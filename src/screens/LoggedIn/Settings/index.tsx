@@ -18,9 +18,8 @@ import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
 import Section from './components/Section'
 import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
 import Option from './components/Option'
-import { debugView } from '~/utils/dev'
-import ToggleSwitch from '~/components/ToggleSwitch'
 import DevelopmentSection from './Development'
 
 const SettingsGeneral: React.FC = () => {
@@ -56,7 +55,10 @@ const SettingsGeneral: React.FC = () => {
       }}
     >
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 100, marginTop: 56 }}
+        contentContainerStyle={{
+          paddingBottom: 100,
+          marginTop: BP({ large: 56, medium: 56, default: 32 }),
+        }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"

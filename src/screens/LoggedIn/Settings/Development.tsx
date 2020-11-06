@@ -17,9 +17,9 @@ const DevelopmentSection = () => {
   }
 
   return (
-    <Section title={'Development'}>
+    <Section title="Development">
       <Option>
-        <Option.Title title={'Toggle Switch'} />
+        <Option.Title title="Toggle Switch" />
         <View style={{ position: 'absolute', right: 16 }}>
           <ToggleSwitch initialState={false} onToggle={handleToggle} />
         </View>
