@@ -1,8 +1,12 @@
-import { AppError, ErrorCode } from '../../lib/errors'
-import { ThunkAction } from '../../store'
 import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
-import { interactionHandlers } from '..'
 import { ErrorCode as SDKErrorCode } from '@jolocom/sdk'
+import { ThunkAction } from '../../store'
+import { AppError, ErrorCode } from '../../lib/errors'
+import { interactionHandlers } from '..'
+import I18n from 'src/locales/i18n'
+import { scheduleNotification } from '../notifications'
+import { createWarningNotification } from 'src/lib/notifications'
+import strings from 'src/locales/strings'
 
 // FIXME NOTE
 // this mapping seems unnecessary because ErrorCode and SDKErrorCode
@@ -49,12 +53,15 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
     }
   }
 
-  const handler = interactionHandlers[interxn.flow.type]
+  const handler = interactionHandlers[interxn.flow.type];
   if (!handler) {
-    throw new AppError(
-      ErrorCode.Unknown,
-      new Error('No handler found for ' + interxn.flow.type)
-    )
+    dispatch(scheduleNotification(
+      createWarningNotification({
+        title: I18n.t(strings.WHOOOPS),
+        message: `${I18n.t(strings.WE_DO_NOT_SUPPRT_INTERACTIONS_OF_TYPE)}: ${interxn.flow.type}`
+      })
+    ));
+    return;
   }
 
   try {

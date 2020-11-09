@@ -107,6 +107,9 @@ const notifications = {
   ACTION_SUCCEEDED: 'Action succeeded',
   YOUR_DATA_WAS_ENCRYPTED: 'Your data was encrypted',
   YOUR_DATA_WAS_DECRYPTED: 'Your data was decrypted',
+  WHOOOPS: 'Whoops',
+  WE_DO_NOT_SUPPRT_INTERACTIONS_OF_TYPE: 'We do not support interaction of type'
+
 }
 
 const errorTitle = {
