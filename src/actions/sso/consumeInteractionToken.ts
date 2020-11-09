@@ -27,10 +27,12 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   getState,
   sdk,
 ) => {
+  // TODO findInteraction should not throw but return undefined
   let interxn = await sdk.findInteraction(jwt)
+    .catch(() => null)
+
   if (interxn && interxn.getMessages().length > 0) {
-    const msg = interxn.lastMessage.encode()
-    if (msg !== jwt) interxn = null
+    if (interxn.lastMessage.encode() !== jwt) interxn = null
   }
 
   if (!interxn) {
