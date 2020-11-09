@@ -9,6 +9,8 @@ import {
   View,
   Animated,
 } from 'react-native'
+import { NavigationProp, withNavigation } from 'react-navigation'
+
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { TorchOffIcon, TorchOnIcon } from 'src/resources'
@@ -93,10 +95,13 @@ const styles = StyleSheet.create({
 interface Props {
   onScan: (jwt: string) => Promise<void>
   onScannerRef?: RefObject<QRScanner>
+  navigation: NavigationProp<{}> & {
+    isFocused: () => boolean
+  }
 }
 
-export const ScannerComponent = (props: Props) => {
-  const { onScan, onScannerRef } = props
+export const ScannerComponent = withNavigation((props: Props) => {
+  const { onScan, onScannerRef, navigation } = props
 
   const [isError, setError] = useState(false)
   const [errorText, setErrorText] = useState('')
@@ -136,19 +141,21 @@ export const ScannerComponent = (props: Props) => {
   })
 
   const onRead = (event: { data: string }) => {
-    return onScan(event.data).catch(err => {
-      // TODO: use different message based on error code
-      //       after fixing up error codes
-      setError(true)
-      if (err.code === ErrorCode.ParseJWTFailed) {
-        setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
-      } else {
-        setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)
-      }
-      Animated.parallel([animateColor(), animateText()]).start(() => {
-        setError(false)
+    if (navigation.isFocused()) {
+      return onScan(event.data).catch(err => {
+        // TODO: use different message based on error code
+        //       after fixing up error codes
+        setError(true)
+        if (err.code === ErrorCode.ParseJWTFailed) {
+          setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
+        } else {
+          setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)
+        }
+        Animated.parallel([animateColor(), animateText()]).start(() => {
+          setError(false)
+        })
       })
-    })
+    }
   }
 
   const cameraSettings = {
@@ -167,8 +174,7 @@ export const ScannerComponent = (props: Props) => {
           position: 'absolute',
         }}
         cameraProps={cameraSettings}
-        reactivate={true}
-        reactivateTimeout={3000}
+        reactivate={false}
         fadeIn={false}
         onRead={onRead}
         cameraStyle={styles.cameraStyle}
@@ -224,4 +230,4 @@ export const ScannerComponent = (props: Props) => {
       </View>
     </>
   )
-}
+})
