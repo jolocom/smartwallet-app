@@ -109,6 +109,8 @@ export const ScannerComponent = withNavigation((props: Props) => {
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
 
+  const [isScanned, setIsScanned] = useState(false)
+
   const animateColor = () =>
     Animated.sequence([
       Animated.timing(colorAnimationValue, {
@@ -142,19 +144,24 @@ export const ScannerComponent = withNavigation((props: Props) => {
 
   const onRead = (event: { data: string }) => {
     if (navigation.isFocused()) {
-      return onScan(event.data).catch(err => {
-        // TODO: use different message based on error code
-        //       after fixing up error codes
-        setError(true)
-        if (err.code === ErrorCode.ParseJWTFailed) {
-          setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
-        } else {
-          setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)
-        }
-        Animated.parallel([animateColor(), animateText()]).start(() => {
-          setError(false)
+      return onScan(event.data)
+        .then(() => {
+          setIsScanned(true)
         })
-      })
+        .catch(err => {
+          setIsScanned(false)
+          // TODO: use different message based on error code
+          //       after fixing up error codes
+          setError(true)
+          if (err.code === ErrorCode.ParseJWTFailed) {
+            setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
+          } else {
+            setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)
+          }
+          Animated.parallel([animateColor(), animateText()]).start(() => {
+            setError(false)
+          })
+        })
     }
   }
 
@@ -174,7 +181,9 @@ export const ScannerComponent = withNavigation((props: Props) => {
           position: 'absolute',
         }}
         cameraProps={cameraSettings}
-        reactivate={false}
+        reactivate
+        reactivateTimeout={3000}
+        vibrate={!isScanned}
         fadeIn={false}
         onRead={onRead}
         cameraStyle={styles.cameraStyle}
