@@ -57,7 +57,7 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   if (!handler) {
     dispatch(scheduleNotification(
       createWarningNotification({
-        title: I18n.t(strings.WHOOOPS),
+        title: I18n.t(strings.DAMN),
         message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
       })
     ));
