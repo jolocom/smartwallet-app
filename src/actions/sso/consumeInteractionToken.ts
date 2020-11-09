@@ -22,7 +22,7 @@ const SDKErrorToAppError = {
   [SDKErrorCode.ParseJWTFailed]: ErrorCode.ParseJWTFailed,
 }
 
-export const consumeInteractionToken = (jwt: string): ThunkAction => async (
+export const consumeInteractionToken = (jwt: string, channel: InteractionTransportType): ThunkAction => async (
   dispatch,
   getState,
   sdk,
@@ -31,14 +31,13 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   let interxn = await sdk.findInteraction(jwt)
     .catch(() => null)
 
-  if (interxn && interxn.getMessages().length > 0) {
-    if (interxn.lastMessage.encode() !== jwt) interxn = null
+  if (interxn?.lastMessage?.encode() !==jwt) {
+    interxn = null
   }
 
+  // we only process this if the interaction was not previously created
+  // otherwise it will fail because the token was already processed
   if (!interxn) {
-    // we only process this if the interaction was not previously created
-    // otherwise it will fail because the token was already processed
-
     try {
       interxn = await sdk.processJWT(jwt)
     } catch (e) {

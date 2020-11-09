@@ -232,6 +232,7 @@ const isCredentialStored = async (
 //    ).map(storeCredentialMetadata),
 //  )
 //
+
 const endReceiving = (interactionId: string): ThunkAction => async (
   dispatch,
   getState,
