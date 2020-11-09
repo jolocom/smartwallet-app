@@ -115,7 +115,13 @@ export const ScannerContainer: React.FC<Props> = props => {
 
   let ret
   if (showCamera && permission === RESULTS.GRANTED) {
-    ret = <ScannerComponent onScan={consumeToken} onScannerRef={scannerRef} />
+    ret = (
+      <ScannerComponent
+        onScan={consumeToken}
+        onScannerRef={scannerRef}
+        navigation={navigation}
+      />
+    )
   } else if (permission === RESULTS.UNAVAILABLE || !showCamera) {
     // TODO: maybe add a message here like "do you even camera?"
     ret = (

@@ -9,7 +9,7 @@ import {
   View,
   Animated,
 } from 'react-native'
-import { NavigationProp, withNavigation } from 'react-navigation'
+import { NavigationProp } from 'react-navigation'
 
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
@@ -100,7 +100,7 @@ interface Props {
   }
 }
 
-export const ScannerComponent = withNavigation((props: Props) => {
+export const ScannerComponent = (props: Props) => {
   const { onScan, onScannerRef, navigation } = props
 
   const [isError, setError] = useState(false)
@@ -163,6 +163,7 @@ export const ScannerComponent = withNavigation((props: Props) => {
           })
         })
     }
+    return
   }
 
   const cameraSettings = {
@@ -239,4 +240,4 @@ export const ScannerComponent = withNavigation((props: Props) => {
       </View>
     </>
   )
-})
+}
