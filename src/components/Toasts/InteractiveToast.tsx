@@ -21,8 +21,13 @@ interface IProps {
 
 const InteractiveToast = React.forwardRef<View, IProps>(
   ({ handleInteractionBtnLayout }, ref) => {
-    const { toastToShow, toastColor, invokeInteract } = useToastToShow()
-    if (toastToShow?.interact && toastToShow.dismiss) {
+    const {
+      toastToShow,
+      toastColor,
+      invokeInteract,
+      isInteractive,
+    } = useToastToShow()
+    if (isInteractive) {
       return (
         <>
           <ToastTitle customStyles={{ textAlign: 'left' }} />
@@ -39,18 +44,20 @@ const InteractiveToast = React.forwardRef<View, IProps>(
                 onPressIn={invokeInteract}
                 style={styles.interactBtn}
               >
-                <JoloText
-                  kind={JoloTextKind.subtitle}
-                  size={JoloTextSizes.tiniest}
-                  color={toastColor}
-                  customStyles={{
-                    fontSize: 12,
-                    letterSpacing: 0.8,
-                    lineHeight: 12,
-                  }}
-                >
-                  {toastToShow.interact.label}
-                </JoloText>
+                {toastToShow?.interact && (
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    size={JoloTextSizes.tiniest}
+                    color={toastColor}
+                    customStyles={{
+                      fontSize: 12,
+                      letterSpacing: 0.8,
+                      lineHeight: 12,
+                    }}
+                  >
+                    {toastToShow.interact.label}
+                  </JoloText>
+                )}
               </TouchableOpacity>
             </View>
           </View>

@@ -4,9 +4,8 @@ import ToastDescription from './ToastDescription'
 import ToastTitle from './ToastTitle'
 
 const NormalToast = () => {
-  const { toastToShow } = useToastToShow()
-
-  if (toastToShow && toastToShow.dismiss && !toastToShow?.interact) {
+  const { isNormal } = useToastToShow()
+  if (isNormal) {
     return (
       <>
         <ToastTitle />

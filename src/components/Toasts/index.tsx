@@ -201,6 +201,9 @@ const Toasts: React.FC = () => {
       toastToShow,
       toastColor,
       invokeInteract,
+      isNormal: toastToShow?.dismiss && !toastToShow?.interact,
+      isInteractive: toastToShow?.interact && toastToShow.dismiss,
+      isSticky: !toastToShow?.dismiss,
     }),
     [JSON.stringify(toastToShow), invokeInteract],
   )

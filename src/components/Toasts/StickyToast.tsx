@@ -6,8 +6,8 @@ import ToastDescription from './ToastDescription'
 import ToastTitle from './ToastTitle'
 
 const StickyToast = () => {
-  const { toastToShow, invokeInteract } = useToastToShow()
-  if (toastToShow && !toastToShow?.dismiss) {
+  const { invokeInteract, isSticky } = useToastToShow()
+  if (isSticky) {
     return (
       <TouchableOpacity onPressIn={invokeInteract}>
         <ToastTitle />

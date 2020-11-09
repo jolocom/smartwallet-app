@@ -6,12 +6,18 @@ interface IToastContext {
   toastToShow: Toast | null | undefined
   toastColor: Colors
   invokeInteract: () => void
+  isNormal: boolean
+  isInteractive: boolean
+  isSticky: boolean
 }
 
 export const ToastToShowContext = React.createContext<IToastContext>({
   toastToShow: null,
   toastColor: Colors.white,
   invokeInteract: () => {},
+  isNormal: false,
+  isInteractive: false,
+  isSticky: false,
 })
 
 export const useToastToShow = () => {
