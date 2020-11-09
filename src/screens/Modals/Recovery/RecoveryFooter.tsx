@@ -39,6 +39,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
   const dispatch = useDispatch()
+
   const agent = useAgent()
   const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
   const resetPin = useResetKeychainValues(PIN_SERVICE)
@@ -47,6 +48,17 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const navigation = useNavigation()
 
   const { isAccessRestore } = route.params
+
+  const handlePhraseSubmit = useCallback(async () => {
+    const success = await loader(async () => await submitCb(), {
+      loading: strings.MATCHING,
+    })
+    if (success) {
+      dispatch(setLogged(true))
+      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
+      navigation.dispatch(replaceAction)
+    } else recoveryDispatch(resetPhrase())
+  }, [phrase])
 
   const restoreEntropy = async () => {
     const shouldRecover = await shouldRecoverFromSeed()
@@ -66,18 +78,6 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
       dispatch(setDid(idw.did))
     }
   }
-
-  const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(async () => await submitCb(), {
-      loading: strings.MATCHING,
-    })
-
-    if (success) {
-      dispatch(setLogged(true))
-      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
-      navigation.dispatch(replaceAction)
-    } else recoveryDispatch(resetPhrase())
-  }, [phrase])
 
   const isPhraseComplete = phrase.length === 12
 

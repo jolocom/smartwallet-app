@@ -163,12 +163,39 @@ const lock = {
 }
 
 const settings = {
+  APP_PREFERENCES: 'App preferences',
+  LANGUAGE: 'Language',
+  SECURITY: 'Security',
   CHANGE_PIN: 'Change PIN',
+  BACKUP_IDENTITY: 'Backup Identity',
+  GENERAL: 'General',
+  FAQ: 'FAQ',
+  CONTACT_US: 'Contact us',
+  RATE_US: 'Rate us',
+  ABOUT: 'About',
+  IMPRINT: 'Imprint',
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
   WRONG_PIN: 'Wrong PIN',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
+  DE_VERSION: 'DE Version',
+  PRIVACY_POLICY: 'Privacy Policy',
+  TERMS_OF_SERVICE: 'Terms of Service',
+  YOUR_DOCUMENTS_ARE_AT_RISK:
+    'Your documents are at risk of permanent loss without a backup',
+  PRIVACY_POLICY_QUESTIONS:
+    'If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.',
+}
+
+const termsConsent = {
+  SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
+    'SmartWallet introducing Terms and Conditions and Privacy Policy',
+  YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW:
+    'You can find the German and English version of the documents below. Please note that the German version is legally binding',
+  I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY:
+    'I understand and accept the Terms of Service and Privacy Policy',
+  ACCEPT_NEW_TERMS: 'Accept new terms',
 }
 
 const attributes = {
@@ -207,4 +234,6 @@ export const strings = {
   ...interactions,
   ...attributes,
   ...recoverPin,
+  ...settings,
+  ...termsConsent,
 }

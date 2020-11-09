@@ -18,6 +18,7 @@ import { ResolutionFlowState } from '@jolocom/sdk/js/interactionManager/resoluti
 import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
 
 import { AttributeI } from '~/modules/attributes/types'
+import { Flow } from '@jolocom/sdk/js/interactionManager/flow'
 
 //TODO: move to `~/types/credentials`
 export const fieldNames = {

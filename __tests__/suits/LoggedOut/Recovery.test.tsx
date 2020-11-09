@@ -59,6 +59,7 @@ describe('User on a Recovery screen', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
     const mockDispatchFn = jest.fn()
     useDispatchSpy.mockReturnValue(mockDispatchFn)
+    // @ts-ignore
     redux.useSelector.mockImplementation((callback: (state: any) => void) => {
       return callback(mockAppState)
     })
