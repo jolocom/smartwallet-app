@@ -88,7 +88,7 @@ export const startChannel = (interactionId: string): ThunkAction => async (
   getState,
   sdk,
 ) => {
-  const interaction = sdk.interactionManager.getInteraction(interactionId)
+  const interaction = await sdk.interactionManager.getInteraction(interactionId)
 
   const establishResp = await interaction.createEstablishChannelResponse(0)
   await interaction.processInteractionToken(establishResp)

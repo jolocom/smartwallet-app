@@ -45,7 +45,7 @@ export const consumeCredentialReceive = (
   selectedSignedCredentialWithMetadata: SignedCredentialWithMetadata[],
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const interaction = interactionManager.getInteraction(interactionId)
+  const interaction = await interactionManager.getInteraction(interactionId)
 
   const response = await interaction
     .createCredentialOfferResponseToken(selectedSignedCredentialWithMetadata)
@@ -87,7 +87,7 @@ export const validateSelectionAndSave = (
   getState,
   { interactionManager, storage },
 ) => {
-  const interaction = interactionManager.getInteraction(interactionId)
+  const interaction = await interactionManager.getInteraction(interactionId)
   const { offerSummary, issued } = interaction.getSummary()
     .state as CredentialOfferFlowState
 
@@ -232,12 +232,12 @@ const isCredentialStored = async (
 //    ).map(storeCredentialMetadata),
 //  )
 //
-const endReceiving = (interactionId: string): ThunkAction => (
+const endReceiving = (interactionId: string): ThunkAction => async (
   dispatch,
   getState,
   { interactionManager },
 ) => {
-  const interaction = interactionManager.getInteraction(interactionId)
+  const interaction = await interactionManager.getInteraction(interactionId)
   const { desc: transportDesc } = interaction.transportAPI
 
   if (

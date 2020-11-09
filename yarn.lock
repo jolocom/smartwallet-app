@@ -1674,14 +1674,14 @@
     form-data "^3.0.0"
     node-fetch "^2.6.1"
 
-"@jolocom/jolo-did-resolver@^1.0.0-rc5":
-  version "1.0.0-rc5"
-  resolved "https://registry.yarnpkg.com/@jolocom/jolo-did-resolver/-/jolo-did-resolver-1.0.0-rc5.tgz#0411ec2eabb9b1dd2881a5ce7779ff6dfcf2b13f"
-  integrity sha512-Yb4NBL8gaNvDKtpj/SLMGJURvtQ2xLJTYmRC9c7yGZ65ekcAnSPm5T8YbToYYNHa0TWCu6ZbJmXKsF/hDoLZHw==
+"@jolocom/jolo-did-resolver@^1.0.0-rc6":
+  version "1.0.0-rc6"
+  resolved "https://registry.yarnpkg.com/@jolocom/jolo-did-resolver/-/jolo-did-resolver-1.0.0-rc6.tgz#4adc6f8d00687a22e4e10d87d682adf0730f17ea"
+  integrity sha512-7/c3JClqj2W4bUj1Q/wk+u9aJPKlDLFxuKgo1yNYWru8/HUzuhmL4AmKUDKChuy6Cwk9a8IzObbUZd1c/NX5rQ==
   dependencies:
     "@jolocom/registry-contract" "^1.0.0-rc5"
     detect-node "^2.0.4"
-    node-fetch "^2.6.0"
+    node-fetch "^2.6.1"
 
 "@jolocom/local-resolver-registrar@^1.0.0-rc1":
   version "1.0.0-rc1"
@@ -1756,18 +1756,18 @@
   dependencies:
     ethers "5.0.5"
 
-"@jolocom/sdk-storage-typeorm@^2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-2.0.9.tgz#17c5b80bf1d4227d3d1e4c5544723e4350dd8804"
-  integrity sha512-cOZ1YBEOf1KbqSnAHIx9wT7qjZxWVlzeLdamlw5qJE1TksHstEBxSsj79rz9hpp7n3jBsPvJ/E0RD38qoAg5kA==
+"@jolocom/sdk-storage-typeorm@^4.0.0-rc2":
+  version "4.0.0-rc2"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-4.0.0-rc2.tgz#cbcb8823f0fa1b5b12186ac78ba1215e69862bad"
+  integrity sha512-THwS7/WF5U+2vgoW400NtzbLfIHLdDrA0r8s7DkfZ6eKcl7oAnzJ4T/RpjR43bpJufjbrXOxPd0irrdEwOdy4A==
   dependencies:
-    class-transformer "^0.2.3"
+    class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.0.0-rc12":
-  version "1.0.0-rc12"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc12.tgz#910df7431f37e76e8dd6439e4d6399a119620751"
-  integrity sha512-cpvXQlipwh6/TuadROeoi1s3b6JV9V0IxZ4xUZ3M91g23IekLkv1bGhMPoW0ESX0vLTNNAa4Q1K/OAOzZN2G0g==
+"@jolocom/sdk@^1.0.0-rc15":
+  version "1.0.0-rc15"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc15.tgz#cc3209dc15ea5c112a5de84152516c8e2c175d2c"
+  integrity sha512-uVtT7m1px6qWFa3+BKF/pynAjsh1685y076KN4J2O8bmbxJKDCVC7FLqS6ekf1JGrmVrKg9QdxWNyNECmnnuJw==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.2"
     form-data "^3.0.0"
@@ -3985,11 +3985,6 @@ class-transformer@^0.1.9:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.1.10.tgz#350f168ebb4c1f87edb18b98dd973681fc20fff7"
   integrity sha512-QiNdUxEvTBiUtc0KiapGVHhgaqGQVEhOfL9UEBnb9xRfcwmDJT5ijIDwcwJUTwXaT/kGvZZB4JCGsiuR5adX6g==
-
-class-transformer@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.2.3.tgz#598c92ca71dcca73f91ccb875d74a3847ccfa32d"
-  integrity sha512-qsP+0xoavpOlJHuYsQJsN58HXSl8Jvveo+T37rEvCEeRfMWoytAyR0Ua/YsFgpM6AZYZ/og2PJwArwzJl1aXtQ==
 
 class-transformer@^0.3.1:
   version "0.3.1"
@@ -7806,20 +7801,19 @@ jetifier@^1.6.2:
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.6.tgz#fec8bff76121444c12dc38d2dad6767c421dab68"
   integrity sha512-JNAkmPeB/GS2tCRqUzRPsTOHpGDah7xP18vGJfIjZC+W2sxEHbxgJxetIjIqhjQ3yYbYNEELkM/spKLtwoOSUQ==
 
-jolocom-lib@^5.1.0-rc10:
-  version "5.1.0-rc10"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.1.0-rc10.tgz#4f481840d05973e67504c32be107333c21f4fe32"
-  integrity sha512-IB2+XabNJTroriMPL41z3lk/fLTvSmsN+pJdfYj6a+MeVg1fXzdEklQ+kO/wf1RMwwjpnAshWgsx/Ya3/aN30A==
+jolocom-lib@^5.1.0-rc12:
+  version "5.1.0-rc12"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.1.0-rc12.tgz#04e332293adc0fd19d34ac0e5c91eb5eda6d37c9"
+  integrity sha512-mGHygJkjJKFrxHHnqU7Rvu8T4Crwg7fpYMnFKG9E8lOgpPbcXoLMwUdwtXWW+mbCBRp4KxqolgGvDnqDKCOcYQ==
   dependencies:
     "@hawkingnetwork/ed25519-hd-key-rn" "^1.0.1"
     "@jolocom/jolo-did-registrar" "^1.0.0-rc6"
-    "@jolocom/jolo-did-resolver" "^1.0.0-rc5"
+    "@jolocom/jolo-did-resolver" "^1.0.0-rc6"
     "@jolocom/local-resolver-registrar" "^1.0.0-rc1"
     "@jolocom/native-core" "^1.0.0-rc4"
     "@jolocom/protocol-ts" "^0.5.1"
     "@jolocom/vaulted-key-provider" "^0.7.4"
     "@types/sinon" "^9.0.5"
-    base64url "^3.0.1"
     bip39 "^3.0.2"
     class-transformer "^0.3.1"
     create-hash "^1.2.0"
@@ -7829,8 +7823,9 @@ jolocom-lib@^5.1.0-rc10:
     json-logic-js "^1.2.2"
     jsonld "^1.6.1"
     jsontokens "^1.0.0"
-    node-fetch "^2.3.0"
+    node-fetch "^2.6.1"
     reflect-metadata "^0.1.13"
+    rfc4648 "^1.4.0"
     secrets.js-grempe "^1.1.0"
 
 js-sha3@0.5.7:
@@ -9065,7 +9060,7 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-fetch@^2.0.0-alpha.8, node-fetch@^2.2.0, node-fetch@^2.3.0, node-fetch@^2.5.0, node-fetch@^2.6.0:
+node-fetch@^2.0.0-alpha.8, node-fetch@^2.2.0, node-fetch@^2.5.0, node-fetch@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
@@ -10317,12 +10312,12 @@ react-native-iphone-x-helper@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
 
-react-native-jolocom@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.0.0.tgz#24aa69ef9f46204ddb778f51145e2b54d9c94b62"
-  integrity sha512-pdyjb4HTXBMQN9Aw8BhwjQDfeF15jJfjpPiZbEUdDNiETEjRewvbqcgz/CLct2u+JFUspnoHFWe68JeP93jApw==
+react-native-jolocom@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.1.0.tgz#62fa3157bbcf4af93f5da32411c26585f1e27a81"
+  integrity sha512-wlBHNgjIT90juoFBynsV2MqDjm0dPUiVxashOXEjbpr/4MPP5EXtyLtExyHVGds+wFeM2eFUgfqakQjwmrWx3Q==
   dependencies:
-    "@jolocom/sdk-storage-typeorm" "^2.0.9"
+    "@jolocom/sdk-storage-typeorm" "^4.0.0-rc2"
     crypto-browserify "^3.12.0"
     object.assign "^4.1.0"
     react-native-crypto "^2.2.0"
