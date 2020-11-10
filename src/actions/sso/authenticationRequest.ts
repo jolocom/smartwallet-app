@@ -23,7 +23,7 @@ export const consumeAuthenticationRequest = (
 export const sendAuthenticationResponse = (
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, sdk) => {
-  const interaction = sdk.interactionManager.getInteraction(
+  const interaction = await sdk.interactionManager.getInteraction(
     interactionId,
   )
   return interaction

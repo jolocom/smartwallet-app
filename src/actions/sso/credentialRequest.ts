@@ -76,7 +76,7 @@ export const sendCredentialResponse = (
   selectedCredentials: CredentialVerificationSummary[],
   interactionId: string,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
-  const interaction: Interaction = interactionManager.getInteraction(
+  const interaction: Interaction = await interactionManager.getInteraction(
     interactionId,
   )
 

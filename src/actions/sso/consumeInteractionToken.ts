@@ -1,8 +1,13 @@
-import { AppError, ErrorCode } from '../../lib/errors'
-import { ThunkAction } from '../../store'
 import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
-import { interactionHandlers } from '..'
 import { ErrorCode as SDKErrorCode } from '@jolocom/sdk'
+import { withLoading } from '../modifiers'
+import { ThunkAction } from '../../store'
+import { AppError, ErrorCode } from '../../lib/errors'
+import { interactionHandlers } from '..'
+import I18n from 'src/locales/i18n'
+import { scheduleNotification } from '../notifications'
+import { createWarningNotification } from 'src/lib/notifications'
+import strings from 'src/locales/strings'
 
 // FIXME NOTE
 // this mapping seems unnecessary because ErrorCode and SDKErrorCode
@@ -27,16 +32,17 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   getState,
   sdk,
 ) => {
-  let interxn = sdk.findInteraction(jwt)
-  if (interxn && interxn.getMessages().length > 0) {
-    const msg = interxn.lastMessage.encode()
-    if (msg !== jwt) interxn = null
+  // TODO findInteraction should not throw but return undefined
+  let interxn = await sdk.findInteraction(jwt)
+    .catch(() => null)
+
+  if (interxn?.lastMessage?.encode() !==jwt) {
+    interxn = null
   }
 
+  // we only process this if the interaction was not previously created
+  // otherwise it will fail because the token was already processed
   if (!interxn) {
-    // we only process this if the interaction was not previously created
-    // otherwise it will fail because the token was already processed
-
     try {
       interxn = await sdk.processJWT(jwt)
     } catch (e) {
@@ -49,16 +55,19 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
     }
   }
 
-  const handler = interactionHandlers[interxn.flow.type]
+  const handler = interactionHandlers[interxn.flow.type];
   if (!handler) {
-    throw new AppError(
-      ErrorCode.Unknown,
-      new Error('No handler found for ' + interxn.flow.type)
-    )
+    dispatch(scheduleNotification(
+      createWarningNotification({
+        title: I18n.t(strings.DAMN),
+        message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
+      })
+    ));
+    return;
   }
 
   try {
-    return dispatch(handler(interxn))
+    return dispatch(withLoading(handler(interxn)))
   } catch (e) {
     // FIXME we should not be seeing jolocom-lib errors here, they should
     // be wrapped up by SDK errors, but this needs a fix in the SDK
