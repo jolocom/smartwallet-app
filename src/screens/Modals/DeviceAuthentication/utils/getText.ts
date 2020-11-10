@@ -1,17 +1,17 @@
-import { BIOMETRY_TYPE } from 'react-native-keychain'
-
 import { strings } from '~/translations/strings'
-import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthTypes'
+import { BiometryTypes } from '../module/deviceAuthTypes'
 
 export const getBiometryHeader = (biometryType: BiometryTypes) => {
   switch (biometryType) {
-    case BIOMETRY_TYPE.TOUCH_ID:
+    case BiometryTypes.TouchID:
       return strings.USE_TOUCH_ID_TO_AUTHORIZE
-    case BIOMETRY_TYPE.FACE_ID:
+    case BiometryTypes.FaceID:
       return strings.USE_FACE_ID_TO_AUTHORIZE
-    case BIOMETRY_TYPE.FINGERPRINT:
+    case BiometryTypes.Biometrics:
+      return strings.USE_BIOMETRICS
+    case BiometryTypes.Fingerprint:
       return strings.USE_FINGERPRINT_TO_AUTHORIZE
-    case 'FACE':
+    case BiometryTypes.FACE:
       return strings.USE_FACE_TO_AUTHORIZE
     default:
       return ''
@@ -20,13 +20,15 @@ export const getBiometryHeader = (biometryType: BiometryTypes) => {
 
 export const getBiometryIsDisabledText = (biometryType: BiometryTypes) => {
   switch (biometryType) {
-    case BIOMETRY_TYPE.TOUCH_ID:
+    case BiometryTypes.TouchID:
       return strings.TOUCH_ID_IS_DISABLED
-    case BIOMETRY_TYPE.FACE_ID:
+    case BiometryTypes.FaceID:
       return strings.FACE_ID_IS_DISABLED
-    case BIOMETRY_TYPE.FINGERPRINT:
+    case BiometryTypes.Biometrics:
+      return strings.USE_BIOMETRICS
+    case BiometryTypes.Fingerprint:
       return strings.FINGERPRINT_IS_DISABLED
-    case 'FACE':
+    case BiometryTypes.FACE:
       return strings.FACE_IS_DISABLED
     default:
       return ''
@@ -35,9 +37,9 @@ export const getBiometryIsDisabledText = (biometryType: BiometryTypes) => {
 
 export const getBiometryDescription = (biometryType: BiometryTypes) => {
   switch (biometryType) {
-    case BIOMETRY_TYPE.TOUCH_ID || BIOMETRY_TYPE.FINGERPRINT:
+    case BiometryTypes.TouchID || BiometryTypes.Fingerprint:
       return strings.SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER
-    case BIOMETRY_TYPE.FACE_ID || 'FACE':
+    case BiometryTypes.FaceID || BiometryTypes.FACE:
       return strings.SCAN_YOUR_FACE
     default:
       return ''

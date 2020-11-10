@@ -73,6 +73,7 @@ const deviceAuthentication = {
   USE_FACE_ID_TO_AUTHORIZE: 'Use Face ID to authorise wallet',
   USE_FINGERPRINT_TO_AUTHORIZE: 'Use Fingerprint to authorise wallet',
   USE_FACE_TO_AUTHORIZE: 'Use your Face to authorise wallet', // a terrible wording here
+  USE_BIOMETRICS: 'Use Biometrics to authorrise wallet',
 
   TAP_TO_ACTIVATE_TOUCH_ID:
     'Tap to activate Touch ID so you don’t need to confirm your PIN every time you need to use it',
@@ -93,6 +94,7 @@ const deviceAuthentication = {
   FACE_ID_IS_DISABLED: 'Touch ID is disabled',
   FINGERPRINT_IS_DISABLED: 'Touch ID is disabled',
   FACE_IS_DISABLED: 'Touch ID is disabled',
+  BIOMETRICS_ARE_DISABLED: 'Biometrics are disabled',
 
   TO_USE_BIOMETRICS_ENABLE:
     'To use biometrics enable this feature in the system settings',

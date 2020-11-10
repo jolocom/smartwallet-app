@@ -1,5 +1,4 @@
 import React from 'react'
-import AsyncStorage from '@react-native-community/async-storage'
 import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -13,6 +12,7 @@ import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { accountReset } from '~/modules/account/actions'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useAgent } from '~/hooks/sdk'
 
 const Settings = () => {
   const redirectToChangePin = useRedirectTo(ScreenNames.SettingsList, {
@@ -21,10 +21,13 @@ const Settings = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
   const dispatch = useDispatch()
+  const agent = useAgent()
 
   const logout = async () => {
     try {
-      await AsyncStorage.removeItem('biometry')
+      await agent.storage.store.setting('biometry', {
+        type: '',
+      })
       resetServiceValuesInKeychain()
       dispatch(accountReset())
     } catch (err) {

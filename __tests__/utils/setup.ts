@@ -23,6 +23,11 @@ jest.mock('react-redux', () => ({
 jest.mock('../../src/hooks/sdk', () => ({
   useAgent: () => ({
     initWithMnemonic: jest.fn().mockResolvedValue(true),
+    storage: {
+      get: {
+        setting: jest.fn().mockImplementation(() => ({type: ''}))
+      }
+    }
   }),
 }))
 
