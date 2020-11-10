@@ -216,6 +216,7 @@ export default {
   ...deviceAuth,
   ...termsOfService,
   NO_SERVICE_NAME: "Service shared no public profile",
+  PULL_TO_CHOOSE: "Pull to choose",
   SHOWING_VALID: "Showing valid",
   SHOWING_EXPIRED: "Showing expired",
   ISSUED_BY: "Issued by",

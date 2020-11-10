@@ -67,7 +67,7 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   }
 
   try {
-    return dispatch(withLoading(handler(interxn)))
+    return dispatch(handler(interxn))
   } catch (e) {
     // FIXME we should not be seeing jolocom-lib errors here, they should
     // be wrapped up by SDK errors, but this needs a fix in the SDK
