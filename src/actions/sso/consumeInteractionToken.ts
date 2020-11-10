@@ -3,6 +3,7 @@ import { ThunkAction } from '../../store'
 import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
 import { interactionHandlers } from '..'
 import { ErrorCode as SDKErrorCode } from '@jolocom/sdk'
+import { withLoading } from '../modifiers'
 
 // FIXME NOTE
 // this mapping seems unnecessary because ErrorCode and SDKErrorCode
@@ -22,7 +23,7 @@ const SDKErrorToAppError = {
   [SDKErrorCode.ParseJWTFailed]: ErrorCode.ParseJWTFailed,
 }
 
-export const consumeInteractionToken = (jwt: string, channel: InteractionTransportType): ThunkAction => async (
+export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   dispatch,
   getState,
   sdk,
@@ -59,7 +60,7 @@ export const consumeInteractionToken = (jwt: string, channel: InteractionTranspo
   }
 
   try {
-    return dispatch(handler(interxn))
+    return dispatch(withLoading(handler(interxn)))
   } catch (e) {
     // FIXME we should not be seeing jolocom-lib errors here, they should
     // be wrapped up by SDK errors, but this needs a fix in the SDK
