@@ -11,17 +11,19 @@ import {
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
+import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelSSO } from './index'
 import { Interaction, InteractionTransportType } from '@jolocom/sdk'
 
 export const consumeCredentialOfferRequest = (
-  interaction: Interaction
+  interaction: Interaction,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interactionSummary = interaction.getSummary()
-  const passedValidation = (interactionSummary.state as CredentialOfferFlowState)
-          .offerSummary.map(_ => true)
+  const passedValidation = (interactionSummary.state as CredentialOfferFlowState).offerSummary.map(
+    _ => true,
+  )
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
@@ -47,8 +49,9 @@ export const consumeCredentialReceive = (
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = await interactionManager.getInteraction(interactionId)
 
-  const response = await interaction
-    .createCredentialOfferResponseToken(selectedSignedCredentialWithMetadata)
+  const response = await interaction.createCredentialOfferResponseToken(
+    selectedSignedCredentialWithMetadata,
+  )
 
   await interaction.processInteractionToken(response)
 
@@ -82,31 +85,30 @@ export const consumeCredentialReceive = (
 export const validateSelectionAndSave = (
   selectedCredentials: SignedCredentialWithMetadata[],
   interactionId: string,
-): ThunkAction => async (
-  dispatch,
-  getState,
-  { interactionManager, storage },
-) => {
+): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interaction = await interactionManager.getInteraction(interactionId)
-  const { offerSummary, issued } = interaction.getSummary()
+  const { offerSummary, issued, credentialsValidity } = interaction.getSummary()
     .state as CredentialOfferFlowState
 
   const selectedTypes = selectedCredentials.map(el => el.type)
-  const toSave = issued.filter(credential => selectedTypes.includes(credential.type[1]))
-
-  // if (toSave.length !== selectedCredentials.length) {}
-
-  const duplicates = await isCredentialStored(
-    toSave,
-    id => interaction.getStoredCredentialById(id)
+  const toSave = issued.map(credential =>
+    selectedTypes.includes(credential.type[1]) ? credential : null,
   )
 
-  // TODO update to the latest version of the SDK and && the signature check as well
-  const passedValidation = toSave.map(
-    (credential, i) =>
-      credential.signer.did === interaction.participants.requester!.did &&
-      credential.claim.id === getState().account.did.did &&
-      !duplicates[i],
+  const duplicates = await isCredentialStored(toSave, id =>
+    interaction.getStoredCredentialById(id),
+  )
+
+  const issuanceResult = (interaction.flow as CredentialOfferFlow).getIssuanceResult()
+
+  const passedValidation = toSave.map((cred, i) =>
+    // NOTE: ignoring validation for credentials that were not selected
+    cred
+      ? credentialsValidity[i] &&
+        !issuanceResult[i].validationErrors.invalidIssuer &&
+        !issuanceResult[i].validationErrors.invalidSubject &&
+        !duplicates[i]
+      : true,
   )
 
   // None passed the validation
@@ -184,7 +186,7 @@ export const validateSelectionAndSave = (
           ...interaction.getSummary(),
           state: { offerSummary },
         },
-        passedValidation
+        passedValidation,
       },
     }),
   )
@@ -196,11 +198,11 @@ export const validateSelectionAndSave = (
  */
 
 const isCredentialStored = async (
-  offer: SignedCredential[],
+  offer: Array<SignedCredential | null>,
   getCredential: (id: string) => Promise<SignedCredential[]>,
 ) =>
   Promise.all(
-    offer.map(async (signedCredential) =>
+    offer.map(async signedCredential =>
       signedCredential
         ? !isEmpty(await getCredential(signedCredential.id))
         : false,
