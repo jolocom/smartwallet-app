@@ -190,9 +190,10 @@
   "The token nonce does not match the request": "Gesendete Daten entsprechen nicht den angefragten Daten",
   "Valid until": "Gültig bis",
   "Expires on": "Expires on",
+  "Pull to choose": "Herunterziehen zum auswählen",
   "Showing expired": "Showing expired",
   "Showing valid": "Showing valid",
-  "Service shared no public profile": "Service shared no public profile",
+  "Service shared no public profile": "Zu diesem Dienst liegt kein öffentliches Profil vor",
   "You are not the intended audience of received token": "You are not the intended audience of received token",
   "For security purposes, we need some randomness": "For security purposes, we need some randomness",
   "Please tap the screen and draw on it randomly": "Please tap the screen and draw on it randomly",
@@ -203,7 +204,7 @@
   "Establish Channel request": "Establish Channel request",
   "Action succeeded": "Action succeeded",
   "Adding an extra layer of security helps prevent unwanted access to your wallet": "Adding an extra layer of security helps prevent unwanted access to your wallet",
-  "Interaction with the service completed. Your service page should be updated now": "Interaction with the service completed. Your service page should be updated now",
+  "Interaction with the service completed. Your service page should be updated now": "Service Interaktion erfolgreich",
   "Your data was decrypted": "Your data was decrypted",
   "Your data was encrypted": "Your data was encrypted"
 }
