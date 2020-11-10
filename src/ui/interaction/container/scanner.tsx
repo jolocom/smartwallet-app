@@ -53,17 +53,24 @@ export const ScannerContainer: React.FC<Props> = props => {
       },
     )
 
-    let listener: NavigationEventSubscription | undefined
+    let focusListener: NavigationEventSubscription | undefined
+    let blurListener: NavigationEventSubscription | undefined
+
     if (navigation) {
-      listener = navigation.addListener('didFocus', () => {
+      focusListener = navigation.addListener('didFocus', () => {
         setShowCamera(true)
         reactivate()
+      })
+
+      blurListener = navigation.addListener('didBlur', () => {
+        setShowCamera(false)
       })
     }
     checkCameraPermissions()
 
     return () => {
-      listener && listener.remove()
+      blurListener && blurListener.remove()
+      focusListener && focusListener.remove()
       backListener.remove()
     }
   }, [])
