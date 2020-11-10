@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
+import Keychain from 'react-native-keychain'
 
 import { ScreenNames } from '~/types/screens'
 
@@ -23,8 +24,11 @@ const DeviceAuthentication: React.FC = () => {
     const getAuthenticationType = async () => {
       try {
         const type = await FingerprintScanner.isSensorAvailable()
-
+        //console.log({type});
         dispatch(setBiometryType(type))
+
+        // const supportedBiometryType = await Keychain.getSupportedBiometryType();
+        // console.log({supportedBiometryType});
       } catch (e) {
         console.log({ e })
         if (e?.name === 'FingerprintScannerNotEnrolled') {
