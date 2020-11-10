@@ -1,4 +1,4 @@
-import React, { useState, RefObject } from 'react'
+import React, { useState, RefObject, useEffect } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -9,7 +9,11 @@ import {
   View,
   Animated,
 } from 'react-native'
-import { NavigationProp } from 'react-navigation'
+import {
+  NavigationParams,
+  NavigationRoute,
+  NavigationScreenProp,
+} from 'react-navigation'
 
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
@@ -95,9 +99,7 @@ const styles = StyleSheet.create({
 interface Props {
   onScan: (jwt: string) => Promise<void>
   onScannerRef?: RefObject<QRScanner>
-  navigation: NavigationProp<{}> & {
-    isFocused: () => boolean
-  }
+  navigation: NavigationScreenProp<NavigationRoute<NavigationParams>>
 }
 
 export const ScannerComponent = (props: Props) => {
@@ -110,6 +112,14 @@ export const ScannerComponent = (props: Props) => {
   const [textAnimationValue] = useState(new Animated.Value(0))
 
   const [isScanned, setIsScanned] = useState(false)
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('didFocus', () => {
+      setIsScanned(false)
+    })
+
+    return () => unsubscribe.remove()
+  }, [navigation])
 
   const animateColor = () =>
     Animated.sequence([
@@ -184,7 +194,7 @@ export const ScannerComponent = (props: Props) => {
         cameraProps={cameraSettings}
         reactivate
         reactivateTimeout={3000}
-        vibrate={!isScanned}
+        vibrate={navigation.isFocused() && !isScanned}
         fadeIn={false}
         onRead={onRead}
         cameraStyle={styles.cameraStyle}
