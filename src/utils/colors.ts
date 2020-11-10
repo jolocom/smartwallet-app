@@ -33,6 +33,7 @@ export enum Colors {
   peach = '#ffdebc',
   floralWhite = '#fffefc',
   borderGray20 = 'rgba(143, 146, 161, 0.2)',
+  silverChalice = '#adadad',
   purple = '#7372ee',
   blackRussian = 'rgb(35, 36, 38)',
   carnationPink = 'rgb(145, 25, 66)',
