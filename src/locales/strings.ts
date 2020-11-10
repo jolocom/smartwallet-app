@@ -288,6 +288,7 @@ export default {
   UNKNOWN: 'Unknown',
   VALID_UNTIL: 'Valid until',
   EXPIRES_ON: 'Expires on',
+  PULL_TO_CHOOSE: 'Pull to choose',
 
   //ESATABLISH
   CONNECTION_DESCRIPTION: 'Connection description:',
