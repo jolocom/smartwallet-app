@@ -190,7 +190,7 @@
   "The token nonce does not match the request": "Gesendete Daten entsprechen nicht den angefragten Daten",
   "Valid until": "Gültig bis",
   "Expires on": "Expires on",
-  "Pull to choose": "Herunterziehen zum auswählen",
+  "Pull to choose": "Zum auswählen ziehen",
   "Showing expired": "Showing expired",
   "Showing valid": "Showing valid",
   "Service shared no public profile": "Zu diesem Dienst liegt kein öffentliches Profil vor",

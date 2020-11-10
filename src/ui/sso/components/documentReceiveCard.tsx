@@ -15,6 +15,8 @@ import React, { useRef, useState } from 'react'
 import Interactable, { IDragEvent, ISnapEvent } from 'react-native-interactable'
 import { Colors, Typefaces } from '../../../styles'
 import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/interactionManager/types'
+import strings from 'src/locales/strings'
+import I18n from 'src/locales/i18n'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -145,7 +147,7 @@ export const DocumentReceiveCard = (props: Props) => {
               ],
             },
           ]}>
-          <Text style={styles.infoText}>Pull to choose</Text>
+          <Text style={styles.infoText}>{I18n.t(strings.PULL_TO_CHOOSE)}</Text>
         </Animated.View>
       )}
       <TouchableWithoutFeedback onPress={() => selected && onUnselect()}>
