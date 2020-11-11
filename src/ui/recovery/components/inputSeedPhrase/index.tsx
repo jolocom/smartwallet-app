@@ -8,14 +8,16 @@ import {
 } from 'react-native'
 
 import RecoveryHeader from './RecoveryHeader'
-// import RecoveryFooter from './RecoveryFooter'
+import RecoveryFooter from './RecoveryFooter'
 
 import RecoveryContextProvider from './module/recoveryContext'
 import SeedKeyInput from './SeedKeyInput'
 import SeedKeySuggestions from './SeedKeySuggestions'
 import ScreenContainer from 'src/ui/deviceauth/components/ScreenContainer'
 
-const Recovery: React.FC = () => {
+const Recovery: React.FC = props => {
+  console.log('PROPS', { props })
+
   return (
     <>
       <ScrollView
@@ -32,7 +34,7 @@ const Recovery: React.FC = () => {
             <RecoveryHeader />
             <SeedKeyInput />
           </View>
-          {/* <RecoveryFooter /> */}
+          <RecoveryFooter handleButtonPress={props.handleButtonPress} />
         </ScreenContainer>
       </ScrollView>
       {Platform.OS === 'ios' && (
@@ -53,10 +55,10 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function() {
+export default function({ handleButtonPress }) {
   return (
     <RecoveryContextProvider>
-      <Recovery />
+      <Recovery handleButtonPress={handleButtonPress} />
     </RecoveryContextProvider>
   )
 }

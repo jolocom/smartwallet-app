@@ -125,12 +125,12 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
   private nextWord = () => this.changeMarkedWord(true)
   private previousWord = () => this.changeMarkedWord(false)
 
-  private onSubmit = async () => {
+  private onSubmit = async (mnemonic: string[]) => {
     const { state } = this.props.navigation
     if (state.params && state.params.isPINrecovery) {
-      this.props.handleRestoreAccess(this.state.mnemonic)
+      this.props.handleRestoreAccess(mnemonic)
     } else {
-      this.props.recoverIdentity(this.state.mnemonic.join(' '))
+      this.props.recoverIdentity(mnemonic.join(' '))
     }
   }
 
@@ -172,6 +172,7 @@ export class InputSeedPhraseContainer extends React.Component<Props, State> {
         handlePreviousWord={this.previousWord}
         handleBackButton={this.onCancel}
         isLoading={this.props.isLoading}
+        routeParams={this.props.navigation.state.params}
       />
     )
   }
