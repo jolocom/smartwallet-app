@@ -121,7 +121,7 @@ export const CredentialReceiveComponent = (props: Props) => {
   const profileScaleValue = interpolateY([0, 100], [1, 0.8])
 
   return (
-    <>
+    <View>
       <Animated.View
         style={[styles.headerWrapper, { opacity: headerOpacityValue }]}>
         <LinearGradient
@@ -197,6 +197,6 @@ export const CredentialReceiveComponent = (props: Props) => {
           )
         })}
       </Animated.ScrollView>
-    </>
+    </View>
   )
 }
