@@ -64,7 +64,11 @@ export const withInternet = (
 ): ThunkAction => async dispatch => {
   const state = await NetInfo.fetch()
   if (!state.isConnected) {
-    return dispatch(scheduleOfflineNotification)
+    return dispatch(
+      scheduleOfflineNotification(
+        strings.PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN,
+      ),
+    )
   }
   return dispatch(wrappedAction)
 }

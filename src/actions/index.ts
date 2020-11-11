@@ -22,14 +22,14 @@ export {
   notificationsActions,
 }
 
-export const scheduleOfflineNotification: ThunkAction = dispatch =>
+export const scheduleOfflineNotification = (
+  message: string,
+): ThunkAction => dispatch =>
   dispatch(
     notificationsActions.scheduleNotification(
       createInfoNotification({
-        title: I18n.t(strings.UH_OH_YOURE_NOT_CONNECTED),
-        message: I18n.t(
-          strings.WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN,
-        ),
+        title: I18n.t(strings.NO_INTERNET_CONNECTION),
+        message: I18n.t(message),
       }),
     ),
   )

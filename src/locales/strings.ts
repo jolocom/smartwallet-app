@@ -107,9 +107,11 @@ const notifications = {
   ACTION_SUCCEEDED: 'Action succeeded',
   YOUR_DATA_WAS_ENCRYPTED: 'Your data was encrypted',
   YOUR_DATA_WAS_DECRYPTED: 'Your data was decrypted',
-  UH_OH_YOURE_NOT_CONNECTED: 'Uh oh… you’re not connected!',
-  WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN:
-    'We can’t register you if you don’t have internet. Please check your connection and try again.',
+  NO_INTERNET_CONNECTION: 'No internet connection',
+  WITHOUT_AN_ACTIVE_CONNECTION_SOME_FEATURES_MAY_BE_UNAVAILABLE:
+    'Without an active connection, some features may be unavailable',
+  PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN:
+    'Please check your connection and try again',
 }
 
 const errorTitle = {

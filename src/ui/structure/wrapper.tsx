@@ -24,6 +24,7 @@ import { useAppState } from '../deviceauth/hooks/useAppState'
 import { genericActions, scheduleOfflineNotification } from 'src/actions'
 import { Colors } from '../deviceauth/colors'
 import { useNetInfo } from '@react-native-community/netinfo'
+import strings from 'src/locales/strings'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   registerProps: (props: Props) =>
@@ -35,7 +36,12 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 const mapStateToAppWrapProps = (state: RootState) => state.generic.appWrapConfig
 const mapDispatchToAppWrapProps = (dispatch: ThunkDispatch) => ({
   lockApp: () => dispatch(genericActions.lockApp()),
-  scheduleOfflineNotification: () => dispatch(scheduleOfflineNotification),
+  scheduleOfflineNotification: () =>
+    dispatch(
+      scheduleOfflineNotification(
+        strings.WITHOUT_AN_ACTIVE_CONNECTION_SOME_FEATURES_MAY_BE_UNAVAILABLE,
+      ),
+    ),
 })
 
 interface Props
