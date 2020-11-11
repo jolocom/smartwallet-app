@@ -16,7 +16,7 @@ import { showErrorScreen } from 'src/actions/generic'
 
 import { ScannerContainer } from './scanner'
 import { genericActions, navigationActions } from 'src/actions'
-import { withLoading } from 'src/actions/modifiers'
+import { withLoading, withInternet } from 'src/actions/modifiers'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -87,7 +87,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   consumeToken: async (jwt: string) => {
     try {
       // NOTE: need to await here, for the catch to trigger correctly on error
-      const ret = await dispatch(withLoading(consumeInteractionToken(jwt)))
+      const ret = await dispatch(
+        withInternet(withLoading(consumeInteractionToken(jwt))),
+      )
       return ret
     } catch (e) {
       if (localNotificationErrors.includes(e.code)) {
@@ -98,7 +100,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     }
   },
   navigateHome: () => dispatch(navigationActions.navigateBackHome()),
-  setDisableLock: (val: boolean) => dispatch(genericActions.setDisableLock(val))
+  setDisableLock: (val: boolean) =>
+    dispatch(genericActions.setDisableLock(val)),
 })
 
 export const InteractionScreen = connect(
