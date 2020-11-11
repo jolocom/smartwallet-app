@@ -110,9 +110,12 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
   } = props
   const { isConnected } = useNetInfo()
 
-  useEffect(() => {
-    !isConnected && scheduleOfflineNotification()
-  }, [isConnected])
+  // TODO We need a way to delay this notification, currently it would show up
+  // during the splash screen. Also, on IOS the application starts with no
+  // internet access (therefore the notification is always scheduled).
+  // useEffect(() => {
+  //   !isConnected && scheduleOfflineNotification()
+  // }, [isConnected])
 
   useEffect(() => {
     // TODO @mnzaki
