@@ -107,6 +107,9 @@ const notifications = {
   ACTION_SUCCEEDED: 'Action succeeded',
   YOUR_DATA_WAS_ENCRYPTED: 'Your data was encrypted',
   YOUR_DATA_WAS_DECRYPTED: 'Your data was decrypted',
+  UH_OH_YOURE_NOT_CONNECTED: 'Uh oh… you’re not connected!',
+  WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN:
+    'We can’t register you if you don’t have internet. Please check your connection and try again.',
 }
 
 const errorTitle = {
@@ -215,11 +218,11 @@ export default {
   ...notifications,
   ...deviceAuth,
   ...termsOfService,
-  NO_SERVICE_NAME: "Service shared no public profile",
-  PULL_TO_CHOOSE: "Pull to choose",
-  SHOWING_VALID: "Showing valid",
-  SHOWING_EXPIRED: "Showing expired",
-  ISSUED_BY: "Issued by",
+  NO_SERVICE_NAME: 'Service shared no public profile',
+  PULL_TO_CHOOSE: 'Pull to choose',
+  SHOWING_VALID: 'Showing valid',
+  SHOWING_EXPIRED: 'Showing expired',
+  ISSUED_BY: 'Issued by',
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',

@@ -48,5 +48,29 @@ export const withErrorHandler = (
   }
 }
 
+/**
+ * Curried function that wraps a {@link ThunkAction} with a notification on internet connection absence
+ * @param wrappedAction - The thunkAction to be wrapped
+ * @example dispatch(withInternet((saveClaims))
+ */
+export const withInternet = (
+  wrappedAction: ThunkAction,
+): ThunkAction => async dispatch => {
+  const state = await NetInfo.fetch()
+  if (!state.isConnected) {
+    return dispatch(
+      scheduleNotification(
+        createInfoNotification({
+          title: I18n.t(strings.UH_OH_YOURE_NOT_CONNECTED),
+          message: I18n.t(
+            strings.WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN,
+          ),
+        }),
+      ),
+    )
+  }
+  return dispatch(wrappedAction)
+}
+
 export const withLoading = withLoadingHandler(showAppLoading)
 export const withErrorScreen = withErrorHandler(showErrorScreen)
