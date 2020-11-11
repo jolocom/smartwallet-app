@@ -56,7 +56,7 @@ const InteractionContainer = (props: Props) => {
     <Wrapper dark centered withoutSafeArea withoutStatusBar>
       {IS_IOS && (
         <TouchableOpacity
-          onPress={props.navigateHome}
+          onPress={props.navigateBack}
           style={styles.closeButton}>
           <CloseIcon />
         </TouchableOpacity>
@@ -99,7 +99,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
       }
     }
   },
-  navigateHome: () => dispatch(navigationActions.navigateBackHome()),
+  navigateBack: () => dispatch(navigationActions.navigateBack()),
   setDisableLock: (val: boolean) =>
     dispatch(genericActions.setDisableLock(val)),
 })

@@ -5,9 +5,10 @@ import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
 import { removeNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
+ // TODO Import ^ from jolocom-lib
 import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
- // TODO Import ^ from jolocom-lib
+import strings from 'src/locales/strings'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -83,11 +84,11 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     true,
   )
 
-  // TODO: find sticky by id from queue, not active
-  const {
-    notifications: { active: stickyNotification },
-  } = getState()
-  if (stickyNotification) dispatch(removeNotification(stickyNotification))
+  const stickies = getState().notifications.queue.filter(n =>
+    n.message === strings.YOUR_DATA_MAY_BE_LOST_BECAUSE_YOU_DID_NOT_CONFIRM_THE_SEED_PHRASE_WE_ADVISE_YOU_TO_COMPLETE_THE_REGISTRATION
+  )
+
+  stickies.map(sticky => dispatch(removeNotification(sticky)))
 
   return dispatch({
     type: 'SET_SEED_PHRASE_SAVED',
