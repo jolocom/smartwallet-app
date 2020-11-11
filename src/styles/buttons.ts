@@ -7,6 +7,7 @@ export const buttonStandardContainer = {
 }
 
 export const buttonStandardText = {
+  textAlign: 'center',
   fontSize: textSM,
   // React Material Button uses a default weight, 500, that isn't supported by
   // our font on Android, so we must manually define it here
