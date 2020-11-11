@@ -53,8 +53,10 @@ const mapStateToProps = (state: RootState) => ({
   seedPhraseSaved: state.settings.seedPhraseSaved,
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
-  recoverIdentity: (mnemonic: string) =>
-    dispatch(withErrorScreen(recoverIdentity(mnemonic))),
+  recoverIdentity: (mnemonic: string) => {
+    // dispatch(withErrorScreen(recoverIdentity(mnemonic)))
+    dispatch(recoverIdentity(mnemonic))
+  },
   goBack: () => dispatch(navigationActions.navigateBack()),
   goToLanding: () =>
     dispatch(navigationActions.navigate({ routeName: routeList.Landing })),

@@ -5,9 +5,13 @@ import { setSeedPhraseSaved } from '../recovery'
 import { generateSecureRandomBytes } from '@jolocom/sdk/js/util'
 import { ThunkAction } from '../../store'
 import { entropyToMnemonic } from 'bip39'
-import { genericActions } from '..'
+import { genericActions, navigationActions } from '..'
 import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
+import { createWarningNotification } from 'src/lib/notifications'
+import { scheduleNotification } from '../notifications'
+import strings from 'src/locales/strings'
+import I18n from 'i18n-js'
 
 const humanTimeout = () => new Promise(resolve => setTimeout(resolve, 1000))
 
@@ -77,16 +81,25 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   agent,
 ) => {
   dispatch(setIsRegistering(true))
-
   try {
-    const identity = await agent.loadFromMnemonic(mnemonic)
+    const identity = await agent.loadFromMnemonic(mnemonic);
+    console.log({identity});
+    
     dispatch(setDid(identity.did))
     dispatch(setSeedPhraseSaved())
 
-    dispatch(setIsRegistering(false))
-    return dispatch(navigatorResetHome())
+    dispatch(navigatorResetHome())
+
+    return dispatch(setIsRegistering(false))
   } catch (e) {
+    const notification = createWarningNotification({
+      title: I18n.t(strings.AWKWARD),
+      message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
+    })
+    dispatch(scheduleNotification(notification))
+    dispatch(navigationActions.navigateBack())
     dispatch(setIsRegistering(false))
-    throw e
+    return;
+    // throw e
   }
 }

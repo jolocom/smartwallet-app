@@ -3,10 +3,13 @@ import { ThunkAction } from '../store'
 import { navigationActions, genericActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
-import { removeNotification } from './notifications'
+import { removeNotification, scheduleNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
 import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
+import { createWarningNotification } from 'src/lib/notifications'
+import strings from 'src/locales/strings'
+import I18n from 'i18n-js'
  // TODO Import ^ from jolocom-lib
 
 export const showSeedPhrase = (): ThunkAction => async (
@@ -64,6 +67,12 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
     dispatch(navigationActions.navigatorResetHome())
+  } else {
+    const notification = createWarningNotification({
+      title: I18n.t(strings.AWKWARD),
+      message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
+    })
+    dispatch(scheduleNotification(notification))
   }
 
   // we re-lock the app, which will trigger the create pin screen

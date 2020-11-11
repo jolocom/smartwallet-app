@@ -174,7 +174,10 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
     },
     [routeList.InputSeedPhrase]: {
       screen: InputSeedPhrase,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.onlyDismissible,
+      },
     },
     [routeList.Entropy]: {
       screen: Entropy,
@@ -205,7 +208,7 @@ const MainStack = createStackNavigator(
       navigationOptions: {
         gestureEnabled: false,
         // @ts-ignore
-        notifications: NotificationFilter.none,
+        notifications: NotificationFilter.onlyDismissible,
         ...lockTransition,
       },
     },
@@ -368,7 +371,7 @@ export const Routes = createSwitchNavigator(
     [routeList.Registration]: {
       screen: RegistrationScreens,
       // @ts-ignore
-      notifications: NotificationFilter.none,
+      // notifications: NotificationFilter.none,
     },
   },
   {
