@@ -6,18 +6,34 @@ import {
   InputAccessoryView,
   Platform,
 } from 'react-native'
+import { RippleLoader } from 'react-native-indicator'
+import { Colors } from 'src/styles'
 
 import RecoveryHeader from './RecoveryHeader'
 import RecoveryFooter from './RecoveryFooter'
 
-import RecoveryContextProvider from './module/recoveryContext'
 import SeedKeyInput from './SeedKeyInput'
 import SeedKeySuggestions from './SeedKeySuggestions'
 import ScreenContainer from 'src/ui/deviceauth/components/ScreenContainer'
 
-const Recovery: React.FC = props => {
-  console.log('PROPS', { props })
+interface Props {
+  handleSubmit: (mnemonic: string[]) => void
+  handleCancel: () => void
+  isLoading: boolean
+}
 
+const Recovery: React.FC<Props> = ({
+  handleSubmit,
+  handleCancel,
+  isLoading,
+}) => {
+  if (isLoading) {
+    return (
+      <ScreenContainer>
+        <RippleLoader size={120} strokeWidth={4} color={Colors.mint} />
+      </ScreenContainer>
+    )
+  }
   return (
     <>
       <ScrollView
@@ -34,7 +50,7 @@ const Recovery: React.FC = props => {
             <RecoveryHeader />
             <SeedKeyInput />
           </View>
-          <RecoveryFooter handleButtonPress={props.handleButtonPress} />
+          <RecoveryFooter onSubmit={handleSubmit} onCancel={handleCancel} />
         </ScreenContainer>
       </ScrollView>
       {Platform.OS === 'ios' && (
@@ -55,10 +71,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function({ handleButtonPress }) {
-  return (
-    <RecoveryContextProvider>
-      <Recovery handleButtonPress={handleButtonPress} />
-    </RecoveryContextProvider>
-  )
-}
+export default Recovery

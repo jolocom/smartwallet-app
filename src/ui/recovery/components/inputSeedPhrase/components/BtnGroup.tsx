@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 export enum BtnsAlignment {
   vertical,
@@ -19,8 +19,7 @@ const BtnGroup: React.FC<PropsI> = ({
       style={[
         styles.container,
         alignment === BtnsAlignment.horizontal && styles.horizontal,
-      ]}
-    >
+      ]}>
       {children}
     </View>
   )
@@ -29,6 +28,7 @@ const BtnGroup: React.FC<PropsI> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    paddingBottom: 30,
   },
   horizontal: {
     flexDirection: 'row',

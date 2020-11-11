@@ -44,12 +44,11 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
 ) => {
   let recovered = false
 
-  const recoveredEntropy = Buffer.from(
-    mnemonicToEntropy(mnemonicInput.join(' ')),
-    'hex'
-  )
-
   try {
+    const recoveredEntropy = Buffer.from(
+      mnemonicToEntropy(mnemonicInput.join(' ')),
+      'hex'
+    )
     if (agent.didMethod.recoverFromSeed) {
       const { identityWallet } = await agent.didMethod.recoverFromSeed(
         recoveredEntropy,
