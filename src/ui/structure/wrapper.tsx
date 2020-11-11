@@ -21,8 +21,9 @@ import {
 } from 'src/actions/generic'
 import { RootState } from 'src/reducers'
 import { useAppState } from '../deviceauth/hooks/useAppState'
-import { genericActions } from 'src/actions'
+import { genericActions, scheduleOfflineNotification } from 'src/actions'
 import { Colors } from '../deviceauth/colors'
+import { useNetInfo } from '@react-native-community/netinfo'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   registerProps: (props: Props) =>
@@ -34,6 +35,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
 const mapStateToAppWrapProps = (state: RootState) => state.generic.appWrapConfig
 const mapDispatchToAppWrapProps = (dispatch: ThunkDispatch) => ({
   lockApp: () => dispatch(genericActions.lockApp()),
+  scheduleOfflineNotification: () => dispatch(scheduleOfflineNotification),
 })
 
 interface Props
@@ -92,7 +94,19 @@ const styles = StyleSheet.create({
 
 let statusBarHidden = 0
 const AppWrapContainer: React.FC<AppWrapProps> = props => {
-  const { dark, secondaryDark, loading, withoutStatusBar, lockApp } = props
+  const {
+    dark,
+    secondaryDark,
+    loading,
+    withoutStatusBar,
+    lockApp,
+    scheduleOfflineNotification,
+  } = props
+  const { isConnected } = useNetInfo()
+
+  useEffect(() => {
+    !isConnected && scheduleOfflineNotification()
+  }, [isConnected])
 
   useEffect(() => {
     // TODO @mnzaki
@@ -201,9 +215,7 @@ export const Wrapper = React.memo(
 
     return (
       <>
-        <WrapperView
-          testID={props.testID}
-          style={[styles.wrapper, extraStyle]}>
+        <WrapperView testID={props.testID} style={[styles.wrapper, extraStyle]}>
           {props.children}
         </WrapperView>
       </>

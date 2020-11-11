@@ -1,7 +1,13 @@
 import { ActionCreator } from 'redux'
+import NetInfo from '@react-native-community/netinfo'
 import { ThunkAction } from 'src/store'
 import { AppError } from '../lib/errors'
 import { showErrorScreen, showAppLoading } from './generic'
+import { scheduleNotification } from './notifications'
+import { createInfoNotification } from '../lib/notifications'
+import I18n from 'src/locales/i18n'
+import strings from '../locales/strings'
+import { scheduleOfflineNotification } from '.'
 
 /**
  * Curried function that wraps a {@link ThunkAction} with two calls to the provided loadingAction
@@ -58,16 +64,7 @@ export const withInternet = (
 ): ThunkAction => async dispatch => {
   const state = await NetInfo.fetch()
   if (!state.isConnected) {
-    return dispatch(
-      scheduleNotification(
-        createInfoNotification({
-          title: I18n.t(strings.UH_OH_YOURE_NOT_CONNECTED),
-          message: I18n.t(
-            strings.WE_CANT_REGISTER_YOU_IF_YOU_DONT_HAVE_INTERNET_PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN,
-          ),
-        }),
-      ),
-    )
+    return dispatch(scheduleOfflineNotification)
   }
   return dispatch(wrappedAction)
 }
