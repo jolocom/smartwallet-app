@@ -58,8 +58,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   goBack: () => dispatch(navigationActions.navigateBack()),
   goToLanding: () =>
     dispatch(navigationActions.navigate({ routeName: routeList.Landing })),
-  handleRestoreAccess: (mnemonic: string[], resetPhrase: () => void) =>
-    dispatch(recoveryActions.onRestoreAccess(mnemonic, resetPhrase)),
+  handleRestoreAccess: (mnemonic: string[]) =>
+    dispatch(recoveryActions.onRestoreAccess(mnemonic)),
 })
 
 export const InputSeedPhrase = connect(
