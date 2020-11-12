@@ -23,7 +23,6 @@ import { RootState } from 'src/reducers'
 import { useAppState } from '../deviceauth/hooks/useAppState'
 import { genericActions, scheduleOfflineNotification } from 'src/actions'
 import { Colors } from '../deviceauth/colors'
-import { useNetInfo } from '@react-native-community/netinfo'
 import strings from 'src/locales/strings'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
@@ -106,9 +105,9 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
     loading,
     withoutStatusBar,
     lockApp,
-    scheduleOfflineNotification,
+    // scheduleOfflineNotification,
   } = props
-  const { isConnected } = useNetInfo()
+  // const { isConnected } = useNetInfo()
 
   // TODO We need a way to delay this notification, currently it would show up
   // during the splash screen. Also, on IOS the application starts with no

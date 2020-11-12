@@ -1,6 +1,5 @@
 import { ErrorCodes as LibErrorCode } from 'jolocom-lib/js/errors'
 import { ErrorCode as SDKErrorCode } from '@jolocom/sdk'
-import { withLoading } from '../modifiers'
 import { ThunkAction } from '../../store'
 import { AppError, ErrorCode } from '../../lib/errors'
 import { interactionHandlers } from '..'
