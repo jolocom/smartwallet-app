@@ -46,10 +46,21 @@ jest.mock('react-native-jolocom', () => ({
   JolocomLib: {
     parse: {
       interactionToken: {
-        fromJWT: jest.fn()
-      }
-    }
-  }
+        fromJWT: jest.fn(),
+      },
+    },
+  },
 }))
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
+
+jest.mock('react-native-localize', () => ({
+  getLocales: () => [
+    {
+      countryCode: 'US',
+      languageTag: 'en-US',
+      languageCode: 'en',
+      isRTL: false,
+    },
+  ],
+}))
