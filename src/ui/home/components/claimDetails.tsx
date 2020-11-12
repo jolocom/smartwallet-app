@@ -8,6 +8,7 @@ import {
   Text,
   View,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native'
 import { DecoratedClaims } from 'src/reducers/account/'
 import { TextInputField } from 'src/ui/home/components/textInputField'
@@ -140,8 +141,10 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
           .map(field => claimData[field])
 
         // at least one claim of size > 0
-        return fieldValuesToCheck.some(field => field.length > 0) &&
-            fieldValuesToCheck.every(validator)
+        return (
+          fieldValuesToCheck.some(field => field.length > 0) &&
+          fieldValuesToCheck.every(validator)
+        )
       }
       return claimData[c].length > 0 && validator(claimData[c])
     })
@@ -156,31 +159,39 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
       !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <Wrapper>
-        {Platform.OS === 'ios' ? (
-          <NavigationSection
-            isBackButton
-            onNavigation={this.props.onBackPress}
-            backButtonColor={ColorsEnum.black}
-          />
-        ) : null}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={'padding'}>
+        <Wrapper style={{ backgroundColor: 'transparent' }}>
+          {Platform.OS === 'ios' ? (
+            <NavigationSection
+              isBackButton
+              onNavigation={this.props.onBackPress}
+              backButtonColor={ColorsEnum.black}
+            />
+          ) : null}
 
-        <ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>
-          <Text style={styles.header}>{I18n.t(credentialType)}</Text>
-          <View style={styles.textInputArea}>
-            {this.renderInputFields(selectedClaim)}
-          </View>
-          <View style={styles.buttonArea}>
-            {showButtonWhileTyping ? (
-              <JolocomButton
-                onPress={() => this.onSubmit()}
-                text={I18n.t(strings.ADD_CLAIM)}
-                disabled={!!this.confirmationEligibilityCheck()}
-              />
-            ) : null}
-          </View>
-        </ScrollView>
-      </Wrapper>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            style={styles.scroll}
+            showsVerticalScrollIndicator={false}>
+            <Text style={styles.header}>{I18n.t(credentialType)}</Text>
+            <View style={styles.textInputArea}>
+              {this.renderInputFields(selectedClaim)}
+            </View>
+            <View style={styles.buttonArea}>
+              {showButtonWhileTyping ? (
+                <JolocomButton
+                  onPress={this.onSubmit}
+                  text={I18n.t(strings.ADD_CLAIM)}
+                  disabled={!!this.confirmationEligibilityCheck()}
+                />
+              ) : null}
+            </View>
+          </ScrollView>
+          <View style={{ paddingBottom: 10 }} />
+        </Wrapper>
+      </KeyboardAvoidingView>
     )
   }
 }
