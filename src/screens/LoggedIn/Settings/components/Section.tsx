@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewStyle } from 'react-native'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
-import Block from '~/components/Block'
+import Block, { BlockAlign } from '~/components/Block'
 
 interface PropsI {
   title: string
@@ -22,7 +22,7 @@ const Section: React.FC<PropsI> = ({ title, children, customStyles = {} }) => (
     >
       {title}
     </JoloText>
-    {children && <Block>{children}</Block>}
+    {children && <Block align={BlockAlign.left}>{children}</Block>}
   </View>
 )
 
