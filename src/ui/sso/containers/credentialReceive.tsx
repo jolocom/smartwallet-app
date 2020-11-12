@@ -61,7 +61,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     selected.includes(offering)
 
   return (
-    <Wrapper>
+    <Wrapper withoutStatusBar>
       <CredentialReceiveComponent
         credentialOfferSummary={
           interactionSummary.state as CredentialOfferFlowState
