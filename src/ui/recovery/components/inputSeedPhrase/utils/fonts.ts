@@ -1,10 +1,11 @@
 import { Colors } from 'src/ui/deviceauth/colors'
 import BP from './breakpoints'
+import { fontMain, fontMedium, fontLight } from 'src/styles/typography'
 
-export enum Fonts {
-  Regular = 'TTCommons-Regular',
-  Medium = 'TTCommons-Medium',
-  Light = 'TTCommons-Light',
+export const Fonts = {
+  Regular: fontMain,
+  Medium: fontMedium,
+  Light: fontLight,
 }
 
 type FontSetI = {
@@ -12,7 +13,7 @@ type FontSetI = {
   lineHeight: number
   letterSpacing: number
   color: Colors
-  fontFamily: Fonts
+  fontFamily: string
 }
 
 export enum JoloTextSizes {
@@ -27,7 +28,7 @@ const arrangeFontStyle = (
   lineHeight: number,
   letterSpacing: number,
   color: Colors,
-  fontFamily: Fonts,
+  fontFamily: string,
 ): FontSetI => ({
   fontSize,
   lineHeight,
