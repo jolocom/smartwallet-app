@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 12,
+    top: IS_IOS ? 30 :  12,
     right: 12,
     zIndex: 2,
     width: 45,
