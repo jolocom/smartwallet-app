@@ -7,9 +7,11 @@ import SingleSelectBlock, {
 import Section from './components/Section'
 import useTranslation from '~/hooks/useTranslation'
 import { Locales, strings } from '~/translations'
+import { useAgent } from '~/hooks/sdk'
 
 const Language = () => {
   const { t, changeLanguage, currentLanguage } = useTranslation()
+  const agent = useAgent()
 
   const languages = [
     { id: Locales.en, value: t(strings.ENGLISH) },
@@ -18,8 +20,8 @@ const Language = () => {
 
   const initialSelection = languages.find((l) => l.id === currentLanguage)
 
-  const handleLanguageChange = (language: BlockSelection) => {
-    changeLanguage(language.id as Locales)
+  const handleLanguageChange = async (language: BlockSelection) => {
+    return changeLanguage(language.id as Locales, agent)
   }
 
   return (
