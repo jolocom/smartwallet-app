@@ -153,15 +153,11 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
   render() {
     const {
       selectedClaim,
-      selectedClaim: { credentialType, claimData },
+      selectedClaim: { credentialType },
     } = this.props
-    const showButtonWhileTyping =
-      !this.state.keyboardDrawn || Object.keys(claimData).length < 3
 
     return (
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={'padding'}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={'padding'}>
         <Wrapper style={{ backgroundColor: 'transparent' }}>
           {Platform.OS === 'ios' ? (
             <NavigationSection
@@ -180,13 +176,11 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
               {this.renderInputFields(selectedClaim)}
             </View>
             <View style={styles.buttonArea}>
-              {showButtonWhileTyping ? (
-                <JolocomButton
-                  onPress={this.onSubmit}
-                  text={I18n.t(strings.ADD_CLAIM)}
-                  disabled={!!this.confirmationEligibilityCheck()}
-                />
-              ) : null}
+              <JolocomButton
+                onPress={this.onSubmit}
+                text={I18n.t(strings.ADD_CLAIM)}
+                disabled={!!this.confirmationEligibilityCheck()}
+              />
             </View>
           </ScrollView>
           <View style={{ paddingBottom: 10 }} />
