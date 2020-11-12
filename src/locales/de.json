@@ -205,5 +205,6 @@
   "Action succeeded": "Aktion erfolgreich",
   "Interaction with the service completed. Your service page should be updated now": "Service Interaktion erfolgreich",
   "Your data was decrypted": "Deine Daten wurden entschlüsselt",
-  "Your data was encrypted": "Deine Daten wurden verschlüsselt"
+  "Your data was encrypted": "Deine Daten wurden verschlüsselt",
+  "Please check your connection and try again": "Bitte überprüfen Sie Ihre Internetverbindung"
 }
