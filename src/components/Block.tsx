@@ -18,7 +18,7 @@ const Block: React.FC<Props> = ({
   customStyle = {},
   align = BlockAlign.center,
 }) => (
-  <View style={[styles.container, { justifyContent: align }, customStyle]}>
+  <View style={[styles.container, { alignItems: align }, customStyle]}>
     {children}
   </View>
 )
