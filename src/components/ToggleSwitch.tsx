@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Colors } from '~/utils/colors'
 
 interface Props {
-  onToggle: (state: boolean) => void
+  onToggle: () => void
   on?: boolean
 }
 
@@ -23,6 +23,7 @@ const ToggleSwitch = (props: Props) => {
   const getOnState = () => {
     return isPropControlled('on') ? props.on : isOn
   }
+  const onState = getOnState()
 
   const onGradientColors = [Colors.carnationPink, Colors.hyacinthPink]
   const offGradientColors = [Colors.haiti, Colors.haiti]
@@ -32,18 +33,20 @@ const ToggleSwitch = (props: Props) => {
   ).current
 
   const toggle = () => {
+    if (isPropControlled('on')) {
+      props.onToggle()
+    } else {
+      setIsOn((prevState) => !prevState)
+    }
+  }
+
+  useEffect(() => {
     Animated.timing(positionValue, {
-      toValue: getOnState() ? OFF_POSITION : ON_POSITION,
+      toValue: onState ? ON_POSITION : OFF_POSITION,
       duration: 300,
       useNativeDriver: true,
-    }).start(() => {
-      if (isPropControlled('on')) {
-        props.onToggle(!getOnState())
-      } else {
-        setIsOn((prevState) => !prevState)
-      }
-    })
-  }
+    }).start()
+  }, [onState])
 
   return (
     <TouchableWithoutFeedback
