@@ -4,7 +4,7 @@ import { ThunkAction } from '../../store'
 import { Interaction, FlowType, ErrorCode } from '@jolocom/sdk'
 import { cancelSSO, scheduleSuccessNotification } from '.'
 import { scheduleNotification } from '../notifications'
-import { createInfoNotification } from '../../lib/notifications'
+import { createInfoNotification, createWarningNotification } from '../../lib/notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
 import { showErrorScreen } from '../generic'
@@ -76,10 +76,16 @@ export const handleChannelInterxn = (channel: Channel, interxn: Interaction): Th
       )
     }
   } catch (err) {
-    const error = err instanceof AppError
-      ? err
-      : new AppError(ErrorCode.Unknown, err)
-    dispatch(showErrorScreen(error))
+    const notification = createWarningNotification({
+      title: I18n.t(strings.AWKWARD),
+      message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
+    })
+
+    dispatch(scheduleNotification(notification))
+    // const error = err instanceof AppError
+    //   ? err
+    //   : new AppError(ErrorCode.Unknown, err)
+    // dispatch(showErrorScreen(error))
   }
 }
 
