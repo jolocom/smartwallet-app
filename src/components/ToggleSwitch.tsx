@@ -6,41 +6,50 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Colors } from '~/utils/colors'
 
 interface Props {
-  initialState: boolean
   onToggle: (state: boolean) => void
+  on?: boolean
 }
 
 const ON_POSITION = 17
 const OFF_POSITION = 2
 
 const ToggleSwitch = (props: Props) => {
-  const { onToggle, initialState } = props
+  const [isOn, setIsOn] = useState(false)
 
-  const [toggled, setToggled] = useState(initialState)
+  const isPropControlled = (prop: string) => {
+    return props[prop] !== undefined
+  }
+
+  const getOnState = () => {
+    return isPropControlled('on') ? props.on : isOn
+  }
 
   const onGradientColors = [Colors.carnationPink, Colors.hyacinthPink]
   const offGradientColors = [Colors.haiti, Colors.haiti]
 
   const positionValue = useRef(
-    new Animated.Value(toggled ? ON_POSITION : OFF_POSITION),
+    new Animated.Value(getOnState() ? ON_POSITION : OFF_POSITION),
   ).current
 
-  const onPress = () => {
+  const toggle = () => {
     Animated.timing(positionValue, {
-      toValue: toggled ? OFF_POSITION : ON_POSITION,
+      toValue: getOnState() ? OFF_POSITION : ON_POSITION,
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
-      setToggled(!toggled)
+      if (isPropControlled('on')) {
+        props.onToggle(!getOnState())
+      } else {
+        setIsOn((prevState) => !prevState)
+      }
     })
-    onToggle(!toggled)
   }
 
   return (
     <TouchableWithoutFeedback
       testID="toggleSwitch"
       style={styles.track}
-      onPressIn={onPress}
+      onPressIn={toggle}
     >
       <Animated.View
         style={{
@@ -52,7 +61,7 @@ const ToggleSwitch = (props: Props) => {
           style={styles.gradientWrapper}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={toggled ? onGradientColors : offGradientColors}
+          colors={getOnState() ? onGradientColors : offGradientColors}
         />
       </Animated.View>
     </TouchableWithoutFeedback>

@@ -167,6 +167,7 @@ const settings = {
   LANGUAGE: 'Language',
   SECURITY: 'Security',
   CHANGE_PIN: 'Change PIN',
+  USE_BIOMETRICS_TO_LOGIN: 'Use Biometrics to log in',
   BACKUP_IDENTITY: 'Backup Identity',
   GENERAL: 'General',
   FAQ: 'FAQ',
