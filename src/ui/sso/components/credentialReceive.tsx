@@ -121,7 +121,7 @@ export const CredentialReceiveComponent = (props: Props) => {
   const profileScaleValue = interpolateY([0, 100], [1, 0.8])
 
   return (
-    <View>
+    <View style={{ flex: 1, width: '100%' }}>
       <Animated.View
         style={[styles.headerWrapper, { opacity: headerOpacityValue }]}>
         <LinearGradient
