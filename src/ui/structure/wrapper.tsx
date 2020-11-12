@@ -122,7 +122,7 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
     // this is overengineered to allow for nesting <Wrapper>
     // instances that have conflicting StatusBar desires
     // see notion:spaces/mnzaki
-    if (withoutStatusBar) {
+    if (withoutStatusBar && Platform.OS !== 'ios') {
       statusBarHidden += 1
       StatusBar.setHidden(true)
       return () => {
