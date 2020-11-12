@@ -161,7 +161,7 @@ export class ClaimDetailsComponent extends React.Component<Props, State> {
     return (
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : null}>
+        behavior={'padding'}>
         <Wrapper style={{ backgroundColor: 'transparent' }}>
           {Platform.OS === 'ios' ? (
             <NavigationSection
