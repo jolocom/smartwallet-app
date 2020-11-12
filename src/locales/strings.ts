@@ -296,5 +296,5 @@ export default {
   EXPIRES_ON: 'Expires on',
 
   //ESATABLISH
-  CONNECTION_DESCRIPTION: 'Connection description:',
+  CONNECTION_DESCRIPTION: 'Connection description',
 }

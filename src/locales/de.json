@@ -200,11 +200,10 @@
   "About": "About",
   "Reset": "Reset",
   "Skip": "Skip",
-  "Connection description:": "Connection description:",
+  "Connection description": "Verbindungsbeschreibung:",
   "Establish Channel request": "Establish Channel request",
-  "Action succeeded": "Action succeeded",
-  "Adding an extra layer of security helps prevent unwanted access to your wallet": "Adding an extra layer of security helps prevent unwanted access to your wallet",
+  "Action succeeded": "Aktion erfolgreich",
   "Interaction with the service completed. Your service page should be updated now": "Service Interaktion erfolgreich",
-  "Your data was decrypted": "Your data was decrypted",
-  "Your data was encrypted": "Your data was encrypted"
+  "Your data was decrypted": "Deine Daten wurden entschlüsselt",
+  "Your data was encrypted": "Deine Daten wurden verschlüsselt"
 }
