@@ -5,17 +5,21 @@ import SingleSelectBlock, {
   BlockSelection,
 } from '~/components/SingleSelectBlock'
 import Section from './components/Section'
-import { strings } from '~/translations/strings'
-
-const mockLanguages = [
-  { id: 'en', value: 'English' },
-  { id: 'de', value: 'German' },
-  { id: 'nl', value: 'Dutch' },
-]
+import useTranslation from '~/hooks/useTranslation'
+import { Locales, strings } from '~/translations'
 
 const Language = () => {
+  const { t, changeLanguage, currentLanguage } = useTranslation()
+
+  const languages = [
+    { id: Locales.en, value: t(strings.ENGLISH) },
+    { id: Locales.de, value: t(strings.GERMAN) },
+  ]
+
+  const initialSelection = languages.find((l) => l.id === currentLanguage)
+
   const handleLanguageChange = (language: BlockSelection) => {
-    console.log('changing language to ', language.value)
+    changeLanguage(language.id as Locales)
   }
 
   return (
@@ -23,9 +27,10 @@ const Language = () => {
       hasHeaderBack
       customStyles={{ justifyContent: 'flex-start' }}
     >
-      <Section title={strings.LANGUAGE} customStyles={{ marginBottom: 0 }} />
+      <Section title={t(strings.LANGUAGE)} customStyles={{ marginBottom: 0 }} />
       <SingleSelectBlock
-        selection={mockLanguages}
+        initialSelect={initialSelection}
+        selection={languages}
         onSelect={handleLanguageChange}
       />
     </ScreenContainer>
