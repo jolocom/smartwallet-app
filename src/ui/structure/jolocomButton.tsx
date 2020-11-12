@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     fontFamily: fontMain,
     ...Platform.select({
       ios: {
-        marginTop: 3,
+        marginTop: 5,
       },
     }),
   },
