@@ -19,7 +19,10 @@ const FAQ = () => {
       hasHeaderBack
       customStyles={{ justifyContent: 'flex-start' }}
     >
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView
+        overScrollMode={'never'}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
         <Section title={strings.POPULAR_QUESTIONS} />
         {faqArray.map(({ question, answer }, i) => (
           <BlockExpanded key={i} title={question} expandedText={answer} />
