@@ -2,7 +2,6 @@ import React from 'react'
 import { View, StyleSheet, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 
 export enum BlockAlign {
   left = 'flex-start',
