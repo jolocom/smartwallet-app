@@ -107,6 +107,11 @@ const notifications = {
   ACTION_SUCCEEDED: 'Action succeeded',
   YOUR_DATA_WAS_ENCRYPTED: 'Your data was encrypted',
   YOUR_DATA_WAS_DECRYPTED: 'Your data was decrypted',
+  NO_INTERNET_CONNECTION: 'No internet connection',
+  WITHOUT_AN_ACTIVE_CONNECTION_SOME_FEATURES_MAY_BE_UNAVAILABLE:
+    'Without an active connection, some features may be unavailable',
+  PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN:
+    'Please check your connection and try again',
 }
 
 const errorTitle = {
@@ -215,10 +220,11 @@ export default {
   ...notifications,
   ...deviceAuth,
   ...termsOfService,
-  NO_SERVICE_NAME: "Service shared no public profile",
-  SHOWING_VALID: "Showing valid",
-  SHOWING_EXPIRED: "Showing expired",
-  ISSUED_BY: "Issued by",
+  NO_SERVICE_NAME: 'Service shared no public profile',
+  PULL_TO_CHOOSE: 'Pull to choose',
+  SHOWING_VALID: 'Showing valid',
+  SHOWING_EXPIRED: 'Showing expired',
+  ISSUED_BY: 'Issued by',
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',
@@ -290,5 +296,5 @@ export default {
   EXPIRES_ON: 'Expires on',
 
   //ESATABLISH
-  CONNECTION_DESCRIPTION: 'Connection description:',
+  CONNECTION_DESCRIPTION: 'Connection description',
 }

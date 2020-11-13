@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { Colors, Spacing, Typography } from '../../../styles'
 import React from 'react'
 import SettingItem from './settingItem'
@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
   },
   languageOption: {
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Colors.lightGreyLight,
     borderRadius: 4,
     paddingHorizontal: Spacing.MD,
@@ -22,6 +23,11 @@ const styles = StyleSheet.create({
     ...Typography.baseFontStyles,
     fontSize: Typography.textXS,
     color: Colors.blackMain,
+    ...Platform.select({
+      ios: {
+        paddingTop: 5,
+      },
+    }),
   },
 })
 
@@ -36,8 +42,7 @@ export const LocaleSetting: React.FC<Props> = props => {
   return (
     <SettingItem
       title={I18n.translate(strings.LANGUAGE)}
-      iconName={'translate'}
-    >
+      iconName={'translate'}>
       <View style={styles.languageOptions}>
         {props.locales.map(locale => {
           const isCurrentLanguage = locale === currentLocale
@@ -50,16 +55,14 @@ export const LocaleSetting: React.FC<Props> = props => {
                 isCurrentLanguage && {
                   backgroundColor: Colors.sandLight,
                 },
-              ]}
-            >
+              ]}>
               <Text
                 style={[
                   styles.languageOptionText,
                   isCurrentLanguage && {
                     color: Colors.purpleMain,
                   },
-                ]}
-              >
+                ]}>
                 {locale.toUpperCase()}
               </Text>
             </View>

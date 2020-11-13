@@ -3,11 +3,15 @@ import { connect } from 'react-redux'
 import { ConsentComponent } from 'src/ui/sso/components/consent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
-import { withLoading, withErrorScreen } from 'src/actions/modifiers'
+import {
+  withLoading,
+  withErrorScreen,
+  withInternet,
+} from 'src/actions/modifiers'
 import {
   CredentialVerificationSummary,
   CredentialTypeSummary,
-  InteractionSummary
+  InteractionSummary,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
@@ -66,9 +70,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     interactionId: string,
   ) =>
     dispatch(
-      withLoading(
-        withErrorScreen(
-          ssoActions.sendCredentialResponse(credentials, interactionId),
+      withInternet(
+        withLoading(
+          withErrorScreen(
+            ssoActions.sendCredentialResponse(credentials, interactionId),
+          ),
         ),
       ),
     ),

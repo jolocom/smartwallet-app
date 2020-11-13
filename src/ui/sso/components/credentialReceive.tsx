@@ -85,7 +85,7 @@ export const CredentialReceiveComponent = (props: Props) => {
     credentialOfferSummary: { offerSummary },
     onToggleSelect,
     isDocumentSelected,
-    passedValidation
+    passedValidation,
   } = props
 
   const issuerImage = publicProfile?.image && publicProfile.image
@@ -121,15 +121,13 @@ export const CredentialReceiveComponent = (props: Props) => {
   const profileScaleValue = interpolateY([0, 100], [1, 0.8])
 
   return (
-    <>
+    <View style={{ flex: 1, width: '100%' }}>
       <Animated.View
-        style={[styles.headerWrapper, { opacity: headerOpacityValue }]}
-      >
+        style={[styles.headerWrapper, { opacity: headerOpacityValue }]}>
         <LinearGradient
           colors={gradientColors}
           start={{ x: 0.5, y: 0.7 }}
-          style={styles.gradientWrapper}
-        >
+          style={styles.gradientWrapper}>
           <Animated.Text
             style={[
               styles.headerServiceName,
@@ -141,17 +139,16 @@ export const CredentialReceiveComponent = (props: Props) => {
                 ],
                 opacity: headerTextOpacityValue,
               },
-            ]}
-          >
+            ]}>
             {issuerName}
           </Animated.Text>
         </LinearGradient>
       </Animated.View>
       <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollWrapper}
         scrollEventThrottle={1}
-        onScroll={handleScroll}
-      >
+        onScroll={handleScroll}>
         <Animated.View
           style={[
             styles.profileWrapper,
@@ -163,8 +160,7 @@ export const CredentialReceiveComponent = (props: Props) => {
               ],
               opacity: detailsOpacityValue,
             },
-          ]}
-        >
+          ]}>
           {issuerImage ? (
             <Image style={styles.logo} source={{ uri: issuerImage }} />
           ) : (
@@ -182,21 +178,18 @@ export const CredentialReceiveComponent = (props: Props) => {
               ],
               opacity: detailsOpacityValue,
             },
-          ]}
-        >
+          ]}>
           <Text style={styles.description}>
             {I18n.t(
-              strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU
+              strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_PROVIDED_BY_THIS_SERVICE_AND_WE_WILL_GENERATE_THEM_FOR_YOU,
             )}
           </Text>
         </Animated.View>
         {offerSummary.map((offer, i) => {
           return (
             <DocumentReceiveCard
-              key={i}
-              onToggle={() =>
-                passedValidation[i] && onToggleSelect(offer)
-              }
+              key={i + offer.type}
+              onToggle={() => passedValidation[i] && onToggleSelect(offer)}
               selected={isDocumentSelected(offer)}
               offering={offer}
               invalid={!passedValidation[i]}
@@ -204,6 +197,6 @@ export const CredentialReceiveComponent = (props: Props) => {
           )
         })}
       </Animated.ScrollView>
-    </>
+    </View>
   )
 }

@@ -31,16 +31,17 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   getState,
   sdk,
 ) => {
-  let interxn = sdk.findInteraction(jwt)
-  if (interxn && interxn.getMessages().length > 0) {
-    const msg = interxn.lastMessage.encode()
-    if (msg !== jwt) interxn = null
+  // TODO findInteraction should not throw but return undefined
+  let interxn = await sdk.findInteraction(jwt)
+    .catch(() => null)
+
+  if (interxn?.lastMessage?.encode() !==jwt) {
+    interxn = null
   }
 
+  // we only process this if the interaction was not previously created
+  // otherwise it will fail because the token was already processed
   if (!interxn) {
-    // we only process this if the interaction was not previously created
-    // otherwise it will fail because the token was already processed
-
     try {
       interxn = await sdk.processJWT(jwt)
     } catch (e) {

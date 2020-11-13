@@ -3,11 +3,14 @@ import { ThunkAction } from '../store'
 import { navigationActions, genericActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
-import { removeNotification } from './notifications'
+import { removeNotification, scheduleNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
+ // TODO Import ^ from jolocom-lib
 import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
- // TODO Import ^ from jolocom-lib
+import { createWarningNotification } from 'src/lib/notifications'
+import strings from 'src/locales/strings'
+import I18n from 'src/locales/i18n'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
@@ -44,12 +47,11 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
 ) => {
   let recovered = false
 
-  const recoveredEntropy = Buffer.from(
-    mnemonicToEntropy(mnemonicInput.join(' ')),
-    'hex'
-  )
-
   try {
+    const recoveredEntropy = Buffer.from(
+      mnemonicToEntropy(mnemonicInput.join(' ')),
+      'hex'
+    )
     if (agent.didMethod.recoverFromSeed) {
       const { identityWallet } = await agent.didMethod.recoverFromSeed(
         recoveredEntropy,
@@ -65,6 +67,12 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
     dispatch(navigationActions.navigatorResetHome())
+  } else {
+    const notification = createWarningNotification({
+      title: I18n.t(strings.AWKWARD),
+      message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
+    })
+    dispatch(scheduleNotification(notification))
   }
 
   // we re-lock the app, which will trigger the create pin screen
@@ -83,11 +91,9 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
     true,
   )
 
-  // TODO: find sticky by id from queue, not active
-  const {
-    notifications: { active: stickyNotification },
-  } = getState()
-  if (stickyNotification) dispatch(removeNotification(stickyNotification))
+  const stickies = getState().notifications.queue.filter(n => !n.dismiss)
+
+  stickies.map(sticky => dispatch(removeNotification(sticky)))
 
   return dispatch({
     type: 'SET_SEED_PHRASE_SAVED',

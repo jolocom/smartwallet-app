@@ -8,6 +8,9 @@ import * as genericActions from 'src/actions/generic/'
 import * as ssoActions from 'src/actions/sso/'
 import * as recoveryActions from 'src/actions/recovery'
 import * as notificationsActions from 'src/actions/notifications'
+import strings from 'src/locales/strings'
+import I18n from 'src/locales/i18n'
+import { createInfoNotification } from '../lib/notifications'
 
 export {
   accountActions,
@@ -18,6 +21,18 @@ export {
   recoveryActions,
   notificationsActions,
 }
+
+export const scheduleOfflineNotification = (
+  message: string,
+): ThunkAction => dispatch =>
+  dispatch(
+    notificationsActions.scheduleNotification(
+      createInfoNotification({
+        title: I18n.t(strings.NO_INTERNET_CONNECTION),
+        message: I18n.t(message),
+      }),
+    ),
+  )
 
 export const interactionHandlers: {
   [flowType: string]: (interxn: Interaction) => ThunkAction

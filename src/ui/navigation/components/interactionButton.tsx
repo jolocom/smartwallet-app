@@ -11,7 +11,7 @@ import { ScanIcon } from '../../../resources'
 
 const styles = StyleSheet.create({
   circle: {
-    borderRadius: 35,
+    borderRadius: 100,
     // NOTE zIndex behaves differently on iOS and android
     zIndex: Platform.select({
       ios: undefined,

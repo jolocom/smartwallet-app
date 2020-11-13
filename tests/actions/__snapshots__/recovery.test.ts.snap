@@ -27,6 +27,18 @@ Array [
 exports[`Account recovery actions should not restore access for incorrect mnemonic 1`] = `
 Array [
   Object {
+    "notification": Object {
+      "dismiss": Object {
+        "timeout": 3000,
+      },
+      "id": 0,
+      "message": "It seems like we can't do this",
+      "title": "#awkward",
+      "type": "warning",
+    },
+    "type": "SCHEDULE_NOTIFICATION",
+  },
+  Object {
     "type": "APPWRAP_SET_LOCKED",
     "value": true,
   },

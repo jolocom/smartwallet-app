@@ -92,11 +92,12 @@ const styles = StyleSheet.create({
 
 interface Props {
   onScan: (jwt: string) => Promise<void>
+  shouldScan: boolean
   onScannerRef?: RefObject<QRScanner>
 }
 
 export const ScannerComponent = (props: Props) => {
-  const { onScan, onScannerRef } = props
+  const { onScan, onScannerRef, shouldScan } = props
 
   const [isError, setError] = useState(false)
   const [errorText, setErrorText] = useState('')
@@ -136,7 +137,7 @@ export const ScannerComponent = (props: Props) => {
   })
 
   const onRead = (event: { data: string }) => {
-    return onScan(event.data).catch(err => {
+    return shouldScan && onScan(event.data).catch(err => {
       // TODO: use different message based on error code
       //       after fixing up error codes
       setError(true)
@@ -168,6 +169,7 @@ export const ScannerComponent = (props: Props) => {
         }}
         cameraProps={cameraSettings}
         reactivate={true}
+        vibrate={shouldScan}
         reactivateTimeout={3000}
         fadeIn={false}
         onRead={onRead}

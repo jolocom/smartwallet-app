@@ -43,6 +43,7 @@ export const ScannerContainer: React.FC<Props> = props => {
   const scannerRef = useRef<QRScanner>(null)
   const reactivate = () => scannerRef && scannerRef.current?.reactivate()
   const [showCamera, setShowCamera] = useState(true)
+  const [shouldScan, setShouldScan] = useState(true)
 
   useEffect(() => {
     const backListener = BackHandler.addEventListener(
@@ -53,17 +54,26 @@ export const ScannerContainer: React.FC<Props> = props => {
       },
     )
 
-    let listener: NavigationEventSubscription | undefined
+    let focusListener: NavigationEventSubscription | undefined
+    let blurListener: NavigationEventSubscription | undefined
+
     if (navigation) {
-      listener = navigation.addListener('didFocus', () => {
+      focusListener = navigation.addListener('didFocus', () => {
         setShowCamera(true)
+        setShouldScan(true)
         reactivate()
+      })
+
+      blurListener = navigation.addListener('didBlur', () => {
+        //setShowCamera(false)
+        setShouldScan(false)
       })
     }
     checkCameraPermissions()
 
     return () => {
-      listener && listener.remove()
+      blurListener && blurListener.remove()
+      focusListener && focusListener.remove()
       backListener.remove()
     }
   }, [])
@@ -115,7 +125,7 @@ export const ScannerContainer: React.FC<Props> = props => {
 
   let ret
   if (showCamera && permission === RESULTS.GRANTED) {
-    ret = <ScannerComponent onScan={consumeToken} onScannerRef={scannerRef} />
+    ret = <ScannerComponent shouldScan={shouldScan} onScan={consumeToken} onScannerRef={scannerRef} />
   } else if (permission === RESULTS.UNAVAILABLE || !showCamera) {
     // TODO: maybe add a message here like "do you even camera?"
     ret = (

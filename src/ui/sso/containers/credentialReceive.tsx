@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { withErrorScreen, withLoading } from '../../../actions/modifiers'
+import {
+  withErrorScreen,
+  withLoading,
+  withInternet,
+} from '../../../actions/modifiers'
 import { routeList } from '../../../routeList'
 import { Wrapper } from '../../structure'
 import { Colors } from '../../../styles'
@@ -57,7 +61,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     selected.includes(offering)
 
   return (
-    <Wrapper>
+    <Wrapper withoutStatusBar>
       <CredentialReceiveComponent
         credentialOfferSummary={
           interactionSummary.state as CredentialOfferFlowState
@@ -85,8 +89,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   ) =>
     dispatch(
       withErrorScreen(
-        withLoading(
-          ssoActions.consumeCredentialReceive(selected, interactionId),
+        withInternet(
+          withLoading(
+            ssoActions.consumeCredentialReceive(selected, interactionId),
+          ),
         ),
       ),
     ),
