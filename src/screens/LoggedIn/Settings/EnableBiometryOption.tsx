@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import FingerprintScanner, {
   Biometrics,
 } from 'react-native-fingerprint-scanner'
+import Biometry from 'react-native-biometrics'
 
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useBiometry } from '~/hooks/biometry'
@@ -58,11 +59,11 @@ const EnableBiometryOption = () => {
         /* if next state is on */
 
         // if user wants to activate biometry
-        await FingerprintScanner.authenticate({
-          fallbackEnabled: false,
+        setIsOn(true)
+        await Biometry.simplePrompt({
+          promptMessage: 'Authenticate',
         })
         enrolledBiometry && updateBiometry(enrolledBiometry)
-        setIsOn(true)
       } else {
         /* if next state is off */
 
