@@ -1,7 +1,8 @@
 import React from 'react'
-import { View, StyleSheet, ViewProps } from 'react-native'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
+import { debugView } from '~/utils/dev'
 
 export enum BlockAlign {
   left = 'flex-start',
@@ -10,7 +11,7 @@ export enum BlockAlign {
 
 interface Props {
   align?: BlockAlign
-  customStyle?: ViewProps
+  customStyle?: ViewStyle
 }
 
 const Block: React.FC<Props> = ({
