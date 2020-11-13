@@ -16,7 +16,6 @@ export const useBiometry = () => {
    return await agent.storage.get.setting('biometry')
   }
 
-  // TODO: limit to biometry types only
   const setBiometry = async (value: BiometryType | '') => {
     await agent.storage.store.setting(PROP_NAME, {
       type: value
