@@ -204,5 +204,7 @@
   "You can find your new credential in the documents": "You can find your new credential in the documents",
   "You can provide further details about the issue here": "You can provide further details about the issue here",
   "You can scan the qr code now!": "You can scan the qr code now!",
-  "You haven't logged in to any services yet": "You haven't logged in to any services yet"
+  "You haven't logged in to any services yet": "You haven't logged in to any services yet",
+  "Without an active connection, some features may be unavailable": "Without an active connection, some features may be unavailable",
+  "Please check your connection and try again": "Please check your connection and try again"
 }

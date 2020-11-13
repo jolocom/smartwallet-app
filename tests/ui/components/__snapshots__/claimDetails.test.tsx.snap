@@ -1,132 +1,182 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ClaimDetails component matches the snapshot on render 1`] = `
-<Memo(Connect(Component))>
-  <NavigationSection
-    backButtonColor="#000"
-    isBackButton={true}
-    onNavigation={[Function]}
-  />
-  <ScrollViewMock
-    keyboardShouldPersistTaps="handled"
+<KeyboardAvoidingView
+  behavior="padding"
+  enabled={true}
+  keyboardVerticalOffset={0}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <Memo(Connect(Component))
     style={
       Object {
-        "width": "100%",
+        "backgroundColor": "transparent",
       }
     }
   >
-    <Text
+    <NavigationSection
+      backButtonColor="#000"
+      isBackButton={true}
+      onNavigation={[Function]}
+    />
+    <ScrollViewMock
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
       style={
         Object {
-          "color": "rgb(5, 5, 13)",
-          "fontFamily": "TT Commons",
-          "fontSize": 30,
-          "marginTop": 32,
-          "textAlign": "center",
+          "width": "100%",
         }
       }
     >
-      Email
-    </Text>
+      <Text
+        style={
+          Object {
+            "color": "rgb(5, 5, 13)",
+            "fontFamily": "TT Commons",
+            "fontSize": 30,
+            "marginTop": 32,
+            "textAlign": "center",
+          }
+        }
+      >
+        Email
+      </Text>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "marginTop": 24,
+          }
+        }
+      >
+        <TextInputField
+          autoFocus={true}
+          fieldName="email"
+          fieldValue="test@test.com"
+          handleFieldInput={[Function]}
+          key="email"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "marginVertical": 48,
+          }
+        }
+      >
+        <JolocomButton
+          disabled={false}
+          onPress={[Function]}
+          text="Add claim"
+        />
+      </View>
+    </ScrollViewMock>
     <View
       style={
         Object {
-          "alignItems": "center",
-          "marginTop": 24,
+          "paddingBottom": 10,
         }
       }
-    >
-      <TextInputField
-        autoFocus={true}
-        fieldName="email"
-        fieldValue="test@test.com"
-        handleFieldInput={[Function]}
-        key="email"
-      />
-    </View>
-    <View
-      style={
-        Object {
-          "alignItems": "center",
-          "marginVertical": 48,
-        }
-      }
-    >
-      <JolocomButton
-        disabled={false}
-        onPress={[Function]}
-        text="Add claim"
-      />
-    </View>
-  </ScrollViewMock>
-</Memo(Connect(Component))>
+    />
+  </Memo(Connect(Component))>
+</KeyboardAvoidingView>
 `;
 
 exports[`ClaimDetails component matches the snapshot on render with multi-line claim 1`] = `
-<Memo(Connect(Component))>
-  <NavigationSection
-    backButtonColor="#000"
-    isBackButton={true}
-    onNavigation={[Function]}
-  />
-  <ScrollViewMock
-    keyboardShouldPersistTaps="handled"
+<KeyboardAvoidingView
+  behavior="padding"
+  enabled={true}
+  keyboardVerticalOffset={0}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <Memo(Connect(Component))
     style={
       Object {
-        "width": "100%",
+        "backgroundColor": "transparent",
       }
     }
   >
-    <Text
+    <NavigationSection
+      backButtonColor="#000"
+      isBackButton={true}
+      onNavigation={[Function]}
+    />
+    <ScrollViewMock
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
       style={
         Object {
-          "color": "rgb(5, 5, 13)",
-          "fontFamily": "TT Commons",
-          "fontSize": 30,
-          "marginTop": 32,
-          "textAlign": "center",
+          "width": "100%",
         }
       }
     >
-      Name
-    </Text>
+      <Text
+        style={
+          Object {
+            "color": "rgb(5, 5, 13)",
+            "fontFamily": "TT Commons",
+            "fontSize": 30,
+            "marginTop": 32,
+            "textAlign": "center",
+          }
+        }
+      >
+        Name
+      </Text>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "marginTop": 24,
+          }
+        }
+      >
+        <TextInputField
+          autoFocus={true}
+          fieldName="givenName"
+          fieldValue="natascha"
+          handleFieldInput={[Function]}
+          key="givenName"
+        />
+        <TextInputField
+          autoFocus={false}
+          fieldName="familyName"
+          fieldValue="test"
+          handleFieldInput={[Function]}
+          key="familyName"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "marginVertical": 48,
+          }
+        }
+      >
+        <JolocomButton
+          disabled={false}
+          onPress={[Function]}
+          text="Add claim"
+        />
+      </View>
+    </ScrollViewMock>
     <View
       style={
         Object {
-          "alignItems": "center",
-          "marginTop": 24,
+          "paddingBottom": 10,
         }
       }
-    >
-      <TextInputField
-        autoFocus={true}
-        fieldName="givenName"
-        fieldValue="natascha"
-        handleFieldInput={[Function]}
-        key="givenName"
-      />
-      <TextInputField
-        autoFocus={false}
-        fieldName="familyName"
-        fieldValue="test"
-        handleFieldInput={[Function]}
-        key="familyName"
-      />
-    </View>
-    <View
-      style={
-        Object {
-          "alignItems": "center",
-          "marginVertical": 48,
-        }
-      }
-    >
-      <JolocomButton
-        disabled={false}
-        onPress={[Function]}
-        text="Add claim"
-      />
-    </View>
-  </ScrollViewMock>
-</Memo(Connect(Component))>
+    />
+  </Memo(Connect(Component))>
+</KeyboardAvoidingView>
 `;

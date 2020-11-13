@@ -206,5 +206,6 @@
   "Interaction with the service completed. Your service page should be updated now": "Service Interaktion erfolgreich",
   "Your data was decrypted": "Deine Daten wurden entschlüsselt",
   "Your data was encrypted": "Deine Daten wurden verschlüsselt",
-  "Please check your connection and try again": "Bitte überprüfen Sie Ihre Internetverbindung"
+  "Please check your connection and try again": "Bitte überprüfen Sie Ihre Internetverbindung",
+  "Without an active connection, some features may be unavailable": "Without an active connection, some features may be unavailable"
 }
