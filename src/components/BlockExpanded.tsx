@@ -6,9 +6,8 @@ import {
   StyleSheet,
 } from 'react-native'
 
-import Block, { BlockAlign } from './Block'
+import Block from './Block'
 import JoloText from './JoloText'
-import { debugView } from '~/utils/dev'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 
@@ -29,7 +28,7 @@ const BlockExpanded: React.FC<Props> = ({ title, expandedText }) => {
   }
 
   return (
-    <Block align={BlockAlign.left} customStyle={{ marginVertical: 10 }}>
+    <Block customStyle={{ marginVertical: 10 }}>
       <TouchableWithoutFeedback onPress={handleExpand}>
         <View style={styles.container}>
           <JoloText
