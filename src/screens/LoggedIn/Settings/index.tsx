@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import { Alert, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -18,8 +18,9 @@ import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
 import Section from './components/Section'
 import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
 import Option from './components/Option'
-import { CaretRight } from '~/assets/svg'
+import DevelopmentSection from './Development'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -50,14 +51,19 @@ const SettingsGeneral: React.FC = () => {
       customStyles={{
         justifyContent: 'flex-start',
         paddingHorizontal: 10,
+        paddingTop: 0,
       }}
     >
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{
+          paddingBottom: 150,
+          marginTop: BP({ large: 56, medium: 56, default: 32 }),
+        }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
+        {__DEV__ && <DevelopmentSection />}
         <Section title={strings.APP_PREFERENCES}>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Language)}>
             <Option.Title title={strings.LANGUAGE} />
