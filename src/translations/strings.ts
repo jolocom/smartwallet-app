@@ -102,6 +102,7 @@ const deviceAuthentication = {
   SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER:
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
+  PROVIDE_BIOMETRICS: 'Provide biometrics to continue',
   RESET: 'Reset',
   RESTORE_ACCESS: 'Restore access',
 }
@@ -220,6 +221,12 @@ const recoverPin = {
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
 }
 
+const notifications = {
+  WHOOPS: 'Whoops',
+  COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
+  COULDNOT_ACTIVATE: 'We could not activate biometrics'
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -237,4 +244,5 @@ export const strings = {
   ...recoverPin,
   ...settings,
   ...termsConsent,
+  ...notifications
 }

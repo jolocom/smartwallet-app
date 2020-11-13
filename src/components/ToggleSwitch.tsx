@@ -4,24 +4,21 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Colors } from '~/utils/colors'
+import { isPropControlled } from '~/utils/props'
 
 interface Props {
-  onToggle?: () => void
+  onToggle?: (localSwitchState: boolean) => void
   on?: boolean
 }
 
 const ON_POSITION = 17
 const OFF_POSITION = 2
 
-const ToggleSwitch: React.FC<Props & Record<string, any>> = (props) => {
+const ToggleSwitch: React.FC<Props> = (props) => {
   const [isOn, setIsOn] = useState(false)
 
-  const isPropControlled = (prop: string) => {
-    return props[prop] !== undefined
-  }
-
   const getOnState = () => {
-    return isPropControlled('on') ? props.on : isOn
+    return isPropControlled(props, 'on') ? props.on : isOn
   }
   const onState = getOnState()
 
@@ -33,8 +30,8 @@ const ToggleSwitch: React.FC<Props & Record<string, any>> = (props) => {
   ).current
 
   const toggle = () => {
-    if (isPropControlled('on')) {
-      props.onToggle && props.onToggle()
+    if (isPropControlled(props, 'on')) {
+      props.onToggle && props.onToggle(isOn)
     } else {
       setIsOn((prevState) => !prevState)
     }

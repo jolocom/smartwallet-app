@@ -21,7 +21,6 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 import { ScreenNames } from '~/types/screens'
 import FingerprintScanner from 'react-native-fingerprint-scanner'
-import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { getBiometryDescription } from './DeviceAuthentication/utils/getText'
 import { useDispatch } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
@@ -71,9 +70,7 @@ const Lock = () => {
       })
       unlockApp()
     } catch (err) {
-      if (err.name === 'FingerprintScannerNotEnrolled') {
-        handleNotEnrolled(biometryType)
-      }
+      console.log('Error in authenticating with biometry on Lock', { e })
     }
   }
 
