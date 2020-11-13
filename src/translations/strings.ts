@@ -71,17 +71,7 @@ const seedphrase = {
 const deviceAuthentication = {
   USE_TOUCH_ID_TO_AUTHORIZE: 'Use Touch ID to authorise wallet',
   USE_FACE_ID_TO_AUTHORIZE: 'Use Face ID to authorise wallet',
-  USE_FINGERPRINT_TO_AUTHORIZE: 'Use Fingerprint to authorise wallet',
-  USE_FACE_TO_AUTHORIZE: 'Use your Face to authorise wallet', // a terrible wording here
-
-  TAP_TO_ACTIVATE_TOUCH_ID:
-    'Tap to activate Touch ID so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FACE_ID:
-    'Tap to activate Face ID so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FINGERPRINT:
-    'Tap to activate Fingerprint so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FACE:
-    'Tap to activate Face so you don’t need to confirm your PIN every time you need to use it',
+  USE_BIOMETRICS_TO_AUTHORIZE: 'Use Biometrics to authorise wallet',
 
   SO_YOU_DONT_NEED_TO_CONFIRM:
     'So you don’t need to confirm your PIN every time you need to use it',
@@ -89,14 +79,6 @@ const deviceAuthentication = {
   SKIP: 'Skip',
   YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
 
-  TOUCH_ID_IS_DISABLED: 'Touch ID is disabled',
-  FACE_ID_IS_DISABLED: 'Touch ID is disabled',
-  FINGERPRINT_IS_DISABLED: 'Touch ID is disabled',
-  FACE_IS_DISABLED: 'Touch ID is disabled',
-
-  TO_USE_BIOMETRICS_ENABLE:
-    'To use biometrics enable this feature in the system settings',
-  SETTINGS: 'Settings',
   CANCEL: 'Cancel',
 
   SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER:
