@@ -7,6 +7,7 @@ import Section from './components/Section'
 // @ts-ignore
 import faqJson from '~/translations/faq.json'
 import { strings } from '~/translations/strings'
+import { ScrollView } from 'react-native-gesture-handler'
 
 type FAQArray = Array<{ question: string; answer: string }>
 
@@ -18,10 +19,12 @@ const FAQ = () => {
       hasHeaderBack
       customStyles={{ justifyContent: 'flex-start' }}
     >
-      <Section title={strings.POPULAR_QUESTIONS} />
-      {faqArray.map(({ question, answer }, i) => (
-        <BlockExpanded key={i} title={question} expandedText={answer} />
-      ))}
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+        <Section title={strings.POPULAR_QUESTIONS} />
+        {faqArray.map(({ question, answer }, i) => (
+          <BlockExpanded key={i} title={question} expandedText={answer} />
+        ))}
+      </ScrollView>
     </ScreenContainer>
   )
 }

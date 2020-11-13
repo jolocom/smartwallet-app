@@ -29,7 +29,7 @@ const BlockExpanded: React.FC<Props> = ({ title, expandedText }) => {
   }
 
   return (
-    <Block align={BlockAlign.left} customStyle={{ marginVertical: 10 }}>
+    <Block align={BlockAlign.left} customStyle={{ marginBottom: 16 }}>
       <TouchableWithoutFeedback onPress={handleExpand}>
         <View style={styles.container}>
           <JoloText
