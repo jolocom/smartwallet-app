@@ -1,5 +1,6 @@
 import React from 'react'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { ScrollView } from 'react-native'
+
 import ScreenContainer from '~/components/ScreenContainer'
 import { JoloTextSizes } from '~/utils/fonts'
 import BlockExpanded from '~/components/BlockExpanded'
@@ -7,7 +8,6 @@ import Section from './components/Section'
 // @ts-ignore
 import faqJson from '~/translations/faq.json'
 import { strings } from '~/translations/strings'
-import { ScrollView } from 'react-native-gesture-handler'
 
 type FAQArray = Array<{ question: string; answer: string }>
 
