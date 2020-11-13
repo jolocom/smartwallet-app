@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import InputSeedPhraseComponent from '../../../src/ui/recovery/components/inputSeedPhrase'
 
-describe.only('inputSeedPhrase component', () => {
+describe('inputSeedPhrase component', () => {
   const makeProps = (
     input: string = '',
     suggestions: string[] = [],
