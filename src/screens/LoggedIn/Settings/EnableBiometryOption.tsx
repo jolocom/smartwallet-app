@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View } from 'react-native'
-import FingerprintScanner, {
-  Biometrics,
-} from 'react-native-fingerprint-scanner'
-import Biometry from 'react-native-biometrics'
+import Biometry, { BiometryType } from 'react-native-biometrics'
 
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useBiometry } from '~/hooks/biometry'
@@ -19,27 +16,37 @@ const EnableBiometryOption = () => {
   /* Based on this state we display switch or not to handle correct was on child useRef */
   const [isSwitchVisible, setSwitchVisibility] = useState(false)
   /* State represent what biometrics were enrolled */
-  const [enrolledBiometry, setEnrolledBiometry] = useState<Biometrics | null>(
-    null,
-  )
+  const [enrolledBiometry, setEnrolledBiometry] = useState<
+    BiometryType | undefined
+  >()
 
-  const { resetBiometry, getBiometry, updateBiometry } = useBiometry()
+  const {
+    resetBiometry,
+    getBiometry,
+    setBiometry,
+    authenticate,
+  } = useBiometry()
   const { scheduleWarning } = useToasts()
 
+  /* check if we should display this component or not */
   const checkIfBiometryIsEnrolled = async () => {
     try {
       // identified biometrics will only return something if biometry was enrolled
-      const identifiedBiometrics = await FingerprintScanner.isSensorAvailable()
-      setEnrolledBiometry(identifiedBiometrics)
-      setIsOptionVisible(true)
+      const { available, biometryType } = await Biometry.isSensorAvailable()
+      if (available) {
+        setEnrolledBiometry(biometryType)
+        setIsOptionVisible(true)
+      } else {
+        setIsOptionVisible(false)
+      }
     } catch (e) {
       setIsOptionVisible(false)
     }
   }
 
-  /* check if we should display this component or not */
   useEffect(() => {
     checkIfBiometryIsEnrolled()
+    getStoredBiometry()
   }, [])
 
   /* check what has been stored biometry related in settings */
@@ -49,10 +56,6 @@ const EnableBiometryOption = () => {
     setSwitchVisibility(true)
   }, [])
 
-  useEffect(() => {
-    getStoredBiometry()
-  }, [])
-
   const handleToggle = async () => {
     try {
       if (!isOn) {
@@ -60,26 +63,26 @@ const EnableBiometryOption = () => {
 
         // if user wants to activate biometry
         setIsOn(true)
-        await Biometry.simplePrompt({
-          promptMessage: 'Authenticate',
-        })
-        enrolledBiometry && updateBiometry(enrolledBiometry)
+        const result = await authenticate()
+        if (result.success) {
+          enrolledBiometry && setBiometry(enrolledBiometry)
+        } else {
+          setIsOn((prevState) => !prevState)
+        }
       } else {
         /* if next state is off */
 
         // if user wants to switch biometry off
         // - reset biometry value from storage as Lock screen should use this value
-        await resetBiometry()
         setIsOn(false)
+        await resetBiometry()
       }
     } catch (e) {
+      setIsOn((prevState) => !prevState)
       scheduleWarning({
-        title: 'Ooops',
-        message: isOn
-          ? 'We could not disactivate biometrics'
-          : 'We could not activate biometrics',
+        title: strings.WHOOPS,
+        message: isOn ? strings.COULDNOT_DEACTIVATE : strings.COULDNOT_ACTIVATE,
       })
-      console.log('error in biometry option', { e })
     }
   }
 

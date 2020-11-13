@@ -19,7 +19,6 @@ import { useDeviceAuthState } from './module/deviceAuthContext'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
 import { getBiometryHeader, getBiometryDescription } from './utils/getText'
 
-import { handleNotEnrolled } from '~/utils/biometryErrors'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
@@ -44,9 +43,9 @@ const RegisterBiometry: React.FC = () => {
       displaySuccessLoader()
       handleRedirectToLogin()
     } catch (err) {
-      if (err.name === 'FingerprintScannerNotEnrolled') {
-        handleNotEnrolled(biometryType)
-      }
+      console.log('Error authenticating with Biometrics in RegisterBiometry', {
+        err,
+      })
     }
   }
 
