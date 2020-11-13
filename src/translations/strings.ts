@@ -186,6 +186,7 @@ const settings = {
     'Your documents are at risk of permanent loss without a backup',
   PRIVACY_POLICY_QUESTIONS:
     'If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.',
+  POPULAR_QUESTIONS: 'Popular questions',
 }
 
 const termsConsent = {
