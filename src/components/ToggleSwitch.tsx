@@ -6,14 +6,14 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Colors } from '~/utils/colors'
 
 interface Props {
-  onToggle: () => void
+  onToggle?: () => void
   on?: boolean
 }
 
 const ON_POSITION = 17
 const OFF_POSITION = 2
 
-const ToggleSwitch = (props: Props) => {
+const ToggleSwitch: React.FC<Props & Record<string, any>> = (props) => {
   const [isOn, setIsOn] = useState(false)
 
   const isPropControlled = (prop: string) => {
@@ -29,12 +29,12 @@ const ToggleSwitch = (props: Props) => {
   const offGradientColors = [Colors.haiti, Colors.haiti]
 
   const positionValue = useRef(
-    new Animated.Value(getOnState() ? ON_POSITION : OFF_POSITION),
+    new Animated.Value(onState ? ON_POSITION : OFF_POSITION),
   ).current
 
   const toggle = () => {
     if (isPropControlled('on')) {
-      props.onToggle()
+      props.onToggle && props.onToggle()
     } else {
       setIsOn((prevState) => !prevState)
     }
@@ -64,7 +64,7 @@ const ToggleSwitch = (props: Props) => {
           style={styles.gradientWrapper}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={getOnState() ? onGradientColors : offGradientColors}
+          colors={onState ? onGradientColors : offGradientColors}
         />
       </Animated.View>
     </TouchableWithoutFeedback>

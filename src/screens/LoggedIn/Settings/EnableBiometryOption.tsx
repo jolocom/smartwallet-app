@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View } from 'react-native'
-import FingerprintScanner from 'react-native-fingerprint-scanner'
-import Keychain from 'react-native-keychain'
+import FingerprintScanner, {
+  Biometrics,
+} from 'react-native-fingerprint-scanner'
 
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useBiometry } from '~/hooks/biometry'
+import { useToasts } from '~/hooks/toasts'
 import { strings } from '~/translations/strings'
 import Option from './components/Option'
 
@@ -16,9 +18,12 @@ const EnableBiometryOption = () => {
   /* Based on this state we display switch or not to handle correct was on child useRef */
   const [isSwitchVisible, setSwitchVisibility] = useState(false)
   /* State represent what biometrics were enrolled */
-  const [enrolledBiometry, setEnrolledBiometry] = useState(null)
+  const [enrolledBiometry, setEnrolledBiometry] = useState<Biometrics | null>(
+    null,
+  )
 
   const { resetBiometry, getBiometry, updateBiometry } = useBiometry()
+  const { scheduleWarning } = useToasts()
 
   const checkIfBiometryIsEnrolled = async () => {
     try {
@@ -56,7 +61,7 @@ const EnableBiometryOption = () => {
         await FingerprintScanner.authenticate({
           fallbackEnabled: false,
         })
-        updateBiometry(enrolledBiometry)
+        enrolledBiometry && updateBiometry(enrolledBiometry)
         setIsOn(true)
       } else {
         /* if next state is off */
@@ -67,6 +72,12 @@ const EnableBiometryOption = () => {
         setIsOn(false)
       }
     } catch (e) {
+      scheduleWarning({
+        title: 'Ooops',
+        message: isOn
+          ? 'We could not disactivate biometrics'
+          : 'We could not activate biometrics',
+      })
       console.log('error in biometry option', { e })
     }
   }
