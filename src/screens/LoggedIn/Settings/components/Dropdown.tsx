@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { View, StyleSheet, Animated } from 'react-native'
 import Block from '~/components/Block'
 import { SelectableProvider, useSelectableState } from '~/components/Selectable'
 
@@ -34,6 +34,24 @@ const Dropdown = () => {
     setIsExpanded(false)
   }
 
+  const animatedOpacity = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    if (isExpanded) {
+      Animated.timing(animatedOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start()
+    } else {
+      Animated.timing(animatedOpacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start()
+    }
+  }, [isExpanded])
+
   return (
     <View style={styles.container}>
       <Block>
@@ -46,18 +64,26 @@ const Dropdown = () => {
         </Option>
       </Block>
       {isExpanded ? (
-        <Block customStyle={styles.dropdownSpecificOptions}>
-          {options.map((option: { id: string; value: string }) => (
-            <Option onPress={() => handleSelectOption(option.value)}>
-              <Option.Title
-                title={option.value}
-                color={
-                  option.value === selectedValue ? Colors.success : Colors.white
-                }
-              />
-            </Option>
-          ))}
-        </Block>
+        <Animated.View style={{ opacity: animatedOpacity }}>
+          <Block
+            customStyle={{
+              ...styles.dropdownSpecificOptions,
+            }}
+          >
+            {options.map((option: { id: string; value: string }) => (
+              <Option onPress={() => handleSelectOption(option.value)}>
+                <Option.Title
+                  title={option.value}
+                  color={
+                    option.value === selectedValue
+                      ? Colors.success
+                      : Colors.white
+                  }
+                />
+              </Option>
+            ))}
+          </Block>
+        </Animated.View>
       ) : null}
     </View>
   )
@@ -72,7 +98,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 15,
     position: 'absolute',
-    top: 50,
   },
 })
 
