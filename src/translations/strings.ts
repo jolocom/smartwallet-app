@@ -219,6 +219,23 @@ const recoverPin = {
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
 }
 
+const toasts = {
+  REPORT: 'Report',
+  REVIEW: 'Review',
+  ERROR_TOAST_TITLE: 'Whoops...',
+  ERROR_TOAST_MSG:
+    "We weren't expecting that to happen either. Help us help everyone by sharing the error you encountered",
+  INTERACTION_SUCCESS_TOAST_TITLE: 'Great success!',
+  INTERACTION_SUCCESS_TOAST_MSG:
+    'Interaction with the service completed. Your service page should be updated now',
+  OFFER_ALL_INVALID_TOAST_TITLE: 'Unable to save',
+  OFFER_ALL_INVALID_TOAST_MSG:
+    'There seems to be an issue with the documents sent by {{serviceName}}',
+  OFFER_RENEGOTIATION_TITLE: 'Be aware',
+  OFFER_RENEGOTIATION_MSG:
+    "Some documents didn't pass our security check and cannot be saved or received",
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -236,4 +253,5 @@ export const strings = {
   ...recoverPin,
   ...settings,
   ...termsConsent,
+  ...toasts,
 }
