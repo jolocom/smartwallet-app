@@ -1,19 +1,23 @@
 import { useDispatch } from 'react-redux'
 
 import { useCredentialShareFlow } from './useCredentialShareFlow'
-import { showNotification } from './utils'
 import { resetInteraction } from '~/modules/interaction/actions'
+import useInteractionToasts from './useInteractionToasts'
 
 const useCredentialShareSubmit = () => {
   const { assembleShareResponseToken } = useCredentialShareFlow()
+  const {
+    scheduleSuccessInteraction,
+    scheduleErrorInteraction,
+  } = useInteractionToasts()
   const dispatch = useDispatch()
 
   return async () => {
     try {
       await assembleShareResponseToken()
-      showNotification('Credentials shared successfully')
+      scheduleSuccessInteraction()
     } catch (e) {
-      showNotification('Failed to share credentials', e.message)
+      scheduleErrorInteraction()
     } finally {
       dispatch(resetInteraction())
     }

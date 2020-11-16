@@ -1,4 +1,3 @@
-import { Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import {
@@ -7,7 +6,11 @@ import {
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
-import { showNotification } from './utils'
+import { useToasts } from '../toasts'
+import { strings } from '~/translations/strings'
+import { useRedirect } from '../navigation'
+import { ScreenNames } from '~/types/screens'
+import useInteractionToasts from './useInteractionToasts'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -20,12 +23,27 @@ const useCredentialOfferSubmit = () => {
     checkDuplicates,
   } = useCredentialOfferFlow()
   const syncCredentials = useSyncStorageCredentials()
+  const {
+    scheduleErrorInteraction,
+    scheduleSuccessInteraction,
+  } = useInteractionToasts()
+  const { scheduleInfo } = useToasts()
+  const redirect = useRedirect()
+
+  const scheduleSuccess = () =>
+    scheduleSuccessInteraction({
+      interact: {
+        label: strings.REVIEW,
+        onInteract: () => redirect(ScreenNames.Documents),
+      },
+    })
 
   return async () => {
     try {
       if (credentialsAlreadyIssued()) {
         await storeSelectedCredentials()
         await syncCredentials()
+        scheduleSuccess()
         return dispatch(resetInteraction())
       }
 
@@ -47,28 +65,28 @@ const useCredentialOfferSubmit = () => {
       if (allValid) {
         await storeSelectedCredentials()
         await syncCredentials()
-        showNotification('Documents stored successfully')
-        //TODO: update store credentials with the new ones
-
+        scheduleSuccess()
         dispatch(resetInteraction())
       } else if (allInvalid) {
-        showNotification('All the documents are corrupted')
-        //TODO: dispatch "interaction failed" notification
+        //TODO: add translation interpolation to the toast message
+        scheduleErrorInteraction({
+          title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
+          message: strings.OFFER_ALL_INVALID_TOAST_MSG,
+        })
 
         dispatch(resetInteraction())
       } else {
-        //TODO: dispatch renegotiation notification
-
         const credentials = {
           service_issued: validatedCredentials,
         }
         dispatch(setInteractionDetails({ credentials }))
-        showNotification('Renegotiating')
+        scheduleInfo({
+          title: strings.OFFER_RENEGOTIATION_TITLE,
+          message: strings.OFFER_RENEGOTIATION_MSG,
+        })
       }
     } catch (err) {
-      //TODO: dispatch error notification
-      showNotification('Interaction failed', err.message)
-
+      scheduleErrorInteraction()
       console.log({ err })
       dispatch(resetInteraction())
       throw new Error(err)
