@@ -16,13 +16,18 @@ const Section: React.FC<PropsI> = ({ title, children, customStyles = {} }) => (
       kind={JoloTextKind.title}
       size={JoloTextSizes.middle}
       weight={JoloTextWeight.regular}
-      customStyles={{
-        marginBottom: BP({ large: 40, medium: 40, default: 20 }),
-      }}
     >
       {title}
     </JoloText>
-    {children && <Block>{children}</Block>}
+    {children && (
+      <Block
+        customStyle={{
+          marginTop: BP({ large: 40, medium: 40, default: 20 }),
+        }}
+      >
+        {children}
+      </Block>
+    )}
   </View>
 )
 

@@ -65,13 +65,12 @@ const Dropdown = () => {
       </Block>
       {isExpanded ? (
         <Animated.View style={{ opacity: animatedOpacity }}>
-          <Block
-            customStyle={{
-              ...styles.dropdownSpecificOptions,
-            }}
-          >
+          <Block customStyle={styles.dropdownSpecificOptions}>
             {options.map((option: { id: string; value: string }) => (
-              <Option onPress={() => handleSelectOption(option.value)}>
+              <Option
+                key={option.id}
+                onPress={() => handleSelectOption(option.value)}
+              >
                 <Option.Title
                   title={option.value}
                   color={
