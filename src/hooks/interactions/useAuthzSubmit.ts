@@ -5,7 +5,7 @@ import { useInteraction } from '.'
 import useInteractionToasts from './useInteractionToasts'
 
 const useAuthzSubmit = () => {
-  const interaction = useInteraction()
+  const getInteraction = useInteraction()
   const dispatch = useDispatch()
   const {
     scheduleErrorInteraction,
@@ -14,6 +14,7 @@ const useAuthzSubmit = () => {
 
   return async () => {
     try {
+      const interaction = await getInteraction()
       const authzResponse = await interaction.createAuthorizationResponse()
       await interaction.processInteractionToken(authzResponse)
       await interaction.send(authzResponse)

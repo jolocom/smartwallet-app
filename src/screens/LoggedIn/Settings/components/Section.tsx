@@ -1,27 +1,33 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ViewStyle } from 'react-native'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
-import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import Block from '~/components/Block'
 
 interface PropsI {
   title: string
+  customStyles?: ViewStyle
 }
 
-const Section: React.FC<PropsI> = ({ title, children }) => (
-  <View style={styles.sectionContainer}>
+const Section: React.FC<PropsI> = ({ title, children, customStyles = {} }) => (
+  <View style={[styles.sectionContainer, customStyles]}>
     <JoloText
       kind={JoloTextKind.title}
       size={JoloTextSizes.middle}
       weight={JoloTextWeight.regular}
-      customStyles={{
-        marginBottom: BP({ large: 40, medium: 40, default: 20 }),
-      }}
     >
       {title}
     </JoloText>
-    <View style={styles.sectionOptionContainer}>{children}</View>
+    {children && (
+      <Block
+        customStyle={{
+          marginTop: BP({ large: 40, medium: 40, default: 20 }),
+        }}
+      >
+        {children}
+      </Block>
+    )}
   </View>
 )
 
@@ -31,12 +37,6 @@ const styles = StyleSheet.create({
     marginBottom: 44,
     alignItems: 'flex-start',
     width: '100%',
-  },
-  sectionOptionContainer: {
-    backgroundColor: Colors.haiti,
-    elevation: 15,
-    width: '100%',
-    borderRadius: 8,
   },
 })
 

@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler'
 import 'crypto'
 import React, { useRef } from 'react'
+import { Platform, UIManager } from 'react-native'
 import { Provider } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
@@ -12,6 +13,12 @@ import Overlays from '~/Overlays'
 import { NavigationContainerRef } from '@react-navigation/native'
 
 const store = configureStore()
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true)
+  }
+}
 
 const App = () => {
   const navRef = useRef<NavigationContainerRef>(null)

@@ -23,7 +23,7 @@ export const useInteraction = () => {
   const interactionId = useSelector(getInteractionId)
   if (!interactionId) throw new Error('Interaction not found')
 
-  return agent.interactionManager.getInteraction(interactionId)
+  return () => agent.interactionManager.getInteraction(interactionId)
 }
 
 type PreInteractionHandler = (i: Interaction) => boolean
