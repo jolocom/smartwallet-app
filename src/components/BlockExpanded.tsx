@@ -8,7 +8,6 @@ import {
 
 import Block from './Block'
 import JoloText from './JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 
 interface Props {
@@ -28,7 +27,7 @@ const BlockExpanded: React.FC<Props> = ({ title, expandedText }) => {
   }
 
   return (
-    <Block customStyle={{ marginVertical: 10 }}>
+    <Block customStyle={{ marginBottom: 16 }}>
       <TouchableWithoutFeedback onPress={handleExpand}>
         <View style={styles.container}>
           <JoloText
