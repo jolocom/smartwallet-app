@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ViewStyle } from 'react-native'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -7,10 +7,11 @@ import Block from '~/components/Block'
 
 interface PropsI {
   title: string
+  customStyles?: ViewStyle
 }
 
-const Section: React.FC<PropsI> = ({ title, children }) => (
-  <View style={styles.sectionContainer}>
+const Section: React.FC<PropsI> = ({ title, children, customStyles = {} }) => (
+  <View style={[styles.sectionContainer, customStyles]}>
     <JoloText
       kind={JoloTextKind.title}
       size={JoloTextSizes.middle}
@@ -21,7 +22,7 @@ const Section: React.FC<PropsI> = ({ title, children }) => (
     >
       {title}
     </JoloText>
-    <Block>{children}</Block>
+    {children && <Block>{children}</Block>}
   </View>
 )
 
