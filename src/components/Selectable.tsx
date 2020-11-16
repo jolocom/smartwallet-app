@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 
-type TOptionExtend = string | number
+export type TOptionExtend = string | number
 
 export interface IOption<T> {
   id: string
@@ -33,7 +33,7 @@ export const SelectableProvider = <T extends TOptionExtend>({
   )
 
   return (
-    // @ts-ignore
+    //@ts-ignore
     <SelectableContext.Provider value={contextValue}>
       {children}
     </SelectableContext.Provider>

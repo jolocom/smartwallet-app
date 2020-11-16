@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
 import { CaretDown } from '~/assets/svg'
 import Block from '~/components/Block'
 import {
   IOption,
+  TOptionExtend,
   SelectableProvider,
   useSelectableState,
 } from '~/components/Selectable'
@@ -12,29 +13,16 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import Option from './Option'
 
-const INQUIRIES_LIST = [
-  strings.POSSIBLE_PARTNERSHIP,
-  strings.ISSUES_WITH_THE_APP,
-  strings.I_LOST_MY_WALLET,
-  strings.HOW_TO_BECOME_PART_OF_THE_PROJECT,
-]
-
 const Dropdown = () => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const { selectedValue, setSelectedValue } = useSelectableState()
-
-  const options = useMemo(
-    () =>
-      INQUIRIES_LIST.map((el) => ({ id: el.split(' ').join(''), value: el })),
-    [],
-  )
+  const { selectedValue, setSelectedValue, options } = useSelectableState()
 
   const toggleExpanded = () => {
     setIsExpanded((prevState) => !prevState)
   }
 
-  const handleSelectOption = (option: IOption<string>) => {
+  const handleSelectOption = (option: IOption<TOptionExtend>) => {
     setSelectedValue(option)
     setIsExpanded(false)
   }
@@ -79,7 +67,7 @@ const Dropdown = () => {
       {isExpanded ? (
         <Animated.View style={{ opacity: animatedOpacity }}>
           <Block customStyle={styles.dropdownSpecificOptions}>
-            {options.map((option: { id: string; value: string }) => (
+            {options.map((option) => (
               <Option
                 key={option.id}
                 onPress={() => handleSelectOption(option)}
