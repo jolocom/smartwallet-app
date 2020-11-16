@@ -42,6 +42,7 @@ const Dropdown = () => {
             title={selectedValue ?? strings.SELECT_AN_OPTION}
             color={isExpanded ? Colors.white30 : Colors.white70}
           />
+          {!isExpanded ? <Option.RightIcon /> : null}
         </Option>
       </Block>
       {isExpanded ? (
@@ -70,6 +71,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.white21,
     borderWidth: 1,
     marginTop: 15,
+    position: 'absolute',
+    top: 50,
   },
 })
 
