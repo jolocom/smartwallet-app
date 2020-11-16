@@ -8,9 +8,9 @@ import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { useToasts } from '../toasts'
 import { strings } from '~/translations/strings'
-import { useRedirect } from '../navigation'
 import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
+import { useOutsideRedirect } from '~/NavigationProvider'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -28,7 +28,7 @@ const useCredentialOfferSubmit = () => {
     scheduleSuccessInteraction,
   } = useInteractionToasts()
   const { scheduleInfo } = useToasts()
-  const redirect = useRedirect()
+  const redirect = useOutsideRedirect()
 
   const scheduleSuccess = () =>
     scheduleSuccessInteraction({

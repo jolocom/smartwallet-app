@@ -1,12 +1,12 @@
 import { useToasts } from '~/hooks/toasts'
-import { useRedirect } from '~/hooks/navigation'
 import { ToastBody } from '~/types/toasts'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
+import { useOutsideRedirect } from '~/NavigationProvider'
 
 const useInteractionToasts = () => {
   const { scheduleInfo, scheduleWarning } = useToasts()
-  const redirect = useRedirect()
+  const redirect = useOutsideRedirect()
 
   const scheduleSuccessInteraction = (config?: Partial<ToastBody>) =>
     scheduleInfo({
