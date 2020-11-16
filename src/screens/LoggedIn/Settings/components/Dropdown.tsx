@@ -36,19 +36,19 @@ const Dropdown = () => {
 
   const animatedOpacity = useRef(new Animated.Value(0)).current
 
+  const animate = (toValue: number) => {
+    Animated.timing(animatedOpacity, {
+      toValue,
+      duration: 200,
+      useNativeDriver: true,
+    }).start()
+  }
+
   useEffect(() => {
     if (isExpanded) {
-      Animated.timing(animatedOpacity, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }).start()
+      animate(1)
     } else {
-      Animated.timing(animatedOpacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start()
+      animate(0)
     }
   }, [isExpanded])
 
