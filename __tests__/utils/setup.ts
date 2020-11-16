@@ -34,9 +34,9 @@ jest.mock('react-native-randombytes', () => ({
 jest.mock('react-native-jolocom', () => ({
   FlowType: {
     Authentication: 'Authentication',
-    CredentialShare: "CredentialShare",
-    CredentialOffer: "CredentialOffer",
-    Authorization: "Authorization",
+    CredentialShare: 'CredentialShare',
+    CredentialOffer: 'CredentialOffer',
+    Authorization: 'Authorization',
   },
   SDKError: {
     codes: {
@@ -55,12 +55,5 @@ jest.mock('react-native-jolocom', () => ({
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
 
 jest.mock('react-native-localize', () => ({
-  getLocales: () => [
-    {
-      countryCode: 'US',
-      languageTag: 'en-US',
-      languageCode: 'en',
-      isRTL: false,
-    },
-  ],
+  findBestAvailableLanguage: (_: Array<string>) => 'en',
 }))
