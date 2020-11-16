@@ -16,7 +16,7 @@ import { useInteraction } from '.'
  * Custom hook that exposes a collection of utils for the Credential Offer interaction
  */
 const useCredentialOfferFlow = () => {
-  const interaction = useInteraction()
+  const getInteraction = useInteraction()
   const serviceName = useSelector(getCounterpartyName)
 
   /**
@@ -25,6 +25,7 @@ const useCredentialOfferFlow = () => {
    * @selectedCredentials are all the credentials that were offered.
    */
   const assembleOfferResponseToken = async () => {
+    const interaction = await getInteraction()
     const state = interaction.getSummary().state as CredentialOfferFlowState
 
     const selectedCredentials: SignedCredentialWithMetadata[] =
@@ -41,6 +42,7 @@ const useCredentialOfferFlow = () => {
    * @CredentialsReceive token, which is finally processed by the InteractionManager.
    */
   const processOfferReceiveToken = async () => {
+    const interaction = await getInteraction()
     const responseToken = interaction
       .getMessages()
       .find(
@@ -57,7 +59,8 @@ const useCredentialOfferFlow = () => {
   /**
    * Gets the credential validation results from the @InteractionManager.
    */
-  const getValidatedCredentials = (): OfferUICredential[] => {
+  const getValidatedCredentials = async (): Promise<OfferUICredential[]> => {
+    const interaction = await getInteraction()
     const { initiator, state } = interaction.getSummary()
     const {
       offerSummary,
@@ -90,6 +93,7 @@ const useCredentialOfferFlow = () => {
    * in the SDK's TypeORM storage.
    */
   const storeSelectedCredentials = async () => {
+    const interaction = await getInteraction()
     await interaction.storeSelectedCredentials()
     await interaction.storeCredentialMetadata()
     await interaction.storeIssuerProfile()
@@ -102,6 +106,7 @@ const useCredentialOfferFlow = () => {
    * credential multiple times).
    */
   const checkDuplicates = async () => {
+    const interaction = await getInteraction()
     const state = interaction.getSummary().state as CredentialOfferFlowState
     const duplicates = await Promise.all(
       state.issued.map(async (cred) => {
@@ -117,7 +122,8 @@ const useCredentialOfferFlow = () => {
    * whether renegotiation is in progress. In the future can use a flag in the store
    * to indicate renegotiation.
    */
-  const credentialsAlreadyIssued = () => {
+  const credentialsAlreadyIssued = async () => {
+    const interaction = await getInteraction()
     const state = interaction.getSummary().state as CredentialOfferFlowState
     return state.issued.length
   }
