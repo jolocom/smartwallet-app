@@ -15,6 +15,8 @@ import { getInteractionId } from '~/modules/interaction/selectors'
 import { getMappedInteraction, isTypeAttribute } from '~/utils/dataMapping'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
+import { strings } from '~/translations/strings'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -31,10 +33,11 @@ export const useInteractionStart = () => {
   const dispatch = useDispatch()
   const loader = useLoader()
   const credentials = useSelector(getAllCredentials)
+  const { scheduleInfo } = useToasts()
 
   const parseJWT = (jwt: string) => {
     try {
-      return JolocomLib.parse.interactionToken.fromJWT(jwt);
+      return JolocomLib.parse.interactionToken.fromJWT(jwt)
     } catch (e) {
       if (e instanceof SyntaxError) {
         throw new Error(SDKError.codes.ParseJWTFailed)
@@ -72,13 +75,11 @@ export const useInteractionStart = () => {
       )
 
       if (missingTypes.length) {
-        //TODO: dispatch notification "Credential not available"
-        Alert.alert(
-          'Oops',
-          `You're missing the following credentials: ${missingTypes.join(
-            ', ',
-          )}`,
-        )
+        //TODO: add translations interpolation with the issuer, missingTypes
+        scheduleInfo({
+          title: strings.SHARE_MISSING_DOCS_TITLE,
+          message: strings.SHARE_MISSING_DOCS_MSG,
+        })
         return false
       }
 
@@ -112,5 +113,4 @@ export const useInteractionStart = () => {
       { showSuccess: false },
     )
   }
-
 }

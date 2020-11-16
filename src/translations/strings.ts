@@ -234,6 +234,9 @@ const toasts = {
   OFFER_RENEGOTIATION_TITLE: 'Be aware',
   OFFER_RENEGOTIATION_MSG:
     "Some documents didn't pass our security check and cannot be saved or received",
+  SHARE_MISSING_DOCS_TITLE: 'User is missing requested documents',
+  SHARE_MISSING_DOCS_MSG:
+    '{{serviceName}} is requesting documents that can’t be found in your wallet. \n Missing: {{documentType}} ... ',
 }
 
 export const strings = {
