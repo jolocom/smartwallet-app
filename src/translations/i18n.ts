@@ -1,6 +1,6 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import { getLocales } from 'react-native-localize'
+import { findBestAvailableLanguage } from 'react-native-localize'
 // @ts-ignore
 import en from './en.json'
 // @ts-ignore
@@ -19,13 +19,11 @@ const resources = {
 }
 
 const getSystemLng = () => {
-  const systemLng = getLocales()[0].languageCode as Locales
+  const systemLng = findBestAvailableLanguage(localesArr)
 
-  if (localesArr.includes(systemLng)) {
-    return systemLng
-  }
+  if (!systemLng) return Locales.en
 
-  return Locales.en
+  return systemLng.languageTag
 }
 
 i18n.use(initReactI18next).init({

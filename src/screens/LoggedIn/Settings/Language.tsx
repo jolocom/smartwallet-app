@@ -18,7 +18,7 @@ const Language = () => {
     { id: Locales.de, value: t(strings.GERMAN) },
   ]
 
-  const initialSelection = languages.find((l) => l.id === currentLanguage)
+  const storedLanguage = languages.find((l) => l.id === currentLanguage)
 
   const handleLanguageChange = async (language: BlockSelection) => {
     return changeLanguage(language.id as Locales, agent)
@@ -31,7 +31,7 @@ const Language = () => {
     >
       <Section title={t(strings.LANGUAGE)} customStyles={{ marginBottom: 0 }} />
       <SingleSelectBlock
-        initialSelect={initialSelection}
+        initialSelect={storedLanguage}
         selection={languages}
         onSelect={handleLanguageChange}
       />
