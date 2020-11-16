@@ -12,6 +12,15 @@ interface NestedSceenI {
   screen?: ScreenNames
 }
 
+export const useRedirect = () => {
+  const navigation = useNavigation()
+
+  return (
+    screenName: ScreenNames,
+    params: Record<string, any> & NestedSceenI = {},
+  ) => navigation.navigate(screenName, params)
+}
+
 export const useRedirectTo = (
   screenName: ScreenNames,
   params: Record<string, any> & NestedSceenI = {},
