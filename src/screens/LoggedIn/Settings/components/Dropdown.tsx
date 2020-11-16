@@ -2,7 +2,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
 import { CaretDown } from '~/assets/svg'
 import Block from '~/components/Block'
-import { SelectableProvider, useSelectableState } from '~/components/Selectable'
+import {
+  IOption,
+  SelectableProvider,
+  useSelectableState,
+} from '~/components/Selectable'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
@@ -30,7 +34,7 @@ const Dropdown = () => {
     setIsExpanded((prevState) => !prevState)
   }
 
-  const handleSelectOption = (option: string) => {
+  const handleSelectOption = (option: IOption<string>) => {
     setSelectedValue(option)
     setIsExpanded(false)
   }
@@ -58,7 +62,7 @@ const Dropdown = () => {
       <Block>
         <Option onPress={toggleExpanded}>
           <Option.Title
-            title={selectedValue ?? strings.SELECT_AN_OPTION}
+            title={selectedValue?.value ?? strings.SELECT_AN_OPTION}
             color={isExpanded ? Colors.white30 : Colors.white70}
           />
           <Option.IconContainer>
@@ -78,12 +82,12 @@ const Dropdown = () => {
             {options.map((option: { id: string; value: string }) => (
               <Option
                 key={option.id}
-                onPress={() => handleSelectOption(option.value)}
+                onPress={() => handleSelectOption(option)}
               >
                 <Option.Title
                   title={option.value}
                   color={
-                    option.value === selectedValue
+                    option.value === selectedValue?.value
                       ? Colors.success
                       : Colors.white
                   }
@@ -109,9 +113,9 @@ const styles = StyleSheet.create({
   },
 })
 
-export default () => {
+export default ({ options }: { options: IOption<string>[] }) => {
   return (
-    <SelectableProvider<string>>
+    <SelectableProvider<string> options={options}>
       <Dropdown />
     </SelectableProvider>
   )

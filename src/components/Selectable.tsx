@@ -2,23 +2,30 @@ import React, { createContext, useContext, useMemo, useState } from 'react'
 
 type TOptionExtend = string | number
 
-interface IContext {
-  selectedValue: TOptionExtend | null
-  setSelectedValue: React.Dispatch<React.SetStateAction<TOptionExtend | null>>
+export interface IOption<T> {
+  id: string
+  value: T
 }
 
-const SelectableContext = createContext<IContext>({
-  selectedValue: null,
-  setSelectedValue: (value: TOptionExtend | null) => {},
-})
+interface IContext<T> {
+  options: IOption<T>[]
+  selectedValue: IOption<T> | null
+  setSelectedValue: React.Dispatch<React.SetStateAction<IOption<T> | null>>
+}
+
+const SelectableContext = createContext<IContext<string | number> | undefined>(
+  undefined,
+)
 
 export const SelectableProvider = <T extends TOptionExtend>({
+  options,
   children,
-}: React.PropsWithChildren<{}>) => {
-  const [selectedValue, setSelectedValue] = useState<T | null>(null)
+}: React.PropsWithChildren<{ options: IOption<T>[] }>) => {
+  const [selectedValue, setSelectedValue] = useState<IOption<T> | null>(null)
 
-  const contextValue = useMemo(
+  const contextValue: IContext<T> = useMemo<IContext<T>>(
     () => ({
+      options,
       selectedValue,
       setSelectedValue,
     }),
@@ -26,6 +33,7 @@ export const SelectableProvider = <T extends TOptionExtend>({
   )
 
   return (
+    // @ts-ignore
     <SelectableContext.Provider value={contextValue}>
       {children}
     </SelectableContext.Provider>
