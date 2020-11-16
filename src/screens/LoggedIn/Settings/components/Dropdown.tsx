@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
+import { CaretDown } from '~/assets/svg'
 import Block from '~/components/Block'
 import { SelectableProvider, useSelectableState } from '~/components/Selectable'
 
@@ -60,7 +61,15 @@ const Dropdown = () => {
             title={selectedValue ?? strings.SELECT_AN_OPTION}
             color={isExpanded ? Colors.white30 : Colors.white70}
           />
-          {!isExpanded ? <Option.RightIcon /> : null}
+          <Option.IconContainer>
+            {!isExpanded ? (
+              <CaretDown />
+            ) : (
+              <View style={{ transform: [{ rotate: '180deg' }] }}>
+                <CaretDown />
+              </View>
+            )}
+          </Option.IconContainer>
         </Option>
       </Block>
       {isExpanded ? (

@@ -19,10 +19,14 @@ const Title: React.FC<TitlePropsI> = ({ title, color }) => (
   </JoloText>
 )
 
+const IconContainer: React.FC = ({ children }) => (
+  <View style={styles.rightIcon}>{children}</View>
+)
+
 const RightIcon: React.FC = () => (
-  <View style={styles.rightIcon}>
+  <IconContainer>
     <CaretRight />
-  </View>
+  </IconContainer>
 )
 
 interface PropsI {
@@ -32,6 +36,7 @@ interface PropsI {
 const Option: React.FC<PropsI> & {
   Title: React.FC<TitlePropsI>
   RightIcon: React.FC
+  IconContainer: React.FC
 } = ({ onPress, children }) => {
   return (
     <View style={styles.container}>
@@ -47,6 +52,7 @@ const Option: React.FC<PropsI> & {
 }
 
 Option.Title = Title
+Option.IconContainer = IconContainer
 Option.RightIcon = RightIcon
 
 const styles = StyleSheet.create({
