@@ -6,10 +6,15 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 interface TitlePropsI {
-  title: string
+  title: string | number
+  color?: Colors
 }
-const Title: React.FC<TitlePropsI> = ({ title }) => (
-  <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+const Title: React.FC<TitlePropsI> = ({ title, color }) => (
+  <JoloText
+    kind={JoloTextKind.subtitle}
+    size={JoloTextSizes.middle}
+    color={color}
+  >
     {title}
   </JoloText>
 )

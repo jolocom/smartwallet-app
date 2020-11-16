@@ -186,6 +186,11 @@ const settings = {
     'Your documents are at risk of permanent loss without a backup',
   PRIVACY_POLICY_QUESTIONS:
     'If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.',
+  SELECT_AN_OPTION: 'Select an option',
+  POSSIBLE_PARTNERSHIP: 'Possible partnership with Jolocom',
+  ISSUES_WITH_THE_APP: 'Issues with the application',
+  I_LOST_MY_WALLET: 'I lost my wallet',
+  HOW_TO_BECOME_PART_OF_THE_PROJECT: 'How to become a part of the project?',
 }
 
 const termsConsent = {
