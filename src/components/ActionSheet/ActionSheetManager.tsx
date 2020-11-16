@@ -22,6 +22,7 @@ import { IntermediarySheetState } from '~/modules/interaction/types'
 import Loader from '~/modals/Loader'
 import ActionSheet from './ActionSheet'
 import Resolution from '~/screens/Modals/Interactions/Resolution'
+import Toasts from '../Toasts'
 
 enum ActionSheetTypes {
   InteractionSheet,
@@ -134,6 +135,7 @@ const ActionSheetManager: React.FC = () => {
         isVisible={activeSheet === ActionSheetTypes.InteractionSheet}
       >
         {Platform.OS === 'ios' && <Loader />}
+        <Toasts />
         {renderInteractionBody()}
       </ActionSheet>
 
@@ -143,6 +145,7 @@ const ActionSheetManager: React.FC = () => {
           isVisible={activeSheet === ActionSheetTypes.IntermediateSheet}
         >
           {Platform.OS === 'ios' && <Loader />}
+          <Toasts />
           <IntermediarySheetBody />
         </ActionSheet>
       )}
