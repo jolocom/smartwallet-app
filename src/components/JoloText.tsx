@@ -19,8 +19,8 @@ export enum JoloTextWeight {
 }
 
 interface PropsI {
-  kind: JoloTextKind
-  size: JoloTextSizes
+  kind?: JoloTextKind
+  size?: JoloTextSizes
   weight?: JoloTextWeight
   color?: Colors
   customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>
@@ -30,8 +30,8 @@ interface PropsI {
 
 const JoloText: React.FC<PropsI> = ({
   children,
-  kind,
-  size,
+  kind = JoloTextKind.subtitle,
+  size = JoloTextSizes.middle,
   weight,
   color,
   customStyles,
