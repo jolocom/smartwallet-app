@@ -1,5 +1,8 @@
 import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
@@ -22,11 +25,11 @@ export type RootStackParamList = {
 
 const RootStack = createStackNavigator<RootStackParamList>()
 
-const RootNavigation: React.FC = () => {
+const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
   const isLoggedIn = useSelector(isLogged)
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={ref}>
       <RootStack.Navigator headerMode="none" mode="modal">
         {isLoggedIn ? (
           <RootStack.Screen
@@ -47,6 +50,6 @@ const RootNavigation: React.FC = () => {
       </RootStack.Navigator>
     </NavigationContainer>
   )
-}
+})
 
 export default RootNavigation
