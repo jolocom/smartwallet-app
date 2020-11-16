@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
@@ -25,9 +25,13 @@ const ToggleSwitch: React.FC<Props> = (props) => {
   const onGradientColors = [Colors.carnationPink, Colors.hyacinthPink]
   const offGradientColors = [Colors.haiti, Colors.haiti]
 
-  const positionValue = useRef(
-    new Animated.Value(onState ? ON_POSITION : OFF_POSITION),
-  ).current
+  // const positionValue = useRef(
+  //   new Animated.Value(onState ? ON_POSITION : OFF_POSITION),
+  // ).current
+
+  const positionValue = useMemo(() => {
+    return new Animated.Value(onState ? ON_POSITION : OFF_POSITION)
+  }, [onState])
 
   const toggle = () => {
     if (isPropControlled(props, 'on')) {

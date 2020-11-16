@@ -13,8 +13,6 @@ const EnableBiometryOption = () => {
   const [isOptionVisible, setIsOptionVisible] = useState(false)
   /* On state that is controlled and passed to ToggleSwitch */
   const [isOn, setIsOn] = useState(false)
-  /* Based on this state we display switch or not to handle correct was on child useRef */
-  const [isSwitchVisible, setSwitchVisibility] = useState(false)
   /* State represent what biometrics were enrolled */
   const [enrolledBiometry, setEnrolledBiometry] = useState<
     BiometryType | undefined
@@ -51,9 +49,12 @@ const EnableBiometryOption = () => {
 
   /* check what has been stored biometry related in settings */
   const getStoredBiometry = useCallback(async () => {
-    const biometry = await getBiometry()
-    setIsOn(!!biometry?.type)
-    setSwitchVisibility(true)
+    try {
+      const biometry = await getBiometry()
+      setIsOn(!!biometry?.type)
+    } catch (e) {
+      setIsOptionVisible(false)
+    }
   }, [])
 
   const handleToggle = async () => {
@@ -91,9 +92,7 @@ const EnableBiometryOption = () => {
     <Option>
       <Option.Title title={strings.USE_BIOMETRICS_TO_LOGIN} />
       <View style={{ position: 'absolute', right: 16 }}>
-        {isSwitchVisible ? (
-          <ToggleSwitch on={isOn} onToggle={handleToggle} />
-        ) : null}
+        <ToggleSwitch on={isOn} onToggle={handleToggle} />
       </View>
     </Option>
   )
