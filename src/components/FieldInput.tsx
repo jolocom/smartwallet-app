@@ -1,0 +1,86 @@
+import React, { useState, useCallback } from 'react'
+import { View, TextInput, TextInputProps, StyleSheet } from 'react-native'
+import { debugView } from '~/utils/dev'
+import { subtitleFontStyles } from '~/utils/fonts'
+import { Colors } from '~/utils/colors'
+import { InputValidation, validateString } from '~/utils/stringUtils'
+
+enum InputValidityState {
+  none = 'none',
+  error = 'error',
+  valid = 'valid',
+}
+
+interface Props extends TextInputProps {
+  validation?: InputValidation
+  onValidation?: (state: InputValidityState) => void
+}
+
+const FieldInput: React.FC<Props> = ({
+  validation = InputValidation.all,
+  onChangeText = () => {},
+  onValidation = () => {},
+  ...inputProps
+}) => {
+  const [validity, setValidity] = useState(InputValidityState.none)
+
+  const getUnderlineColor = useCallback(() => {
+    let color: Colors
+    switch (validity) {
+      case InputValidityState.error:
+        color = Colors.error
+        break
+      case InputValidityState.valid:
+        color = Colors.success
+        break
+      default:
+        color = Colors.white60
+        break
+    }
+
+    return { borderColor: color }
+  }, [validity])
+
+  const onChange = (text: string) => {
+    const state =
+      text.length < 4
+        ? InputValidityState.none
+        : validateString(text, validation)
+        ? InputValidityState.valid
+        : InputValidityState.error
+
+    setValidity(state)
+
+    onValidation(state)
+    onChangeText(text)
+  }
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={[styles.text, getUnderlineColor()]}
+        onChangeText={onChange}
+        autoCapitalize={'none'}
+        autoCorrect={false}
+        returnKeyType={'done'}
+        selectionColor={Colors.success}
+        underlineColorAndroid="transparent"
+        {...inputProps}
+      />
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  text: {
+    ...subtitleFontStyles.middle,
+    color: Colors.white,
+    borderBottomWidth: 1,
+  },
+  container: {
+    ...debugView,
+    width: '100%',
+  },
+})
+
+export default FieldInput
