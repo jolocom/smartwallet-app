@@ -6,30 +6,41 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 interface TitlePropsI {
-  title: string
+  title: string | number
+  color?: Colors
 }
-const Title: React.FC<TitlePropsI> = ({ title }) => (
-  <JoloText kind={JoloTextKind.subtitle} size={JoloTextSizes.middle}>
+const Title: React.FC<TitlePropsI> = ({ title, color }) => (
+  <JoloText
+    kind={JoloTextKind.subtitle}
+    size={JoloTextSizes.middle}
+    color={color}
+  >
     {title}
   </JoloText>
 )
 
+const IconContainer: React.FC = ({ children }) => (
+  <View style={styles.rightIcon}>{children}</View>
+)
+
 const RightIcon: React.FC = () => (
-  <View style={styles.rightIcon}>
+  <IconContainer>
     <CaretRight />
-  </View>
+  </IconContainer>
 )
 
 interface PropsI {
   onPress?: () => void
+  hasBorder?: boolean
 }
 
 const Option: React.FC<PropsI> & {
   Title: React.FC<TitlePropsI>
   RightIcon: React.FC
-} = ({ onPress, children }) => {
+  IconContainer: React.FC
+} = ({ onPress, hasBorder = true, children }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { ...(hasBorder && styles.border) }]}>
       <TouchableOpacity
         activeOpacity={onPress ? 0.2 : 1}
         onPress={onPress}
@@ -42,13 +53,16 @@ const Option: React.FC<PropsI> & {
 }
 
 Option.Title = Title
+Option.IconContainer = IconContainer
 Option.RightIcon = RightIcon
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
+  },
+  border: {
     borderBottomColor: Colors.mainBlack,
     borderBottomWidth: 1,
-    width: '100%',
   },
   sectionOption: {
     flexDirection: 'row',

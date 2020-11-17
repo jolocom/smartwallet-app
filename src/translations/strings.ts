@@ -71,17 +71,7 @@ const seedphrase = {
 const deviceAuthentication = {
   USE_TOUCH_ID_TO_AUTHORIZE: 'Use Touch ID to authorise wallet',
   USE_FACE_ID_TO_AUTHORIZE: 'Use Face ID to authorise wallet',
-  USE_FINGERPRINT_TO_AUTHORIZE: 'Use Fingerprint to authorise wallet',
-  USE_FACE_TO_AUTHORIZE: 'Use your Face to authorise wallet', // a terrible wording here
-
-  TAP_TO_ACTIVATE_TOUCH_ID:
-    'Tap to activate Touch ID so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FACE_ID:
-    'Tap to activate Face ID so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FINGERPRINT:
-    'Tap to activate Fingerprint so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FACE:
-    'Tap to activate Face so you don’t need to confirm your PIN every time you need to use it',
+  USE_BIOMETRICS_TO_AUTHORIZE: 'Use Biometrics to authorise wallet',
 
   SO_YOU_DONT_NEED_TO_CONFIRM:
     'So you don’t need to confirm your PIN every time you need to use it',
@@ -89,19 +79,12 @@ const deviceAuthentication = {
   SKIP: 'Skip',
   YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
 
-  TOUCH_ID_IS_DISABLED: 'Touch ID is disabled',
-  FACE_ID_IS_DISABLED: 'Touch ID is disabled',
-  FINGERPRINT_IS_DISABLED: 'Touch ID is disabled',
-  FACE_IS_DISABLED: 'Touch ID is disabled',
-
-  TO_USE_BIOMETRICS_ENABLE:
-    'To use biometrics enable this feature in the system settings',
-  SETTINGS: 'Settings',
   CANCEL: 'Cancel',
 
   SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER:
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
+  PROVIDE_BIOMETRICS: 'Provide biometrics to continue',
   RESET: 'Reset',
   RESTORE_ACCESS: 'Restore access',
 }
@@ -167,6 +150,7 @@ const settings = {
   LANGUAGE: 'Language',
   SECURITY: 'Security',
   CHANGE_PIN: 'Change PIN',
+  USE_BIOMETRICS_TO_LOGIN: 'Use Biometrics to log in',
   BACKUP_IDENTITY: 'Backup Identity',
   GENERAL: 'General',
   FAQ: 'FAQ',
@@ -186,6 +170,13 @@ const settings = {
     'Your documents are at risk of permanent loss without a backup',
   PRIVACY_POLICY_QUESTIONS:
     'If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.',
+  SELECT_AN_OPTION: 'Select an option',
+  POSSIBLE_PARTNERSHIP: 'Possible partnership with Jolocom',
+  ISSUES_WITH_THE_APP: 'Issues with the application',
+  I_LOST_MY_WALLET: 'I lost my wallet',
+  HOW_TO_BECOME_PART_OF_THE_PROJECT: 'How to become a part of the project?',
+  ENGLISH: 'English',
+  GERMAN: 'German',
   POPULAR_QUESTIONS: 'Popular questions',
   TAP_TO_WRITE: 'Tap to write'
 }
@@ -221,6 +212,12 @@ const recoverPin = {
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
 }
 
+const notifications = {
+  WHOOPS: 'Whoops',
+  COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
+  COULDNOT_ACTIVATE: 'We could not activate biometrics'
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -238,4 +235,5 @@ export const strings = {
   ...recoverPin,
   ...settings,
   ...termsConsent,
+  ...notifications
 }
