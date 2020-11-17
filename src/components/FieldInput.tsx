@@ -5,7 +5,7 @@ import { subtitleFontStyles } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
 
-enum InputValidityState {
+export enum InputValidityState {
   none = 'none',
   error = 'error',
   valid = 'valid',

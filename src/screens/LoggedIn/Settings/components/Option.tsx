@@ -1,10 +1,11 @@
 import React from 'react'
 import { StyleSheet, View, Platform } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
 import { CaretRight } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 interface TitlePropsI {
   title: string | number

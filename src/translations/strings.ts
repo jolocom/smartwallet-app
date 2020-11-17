@@ -186,8 +186,8 @@ const settings = {
     'Dare to suggest you have something to tell us, so we will be prepared for the future conversations',
   WANT_TO_GET_IN_TOUCH: 'Want to get in touch?',
   WE_DO_NOT_STORE_DATA: 'We do not store data and do not spam',
-  PLEASE_ENTER_A_VALID_EMAIL_OR_PHONE_NUMBER:
-    'Please enter a valid email or phone number',
+  PLEASE_ENTER_A_VALID_EMAIL: 'Please enter a valid email',
+  SEND: 'Send',
 }
 
 const termsConsent = {
