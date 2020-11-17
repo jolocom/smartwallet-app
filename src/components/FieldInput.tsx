@@ -3,7 +3,7 @@ import { View, TextInput, TextInputProps, StyleSheet } from 'react-native'
 import { debugView } from '~/utils/dev'
 import { subtitleFontStyles } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-import { InputValidation, validateString } from '~/utils/stringUtils'
+import { InputValidation, regexValidations } from '~/utils/stringUtils'
 
 enum InputValidityState {
   none = 'none',
@@ -12,12 +12,12 @@ enum InputValidityState {
 }
 
 interface Props extends TextInputProps {
-  validation?: InputValidation
+  validation?: RegExp
   onValidation?: (state: InputValidityState) => void
 }
 
 const FieldInput: React.FC<Props> = ({
-  validation = InputValidation.all,
+  validation = regexValidations[InputValidation.all],
   onChangeText = () => {},
   onValidation = () => {},
   ...inputProps

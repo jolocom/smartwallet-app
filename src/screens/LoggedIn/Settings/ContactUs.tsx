@@ -6,7 +6,7 @@ import { strings } from '~/translations/strings'
 import { JoloTextSizes } from '~/utils/fonts'
 import Dropdown from './components/Dropdown'
 import FieldInput from '~/components/FieldInput'
-import { InputValidation } from '~/utils/stringUtils'
+import { InputValidation, regexValidations } from '~/utils/stringUtils'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -35,7 +35,7 @@ const ContactUs: React.FC = () => {
       <Dropdown options={options} />
 
       <FieldInput
-        validation={InputValidation.email}
+        validation={regexValidations[InputValidation.email]}
         value={value}
         onChangeText={setValue}
         placeholder={strings.CONTACT_US_GET_IN_TOUCH}
