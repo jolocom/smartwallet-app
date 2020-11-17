@@ -40,6 +40,13 @@ jest.mock('../../../src/utils/parseJWT', () => ({
   parseJWT: jest.fn().mockReturnValue(mockedJWT),
 }))
 
+jest.mock('../../../src/hooks/toasts', () => ({
+  useToasts: () => ({
+    scheduleInfo: jest.fn(),
+    scheduleWarning: jest.fn(),
+  }),
+}))
+
 const getMockedDispatch = () => {
   const mockDispatchFn = jest.fn()
   const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
