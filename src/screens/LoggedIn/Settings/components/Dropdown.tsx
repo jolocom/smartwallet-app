@@ -16,7 +16,12 @@ import Option from './Option'
 const Dropdown = () => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const { selectedValue, setSelectedValue, options } = useSelectableState()
+  const {
+    selectedValue,
+    setSelectedValue,
+    options,
+    onSelect,
+  } = useSelectableState()
   const selectedValueTruncated = selectedValue
     ? selectedValue.value.toString().length > 30
       ? selectedValue.value.toString().split('').splice(0, 30).join('') + '...'
@@ -30,6 +35,7 @@ const Dropdown = () => {
   const handleSelectOption = (option: IOption<TOptionExtend>) => {
     setSelectedValue(option)
     setIsExpanded(false)
+    onSelect(option)
   }
 
   const animatedOpacity = useRef(new Animated.Value(0)).current
@@ -70,7 +76,7 @@ const Dropdown = () => {
         </Option>
       </Block>
       {isExpanded ? (
-        <Animated.View style={{ opacity: animatedOpacity }}>
+        <Animated.View style={{ opacity: animatedOpacity, zIndex: 99 }}>
           <Block customStyle={styles.dropdownSpecificOptions}>
             {options.map((option) => (
               <Option
@@ -107,9 +113,15 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ({ options }: { options: IOption<string>[] }) => {
+export default ({
+  options,
+  onSelect,
+}: {
+  options: IOption<string>[]
+  onSelect: (val: IOption<string>) => void
+}) => {
   return (
-    <SelectableProvider<string> options={options}>
+    <SelectableProvider<string> options={options} onSelect={onSelect}>
       <Dropdown />
     </SelectableProvider>
   )
