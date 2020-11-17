@@ -76,6 +76,7 @@ const Dropdown = () => {
               <Option
                 key={option.id}
                 onPress={() => handleSelectOption(option)}
+                hasBorder={false}
               >
                 <Option.Title
                   title={option.value}
