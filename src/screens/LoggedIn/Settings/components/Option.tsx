@@ -29,7 +29,7 @@ const Option: React.FC<PropsI> & {
   RightIcon: React.FC
 } = ({ onPress, children }) => {
   return (
-    <View style={{ borderBottomColor: Colors.mainBlack, borderBottomWidth: 1 }}>
+    <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={onPress ? 0.2 : 1}
         onPress={onPress}
@@ -45,6 +45,11 @@ Option.Title = Title
 Option.RightIcon = RightIcon
 
 const styles = StyleSheet.create({
+  container: {
+    borderBottomColor: Colors.mainBlack,
+    borderBottomWidth: 1,
+    width: '100%',
+  },
   sectionOption: {
     flexDirection: 'row',
     justifyContent: 'space-between',

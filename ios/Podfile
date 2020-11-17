@@ -82,6 +82,11 @@ target 'SmartWallet' do
   pod 'Permission-Notifications', :path => "../node_modules/react-native-permissions/ios/Notifications.podspec"
   pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera.podspec"
 
+  # NOTE: this is needed to enable "modular_headers" for JolocomCore!
+  # otherwise we would have to use "use_frameworks!"
+  # but that interferes with "Flipper" (see notes about flipper at the end)
+  pod 'JolocomCore', :path => '../node_modules/@jolocom/native-core-react-native', :modular_headers => true
+
   target 'SmartWalletTests' do
     inherit! :complete
     # Pods for testing
