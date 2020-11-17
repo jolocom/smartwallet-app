@@ -38,6 +38,7 @@ const ContactUs: React.FC = () => {
         validation={InputValidation.email}
         value={value}
         onChangeText={setValue}
+        placeholder={strings.CONTACT_US_GET_IN_TOUCH}
         onValidation={console.log}
       />
     </ScreenContainer>

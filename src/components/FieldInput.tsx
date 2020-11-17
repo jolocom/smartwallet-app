@@ -42,16 +42,16 @@ const FieldInput: React.FC<Props> = ({
   }, [validity])
 
   const onChange = (text: string) => {
-    const state =
+    const newValidity =
       text.length < 4
         ? InputValidityState.none
-        : validateString(text, validation)
+        : validation.test(text)
         ? InputValidityState.valid
         : InputValidityState.error
 
-    setValidity(state)
+    setValidity(newValidity)
 
-    onValidation(state)
+    if (newValidity !== validity) onValidation(newValidity)
     onChangeText(text)
   }
 
@@ -64,7 +64,8 @@ const FieldInput: React.FC<Props> = ({
         autoCorrect={false}
         returnKeyType={'done'}
         selectionColor={Colors.success}
-        underlineColorAndroid="transparent"
+        underlineColorAndroid={Colors.transparent}
+        placeholderTextColor={Colors.white70}
         {...inputProps}
       />
     </View>

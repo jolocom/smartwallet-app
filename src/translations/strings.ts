@@ -178,6 +178,7 @@ const settings = {
   ENGLISH: 'English',
   GERMAN: 'German',
   POPULAR_QUESTIONS: 'Popular questions',
+  CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
 }
 
 const termsConsent = {
@@ -214,7 +215,7 @@ const recoverPin = {
 const notifications = {
   WHOOPS: 'Whoops',
   COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
-  COULDNOT_ACTIVATE: 'We could not activate biometrics'
+  COULDNOT_ACTIVATE: 'We could not activate biometrics',
 }
 
 export const strings = {
@@ -234,5 +235,5 @@ export const strings = {
   ...recoverPin,
   ...settings,
   ...termsConsent,
-  ...notifications
+  ...notifications,
 }
