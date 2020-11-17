@@ -180,6 +180,14 @@ const settings = {
   POPULAR_QUESTIONS: 'Popular questions',
   CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
   TAP_TO_WRITE: 'Tap to write',
+  WHAT_WE_ARE_GOING_TO_TALK_ABOUT: 'What we are going to talk about?',
+  ANYTHING_SPECIFIC_TO_MENTION: 'Anything specific to mention?',
+  DARE_TO_SUGGEST_SMTH:
+    'Dare to suggest you have something to tell us, so we will be prepared for the future conversations',
+  WANT_TO_GET_IN_TOUCH: 'Want to get in touch?',
+  WE_DO_NOT_STORE_DATA: 'We do not store data and do not spam',
+  PLEASE_ENTER_A_VALID_EMAIL_OR_PHONE_NUMBER:
+    'Please enter a valid email or phone number',
 }
 
 const termsConsent = {
