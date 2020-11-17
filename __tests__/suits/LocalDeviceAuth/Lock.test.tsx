@@ -40,6 +40,14 @@ jest.mock('../../../src/hooks/sdk', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/biometry', () => ({
+  useBiometry: () => ({
+    getBiometry: jest.fn().mockImplementationOnce(() => {
+      return { type: 'FaceID' }
+    }),
+  }),
+}))
+
 describe('Lock screen', () => {
   test('displays body and unlocks the app', async () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
