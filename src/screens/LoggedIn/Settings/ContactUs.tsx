@@ -7,6 +7,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import Dropdown from './components/Dropdown'
 import FieldInput from '~/components/FieldInput'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
+import TextArea from './components/TextArea'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -17,7 +18,7 @@ const INQUIRIES_LIST = [
 
 const ContactUs: React.FC = () => {
   const [value, setValue] = useState('')
-
+  const [detailsInput, setDetailsInput] = useState('')
   const options = useMemo(
     () =>
       INQUIRIES_LIST.map((el) => ({ id: el.split(' ').join(''), value: el })),
@@ -32,6 +33,7 @@ const ContactUs: React.FC = () => {
       <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
         Contact us
       </JoloText>
+      <TextArea input={detailsInput} setInput={setDetailsInput} />
       <Dropdown options={options} />
 
       <FieldInput
