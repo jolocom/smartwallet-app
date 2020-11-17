@@ -632,6 +632,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.12.0", "@babel/runtime@^7.3.1":
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
+  integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.0.0", "@babel/template@^7.10.1", "@babel/template@^7.4.0":
   version "7.10.1"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.10.1.tgz#e167154a94cb5f14b28dc58f5356d2162f539811"
@@ -1268,14 +1275,14 @@
     form-data "^3.0.0"
     node-fetch "^2.6.1"
 
-"@jolocom/jolo-did-resolver@^1.0.0-rc5":
-  version "1.0.0-rc5"
-  resolved "https://registry.yarnpkg.com/@jolocom/jolo-did-resolver/-/jolo-did-resolver-1.0.0-rc5.tgz#0411ec2eabb9b1dd2881a5ce7779ff6dfcf2b13f"
-  integrity sha512-Yb4NBL8gaNvDKtpj/SLMGJURvtQ2xLJTYmRC9c7yGZ65ekcAnSPm5T8YbToYYNHa0TWCu6ZbJmXKsF/hDoLZHw==
+"@jolocom/jolo-did-resolver@^1.0.0-rc6":
+  version "1.0.0-rc6"
+  resolved "https://registry.yarnpkg.com/@jolocom/jolo-did-resolver/-/jolo-did-resolver-1.0.0-rc6.tgz#4adc6f8d00687a22e4e10d87d682adf0730f17ea"
+  integrity sha512-7/c3JClqj2W4bUj1Q/wk+u9aJPKlDLFxuKgo1yNYWru8/HUzuhmL4AmKUDKChuy6Cwk9a8IzObbUZd1c/NX5rQ==
   dependencies:
     "@jolocom/registry-contract" "^1.0.0-rc5"
     detect-node "^2.0.4"
-    node-fetch "^2.6.0"
+    node-fetch "^2.6.1"
 
 "@jolocom/local-resolver-registrar@^1.0.0-rc1":
   version "1.0.0-rc1"
@@ -1343,18 +1350,18 @@
   dependencies:
     ethers "5.0.5"
 
-"@jolocom/sdk-storage-typeorm@^2.0.9":
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-2.0.11.tgz#eccc65d875f92aa3ab0030f2576e63d704f56059"
-  integrity sha512-A9vxHcOvGvb4aiqogeBVGco1WXD78cg5vypwySFE0C7Kp7H8rc8coUzQl/ovp5Bt57sR4wk9PCp72dKS7Oue7A==
+"@jolocom/sdk-storage-typeorm@^4.0.0-rc2":
+  version "4.0.0-rc2"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-4.0.0-rc2.tgz#cbcb8823f0fa1b5b12186ac78ba1215e69862bad"
+  integrity sha512-THwS7/WF5U+2vgoW400NtzbLfIHLdDrA0r8s7DkfZ6eKcl7oAnzJ4T/RpjR43bpJufjbrXOxPd0irrdEwOdy4A==
   dependencies:
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.0.0-rc12":
-  version "1.0.0-rc12"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc12.tgz#910df7431f37e76e8dd6439e4d6399a119620751"
-  integrity sha512-cpvXQlipwh6/TuadROeoi1s3b6JV9V0IxZ4xUZ3M91g23IekLkv1bGhMPoW0ESX0vLTNNAa4Q1K/OAOzZN2G0g==
+"@jolocom/sdk@^1.0.0-rc16":
+  version "1.0.0-rc16"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc16.tgz#67db9de9a450ddcb7feaec88824671c18ae62ef2"
+  integrity sha512-7sT5ouqEalo/S7dCOK+KuEhV9+YTKMJd7qFtjU+lS2YHGc7M1k3qXllfR2SMBJMu7j1MkopZvAFi812aZE3rkQ==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.2"
     form-data "^3.0.0"
@@ -4806,6 +4813,13 @@ html-escaper@^2.0.0:
   resolved "https://registry.yarnpkg.com/html-escaper/-/html-escaper-2.0.2.tgz#dfd60027da36a36dfcbe236262c00a5822681453"
   integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
+html-parse-stringify2@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/html-parse-stringify2/-/html-parse-stringify2-2.0.1.tgz#dc5670b7292ca158b7bc916c9a6735ac8872834a"
+  integrity sha1-3FZwtyksoVi3vJFsmmc1rIhyg0o=
+  dependencies:
+    void-elements "^2.0.1"
+
 http-errors@~1.7.2:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.7.3.tgz#6c619e4f9c60308c38519498c14fbb10aacebb06"
@@ -4841,6 +4855,13 @@ husky@^4.2.5:
     please-upgrade-node "^3.2.0"
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
+
+i18next@^19.8.3:
+  version "19.8.3"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.8.3.tgz#10df7222db8c23389b13bceb9ba67a5e20a0241e"
+  integrity sha512-eVrqAw2gGGYYJaJMYw4VM1FNFawLD4b84IsoTZMVXeWHaxAM2gyTa34j2Sip15UkBz/LrSxdFJj0Jhlrz7EvHA==
+  dependencies:
+    "@babel/runtime" "^7.12.0"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.24, iconv-lite@~0.4.13:
   version "0.4.24"
@@ -5739,20 +5760,19 @@ jetifier@^1.6.2:
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.5.tgz#ea87324a4230bef20a9651178ecab978ee54a8cb"
   integrity sha512-T7yzBSu9PR+DqjYt+I0KVO1XTb1QhAfHnXV5Nd3xpbXM6Xg4e3vP60Q4qkNU8Fh6PHC2PivPUNN3rY7G2MxcDQ==
 
-jolocom-lib@^5.1.0-rc10:
-  version "5.1.0-rc10"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.1.0-rc10.tgz#4f481840d05973e67504c32be107333c21f4fe32"
-  integrity sha512-IB2+XabNJTroriMPL41z3lk/fLTvSmsN+pJdfYj6a+MeVg1fXzdEklQ+kO/wf1RMwwjpnAshWgsx/Ya3/aN30A==
+jolocom-lib@5.1.0-rc12:
+  version "5.1.0-rc12"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.1.0-rc12.tgz#04e332293adc0fd19d34ac0e5c91eb5eda6d37c9"
+  integrity sha512-mGHygJkjJKFrxHHnqU7Rvu8T4Crwg7fpYMnFKG9E8lOgpPbcXoLMwUdwtXWW+mbCBRp4KxqolgGvDnqDKCOcYQ==
   dependencies:
     "@hawkingnetwork/ed25519-hd-key-rn" "^1.0.1"
     "@jolocom/jolo-did-registrar" "^1.0.0-rc6"
-    "@jolocom/jolo-did-resolver" "^1.0.0-rc5"
+    "@jolocom/jolo-did-resolver" "^1.0.0-rc6"
     "@jolocom/local-resolver-registrar" "^1.0.0-rc1"
     "@jolocom/native-core" "^1.0.0-rc4"
     "@jolocom/protocol-ts" "^0.5.1"
     "@jolocom/vaulted-key-provider" "^0.7.4"
     "@types/sinon" "^9.0.5"
-    base64url "^3.0.1"
     bip39 "^3.0.2"
     class-transformer "^0.3.1"
     create-hash "^1.2.0"
@@ -5762,8 +5782,9 @@ jolocom-lib@^5.1.0-rc10:
     json-logic-js "^1.2.2"
     jsonld "^1.6.1"
     jsontokens "^1.0.0"
-    node-fetch "^2.3.0"
+    node-fetch "^2.6.1"
     reflect-metadata "^0.1.13"
+    rfc4648 "^1.4.0"
     secrets.js-grempe "^1.1.0"
 
 js-sha3@0.5.7:
@@ -6746,7 +6767,7 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-fetch@^2.2.0, node-fetch@^2.3.0, node-fetch@^2.6.0:
+node-fetch@^2.2.0, node-fetch@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
@@ -7608,6 +7629,14 @@ react-devtools@^4.6.0:
     react-devtools-core "4.7.0"
     update-notifier "^2.1.0"
 
+react-i18next@^11.7.3:
+  version "11.7.3"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.7.3.tgz#256461c46baf5b3208c3c6860ca4e569fc7ed053"
+  integrity sha512-7sYZqVZgdaS9Z0ZH6nuJFErCD0zz5wK3jR4/xCrWjZcxHHF3GRu7BXdicbSPprZV4ZYz7LJzxxMHO7dg5Qb70A==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    html-parse-stringify2 "2.0.1"
+
 react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -7676,12 +7705,12 @@ react-native-iphone-x-helper@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
 
-react-native-jolocom@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.0.0.tgz#24aa69ef9f46204ddb778f51145e2b54d9c94b62"
-  integrity sha512-pdyjb4HTXBMQN9Aw8BhwjQDfeF15jJfjpPiZbEUdDNiETEjRewvbqcgz/CLct2u+JFUspnoHFWe68JeP93jApw==
+react-native-jolocom@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.1.0.tgz#62fa3157bbcf4af93f5da32411c26585f1e27a81"
+  integrity sha512-wlBHNgjIT90juoFBynsV2MqDjm0dPUiVxashOXEjbpr/4MPP5EXtyLtExyHVGds+wFeM2eFUgfqakQjwmrWx3Q==
   dependencies:
-    "@jolocom/sdk-storage-typeorm" "^2.0.9"
+    "@jolocom/sdk-storage-typeorm" "^4.0.0-rc2"
     crypto-browserify "^3.12.0"
     object.assign "^4.1.0"
     react-native-crypto "^2.2.0"
@@ -7709,6 +7738,11 @@ react-native-linear-gradient@^2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
   integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
+
+react-native-localize@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-1.4.3.tgz#6fde2fb1e73a7205910419a680cb4734187d556f"
+  integrity sha512-n3pi89LBeSzB825CBagyaYRtBS93LdvNz3sI386iXwLSg1ONjEGR1Ez36JBuxZalZgORjrKzV2Pun6MO7iwD6w==
 
 react-native-permissions@^2.0.2, react-native-permissions@^2.1.5:
   version "2.1.5"
@@ -9493,6 +9527,11 @@ vm-browserify@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
+
+void-elements@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
+  integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
 w3c-hr-time@^1.0.1:
   version "1.0.2"

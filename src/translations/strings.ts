@@ -191,6 +191,8 @@ const settings = {
   ISSUES_WITH_THE_APP: 'Issues with the application',
   I_LOST_MY_WALLET: 'I lost my wallet',
   HOW_TO_BECOME_PART_OF_THE_PROJECT: 'How to become a part of the project?',
+  ENGLISH: 'English',
+  GERMAN: 'German',
   POPULAR_QUESTIONS: 'Popular questions',
 }
 
