@@ -30,6 +30,16 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/sdk', () => ({
+  useAgent: () => ({
+    storage: {
+      get: {
+        setting: jest.fn().mockImplementation(() => ({ type: '' })),
+      },
+    },
+  }),
+}))
+
 describe('Lock screen', () => {
   test('displays body and unlocks the app', async () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')

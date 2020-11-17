@@ -16,7 +16,9 @@ export const getBiometryHeader = (biometryType: BiometryType | undefined) => {
   }
 }
 
-export const getBiometryDescription = (biometryType: BiometryType | undefined) => {
+export const getBiometryDescription = (
+  biometryType: BiometryType | undefined,
+) => {
   switch (biometryType) {
     case BiometryTypes.TouchID:
       return strings.SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER

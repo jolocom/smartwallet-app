@@ -1,9 +1,9 @@
 import Biometry, { BiometryType } from 'react-native-biometrics'
-import { getBiometryDescription } from '~/screens/Modals/DeviceAuthentication/utils/getText';
-import { StorageKeys, useAgent } from "./sdk";
+import { getBiometryDescription } from '~/screens/Modals/DeviceAuthentication/utils/getText'
+import { StorageKeys, useAgent } from './sdk'
 
 export const useBiometry = () => {
-  const agent = useAgent();
+  const agent = useAgent()
 
   const authenticate = async (biometryType: BiometryType | undefined) => {
     return await Biometry.simplePrompt({
@@ -11,22 +11,24 @@ export const useBiometry = () => {
     })
   }
 
-  const getBiometry = async (): Promise<{type: BiometryType | undefined} | undefined> => {
-   return await agent.storage.get.setting(StorageKeys.biometry)
+  const getBiometry = async (): Promise<
+    { type: BiometryType | undefined } | undefined
+  > => {
+    return await agent.storage.get.setting(StorageKeys.biometry)
   }
 
   const setBiometry = async (value: BiometryType | undefined) => {
     await agent.storage.store.setting(StorageKeys.biometry, {
-      type: value
+      type: value,
     })
   }
 
-  const resetBiometry = () => setBiometry(undefined);
+  const resetBiometry = () => setBiometry(undefined)
 
   return {
     authenticate,
     setBiometry,
     resetBiometry,
-    getBiometry
+    getBiometry,
   }
 }

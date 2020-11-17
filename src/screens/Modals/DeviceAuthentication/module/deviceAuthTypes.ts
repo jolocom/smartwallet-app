@@ -10,7 +10,7 @@ export enum BiometryTypes {
 }
 
 export interface StateI {
-  biometryType: BiometryTypes | undefined,
+  biometryType: BiometryTypes | undefined
   isPasscodeView: boolean
 }
 
