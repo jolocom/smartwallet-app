@@ -5,17 +5,23 @@ import SingleSelectBlock, {
   BlockSelection,
 } from '~/components/SingleSelectBlock'
 import Section from './components/Section'
-import { strings } from '~/translations/strings'
-
-const mockLanguages = [
-  { id: 'en', value: 'English' },
-  { id: 'de', value: 'German' },
-  { id: 'nl', value: 'Dutch' },
-]
+import useTranslation from '~/hooks/useTranslation'
+import { Locales, strings } from '~/translations'
+import { useAgent } from '~/hooks/sdk'
 
 const Language = () => {
-  const handleLanguageChange = (language: BlockSelection) => {
-    console.log('changing language to ', language.value)
+  const { t, changeLanguage, currentLanguage } = useTranslation()
+  const agent = useAgent()
+
+  const languages = [
+    { id: Locales.en, value: t(strings.ENGLISH) },
+    { id: Locales.de, value: t(strings.GERMAN) },
+  ]
+
+  const storedLanguage = languages.find((l) => l.id === currentLanguage)
+
+  const handleLanguageChange = async (language: BlockSelection) => {
+    return changeLanguage(language.id as Locales, agent)
   }
 
   return (
@@ -23,9 +29,10 @@ const Language = () => {
       hasHeaderBack
       customStyles={{ justifyContent: 'flex-start' }}
     >
-      <Section title={strings.LANGUAGE} customStyles={{ marginBottom: 0 }} />
+      <Section title={t(strings.LANGUAGE)} customStyles={{ marginBottom: 0 }} />
       <SingleSelectBlock
-        selection={mockLanguages}
+        initialSelect={storedLanguage}
+        selection={languages}
         onSelect={handleLanguageChange}
       />
     </ScreenContainer>
