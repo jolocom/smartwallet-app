@@ -21,6 +21,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import Option from './components/Option'
 import DevelopmentSection from './Development'
+import EnableBiometryOption from './EnableBiometryOption'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -75,6 +76,7 @@ const SettingsGeneral: React.FC = () => {
             <Option.Title title={strings.CHANGE_PIN} />
             <Option.RightIcon />
           </Option>
+          <EnableBiometryOption />
           <Option
             onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
           >

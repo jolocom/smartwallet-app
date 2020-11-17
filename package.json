@@ -41,6 +41,7 @@
     "react": "16.11.0",
     "react-i18next": "^11.7.3",
     "react-native": "0.62.2",
+    "react-native-biometrics": "^2.1.4",
     "react-native-camera": "^3.30.0",
     "react-native-crypto": "^2.1.0",
     "react-native-fingerprint-scanner": "^5.0.0",
