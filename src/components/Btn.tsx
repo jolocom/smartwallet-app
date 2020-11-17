@@ -14,9 +14,10 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
 export enum BtnTypes {
-  primary,
-  secondary,
-  tertiary,
+  primary = 'primary',
+  secondary = 'secondary',
+  tertiary = 'tertiary',
+  quaternary = 'quaternary',
 }
 
 export enum BtnSize {
@@ -41,7 +42,7 @@ interface PropsI extends BtnPropsI {
 const GRADIENT_START = { x: 0, y: 0 }
 const GRADIENT_END = { x: 1, y: 0 }
 
-const Button: React.FC<BtnPropsI> = ({
+const ButtonText: React.FC<BtnPropsI> = ({
   type = BtnTypes.primary,
   size = BtnSize.medium,
   children,
@@ -89,14 +90,14 @@ const Btn: React.FC<PropsI> = (props) => {
           style={[styles.container, btnStyle]}
           colors={[Colors.disco, Colors.ceriseRed]}
         >
-          <Button {...props} />
+          <ButtonText {...props} />
         </LinearGradient>
       ) : (
         <View
           style={[containerStyles, props.customContainerStyles, btnStyle]}
           testID="non-gradient"
         >
-          <Button {...props} />
+          <ButtonText {...props} />
         </View>
       )}
     </TouchableOpacity>
