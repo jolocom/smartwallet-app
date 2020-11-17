@@ -4,13 +4,13 @@ export enum DeviceAuthActions {
 }
 
 export enum BiometryTypes {
-  TouchID = 'Touch ID',
-  FaceID = 'Face ID',
+  TouchID = 'TouchID',
+  FaceID = 'FaceID',
   Biometrics = 'Biometrics',
 }
 
 export interface StateI {
-  biometryType: BiometryTypes
+  biometryType: BiometryTypes | undefined,
   isPasscodeView: boolean
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import Keychain from 'react-native-keychain'
+import Biometry from 'react-native-biometrics'
 
 import { ScreenNames } from '~/types/screens'
 
@@ -11,7 +11,6 @@ import DeviceAuthContextProvider, {
 import { setBiometryType } from './module/deviceAuthActions'
 import RegisterPin from './RegisterPin'
 import RegisterBiometry from './RegisterBiometry'
-import FingerprintScanner from 'react-native-fingerprint-scanner'
 
 const Stack = createStackNavigator()
 
@@ -23,24 +22,14 @@ const DeviceAuthentication: React.FC = () => {
   useEffect(() => {
     const getAuthenticationType = async () => {
       try {
-        const type = await FingerprintScanner.isSensorAvailable()
-        //console.log({type});
-        dispatch(setBiometryType(type))
-
-        // const supportedBiometryType = await Keychain.getSupportedBiometryType();
-        // console.log({supportedBiometryType});
-      } catch (e) {
-        console.log({ e })
-        if (e?.name === 'FingerprintScannerNotEnrolled') {
-          // fingerprint (biometry is reality) is available but is not enrolled
-          dispatch(setBiometryType(null))
-        } else if (
-          e?.name === 'FingerprintScannerNotAvailable' ||
-          e?.name === 'FingerprintScannerNotSupported'
-        ) {
-          // fingerprint (biometry is reality) is not supported
-          dispatch(setBiometryType(null))
+        const { available, biometryType } = await Biometry.isSensorAvailable()
+        if (available) {
+          dispatch(setBiometryType(biometryType))
+        } else {
+          setBiometryType(null)
         }
+      } catch (e) {
+        dispatch(setBiometryType(null))
       }
     }
 
