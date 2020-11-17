@@ -88,7 +88,7 @@ const Walkthrough: React.FC = () => {
         renderPagination={renderPagination}
       >
         {walkthroughData.map((slide, idx) => (
-          <>
+          <React.Fragment key={slide.header + idx}>
             <ImageBackground
               key={idx}
               style={styles.background}
@@ -117,7 +117,7 @@ const Walkthrough: React.FC = () => {
                 {walkthroughData[idx].paragraph}
               </JoloText>
             </AbsoluteBottom>
-          </>
+          </React.Fragment>
         ))}
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
