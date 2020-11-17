@@ -17,6 +17,11 @@ const Dropdown = () => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const { selectedValue, setSelectedValue, options } = useSelectableState()
+  const selectedValueTruncated = selectedValue
+    ? selectedValue.value.toString().length > 30
+      ? selectedValue.value.toString().split('').splice(0, 30).join('') + '...'
+      : selectedValue.value
+    : selectedValue
 
   const toggleExpanded = () => {
     setIsExpanded((prevState) => !prevState)
@@ -50,7 +55,7 @@ const Dropdown = () => {
       <Block>
         <Option onPress={toggleExpanded}>
           <Option.Title
-            title={selectedValue?.value ?? strings.SELECT_AN_OPTION}
+            title={selectedValueTruncated ?? strings.SELECT_AN_OPTION}
             color={isExpanded ? Colors.white30 : Colors.white70}
           />
           <Option.IconContainer>
