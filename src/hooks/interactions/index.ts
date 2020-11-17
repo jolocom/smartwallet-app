@@ -21,7 +21,7 @@ export const useInteraction = () => {
   const interactionId = useSelector(getInteractionId)
   if (!interactionId) throw new Error('Interaction not found')
 
-  return agent.interactionManager.getInteraction(interactionId)
+  return () => agent.interactionManager.getInteraction(interactionId)
 }
 
 type PreInteractionHandler = (i: Interaction) => boolean
@@ -34,7 +34,7 @@ export const useInteractionStart = () => {
 
   const parseJWT = (jwt: string) => {
     try {
-      return JolocomLib.parse.interactionToken.fromJWT(jwt);
+      return JolocomLib.parse.interactionToken.fromJWT(jwt)
     } catch (e) {
       if (e instanceof SyntaxError) {
         throw new Error(SDKError.codes.ParseJWTFailed)
@@ -112,5 +112,4 @@ export const useInteractionStart = () => {
       { showSuccess: false },
     )
   }
-
 }

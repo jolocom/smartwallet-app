@@ -22,7 +22,7 @@ import { useInteraction } from '.'
  */
 export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
-  const interaction = useInteraction()
+  const getInteraction = useInteraction()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getAvailableAttributesToShare)
   const { requestedAttributes, requestedCredentials } = useSelector(
@@ -36,6 +36,7 @@ export const useCredentialShareFlow = () => {
    * credentials, processes it and sends it to the @counterparty.
    */
   const assembleShareResponseToken = async () => {
+    const interaction = await getInteraction()
     if (selectedShareCredentials) {
       const mappedSelection = Object.values(selectedShareCredentials).map(
         (id) => id,

@@ -1,4 +1,3 @@
-import { Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import {
@@ -23,7 +22,7 @@ const useCredentialOfferSubmit = () => {
 
   return async () => {
     try {
-      if (credentialsAlreadyIssued()) {
+      if (await credentialsAlreadyIssued()) {
         await storeSelectedCredentials()
         await syncCredentials()
         return dispatch(resetInteraction())
@@ -40,7 +39,7 @@ const useCredentialOfferSubmit = () => {
           "Duplicates were found. Can't proceed with the interaction",
         )
 
-      const validatedCredentials = getValidatedCredentials()
+      const validatedCredentials = await getValidatedCredentials()
       const allValid = validatedCredentials.every((cred) => !cred.invalid)
       const allInvalid = validatedCredentials.every((cred) => cred.invalid)
 
