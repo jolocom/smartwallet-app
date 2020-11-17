@@ -71,18 +71,7 @@ const seedphrase = {
 const deviceAuthentication = {
   USE_TOUCH_ID_TO_AUTHORIZE: 'Use Touch ID to authorise wallet',
   USE_FACE_ID_TO_AUTHORIZE: 'Use Face ID to authorise wallet',
-  USE_FINGERPRINT_TO_AUTHORIZE: 'Use Fingerprint to authorise wallet',
-  USE_FACE_TO_AUTHORIZE: 'Use your Face to authorise wallet', // a terrible wording here
-  USE_BIOMETRICS: 'Use Biometrics to authorrise wallet',
-
-  TAP_TO_ACTIVATE_TOUCH_ID:
-    'Tap to activate Touch ID so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FACE_ID:
-    'Tap to activate Face ID so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FINGERPRINT:
-    'Tap to activate Fingerprint so you don’t need to confirm your PIN every time you need to use it',
-  TAP_TO_ACTIVATE_FACE:
-    'Tap to activate Face so you don’t need to confirm your PIN every time you need to use it',
+  USE_BIOMETRICS_TO_AUTHORIZE: 'Use Biometrics to authorise wallet',
 
   SO_YOU_DONT_NEED_TO_CONFIRM:
     'So you don’t need to confirm your PIN every time you need to use it',
@@ -90,20 +79,12 @@ const deviceAuthentication = {
   SKIP: 'Skip',
   YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
 
-  TOUCH_ID_IS_DISABLED: 'Touch ID is disabled',
-  FACE_ID_IS_DISABLED: 'Touch ID is disabled',
-  FINGERPRINT_IS_DISABLED: 'Touch ID is disabled',
-  FACE_IS_DISABLED: 'Touch ID is disabled',
-  BIOMETRICS_ARE_DISABLED: 'Biometrics are disabled',
-
-  TO_USE_BIOMETRICS_ENABLE:
-    'To use biometrics enable this feature in the system settings',
-  SETTINGS: 'Settings',
   CANCEL: 'Cancel',
 
   SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER:
     'Scan your fingerprint on the device scanner to continue',
   SCAN_YOUR_FACE: 'Scan your face to continue', // this definitely should be changed
+  PROVIDE_BIOMETRICS: 'Provide biometrics to continue',
   RESET: 'Reset',
   RESTORE_ACCESS: 'Restore access',
 }
@@ -165,12 +146,40 @@ const lock = {
 }
 
 const settings = {
+  APP_PREFERENCES: 'App preferences',
+  LANGUAGE: 'Language',
+  SECURITY: 'Security',
   CHANGE_PIN: 'Change PIN',
+  USE_BIOMETRICS_TO_LOGIN: 'Use Biometrics to log in',
+  BACKUP_IDENTITY: 'Backup Identity',
+  GENERAL: 'General',
+  FAQ: 'FAQ',
+  CONTACT_US: 'Contact us',
+  RATE_US: 'Rate us',
+  ABOUT: 'About',
+  IMPRINT: 'Imprint',
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
   WRONG_PIN: 'Wrong PIN',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
+  DE_VERSION: 'DE Version',
+  PRIVACY_POLICY: 'Privacy Policy',
+  TERMS_OF_SERVICE: 'Terms of Service',
+  YOUR_DOCUMENTS_ARE_AT_RISK:
+    'Your documents are at risk of permanent loss without a backup',
+  PRIVACY_POLICY_QUESTIONS:
+    'If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.',
+}
+
+const termsConsent = {
+  SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY:
+    'SmartWallet introducing Terms and Conditions and Privacy Policy',
+  YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW:
+    'You can find the German and English version of the documents below. Please note that the German version is legally binding',
+  I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY:
+    'I understand and accept the Terms of Service and Privacy Policy',
+  ACCEPT_NEW_TERMS: 'Accept new terms',
 }
 
 const attributes = {
@@ -194,6 +203,12 @@ const recoverPin = {
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
 }
 
+const notifications = {
+  WHOOPS: 'Whoops',
+  COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
+  COULDNOT_ACTIVATE: 'We could not activate biometrics'
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -209,4 +224,7 @@ export const strings = {
   ...interactions,
   ...attributes,
   ...recoverPin,
+  ...settings,
+  ...termsConsent,
+  ...notifications
 }

@@ -4,10 +4,14 @@ import { useSelector } from 'react-redux'
 
 import Loader from '~/modals/Loader'
 import ActionSheetManager from './components/ActionSheet/ActionSheetManager'
+import Toasts from './components/Toasts'
 import { getInteractionType } from './modules/interaction/selectors'
+import { getIsAppLocked } from './modules/account/selectors'
+import TermsConsent from './screens/Modals/TermsConsent'
 
 const Overlays = () => {
   const isInteracting = useSelector(getInteractionType)
+  const isAppLocked = useSelector(getIsAppLocked)
 
   return (
     <>
@@ -18,7 +22,9 @@ const Overlays = () => {
         barStyle="light-content"
       />
       <Loader />
-      {isInteracting ? <ActionSheetManager /> : null}
+      <Toasts />
+      {!isAppLocked && <TermsConsent />}
+      {isInteracting && <ActionSheetManager />}
     </>
   )
 }

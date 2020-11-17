@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { StatusBar } from 'react-native'
 
 export const useDelay = (callback: () => void, timeout = 2500) => {
@@ -30,4 +30,12 @@ export const useHideStatusBar = () => {
       StatusBar.setHidden(false)
     }
   }, [])
+}
+
+export const usePrevious = (value: any) => {
+  const ref = useRef()
+  useEffect(() => {
+    ref.current = value
+  }, [JSON.stringify(value)])
+  return ref.current
 }

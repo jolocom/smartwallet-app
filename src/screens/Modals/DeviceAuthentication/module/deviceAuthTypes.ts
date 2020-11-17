@@ -7,8 +7,6 @@ export enum BiometryTypes {
   TouchID = 'Touch ID',
   FaceID = 'Face ID',
   Biometrics = 'Biometrics',
-  Fingerprint = 'Fingerprint',
-  FACE = 'FACE',
 }
 
 export interface StateI {

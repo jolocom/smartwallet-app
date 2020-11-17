@@ -21,6 +21,7 @@ import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import useTermsConsent from '~/hooks/consent'
 
 const walkthroughData = [
   {
@@ -53,6 +54,7 @@ const Dot: React.FC<{ active: boolean }> = ({ active }) => {
   )
 }
 const Walkthrough: React.FC = () => {
+  const { checkConsent } = useTermsConsent()
   const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
   const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
 
@@ -67,6 +69,11 @@ const Walkthrough: React.FC = () => {
   }
 
   const insets = useSafeArea()
+
+  const onPress = (redirect: () => void) => {
+    checkConsent()
+    setTimeout(redirect, 100)
+  }
 
   return (
     <ScreenContainer
@@ -115,13 +122,13 @@ const Walkthrough: React.FC = () => {
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn size={BtnSize.large} onPress={redirectToEntropy}>
+          <Btn size={BtnSize.large} onPress={() => onPress(redirectToEntropy)}>
             {strings.GET_STARTED}
           </Btn>
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={redirectToRecovery}
+            onPress={() => onPress(redirectToRecovery)}
           >
             {strings.NEED_RESTORE}
           </Btn>

@@ -1,35 +1,16 @@
-import { strings } from '~/translations/strings'
 import { BiometryTypes } from '../module/deviceAuthTypes'
+import { BiometryType } from 'react-native-biometrics'
 
-export const getBiometryHeader = (biometryType: BiometryTypes) => {
+import { strings } from '~/translations/strings'
+
+export const getBiometryHeader = (biometryType: BiometryType) => {
   switch (biometryType) {
     case BiometryTypes.TouchID:
       return strings.USE_TOUCH_ID_TO_AUTHORIZE
     case BiometryTypes.FaceID:
       return strings.USE_FACE_ID_TO_AUTHORIZE
-    case BiometryTypes.Biometrics:
-      return strings.USE_BIOMETRICS
-    case BiometryTypes.Fingerprint:
-      return strings.USE_FINGERPRINT_TO_AUTHORIZE
-    case BiometryTypes.FACE:
-      return strings.USE_FACE_TO_AUTHORIZE
-    default:
-      return ''
-  }
-}
-
-export const getBiometryIsDisabledText = (biometryType: BiometryTypes) => {
-  switch (biometryType) {
-    case BiometryTypes.TouchID:
-      return strings.TOUCH_ID_IS_DISABLED
-    case BiometryTypes.FaceID:
-      return strings.FACE_ID_IS_DISABLED
-    case BiometryTypes.Biometrics:
-      return strings.USE_BIOMETRICS
-    case BiometryTypes.Fingerprint:
-      return strings.FINGERPRINT_IS_DISABLED
-    case BiometryTypes.FACE:
-      return strings.FACE_IS_DISABLED
+    case 'Biometrics':
+      return strings.USE_BIOMETRICS_TO_AUTHORIZE
     default:
       return ''
   }
@@ -37,10 +18,12 @@ export const getBiometryIsDisabledText = (biometryType: BiometryTypes) => {
 
 export const getBiometryDescription = (biometryType: BiometryTypes) => {
   switch (biometryType) {
-    case BiometryTypes.TouchID || BiometryTypes.Fingerprint:
+    case BiometryTypes.TouchID:
       return strings.SCAN_YOUR_FINGERPRINT_ON_THE_DEVICE_SCANNER
-    case BiometryTypes.FaceID || BiometryTypes.FACE:
+    case BiometryTypes.FaceID:
       return strings.SCAN_YOUR_FACE
+    case 'Biometrics':
+      return strings.PROVIDE_BIOMETRICS
     default:
       return ''
   }

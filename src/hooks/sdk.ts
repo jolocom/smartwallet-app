@@ -17,6 +17,7 @@ import { PIN_SERVICE } from '~/utils/keychainConsts'
 export enum StorageKeys {
   isOnboardingDone = 'isOnboardingDone',
   encryptedSeed = 'encryptedSeed',
+  termsConsent = 'termsConsent',
 }
 
 /**
