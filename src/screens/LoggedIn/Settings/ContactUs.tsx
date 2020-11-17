@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { strings } from '~/translations/strings'
 import { JoloTextSizes } from '~/utils/fonts'
 import Dropdown from './components/Dropdown'
+import TextArea from './components/TextArea'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -14,6 +15,7 @@ const INQUIRIES_LIST = [
 ]
 
 const ContactUs: React.FC = () => {
+  const [detailsInput, setDetailsInput] = useState('')
   const options = useMemo(
     () =>
       INQUIRIES_LIST.map((el) => ({ id: el.split(' ').join(''), value: el })),
@@ -24,6 +26,7 @@ const ContactUs: React.FC = () => {
       <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
         Contact us
       </JoloText>
+      <TextArea input={detailsInput} setInput={setDetailsInput} />
       <Dropdown options={options} />
     </ScreenContainer>
   )
