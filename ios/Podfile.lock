@@ -328,10 +328,12 @@ PODS:
     - React
   - RNGestureHandler (1.6.1):
     - React
-  - RNJolocom (2.0.0):
+  - RNJolocom (2.1.0):
     - React
   - RNKeychain (6.1.1):
     - React
+  - RNLocalize (1.4.3):
+    - React-Core
   - RNPermissions (2.1.5):
     - React
   - RNReactNativeHapticFeedback (1.10.0):
@@ -412,6 +414,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
   - RNJolocom (from `../node_modules/react-native-jolocom/ios`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -518,6 +521,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-jolocom/ios"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNReactNativeHapticFeedback:
@@ -584,8 +589,9 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNCPicker: 55b9b4240d0a9eba8733d02616775d4040de2e7d
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNJolocom: 301b349bf6f6a3ae04414ed24456bc5e6ad4b969
+  RNJolocom: 725f27b85fe015dc162cfbfc7997073b790d4517
   RNKeychain: db956c02a018f7dd3a0ea8a6cf3087bc1894bf2b
+  RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
   RNReactNativeHapticFeedback: 22c5ecf474428766c6b148f96f2ff6155cd7225e
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
@@ -595,6 +601,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 6768d6e1bcf836fc6fe15f672e0dea3fb3e59ff6
+PODFILE CHECKSUM: 02a680f39aaa4f8867f374f6af05b92173d1be8e
 
 COCOAPODS: 1.9.3

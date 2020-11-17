@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 import { Alert, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -52,13 +52,12 @@ const SettingsGeneral: React.FC = () => {
       customStyles={{
         justifyContent: 'flex-start',
         paddingHorizontal: 10,
-        paddingTop: 0,
       }}
     >
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 150,
-          marginTop: BP({ large: 56, medium: 56, default: 32 }),
+          // marginTop: BP({ large: 56, medium: 56, default: 32 }),
         }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}

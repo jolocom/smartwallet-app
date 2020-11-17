@@ -152,7 +152,7 @@ const LoggedInTabs: React.FC = () => {
   })
   /* All about when lock screen comes up - END */
 
-  useBackHandler(() => true)
+  // useBackHandler(() => true)
 
   return (
     <LoggedInStack.Navigator

@@ -201,8 +201,8 @@ const Toasts: React.FC = () => {
       toastToShow,
       toastColor,
       invokeInteract,
-      isNormal: toastToShow?.dismiss && !toastToShow?.interact,
-      isInteractive: toastToShow?.interact && toastToShow.dismiss,
+      isNormal: !!(toastToShow?.dismiss && !toastToShow?.interact) ?? false,
+      isInteractive: !!(toastToShow?.interact && toastToShow.dismiss) ?? false,
       isSticky: !toastToShow?.dismiss,
     }),
     [JSON.stringify(toastToShow), invokeInteract],
@@ -241,6 +241,11 @@ const Toasts: React.FC = () => {
 }
 
 export default () => {
+  const { activeToast } = useToasts()
+
+  if (!activeToast) {
+    return null
+  }
   return (
     <View style={styles.notifications}>
       <Toasts />
