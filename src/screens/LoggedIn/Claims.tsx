@@ -33,23 +33,20 @@ const Claims: React.FC = () => {
 
   const normal = () => {
     scheduleInfo({
-      title:
-        "I'm baby salvia deep v forage aesthetic organic kitsch pork belly truffaut tumblr",
+      title: "I'm baby salvia deep v forage",
       message:
-        ' deep v normcore adaptogen. Direct trade PBR&B vaporware listicle shoreditch, aesthetic brunch plaid snackwave knausgaard 3 wolf moon freegan occupy keytar. Meggings chambray art party la c',
+        ' deep v normcore adaptogen. Direct trade PBR&B vaporware listicle',
     })
   }
 
   const warning = () => {
     scheduleWarning({
-      title:
-        "I'm baby salvia deep v forage aesthetic organic kitsch pork belly truffaut tumblr",
-      message:
-        'deep v normcore adaptogen. Direct trade PBR&B vaporware listicle shoreditch, aesthetic brunch plaid snackwave knausgaard 3 wolf moon freegan occupy keytar. Meggings chambray art party la c',
+      title: "I'm baby salvia deep v forage aesthetic",
+      message: 'deep v normcore adaptogen. Direct trade PBR&B vaporware ',
       interact: {
         label: 'Show',
         onInteract: () => {
-          Alert.prompt('Hey', 'amsburg activ')
+          Alert.alert('Hey', 'amsburg activ')
         },
       },
     })
