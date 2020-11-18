@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, Animated } from 'react-native'
+import { View, StyleSheet, Animated, LayoutAnimation } from 'react-native'
 import { CaretDown } from '~/assets/svg'
 import Block from '~/components/Block'
 import {
@@ -11,12 +11,25 @@ import {
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
+import { debugView } from '~/utils/dev'
 import Option from './Option'
+
+const animateLayout = () => {
+  LayoutAnimation.configureNext({
+    ...LayoutAnimation.Presets.easeInEaseOut,
+    duration: 200,
+  })
+}
 
 const Dropdown = () => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const { selectedValue, setSelectedValue, options } = useSelectableState()
+  const {
+    selectedValue,
+    setSelectedValue,
+    options,
+    onSelect,
+  } = useSelectableState()
   const selectedValueTruncated = selectedValue
     ? selectedValue.value.toString().length > 30
       ? selectedValue.value.toString().split('').splice(0, 30).join('') + '...'
@@ -24,12 +37,15 @@ const Dropdown = () => {
     : selectedValue
 
   const toggleExpanded = () => {
+    animateLayout()
     setIsExpanded((prevState) => !prevState)
   }
 
   const handleSelectOption = (option: IOption<TOptionExtend>) => {
+    animateLayout()
     setSelectedValue(option)
     setIsExpanded(false)
+    onSelect(option)
   }
 
   const animatedOpacity = useRef(new Animated.Value(0)).current
@@ -103,13 +119,19 @@ const styles = StyleSheet.create({
     borderColor: Colors.white21,
     borderWidth: 1,
     marginTop: 15,
-    position: 'absolute',
+    // position: 'absolute', // TODO: display it on top of other elements
   },
 })
 
-export default ({ options }: { options: IOption<string>[] }) => {
+export default ({
+  options,
+  onSelect,
+}: {
+  options: IOption<string>[]
+  onSelect: (val: IOption<string>) => void
+}) => {
   return (
-    <SelectableProvider<string> options={options}>
+    <SelectableProvider<string> options={options} onSelect={onSelect}>
       <Dropdown />
     </SelectableProvider>
   )
