@@ -22,10 +22,12 @@ import Option from './components/Option'
 import DevelopmentSection from './Development'
 import EnableBiometryOption from './EnableBiometryOption'
 import { useBiometry } from '~/hooks/biometry'
+import useBackup from '~/hooks/backup'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
   const { resetBiometry } = useBiometry()
+  const { shouldWarnBackup } = useBackup()
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
@@ -82,18 +84,20 @@ const SettingsGeneral: React.FC = () => {
           >
             <View style={{ alignItems: 'flex-start' }}>
               <Option.Title title={strings.BACKUP_IDENTITY} />
-              <JoloText
-                kind={JoloTextKind.subtitle}
-                size={JoloTextSizes.tiniest}
-                color={Colors.error}
-                customStyles={{
-                  textAlign: 'left',
-                  lineHeight: 14,
-                  marginTop: 10,
-                }}
-              >
-                {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
-              </JoloText>
+              {shouldWarnBackup() && (
+                <JoloText
+                  kind={JoloTextKind.subtitle}
+                  size={JoloTextSizes.tiniest}
+                  color={Colors.error}
+                  customStyles={{
+                    textAlign: 'left',
+                    lineHeight: 14,
+                    marginTop: 10,
+                  }}
+                >
+                  {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
+                </JoloText>
+              )}
             </View>
           </Option>
         </Section>
