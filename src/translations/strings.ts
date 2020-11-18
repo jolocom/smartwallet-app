@@ -178,8 +178,18 @@ const settings = {
   ENGLISH: 'English',
   GERMAN: 'German',
   POPULAR_QUESTIONS: 'Popular questions',
-  CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
   TAP_TO_WRITE: 'Tap to write',
+  BACKUP_OPTIONS: 'Backup options',
+  BACKUP_YOUR_DATA: 'Backup your data',
+  RESTORE_YOUR_DATA: 'Restore your data',
+  DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA:
+    'Download an encrypted copy of the data in your SmartWallet to your device. Make sure to keep your backups up-to-date and stored somewhere safe',
+  IN_CASE_YOU_DELETED_SOMETHING_IMPORTANT:
+    'In case you deleted something important by mistake. Only possible if backup was created using this wallet',
+  EXPORT_BACKUP_FILE: 'Export backup file',
+  IMPORT_FILE: 'Import file',
+  LAST_BACKUP: 'Last backup',
+  CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
   EMPTY_WALLET: 'Empty wallet',
   YOUR_IDENTITY_WILL_NOT_BE_DELETED:
     'Your identity will not be deleted, but we will erase all the documents and data from your wallet',
