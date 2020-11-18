@@ -38,4 +38,7 @@ export enum ScreenNames {
   Scanner = 'Scanner',
   ScannerPermission = 'ScannerPermission',
   Details = 'Details',
+
+  //Development
+  ButtonsTest = 'ButtonsTest',
 }
