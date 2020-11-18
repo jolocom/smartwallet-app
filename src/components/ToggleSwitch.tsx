@@ -25,13 +25,9 @@ const ToggleSwitch: React.FC<Props> = (props) => {
   const onGradientColors = [Colors.carnationPink, Colors.hyacinthPink]
   const offGradientColors = [Colors.haiti, Colors.haiti]
 
-  // const positionValue = useRef(
-  //   new Animated.Value(onState ? ON_POSITION : OFF_POSITION),
-  // ).current
-
-  const positionValue = useMemo(() => {
-    return new Animated.Value(onState ? ON_POSITION : OFF_POSITION)
-  }, [onState])
+  const positionValue = useRef(
+    new Animated.Value(onState ? ON_POSITION : OFF_POSITION),
+  ).current
 
   const toggle = () => {
     if (isPropControlled(props, 'on')) {

@@ -1,7 +1,7 @@
 import { StateI, ActionI, DeviceAuthActions } from './deviceAuthTypes'
 
 export const initialState = {
-  biometryType: null,
+  biometryType: undefined,
   isPasscodeView: true,
 }
 

@@ -1,6 +1,4 @@
 import React from 'react'
-import AsyncStorage from '@react-native-community/async-storage'
-import FingerprintScanner from 'react-native-fingerprint-scanner'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useDispatch } from 'react-redux'
 
@@ -17,13 +15,15 @@ import { setPopup } from '~/modules/appState/actions'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
-import { getBiometryHeader, getBiometryDescription } from './utils/getText'
+import { getBiometryHeader } from './utils/getText'
 
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useBiometry } from '~/hooks/biometry'
 
 const RegisterBiometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
+  const { authenticate, setBiometry } = useBiometry()
   const displaySuccessLoader = useSuccess()
 
   const dispatch = useDispatch()
@@ -33,15 +33,12 @@ const RegisterBiometry: React.FC = () => {
   const handleAuthenticate = async () => {
     dispatch(setPopup(true))
     try {
-      await FingerprintScanner.authenticate({
-        description: getBiometryDescription(biometryType),
-        fallbackEnabled: false, // on this stage we don't want to prompr use passcode as a fallback
-      })
-
-      await AsyncStorage.setItem('biometry', biometryType || '')
-
-      displaySuccessLoader()
-      handleRedirectToLogin()
+      const result = await authenticate(biometryType)
+      if (result.success) {
+        setBiometry(biometryType)
+        displaySuccessLoader()
+        handleRedirectToLogin()
+      }
     } catch (err) {
       console.log('Error authenticating with Biometrics in RegisterBiometry', {
         err,
