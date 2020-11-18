@@ -89,6 +89,7 @@ const SettingsGeneral: React.FC = () => {
                 customStyles={{
                   textAlign: 'left',
                   lineHeight: 14,
+                  marginTop: 10,
                 }}
               >
                 {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
