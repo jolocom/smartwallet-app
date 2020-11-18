@@ -180,6 +180,9 @@ const settings = {
   POPULAR_QUESTIONS: 'Popular questions',
   CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
   TAP_TO_WRITE: 'Tap to write',
+  EMPTY_WALLET: 'Empty wallet',
+  YOUR_IDENTITY_WILL_NOT_BE_DELETED:
+    'Your identity will not be deleted, but we will erase all the documents and data from your wallet',
 }
 
 const termsConsent = {

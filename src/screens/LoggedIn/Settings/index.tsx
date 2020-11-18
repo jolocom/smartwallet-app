@@ -117,11 +117,16 @@ const SettingsGeneral: React.FC = () => {
             <Option.RightIcon />
           </Option>
         </Section>
-        {__DEV__ ? (
-          <Btn type={BtnTypes.secondary} onPress={handleLogout}>
-            {strings.LOG_OUT}
-          </Btn>
-        ) : null}
+        <Btn type={BtnTypes.quinary} onPress={handleLogout}>
+          {strings.EMPTY_WALLET}
+        </Btn>
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size={JoloTextSizes.tiniest}
+          customStyles={{ marginTop: 20, opacity: 0.2 }}
+        >
+          {strings.YOUR_IDENTITY_WILL_NOT_BE_DELETED}
+        </JoloText>
       </ScrollView>
     </ScreenContainer>
   )
