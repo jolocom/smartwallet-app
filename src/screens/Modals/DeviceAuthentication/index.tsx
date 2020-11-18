@@ -11,18 +11,20 @@ import DeviceAuthContextProvider, {
 import { setBiometryType } from './module/deviceAuthActions'
 import RegisterPin from './RegisterPin'
 import RegisterBiometry from './RegisterBiometry'
+import { useBiometry } from '~/hooks/biometry'
 
 const Stack = createStackNavigator()
 
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
   const { isPasscodeView } = useDeviceAuthState()
+  const {getEnrolledBiometry} = useBiometry();
 
   // on this step we check wether user device supports biometrics
   useEffect(() => {
     const getAuthenticationType = async () => {
       try {
-        const { available, biometryType } = await Biometry.isSensorAvailable()
+        const { available, biometryType } = await getEnrolledBiometry()
         if (available) {
           dispatch(setBiometryType(biometryType))
         } else {

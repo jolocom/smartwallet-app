@@ -74,9 +74,9 @@ PODS:
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
-  - Permission-Camera (2.1.5):
+  - Permission-Camera (2.2.2):
     - RNPermissions
-  - Permission-Notifications (2.1.5):
+  - Permission-Notifications (2.2.2):
     - RNPermissions
   - RCTRequired (0.62.2)
   - RCTTypeSafety (0.62.2):
@@ -243,18 +243,16 @@ PODS:
   - React-jsinspector (0.62.2)
   - react-native-biometrics (2.1.4):
     - React
-  - react-native-camera (3.30.0):
-    - React
-    - react-native-camera/RCT (= 3.30.0)
-    - react-native-camera/RN (= 3.30.0)
-  - react-native-camera/RCT (3.30.0):
-    - React
-  - react-native-camera/RN (3.30.0):
-    - React
-  - react-native-fingerprint-scanner (5.0.0):
-    - React
-  - react-native-randombytes (3.5.3):
-    - React
+  - react-native-camera (3.40.0):
+    - React-Core
+    - react-native-camera/RCT (= 3.40.0)
+    - react-native-camera/RN (= 3.40.0)
+  - react-native-camera/RCT (3.40.0):
+    - React-Core
+  - react-native-camera/RN (3.40.0):
+    - React-Core
+  - react-native-randombytes (3.6.0):
+    - React-Core
   - react-native-safe-area-context (0.7.3):
     - React
   - react-native-sqlite-storage (5.0.0):
@@ -322,27 +320,27 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.10):
     - React
-  - RNCPicker (1.6.5):
+  - RNCPicker (1.8.1):
+    - React-Core
+  - RNGestureHandler (1.8.0):
     - React
-  - RNGestureHandler (1.6.1):
+  - RNJolocom (2.2.0):
     - React
-  - RNJolocom (2.1.0):
-    - React
-  - RNKeychain (6.1.1):
+  - RNKeychain (6.2.0):
     - React
   - RNLocalize (1.4.3):
     - React-Core
-  - RNPermissions (2.1.5):
-    - React
-  - RNReactNativeHapticFeedback (1.10.0):
-    - React
-  - RNReanimated (1.9.0):
-    - React
-  - RNScreens (2.8.0):
-    - React
+  - RNPermissions (2.2.2):
+    - React-Core
+  - RNReactNativeHapticFeedback (1.11.0):
+    - React-Core
+  - RNReanimated (1.13.2):
+    - React-Core
+  - RNScreens (2.15.0):
+    - React-Core
   - RNSVG (12.1.0):
     - React
-  - SRSRadialGradient (1.0.0):
+  - SRSRadialGradient (1.0.8):
     - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -390,7 +388,6 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-biometrics (from `../node_modules/react-native-biometrics`)
   - react-native-camera (from `../node_modules/react-native-camera`)
-  - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
@@ -476,8 +473,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-biometrics"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
-  react-native-fingerprint-scanner:
-    :path: "../node_modules/react-native-fingerprint-scanner"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-safe-area-context:
@@ -552,8 +547,8 @@ SPEC CHECKSUMS:
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   JolocomCore: 1de0693327fd69709ed729f008dba89bed11682f
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
-  Permission-Camera: afad27bf90337684d4a86f3825112d648c8c4d3b
-  Permission-Notifications: 231d0e1db2300b686548587d384ba414e6a93332
+  Permission-Camera: 5d2aaf95592660b6dcb5e8d1d90ed5d0156cad02
+  Permission-Notifications: 9c6b5cc4f0e6599e9fc3395b77cebddc48f1be41
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3
@@ -564,9 +559,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-biometrics: 9d3306e5d29c3bc4e6a3c912d759a94e76a2f683
-  react-native-camera: eeb5b5f4ba4c1365fed3563af8a72007cbad7aab
-  react-native-fingerprint-scanner: 3e8c46641b5751a31f45e66789d4b6f342be5e6d
-  react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
+  react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
+  react-native-randombytes: b6677f7d495c27e9ee0dbd77ebc97b3c59173729
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
@@ -581,17 +575,17 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNCPicker: 55b9b4240d0a9eba8733d02616775d4040de2e7d
-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNJolocom: 725f27b85fe015dc162cfbfc7997073b790d4517
-  RNKeychain: db956c02a018f7dd3a0ea8a6cf3087bc1894bf2b
+  RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNJolocom: c2b328d54f3dcb77d9a4dc85ce766f3d23702ceb
+  RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
-  RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
-  RNReactNativeHapticFeedback: 22c5ecf474428766c6b148f96f2ff6155cd7225e
-  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
+  RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+  RNReactNativeHapticFeedback: 653a8c126a0f5e88ce15ffe280b3ff37e1fbb285
+  RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
+  RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  SRSRadialGradient: c8ab040309de2b2c1fc3f5c4804f2436c2df1f1a
+  SRSRadialGradient: 71378a83e52b616c40367c37ee7cb6865f9f7c6e
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
