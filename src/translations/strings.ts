@@ -180,6 +180,9 @@ const settings = {
   POPULAR_QUESTIONS: 'Popular questions',
   CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
   TAP_TO_WRITE: 'Tap to write',
+  EMPTY_WALLET: 'Empty wallet',
+  YOUR_IDENTITY_WILL_NOT_BE_DELETED:
+    'Your identity will not be deleted, but we will erase all the documents and data from your wallet',
   WHAT_WE_ARE_GOING_TO_TALK_ABOUT: 'What we are going to talk about?',
   ANYTHING_SPECIFIC_TO_MENTION: 'Anything specific to mention?',
   DARE_TO_SUGGEST_SMTH:

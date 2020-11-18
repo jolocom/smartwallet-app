@@ -18,6 +18,7 @@ export enum BtnTypes {
   secondary = 'secondary',
   tertiary = 'tertiary',
   quaternary = 'quaternary',
+  quinary = 'quinary',
 }
 
 export enum BtnSize {
@@ -58,6 +59,8 @@ const ButtonText: React.FC<BtnPropsI> = ({
         return styles.textTertiary
       case BtnTypes.quaternary:
         return styles.textQuaternary
+      case BtnTypes.quinary:
+        return styles.textQuinary
       default:
         return styles.textPrimary
     }
@@ -110,6 +113,7 @@ const Btn: React.FC<PropsI> = (props) => {
           </View>
         )
       case BtnTypes.quaternary:
+      case BtnTypes.quinary:
         return (
           <View
             style={[
@@ -184,6 +188,11 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Regular,
     opacity: 0.8,
     color: Colors.activity,
+  },
+  textQuinary: {
+    fontFamily: Fonts.Regular,
+    opacity: 0.8,
+    color: Colors.success,
   },
 })
 
