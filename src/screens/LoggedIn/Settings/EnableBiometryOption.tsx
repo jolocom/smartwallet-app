@@ -16,7 +16,7 @@ const EnableBiometryOption = () => {
   /* State represent what biometrics were enrolled */
   const [enrolledBiometry, setEnrolledBiometry] = useState<
     BiometryType | undefined
-  >()
+  >(undefined)
 
   const {
     resetBiometry,
@@ -64,7 +64,7 @@ const EnableBiometryOption = () => {
 
         // if user wants to activate biometry
         setIsOn(true)
-        const result = await authenticate()
+        const result = await authenticate(enrolledBiometry)
         if (result.success) {
           enrolledBiometry && setBiometry(enrolledBiometry)
         } else {

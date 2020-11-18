@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Keychain from 'react-native-keychain'
-import AsyncStorage from '@react-native-community/async-storage'
 
 import { setLocalAuth } from '~/modules/account/actions'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
-import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
+import { useAgent } from './sdk'
+import { useBiometry } from './biometry'
+import { BiometryType } from 'react-native-biometrics'
 
 export const useResetKeychainValues = (service: string) => {
   const dispatch = useDispatch()
@@ -24,9 +25,14 @@ export const useResetKeychainValues = (service: string) => {
 
 export const useGetStoredAuthValues = () => {
   const [isLoadingStorage, setIsLoadingStorage] = useState(false)
-  const [biometryType, setBiometryType] = useState<BiometryTypes>(null)
+  const [biometryType, setBiometryType] = useState<BiometryType | undefined>(
+    undefined,
+  )
   const [keychainPin, setKeychainPin] = useState('')
   const [isBiometrySelected, setIsBiometrySelected] = useState(false)
+
+  const agent = useAgent()
+  const { getBiometry } = useBiometry()
 
   useEffect(() => {
     let isCurrent = true
@@ -35,20 +41,20 @@ export const useGetStoredAuthValues = () => {
       setIsLoadingStorage(true)
       try {
         const [storedBiometry, storedPin] = await Promise.all([
-          AsyncStorage.getItem('biometry'),
+          getBiometry(),
           Keychain.getGenericPassword({
             service: PIN_SERVICE,
           }),
         ])
 
-        isCurrent && setBiometryType(storedBiometry as BiometryTypes)
+        isCurrent && setBiometryType(storedBiometry?.type)
         if (storedPin) {
           isCurrent && setKeychainPin(storedPin.password)
         } else {
           throw new Error('No PIN was set, revisit your flow of setting up PIN')
         }
         if (isCurrent) {
-          setIsBiometrySelected(!!storedBiometry)
+          setIsBiometrySelected(!!storedBiometry?.type)
         }
       } catch (err) {
         // ✍🏼 todo: how should we handle this hasError ?

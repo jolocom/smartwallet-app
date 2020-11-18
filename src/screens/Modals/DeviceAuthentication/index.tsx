@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import Keychain from 'react-native-keychain'
+import Biometry from 'react-native-biometrics'
 
 import { ScreenNames } from '~/types/screens'
 
@@ -18,12 +18,16 @@ const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
   const { isPasscodeView } = useDeviceAuthState()
 
-  // on this step we chceck wether user device supports biometrics
+  // on this step we check wether user device supports biometrics
   useEffect(() => {
     const getAuthenticationType = async () => {
       try {
-        const authenticationType = await Keychain.getSupportedBiometryType()
-        dispatch(setBiometryType(authenticationType))
+        const { available, biometryType } = await Biometry.isSensorAvailable()
+        if (available) {
+          dispatch(setBiometryType(biometryType))
+        } else {
+          setBiometryType(null)
+        }
       } catch (e) {
         dispatch(setBiometryType(null))
       }
