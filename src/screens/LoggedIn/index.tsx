@@ -8,7 +8,6 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-import { useBackHandler } from '@react-native-community/hooks'
 import { AppStateStatus, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -136,8 +135,8 @@ const LoggedInTabs: React.FC = () => {
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
     if (
       (Platform.OS === 'ios' &&
-        appState.match(/inactive|active/) &&
-        nextAppState.match(/background/)) ||
+        appState.match(/background/) &&
+        nextAppState.match(/inactive|active/)) ||
       (Platform.OS === 'android' &&
         appState.match(/inactive|background/) &&
         nextAppState.match(/active/))
