@@ -53,11 +53,12 @@ const ContactUs: React.FC = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      customStyles={{ justifyContent: 'flex-start' }}
+      customStyles={{ justifyContent: 'flex-start', paddingTop: 0 }}
     >
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 35,
+          paddingTop: 12,
         }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
