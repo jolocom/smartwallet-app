@@ -16,13 +16,14 @@ const EnableBiometryOption = () => {
   /* State represent what biometrics were enrolled */
   const [enrolledBiometry, setEnrolledBiometry] = useState<
     BiometryType | undefined
-  >()
+  >(undefined)
 
   const {
     resetBiometry,
     getBiometry,
     setBiometry,
     authenticate,
+    getEnrolledBiometry
   } = useBiometry()
   const { scheduleWarning } = useToasts()
 
@@ -30,7 +31,7 @@ const EnableBiometryOption = () => {
   const checkIfBiometryIsEnrolled = async () => {
     try {
       // identified biometrics will only return something if biometry was enrolled
-      const { available, biometryType } = await Biometry.isSensorAvailable()
+      const { available, biometryType } = await getEnrolledBiometry()
       if (available) {
         setEnrolledBiometry(biometryType)
         setIsOptionVisible(true)
@@ -64,7 +65,7 @@ const EnableBiometryOption = () => {
 
         // if user wants to activate biometry
         setIsOn(true)
-        const result = await authenticate()
+        const result = await authenticate(enrolledBiometry)
         if (result.success) {
           enrolledBiometry && setBiometry(enrolledBiometry)
         } else {

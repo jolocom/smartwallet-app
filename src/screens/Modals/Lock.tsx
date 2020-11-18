@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, Keyboard, TextInput } from 'react-native'
+import { View, StyleSheet, TextInput, ActivityIndicator } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 import { strings } from '~/translations/strings'
 
@@ -20,23 +20,23 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 import { ScreenNames } from '~/types/screens'
-import FingerprintScanner from 'react-native-fingerprint-scanner'
-import { getBiometryDescription } from './DeviceAuthentication/utils/getText'
 import { useDispatch } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
+import { useBiometry } from '~/hooks/biometry'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
-  const [hasError, setHasError] = useState(false)
+  const [hasError, setHasError] = useState(false);
 
   const {
-    biometryType,
     keychainPin,
     isBiometrySelected,
+    isLoadingStorage
   } = useGetStoredAuthValues()
 
   const { keyboardHeight } = useKeyboard()
   const dispatch = useDispatch()
+  const { authenticate, getEnrolledBiometry } = useBiometry()
 
   const navigation = useNavigation()
 
@@ -49,39 +49,36 @@ const Lock = () => {
     navigation.goBack()
   }, [])
 
-  /* START -> This is for showing and hiding keyboard when we move away from Lock screen */
   const pinInputRef = useRef<TextInput>(null)
-  const isFocused = useIsFocused()
-
-  useEffect(() => {
-    if (!isFocused) {
-      Keyboard.dismiss()
-    } else {
-      pinInputRef.current?.focus()
-    }
-  }, [isFocused])
-  /* END -> This is for showing and hiding keyboard when we move away from Lock screen */
 
   /* START -> Biometry authentication if applicatble */
+  /* this will only be invoked if we stored biometry */
   const handleBiometryAuthentication = async () => {
     try {
-      await FingerprintScanner.authenticate({
-        description: getBiometryDescription(biometryType),
-      })
-      unlockApp()
+        /* in case user disabled biometrics we don't want to run authenticate */
+        const { available, biometryType } = await getEnrolledBiometry();
+        
+        if(available) {
+          const {success} = await authenticate(biometryType)
+          if(success) {
+            unlockApp()
+          } else {
+            pinInputRef.current?.focus()
+          }
+        }
     } catch (err) {
-      console.log('Error in authenticating with biometry on Lock', { e })
+      console.log('Error in authenticating with biometry on Lock', { err })
     }
   }
 
   useEffect(() => {
-    const initialBiometry = async () => {
-      if (isFocused && isBiometrySelected) {
+    const promptBiometry = async () => {
+      if (isBiometrySelected) {
         await handleBiometryAuthentication()
       }
     }
-    initialBiometry()
-  }, [isFocused, isBiometrySelected])
+    promptBiometry()
+  }, [isBiometrySelected])
   /* START -> Biometry authentication if applicatble */
 
   /* disable hardwareback button default functionality */
@@ -116,7 +113,11 @@ const Lock = () => {
       >
         {strings.ENTER_YOUR_PIN}
       </JoloText>
-      <View style={styles.inputContainer}>
+      {isLoadingStorage ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <View style={styles.inputContainer}>
         <PasscodeInput
           value={pin}
           stateUpdaterFn={setPin}
@@ -134,6 +135,9 @@ const Lock = () => {
           {strings.FORGOT_YOUR_PIN}
         </Btn>
       </AbsoluteBottom>
+        </>
+      )}
+      
     </ScreenContainer>
   )
 }

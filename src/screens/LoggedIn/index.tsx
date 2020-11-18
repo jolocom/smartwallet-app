@@ -8,7 +8,6 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-import { useBackHandler } from '@react-native-community/hooks'
 import { AppStateStatus, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -48,6 +47,7 @@ import TermsOfService from './Settings/TermsOfService'
 import useTermsConsent from '~/hooks/consent'
 import { setAppLocked } from '~/modules/account/actions'
 import BackupIdentity from './Settings/BackupIdentity'
+import ButtonsTest from './Settings/Development/ButtonsTest'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -135,8 +135,8 @@ const LoggedInTabs: React.FC = () => {
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
     if (
       (Platform.OS === 'ios' &&
-        appState.match(/inactive|active/) &&
-        nextAppState.match(/background/)) ||
+        appState.match(/background/) &&
+        nextAppState.match(/inactive|active/)) ||
       (Platform.OS === 'android' &&
         appState.match(/inactive|background/) &&
         nextAppState.match(/active/))
@@ -208,6 +208,14 @@ const LoggedInTabs: React.FC = () => {
         component={TermsOfService}
         options={settingsScreenTransitionOptions}
       />
+
+      {__DEV__ && (
+        <LoggedInStack.Screen
+          name={ScreenNames.ButtonsTest}
+          component={ButtonsTest}
+          options={settingsScreenTransitionOptions}
+        />
+      )}
       {/* Settings Screens -> End   */}
 
       {/* Modals -> Start */}

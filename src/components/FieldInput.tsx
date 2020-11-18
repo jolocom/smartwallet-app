@@ -1,6 +1,11 @@
 import React, { useState, useCallback } from 'react'
-import { View, TextInput, TextInputProps, StyleSheet } from 'react-native'
-import { debugView } from '~/utils/dev'
+import {
+  View,
+  TextInput,
+  TextInputProps,
+  StyleSheet,
+  Platform,
+} from 'react-native'
 import { subtitleFontStyles } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
@@ -76,10 +81,12 @@ const styles = StyleSheet.create({
   text: {
     ...subtitleFontStyles.middle,
     color: Colors.white,
-    borderBottomWidth: 1,
+    borderBottomWidth: Platform.select({
+      android: 1,
+      ios: 2,
+    }),
   },
   container: {
-    ...debugView,
     width: '100%',
   },
 })

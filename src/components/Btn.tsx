@@ -14,9 +14,10 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
 export enum BtnTypes {
-  primary,
-  secondary,
-  tertiary,
+  primary = 'primary',
+  secondary = 'secondary',
+  tertiary = 'tertiary',
+  quaternary = 'quaternary',
 }
 
 export enum BtnSize {
@@ -41,21 +42,31 @@ interface PropsI extends BtnPropsI {
 const GRADIENT_START = { x: 0, y: 0 }
 const GRADIENT_END = { x: 1, y: 0 }
 
-const Button: React.FC<BtnPropsI> = ({
+const ButtonText: React.FC<BtnPropsI> = ({
   type = BtnTypes.primary,
   size = BtnSize.medium,
   children,
   customTextStyles = {},
 }) => {
+  const getTextStyle = () => {
+    switch (type) {
+      case BtnTypes.primary:
+        return styles.textPrimary
+      case BtnTypes.secondary:
+        return styles.textSecondary
+      case BtnTypes.tertiary:
+        return styles.textTertiary
+      case BtnTypes.quaternary:
+        return styles.textQuaternary
+      default:
+        return styles.textPrimary
+    }
+  }
   return (
     <Text
       style={[
         styles.text,
-        type === BtnTypes.primary
-          ? styles.textPrimary
-          : type === BtnTypes.secondary
-          ? styles.textSecondary
-          : styles.textTertiary,
+        getTextStyle(),
         { fontSize: size === BtnSize.medium ? 18 : 20 },
         customTextStyles,
       ]}
@@ -74,6 +85,46 @@ const Btn: React.FC<PropsI> = (props) => {
   const btnStyle =
     props.size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
 
+  const renderButton = () => {
+    switch (props.type) {
+      case BtnTypes.primary:
+        return (
+          <LinearGradient
+            testID="gradient"
+            start={GRADIENT_START}
+            end={GRADIENT_END}
+            style={[styles.container, btnStyle]}
+            colors={[Colors.disco, Colors.ceriseRed]}
+          >
+            <ButtonText {...props} />
+          </LinearGradient>
+        )
+      case BtnTypes.secondary:
+      case BtnTypes.tertiary:
+        return (
+          <View
+            style={[containerStyles, props.customContainerStyles, btnStyle]}
+            testID="non-gradient"
+          >
+            <ButtonText {...props} />
+          </View>
+        )
+      case BtnTypes.quaternary:
+        return (
+          <View
+            style={[
+              containerStyles,
+              { backgroundColor: Colors.matterhorn18 },
+              props.customContainerStyles,
+              btnStyle,
+            ]}
+          >
+            <ButtonText {...props} />
+          </View>
+        )
+    }
+  }
+
   return (
     <TouchableOpacity
       style={containerStyles}
@@ -81,24 +132,7 @@ const Btn: React.FC<PropsI> = (props) => {
       disabled={props.disabled}
       testID="button"
     >
-      {props.type === BtnTypes.primary ? (
-        <LinearGradient
-          testID="gradient"
-          start={GRADIENT_START}
-          end={GRADIENT_END}
-          style={[styles.container, btnStyle]}
-          colors={[Colors.disco, Colors.ceriseRed]}
-        >
-          <Button {...props} />
-        </LinearGradient>
-      ) : (
-        <View
-          style={[containerStyles, props.customContainerStyles, btnStyle]}
-          testID="non-gradient"
-        >
-          <Button {...props} />
-        </View>
-      )}
+      {renderButton()}
     </TouchableOpacity>
   )
 }
@@ -145,6 +179,11 @@ const styles = StyleSheet.create({
   },
   textTertiary: {
     fontFamily: Fonts.Medium,
+  },
+  textQuaternary: {
+    fontFamily: Fonts.Regular,
+    opacity: 0.8,
+    color: Colors.activity,
   },
 })
 
