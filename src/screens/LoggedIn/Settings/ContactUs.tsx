@@ -40,14 +40,22 @@ const ContactUs: React.FC = () => {
     setSelectedIssue(option.value)
   }
 
-  const handleSubmit = () => {
-    const assembledData = {
-      issue: selectedIssue,
-      details: detailsInput,
-      email: contactValue,
-    }
+  const assembledData = {
+    issue: selectedIssue,
+    details: detailsInput,
+    email: contactValue,
+  }
 
+  const handleSubmit = () => {
     console.log('Submitting ', assembledData)
+  }
+
+  const isBtnEnabled = () => {
+    const fieldValues = Object.values(assembledData)
+      .map((el) => !!el)
+      .filter((el) => el)
+
+    return fieldValues.length > 1
   }
 
   return (
@@ -108,7 +116,11 @@ const ContactUs: React.FC = () => {
               : strings.PLEASE_ENTER_A_VALID_EMAIL}
           </JoloText>
         </Section>
-        <Btn type={BtnTypes.primary} onPress={handleSubmit}>
+        <Btn
+          type={BtnTypes.primary}
+          onPress={handleSubmit}
+          disabled={!contactValid || !isBtnEnabled()}
+        >
           {strings.SEND}
         </Btn>
       </ScrollView>

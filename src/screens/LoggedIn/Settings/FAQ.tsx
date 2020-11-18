@@ -2,7 +2,6 @@ import React from 'react'
 import { ScrollView } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import { JoloTextSizes } from '~/utils/fonts'
 import BlockExpanded from '~/components/BlockExpanded'
 import Section from './components/Section'
 // @ts-ignore
