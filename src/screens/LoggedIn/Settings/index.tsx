@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import AsyncStorage from '@react-native-community/async-storage'
 import { Alert, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
@@ -22,16 +21,18 @@ import BP from '~/utils/breakpoints'
 import Option from './components/Option'
 import DevelopmentSection from './Development'
 import EnableBiometryOption from './EnableBiometryOption'
+import { useBiometry } from '~/hooks/biometry'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
+  const { resetBiometry } = useBiometry()
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
   const handleLogout = useCallback(async () => {
     try {
-      await AsyncStorage.removeItem('biometry')
-      resetServiceValuesInKeychain()
+      await resetBiometry()
+      await resetServiceValuesInKeychain()
       dispatch(accountReset())
     } catch (err) {
       console.log('Error occured while logging out')
