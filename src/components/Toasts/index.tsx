@@ -79,6 +79,5 @@ const styles = StyleSheet.create({
     top: 0,
     width: SCREEN_WIDTH,
     zIndex: 100,
-    backgroundColor: 'blue',
   },
 })
