@@ -12,6 +12,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 import JoloText, { JoloTextKind } from '../JoloText'
 import { useToastToShow } from './context'
+import ToastContainer from './ToastContainer'
 import ToastDescription from './ToastDescription'
 import ToastTitle from './ToastTitle'
 
@@ -29,7 +30,7 @@ const InteractiveToast = React.forwardRef<View, IProps>(
     } = useToastToShow()
     if (isInteractive) {
       return (
-        <>
+        <ToastContainer>
           <ToastTitle customStyles={{ textAlign: 'left' }} />
           <View style={styles.withInteractContainer}>
             <View style={styles.withInteractText}>
@@ -61,7 +62,7 @@ const InteractiveToast = React.forwardRef<View, IProps>(
               </TouchableOpacity>
             </View>
           </View>
-        </>
+        </ToastContainer>
       )
     }
     return null

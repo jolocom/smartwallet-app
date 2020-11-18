@@ -189,6 +189,18 @@ const settings = {
   EXPORT_BACKUP_FILE: 'Export backup file',
   IMPORT_FILE: 'Import file',
   LAST_BACKUP: 'Last backup',
+  CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
+  EMPTY_WALLET: 'Empty wallet',
+  YOUR_IDENTITY_WILL_NOT_BE_DELETED:
+    'Your identity will not be deleted, but we will erase all the documents and data from your wallet',
+  WHAT_WE_ARE_GOING_TO_TALK_ABOUT: 'What we are going to talk about?',
+  ANYTHING_SPECIFIC_TO_MENTION: 'Anything specific to mention?',
+  DARE_TO_SUGGEST_SMTH:
+    'Dare to suggest you have something to tell us, so we will be prepared for the future conversations',
+  WANT_TO_GET_IN_TOUCH: 'Want to get in touch?',
+  WE_DO_NOT_STORE_DATA: 'We do not store data and do not spam',
+  PLEASE_ENTER_A_VALID_EMAIL: 'Please enter a valid email',
+  SEND: 'Send',
 }
 
 const termsConsent = {

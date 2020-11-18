@@ -8,14 +8,7 @@ exports[`ToggleSwitch should render the switch with disabled initial state 1`] =
   onGestureHandlerStateChange={[Function]}
   onHandlerStateChange={[Function]}
   rippleColor={0}
-  style={
-    Array [
-      Object {
-        "overflow": "hidden",
-      },
-      undefined,
-    ]
-  }
+  testID="toggleSwitch"
 >
   <View
     accessible={true}
@@ -28,7 +21,6 @@ exports[`ToggleSwitch should render the switch with disabled initial state 1`] =
         "width": 45,
       }
     }
-    testID="toggleSwitch"
   >
     <View
       style={
@@ -96,14 +88,7 @@ exports[`ToggleSwitch should render the switch with enabled initial state 1`] = 
   onGestureHandlerStateChange={[Function]}
   onHandlerStateChange={[Function]}
   rippleColor={0}
-  style={
-    Array [
-      Object {
-        "overflow": "hidden",
-      },
-      undefined,
-    ]
-  }
+  testID="toggleSwitch"
 >
   <View
     accessible={true}
@@ -116,7 +101,6 @@ exports[`ToggleSwitch should render the switch with enabled initial state 1`] = 
         "width": 45,
       }
     }
-    testID="toggleSwitch"
   >
     <View
       style={

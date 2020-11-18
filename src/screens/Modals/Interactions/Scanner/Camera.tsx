@@ -30,6 +30,7 @@ import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -107,11 +108,13 @@ const Camera = () => {
     }
   }
 
+  const { top } = useSafeArea()
+
   return (
     <ScreenContainer isFullscreen hideStatusBar backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
         {overlayVisible && (
-          <View style={styles.navigationContainer}>
+          <View style={[styles.navigationContainer, { top }]}>
             <NavigationHeader type={NavHeaderType.Close} />
           </View>
         )}
@@ -202,7 +205,6 @@ const MARKER_SIZE = SCREEN_WIDTH * 0.75
 const styles = StyleSheet.create({
   navigationContainer: {
     position: 'absolute',
-    top: 0,
     zIndex: 10,
   },
   scannerContainer: {

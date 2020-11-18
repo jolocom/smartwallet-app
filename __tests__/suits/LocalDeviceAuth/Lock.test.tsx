@@ -45,6 +45,9 @@ jest.mock('../../../src/hooks/biometry', () => ({
     getBiometry: jest.fn().mockImplementationOnce(() => {
       return { type: 'FaceID' }
     }),
+    getEnrolledBiometry: jest.fn().mockImplementationOnce(() => {
+      return { type: 'FaceID' }
+    })
   }),
 }))
 

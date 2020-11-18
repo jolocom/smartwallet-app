@@ -4,7 +4,6 @@ import Keychain from 'react-native-keychain'
 
 import { setLocalAuth } from '~/modules/account/actions'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
-import { useAgent } from './sdk'
 import { useBiometry } from './biometry'
 import { BiometryType } from 'react-native-biometrics'
 
@@ -31,7 +30,6 @@ export const useGetStoredAuthValues = () => {
   const [keychainPin, setKeychainPin] = useState('')
   const [isBiometrySelected, setIsBiometrySelected] = useState(false)
 
-  const agent = useAgent()
   const { getBiometry } = useBiometry()
 
   useEffect(() => {

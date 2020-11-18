@@ -9,6 +9,7 @@ import {
 import Block from './Block'
 import JoloText from './JoloText'
 import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface Props {
   title: string

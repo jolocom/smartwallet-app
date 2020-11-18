@@ -11,6 +11,10 @@ export const useBiometry = () => {
     })
   }
 
+  const getEnrolledBiometry = async () => {
+    return await Biometry.isSensorAvailable();
+  }
+
   const getBiometry = async (): Promise<
     { type: BiometryType | undefined } | undefined
   > => {
@@ -27,6 +31,7 @@ export const useBiometry = () => {
 
   return {
     authenticate,
+    getEnrolledBiometry,
     setBiometry,
     resetBiometry,
     getBiometry,
