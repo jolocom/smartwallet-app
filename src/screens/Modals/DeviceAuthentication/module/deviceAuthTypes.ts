@@ -1,14 +1,16 @@
-import { BIOMETRY_TYPE } from 'react-native-keychain'
-
 export enum DeviceAuthActions {
   setBiometryType,
   showBiometry,
 }
 
-export type BiometryTypes = BIOMETRY_TYPE | 'FACE' | 'IRIS' | null
+export enum BiometryTypes {
+  TouchID = 'TouchID',
+  FaceID = 'FaceID',
+  Biometrics = 'Biometrics',
+}
 
 export interface StateI {
-  biometryType: BiometryTypes
+  biometryType: BiometryTypes | undefined
   isPasscodeView: boolean
 }
 

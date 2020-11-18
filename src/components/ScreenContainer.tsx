@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ViewStyle, Platform, StatusBar } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
@@ -29,6 +29,8 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
 }) => {
   hideStatusBar && useHideStatusBar()
 
+  const { top } = useSafeArea()
+
   return (
     <SafeAreaView
       style={{
@@ -38,7 +40,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
           ? 0
           : Platform.select({
               android: StatusBar.currentHeight,
-              ios: 20,
+              ios: top,
             }),
       }}
       mode="padding"

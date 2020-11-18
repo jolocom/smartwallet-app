@@ -1,4 +1,4 @@
-import { FlowType } from "@jolocom/sdk"
+import { FlowType } from '@jolocom/sdk'
 
 export const mockedAgent = (value: any) => {
   return {
@@ -80,7 +80,7 @@ export const mockedInteractionAuthz = {
     state: {
       description: 'Service would like you to',
       imageURL: 'adjakjda',
-      action: 'Unlock'
+      action: 'Unlock',
     },
   }),
 }

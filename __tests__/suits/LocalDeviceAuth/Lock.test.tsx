@@ -30,6 +30,24 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/sdk', () => ({
+  useAgent: () => ({
+    storage: {
+      get: {
+        setting: jest.fn().mockImplementation(() => ({ type: '' })),
+      },
+    },
+  }),
+}))
+
+jest.mock('../../../src/hooks/biometry', () => ({
+  useBiometry: () => ({
+    getBiometry: jest.fn().mockImplementationOnce(() => {
+      return { type: 'FaceID' }
+    }),
+  }),
+}))
+
 describe('Lock screen', () => {
   test('displays body and unlocks the app', async () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')

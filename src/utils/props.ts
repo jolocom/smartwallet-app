@@ -1,3 +1,3 @@
- export const isPropControlled = (props: Record<string, any>, prop: string) => {
-    return props[prop] !== undefined
-  }
+export const isPropControlled = (props: Record<string, any>, prop: string) => {
+  return props[prop] !== undefined
+}
