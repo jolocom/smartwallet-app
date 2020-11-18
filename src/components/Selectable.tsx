@@ -11,6 +11,7 @@ interface IContext<T> {
   options: IOption<T>[]
   selectedValue: IOption<T> | null
   setSelectedValue: React.Dispatch<React.SetStateAction<IOption<T> | null>>
+  onSelect: (val: IOption<T>) => void
 }
 
 const SelectableContext = createContext<IContext<string | number> | undefined>(
@@ -19,8 +20,12 @@ const SelectableContext = createContext<IContext<string | number> | undefined>(
 
 export const SelectableProvider = <T extends TOptionExtend>({
   options,
+  onSelect,
   children,
-}: React.PropsWithChildren<{ options: IOption<T>[] }>) => {
+}: React.PropsWithChildren<{
+  options: IOption<T>[]
+  onSelect: (val: IOption<T>) => void
+}>) => {
   const [selectedValue, setSelectedValue] = useState<IOption<T> | null>(null)
 
   const contextValue: IContext<T> = useMemo<IContext<T>>(
@@ -28,6 +33,7 @@ export const SelectableProvider = <T extends TOptionExtend>({
       options,
       selectedValue,
       setSelectedValue,
+      onSelect,
     }),
     [selectedValue, setSelectedValue],
   )

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, ViewStyle } from 'react-native'
+import { StyleSheet, View, ViewStyle, TextStyle } from 'react-native'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -8,28 +8,39 @@ import Block from '~/components/Block'
 interface PropsI {
   title: string
   customStyles?: ViewStyle
+  titleStyles?: TextStyle
+  hasBlock?: boolean
 }
 
-const Section: React.FC<PropsI> = ({ title, children, customStyles = {} }) => (
-  <View style={[styles.sectionContainer, customStyles]}>
-    <JoloText
-      kind={JoloTextKind.title}
-      size={JoloTextSizes.middle}
-      weight={JoloTextWeight.regular}
-    >
-      {title}
-    </JoloText>
-    {children && (
-      <Block
-        customStyle={{
-          marginTop: BP({ large: 40, medium: 40, default: 20 }),
-        }}
+const Section: React.FC<PropsI> = ({
+  title,
+  children,
+  hasBlock = true,
+  customStyles = {},
+  titleStyles = {},
+}) => {
+  const ChildrenContainer = hasBlock ? Block : React.Fragment
+
+  return (
+    <View style={[styles.sectionContainer, customStyles]}>
+      <JoloText
+        kind={JoloTextKind.title}
+        size={JoloTextSizes.middle}
+        weight={JoloTextWeight.regular}
+        customStyles={[
+          {
+            textAlign: 'left',
+            marginBottom: BP({ large: 40, medium: 40, default: 20 }),
+          },
+          titleStyles,
+        ]}
       >
-        {children}
-      </Block>
-    )}
-  </View>
-)
+        {title}
+      </JoloText>
+      {children && <ChildrenContainer>{children}</ChildrenContainer>}
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   sectionContainer: {
