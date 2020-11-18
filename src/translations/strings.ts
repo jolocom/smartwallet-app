@@ -178,7 +178,8 @@ const settings = {
   ENGLISH: 'English',
   GERMAN: 'German',
   POPULAR_QUESTIONS: 'Popular questions',
-  TAP_TO_WRITE: 'Tap to write'
+  CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
+  TAP_TO_WRITE: 'Tap to write',
 }
 
 const termsConsent = {
