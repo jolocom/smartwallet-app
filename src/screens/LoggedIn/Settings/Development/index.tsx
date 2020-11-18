@@ -1,13 +1,16 @@
 import React from 'react'
 import { View } from 'react-native'
 
-import Section from './components/Section'
-import Option from './components/Option'
+import Section from '../components/Section'
+import Option from '../components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
+import { useRedirectTo } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
+  const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
 
   const handleToggle = (toggled: boolean) => {
     scheduleInfo({
@@ -23,6 +26,9 @@ const DevelopmentSection = () => {
         <View style={{ position: 'absolute', right: 16 }}>
           <ToggleSwitch initialState={false} onToggle={handleToggle} />
         </View>
+      </Option>
+      <Option onPress={redirectButtons}>
+        <Option.Title title="Buttons" />
       </Option>
     </Section>
   )
