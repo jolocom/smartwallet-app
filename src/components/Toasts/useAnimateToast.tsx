@@ -92,7 +92,6 @@ export const useAnimateLayoutToast = (setToastToShow: TStateUpdate) => {
   const animateToast = (toValue: number) => {
     return (cb = () => {}) => {
       Animated.timing(containerTranslateY, {
-        duration: 1000,
         toValue: toValue,
         useNativeDriver: true,
       }).start(cb)

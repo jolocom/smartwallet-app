@@ -11,7 +11,7 @@ const ToastContainer: React.FC = ({ children }) => {
     <View
       style={{
         paddingTop: top + 20,
-        backgroundColor: Colors.black65,
+        backgroundColor: Colors.black,
         paddingHorizontal: 25,
         paddingBottom: BOTTOM_PADDING,
       }}

@@ -178,6 +178,7 @@ const settings = {
   ENGLISH: 'English',
   GERMAN: 'German',
   POPULAR_QUESTIONS: 'Popular questions',
+  TAP_TO_WRITE: 'Tap to write'
 }
 
 const termsConsent = {
