@@ -57,7 +57,7 @@ const ContactUs: React.FC = () => {
     >
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: 150,
+          paddingBottom: 35,
         }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
@@ -87,6 +87,7 @@ const ContactUs: React.FC = () => {
           hasBlock={false}
           title={strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
           titleStyles={{ marginBottom: 12 }}
+          customStyles={{ marginBottom: 84 }}
         >
           <FieldInput
             validation={regexValidations[InputValidation.email]}
