@@ -1,46 +1,55 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Colors } from '~/utils/colors'
+import { isPropControlled } from '~/utils/props'
 
 interface Props {
-  initialState: boolean
-  onToggle: (state: boolean) => void
+  onToggle?: (localSwitchState: boolean) => void
+  on?: boolean
 }
 
 const ON_POSITION = 17
 const OFF_POSITION = 2
 
-const ToggleSwitch = (props: Props) => {
-  const { onToggle, initialState } = props
+const ToggleSwitch: React.FC<Props> = (props) => {
+  const [isOn, setIsOn] = useState(false)
 
-  const [toggled, setToggled] = useState(initialState)
+  const getOnState = () => {
+    return isPropControlled(props, 'on') ? props.on : isOn
+  }
+  const onState = getOnState()
 
   const onGradientColors = [Colors.carnationPink, Colors.hyacinthPink]
   const offGradientColors = [Colors.haiti, Colors.haiti]
 
   const positionValue = useRef(
-    new Animated.Value(toggled ? ON_POSITION : OFF_POSITION),
+    new Animated.Value(onState ? ON_POSITION : OFF_POSITION),
   ).current
 
-  const onPress = () => {
+  const toggle = () => {
+    if (isPropControlled(props, 'on')) {
+      props.onToggle && props.onToggle(isOn)
+    } else {
+      setIsOn((prevState) => !prevState)
+    }
+  }
+
+  useEffect(() => {
     Animated.timing(positionValue, {
-      toValue: toggled ? OFF_POSITION : ON_POSITION,
+      toValue: onState ? ON_POSITION : OFF_POSITION,
       duration: 300,
       useNativeDriver: true,
-    }).start(() => {
-      setToggled(!toggled)
-    })
-    onToggle(!toggled)
-  }
+    }).start()
+  }, [onState])
 
   return (
     <TouchableWithoutFeedback
       testID="toggleSwitch"
       style={styles.track}
-      onPressIn={onPress}
+      onPressIn={toggle}
     >
       <Animated.View
         style={{
@@ -52,7 +61,7 @@ const ToggleSwitch = (props: Props) => {
           style={styles.gradientWrapper}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={toggled ? onGradientColors : offGradientColors}
+          colors={onState ? onGradientColors : offGradientColors}
         />
       </Animated.View>
     </TouchableWithoutFeedback>

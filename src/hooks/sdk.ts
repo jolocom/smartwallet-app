@@ -18,6 +18,8 @@ export enum StorageKeys {
   isOnboardingDone = 'isOnboardingDone',
   encryptedSeed = 'encryptedSeed',
   termsConsent = 'termsConsent',
+  biometry = 'biometry',
+  language = 'language',
 }
 
 /**

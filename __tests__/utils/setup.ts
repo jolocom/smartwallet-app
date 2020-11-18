@@ -1,6 +1,3 @@
-// @ts-ignore missing declaration file
-import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'
-
 jest.mock('react-native-keychain', () => ({
   SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
   SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
@@ -20,13 +17,6 @@ jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
 }))
 
-/* // TODO: this definitely should not be here */
-// jest.mock('../../src/hooks/sdk', () => ({
-//   useAgent: () => ({
-//     initWithMnemonic: jest.fn().mockResolvedValue(true),
-//   }),
-// }))
-
 jest.mock('react-native-randombytes', () => ({
   randomBytes: jest.fn().mockResolvedValue('sdsd'),
 }))
@@ -34,9 +24,9 @@ jest.mock('react-native-randombytes', () => ({
 jest.mock('react-native-jolocom', () => ({
   FlowType: {
     Authentication: 'Authentication',
-    CredentialShare: "CredentialShare",
-    CredentialOffer: "CredentialOffer",
-    Authorization: "Authorization",
+    CredentialShare: 'CredentialShare',
+    CredentialOffer: 'CredentialOffer',
+    Authorization: 'Authorization',
   },
   SDKError: {
     codes: {
@@ -46,10 +36,14 @@ jest.mock('react-native-jolocom', () => ({
   JolocomLib: {
     parse: {
       interactionToken: {
-        fromJWT: jest.fn()
-      }
-    }
-  }
+        fromJWT: jest.fn(),
+      },
+    },
+  },
 }))
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
+
+jest.mock('react-native-localize', () => ({
+  findBestAvailableLanguage: (_: Array<string>) => 'en',
+}))

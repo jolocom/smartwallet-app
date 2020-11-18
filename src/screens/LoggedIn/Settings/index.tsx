@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react'
-import AsyncStorage from '@react-native-community/async-storage'
+import React, { useCallback } from 'react'
 import { Alert, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
@@ -21,16 +20,19 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import Option from './components/Option'
 import DevelopmentSection from './Development'
+import EnableBiometryOption from './EnableBiometryOption'
+import { useBiometry } from '~/hooks/biometry'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
+  const { resetBiometry } = useBiometry()
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
   const handleLogout = useCallback(async () => {
     try {
-      await AsyncStorage.removeItem('biometry')
-      resetServiceValuesInKeychain()
+      await resetBiometry()
+      await resetServiceValuesInKeychain()
       dispatch(accountReset())
     } catch (err) {
       console.log('Error occured while logging out')
@@ -51,13 +53,12 @@ const SettingsGeneral: React.FC = () => {
       customStyles={{
         justifyContent: 'flex-start',
         paddingHorizontal: 10,
-        paddingTop: 0,
       }}
     >
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 150,
-          marginTop: BP({ large: 56, medium: 56, default: 32 }),
+          // marginTop: BP({ large: 56, medium: 56, default: 32 }),
         }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
@@ -75,6 +76,7 @@ const SettingsGeneral: React.FC = () => {
             <Option.Title title={strings.CHANGE_PIN} />
             <Option.RightIcon />
           </Option>
+          <EnableBiometryOption />
           <Option
             onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
           >

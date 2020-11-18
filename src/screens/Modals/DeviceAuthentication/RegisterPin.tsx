@@ -44,7 +44,7 @@ const RegisterPin = () => {
   }, [])
 
   const redirectTo = () => {
-    if (biometryType && biometryType !== 'IRIS') {
+    if (biometryType) {
       dispatchToLocalAuth(showBiometry())
     } else {
       handleRedirectToLoggedIn()

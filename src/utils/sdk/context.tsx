@@ -12,6 +12,7 @@ import { Agent } from 'react-native-jolocom'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useWalletInit } from '~/hooks/sdk'
 import { initAgent } from '.'
+import useTranslation from '~/hooks/useTranslation'
 
 export const AgentContext = createContext<MutableRefObject<Agent | null> | null>(
   null,
@@ -21,6 +22,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   const agentRef = useRef<Agent | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const initWallet = useWalletInit()
+  const { initStoredLanguage } = useTranslation()
 
   const initializeAll = async () => {
     try {
@@ -28,6 +30,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
       agentRef.current = agent
 
       await initWallet(agent)
+      await initStoredLanguage(agent)
     } catch (err) {
       console.warn(err)
       throw new Error('Agent initialization failed')
