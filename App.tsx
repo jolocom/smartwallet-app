@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'
 import 'crypto'
-import React from 'react'
+import React, { useRef } from 'react'
 import { Platform, UIManager } from 'react-native'
 import { Provider } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -11,6 +11,7 @@ import { ErrorBoundary } from '~/ErrorBoundary'
 import { AgentContextProvider } from '~/utils/sdk/context'
 import configureStore from './configureStore'
 import Overlays from '~/Overlays'
+import { NavigationContainerRef } from '@react-navigation/native'
 import { i18n } from '~/translations'
 
 const store = configureStore()
@@ -22,14 +23,16 @@ if (Platform.OS === 'android') {
 }
 
 const App = () => {
+  const navRef = useRef<NavigationContainerRef>(null)
+
   return (
     <SafeAreaProvider>
       <I18nextProvider i18n={i18n}>
         <ErrorBoundary>
           <Provider store={store}>
             <AgentContextProvider>
-              <Overlays />
-              <RootNavigation />
+              <Overlays navRef={navRef} />
+              <RootNavigation ref={navRef} />
             </AgentContextProvider>
           </Provider>
         </ErrorBoundary>
