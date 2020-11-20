@@ -9,6 +9,7 @@ export enum Colors {
   black = '#000',
   elevatedElement = '#29232b',
   black95 = 'rgba(0,0,0,0.95)',
+  black90 = 'rgba(0,0,0,0.90)',
   black65 = 'rgba(0,0,0,0.65)',
   black50 = 'rgba(0,0,0,0.5)',
   black30 = 'rgba(0,0,0,0.30)',

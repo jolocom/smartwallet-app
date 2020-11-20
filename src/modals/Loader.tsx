@@ -26,7 +26,7 @@ interface LoaderI {
 
 const SCALE_MAX = 5
 
-const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
+const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
   const { msg, type }: { msg: string; type: LoaderTypes } = useSelector(
     getLoaderState,
   )
