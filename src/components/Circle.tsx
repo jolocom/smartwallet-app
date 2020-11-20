@@ -16,6 +16,7 @@ interface PropsI {
   animatedStyles?: AnimatedStylesI | ViewStyle
   diameter: number
   color: Colors
+  thickness?: number
 }
 
 const Circle: React.FC<PropsI> = ({
@@ -23,6 +24,7 @@ const Circle: React.FC<PropsI> = ({
   diameter,
   children,
   color,
+  thickness = undefined,
 }) => {
   return (
     <Animated.View
@@ -33,7 +35,7 @@ const Circle: React.FC<PropsI> = ({
           height: diameter,
           borderRadius: diameter / 2,
           borderColor: color,
-          borderWidth: StyleSheet.hairlineWidth,
+          borderWidth: thickness ?? StyleSheet.hairlineWidth,
           overflow: 'hidden',
         },
         animatedStyles,

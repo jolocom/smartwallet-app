@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Animated, StyleSheet, Modal, Easing } from 'react-native'
+import {
+  View,
+  Animated,
+  StyleSheet,
+  Modal,
+  Easing,
+  Dimensions,
+} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Circle from '~/components/Circle'
@@ -108,7 +115,6 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
 
   const ripple = Animated.sequence([
     Animated.parallel([fRipple, sRipple, tRipple]),
-    Animated.delay(500),
     reset,
   ])
 
@@ -116,7 +122,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
-        duration: 300,
+        duration: 500,
         easing: Easing.ease,
         useNativeDriver: true,
       }),
@@ -133,7 +139,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
-        duration: 0,
+        duration: 500,
         easing: Easing.ease,
         useNativeDriver: true,
       }),
@@ -178,8 +184,20 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
   return (
     <Modal animationType="fade" visible presentationStyle="overFullScreen">
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
-        <View style={{ width: 230, justifyContent: 'space-between' }}>
-          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <View
+          style={{
+            width: 230,
+            alignItems: 'center',
+          }}
+        >
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 100,
+              height: 100,
+            }}
+          >
             <Circle
               diameter={CIRCLE_DIAMETER}
               color={colors.default}
@@ -207,6 +225,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             {loaderType.current !== LoaderTypes.default && (
               <Circle
                 diameter={CIRCLE_DIAMETER - 4}
+                thickness={StyleSheet.hairlineWidth / 2}
                 color={colors.default}
                 animatedStyles={{
                   transform: [{ scale: 5 }],
@@ -250,7 +269,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             kind={JoloTextKind.subtitle}
             size={JoloTextSizes.big}
             color={Colors.white80}
-            customStyles={{ marginTop: 50 }}
+            customStyles={{ marginTop: 10 }}
           >
             {status}
           </JoloText>
@@ -264,7 +283,7 @@ const styles = StyleSheet.create({
   modalBodyContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: Dimensions.get('window').height * 0.3,
   },
   tickContainer: {
     width: 100,
