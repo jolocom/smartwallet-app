@@ -11,6 +11,8 @@ import { LoaderTypes } from '~/modules/loader/types'
 import { dismissLoader } from '~/modules/loader/actions'
 import { useDelay } from '~/hooks/generic'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { isLocalAuthSet } from '~/modules/account/selectors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const colors = {
   default: Colors.white90,
@@ -22,12 +24,12 @@ interface LoaderI {
   bgColor?: Colors
 }
 
-const SECONDS = 500;
-const SCALE_BREAK_POINT = 4;
-const SCALE_MAX = 5;
+const SCALE_MAX = 5
 
 const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
-  const { msg, type } = useSelector(getLoaderState)
+  const { msg, type }: { msg: string; type: LoaderTypes } = useSelector(
+    getLoaderState,
+  )
   const isAnimating = useRef(true)
   const dispatch = useDispatch()
 
@@ -37,27 +39,21 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const [status, setStatus] = useState(msg)
 
-  const animatedWidth1 = useRef(new Animated.Value(1)).current
+  const animatedWidth1 = useRef(new Animated.Value(0.5)).current
   const animatedOpacity1 = animatedWidth1.interpolate({
-    // inputRange: [1, 1.5, 5],
-    // outputRange: [1, 1, 0],
-    inputRange: [1, 4, 5],
+    inputRange: [1, 4, SCALE_MAX],
     outputRange: [1, 0.3, 0],
   })
 
   const animatedWidth2 = useRef(new Animated.Value(0)).current
   const animatedOpacity2 = animatedWidth2.interpolate({
-    inputRange: [0, 1.5, 5],
+    inputRange: [0, 1.5, SCALE_MAX],
     outputRange: [0, 1, 0],
   })
 
   const animatedWidth3 = useRef(new Animated.Value(0)).current
   const animatedOpacity3 = animatedWidth3.interpolate({
-    // inputRange: [2, 4.5, 5],
-    // outputRange: [0, 1, 0],
-    // inputRange: [2, 3.5, 5],
-    // outputRange: [0, 1, 0],
-    inputRange: [0, 1.5, 5],
+    inputRange: [0, 1.5, SCALE_MAX],
     outputRange: [0, 1, 0],
   })
 
@@ -68,7 +64,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   })
 
   const tickBlockerOpacity = useRef(new Animated.Value(0)).current
-  const tickBlockerPosition = useRef(new Animated.Value(10)).current
+  const tickBlockerPosition = useRef(new Animated.Value(-3)).current
   const tickBlockerWidth = tickBlockerPosition.interpolate({
     inputRange: [0, 45],
     outputRange: [1, 0.1],
@@ -76,44 +72,17 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const animatedOpacity4 = useRef(new Animated.Value(0)).current
 
-  const animateValueTo = (value, toValue, duration) => {
+  const animateValueTo = (
+    value: Animated.Value,
+    toValue: number,
+    duration: number,
+  ) => {
     return Animated.timing(value, {
       toValue: toValue,
       duration: duration,
       useNativeDriver: true,
     })
   }
-
-  const firstRipple = Animated.parallel([
-    animateValueTo(animatedWidth1, 1, 0),
-    animateValueTo(animatedWidth1, 5, 2500 - SECONDS * 2),
-  ])
-
-  // const secondRipple = Animated.sequence([
-  //   animateValueTo(animatedWidth2, 1, 2000 - SECONDS * 2),
-  //   animateValueTo(animatedWidth2, 5, 2000 - SECONDS),
-  // ])
-  const secondRipple = Animated.sequence([
-    animateValueTo(animatedWidth2, 1, 2000 - SECONDS * 2),
-    animateValueTo(animatedWidth2, 5, 2000 - SECONDS),
-  ])
-
-  const thirdRipple = Animated.sequence([
-    // animateValueTo(animatedWidth3, 1, 2000),
-    Animated.timing(animatedWidth3, {
-      toValue: 1,
-      // delay: 1500 - SECONDS * 2,
-      delay: 1500 - SECONDS,
-      duration: 1000,
-      useNativeDriver: true,
-    }),
-    Animated.timing(animatedWidth3, {
-      toValue: 5,
-      // delay: 3000,
-      duration: 1000,
-      useNativeDriver: true,
-    }),
-  ])
 
   const reset = Animated.parallel([
     animateValueTo(animatedWidth1, 0, 0),
@@ -122,63 +91,21 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   ])
 
   const fRipple = Animated.sequence([
-    Animated.timing(animatedWidth1, {
-      toValue: SCALE_BREAK_POINT,
-      duration: 1500,
-      useNativeDriver: true,
-      // easing: Easing.in(Easing.linear),
-    }),
-    Animated.timing(animatedWidth1, {
-      toValue: SCALE_MAX,
-      duration: 1000,
-      useNativeDriver: true,
-      // easing: Easing.in(Easing.linear),
-    })
-  ]) 
+    animateValueTo(animatedWidth1, SCALE_MAX, 1500),
+  ])
 
   const sRipple = Animated.sequence([
-    Animated.delay(800),
-    Animated.timing(animatedWidth2, {
-      toValue: SCALE_BREAK_POINT,
-      duration: 2500,
-      useNativeDriver: true,
-      // easing: Easing.in(Easing.linear),
-    }),
-    Animated.timing(animatedWidth2, {
-      toValue: SCALE_MAX,
-      duration: 1000,
-      useNativeDriver: true,
-      // easing: Easing.quad,
-    })
+    Animated.delay(400),
+    animateValueTo(animatedWidth2, SCALE_MAX, 2500),
   ])
 
   const tRipple = Animated.sequence([
-    Animated.delay(2500),
-    Animated.timing(animatedWidth3, {
-      toValue: SCALE_BREAK_POINT,
-      duration: 2500,
-      useNativeDriver: true,
-      // easing: Easing.in(Easing.linear),
-    }),
-    Animated.timing(animatedWidth3, {
-      toValue: SCALE_MAX,
-      duration: 1000,
-      useNativeDriver: true,
-      // easing: Easing.quad,
-    })
+    Animated.delay(1600),
+    animateValueTo(animatedWidth3, SCALE_MAX, 2500),
   ])
 
-  // const ripple = Animated.sequence([
-  //   Animated.stagger(500, [firstRipple, secondRipple, thirdRipple]),
-  //   Animated.delay(500),
-  //   reset,
-  // ])
   const ripple = Animated.sequence([
-    Animated.parallel([
-      fRipple,
-      sRipple,
-      tRipple
-    ]),
+    Animated.parallel([fRipple, sRipple, tRipple]),
     Animated.delay(500),
     reset,
   ])
@@ -209,22 +136,12 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
         useNativeDriver: true,
       }),
       Animated.sequence([
-        Animated.timing(tickBlockerOpacity, {
-          toValue: 1,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-        Animated.timing(tickBlockerPosition, {
-          toValue: 28,
-          duration: 700,
-          useNativeDriver: true,
-        }),
+        animateValueTo(tickBlockerOpacity, 1, 0),
+        animateValueTo(tickBlockerPosition, 25, 700),
       ]),
     ]).start()
     await useDelay(() => dispatch(dismissLoader()), 3000)
   }
-
-  const modalVisible = msg !== ''
 
   const looping = () => {
     if (loaderType.current === LoaderTypes.default) {
@@ -257,88 +174,85 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   })
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={modalVisible}
-      presentationStyle="overFullScreen"
-    >
+    <Modal animationType="fade" visible presentationStyle="overFullScreen">
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
-          {/* <View
-            style={{
-              position: 'relative',
-              justifyContent: 'center',
-              height: 160,
-            }}
-          ></View> */}
-          <Circle
-            diameter={18}
-            bgColor={loaderColor.current}
-            animatedStyles={{
-              transform: [{ scale: animatedWidth1 }],
-              opacity: animatedOpacity1,
-            }}
-          />
-          <Circle
-            diameter={18}
-            bgColor={loaderColor.current}
-            animatedStyles={{
-              transform: [{ scale: animatedWidth2 }],
-              opacity: animatedOpacity2,
-            }}
-          />
-          <Circle
-            diameter={18}
-            bgColor={loaderColor.current}
-            animatedStyles={{
-              transform: [{ scale: animatedWidth3 }],
-              opacity: animatedOpacity3,
-            }}
-          />
-          {loaderType.current !== LoaderTypes.default && (
+        <View style={{ width: 230, justifyContent: 'space-between' }}>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <Circle
-              // diameter={18}
-              diameter={14}
-              // bgColor={loaderColor.current}
-              bgColor={colors.default}
+              diameter={18}
+              color={colors.default}
               animatedStyles={{
-                transform: [{ scale: 5 }],
-                opacity: animatedOpacity4,
+                transform: [{ scale: animatedWidth1 }],
+                opacity: animatedOpacity1,
               }}
             />
-          )}
-          {loaderType.current === LoaderTypes.error && (
-            <Animated.View
-              style={{
-                position: 'absolute',
-                transform: [{ scale: errorScale }],
-                opacity: errorOpacity,
+            <Circle
+              diameter={18}
+              color={colors.default}
+              animatedStyles={{
+                transform: [{ scale: animatedWidth2 }],
+                opacity: animatedOpacity2,
               }}
-            >
-              <ErrorIcon color={colors.default} />
-            </Animated.View>
-          )}
-          {loaderType.current === LoaderTypes.success && (
-            <View style={styles.tickContainer}>
-              <View style={{ position: 'absolute' }}>
-                {/* <SuccessTick color={loaderColor.current}  /> */}
-                <SuccessTick color={colors.default}  />
-              </View>
-              <Animated.View
-                style={[
-                  styles.tickBlocker,
-                  {
-                    backgroundColor: bgColor,
-                    transform: [
-                      { translateX: tickBlockerPosition },
-                      { scale: tickBlockerWidth },
-                    ],
-                  },
-                ]}
+            />
+            <Circle
+              diameter={18}
+              color={colors.default}
+              animatedStyles={{
+                transform: [{ scale: animatedWidth3 }],
+                opacity: animatedOpacity3,
+              }}
+            />
+            {loaderType.current !== LoaderTypes.default && (
+              <Circle
+                diameter={14}
+                color={colors.default}
+                animatedStyles={{
+                  transform: [{ scale: 5 }],
+                  opacity: animatedOpacity4,
+                }}
               />
-            </View>
-          )}
-          {/* <JoloText kind={JoloTextKind.subtitle}>{status}</JoloText> */}
+            )}
+            {loaderType.current === LoaderTypes.error && (
+              <Animated.View
+                style={{
+                  position: 'absolute',
+                  transform: [{ scale: errorScale }],
+                  opacity: errorOpacity,
+                }}
+              >
+                <ErrorIcon color={colors.default} />
+              </Animated.View>
+            )}
+            {loaderType.current === LoaderTypes.success && (
+              <View style={styles.tickContainer}>
+                <View style={{ position: 'absolute' }}>
+                  <SuccessTick color={colors.default} />
+                </View>
+                <Animated.View
+                  style={[
+                    styles.tickBlocker,
+                    {
+                      backgroundColor: bgColor,
+                      transform: [
+                        { translateX: tickBlockerPosition },
+                        { scale: tickBlockerWidth },
+                      ],
+                    },
+                  ]}
+                />
+              </View>
+            )}
+          </View>
+
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.big}
+            color={Colors.white80}
+            customStyles={{ marginTop: 50 }}
+          >
+            {status}
+          </JoloText>
+        </View>
       </View>
     </Modal>
   )
@@ -359,14 +273,16 @@ const styles = StyleSheet.create({
   },
   tickBlocker: {
     height: '100%',
-    // width: 50,
-    width: 20,
+    width: 30,
   },
 })
 
 export default function () {
-  const { isVisible } = useSelector(getLoaderState)
-  if (isVisible) {
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
+  const isAuthSet = useSelector(isLocalAuthSet)
+
+  // isVisible && isLocked && !isAuthSet => Logged out section
+  if (isLoaderVisible || (isLoaderVisible && !isAuthSet)) {
     return <Loader />
   }
   return null

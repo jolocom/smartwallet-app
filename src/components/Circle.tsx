@@ -15,14 +15,14 @@ interface AnimatedStylesI {
 interface PropsI {
   animatedStyles?: AnimatedStylesI | ViewStyle
   diameter: number
-  bgColor: Colors
+  color: Colors
 }
 
 const Circle: React.FC<PropsI> = ({
   animatedStyles,
   diameter,
   children,
-  bgColor,
+  color,
 }) => {
   return (
     <Animated.View
@@ -32,19 +32,13 @@ const Circle: React.FC<PropsI> = ({
           width: diameter,
           height: diameter,
           borderRadius: diameter / 2,
-          // backgroundColor: Colors.transparent,
-          borderColor: bgColor,
+          borderColor: color,
           borderWidth: StyleSheet.hairlineWidth,
           overflow: 'hidden',
         },
         animatedStyles,
       ]}
     >
-      {/*  the border of the circle once is scaled get pixelated
-        therefore drawing 2 circles to avoid border pixelation
-        one inside of the other
-        the outer has a background color depending on the Loader type
-        the inner circle is of the color of the screen */}
       {children}
     </Animated.View>
   )
@@ -55,12 +49,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-  },
-  nestedCircle: {
-    width: 17.4,
-    height: 17.4,
-    borderRadius: 8.7,
-    backgroundColor: Colors.black,
+    zIndex: 10,
   },
 })
 
