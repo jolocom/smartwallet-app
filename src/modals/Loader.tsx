@@ -39,7 +39,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const [status, setStatus] = useState(msg)
 
-  const animatedWidth1 = useRef(new Animated.Value(0.5)).current
+  const animatedWidth1 = useRef(new Animated.Value(0)).current
   const animatedOpacity1 = animatedWidth1.interpolate({
     inputRange: [1, 4, SCALE_MAX],
     outputRange: [1, 0.3, 0],
@@ -91,6 +91,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   ])
 
   const fRipple = Animated.sequence([
+    animateValueTo(animatedWidth1, 0.5, 0),
     animateValueTo(animatedWidth1, SCALE_MAX, 1500),
   ])
 
