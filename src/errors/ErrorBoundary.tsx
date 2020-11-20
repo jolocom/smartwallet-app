@@ -1,4 +1,6 @@
 import React from 'react'
+import RNRestart from 'react-native-restart'
+
 import { ErrorFallback } from '~/components/ErrorFallback'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import { strings } from '~/translations/strings'
@@ -9,18 +11,23 @@ export class ErrorBoundary extends React.Component {
 
   public state = {
     hasError: false,
+    error: null,
   }
 
-  public static getDerivedStateFromError() {
-    return { hasError: true }
+  public static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error }
   }
 
   private handleClose = () => {
     this.setState({ hasError: false })
   }
 
+  private handleRestart = () => {
+    RNRestart.Restart()
+  }
+
   private handleReport = () => {
-    this.context.setErrorScreen(ErrorScreens.errorReporting)
+    this.context.setError(ErrorScreens.errorReporting, this.state.error)
     this.handleClose()
   }
 
@@ -28,24 +35,22 @@ export class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <ErrorFallback
-          title={strings.UNKNOWN_ERROR}
-          description={
-            strings.AND_IF_THIS_IS_NOT_THE_FIRST_TIME_WE_STRONGLY_RECOMMEND_LETTING_US_KNOW
-          }
+          title={strings.SYSTEM_CRASH}
+          description={strings.BUT_DONT_WORRY_YOUR_DATA_IS_SAFE}
         >
           <Btn
-            type={BtnTypes.secondary}
+            type={BtnTypes.quaternary}
             size={BtnSize.medium}
             onPress={this.handleReport}
           >
-            Report error
+            {strings.SUBMIT_REPORT}
           </Btn>
           <Btn
             type={BtnTypes.secondary}
             size={BtnSize.medium}
-            onPress={this.handleClose}
+            onPress={this.handleRestart}
           >
-            {strings.CLOSE}
+            {strings.RESTART_APPLICATION}
           </Btn>
         </ErrorFallback>
       )
