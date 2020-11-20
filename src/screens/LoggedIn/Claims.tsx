@@ -8,6 +8,8 @@ import { useLoader } from '~/hooks/loader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useToasts } from '~/hooks/toasts'
+import useErrors from '~/hooks/useErrors'
+import { SWErrorCodes } from '~/errors/codes'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -16,6 +18,7 @@ const ContainerComponent: React.FC = ({ children }) => {
 const Claims: React.FC = () => {
   const loader = useLoader()
   const { scheduleInfo, scheduleWarning } = useToasts()
+  const { showErrorReporting } = useErrors()
 
   const openLoader = async () => {
     await loader(
@@ -44,9 +47,9 @@ const Claims: React.FC = () => {
       title: "I'm baby salvia deep v forage aesthetic",
       message: 'deep v normcore adaptogen. Direct trade PBR&B vaporware ',
       interact: {
-        label: 'Show',
+        label: 'Report',
         onInteract: () => {
-          Alert.alert('Hey', 'amsburg activ')
+          showErrorReporting(new Error(SWErrorCodes.SWUnknown))
         },
       },
     })
