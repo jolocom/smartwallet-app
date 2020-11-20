@@ -22,6 +22,10 @@ interface LoaderI {
   bgColor?: Colors
 }
 
+const SECONDS = 500;
+const SCALE_BREAK_POINT = 4;
+const SCALE_MAX = 5;
+
 const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   const { msg, type } = useSelector(getLoaderState)
   const isAnimating = useRef(true)
@@ -33,10 +37,12 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const [status, setStatus] = useState(msg)
 
-  const animatedWidth1 = useRef(new Animated.Value(0)).current
+  const animatedWidth1 = useRef(new Animated.Value(1)).current
   const animatedOpacity1 = animatedWidth1.interpolate({
-    inputRange: [1, 2, 5],
-    outputRange: [1, 0.6, 0],
+    // inputRange: [1, 1.5, 5],
+    // outputRange: [1, 1, 0],
+    inputRange: [1, 4, 5],
+    outputRange: [1, 0.3, 0],
   })
 
   const animatedWidth2 = useRef(new Animated.Value(0)).current
@@ -80,20 +86,25 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const firstRipple = Animated.parallel([
     animateValueTo(animatedWidth1, 1, 0),
-    animateValueTo(animatedWidth1, 5, 3500),
+    animateValueTo(animatedWidth1, 5, 2500 - SECONDS * 2),
   ])
 
+  // const secondRipple = Animated.sequence([
+  //   animateValueTo(animatedWidth2, 1, 2000 - SECONDS * 2),
+  //   animateValueTo(animatedWidth2, 5, 2000 - SECONDS),
+  // ])
   const secondRipple = Animated.sequence([
-    animateValueTo(animatedWidth2, 1, 2000),
-    animateValueTo(animatedWidth2, 5, 2000),
+    animateValueTo(animatedWidth2, 1, 2000 - SECONDS * 2),
+    animateValueTo(animatedWidth2, 5, 2000 - SECONDS),
   ])
 
   const thirdRipple = Animated.sequence([
     // animateValueTo(animatedWidth3, 1, 2000),
     Animated.timing(animatedWidth3, {
       toValue: 1,
-      delay: 1500,
-      duration: 1500,
+      // delay: 1500 - SECONDS * 2,
+      delay: 1500 - SECONDS,
+      duration: 1000,
       useNativeDriver: true,
     }),
     Animated.timing(animatedWidth3, {
@@ -110,8 +121,64 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
     animateValueTo(animatedWidth3, 0, 0),
   ])
 
+  const fRipple = Animated.sequence([
+    Animated.timing(animatedWidth1, {
+      toValue: SCALE_BREAK_POINT,
+      duration: 1500,
+      useNativeDriver: true,
+      // easing: Easing.in(Easing.linear),
+    }),
+    Animated.timing(animatedWidth1, {
+      toValue: SCALE_MAX,
+      duration: 1000,
+      useNativeDriver: true,
+      // easing: Easing.in(Easing.linear),
+    })
+  ]) 
+
+  const sRipple = Animated.sequence([
+    Animated.delay(800),
+    Animated.timing(animatedWidth2, {
+      toValue: SCALE_BREAK_POINT,
+      duration: 2500,
+      useNativeDriver: true,
+      // easing: Easing.in(Easing.linear),
+    }),
+    Animated.timing(animatedWidth2, {
+      toValue: SCALE_MAX,
+      duration: 1000,
+      useNativeDriver: true,
+      // easing: Easing.quad,
+    })
+  ])
+
+  const tRipple = Animated.sequence([
+    Animated.delay(2500),
+    Animated.timing(animatedWidth3, {
+      toValue: SCALE_BREAK_POINT,
+      duration: 2500,
+      useNativeDriver: true,
+      // easing: Easing.in(Easing.linear),
+    }),
+    Animated.timing(animatedWidth3, {
+      toValue: SCALE_MAX,
+      duration: 1000,
+      useNativeDriver: true,
+      // easing: Easing.quad,
+    })
+  ])
+
+  // const ripple = Animated.sequence([
+  //   Animated.stagger(500, [firstRipple, secondRipple, thirdRipple]),
+  //   Animated.delay(500),
+  //   reset,
+  // ])
   const ripple = Animated.sequence([
-    Animated.stagger(500, [firstRipple, secondRipple, thirdRipple]),
+    Animated.parallel([
+      fRipple,
+      sRipple,
+      tRipple
+    ]),
     Animated.delay(500),
     reset,
   ])
@@ -293,7 +360,7 @@ const styles = StyleSheet.create({
   tickBlocker: {
     height: '100%',
     // width: 50,
-    width: 13,
+    width: 20,
   },
 })
 

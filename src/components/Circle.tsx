@@ -35,7 +35,7 @@ const Circle: React.FC<PropsI> = ({
           // backgroundColor: Colors.transparent,
           borderColor: bgColor,
           borderWidth: StyleSheet.hairlineWidth,
-          overflow: 'hidden'
+          overflow: 'hidden',
         },
         animatedStyles,
       ]}
@@ -54,8 +54,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute'
-    
+    position: 'absolute',
   },
   nestedCircle: {
     width: 17.4,
