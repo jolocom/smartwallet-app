@@ -6,12 +6,21 @@ import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { JoloTextSizes } from '~/utils/fonts'
+import DocumentTabs from '~/components/Tabs/DocumetTabs'
+import { useTabs } from '~/components/Tabs/Tabs'
 
 const DocumentList = () => {
   const credentials = useSelector(getAllCredentials)
+  const { activeTab, activeSubtab } = useTabs()
 
   return (
-    <View style={{ height: 200, paddingVertical: 20, marginTop: 20 }}>
+    <View
+      style={{
+        height: 200,
+        paddingVertical: 20,
+        marginTop: 20,
+      }}
+    >
       <ScrollView>
         {credentials.map(({ metadata: { name } }) => (
           <JoloText
@@ -29,11 +38,10 @@ const DocumentList = () => {
 
 const Documents: React.FC = () => {
   return (
-    <ScreenContainer>
-      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
-        Documents
-      </JoloText>
-      <DocumentList />
+    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+      <DocumentTabs>
+        <DocumentList />
+      </DocumentTabs>
     </ScreenContainer>
   )
 }

@@ -1,15 +1,12 @@
 import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
+import HistoryTabs from '~/components/Tabs/HistoryTabs'
 
 const History: React.FC = () => {
   return (
-    <ScreenContainer>
-      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
-        History
-      </JoloText>
+    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+      <HistoryTabs />
     </ScreenContainer>
   )
 }
