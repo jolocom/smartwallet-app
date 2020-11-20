@@ -20,7 +20,7 @@ const Claims: React.FC = () => {
   const openLoader = async () => {
     await loader(
       async () => {
-        // throw new Error('test')
+        throw new Error('test')
       },
       {
         success: 'Good loader',

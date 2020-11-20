@@ -15,7 +15,7 @@ import { isLocalAuthSet } from '~/modules/account/selectors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const colors = {
-  default: Colors.white90,
+  default: Colors.white70,
   error: Colors.error,
   success: Colors.success,
 }
@@ -25,6 +25,7 @@ interface LoaderI {
 }
 
 const SCALE_MAX = 5
+const CIRCLE_DIAMETER = 18
 
 const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
   const { msg, type }: { msg: string; type: LoaderTypes } = useSelector(
@@ -180,7 +181,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
         <View style={{ width: 230, justifyContent: 'space-between' }}>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <Circle
-              diameter={18}
+              diameter={CIRCLE_DIAMETER}
               color={colors.default}
               animatedStyles={{
                 transform: [{ scale: animatedWidth1 }],
@@ -188,7 +189,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
               }}
             />
             <Circle
-              diameter={18}
+              diameter={CIRCLE_DIAMETER}
               color={colors.default}
               animatedStyles={{
                 transform: [{ scale: animatedWidth2 }],
@@ -196,7 +197,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
               }}
             />
             <Circle
-              diameter={18}
+              diameter={CIRCLE_DIAMETER}
               color={colors.default}
               animatedStyles={{
                 transform: [{ scale: animatedWidth3 }],
@@ -205,7 +206,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             />
             {loaderType.current !== LoaderTypes.default && (
               <Circle
-                diameter={14}
+                diameter={CIRCLE_DIAMETER - 4}
                 color={colors.default}
                 animatedStyles={{
                   transform: [{ scale: 5 }],
