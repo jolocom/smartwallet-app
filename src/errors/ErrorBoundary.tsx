@@ -1,9 +1,12 @@
 import React from 'react'
-import { ErrorFallback } from './components/ErrorFallback'
+import { ErrorFallback } from '~/components/ErrorFallback'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import { strings } from '~/translations/strings'
+import { ErrorContext, ErrorScreens } from './errorContext'
 
 export class ErrorBoundary extends React.Component {
+  static contextType = ErrorContext
+
   public state = {
     hasError: false,
   }
@@ -14,6 +17,11 @@ export class ErrorBoundary extends React.Component {
 
   private handleClose = () => {
     this.setState({ hasError: false })
+  }
+
+  private handleReport = () => {
+    this.context.setErrorScreen(ErrorScreens.errorReporting)
+    this.handleClose()
   }
 
   render() {
@@ -28,6 +36,13 @@ export class ErrorBoundary extends React.Component {
           <Btn
             type={BtnTypes.secondary}
             size={BtnSize.medium}
+            onPress={this.handleReport}
+          >
+            Report error
+          </Btn>
+          <Btn
+            type={BtnTypes.secondary}
+            size={BtnSize.medium}
             onPress={this.handleClose}
           >
             {strings.CLOSE}
@@ -35,7 +50,6 @@ export class ErrorBoundary extends React.Component {
         </ErrorFallback>
       )
     }
-
     return this.props.children
   }
 }
