@@ -14,7 +14,6 @@ const useSentry = () => {
       scope.setExtras({ ...report, sendPrivateData })
       if (!sendPrivateData) scope.setUser(null)
 
-      console.log({ report })
       try {
         if (error) {
           Sentry.captureException(new Error('TEST_ERROR'))
