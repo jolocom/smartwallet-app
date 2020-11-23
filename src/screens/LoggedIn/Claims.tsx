@@ -8,12 +8,15 @@ import { useLoader } from '~/hooks/loader'
 import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useToasts } from '~/hooks/toasts'
+import { useRedirectTo } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
 }
 
 const Claims: React.FC = () => {
+  const redirectToDeleteDoc = useRedirectTo(ScreenNames.DeleteDocument)
   const loader = useLoader()
   const { scheduleInfo, scheduleWarning } = useToasts()
 
@@ -68,6 +71,7 @@ const Claims: React.FC = () => {
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={normal}>Normal</Btn>
       <Btn onPress={warning}>Warning</Btn>
+      <Btn onPress={redirectToDeleteDoc}>DeleteDocument</Btn>
     </ScreenContainer>
   )
 }
