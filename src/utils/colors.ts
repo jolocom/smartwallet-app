@@ -42,4 +42,5 @@ export enum Colors {
   blackRussian = 'rgb(35, 36, 38)',
   carnationPink = 'rgb(145, 25, 66)',
   hyacinthPink = 'rgb(210, 45, 105)',
+  slateGray = '#6c7b8a'
 }

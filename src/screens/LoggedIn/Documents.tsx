@@ -1,39 +1,41 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { ScrollView, View } from 'react-native'
+// import Face from '~/assets/images/face.jpg'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { getAllCredentials } from '~/modules/credentials/selectors'
-import { JoloTextSizes } from '~/utils/fonts'
-
-const DocumentList = () => {
-  const credentials = useSelector(getAllCredentials)
-
-  return (
-    <View style={{ height: 200, paddingVertical: 20, marginTop: 20 }}>
-      <ScrollView>
-        {credentials.map(({ metadata: { name } }) => (
-          <JoloText
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            customStyles={{ paddingVertical: 10 }}
-          >
-            {name}
-          </JoloText>
-        ))}
-      </ScrollView>
-    </View>
-  )
-}
+import DocumentCard from '~/components/Card/DocumentCard.index'
+import { Colors } from '~/utils/colors'
 
 const Documents: React.FC = () => {
+  const credentials = useSelector(getAllCredentials)
+  const mandatoryFields = [
+    {
+      name: 'Document Type',
+      value: 'Nederlandse identitekaart Nederlandse identitekaart',
+    },
+    { name: 'Document Name', value: 'Nederlandse identitekaart' },
+    { name: 'Given Name', value: 'De Bruijn Willeke Liselotte' },
+  ]
+
+  const preferredFields = [
+    { name: 'Date of birth', value: Date.now() },
+    {
+      name:
+        'Some more info that can fit in here and if it is not going over two lines agreed previou',
+      value:
+        'Some more info that can fit in here and if it is not going over two lines agreed previou over two lines agreed previou',
+    },
+    { name: 'Date of expiry', value: Date.now() },
+  ]
   return (
     <ScreenContainer>
-      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.big}>
-        Documents
-      </JoloText>
-      <DocumentList />
+      <DocumentCard
+        mandatoryFields={mandatoryFields}
+        preferredFields={preferredFields}
+        highlight="SPECI2014"
+        // photo={Face}
+      />
     </ScreenContainer>
   )
 }
