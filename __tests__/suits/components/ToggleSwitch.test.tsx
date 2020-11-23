@@ -18,16 +18,6 @@ describe('ToggleSwitch', () => {
     expect(toJSON()).toMatchSnapshot()
   })
 
-  it('is not controlled and should not call passed onToggle fn', async () => {
-    const mockFn = jest.fn()
-    const { findByTestId } = render(<ToggleSwitch onToggle={mockFn} />)
-
-    const component = await findByTestId(TOGGLE_SWITCH_ID)
-    fireEvent(component, 'pressIn')
-
-    expect(mockFn).toHaveBeenCalledTimes(0)
-  })
-
   it('is controlled and should call passed onToggle fn', async () => {
     const mockFn = jest.fn()
     const { findByTestId } = render(
