@@ -37,22 +37,11 @@ export class ErrorBoundary extends React.Component {
         <ErrorFallback
           title={strings.SYSTEM_CRASH}
           description={strings.BUT_DONT_WORRY_YOUR_DATA_IS_SAFE}
-        >
-          <Btn
-            type={BtnTypes.quaternary}
-            size={BtnSize.medium}
-            onPress={this.handleReport}
-          >
-            {strings.SUBMIT_REPORT}
-          </Btn>
-          <Btn
-            type={BtnTypes.secondary}
-            size={BtnSize.medium}
-            onPress={this.handleRestart}
-          >
-            {strings.RESTART_APPLICATION}
-          </Btn>
-        </ErrorFallback>
+          topButtonText={strings.SUBMIT_REPORT}
+          onPressTop={this.handleReport}
+          bottomButtonText={strings.RESTART_APPLICATION}
+          onPressBottom={this.handleRestart}
+        />
       )
     }
     return this.props.children

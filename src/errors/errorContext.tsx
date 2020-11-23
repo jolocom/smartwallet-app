@@ -30,7 +30,7 @@ export const ErrorContextProvider: React.FC = ({ children }) => {
     errorScreen: null,
   })
 
-  const setError = (errorScreen: ErrorScreens, error: Error | null) =>
+  const setError = (errorScreen: ErrorScreens, error: Error | null = null) =>
     setState({ error, errorScreen })
 
   const contextValue = useMemo<IErrorContext>(
