@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 
 import Section from '../components/Section'
@@ -7,10 +7,12 @@ import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import PopupMenu from '~/components/PopupMenu'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
+  const [showPopup, setShowPopup] = useState(false)
 
   const handleToggle = (toggled: boolean) => {
     scheduleInfo({
@@ -29,6 +31,18 @@ const DevelopmentSection = () => {
       </Option>
       <Option onPress={redirectButtons}>
         <Option.Title title="Buttons" />
+      </Option>
+      <Option onPress={() => setShowPopup(true)}>
+        <Option.Title title="Popup menu" />
+        <PopupMenu
+          options={[
+            { title: 'Help', onPress: () => {} },
+            { title: 'Me', onPress: () => {} },
+            { title: 'Please', onPress: () => {} },
+          ]}
+          onClose={() => setShowPopup(false)}
+          isVisible={showPopup}
+        />
       </Option>
     </Section>
   )
