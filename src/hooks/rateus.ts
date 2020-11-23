@@ -7,7 +7,7 @@ import { setPopup } from '~/modules/appState/actions'
 const options = {
   AppleAppID: '1223869062',
   GooglePackageName: 'com.jolocomwallet',
-  preferInApp: true,
+  preferInApp: Platform.OS === 'ios',
   openAppStoreIfInAppFails: true,
   preferredAndroidMarket: AndroidMarket.Google,
 }
