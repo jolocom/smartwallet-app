@@ -112,7 +112,7 @@ const DragBall = ({ route }) => {
           style={[
             styles.hole,
             {
-              ...(isBallOverTheHole && { backgroundColor: Colors.activity }),
+              ...(isBallOverTheHole && { backgroundColor: Colors.mainBlack }),
             },
           ]}
         />
