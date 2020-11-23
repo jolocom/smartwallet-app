@@ -7,10 +7,13 @@ import Btn from '~/components/Btn'
 import useErrors from '~/hooks/useErrors'
 
 const ErrorReporting = () => {
-  const { errorScreen, resetError } = useErrors()
+  const { errorScreen, resetError, error } = useErrors()
 
   return (
-    <ModalScreen isVisible={errorScreen === ErrorScreens.errorReporting}>
+    <ModalScreen
+      isVisible={errorScreen === ErrorScreens.errorReporting}
+      animationType={'slide'}
+    >
       <ScreenContainer>
         <JoloText>Error Reporting</JoloText>
         <Btn onPress={resetError}>Close</Btn>

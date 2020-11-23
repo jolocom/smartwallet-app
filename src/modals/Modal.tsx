@@ -4,16 +4,18 @@ import { Modal } from 'react-native'
 interface PropsI {
   isVisible: boolean
   onShow?: () => void
+  animationType?: 'none' | 'slide' | 'fade'
 }
 
 const ModalScreen: React.FC<PropsI> = ({
   children,
   isVisible,
+  animationType = 'fade',
   onShow = () => {},
 }) => {
   return (
     <Modal
-      animationType="fade"
+      animationType={animationType}
       transparent={true}
       visible={isVisible}
       presentationStyle="overFullScreen"
