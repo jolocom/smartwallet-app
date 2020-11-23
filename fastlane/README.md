@@ -20,6 +20,11 @@ or alternatively using `brew install fastlane`
 fastlane get_appcenter_token
 ```
 Get API token for MS AppCenter
+### sentry_auth
+```
+fastlane sentry_auth
+```
+Get Sentry Auth Token
 
 ----
 

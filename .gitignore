@@ -1,3 +1,12 @@
+# Sentry auth
+sentry.properties
+sentry-auth/
+android-secrets/
+report.xml
+.bundle/
+vendor/
+
+#== DEFAULT IGNORES ==
 # OSX
 #
 .DS_Store
