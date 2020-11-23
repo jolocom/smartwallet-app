@@ -257,6 +257,12 @@ const toasts = {
   COULDNOT_ACTIVATE: 'We could not activate biometrics',
 }
 
+const documents = {
+  DROP_THE_BALL: 'Drag and drop the ball to delete',
+  DO_YOU_WANT_TO_DELETE: 'Do you want to delete',
+  DOCUMENT: 'Document',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -275,4 +281,5 @@ export const strings = {
   ...settings,
   ...termsConsent,
   ...toasts,
+  ...documents
 }
