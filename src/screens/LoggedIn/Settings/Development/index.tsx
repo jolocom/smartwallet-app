@@ -7,9 +7,12 @@ import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import useErrors from '~/hooks/useErrors'
+import { SWErrorCodes } from '~/errors/codes'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
+  const { showErrorDisplay } = useErrors()
   const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
 
   const handleToggle = (toggled: boolean) => {
@@ -29,6 +32,11 @@ const DevelopmentSection = () => {
       </Option>
       <Option onPress={redirectButtons}>
         <Option.Title title="Buttons" />
+      </Option>
+      <Option
+        onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
+      >
+        <Option.Title title="Throw error" />
       </Option>
     </Section>
   )
