@@ -1,27 +1,24 @@
 import * as Sentry from '@sentry/react-native'
+import useErrors from './useErrors'
 
 interface UserReport {
-  issue?: string
+  issue?: string | null
   details?: string
-  contact?: string
+  email?: string
 }
 
 const useSentry = () => {
-  const error = false
+  const { error } = useErrors()
 
-  const sendReport = (report: UserReport, sendPrivateData: boolean) => {
+  const sendReport = (report: UserReport, sendPrivateData: boolean = false) => {
     Sentry.withScope((scope) => {
       scope.setExtras({ ...report, sendPrivateData })
       if (!sendPrivateData) scope.setUser(null)
 
-      try {
-        if (error) {
-          Sentry.captureException(new Error('TEST_ERROR'))
-        } else {
-          Sentry.captureMessage('TEST_MESSAGE', scope)
-        }
-      } catch (e) {
-        console.log(e)
+      if (error) {
+        Sentry.captureException(error)
+      } else {
+        Sentry.captureMessage('CONTACT_US', scope)
       }
     })
   }
