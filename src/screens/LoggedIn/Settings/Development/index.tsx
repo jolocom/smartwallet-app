@@ -27,7 +27,7 @@ const DevelopmentSection = () => {
       <Option>
         <Option.Title title="Toggle Switch" />
         <View style={{ position: 'absolute', right: 16 }}>
-          <ToggleSwitch initialState={false} onToggle={handleToggle} />
+          <ToggleSwitch onToggle={handleToggle} />
         </View>
       </Option>
       <Option onPress={redirectButtons}>
