@@ -67,16 +67,16 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
     dispatch(navigationActions.navigatorResetHome())
+
+    // we re-lock the app, which will trigger the create pin screen
+    return dispatch(genericActions.lockApp())
   } else {
     const notification = createWarningNotification({
       title: I18n.t(strings.AWKWARD),
       message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
     })
-    dispatch(scheduleNotification(notification))
+    return dispatch(scheduleNotification(notification))
   }
-
-  // we re-lock the app, which will trigger the create pin screen
-  return dispatch(genericActions.lockApp())
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (

@@ -6,7 +6,10 @@ import {
   InputAccessoryView,
   Platform,
 } from 'react-native'
+
+// @ts-ignore
 import { RippleLoader } from 'react-native-indicator'
+
 import { Colors } from 'src/styles'
 
 import RecoveryHeader from './RecoveryHeader'
