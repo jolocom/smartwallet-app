@@ -1,5 +1,6 @@
 import Rate, { AndroidMarket } from 'react-native-rate'
 import { useState } from 'react'
+import { Platform } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import { setPopup } from '~/modules/appState/actions'
