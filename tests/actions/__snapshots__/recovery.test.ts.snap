@@ -38,13 +38,5 @@ Array [
     },
     "type": "SCHEDULE_NOTIFICATION",
   },
-  Object {
-    "type": "APPWRAP_SET_LOCKED",
-    "value": true,
-  },
-  Object {
-    "routeName": "Lock",
-    "type": "Navigation/NAVIGATE",
-  },
 ]
 `;
