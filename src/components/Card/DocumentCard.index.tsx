@@ -1,13 +1,6 @@
-import React, { useState } from 'react'
-import {
-  StyleSheet,
-  View,
-  LayoutChangeEvent,
-  LayoutRectangle,
-  Image,
-} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View, Image } from 'react-native'
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
-import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { debugView } from '~/utils/dev'
 import Dots from './Dots'
@@ -18,10 +11,6 @@ import {
   SpecialField,
   Highlight,
 } from './Field'
-
-const HORIZONTAL_SHADOW = 13
-const TOP_SHADOW = 9
-const BOTTOM_SHADOW = 17
 
 interface IField {
   name: string
@@ -48,55 +37,38 @@ const DocumentCard: React.FC<IProps> = ({
   const document = getFieldInfo('Document Type')
   const givenName = getFieldInfo('Given Name')
 
-  const [svgLayout, setSVGLayout] = useState<LayoutRectangle | null>(null)
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
-  const [areOptionalFieldsCut, setAreOptionalFieldsCut] = useState(false)
-  const [isOptionTrimmed, setIsOptionTrimmed] = useState(false)
+  const [numberOfOptionalLines, setNumberOfOptionalLines] = useState(0)
 
-  const displayedOptionalField = areOptionalFieldsCut
-    ? preferredFields.slice(0, 2)
-    : preferredFields
-
-  const handleSVGLayout = (e: LayoutChangeEvent) => {
-    setSVGLayout(e.nativeEvent.layout)
-  }
+  const [displayedOptionalFields, setDisplayedOptionalFields] = useState(
+    preferredFields,
+  )
 
   const handleHeaderTextLayout = (e) => {
+    console.log('handleHeaderTextLayout', e.nativeEvent)
+
     if (!isHeaderScalled) {
       setIsHeaderScaled(e.nativeEvent.lines.length > 2)
     }
   }
 
-  const handleOptionFieldsLayou = (e: LayoutChangeEvent) => {
-    if (e.nativeEvent.layout.height > 185 && highlight) {
-      setAreOptionalFieldsCut(true)
-    }
+  const handleOptionalFieldTextLayout = (e) => {
+    console.log('handleOptionalFieldTextLayout', e.nativeEvent)
+    const numberOfLines = e.nativeEvent.lines.length
+    setNumberOfOptionalLines((prevState) => prevState + numberOfLines)
   }
 
-  const handleTrimField = (idx: number, e) => {
-    if (
-      idx === displayedOptionalField.length - 1 &&
-      e.nativeEvent.lines.length === 2
-    ) {
-      setIsOptionTrimmed(true)
+  /* check wether to show last optional field */
+  useEffect(() => {
+    if (numberOfOptionalLines > 6 && highlight) {
+      setDisplayedOptionalFields((prevState) => prevState.slice(0, 2))
     }
-  }
+  }, [numberOfOptionalLines])
 
   return (
     <View style={styles.container}>
-      <DocumentCardMedium onLayout={handleSVGLayout}>
-        <View
-          style={[
-            styles.bodyContainer,
-            // aligning body with SVG size
-            {
-              marginTop: TOP_SHADOW,
-              marginBottom: BOTTOM_SHADOW,
-              width: (svgLayout?.width ?? 348) - HORIZONTAL_SHADOW * 2,
-              height: (svgLayout?.height ?? 348) - TOP_SHADOW - BOTTOM_SHADOW,
-            },
-          ]}
-        >
+      <DocumentCardMedium>
+        <View style={styles.bodyContainer}>
           <View style={styles.cardHeader}>
             <TitleField
               onTextLayout={handleHeaderTextLayout}
@@ -110,69 +82,77 @@ const DocumentCard: React.FC<IProps> = ({
             <Dots />
           </View>
           <SpecialField numberOfLines={2}>{givenName?.value}</SpecialField>
-          <View
-            style={styles.optionalFieldsContainer}
-            onLayout={handleOptionFieldsLayou}
-          >
-            {displayedOptionalField.map((pField, idx) => (
-              <>
-                <FieldName numberOfLines={1} customStyles={{ marginBottom: 8 }}>
-                  {pField.name}:
-                </FieldName>
-                <FieldValue
-                  numberOfLines={2}
-                  onTextLayout={(e) => handleTrimField(idx, e)}
-                  customStyles={{
-                    marginBottom: 10,
-                    marginRight:
-                      isOptionTrimmed &&
-                      idx === displayedOptionalField.length - 1 &&
-                      areOptionalFieldsCut
-                        ? 70
-                        : 0,
-                  }}
-                >
-                  {pField.value}
-                </FieldValue>
-              </>
-            ))}
+          <View style={styles.optionalFieldsContainer}>
+            {displayedOptionalFields.map((pField, idx) => {
+              return (
+                <View style={{ width: '100%' }}>
+                  <FieldName
+                    numberOfLines={1}
+                    customStyles={{ marginBottom: 8 }}
+                    onTextLayout={handleOptionalFieldTextLayout}
+                  >
+                    {pField.name}:
+                  </FieldName>
+                  {/* in case thers is a photo we should display last field differently */}
+                  {idx === displayedOptionalFields.length - 1 && photo ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        width: '100%',
+                        justifyContent: 'space-between',
+                        zIndex: 100,
+                      }}
+                    >
+                      <FieldValue
+                        numberOfLines={2}
+                        customStyles={{
+                          marginBottom: 10,
+                          flex: 0.7,
+                        }}
+                        onTextLayout={handleOptionalFieldTextLayout}
+                      >
+                        {pField.value}
+                      </FieldValue>
+                      <View style={{ flex: 0.3 }} />
+                    </View>
+                  ) : (
+                    <FieldValue
+                      numberOfLines={2}
+                      customStyles={{
+                        marginBottom: 10,
+                      }}
+                      onTextLayout={handleOptionalFieldTextLayout}
+                    >
+                      {pField.value}
+                    </FieldValue>
+                  )}
+                </View>
+              )
+            })}
           </View>
         </View>
-        {photo ? (
-          <View
-            style={[
-              styles.photoContainer,
-              { marginBottom: BOTTOM_SHADOW, marginRight: HORIZONTAL_SHADOW },
-            ]}
-          >
-            <Image style={styles.photo} source={{ uri: photo }} />
-          </View>
-        ) : null}
-        {highlight ? (
-          <View
-            style={[
-              styles.highlight,
-              {
-                marginTop: TOP_SHADOW,
-                marginBottom: BOTTOM_SHADOW,
-                width: (svgLayout?.width ?? 348) - HORIZONTAL_SHADOW * 2,
-              },
-            ]}
-          >
-            <Highlight>{highlight}</Highlight>
-          </View>
-        ) : null}
       </DocumentCardMedium>
+      {photo ? (
+        <View style={styles.photoContainer}>
+          <Image style={styles.photo} source={{ uri: photo }} />
+        </View>
+      ) : null}
+      {highlight ? (
+        <View style={styles.highlight}>
+          <Highlight>{highlight}</Highlight>
+        </View>
+      ) : null}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    transform: [{ scale: BP({ default: 1, small: 0.95, xsmall: 0.8 }) }],
+    width: '100%',
+    ...debugView(),
   },
   bodyContainer: {
-    // position: 'absolute',
+    height: '100%',
     alignSelf: 'center',
     alignItems: 'flex-start',
     paddingHorizontal: 14,
@@ -185,20 +165,22 @@ const styles = StyleSheet.create({
   optionalFieldsContainer: {
     alignItems: 'flex-start',
     marginTop: 10,
-    // ...debugView(),
+    width: '100%',
   },
   photoContainer: {
     position: 'absolute',
-    bottom: 27,
     right: 14,
+    bottom: 27,
     zIndex: 10,
   },
   photo: {
     width: 82,
     height: 82,
     borderRadius: 41,
+    zIndex: 10,
   },
   highlight: {
+    width: '100%',
     position: 'absolute',
     bottom: 0,
     alignSelf: 'center',
@@ -208,6 +190,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 14,
+    zIndex: 0,
   },
   scaledDocumentField: {
     fontSize: 22,
@@ -217,7 +200,3 @@ const styles = StyleSheet.create({
 })
 
 export default DocumentCard
-
-// add highlight condition:
-// - hightlight: 6
-// - n/highlight: 9
