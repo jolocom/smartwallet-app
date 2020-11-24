@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import InputSeedPhraseComponent from '../components/inputSeedPhrase'
-import { withErrorScreen } from '../../../actions/modifiers'
 import { recoverIdentity } from '../../../actions/registration'
 import { RootState } from '../../../reducers'
 import { navigationActions, recoveryActions } from 'src/actions'
@@ -54,7 +53,6 @@ const mapStateToProps = (state: RootState) => ({
 })
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   recoverIdentity: (mnemonic: string) => {
-    // dispatch(withErrorScreen(recoverIdentity(mnemonic)))
     dispatch(recoverIdentity(mnemonic))
   },
   goBack: () => dispatch(navigationActions.navigateBack()),

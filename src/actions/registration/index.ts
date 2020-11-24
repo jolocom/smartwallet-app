@@ -83,12 +83,12 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   dispatch(setIsRegistering(true))
   try {
     const identity = await agent.loadFromMnemonic(mnemonic);
-    console.log({identity});
-    
-    dispatch(setDid(identity.did))
-    dispatch(setSeedPhraseSaved())
 
-    dispatch(navigatorResetHome())
+    dispatch(setDid(identity.did))
+    await dispatch(setSeedPhraseSaved())
+
+    await dispatch(navigatorResetHome())
+    await dispatch(genericActions.lockApp())
 
     return dispatch(setIsRegistering(false))
   } catch (e) {
@@ -98,8 +98,6 @@ export const recoverIdentity = (mnemonic: string): ThunkAction => async (
     })
     dispatch(scheduleNotification(notification))
     dispatch(navigationActions.navigateBack())
-    dispatch(setIsRegistering(false))
-    return;
-    // throw e
+    return dispatch(setIsRegistering(false))
   }
 }
