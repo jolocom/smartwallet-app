@@ -21,8 +21,12 @@ const FAQ = () => {
       <ScrollView
         overScrollMode={'never'}
         contentContainerStyle={{ paddingBottom: 40 }}
+        style={{ width: '100%' }}
       >
-        <Section title={strings.POPULAR_QUESTIONS} />
+        <Section
+          customStyles={{ marginBottom: 32 }}
+          title={strings.POPULAR_QUESTIONS}
+        />
         {faqArray.map(({ question, answer }, i) => (
           <BlockExpanded key={i} title={question} expandedText={answer} />
         ))}
