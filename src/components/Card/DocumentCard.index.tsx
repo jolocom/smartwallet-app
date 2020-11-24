@@ -2,15 +2,22 @@ import React, { useState } from 'react'
 import {
   StyleSheet,
   View,
-  TouchableOpacity,
   LayoutChangeEvent,
   LayoutRectangle,
+  Image,
 } from 'react-native'
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { debugView } from '~/utils/dev'
-import { JoloTextSizes } from '~/utils/fonts'
-import JoloText, { JoloTextKind, JoloTextWeight } from '../JoloText'
+import Dots from './Dots'
+import {
+  TitleField,
+  FieldName,
+  FieldValue,
+  SpecialField,
+  Highlight,
+} from './Field'
 
 const HORIZONTAL_SHADOW = 13
 const TOP_SHADOW = 9
@@ -28,16 +35,6 @@ interface IProps {
   photo?: string | undefined
 }
 
-const Dots = () => {
-  return (
-    <TouchableOpacity style={styles.dotsContainer}>
-      {['a', 'b', 'c'].map((c) => (
-        <View key={c} style={styles.dot} />
-      ))}
-    </TouchableOpacity>
-  )
-}
-
 const DocumentCard: React.FC<IProps> = ({
   mandatoryFields,
   preferredFields,
@@ -53,6 +50,12 @@ const DocumentCard: React.FC<IProps> = ({
 
   const [svgLayout, setSVGLayout] = useState<LayoutRectangle | null>(null)
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
+  const [areOptionalFieldsCut, setAreOptionalFieldsCut] = useState(false)
+  const [isOptionTrimmed, setIsOptionTrimmed] = useState(false)
+
+  const displayedOptionalField = areOptionalFieldsCut
+    ? preferredFields.slice(0, 2)
+    : preferredFields
 
   const handleSVGLayout = (e: LayoutChangeEvent) => {
     setSVGLayout(e.nativeEvent.layout)
@@ -64,85 +67,112 @@ const DocumentCard: React.FC<IProps> = ({
     }
   }
 
-  return (
-    <View>
-      <View>
-        <DocumentCardMedium onLayout={handleSVGLayout} />
-      </View>
-      <View
-        style={[
-          styles.bodyContainer,
-          // aligning body with SVG size
-          {
-            marginTop: TOP_SHADOW,
-            marginBottom: BOTTOM_SHADOW,
-            width: (svgLayout?.width ?? 348) - HORIZONTAL_SHADOW * 2,
-            height: (svgLayout?.height ?? 348) - TOP_SHADOW - BOTTOM_SHADOW,
-          },
-        ]}
-      >
-        <View style={styles.cardHeader}>
-          <JoloText
-            kind={isHeaderScalled ? JoloTextKind.subtitle : JoloTextKind.title}
-            color={Colors.black}
-            weight={JoloTextWeight.regular}
-            customStyles={{
-              flex: 0.85,
-              textAlign: 'left',
-              ...(isHeaderScalled && styles.scaledFont),
-            }}
-            onTextLayout={handleHeaderTextLayout}
-          >
-            {document?.value}
-          </JoloText>
-          <Dots />
-        </View>
-        <JoloText
-          color={Colors.black}
-          weight={JoloTextWeight.medium}
-          customStyles={{ marginLeft: 10 }}
-        >
-          {givenName?.value}
-        </JoloText>
+  const handleOptionFieldsLayou = (e: LayoutChangeEvent) => {
+    if (e.nativeEvent.layout.height > 185 && highlight) {
+      setAreOptionalFieldsCut(true)
+    }
+  }
 
-        <View style={styles.optionalFieldsContainer}>
-          {preferredFields.map((pField) => (
-            <>
-              <JoloText
-                size={JoloTextSizes.mini}
-                color={Colors.slateGray}
-                customStyles={{ textAlign: 'left' }}
-                numberOfLines={1}
-              >
-                {pField.name}:
-              </JoloText>
-              <JoloText
-                color={Colors.black}
-                weight={JoloTextWeight.medium}
-                customStyles={{ textAlign: 'left' }}
-                numberOfLines={2}
-              >
-                {pField.value}
-              </JoloText>
-            </>
-          ))}
+  const handleTrimField = (idx: number, e) => {
+    if (
+      idx === displayedOptionalField.length - 1 &&
+      e.nativeEvent.lines.length === 2
+    ) {
+      setIsOptionTrimmed(true)
+    }
+  }
+
+  return (
+    <View style={styles.container}>
+      <DocumentCardMedium onLayout={handleSVGLayout}>
+        <View
+          style={[
+            styles.bodyContainer,
+            // aligning body with SVG size
+            {
+              marginTop: TOP_SHADOW,
+              marginBottom: BOTTOM_SHADOW,
+              width: (svgLayout?.width ?? 348) - HORIZONTAL_SHADOW * 2,
+              height: (svgLayout?.height ?? 348) - TOP_SHADOW - BOTTOM_SHADOW,
+            },
+          ]}
+        >
+          <View style={styles.cardHeader}>
+            <TitleField
+              onTextLayout={handleHeaderTextLayout}
+              customStyles={{
+                flex: 0.85,
+                ...(isHeaderScalled && styles.scaledDocumentField),
+              }}
+            >
+              {document?.value}
+            </TitleField>
+            <Dots />
+          </View>
+          <SpecialField numberOfLines={2}>{givenName?.value}</SpecialField>
+          <View
+            style={styles.optionalFieldsContainer}
+            onLayout={handleOptionFieldsLayou}
+          >
+            {displayedOptionalField.map((pField, idx) => (
+              <>
+                <FieldName numberOfLines={1} customStyles={{ marginBottom: 8 }}>
+                  {pField.name}:
+                </FieldName>
+                <FieldValue
+                  numberOfLines={2}
+                  onTextLayout={(e) => handleTrimField(idx, e)}
+                  customStyles={{
+                    marginBottom: 10,
+                    marginRight:
+                      isOptionTrimmed &&
+                      idx === displayedOptionalField.length - 1 &&
+                      areOptionalFieldsCut
+                        ? 70
+                        : 0,
+                  }}
+                >
+                  {pField.value}
+                </FieldValue>
+              </>
+            ))}
+          </View>
         </View>
-        {highlight ? (
-          <View style={styles.highlight}>
-            <JoloText>{highlight}</JoloText>
+        {photo ? (
+          <View
+            style={[
+              styles.photoContainer,
+              { marginBottom: BOTTOM_SHADOW, marginRight: HORIZONTAL_SHADOW },
+            ]}
+          >
+            <Image style={styles.photo} source={{ uri: photo }} />
           </View>
         ) : null}
-      </View>
+        {highlight ? (
+          <View
+            style={[
+              styles.highlight,
+              {
+                marginTop: TOP_SHADOW,
+                marginBottom: BOTTOM_SHADOW,
+                width: (svgLayout?.width ?? 348) - HORIZONTAL_SHADOW * 2,
+              },
+            ]}
+          >
+            <Highlight>{highlight}</Highlight>
+          </View>
+        ) : null}
+      </DocumentCardMedium>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'flex-start',
+    transform: [{ scale: BP({ default: 1, small: 0.95, xsmall: 0.8 }) }],
   },
   bodyContainer: {
-    position: 'absolute',
+    // position: 'absolute',
     alignSelf: 'center',
     alignItems: 'flex-start',
     paddingHorizontal: 14,
@@ -151,45 +181,43 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    ...debugView(),
-  },
-  scaledFont: {
-    fontSize: 22,
-    lineHeight: 22,
-    marginBottom: 15,
-  },
-  dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: Colors.black,
-    marginHorizontal: 2,
-  },
-  dotsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingTop: 15,
-    paddingRight: 15,
-    flex: 0.15,
   },
   optionalFieldsContainer: {
     alignItems: 'flex-start',
     marginTop: 10,
-    // marginRight: 40,
-    ...debugView(),
+    // ...debugView(),
+  },
+  photoContainer: {
+    position: 'absolute',
+    bottom: 27,
+    right: 14,
+    zIndex: 10,
+  },
+  photo: {
+    width: 82,
+    height: 82,
+    borderRadius: 41,
   },
   highlight: {
     position: 'absolute',
-    alignItems: 'flex-start',
     bottom: 0,
-    alignSelf: 'flex-end',
-    width: '110%',
+    alignSelf: 'center',
+    paddingTop: 17,
+    paddingBottom: 12,
     paddingHorizontal: 14,
-    paddingVertical: 13,
     backgroundColor: Colors.black,
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 14,
   },
+  scaledDocumentField: {
+    fontSize: 22,
+    lineHeight: 22,
+    marginBottom: 20,
+  },
 })
 
 export default DocumentCard
+
+// add highlight condition:
+// - hightlight: 6
+// - n/highlight: 9
