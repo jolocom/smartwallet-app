@@ -15,9 +15,14 @@ import BP from '~/utils/breakpoints'
 interface Props {
   title: string
   expandedText: string
+  onExpand?: () => void
 }
 
-const BlockExpanded: React.FC<Props> = ({ title, expandedText }) => {
+const BlockExpanded: React.FC<Props> = ({
+  title,
+  expandedText,
+  onExpand = () => {},
+}) => {
   const [showText, setShowText] = useState(false)
 
   const handleExpand = () => {
@@ -26,6 +31,11 @@ const BlockExpanded: React.FC<Props> = ({ title, expandedText }) => {
       duration: 200,
     })
     setShowText((prev) => !prev)
+
+    if (!showText)
+      setTimeout(() => {
+        onExpand()
+      }, 1)
   }
 
   return (
