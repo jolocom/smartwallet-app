@@ -1,9 +1,7 @@
 import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
-import * as Keychain from 'react-native-keychain'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary, CredentialMetadataSummary } from '@jolocom/sdk'
 
-import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
 import { navigationActions, genericActions } from 'src/actions/'
 
 import { routeList } from 'src/routeList'
@@ -26,50 +24,9 @@ export const setDid = (did: string) => ({
   value: did,
 })
 
-export const setLocalAuth = () => ({
-  type: 'SET_LOCAL_AUTH',
-})
-
-export const openLocalAuth = () => ({
-  type: 'OPEN_LOCAL_AUTH',
-})
-
-export const closeLocalAuth = () => ({
-  type: 'CLOSE_LOCAL_AUTH',
-})
-
 export const setSelected = (claim: DecoratedClaims) => ({
   type: 'SET_SELECTED',
   selected: claim,
-})
-
-export const setPopup = (value: boolean) => ({
-  type: 'SET_POPUP',
-  payload: value,
-})
-
-export const lockApp = () => ({
-  type: 'LOCK_APP',
-})
-
-export const unlockApp = () => ({
-  type: 'UNLOCK_APP',
-})
-
-export const closeLock = () => ({
-  type: 'CLOSE_LOCK',
-})
-
-export const openLock = () => ({
-  type: 'OPEN_LOCK',
-})
-
-export const closePINinstructions = () => ({
-  type: 'CLOSE_PIN_INSTRICTIONS',
-})
-
-export const openPINinstructions = () => ({
-  type: 'OPEN_PIN_INSTRICTIONS',
 })
 
 export const resetSelected = () => ({
@@ -92,7 +49,6 @@ export const checkIdentityExists: ThunkAction = async (
     const userDid = identityWallet.identity.did
     dispatch(setDid(userDid))
     await dispatch(setClaimsForDid)
-    //await dispatch(checkLocalDeviceAuthSet)
     await dispatch(checkRecoverySetup)
     await dispatch(checkTermsOfService(routeList.Home))
     return dispatch(genericActions.lockApp())
@@ -113,28 +69,6 @@ export const checkIdentityExists: ThunkAction = async (
     }
 
     throw err
-  }
-}
-
-export const checkLocalDeviceAuthSet: ThunkAction = async dispatch => {
-  const pin = await Keychain.getGenericPassword({
-    service: PIN_SERVICE,
-  })
-  if (pin) {
-    dispatch(setLocalAuth())
-  } else {
-    dispatch(openLocalAuth())
-  }
-}
-
-export const handleRecoveryBack: ThunkAction = async (dispatch, getState) => {
-  console.log(getState())
-  const state = getState()
-  if (state.account.did.did) {
-    dispatch(openPINinstructions())
-    dispatch(navigationActions.navigate({ routeName: routeList.Home }))
-  } else {
-    dispatch(navigationActions.navigate({ routeName: routeList.Landing }))
   }
 }
 
