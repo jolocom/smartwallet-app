@@ -32,9 +32,12 @@ export const setTopLevelNavigator = (nav: NavigationContainerComponent) => {
  * (comparing snapshots of store actions) and it makes typescript happy
  */
 export const navigate = (
-  options: NavigationNavigateActionPayload
+  options: NavigationNavigateActionPayload,
+  replace = false
 ): ThunkAction => dispatch => {
-  const action = NavigationActions.navigate(options)
+  const action = replace
+    ? StackActions.replace(options)
+    : NavigationActions.navigate(options)
 
   dispatchNavigationAction(action)
   return dispatch(action)
