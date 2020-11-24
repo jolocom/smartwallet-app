@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { debugView } from '~/utils/dev'
 import Dots from './Dots'
@@ -152,10 +153,12 @@ const styles = StyleSheet.create({
     ...debugView(),
   },
   bodyContainer: {
+    transform: [{ scale: BP({ default: 1, xsmall: 0.9 }) }],
     height: '100%',
     alignSelf: 'center',
     alignItems: 'flex-start',
     paddingHorizontal: 14,
+    // paddingHorizontal: 34, // TODO: remove later
     paddingTop: 22,
   },
   cardHeader: {
