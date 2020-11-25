@@ -7,13 +7,13 @@ import JoloText from './JoloText'
 import ActionSheet from './ActionSheet/ActionSheet'
 import { useSafeArea } from 'react-native-safe-area-context'
 
-interface PopupOption {
+interface IPopupOption {
   title: string
   onPress: () => void
 }
 
 interface Props {
-  options: PopupOption[]
+  options: IPopupOption[]
 }
 
 const PopupButton: React.FC<{ onPress: () => void }> = ({
