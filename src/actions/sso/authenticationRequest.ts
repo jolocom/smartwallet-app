@@ -26,8 +26,9 @@ export const sendAuthenticationResponse = (
   const interaction = await sdk.interactionManager.getInteraction(
     interactionId,
   )
-  return interaction
-    .send(await interaction.createAuthenticationResponse())
-    .then(() => dispatch(cancelSSO))
-    .then(() => dispatch(scheduleSuccessNotification))
+  const resp = await interaction.createAuthenticationResponse()
+  await interaction.send(resp)
+  await interaction.processInteractionToken(resp)
+  await dispatch(cancelSSO)
+  return dispatch(scheduleSuccessNotification)
 }
