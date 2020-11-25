@@ -1,35 +1,43 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Animated, StyleSheet, Easing } from 'react-native'
+import {
+  View,
+  Animated,
+  StyleSheet,
+  Modal,
+  Easing,
+  Dimensions,
+} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import { WaveIndicator } from 'react-native-indicators'
 
 import Circle from '~/components/Circle'
-import Modal from '~/modals/Modal'
 
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
-import { useDelay } from '~/hooks/generic'
 import { dismissLoader } from '~/modules/loader/actions'
-import { isLocalAuthSet } from '~/modules/account/selectors'
+import { useDelay } from '~/hooks/generic'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { isLocalAuthSet } from '~/modules/account/selectors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-const colors: Record<string, Colors> = {
+const colors = {
   default: Colors.white70,
-  error: Colors.white70,
-  success: Colors.white70,
+  error: Colors.error,
+  success: Colors.success,
 }
 
 interface LoaderI {
   bgColor?: Colors
 }
 
-const CIRCLE_DIAMETER = 70
+const SCALE_MAX = 5
+const CIRCLE_DIAMETER = 18
 
-const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
-  const { msg, type } = useSelector(getLoaderState)
+const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
+  const { msg, type }: { msg: string; type: LoaderTypes } = useSelector(
+    getLoaderState,
+  )
   const isAnimating = useRef(true)
   const dispatch = useDispatch()
 
@@ -39,28 +47,87 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
 
   const [status, setStatus] = useState(msg)
 
+  const animatedWidth1 = useRef(new Animated.Value(0)).current
+  const animatedOpacity1 = animatedWidth1.interpolate({
+    inputRange: [1, 4, SCALE_MAX],
+    outputRange: [1, 0.3, 0],
+  })
+
+  const animatedWidth2 = useRef(new Animated.Value(0)).current
+  const animatedOpacity2 = animatedWidth2.interpolate({
+    inputRange: [0, 1.5, SCALE_MAX],
+    outputRange: [0, 1, 0],
+  })
+
+  const animatedWidth3 = useRef(new Animated.Value(0)).current
+  const animatedOpacity3 = animatedWidth3.interpolate({
+    inputRange: [0, 1.5, SCALE_MAX],
+    outputRange: [0, 1, 0],
+  })
+
   const errorScale = useRef(new Animated.Value(0)).current
   const errorOpacity = errorScale.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 1],
   })
 
-  const animatedOpacity = useRef(new Animated.Value(0)).current
-  const animatedWidth = animatedOpacity.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.6, 1],
+  const tickBlockerOpacity = useRef(new Animated.Value(0)).current
+  const tickBlockerPosition = useRef(new Animated.Value(-3)).current
+  const tickBlockerWidth = tickBlockerPosition.interpolate({
+    inputRange: [0, 45],
+    outputRange: [1, 0.1],
   })
+
+  const animatedOpacity4 = useRef(new Animated.Value(0)).current
+
+  const animateValueTo = (
+    value: Animated.Value,
+    toValue: number,
+    duration: number,
+  ) => {
+    return Animated.timing(value, {
+      toValue: toValue,
+      duration: duration,
+      useNativeDriver: true,
+    })
+  }
+
+  const reset = Animated.parallel([
+    animateValueTo(animatedWidth1, 0, 0),
+    animateValueTo(animatedWidth2, 0, 0),
+    animateValueTo(animatedWidth3, 0, 0),
+  ])
+
+  const fRipple = Animated.sequence([
+    animateValueTo(animatedWidth1, 0.5, 0),
+    animateValueTo(animatedWidth1, SCALE_MAX, 1500),
+  ])
+
+  const sRipple = Animated.sequence([
+    Animated.delay(400),
+    animateValueTo(animatedWidth2, SCALE_MAX, 2500),
+  ])
+
+  const tRipple = Animated.sequence([
+    Animated.delay(1600),
+    animateValueTo(animatedWidth3, SCALE_MAX, 2500),
+  ])
+
+  const ripple = Animated.sequence([
+    Animated.parallel([fRipple, sRipple, tRipple]),
+    reset,
+  ])
 
   const bounceError = async () => {
     Animated.parallel([
-      Animated.timing(animatedOpacity, {
+      Animated.timing(animatedOpacity4, {
         toValue: 1,
-        duration: 300,
+        duration: 500,
         easing: Easing.ease,
         useNativeDriver: true,
       }),
       Animated.timing(errorScale, {
-        toValue: 1,
+        toValue: 1.5,
         easing: Easing.bounce,
         useNativeDriver: true,
       }),
@@ -69,34 +136,38 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
   }
 
   const showTick = async () => {
-    Animated.timing(animatedOpacity, {
-      toValue: 1,
-      duration: 100,
-      easing: Easing.ease,
-      useNativeDriver: true,
-    }).start()
+    Animated.parallel([
+      Animated.timing(animatedOpacity4, {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+      Animated.sequence([
+        animateValueTo(tickBlockerOpacity, 1, 0),
+        animateValueTo(tickBlockerPosition, 25, 700),
+      ]),
+    ]).start()
     await useDelay(() => dispatch(dismissLoader()), 3000)
   }
 
-  const modalVisible = msg !== ''
-
-  const looping = async () => {
+  const looping = () => {
     if (loaderType.current === LoaderTypes.default) {
-      setTimeout(async () => {
+      Animated.loop(ripple, { iterations: 1 }).start(() => {
         if (loaderType.current === LoaderTypes.default) {
-          await looping()
+          looping()
         } else if (loaderType.current === LoaderTypes.error) {
           setStatus(loaderMsg.current)
-          await bounceError()
+          bounceError()
         } else if (loaderType.current === LoaderTypes.success) {
           setStatus(loaderMsg.current)
-          await showTick()
+          showTick()
         }
-      }, 2000)
+      })
     } else if (loaderType.current === LoaderTypes.error) {
-      await bounceError()
+      bounceError()
     } else if (loaderType.current === LoaderTypes.success) {
-      await showTick()
+      showTick()
     }
   }
 
@@ -110,74 +181,95 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black95 }) => {
     }
   })
 
-  const renderLoaderType = () => {
-    if (loaderType.current === LoaderTypes.default) {
-      return (
-        <View
-          style={{
-            width: CIRCLE_DIAMETER,
-            height: CIRCLE_DIAMETER,
-          }}
-        >
-          <WaveIndicator
-            color={loaderColor.current}
-            count={2}
-            size={CIRCLE_DIAMETER}
-            waveMode={'outline'}
-          />
-        </View>
-      )
-    } else {
-      return (
-        <Circle
-          diameter={60}
-          bgColor={loaderColor.current}
-          animatedStyles={{
-            opacity: animatedOpacity,
-            transform: [{ scale: animatedWidth }],
-            borderWidth: 1,
-            marginBottom: 10,
-          }}
-        >
-          {loaderType.current === LoaderTypes.success ? (
-            <View style={styles.tickContainer}>
-              <View>
-                <SuccessTick color={loaderColor.current} />
-              </View>
-            </View>
-          ) : (
-            <Animated.View
-              style={{
-                transform: [{ scale: errorScale }],
-                opacity: errorOpacity,
-              }}
-            >
-              <ErrorIcon color={loaderColor.current} />
-            </Animated.View>
-          )}
-        </Circle>
-      )
-    }
-  }
-
   return (
-    <Modal isVisible={modalVisible}>
+    <Modal animationType="fade" visible presentationStyle="overFullScreen">
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
         <View
           style={{
-            height: 200,
             width: 230,
             alignItems: 'center',
-            justifyContent: 'flex-start',
           }}
         >
-          {renderLoaderType()}
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 100,
+              height: 100,
+            }}
+          >
+            <Circle
+              diameter={CIRCLE_DIAMETER}
+              color={colors.default}
+              animatedStyles={{
+                transform: [{ scale: animatedWidth1 }],
+                opacity: animatedOpacity1,
+              }}
+            />
+            <Circle
+              diameter={CIRCLE_DIAMETER}
+              color={colors.default}
+              animatedStyles={{
+                transform: [{ scale: animatedWidth2 }],
+                opacity: animatedOpacity2,
+              }}
+            />
+            <Circle
+              diameter={CIRCLE_DIAMETER}
+              color={colors.default}
+              animatedStyles={{
+                transform: [{ scale: animatedWidth3 }],
+                opacity: animatedOpacity3,
+              }}
+            />
+            {loaderType.current !== LoaderTypes.default && (
+              <Circle
+                diameter={CIRCLE_DIAMETER - 4}
+                thickness={StyleSheet.hairlineWidth / 2}
+                color={colors.default}
+                animatedStyles={{
+                  transform: [{ scale: 5 }],
+                  opacity: animatedOpacity4,
+                }}
+              />
+            )}
+            {loaderType.current === LoaderTypes.error && (
+              <Animated.View
+                style={{
+                  position: 'absolute',
+                  transform: [{ scale: errorScale }],
+                  opacity: errorOpacity,
+                }}
+              >
+                <ErrorIcon color={colors.default} />
+              </Animated.View>
+            )}
+            {loaderType.current === LoaderTypes.success && (
+              <View style={styles.tickContainer}>
+                <View style={{ position: 'absolute' }}>
+                  <SuccessTick color={colors.default} />
+                </View>
+                <Animated.View
+                  style={[
+                    styles.tickBlocker,
+                    {
+                      backgroundColor: bgColor,
+                      transform: [
+                        { translateX: tickBlockerPosition },
+                        { scale: tickBlockerWidth },
+                      ],
+                    },
+                  ]}
+                />
+              </View>
+            )}
+          </View>
 
           <JoloText
             kind={JoloTextKind.subtitle}
             size={JoloTextSizes.big}
             color={Colors.white80}
-            customStyles={{ marginTop: 5 }}
+            customStyles={{ marginTop: 10 }}
           >
             {status}
           </JoloText>
@@ -191,8 +283,7 @@ const styles = StyleSheet.create({
   modalBodyContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 10,
+    paddingTop: Dimensions.get('window').height * 0.3,
   },
   tickContainer: {
     width: 100,
@@ -203,11 +294,7 @@ const styles = StyleSheet.create({
   },
   tickBlocker: {
     height: '100%',
-    width: 10,
-  },
-  description: {
-    marginTop: 20,
-    opacity: 0.9,
+    width: 30,
   },
 })
 
