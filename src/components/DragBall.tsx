@@ -1,3 +1,4 @@
+import { transform } from '@babel/core'
 import React, { useMemo, useRef, useState } from 'react'
 import {
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   LayoutRectangle,
   PanResponderGestureState,
   Dimensions,
+  Easing,
 } from 'react-native'
 import { useGoBack } from '~/hooks/navigation'
 import { strings } from '~/translations'
@@ -24,50 +26,45 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 const DragBall = ({ route }) => {
   const { documentName = strings.DOCUMENT } = route?.params
   const goBack = useGoBack()
+
   const holeRef = useRef<View>(null)
+
   const [isBallShown, setIsBallShown] = useState(true)
-  const [isBallOverTheHole, setIsBallOverTheHole] = useState(false)
   const [holePosition, setHolePosition] = useState<LayoutRectangle | null>(null)
-  const pan = useRef(new Animated.ValueXY()).current
+  const [areInstructionsVisible, setInstructionsVisibility] = useState(true)
+
+  const ball = useRef(new Animated.ValueXY()).current
+  const ball2 = useRef(new Animated.Value(1)).current
+
   const panResponder = useMemo(
     () =>
       PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderMove: (e, gesture) => {
+          setInstructionsVisibility(false)
           Animated.event(
             [
               null,
               {
-                dx: pan.x,
-                dy: pan.y,
+                dx: ball.x,
+                dy: ball.y,
               },
             ],
             { useNativeDriver: false },
           )(e, gesture)
-          const dz = holePosition
-          if (dz) {
-            if (
-              gesture.moveX > dz.x &&
-              gesture.moveX < dz.x + dz.width &&
-              gesture.moveY > dz.y &&
-              gesture.moveY < dz.y + dz.height
-            ) {
-              setIsBallOverTheHole(true)
-            } else {
-              setIsBallOverTheHole(false)
-            }
-          }
         },
         onPanResponderRelease: (e, gesture) => {
+          setInstructionsVisibility(true)
           if (isInHole(gesture)) {
-            setIsBallShown(false)
+            pullInBallHole()
           } else {
-            Animated.spring(pan, {
+            Animated.timing(ball, {
               toValue: { x: 0, y: 0 },
+              easing: Easing.bounce,
               useNativeDriver: false,
-              tension: 10,
-              friction: 1.5,
-            }).start()
+            }).start(() => {
+              setInstructionsVisibility(true)
+            })
           }
         },
       }),
@@ -80,17 +77,37 @@ const DragBall = ({ route }) => {
     })
   }
 
+  const pullInBallHole = () => {
+    // 1. remove draggable ball
+    setIsBallShown(false)
+    // 2. Animate scale down
+    Animated.timing(ball2, {
+      toValue: 0,
+      easing: Easing.elastic(1),
+      useNativeDriver: true,
+    }).start(goBack)
+  }
+
   const isInHole = (gesture: PanResponderGestureState) => {
-    const dz = holePosition
-    if (dz) {
+    const hp = holePosition
+    if (hp) {
       return (
-        gesture.moveX > dz.x &&
-        gesture.moveX < dz.x + dz.width &&
-        gesture.moveY > dz.y &&
-        gesture.moveY < dz.y + dz.height
+        gesture.moveX > hp.x &&
+        gesture.moveX < hp.x + hp.width &&
+        gesture.moveY > hp.y &&
+        gesture.moveY < hp.y + hp.height
       )
     }
     return false
+  }
+
+  const holeCenter = {
+    x: holePosition
+      ? holePosition.x + holePosition?.width / 2 - BALL_DIAMETER / 2
+      : 0,
+    y: holePosition
+      ? holePosition?.y + holePosition?.height / 2 - BALL_DIAMETER / 2
+      : 0,
   }
 
   return (
@@ -108,27 +125,51 @@ const DragBall = ({ route }) => {
         onLayout={handleHoleLayout}
         ref={holeRef}
       >
-        <View
+        <Animated.View
           style={[
             styles.hole,
             {
-              ...(isBallOverTheHole && { backgroundColor: Colors.mainBlack }),
+              transform: [{ scale: ball2 }],
             },
           ]}
         />
       </View>
 
+      {!isBallShown ? (
+        <View
+          style={[
+            styles.ballContainer,
+            {
+              position: 'absolute',
+              top: holeCenter.y,
+              left: holeCenter.x,
+            },
+          ]}
+        >
+          <Animated.View
+            style={[
+              styles.ball,
+              {
+                transform: [{ scale: ball2 }],
+              },
+            ]}
+          />
+        </View>
+      ) : null}
+
       <AbsoluteBottom>
         {isBallShown ? (
           <>
-            <JoloText
-              color={Colors.white21}
-              customStyles={{ marginBottom: 20 }}
-            >
-              {strings.DROP_THE_BALL}
-            </JoloText>
+            {areInstructionsVisible ? (
+              <JoloText
+                color={Colors.white21}
+                customStyles={{ marginBottom: 20 }}
+              >
+                {strings.DROP_THE_BALL}
+              </JoloText>
+            ) : null}
             <View style={styles.ballContainer} {...panResponder.panHandlers}>
-              <Animated.View style={[pan.getLayout(), styles.ball]} />
+              <Animated.View style={[ball.getLayout(), styles.ball]} />
             </View>
           </>
         ) : null}
