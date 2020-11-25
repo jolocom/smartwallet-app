@@ -31,17 +31,20 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
   getState,
   sdk,
 ) => {
-  // TODO findInteraction should not throw but return undefined
+  // TODO FIXME
+  // - findInteraction should never throw but return undefined
+  // - transportAPI is sometimes not set for interactions returned by
+  //   findInteraction
   let interxn = await sdk.findInteraction(jwt)
     .catch(() => null)
 
-  if (interxn?.lastMessage?.encode() !==jwt) {
-    interxn = null
+  if (interxn && interxn.getMessages().length > 1) {
+    throw new AppError(ErrorCode.TokenExpired)
   }
 
-  // we only process this if the interaction was not previously created
-  // otherwise it will fail because the token was already processed
   if (!interxn) {
+    // we only process this token if the interaction was not previously created
+    // otherwise it will fail because the token was already processed
     try {
       interxn = await sdk.processJWT(jwt)
     } catch (e) {
@@ -56,13 +59,12 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
 
   const handler = interactionHandlers[interxn.flow.type];
   if (!handler) {
-    dispatch(scheduleNotification(
+    return dispatch(scheduleNotification(
       createWarningNotification({
         title: I18n.t(strings.DAMN),
         message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
       })
-    ));
-    return;
+    ))
   }
 
   try {
