@@ -13,10 +13,11 @@ export enum NavHeaderType {
 
 interface Props {
   type: NavHeaderType
+  onPress?: () => void
 }
 
-const NavigationHeader: React.FC<Props> = ({ type }) => {
-  const navigateBack = useNavigateBack()
+const NavigationHeader: React.FC<Props> = ({ type, onPress }) => {
+  const navigateBack = onPress ?? useNavigateBack()
 
   return (
     <View

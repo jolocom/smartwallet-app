@@ -8,6 +8,8 @@ export enum Colors {
   mainBlack = '#201a21',
   black = '#000',
   elevatedElement = '#29232b',
+  osloGray = 'rgb(138, 138, 145)',
+  genevaGray = 'rgb(151, 151, 151)',
   black95 = 'rgba(0,0,0,0.95)',
   black90 = 'rgba(0,0,0,0.90)',
   black65 = 'rgba(0,0,0,0.65)',

@@ -15,6 +15,7 @@ interface ScreenContainerI {
   hasHeaderBack?: boolean
   hasHeaderClose?: boolean
   hideStatusBar?: boolean
+  onClose?: () => void
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> = ({
@@ -26,6 +27,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   hasHeaderBack = false,
   hasHeaderClose = false,
   hideStatusBar = false,
+  onClose,
 }) => {
   hideStatusBar && useHideStatusBar()
 
@@ -48,6 +50,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
       <View style={[styles.navContainer, isTransparent && styles.transparent]}>
         {(hasHeaderClose || hasHeaderBack) && (
           <NavigationHeader
+            onPress={onClose}
             type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
           />
         )}
