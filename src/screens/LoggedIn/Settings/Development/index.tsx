@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { View } from 'react-native'
 
 import Section from '../components/Section'
@@ -12,7 +12,7 @@ import PopupMenu from '~/components/PopupMenu'
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
-  const [showPopup, setShowPopup] = useState(false)
+  const popupRef = useRef<{ show: () => void }>(null)
 
   const handleToggle = (toggled: boolean) => {
     scheduleInfo({
@@ -32,16 +32,15 @@ const DevelopmentSection = () => {
       <Option onPress={redirectButtons}>
         <Option.Title title="Buttons" />
       </Option>
-      <Option onPress={() => setShowPopup(true)}>
+      <Option onPress={() => popupRef.current?.show()}>
         <Option.Title title="Popup menu" />
         <PopupMenu
+          ref={popupRef}
           options={[
             { title: 'Help', onPress: () => {} },
             { title: 'Me', onPress: () => {} },
             { title: 'Please', onPress: () => {} },
           ]}
-          onClose={() => setShowPopup(false)}
-          isVisible={showPopup}
         />
       </Option>
     </Section>
