@@ -7,12 +7,16 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import Block from '~/components/Block'
+import BP from '~/utils/breakpoints'
+import ScreenContainer from '~/components/ScreenContainer'
 
 interface Props {
   fields: Record<string, string>
   title: string
   image?: string
 }
+
+const IMAGE_SIZE = BP({ default: 100, xsmall: 90 })
 
 const CardDetails = React.forwardRef<{ show: () => void }, Props>(
   ({ fields, title, image }, ref) => {
@@ -26,13 +30,18 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
 
     return (
       <ActionSheet isVisible={modalVisible} onClose={handleClose}>
-        <View style={styles.container}>
-          <NavigationHeader type={NavHeaderType.Close} onPress={handleClose} />
+        <ScreenContainer
+          hasHeaderClose
+          onClose={handleClose}
+          customStyles={{ paddingTop: 0 }}
+        >
           <ScrollView
             showsVerticalScrollIndicator={false}
             overScrollMode="never"
-            style={{ paddingHorizontal: 20 }}
-            contentContainerStyle={{ paddingBottom: 50 }}
+            style={{ width: '100%' }}
+            contentContainerStyle={{
+              paddingBottom: 50,
+            }}
           >
             <View
               style={[
@@ -64,7 +73,10 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                     </JoloText>
                     <JoloText
                       color={Colors.black95}
-                      customStyles={[styles.fieldText, { marginTop: 8 }]}
+                      customStyles={[
+                        styles.fieldText,
+                        { marginTop: BP({ default: 8, xsmall: 4 }) },
+                      ]}
                     >
                       {fields[field]}
                     </JoloText>
@@ -76,7 +88,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               ))}
             </Block>
           </ScrollView>
-        </View>
+        </ScreenContainer>
       </ActionSheet>
     )
   },
@@ -89,18 +101,22 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     paddingLeft: 6,
-    paddingBottom: 12,
+    paddingBottom: BP({ default: 12, xsmall: 8 }),
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: IMAGE_SIZE,
+    height: IMAGE_SIZE,
+    borderRadius: IMAGE_SIZE / 2,
     position: 'absolute',
     right: 12,
-    top: -70,
+    top: -IMAGE_SIZE + IMAGE_SIZE * 0.3,
   },
   fieldContainer: {
-    padding: 16,
+    paddingVertical: BP({
+      default: 16,
+      xsmall: 8,
+    }),
+    paddingHorizontal: 16,
     alignItems: 'flex-start',
   },
   fieldText: {
