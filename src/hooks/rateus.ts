@@ -14,18 +14,16 @@ const options = {
 }
 
 const useMarketRating = () => {
-  const [isRated, setIsRated] = useState(false)
   const dispatch = useDispatch()
 
   const rateApp = () => {
     dispatch(setPopup(true))
     Rate.rate(options, (success) => {
-      setIsRated(success)
       dispatch(setPopup(false))
     })
   }
 
-  return { isRated, rateApp }
+  return { rateApp }
 }
 
 export default useMarketRating
