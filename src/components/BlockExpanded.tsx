@@ -30,12 +30,14 @@ const BlockExpanded: React.FC<Props> = ({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 200,
     })
-    setShowText((prev) => !prev)
+    setShowText((prev) => {
+      if (!prev)
+        setTimeout(() => {
+          onExpand()
+        }, 1)
 
-    if (!showText)
-      setTimeout(() => {
-        onExpand()
-      }, 1)
+      return !prev
+    })
   }
 
   return (

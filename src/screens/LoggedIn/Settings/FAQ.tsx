@@ -18,7 +18,6 @@ const FAQ = () => {
   const handleExpand = (index: number) => {
     flatlistRef.current?.scrollToIndex({
       index,
-      animated: true,
       //NOTE: attempts to center the view
       viewPosition: 0.5,
     })
