@@ -128,6 +128,7 @@
   "Submit report": "Bericht senden",
   "This includes some private metadata info (file sizes, but not names or contents) but it will help developers fix bugs more quickly.": "Hier sind ein paar private Metadaten enthalten (Größenangaben zu Dateien, aber keine Namen oder Inhalte), die den Entwicklern dabei helfen Probleme schneller zu lösen.",
   "We do not store data and do not spam, any user information will be deleted immediately after solving the problem": "Wir speichern keine Daten und versenden keine Meldungen, alle Nutzerdaten werden direkt nach Lösung eines Problems gelöscht",
+  "Here we present the history of your interactions": "Hier zeigen wir deine vergangenen Interaktionen an",
   "History": "Historie",
   "Identity": "Identität",
   "Confirmation is not complete": "Bestätigung ist unvollständig",
