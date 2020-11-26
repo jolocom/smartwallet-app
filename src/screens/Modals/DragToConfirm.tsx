@@ -1,5 +1,5 @@
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import { RouteProp } from '@react-navigation/native'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   StyleSheet,
   View,
@@ -9,6 +9,7 @@ import {
   PanResponderGestureState,
   Dimensions,
   Easing,
+  Platform,
 } from 'react-native'
 import MagicButton from '~/components/MagicButton'
 import { useMagicBtnAnimations } from '~/hooks/magicButton'
@@ -95,10 +96,19 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
   )
 
   const handleHoleLayout = () => {
-    holeRef.current?.measure((x, y, width, height, pageX, pageY) => {
-      setHolePosition({ x, y, width, height })
-    })
+    if (Platform.OS === 'android') {
+      holeRef.current?.measureInWindow((x, y, width, height) => {
+        setHolePosition({ x, y, width, height })
+      })
+    } else {
+      holeRef.current?.measure((x, y, width, height) => {
+        setHolePosition({ x, y, width, height })
+      })
+    }
   }
+  useEffect(() => {
+    handleHoleLayout()
+  }, [])
 
   const pullInBallHole = () => {
     // 1. remove draggable ball
@@ -161,11 +171,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       >
         {title}
       </JoloText>
-      <View
-        style={styles.holeContainer}
-        onLayout={handleHoleLayout}
-        ref={holeRef}
-      >
+      <View style={styles.holeContainer} ref={holeRef}>
         <Animated.View
           style={[
             styles.hole,
