@@ -6,7 +6,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { JoloTextSizes } from '~/utils/fonts'
-import DocumentTabs from '~/components/Tabs/DocumetTabs'
+import DocumentTabs from '~/screens/Documents/DocumentTabs'
 import { useTabs } from '~/components/Tabs/Tabs'
 
 const DocumentList = () => {

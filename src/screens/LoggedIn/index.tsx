@@ -22,8 +22,8 @@ import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
 import Lock from '~/screens/Modals/Lock'
 
 import Claims from './Claims'
-import Documents from './Documents'
-import History from './History'
+import History from '../History'
+import Documents from '../Documents'
 
 import { dismissLoader } from '~/modules/loader/actions'
 import { resetInteraction } from '~/modules/interaction/actions'

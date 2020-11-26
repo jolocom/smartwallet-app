@@ -4,27 +4,32 @@ import Subtab from './Subtab'
 import Tab from './Tab'
 
 interface ITabsContext {
-  activeTab: string | undefined
-  activeSubtab: string | undefined
-  setActiveTab: (value: string) => void
-  setActiveSubtab: (value: string) => void
+  activeTab: ITabProps | undefined
+  activeSubtab: ITabProps | undefined
+  setActiveTab: (value: ITabProps) => void
+  setActiveSubtab: (value: ITabProps) => void
 }
 
-export interface ITabProps {
-  children: string
+interface ITabProps {
+  id: string
+  value: string
+}
+
+export interface ITab {
+  tab: ITabProps
 }
 
 interface ITabsComposition {
-  Tab: React.FC<ITabProps>
-  Subtab: React.FC<ITabProps>
+  Tab: React.FC<ITab>
+  Subtab: React.FC<ITab>
   Panel: React.FC
 }
 
 const TabsContext = React.createContext<ITabsContext | undefined>(undefined)
 
 interface ITabs {
-  initialActiveTab?: string
-  initialActiveSubtab?: string
+  initialActiveTab?: ITabProps
+  initialActiveSubtab?: ITabProps
 }
 
 export const useTabs = () => {

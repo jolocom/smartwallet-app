@@ -1,7 +1,7 @@
 import React from 'react'
 import JoloText from '~/components/JoloText'
 
-import { ITabProps, useTabs } from './Tabs'
+import { ITab, useTabs } from './Tabs'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { TouchableOpacity, View } from 'react-native'
@@ -9,12 +9,11 @@ import BP from '~/utils/breakpoints'
 
 const RIGHT_MARGIN = 15
 
-const Subtab: React.FC<ITabProps> = ({ children }) => {
+const Subtab: React.FC<ITab> = ({ tab }) => {
   const { activeSubtab, setActiveSubtab } = useTabs()
-  const tabName = children
-  const isTabActive = tabName === activeSubtab
+  const isTabActive = tab.id === activeSubtab?.id
   return (
-    <TouchableOpacity onPress={() => setActiveSubtab(children)}>
+    <TouchableOpacity onPress={() => setActiveSubtab(tab)}>
       <JoloText
         size={JoloTextSizes.mini}
         color={isTabActive ? Colors.ceriseRed : Colors.white}
@@ -26,7 +25,7 @@ const Subtab: React.FC<ITabProps> = ({ children }) => {
           marginRight: RIGHT_MARGIN,
         }}
       >
-        {tabName}
+        {tab.value}
       </JoloText>
       <View
         style={{
