@@ -7,11 +7,13 @@ import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import PopupMenu from '~/components/PopupMenu'
 import CardDetails from '../../Documents/CardDetails'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
+  const popupRef = useRef<{ show: () => void }>(null)
   const cardDetailsRef = useRef<{ show: () => void }>(null)
 
   const handleToggle = (toggled: boolean) => {
@@ -40,6 +42,17 @@ const DevelopmentSection = () => {
       </Option>
       <Option onPress={redirectButtons}>
         <Option.Title title="Buttons" />
+      </Option>
+      <Option onPress={() => popupRef.current?.show()}>
+        <Option.Title title="Popup menu" />
+        <PopupMenu
+          ref={popupRef}
+          options={[
+            { title: 'Help', onPress: () => {} },
+            { title: 'Me', onPress: () => {} },
+            { title: 'Please', onPress: () => {} },
+          ]}
+        />
       </Option>
       <Option onPress={() => cardDetailsRef.current?.show()}>
         <Option.Title title="Document details" />
