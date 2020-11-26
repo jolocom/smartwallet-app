@@ -46,14 +46,6 @@ Array [
     "routeName": "TermsOfServiceConsent",
     "type": "Navigation/NAVIGATE",
   },
-  Object {
-    "type": "APPWRAP_SET_LOCKED",
-    "value": true,
-  },
-  Object {
-    "routeName": "Lock",
-    "type": "Navigation/NAVIGATE",
-  },
 ]
 `;
 

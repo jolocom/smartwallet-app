@@ -3,7 +3,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { AppError, ErrorCode } from '../../lib/errors'
 import I18n from '../../locales/i18n'
 import { routeList } from '../../routeList'
-import { navigationActions, accountActions } from '../../actions'
+import { navigationActions, accountActions, genericActions } from '../../actions'
 import { ThunkAction } from '../../store'
 import { withLoading, withErrorScreen } from '../modifiers'
 import { showErrorScreen } from '.'
@@ -37,10 +37,12 @@ export const initApp: ThunkAction = async (
         withLoading(withErrorScreen(navigationActions.handleDeepLink(url))),
       )
     Linking.addEventListener('url', event => handleDeepLink(event.url))
-    await Linking.getInitialURL().then(url => {
-      if (url) handleDeepLink(url)
-    })
+    const deepLinkUrl = await Linking.getInitialURL()
+    if (deepLinkUrl) {
+      await handleDeepLink(deepLinkUrl)
+    }
 
+    await dispatch(genericActions.lockApp())
     return ret
   } catch (e) {
     return dispatch(

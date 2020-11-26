@@ -4,7 +4,6 @@ import { scheduleNotification } from '../notifications'
 import { createInfoNotification } from 'src/lib/notifications'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
-import { routeList } from '../../routeList'
 
 export {
   consumeAuthenticationRequest,
@@ -29,11 +28,8 @@ export {
 
 export { consumeResolutionRequest } from './resolution'
 
-export const cancelSSO: ThunkAction = dispatch => {
-  return dispatch(
-    navigationActions.navigate({ routeName: routeList.InteractionScreen }),
-  )
-}
+export const cancelSSO: ThunkAction = dispatch =>
+  dispatch(navigationActions.navigateBack())
 
 export const scheduleSuccessNotification: ThunkAction = dispatch => {
   return dispatch(

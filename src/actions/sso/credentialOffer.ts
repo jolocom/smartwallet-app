@@ -15,7 +15,7 @@ import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credenti
 import { isEmpty } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { cancelSSO } from './index'
-import { Interaction, InteractionTransportType } from '@jolocom/sdk'
+import { Interaction } from '@jolocom/sdk'
 
 export const consumeCredentialOfferRequest = (
   interaction: Interaction,
@@ -130,7 +130,7 @@ export const validateSelectionAndSave = (
         I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS),
       ),
     )
-    return dispatch(endReceiving(interactionId))
+    return dispatch(cancelSSO)
   }
 
   if (allValid) {
@@ -167,7 +167,7 @@ export const validateSelectionAndSave = (
     })
 
     dispatch(scheduleNotification(notification))
-    return dispatch(endReceiving(interactionId))
+    return dispatch(cancelSSO)
   }
 
   dispatch(
@@ -188,7 +188,7 @@ export const validateSelectionAndSave = (
         },
         passedValidation,
       },
-    }),
+    }, true),
   )
 }
 
@@ -234,21 +234,3 @@ const isCredentialStored = async (
 //    ).map(storeCredentialMetadata),
 //  )
 //
-
-const endReceiving = (interactionId: string): ThunkAction => async (
-  dispatch,
-  getState,
-  { interactionManager },
-) => {
-  const interaction = await interactionManager.getInteraction(interactionId)
-  const { desc: transportDesc } = interaction.transportAPI
-
-  if (
-    transportDesc &&
-    transportDesc.type === InteractionTransportType.Deeplink
-  ) {
-    return dispatch(navigationActions.navigatorResetHome())
-  } else {
-    return dispatch(cancelSSO)
-  }
-}
