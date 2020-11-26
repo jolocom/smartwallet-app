@@ -20,10 +20,18 @@ const Claims: React.FC = () => {
   const { scheduleInfo, scheduleWarning } = useToasts()
   const { showErrorReporting } = useErrors()
 
+  const longFn = () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => res('done'), 6000)
+      // setTimeout(() => rej('oops'), 5000)
+    })
+  }
+
   const openLoader = async () => {
     await loader(
       async () => {
-        // throw new Error('test')
+        const res = await longFn()
+        console.log({ res })
       },
       {
         success: 'Good loader',
@@ -38,7 +46,7 @@ const Claims: React.FC = () => {
     scheduleInfo({
       title: "I'm baby salvia deep v forage",
       message:
-        ' deep v normcore adaptogen. Direct trade PBR&B vaporware listicle',
+        'deep v normcore adaptogen. Direct trade PBR&B vaporware listicle',
     })
   }
 

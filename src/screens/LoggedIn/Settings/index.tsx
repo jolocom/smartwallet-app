@@ -23,11 +23,13 @@ import DevelopmentSection from './Development'
 import EnableBiometryOption from './EnableBiometryOption'
 import { useBiometry } from '~/hooks/biometry'
 import useBackup from '~/hooks/backup'
+import useMarketRating from '~/hooks/rateus'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
   const { resetBiometry } = useBiometry()
   const { shouldWarnBackup } = useBackup()
+  const { rateApp } = useMarketRating()
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
@@ -44,10 +46,6 @@ const SettingsGeneral: React.FC = () => {
 
   const handleNavigateToScreen = (screenName: ScreenNames) => {
     navigation.navigate(screenName)
-  }
-
-  const handleRate = () => {
-    Alert.alert('Rate us', 'Please rate us')
   }
 
   return (
@@ -110,7 +108,7 @@ const SettingsGeneral: React.FC = () => {
             <Option.Title title={strings.CONTACT_US} />
             <Option.RightIcon />
           </Option>
-          <Option onPress={handleRate}>
+          <Option onPress={rateApp}>
             <Option.Title title={strings.RATE_US} />
           </Option>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
