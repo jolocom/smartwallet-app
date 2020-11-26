@@ -1,5 +1,5 @@
 import { transform } from '@babel/core'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -71,11 +71,11 @@ const DragBall = ({ route }) => {
     [JSON.stringify(holePosition)],
   )
 
-  const handleHoleLayout = (event: LayoutChangeEvent) => {
-    holeRef.current?.measure((x, y, width, height, pageX, pageY) => {
+  useEffect(() => {
+    holeRef.current?.measureInWindow((x, y, width, height) => {
       setHolePosition({ x, y, width, height })
     })
-  }
+  }, [])
 
   const pullInBallHole = () => {
     // 1. remove draggable ball
@@ -122,7 +122,7 @@ const DragBall = ({ route }) => {
       >{`${strings.DO_YOU_WANT_TO_DELETE} ${documentName}?`}</JoloText>
       <View
         style={styles.holeContainer}
-        onLayout={handleHoleLayout}
+        //onLayout={handleHoleLayout}
         ref={holeRef}
       >
         <Animated.View
