@@ -272,6 +272,8 @@ export default {
   SELF_SIGNED: 'Self-signed',
   THIS_SERVICE_IS_ASKING_YOU_TO_SHARE_THE_FOLLOWING_CLAIMS:
     'This service is asking you to share the following claims',
+  HERE_WE_PRESENT_THE_HISTORY_OF_YOUR_INTERACTIONS:
+    'Here we present the history of your interactions',
   YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET:
     "You haven't logged in to any services yet",
   THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST: 'There was an error with your request',

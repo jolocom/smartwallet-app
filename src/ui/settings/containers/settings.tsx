@@ -102,7 +102,7 @@ export const SettingsContainer: React.FC<Props> = props => {
         </SettingSection>
         <SettingSection title={I18n.t(strings.ABOUT)}>
           <SettingItem
-            title={I18n.t(strings.CONTACT_US)}
+            title={I18n.t(strings.SEND_ERROR_REPORT)}
             iconName={'message'}
             onPress={() =>
               navigate(routeList.ErrorReporting, {
