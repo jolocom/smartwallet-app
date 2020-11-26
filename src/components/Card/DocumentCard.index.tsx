@@ -13,6 +13,8 @@ import {
   Highlight,
 } from './Field'
 
+const CARD_HORIZONTAL_PADDING = 18
+
 interface IField {
   name: string
   value: string | number
@@ -46,15 +48,12 @@ const DocumentCard: React.FC<IProps> = ({
   )
 
   const handleHeaderTextLayout = (e) => {
-    console.log('handleHeaderTextLayout', e.nativeEvent)
-
     if (!isHeaderScalled) {
       setIsHeaderScaled(e.nativeEvent.lines.length > 2)
     }
   }
 
   const handleOptionalFieldTextLayout = (e) => {
-    console.log('handleOptionalFieldTextLayout', e.nativeEvent)
     const numberOfLines = e.nativeEvent.lines.length
     setNumberOfOptionalLines((prevState) => prevState + numberOfLines)
   }
@@ -150,15 +149,13 @@ const DocumentCard: React.FC<IProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    ...debugView(),
   },
   bodyContainer: {
     transform: [{ scale: BP({ default: 1, xsmall: 0.9 }) }],
     height: '100%',
     alignSelf: 'center',
     alignItems: 'flex-start',
-    paddingHorizontal: 14,
-    // paddingHorizontal: 34, // TODO: remove later
+    paddingHorizontal: CARD_HORIZONTAL_PADDING,
     paddingTop: 22,
   },
   cardHeader: {
@@ -189,7 +186,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingTop: 17,
     paddingBottom: 12,
-    paddingHorizontal: 14,
+    paddingHorizontal: CARD_HORIZONTAL_PADDING,
     backgroundColor: Colors.black,
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 14,

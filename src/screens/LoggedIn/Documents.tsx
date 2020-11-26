@@ -112,7 +112,7 @@ const Documents: React.FC = () => {
   const credentials = useSelector(getAllCredentials)
 
   return (
-    <ScreenContainer isFullscreen>
+    <ScreenContainer>
       <ScrollView showsVerticalScrollIndicator={false}>
         {DOCUMENTS.map((document) => (
           <DocumentCard
