@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import { getAllCredentials } from '~/modules/credentials/selectors'
-import DocumentCard from '~/components/Card/DocumentCard.index'
+import DocumentCard from '~/components/Card/DocumentCard'
 import { ScrollView, View } from 'react-native'
 
 const DOCUMENTS = [
@@ -120,7 +120,7 @@ const Documents: React.FC = () => {
             mandatoryFields={document.details.mandatoryFields}
             preferredFields={document.details.preferredFields}
             highlight={document.details.highlight}
-            photo={document.details.photo}
+            image={document.details.photo}
           />
         ))}
         <View style={{ height: 100 }} />
