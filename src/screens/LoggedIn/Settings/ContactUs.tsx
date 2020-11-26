@@ -15,6 +15,7 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import { IOption } from '~/components/Selectable'
 import useSentry from '~/hooks/sentry'
 import { useNavigateBack } from '~/hooks/navigation'
+import { useSuccess } from '~/hooks/loader'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -25,6 +26,7 @@ const INQUIRIES_LIST = [
 
 const ContactUs: React.FC = () => {
   const navigateBack = useNavigateBack()
+  const showSuccess = useSuccess()
   const { sendReport } = useSentry()
 
   const [contactValue, setContactValue] = useState('')
@@ -53,6 +55,7 @@ const ContactUs: React.FC = () => {
 
   const handleSubmit = () => {
     sendReport(assembledData)
+    showSuccess()
     navigateBack()
   }
 
