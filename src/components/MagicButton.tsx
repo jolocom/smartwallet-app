@@ -9,7 +9,7 @@ import RadialGradient from 'react-native-radial-gradient'
 import { Colors } from '~/utils/colors'
 
 interface IProps {
-  gestureHandlers: GestureResponderHandlers | undefined
+  gestureHandlers?: GestureResponderHandlers | undefined
   animatedValues: {
     shadowScale: Animated.Value | Animated.ValueXY
     magicOpacity: Animated.Value | Animated.ValueXY
@@ -21,7 +21,7 @@ const MagicButton: React.FC<IProps> = ({ gestureHandlers, animatedValues }) => {
   const { shadowScale, magicOpacity, circleScale } = animatedValues
   return (
     <Animated.View
-      {...gestureHandlers}
+      {...(gestureHandlers ? gestureHandlers : {})}
       style={[
         {
           transform: [{ scaleX: shadowScale }, { scaleY: shadowScale }],

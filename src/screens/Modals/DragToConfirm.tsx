@@ -1,5 +1,5 @@
 import { RouteProp } from '@react-navigation/native'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   StyleSheet,
   View,
@@ -10,6 +10,8 @@ import {
   Dimensions,
   Easing,
 } from 'react-native'
+import MagicButton from '~/components/MagicButton'
+import { useMagicBtnAnimations } from '~/hooks/magicButton'
 import { useGoBack } from '~/hooks/navigation'
 import { RootStackParamList } from '~/RootNavigation'
 import { strings } from '~/translations'
@@ -23,7 +25,7 @@ import JoloText, {
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 
-const HOLE_DIAMETER = 99
+const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -40,6 +42,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const [isBallShown, setIsBallShown] = useState(true)
   const [holePosition, setHolePosition] = useState<LayoutRectangle | null>(null)
   const [areInstructionsVisible, setInstructionsVisibility] = useState(true)
+  const [isBallOverTheHole, setIsBallOverTheHole] = useState(false)
 
   const ball = useRef(new Animated.ValueXY()).current
   const ballScale = useRef(new Animated.Value(1)).current
@@ -60,6 +63,19 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
             ],
             { useNativeDriver: false },
           )(e, gesture)
+          const hp = holePosition
+          if (hp) {
+            if (
+              gesture.moveX > hp.x &&
+              gesture.moveX < hp.x + hp.width &&
+              gesture.moveY > hp.y &&
+              gesture.moveY < hp.y + hp.height
+            ) {
+              setIsBallOverTheHole(true)
+            } else {
+              setIsBallOverTheHole(false)
+            }
+          }
         },
         onPanResponderRelease: (e, gesture) => {
           if (isInHole(gesture)) {
@@ -120,6 +136,19 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       : 0,
   }
 
+  const {
+    animatedValues,
+    animateValues: { riseShadow, resetMagic },
+  } = useMagicBtnAnimations(1200)
+
+  useEffect(() => {
+    if (isBallOverTheHole) {
+      riseShadow.start()
+    } else {
+      resetMagic.start()
+    }
+  }, [isBallOverTheHole])
+
   return (
     <ScreenContainer
       backgroundColor={Colors.black}
@@ -144,7 +173,9 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
               transform: [{ scale: ballScale }],
             },
           ]}
-        />
+        >
+          <MagicButton animatedValues={animatedValues} />
+        </Animated.View>
       </View>
 
       {!isBallShown ? (
@@ -210,7 +241,6 @@ const styles = StyleSheet.create({
     width: HOLE_DIAMETER,
     height: HOLE_DIAMETER,
     borderRadius: HOLE_DIAMETER / 2,
-    borderColor: Colors.success,
     borderWidth: 1,
   },
 })

@@ -36,13 +36,21 @@ export const useMagicBtnAnimations = (animationDuration: number) => {
 
   const hideMagicBtn = animate(magicOpacity, 0, 300);
 
-  return {
+  const animatedValues = {
     magicOpacity,
     shadowScale,
     circleScale,
+  }
+
+  const animateValues = {
     riseShadow,
     resetShadow,
     resetMagic,
     hideMagicBtn
+  }
+
+  return {
+    animatedValues,
+    animateValues
   }
 }
