@@ -19,6 +19,11 @@ export type RootStackParamList = {
   Recovery: {
     isAccessRestore: boolean
   }
+  DragTheBall: {
+    title: string
+    cancelText: string
+    onComplete: () => void
+  }
   LoggedIn: undefined
   LoggedOut: undefined
 }

@@ -48,7 +48,7 @@ import useTermsConsent from '~/hooks/consent'
 import { setAppLocked } from '~/modules/account/actions'
 import BackupIdentity from './Settings/BackupIdentity'
 import ButtonsTest from './Settings/Development/ButtonsTest'
-import DragBall from '~/components/DragBall'
+import DragTheBall from '~/screens/Modals/DragTheBall'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -210,8 +210,8 @@ const LoggedInTabs: React.FC = () => {
         options={settingsScreenTransitionOptions}
       />
       <LoggedInStack.Screen
-        name={ScreenNames.DeleteDocument}
-        component={DragBall}
+        name={ScreenNames.DragTheBall}
+        component={DragTheBall}
       />
 
       {__DEV__ && (

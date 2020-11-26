@@ -1,5 +1,6 @@
-import { useRef, useState, useCallback, useEffect } from 'react'
-import { Animated, GestureResponderEvent, PanResponder } from 'react-native'
+import { useRef, useState, useEffect } from 'react'
+import { GestureResponderEvent, PanResponder } from 'react-native'
+import { useMagicBtnAnimations } from '~/hooks/magicButton'
 
 export enum GestureState {
   None,
@@ -19,58 +20,27 @@ const useCircleHoldAnimation = (animationDuration: number) => {
   useEffect(() => {
     gestureStateRef.current = gestureState
     if (gestureState === GestureState.Success) {
-      Animated.timing(shadowScale, {
-        duration: 300,
-        toValue: 0.8,
-        useNativeDriver: true,
-      }).start()
+      resetShadow.start()
     }
   }, [gestureState])
 
-  // NOTE: the @shadow in this case is used for the view wrapping the @RadialGradient
-  // component, which scales it up during a gesture. To avoid the inner circle
-  // being scaled up as well, the @circle animated value is used to scale it
-  // down accordingly. Not fully optimized, since the inner circle still scales up
-  // a tiny bit. All of this is due to the lack of support of customizable shadows
-  // on Android.
-  const magicOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
-  const shadowScale = useRef<Animated.Value>(new Animated.Value(0.8)).current
-  const circleScale = useRef<Animated.Value>(new Animated.Value(1.2)).current
+
+  const {magicOpacity,
+    shadowScale,
+    circleScale, riseShadow, resetShadow, resetMagic, hideMagicBtn} = useMagicBtnAnimations(animationDuration);
 
   const onTouchStart = (e: GestureResponderEvent) => {
     if (gestureStateRef.current !== GestureState.Success) {
       startTime.current = e.nativeEvent.timestamp
       setGestureState(GestureState.Start)
-      Animated.parallel([
-        Animated.timing(shadowScale, {
-          duration: animationDuration,
-          toValue: 1,
-          useNativeDriver: true,
-        }),
-        Animated.timing(circleScale, {
-          duration: animationDuration,
-          toValue: 1,
-          useNativeDriver: true,
-        }),
-      ]).start()
+      riseShadow.start()
     }
   }
 
   const onTouchEnd = () => {
     if (gestureStateRef.current !== GestureState.Success) {
       setGestureState(GestureState.End)
-      Animated.parallel([
-        Animated.timing(shadowScale, {
-          duration: 400,
-          toValue: 0.8,
-          useNativeDriver: true,
-        }),
-        Animated.timing(circleScale, {
-          duration: 400,
-          toValue: 1.2,
-          useNativeDriver: true,
-        }),
-      ]).start()
+      resetMagic.start()
     }
   }
 
@@ -103,9 +73,13 @@ const useCircleHoldAnimation = (animationDuration: number) => {
     circleScale,
     magicOpacity,
   }
+  const animateVaues = {
+    hideMagicBtn
+  }
   return {
     gestureState,
     animationValues,
+    animateVaues, 
     gestureHandlers: panResponder.panHandlers,
   }
 }

@@ -1,30 +1,38 @@
-import { transform } from '@babel/core'
+import { RouteProp } from '@react-navigation/native'
 import React, { useMemo, useRef, useState } from 'react'
 import {
   StyleSheet,
   View,
   Animated,
   PanResponder,
-  LayoutChangeEvent,
   LayoutRectangle,
   PanResponderGestureState,
   Dimensions,
   Easing,
 } from 'react-native'
 import { useGoBack } from '~/hooks/navigation'
+import { RootStackParamList } from '~/RootNavigation'
 import { strings } from '~/translations'
+import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import AbsoluteBottom from './AbsoluteBottom'
-import Btn, { BtnTypes } from './Btn'
-import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
-import ScreenContainer from './ScreenContainer'
+import AbsoluteBottom from '../../components/AbsoluteBottom'
+import Btn, { BtnTypes } from '../../components/Btn'
+import JoloText, {
+  JoloTextKind,
+  JoloTextWeight,
+} from '../../components/JoloText'
+import ScreenContainer from '../../components/ScreenContainer'
 
 const HOLE_DIAMETER = 99
 const BALL_DIAMETER = 57
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const DragBall = ({ route }) => {
-  const { documentName = strings.DOCUMENT } = route?.params
+interface IProps {
+  route: RouteProp<RootStackParamList, ScreenNames.DragTheBall>
+}
+
+const DragTheBall: React.FC<IProps> = ({ route }) => {
+  const { title, cancelText, onComplete } = route?.params
   const goBack = useGoBack()
 
   const holeRef = useRef<View>(null)
@@ -34,7 +42,7 @@ const DragBall = ({ route }) => {
   const [areInstructionsVisible, setInstructionsVisibility] = useState(true)
 
   const ball = useRef(new Animated.ValueXY()).current
-  const ball2 = useRef(new Animated.Value(1)).current
+  const ballScale = useRef(new Animated.Value(1)).current
 
   const panResponder = useMemo(
     () =>
@@ -54,7 +62,6 @@ const DragBall = ({ route }) => {
           )(e, gesture)
         },
         onPanResponderRelease: (e, gesture) => {
-          setInstructionsVisibility(true)
           if (isInHole(gesture)) {
             pullInBallHole()
           } else {
@@ -71,7 +78,7 @@ const DragBall = ({ route }) => {
     [JSON.stringify(holePosition)],
   )
 
-  const handleHoleLayout = (event: LayoutChangeEvent) => {
+  const handleHoleLayout = () => {
     holeRef.current?.measure((x, y, width, height, pageX, pageY) => {
       setHolePosition({ x, y, width, height })
     })
@@ -80,12 +87,15 @@ const DragBall = ({ route }) => {
   const pullInBallHole = () => {
     // 1. remove draggable ball
     setIsBallShown(false)
-    // 2. Animate scale down
-    Animated.timing(ball2, {
+    // 2. Animate replacement ball with scale down
+    Animated.timing(ballScale, {
       toValue: 0,
       easing: Easing.elastic(1),
       useNativeDriver: true,
-    }).start(goBack)
+    }).start(() => {
+      onComplete()
+      goBack()
+    })
   }
 
   const isInHole = (gesture: PanResponderGestureState) => {
@@ -119,7 +129,9 @@ const DragBall = ({ route }) => {
         color={Colors.white90}
         kind={JoloTextKind.title}
         weight={JoloTextWeight.regular}
-      >{`${strings.DO_YOU_WANT_TO_DELETE} ${documentName}?`}</JoloText>
+      >
+        {title}
+      </JoloText>
       <View
         style={styles.holeContainer}
         onLayout={handleHoleLayout}
@@ -129,7 +141,7 @@ const DragBall = ({ route }) => {
           style={[
             styles.hole,
             {
-              transform: [{ scale: ball2 }],
+              transform: [{ scale: ballScale }],
             },
           ]}
         />
@@ -150,7 +162,7 @@ const DragBall = ({ route }) => {
             style={[
               styles.ball,
               {
-                transform: [{ scale: ball2 }],
+                transform: [{ scale: ballScale }],
               },
             ]}
           />
@@ -174,7 +186,7 @@ const DragBall = ({ route }) => {
           </>
         ) : null}
         <Btn type={BtnTypes.secondary} onPress={goBack}>
-          {strings.CANCEL}
+          {cancelText}
         </Btn>
       </AbsoluteBottom>
     </ScreenContainer>
@@ -203,4 +215,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default DragBall
+export default DragTheBall
