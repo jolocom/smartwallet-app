@@ -8,7 +8,7 @@ const useErrors = () => {
   }
 
   const showErrorReporting = (error?: Error) => {
-    setError(ErrorScreens.errorReporting, error)
+    setError(ErrorScreens.errorReporting, error ?? null)
   }
 
   const resetError = () => {

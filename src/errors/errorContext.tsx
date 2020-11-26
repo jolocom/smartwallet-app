@@ -11,7 +11,7 @@ export enum ErrorScreens {
 interface IErrorContext {
   error: Error | null
   errorScreen: ErrorScreens | null
-  setError: (screen: ErrorScreens, err: Error | null) => void
+  setError: (screen: ErrorScreens | null, err: Error | null) => void
 }
 
 const initialState = {
@@ -30,8 +30,10 @@ export const ErrorContextProvider: React.FC = ({ children }) => {
     errorScreen: null,
   })
 
-  const setError = (errorScreen: ErrorScreens, error: Error | null = null) =>
-    setState({ error, errorScreen })
+  const setError = (
+    errorScreen: ErrorScreens | null,
+    error: Error | null = null,
+  ) => setState({ error, errorScreen })
 
   const contextValue = useMemo<IErrorContext>(
     () => ({
