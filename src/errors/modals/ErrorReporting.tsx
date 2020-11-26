@@ -5,9 +5,11 @@ import ScreenContainer from '~/components/ScreenContainer'
 import JoloText from '~/components/JoloText'
 import Btn from '~/components/Btn'
 import useErrors from '~/hooks/useErrors'
+import useSentry from '~/hooks/sentry'
 
 const ErrorReporting = () => {
   const { errorScreen, resetError, error } = useErrors()
+  const { sendReport } = useSentry()
 
   return (
     <ModalScreen
@@ -17,6 +19,7 @@ const ErrorReporting = () => {
       <ScreenContainer>
         <JoloText>Error Reporting</JoloText>
         <Btn onPress={resetError}>Close</Btn>
+        <Btn onPress={() => sendReport({})}>Send report</Btn>
       </ScreenContainer>
     </ModalScreen>
   )
