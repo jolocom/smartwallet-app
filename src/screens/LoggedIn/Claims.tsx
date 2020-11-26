@@ -17,7 +17,7 @@ const ContainerComponent: React.FC = ({ children }) => {
 }
 
 const Claims: React.FC = () => {
-  const redirectToDeleteDoc = useRedirectTo(ScreenNames.DragTheBall, {
+  const redirectToDeleteDoc = useRedirectTo(ScreenNames.DragToConfirm, {
     title: `${strings.DO_YOU_WANT_TO_DELETE} Driving License?`,
     cancelText: strings.CANCEL,
     onComplete: () => console.log('Deleted the doc'),

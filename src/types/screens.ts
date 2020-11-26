@@ -22,7 +22,7 @@ export enum ScreenNames {
   Interactions = 'Interactions',
   Lock = 'Lock',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
-  DragTheBall = 'DragTheBall',
+  DragToConfirm = 'DragToConfirm',
   //Settings
   SettingsGeneral = 'SettingsGeneral',
   Language = 'Language',

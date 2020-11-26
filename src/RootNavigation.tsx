@@ -19,7 +19,7 @@ export type RootStackParamList = {
   Recovery: {
     isAccessRestore: boolean
   }
-  DragTheBall: {
+  DragToConfirm: {
     title: string
     cancelText: string
     onComplete: () => void

@@ -28,10 +28,10 @@ const BALL_DIAMETER = 57
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 interface IProps {
-  route: RouteProp<RootStackParamList, ScreenNames.DragTheBall>
+  route: RouteProp<RootStackParamList, ScreenNames.DragToConfirm>
 }
 
-const DragTheBall: React.FC<IProps> = ({ route }) => {
+const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const { title, cancelText, onComplete } = route?.params
   const goBack = useGoBack()
 
@@ -215,4 +215,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default DragTheBall
+export default DragToConfirm
