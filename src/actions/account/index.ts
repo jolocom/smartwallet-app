@@ -4,7 +4,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 import { IdentitySummary, CredentialMetadataSummary } from '@jolocom/sdk'
 
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
-import { navigationActions, genericActions } from 'src/actions/'
+import { navigationActions } from 'src/actions/'
 
 import { routeList } from 'src/routeList'
 import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
@@ -94,8 +94,7 @@ export const checkIdentityExists: ThunkAction = async (
     await dispatch(setClaimsForDid)
     //await dispatch(checkLocalDeviceAuthSet)
     await dispatch(checkRecoverySetup)
-    await dispatch(checkTermsOfService(routeList.Home))
-    return dispatch(genericActions.lockApp())
+    return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
     if (
       err.message === SDKError.codes.NoEntropy ||

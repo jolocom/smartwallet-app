@@ -1,7 +1,6 @@
 import { ThunkDispatch } from '../../../store'
 import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { routeList } from '../../../routeList'
-import { navigationActions, ssoActions } from '../../../actions'
+import { ssoActions } from '../../../actions'
 import { connect } from 'react-redux'
 import { CredentialsReceiveContainer } from './credentialReceive'
 import { SignedCredentialWithMetadata } from '@jolocom/sdk/js/interactionManager/types'
@@ -18,10 +17,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
         ),
       ),
     ),
-  goBack: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.InteractionScreen }),
-    ),
+  goBack: () => dispatch(ssoActions.cancelSSO),
 })
 
 export const CredentialReceiveNegotiate = connect(

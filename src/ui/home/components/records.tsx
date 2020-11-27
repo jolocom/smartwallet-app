@@ -2,7 +2,6 @@ import React from 'react'
 import {
   StyleSheet,
   Text,
-  View,
 } from 'react-native'
 import { Wrapper } from 'src/ui/structure'
 import I18n from 'src/locales/i18n'
@@ -23,7 +22,7 @@ const styles = StyleSheet.create({
 export const RecordsComponent: React.FC<Props> = () => (
   <Wrapper>
     <Text style={styles.text}>
-      {I18n.t(strings.YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET) + '.'}
+      {I18n.t(strings.HERE_WE_PRESENT_THE_HISTORY_OF_YOUR_INTERACTIONS) + '.'}
     </Text>
   </Wrapper>
 )
