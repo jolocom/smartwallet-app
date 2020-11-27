@@ -3,7 +3,6 @@ import { StyleSheet, View, Image } from 'react-native'
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import Dots from './Dots'
 import {
   TitleField,

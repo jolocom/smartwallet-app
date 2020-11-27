@@ -4,7 +4,7 @@ import { useCard } from './Card'
 import Dots from './Dots'
 import { TitleField } from './Field'
 
-const Header = () => {
+const CardHeader: React.FC = () => {
   const { document } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
 
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Header
+export default CardHeader

@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { useCard } from './Card'
 
-const CardPhoto = () => {
+const CardPhoto: React.FC = () => {
   const { image: photo } = useCard()
   if (!photo) return null
   return (

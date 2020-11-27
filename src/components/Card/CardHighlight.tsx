@@ -6,7 +6,7 @@ import { Highlight } from './Field'
 
 const CARD_HORIZONTAL_PADDING = 18 // TODO: should not be duplicated here
 
-const CardHighlight = () => {
+const CardHighlight: React.FC = () => {
   const { highlight } = useCard()
   if (!highlight) return null
   return (

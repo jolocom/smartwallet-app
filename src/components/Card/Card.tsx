@@ -1,14 +1,20 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import CardHighlight from './CardHighlight'
 import CardPhoto from './CardPhoto'
-import Header from './Header'
+import CardHeader from './CardHeader'
 import OptionalFields from './OptionalFields'
+
+interface IField {
+  name: string
+  value: string | number
+}
 
 interface ICardContext {
   numberOfOptionalLines: number
-  setNumberOfOptionalLines: (value: number) => void
+  setNumberOfOptionalLines: React.Dispatch<React.SetStateAction<number>>
   document: any
   givenName: any
+  preferredFields: IField[]
   image: string | undefined
   highlight: string | undefined
 }
@@ -22,17 +28,20 @@ export const useCard = () => {
 }
 
 interface IProps {
-  preferredFields: Array<any>
-  mandatoryFields: Array<any>
+  preferredFields: IField[]
+  mandatoryFields: IField[]
   image: string | undefined
   highlight: string | undefined
 }
 
 interface ICardComposition {
   OptionalFields: React.FC
+  Header: React.FC
+  Highlight: React.FC
+  Photo: React.FC
 }
 
-const Card: React.FC<IProps & ICardComposition> = ({
+const Card: React.FC<IProps> & ICardComposition = ({
   children,
   preferredFields,
   mandatoryFields,
@@ -62,7 +71,7 @@ const Card: React.FC<IProps & ICardComposition> = ({
 }
 
 Card.OptionalFields = OptionalFields
-Card.Header = Header
+Card.Header = CardHeader
 Card.Highlight = CardHighlight
 Card.Photo = CardPhoto
 

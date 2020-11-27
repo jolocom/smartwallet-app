@@ -1,18 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useCard } from './Card'
 import { FieldName, FieldValue } from './Field'
 
-const OptionalFields = () => {
+const OptionalFields: React.FC = () => {
   const {
     numberOfOptionalLines,
     setNumberOfOptionalLines,
     preferredFields,
+    highlight,
     image,
   } = useCard()
   const [displayedOptionalFields, setDisplayedOptionalFields] = useState(
     preferredFields,
   )
+
+  /* check wether to show last optional field */
+  useEffect(() => {
+    if (numberOfOptionalLines > 6 && highlight) {
+      setDisplayedOptionalFields((prevState) => prevState.slice(0, 2))
+    } else if (numberOfOptionalLines > 9 && !highlight) {
+      setDisplayedOptionalFields((prevState) => prevState.slice(0, 3))
+    }
+  }, [numberOfOptionalLines])
 
   const handleOptionalFieldTextLayout = (e) => {
     const numberOfLines = e.nativeEvent.lines.length
