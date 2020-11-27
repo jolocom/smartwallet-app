@@ -5,7 +5,6 @@ import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import Btn, { BtnTypes, BtnSize } from './Btn'
-import { debugView } from '~/utils/dev'
 
 interface Props {
   title: string

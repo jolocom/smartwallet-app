@@ -253,9 +253,13 @@ PODS:
     - React-Core
   - react-native-randombytes (3.6.0):
     - React-Core
+  - react-native-restart (0.0.17):
+    - React
   - react-native-safe-area-context (0.7.3):
     - React
   - react-native-sqlite-storage (5.0.0):
+    - React
+  - react-native-version-number (0.3.6):
     - React
   - React-RCTActionSheet (0.62.2):
     - React-Core/RCTActionSheetHeaders (= 0.62.2)
@@ -338,8 +342,14 @@ PODS:
     - React-Core
   - RNScreens (2.15.0):
     - React-Core
+  - RNSentry (1.3.3):
+    - React
+    - Sentry (~> 4.4.0)
   - RNSVG (12.1.0):
     - React
+  - Sentry (4.4.3):
+    - Sentry/Core (= 4.4.3)
+  - Sentry/Core (4.4.3)
   - SRSRadialGradient (1.0.8):
     - React
   - Yoga (1.14.0)
@@ -389,8 +399,10 @@ DEPENDENCIES:
   - react-native-biometrics (from `../node_modules/react-native-biometrics`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
+  - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
+  - react-native-version-number (from `../node_modules/react-native-version-number`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -413,6 +425,7 @@ DEPENDENCIES:
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - SRSRadialGradient (from `../node_modules/react-native-radial-gradient/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -430,6 +443,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - OpenSSL-Universal
+    - Sentry
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -475,10 +489,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
+  react-native-restart:
+    :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
+  react-native-version-number:
+    :path: "../node_modules/react-native-version-number"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -521,6 +539,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   SRSRadialGradient:
@@ -561,8 +581,10 @@ SPEC CHECKSUMS:
   react-native-biometrics: 9d3306e5d29c3bc4e6a3c912d759a94e76a2f683
   react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
   react-native-randombytes: b6677f7d495c27e9ee0dbd77ebc97b3c59173729
+  react-native-restart: d19a0f8d053d065fe64cd2baebb6487111c77149
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
+  react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
   React-RCTBlob: a332773f0ebc413a0ce85942a55b064471587a71
@@ -584,11 +606,13 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 653a8c126a0f5e88ce15ffe280b3ff37e1fbb285
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
+  RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+  Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
   SRSRadialGradient: 71378a83e52b616c40367c37ee7cb6865f9f7c6e
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 02a680f39aaa4f8867f374f6af05b92173d1be8e
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0
