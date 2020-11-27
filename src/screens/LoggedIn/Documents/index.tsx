@@ -220,7 +220,13 @@ const DocumentList = () => {
 
 const Documents: React.FC = () => {
   return (
-    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+    <ScreenContainer
+      customStyles={{
+        paddingHorizontal: 28,
+        justifyContent: 'flex-start',
+        backgroundColor: 'pink',
+      }}
+    >
       <DocumentTabs>
         <DocumentList />
       </DocumentTabs>

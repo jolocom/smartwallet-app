@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native'
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
@@ -60,8 +61,8 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   titleField: {
-    fontSize: 28,
-    lineHeight: 28,
+    fontSize: BP({ default: 28, xsmall: 24 }),
+    lineHeight: BP({ default: 28, xsmall: 24 }),
     marginBottom: 10,
   },
   highlight: {

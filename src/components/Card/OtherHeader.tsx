@@ -1,60 +1,70 @@
 import React, { useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { strings } from '~/translations'
+import BP from '~/utils/breakpoints'
 import { useCard } from './Card'
 import { FieldName, TitleField } from './Field'
 
-const LARGE_LOGO_SIZE = 78
+const LARGE_LOGO_SIZE = BP({ default: 78, xsmall: 60 })
 const SMALL_LOGO_SIZE = 37
 
 const OtherHeader: React.FC = () => {
   const { document, image: logo } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
-  const [titleLines, setTitleLines] = useState(0)
 
   const handleHeaderTextLayout = (e) => {
     if (!isHeaderScalled) {
-      setTitleLines(e.nativeEvent.lines.length)
       setIsHeaderScaled(e.nativeEvent.lines.length > 2)
     }
   }
 
   return (
-    <View
-      style={[
-        styles.header,
-        { marginBottom: isHeaderScalled ? 20 : titleLines === 2 ? 23 : 49 },
-      ]}
-    >
-      <View style={{ flex: isHeaderScalled ? 0.9 : 0.6 }}>
-        <FieldName customStyles={{ marginBottom: 10 }}>
-          {strings.TYPE_OF_DOCUMENT}
-        </FieldName>
-        <TitleField
-          onTextLayout={handleHeaderTextLayout}
-          numberOfLines={isHeaderScalled ? 2 : undefined}
+    <View style={styles.header}>
+      <View style={{ flex: isHeaderScalled ? 0.9 : 1 }}>
+        <FieldName
+          numberOfLines={1}
           customStyles={{
-            ...(isHeaderScalled && styles.scaledDocumentField),
+            marginBottom: isHeaderScalled
+              ? BP({ default: 12, xsmall: 8 })
+              : BP({ default: 8, xsmall: 4 }),
           }}
         >
-          {document?.value}
-        </TitleField>
+          {strings.TYPE_OF_DOCUMENT}
+        </FieldName>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          <TitleField
+            onTextLayout={handleHeaderTextLayout}
+            numberOfLines={isHeaderScalled ? 2 : undefined}
+            customStyles={{
+              flexWrap: 'wrap',
+              ...(isHeaderScalled && styles.scaledDocumentField),
+            }}
+          >
+            {document?.value}
+          </TitleField>
+        </View>
       </View>
-      <View style={{ flex: isHeaderScalled ? 0.1 : 0.4 }}>
-        <Image
-          source={{ uri: logo }}
-          style={[
-            styles.logo,
-            {
-              width: isHeaderScalled ? SMALL_LOGO_SIZE : LARGE_LOGO_SIZE,
-              height: isHeaderScalled ? SMALL_LOGO_SIZE : LARGE_LOGO_SIZE,
-              borderRadius: isHeaderScalled
-                ? SMALL_LOGO_SIZE / 2
-                : LARGE_LOGO_SIZE / 2,
-            },
-          ]}
-        />
-      </View>
+      {logo ? (
+        <View
+          style={{
+            flex: isHeaderScalled ? 0.1 : 0,
+            alignItems: 'flex-end',
+          }}
+        >
+          <Image
+            source={{ uri: logo }}
+            style={[
+              {
+                width: isHeaderScalled ? SMALL_LOGO_SIZE : LARGE_LOGO_SIZE,
+                height: isHeaderScalled ? SMALL_LOGO_SIZE : LARGE_LOGO_SIZE,
+                borderRadius: isHeaderScalled
+                  ? SMALL_LOGO_SIZE / 2
+                  : LARGE_LOGO_SIZE / 2,
+              },
+            ]}
+          />
+        </View>
+      ) : null}
     </View>
   )
 }
@@ -68,11 +78,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 22,
     marginBottom: 20,
-  },
-  logo: {
-    position: 'absolute',
-    top: -5,
-    right: 0,
   },
 })
 

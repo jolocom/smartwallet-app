@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import BP from '~/utils/breakpoints'
 import Card from './Card'
@@ -22,14 +23,30 @@ const OtherCard: React.FC<ICardProps> = ({
           optionalFields={optionalFields}
           image={image}
         >
-          <CardBody>
-            <Card.OtherHeader />
-            <Card.OptionalFields
-              customStyles={{
-                paddingHorizontal: BP({ default: 8, xsmall: 0 }),
-              }}
-            />
-          </CardBody>
+          <View
+            style={{
+              paddingTop: BP({ default: 20, xsmall: 18 }),
+            }}
+          >
+            <CardBody>
+              <View style={{ flex: 0.26 }}>
+                <Card.OtherHeader />
+              </View>
+
+              <View
+                style={{
+                  flex: 0.74,
+                  marginTop: BP({ default: 20, xsmall: 0 }),
+                }}
+              >
+                <Card.OptionalFields
+                  customStyles={{
+                    paddingHorizontal: BP({ default: 8, xsmall: 0 }),
+                  }}
+                />
+              </View>
+            </CardBody>
+          </View>
         </Card>
       </OtherCardMedium>
       <Card.Dots

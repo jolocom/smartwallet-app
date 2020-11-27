@@ -1,6 +1,9 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
+import BP from '~/utils/breakpoints'
 import { useCard } from './Card'
+
+const PHOTO_SIZE = BP({ default: 82, xsmall: 60 })
 
 const CardPhoto: React.FC = () => {
   const { image: photo } = useCard()
@@ -20,9 +23,9 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   photo: {
-    width: 82,
-    height: 82,
-    borderRadius: 41,
+    width: PHOTO_SIZE,
+    height: PHOTO_SIZE,
+    borderRadius: PHOTO_SIZE / 2,
     zIndex: 10,
   },
 })

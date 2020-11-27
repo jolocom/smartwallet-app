@@ -1,5 +1,6 @@
 import React from 'react'
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
+import BP from '~/utils/breakpoints'
 import Card from './Card'
 import {
   CardBody,
@@ -30,7 +31,9 @@ const DocumentCard: React.FC<ICardProps> = ({
           image={image}
           highlight={highlight}
         >
-          <CardBody>
+          <CardBody
+            customStyles={{ paddingTop: BP({ default: 20, xsmall: 18 }) }}
+          >
             <Card.DocumentHeader />
             <Card.OptionalFields />
           </CardBody>
