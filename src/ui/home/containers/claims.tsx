@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import { CredentialOverview } from '../components/credentialOverview'
@@ -17,10 +17,6 @@ export interface ClaimsContainerProps
 
 export const ClaimsContainer = (props: ClaimsContainerProps) => {
   const { did, claimsState, openClaimDetails } = props
-
-  useEffect(() => {
-    props.checkLocalAuthSet()
-  }, [])
 
   useDisableBackButton(() => {
     // return true (disable back button) if we are focused
@@ -49,7 +45,6 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   openClaimDetails: (claim: DecoratedClaims) =>
     dispatch(accountActions.openClaimDetails(claim)),
-    checkLocalAuthSet: () => dispatch(accountActions.checkLocalDeviceAuthSet),
 })
 
 export const Claims = connect(

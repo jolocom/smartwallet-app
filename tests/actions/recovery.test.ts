@@ -15,6 +15,9 @@ describe('Account recovery actions', () => {
     },
     generic: {
       disableLock: false
+    },
+    notifications: {
+      queue: []
     }
   }
   const { identityWallet, entropy, getPasswordResult } = data
@@ -76,7 +79,7 @@ describe('Account recovery actions', () => {
 
     expect(mockMethod.recoverFromSeed).toHaveBeenCalledWith(badEntropy, getPasswordResult)
     expect(resetGenericPassword).toHaveBeenCalledTimes(0)
-    expect(getGenericPassword).toHaveBeenCalledTimes(2) // once or twice? FIXME
+    expect(getGenericPassword).toHaveBeenCalledTimes(1)
     expect(mockStore.getActions()).toMatchSnapshot()
   })
 })
