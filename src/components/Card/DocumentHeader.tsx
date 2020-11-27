@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useCard } from './Card'
-import Dots from './Dots'
 import { SpecialField, TitleField } from './Field'
 
 const DocumentHeader: React.FC = () => {
@@ -27,7 +26,7 @@ const DocumentHeader: React.FC = () => {
         >
           {document?.value}
         </TitleField>
-        <Dots />
+        <View style={{ flex: 0.15 }} />
       </View>
       <SpecialField numberOfLines={2}>{restMandatoryField?.value}</SpecialField>
     </>

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   bodyContainer: {
-    transform: [{ scale: BP({ default: 1, xsmall: 0.9 }) }],
+    // transform: [{ scale: BP({ default: 1, xsmall: 0.9 }) }],
     height: '100%',
     alignSelf: 'center',
     alignItems: 'flex-start',
