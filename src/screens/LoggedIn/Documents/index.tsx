@@ -1,10 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { ScrollView, View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import { getAllCredentials } from '~/modules/credentials/selectors'
 import DocumentCard from '~/components/Card/DocumentCard'
-import { ScrollView, View } from 'react-native'
+import { useTabs } from '~/components/Tabs/Tabs'
+import { getAllCredentials } from '~/modules/credentials/selectors'
+import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 
 const DOCUMENTS = [
   {
@@ -108,23 +110,32 @@ const DOCUMENTS = [
   },
 ]
 
-const Documents: React.FC = () => {
+const DocumentList = () => {
   const credentials = useSelector(getAllCredentials)
+  const { activeTab, activeSubtab } = useTabs()
 
   return (
-    <ScreenContainer>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {DOCUMENTS.map((document) => (
-          <DocumentCard
-            key={document.id}
-            mandatoryFields={document.details.mandatoryFields}
-            preferredFields={document.details.preferredFields}
-            highlight={document.details.highlight}
-            image={document.details.photo}
-          />
-        ))}
-        <View style={{ height: 100 }} />
-      </ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      {DOCUMENTS.map((document) => (
+        <DocumentCard
+          key={document.id}
+          mandatoryFields={document.details.mandatoryFields}
+          preferredFields={document.details.preferredFields}
+          highlight={document.details.highlight}
+          image={document.details.photo}
+        />
+      ))}
+      <View style={{ height: 100 }} />
+    </ScrollView>
+  )
+}
+
+const Documents: React.FC = () => {
+  return (
+    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+      <DocumentTabs>
+        <DocumentList />
+      </DocumentTabs>
     </ScreenContainer>
   )
 }

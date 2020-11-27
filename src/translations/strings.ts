@@ -257,6 +257,17 @@ const toasts = {
   COULDNOT_ACTIVATE: 'We could not activate biometrics',
 }
 
+const documents = {
+  TYPE: 'Type',
+  ISSUER: 'Issuer'
+}
+
+const history = {
+  ALL: 'All',
+  SHARED: 'Shared',
+  RECEIVED: 'Received',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errorBoundary,
@@ -275,4 +286,6 @@ export const strings = {
   ...settings,
   ...termsConsent,
   ...toasts,
+  ...documents,
+  ...history
 }
