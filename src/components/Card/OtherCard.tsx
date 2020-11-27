@@ -14,7 +14,10 @@ const OtherCard = ({ mandatoryFields, preferredFields, image }) => {
         >
           <CardBody>
             <Card.OtherHeader />
-            <Card.OptionalFields />
+            <Card.OptionalFields customStyles={{ paddingHorizontal: 8 }} />
+            <Card.Dots
+              customStyles={{ position: 'absolute', bottom: 25, right: 25 }}
+            />
           </CardBody>
         </Card>
       </OtherCardMedium>

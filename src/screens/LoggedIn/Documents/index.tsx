@@ -7,16 +7,19 @@ import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/Tabs'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
-import { DocumentTypes } from '~/components/Card/Card'
+import { DocumentFields, DocumentTypes } from '~/components/Card/Card'
 import OtherCard from '~/components/Card/OtherCard'
 
 const DOCUMENTS = [
   {
     id: 1,
-    type: DocumentTypes.Document,
+    type: DocumentTypes.document,
     details: {
       mandatoryFields: [
-        { name: 'Document Name', value: 'Nederlandse identitekaart' },
+        {
+          name: DocumentFields.DocumentName,
+          value: 'Nederlandse identitekaart',
+        },
         {
           name: 'Given Name',
           value: 'De Bruijn Willeke Liselotte',
@@ -37,12 +40,13 @@ const DOCUMENTS = [
   },
   {
     id: 2,
-    type: DocumentTypes.Document,
+    type: DocumentTypes.document,
     details: {
       mandatoryFields: [
         {
-          name: 'Document Name',
-          value: 'Nederlandse identitekaart Nederlandse identitekaart',
+          name: DocumentFields.DocumentName,
+          value:
+            'Nederlandse identitekaart Nederlandse identitekaart Nederlandse identitekaart',
         },
         {
           name: 'Given Name',
@@ -75,10 +79,13 @@ const DOCUMENTS = [
   },
   {
     id: 3,
-    type: DocumentTypes.Document,
+    type: DocumentTypes.document,
     details: {
       mandatoryFields: [
-        { name: 'Document Name', value: 'Nederlandse identitekaart' },
+        {
+          name: DocumentFields.DocumentName,
+          value: 'Nederlandse identitekaart',
+        },
         {
           name: 'Given Name',
           value: 'De Bruijn Willeke Liselotte',
@@ -109,9 +116,11 @@ const DOCUMENTS = [
 const OTHER = [
   {
     id: 4,
-    type: DocumentTypes.Other,
+    type: DocumentTypes.other,
     details: {
-      mandatoryFields: [{ name: 'Document Name', value: 'Name of the event' }],
+      mandatoryFields: [
+        { name: DocumentFields.DocumentName, value: 'Name of the event' },
+      ],
       preferredFields: [
         {
           name: 'Extra long description of the input',
@@ -133,9 +142,9 @@ const OTHER = [
   },
   {
     id: 5,
-    type: DocumentTypes.Other,
+    type: DocumentTypes.other,
     details: {
-      mandatoryFields: [{ name: 'Document Name', value: 'Name' }],
+      mandatoryFields: [{ name: DocumentFields.DocumentName, value: 'Name' }],
       preferredFields: [
         {
           name: 'Title',
@@ -150,11 +159,11 @@ const OTHER = [
   },
   {
     id: 6,
-    type: DocumentTypes.Other,
+    type: DocumentTypes.other,
     details: {
       mandatoryFields: [
         {
-          name: 'Document Name',
+          name: DocumentFields.DocumentName,
           value:
             'Systemischer Agile Coach - Infos zu unserer Weiterbildung Systemischer Agile Coach - Infos zu unserer Weiterbildung',
         },
@@ -165,11 +174,11 @@ const OTHER = [
           value: 'Information that should be previewed here',
         },
         {
-          name: 'Extra long description of the input:',
+          name: 'Extra long description of the input',
           value: 'Information that should be previewed here',
         },
         {
-          name: 'Extra long description of the input:',
+          name: 'Extra long description of the input',
           value: 'Information that should be previewed here',
         },
       ],
@@ -185,7 +194,7 @@ const DocumentList = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      {activeTab?.id === 'documents' &&
+      {activeTab?.id === DocumentTypes.document &&
         DOCUMENTS.map((document) => (
           <DocumentCard
             key={document.id}
@@ -195,7 +204,7 @@ const DocumentList = () => {
             image={document.details.photo}
           />
         ))}
-      {activeTab?.id === 'other' &&
+      {activeTab?.id === DocumentTypes.other &&
         OTHER.map((otherDoc) => (
           <OtherCard
             key={otherDoc.id}

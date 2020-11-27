@@ -10,16 +10,23 @@ const SMALL_LOGO_SIZE = 37
 const OtherHeader: React.FC = () => {
   const { document, image: logo } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
+  const [titleLines, setTitleLines] = useState(0)
 
   const handleHeaderTextLayout = (e) => {
     if (!isHeaderScalled) {
+      setTitleLines(e.nativeEvent.lines.length)
       setIsHeaderScaled(e.nativeEvent.lines.length > 2)
     }
   }
 
   return (
-    <View style={[styles.header, { marginBottom: isHeaderScalled ? 20 : 49 }]}>
-      <View style={{ flex: isHeaderScalled ? 0.9 : 0.7 }}>
+    <View
+      style={[
+        styles.header,
+        { marginBottom: isHeaderScalled ? 20 : titleLines === 2 ? 23 : 49 },
+      ]}
+    >
+      <View style={{ flex: isHeaderScalled ? 0.9 : 0.6 }}>
         <FieldName customStyles={{ marginBottom: 10 }}>
           {strings.TYPE_OF_DOCUMENT}
         </FieldName>
@@ -33,7 +40,7 @@ const OtherHeader: React.FC = () => {
           {document?.value}
         </TitleField>
       </View>
-      <View style={{ flex: isHeaderScalled ? 0.1 : 0.3 }}>
+      <View style={{ flex: isHeaderScalled ? 0.1 : 0.4 }}>
         <Image
           source={{ uri: logo }}
           style={[

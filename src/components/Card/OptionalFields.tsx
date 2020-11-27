@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useCard } from './Card'
+import { IWithCustomStyle, useCard } from './Card'
 import { FieldName, FieldValue } from './Field'
 
-const OptionalFields: React.FC = () => {
+const OptionalFields: React.FC<IWithCustomStyle> = ({
+  customStyles: customContainerStyles,
+}) => {
   const {
     numberOfOptionalLines,
     setNumberOfOptionalLines,
@@ -30,7 +32,7 @@ const OptionalFields: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, customContainerStyles]}>
       {displayedOptionalFields.map((pField, idx) => (
         <View style={{ width: '100%' }}>
           <FieldName

@@ -5,7 +5,7 @@ import Dots from './Dots'
 import { SpecialField, TitleField } from './Field'
 
 const DocumentHeader: React.FC = () => {
-  const { document, givenName } = useCard()
+  const { document, restMandatoryField } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
 
   const handleHeaderTextLayout = (e) => {
@@ -19,6 +19,7 @@ const DocumentHeader: React.FC = () => {
       <View style={styles.header}>
         <TitleField
           onTextLayout={handleHeaderTextLayout}
+          numberOfLines={isHeaderScalled ? 2 : undefined}
           customStyles={{
             flex: 0.85,
             ...(isHeaderScalled && styles.scaledDocumentField),
@@ -28,7 +29,7 @@ const DocumentHeader: React.FC = () => {
         </TitleField>
         <Dots />
       </View>
-      <SpecialField numberOfLines={2}>{givenName?.value}</SpecialField>
+      <SpecialField numberOfLines={2}>{restMandatoryField?.value}</SpecialField>
     </>
   )
 }

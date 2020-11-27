@@ -1,11 +1,11 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-import { debugView } from '~/utils/dev'
+import { IWithCustomStyle } from './Card'
 
-const Dots = () => {
+const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={[styles.container, customStyles]}>
       {['a', 'b', 'c'].map((c) => (
         <View key={c} style={styles.dot} />
       ))}
@@ -18,9 +18,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingTop: 5,
-    // paddingRight: 14,
     flex: 0.15,
-    // ...debugView(),
   },
   dot: {
     width: 4,

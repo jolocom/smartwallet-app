@@ -1,13 +1,23 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
+import { StyleProp, ViewStyle } from 'react-native'
 import CardHighlight from './CardHighlight'
 import CardPhoto from './CardPhoto'
 import DocumentHeader from './DocumentHeader'
+import Dots from './Dots'
 import OptionalFields from './OptionalFields'
 import OtherHeader from './OtherHeader'
 
+export interface IWithCustomStyle {
+  customStyles: StyleProp<ViewStyle>
+}
+
 export enum DocumentTypes {
-  Document = 'Document',
-  Other = 'Other',
+  document = 'document',
+  other = 'other',
+}
+
+export enum DocumentFields {
+  DocumentName = 'Document Name',
 }
 
 interface IField {
@@ -18,8 +28,8 @@ interface IField {
 interface ICardContext {
   numberOfOptionalLines: number
   setNumberOfOptionalLines: React.Dispatch<React.SetStateAction<number>>
-  document: any
-  givenName: any
+  document: IField | undefined
+  restMandatoryField: IField | undefined
   preferredFields: IField[]
   image?: string | undefined
   highlight?: string | undefined
@@ -41,11 +51,12 @@ interface IProps {
 }
 
 interface ICardComposition {
-  OptionalFields: React.FC
+  OptionalFields: React.FC<IWithCustomStyle>
   DocumentHeader: React.FC
   OtherHeader: React.FC
   Highlight: React.FC
   Photo: React.FC
+  Dots: React.FC<IWithCustomStyle>
 }
 
 const Card: React.FC<IProps> & ICardComposition = ({
@@ -60,15 +71,17 @@ const Card: React.FC<IProps> & ICardComposition = ({
   const getFieldInfo = (fieldName: string) =>
     mandatoryFields.find((el) => el.name === fieldName)
 
-  const document = getFieldInfo('Document Name')
-  const givenName = getFieldInfo('Given Name')
+  const document = getFieldInfo(DocumentFields.DocumentName)
+  const [restMandatoryField] = mandatoryFields.filter(
+    (f) => f.name !== DocumentFields.DocumentName,
+  )
 
   const contextValue = useMemo(
     () => ({
       numberOfOptionalLines,
       setNumberOfOptionalLines,
       document,
-      givenName,
+      restMandatoryField,
       preferredFields,
       image,
       highlight,
@@ -83,5 +96,6 @@ Card.DocumentHeader = DocumentHeader
 Card.OtherHeader = OtherHeader
 Card.Highlight = CardHighlight
 Card.Photo = CardPhoto
+Card.Dots = Dots
 
 export default Card
