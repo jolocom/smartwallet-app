@@ -1,7 +1,7 @@
 import React from 'react'
 import { strings } from '~/translations'
-import TabsContainer from '../../components/Tabs/Container'
-import Tabs from '../../components/Tabs/Tabs'
+import TabsContainer from '~/components/Tabs/Container'
+import Tabs from '~/components/Tabs/Tabs'
 
 const TABS = [
   { id: 'documents', value: strings.DOCUMENTS },
