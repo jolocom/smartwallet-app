@@ -15,6 +15,7 @@ export const CardBody: React.FC = ({ children }) => (
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    marginTop: 10,
   },
   bodyContainer: {
     transform: [{ scale: BP({ default: 1, xsmall: 0.9 }) }],

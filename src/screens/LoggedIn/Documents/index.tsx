@@ -7,16 +7,15 @@ import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/Tabs'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
+import { DocumentTypes } from '~/components/Card/Card'
+import OtherCard from '~/components/Card/OtherCard'
 
 const DOCUMENTS = [
   {
     id: 1,
+    type: DocumentTypes.Document,
     details: {
       mandatoryFields: [
-        {
-          name: 'Document Type',
-          value: 'Nederlandse identitekaart',
-        },
         { name: 'Document Name', value: 'Nederlandse identitekaart' },
         {
           name: 'Given Name',
@@ -38,13 +37,13 @@ const DOCUMENTS = [
   },
   {
     id: 2,
+    type: DocumentTypes.Document,
     details: {
       mandatoryFields: [
         {
-          name: 'Document Type',
+          name: 'Document Name',
           value: 'Nederlandse identitekaart Nederlandse identitekaart',
         },
-        { name: 'Document Name', value: 'Nederlandse identitekaart' },
         {
           name: 'Given Name',
           value:
@@ -76,12 +75,9 @@ const DOCUMENTS = [
   },
   {
     id: 3,
+    type: DocumentTypes.Document,
     details: {
       mandatoryFields: [
-        {
-          name: 'Document Type',
-          value: 'Nederlandse identitekaart',
-        },
         { name: 'Document Name', value: 'Nederlandse identitekaart' },
         {
           name: 'Given Name',
@@ -110,21 +106,104 @@ const DOCUMENTS = [
   },
 ]
 
+const OTHER = [
+  {
+    id: 4,
+    type: DocumentTypes.Other,
+    details: {
+      mandatoryFields: [{ name: 'Document Name', value: 'Name of the event' }],
+      preferredFields: [
+        {
+          name: 'Extra long description of the input',
+          value: 'Information that should be previewed here',
+        },
+        {
+          name:
+            'Some more info that can fit in here and if it is not going over two lines agreed previou',
+          value: 'Information that should be',
+        },
+        {
+          name: 'Extra long description of the input',
+          value: 'Information',
+        },
+      ],
+      logo:
+        'https://i.pinimg.com/564x/db/3f/9b/db3f9bce5262323d79cc020950db08bc.jpg',
+    },
+  },
+  {
+    id: 5,
+    type: DocumentTypes.Other,
+    details: {
+      mandatoryFields: [{ name: 'Document Name', value: 'Name' }],
+      preferredFields: [
+        {
+          name: 'Title',
+          value: 'Info',
+        },
+        {
+          name: 'Title',
+          value: 'Information that should bу probably previewed here or not',
+        },
+      ],
+    },
+  },
+  {
+    id: 6,
+    type: DocumentTypes.Other,
+    details: {
+      mandatoryFields: [
+        {
+          name: 'Document Name',
+          value:
+            'Systemischer Agile Coach - Infos zu unserer Weiterbildung Systemischer Agile Coach - Infos zu unserer Weiterbildung',
+        },
+      ],
+      preferredFields: [
+        {
+          name: 'Extra long description of the input',
+          value: 'Information that should be previewed here',
+        },
+        {
+          name: 'Extra long description of the input:',
+          value: 'Information that should be previewed here',
+        },
+        {
+          name: 'Extra long description of the input:',
+          value: 'Information that should be previewed here',
+        },
+      ],
+      logo:
+        'https://i.pinimg.com/564x/db/3f/9b/db3f9bce5262323d79cc020950db08bc.jpg',
+    },
+  },
+]
+
 const DocumentList = () => {
   const credentials = useSelector(getAllCredentials)
   const { activeTab, activeSubtab } = useTabs()
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      {DOCUMENTS.map((document) => (
-        <DocumentCard
-          key={document.id}
-          mandatoryFields={document.details.mandatoryFields}
-          preferredFields={document.details.preferredFields}
-          highlight={document.details.highlight}
-          image={document.details.photo}
-        />
-      ))}
+      {activeTab?.id === 'documents' &&
+        DOCUMENTS.map((document) => (
+          <DocumentCard
+            key={document.id}
+            mandatoryFields={document.details.mandatoryFields}
+            preferredFields={document.details.preferredFields}
+            highlight={document.details.highlight}
+            image={document.details.photo}
+          />
+        ))}
+      {activeTab?.id === 'other' &&
+        OTHER.map((otherDoc) => (
+          <OtherCard
+            key={otherDoc.id}
+            mandatoryFields={otherDoc.details.mandatoryFields}
+            preferredFields={otherDoc.details.preferredFields}
+            image={otherDoc.details.logo}
+          />
+        ))}
       <View style={{ height: 100 }} />
     </ScrollView>
   )

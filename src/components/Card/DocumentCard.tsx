@@ -19,7 +19,7 @@ const DocumentCard = ({
           highlight={highlight}
         >
           <CardBody>
-            <Card.Header />
+            <Card.DocumentHeader />
             <Card.OptionalFields />
           </CardBody>
           <Card.Highlight />

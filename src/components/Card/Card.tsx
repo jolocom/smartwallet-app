@@ -1,8 +1,14 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import CardHighlight from './CardHighlight'
 import CardPhoto from './CardPhoto'
-import CardHeader from './CardHeader'
+import DocumentHeader from './DocumentHeader'
 import OptionalFields from './OptionalFields'
+import OtherHeader from './OtherHeader'
+
+export enum DocumentTypes {
+  Document = 'Document',
+  Other = 'Other',
+}
 
 interface IField {
   name: string
@@ -15,8 +21,8 @@ interface ICardContext {
   document: any
   givenName: any
   preferredFields: IField[]
-  image: string | undefined
-  highlight: string | undefined
+  image?: string | undefined
+  highlight?: string | undefined
 }
 
 const CardContext = createContext<ICardContext | undefined>(undefined)
@@ -30,13 +36,14 @@ export const useCard = () => {
 interface IProps {
   preferredFields: IField[]
   mandatoryFields: IField[]
-  image: string | undefined
-  highlight: string | undefined
+  image?: string | undefined
+  highlight?: string | undefined
 }
 
 interface ICardComposition {
   OptionalFields: React.FC
-  Header: React.FC
+  DocumentHeader: React.FC
+  OtherHeader: React.FC
   Highlight: React.FC
   Photo: React.FC
 }
@@ -53,8 +60,9 @@ const Card: React.FC<IProps> & ICardComposition = ({
   const getFieldInfo = (fieldName: string) =>
     mandatoryFields.find((el) => el.name === fieldName)
 
-  const document = getFieldInfo('Document Type')
+  const document = getFieldInfo('Document Name')
   const givenName = getFieldInfo('Given Name')
+
   const contextValue = useMemo(
     () => ({
       numberOfOptionalLines,
@@ -71,7 +79,8 @@ const Card: React.FC<IProps> & ICardComposition = ({
 }
 
 Card.OptionalFields = OptionalFields
-Card.Header = CardHeader
+Card.DocumentHeader = DocumentHeader
+Card.OtherHeader = OtherHeader
 Card.Highlight = CardHighlight
 Card.Photo = CardPhoto
 

@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useCard } from './Card'
 import Dots from './Dots'
-import { TitleField } from './Field'
+import { SpecialField, TitleField } from './Field'
 
-const CardHeader: React.FC = () => {
-  const { document } = useCard()
+const DocumentHeader: React.FC = () => {
+  const { document, givenName } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
 
   const handleHeaderTextLayout = (e) => {
@@ -15,18 +15,21 @@ const CardHeader: React.FC = () => {
   }
 
   return (
-    <View style={styles.header}>
-      <TitleField
-        onTextLayout={handleHeaderTextLayout}
-        customStyles={{
-          flex: 0.85,
-          ...(isHeaderScalled && styles.scaledDocumentField),
-        }}
-      >
-        {document?.value}
-      </TitleField>
-      <Dots />
-    </View>
+    <>
+      <View style={styles.header}>
+        <TitleField
+          onTextLayout={handleHeaderTextLayout}
+          customStyles={{
+            flex: 0.85,
+            ...(isHeaderScalled && styles.scaledDocumentField),
+          }}
+        >
+          {document?.value}
+        </TitleField>
+        <Dots />
+      </View>
+      <SpecialField numberOfLines={2}>{givenName?.value}</SpecialField>
+    </>
   )
 }
 
@@ -42,4 +45,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CardHeader
+export default DocumentHeader

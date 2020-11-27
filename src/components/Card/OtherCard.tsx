@@ -1,16 +1,23 @@
 import React from 'react'
-import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
+import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import Card from './Card'
+import { CardBody, CardContainer } from './CardStyledComponents'
 
-const OtherCard = ({ mandatoryFields, preferredFields }) => {
+const OtherCard = ({ mandatoryFields, preferredFields, image }) => {
   return (
     <CardContainer>
-      <DocumentCardMedium>
-        <Card>
-          <Card.MandatoryFields />
-          <Card.OptionalFields />
+      <OtherCardMedium>
+        <Card
+          mandatoryFields={mandatoryFields}
+          preferredFields={preferredFields}
+          image={image}
+        >
+          <CardBody>
+            <Card.OtherHeader />
+            <Card.OptionalFields />
+          </CardBody>
         </Card>
-      </DocumentCardMedium>
+      </OtherCardMedium>
     </CardContainer>
   )
 }
