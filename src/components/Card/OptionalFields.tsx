@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { IWithCustomStyle, useCard } from './Card'
+import { useCard } from './Card'
 import { FieldName, FieldValue } from './Field'
+import { IWithCustomStyle } from './types'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
@@ -9,12 +10,12 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
   const {
     numberOfOptionalLines,
     setNumberOfOptionalLines,
-    preferredFields,
+    optionalFields,
     highlight,
     image,
   } = useCard()
   const [displayedOptionalFields, setDisplayedOptionalFields] = useState(
-    preferredFields,
+    optionalFields,
   )
 
   /* check wether to show last optional field */

@@ -1,36 +1,18 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
-import { StyleProp, ViewStyle } from 'react-native'
 import CardHighlight from './CardHighlight'
 import CardPhoto from './CardPhoto'
 import DocumentHeader from './DocumentHeader'
 import Dots from './Dots'
 import OptionalFields from './OptionalFields'
 import OtherHeader from './OtherHeader'
-
-export interface IWithCustomStyle {
-  customStyles: StyleProp<ViewStyle>
-}
-
-export enum DocumentTypes {
-  document = 'document',
-  other = 'other',
-}
-
-export enum DocumentFields {
-  DocumentName = 'Document Name',
-}
-
-interface IField {
-  name: string
-  value: string | number
-}
+import { DocumentFields, IField, IWithCustomStyle, ICardProps } from './types'
 
 interface ICardContext {
   numberOfOptionalLines: number
   setNumberOfOptionalLines: React.Dispatch<React.SetStateAction<number>>
   document: IField | undefined
   restMandatoryField: IField | undefined
-  preferredFields: IField[]
+  optionalFields: IField[]
   image?: string | undefined
   highlight?: string | undefined
 }
@@ -43,13 +25,6 @@ export const useCard = () => {
   return context
 }
 
-interface IProps {
-  preferredFields: IField[]
-  mandatoryFields: IField[]
-  image?: string | undefined
-  highlight?: string | undefined
-}
-
 interface ICardComposition {
   OptionalFields: React.FC<IWithCustomStyle>
   DocumentHeader: React.FC
@@ -59,9 +34,9 @@ interface ICardComposition {
   Dots: React.FC<IWithCustomStyle>
 }
 
-const Card: React.FC<IProps> & ICardComposition = ({
+const Card: React.FC<ICardProps> & ICardComposition = ({
   children,
-  preferredFields,
+  optionalFields,
   mandatoryFields,
   image,
   highlight,
@@ -82,7 +57,7 @@ const Card: React.FC<IProps> & ICardComposition = ({
       setNumberOfOptionalLines,
       document,
       restMandatoryField,
-      preferredFields,
+      optionalFields,
       image,
       highlight,
     }),

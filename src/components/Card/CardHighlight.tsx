@@ -2,9 +2,8 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { useCard } from './Card'
+import { CARD_HORIZONTAL_PADDING } from './CardStyledComponents'
 import { Highlight } from './Field'
-
-const CARD_HORIZONTAL_PADDING = 18 // TODO: should not be duplicated here
 
 const CardHighlight: React.FC = () => {
   const { highlight } = useCard()

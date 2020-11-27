@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-import { IWithCustomStyle } from './Card'
+import { IWithCustomStyle } from './types'
 
 const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   return (

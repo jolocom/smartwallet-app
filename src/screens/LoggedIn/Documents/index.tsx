@@ -7,8 +7,8 @@ import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/Tabs'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
-import { DocumentFields, DocumentTypes } from '~/components/Card/Card'
 import OtherCard from '~/components/Card/OtherCard'
+import { DocumentTypes, DocumentFields } from '~/components/Card/types'
 
 const DOCUMENTS = [
   {
@@ -25,7 +25,7 @@ const DOCUMENTS = [
           value: 'De Bruijn Willeke Liselotte',
         },
       ],
-      preferredFields: [
+      optionalFields: [
         { name: 'Date of birth', value: Date.now() },
         {
           name: 'Nationality',
@@ -54,7 +54,7 @@ const DOCUMENTS = [
             'Adolph Blaine Charles David Earl Frederick Gerald Hubert Irvin Gerald Hubert Irvin',
         },
       ],
-      preferredFields: [
+      optionalFields: [
         {
           name: 'Extra long description of the input',
           value:
@@ -91,7 +91,7 @@ const DOCUMENTS = [
           value: 'De Bruijn Willeke Liselotte',
         },
       ],
-      preferredFields: [
+      optionalFields: [
         {
           name: 'Extra long description of the input',
           value:
@@ -121,7 +121,7 @@ const OTHER = [
       mandatoryFields: [
         { name: DocumentFields.DocumentName, value: 'Name of the event' },
       ],
-      preferredFields: [
+      optionalFields: [
         {
           name: 'Extra long description of the input',
           value: 'Information that should be previewed here',
@@ -145,7 +145,7 @@ const OTHER = [
     type: DocumentTypes.other,
     details: {
       mandatoryFields: [{ name: DocumentFields.DocumentName, value: 'Name' }],
-      preferredFields: [
+      optionalFields: [
         {
           name: 'Title',
           value: 'Info',
@@ -168,7 +168,7 @@ const OTHER = [
             'Systemischer Agile Coach - Infos zu unserer Weiterbildung Systemischer Agile Coach - Infos zu unserer Weiterbildung',
         },
       ],
-      preferredFields: [
+      optionalFields: [
         {
           name: 'Extra long description of the input',
           value: 'Information that should be previewed here',
@@ -199,7 +199,7 @@ const DocumentList = () => {
           <DocumentCard
             key={document.id}
             mandatoryFields={document.details.mandatoryFields}
-            preferredFields={document.details.preferredFields}
+            optionalFields={document.details.optionalFields}
             highlight={document.details.highlight}
             image={document.details.photo}
           />
@@ -209,7 +209,7 @@ const DocumentList = () => {
           <OtherCard
             key={otherDoc.id}
             mandatoryFields={otherDoc.details.mandatoryFields}
-            preferredFields={otherDoc.details.preferredFields}
+            optionalFields={otherDoc.details.optionalFields}
             image={otherDoc.details.logo}
           />
         ))}

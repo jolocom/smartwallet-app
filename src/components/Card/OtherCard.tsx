@@ -2,14 +2,19 @@ import React from 'react'
 import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import Card from './Card'
 import { CardBody, CardContainer } from './CardStyledComponents'
+import { ICardProps } from './types'
 
-const OtherCard = ({ mandatoryFields, preferredFields, image }) => {
+const OtherCard: React.FC<ICardProps> = ({
+  mandatoryFields,
+  optionalFields,
+  image,
+}) => {
   return (
     <CardContainer>
       <OtherCardMedium>
         <Card
           mandatoryFields={mandatoryFields}
-          preferredFields={preferredFields}
+          optionalFields={optionalFields}
           image={image}
         >
           <CardBody>

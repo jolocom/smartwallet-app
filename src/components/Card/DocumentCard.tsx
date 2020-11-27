@@ -2,10 +2,11 @@ import React from 'react'
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import Card from './Card'
 import { CardBody, CardContainer } from './CardStyledComponents'
+import { ICardProps } from './types'
 
-const DocumentCard = ({
+const DocumentCard: React.FC<ICardProps> = ({
   mandatoryFields,
-  preferredFields,
+  optionalFields,
   image,
   highlight,
 }) => {
@@ -14,7 +15,7 @@ const DocumentCard = ({
       <DocumentCardMedium>
         <Card
           mandatoryFields={mandatoryFields}
-          preferredFields={preferredFields}
+          optionalFields={optionalFields}
           image={image}
           highlight={highlight}
         >
