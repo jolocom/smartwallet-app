@@ -1,10 +1,17 @@
 import * as loading from 'src/actions/registration/loadingStages'
-import { setDid, checkLocalDeviceAuthSet } from 'src/actions/account'
+import { setDid } from 'src/actions/account'
 import { navigatorResetHome } from '../navigation'
 import { setSeedPhraseSaved } from '../recovery'
-import { generateSecureRandomBytes } from '@jolocom/sdk/js/src/lib/util'
+import { generateSecureRandomBytes } from '@jolocom/sdk/js/util'
 import { ThunkAction } from '../../store'
 import { entropyToMnemonic } from 'bip39'
+import { genericActions, navigationActions } from '..'
+import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
+import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
+import { createWarningNotification } from 'src/lib/notifications'
+import { scheduleNotification } from '../notifications'
+import strings from 'src/locales/strings'
+import I18n from 'i18n-js'
 
 const humanTimeout = () => new Promise(resolve => setTimeout(resolve, 1000))
 
@@ -21,7 +28,7 @@ export const setIsRegistering = (value: boolean) => ({
 export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch,
   getState,
-  sdk,
+  agent,
 ) => {
   const isRegistering = getState().registration.loading.isRegistering
   if (isRegistering) return
@@ -33,9 +40,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setLoadingMsg(loading.loadingStages[0]))
 
   const seed = await generateSecureRandomBytes(16)
-  const password = (await generateSecureRandomBytes(32)).toString('base64')
-  // const identity = await sdk.createNewIdentity(password)
-  const identity = await sdk.loadFromMnemonic(entropyToMnemonic(seed), password)
+  const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
   // and it's too fast so slow down
   await humanTimeout()
 
@@ -50,7 +55,7 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
       resolve: async _ => identity.identity
     })
 
-  await sdk.storageLib.store.setting(
+  await agent.storage.store.setting(
     'encryptedSeed',
     {
       b64Encoded: encryptedSeed.toString('base64')
@@ -63,28 +68,36 @@ export const createIdentity = (encodedEntropy: string): ThunkAction => async (
   dispatch(setDid(identity.did))
   await humanTimeout()
   dispatch(setIsRegistering(false))
-  await dispatch(checkLocalDeviceAuthSet)
 
-  return dispatch(navigatorResetHome())
+  // clear the saved PIN code, if any
+  await useResetKeychainValues(PIN_SERVICE)()
+
+  return dispatch(genericActions.lockApp())
 }
 
 export const recoverIdentity = (mnemonic: string): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
   dispatch(setIsRegistering(true))
-
   try {
-    const password = (await generateSecureRandomBytes(32)).toString('base64')
-    const identity = await backendMiddleware.loadFromMnemonic(mnemonic, password)
-    dispatch(setDid(identity.did))
-    dispatch(setSeedPhraseSaved())
+    const identity = await agent.loadFromMnemonic(mnemonic);
 
-    dispatch(setIsRegistering(false))
-    return dispatch(navigatorResetHome())
+    dispatch(setDid(identity.did))
+    await dispatch(setSeedPhraseSaved())
+
+    await dispatch(navigatorResetHome())
+    await dispatch(genericActions.lockApp())
+
+    return dispatch(setIsRegistering(false))
   } catch (e) {
-    dispatch(setIsRegistering(false))
-    throw e
+    const notification = createWarningNotification({
+      title: I18n.t(strings.AWKWARD),
+      message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
+    })
+    dispatch(scheduleNotification(notification))
+    dispatch(navigationActions.navigateBack())
+    return dispatch(setIsRegistering(false))
   }
 }

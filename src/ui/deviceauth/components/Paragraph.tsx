@@ -3,6 +3,7 @@ import { Text, StyleSheet, TextStyle, Animated, Platform } from 'react-native'
 
 import { Colors } from '../colors'
 import { Fonts } from '../utils/fonts'
+import { BP } from 'src/styles/breakpoints'
 
 export enum ParagraphSizes {
   large = 'large',
@@ -29,8 +30,7 @@ const Paragraph: React.FC<PropsI> = ({
   return (
     <TextComponent
       testID="paragraph"
-      style={[styles.paragraph, styles[size], { color }, customStyles]}
-    >
+      style={[styles.paragraph, styles[size], { color }, customStyles]}>
       {children}
     </TextComponent>
   )
@@ -68,7 +68,11 @@ const styles = StyleSheet.create({
     ...getStyle(16, 22, 0),
   },
   medium: {
-    ...getStyle(20, 22, 0.14),
+    ...getStyle(
+      BP({ large: 20, medium: 18, small: 16 }),
+      BP({ large: 22, medium: 20, small: 18 }),
+      0.14,
+    ),
   },
   large: {
     ...getStyle(22, 26, 0.15),

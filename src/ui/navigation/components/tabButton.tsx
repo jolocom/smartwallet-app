@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { fontLight } from '../../../styles/typography'
 import { BP } from '../../../styles/breakpoints'
+import I18n from 'src/locales/i18n'
 
 const styles = StyleSheet.create({
   label: {
@@ -74,8 +75,7 @@ export const TabButton = (props: Props) => {
       style={styles.button}
       accessibilityLabel={accessibility.label}
       accessibilityRole={accessibility.role}
-      accessibilityStates={accessibility.states}
-    >
+      accessibilityStates={accessibility.states}>
       <View style={{ width: iconSize, height: iconSize }}>
         {renderIcon({
           ...scene,
@@ -94,9 +94,8 @@ export const TabButton = (props: Props) => {
               : colors.inactiveTintColor,
           },
         ]}
-        allowFontScaling={true}
-      >
-        {label}
+        allowFontScaling={true}>
+        {I18n.t(label)}
       </Text>
     </TouchableOpacity>
   )

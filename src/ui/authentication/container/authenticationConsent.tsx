@@ -3,9 +3,13 @@ import { connect } from 'react-redux'
 import { AuthenticationConsentComponent } from '../components/authenticationConsent'
 import { ssoActions } from 'src/actions'
 import { ThunkDispatch } from 'src/store'
-import { withErrorScreen } from 'src/actions/modifiers'
+import {
+  withErrorScreen,
+  withLoading,
+  withInternet,
+} from 'src/actions/modifiers'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { InteractionSummary } from '@jolocom/sdk/js/src/lib/interactionManager/types'
+import { InteractionSummary } from '@jolocom/sdk/js/interactionManager/types'
 
 interface AuthenticationNavigationParams {
   interactionId: string
@@ -43,7 +47,11 @@ export const AuthenticationConsentContainer = (props: Props) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   confirmAuthenticationRequest: (interactionId: string) =>
     dispatch(
-      withErrorScreen(ssoActions.sendAuthenticationResponse(interactionId)),
+      withInternet(
+        withLoading(
+          withErrorScreen(ssoActions.sendAuthenticationResponse(interactionId)),
+        ),
+      ),
     ),
   cancelAuthenticationRequest: () => dispatch(ssoActions.cancelSSO),
 })

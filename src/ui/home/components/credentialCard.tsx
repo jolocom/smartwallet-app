@@ -5,7 +5,7 @@ import I18n from 'src/locales/i18n'
 import { CardWrapper } from 'src/ui/structure'
 import { Spacing, Typography } from 'src/styles'
 import MoreIcon from 'src/resources/svg/MoreIcon'
-import { prepareLabel } from '@jolocom/sdk/js/src/lib/util'
+import { prepareLabel } from 'src/lib/util'
 import { credentialStyles } from './sharedConstants'
 
 interface Props {
@@ -48,8 +48,8 @@ export const CredentialCard: React.FC<Props> = props => {
       <View style={credentialStyles.claimsArea}>
         {Object.keys(claimData).map(key => (
           <React.Fragment key={key}>
-            <Text style={styles.claimLabel}>{prepareLabel(I18n.t(key))}</Text>
-            <Text style={styles.claimText}>{I18n.t(claimData[key])}</Text>
+            <Text style={styles.claimLabel}>{I18n.t(prepareLabel(key))}</Text>
+            <Text style={styles.claimText}>{claimData[key]}</Text>
           </React.Fragment>
         ))}
       </View>

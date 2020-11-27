@@ -46,7 +46,7 @@ platform :android do
       secure_text: true
     )
     sh(
-      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out key.json -k #{password}",
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out ../key.json -k #{password}",
       log: false
     )
     sh(

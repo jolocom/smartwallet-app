@@ -9,6 +9,7 @@ import QRCodeScanner, { Event } from 'react-native-qrcode-scanner'
 describe('Scanner component', () => {
   const defaultProps = {
     onScan: jest.fn().mockReturnValueOnce(Promise.resolve()),
+    shouldScan: true,
     reRenderKey: 4,
   }
 

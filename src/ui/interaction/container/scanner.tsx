@@ -29,7 +29,7 @@ import { Wrapper } from 'src/ui/structure'
 
 interface Props extends NavigationInjectedProps {
   consumeToken: (jwt: string) => Promise<any>
-  registerPopup: () => void
+  setDisableLock: (val: boolean) => void
 }
 
 const CAMERA_PERMISSION = Platform.select({
@@ -43,15 +43,7 @@ export const ScannerContainer: React.FC<Props> = props => {
   const scannerRef = useRef<QRScanner>(null)
   const reactivate = () => scannerRef && scannerRef.current?.reactivate()
   const [showCamera, setShowCamera] = useState(true)
-
-  // NOTE: this is needed because QRScanner behaves weirdly when the screen is
-  // remounted.... but we don't have error state here because rebase
-  // FIXME TODO @mnzaki
-  //if (!isError) reactivate()
-
-  const rerender = () => {
-    reactivate()
-  }
+  const [shouldScan, setShouldScan] = useState(true)
 
   useEffect(() => {
     const backListener = BackHandler.addEventListener(
@@ -62,18 +54,26 @@ export const ScannerContainer: React.FC<Props> = props => {
       },
     )
 
-    let listener: NavigationEventSubscription | undefined
+    let focusListener: NavigationEventSubscription | undefined
+    let blurListener: NavigationEventSubscription | undefined
+
     if (navigation) {
-      listener = navigation.addListener('didFocus', () => {
+      focusListener = navigation.addListener('didFocus', () => {
         setShowCamera(true)
-        rerender()
-        checkCameraPermissions()
+        setShouldScan(true)
+        reactivate()
+      })
+
+      blurListener = navigation.addListener('didBlur', () => {
+        //setShowCamera(false)
+        setShouldScan(false)
       })
     }
     checkCameraPermissions()
 
     return () => {
-      listener && listener.remove()
+      blurListener && blurListener.remove()
+      focusListener && focusListener.remove()
       backListener.remove()
     }
   }, [])
@@ -90,9 +90,12 @@ export const ScannerContainer: React.FC<Props> = props => {
   }
 
   const requestCameraPermission = async () => {
-    props.registerPopup()
+    // we disable the app lock while getting permissions so that user is not
+    // locked out on returning to app
+    props.setDisableLock(true)
     const permission = await request(CAMERA_PERMISSION)
     setPermission(permission)
+    props.setDisableLock(false)
   }
 
   const tryOpenSettings = () => {
@@ -122,7 +125,7 @@ export const ScannerContainer: React.FC<Props> = props => {
 
   let ret
   if (showCamera && permission === RESULTS.GRANTED) {
-    ret = <ScannerComponent onScan={consumeToken} onScannerRef={scannerRef} />
+    ret = <ScannerComponent shouldScan={shouldScan} onScan={consumeToken} onScannerRef={scannerRef} />
   } else if (permission === RESULTS.UNAVAILABLE || !showCamera) {
     // TODO: maybe add a message here like "do you even camera?"
     ret = (

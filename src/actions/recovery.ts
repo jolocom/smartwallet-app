@@ -1,30 +1,32 @@
 import { ThunkAction } from '../store'
 //import { SoftwareKeyProvider } from 'jolocom-lib/js/vaultedKeyProvider/softwareProvider'
-import { navigationActions } from './index'
+import { navigationActions, genericActions } from './index'
 import { routeList } from '../routeList'
 import settingKeys from '../ui/settings/settingKeys'
-import { removeNotification } from './notifications'
+import { removeNotification, scheduleNotification } from './notifications'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
+ // TODO Import ^ from jolocom-lib
 import useResetKeychainValues from 'src/ui/deviceauth/hooks/useResetKeychainValues'
 import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
-import { checkLocalDeviceAuthSet } from './account'
- // TODO Import ^ from jolocom-lib
+import { createWarningNotification } from 'src/lib/notifications'
+import strings from 'src/locales/strings'
+import I18n from 'src/locales/i18n'
 
 export const showSeedPhrase = (): ThunkAction => async (
   dispatch,
   getState,
-  backendMiddleware,
+  agent,
 ) => {
-  const encryptedSeed = await backendMiddleware.storageLib
+  const encryptedSeed = await agent.storage
     .get.setting('encryptedSeed')
 
   if (!encryptedSeed) {
     throw new Error('Can not retrieve Seed from database')
   }
 
-  const decrypted = await backendMiddleware.idw.asymDecrypt(
+  const decrypted = await agent.idw.asymDecrypt(
     Buffer.from(encryptedSeed.b64Encoded, 'base64'),
-    await backendMiddleware.keyChainLib.getPassword()
+    await agent.passwordStore.getPassword()
   )
 
   return dispatch(
@@ -41,23 +43,21 @@ export const showSeedPhrase = (): ThunkAction => async (
 export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   dispatch,
   getState,
-  sdk,
+  agent,
 ) => {
   let recovered = false
 
-  const recoveredEntropy = Buffer.from(
-    mnemonicToEntropy(mnemonicInput.join(' ')),
-    'hex'
-  )
-
   try {
-    const didMethod = await sdk.didMethods.getDefault()
-    if (didMethod.recoverFromSeed) {
-      const { identityWallet } = await didMethod.recoverFromSeed(
+    const recoveredEntropy = Buffer.from(
+      mnemonicToEntropy(mnemonicInput.join(' ')),
+      'hex'
+    )
+    if (agent.didMethod.recoverFromSeed) {
+      const { identityWallet } = await agent.didMethod.recoverFromSeed(
         recoveredEntropy,
-        await sdk.keyChainLib.getPassword()
+        await agent.passwordStore.getPassword()
       )
-      recovered = identityWallet.did === sdk.idw.did
+      recovered = identityWallet.did === agent.idw.did
     }
   } catch(e) {
     console.error('onRestoreAccess failed', e)
@@ -66,10 +66,17 @@ export const onRestoreAccess = (mnemonicInput: string[]): ThunkAction => async (
   if (recovered) {
     const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
     await resetServiceValuesInKeychain()
-  }
+    dispatch(navigationActions.navigatorResetHome())
 
-  await dispatch(checkLocalDeviceAuthSet)
-  return dispatch(navigationActions.navigatorResetHome())
+    // we re-lock the app, which will trigger the create pin screen
+    return dispatch(genericActions.lockApp())
+  } else {
+    const notification = createWarningNotification({
+      title: I18n.t(strings.AWKWARD),
+      message: I18n.t(strings.IT_SEEMS_LIKE_WE_CANT_DO_THIS)
+    })
+    return dispatch(scheduleNotification(notification))
+  }
 }
 
 export const setSeedPhraseSaved = (): ThunkAction => async (
@@ -78,17 +85,15 @@ export const setSeedPhraseSaved = (): ThunkAction => async (
   backendMiddleware,
 ) => {
   // No delete call available yet, overwriting with empty object
-  await backendMiddleware.storageLib.store.setting('encryptedSeed', {})
-  await backendMiddleware.storageLib.store.setting(
+  await backendMiddleware.storage.store.setting('encryptedSeed', {})
+  await backendMiddleware.storage.store.setting(
     settingKeys.seedPhraseSaved,
     true,
   )
 
-  // TODO: find sticky by id from queue, not active
-  const {
-    notifications: { active: stickyNotification },
-  } = getState()
-  if (stickyNotification) dispatch(removeNotification(stickyNotification))
+  const stickies = getState().notifications.queue.filter(n => !n.dismiss)
+
+  stickies.map(sticky => dispatch(removeNotification(sticky)))
 
   return dispatch({
     type: 'SET_SEED_PHRASE_SAVED',

@@ -6,6 +6,8 @@ import {
   View,
   StyleProp,
   ViewStyle,
+  AppStateStatus,
+  Platform,
 } from 'react-native'
 
 import { backgroundDarkMain, backgroundLightMain } from 'src/styles/colors'
@@ -18,9 +20,10 @@ import {
   unregisterAppWrapConfig,
 } from 'src/actions/generic'
 import { RootState } from 'src/reducers'
-import Lock from '../deviceauth/Lock'
-import RegisterPIN from '../deviceauth/RegisterPIN'
-import HowToChangePIN from '../deviceauth/HowToChangePIN'
+import { useAppState } from '../deviceauth/hooks/useAppState'
+import { genericActions, scheduleOfflineNotification } from 'src/actions'
+import { Colors } from '../deviceauth/colors'
+import strings from 'src/locales/strings'
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   registerProps: (props: Props) =>
@@ -29,13 +32,24 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     dispatch(unregisterAppWrapConfig(ref.value)),
 })
 
-const mapStateToProps = (state: RootState) => state.generic.appWrapConfig
+const mapStateToAppWrapProps = (state: RootState) => state.generic.appWrapConfig
+const mapDispatchToAppWrapProps = (dispatch: ThunkDispatch) => ({
+  lockApp: () => dispatch(genericActions.lockApp()),
+  scheduleOfflineNotification: () =>
+    dispatch(
+      scheduleOfflineNotification(
+        strings.WITHOUT_AN_ACTIVE_CONNECTION_SOME_FEATURES_MAY_BE_UNAVAILABLE,
+      ),
+    ),
+})
 
 interface Props
   extends Partial<AppWrapConfig>,
     ReturnType<typeof mapDispatchToProps> {
+  readonly style?: ViewStyle
   readonly withoutSafeArea?: boolean
   readonly dark?: boolean
+  readonly secondaryDark?: boolean
   readonly breathy?: boolean
   readonly centered?: boolean
   readonly overlay?: boolean
@@ -46,7 +60,8 @@ interface Props
 
 interface AppWrapProps
   extends AppWrapConfig,
-    ReturnType<typeof mapStateToProps> {
+    ReturnType<typeof mapDispatchToAppWrapProps>,
+    ReturnType<typeof mapStateToAppWrapProps> {
   children: ReactNode
 }
 
@@ -63,10 +78,12 @@ interface AppWrapProps
  * Wrapper props:
  * withoutSafeArea    don't pad for SafeArea
  * dark               use dark background and status bar
+ * secondaryDark      lighter background and status bar
  * breathy            justify with 'space-around', for a breathy look-n-feel
  * centered           alignItems 'center'
  * overlay            absolutely positioned transpare overlay
  * heightless         set height to 0 instead of default 100%
+ * style              custom styles for the wrapping view
  * testID             ID/label for use in tests
  */
 
@@ -77,20 +94,34 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     backgroundColor: backgroundLightMain,
-    //...debug
   },
 })
 
 let statusBarHidden = 0
 const AppWrapContainer: React.FC<AppWrapProps> = props => {
-  const { dark, loading, withoutStatusBar } = props
+  const {
+    dark,
+    secondaryDark,
+    loading,
+    withoutStatusBar,
+    lockApp,
+    // scheduleOfflineNotification,
+  } = props
+  // const { isConnected } = useNetInfo()
+
+  // TODO We need a way to delay this notification, currently it would show up
+  // during the splash screen. Also, on IOS the application starts with no
+  // internet access (therefore the notification is always scheduled).
+  // useEffect(() => {
+  //   !isConnected && scheduleOfflineNotification()
+  // }, [isConnected])
 
   useEffect(() => {
     // TODO @mnzaki
     // this is overengineered to allow for nesting <Wrapper>
     // instances that have conflicting StatusBar desires
     // see notion:spaces/mnzaki
-    if (withoutStatusBar) {
+    if (withoutStatusBar && Platform.OS !== 'ios') {
       statusBarHidden += 1
       StatusBar.setHidden(true)
       return () => {
@@ -104,25 +135,43 @@ const AppWrapContainer: React.FC<AppWrapProps> = props => {
     return
   }, [withoutStatusBar])
 
+  useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
+    /* if (appState.match(/active/) && nextAppState.match(/inactive|background/)) {
+     *   lockApp()
+     * } */
+
+    if (
+      (Platform.OS === 'ios' &&
+        appState.match(/background/) &&
+        nextAppState.match(/inactive|active/)) ||
+      (Platform.OS === 'android' &&
+        appState.match(/active/) &&
+        nextAppState.match(/inactive|background/))
+    ) {
+      lockApp()
+    }
+  })
+
   return (
     <>
       <StatusBar
         //hidden={statusBarHidden > 0}
-        barStyle={dark ? 'light-content' : 'dark-content'}
+        barStyle={dark || secondaryDark ? 'light-content' : 'dark-content'}
         backgroundColor={'transparent'}
         animated
         translucent
       />
+
       <AppLoadingAndNotifications loading={!!loading} />
-      <Lock />
-      <RegisterPIN />
-      <HowToChangePIN />
       {props.children}
     </>
   )
 }
 
-export const AppWrap = connect(mapStateToProps)(AppWrapContainer)
+export const AppWrap = connect(
+  mapStateToAppWrapProps,
+  mapDispatchToAppWrapProps,
+)(AppWrapContainer)
 
 export const Wrapper = React.memo(
   connect(
@@ -145,13 +194,18 @@ export const Wrapper = React.memo(
       centered,
       overlay,
       heightless,
+      withoutStatusBar,
+      style,
+      secondaryDark,
     } = props
 
     const extraStyle: StyleProp<ViewStyle> = {
       // Note: StatusBar.currentHeight is not available on iOS
       paddingTop: withoutSafeArea ? 0 : StatusBar.currentHeight,
     }
+    if (withoutStatusBar) extraStyle.paddingTop = 0
     if (dark) extraStyle.backgroundColor = backgroundDarkMain
+    if (secondaryDark) extraStyle.backgroundColor = Colors.mainBlack
     if (breathy) extraStyle.justifyContent = 'space-around'
     if (centered) extraStyle.alignItems = 'center'
     if (heightless) {
@@ -165,13 +219,7 @@ export const Wrapper = React.memo(
       extraStyle.backgroundColor = 'transparent'
     }
 
-    // @ts-ignore
-    if (__DEV__ && props.style) {
-      throw new Error(
-        '<Wrapper> dont care bout yo style. ' +
-          'Look at src/ui/structure/wrapper.tsx',
-      )
-    }
+    if (style) Object.assign(extraStyle, style)
 
     return (
       <>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { ButtonSection } from 'src/ui/structure/buttonSectionBottom'
 import { Text, StyleSheet, View } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from '../../../locales/strings'
@@ -8,12 +7,14 @@ import { IssuerCard } from '../../documents/components/issuerCard'
 import {
   InteractionSummary,
   AuthenticationFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
+import { ButtonSheet } from 'src/ui/structure/buttonSheet'
+import { Wrapper } from '../../structure'
 
 interface Props {
   interactionSummary: InteractionSummary
-  confirmAuthenticationRequest: Function
-  cancelAuthenticationRequest: Function
+  confirmAuthenticationRequest: () => void
+  cancelAuthenticationRequest: () => void
 }
 
 interface State {}
@@ -64,7 +65,7 @@ export class AuthenticationConsentComponent extends React.Component<
     const { initiator: issuer, state } = this.props.interactionSummary
     const { description } = state as AuthenticationFlowState
     return (
-      <View style={styles.container}>
+      <Wrapper>
         <View style={styles.topSection}>
           <IssuerCard issuer={issuer} style={styles.issuerCard} />
           <View style={styles.authRequestContainer}>
@@ -72,8 +73,10 @@ export class AuthenticationConsentComponent extends React.Component<
               {I18n.t(strings.WOULD_YOU_LIKE_TO)}
             </Text>
             <Text
-              style={[styles.authRequestText, { fontSize: Typography.text4XL }]}
-            >
+              style={[
+                styles.authRequestText,
+                { fontSize: Typography.text4XL },
+              ]}>
               {description}
             </Text>
             <Text style={styles.authRequestText}>
@@ -82,16 +85,15 @@ export class AuthenticationConsentComponent extends React.Component<
           </View>
         </View>
         <View style={styles.buttonSection}>
-          <ButtonSection
-            disabled={this.state.pending}
-            denyDisabled={this.state.pending}
-            confirmText={I18n.t(strings.AUTHORIZE)}
-            denyText={I18n.t(strings.DENY)}
-            handleConfirm={this.handleConfirm}
-            handleDeny={() => this.props.cancelAuthenticationRequest()}
+          <ButtonSheet
+            disabledConfirm={this.state.pending}
+            confirmText={strings.AUTHORIZE}
+            cancelText={strings.DENY}
+            onCancel={this.props.cancelAuthenticationRequest}
+            onConfirm={this.handleConfirm}
           />
         </View>
-      </View>
+      </Wrapper>
     )
   }
 }

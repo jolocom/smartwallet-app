@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { IssuerCard } from 'src/ui/documents/components/issuerCard'
 import { DecoratedClaims } from 'src/reducers/account'
-import { prepareLabel } from '@jolocom/sdk/js/src/lib/util'
+import { prepareLabel } from 'src/lib/util'
 import { Typography, Colors, Spacing } from 'src/styles'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
@@ -50,7 +50,7 @@ export const DocumentDetailsComponent: React.FC<Props> = ({ document }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionHeader}>Issued by</Text>
+      <Text style={styles.sectionHeader}>{I18n.t(strings.ISSUED_BY)}</Text>
       <IssuerCard issuer={document.issuer} />
       <Text style={styles.sectionHeader}>
         {I18n.t(strings.DOCUMENT_DETAILS_CLAIMS)}

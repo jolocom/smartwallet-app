@@ -1,20 +1,32 @@
 /**
+ * NOTE: This migration has been disabled because newer version of the wallet
+ * have switched to the "did:jun" identities and there is no upgrade path
+ *
+ * The rest is here only for historical reasons.
+ *
+ ******************************************************************************/
+
+
+ /*
  * This migration re-encrypts the encryptedEntropy in the wallet database using
  * the jolocom-lib (which uses node crypto) instead of the previously used
  * crypto-js dependency
  */
 
 import { MigrationInterface, QueryRunner } from 'typeorm/browser'
+/*
 import CryptoJS from './../../compat/cryptojs'
 import { KeyChain } from '../../../lib/keychain'
-import { MasterKeyEntity } from '@jolocom/sdk/js/src/lib/storage/entities'
+import { MasterKeyEntity } from '@jolocom/sdk-storage-typeorm/js/src/entities'
 import { encryptWithLib3 } from './../../compat/jolocomLib'
 
 const getMasterKeys = (queryRunner: QueryRunner): Promise<MasterKeyEntity[]> =>
   queryRunner.query('SELECT encryptedEntropy FROM master_keys;')
 
+*/
+
 export class ReencryptSeed1567674609659 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<any> {
+  public async up(queryRunner: QueryRunner): Promise<any> {/*
     let password: string
     try {
       password = await new KeyChain().getPassword()
@@ -52,7 +64,7 @@ export class ReencryptSeed1567674609659 implements MigrationInterface {
         )
       }),
     )
-  }
+  */}
 
   public async down(queryRunner: QueryRunner): Promise<any> {
     throw new Error("There's no going back")

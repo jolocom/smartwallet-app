@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, LayoutChangeEvent, StyleSheet } from 'react-native'
+import { Animated, LayoutChangeEvent, StyleSheet, View, ViewStyle } from 'react-native'
 import { Colors } from '../../styles'
+import { overflowBlack } from '../../styles/colors'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -20,10 +21,11 @@ const styles = StyleSheet.create({
 
 interface Props {
   showSlide: boolean
+  customStyles?: ViewStyle
 }
 
 export const ActionSheet: React.FC<Props> = props => {
-  const { showSlide } = props
+  const { showSlide, customStyles = {} } = props
   // NOTE: default height is 9999 to make sure the view is hidden on first render
   const [viewHeight, setViewHeight] = useState(9999)
   const [animatedValue] = useState(new Animated.Value(0))
@@ -58,14 +60,26 @@ export const ActionSheet: React.FC<Props> = props => {
   })
 
   return (
+
     <Animated.View
       style={{
         ...styles.wrapper,
+        ...customStyles,
         transform: [{ translateY: interpolatedValue }],
       }}
       onLayout={getDimensions}
     >
       {props.children}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: -300,
+          height: 300,
+          left: 0,
+          right: 0,
+          backgroundColor: overflowBlack,
+        }}
+      />
     </Animated.View>
   )
 }

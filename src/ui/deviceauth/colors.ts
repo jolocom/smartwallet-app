@@ -7,8 +7,10 @@ export enum Colors {
   black = '#000',
   mainBlack = '#201a21',
   white = '#ffffff',
+  white40 = 'rgba(255, 255, 255, 0.4)',
   white45 = 'rgba(255, 255, 255, 0.45)',
   white70 = 'rgba(255, 255, 255, 0.7)',
   white80 = 'rgba(255, 255, 255, 0.8)',
+  white85 = 'rgba(255, 255, 255, 0.85)',
   white90 = 'rgba(255,255,255,0.9)',
 }

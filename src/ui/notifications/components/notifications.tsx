@@ -8,6 +8,7 @@ import {
   Animated,
   PanResponderGestureState,
   StatusBar,
+  Platform,
 } from 'react-native'
 import { fontMain } from '../../../styles/typography'
 import { black, white, yellowError } from '../../../styles/colors'
@@ -92,6 +93,11 @@ const styles = StyleSheet.create({
     fontFamily: fontMain,
     fontSize: 12,
     fontWeight: 'bold',
+    ...Platform.select({
+      ios: {
+        marginTop: 4,
+      },
+    }),
   },
   warningButton: {
     backgroundColor: '#f3c61c',

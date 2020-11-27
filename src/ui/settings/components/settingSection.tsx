@@ -1,5 +1,4 @@
-import React, { ReactNodeArray } from 'react'
-import { ReactNode } from 'react-redux'
+import React, { ReactNodeArray, ReactNode } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Spacing, Typography } from '../../../styles'
 

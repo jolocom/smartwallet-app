@@ -9,13 +9,13 @@ import { getDocumentClaims } from 'src/utils/filterDocuments'
 import { ThunkDispatch } from 'src/store'
 
 import I18n from 'src/locales/i18n'
-import { filters } from '@jolocom/sdk/js/src/lib/filterDecoratedClaims'
+import { filters } from 'src/lib/filterDecoratedClaims'
 
 import { DocumentsCarousel } from '../components/documentsCarousel'
 import { DocumentsList } from '../components/documentsList'
 import { DocumentViewToggle } from '../components/documentViewToggle'
 import strings from '../../../locales/strings'
-import { Typography, Colors, Spacing } from 'src/styles'
+import { Typography, Colors } from 'src/styles'
 import { Wrapper } from '../../structure'
 
 interface Props

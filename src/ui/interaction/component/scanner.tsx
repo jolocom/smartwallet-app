@@ -1,4 +1,4 @@
-import React, { useState, useEffect, RefObject } from 'react'
+import React, { useState, RefObject } from 'react'
 import QRScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import {
@@ -8,7 +8,6 @@ import {
   TouchableHighlight,
   View,
   Animated,
-  BackHandler,
 } from 'react-native'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
@@ -93,29 +92,18 @@ const styles = StyleSheet.create({
 
 interface Props {
   onScan: (jwt: string) => Promise<void>
+  shouldScan: boolean
   onScannerRef?: RefObject<QRScanner>
 }
 
 export const ScannerComponent = (props: Props) => {
-  const { onScan, onScannerRef } = props
+  const { onScan, onScannerRef, shouldScan } = props
 
   const [isError, setError] = useState(false)
   const [errorText, setErrorText] = useState('')
   const [isTorchPressed, setTorchPressed] = useState(false)
   const [colorAnimationValue] = useState(new Animated.Value(0))
   const [textAnimationValue] = useState(new Animated.Value(0))
-  const [showCamera, setShowCamera] = useState(true)
-
-  useEffect(() => {
-    let backListener = BackHandler.addEventListener('hardwareBackPress', () => {
-      setShowCamera(false)
-      return false
-    })
-
-    return () => {
-      backListener.remove()
-    }
-  }, [])
 
   const animateColor = () =>
     Animated.sequence([
@@ -149,7 +137,7 @@ export const ScannerComponent = (props: Props) => {
   })
 
   const onRead = (event: { data: string }) => {
-    return onScan(event.data).catch(err => {
+    return shouldScan && onScan(event.data).catch(err => {
       // TODO: use different message based on error code
       //       after fixing up error codes
       setError(true)
@@ -173,21 +161,21 @@ export const ScannerComponent = (props: Props) => {
 
   return (
     <>
-      {showCamera && (
-        <QRScanner
-          ref={onScannerRef}
-          //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
-          containerStyle={{
-            position: 'absolute',
-          }}
-          cameraProps={cameraSettings}
-          reactivate={true}
-          reactivateTimeout={3000}
-          fadeIn={false}
-          onRead={onRead}
-          cameraStyle={styles.cameraStyle}
-        />
-      )}
+      <QRScanner
+        ref={onScannerRef}
+        //@ts-ignore - see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/29651
+        containerStyle={{
+          position: 'absolute',
+        }}
+        cameraProps={cameraSettings}
+        reactivate={true}
+        vibrate={shouldScan}
+        reactivateTimeout={3000}
+        fadeIn={false}
+        onRead={onRead}
+        cameraStyle={styles.cameraStyle}
+      />
+
       <View style={styles.topOverlay} />
       <View
         style={{

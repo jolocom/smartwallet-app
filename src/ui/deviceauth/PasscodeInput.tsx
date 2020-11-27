@@ -29,6 +29,7 @@ interface PasscodeInputI {
   onSubmit: () => void
   errorStateUpdaterFn?: Dispatch<SetStateAction<boolean>>
   hasError?: boolean
+  isSuccess?: boolean
 }
 
 type AddPasscodeFnT = (prevState: string, passcode?: string) => string
@@ -40,6 +41,7 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
   errorStateUpdaterFn,
   onSubmit,
   hasError = false,
+  isSuccess = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
 
@@ -183,12 +185,13 @@ const PasscodeInput: React.FC<PasscodeInputI> = ({
         {PASSCODE_LENGTH.map((v, index) => {
           const isSelected = digits.length === index
           return (
-            <TouchableWithoutFeedback onPress={focusInput}>
+            <TouchableWithoutFeedback key={index} onPress={focusInput}>
               <View
                 style={[
                   styles.display,
                   isSelected && styles.active,
                   hasError && styles.error,
+                  isSuccess && styles.success,
                 ]}
                 key={index}>
                 <Text style={styles.text} testID="passcode-cell">
@@ -239,6 +242,9 @@ const styles = StyleSheet.create({
   },
   error: {
     borderColor: Colors.error,
+  },
+  success: {
+    borderColor: Colors.success,
   },
   text: {
     fontSize: 43,

@@ -9,7 +9,7 @@ import { CheckboxCredential } from './checkboxCredential'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 
 const styles = StyleSheet.create({
   card: {
@@ -51,7 +51,7 @@ export const CredentialSectionCard: React.FC<CredentialSectionProps> = props => 
       </View>
       <View style={styles.credentialsArea}>
         {/* Title for the section */}
-        <Text style={Typography.cardSecondaryTextBlack}>{sectionType}:</Text>
+        <Text style={Typography.cardSecondaryTextBlack}>{I18n.t(sectionType)}:</Text>
 
         {/* Credentials in each section */}
         {credentials.map(credential => {

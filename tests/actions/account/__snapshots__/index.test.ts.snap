@@ -35,9 +35,6 @@ Array [
     "type": "SET_CLAIMS_FOR_DID",
   },
   Object {
-    "type": "SET_LOCAL_AUTH",
-  },
-  Object {
     "type": "HAS_EXTERNAL_CREDENTIALS",
     "value": true,
   },
@@ -101,7 +98,7 @@ Array [
   Object {
     "params": Object {
       "error": [Error: Unknown Error],
-      "returnTo": "AppInit",
+      "returnTo": "Home",
     },
     "routeName": "Exception",
     "type": "Navigation/NAVIGATE",

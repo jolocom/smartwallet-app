@@ -1,4 +1,4 @@
-import { filters } from './../../src/lib/filterCreds'
+import { filters } from 'src/lib/filterCreds'
 import {
   testCreds,
   issuers,
@@ -8,8 +8,8 @@ import {
   numExpiredCreds,
   numValidCreds,
 } from './testData/filterTestData'
-import * as filterDecoratedClaims from '@jolocom/sdk/js/src/lib/filterDecoratedClaims'
-import { getUiCredentialTypeByType } from '@jolocom/sdk/js/src/lib/util'
+import * as filterDecoratedClaims from 'src/lib/filterDecoratedClaims'
+import { getUiCredentialTypeByType } from 'src/lib/util'
 
 describe('Filtering Credentials', () => {
   it('should filter expired creds', () => {

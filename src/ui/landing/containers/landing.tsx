@@ -7,18 +7,24 @@ import { checkTermsOfService } from 'src/actions/generic'
 import { withErrorScreen } from 'src/actions/modifiers'
 import { registrationActions } from 'src/actions/'
 import { AppError, ErrorCode } from 'src/lib/errors'
+import useDisableBackButton from 'src/ui/deviceauth/hooks/useDisableBackButton'
+import { NavigationInjectedProps } from 'react-navigation'
 
-interface Props extends ReturnType<typeof mapDispatchToProps> {}
+interface Props extends ReturnType<typeof mapDispatchToProps>,
+  NavigationInjectedProps {}
 
-export class LandingContainer extends React.Component<Props> {
-  public render(): JSX.Element {
-    return (
-      <LandingComponent
-        handleGetStarted={this.props.getStarted}
-        handleRecover={this.props.recoverIdentity}
-      />
-    )
-  }
+export const LandingContainer = (props: Props) => {
+  useDisableBackButton(() => {
+    // return true (disable back button) if we are focused
+    return props.navigation?.isFocused()
+  })
+
+  return (
+    <LandingComponent
+      handleGetStarted={props.getStarted}
+      handleRecover={props.recoverIdentity}
+    />
+  )
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
@@ -42,7 +48,13 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
     )
   },
   recoverIdentity: () => {
-    dispatch(withErrorScreen(checkTermsOfService(routeList.InputSeedPhrase)))
+    dispatch(
+      withErrorScreen(
+        checkTermsOfService(routeList.InputSeedPhrase),
+        err =>
+          new AppError(ErrorCode.RegistrationFailed, err, routeList.Landing),
+      ),
+    )
   },
 })
 

@@ -1,27 +1,19 @@
-import { JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { Interaction } from '@jolocom/sdk'
+
 import { navigationActions } from 'src/actions'
-import { Authentication } from 'jolocom-lib/js/interactionTokens/authentication'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
-import { InteractionTransportType } from '@jolocom/sdk/js/src/lib/interactionManager/types'
-import { cancelSSO } from '.'
+import { cancelSSO, scheduleSuccessNotification } from '.'
 
 export const consumeAuthenticationRequest = (
-  authenticationRequest: JSONWebToken<Authentication>,
-  channel: InteractionTransportType
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const { interactionManager } = backendMiddleware
-  const interaction = await interactionManager.start(
-    channel,
-    authenticationRequest
-  )
-
+  interaction: Interaction,
+): ThunkAction => async (dispatch, getState, agent) => {
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.AuthenticationConsent,
       params: {
         interactionId: interaction.id,
-        interactionSummary: interaction.getSummary()
+        interactionSummary: interaction.getSummary(),
       },
       key: 'authenticationRequest',
     }),
@@ -29,8 +21,14 @@ export const consumeAuthenticationRequest = (
 }
 
 export const sendAuthenticationResponse = (
-  interactionId: string
-): ThunkAction => async (dispatch, getState, backendMiddleware) => {
-  const interaction = backendMiddleware.interactionManager.getInteraction(interactionId)
-  return interaction.send(await interaction.createAuthenticationResponse()).then(() => dispatch(cancelSSO))
+  interactionId: string,
+): ThunkAction => async (dispatch, getState, sdk) => {
+  const interaction = await sdk.interactionManager.getInteraction(
+    interactionId,
+  )
+  const resp = await interaction.createAuthenticationResponse()
+  await interaction.send(resp)
+  await interaction.processInteractionToken(resp)
+  await dispatch(cancelSSO)
+  return dispatch(scheduleSuccessNotification)
 }

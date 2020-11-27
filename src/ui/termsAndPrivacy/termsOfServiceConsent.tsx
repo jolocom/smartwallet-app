@@ -5,11 +5,10 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  StatusBar,
 } from 'react-native'
 import { ThunkDispatch } from 'src/store'
 import { storeTermsOfService } from 'src/actions/generic'
-import { JolocomButton } from '../structure'
+import { JolocomButton, Wrapper } from '../structure'
 import { connect } from 'react-redux'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { routeList } from 'src/routeList'
@@ -24,7 +23,7 @@ import { CheckmarkSmallIcon } from 'src/resources'
 import strings from 'src/locales/strings'
 import I18n from 'src/locales/i18n'
 import { BP } from 'src/styles/breakpoints'
-import ScreenContainer from 'src/ui/deviceauth/components/ScreenContainer'
+import { ActionSheet } from '../structure/actionSheet'
 
 interface NavigationProps {
   nextRoute: routeList
@@ -93,8 +92,7 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
   }
 
   return (
-    <ScreenContainer>
-      <StatusBar barStyle="light-content" />
+    <Wrapper secondaryDark>
       <View
         style={{ paddingHorizontal: BP({ small: 20, medium: 32, large: 32 }) }}>
         <Text style={styles.title}>
@@ -105,7 +103,7 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
       </View>
       <View style={styles.termsWrapper}>
         <ScrollView
-          contentContainerStyle={{ paddingBottom: '50%' }}
+          contentContainerStyle={{ paddingBottom: '60%' }}
           showsVerticalScrollIndicator={false}
           overScrollMode={'never'}>
           <Text style={styles.description}>
@@ -124,11 +122,11 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
                 onPress={() => setTextType(TextType.PrivacyEN)}
               />
               <ConsentTextButton
-                text={'Nutzungsbedingungen '}
+                text={'Nutzungsbedingungen'}
                 onPress={() => setTextType(TextType.TermsDE)}
               />
               <ConsentTextButton
-                text={'Datenschutzerklärung '}
+                text={'Datenschutzerklärung'}
                 onPress={() => setTextType(TextType.PrivacyDE)}
               />
             </>
@@ -140,7 +138,7 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
           )}
         </ScrollView>
       </View>
-      <View style={styles.bottomBar}>
+      <ActionSheet showSlide={true} customStyles={styles.bottomBar}>
         <TouchableOpacity
           onPress={() => setAccepted(!accepted)}
           style={styles.acceptWrapper}>
@@ -170,8 +168,8 @@ const TermsOfServiceConsentContainer: React.FC<Props> = ({
           }}
           disabled={!accepted}
         />
-      </View>
-    </ScreenContainer>
+      </ActionSheet>
+    </Wrapper>
   )
 }
 
@@ -203,16 +201,13 @@ const styles = StyleSheet.create({
     marginBottom: BP({ small: 32, medium: 54, large: 54 }),
   },
   bottomBar: {
-    paddingVertical: 26,
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
-    backgroundColor: 'rgb(11, 3,13)',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    paddingTop: 26,
+    paddingBottom: BP({
+      small: 26,
+      medium: 40,
+      large: 40
+    }),
     paddingHorizontal: 20,
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
   },
   checkboxBase: {
     width: 28,

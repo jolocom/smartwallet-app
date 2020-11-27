@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 import { Provider } from 'react-redux'
 import { initStore, initTypeorm, ThunkDispatch } from './store'
 import { navigationActions } from 'src/actions'
@@ -13,15 +13,12 @@ import {
 } from 'react-navigation'
 import { setActiveNotificationFilter } from './actions/notifications'
 
-import Lock from './ui/deviceauth/Lock'
-import RegisterPIN from './ui/deviceauth/RegisterPIN'
-import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
-
 import {
   JolocomLinking,
   JolocomWebSockets,
   JolocomKeychainPasswordStore,
   JolocomSDK,
+  Agent,
 } from 'react-native-jolocom'
 
 import { backgroundDarkMain } from './styles/colors'
@@ -50,7 +47,7 @@ const styles = StyleSheet.create({
 
 export default class App extends React.PureComponent<
   {},
-  { ready: boolean; showStatusBar: boolean }
+  { ready: boolean }
 > {
   private navigator!: NavigationContainerComponent
 
@@ -58,7 +55,6 @@ export default class App extends React.PureComponent<
     super(props)
     this.state = {
       ready: false,
-      showStatusBar: true,
     }
     // only init store once, or else Provider complains (especially on 'toggle
     // inspector')
@@ -70,11 +66,18 @@ export default class App extends React.PureComponent<
     if (!sdkPromise) {
       sdkPromise = initTypeorm().then(async storage => {
         const passwordStore = new JolocomKeychainPasswordStore()
-        const sdk = new JolocomSDK({ storage, passwordStore })
-        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+        const sdk = new JolocomSDK({ storage })
         sdk.setDefaultDidMethod('jun')
 
-        store = initStore(sdk)
+        await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
+
+        sdk.transports.http.configure({ fetch })
+        const agent = new Agent({
+          sdk,
+          passwordStore,
+        })
+
+        store = initStore(agent)
         this.setState({ ready: true })
         return sdk
       })
@@ -87,6 +90,8 @@ export default class App extends React.PureComponent<
   ) {
     // @ts-ignore
     let navigation = this.navigator._navigation
+
+    const thunkDispatch: ThunkDispatch = store.dispatch
     let curState: NavigationState | NavigationRoute = newState,
       navigationOptions
 
@@ -110,7 +115,6 @@ export default class App extends React.PureComponent<
     const { notifications } = navigationOptions
 
     if (!isNil(notifications)) {
-      const thunkDispatch: ThunkDispatch = store.dispatch
       thunkDispatch(setActiveNotificationFilter(notifications))
     }
   }
@@ -126,7 +130,12 @@ export default class App extends React.PureComponent<
     return (
       <View style={styles.appWrapper}>
         {!ready ? (
-          <View />
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Image
+              source={require('src/resources/img/splashIcons/joloLogoIcon.png')}
+            />
+          </View>
         ) : (
           // @ts-ignore
           <Provider store={store}>
@@ -135,9 +144,6 @@ export default class App extends React.PureComponent<
                 onNavigationStateChange={this.handleNavigationChange.bind(this)}
                 ref={nav => this.setNavigator(nav)}
               />
-              <Lock />
-              <RegisterPIN />
-              <HowToChangePIN />
             </AppWrap>
           </Provider>
         )}

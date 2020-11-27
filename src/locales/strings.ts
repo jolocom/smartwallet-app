@@ -1,6 +1,6 @@
 // NOTE: not importing from 'src/lib/errors' to avoid cycle
 // NOTE: absolute path causes `generateTerms` to crash, since it is outside /src (I guess that's the cause)
-import { ErrorCode } from '@jolocom/sdk/js/src/lib/errors/types'
+import { ErrorCode } from '../lib/errors/codes'
 
 const registration = {
   ENCRYPTING_AND_STORING_DATA_LOCALLY: 'Encrypting and storing data locally',
@@ -82,7 +82,7 @@ const backup = {
   RESTORE_ACCOUNT: 'Restore account',
   BACK_TO_SIGNUP: 'Back to signup',
   START_WRITING_YOUR_SEED_PHRASE_AND_IT_WILL_APPEAR_HERE_WORD_BY_WORD:
-    'Start writing your seed-phrase and it will appear here word by word',
+    'Enter your secret phrase word by word and it will appear here',
 }
 
 const notifications = {
@@ -102,6 +102,16 @@ const notifications = {
     "We can't do this, some of the documents are not yours",
   IT_SEEMS_LIKE_WE_CANT_DO_THIS: "It seems like we can't do this",
   SOMETHING_WENT_WRONG_CHOOSE_AGAIN: 'Something went wrong. Choose again!',
+  INTERACTION_WITH_THE_SERVICE_COMPLETED:
+    'Interaction with the service completed. Your service page should be updated now',
+  ACTION_SUCCEEDED: 'Action succeeded',
+  YOUR_DATA_WAS_ENCRYPTED: 'Your data was encrypted',
+  YOUR_DATA_WAS_DECRYPTED: 'Your data was decrypted',
+  NO_INTERNET_CONNECTION: 'No internet connection',
+  WITHOUT_AN_ACTIVE_CONNECTION_SOME_FEATURES_MAY_BE_UNAVAILABLE:
+    'Without an active connection, some features may be unavailable',
+  PLEASE_CHECK_YOUR_CONNECTION_AND_TRY_AGAIN:
+    'Please check your connection and try again',
 }
 
 const errorTitle = {
@@ -125,7 +135,7 @@ const errorReporting = {
     'You can provide further details about the issue here',
   TAP_TO_WRITE: 'Tap to write...',
   WANT_TO_GET_IN_TOUCH: 'Want to get in touch?',
-  LEAVE_US_YOUR_EMAIL_AND_NUMBER: 'Leave us your email or number...',
+  LEAVE_US_YOUR_EMAIL_AND_NUMBER: 'Leave us your email',
   WE_DO_NOT_STORE_ANY_DATA_AND_DO_NOT_SPAM_ANY_USER_INFORMATION_WILL_BE_DELETED_IMMEDIATELY_AFTER_SOLVING_THE_PROBLEM:
     'We do not store data and do not spam, any user information will be deleted immediately after solving the problem',
   RATE_THE_ISSUE: 'Rate the issue',
@@ -144,8 +154,6 @@ const errorCodes = {
 
   [ErrorCode.AuthenticationRequestFailed]: 'Authentication request failed',
   [ErrorCode.AuthenticationResponseFailed]: 'Authentication response failed',
-  [ErrorCode.PaymentRequestFailed]: 'Payment request failed',
-  [ErrorCode.PaymentResponseFailed]: 'Payment response failed',
 
   [ErrorCode.CredentialOfferFailed]: 'Credential offer failed',
   [ErrorCode.CredentialsReceiveFailed]: 'Could not receive credentials',
@@ -163,29 +171,22 @@ const errorCodes = {
 }
 
 const deviceAuth = {
-  ENTER_YOUR_PIN: 'Enter your PIN',
-  FORGOT_YOUR_PIN: 'Forgot your PIN?',
-  I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
+  ENTER_YOUR_PIN: 'Enter your passcode',
+  FORGOT_YOUR_PIN: 'Forgot your passcode?',
   SKIP: 'Skip',
-  YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
   SETTINGS: 'Settings',
   CANCEL: 'Cancel',
   RESET: 'Reset',
-  CHANGE_PIN: 'Change PIN',
+  CHANGE_PIN: 'Change passcode',
   CURRENT_PASSCODE: 'Current passcode',
-  CREATE_NEW_PASSCODE: 'Create new passcode',
-  WRONG_PIN: 'Wrong PIN',
-  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
-  CREATE_PASSCODE: 'Create PIN',
-  VERIFY_PASSCODE: 'Verify PIN',
-  IN_ORDER_TO_PROTECT_YOUR_DATA:
-    'In order to protect your data from other users and maintain confidentiality',
-  YOU_WONT_BE_ABLE_TO_EASILY_CHECK_IT_AGAIN:
-    'You won’t be able to easily check it again, so please memorise it',
-  PINS_DONT_MATCH: "PINs don't match",
+  CREATE_NEW_PASSCODE: 'New passcode',
+  WRONG_PIN: 'Wrong code',
+  PASSCODE_CHANGED: 'Passcode changed!',
+  CREATE_PASSCODE: 'Create passcode',
+  VERIFY_PASSCODE: 'Verify passcode',
   ANY_FUTURE_PASSCODE_RESTORE:
-    'Any future passcode restore is possible only with your secret phrase',
-  HOW_TO_CHANGE_PIN: 'How to change your PIN',
+    'You can change the passcode later by using your secret phrase',
+  HOW_TO_CHANGE_PIN: 'How to change your passcode',
   WE_ARE_SORRY_THAT_YOU_FORGOT:
     'We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!',
   RESTORE_ACCESS: 'Restore access',
@@ -193,6 +194,10 @@ const deviceAuth = {
     'Setting a new passcode will not affect your stored data',
   YOU_CAN_CHANGE_PIN:
     'You can change your passcode by entering your secret phrase. Click Restore Access below to make the change',
+  REPEAT_YOUR_PHRASE: 'Repeat your phrase',
+  WORD_BY_WORD: 'word by word',
+  ADDING_AN_EXTRA_LAYER_OF_SECURITY:
+    'Adding an extra layer of security helps prevent unwanted access to your wallet',
 }
 
 const termsOfService = {
@@ -215,6 +220,11 @@ export default {
   ...notifications,
   ...deviceAuth,
   ...termsOfService,
+  NO_SERVICE_NAME: 'Service shared no public profile',
+  PULL_TO_CHOOSE: 'Pull to choose',
+  SHOWING_VALID: 'Showing valid',
+  SHOWING_EXPIRED: 'Showing expired',
+  ISSUED_BY: 'Issued by',
   IDENTITY: 'Identity',
   DOCUMENTS: 'Documents',
   HISTORY: 'History',
@@ -262,6 +272,8 @@ export default {
   SELF_SIGNED: 'Self-signed',
   THIS_SERVICE_IS_ASKING_YOU_TO_SHARE_THE_FOLLOWING_CLAIMS:
     'This service is asking you to share the following claims',
+  HERE_WE_PRESENT_THE_HISTORY_OF_YOUR_INTERACTIONS:
+    'Here we present the history of your interactions',
   YOU_HAVENT_LOGGED_IN_TO_ANY_SERVICES_YET:
     "You haven't logged in to any services yet",
   THERE_WAS_AN_ERROR_WITH_YOUR_REQUEST: 'There was an error with your request',
@@ -280,9 +292,11 @@ export default {
   NAME: 'Name',
   PERSONAL: 'Personal',
   NO_DOCUMENTS_TO_SEE_HERE: 'No documents to see here',
-  EXPIRED: 'expired',
+  EXPIRED: 'Expired',
   UNKNOWN: 'Unknown',
+  VALID_UNTIL: 'Valid until',
+  EXPIRES_ON: 'Expires on',
 
   //ESATABLISH
-  CONNECTION_DESCRIPTION: 'Connection description:',
+  CONNECTION_DESCRIPTION: 'Connection description',
 }

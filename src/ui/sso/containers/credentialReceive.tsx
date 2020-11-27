@@ -2,17 +2,19 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from '../../../store'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
-import { withErrorScreen, withLoading } from '../../../actions/modifiers'
-import { routeList } from '../../../routeList'
+import {
+  withErrorScreen,
+  withLoading,
+  withInternet,
+} from '../../../actions/modifiers'
 import { Wrapper } from '../../structure'
-import { Colors } from '../../../styles'
-import { ssoActions, navigationActions } from 'src/actions'
+import { ssoActions } from 'src/actions'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
 import {
   InteractionSummary,
   SignedCredentialWithMetadata,
   CredentialOfferFlowState,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import { ButtonSheet } from 'src/ui/structure/buttonSheet'
 import strings from 'src/locales/strings'
 
@@ -34,6 +36,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
+      // @ts-ignore
       params: { interactionSummary, interactionId, passedValidation },
     },
   } = navigation
@@ -57,7 +60,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
     selected.includes(offering)
 
   return (
-    <Wrapper>
+    <Wrapper withoutStatusBar>
       <CredentialReceiveComponent
         credentialOfferSummary={
           interactionSummary.state as CredentialOfferFlowState
@@ -85,15 +88,14 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   ) =>
     dispatch(
       withErrorScreen(
-        withLoading(
-          ssoActions.consumeCredentialReceive(selected, interactionId),
+        withInternet(
+          withLoading(
+            ssoActions.consumeCredentialReceive(selected, interactionId),
+          ),
         ),
       ),
     ),
-  goBack: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.InteractionScreen }),
-    ),
+  goBack: () => dispatch(ssoActions.cancelSSO),
 })
 
 export const CredentialReceive = connect(

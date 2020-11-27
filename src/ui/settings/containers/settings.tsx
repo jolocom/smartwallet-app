@@ -62,11 +62,6 @@ export const SettingsContainer: React.FC<Props> = props => {
               onPress={() => navigate(routeList.NotificationScheduler)}
               iconName={'bell-ring'}
             />
-            <SettingItem
-              title="Change PIN"
-              onPress={() => navigate(routeList.ChangePIN)}
-              iconName="bell-ring"
-            />
           </SettingSection>
         )}
         <SettingSection title={I18n.t(strings.YOUR_PREFERENCES)}>
@@ -77,6 +72,11 @@ export const SettingsContainer: React.FC<Props> = props => {
           />
         </SettingSection>
         <SettingSection title={I18n.t(strings.SECURITY)}>
+          <SettingItem
+            title={I18n.t(strings.CHANGE_PIN)}
+            onPress={() => navigate(routeList.ChangePIN)}
+            iconName="bell-ring"
+          />
           <SettingItem
             title={I18n.t(strings.BACKUP_YOUR_IDENTITY)}
             iconName={'flash'}
@@ -102,7 +102,7 @@ export const SettingsContainer: React.FC<Props> = props => {
         </SettingSection>
         <SettingSection title={I18n.t(strings.ABOUT)}>
           <SettingItem
-            title={I18n.t(strings.CONTACT_US)}
+            title={I18n.t(strings.SEND_ERROR_REPORT)}
             iconName={'message'}
             onPress={() =>
               navigate(routeList.ErrorReporting, {

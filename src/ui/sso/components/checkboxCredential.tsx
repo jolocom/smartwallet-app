@@ -2,15 +2,15 @@ import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { Spacing, Typography, Colors } from 'src/styles'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { IdentitySummary } from 'src/actions/sso/types'
 import {
   CredentialTypeSummary,
   CredentialVerificationSummary,
-} from '@jolocom/sdk/js/src/lib/interactionManager/types'
+} from '@jolocom/sdk/js/interactionManager/types'
 import I18n from 'src/locales/i18n'
 import strings from 'src/locales/strings'
 import { IconToggle } from 'react-native-material-ui'
 import { reject, isEmpty } from 'ramda'
+import { IdentitySummary } from '@jolocom/sdk'
 
 const styles = StyleSheet.create({
   container: {

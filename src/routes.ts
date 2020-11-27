@@ -8,11 +8,7 @@ import {
   createSwitchNavigator,
 } from 'react-navigation'
 
-import {
-  //StackViewTransitionConfigs,
-  //NavigationStackOptions,
-  createStackNavigator,
-} from 'react-navigation-stack'
+import { createStackNavigator, TransitionPresets } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 
@@ -32,6 +28,10 @@ import { AppInit } from './ui/generic/appInit'
 import strings from './locales/strings'
 import { Colors, Typography } from 'src/styles'
 import ChangePIN from './ui/deviceauth/ChangePIN'
+
+import Lock from './ui/deviceauth/Lock'
+import RegisterPIN from './ui/deviceauth/RegisterPIN'
+import HowToChangePIN from './ui/deviceauth/HowToChangePIN'
 
 import {
   DocsIcon,
@@ -66,7 +66,7 @@ const headerBackImage = createElement(Image, {
 })
 
 const noHeaderNavOpts = {
-  header: null,
+  headerShown: false,
 }
 
 const headerTitleStyle: StyleProp<TextStyle> = {
@@ -99,40 +99,40 @@ const navOptScreenWCancel = {
 export const BottomTabBarRoutes = {
   [routeList.Claims]: {
     screen: Claims,
-    title: strings.IDENTITY,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: IdentityIcon,
+      tabBarLabel: strings.IDENTITY,
       // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
   [routeList.Documents]: {
     screen: Documents,
-    title: strings.DOCUMENTS,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: DocsIcon,
+      tabBarLabel: strings.DOCUMENTS,
       // @ts-ignore
       notifications: NotificationFilter.all,
     },
   },
   [routeList.Records]: {
     screen: Records,
-    title: strings.HISTORY,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: HistoryIcon,
+      tabBarLabel: strings.HISTORY,
       // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
   },
   [routeList.Settings]: {
     screen: Settings,
-    title: strings.SETTINGS,
     navigationOptions: {
       ...commonNavigationOptions,
       tabBarIcon: SettingsIcon,
+      tabBarLabel: strings.SETTINGS,
       // @ts-ignore
       notifications: NotificationFilter.onlyDismissible,
     },
@@ -174,7 +174,10 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
     },
     [routeList.InputSeedPhrase]: {
       screen: InputSeedPhrase,
-      navigationOptions: noHeaderNavOpts,
+      navigationOptions: {
+        ...noHeaderNavOpts,
+        notifications: NotificationFilter.onlyDismissible,
+      },
     },
     [routeList.Entropy]: {
       screen: Entropy,
@@ -190,27 +193,52 @@ const RegistrationScreens = createAnimatedSwitchNavigator(
   },
 )
 
+const lockTransition = TransitionPresets.ModalSlideFromBottomIOS
+
 const MainStack = createStackNavigator(
   {
     [routeList.Home]: {
       screen: BottomTabNavigator,
     },
+
+    // The following two screens "lock" the app, and should not show
+    // notifications or allow using the "navigate back" gesture
+    [routeList.Lock]: {
+      screen: Lock,
+      navigationOptions: {
+        gestureEnabled: false,
+        // @ts-ignore
+        notifications: NotificationFilter.onlyDismissible,
+        ...lockTransition,
+      },
+    },
+    [routeList.RegisterPIN]: {
+      screen: RegisterPIN,
+      navigationOptions: {
+        gestureEnabled: false,
+        // @ts-ignore
+        notifications: NotificationFilter.none,
+        ...lockTransition,
+      },
+    },
+
+    [routeList.HowToChangePIN]: {
+      screen: HowToChangePIN,
+    },
     [routeList.ChangePIN]: {
       screen: ChangePIN,
-      navigationOptions: {
-        gesturesEnabled: false,
-      },
     },
     [routeList.InputSeedPhrasePin]: {
       screen: InputSeedPhrase,
+      // @ts-ignore
       navigationOptions: noHeaderNavOpts,
     },
     [routeList.InteractionScreen]: {
       screen: InteractionScreen,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.onlyDismissible,
+        ...TransitionPresets.ScaleFromCenterAndroid,
       },
     },
     [routeList.CredentialReceiveNegotiate]: {
@@ -258,7 +286,6 @@ const MainStack = createStackNavigator(
     [routeList.SeedPhrase]: {
       screen: SeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -266,7 +293,6 @@ const MainStack = createStackNavigator(
     [routeList.RepeatSeedPhrase]: {
       screen: RepeatSeedPhrase,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -274,31 +300,27 @@ const MainStack = createStackNavigator(
     [routeList.TermsOfService]: {
       screen: TermsOfService,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
-        notifications: NotificationFilter.all,
+        notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.PrivacyPolicy]: {
       screen: PrivacyPolicy,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
-        notifications: NotificationFilter.all,
+        notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.Impressum]: {
       screen: Impressum,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
-        notifications: NotificationFilter.all,
+        notifications: NotificationFilter.onlyDismissible,
       },
     },
     [routeList.Exception]: {
       screen: Exception,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -306,7 +328,6 @@ const MainStack = createStackNavigator(
     [routeList.ErrorReporting]: {
       screen: ErrorReporting,
       navigationOptions: {
-        ...noHeaderNavOpts,
         // @ts-ignore
         notifications: NotificationFilter.none,
       },
@@ -319,7 +340,6 @@ const MainStack = createStackNavigator(
       [routeList.NotificationScheduler]: {
         screen: NotificationScheduler,
         navigationOptions: {
-          ...noHeaderNavOpts,
           // @ts-ignore
           notifications: NotificationFilter.all,
         },
@@ -327,24 +347,11 @@ const MainStack = createStackNavigator(
     }),
   },
   {
-    //    transitionConfig: (transitionProps, prevTransitionProps) => {
-    //      const isModal = MODAL_ROUTES.some(
-    //        screenName =>
-    //          screenName === transitionProps.scene.route.routeName ||
-    //          (prevTransitionProps &&
-    //            screenName === prevTransitionProps.scene.route.routeName),
-    //      )
-    //      return StackViewTransitionConfigs.defaultTransitionConfig(
-    //        transitionProps,
-    //        prevTransitionProps,
-    //        isModal,
-    //      )
-    //    },
-    defaultNavigationOptions: noHeaderNavOpts,
+    defaultNavigationOptions: {
+      ...noHeaderNavOpts,
+    },
   },
 )
-
-//const MODAL_ROUTES = [routeList.InteractionScreen]
 
 // NOTE: navigatorReset in actions/navigation assumes that there is only 1
 // StackRouter child at the top level
@@ -364,11 +371,12 @@ export const Routes = createSwitchNavigator(
     [routeList.Registration]: {
       screen: RegistrationScreens,
       // @ts-ignore
-      notifications: NotificationFilter.none,
+      // notifications: NotificationFilter.none,
     },
   },
   {
     initialRouteName: routeList.AppInit,
+    backBehavior: 'initialRoute',
   },
 )
 

@@ -14,10 +14,9 @@ import { white } from 'src/styles/colors'
 import { fontMain, textXXS } from 'src/styles/typography'
 import { showErrorScreen } from 'src/actions/generic'
 
-import { accountActions } from 'src/actions'
-import { navigateBack } from 'src/actions/navigation'
-
 import { ScannerContainer } from './scanner'
+import { genericActions, navigationActions } from 'src/actions'
+import { withLoading, withInternet } from 'src/actions/modifiers'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 12,
+    top: IS_IOS ? 30 :  12,
     right: 12,
     zIndex: 2,
     width: 45,
@@ -57,7 +56,7 @@ const InteractionContainer = (props: Props) => {
     <Wrapper dark centered withoutSafeArea withoutStatusBar>
       {IS_IOS && (
         <TouchableOpacity
-          onPress={props.navigateHome}
+          onPress={props.navigateBack}
           style={styles.closeButton}>
           <CloseIcon />
         </TouchableOpacity>
@@ -65,7 +64,7 @@ const InteractionContainer = (props: Props) => {
       <ScannerContainer
         navigation={props.navigation}
         consumeToken={props.consumeToken}
-        registerPopup={props.registerPopup}
+        setDisableLock={props.setDisableLock}
       />
     </Wrapper>
   )
@@ -78,6 +77,7 @@ const localNotificationErrors = [
   ErrorCode.ParseJWTFailed,
   // AppError: "Wrong Data"
   ErrorCode.WrongDID,
+  ErrorCode.WrongFlow,
   ErrorCode.WrongNonce,
   ErrorCode.InvalidSignature,
   ErrorCode.TokenExpired,
@@ -86,17 +86,22 @@ const localNotificationErrors = [
 const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
   consumeToken: async (jwt: string) => {
     try {
-      return dispatch(consumeInteractionToken(jwt))
+      // NOTE: need to await here, for the catch to trigger correctly on error
+      const ret = await dispatch(
+        withInternet(withLoading(consumeInteractionToken(jwt))),
+      )
+      return ret
     } catch (e) {
-      if (localNotificationErrors.includes(e.message)) {
+      if (localNotificationErrors.includes(e.code)) {
         throw e
       } else {
         return dispatch(showErrorScreen(new AppError(ErrorCode.Unknown, e)))
       }
     }
   },
-  navigateHome: () => dispatch(navigateBack()),
-  registerPopup: () => dispatch(accountActions.setPopup(true)),
+  navigateBack: () => dispatch(navigationActions.navigateBack()),
+  setDisableLock: (val: boolean) =>
+    dispatch(genericActions.setDisableLock(val)),
 })
 
 export const InteractionScreen = connect(

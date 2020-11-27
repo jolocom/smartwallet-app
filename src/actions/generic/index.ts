@@ -5,6 +5,7 @@ import { navigationActions } from '../../actions'
 import { ThunkAction } from '../../store'
 import settingKeys from '../../ui/settings/settingKeys'
 
+import * as Keychain from 'react-native-keychain'
 // TODO use the settings items from storage
 import AsyncStorage from '@react-native-community/async-storage'
 // TODO don't depend on the crypto lib, perhaps use the rust crypto utils?
@@ -18,8 +19,11 @@ import {
   APPWRAP_SHOW_LOADER,
   APPWRAP_REGISTER_CONFIG,
   APPWRAP_UNREGISTER_CONFIG,
+  APPWRAP_SET_LOCKED,
+  APPWRAP_SET_DISABLE_LOCK,
 } from '../../reducers/generic'
 import { AnyAction } from 'redux'
+import { PIN_SERVICE } from 'src/ui/deviceauth/utils/keychainConsts'
 
 // Default delay on the loading state value before it can switch back to 'false'
 const DEFAULT_LOADING_LATCH_DELAY_MS = 300
@@ -60,12 +64,21 @@ export const checkTermsOfService = (
   const shouldShowTerms = storageHash !== currentHash
 
   if (!shouldShowTerms && onSubmit) onSubmit()
-  return dispatch(
-    navigationActions.navigate({
-      routeName: shouldShowTerms ? routeList.TermsOfServiceConsent : route,
-      params: { nextRoute: route, onSubmit },
-    }),
-  )
+
+  if (shouldShowTerms) {
+    return dispatch(
+      navigationActions.navigate({
+        routeName: routeList.TermsOfServiceConsent,
+        params: { nextRoute: route, onSubmit },
+      })
+    )
+  } else {
+    return dispatch(
+      navigationActions.navigate({
+        routeName: route,
+      })
+    )
+  }
 }
 
 export const storeTermsOfService = (
@@ -82,7 +95,7 @@ export const setLocale = (locale: string): ThunkAction => async (
   getState,
   backendMiddleware,
 ) => {
-  await backendMiddleware.storageLib.store.setting(settingKeys.locale, {
+  await backendMiddleware.storage.store.setting(settingKeys.locale, {
     selected: locale
   })
 
@@ -98,6 +111,50 @@ const setLoading = (value: boolean) => ({
   type: APPWRAP_SHOW_LOADER,
   value,
 })
+
+export const setLocked = (value: boolean) => ({
+  type: APPWRAP_SET_LOCKED,
+  value,
+})
+
+export const setDisableLock = (value: boolean) => ({
+  type: APPWRAP_SET_DISABLE_LOCK,
+  value,
+})
+
+export const lockApp = (
+): ThunkAction => async (dispatch, getState) => {
+  // if the lock is globally disabled, or there is no identity created/loaded
+  // yet, then this action has no effect
+  const disableLock = getState().generic.disableLock
+  const hasIdentity = !!getState().account.did.did
+  if (disableLock || !hasIdentity) return
+
+  // otherwise we lock the app, using the appropriate lock screen
+  const keychainPin = await Keychain.getGenericPassword({
+    service: PIN_SERVICE,
+  })
+  const lockScreen = keychainPin ? routeList.Lock : routeList.RegisterPIN
+
+  dispatch(setLocked(true))
+  return dispatch(navigationActions.navigate({ routeName: lockScreen }))
+}
+
+export const unlockApp = (
+  pin: string,
+  resetNav?: boolean,
+): ThunkAction => async dispatch => {
+  const keychainPin = await Keychain.getGenericPassword({
+    service: PIN_SERVICE,
+  })
+
+  if (!keychainPin || keychainPin.password !== pin) throw new Error('wrongPin')
+
+  dispatch(setLocked(false))
+  return resetNav
+    ? dispatch(navigationActions.navigatorResetHome())
+    : dispatch(navigationActions.navigateBack())
+}
 
 export const updateAppWrapConfig = (value: AppWrapConfig) => ({
   type: APPWRAP_UPDATE_CONFIG,
