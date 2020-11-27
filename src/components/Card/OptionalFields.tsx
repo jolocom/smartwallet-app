@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import BP from '~/utils/breakpoints'
 import { useCard } from './Card'
 import { FieldName, FieldValue } from './Field'
 import { IWithCustomStyle } from './types'
@@ -20,10 +21,15 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
 
   /* check wether to show last optional field */
   useEffect(() => {
-    if (numberOfOptionalLines > 6 && highlight) {
+    if (numberOfOptionalLines > BP({ default: 6, xsmall: 5 }) && highlight) {
       setDisplayedOptionalFields((prevState) => prevState.slice(0, 2))
-    } else if (numberOfOptionalLines > 9 && !highlight) {
-      setDisplayedOptionalFields((prevState) => prevState.slice(0, 3))
+    } else if (
+      numberOfOptionalLines > BP({ default: 9, xsmall: 6 }) &&
+      !highlight
+    ) {
+      setDisplayedOptionalFields((prevState) =>
+        prevState.slice(0, BP({ default: 3, xsmall: 2 })),
+      )
     }
   }, [numberOfOptionalLines])
 

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   highlight: {
     width: '100%',
     position: 'absolute',
-    bottom: 0,
+    bottom: -1,
     alignSelf: 'center',
     paddingTop: 17,
     paddingBottom: 12,
