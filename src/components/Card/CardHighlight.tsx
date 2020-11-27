@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     paddingHorizontal: CARD_HORIZONTAL_PADDING,
     backgroundColor: Colors.black,
-    borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 14,
+    borderBottomRightRadius: 13,
+    borderBottomLeftRadius: 13,
     zIndex: 0,
   },
 })
