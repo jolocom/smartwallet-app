@@ -52,14 +52,8 @@ export const consumeCredentialReceive = (
   const response = await interaction.createCredentialOfferResponseToken(
     selectedSignedCredentialWithMetadata,
   )
-
   await interaction.processInteractionToken(response)
-
-  await interaction.send(
-    await interaction.createCredentialOfferResponseToken(
-      selectedSignedCredentialWithMetadata,
-    ),
-  )
+  await interaction.send(response)
 
   return dispatch(
     validateSelectionAndSave(

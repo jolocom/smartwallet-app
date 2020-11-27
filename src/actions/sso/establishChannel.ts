@@ -1,14 +1,12 @@
 import { navigationActions } from 'src/actions'
 import { routeList } from 'src/routeList'
 import { ThunkAction } from '../../store'
-import { Interaction, FlowType, ErrorCode } from '@jolocom/sdk'
+import { Interaction, FlowType } from '@jolocom/sdk'
 import { cancelSSO, scheduleSuccessNotification } from '.'
 import { scheduleNotification } from '../notifications'
 import { createInfoNotification, createWarningNotification } from '../../lib/notifications'
 import I18n from 'src/locales/i18n'
 import strings from '../../locales/strings'
-import { showErrorScreen } from '../generic'
-import { AppError } from 'src/lib/errors'
 import { Channel } from '@jolocom/sdk/js/channels'
 
 export const consumeEstablishChannelRequest = (

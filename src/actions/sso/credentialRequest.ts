@@ -80,12 +80,12 @@ export const sendCredentialResponse = (
     interactionId,
   )
 
-  return interaction
-    .send(
-      await interaction.createCredentialResponse(
-        selectedCredentials.map(c => c.id),
-      ),
-    )
-    .then(() => dispatch(cancelSSO))
-    .then(() => dispatch(scheduleSuccessNotification))
+  const resp = await interaction.createCredentialResponse(
+    selectedCredentials.map(c => c.id),
+  )
+  await interaction.send(resp)
+  await interaction.processInteractionToken(resp)
+
+  await dispatch(cancelSSO)
+  return dispatch(scheduleSuccessNotification)
 }
