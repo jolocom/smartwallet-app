@@ -7,10 +7,8 @@ import {
   withLoading,
   withInternet,
 } from '../../../actions/modifiers'
-import { routeList } from '../../../routeList'
 import { Wrapper } from '../../structure'
-import { Colors } from '../../../styles'
-import { ssoActions, navigationActions } from 'src/actions'
+import { ssoActions } from 'src/actions'
 import { CredentialReceiveComponent } from '../components/credentialReceive'
 import {
   InteractionSummary,
@@ -38,6 +36,7 @@ export const CredentialsReceiveContainer = (props: Props) => {
   const { navigation, acceptSelectedCredentials, goBack } = props
   const {
     state: {
+      // @ts-ignore
       params: { interactionSummary, interactionId, passedValidation },
     },
   } = navigation
@@ -96,10 +95,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch) => ({
         ),
       ),
     ),
-  goBack: () =>
-    dispatch(
-      navigationActions.navigate({ routeName: routeList.InteractionScreen }),
-    ),
+  goBack: () => dispatch(ssoActions.cancelSSO),
 })
 
 export const CredentialReceive = connect(

@@ -2,7 +2,7 @@ import { groupBy, map, mergeRight, omit, uniq, zipWith } from 'ramda'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary, CredentialMetadataSummary } from '@jolocom/sdk'
 
-import { navigationActions, genericActions } from 'src/actions/'
+import { navigationActions } from 'src/actions/'
 
 import { routeList } from 'src/routeList'
 import { CategorizedClaims, DecoratedClaims } from 'src/reducers/account'
@@ -50,8 +50,7 @@ export const checkIdentityExists: ThunkAction = async (
     dispatch(setDid(userDid))
     await dispatch(setClaimsForDid)
     await dispatch(checkRecoverySetup)
-    await dispatch(checkTermsOfService(routeList.Home))
-    return dispatch(genericActions.lockApp())
+    return dispatch(checkTermsOfService(routeList.Home))
   } catch (err) {
     if (
       err.message === SDKError.codes.NoEntropy ||

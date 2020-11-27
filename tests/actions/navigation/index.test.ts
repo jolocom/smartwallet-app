@@ -5,7 +5,7 @@ import { AppError } from 'src/lib/errors'
 import { FlowType } from '@jolocom/sdk'
 
 describe('Navigation action creators', () => {
-  describe.skip('handleDeepLink', () => {
+  describe('handleDeepLink', () => {
     const jwt = 'mockJWT'
 
     const mockDid = 'did:jolo:mock'
@@ -28,7 +28,8 @@ describe('Navigation action creators', () => {
         identityWallet: {
           validateJWT: jest.fn().mockResolvedValue(true),
         },
-        processJWT: jest.fn()
+        processJWT: jest.fn(),
+        findInteraction: jest.fn().mockResolvedValue(undefined)
       },
     )
 
