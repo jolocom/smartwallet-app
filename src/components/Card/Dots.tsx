@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { Colors } from '~/utils/colors'
 import { IWithCustomStyle } from './types'
 
 const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
@@ -14,7 +14,7 @@ const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
       testID="card-action-more"
     >
       <View style={styles.dots}>
-        {['a', 'b', 'c'].map((c) => (
+        {[...Array(3).keys()].map((c) => (
           <View key={c} style={styles.dot} />
         ))}
       </View>
