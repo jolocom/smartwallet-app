@@ -8,7 +8,12 @@ export enum Colors {
   mainBlack = '#201a21',
   black = '#000',
   elevatedElement = '#29232b',
+  dark = 'rgb(32, 26, 33)',
+  darkGray = 'rgb(108, 123, 138)',
+  osloGray = 'rgb(138, 138, 145)',
+  genevaGray = 'rgb(151, 151, 151)',
   black95 = 'rgba(0,0,0,0.95)',
+  black90 = 'rgba(0,0,0,0.90)',
   black65 = 'rgba(0,0,0,0.65)',
   black50 = 'rgba(0,0,0,0.5)',
   black30 = 'rgba(0,0,0,0.30)',
@@ -42,4 +47,5 @@ export enum Colors {
   blackRussian = 'rgb(35, 36, 38)',
   carnationPink = 'rgb(145, 25, 66)',
   hyacinthPink = 'rgb(210, 45, 105)',
+  slateGray = '#6c7b8a'
 }

@@ -1,5 +1,12 @@
 import React from 'react'
-import { TextStyle, Animated, StyleSheet, Platform, Text } from 'react-native'
+import {
+  TextStyle,
+  Animated,
+  StyleSheet,
+  Platform,
+  Text,
+  TextProps,
+} from 'react-native'
 import { Colors } from '~/utils/colors'
 import {
   titleFontStyles,
@@ -28,16 +35,19 @@ interface PropsI {
   testID?: string
 }
 
-const JoloText: React.FC<PropsI> = ({
-  children,
-  kind = JoloTextKind.subtitle,
-  size = JoloTextSizes.middle,
-  weight,
-  color,
-  customStyles,
-  animated,
-  testID,
-}) => {
+const JoloText: React.FC<PropsI & TextProps> = (props) => {
+  const {
+    children,
+    kind = JoloTextKind.subtitle,
+    size = JoloTextSizes.middle,
+    weight,
+    color,
+    customStyles,
+    animated,
+    testID,
+    ...rest
+  } = props
+
   const TextComponent = animated ? Animated.Text : Text
   const fontStylesAllSizes =
     kind === JoloTextKind.title ? titleFontStyles : subtitleFontStyles
@@ -51,6 +61,7 @@ const JoloText: React.FC<PropsI> = ({
   }
   return (
     <TextComponent
+      {...rest}
       testID={testID}
       style={[styles.title, sizeStyles, customStyles]}
     >

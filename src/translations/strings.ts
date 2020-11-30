@@ -261,6 +261,15 @@ const documents = {
   DROP_THE_BALL: 'Drag and drop the ball to delete',
   DO_YOU_WANT_TO_DELETE: 'Do you want to delete',
   DOCUMENT: 'Document',
+  TYPE: 'Type',
+  ISSUER: 'Issuer',
+  TYPE_OF_DOCUMENT: 'Type of the document'
+}
+
+const history = {
+  ALL: 'All',
+  SHARED: 'Shared',
+  RECEIVED: 'Received',
 }
 
 export const strings = {
@@ -281,5 +290,6 @@ export const strings = {
   ...settings,
   ...termsConsent,
   ...toasts,
-  ...documents
+  ...documents,
+  ...history
 }

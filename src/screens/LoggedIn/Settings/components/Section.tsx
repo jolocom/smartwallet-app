@@ -22,7 +22,13 @@ const Section: React.FC<PropsI> = ({
   const ChildrenContainer = hasBlock ? Block : React.Fragment
 
   return (
-    <View style={[styles.sectionContainer, customStyles]}>
+    <View
+      style={[
+        styles.sectionContainer,
+        { marginBottom: children ? 44 : 0 },
+        customStyles,
+      ]}
+    >
       <JoloText
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
@@ -30,7 +36,9 @@ const Section: React.FC<PropsI> = ({
         customStyles={[
           {
             textAlign: 'left',
-            marginBottom: BP({ large: 40, medium: 40, default: 20 }),
+            marginBottom: children
+              ? BP({ large: 40, medium: 40, default: 20 })
+              : 0,
           },
           titleStyles,
         ]}
