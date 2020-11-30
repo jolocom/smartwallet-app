@@ -4,7 +4,7 @@ import BP from '~/utils/breakpoints'
 import { useTabs } from '../Tabs/Tabs'
 import { useCard } from './Card'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
-import { IWithCustomStyle } from './types'
+import { DocumentTypes, IWithCustomStyle } from './types'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
@@ -30,7 +30,10 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
         lines.current += numberOfLines
         if (calculatedTimes === optionalFields.length * 2) {
           /* check wether to show last optional field */
-          if (lines.current > 7 && (highlight || image)) {
+          if (
+            lines.current > 7 &&
+            (highlight || (image && DocumentTypes.document))
+          ) {
             setDisplayedOptionalFields((prevState) =>
               prevState.slice(
                 0,
