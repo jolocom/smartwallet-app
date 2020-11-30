@@ -12,7 +12,7 @@ const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
 
   return (
     <TouchableOpacity
-      onPress={popupRef.current?.show}
+      onPress={() => popupRef.current?.show()}
       style={[styles.container, customStyles]}
       testID="card-action-more"
     >
