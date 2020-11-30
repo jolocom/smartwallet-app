@@ -1,4 +1,5 @@
-import { StyleProp, ViewStyle } from "react-native";
+import { StyleProp, ViewStyle } from 'react-native'
+import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 
 export enum DocumentTypes {
   document = 'document',
@@ -15,12 +16,12 @@ export interface IWithCustomStyle {
 
 export interface IField {
   name: string
-  value: string | number
+  value: ClaimEntry
 }
 
 export interface ICardProps {
   optionalFields: IField[]
-  mandatoryFields: IField[]
+  mandatoryFields: Array<IField | null>
   image?: string | undefined
   highlight?: string | undefined
 }

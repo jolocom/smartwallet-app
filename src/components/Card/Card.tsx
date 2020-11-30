@@ -8,8 +8,8 @@ import OtherHeader from './OtherHeader'
 import { DocumentFields, IField, IWithCustomStyle, ICardProps } from './types'
 
 interface ICardContext {
-  document: IField | undefined
-  restMandatoryField: IField | undefined
+  document: IField | undefined | null
+  restMandatoryField: IField | undefined | null
   optionalFields: IField[]
   image?: string | undefined
   highlight?: string | undefined
@@ -40,11 +40,11 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
   highlight,
 }) => {
   const getFieldInfo = (fieldName: string) =>
-    mandatoryFields.find((el) => el.name === fieldName)
+    mandatoryFields.find((el) => el?.name === fieldName)
 
   const document = getFieldInfo(DocumentFields.DocumentName)
   const [restMandatoryField] = mandatoryFields.filter(
-    (f) => f.name !== DocumentFields.DocumentName,
+    (f) => f?.name !== DocumentFields.DocumentName,
   )
 
   const contextValue = useMemo(
