@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import { View } from 'react-native'
 
 import Section from '../components/Section'

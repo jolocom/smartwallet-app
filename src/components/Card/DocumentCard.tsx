@@ -10,13 +10,14 @@ import {
 import { ICardProps } from './types'
 
 const DocumentCard: React.FC<ICardProps> = ({
+  id,
   mandatoryFields,
   optionalFields,
   image,
   highlight,
 }) => {
   return (
-    <CardContainer>
+    <CardContainer testID="document-card">
       <Card.Dots
         customStyles={{
           top: CARD_HORIZONTAL_PADDING / 2,
@@ -26,6 +27,7 @@ const DocumentCard: React.FC<ICardProps> = ({
       />
       <DocumentCardMedium>
         <Card
+          id={id}
           mandatoryFields={mandatoryFields}
           optionalFields={optionalFields}
           image={image}

@@ -42,6 +42,7 @@ const DocumentList = () => {
         documents.map((document) => (
           <DocumentCard
             key={document.id}
+            id={document.id}
             mandatoryFields={[
               {
                 name: DocumentFields.DocumentName,
@@ -57,6 +58,7 @@ const DocumentList = () => {
       {activeTab?.id === DocumentTypes.other &&
         other.map((otherDoc) => (
           <OtherCard
+            id={otherDoc.id}
             key={otherDoc.id}
             mandatoryFields={[
               {

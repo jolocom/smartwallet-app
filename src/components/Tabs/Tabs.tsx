@@ -38,7 +38,7 @@ export const useTabs = () => {
   return context
 }
 
-const Tabs: React.FC<ITabs> & ITabsComposition = ({
+export const Tabs: React.FC<ITabs> & ITabsComposition = ({
   initialActiveTab,
   initialActiveSubtab,
   children,

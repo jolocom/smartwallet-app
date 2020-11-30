@@ -11,6 +11,7 @@ import {
 import { ICardProps } from './types'
 
 const OtherCard: React.FC<ICardProps> = ({
+  id,
   mandatoryFields,
   optionalFields,
   image,
@@ -19,6 +20,7 @@ const OtherCard: React.FC<ICardProps> = ({
     <CardContainer>
       <OtherCardMedium>
         <Card
+          id={id}
           mandatoryFields={mandatoryFields}
           optionalFields={optionalFields}
           image={image}

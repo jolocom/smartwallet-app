@@ -5,9 +5,10 @@ import { IWithCustomStyle } from './types'
 
 export const CARD_HORIZONTAL_PADDING = BP({ default: 20, xsmall: 16 })
 
-export const CardContainer: React.FC = ({ children }) => (
-  <View style={styles.container} children={children} />
-)
+export const CardContainer: React.FC<{ testID: string }> = ({
+  children,
+  testID,
+}) => <View style={styles.container} children={children} testID={testID} />
 
 export const CardBody: React.FC<IWithCustomStyle> = ({
   children,
