@@ -27,6 +27,12 @@ const DocumentList = () => {
     return null
   }
 
+  const formatClaims = (claims: IClaimSection) =>
+    Object.keys(claims).map((key) => ({
+      name: capitalizeWord(key),
+      value: claims[key],
+    }))
+
   const getOptionalFields = (claim: IClaimSection) =>
     Object.keys(claim)
       .filter((k) => k !== 'id' && k !== 'familyName' && k !== 'givenName')
@@ -53,6 +59,7 @@ const DocumentList = () => {
             optionalFields={getOptionalFields(document.claim)}
             highlight={document.id.slice(0, 14)}
             image={document.renderInfo?.logo?.url}
+            claims={formatClaims(document.claim)}
           />
         ))}
       {activeTab?.id === DocumentTypes.other &&
@@ -68,6 +75,7 @@ const DocumentList = () => {
             ]}
             optionalFields={getOptionalFields(otherDoc.claim)}
             image={otherDoc.renderInfo?.logo?.url}
+            claims={formatClaims(otherDoc.claim)}
           />
         ))}
       <View style={{ height: 100 }} />

@@ -14,6 +14,7 @@ interface ICardContext {
   optionalFields: IField[]
   image?: string | undefined
   highlight?: string | undefined
+  claims: IField[]
 }
 
 const CardContext = createContext<ICardContext | undefined>(undefined)
@@ -40,6 +41,7 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
   mandatoryFields,
   image,
   highlight,
+  claims,
 }) => {
   const getFieldInfo = (fieldName: string) =>
     mandatoryFields.find((el) => el?.name === fieldName)
@@ -57,6 +59,7 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
       optionalFields,
       image,
       highlight,
+      claims,
     }),
     [],
   )
