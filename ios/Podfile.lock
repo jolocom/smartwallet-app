@@ -332,6 +332,8 @@ PODS:
     - React-Core
   - RNPermissions (2.2.2):
     - React-Core
+  - RNRate (1.2.4):
+    - React
   - RNReactNativeHapticFeedback (1.11.0):
     - React-Core
   - RNReanimated (1.13.2):
@@ -410,6 +412,7 @@ DEPENDENCIES:
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNRate (from `../node_modules/react-native-rate`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -515,6 +518,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localize"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNRate:
+    :path: "../node_modules/react-native-rate"
   RNReactNativeHapticFeedback:
     :path: "../node_modules/react-native-haptic-feedback"
   RNReanimated:
@@ -581,6 +586,7 @@ SPEC CHECKSUMS:
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+  RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
   RNReactNativeHapticFeedback: 653a8c126a0f5e88ce15ffe280b3ff37e1fbb285
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
@@ -591,4 +597,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 02a680f39aaa4f8867f374f6af05b92173d1be8e
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0
