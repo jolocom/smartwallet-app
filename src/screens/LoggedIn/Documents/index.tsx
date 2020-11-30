@@ -224,7 +224,6 @@ const Documents: React.FC = () => {
       customStyles={{
         paddingHorizontal: 28,
         justifyContent: 'flex-start',
-        backgroundColor: 'pink',
       }}
     >
       <DocumentTabs>

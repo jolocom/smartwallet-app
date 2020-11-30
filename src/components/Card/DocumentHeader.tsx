@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import BP from '~/utils/breakpoints'
 import { useCard } from './Card'
 import { SpecialField, TitleField } from './Field'
 
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   scaledDocumentField: {
-    fontSize: 22,
+    fontSize: BP({ default: 22, xsmall: 20 }),
     lineHeight: 22,
     marginBottom: 20,
   },

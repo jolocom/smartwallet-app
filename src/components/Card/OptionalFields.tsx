@@ -1,50 +1,46 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
-import { debugView } from '~/utils/dev'
+import { useTabs } from '../Tabs/Tabs'
 import { useCard } from './Card'
 import { FieldName, FieldValue } from './Field'
-import { IWithCustomStyle } from './types'
+import { DocumentTypes, IWithCustomStyle } from './types'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
 }) => {
-  const {
-    numberOfOptionalLines,
-    setNumberOfOptionalLines,
-    optionalFields,
-    highlight,
-    image,
-  } = useCard()
+  const { optionalFields, highlight, image } = useCard()
   const [displayedOptionalFields, setDisplayedOptionalFields] = useState(
     optionalFields,
   )
 
+  const { activeTab } = useTabs()
+
   const lines = useRef(0)
 
-  /* check wether to show last optional field */
-  useEffect(() => {
-    console.log('lines', lines.current)
-
-    if (lines.current > 6 && highlight) {
-      setDisplayedOptionalFields((prevState) => prevState.slice(0, 2))
-    } else if (lines.current > 9 && !highlight) {
-      setDisplayedOptionalFields((prevState) => prevState.slice(0, 3))
+  const handleOptionalFieldTextLayout = () => {
+    let calculatedTimes = 0
+    return (e) => {
+      calculatedTimes++
+      // disable lines manipulation if the number of times this function was invoked
+      // exceeds length of otional firlds twice (because we calculate field name and
+      // field value )
+      if (calculatedTimes < optionalFields.length * 2 + 1) {
+        const numberOfLines = e.nativeEvent.lines.length
+        lines.current += numberOfLines
+        if (calculatedTimes === optionalFields.length * 2) {
+          /* check wether to show last optional field */
+          if (lines.current > 6 && highlight) {
+            setDisplayedOptionalFields((prevState) => prevState.slice(0, 2))
+          } else if (lines.current > 9 && !highlight) {
+            setDisplayedOptionalFields((prevState) => prevState.slice(0, 3))
+          }
+        }
+      }
     }
-  }, [])
-
-  const handleOptionalFieldTextLayout = (e) => {
-    const numberOfLines = e.nativeEvent.lines.length
-    // setNumberOfOptionalLines((prevState) => prevState + numberOfLines)
-    lines.current += numberOfLines
   }
 
-  // useLayoutEffect(() => {
-  //   const numberOfLines = e.nativeEvent.lines.length
-  //   setNumberOfOptionalLines((prevState) => prevState + numberOfLines)
-  // }, [])
-
-  // console.log('rerender')
+  const onTextLayoutChange = handleOptionalFieldTextLayout()
 
   return (
     <View style={[styles.container, customContainerStyles]}>
@@ -52,8 +48,13 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
         <View style={{ width: '100%' }}>
           <FieldName
             numberOfLines={1}
-            customStyles={{ marginBottom: 8 }}
-            onTextLayout={handleOptionalFieldTextLayout}
+            customStyles={{
+              marginBottom: BP({
+                default: 8,
+                xsmall: activeTab?.id === DocumentTypes.document ? 0 : 8,
+              }),
+            }}
+            onTextLayout={onTextLayoutChange}
           >
             {pField.name}:
           </FieldName>
@@ -67,18 +68,15 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
               }}
             >
               <FieldValue
-                // numberOfLines={
-                //   displayedOptionalFields.length === optionalFields.length
-                //     ? undefined
-                //     : BP({ default: 2, xsmall: 1 })
-                // }
                 numberOfLines={BP({ default: 2, xsmall: 1 })}
                 customStyles={{
-                  marginBottom: 10,
+                  marginBottom: BP({
+                    default: 10,
+                    xsmall: activeTab?.id === DocumentTypes.document ? 5 : 10,
+                  }),
                   flex: 0.7,
-                  ...debugView(),
                 }}
-                onTextLayout={handleOptionalFieldTextLayout}
+                onTextLayout={onTextLayoutChange}
               >
                 {pField.value}
               </FieldValue>
@@ -88,10 +86,12 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
             <FieldValue
               numberOfLines={BP({ default: 2, xsmall: 1 })}
               customStyles={{
-                marginBottom: 10,
-                ...debugView(),
+                marginBottom: BP({
+                  default: 10,
+                  xsmall: activeTab?.id === DocumentTypes.document ? 5 : 10,
+                }),
               }}
-              onTextLayout={handleOptionalFieldTextLayout}
+              onTextLayout={onTextLayoutChange}
             >
               {pField.value}
             </FieldValue>
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginTop: 10,
     width: '100%',
-    ...debugView(),
   },
 })
 

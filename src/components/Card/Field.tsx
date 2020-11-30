@@ -22,7 +22,7 @@ export const TitleField: React.FC<TextProps & IFieldProps> = (props) => (
 )
 
 export const SpecialField: React.FC<TextProps & IFieldProps> = (props) => (
-  <Field {...props} customStyles={[styles.nameField, props.customStyles]} />
+  <Field {...props} customStyles={[styles.specialField, props.customStyles]} />
 )
 
 export const FieldName: React.FC<TextProps & IFieldProps> = (props) => (
@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
     color: Colors.slateGray,
   },
   fieldValue: {
-    fontSize: 20,
+    fontSize: BP({ default: 20, xsmall: 18 }),
     lineHeight: 20,
     color: Colors.black,
     fontFamily: Fonts.Medium,
   },
-  nameField: {
+  specialField: {
     color: Colors.black,
     fontFamily: Fonts.Medium,
     marginLeft: 10,

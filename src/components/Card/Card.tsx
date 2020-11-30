@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 import CardHighlight from './CardHighlight'
 import CardPhoto from './CardPhoto'
 import DocumentHeader from './DocumentHeader'
@@ -8,8 +8,6 @@ import OtherHeader from './OtherHeader'
 import { DocumentFields, IField, IWithCustomStyle, ICardProps } from './types'
 
 interface ICardContext {
-  numberOfOptionalLines: number
-  setNumberOfOptionalLines: React.Dispatch<React.SetStateAction<number>>
   document: IField | undefined
   restMandatoryField: IField | undefined
   optionalFields: IField[]
@@ -41,8 +39,6 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
   image,
   highlight,
 }) => {
-  const [numberOfOptionalLines, setNumberOfOptionalLines] = useState(0)
-
   const getFieldInfo = (fieldName: string) =>
     mandatoryFields.find((el) => el.name === fieldName)
 
@@ -53,15 +49,13 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
 
   const contextValue = useMemo(
     () => ({
-      numberOfOptionalLines,
-      setNumberOfOptionalLines,
       document,
       restMandatoryField,
       optionalFields,
       image,
       highlight,
     }),
-    [numberOfOptionalLines],
+    [],
   )
   return <CardContext.Provider value={contextValue} children={children} />
 }
