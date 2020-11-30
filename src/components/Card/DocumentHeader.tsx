@@ -29,7 +29,11 @@ const DocumentHeader: React.FC = () => {
         </TitleField>
         <View style={{ flex: 0.15 }} />
       </View>
-      <SpecialField numberOfLines={2}>{restMandatoryField?.value}</SpecialField>
+      {restMandatoryField && (
+        <SpecialField numberOfLines={2}>
+          {restMandatoryField?.value}
+        </SpecialField>
+      )}
     </>
   )
 }
