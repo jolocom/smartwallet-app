@@ -1,11 +1,12 @@
 import React from 'react'
 import { strings } from '~/translations'
 import TabsContainer from '~/components/Tabs/Container'
-import Tabs from '~/components/Tabs/Tabs'
+import { Tabs } from '~/components/Tabs/Tabs'
+import { DocumentTypes } from '~/components/Card/types'
 
 const TABS = [
-  { id: 'documents', value: strings.DOCUMENTS },
-  { id: 'other', value: strings.OTHER },
+  { id: DocumentTypes.document, value: strings.DOCUMENTS },
+  { id: DocumentTypes.other, value: strings.OTHER },
 ]
 
 const SUBTABS = [

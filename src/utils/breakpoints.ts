@@ -1,4 +1,4 @@
-import { Dimensions, Platform } from 'react-native'
+import { Dimensions } from 'react-native'
 
 const SCREEN_SIZE = Dimensions.get('window')
 
@@ -9,7 +9,9 @@ enum ScreenSize {
   large = 'large',
 }
 
-interface StyleValues<T extends string | number> {
+type Values = string | number | Element | any
+
+interface StyleValues<T extends Values> {
   default?: never
   [ScreenSize.xsmall]: T
   [ScreenSize.small]: T
@@ -17,7 +19,7 @@ interface StyleValues<T extends string | number> {
   [ScreenSize.large]: T
 }
 
-interface DefaultedStyleValues<T extends string | number> {
+interface DefaultedStyleValues<T extends Values> {
   default: T
   [ScreenSize.xsmall]?: T
   [ScreenSize.small]?: T
@@ -57,7 +59,7 @@ const getScreenSize = (): ScreenSize => {
   return size ? size : ScreenSize.xsmall
 }
 
-const BP = <T extends string | number>(
+const BP = <T extends Values>(
   values: StyleValues<T> | DefaultedStyleValues<T>,
 ): T => {
   const value = values[getScreenSize()]

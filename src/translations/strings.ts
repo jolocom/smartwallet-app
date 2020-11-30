@@ -259,7 +259,8 @@ const toasts = {
 
 const documents = {
   TYPE: 'Type',
-  ISSUER: 'Issuer'
+  ISSUER: 'Issuer',
+  TYPE_OF_DOCUMENT: 'Type of the document'
 }
 
 const history = {
