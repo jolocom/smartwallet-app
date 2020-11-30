@@ -1,5 +1,5 @@
-import React, { useRef, useState, SyntheticEvent } from 'react'
-import { StyleSheet, View, TextProps, TextStyle } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
 import { useTabs } from '../Tabs/Tabs'
 import { useCard } from './Card'
@@ -86,7 +86,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
   return (
     <View style={[styles.container, customContainerStyles]}>
       {displayedOptionalFields.map((pField, idx) => (
-        <View style={{ width: '100%' }}>
+        <View style={{ width: '100%' }} key={pField.name + idx}>
           {renderFieldName(pField.name)}
           {/* in case thers is a photo we should display last field differently */}
           {idx === displayedOptionalFields.length - 1 && image

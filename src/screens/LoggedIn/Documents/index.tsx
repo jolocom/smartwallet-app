@@ -198,6 +198,7 @@ const DocumentList = () => {
         DOCUMENTS.map((document) => (
           <DocumentCard
             key={document.id}
+            id={document.id}
             mandatoryFields={document.details.mandatoryFields}
             optionalFields={document.details.optionalFields}
             highlight={document.details.highlight}
@@ -207,6 +208,7 @@ const DocumentList = () => {
       {activeTab?.id === DocumentTypes.other &&
         OTHER.map((otherDoc) => (
           <OtherCard
+            id={otherDoc.id}
             key={otherDoc.id}
             mandatoryFields={otherDoc.details.mandatoryFields}
             optionalFields={otherDoc.details.optionalFields}

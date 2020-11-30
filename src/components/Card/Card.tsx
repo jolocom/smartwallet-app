@@ -8,6 +8,7 @@ import OtherHeader from './OtherHeader'
 import { DocumentFields, IField, IWithCustomStyle, ICardProps } from './types'
 
 interface ICardContext {
+  id: number | string
   document: IField | undefined
   restMandatoryField: IField | undefined
   optionalFields: IField[]
@@ -34,6 +35,7 @@ interface ICardComposition {
 
 const Card: React.FC<ICardProps> & ICardComposition = ({
   children,
+  id,
   optionalFields,
   mandatoryFields,
   image,
@@ -49,6 +51,7 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
 
   const contextValue = useMemo(
     () => ({
+      id,
       document,
       restMandatoryField,
       optionalFields,
