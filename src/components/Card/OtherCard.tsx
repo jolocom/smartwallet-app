@@ -18,13 +18,13 @@ const OtherCard: React.FC<ICardProps> = ({
 }) => {
   return (
     <CardContainer>
-      <OtherCardMedium>
-        <Card
-          id={id}
-          mandatoryFields={mandatoryFields}
-          optionalFields={optionalFields}
-          image={image}
-        >
+      <Card
+        id={id}
+        mandatoryFields={mandatoryFields}
+        optionalFields={optionalFields}
+        image={image}
+      >
+        <OtherCardMedium>
           <View
             style={{
               paddingTop: BP({ default: 20, xsmall: 18 }),
@@ -49,14 +49,14 @@ const OtherCard: React.FC<ICardProps> = ({
               </View>
             </CardBody>
           </View>
-        </Card>
-      </OtherCardMedium>
-      <Card.Dots
-        customStyles={{
-          bottom: CARD_HORIZONTAL_PADDING / 3,
-          right: CARD_HORIZONTAL_PADDING / 2,
-        }}
-      />
+        </OtherCardMedium>
+        <Card.Dots
+          customStyles={{
+            bottom: CARD_HORIZONTAL_PADDING / 3,
+            right: CARD_HORIZONTAL_PADDING / 2,
+          }}
+        />
+      </Card>
     </CardContainer>
   )
 }

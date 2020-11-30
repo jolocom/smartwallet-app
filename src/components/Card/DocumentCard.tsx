@@ -18,21 +18,22 @@ const DocumentCard: React.FC<ICardProps> = ({
 }) => {
   return (
     <CardContainer testID="document-card">
-      <Card.Dots
-        customStyles={{
-          top: CARD_HORIZONTAL_PADDING / 2,
-          right: CARD_HORIZONTAL_PADDING / 2,
-          zIndex: 10,
-        }}
-      />
-      <DocumentCardMedium>
-        <Card
-          id={id}
-          mandatoryFields={mandatoryFields}
-          optionalFields={optionalFields}
-          image={image}
-          highlight={highlight}
-        >
+      <Card
+        id={id}
+        mandatoryFields={mandatoryFields}
+        optionalFields={optionalFields}
+        image={image}
+        highlight={highlight}
+      >
+        <Card.Dots
+          customStyles={{
+            top: CARD_HORIZONTAL_PADDING / 2,
+            right: CARD_HORIZONTAL_PADDING / 2,
+            zIndex: 10,
+          }}
+        />
+
+        <DocumentCardMedium>
           <CardBody
             customStyles={{ paddingTop: BP({ default: 20, xsmall: 18 }) }}
           >
@@ -41,8 +42,8 @@ const DocumentCard: React.FC<ICardProps> = ({
           </CardBody>
           <Card.Highlight />
           <Card.Photo />
-        </Card>
-      </DocumentCardMedium>
+        </DocumentCardMedium>
+      </Card>
     </CardContainer>
   )
 }
