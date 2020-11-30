@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { SyntheticEvent } from 'react'
 import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
+//FIXME: when @TextLayoutEvent type is added to RN, should replace this line
+export type TextLayoutEvent = SyntheticEvent<{}, { lines: Array<number> }>
+
 interface IFieldProps {
   customStyles?: StyleProp<TextStyle>
+  onTextLayout?: (e: TextLayoutEvent) => void
 }
 
 const Field: React.FC<TextProps & IFieldProps> = (props) => {
