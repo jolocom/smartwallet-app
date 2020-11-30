@@ -52,6 +52,7 @@ const OtherHeader: React.FC = () => {
           }}
         >
           <Image
+            testID="card-logo"
             source={{ uri: logo }}
             style={[
               {

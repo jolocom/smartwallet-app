@@ -16,7 +16,7 @@ const DocumentCard: React.FC<ICardProps> = ({
   highlight,
 }) => {
   return (
-    <CardContainer>
+    <CardContainer testID="document-card">
       <Card.Dots
         customStyles={{
           top: CARD_HORIZONTAL_PADDING / 2,

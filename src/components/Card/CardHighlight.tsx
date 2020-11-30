@@ -10,7 +10,7 @@ const CardHighlight: React.FC = () => {
   const { highlight } = useCard()
   if (!highlight) return null
   return (
-    <View style={styles.highlight}>
+    <View style={styles.highlight} testID="card-highlight">
       <Highlight>{highlight}</Highlight>
     </View>
   )

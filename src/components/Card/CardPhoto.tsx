@@ -9,7 +9,7 @@ const CardPhoto: React.FC = () => {
   const { image: photo } = useCard()
   if (!photo) return null
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="card-photo">
       <Image style={styles.photo} source={{ uri: photo }} />
     </View>
   )
