@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useRef, useState, SyntheticEvent } from 'react'
+import { StyleSheet, View, TextProps, TextStyle } from 'react-native'
 import BP from '~/utils/breakpoints'
 import { useTabs } from '../Tabs/Tabs'
 import { useCard } from './Card'
-import { FieldName, FieldValue } from './Field'
-import { DocumentTypes, IWithCustomStyle } from './types'
+import { FieldName, FieldValue, TextLayoutEvent } from './Field'
+import { IWithCustomStyle } from './types'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
@@ -20,7 +20,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
 
   const handleOptionalFieldTextLayout = () => {
     let calculatedTimes = 0
-    return (e) => {
+    return (e: TextLayoutEvent) => {
       calculatedTimes++
       // disable lines manipulation if the number of times this function was invoked
       // exceeds length of otional firlds twice (because we calculate field name and
@@ -30,7 +30,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
         lines.current += numberOfLines
         if (calculatedTimes === optionalFields.length * 2) {
           /* check wether to show last optional field */
-          if (lines.current > 6 && highlight) {
+          if (lines.current > 6 && (highlight || image)) {
             setDisplayedOptionalFields((prevState) => prevState.slice(0, 2))
           } else if (lines.current > 9 && !highlight) {
             setDisplayedOptionalFields((prevState) => prevState.slice(0, 3))
@@ -42,60 +42,53 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
 
   const onTextLayoutChange = handleOptionalFieldTextLayout()
 
+  const renderFieldValue = (
+    value: string | number,
+    padding?: string | number,
+  ) => {
+    return (
+      <FieldValue
+        numberOfLines={2}
+        customStyles={{
+          marginBottom: BP({
+            default: 10,
+            xsmall: 5,
+          }),
+          paddingRight: padding,
+        }}
+        onTextLayout={onTextLayoutChange}
+      >
+        {value}
+      </FieldValue>
+    )
+  }
+
+  const renderFieldName = (value: string) => {
+    return (
+      <FieldName
+        numberOfLines={1}
+        customStyles={{
+          marginBottom: BP({
+            default: 8,
+            xsmall: 0,
+          }),
+        }}
+        onTextLayout={onTextLayoutChange}
+      >
+        {value}:
+      </FieldName>
+    )
+  }
+
   return (
     <View style={[styles.container, customContainerStyles]}>
       {displayedOptionalFields.map((pField, idx) => (
         <View style={{ width: '100%' }}>
-          <FieldName
-            numberOfLines={1}
-            customStyles={{
-              marginBottom: BP({
-                default: 8,
-                xsmall: activeTab?.id === DocumentTypes.document ? 0 : 8,
-              }),
-            }}
-            onTextLayout={onTextLayoutChange}
-          >
-            {pField.name}:
-          </FieldName>
+          {renderFieldName(pField.name)}
           {/* in case thers is a photo we should display last field differently */}
-          {idx === displayedOptionalFields.length - 1 && image ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-between',
-              }}
-            >
-              <FieldValue
-                numberOfLines={BP({ default: 2, xsmall: 1 })}
-                customStyles={{
-                  marginBottom: BP({
-                    default: 10,
-                    xsmall: activeTab?.id === DocumentTypes.document ? 5 : 10,
-                  }),
-                  flex: 0.7,
-                }}
-                onTextLayout={onTextLayoutChange}
-              >
-                {pField.value}
-              </FieldValue>
-              <View style={{ flex: 0.3 }} />
-            </View>
-          ) : (
-            <FieldValue
-              numberOfLines={BP({ default: 2, xsmall: 1 })}
-              customStyles={{
-                marginBottom: BP({
-                  default: 10,
-                  xsmall: activeTab?.id === DocumentTypes.document ? 5 : 10,
-                }),
-              }}
-              onTextLayout={onTextLayoutChange}
-            >
-              {pField.value}
-            </FieldValue>
-          )}
+          {idx === displayedOptionalFields.length - 1 && image
+            ? renderFieldValue(pField.value, '30%')
+            : renderFieldValue(pField.value)}
         </View>
       ))}
     </View>
