@@ -5,10 +5,12 @@ import { Colors } from '~/utils/colors'
 import PopupMenu from '../PopupMenu'
 import { useCard } from './Card'
 import { IWithCustomStyle } from './types'
+import CardDetails from '~/screens/LoggedIn/Documents/CardDetails'
 
 const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
-  const { id } = useCard()
+  const { id, image, claims, document } = useCard()
   const popupRef = useRef<{ show: () => void }>(null)
+  const infoRef = useRef<{ show: () => void }>(null)
 
   return (
     <TouchableOpacity
@@ -21,10 +23,19 @@ const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
           <View key={c} style={styles.dot} />
         ))}
       </View>
+      <CardDetails
+        ref={infoRef}
+        fields={claims}
+        image={image}
+        title={document?.value}
+      />
       <PopupMenu
         ref={popupRef}
         options={[
-          { title: strings.INFO, onPress: () => {} },
+          {
+            title: strings.INFO,
+            onPress: () => infoRef.current?.show(),
+          },
           { title: strings.DELETE, onPress: () => {} },
         ]}
       />
