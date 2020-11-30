@@ -4,14 +4,14 @@ import BP from '~/utils/breakpoints'
 import { useTabs } from '../Tabs/Tabs'
 import { useCard } from './Card'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
-import { DocumentTypes, IWithCustomStyle } from './types'
+import { IWithCustomStyle } from './types'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
 }) => {
   const { optionalFields, highlight, image } = useCard()
   const [displayedOptionalFields, setDisplayedOptionalFields] = useState(
-    optionalFields,
+    optionalFields.slice(0, 3),
   )
 
   const { activeTab } = useTabs()
@@ -30,11 +30,13 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
         lines.current += numberOfLines
         if (calculatedTimes === optionalFields.length * 2) {
           /* check wether to show last optional field */
-          if (
-            lines.current > 6 &&
-            (highlight || (image && activeTab?.id === DocumentTypes.document))
-          ) {
-            setDisplayedOptionalFields((prevState) => prevState.slice(0, 2))
+          if (lines.current > 7 && (highlight || image)) {
+            setDisplayedOptionalFields((prevState) =>
+              prevState.slice(
+                0,
+                Math.floor(lines.current / optionalFields.length),
+              ),
+            )
           } else if (lines.current > 9 && !highlight) {
             setDisplayedOptionalFields((prevState) => prevState.slice(0, 3))
           }
