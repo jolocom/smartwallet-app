@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from 'react-native'
 // @ts-ignore no typescript support as of yet
-import RadialGradient from 'react-native-radial-gradient'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -24,6 +23,7 @@ import { InfoIcon } from '~/assets/svg'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
+import MagicButton from '~/components/MagicButton'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -35,6 +35,7 @@ const SeedPhrase: React.FC = () => {
   const {
     gestureState,
     animationValues: { shadowScale, circleScale, magicOpacity },
+    animateVaues: { hideMagicBtn },
     gestureHandlers,
   } = useCircleHoldAnimation(1200)
 
@@ -65,11 +66,7 @@ const SeedPhrase: React.FC = () => {
       case GestureState.Success:
         ReactNativeHapticFeedback.trigger('impactLight', vibrationOptions)
         Animated.parallel([
-          Animated.timing(magicOpacity, {
-            duration: 300,
-            useNativeDriver: true,
-            toValue: 0,
-          }),
+          hideMagicBtn,
           Animated.timing(buttonOpacity, {
             duration: 200,
             useNativeDriver: true,
@@ -164,31 +161,10 @@ const SeedPhrase: React.FC = () => {
   )
 
   const renderMagicButton = () => (
-    <Animated.View
-      {...gestureHandlers}
-      style={[
-        {
-          transform: [{ scaleX: shadowScale }, { scaleY: shadowScale }],
-          opacity: magicOpacity,
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-      ]}
-    >
-      <Animated.View
-        style={[
-          styles.button,
-          {
-            transform: [{ scale: circleScale }],
-          },
-        ]}
-      ></Animated.View>
-      <RadialGradient
-        style={styles.gradient}
-        colors={[Colors.success, 'transparent']}
-        stops={[0.4, 1]}
-      />
-    </Animated.View>
+    <MagicButton
+      gestureHandlers={gestureHandlers}
+      animatedValues={{ shadowScale, circleScale, magicOpacity }}
+    />
   )
 
   const renderMagicInfo = () => (
