@@ -2,17 +2,17 @@ import React, { useState, useImperativeHandle } from 'react'
 import { View, Image, StyleSheet, ScrollView } from 'react-native'
 
 import ActionSheet from '~/components/ActionSheet/ActionSheet'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import Block from '~/components/Block'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
+import { IField } from '~/components/Card/types'
 
 interface Props {
-  fields: Record<string, string>
-  title: string
+  fields: IField[]
+  title?: string
   image?: string
 }
 
@@ -61,7 +61,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
             </View>
             <Block customStyle={{ backgroundColor: Colors.white }}>
               {image && <Image source={{ uri: image }} style={styles.image} />}
-              {Object.keys(fields).map((field, i) => (
+              {fields.map((field, i) => (
                 <React.Fragment key={i}>
                   <View style={styles.fieldContainer}>
                     <JoloText
@@ -69,7 +69,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                       size={JoloTextSizes.mini}
                       color={Colors.osloGray}
                     >
-                      {field}
+                      {field.name}
                     </JoloText>
                     <JoloText
                       color={Colors.black95}
@@ -78,7 +78,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                         { marginTop: BP({ default: 8, xsmall: 4 }) },
                       ]}
                     >
-                      {fields[field]}
+                      {field.value}
                     </JoloText>
                   </View>
                   {i !== Object.keys(fields).length - 1 && (

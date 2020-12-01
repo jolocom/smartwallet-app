@@ -8,6 +8,7 @@ import { Colors } from '~/utils/colors'
 import PopupMenu from '../PopupMenu'
 import { useCard } from './Card'
 import { IWithCustomStyle } from './types'
+import CardDetails from '~/screens/LoggedIn/Documents/CardDetails'
 
 const deleteDocMock = (id: string | number): Promise<string> => {
   return new Promise((res, rej) => {
@@ -17,11 +18,12 @@ const deleteDocMock = (id: string | number): Promise<string> => {
 }
 
 const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
-  const { id, document } = useCard()
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
 
+  const { id, image, claims, document } = useCard()
   const popupRef = useRef<{ show: () => void }>(null)
+  const infoRef = useRef<{ show: () => void }>(null)
 
   const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${document?.name}?`
   const cancelText = strings.CANCEL
@@ -57,10 +59,19 @@ const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
           <View key={c} style={styles.dot} />
         ))}
       </View>
+      <CardDetails
+        ref={infoRef}
+        fields={claims}
+        image={image}
+        title={document?.value}
+      />
       <PopupMenu
         ref={popupRef}
         options={[
-          { title: strings.INFO, onPress: () => {} },
+          {
+            title: strings.INFO,
+            onPress: () => infoRef.current?.show(),
+          },
           { title: strings.DELETE, onPress: redirectToDelete },
         ]}
       />

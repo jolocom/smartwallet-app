@@ -15,14 +15,16 @@ const OtherCard: React.FC<ICardProps> = ({
   mandatoryFields,
   optionalFields,
   image,
+  claims,
 }) => {
   return (
-    <CardContainer>
+    <CardContainer testID="otherCard">
       <Card
         id={id}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
         image={image}
+        claims={claims}
       >
         <OtherCardMedium>
           <View
