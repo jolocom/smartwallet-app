@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import CloseIcon from '~/assets/svg/CloseIcon'
-import { useNavigateBack } from '~/hooks/navigation'
+import { useGoBack } from '~/hooks/navigation'
 import IconBtn from './IconBtn'
 import { BackArrowIcon } from '~/assets/svg'
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const NavigationHeader: React.FC<Props> = ({ type, onPress }) => {
-  const navigateBack = onPress ?? useNavigateBack()
+  const navigateBack = onPress ?? useGoBack()
 
   return (
     <View
