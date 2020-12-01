@@ -12,8 +12,8 @@ import CardDetails from '~/screens/LoggedIn/Documents/CardDetails'
 
 const deleteDocMock = (id: string | number): Promise<string> => {
   return new Promise((res, rej) => {
-    // res('Success, deleted')
-    rej('Failure to delete')
+    res('Success, deleted')
+    // rej('Failure to delete')
   })
 }
 
@@ -25,7 +25,7 @@ const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const popupRef = useRef<{ show: () => void }>(null)
   const infoRef = useRef<{ show: () => void }>(null)
 
-  const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${document?.name}?`
+  const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${document?.value}?`
   const cancelText = strings.CANCEL
   const handleDelete = async () => {
     try {

@@ -10,6 +10,7 @@ jest.mock('react-native-keychain', () => ({
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: jest.fn(),
+    canGoBack: jest.fn().mockReturnValue(true),
   }),
 }))
 

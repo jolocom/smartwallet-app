@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react-native'
 import React from 'react'
 import DocumentCard from '~/components/Card/DocumentCard'
 import OtherCard from '~/components/Card/OtherCard'
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const HIGHLIGHT = 'ABC123'
 const IMAGE = 'data:abc'
@@ -26,6 +26,13 @@ const FIELDS = [
     },
   },
 ]
+const CLAIMS = [
+  {
+    name: 'claim1',
+    value: 'Claim 1',
+  },
+  { name: 'claim1', value: 'Claim 1' },
+]
 
 const testIds = {
   photo: 'card-photo',
@@ -42,18 +49,26 @@ jest.mock('../../../src/components/Tabs/Tabs', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/toasts', () => ({
+  useToasts: jest.fn().mockImplementation(() => ({
+    scheduleWarning: jest.fn(),
+  })),
+}))
+
 const [mandatoryFields] = FIELDS.map((f) => f.details.mandatoryFields)
 
 const [optionalFields] = FIELDS.map((f) => f.details.optionalFields)
 
 describe('Document card is displaying passed props', () => {
   test('documents with image and highlight ', () => {
-    const { getByText, getByTestId, queryByText } = render(
+    const { getByText, getByTestId, queryByText } = renderWithSafeArea(
       <DocumentCard
+        id={1}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
         image={IMAGE}
         highlight={HIGHLIGHT}
+        claims={CLAIMS}
       />,
     )
 
@@ -70,10 +85,12 @@ describe('Document card is displaying passed props', () => {
   })
 
   test('without image and highlight', () => {
-    const { queryByTestId } = render(
+    const { queryByTestId } = renderWithSafeArea(
       <DocumentCard
+        id={1}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
+        claims={CLAIMS}
       />,
     )
 
@@ -84,10 +101,12 @@ describe('Document card is displaying passed props', () => {
 
 describe('Other card is displaying passed props', () => {
   test('no logo', () => {
-    const { queryByTestId, getByText } = render(
+    const { queryByTestId, getByText } = renderWithSafeArea(
       <OtherCard
+        id={1}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
+        claims={CLAIMS}
       />,
     )
 
