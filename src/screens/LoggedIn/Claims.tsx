@@ -10,12 +10,20 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import { useToasts } from '~/hooks/toasts'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
+import { useRedirectTo } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
+import { strings } from '~/translations'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
 }
 
 const Claims: React.FC = () => {
+  const redirectToDeleteDoc = useRedirectTo(ScreenNames.DragToConfirm, {
+    title: `${strings.DO_YOU_WANT_TO_DELETE} Driving License?`,
+    cancelText: strings.CANCEL,
+    onComplete: () => console.log('Deleted the doc'),
+  })
   const loader = useLoader()
   const { scheduleInfo, scheduleWarning } = useToasts()
   const { showErrorReporting } = useErrors()
@@ -79,6 +87,7 @@ const Claims: React.FC = () => {
       <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={normal}>Normal</Btn>
       <Btn onPress={warning}>Warning</Btn>
+      <Btn onPress={redirectToDeleteDoc}>DeleteDocument</Btn>
     </ScreenContainer>
   )
 }

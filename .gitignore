@@ -75,3 +75,6 @@ buck-out/
 
 # env variables
 .env
+
+# other
+coverage/

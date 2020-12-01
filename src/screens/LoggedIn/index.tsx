@@ -22,8 +22,8 @@ import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
 import Lock from '~/screens/Modals/Lock'
 
 import Claims from './Claims'
-import Documents from './Documents'
 import History from './History'
+import Documents from './Documents'
 
 import { dismissLoader } from '~/modules/loader/actions'
 import { resetInteraction } from '~/modules/interaction/actions'
@@ -48,6 +48,7 @@ import useTermsConsent from '~/hooks/consent'
 import { setAppLocked } from '~/modules/account/actions'
 import BackupIdentity from './Settings/BackupIdentity'
 import ButtonsTest from './Settings/Development/ButtonsTest'
+import DragToConfirm from '~/screens/Modals/DragToConfirm'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -207,6 +208,10 @@ const LoggedInTabs: React.FC = () => {
         name={ScreenNames.TermsOfService}
         component={TermsOfService}
         options={settingsScreenTransitionOptions}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.DragToConfirm}
+        component={DragToConfirm}
       />
 
       {__DEV__ && (
