@@ -15,6 +15,18 @@ lane :get_appcenter_token do
   File.read("appcenter-secrets/api_key.txt")
 end
 
+desc  'Get Sentry Auth Token'
+lane :sentry_auth do
+  begin
+      sh("git clone git@infra.jolocom.io:sentry-auth")
+  rescue
+      puts "sentry token already present"
+  end
+  sh("cp ./sentry-auth/sentry2.properties ../ios/sentry.properties")
+  sh("cp ./sentry-auth/sentry2.properties ../android/sentry.properties")
+end
+
+
 # lanes for ios building, signing and deployment
 platform :ios do
 
@@ -35,6 +47,7 @@ platform :ios do
 
   desc 'Build iOS application and upload to Appcenter'
   lane :alpha do
+    sentry_auth
     build
     api_token = get_appcenter_token.strip
     appcenter_upload(
@@ -64,6 +77,7 @@ platform :android do
 
   desc 'Build Android application and upload to Appcenter'
   lane :alpha do
+    sentry_auth
     build
     api_token = get_appcenter_token.strip
     appcenter_upload(

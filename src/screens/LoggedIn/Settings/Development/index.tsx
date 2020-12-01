@@ -7,11 +7,14 @@ import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import useErrors from '~/hooks/useErrors'
+import { SWErrorCodes } from '~/errors/codes'
 import PopupMenu from '~/components/PopupMenu'
 import CardDetails from '../../Documents/CardDetails'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
+  const { showErrorDisplay } = useErrors()
   const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
   const popupRef = useRef<{ show: () => void }>(null)
   const cardDetailsRef = useRef<{ show: () => void }>(null)
@@ -37,11 +40,16 @@ const DevelopmentSection = () => {
       <Option>
         <Option.Title title="Toggle Switch" />
         <View style={{ position: 'absolute', right: 16 }}>
-          <ToggleSwitch initialState={false} onToggle={handleToggle} />
+          <ToggleSwitch onToggle={handleToggle} />
         </View>
       </Option>
       <Option onPress={redirectButtons}>
         <Option.Title title="Buttons" />
+      </Option>
+      <Option
+        onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
+      >
+        <Option.Title title="Throw error" />
       </Option>
       <Option onPress={() => popupRef.current?.show()}>
         <Option.Title title="Popup menu" />

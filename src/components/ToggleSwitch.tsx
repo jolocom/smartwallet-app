@@ -33,7 +33,10 @@ const ToggleSwitch: React.FC<Props> = (props) => {
     if (isPropControlled(props, 'on')) {
       props.onToggle && props.onToggle(isOn)
     } else {
-      setIsOn((prevState) => !prevState)
+      setIsOn((prevState) => {
+        props.onToggle && props.onToggle(!prevState)
+        return !prevState
+      })
     }
   }
 

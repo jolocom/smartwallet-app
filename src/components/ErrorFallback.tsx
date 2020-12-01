@@ -4,18 +4,26 @@ import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import Btn, { BtnTypes, BtnSize } from './Btn'
 
 interface Props {
   title: string
   description: string
+  topButtonText: string
+  bottomButtonText: string
+  onPressTop: () => void
+  onPressBottom: () => void
 }
 
 export const ErrorFallback: React.FC<Props> = ({
   title,
   description,
-  children,
+  topButtonText,
+  bottomButtonText,
+  onPressBottom,
+  onPressTop,
 }) => (
-  <ScreenContainer>
+  <ScreenContainer customStyles={{ paddingTop: 0 }}>
     <View style={styles.imageContainer}>
       <View style={styles.imagePadding} />
       <Image
@@ -38,11 +46,23 @@ export const ErrorFallback: React.FC<Props> = ({
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.middle}
         color={Colors.white70}
+        customStyles={{ marginTop: 12 }}
       >
         {description}
       </JoloText>
     </View>
-    <View style={styles.buttonContainer}>{children}</View>
+    <View style={styles.buttonContainer}>
+      <Btn type={BtnTypes.senary} size={BtnSize.medium} onPress={onPressTop}>
+        {topButtonText}
+      </Btn>
+      <Btn
+        type={BtnTypes.secondary}
+        size={BtnSize.medium}
+        onPress={onPressBottom}
+      >
+        {bottomButtonText}
+      </Btn>
+    </View>
   </ScreenContainer>
 )
 
@@ -60,6 +80,7 @@ const styles = StyleSheet.create({
     flex: 0.6,
   },
   textContainer: {
+    paddingTop: 12,
     flex: 0.5,
     alignItems: 'center',
   },

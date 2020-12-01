@@ -50,12 +50,16 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
               "paddingTop": 40,
               "width": "100%",
             },
-            Object {},
+            Object {
+              "paddingTop": 0,
+            },
             Object {
               "backgroundColor": "#201a21",
             },
             false,
-            Object {},
+            Object {
+              "paddingTop": 0,
+            },
           ]
         }
       >
@@ -94,6 +98,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             Object {
               "alignItems": "center",
               "flex": 0.5,
+              "paddingTop": 12,
             }
           }
         >
@@ -132,7 +137,9 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
                   "letterSpacing": 0.14,
                   "lineHeight": 22,
                 },
-                undefined,
+                Object {
+                  "marginTop": 12,
+                },
               ]
             }
             testID="subtitle"
@@ -149,7 +156,143 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
               "width": "100%",
             }
           }
-        />
+        >
+          <View
+            accessible={true}
+            focusable={false}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "borderRadius": 8,
+                "justifyContent": "center",
+                "marginVertical": 5,
+                "opacity": 1,
+                "width": "100%",
+              }
+            }
+            testID="button"
+          >
+            <View
+              style={
+                Array [
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "width": "100%",
+                    },
+                    false,
+                    Object {
+                      "marginVertical": 5,
+                    },
+                  ],
+                  Object {
+                    "backgroundColor": "rgba(81, 81, 81, 0.18)",
+                  },
+                  undefined,
+                  Object {
+                    "height": 45,
+                  },
+                ]
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#ffffff",
+                      "paddingTop": 5,
+                      "textAlignVertical": "center",
+                    },
+                    Object {
+                      "color": "#ffffff",
+                      "fontFamily": "TTCommons-Medium",
+                      "opacity": 0.8,
+                    },
+                    Object {
+                      "fontSize": 18,
+                    },
+                    Object {},
+                  ]
+                }
+              />
+            </View>
+          </View>
+          <View
+            accessible={true}
+            focusable={false}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "borderRadius": 8,
+                "justifyContent": "center",
+                "marginVertical": 5,
+                "opacity": 1,
+                "width": "100%",
+              }
+            }
+            testID="button"
+          >
+            <View
+              style={
+                Array [
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "width": "100%",
+                    },
+                    false,
+                    Object {
+                      "marginVertical": 5,
+                    },
+                  ],
+                  undefined,
+                  Object {
+                    "height": 45,
+                  },
+                ]
+              }
+              testID="non-gradient"
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#ffffff",
+                      "paddingTop": 5,
+                      "textAlignVertical": "center",
+                    },
+                    Object {
+                      "fontFamily": "TTCommons-Regular",
+                      "opacity": 0.8,
+                    },
+                    Object {
+                      "fontSize": 18,
+                    },
+                    Object {},
+                  ]
+                }
+              />
+            </View>
+          </View>
+        </View>
       </View>
     </View>
   </View>
