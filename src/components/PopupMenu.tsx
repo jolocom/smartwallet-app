@@ -42,6 +42,7 @@ const PopupMenu = React.forwardRef<{ show: () => void }, Props>(
         onClose={handleHide}
         overlayColor={Colors.black85}
         animationType={'fade'}
+        testID="popup-menu"
       >
         <View style={[styles.container, { paddingBottom: bottom + 24 }]}>
           <Block customStyle={styles.block}>

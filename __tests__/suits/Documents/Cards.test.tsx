@@ -1,6 +1,8 @@
+import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import DocumentCard from '~/components/Card/DocumentCard'
 import OtherCard from '~/components/Card/OtherCard'
+import { ScreenNames } from '~/types/screens'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const HIGHLIGHT = 'ABC123'
@@ -39,7 +41,10 @@ const testIds = {
   highlight: 'card-highlight',
   logo: 'card-logo',
   more: 'card-action-more',
+  popupMenu: 'popup-menu',
 }
+
+const mockedNavigate = jest.fn()
 
 jest.mock('../../../src/components/Tabs/Tabs', () => ({
   ...jest.requireActual('../../../src/components/Tabs/Tabs'),
@@ -53,6 +58,13 @@ jest.mock('../../../src/hooks/toasts', () => ({
   useToasts: jest.fn().mockImplementation(() => ({
     scheduleWarning: jest.fn(),
   })),
+}))
+
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({
+    navigate: mockedNavigate,
+  }),
 }))
 
 const [mandatoryFields] = FIELDS.map((f) => f.details.mandatoryFields)
@@ -96,6 +108,31 @@ describe('Document card is displaying passed props', () => {
 
     expect(queryByTestId(testIds.photo)).toBe(null)
     expect(queryByTestId(testIds.highlight)).toBe(null)
+  })
+
+  test('can perform actions on a card', () => {
+    const { getByTestId, getByText, debug } = renderWithSafeArea(
+      <DocumentCard
+        id={1}
+        mandatoryFields={mandatoryFields}
+        optionalFields={optionalFields}
+        image={IMAGE}
+        highlight={HIGHLIGHT}
+        claims={CLAIMS}
+      />,
+    )
+
+    const dots = getByTestId(testIds.more)
+    fireEvent.press(dots)
+
+    const popupMenu = getByTestId(testIds.popupMenu)
+
+    expect(popupMenu.props.visible).toBe(true)
+
+    const deleteBtn = getByText('Delete')
+
+    fireEvent.press(deleteBtn)
+    expect(mockedNavigate).toHaveBeenCalledTimes(1)
   })
 })
 

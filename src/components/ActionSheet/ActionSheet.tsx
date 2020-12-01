@@ -7,6 +7,7 @@ interface Props {
   onClose: () => void
   overlayColor?: Colors
   animationType?: 'slide' | 'fade' | 'none'
+  testID?: string
 }
 
 const ActionSheet: React.FC<Props> = ({
@@ -15,6 +16,7 @@ const ActionSheet: React.FC<Props> = ({
   onClose,
   overlayColor = Colors.transparent,
   animationType = 'slide',
+  testID,
 }) => {
   return (
     <Modal
@@ -23,6 +25,7 @@ const ActionSheet: React.FC<Props> = ({
       animationType={animationType}
       transparent={true}
       visible={isVisible}
+      testID={testID}
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View

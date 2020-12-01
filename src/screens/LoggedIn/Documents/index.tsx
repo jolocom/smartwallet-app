@@ -95,6 +95,7 @@ const DocumentList = () => {
         style={{
           display: activeTab?.id === DocumentTypes.document ? 'flex' : 'none',
         }}
+        testID="document-cards-container"
       >
         <DocumentCards documents={documents} />
       </View>
@@ -102,6 +103,7 @@ const DocumentList = () => {
         style={{
           display: activeTab?.id === DocumentTypes.document ? 'none' : 'flex',
         }}
+        testID="other-cards-container"
       >
         <OtherCards other={other} />
       </View>
