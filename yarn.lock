@@ -1764,10 +1764,10 @@
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.0.0-rc16":
-  version "1.0.0-rc16"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.0-rc16.tgz#67db9de9a450ddcb7feaec88824671c18ae62ef2"
-  integrity sha512-7sT5ouqEalo/S7dCOK+KuEhV9+YTKMJd7qFtjU+lS2YHGc7M1k3qXllfR2SMBJMu7j1MkopZvAFi812aZE3rkQ==
+"@jolocom/sdk@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.1.tgz#7698691f3f18c490363c9f5694832c021bf1f8d1"
+  integrity sha512-71rtwrAGYZ4nJ0eDXQIZjq7orgeNkIfSAGigY2IR8A0BPl9pqsIsjy5lEOMETuGi1+nKo04alqjqyNTfEyT0hQ==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.2"
     form-data "^3.0.0"
