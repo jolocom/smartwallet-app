@@ -33,11 +33,11 @@ export const consumeInteractionToken = (jwt: string): ThunkAction => async (
 ) => {
   // TODO FIXME
   // - findInteraction should never throw but return undefined
-  // - transportAPI is sometimes not set for interactions returned by
-  //   findInteraction
   let interxn = await sdk.findInteraction(jwt)
     .catch(() => null)
 
+  // if the interaction has already been interacted with then we consider it
+  // ended
   if (interxn && interxn.getMessages().length > 1) {
     throw new AppError(ErrorCode.TokenExpired)
   }
