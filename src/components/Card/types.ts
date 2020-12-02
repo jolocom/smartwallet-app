@@ -10,6 +10,13 @@ export enum DocumentFields {
   DocumentName = 'Document Name',
 }
 
+export enum ClaimKeys {
+  givenName = 'givenName',
+  familyName = 'familyName',
+  id = 'id',
+  photo = 'photo',
+}
+
 export interface IWithCustomStyle {
   customStyles?: StyleProp<ViewStyle>
 }

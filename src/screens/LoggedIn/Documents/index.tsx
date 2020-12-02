@@ -9,9 +9,14 @@ import { useTabs } from '~/components/Tabs/Tabs'
 import { getCredentialsBySection } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
-import { DocumentTypes, DocumentFields } from '~/components/Card/types'
+import {
+  DocumentTypes,
+  DocumentFields,
+  ClaimKeys,
+} from '~/components/Card/types'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { UICredential } from '~/types/credentials'
+import { IdentitySummary } from '@jolocom/sdk'
 
 const formatClaims = (claims: IClaimSection) =>
   Object.keys(claims).map((key) => ({
@@ -19,8 +24,8 @@ const formatClaims = (claims: IClaimSection) =>
     value: claims[key],
   }))
 
-const getDocumentName = (claim: IClaimSection) => {
-  if (!!claim['givenName'] && !!claim['familyName']) {
+const getSubjectName = (claim: IClaimSection) => {
+  if (!!claim['givenName'] || !!claim['familyName']) {
     return {
       name: 'Subject name',
       value: `${claim['givenName']} ${claim['familyName']}`,
@@ -30,34 +35,62 @@ const getDocumentName = (claim: IClaimSection) => {
   return null
 }
 
+const filteredOptionalFields = [
+  ClaimKeys.familyName,
+  ClaimKeys.givenName,
+  ClaimKeys.id,
+  ClaimKeys.photo,
+]
+
 const getOptionalFields = (claim: IClaimSection) =>
   Object.keys(claim)
-    .filter((k) => k !== 'id' && k !== 'familyName' && k !== 'givenName')
+    .filter((k) => !filteredOptionalFields.includes(k as ClaimKeys))
     .map((key) => ({
       name: capitalizeWord(key),
       value: claim[key],
     }))
     .slice(0, 6)
 
+const getIssuerFields = (issuer: IdentitySummary) => {
+  const fields = [{ name: 'Issuer Id', value: issuer.did }]
+  const issuerProfile = issuer.publicProfile
+  if (issuerProfile) {
+    fields.push({ name: 'Issuer name', value: issuerProfile.name })
+    fields.push({
+      name: 'Issuer description',
+      value: issuerProfile.description,
+    })
+    issuerProfile.url &&
+      fields.push({ name: 'Issuer URL', value: issuerProfile.url })
+  }
+
+  return fields
+}
+
 const DocumentCards: React.FC<{ documents: UICredential[] }> = memo(
   ({ documents }) => {
-    return documents.map((document) => (
-      <DocumentCard
-        key={document.id}
-        id={document.id}
-        mandatoryFields={[
-          {
-            name: DocumentFields.DocumentName,
-            value: document.metadata.name,
-          },
-          getDocumentName(document.claim),
-        ]}
-        optionalFields={getOptionalFields(document.claim)}
-        highlight={document.id.slice(0, 14)}
-        image={document.renderInfo?.logo?.url}
-        claims={formatClaims(document.claim)}
-      />
-    ))
+    return documents.map((document) => {
+      return (
+        <DocumentCard
+          key={document.id}
+          id={document.id}
+          mandatoryFields={[
+            {
+              name: DocumentFields.DocumentName,
+              value: document.metadata.name,
+            },
+            getSubjectName(document.claim),
+          ]}
+          optionalFields={[...getOptionalFields(document.claim)]}
+          highlight={document.id.slice(0, 14)}
+          image={document.claim['photo'] as string}
+          claims={[
+            ...formatClaims(document.claim),
+            ...getIssuerFields(document.issuer),
+          ]}
+        />
+      )
+    })
   },
   (prevProps, nextProps) =>
     JSON.stringify(prevProps.documents) === JSON.stringify(nextProps.documents),
@@ -75,9 +108,12 @@ const OtherCards: React.FC<{ other: UICredential[] }> = memo(
             value: otherDoc.metadata.name,
           },
         ]}
-        optionalFields={getOptionalFields(otherDoc.claim)}
+        optionalFields={[...getOptionalFields(otherDoc.claim)]}
         image={otherDoc.renderInfo?.logo?.url}
-        claims={formatClaims(otherDoc.claim)}
+        claims={[
+          ...formatClaims(otherDoc.claim),
+          ...getIssuerFields(otherDoc.issuer),
+        ]}
       />
     ))
   },

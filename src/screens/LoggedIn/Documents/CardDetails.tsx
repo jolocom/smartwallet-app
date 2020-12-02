@@ -73,6 +73,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                     </JoloText>
                     <JoloText
                       color={Colors.black95}
+                      numberOfLines={4}
                       customStyles={[
                         styles.fieldText,
                         { marginTop: BP({ default: 8, xsmall: 4 }) },
