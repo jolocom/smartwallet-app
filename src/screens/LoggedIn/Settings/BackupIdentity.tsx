@@ -9,7 +9,7 @@ import { strings } from '~/translations'
 import Block from '~/components/Block'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
+import BP from '~/utils/breakpoints'
 
 const BackupBlock: React.FC<{
   title: string
@@ -17,7 +17,13 @@ const BackupBlock: React.FC<{
   btnText: string
   onPress: () => void
 }> = ({ title, description, btnText, onPress }) => (
-  <Block customStyle={{ padding: 24, marginBottom: 28 }}>
+  <Block
+    customStyle={{
+      paddingVertical: BP({ default: 24, xsmall: 20 }),
+      paddingHorizontal: BP({ default: 24, xsmall: 12 }),
+      marginBottom: BP({ default: 24, xsmall: 16 }),
+    }}
+  >
     <JoloText
       color={Colors.white90}
       kind={JoloTextKind.subtitle}
@@ -47,25 +53,36 @@ const BackupIdentity = () => {
       hasHeaderBack
       customStyles={{ justifyContent: 'space-between', paddingTop: 12 }}
     >
-      <View style={{ width: '100%' }}>
-        <Section title={strings.BACKUP_OPTIONS} />
-        <BackupBlock
-          title={strings.BACKUP_YOUR_DATA}
-          description={strings.DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA}
-          btnText={strings.EXPORT_BACKUP_FILE}
-          onPress={() => {}}
-        />
-        <BackupBlock
-          title={strings.RESTORE_YOUR_DATA}
-          description={strings.IN_CASE_YOU_DELETED_SOMETHING_IMPORTANT}
-          btnText={strings.IMPORT_FILE}
-          onPress={() => {}}
-        />
-      </View>
-      <View style={{ width: '100%', paddingBottom: 32 }}>
-        <JoloText color={Colors.white30}>{strings.LAST_BACKUP}</JoloText>
-        <JoloText color={Colors.white30}>{lastBackup}</JoloText>
-      </View>
+      <ScrollView
+        style={{ width: '100%' }}
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        overScrollMode="never"
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}
+      >
+        <View>
+          <Section
+            customStyles={{ marginBottom: BP({ default: 32, xsmall: 24 }) }}
+            title={strings.BACKUP_OPTIONS}
+          />
+          <BackupBlock
+            title={strings.BACKUP_YOUR_DATA}
+            description={strings.DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA}
+            btnText={strings.EXPORT_BACKUP_FILE}
+            onPress={() => {}}
+          />
+          <BackupBlock
+            title={strings.RESTORE_YOUR_DATA}
+            description={strings.IN_CASE_YOU_DELETED_SOMETHING_IMPORTANT}
+            btnText={strings.IMPORT_FILE}
+            onPress={() => {}}
+          />
+        </View>
+        <View style={{ width: '100%', paddingBottom: 32, paddingTop: 20 }}>
+          <JoloText color={Colors.white30}>{strings.LAST_BACKUP}</JoloText>
+          <JoloText color={Colors.white30}>{lastBackup}</JoloText>
+        </View>
+      </ScrollView>
     </ScreenContainer>
   )
 }
