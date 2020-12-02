@@ -3,6 +3,13 @@ export const truncateFirstWord = (text: string) => text.split(' ')[0]
 export const capitalizeWord = (word: string) =>
   word.charAt(0).toUpperCase() + word.slice(1)
 
+export const prepareLabel = (label: string): string => {
+  const words = label.split(/(?=[A-Z0-9])/)
+  return words.length > 1
+    ? words.map(capitalizeWord).join(' ')
+    : capitalizeWord(label)
+}
+
 export enum InputValidation {
   email = 'email',
   phone = 'phone',

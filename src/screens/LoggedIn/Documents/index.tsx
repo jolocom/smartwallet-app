@@ -14,13 +14,13 @@ import {
   DocumentFields,
   ClaimKeys,
 } from '~/components/Card/types'
-import { capitalizeWord } from '~/utils/stringUtils'
+import { prepareLabel } from '~/utils/stringUtils'
 import { UICredential } from '~/types/credentials'
 import { IdentitySummary } from '@jolocom/sdk'
 
 const formatClaims = (claims: IClaimSection) =>
   Object.keys(claims).map((key) => ({
-    name: capitalizeWord(key),
+    name: prepareLabel(key),
     value: claims[key],
   }))
 
@@ -46,7 +46,7 @@ const getOptionalFields = (claim: IClaimSection) =>
   Object.keys(claim)
     .filter((k) => !filteredOptionalFields.includes(k as ClaimKeys))
     .map((key) => ({
-      name: capitalizeWord(key),
+      name: prepareLabel(key),
       value: claim[key],
     }))
     .slice(0, 6)
