@@ -16,7 +16,7 @@ interface Props {
   image?: string
 }
 
-const IMAGE_SIZE = BP({ default: 100, xsmall: 90 })
+const IMAGE_SIZE = BP({ default: 100, small: 90, xsmall: 90 })
 
 const CardDetails = React.forwardRef<{ show: () => void }, Props>(
   ({ fields, title, image }, ref) => {
@@ -47,6 +47,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               style={[
                 styles.titleContainer,
                 {
+                  paddingTop: 20,
                   paddingRight: image ? '40%' : 0,
                 },
               ]}
