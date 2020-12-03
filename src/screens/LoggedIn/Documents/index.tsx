@@ -49,7 +49,7 @@ const getOptionalFields = (claim: IClaimSection) =>
       name: prepareLabel(key),
       value: claim[key],
     }))
-    .slice(0, 6)
+    .slice(0, 3)
 
 const getIssuerFields = (issuer: IdentitySummary) => {
   const fields = [{ name: 'Issuer Id', value: issuer.did }]
