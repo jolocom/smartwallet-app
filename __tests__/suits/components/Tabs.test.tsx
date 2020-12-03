@@ -30,6 +30,13 @@ const mockedDocuments = {
       metadata: {
         name: 'Document 2',
       },
+      issuer: {
+        did: 'did:jun:example',
+        publicProfile: {
+          name: 'Issuer name',
+          description: 'I am the issuer',
+        },
+      },
     },
   ],
   other: [
