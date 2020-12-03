@@ -67,30 +67,34 @@ const getIssuerFields = (issuer: IdentitySummary) => {
   return fields
 }
 
-const DocumentCards: React.FC<{ documents: UICredential[] }> = memo(
+const DocumentCards = memo<{ documents: UICredential[] }>(
   ({ documents }) => {
-    return documents.map((document) => {
-      return (
-        <DocumentCard
-          key={document.id}
-          id={document.id}
-          mandatoryFields={[
-            {
-              name: DocumentFields.DocumentName,
-              value: document.metadata.name,
-            },
-            getSubjectName(document.claim),
-          ]}
-          optionalFields={[...getOptionalFields(document.claim)]}
-          highlight={document.id.slice(0, 14)}
-          image={document.claim['photo'] as string}
-          claims={[
-            ...formatClaims(document.claim),
-            ...getIssuerFields(document.issuer),
-          ]}
-        />
-      )
-    })
+    return (
+      <>
+        {documents.map((document) => {
+          return (
+            <DocumentCard
+              key={document.id}
+              id={document.id}
+              mandatoryFields={[
+                {
+                  name: DocumentFields.DocumentName,
+                  value: document.metadata.name,
+                },
+                getSubjectName(document.claim),
+              ]}
+              optionalFields={[...getOptionalFields(document.claim)]}
+              highlight={document.id.slice(0, 14)}
+              image={document.claim['photo'] as string}
+              claims={[
+                ...formatClaims(document.claim),
+                ...getIssuerFields(document.issuer),
+              ]}
+            />
+          )
+        })}
+      </>
+    )
   },
   (prevProps, nextProps) =>
     JSON.stringify(prevProps.documents) === JSON.stringify(nextProps.documents),
@@ -98,24 +102,28 @@ const DocumentCards: React.FC<{ documents: UICredential[] }> = memo(
 
 const OtherCards: React.FC<{ other: UICredential[] }> = memo(
   ({ other }) => {
-    return other.map((otherDoc) => (
-      <OtherCard
-        id={otherDoc.id}
-        key={otherDoc.id}
-        mandatoryFields={[
-          {
-            name: DocumentFields.DocumentName,
-            value: otherDoc.metadata.name,
-          },
-        ]}
-        optionalFields={[...getOptionalFields(otherDoc.claim)]}
-        image={otherDoc.renderInfo?.logo?.url}
-        claims={[
-          ...formatClaims(otherDoc.claim),
-          ...getIssuerFields(otherDoc.issuer),
-        ]}
-      />
-    ))
+    return (
+      <>
+        {other.map((otherDoc) => (
+          <OtherCard
+            id={otherDoc.id}
+            key={otherDoc.id}
+            mandatoryFields={[
+              {
+                name: DocumentFields.DocumentName,
+                value: otherDoc.metadata.name,
+              },
+            ]}
+            optionalFields={[...getOptionalFields(otherDoc.claim)]}
+            image={otherDoc.renderInfo?.logo?.url}
+            claims={[
+              ...formatClaims(otherDoc.claim),
+              ...getIssuerFields(otherDoc.issuer),
+            ]}
+          />
+        ))}
+      </>
+    )
   },
   (prevProps, nextProps) =>
     JSON.stringify(prevProps.other) === JSON.stringify(nextProps.other),
