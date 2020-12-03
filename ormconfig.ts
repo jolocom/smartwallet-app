@@ -15,7 +15,7 @@ const migrations: any[] = []
 
 export default {
   type: 'react-native',
-  database: 'LocalSmartWalletData',
+  database: 'LocalSmartWallet_1.11.1_Data',
   location: 'default',
   logging: ['error', 'warn', 'schema'],
   entities: entityList,
