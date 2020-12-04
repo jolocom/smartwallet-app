@@ -13,6 +13,7 @@ import { SWErrorCodes } from '~/errors/codes'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { strings } from '~/translations'
+import InteractionWidget from '~/components/Widget/InteractionWidget'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -33,21 +34,6 @@ const Claims: React.FC = () => {
       setTimeout(() => res('done'), 6000)
       // setTimeout(() => rej('oops'), 5000)
     })
-  }
-
-  const openLoader = async () => {
-    await loader(
-      async () => {
-        const res = await longFn()
-        console.log({ res })
-      },
-      {
-        success: 'Good loader',
-        loading:
-          'Loader with a very long description to test container height and width',
-        failed: 'Bad loader',
-      },
-    )
   }
 
   const normal = () => {
@@ -75,6 +61,7 @@ const Claims: React.FC = () => {
 
   return (
     <ScreenContainer>
+      <InteractionWidget />
       <ContainerComponent>
         <AttributesWidget
           attributes={attributes}
@@ -84,7 +71,6 @@ const Claims: React.FC = () => {
           isSelectable={false}
         />
       </ContainerComponent>
-      <Btn onPress={openLoader}>Open loader</Btn>
       <Btn onPress={normal}>Normal</Btn>
       <Btn onPress={warning}>Warning</Btn>
       <Btn onPress={redirectToDeleteDoc}>DeleteDocument</Btn>
