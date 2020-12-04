@@ -49,6 +49,7 @@
     "react-native-hyperlink": "^0.0.19",
     "react-native-indicators": "^0.17.0",
     "react-native-jolocom": "^2.1.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-keychain": "^6.0.0",
     "react-native-level-fs": "^3.0.0",
     "react-native-linear-gradient": "^2.5.6",

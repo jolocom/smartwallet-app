@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 import Block from '~/components/Block'
+import { useJoloAwareScroll } from '~/components/JoloKeyboardAwareScroll'
 
 import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
@@ -13,6 +14,8 @@ interface IProps {
 }
 
 const TextArea: React.FC<IProps> = ({ input, setInput }) => {
+  const { onFocusInput } = useJoloAwareScroll()
+
   return (
     <Block customStyle={{ padding: 13 }}>
       <TextInput
@@ -20,6 +23,7 @@ const TextArea: React.FC<IProps> = ({ input, setInput }) => {
         placeholderTextColor={Colors.white70}
         value={input}
         onChangeText={setInput}
+        onFocus={onFocusInput}
         multiline
         style={styles.inputStyle}
       />
