@@ -40,8 +40,9 @@ const PopupMenu = React.forwardRef<{ show: () => void }, Props>(
       <ActionSheet
         isVisible={isVisible}
         onClose={handleHide}
-        overlayColor={Colors.black65}
+        overlayColor={Colors.black85}
         animationType={'fade'}
+        testID="popup-menu"
       >
         <View style={[styles.container, { paddingBottom: bottom + 24 }]}>
           <Block customStyle={styles.block}>
@@ -75,9 +76,12 @@ const PopupMenu = React.forwardRef<{ show: () => void }, Props>(
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    justifyContent: 'flex-end',
     paddingHorizontal: 12,
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   block: {
     backgroundColor: Colors.dark,

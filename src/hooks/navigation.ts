@@ -3,11 +3,6 @@ import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setLocalAuth } from '~/modules/account/actions'
 
-export const useNavigateBack = () => {
-  const navigation = useNavigation()
-  return navigation.goBack
-}
-
 interface NestedSceenI {
   screen?: ScreenNames
 }
@@ -18,15 +13,6 @@ export const useGoBack = () => {
     return navigation.goBack
   } 
   return () => {throw new Error('Can\'t go back')}
-}
-
-export const useRedirect = () => {
-  const navigation = useNavigation()
-
-  return (
-    screenName: ScreenNames,
-    params: Record<string, any> & NestedSceenI = {},
-  ) => navigation.navigate(screenName, params)
 }
 
 export const useRedirectTo = (

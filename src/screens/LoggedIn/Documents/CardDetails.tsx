@@ -2,21 +2,21 @@ import React, { useState, useImperativeHandle } from 'react'
 import { View, Image, StyleSheet, ScrollView } from 'react-native'
 
 import ActionSheet from '~/components/ActionSheet/ActionSheet'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import Block from '~/components/Block'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
+import { IField } from '~/components/Card/types'
 
 interface Props {
-  fields: Record<string, string>
-  title: string
+  fields: IField[]
+  title?: string
   image?: string
 }
 
-const IMAGE_SIZE = BP({ default: 100, xsmall: 90 })
+const IMAGE_SIZE = BP({ default: 100, small: 90, xsmall: 90 })
 
 const CardDetails = React.forwardRef<{ show: () => void }, Props>(
   ({ fields, title, image }, ref) => {
@@ -47,6 +47,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               style={[
                 styles.titleContainer,
                 {
+                  paddingTop: 20,
                   paddingRight: image ? '40%' : 0,
                 },
               ]}
@@ -61,7 +62,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
             </View>
             <Block customStyle={{ backgroundColor: Colors.white }}>
               {image && <Image source={{ uri: image }} style={styles.image} />}
-              {Object.keys(fields).map((field, i) => (
+              {fields.map((field, i) => (
                 <React.Fragment key={i}>
                   <View style={styles.fieldContainer}>
                     <JoloText
@@ -69,16 +70,17 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                       size={JoloTextSizes.mini}
                       color={Colors.osloGray}
                     >
-                      {field}
+                      {field.name}
                     </JoloText>
                     <JoloText
                       color={Colors.black95}
+                      numberOfLines={4}
                       customStyles={[
                         styles.fieldText,
                         { marginTop: BP({ default: 8, xsmall: 4 }) },
                       ]}
                     >
-                      {fields[field]}
+                      {field.value}
                     </JoloText>
                   </View>
                   {i !== Object.keys(fields).length - 1 && (

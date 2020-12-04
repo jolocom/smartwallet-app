@@ -24,10 +24,10 @@ const useCircleHoldAnimation = (animationDuration: number) => {
     }
   }, [gestureState])
 
+  const {
+    animatedValues: {magicOpacity, shadowScale, circleScale},
+    animateValues: {riseShadow, resetShadow, resetMagic, hideMagicBtn}} = useMagicBtnAnimations(animationDuration)
 
-  const {magicOpacity,
-    shadowScale,
-    circleScale, riseShadow, resetShadow, resetMagic, hideMagicBtn} = useMagicBtnAnimations(animationDuration);
 
   const onTouchStart = (e: GestureResponderEvent) => {
     if (gestureStateRef.current !== GestureState.Success) {

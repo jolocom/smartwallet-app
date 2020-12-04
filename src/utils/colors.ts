@@ -14,6 +14,7 @@ export enum Colors {
   genevaGray = 'rgb(151, 151, 151)',
   black95 = 'rgba(0,0,0,0.95)',
   black90 = 'rgba(0,0,0,0.90)',
+  black85 = 'rgba(0,0,0,0.85)',
   black65 = 'rgba(0,0,0,0.65)',
   black50 = 'rgba(0,0,0,0.5)',
   black30 = 'rgba(0,0,0,0.30)',
@@ -47,5 +48,5 @@ export enum Colors {
   blackRussian = 'rgb(35, 36, 38)',
   carnationPink = 'rgb(145, 25, 66)',
   hyacinthPink = 'rgb(210, 45, 105)',
-  slateGray = '#6c7b8a'
+  slateGray = '#6c7b8a',
 }
