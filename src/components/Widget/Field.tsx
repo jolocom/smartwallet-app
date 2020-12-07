@@ -18,15 +18,16 @@ export type TField = IFieldComposition & React.FC
 interface IFieldComposition {
   Input: React.FC
   Static: React.FC<Pick<IWidgetField, 'value'>>
-  Selectable: React.FC<Pick<IWidgetField, 'id' | 'value' | 'isSelected'>>
+  Selectable: React.FC<Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>>
   Empty: React.FC
 }
 
 export interface IWidgetField {
   id: string
   value: string
-  isSelected: boolean
+  isSelected?: boolean
   color?: Colors
+  onSelect?: () => void
 }
 
 const FieldText: React.FC<Pick<IWidgetField, 'value' | 'color'>> = ({
@@ -53,11 +54,10 @@ const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => {
 }
 
 const SelectableField: React.FC<
-  Pick<IWidgetField, 'id' | 'value' | 'isSelected'>
-> = ({ id, value, isSelected }) => {
-  const { onSelect, name } = useWidget()
+  Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>
+> = ({ value, isSelected, onSelect }) => {
   return (
-    <TouchableWithoutFeedback onPress={() => onSelect(name, id)}>
+    <TouchableWithoutFeedback onPress={onSelect}>
       <View style={styles.field}>
         <FieldText value={value} />
         {isSelected ? (
@@ -73,10 +73,12 @@ const SelectableField: React.FC<
 }
 
 const EmptyField: React.FC = () => {
-  const { onCreate, name } = useWidget()
+  const widgetContext = useWidget()
+  if (!widgetContext?.onCreate)
+    throw new Error('No method provided for creating new attribute')
 
   return (
-    <TouchableOpacity onPress={() => onCreate(name)}>
+    <TouchableOpacity onPress={widgetContext.onCreate}>
       <View style={styles.field}>
         <FieldText value={strings.MISSING_INFO} color={Colors.error} />
       </View>
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
 })
+
 Field.Input = FieldInput
 Field.Static = StaticField
 Field.Selectable = SelectableField

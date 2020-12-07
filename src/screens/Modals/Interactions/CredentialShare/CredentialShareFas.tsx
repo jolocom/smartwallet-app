@@ -13,7 +13,6 @@ import CredentialCard from '../CredentialCard'
 import { MultipleShareUICredential } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
-import AttributesWidget from '~/components/AttributesWidget'
 import InteractionFooter, { FooterContainer } from '../InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
@@ -22,6 +21,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
+import InteractionAttributesWidget from '~/components/Widget/InteractionAttributesWidget'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
@@ -111,13 +111,17 @@ const CredentialShareFas = () => {
         <InteractionHeader {...getHeaderText()} />
         {!!Object.keys(attributes).length && (
           <AttributeWidgetWrapper>
-            <AttributesWidget
-              attributes={attributes}
-              onCreateNewAttr={handleCreateAttribute}
-              onSelect={(key, id) => handleSelectCredential({ [key]: id })}
-              selectedAttributes={details.selectedCredentials}
-              isSelectable={true}
-            />
+            {Object.keys(attributes).map((attrKey) => (
+              <InteractionAttributesWidget
+                key={attrKey}
+                attrKey={attrKey}
+                onCreate={() => handleCreateAttribute(attrKey)}
+                onSelect={(attrKey, id) =>
+                  handleSelectCredential({ [attrKey]: id })
+                }
+                fields={attributes[attrKey]}
+              />
+            ))}
           </AttributeWidgetWrapper>
         )}
         <InteractionSection

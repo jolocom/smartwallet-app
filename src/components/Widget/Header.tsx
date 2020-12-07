@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import HeaderAction, { THeaderAction } from './HeaderAction'
-import HeaderName from './HeaderName'
+import HeaderName, { IHeaderNameProps } from './HeaderName'
 
 export type THeader = IHeaderComposition & React.FC
 
 interface IHeaderComposition {
-  Name: React.FC
+  Name: React.FC<IHeaderNameProps>
   Action: THeaderAction
 }
 

@@ -1,28 +1,27 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { getSelectedShareCredentials } from '~/modules/interaction/selectors'
-import { AttrKeys } from '~/types/credentials'
 import Widget from '.'
 import Field, { IWidgetField } from './Field'
 
 interface IProps {
-  onCreate: (attrKey: AttrKeys) => void
-  onSelect: (attrKey: AttrKeys, value: string) => void
+  onCreate: (attrKey: string) => void
+  onSelect: (attrKey: string, id: string) => void
   fields: IWidgetField[]
-  name: AttrKeys
+  attrKey: string
 }
 
-const InteractionAttribbutesWidget: React.FC<IProps> = ({
+const InteractionAttributesWidget: React.FC<IProps> = ({
   onCreate,
   onSelect,
   fields,
-  name,
+  attrKey,
 }) => {
   const selectedCredentials = useSelector(getSelectedShareCredentials)
   return (
-    <Widget onCreate={onCreate} onSelect={onSelect} name={name}>
+    <Widget onCreate={onCreate}>
       <Widget.Header>
-        <Widget.Header.Name children={name} />
+        <Widget.Header.Name value={attrKey} />
         <Widget.Header.Action.CreateNew />
       </Widget.Header>
       {!fields.length ? (
@@ -31,11 +30,11 @@ const InteractionAttribbutesWidget: React.FC<IProps> = ({
         fields.map((field) => (
           <Field.Selectable
             key={field.id}
-            id={field.id}
             value={field.value}
+            onSelect={() => onSelect(attrKey, field.id)}
             isSelected={
               selectedCredentials
-                ? selectedCredentials[name] === field.id
+                ? selectedCredentials[attrKey] === field.id
                 : false
             }
           />
@@ -45,4 +44,4 @@ const InteractionAttribbutesWidget: React.FC<IProps> = ({
   )
 }
 
-export default InteractionAttribbutesWidget
+export default InteractionAttributesWidget

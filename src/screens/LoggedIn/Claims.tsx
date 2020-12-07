@@ -1,11 +1,10 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn from '~/components/Btn'
 import { useLoader } from '~/hooks/loader'
-import AttributesWidget from '~/components/AttributesWidget'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useToasts } from '~/hooks/toasts'
 import useErrors from '~/hooks/useErrors'
@@ -13,10 +12,7 @@ import { SWErrorCodes } from '~/errors/codes'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { strings } from '~/translations'
-
-const ContainerComponent: React.FC = ({ children }) => {
-  return <View style={{ width: '100%' }}>{children}</View>
-}
+import Widget from '~/components/Widget'
 
 const Claims: React.FC = () => {
   const redirectToDeleteDoc = useRedirectTo(ScreenNames.DragToConfirm, {
@@ -57,21 +53,25 @@ const Claims: React.FC = () => {
   }
 
   const attributes = useSelector(getAttributes)
-
   return (
     <ScreenContainer>
-      <ContainerComponent>
-        <AttributesWidget
-          attributes={attributes}
-          onCreateNewAttr={(sectionKey) =>
-            console.log('Creating new attr for', sectionKey)
-          }
-          isSelectable={false}
-        />
-      </ContainerComponent>
-      <Btn onPress={normal}>Normal</Btn>
-      <Btn onPress={warning}>Warning</Btn>
-      <Btn onPress={redirectToDeleteDoc}>DeleteDocument</Btn>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 100 }}
+        style={{ width: '100%' }}
+        showsVerticalScrollIndicator={false}
+      >
+        {Object.keys(attributes).map((attrKey) => (
+          <Widget>
+            <Widget.Header.Name value={attrKey} />
+            {attributes[attrKey].map((field) => (
+              <Widget.Field.Static value={field.value} />
+            ))}
+          </Widget>
+        ))}
+        <Btn onPress={normal}>Normal</Btn>
+        <Btn onPress={warning}>Warning</Btn>
+        <Btn onPress={redirectToDeleteDoc}>DeleteDocument</Btn>
+      </ScrollView>
     </ScreenContainer>
   )
 }

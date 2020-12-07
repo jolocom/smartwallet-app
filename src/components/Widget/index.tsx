@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { AttrKeys } from '~/types/credentials'
 import Field, { TField } from './Field'
 import Header, { THeader } from './Header'
 
@@ -10,9 +9,7 @@ interface IWidgetComposition {
 }
 
 interface IProps {
-  onCreate: (attrKey: AttrKeys) => void
-  onSelect?: (...attrs: any) => void
-  name: AttrKeys
+  onCreate?: (attrs: any) => void
 }
 
 const WidgetContext = createContext<IProps | undefined>(undefined)
@@ -23,16 +20,12 @@ export const useWidget = () => useContext(WidgetContext)
 const Widget: React.FC<IProps> & IWidgetComposition = ({
   children,
   onCreate,
-  onSelect,
-  name,
 }) => {
   const contextValue = useMemo(
     () => ({
       onCreate,
-      onSelect,
-      name,
     }),
-    [onCreate, onSelect, name],
+    [onCreate],
   )
   return (
     <WidgetContext.Provider value={contextValue}>
@@ -44,6 +37,7 @@ const Widget: React.FC<IProps> & IWidgetComposition = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    marginBottom: 20,
   },
 })
 
