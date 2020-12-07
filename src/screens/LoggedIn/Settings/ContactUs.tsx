@@ -69,72 +69,70 @@ const ContactUs: React.FC = () => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-      <ScreenContainer
-        hasHeaderBack
-        customStyles={{ justifyContent: 'flex-end', flex: 1 }}
+    <ScreenContainer
+      hasHeaderBack
+      customStyles={{ justifyContent: 'flex-end', flex: 1 }}
+    >
+      <JoloKeyboardAwareScroll
+        style={{ width: '100%', flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        overScrollMode="never"
+        enableOnAndroid={true}
       >
-        <JoloKeyboardAwareScroll
-          contentContainerStyle={{ paddingBottom: 35, paddingTop: 12 }}
-          style={{ width: '100%' }}
-          showsVerticalScrollIndicator={false}
-          overScrollMode="never"
+        <Section
+          hasBlock={false}
+          title={strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
         >
-          <Section
-            hasBlock={false}
-            title={strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
+          <Dropdown options={options} onSelect={handleDropdownSelect} />
+        </Section>
+        <Section
+          hasBlock={false}
+          title={strings.ANYTHING_SPECIFIC_TO_MENTION}
+          titleStyles={{ marginBottom: 14 }}
+        >
+          <JoloText
+            size={JoloTextSizes.mini}
+            kind={JoloTextKind.subtitle}
+            customStyles={{ textAlign: 'left', marginBottom: 32 }}
           >
-            <Dropdown options={options} onSelect={handleDropdownSelect} />
-          </Section>
-          <Section
-            hasBlock={false}
-            title={strings.ANYTHING_SPECIFIC_TO_MENTION}
-            titleStyles={{ marginBottom: 14 }}
-          >
-            <JoloText
-              size={JoloTextSizes.mini}
-              kind={JoloTextKind.subtitle}
-              customStyles={{ textAlign: 'left', marginBottom: 32 }}
-            >
-              {strings.DARE_TO_SUGGEST_SMTH}
-            </JoloText>
-            <TextArea input={detailsInput} setInput={setDetailsInput} />
-          </Section>
+            {strings.DARE_TO_SUGGEST_SMTH}
+          </JoloText>
+          <TextArea input={detailsInput} setInput={setDetailsInput} />
+        </Section>
 
-          <Section
-            hasBlock={false}
-            title={strings.WANT_TO_GET_IN_TOUCH}
-            titleStyles={{ marginBottom: 0 }}
-            customStyles={{ marginBottom: 84 }}
+        <Section
+          hasBlock={false}
+          title={strings.WANT_TO_GET_IN_TOUCH}
+          titleStyles={{ marginBottom: 0 }}
+          customStyles={{ marginBottom: 84 }}
+        >
+          <FieldInput
+            validation={regexValidations[InputValidation.email]}
+            value={contactValue}
+            onChangeText={setContactValue}
+            placeholder={strings.CONTACT_US_GET_IN_TOUCH}
+            onValidation={handleContactValidation}
+          />
+          <JoloText
+            size={JoloTextSizes.mini}
+            kind={JoloTextKind.subtitle}
+            color={contactValid ? Colors.white30 : Colors.error}
+            customStyles={{ textAlign: 'left', marginTop: 12 }}
           >
-            <FieldInput
-              validation={regexValidations[InputValidation.email]}
-              value={contactValue}
-              onChangeText={setContactValue}
-              placeholder={strings.CONTACT_US_GET_IN_TOUCH}
-              onValidation={handleContactValidation}
-            />
-            <JoloText
-              size={JoloTextSizes.mini}
-              kind={JoloTextKind.subtitle}
-              color={contactValid ? Colors.white30 : Colors.error}
-              customStyles={{ textAlign: 'left', marginTop: 12 }}
-            >
-              {contactValid
-                ? strings.WE_DO_NOT_STORE_DATA
-                : strings.PLEASE_ENTER_A_VALID_EMAIL}
-            </JoloText>
-          </Section>
-          <Btn
-            type={BtnTypes.primary}
-            onPress={handleSubmit}
-            disabled={!contactValid || !isBtnEnabled()}
-          >
-            {strings.SEND}
-          </Btn>
-        </JoloKeyboardAwareScroll>
-      </ScreenContainer>
-    </KeyboardAvoidingView>
+            {contactValid
+              ? strings.WE_DO_NOT_STORE_DATA
+              : strings.PLEASE_ENTER_A_VALID_EMAIL}
+          </JoloText>
+        </Section>
+        <Btn
+          type={BtnTypes.primary}
+          onPress={handleSubmit}
+          disabled={!contactValid || !isBtnEnabled()}
+        >
+          {strings.SEND}
+        </Btn>
+      </JoloKeyboardAwareScroll>
+    </ScreenContainer>
   )
 }
 
