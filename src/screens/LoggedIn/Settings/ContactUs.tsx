@@ -14,7 +14,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
 import { Colors } from '~/utils/colors'
 import useSentry from '~/hooks/sentry'
-import { useNavigateBack } from '~/hooks/navigation'
+import { useGoBack } from '~/hooks/navigation'
 import { useSuccess } from '~/hooks/loader'
 
 import Section from './components/Section'
@@ -28,7 +28,7 @@ const INQUIRIES_LIST = [
 ]
 
 const ContactUs: React.FC = () => {
-  const navigateBack = useNavigateBack()
+  const navigateBack = useGoBack()
   const showSuccess = useSuccess()
   const { sendReport } = useSentry()
 
