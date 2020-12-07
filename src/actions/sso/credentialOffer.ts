@@ -21,16 +21,13 @@ export const consumeCredentialOfferRequest = (
   interaction: Interaction,
 ): ThunkAction => async (dispatch, getState, { interactionManager }) => {
   const interactionSummary = interaction.getSummary()
-  const passedValidation = (interactionSummary.state as CredentialOfferFlowState).offerSummary.map(
-    _ => true,
-  )
   return dispatch(
     navigationActions.navigate({
       routeName: routeList.CredentialReceive,
       params: {
         interactionId: interaction.id,
         interactionSummary,
-        passedValidation,
+        invalidTypes: [],
       },
     }),
   )
@@ -76,6 +73,9 @@ export const consumeCredentialReceive = (
  * (e.g. checking for duplicates)
  */
 
+const getCredentialType = (cred: SignedCredential) =>
+  cred.type[cred.type.length - 1]
+
 export const validateSelectionAndSave = (
   selectedCredentials: SignedCredentialWithMetadata[],
   interactionId: string,
@@ -86,7 +86,7 @@ export const validateSelectionAndSave = (
 
   const selectedTypes = selectedCredentials.map(el => el.type)
   const toSave = issued.map(credential =>
-    selectedTypes.includes(credential.type[1]) ? credential : null,
+    selectedTypes.includes(getCredentialType(credential)) ? credential : null,
   )
 
   const duplicates = await isCredentialStored(toSave, id =>
@@ -95,20 +95,20 @@ export const validateSelectionAndSave = (
 
   const issuanceResult = (interaction.flow as CredentialOfferFlow).getIssuanceResult()
 
-  const passedValidation = toSave.map((cred, i) =>
-    // NOTE: ignoring validation for credentials that were not selected
-    cred
-      ? credentialsValidity[i] &&
-        !issuanceResult[i].validationErrors.invalidIssuer &&
-        !issuanceResult[i].validationErrors.invalidSubject &&
-        !duplicates[i]
-      : true,
-  )
+  const invalidTypes = toSave.reduce<string[]>((acc, cred, i) => {
+    const isValid =
+      credentialsValidity[i] &&
+      !issuanceResult[i].validationErrors.invalidIssuer &&
+      !issuanceResult[i].validationErrors.invalidSubject &&
+      !duplicates[i]
+
+    if (cred && !isValid) acc.push(getCredentialType(cred))
+    return acc
+  }, [])
 
   // None passed the validation
-  const allInvalid = !passedValidation.includes(true)
-  // At least one passed the validatio
-  const allValid = !passedValidation.includes(false)
+  const allInvalid = invalidTypes.length === issued.length
+  const allValid = invalidTypes.length === 0
 
   const scheduleInvalidNotification = (message: string) =>
     scheduleNotification(
@@ -172,17 +172,20 @@ export const validateSelectionAndSave = (
 
   // The screen is borked. Save is enabled by default. Not sure what's wrong
   return dispatch(
-    navigationActions.navigate({
-      routeName: routeList.CredentialReceiveNegotiate,
-      params: {
-        interactionId,
-        interactionSummary: {
-          ...interaction.getSummary(),
-          state: { offerSummary },
+    navigationActions.navigate(
+      {
+        routeName: routeList.CredentialReceiveNegotiate,
+        params: {
+          interactionId,
+          interactionSummary: {
+            ...interaction.getSummary(),
+            state: { ...interaction.getSummary().state, offerSummary },
+          },
+          invalidTypes,
         },
-        passedValidation,
       },
-    }, true),
+      true,
+    ),
   )
 }
 
