@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 interface Props {
   publicProfile: IssuerPublicProfileSummary
   credentialOfferSummary: CredentialOfferFlowState
-  passedValidation: boolean[]
+  invalidTypes: string[]
   onToggleSelect: (offering: SignedCredentialWithMetadata) => void
   isDocumentSelected: (offering: SignedCredentialWithMetadata) => boolean
 }
@@ -82,10 +82,10 @@ interface Props {
 export const CredentialReceiveComponent = (props: Props) => {
   const {
     publicProfile,
-    credentialOfferSummary: { offerSummary },
+    credentialOfferSummary: { offerSummary, selectedTypes },
     onToggleSelect,
     isDocumentSelected,
-    passedValidation,
+    invalidTypes,
   } = props
 
   const issuerImage = publicProfile?.image && publicProfile.image
@@ -119,6 +119,11 @@ export const CredentialReceiveComponent = (props: Props) => {
   const headerTextOpacityValue = interpolateY([130, 150], [0, 1])
   const detailsOpacityValue = interpolateY([0, 100], [1, 0])
   const profileScaleValue = interpolateY([0, 100], [1, 0.8])
+
+  const isTypeValid = (type: string) => !invalidTypes.includes(type)
+  const availableCredentials = offerSummary.filter(o =>
+    selectedTypes.length ? selectedTypes.includes(o.type) : true,
+  )
 
   return (
     <View style={{ flex: 1, width: '100%' }}>
@@ -185,14 +190,14 @@ export const CredentialReceiveComponent = (props: Props) => {
             )}
           </Text>
         </Animated.View>
-        {offerSummary.map((offer, i) => {
+        {availableCredentials.map((offer, i) => {
           return (
             <DocumentReceiveCard
               key={i + offer.type}
-              onToggle={() => passedValidation[i] && onToggleSelect(offer)}
+              onToggle={() => isTypeValid(offer.type) && onToggleSelect(offer)}
               selected={isDocumentSelected(offer)}
               offering={offer}
-              invalid={!passedValidation[i]}
+              invalid={!isTypeValid(offer.type)}
             />
           )
         })}
