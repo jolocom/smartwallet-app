@@ -1,4 +1,10 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react'
+import React, {
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+} from 'react'
 import { RouteProp } from '@react-navigation/native'
 import {
   StyleSheet,
@@ -106,8 +112,11 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       })
     }
   }
-  useEffect(() => {
-    handleHoleLayout()
+
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      handleHoleLayout()
+    }, 200)
   }, [])
 
   const pullInBallHole = () => {
@@ -171,18 +180,19 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       >
         {title}
       </JoloText>
-      <View style={styles.holeContainer} ref={holeRef}>
-        <Animated.View
-          style={[
-            styles.hole,
-            {
-              transform: [{ scale: ballScale }],
-            },
-          ]}
-        >
-          <MagicButton animatedValues={animatedValues} />
-        </Animated.View>
-      </View>
+      <Animated.View
+        ref={holeRef}
+        //onLayout={handleHoleLayout}
+        style={[
+          styles.hole,
+          styles.holeContainer,
+          {
+            transform: [{ scale: ballScale }],
+          },
+        ]}
+      >
+        <MagicButton animatedValues={animatedValues} />
+      </Animated.View>
 
       {!isBallShown ? (
         <View

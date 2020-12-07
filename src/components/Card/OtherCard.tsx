@@ -11,18 +11,22 @@ import {
 import { ICardProps } from './types'
 
 const OtherCard: React.FC<ICardProps> = ({
+  id,
   mandatoryFields,
   optionalFields,
   image,
+  claims,
 }) => {
   return (
-    <CardContainer>
-      <OtherCardMedium>
-        <Card
-          mandatoryFields={mandatoryFields}
-          optionalFields={optionalFields}
-          image={image}
-        >
+    <CardContainer testID="otherCard">
+      <Card
+        id={id}
+        mandatoryFields={mandatoryFields}
+        optionalFields={optionalFields}
+        image={image}
+        claims={claims}
+      >
+        <OtherCardMedium>
           <View
             style={{
               paddingTop: BP({ default: 20, xsmall: 18 }),
@@ -47,14 +51,14 @@ const OtherCard: React.FC<ICardProps> = ({
               </View>
             </CardBody>
           </View>
-        </Card>
-      </OtherCardMedium>
-      <Card.Dots
-        customStyles={{
-          bottom: CARD_HORIZONTAL_PADDING / 3,
-          right: CARD_HORIZONTAL_PADDING / 2,
-        }}
-      />
+        </OtherCardMedium>
+        <Card.Dots
+          customStyles={{
+            bottom: CARD_HORIZONTAL_PADDING / 3,
+            right: CARD_HORIZONTAL_PADDING / 2,
+          }}
+        />
+      </Card>
     </CardContainer>
   )
 }
