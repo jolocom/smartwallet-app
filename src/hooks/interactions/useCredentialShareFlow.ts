@@ -106,7 +106,7 @@ export const useCredentialShareFlow = () => {
   /**
    * Selects a credential in the @interactions module
    */
-  const handleSelectCredential = (credential: Record<string, string>) => {
+  const handleSelectCredential = (credential: Record<AttrKeys, string>) => {
     dispatch(selectShareCredential(credential))
   }
 

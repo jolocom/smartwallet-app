@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, View } from 'react-native'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -13,7 +13,6 @@ import { SWErrorCodes } from '~/errors/codes'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { strings } from '~/translations'
-import InteractionWidget from '~/components/Widget/InteractionWidget'
 
 const ContainerComponent: React.FC = ({ children }) => {
   return <View style={{ width: '100%' }}>{children}</View>
@@ -61,7 +60,6 @@ const Claims: React.FC = () => {
 
   return (
     <ScreenContainer>
-      <InteractionWidget />
       <ContainerComponent>
         <AttributesWidget
           attributes={attributes}

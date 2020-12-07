@@ -14,9 +14,12 @@ interface IHeaderActionComposition {
 }
 
 const CreateNew: React.FC = () => {
-  const { onCreate } = useWidget()
+  const { onCreate, name } = useWidget()
   return (
-    <TouchableOpacity style={styles.createNewBtn} onPress={onCreate}>
+    <TouchableOpacity
+      style={styles.createNewBtn}
+      onPress={() => onCreate(name)}
+    >
       <View style={styles.plus}>
         <PlusIcon />
       </View>

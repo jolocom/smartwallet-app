@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 
 import { RootReducerI } from '~/types/reducer'
 import {
+  AttrKeys,
   attrTypeToAttrKey,
   CredentialsBySection,
   OfferUICredential,
@@ -128,7 +129,7 @@ export const getSelectedShareCredentials = createSelector(
 export const getAvailableAttributesToShare = createSelector(
   [getCredShareDetails, getAttributes],
   ({ requestedAttributes }, attributes) =>
-    requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
+    requestedAttributes.reduce<Partial<Record<AttrKeys, AttributeI[]>>>((acc, v) => {
       const value = attrTypeToAttrKey(v)
       if (!value) return acc
       acc[value] = attributes[value] || []

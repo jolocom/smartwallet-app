@@ -1,28 +1,48 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { getSelectedShareCredentials } from '~/modules/interaction/selectors'
+import { AttrKeys } from '~/types/credentials'
 import Widget from '.'
-import Field from './Field'
+import Field, { IWidgetField } from './Field'
 
-const InteractionWidget: React.FC = () => {
-  const props = {
-    name: 'Name',
-    onCreate: () => console.log('Creating new cred in widget'),
-    fields: [
-      { id: 'abc', value: 'Sveta' },
-      { id: 'def', value: 'Sveta Buben' },
-      { id: 'ghi', value: 'sbub' },
-    ],
-  }
+interface IProps {
+  onCreate: (attrKey: AttrKeys) => void
+  onSelect: (attrKey: AttrKeys, value: string) => void
+  fields: IWidgetField[]
+  name: AttrKeys
+}
+
+const InteractionAttribbutesWidget: React.FC<IProps> = ({
+  onCreate,
+  onSelect,
+  fields,
+  name,
+}) => {
+  const selectedCredentials = useSelector(getSelectedShareCredentials)
   return (
-    <Widget onCreate={props.onCreate}>
+    <Widget onCreate={onCreate} onSelect={onSelect} name={name}>
       <Widget.Header>
-        <Widget.Header.Name children={props.name} />
+        <Widget.Header.Name children={name} />
         <Widget.Header.Action.CreateNew />
       </Widget.Header>
-      {props.fields.map((field) => (
-        <Field.ValueDisplay key={field.id} children={field.value} />
-      ))}
+      {!fields.length ? (
+        <Field.Empty />
+      ) : (
+        fields.map((field) => (
+          <Field.Selectable
+            key={field.id}
+            id={field.id}
+            value={field.value}
+            isSelected={
+              selectedCredentials
+                ? selectedCredentials[name] === field.id
+                : false
+            }
+          />
+        ))
+      )}
     </Widget>
   )
 }
 
-export default InteractionWidget
+export default InteractionAttribbutesWidget
