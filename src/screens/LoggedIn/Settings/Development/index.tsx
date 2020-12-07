@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { View } from 'react-native'
 
 import Section from '../components/Section'
@@ -10,10 +10,13 @@ import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import PopupMenu from '~/components/PopupMenu'
+import TopSheet from '~/components/TopSheet'
+import Btn, { BtnTypes } from '~/components/Btn'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
+  const [showTopSheet, setShowTopSheet] = useState(false)
   const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
   const popupRef = useRef<{ show: () => void }>(null)
 
@@ -22,15 +25,6 @@ const DevelopmentSection = () => {
       title: 'ToggleSwitch',
       message: `I am ${toggled ? 'toggled' : 'not toggled'}!`,
     })
-  }
-
-  const docCardMockData = {
-    'Name of issuer': 'Embassy of Netherlands',
-    'First name': 'De Bruijn',
-    'Last name': 'Willeke Liselotte',
-    'Valid from': '09 MAA/MAR 2024',
-    'Gender ': 'Female',
-    '2 Last name': 'Willeke Liselotte',
   }
 
   return (
@@ -59,6 +53,23 @@ const DevelopmentSection = () => {
             { title: 'Please', onPress: () => {} },
           ]}
         />
+      </Option>
+      <Option onPress={() => popupRef.current?.show()}>
+        <Option.Title title="Top ActionSheet" />
+        <TopSheet
+          onClose={() => setShowTopSheet(false)}
+          isVisible={showTopSheet}
+        >
+          <Btn onPress={() => setShowTopSheet(false)} type={BtnTypes.senary}>
+            Test
+          </Btn>
+        </TopSheet>
+        <View style={{ position: 'absolute', right: 16 }}>
+          <ToggleSwitch
+            on={showTopSheet}
+            onToggle={() => setShowTopSheet((prev) => !prev)}
+          />
+        </View>
       </Option>
     </Section>
   )
