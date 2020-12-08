@@ -21,6 +21,10 @@ const Identity = () => {
             {attributes[attrKey].map((field) => (
               <Widget.Field.Static value={field.value} />
             ))}
+            <Widget>
+              <Widget.Header.Name value="companyName" />
+              <Widget.Field.Static value="Jolocom" />
+            </Widget>
           </Widget>
         ))}
       </ScrollView>

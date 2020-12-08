@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { strings } from '~/translations'
 import { AttrKeysUpper } from '~/types/credentials'
@@ -12,16 +12,24 @@ export interface IHeaderNameProps {
 
 const HeaderName: React.FC<IHeaderNameProps> = ({ value }) => {
   const indexedValue = value.toUpperCase() as AttrKeysUpper
-  if (!indexedValue) throw new Error(`No translation found for ${value}`)
-  const name = strings[indexedValue]
+  const [displayedName, setDisplayedName] = useState<string>(indexedValue)
+
+  useEffect(() => {
+    if (indexedValue in strings === false) {
+      console.warn(`No translation found for ${value}`)
+    } else {
+      const val = strings[indexedValue]
+      setDisplayedName(val)
+    }
+  }, [])
   return (
     <JoloText
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.middle}
       color={Colors.white70}
-      customStyles={{ opacity: 0.6 }}
+      customStyles={{ opacity: 0.6, alignSelf: 'flex-start' }}
     >
-      {name}
+      {displayedName}
     </JoloText>
   )
 }
