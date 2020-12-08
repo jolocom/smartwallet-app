@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 
 import { RootReducerI } from '~/types/reducer'
 import {
+  AttrKeys,
   attrTypeToAttrKey,
   CredentialsBySection,
   OfferUICredential,

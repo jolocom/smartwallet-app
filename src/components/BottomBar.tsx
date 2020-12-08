@@ -50,7 +50,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const renderIcon = () => {
     const color = isActive ? Colors.white : Colors.white40
     switch (label) {
-      case ScreenNames.Claims:
+      case ScreenNames.Identity:
         return <IdentityTabIcon color={color} />
       case ScreenNames.Documents:
         return <DocumentsTabIcon color={color} />
