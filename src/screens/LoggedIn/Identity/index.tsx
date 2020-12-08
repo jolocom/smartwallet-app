@@ -1,10 +1,12 @@
 import React from 'react'
-import { ScrollView } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { useSelector } from 'react-redux'
+import JoloText from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import Widget from '~/components/Widget'
 import { getAttributes } from '~/modules/attributes/selectors'
 import Form from './components/Form'
+import FormBody from './components/FormBody'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
@@ -28,14 +30,32 @@ const Identity = () => {
             </Widget>
           </Widget>
         ))}
-        <Form config={{}} onCancel={() => {}} onSubmit={() => {}}>
+        <Form
+          config={{
+            id: 'name',
+            fields: [
+              {
+                key: 'givenName',
+                placeholder: 'Select a given name',
+                keyboardType: 'default',
+              },
+              {
+                key: 'lastName',
+                placeholder: 'Select a last name',
+                keyboardType: 'default',
+              },
+            ],
+          }}
+          onCancel={() => {}}
+          onSubmit={() => {}}
+        >
           <Form.Header>
             <Form.Header.Cancel />
             <Form.Header.Done />
           </Form.Header>
-          {/* <Form.Body>
-            {({ fields }) => fields.map((field) => <Form.Fields />)}
-          </Form.Body> */}
+          <Form.Body>
+            {({ fields }) => fields.map((field) => <Form.Field {...field} />)}
+          </Form.Body>
         </Form>
       </ScrollView>
     </ScreenContainer>
