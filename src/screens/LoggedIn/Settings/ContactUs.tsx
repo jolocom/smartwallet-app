@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react'
-import { KeyboardAvoidingView } from 'react-native'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -97,7 +96,15 @@ const ContactUs: React.FC = () => {
           >
             {strings.DARE_TO_SUGGEST_SMTH}
           </JoloText>
-          <TextArea input={detailsInput} setInput={setDetailsInput} />
+          <JoloKeyboardAwareScroll.InputContainer>
+            {({ focusInput }: { focusInput: () => void }) => (
+              <TextArea
+                input={detailsInput}
+                setInput={setDetailsInput}
+                onFocus={focusInput}
+              />
+            )}
+          </JoloKeyboardAwareScroll.InputContainer>
         </Section>
 
         <Section
@@ -106,13 +113,18 @@ const ContactUs: React.FC = () => {
           titleStyles={{ marginBottom: 0 }}
           customStyles={{ marginBottom: 84 }}
         >
-          <FieldInput
-            validation={regexValidations[InputValidation.email]}
-            value={contactValue}
-            onChangeText={setContactValue}
-            placeholder={strings.CONTACT_US_GET_IN_TOUCH}
-            onValidation={handleContactValidation}
-          />
+          <JoloKeyboardAwareScroll.InputContainer>
+            {({ focusInput }: { focusInput: () => void }) => (
+              <FieldInput
+                validation={regexValidations[InputValidation.email]}
+                value={contactValue}
+                onChangeText={setContactValue}
+                placeholder={strings.CONTACT_US_GET_IN_TOUCH}
+                onValidation={handleContactValidation}
+                onFocus={focusInput}
+              />
+            )}
+          </JoloKeyboardAwareScroll.InputContainer>
           <JoloText
             size={JoloTextSizes.mini}
             kind={JoloTextKind.subtitle}

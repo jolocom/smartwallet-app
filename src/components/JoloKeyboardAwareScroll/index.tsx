@@ -5,9 +5,14 @@ import {
   KeyboardAwareScrollViewProps,
 } from 'react-native-keyboard-aware-scroll-view'
 import { useCustomContext } from '~/hooks/context'
+import InputContainer from './InputContainer'
 
 interface IContext {
   onFocusInput: (event: NativeSyntheticEvent<TargetedEvent>) => void
+}
+
+interface IJoloKeyboardAwareScrollComposition {
+  InputContainer: React.FC
 }
 
 const JoloKeyboardAwareScrollContext = createContext<IContext>({
@@ -19,10 +24,8 @@ export const useJoloAwareScroll = useCustomContext(
   JoloKeyboardAwareScrollContext,
 )
 
-const JoloKeyboardAwareScroll: React.FC<KeyboardAwareScrollViewProps> = ({
-  children,
-  ...rest
-}) => {
+const JoloKeyboardAwareScroll: React.FC<KeyboardAwareScrollViewProps> &
+  IJoloKeyboardAwareScrollComposition = ({ children, ...rest }) => {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null)
 
   const handleFocusInput = (event: NativeSyntheticEvent<TargetedEvent>) => {
@@ -42,10 +45,14 @@ const JoloKeyboardAwareScroll: React.FC<KeyboardAwareScrollViewProps> = ({
       <KeyboardAwareScrollView
         {...rest}
         ref={scrollViewRef}
+        extraScrollHeight={50}
+        keyboardOpeningTime={0}
         children={children}
       />
     </JoloKeyboardAwareScrollContext.Provider>
   )
 }
+
+JoloKeyboardAwareScroll.InputContainer = InputContainer
 
 export default JoloKeyboardAwareScroll

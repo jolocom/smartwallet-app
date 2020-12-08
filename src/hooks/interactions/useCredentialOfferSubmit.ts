@@ -43,7 +43,7 @@ const useCredentialOfferSubmit = () => {
       if (await credentialsAlreadyIssued()) {
         await storeSelectedCredentials()
         await syncCredentials()
-        scheduleSuccess() // TODO: in case VC were issued we should show a different toast than success
+        scheduleSuccess()
         return dispatch(resetInteraction())
       }
 
