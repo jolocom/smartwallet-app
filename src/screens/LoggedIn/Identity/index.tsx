@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import ScreenContainer from '~/components/ScreenContainer'
 import Widget from '~/components/Widget'
 import { getAttributes } from '~/modules/attributes/selectors'
+import Form from './components/Form'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
@@ -27,6 +28,15 @@ const Identity = () => {
             </Widget>
           </Widget>
         ))}
+        <Form config={{}} onCancel={() => {}} onSubmit={() => {}}>
+          <Form.Header>
+            <Form.Header.Cancel />
+            <Form.Header.Done />
+          </Form.Header>
+          {/* <Form.Body>
+            {({ fields }) => fields.map((field) => <Form.Fields />)}
+          </Form.Body> */}
+        </Form>
       </ScrollView>
     </ScreenContainer>
   )

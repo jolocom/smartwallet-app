@@ -10,6 +10,7 @@ import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from '.'
+import FieldContainer from '../FieldContainer'
 import JoloText, { JoloTextKind } from '../JoloText'
 
 export type TField = IFieldComposition & React.FC
@@ -45,9 +46,9 @@ const FieldText: React.FC<Pick<IWidgetField, 'value' | 'color'>> = ({
 
 const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => {
   return (
-    <View style={styles.field}>
+    <FieldContainer>
       <FieldText value={value} />
-    </View>
+    </FieldContainer>
   )
 }
 
@@ -56,7 +57,7 @@ const SelectableField: React.FC<
 > = ({ value, isSelected, onSelect }) => {
   return (
     <TouchableWithoutFeedback onPress={onSelect}>
-      <View style={styles.field}>
+      <FieldContainer>
         <FieldText value={value} />
         {isSelected ? (
           <View style={styles.radio}>
@@ -65,7 +66,7 @@ const SelectableField: React.FC<
         ) : (
           <View style={[styles.radio, styles.notSelected]} />
         )}
-      </View>
+      </FieldContainer>
     </TouchableWithoutFeedback>
   )
 }
@@ -77,9 +78,9 @@ const EmptyField: React.FC = () => {
 
   return (
     <TouchableOpacity onPress={widgetContext.onCreate}>
-      <View style={styles.field}>
+      <FieldContainer>
         <FieldText value={strings.MISSING_INFO} color={Colors.error} />
-      </View>
+      </FieldContainer>
     </TouchableOpacity>
   )
 }
