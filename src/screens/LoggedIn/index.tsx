@@ -21,7 +21,6 @@ import DeviceAuthentication from '~/screens/Modals/DeviceAuthentication'
 import PinRecoveryInstructions from '~/screens/Modals/PinRecoveryInstructions'
 import Lock from '~/screens/Modals/Lock'
 
-import Claims from './Claims'
 import History from './History'
 import Documents from './Documents'
 
@@ -50,6 +49,7 @@ import BackupIdentity from './Settings/BackupIdentity'
 import ButtonsTest from './Settings/Development/ButtonsTest'
 import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import LoaderTest from './Settings/Development/DevLoaders'
+import Identity from './Identity'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -60,7 +60,7 @@ const Tabs = () => (
       return <BottomBar {...props} />
     }}
   >
-    <MainTabs.Screen name={ScreenNames.Claims} component={Claims} />
+    <MainTabs.Screen name={ScreenNames.Identity} component={Identity} />
     <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
     <MainTabs.Screen name={ScreenNames.History} component={History} />
     <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
