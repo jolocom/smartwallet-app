@@ -5,7 +5,7 @@ import Section from '../components/Section'
 import Option from '../components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
@@ -17,7 +17,7 @@ const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
   const [showTopSheet, setShowTopSheet] = useState(false)
-  const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
+  const redirect = useRedirect()
   const popupRef = useRef<{ show: () => void }>(null)
 
   const handleToggle = (toggled: boolean) => {
@@ -35,8 +35,11 @@ const DevelopmentSection = () => {
           <ToggleSwitch onToggle={handleToggle} />
         </View>
       </Option>
-      <Option onPress={redirectButtons}>
+      <Option onPress={() => redirect(ScreenNames.ButtonsTest)}>
         <Option.Title title="Buttons" />
+      </Option>
+      <Option onPress={() => redirect(ScreenNames.LoaderTest)}>
+        <Option.Title title="Loader" />
       </Option>
       <Option
         onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
@@ -54,7 +57,7 @@ const DevelopmentSection = () => {
           ]}
         />
       </Option>
-      <Option onPress={() => popupRef.current?.show()}>
+      <Option>
         <Option.Title title="Top ActionSheet" />
         <TopSheet
           onClose={() => setShowTopSheet(false)}

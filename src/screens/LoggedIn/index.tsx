@@ -49,6 +49,7 @@ import { setAppLocked } from '~/modules/account/actions'
 import BackupIdentity from './Settings/BackupIdentity'
 import ButtonsTest from './Settings/Development/ButtonsTest'
 import DragToConfirm from '~/screens/Modals/DragToConfirm'
+import LoaderTest from './Settings/Development/DevLoaders'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -215,11 +216,18 @@ const LoggedInTabs: React.FC = () => {
       />
 
       {__DEV__ && (
-        <LoggedInStack.Screen
-          name={ScreenNames.ButtonsTest}
-          component={ButtonsTest}
-          options={settingsScreenTransitionOptions}
-        />
+        <>
+          <LoggedInStack.Screen
+            name={ScreenNames.ButtonsTest}
+            component={ButtonsTest}
+            options={settingsScreenTransitionOptions}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.LoaderTest}
+            component={LoaderTest}
+            options={settingsScreenTransitionOptions}
+          />
+        </>
       )}
       {/* Settings Screens -> End   */}
 
