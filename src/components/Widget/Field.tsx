@@ -11,12 +11,10 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from '.'
 import JoloText, { JoloTextKind } from '../JoloText'
-import FieldInput from './FieldInput'
 
 export type TField = IFieldComposition & React.FC
 
 interface IFieldComposition {
-  Input: React.FC
   Static: React.FC<Pick<IWidgetField, 'value'>>
   Selectable: React.FC<Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>>
   Empty: React.FC
@@ -116,7 +114,6 @@ const styles = StyleSheet.create({
   },
 })
 
-Field.Input = FieldInput
 Field.Static = StaticField
 Field.Selectable = SelectableField
 Field.Empty = EmptyField
