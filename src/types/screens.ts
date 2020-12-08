@@ -42,4 +42,6 @@ export enum ScreenNames {
 
   //Development
   ButtonsTest = 'ButtonsTest',
+  NotificationsTest = 'NotificationsTest',
+  
 }

@@ -14,7 +14,8 @@ import PopupMenu from '~/components/PopupMenu'
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
-  const redirectButtons = useRedirectTo(ScreenNames.ButtonsTest)
+  const redirectToButtons = useRedirectTo(ScreenNames.ButtonsTest)
+  const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const popupRef = useRef<{ show: () => void }>(null)
 
   const handleToggle = (toggled: boolean) => {
@@ -22,15 +23,6 @@ const DevelopmentSection = () => {
       title: 'ToggleSwitch',
       message: `I am ${toggled ? 'toggled' : 'not toggled'}!`,
     })
-  }
-
-  const docCardMockData = {
-    'Name of issuer': 'Embassy of Netherlands',
-    'First name': 'De Bruijn',
-    'Last name': 'Willeke Liselotte',
-    'Valid from': '09 MAA/MAR 2024',
-    'Gender ': 'Female',
-    '2 Last name': 'Willeke Liselotte',
   }
 
   return (
@@ -41,7 +33,7 @@ const DevelopmentSection = () => {
           <ToggleSwitch onToggle={handleToggle} />
         </View>
       </Option>
-      <Option onPress={redirectButtons}>
+      <Option onPress={redirectToButtons}>
         <Option.Title title="Buttons" />
       </Option>
       <Option
@@ -59,6 +51,9 @@ const DevelopmentSection = () => {
             { title: 'Please', onPress: () => {} },
           ]}
         />
+      </Option>
+      <Option onPress={redirectToNotifications}>
+        <Option.Title title="Notifications" />
       </Option>
     </Section>
   )
