@@ -12,7 +12,9 @@ interface IContext {
 }
 
 interface IJoloKeyboardAwareScrollComposition {
-  InputContainer: React.FC
+  InputContainer: React.FC<{
+    children: (_: { focusInput: () => void }) => JSX.Element
+  }>
 }
 
 const JoloKeyboardAwareScrollContext = createContext<IContext>({

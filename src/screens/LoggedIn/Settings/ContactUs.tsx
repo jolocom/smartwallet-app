@@ -97,7 +97,7 @@ const ContactUs: React.FC = () => {
             {strings.DARE_TO_SUGGEST_SMTH}
           </JoloText>
           <JoloKeyboardAwareScroll.InputContainer>
-            {({ focusInput }: { focusInput: () => void }) => (
+            {({ focusInput }) => (
               <TextArea
                 input={detailsInput}
                 setInput={setDetailsInput}
@@ -114,7 +114,7 @@ const ContactUs: React.FC = () => {
           customStyles={{ marginBottom: 84 }}
         >
           <JoloKeyboardAwareScroll.InputContainer>
-            {({ focusInput }: { focusInput: () => void }) => (
+            {({ focusInput }) => (
               <FieldInput
                 validation={regexValidations[InputValidation.email]}
                 value={contactValue}
