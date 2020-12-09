@@ -3,14 +3,14 @@ import { TextInput, View } from 'react-native'
 import { debugView } from '~/utils/dev'
 
 export interface IFieldBlock {
-  updateField: (val: string) => void
+  updateValue: (val: string) => void
   value: string
 }
 
-const FormField: React.FC<IFieldBlock> = ({ updateField, value }) => {
+const FormField: React.FC<IFieldBlock> = ({ updateValue, value }) => {
   return (
     <View style={{ ...debugView() }}>
-      <TextInput value={value} onChangeText={updateField} />
+      <TextInput value={value} onChangeText={updateValue} />
     </View>
   )
 }

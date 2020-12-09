@@ -60,7 +60,7 @@ const Identity = () => {
               fields.map((field) => (
                 <FormField
                   key={field.id}
-                  updateField={(val: string) => updateField(field.id, val)}
+                  updateValue={(val: string) => updateField(field.id, val)}
                   value={field.value}
                 />
               ))
