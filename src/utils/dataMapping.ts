@@ -1,12 +1,10 @@
 import {
-  AttrKeys,
+  AttributeKeys,
   ATTR_TYPES,
   UICredential,
   ShareUICredential,
-  AttributeTypes,
 } from '~/types/credentials'
 
-import { claimsMetadata } from 'cred-types-jolocom-core'
 // FIXME: expose these types from react-native-jolocom
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
@@ -32,19 +30,24 @@ export const isCredentialAttribute = (cred: SignedCredential) =>
 
 //TODO: move to ~/types/credentials
 type InitialEntryValueT = undefined | AttributeI[]
+export interface CredentialI {
+  id: string
+  claim: Record<string, string>
+}
 
 export const makeAttrEntry = (
+  attrKey: AttributeKeys,
   initialValue: InitialEntryValueT,
-  cred: SignedCredential,
+  v: CredentialI,
 ) => {
-  let entry: AttributeI = { id: cred.id, value: '' }
-  if (attrKey === AttrKeys.name) {
+  let entry: AttributeI = { id: v.id, value: '' }
+  if (attrKey === AttributeKeys.name) {
     entry.value = `${v.claim.givenName} ${v.claim.familyName}`
-  } else if (attrKey === AttrKeys.emailAddress) {
+  } else if (attrKey === AttributeKeys.emailAddress) {
     entry.value = v.claim.email
-  } else if (attrKey === AttrKeys.mobilePhoneNumber) {
+  } else if (attrKey === AttributeKeys.mobilePhoneNumber) {
     entry.value = v.claim.telephone
-  } else if (attrKey === AttrKeys.postalAddress) {
+  } else if (attrKey === AttributeKeys.postalAddress) {
     // TODO: handle this case once agreen on design
     // it has this schema: {streetAddress, postalCode, addressLocality, addressCountry}
   }
@@ -77,7 +80,7 @@ const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
     requestedAttributes: string[]
   }>(
     (acc, v) => {
-      const credType: AttrKeys | string = v[1]
+      const credType: AttributeKeys | string = v[1]
       if (credType in ATTR_TYPES) {
         acc.requestedAttributes = [...acc.requestedAttributes, credType]
       } else {
@@ -137,18 +140,18 @@ export const getMappedInteraction = (interaction: Interaction) => {
   }
 }
 
-export const getClaim = (attributeKey: AttrKeys, value: string) => {
+export const getClaim = (attributeKey: AttributeKeys, value: string) => {
   switch (attributeKey) {
-    case AttrKeys.name:
+    case AttributeKeys.name:
       const [givenName, ...familyName] = value.split(' ')
 
       return {
         givenName,
         familyName: familyName.length ? familyName.join(' ') : '',
       }
-    case AttrKeys.emailAddress:
+    case AttributeKeys.emailAddress:
       return { email: value }
-    case AttrKeys.mobilePhoneNumber:
+    case AttributeKeys.mobilePhoneNumber:
       return { telephone: value }
   }
 }
