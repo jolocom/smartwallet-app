@@ -1,4 +1,5 @@
 import { TextInputProps } from 'react-native'
+import InputTextArea from './InputTextArea'
 
 import InputUnderline from './InputUnderline'
 
@@ -8,10 +9,6 @@ export interface IInput extends TextInputProps {
 }
 
 const InputBlock = () => {
-  return null
-}
-
-const InputTextArea = () => {
   return null
 }
 

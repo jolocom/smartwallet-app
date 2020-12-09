@@ -1,20 +1,15 @@
 import React from 'react'
-import { StyleSheet, TextInput, TextInputProps } from 'react-native'
-import Block from '~/components/Block'
-
-import { strings } from '~/translations/strings'
+import { StyleSheet, TextInput } from 'react-native'
+import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { subtitleFontStyles } from '~/utils/fonts'
+import { IInput } from '.'
+import Block from '../Block'
 
-interface IProps {
-  input: string
-  setInput: (value: string) => void
-}
-
-const TextArea: React.FC<IProps & TextInputProps> = ({
-  input,
-  setInput,
+const InputTextArea: React.FC<IInput> = ({
+  value,
+  updateInput,
   ...inputProps
 }) => {
   return (
@@ -22,8 +17,8 @@ const TextArea: React.FC<IProps & TextInputProps> = ({
       <TextInput
         placeholder={`${strings.TAP_TO_WRITE}...`}
         placeholderTextColor={Colors.white70}
-        value={input}
-        onChangeText={setInput}
+        value={value}
+        onChangeText={updateInput}
         multiline
         style={styles.inputStyle}
         {...inputProps}
@@ -41,4 +36,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default TextArea
+export default InputTextArea

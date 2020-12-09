@@ -16,7 +16,6 @@ import { useGoBack } from '~/hooks/navigation'
 import { useSuccess } from '~/hooks/loader'
 
 import Section from './components/Section'
-import TextArea from './components/TextArea'
 import Input from '~/components/Input'
 import { InputValidityState } from '~/components/Input/InputUnderline'
 
@@ -99,9 +98,9 @@ const ContactUs: React.FC = () => {
           </JoloText>
           <JoloKeyboardAwareScroll.InputContainer>
             {({ focusInput }) => (
-              <TextArea
-                input={detailsInput}
-                setInput={setDetailsInput}
+              <Input.TextArea
+                value={detailsInput}
+                updateInput={setDetailsInput}
                 onFocus={focusInput}
               />
             )}
