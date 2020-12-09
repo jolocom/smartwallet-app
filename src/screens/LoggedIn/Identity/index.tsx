@@ -53,10 +53,7 @@ const Identity = () => {
             <Form.Header.Done />
           </Form.Header>
           <Form.Body>
-            {({
-              fields,
-              updateField,
-            }: Pick<IFormContext, 'fields' | 'updateField'>) =>
+            {({ fields, updateField }) =>
               fields.map((field) => (
                 <FormField
                   key={field.id}

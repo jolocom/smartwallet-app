@@ -25,8 +25,8 @@ interface IConfig {
 
 interface IFormProps {
   config: IConfig
-  onSubmit: () => void
-  onCancel: () => void
+  onSubmit?: () => void
+  onCancel?: () => void
 }
 
 export interface IFormContext
@@ -37,7 +37,11 @@ export interface IFormContext
 
 interface IFormComposition {
   Header: React.FC & IFormHeaderComposition
-  Body: React.FC
+  Body: React.FC<{
+    children: (
+      _: Pick<IFormContext, 'fields' | 'updateField'>,
+    ) => JSX.Element | JSX.Element[]
+  }>
 }
 
 const FormContext = createContext<IFormContext>({
