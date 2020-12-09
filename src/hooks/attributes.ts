@@ -1,17 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { claimsMetadata } from 'cred-types-jolocom-core'
 
-import { setAttrs, updateAttrs } from '~/modules/attributes/actions'
-import { AttrKeys, ATTR_TYPES } from '~/types/credentials'
+import { initAttrs, updateAttrs } from '~/modules/attributes/actions'
+import { AttributeTypes } from '~/types/credentials'
 import { useAgent } from './sdk'
-import { AttrsState, AttributeI } from '~/modules/attributes/types'
+import { AttrsState, AttributeI, ClaimValues } from '~/modules/attributes/types'
 import {
-  makeAttrEntry,
-  CredentialI,
-  getClaim,
   isCredentialAttribute,
+  extractCredentialType,
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
+import { attributeConfig } from '~/config/claims'
 
 export const useSyncStorageAttributes = () => {
   const dispatch = useDispatch()
@@ -22,21 +20,20 @@ export const useSyncStorageAttributes = () => {
       const verifiableCredentials = await agent.storage.get.verifiableCredential()
 
       const attributes = verifiableCredentials.reduce<AttrsState<AttributeI>>(
-        (acc, v) => {
-          if (isCredentialAttribute(v)) {
-            const attrType = v.type[1] as keyof typeof ATTR_TYPES
-            const attrKey: AttrKeys = ATTR_TYPES[attrType]
-            //FIXME type assertion
-            const entry = makeAttrEntry(attrKey, acc[attrKey], v as CredentialI)
+        (acc, cred) => {
+          if (isCredentialAttribute(cred, agent.idw.did)) {
+            const type = extractCredentialType(cred) as AttributeTypes
+            const entry = { id: cred.id, value: cred.claim }
+            const prevEntries = acc[type]
 
-            acc[attrKey] = entry
+            acc[type] = prevEntries ? [...prevEntries, entry] : [entry]
           }
           return acc
         },
         {},
       )
 
-      dispatch(setAttrs(attributes))
+      dispatch(initAttrs(attributes))
     } catch (err) {
       console.warn('Failed getting verifiable credentials', err)
     }
@@ -49,32 +46,26 @@ export const useCreateAttributes = () => {
   const dispatch = useDispatch()
 
   const createSelfIssuedCredential = async (
-    attributeKey: AttrKeys,
-    value: string,
+    type: AttributeTypes,
+    claims: ClaimValues,
   ) => {
-    const password = await agent.passwordStore.getPassword()
-    const metadata = claimsMetadata[attributeKey]
-    if (!metadata) throw new Error('Attribute key is not supported')
+    try {
+      const credential = await agent.idw.create.signedCredential(
+        {
+          metadata: attributeConfig[type].metadata,
+          claim: claims,
+          subject: did,
+        },
+        await agent.passwordStore.getPassword(),
+      )
 
-    // this one is done to map our custom fields names to the one in `cred-types-jolocom-core`
-    const verifiableCredential = await agent.idw.create.signedCredential(
-      {
-        metadata,
-        claim: getClaim(attributeKey, value), // this will split claims and create an object with properties it should have
-        subject: did,
-      },
-      password,
-    )
-    const entry = makeAttrEntry(
-      attributeKey,
-      undefined,
-      verifiableCredential as CredentialI,
-    )
+      await agent.storage.store.verifiableCredential(credential)
 
-    // save it in the storage
-    await agent.storage.store.verifiableCredential(verifiableCredential)
-
-    dispatch(updateAttrs({ attributeKey, attribute: entry[0] }))
+      const attribute = { id: credential.id, value: credential.claim }
+      dispatch(updateAttrs({ type, attribute }))
+    } catch (e) {
+      throw new Error('Failed to create attribute!')
+    }
   }
 
   return createSelfIssuedCredential

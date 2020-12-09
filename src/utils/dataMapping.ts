@@ -5,7 +5,6 @@ import {
   ShareUICredential,
 } from '~/types/credentials'
 
-// FIXME: expose these types from react-native-jolocom
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
   CredentialRequestFlowState,
@@ -16,7 +15,6 @@ import {
 import { ResolutionFlowState } from '@jolocom/sdk/js/interactionManager/resolutionFlow'
 import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
 
-import { AttributeI } from '~/modules/attributes/types'
 import { attributeConfig } from '~/config/claims'
 
 export const extractCredentialType = (cred: SignedCredential) =>
@@ -25,35 +23,11 @@ export const extractCredentialType = (cred: SignedCredential) =>
 export const isTypeAttribute = (type: string) =>
   Object.keys(attributeConfig).includes(type)
 
-export const isCredentialAttribute = (cred: SignedCredential) =>
-  isTypeAttribute(extractCredentialType(cred))
+export const isCredentialAttribute = (cred: SignedCredential, did: string) =>
+  isTypeAttribute(extractCredentialType(cred)) && cred.issuer === did
 
-//TODO: move to ~/types/credentials
-type InitialEntryValueT = undefined | AttributeI[]
-export interface CredentialI {
-  id: string
-  claim: Record<string, string>
-}
-
-export const makeAttrEntry = (
-  attrKey: AttributeKeys,
-  initialValue: InitialEntryValueT,
-  v: CredentialI,
-) => {
-  let entry: AttributeI = { id: v.id, value: '' }
-  if (attrKey === AttributeKeys.name) {
-    entry.value = `${v.claim.givenName} ${v.claim.familyName}`
-  } else if (attrKey === AttributeKeys.emailAddress) {
-    entry.value = v.claim.email
-  } else if (attrKey === AttributeKeys.mobilePhoneNumber) {
-    entry.value = v.claim.telephone
-  } else if (attrKey === AttributeKeys.postalAddress) {
-    // TODO: handle this case once agreen on design
-    // it has this schema: {streetAddress, postalCode, addressLocality, addressCountry}
-  }
-
-  return Array.isArray(initialValue) ? [...initialValue, entry] : [entry]
-}
+export const isCredentialDocument = (cred: SignedCredential, did: string) =>
+  !isCredentialAttribute(cred, did)
 
 interface SummaryI<T> {
   state: T
@@ -137,22 +111,6 @@ export const getMappedInteraction = (interaction: Interaction) => {
       return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
     case FlowType.Resolution:
       return mapResolutionData(summary as SummaryI<ResolutionFlowState>)
-  }
-}
-
-export const getClaim = (attributeKey: AttributeKeys, value: string) => {
-  switch (attributeKey) {
-    case AttributeKeys.name:
-      const [givenName, ...familyName] = value.split(' ')
-
-      return {
-        givenName,
-        familyName: familyName.length ? familyName.join(' ') : '',
-      }
-    case AttributeKeys.emailAddress:
-      return { email: value }
-    case AttributeKeys.mobilePhoneNumber:
-      return { telephone: value }
   }
 }
 
