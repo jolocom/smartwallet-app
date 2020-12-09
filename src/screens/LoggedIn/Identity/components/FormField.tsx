@@ -1,17 +1,16 @@
 import React from 'react'
 import { TextInput, View } from 'react-native'
-import FieldContainer from '~/components/FieldContainer'
 import { debugView } from '~/utils/dev'
-import { useForm } from './Form'
 
-const FormField: React.FC = ({ updateField, ...rest }) => {
-  console.log({ rest })
+export interface IFieldBlock {
+  updateField: (val: string) => void
+  value: string
+}
 
-  const { value } = rest
-
+const FormField: React.FC<IFieldBlock> = ({ updateField, value }) => {
   return (
     <View style={{ ...debugView() }}>
-      <TextInput value={value} onChangeText={() => updateField(type, value)} />
+      <TextInput value={value} onChangeText={updateField} />
     </View>
   )
 }

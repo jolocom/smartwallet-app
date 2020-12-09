@@ -1,12 +1,11 @@
 import React from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
-import JoloText from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import Widget from '~/components/Widget'
 import { getAttributes } from '~/modules/attributes/selectors'
-import Form from './components/Form'
-import FormBody from './components/FormBody'
+import Form, { IFormContext } from './components/Form'
+import FormField from './components/FormField'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
@@ -35,12 +34,12 @@ const Identity = () => {
             id: 'name',
             fields: [
               {
-                key: 'givenName',
+                id: 'givenName',
                 placeholder: 'Select a given name',
                 keyboardType: 'default',
               },
               {
-                key: 'lastName',
+                id: 'lastName',
                 placeholder: 'Select a last name',
                 keyboardType: 'default',
               },
@@ -54,7 +53,18 @@ const Identity = () => {
             <Form.Header.Done />
           </Form.Header>
           <Form.Body>
-            {({ fields }) => fields.map((field) => <Form.Field {...field} />)}
+            {({
+              fields,
+              updateField,
+            }: Pick<IFormContext, 'fields' | 'updateField'>) =>
+              fields.map((field) => (
+                <FormField
+                  key={field.id}
+                  updateField={(val: string) => updateField(field.id, val)}
+                  value={field.value}
+                />
+              ))
+            }
           </Form.Body>
         </Form>
       </ScrollView>

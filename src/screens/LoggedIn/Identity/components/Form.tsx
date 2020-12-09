@@ -3,39 +3,51 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-  useReducer,
+  useState,
 } from 'react'
 import FormBody from './FormBody'
-import FormField from './FormField'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
 
+interface IConfigField {
+  id: string
+  placeholder: string
+  keyboardType: string
+}
+
+interface IState extends IConfigField {
+  value: string
+}
+
+interface IConfig {
+  id: string
+  fields: IConfigField[]
+}
+
 interface IFormProps {
-  config: Record<string, string>
+  config: IConfig
   onSubmit: () => void
   onCancel: () => void
 }
 
-interface IFormContext extends IFormProps {
-  state: any // TODO: update types
-  updateField: (name: string, value: string | number) => void
+export interface IFormContext
+  extends Pick<IFormProps, 'onSubmit' | 'onCancel'> {
+  fields: IState[]
+  updateField: (id: string, value: string) => void
 }
+
 interface IFormComposition {
   Header: React.FC & IFormHeaderComposition
-  Field: React.FC
   Body: React.FC
 }
 
-const FormContext = createContext<IFormContext | undefined>(undefined)
+const FormContext = createContext<IFormContext>({
+  fields: [],
+  onSubmit: () => {},
+  onCancel: () => {},
+  updateField: () => {},
+})
 
 export const useForm = () => useContext(FormContext) // TODO: use useCustomContext instead
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'updateField':
-      const { name, value } = action.payload
-      return { ...state, [name]: { ...state[name], value: value } }
-  }
-}
 
 const Form: React.FC<IFormProps> & IFormComposition = ({
   config,
@@ -45,17 +57,24 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
 }) => {
   const initialState = config.fields.map((el) => ({ ...el, value: '' }))
 
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, setState] = useState(initialState)
 
   const updateField = useCallback(
-    (name, value) => {
-      dispatch({ type: 'updateField', payload: { name: config.id, value } })
+    (id: string, value: string) => {
+      setState((prevState) => {
+        return prevState.map((field) => {
+          if (field.id === id) {
+            return { ...field, value }
+          }
+          return field
+        })
+      })
     },
-    [dispatch],
+    [setState],
   )
+
   const contextValue = useMemo(
     () => ({
-      type: config.id,
       fields: state,
       onSubmit,
       onCancel,
@@ -67,7 +86,6 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
 }
 
 Form.Header = FormHeader
-Form.Field = FormField
 Form.Body = FormBody
 
 export default Form
