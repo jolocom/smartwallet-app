@@ -2,20 +2,22 @@ import React, { useMemo, useState } from 'react'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import FieldInput, { InputValidityState } from '~/components/FieldInput'
+import Dropdown from './components/Dropdown'
+import { IOption } from '~/components/Selectable'
+import Btn, { BtnTypes } from '~/components/Btn'
+import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
+
 import { strings } from '~/translations/strings'
 import { JoloTextSizes } from '~/utils/fonts'
-import Dropdown from './components/Dropdown'
-import FieldInput, { InputValidityState } from '~/components/FieldInput'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
-import TextArea from './components/TextArea'
-import Section from './components/Section'
-import { ScrollView } from 'react-native'
 import { Colors } from '~/utils/colors'
-import Btn, { BtnTypes } from '~/components/Btn'
-import { IOption } from '~/components/Selectable'
 import useSentry from '~/hooks/sentry'
-import { useNavigateBack } from '~/hooks/navigation'
+import { useGoBack } from '~/hooks/navigation'
 import { useSuccess } from '~/hooks/loader'
+
+import Section from './components/Section'
+import TextArea from './components/TextArea'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -25,7 +27,7 @@ const INQUIRIES_LIST = [
 ]
 
 const ContactUs: React.FC = () => {
-  const navigateBack = useNavigateBack()
+  const navigateBack = useGoBack()
   const showSuccess = useSuccess()
   const { sendReport } = useSentry()
 
@@ -60,9 +62,7 @@ const ContactUs: React.FC = () => {
   }
 
   const isBtnEnabled = () => {
-    const fieldValues = Object.values(assembledData)
-      .map((el) => !!el)
-      .filter((el) => el)
+    const fieldValues = Object.values(assembledData).filter(Boolean)
 
     return fieldValues.length > 1
   }
@@ -70,16 +70,13 @@ const ContactUs: React.FC = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      customStyles={{ justifyContent: 'flex-start', paddingTop: 0 }}
+      customStyles={{ justifyContent: 'flex-end', flex: 1 }}
     >
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: 35,
-          paddingTop: 12,
-        }}
-        style={{ width: '100%' }}
+      <JoloKeyboardAwareScroll
+        style={{ width: '100%', flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
+        enableOnAndroid={true}
       >
         <Section
           hasBlock={false}
@@ -99,21 +96,35 @@ const ContactUs: React.FC = () => {
           >
             {strings.DARE_TO_SUGGEST_SMTH}
           </JoloText>
-          <TextArea input={detailsInput} setInput={setDetailsInput} />
+          <JoloKeyboardAwareScroll.InputContainer>
+            {({ focusInput }) => (
+              <TextArea
+                input={detailsInput}
+                setInput={setDetailsInput}
+                onFocus={focusInput}
+              />
+            )}
+          </JoloKeyboardAwareScroll.InputContainer>
         </Section>
+
         <Section
           hasBlock={false}
-          title={strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
-          titleStyles={{ marginBottom: 12 }}
+          title={strings.WANT_TO_GET_IN_TOUCH}
+          titleStyles={{ marginBottom: 0 }}
           customStyles={{ marginBottom: 84 }}
         >
-          <FieldInput
-            validation={regexValidations[InputValidation.email]}
-            value={contactValue}
-            onChangeText={setContactValue}
-            placeholder={strings.CONTACT_US_GET_IN_TOUCH}
-            onValidation={handleContactValidation}
-          />
+          <JoloKeyboardAwareScroll.InputContainer>
+            {({ focusInput }) => (
+              <FieldInput
+                validation={regexValidations[InputValidation.email]}
+                value={contactValue}
+                onChangeText={setContactValue}
+                placeholder={strings.CONTACT_US_GET_IN_TOUCH}
+                onValidation={handleContactValidation}
+                onFocus={focusInput}
+              />
+            )}
+          </JoloKeyboardAwareScroll.InputContainer>
           <JoloText
             size={JoloTextSizes.mini}
             kind={JoloTextKind.subtitle}
@@ -132,7 +143,7 @@ const ContactUs: React.FC = () => {
         >
           {strings.SEND}
         </Btn>
-      </ScrollView>
+      </JoloKeyboardAwareScroll>
     </ScreenContainer>
   )
 }

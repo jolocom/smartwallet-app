@@ -9,6 +9,7 @@ import {
 import { subtitleFontStyles } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
+import { useJoloAwareScroll } from './JoloKeyboardAwareScroll'
 
 export enum InputValidityState {
   none = 'none',
@@ -28,6 +29,8 @@ const FieldInput: React.FC<Props> = ({
   ...inputProps
 }) => {
   const [validity, setValidity] = useState(InputValidityState.none)
+
+  const { onFocusInput } = useJoloAwareScroll()
 
   const getUnderlineColor = useCallback(() => {
     let color: Colors
@@ -71,6 +74,7 @@ const FieldInput: React.FC<Props> = ({
         selectionColor={Colors.success}
         underlineColorAndroid={Colors.transparent}
         placeholderTextColor={Colors.white70}
+        onFocus={onFocusInput}
         {...inputProps}
       />
     </View>
@@ -85,6 +89,7 @@ const styles = StyleSheet.create({
       android: 1,
       ios: 2,
     }),
+    paddingTop: 20,
   },
   container: {
     width: '100%',
