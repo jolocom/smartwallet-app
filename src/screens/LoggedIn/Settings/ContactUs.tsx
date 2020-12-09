@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import FieldInput, { InputValidityState } from '~/components/FieldInput'
 import Dropdown from './components/Dropdown'
 import { IOption } from '~/components/Selectable'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -18,6 +17,8 @@ import { useSuccess } from '~/hooks/loader'
 
 import Section from './components/Section'
 import TextArea from './components/TextArea'
+import Input from '~/components/Input'
+import { InputValidityState } from '~/components/Input/InputUnderline'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -115,10 +116,10 @@ const ContactUs: React.FC = () => {
         >
           <JoloKeyboardAwareScroll.InputContainer>
             {({ focusInput }) => (
-              <FieldInput
+              <Input.Underline
                 validation={regexValidations[InputValidation.email]}
                 value={contactValue}
-                onChangeText={setContactValue}
+                updateInput={setContactValue}
                 placeholder={strings.CONTACT_US_GET_IN_TOUCH}
                 onValidation={handleContactValidation}
                 onFocus={focusInput}

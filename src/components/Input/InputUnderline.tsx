@@ -1,15 +1,10 @@
-import React, { useState, useCallback } from 'react'
-import {
-  View,
-  TextInput,
-  TextInputProps,
-  StyleSheet,
-  Platform,
-} from 'react-native'
-import { subtitleFontStyles } from '~/utils/fonts'
+import React, { useCallback, useState } from 'react'
+import { Platform, StyleSheet, TextInput, View } from 'react-native'
+
 import { Colors } from '~/utils/colors'
+import { subtitleFontStyles } from '~/utils/fonts'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
-import { useJoloAwareScroll } from './JoloKeyboardAwareScroll'
+import { IInput } from '.'
 
 export enum InputValidityState {
   none = 'none',
@@ -17,20 +12,19 @@ export enum InputValidityState {
   valid = 'valid',
 }
 
-interface Props extends TextInputProps {
+interface IInputUnderline extends IInput {
   validation?: RegExp
   onValidation?: (state: InputValidityState) => void
 }
 
-const FieldInput: React.FC<Props> = ({
+const InputUnderline: React.FC<IInputUnderline> = ({
+  value,
   validation = regexValidations[InputValidation.all],
-  onChangeText = () => {},
+  updateInput,
   onValidation = () => {},
   ...inputProps
 }) => {
   const [validity, setValidity] = useState(InputValidityState.none)
-
-  const { onFocusInput } = useJoloAwareScroll()
 
   const getUnderlineColor = useCallback(() => {
     let color: Colors
@@ -60,7 +54,7 @@ const FieldInput: React.FC<Props> = ({
     setValidity(newValidity)
 
     if (newValidity !== validity) onValidation(newValidity)
-    onChangeText(text)
+    updateInput(text)
   }
 
   return (
@@ -74,7 +68,7 @@ const FieldInput: React.FC<Props> = ({
         selectionColor={Colors.success}
         underlineColorAndroid={Colors.transparent}
         placeholderTextColor={Colors.white70}
-        onFocus={onFocusInput}
+        value={value}
         {...inputProps}
       />
     </View>
@@ -96,4 +90,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default FieldInput
+export default InputUnderline
