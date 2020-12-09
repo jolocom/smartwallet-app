@@ -10,7 +10,6 @@ import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from '.'
-import FieldContainer from '../FieldContainer'
 import JoloText, { JoloTextKind } from '../JoloText'
 
 export type TField = IFieldComposition & React.FC
@@ -83,6 +82,10 @@ const EmptyField: React.FC = () => {
       </FieldContainer>
     </TouchableOpacity>
   )
+}
+
+const FieldContainer: React.FC = ({ children }) => {
+  return <View style={styles.field}>{children}</View>
 }
 
 const Field: React.FC & IFieldComposition = ({ children }) => {

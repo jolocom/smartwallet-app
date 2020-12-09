@@ -8,19 +8,19 @@ import React, {
 import FormBody from './FormBody'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
 
-interface IConfigField {
+interface IFieldConfig {
   id: string
   placeholder: string
   keyboardType: string
 }
 
-interface IState extends IConfigField {
+interface IState extends IFieldConfig {
   value: string
 }
 
 interface IConfig {
   id: string
-  fields: IConfigField[]
+  fields: IFieldConfig[]
 }
 
 interface IFormProps {
