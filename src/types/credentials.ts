@@ -11,6 +11,19 @@ export enum AttributeKeys {
   postalAddress = 'postalAddress',
 }
 
+export enum ClaimKeys {
+  givenName = 'givenName',
+  familyName = 'familyName',
+  email = 'email',
+  addressLine = 'addressLine1',
+  postalCode = 'postalCode',
+  city = 'city',
+  country = 'country',
+  telephone = 'telephone',
+  id = 'id',
+  photo = 'photo',
+}
+
 export enum AttributeTypes {
   emailAddress = 'ProofOfEmailCredential',
   mobilePhoneNumber = 'ProofOfMobilePhoneNumber',
@@ -25,7 +38,9 @@ export interface IAttributeClaimField {
 }
 
 export interface IAttributeConfig {
+  // NOTE: if not used anywhere -> remove
   key: AttributeKeys
+  label: string
   metadata: BaseMetadata
   fields: IAttributeClaimField[]
 }
@@ -114,14 +129,6 @@ export enum DocumentTypes {
   other = 'other',
 }
 
-// NOTE: Could this be merged with @DocumentClaimKeys?
 export enum DocumentFields {
   DocumentName = 'Document Name',
-}
-
-export enum DocumentClaimKeys {
-  givenName = 'givenName',
-  familyName = 'familyName',
-  id = 'id',
-  photo = 'photo',
 }

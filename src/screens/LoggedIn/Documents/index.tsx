@@ -12,7 +12,7 @@ import OtherCard from '~/components/Card/OtherCard'
 import {
   DocumentTypes,
   DocumentFields,
-  DocumentClaimKeys,
+  ClaimKeys,
   UICredential,
 } from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
@@ -36,15 +36,15 @@ const getSubjectName = (claim: IClaimSection) => {
 }
 
 const filteredOptionalFields = [
-  DocumentClaimKeys.familyName,
-  DocumentClaimKeys.givenName,
-  DocumentClaimKeys.id,
-  DocumentClaimKeys.photo,
+  ClaimKeys.familyName,
+  ClaimKeys.givenName,
+  ClaimKeys.id,
+  ClaimKeys.photo,
 ]
 
 const getOptionalFields = (claim: IClaimSection) =>
   Object.keys(claim)
-    .filter((k) => !filteredOptionalFields.includes(k as DocumentClaimKeys))
+    .filter((k) => !filteredOptionalFields.includes(k as ClaimKeys))
     .map((key) => ({
       name: prepareLabel(key),
       value: claim[key],

@@ -3,6 +3,7 @@ import {
   ATTR_TYPES,
   UICredential,
   ShareUICredential,
+  AttributeTypes,
 } from '~/types/credentials'
 
 import { claimsMetadata } from 'cred-types-jolocom-core'
@@ -18,34 +19,25 @@ import { ResolutionFlowState } from '@jolocom/sdk/js/interactionManager/resoluti
 import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
 
 import { AttributeI } from '~/modules/attributes/types'
+import { attributeConfig } from '~/config/claims'
+
+export const extractCredentialType = (cred: SignedCredential) =>
+  cred.type[cred.type.length - 1]
 
 export const isTypeAttribute = (type: string) =>
-  Object.values(credentialSchemas).includes(type)
+  Object.keys(attributeConfig).includes(type)
 
 export const isCredentialAttribute = (cred: SignedCredential) =>
-  Object.values(credentialSchemas).indexOf(cred.type[1]) > -1
-
-export const credentialSchemas = Object.keys(claimsMetadata).reduce<
-  Record<string, string>
->((acc, v) => {
-  const value = v as AttrKeys
-  acc[value] = claimsMetadata[value].type[1]
-  return acc
-}, {})
+  isTypeAttribute(extractCredentialType(cred))
 
 //TODO: move to ~/types/credentials
 type InitialEntryValueT = undefined | AttributeI[]
-export interface CredentialI {
-  id: string
-  claim: Record<string, string>
-}
 
 export const makeAttrEntry = (
-  attrKey: AttrKeys,
   initialValue: InitialEntryValueT,
-  v: CredentialI,
+  cred: SignedCredential,
 ) => {
-  let entry: AttributeI = { id: v.id, value: '' }
+  let entry: AttributeI = { id: cred.id, value: '' }
   if (attrKey === AttrKeys.name) {
     entry.value = `${v.claim.givenName} ${v.claim.familyName}`
   } else if (attrKey === AttrKeys.emailAddress) {
