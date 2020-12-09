@@ -1,8 +1,34 @@
 import { KeyboardTypeOptions } from 'react-native'
-
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { claimsMetadata, BaseMetadata } from 'cred-types-jolocom-core'
+
+export enum ClaimKeys {
+  emailAddress = 'emailAddress',
+  mobilePhoneNumber = 'mobilePhoneNumber',
+  name = 'name',
+  postalAddress = 'postalAddress',
+}
+
+export enum ClaimTypes {
+  emailAddress = 'ProofOfEmailCredential',
+  mobilePhoneNumber = 'ProofOfMobilePhoneNumber',
+  name = 'ProofOfNameCredential',
+  postalAddress = 'ProofOfPostalAddressCredential',
+}
+
+export interface IClaimField {
+  key: string
+  keyboardType: KeyboardTypeOptions
+  label: string
+}
+
+export interface IClaimConfig {
+  key: ClaimKeys
+  metadata: BaseMetadata
+  fields: IClaimField[]
+}
 
 export enum AttrKeys {
   emailAddress = 'emailAddress',
@@ -77,9 +103,7 @@ export interface MultipleShareUICredential
   credentials: ShareUICredential[]
 }
 
-export type ShareCredentialsBySection = CredentialsBySection<
-  MultipleShareUICredential
->
+export type ShareCredentialsBySection = CredentialsBySection<MultipleShareUICredential>
 
 export interface OfferUICredential extends BaseUICredential {
   invalid: boolean
