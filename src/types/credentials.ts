@@ -2,32 +2,32 @@ import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { claimsMetadata, BaseMetadata } from 'cred-types-jolocom-core'
+import { BaseMetadata } from 'cred-types-jolocom-core'
 
-export enum ClaimKeys {
+export enum AttributeKeys {
   emailAddress = 'emailAddress',
   mobilePhoneNumber = 'mobilePhoneNumber',
   name = 'name',
   postalAddress = 'postalAddress',
 }
 
-export enum ClaimTypes {
+export enum AttributeTypes {
   emailAddress = 'ProofOfEmailCredential',
   mobilePhoneNumber = 'ProofOfMobilePhoneNumber',
   name = 'ProofOfNameCredential',
   postalAddress = 'ProofOfPostalAddressCredential',
 }
 
-export interface IClaimField {
+export interface IAttributeClaimField {
   key: string
   keyboardType: KeyboardTypeOptions
   label: string
 }
 
-export interface IClaimConfig {
-  key: ClaimKeys
+export interface IAttributeConfig {
+  key: AttributeKeys
   metadata: BaseMetadata
-  fields: IClaimField[]
+  fields: IAttributeClaimField[]
 }
 
 export enum AttrKeys {
@@ -107,4 +107,21 @@ export type ShareCredentialsBySection = CredentialsBySection<MultipleShareUICred
 
 export interface OfferUICredential extends BaseUICredential {
   invalid: boolean
+}
+
+export enum DocumentTypes {
+  document = 'document',
+  other = 'other',
+}
+
+// NOTE: Could this be merged with @DocumentClaimKeys?
+export enum DocumentFields {
+  DocumentName = 'Document Name',
+}
+
+export enum DocumentClaimKeys {
+  givenName = 'givenName',
+  familyName = 'familyName',
+  id = 'id',
+  photo = 'photo',
 }

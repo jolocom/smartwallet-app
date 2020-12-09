@@ -1,12 +1,16 @@
 import { claimsMetadata } from 'cred-types-jolocom-core'
 
-import { IClaimConfig, ClaimTypes } from '~/types/credentials'
+import {
+  IAttributeConfig,
+  AttributeTypes,
+  AttributeKeys,
+} from '~/types/credentials'
 
 // TODO: label should be from strings
 // TODO: metadata.name should be translated. Can be added to strings
-const emailConfig: IClaimConfig = {
-  key: ClaimKeys.emailAddress,
-  metadata: claimsMetadata[ClaimKeys.emailAddress],
+const emailConfig: IAttributeConfig = {
+  key: AttributeKeys.emailAddress,
+  metadata: claimsMetadata[AttributeKeys.emailAddress],
   fields: [
     {
       key: 'email',
@@ -16,9 +20,9 @@ const emailConfig: IClaimConfig = {
   ],
 }
 
-const postalAddressConfig: IClaimConfig = {
-  key: ClaimKeys.postalAddress,
-  metadata: claimsMetadata[ClaimKeys.postalAddress],
+const postalAddressConfig: IAttributeConfig = {
+  key: AttributeKeys.postalAddress,
+  metadata: claimsMetadata[AttributeKeys.postalAddress],
   fields: [
     {
       key: 'addressLine1',
@@ -43,9 +47,9 @@ const postalAddressConfig: IClaimConfig = {
   ],
 }
 
-const mobileNumberConfig: IClaimConfig = {
-  key: ClaimKeys.mobilePhoneNumber,
-  metadata: claimsMetadata[ClaimKeys.mobilePhoneNumber],
+const mobileNumberConfig: IAttributeConfig = {
+  key: AttributeKeys.mobilePhoneNumber,
+  metadata: claimsMetadata[AttributeKeys.mobilePhoneNumber],
   fields: [
     {
       key: 'telephone',
@@ -55,9 +59,9 @@ const mobileNumberConfig: IClaimConfig = {
   ],
 }
 
-const nameConfig: IClaimConfig = {
-  key: ClaimKeys.name,
-  metadata: claimsMetadata[ClaimKeys.name],
+const nameConfig: IAttributeConfig = {
+  key: AttributeKeys.name,
+  metadata: claimsMetadata[AttributeKeys.name],
   fields: [
     {
       key: 'givenName',
@@ -72,9 +76,9 @@ const nameConfig: IClaimConfig = {
   ],
 }
 
-export const claimsConfig: Record<ClaimTypes, IClaimConfig> = {
-  [ClaimTypes.emailAddress]: emailConfig,
-  [ClaimTypes.postalAddress]: postalAddressConfig,
-  [ClaimTypes.mobilePhoneNumber]: mobileNumberConfig,
-  [ClaimTypes.name]: nameConfig,
+export const claimsConfig: Record<AttributeTypes, IAttributeConfig> = {
+  [AttributeTypes.emailAddress]: emailConfig,
+  [AttributeTypes.postalAddress]: postalAddressConfig,
+  [AttributeTypes.mobilePhoneNumber]: mobileNumberConfig,
+  [AttributeTypes.name]: nameConfig,
 }

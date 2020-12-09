@@ -12,10 +12,10 @@ import OtherCard from '~/components/Card/OtherCard'
 import {
   DocumentTypes,
   DocumentFields,
-  ClaimKeys,
-} from '~/components/Card/types'
+  DocumentClaimKeys,
+  UICredential,
+} from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
-import { UICredential } from '~/types/credentials'
 import { IdentitySummary } from '@jolocom/sdk'
 
 const formatClaims = (claims: IClaimSection) =>
@@ -36,15 +36,15 @@ const getSubjectName = (claim: IClaimSection) => {
 }
 
 const filteredOptionalFields = [
-  ClaimKeys.familyName,
-  ClaimKeys.givenName,
-  ClaimKeys.id,
-  ClaimKeys.photo,
+  DocumentClaimKeys.familyName,
+  DocumentClaimKeys.givenName,
+  DocumentClaimKeys.id,
+  DocumentClaimKeys.photo,
 ]
 
 const getOptionalFields = (claim: IClaimSection) =>
   Object.keys(claim)
-    .filter((k) => !filteredOptionalFields.includes(k as ClaimKeys))
+    .filter((k) => !filteredOptionalFields.includes(k as DocumentClaimKeys))
     .map((key) => ({
       name: prepareLabel(key),
       value: claim[key],
