@@ -9,7 +9,7 @@ export enum ScreenNames {
   // Logged In Tabs
   LoggedIn = 'LoggedIn',
   Tabs = 'Tabs',
-  Claims = 'Claims',
+  Identity = 'Identity',
   Documents = 'Documents',
   History = 'History',
   Settings = 'Settings',

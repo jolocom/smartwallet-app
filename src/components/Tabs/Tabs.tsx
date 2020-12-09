@@ -1,4 +1,5 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { useCustomContext } from '~/hooks/context'
 import Panel from './Panel'
 import Subtab from './Subtab'
 import Tab from './Tab'
@@ -26,17 +27,14 @@ interface ITabsComposition {
 }
 
 const TabsContext = React.createContext<ITabsContext | undefined>(undefined)
+TabsContext.displayName = 'TabsContext'
 
 interface ITabs {
   initialActiveTab?: ITabProps
   initialActiveSubtab?: ITabProps
 }
 
-export const useTabs = () => {
-  const context = useContext(TabsContext)
-  if (!context) throw new Error('Component should be wrapped with Tabs')
-  return context
-}
+export const useTabs = useCustomContext(TabsContext)
 
 export const Tabs: React.FC<ITabs> & ITabsComposition = ({
   initialActiveTab,

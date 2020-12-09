@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { StyleSheet, TextInput, TextInputProps } from 'react-native'
 import Block from '~/components/Block'
 
 import { strings } from '~/translations/strings'
@@ -12,7 +12,11 @@ interface IProps {
   setInput: (value: string) => void
 }
 
-const TextArea: React.FC<IProps> = ({ input, setInput }) => {
+const TextArea: React.FC<IProps & TextInputProps> = ({
+  input,
+  setInput,
+  ...inputProps
+}) => {
   return (
     <Block customStyle={{ padding: 13 }}>
       <TextInput
@@ -22,6 +26,7 @@ const TextArea: React.FC<IProps> = ({ input, setInput }) => {
         onChangeText={setInput}
         multiline
         style={styles.inputStyle}
+        {...inputProps}
       />
     </Block>
   )
