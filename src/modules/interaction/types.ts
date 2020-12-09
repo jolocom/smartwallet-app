@@ -1,5 +1,5 @@
 import { FlowType, IdentitySummary } from 'react-native-jolocom'
-import { AttrKeys, OfferUICredential } from '~/types/credentials'
+import { OfferUICredential, AttributeTypes } from '~/types/credentials'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
@@ -32,12 +32,15 @@ export interface InteractionState {
 }
 
 type IntermediaryState =
-  | { sheetState: IntermediarySheetState.showing; attributeInputKey: AttrKeys }
+  | {
+      sheetState: IntermediarySheetState.showing
+      attributeInputType: AttributeTypes
+    }
   | {
       sheetState:
         | IntermediarySheetState.hiding
         | IntermediarySheetState.switching
-      attributeInputKey: null
+      attributeInputType: null
     }
 
 /**
