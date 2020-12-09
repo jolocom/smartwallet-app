@@ -65,7 +65,6 @@ const InputUnderline: React.FC<IInputUnderline> = ({
       returnKeyType={'done'}
       selectionColor={Colors.success}
       underlineColorAndroid={Colors.transparent}
-      placeholderTextColor={Colors.white70}
       value={value}
       {...inputProps}
     />

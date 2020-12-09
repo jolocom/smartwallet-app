@@ -1,9 +1,8 @@
 import React from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
-import { Colors } from '~/utils/colors'
-import { IInput } from '.'
+import { CoreInput, IInput } from '.'
 import Block from '../Block'
 
 const InputTextArea: React.FC<IInput> = ({
@@ -13,9 +12,8 @@ const InputTextArea: React.FC<IInput> = ({
 }) => {
   return (
     <Block customStyle={{ padding: 13 }}>
-      <TextInput
+      <CoreInput
         placeholder={`${strings.TAP_TO_WRITE}...`}
-        placeholderTextColor={Colors.white70}
         value={value}
         onChangeText={updateInput}
         multiline

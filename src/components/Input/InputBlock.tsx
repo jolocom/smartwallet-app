@@ -1,13 +1,16 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
 import { Colors } from '~/utils/colors'
-import { IInput } from '.'
+import { CoreInput, IInput } from '.'
 
-const InputBlock: React.FC<IInput> = ({ updateInput, value }) => {
+const InputBlock: React.FC<IInput> = ({
+  updateInput,
+  value,
+  ...inputProps
+}) => {
   return (
     <View style={styles.block}>
-      <TextInput onChangeText={updateInput} value={value} />
+      <CoreInput {...inputProps} onChangeText={updateInput} value={value} />
     </View>
   )
 }
@@ -15,7 +18,6 @@ const InputBlock: React.FC<IInput> = ({ updateInput, value }) => {
 const styles = StyleSheet.create({
   block: {
     alignItems: 'center',
-    justifyContent: 'space-between',
     flexDirection: 'row',
     paddingHorizontal: 23,
     backgroundColor: Colors.black,
