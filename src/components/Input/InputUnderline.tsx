@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from 'react'
-import { Platform, StyleSheet, TextInput, View } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import { subtitleFontStyles } from '~/utils/fonts'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
-import { IInput } from '.'
+import { CoreInput, IInput } from '.'
 
 export enum InputValidityState {
   none = 'none',
@@ -58,27 +57,23 @@ const InputUnderline: React.FC<IInputUnderline> = ({
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={[styles.text, getUnderlineColor()]}
-        onChangeText={onChange}
-        autoCapitalize={'none'}
-        autoCorrect={false}
-        returnKeyType={'done'}
-        selectionColor={Colors.success}
-        underlineColorAndroid={Colors.transparent}
-        placeholderTextColor={Colors.white70}
-        value={value}
-        {...inputProps}
-      />
-    </View>
+    <CoreInput
+      style={[styles.text, getUnderlineColor()]}
+      onChangeText={onChange}
+      autoCapitalize={'none'}
+      autoCorrect={false}
+      returnKeyType={'done'}
+      selectionColor={Colors.success}
+      underlineColorAndroid={Colors.transparent}
+      placeholderTextColor={Colors.white70}
+      value={value}
+      {...inputProps}
+    />
   )
 }
 
 const styles = StyleSheet.create({
   text: {
-    ...subtitleFontStyles.middle,
-    color: Colors.white,
     borderBottomWidth: Platform.select({
       android: 1,
       ios: 2,

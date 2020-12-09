@@ -3,7 +3,6 @@ import { StyleSheet, TextInput } from 'react-native'
 import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { subtitleFontStyles } from '~/utils/fonts'
 import { IInput } from '.'
 import Block from '../Block'
 
@@ -29,10 +28,8 @@ const InputTextArea: React.FC<IInput> = ({
 
 const styles = StyleSheet.create({
   inputStyle: {
-    ...subtitleFontStyles.middle,
     height: BP({ default: 196, small: 150, xsmall: 150 }),
     textAlignVertical: 'top',
-    color: Colors.white,
   },
 })
 
