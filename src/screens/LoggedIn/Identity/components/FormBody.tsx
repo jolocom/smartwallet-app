@@ -17,6 +17,7 @@ const FormBody: React.FC = ({ children }) => {
             formContext.onSubmit
           }
         },
+        blurOnSubmit: !Boolean(inputs.current[idx + 1]),
         ref: (ref: TextInput) => (inputs.current[idx] = ref),
       })
     })
