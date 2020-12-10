@@ -34,7 +34,7 @@ const FormTest = () => {
         style={{ width: '100%' }}
       >
         <Section title="With header" hasBlock={false}>
-          <Form config={nameConfig} onCancel={() => {}} onSubmit={() => {}}>
+          <Form config={nameConfig}>
             <Form.Header>
               <Form.Header.Cancel />
               <Form.Header.Done />
@@ -58,7 +58,7 @@ const FormTest = () => {
           </Form>
         </Section>
         <Section title="Without header" hasBlock={false}>
-          <Form config={nameConfig} onSubmit={() => {}}>
+          <Form config={nameConfig}>
             <Form.Body>
               {({
                 fields,

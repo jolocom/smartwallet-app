@@ -26,8 +26,8 @@ interface IConfig {
 
 interface IFormProps {
   config: IConfig
-  onSubmit: () => void
-  onCancel: () => void
+  onSubmit?: (collectedValues: IState[]) => void
+  onCancel?: (collectedValues: IState[]) => void
 }
 
 export interface IFormContext
@@ -43,9 +43,9 @@ interface IFormComposition {
 
 const FormContext = createContext<IFormContext>({
   fields: [],
+  updateField: () => {},
   onSubmit: () => {},
   onCancel: () => {},
-  updateField: () => {},
 })
 
 export const useForm = () => useContext(FormContext) // TODO: use useCustomContext instead
@@ -77,8 +77,16 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
   const contextValue = useMemo(
     () => ({
       fields: state,
-      onSubmit,
-      onCancel,
+      onSubmit: onSubmit
+        ? () => onSubmit(state)
+        : () => {
+            console.log('Submitting with values', { state })
+          },
+      onCancel: onCancel
+        ? () => onCancel(state)
+        : () => {
+            console.log('Canceling with values', { state })
+          },
       updateField,
     }),
     [state, onSubmit, onCancel, updateField],
