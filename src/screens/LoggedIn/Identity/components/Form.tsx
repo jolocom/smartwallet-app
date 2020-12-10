@@ -9,11 +9,12 @@ import React, {
 import FormBody from './FormBody'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
 import { ClaimKeys } from '~/types/credentials'
+import { KeyboardTypeOptions } from 'react-native'
 
 interface IConfigField {
   id: ClaimKeys
   placeholder: string
-  keyboardType: string
+  keyboardType: KeyboardTypeOptions
 }
 
 export interface IFormState extends IConfigField {

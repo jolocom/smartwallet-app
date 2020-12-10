@@ -33,7 +33,7 @@ const postalAddressConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.postalCode,
-      keyboardType: 'default',
+      keyboardType: 'number-pad',
       label: 'Postal code',
     },
     {

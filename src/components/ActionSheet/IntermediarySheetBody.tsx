@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { TextInput, StyleSheet, View } from 'react-native'
+import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediarySheetState } from '~/modules/interaction/types'
 import {
@@ -10,17 +10,13 @@ import {
 import BasWrapper from './BasWrapper'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { useLoader } from '~/hooks/loader'
-import { Colors } from '~/utils/colors'
-import { Fonts } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import truncateDid from '~/utils/truncateDid'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { attributeConfig } from '~/config/claims'
-import FormField from '~/screens/LoggedIn/Identity/components/FormField'
 import Input from '../Input'
 import { useToasts } from '~/hooks/toasts'
-import { ClaimValues } from '~/modules/attributes/types'
 import { ClaimKeys } from '~/types/credentials'
 
 const IntermediarySheetBody = () => {
@@ -37,18 +33,7 @@ const IntermediarySheetBody = () => {
   )
 
   const formStateRef = useRef<{ state: IFormState[] }>(null)
-  const inputRef = useRef<TextInput>(null)
   const createAttribute = useCreateAttributes()
-
-  const focusKeyboard = () => {
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 600)
-  }
-
-  useEffect(() => {
-    focusKeyboard()
-  }, [])
 
   const handleSubmit = async () => {
     if (formStateRef.current) {
@@ -84,7 +69,7 @@ const IntermediarySheetBody = () => {
         })
       }
     } else {
-      focusKeyboard()
+      // TODO: focus keyboard
     }
   }
 
@@ -112,6 +97,7 @@ const IntermediarySheetBody = () => {
                   key={f.id}
                   updateInput={(val) => updateField(f.id, val)}
                   value={f.value}
+                  keyboardType={f.keyboardType}
                   returnKeyType={isLastInput ? 'done' : 'next'}
                   onSubmitEditing={handleSubmit}
                 />
@@ -123,22 +109,5 @@ const IntermediarySheetBody = () => {
     </BasWrapper>
   )
 }
-
-const styles = StyleSheet.create({
-  inputWrapper: {
-    paddingHorizontal: 20,
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-  },
-  inputText: {
-    color: Colors.white,
-    fontFamily: Fonts.Regular,
-    fontSize: 20,
-    lineHeight: 22,
-    letterSpacing: 0.14,
-    width: '100%',
-  },
-})
 
 export default IntermediarySheetBody
