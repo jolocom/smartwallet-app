@@ -5,13 +5,14 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import { KeyboardTypeOptions } from 'react-native'
 import FormBody from './FormBody'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
 
 interface IFieldConfig {
   id: string
   placeholder: string
-  keyboardType: string
+  keyboardType: KeyboardTypeOptions
 }
 
 interface IState extends IFieldConfig {

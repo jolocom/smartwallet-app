@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { Platform, StyleSheet } from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
 
 import { Colors } from '~/utils/colors'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
@@ -16,60 +17,66 @@ interface IInputUnderline extends IInput {
   onValidation?: (state: InputValidityState) => void
 }
 
-const InputUnderline: React.FC<IInputUnderline> = ({
-  value,
-  validation = regexValidations[InputValidation.all],
-  updateInput,
-  onValidation = () => {},
-  ...inputProps
-}) => {
-  const [validity, setValidity] = useState(InputValidityState.none)
+const InputUnderline = React.forwardRef<TextInput, IInputUnderline>(
+  (
+    {
+      value,
+      validation = regexValidations[InputValidation.all],
+      updateInput,
+      onValidation = () => {},
+      ...inputProps
+    },
+    ref,
+  ) => {
+    const [validity, setValidity] = useState(InputValidityState.none)
 
-  const getUnderlineColor = useCallback(() => {
-    let color: Colors
-    switch (validity) {
-      case InputValidityState.error:
-        color = Colors.error
-        break
-      case InputValidityState.valid:
-        color = Colors.success
-        break
-      default:
-        color = Colors.white60
-        break
+    const getUnderlineColor = useCallback(() => {
+      let color: Colors
+      switch (validity) {
+        case InputValidityState.error:
+          color = Colors.error
+          break
+        case InputValidityState.valid:
+          color = Colors.success
+          break
+        default:
+          color = Colors.white60
+          break
+      }
+
+      return { borderColor: color }
+    }, [validity])
+
+    const onChange = (text: string) => {
+      const newValidity =
+        text.length < 4
+          ? InputValidityState.none
+          : validation.test(text)
+          ? InputValidityState.valid
+          : InputValidityState.error
+
+      setValidity(newValidity)
+
+      if (newValidity !== validity) onValidation(newValidity)
+      updateInput(text)
     }
 
-    return { borderColor: color }
-  }, [validity])
-
-  const onChange = (text: string) => {
-    const newValidity =
-      text.length < 4
-        ? InputValidityState.none
-        : validation.test(text)
-        ? InputValidityState.valid
-        : InputValidityState.error
-
-    setValidity(newValidity)
-
-    if (newValidity !== validity) onValidation(newValidity)
-    updateInput(text)
-  }
-
-  return (
-    <CoreInput
-      style={[styles.text, getUnderlineColor()]}
-      onChangeText={onChange}
-      autoCapitalize={'none'}
-      autoCorrect={false}
-      returnKeyType={'done'}
-      selectionColor={Colors.success}
-      underlineColorAndroid={Colors.transparent}
-      value={value}
-      {...inputProps}
-    />
-  )
-}
+    return (
+      <CoreInput
+        ref={ref}
+        style={[styles.text, getUnderlineColor()]}
+        onChangeText={onChange}
+        autoCapitalize={'none'}
+        autoCorrect={false}
+        returnKeyType={'done'}
+        selectionColor={Colors.success}
+        underlineColorAndroid={Colors.transparent}
+        value={value}
+        {...inputProps}
+      />
+    )
+  },
+)
 
 const styles = StyleSheet.create({
   text: {

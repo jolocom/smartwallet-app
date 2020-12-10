@@ -21,7 +21,7 @@ const FormBody: React.FC = ({ children }) => {
       })
     })
   }
-  return null
+  return children
 }
 
 export default FormBody
