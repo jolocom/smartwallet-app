@@ -6,8 +6,8 @@ import Field, { IWidgetField } from './Field'
 import { AttributeTypes } from '~/types/credentials'
 
 interface IProps {
-  onCreate: (attrType: string) => void
-  onSelect: (attrType: string, id: string) => void
+  onCreate: () => void
+  onSelect: (attrType: AttributeTypes, id: string) => void
   fields: IWidgetField[]
   name: string
   type: AttributeTypes

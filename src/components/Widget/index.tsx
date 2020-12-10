@@ -2,6 +2,7 @@ import React, { createContext, useContext, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Field, { TField } from './Field'
 import Header, { THeader } from './Header'
+import { useCustomContext } from '~/hooks/context'
 
 interface IWidgetComposition {
   Field: TField
@@ -9,13 +10,12 @@ interface IWidgetComposition {
 }
 
 interface IProps {
-  onCreate?: (attrs: any) => void
+  onCreate?: () => void
 }
 
 const WidgetContext = createContext<IProps | undefined>(undefined)
 
-// TODO: use useCustomContext instead
-export const useWidget = () => useContext(WidgetContext)
+export const useWidget = useCustomContext(WidgetContext)
 
 const Widget: React.FC<IProps> & IWidgetComposition = ({
   children,
