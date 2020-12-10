@@ -96,12 +96,12 @@ const styles = StyleSheet.create({
   radio: {
     width: 20,
     height: 20,
-    borderRadius: 10,
   },
   notSelected: {
     borderColor: Colors.white45,
     opacity: 0.3,
     borderWidth: 1,
+    borderRadius: 10,
   },
   field: {
     alignItems: 'center',
