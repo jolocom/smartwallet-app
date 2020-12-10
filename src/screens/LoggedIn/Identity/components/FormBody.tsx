@@ -1,13 +1,27 @@
-import React from 'react'
+import React, { useRef } from 'react'
+import { TextInput } from 'react-native'
 import { useForm } from './Form'
 
 const FormBody: React.FC = ({ children }) => {
   const formContext = useForm()
-  const { fields, updateField } = formContext
-  if (typeof children === 'function') {
-    return children({ fields, updateField })
+
+  const inputs = useRef<TextInput[]>([])
+
+  if (children && typeof children === 'function') {
+    return React.Children.map(children(formContext), (child, idx) => {
+      return React.cloneElement(child, {
+        onSubmitEditing: () => {
+          if (inputs.current[idx + 1]) {
+            inputs.current[idx + 1].focus()
+          } else {
+            formContext.onSubmit
+          }
+        },
+        ref: (ref: TextInput) => (inputs.current[idx] = ref),
+      })
+    })
   }
-  return children
+  return null
 }
 
 export default FormBody

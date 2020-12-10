@@ -16,6 +16,8 @@ const DevelopmentSection = () => {
   const { showErrorDisplay } = useErrors()
   const redirectToButtons = useRedirectTo(ScreenNames.ButtonsTest)
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
+  const redirectToForms = useRedirectTo(ScreenNames.FormTest)
+  const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const popupRef = useRef<{ show: () => void }>(null)
 
   const handleToggle = (toggled: boolean) => {
@@ -54,6 +56,12 @@ const DevelopmentSection = () => {
       </Option>
       <Option onPress={redirectToNotifications}>
         <Option.Title title="Notifications" />
+      </Option>
+      <Option onPress={redirectToForms}>
+        <Option.Title title="Forms" />
+      </Option>
+      <Option onPress={redirectToInputs}>
+        <Option.Title title="Inputs" />
       </Option>
     </Section>
   )
