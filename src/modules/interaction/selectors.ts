@@ -2,14 +2,12 @@ import { createSelector } from 'reselect'
 
 import { RootReducerI } from '~/types/reducer'
 import {
-  AttrKeys,
-  attrTypeToAttrKey,
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
   ShareUICredential,
 } from '~/types/credentials'
-import { AttributeI } from '~/modules/attributes/types'
+import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
@@ -129,10 +127,8 @@ export const getSelectedShareCredentials = createSelector(
 export const getAvailableAttributesToShare = createSelector(
   [getCredShareDetails, getAttributes],
   ({ requestedAttributes }, attributes) =>
-    requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
-      const value = attrTypeToAttrKey(v)
-      if (!value) return acc
-      acc[value] = attributes[value] || []
+    requestedAttributes.reduce<AttrsState<AttributeI>>((acc, v) => {
+      acc[v] = attributes[v] || []
       return acc
     }, {}),
 )

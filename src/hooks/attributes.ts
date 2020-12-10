@@ -7,6 +7,7 @@ import { AttrsState, AttributeI, ClaimValues } from '~/modules/attributes/types'
 import {
   isCredentialAttribute,
   extractCredentialType,
+  extractClaims,
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
 import { attributeConfig } from '~/config/claims'
@@ -23,7 +24,7 @@ export const useSyncStorageAttributes = () => {
         (acc, cred) => {
           if (isCredentialAttribute(cred, agent.idw.did)) {
             const type = extractCredentialType(cred) as AttributeTypes
-            const entry = { id: cred.id, value: cred.claim }
+            const entry = { id: cred.id, value: extractClaims(cred.claim) }
             const prevEntries = acc[type]
 
             acc[type] = prevEntries ? [...prevEntries, entry] : [entry]
@@ -61,7 +62,10 @@ export const useCreateAttributes = () => {
 
       await agent.storage.store.verifiableCredential(credential)
 
-      const attribute = { id: credential.id, value: credential.claim }
+      const attribute = {
+        id: credential.id,
+        value: extractClaims(credential.claim),
+      }
       dispatch(updateAttrs({ type, attribute }))
     } catch (e) {
       throw new Error('Failed to create attribute!')

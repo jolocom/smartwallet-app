@@ -20,7 +20,7 @@ export const CoreInput: React.FC<TextInputProps> = ({
   return (
     <TextInput
       style={[styles.coreInput, style]}
-      placeholderTextColor={Colors.white70}
+      placeholderTextColor={Colors.white30}
       {...inputProps}
     />
   )

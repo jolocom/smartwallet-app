@@ -17,6 +17,6 @@ export const setIntermediaryState = createAction(
   InteractionActions.setIntermediaryState,
 )
 
-export const setAttributeInputKey = createAction(
-  InteractionActions.setAttributeInputKey,
+export const setAttributeInputType = createAction(
+  InteractionActions.setAttributeInputType,
 )

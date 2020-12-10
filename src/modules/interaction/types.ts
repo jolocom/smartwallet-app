@@ -6,7 +6,7 @@ export enum InteractionActions {
   resetInteraction = 'resetInteraction',
   selectShareCredential = 'selectShareCredential',
   setIntermediaryState = 'setIntermediaryState',
-  setAttributeInputKey = 'setAttributeInputKey',
+  setAttributeInputType = 'setAttributeInputType',
 }
 
 export type InteractionDetails =
@@ -23,7 +23,7 @@ export type InteractionDetails =
  *
  * @details - mapped flow state. If no active interaction, defaults to { flowType: null }
  * @intermediaryState - status of the Intermediary ActionSheet
- * @attributeInputKey - the attribute type that should be created on the @IntermediaryActionSheet
+ * @attributeInputType - the attribute type that should be created on the @IntermediaryActionSheet
  * @selectedShareCredentials - mapping of selected {[type]: id} credentials within the interaction
  */
 export interface InteractionState {
@@ -92,7 +92,7 @@ export interface AuthorizationDetailsI extends InteractionCommonI {
 
 export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
-  requestedAttributes: string[]
+  requestedAttributes: AttributeTypes[]
   //TODO: should be renamed to smth else (not @credentials)
   requestedCredentials: string[]
   selectedCredentials: Record<string, string>

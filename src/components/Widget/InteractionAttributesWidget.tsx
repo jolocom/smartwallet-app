@@ -3,25 +3,28 @@ import { useSelector } from 'react-redux'
 import { getSelectedShareCredentials } from '~/modules/interaction/selectors'
 import Widget from '.'
 import Field, { IWidgetField } from './Field'
+import { AttributeTypes } from '~/types/credentials'
 
 interface IProps {
-  onCreate: (attrKey: string) => void
-  onSelect: (attrKey: string, id: string) => void
+  onCreate: (attrType: string) => void
+  onSelect: (attrType: string, id: string) => void
   fields: IWidgetField[]
-  attrKey: string
+  name: string
+  type: AttributeTypes
 }
 
 const InteractionAttributesWidget: React.FC<IProps> = ({
   onCreate,
   onSelect,
   fields,
-  attrKey,
+  name,
+  type,
 }) => {
   const selectedCredentials = useSelector(getSelectedShareCredentials)
   return (
     <Widget onCreate={onCreate}>
       <Widget.Header>
-        <Widget.Header.Name value={attrKey} />
+        <Widget.Header.Name value={name} />
         <Widget.Header.Action.CreateNew />
       </Widget.Header>
       {!fields.length ? (
@@ -31,10 +34,10 @@ const InteractionAttributesWidget: React.FC<IProps> = ({
           <Field.Selectable
             key={field.id}
             value={field.value}
-            onSelect={() => onSelect(attrKey, field.id)}
+            onSelect={() => onSelect(type, field.id)}
             isSelected={
               selectedCredentials
-                ? selectedCredentials[attrKey] === field.id
+                ? selectedCredentials[type] === field.id
                 : false
             }
           />

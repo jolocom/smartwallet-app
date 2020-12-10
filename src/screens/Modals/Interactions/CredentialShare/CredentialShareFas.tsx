@@ -10,7 +10,7 @@ import {
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
-import { MultipleShareUICredential } from '~/types/credentials'
+import { MultipleShareUICredential, AttributeTypes } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
 import InteractionFooter, { FooterContainer } from '../InteractionFooter'
@@ -22,6 +22,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import InteractionAttributesWidget from '~/components/Widget/InteractionAttributesWidget'
+import { attributeConfig } from '~/config/claims'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
@@ -111,17 +112,28 @@ const CredentialShareFas = () => {
         <InteractionHeader {...getHeaderText()} />
         {!!Object.keys(attributes).length && (
           <AttributeWidgetWrapper>
-            {Object.keys(attributes).map((attrKey) => (
-              <InteractionAttributesWidget
-                key={attrKey}
-                attrKey={attrKey}
-                onCreate={() => handleCreateAttribute(attrKey)}
-                onSelect={(attrKey, id) =>
-                  handleSelectCredential({ [attrKey]: id })
-                }
-                fields={attributes[attrKey]}
-              />
-            ))}
+            {Object.keys(attributes).map((credType) => {
+              const attrType = credType as AttributeTypes
+              const config = attributeConfig[attrType]
+              const attribute = attributes[attrType]
+              if (attribute) {
+                return (
+                  <InteractionAttributesWidget
+                    key={attrType}
+                    name={config.label}
+                    type={attrType}
+                    onCreate={() => handleCreateAttribute(attrType)}
+                    onSelect={(attrKey, id) =>
+                      handleSelectCredential({ [attrKey]: id })
+                    }
+                    fields={attribute.map((attr) => ({
+                      id: attr.id,
+                      value: Object.values(attr.value).join(' '),
+                    }))}
+                  />
+                )
+              }
+            })}
           </AttributeWidgetWrapper>
         )}
         <InteractionSection

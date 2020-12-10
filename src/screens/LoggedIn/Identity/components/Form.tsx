@@ -8,9 +8,10 @@ import React, {
 } from 'react'
 import FormBody from './FormBody'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
+import { ClaimKeys } from '~/types/credentials'
 
 interface IConfigField {
-  id: string
+  id: ClaimKeys
   placeholder: string
   keyboardType: string
 }
