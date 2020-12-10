@@ -28,7 +28,7 @@ const CreateNew: React.FC = () => {
         size={JoloTextSizes.middle}
         color={Colors.white}
       >
-        {strings.CREATE_NEW_ONE}
+        {strings.ADD_ATTRIBUTE}
       </JoloText>
     </TouchableOpacity>
   )
@@ -46,9 +46,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   plus: {
-    transform: [{ scale: 0.6 }],
-    marginRight: 1,
-    marginBottom: BP({ default: 1, medium: 4, large: 4 }),
+    height: 22,
+    width: 22,
+    marginRight: 10,
   },
 })
 

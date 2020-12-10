@@ -219,7 +219,7 @@ const termsConsent = {
 }
 
 const attributes = {
-  CREATE_NEW_ONE: 'Create new one',
+  ADD_ATTRIBUTE: 'Add new one',
   NAME: 'Name',
   EMAILADDRESS: 'Email',
   MOBILEPHONENUMBER: 'Number',
@@ -298,5 +298,5 @@ export const strings = {
   ...termsConsent,
   ...toasts,
   ...documents,
-  ...history
+  ...history,
 }
