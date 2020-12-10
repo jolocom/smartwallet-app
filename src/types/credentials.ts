@@ -26,7 +26,7 @@ export enum ClaimKeys {
 
 export enum AttributeTypes {
   emailAddress = 'ProofOfEmailCredential',
-  mobilePhoneNumber = 'ProofOfMobilePhoneNumber',
+  mobilePhoneNumber = 'ProofOfMobilePhoneNumberCredential',
   name = 'ProofOfNameCredential',
   postalAddress = 'ProofOfPostalAddressCredential',
 }
