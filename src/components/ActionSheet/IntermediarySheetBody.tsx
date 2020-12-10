@@ -14,11 +14,13 @@ import { attributeConfig } from '~/config/claims'
 import Input from '../Input'
 import { useToasts } from '~/hooks/toasts'
 import { ClaimKeys } from '~/types/credentials'
+import useInteractionToasts from '~/hooks/interactions/useInteractionToasts'
 
 const IntermediarySheetBody = () => {
   const dispatch = useDispatch()
   const loader = useLoader()
-  const { scheduleInfo, scheduleWarning } = useToasts()
+  const { scheduleInfo } = useToasts()
+  const { scheduleErrorInteraction } = useInteractionToasts()
   const inputType = useSelector(getAttributeInputType)
 
   const formConfig = attributeConfig[inputType]
@@ -51,10 +53,7 @@ const IntermediarySheetBody = () => {
 
         if (!success) {
           dispatch(setIntermediaryState(IntermediarySheetState.switching))
-          scheduleWarning({
-            title: 'Oops',
-            message: 'Failed to create attribute!',
-          })
+          scheduleErrorInteraction()
         }
       } else {
         scheduleInfo({
