@@ -73,7 +73,9 @@ const CredentialShareBas = () => {
               }
               fields={attribute.map((attr) => ({
                 id: attr.id,
-                value: Object.values(attr.value).join(' '),
+                value: Object.values(attr.value).join(
+                  attrType === AttributeTypes.name ? ' ' : ', ',
+                ),
               }))}
             />
           )
