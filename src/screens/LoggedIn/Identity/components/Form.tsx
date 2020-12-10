@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import { KeyboardTypeOptions } from 'react-native'
 import FormBody from './FormBody'
+import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
 
 interface IFieldConfig {
@@ -30,15 +31,17 @@ interface IFormProps {
   onCancel?: (collectedValues: IState[]) => void
 }
 
-export interface IFormContext
-  extends Pick<IFormProps, 'onSubmit' | 'onCancel'> {
+export interface IFormContext {
   fields: IState[]
   updateField: (id: string, value: string) => void
+  onSubmit: (collectedValues: IState[]) => void
+  onCancel: (collectedValues: IState[]) => void
 }
 
 interface IFormComposition {
   Header: React.FC & IFormHeaderComposition
   Body: React.FC
+  Expose: React.FC
 }
 
 const FormContext = createContext<IFormContext>({
@@ -96,5 +99,6 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
 
 Form.Header = FormHeader
 Form.Body = FormBody
+Form.Expose = FormExpose
 
 export default Form

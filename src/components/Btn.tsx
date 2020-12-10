@@ -35,7 +35,7 @@ interface BtnPropsI {
 
 interface PropsI extends BtnPropsI {
   size?: BtnSize
-  onPress: () => void
+  onPress: (val: any) => void
   disabled?: boolean
   withoutMargins?: boolean
   customContainerStyles?: ViewStyle

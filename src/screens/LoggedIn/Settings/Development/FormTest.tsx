@@ -1,5 +1,6 @@
 import React from 'react'
 import { KeyboardTypeOptions } from 'react-native'
+import Btn from '~/components/Btn'
 
 import Input from '~/components/Input'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
@@ -75,6 +76,26 @@ const FormTest = () => {
                 ))
               }
             </Form.Body>
+          </Form>
+        </Section>
+        <Section title="Exposed values in form" hasBlock={false}>
+          <Form config={nameConfig}>
+            <Form.Body>
+              {({ fields, updateField }: IFormContext) =>
+                fields.map((field) => (
+                  <Input.Block
+                    key={field.id}
+                    value={field.value}
+                    updateInput={(val) => updateField(field.id, val)}
+                  />
+                ))
+              }
+            </Form.Body>
+            <Form.Expose>
+              {({ onSubmit }: IFormContext) => (
+                <Btn onPress={onSubmit}>Get form values</Btn>
+              )}
+            </Form.Expose>
           </Form>
         </Section>
       </JoloKeyboardAwareScroll>
