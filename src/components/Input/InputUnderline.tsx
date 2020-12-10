@@ -1,15 +1,9 @@
-import React, { useState, useCallback } from 'react'
-import {
-  View,
-  TextInput,
-  TextInputProps,
-  StyleSheet,
-  Platform,
-} from 'react-native'
-import { subtitleFontStyles } from '~/utils/fonts'
+import React, { useCallback, useState } from 'react'
+import { Platform, StyleSheet } from 'react-native'
+
 import { Colors } from '~/utils/colors'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
-import { useJoloAwareScroll } from './JoloKeyboardAwareScroll'
+import { CoreInput, IInput } from '.'
 
 export enum InputValidityState {
   none = 'none',
@@ -17,20 +11,19 @@ export enum InputValidityState {
   valid = 'valid',
 }
 
-interface Props extends TextInputProps {
+interface IInputUnderline extends IInput {
   validation?: RegExp
   onValidation?: (state: InputValidityState) => void
 }
 
-const FieldInput: React.FC<Props> = ({
+const InputUnderline: React.FC<IInputUnderline> = ({
+  value,
   validation = regexValidations[InputValidation.all],
-  onChangeText = () => {},
+  updateInput,
   onValidation = () => {},
   ...inputProps
 }) => {
   const [validity, setValidity] = useState(InputValidityState.none)
-
-  const { onFocusInput } = useJoloAwareScroll()
 
   const getUnderlineColor = useCallback(() => {
     let color: Colors
@@ -60,31 +53,26 @@ const FieldInput: React.FC<Props> = ({
     setValidity(newValidity)
 
     if (newValidity !== validity) onValidation(newValidity)
-    onChangeText(text)
+    updateInput(text)
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={[styles.text, getUnderlineColor()]}
-        onChangeText={onChange}
-        autoCapitalize={'none'}
-        autoCorrect={false}
-        returnKeyType={'done'}
-        selectionColor={Colors.success}
-        underlineColorAndroid={Colors.transparent}
-        placeholderTextColor={Colors.white70}
-        onFocus={onFocusInput}
-        {...inputProps}
-      />
-    </View>
+    <CoreInput
+      style={[styles.text, getUnderlineColor()]}
+      onChangeText={onChange}
+      autoCapitalize={'none'}
+      autoCorrect={false}
+      returnKeyType={'done'}
+      selectionColor={Colors.success}
+      underlineColorAndroid={Colors.transparent}
+      value={value}
+      {...inputProps}
+    />
   )
 }
 
 const styles = StyleSheet.create({
   text: {
-    ...subtitleFontStyles.middle,
-    color: Colors.white,
     borderBottomWidth: Platform.select({
       android: 1,
       ios: 2,
@@ -96,4 +84,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default FieldInput
+export default InputUnderline
