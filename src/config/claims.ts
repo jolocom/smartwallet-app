@@ -6,16 +6,17 @@ import {
   AttributeKeys,
   ClaimKeys,
 } from '~/types/credentials'
+import { strings } from '~/translations'
 
-// TODO: label & field label should come from strings
+// TODO: add input validation for each field
 const emailConfig: IAttributeConfig = {
   key: AttributeKeys.emailAddress,
-  label: 'Email',
+  label: strings.EMAIL,
   metadata: claimsMetadata[AttributeKeys.emailAddress],
   fields: [
     {
       key: ClaimKeys.email,
-      label: 'E-mail address',
+      label: strings.EMAIL,
       keyboardOptions: {
         keyboardType: 'email-address',
         autoCapitalize: 'none',
@@ -26,12 +27,12 @@ const emailConfig: IAttributeConfig = {
 
 const postalAddressConfig: IAttributeConfig = {
   key: AttributeKeys.postalAddress,
-  label: 'Address Line',
+  label: strings.ADDRESS,
   metadata: claimsMetadata[AttributeKeys.postalAddress],
   fields: [
     {
       key: ClaimKeys.addressLine,
-      label: 'Address',
+      label: strings.ADDRESS_LINE_FIELD,
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'sentences',
@@ -39,7 +40,7 @@ const postalAddressConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.postalCode,
-      label: 'Postal code',
+      label: strings.POSTAL_CODE_FIELD,
       keyboardOptions: {
         keyboardType: 'number-pad',
         autoCapitalize: 'none',
@@ -47,7 +48,7 @@ const postalAddressConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.city,
-      label: 'City',
+      label: strings.CITY_FIELD,
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'sentences',
@@ -55,7 +56,7 @@ const postalAddressConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.country,
-      label: 'Country',
+      label: strings.COUNTRY_FIELD,
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'words',
@@ -66,12 +67,12 @@ const postalAddressConfig: IAttributeConfig = {
 
 const mobileNumberConfig: IAttributeConfig = {
   key: AttributeKeys.mobilePhoneNumber,
-  label: 'Number',
+  label: strings.NUMBER,
   metadata: claimsMetadata[AttributeKeys.mobilePhoneNumber],
   fields: [
     {
       key: ClaimKeys.telephone,
-      label: 'Phone number',
+      label: strings.NUMBER,
       keyboardOptions: {
         keyboardType: 'number-pad',
         autoCapitalize: 'none',
@@ -82,12 +83,12 @@ const mobileNumberConfig: IAttributeConfig = {
 
 const nameConfig: IAttributeConfig = {
   key: AttributeKeys.name,
-  label: 'Name',
+  label: strings.NAME,
   metadata: claimsMetadata[AttributeKeys.name],
   fields: [
     {
       key: ClaimKeys.givenName,
-      label: 'Given name',
+      label: strings.GIVEN_NAME_FIELD,
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'words',
@@ -95,7 +96,7 @@ const nameConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.familyName,
-      label: 'Family name',
+      label: strings.FAMILY_NAME_FIELD,
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'words',
