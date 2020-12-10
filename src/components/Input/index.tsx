@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet, TextInputProps } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { StyleSheet, TextInputProps, ViewStyle, TextInput } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { subtitleFontStyles } from '~/utils/fonts'
 import InputBlock from './InputBlock'
@@ -11,6 +10,7 @@ import InputUnderline from './InputUnderline'
 export interface IInput extends TextInputProps {
   value: string
   updateInput: (val: string) => void
+  containerStyle?: ViewStyle
 }
 
 export const CoreInput: React.FC<TextInputProps> = ({
