@@ -1,29 +1,22 @@
 import React, {
   createContext,
   useCallback,
-  useContext,
   useMemo,
   useState,
   useImperativeHandle,
 } from 'react'
 import FormBody from './FormBody'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
-import { ClaimKeys } from '~/types/credentials'
-import { KeyboardTypeOptions } from 'react-native'
+import { IAttributeClaimField } from '~/types/credentials'
+import { useCustomContext } from '~/hooks/context'
 
-interface IConfigField {
-  id: ClaimKeys
-  placeholder: string
-  keyboardType: KeyboardTypeOptions
-}
-
-export interface IFormState extends IConfigField {
+export interface IFormState extends IAttributeClaimField {
   value: string
 }
 
 interface IConfig {
   id: string
-  fields: IConfigField[]
+  fields: IAttributeClaimField[]
 }
 
 interface IFormProps {
@@ -54,7 +47,7 @@ const FormContext = createContext<IFormContext>({
   updateField: () => {},
 })
 
-export const useForm = () => useContext(FormContext) // TODO: use useCustomContext instead
+export const useForm = useCustomContext(FormContext)
 
 type FormReturnType = React.ForwardRefExoticComponent<
   React.PropsWithChildren<IFormProps> &
@@ -75,10 +68,10 @@ const Form = React.forwardRef<
   }))
 
   const updateField = useCallback(
-    (id: string, value: string) => {
+    (key: string, value: string) => {
       setState((prevState) => {
         return prevState.map((field) => {
-          if (field.id === id) {
+          if (field.key === key) {
             return { ...field, value }
           }
           return field

@@ -3,15 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { setIntermediaryState } from '~/modules/interaction/actions'
 import { IntermediarySheetState } from '~/modules/interaction/types'
-import {
-  getAttributeInputType,
-  getInteractionCounterparty,
-} from '~/modules/interaction/selectors'
+import { getAttributeInputType } from '~/modules/interaction/selectors'
 import BasWrapper from './BasWrapper'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { useLoader } from '~/hooks/loader'
 import { strings } from '~/translations/strings'
-import truncateDid from '~/utils/truncateDid'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
 import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { attributeConfig } from '~/config/claims'
@@ -24,13 +20,11 @@ const IntermediarySheetBody = () => {
   const loader = useLoader()
   const { scheduleInfo, scheduleWarning } = useToasts()
   const inputType = useSelector(getAttributeInputType)
-  const counterparty = useSelector(getInteractionCounterparty)
 
   const formConfig = attributeConfig[inputType]
   const title = strings.ADD_YOUR_ATTRIBUTE(formConfig.label.toLowerCase())
-  const description = strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(
-    truncateDid(counterparty.did),
-  )
+  const description =
+    strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
 
   const formStateRef = useRef<{ state: IFormState[] }>(null)
   const createAttribute = useCreateAttributes()
@@ -40,7 +34,7 @@ const IntermediarySheetBody = () => {
       const claims = formStateRef.current.state.reduce<
         Partial<Record<ClaimKeys, string>>
       >((acc, v) => {
-        acc[v.id] = v.value
+        acc[v.key] = v.value
         return acc
       }, {})
 
@@ -74,17 +68,18 @@ const IntermediarySheetBody = () => {
   }
 
   return (
-    <BasWrapper showIcon={false} customStyles={{ paddingTop: 10 }}>
+    <BasWrapper
+      showIcon={false}
+      customStyles={{
+        paddingTop: 10,
+      }}
+    >
       <InteractionHeader {...{ title, description }} />
       <Form
         ref={formStateRef}
         config={{
           id: formConfig.key,
-          fields: formConfig.fields.map(({ key, label, keyboardType }) => ({
-            id: key,
-            placeholder: label,
-            keyboardType,
-          })),
+          fields: formConfig.fields,
         }}
       >
         <Form.Body>
@@ -93,13 +88,15 @@ const IntermediarySheetBody = () => {
               const isLastInput = i === fields.length - 1
               return (
                 <Input.Block
-                  placeholder={f.placeholder}
-                  key={f.id}
-                  updateInput={(val) => updateField(f.id, val)}
+                  autoFocus={i === 0}
+                  placeholder={f.label}
+                  key={f.key}
+                  updateInput={(val) => updateField(f.key, val)}
                   value={f.value}
                   keyboardType={f.keyboardType}
                   returnKeyType={isLastInput ? 'done' : 'next'}
                   onSubmitEditing={handleSubmit}
+                  containerStyle={{ marginBottom: 8 }}
                 />
               )
             })
