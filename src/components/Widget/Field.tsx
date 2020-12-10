@@ -56,7 +56,7 @@ const SelectableField: React.FC<
   Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>
 > = ({ value, isSelected, onSelect }) => {
   return (
-    <TouchableWithoutFeedback onPress={onSelect}>
+    <TouchableOpacity activeOpacity={1} onPress={onSelect}>
       <FieldContainer>
         <FieldText value={value} />
         {isSelected ? (
@@ -67,7 +67,7 @@ const SelectableField: React.FC<
           <View style={[styles.radio, styles.notSelected]} />
         )}
       </FieldContainer>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   )
 }
 

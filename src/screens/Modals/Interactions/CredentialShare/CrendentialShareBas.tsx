@@ -68,8 +68,8 @@ const CredentialShareBas = () => {
               name={config.label}
               type={attrType}
               onCreate={() => handleCreateAttribute(attrType)}
-              onSelect={(attrKey, id) =>
-                handleSelectCredential({ [attrKey]: id })
+              onSelect={(attrType, id) =>
+                handleSelectCredential({ [attrType]: id })
               }
               fields={attribute.map((attr) => ({
                 id: attr.id,
