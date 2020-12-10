@@ -19,6 +19,7 @@ export const CoreInput: React.FC<TextInputProps> = ({
 }) => {
   return (
     <TextInput
+      autoCorrect={false}
       style={[styles.coreInput, style]}
       placeholderTextColor={Colors.white30}
       {...inputProps}

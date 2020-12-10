@@ -1,10 +1,6 @@
 import React from 'react'
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import { StyleSheet, TouchableOpacity, View, TextStyle } from 'react-native'
+
 import { PurpleTickSuccess } from '~/assets/svg'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
@@ -29,15 +25,16 @@ export interface IWidgetField {
   onSelect?: () => void
 }
 
-const FieldText: React.FC<Pick<IWidgetField, 'value' | 'color'>> = ({
-  value,
-  color = Colors.white90,
-}) => {
+const FieldText: React.FC<
+  Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
+> = ({ value, color = Colors.white90, customStyles = {} }) => {
   return (
     <JoloText
+      numberOfLines={1}
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.middle}
       color={color}
+      customStyles={[{ textAlign: 'left' }, customStyles]}
     >
       {value}
     </JoloText>
@@ -58,7 +55,7 @@ const SelectableField: React.FC<
   return (
     <TouchableOpacity activeOpacity={1} onPress={onSelect}>
       <FieldContainer>
-        <FieldText value={value} />
+        <FieldText value={value} customStyles={{ width: '85%' }} />
         {isSelected ? (
           <View style={styles.radio}>
             <PurpleTickSuccess />

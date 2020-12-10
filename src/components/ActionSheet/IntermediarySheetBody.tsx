@@ -93,10 +93,10 @@ const IntermediarySheetBody = () => {
                   key={f.key}
                   updateInput={(val) => updateField(f.key, val)}
                   value={f.value}
-                  keyboardType={f.keyboardType}
                   returnKeyType={isLastInput ? 'done' : 'next'}
                   onSubmitEditing={handleSubmit}
                   containerStyle={{ marginBottom: 8 }}
+                  {...f.keyboardOptions}
                 />
               )
             })

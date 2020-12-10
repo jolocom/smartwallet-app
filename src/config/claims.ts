@@ -15,8 +15,11 @@ const emailConfig: IAttributeConfig = {
   fields: [
     {
       key: ClaimKeys.email,
-      keyboardType: 'email-address',
       label: 'E-mail address',
+      keyboardOptions: {
+        keyboardType: 'email-address',
+        autoCapitalize: 'none',
+      },
     },
   ],
 }
@@ -28,23 +31,35 @@ const postalAddressConfig: IAttributeConfig = {
   fields: [
     {
       key: ClaimKeys.addressLine,
-      keyboardType: 'default',
       label: 'Address',
+      keyboardOptions: {
+        keyboardType: 'default',
+        autoCapitalize: 'sentences',
+      },
     },
     {
       key: ClaimKeys.postalCode,
-      keyboardType: 'number-pad',
       label: 'Postal code',
+      keyboardOptions: {
+        keyboardType: 'number-pad',
+        autoCapitalize: 'none',
+      },
     },
     {
       key: ClaimKeys.city,
-      keyboardType: 'default',
       label: 'City',
+      keyboardOptions: {
+        keyboardType: 'default',
+        autoCapitalize: 'sentences',
+      },
     },
     {
       key: ClaimKeys.country,
-      keyboardType: 'default',
       label: 'Country',
+      keyboardOptions: {
+        keyboardType: 'default',
+        autoCapitalize: 'words',
+      },
     },
   ],
 }
@@ -56,8 +71,11 @@ const mobileNumberConfig: IAttributeConfig = {
   fields: [
     {
       key: ClaimKeys.telephone,
-      keyboardType: 'number-pad',
       label: 'Phone number',
+      keyboardOptions: {
+        keyboardType: 'number-pad',
+        autoCapitalize: 'none',
+      },
     },
   ],
 }
@@ -69,13 +87,19 @@ const nameConfig: IAttributeConfig = {
   fields: [
     {
       key: ClaimKeys.givenName,
-      keyboardType: 'default',
       label: 'Given name',
+      keyboardOptions: {
+        keyboardType: 'default',
+        autoCapitalize: 'words',
+      },
     },
     {
       key: ClaimKeys.familyName,
-      keyboardType: 'default',
       label: 'Family name',
+      keyboardOptions: {
+        keyboardType: 'default',
+        autoCapitalize: 'words',
+      },
     },
   ],
 }

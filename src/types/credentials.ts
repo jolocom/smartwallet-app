@@ -1,8 +1,9 @@
-import { KeyboardTypeOptions } from 'react-native'
+import { KeyboardTypeOptions, TextInputProps } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata } from 'cred-types-jolocom-core'
+import { TextInput } from 'react-native-gesture-handler'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -31,10 +32,15 @@ export enum AttributeTypes {
   postalAddress = 'ProofOfPostalAddressCredential',
 }
 
+interface AttributeKeyboardOptions {
+  keyboardType: KeyboardTypeOptions
+  autoCapitalize: 'none' | 'words' | 'sentences' | 'characters'
+}
+
 export interface IAttributeClaimField {
   key: ClaimKeys
-  keyboardType: KeyboardTypeOptions
   label: string
+  keyboardOptions: AttributeKeyboardOptions
 }
 
 export interface IAttributeConfig {
