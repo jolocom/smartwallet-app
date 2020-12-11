@@ -1,20 +1,22 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TextInput } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { CoreInput, IInput } from '.'
 
-const InputBlock: React.FC<IInput> = ({
-  updateInput,
-  value,
-  containerStyle = {},
-  ...inputProps
-}) => {
-  return (
-    <View style={[styles.block, containerStyle]}>
-      <CoreInput {...inputProps} onChangeText={updateInput} value={value} />
-    </View>
-  )
-}
+const InputBlock = React.forwardRef<TextInput, IInput>(
+  ({ updateInput, value, containerStyle = {}, ...inputProps }, ref) => {
+    return (
+      <View style={[styles.block, containerStyle]}>
+        <CoreInput
+          {...inputProps}
+          ref={ref}
+          onChangeText={updateInput}
+          value={value}
+        />
+      </View>
+    )
+  },
+)
 
 const styles = StyleSheet.create({
   block: {

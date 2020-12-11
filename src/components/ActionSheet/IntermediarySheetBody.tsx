@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { setIntermediaryState } from '~/modules/interaction/actions'
@@ -28,17 +28,17 @@ const IntermediarySheetBody = () => {
   const description =
     strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
 
-  const formStateRef = useRef<{ state: IFormState[] }>(null)
   const createAttribute = useCreateAttributes()
 
-  const handleSubmit = async () => {
-    if (formStateRef.current) {
-      const claims = formStateRef.current.state.reduce<
-        Partial<Record<ClaimKeys, string>>
-      >((acc, v) => {
-        acc[v.key] = v.value
-        return acc
-      }, {})
+  const handleSubmit = async (collectedValues: IFormState[]) => {
+    if (collectedValues.length) {
+      const claims = collectedValues.reduce<Partial<Record<ClaimKeys, string>>>(
+        (acc, v) => {
+          acc[v.key] = v.value
+          return acc
+        },
+        {},
+      )
 
       const claimsValid = Object.values(claims).every((c) => c && !!c.length)
 
@@ -75,11 +75,11 @@ const IntermediarySheetBody = () => {
     >
       <InteractionHeader {...{ title, description }} />
       <Form
-        ref={formStateRef}
         config={{
-          id: formConfig.key,
+          key: formConfig.key,
           fields: formConfig.fields,
         }}
+        onSubmit={handleSubmit}
       >
         <Form.Body>
           {({ fields, updateField }) =>
@@ -93,7 +93,6 @@ const IntermediarySheetBody = () => {
                   updateInput={(val) => updateField(f.key, val)}
                   value={f.value}
                   returnKeyType={isLastInput ? 'done' : 'next'}
-                  onSubmitEditing={handleSubmit}
                   containerStyle={{ marginBottom: 8 }}
                   {...f.keyboardOptions}
                 />

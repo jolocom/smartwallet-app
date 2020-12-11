@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { StyleSheet, TextInputProps, ViewStyle, TextInput } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { subtitleFontStyles } from '~/utils/fonts'
@@ -13,19 +13,18 @@ export interface IInput extends TextInputProps {
   containerStyle?: ViewStyle
 }
 
-export const CoreInput: React.FC<TextInputProps> = ({
-  style,
-  ...inputProps
-}) => {
+export const CoreInput = forwardRef<TextInput, TextInputProps>((props, ref) => {
+  const { style, ...inputProps } = props
   return (
     <TextInput
+      ref={ref}
       autoCorrect={false}
       style={[styles.coreInput, style]}
-      placeholderTextColor={Colors.white30}
+      placeholderTextColor={Colors.white70}
       {...inputProps}
     />
   )
-}
+})
 
 const Input = () => {
   return null

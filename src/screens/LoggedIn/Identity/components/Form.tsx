@@ -6,29 +6,27 @@ import React, {
   useImperativeHandle,
 } from 'react'
 import FormBody from './FormBody'
+import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
-import { IAttributeClaimField } from '~/types/credentials'
+import { IAttributeClaimField, IAttributeConfig } from '~/types/credentials'
 import { useCustomContext } from '~/hooks/context'
 
 export interface IFormState extends IAttributeClaimField {
   value: string
 }
 
-interface IConfig {
-  id: string
-  fields: IAttributeClaimField[]
-}
+type TFormConfig = Pick<IAttributeConfig, 'key' | 'fields'>
 
-interface IFormProps {
-  config: IConfig
-  onSubmit?: () => void
-  onCancel?: () => void
-}
-
-export interface IFormContext
-  extends Pick<IFormProps, 'onSubmit' | 'onCancel'> {
+export interface IFormContext {
   fields: IFormState[]
   updateField: (id: string, value: string) => void
+  onSubmit: (collectedValues: IFormState[]) => void | Promise<void>
+  onCancel: (collectedValues: IFormState[]) => void | Promise<void>
+}
+
+interface IFormProps
+  extends Partial<Pick<IFormContext, 'onSubmit' | 'onCancel'>> {
+  config: TFormConfig
 }
 
 interface IFormComposition {
@@ -38,13 +36,14 @@ interface IFormComposition {
       _: Pick<IFormContext, 'fields' | 'updateField'>,
     ) => JSX.Element | JSX.Element[]
   }>
+  Expose: React.FC
 }
 
 const FormContext = createContext<IFormContext>({
   fields: [],
+  updateField: () => {},
   onSubmit: () => {},
   onCancel: () => {},
-  updateField: () => {},
 })
 
 export const useForm = useCustomContext(FormContext)
@@ -84,8 +83,16 @@ const Form = React.forwardRef<
   const contextValue = useMemo(
     () => ({
       fields: state,
-      onSubmit,
-      onCancel,
+      onSubmit: onSubmit
+        ? () => onSubmit(state)
+        : () => {
+            console.log('Submitting with values', { state })
+          },
+      onCancel: onCancel
+        ? () => onCancel(state)
+        : () => {
+            console.log('Canceling with values', { state })
+          },
       updateField,
     }),
     [state, onSubmit, onCancel, updateField],
@@ -95,5 +102,6 @@ const Form = React.forwardRef<
 
 Form.Header = FormHeader
 Form.Body = FormBody
+Form.Expose = FormExpose
 
 export default Form
