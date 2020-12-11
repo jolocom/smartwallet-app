@@ -1,7 +1,6 @@
 export enum AccountActions {
   setDid = 'setDid',
   setLogged = 'setLogged',
-  resetAccount = 'resetAccount',
   setLocalAuth = 'setLocalAuth',
   accountReset = 'accountReset',
   showTermsConsent = 'showTermsConsent',
