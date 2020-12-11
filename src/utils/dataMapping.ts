@@ -1,10 +1,5 @@
-import {
-  UICredential,
-  ShareUICredential,
-  AttributeTypes,
-} from '~/types/credentials'
-
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
+import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
 import {
   CredentialRequestFlowState,
   CredentialOfferFlowState,
@@ -12,17 +7,22 @@ import {
   AuthorizationFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { ResolutionFlowState } from '@jolocom/sdk/js/interactionManager/resolutionFlow'
-import { FlowType, Interaction, IdentitySummary } from 'react-native-jolocom'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+
+import {
+  UICredential,
+  ShareUICredential,
+  AttributeTypes,
+} from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
-import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
 
-export const findCredentialType = (types: string[]) => types[types.length - 1]
+export const getCredentialType = (types: string[]) => types[types.length - 1]
 
 export const extractCredentialType = (cred: SignedCredential) =>
-  findCredentialType(cred.type)
+  getCredentialType(cred.type)
 
 export const isTypeAttribute = (type: string) =>
   Object.keys(attributeConfig).includes(type)
@@ -58,7 +58,7 @@ const mapCredShareData = (summary: SummaryI<CredentialRequestFlowState>) => {
     requestedAttributes: AttributeTypes[]
   }>(
     (acc, v) => {
-      const credType = findCredentialType(v)
+      const credType = getCredentialType(v)
       if (isTypeAttribute(credType)) {
         acc.requestedAttributes = [
           ...acc.requestedAttributes,

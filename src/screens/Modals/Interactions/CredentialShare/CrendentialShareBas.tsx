@@ -14,9 +14,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import InteractionFooter from '../InteractionFooter'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
-import InteractionAttributesWidget from '~/components/Widget/InteractionAttributesWidget'
-import { attributeConfig } from '~/config/claims'
-import { AttributeTypes } from '~/types/credentials'
+import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
 
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
@@ -57,30 +55,7 @@ const CredentialShareBas = () => {
         </CredentialCard>
       )
     } else {
-      return Object.keys(attributes).map((credType) => {
-        const attrType = credType as AttributeTypes
-        const config = attributeConfig[attrType]
-        const attribute = attributes[attrType]
-        if (attribute) {
-          return (
-            <InteractionAttributesWidget
-              key={attrType}
-              name={config.label}
-              type={attrType}
-              onCreate={() => handleCreateAttribute(attrType)}
-              onSelect={(attrType, id) =>
-                handleSelectCredential({ [attrType]: id })
-              }
-              fields={attribute.map((attr) => ({
-                id: attr.id,
-                value: Object.values(attr.value).join(
-                  attrType === AttributeTypes.name ? ' ' : ', ',
-                ),
-              }))}
-            />
-          )
-        }
-      })
+      return <ShareAttributeWidget />
     }
   }
 
