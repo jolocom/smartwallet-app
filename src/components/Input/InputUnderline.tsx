@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Platform, StyleSheet } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { Platform, StyleSheet, TextInput } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
@@ -17,7 +16,10 @@ interface IInputUnderline extends IInput {
   onValidation?: (state: InputValidityState) => void
 }
 
-const InputUnderline = React.forwardRef<TextInput, IInputUnderline>(
+const InputUnderline: React.FC<IInputUnderline> = React.forwardRef<
+  TextInput,
+  IInputUnderline
+>(
   (
     {
       value,
@@ -85,6 +87,9 @@ const styles = StyleSheet.create({
       ios: 2,
     }),
     paddingTop: 20,
+  },
+  container: {
+    width: '100%',
   },
 })
 

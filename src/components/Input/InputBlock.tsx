@@ -1,13 +1,12 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { StyleSheet, View, TextInput } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { CoreInput, IInput } from '.'
 
 const InputBlock = React.forwardRef<TextInput, IInput>(
-  ({ updateInput, value, ...inputProps }, ref) => {
+  ({ updateInput, value, containerStyle = {}, ...inputProps }, ref) => {
     return (
-      <View style={styles.block}>
+      <View style={[styles.block, containerStyle]}>
         <CoreInput
           {...inputProps}
           ref={ref}
@@ -28,6 +27,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 50,
     marginVertical: 2,
+    borderWidth: 1,
+    borderColor: Colors.inputBorder,
   },
 })
 

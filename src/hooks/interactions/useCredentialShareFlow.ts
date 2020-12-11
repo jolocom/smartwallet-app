@@ -7,15 +7,16 @@ import {
   getShareCredentialTypes,
   getCounterpartyName,
 } from '~/modules/interaction/selectors'
-import { AttrKeys, attrTypeToAttrKey, ATTR_UI_NAMES } from '~/types/credentials'
+import { AttributeTypes } from '~/types/credentials'
 import { IntermediarySheetState } from '~/modules/interaction/types'
 import {
   setIntermediaryState,
-  setAttributeInputKey,
+  setAttributeInputType,
   selectShareCredential,
 } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
 import { useInteraction } from '.'
+import { attributeConfig } from '~/config/claims'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction
@@ -54,15 +55,19 @@ export const useCredentialShareFlow = () => {
    * Returns the @id for the first available attribute of each type.
    */
   const getPreselectedAttributes = () =>
-    Object.keys(attributes).reduce<Record<string, string>>((acc, value) => {
-      if (!acc[value]) {
-        const attr = attributes[value] || []
-        if (attr.length) {
-          acc[value] = attr[0].id
+    Object.keys(attributes).reduce<Partial<Record<AttributeTypes, string>>>(
+      (acc, value) => {
+        const attrType = value as AttributeTypes
+        if (!acc[attrType]) {
+          const attr = attributes[attrType] || []
+          if (attr.length) {
+            acc[attrType] = attr[0].id
+          }
         }
-      }
-      return acc
-    }, {})
+        return acc
+      },
+      {},
+    )
 
   /**
    * Assures all requested credentials & attributes are selected.
@@ -100,13 +105,15 @@ export const useCredentialShareFlow = () => {
    */
   const handleCreateAttribute = (sectionKey: string) => {
     dispatch(setIntermediaryState(IntermediarySheetState.showing))
-    dispatch(setAttributeInputKey(sectionKey))
+    dispatch(setAttributeInputType(sectionKey))
   }
 
   /**
    * Selects a credential in the @interactions module
    */
-  const handleSelectCredential = (credential: Partial<Record<AttrKeys, string>>) => {
+  const handleSelectCredential = (
+    credential: Partial<Record<string, string>>,
+  ) => {
     dispatch(selectShareCredential(credential))
   }
 
@@ -114,18 +121,16 @@ export const useCredentialShareFlow = () => {
    * Returns the attribute type if only one attribute is requested, and it's not
    * available in the @attributes module. Otherwise returns @null.
    */
-  const getSingleMissingAttribute = (): AttrKeys | null => {
+  const getSingleMissingAttribute = (): AttributeTypes | null => {
     const isSingleAttribute =
       !requestedCredentials.length && requestedAttributes.length === 1
     if (!isSingleAttribute) return null
 
-    const attrKey = attrTypeToAttrKey(requestedAttributes[0])
-    if (!attrKey) return null
+    const attrType = requestedAttributes[0]
+    const attributesOfType = attributes[attrType]
+    const isMissing = !attributesOfType || !attributesOfType.length
 
-    const typeAttributes = attributes[attrKey]
-    const isMissing = !typeAttributes || !typeAttributes.length
-
-    return isMissing ? attrKey : null
+    return isMissing ? attrType : null
   }
 
   const getHeaderText = () => {
@@ -133,7 +138,7 @@ export const useCredentialShareFlow = () => {
     const title = missingAttr
       ? strings.SERVICE_REQUESTS_ATTRIBUTE(
           serviceName,
-          ATTR_UI_NAMES[missingAttr],
+          attributeConfig[missingAttr].label.toLowerCase(),
         )
       : strings.INCOMING_REQUEST
     const description = strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(

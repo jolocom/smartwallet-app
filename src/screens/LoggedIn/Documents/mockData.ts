@@ -1,4 +1,4 @@
-import { DocumentTypes, DocumentFields } from '~/components/Card/types'
+import { DocumentTypes, DocumentFields } from '~/types/credentials'
 
 export const DOCUMENTS = [
   {

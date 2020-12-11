@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { StyleSheet, TextInput } from 'react-native'
 import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
 import { CoreInput, IInput } from '.'

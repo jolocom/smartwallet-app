@@ -1,5 +1,9 @@
 import createAction from '~/utils/createAction'
-import { AttrActions } from './types'
+import { AttrActions, AttributePayload, AttrsState, AttributeI } from './types'
 
-export const setAttrs = createAction(AttrActions.setAttrs)
-export const updateAttrs = createAction(AttrActions.updateAttrs)
+export const initAttrs = createAction<AttrsState<AttributeI>>(
+  AttrActions.initAttrs,
+)
+export const updateAttrs = createAction<AttributePayload>(
+  AttrActions.updateAttrs,
+)

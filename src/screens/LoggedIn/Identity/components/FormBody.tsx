@@ -14,7 +14,7 @@ const FormBody: React.FC = ({ children }) => {
           if (inputs.current[idx + 1]) {
             inputs.current[idx + 1].focus()
           } else {
-            formContext.onSubmit
+            formContext.onSubmit(formContext.fields)
           }
         },
         blurOnSubmit: !Boolean(inputs.current[idx + 1]),
