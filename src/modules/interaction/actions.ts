@@ -8,7 +8,7 @@ import { FlowType } from '@jolocom/sdk'
 import { OfferUICredential, AttributeTypes } from '~/types/credentials'
 
 export const setInteractionDetails = createAction<
-  Partial<Omit<InteractionDetails, 'flowType'> & { flowType?: FlowType | null }>
+  Omit<InteractionDetails, 'flowType'> & { flowType?: FlowType | null }
 >(InteractionActions.setInteractionDetails)
 
 export const resetInteraction = createAction(
