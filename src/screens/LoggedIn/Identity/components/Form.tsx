@@ -17,17 +17,16 @@ export interface IFormState extends IAttributeClaimField {
 
 type TFormConfig = Pick<IAttributeConfig, 'key' | 'fields'>
 
-interface IFormProps {
-  config: TFormConfig
-  onSubmit?: (collectedValues: IFormState[]) => void
-  onCancel?: (collectedValues: IFormState[]) => void
-}
-
 export interface IFormContext {
   fields: IFormState[]
   updateField: (id: string, value: string) => void
-  onSubmit: (collectedValues: IFormState[]) => void
-  onCancel: (collectedValues: IFormState[]) => void
+  onSubmit: (collectedValues: IFormState[]) => void | Promise<void>
+  onCancel: (collectedValues: IFormState[]) => void | Promise<void>
+}
+
+interface IFormProps
+  extends Partial<Pick<IFormContext, 'onSubmit' | 'onCancel'>> {
+  config: TFormConfig
 }
 
 interface IFormComposition {

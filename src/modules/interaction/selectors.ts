@@ -2,8 +2,6 @@ import { createSelector } from 'reselect'
 
 import { RootReducerI } from '~/types/reducer'
 import {
-  AttributeKeys,
-  AttributeTypes,
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
@@ -43,7 +41,7 @@ export const getAttributeInputType = createSelector(
     if (state.sheetState !== IntermediarySheetState.showing)
       throw new Error("Can't get inputType without an intermediarySheet")
 
-    return state.attributeInputType as AttributeTypes
+    return state.attributeInputType
   },
 )
 

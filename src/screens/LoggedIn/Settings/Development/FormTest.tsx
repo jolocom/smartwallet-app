@@ -32,6 +32,7 @@ const FormTest = () => {
                     key={field.key}
                     updateInput={(val: string) => updateField(field.key, val)}
                     value={field.value}
+                    placeholder={field.label}
                     {...field.keyboardOptions}
                   />
                 ))
@@ -48,6 +49,7 @@ const FormTest = () => {
                     key={field.key}
                     value={field.value}
                     updateInput={(val) => updateField(field.key, val)}
+                    placeholder={field.label}
                     {...field.keyboardOptions}
                   />
                 ))
@@ -64,6 +66,7 @@ const FormTest = () => {
                     key={field.key}
                     value={field.value}
                     updateInput={(val) => updateField(field.key, val)}
+                    placeholder={field.label}
                     {...field.keyboardOptions}
                   />
                 ))
