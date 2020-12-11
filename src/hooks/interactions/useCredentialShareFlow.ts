@@ -138,7 +138,7 @@ export const useCredentialShareFlow = () => {
     const title = missingAttr
       ? strings.SERVICE_REQUESTS_ATTRIBUTE(
           serviceName,
-          attributeConfig[missingAttr].label,
+          attributeConfig[missingAttr].label.toLowerCase(),
         )
       : strings.INCOMING_REQUEST
     const description = strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(
