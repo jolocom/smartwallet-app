@@ -1,22 +1,32 @@
 import createAction from '~/utils/createAction'
-import { InteractionActions } from './types'
+import {
+  InteractionActions,
+  InteractionDetails,
+  IntermediarySheetState,
+} from './types'
+import { FlowType } from '@jolocom/sdk'
+import { OfferUICredential, AttributeTypes } from '~/types/credentials'
 
-export const setInteractionDetails = createAction(
-  InteractionActions.setInteractionDetails,
-)
+export const setInteractionDetails = createAction<
+  Partial<Omit<InteractionDetails, 'flowType'> & { flowType?: FlowType | null }>
+>(InteractionActions.setInteractionDetails)
 
 export const resetInteraction = createAction(
   InteractionActions.resetInteraction,
 )
 
-export const selectShareCredential = createAction(
+export const selectShareCredential = createAction<Record<string, string>>(
   InteractionActions.selectShareCredential,
 )
 
-export const setIntermediaryState = createAction(
+export const addOfferReceivedCredentials = createAction<OfferUICredential[]>(
+  InteractionActions.addOfferReceivedCredentials,
+)
+
+export const setIntermediaryState = createAction<IntermediarySheetState>(
   InteractionActions.setIntermediaryState,
 )
 
-export const setAttributeInputType = createAction(
+export const setAttributeInputType = createAction<AttributeTypes | null>(
   InteractionActions.setAttributeInputType,
 )

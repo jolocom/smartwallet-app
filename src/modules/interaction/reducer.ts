@@ -4,10 +4,10 @@ import {
   IntermediarySheetState,
 } from './types'
 import { Action } from '~/types/actions'
-import { isCredShareDetails } from './guards'
+import { isCredShareDetails, isCredOfferDetails } from './guards'
 
 const initialState: InteractionState = {
-  details: { flowType: null },
+  details: { flowType: null, id: null },
   intermediary: {
     sheetState: IntermediarySheetState.hiding,
     attributeInputType: null,
@@ -20,9 +20,22 @@ const reducer = (
 ) => {
   switch (action.type) {
     case InteractionActions.setInteractionDetails:
-      return { ...state, details: { ...state.details, ...action.payload } }
+      return { ...state, details: action.payload }
     case InteractionActions.resetInteraction:
       return initialState
+    case InteractionActions.addOfferReceivedCredentials:
+      return isCredOfferDetails(state.details)
+        ? {
+            ...state,
+            details: {
+              ...state.details,
+              credentials: {
+                ...state.details.credentials,
+                service_issued: action.payload,
+              },
+            },
+          }
+        : state
     case InteractionActions.selectShareCredential:
       if (isCredShareDetails(state.details)) {
         return {

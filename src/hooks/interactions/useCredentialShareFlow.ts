@@ -103,7 +103,7 @@ export const useCredentialShareFlow = () => {
   /**
    * Shows the Intermediary ActionSheet for creating a new attribute.
    */
-  const handleCreateAttribute = (sectionKey: string) => {
+  const handleCreateAttribute = (sectionKey: AttributeTypes) => {
     dispatch(setIntermediaryState(IntermediarySheetState.showing))
     dispatch(setAttributeInputType(sectionKey))
   }
@@ -111,9 +111,7 @@ export const useCredentialShareFlow = () => {
   /**
    * Selects a credential in the @interactions module
    */
-  const handleSelectCredential = (
-    credential: Partial<Record<string, string>>,
-  ) => {
+  const handleSelectCredential = (credential: Record<string, string>) => {
     dispatch(selectShareCredential(credential))
   }
 
