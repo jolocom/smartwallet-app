@@ -6,10 +6,11 @@ import { CoreInput, IInput } from '.'
 const InputBlock: React.FC<IInput> = ({
   updateInput,
   value,
+  containerStyle = {},
   ...inputProps
 }) => {
   return (
-    <View style={styles.block}>
+    <View style={[styles.block, containerStyle]}>
       <CoreInput {...inputProps} onChangeText={updateInput} value={value} />
     </View>
   )
@@ -24,6 +25,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 50,
     marginVertical: 2,
+    borderWidth: 1,
+    borderColor: Colors.inputBorder,
   },
 })
 

@@ -28,7 +28,7 @@ const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
 }
 
 const Cancel = () => {
-  const { onCancel } = useForm()
+  const { onCancel = () => {} } = useForm()
   return (
     <ActionBtn
       onPress={onCancel}
@@ -38,7 +38,7 @@ const Cancel = () => {
   )
 }
 const Done = () => {
-  const { onSubmit } = useForm()
+  const { onSubmit = () => {} } = useForm()
   return (
     <ActionBtn
       onPress={onSubmit}

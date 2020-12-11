@@ -13,9 +13,9 @@ import {
   DocumentTypes,
   DocumentFields,
   ClaimKeys,
-} from '~/components/Card/types'
+  UICredential,
+} from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
-import { UICredential } from '~/types/credentials'
 import { IdentitySummary } from '@jolocom/sdk'
 
 const formatClaims = (claims: IClaimSection) =>

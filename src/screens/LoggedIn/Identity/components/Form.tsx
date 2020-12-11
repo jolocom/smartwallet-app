@@ -1,43 +1,43 @@
 import React, {
   createContext,
   useCallback,
-  useContext,
   useMemo,
   useState,
+  useImperativeHandle,
 } from 'react'
 import FormBody from './FormBody'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
+import { IAttributeClaimField } from '~/types/credentials'
+import { useCustomContext } from '~/hooks/context'
 
-interface IFieldConfig {
-  id: string
-  placeholder: string
-  keyboardType: string
-}
-
-interface IState extends IFieldConfig {
+export interface IFormState extends IAttributeClaimField {
   value: string
 }
 
 interface IConfig {
   id: string
-  fields: IFieldConfig[]
+  fields: IAttributeClaimField[]
 }
 
 interface IFormProps {
   config: IConfig
-  onSubmit: () => void
-  onCancel: () => void
+  onSubmit?: () => void
+  onCancel?: () => void
 }
 
 export interface IFormContext
   extends Pick<IFormProps, 'onSubmit' | 'onCancel'> {
-  fields: IState[]
+  fields: IFormState[]
   updateField: (id: string, value: string) => void
 }
 
 interface IFormComposition {
   Header: React.FC & IFormHeaderComposition
-  Body: React.FC
+  Body: React.FC<{
+    children: (
+      _: Pick<IFormContext, 'fields' | 'updateField'>,
+    ) => JSX.Element | JSX.Element[]
+  }>
 }
 
 const FormContext = createContext<IFormContext>({
@@ -47,23 +47,31 @@ const FormContext = createContext<IFormContext>({
   updateField: () => {},
 })
 
-export const useForm = () => useContext(FormContext) // TODO: use useCustomContext instead
+export const useForm = useCustomContext(FormContext)
 
-const Form: React.FC<IFormProps> & IFormComposition = ({
-  config,
-  children,
-  onSubmit,
-  onCancel,
-}) => {
+type FormReturnType = React.ForwardRefExoticComponent<
+  React.PropsWithChildren<IFormProps> &
+    React.RefAttributes<{ state: IFormState[] }>
+> &
+  IFormComposition
+
+const Form = React.forwardRef<
+  { state: IFormState[] },
+  React.PropsWithChildren<IFormProps>
+>(({ config, children, onSubmit, onCancel }, ref) => {
   const initialState = config.fields.map((el) => ({ ...el, value: '' }))
 
   const [state, setState] = useState(initialState)
 
+  useImperativeHandle(ref, () => ({
+    state,
+  }))
+
   const updateField = useCallback(
-    (id: string, value: string) => {
+    (key: string, value: string) => {
       setState((prevState) => {
         return prevState.map((field) => {
-          if (field.id === id) {
+          if (field.key === key) {
             return { ...field, value }
           }
           return field
@@ -83,7 +91,7 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
     [state, onSubmit, onCancel, updateField],
   )
   return <FormContext.Provider children={children} value={contextValue} />
-}
+}) as FormReturnType
 
 Form.Header = FormHeader
 Form.Body = FormBody

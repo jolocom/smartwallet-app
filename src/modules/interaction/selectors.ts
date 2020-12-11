@@ -2,14 +2,12 @@ import { createSelector } from 'reselect'
 
 import { RootReducerI } from '~/types/reducer'
 import {
-  AttrKeys,
-  attrTypeToAttrKey,
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
   ShareUICredential,
 } from '~/types/credentials'
-import { AttributeI } from '~/modules/attributes/types'
+import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
@@ -37,13 +35,13 @@ export const getIntermediaryState = (state: RootReducerI) =>
  * Gets the Attribute Type that has to be created on the @IntermediarySheet. Can only
  * be used while there is an active (@showing) @IntermediarySheet
  */
-export const getAttributeInputKey = createSelector(
+export const getAttributeInputType = createSelector(
   [getIntermediaryState],
   (state) => {
     if (state.sheetState !== IntermediarySheetState.showing)
       throw new Error("Can't get inputType without an intermediarySheet")
 
-    return state.attributeInputKey
+    return state.attributeInputType
   },
 )
 
@@ -129,10 +127,8 @@ export const getSelectedShareCredentials = createSelector(
 export const getAvailableAttributesToShare = createSelector(
   [getCredShareDetails, getAttributes],
   ({ requestedAttributes }, attributes) =>
-    requestedAttributes.reduce<Record<string, AttributeI[]>>((acc, v) => {
-      const value = attrTypeToAttrKey(v)
-      if (!value) return acc
-      acc[value] = attributes[value] || []
+    requestedAttributes.reduce<AttrsState<AttributeI>>((acc, v) => {
+      acc[v] = attributes[v] || []
       return acc
     }, {}),
 )
@@ -223,25 +219,28 @@ export const getShareCredentialsBySection = createSelector(
   (shareCredentials, requestedCredTypes) => {
     const defaultSections = { documents: [], other: [] }
 
-    return requestedCredTypes.requestedCredentials.reduce<
-      ShareCredentialsBySection
-    >((acc, type) => {
-      const credentials = shareCredentials.filter((cred) => cred.type === type)
+    return requestedCredTypes.requestedCredentials.reduce<ShareCredentialsBySection>(
+      (acc, type) => {
+        const credentials = shareCredentials.filter(
+          (cred) => cred.type === type,
+        )
 
-      // NOTE: we assume the @renderAs property is the same for all credentials
-      // of the same type
-      const section = getCredentialSection(credentials[0])
+        // NOTE: we assume the @renderAs property is the same for all credentials
+        // of the same type
+        const section = getCredentialSection(credentials[0])
 
-      acc[section] = [
-        ...acc[section],
-        {
-          type,
-          credentials,
-        },
-      ]
+        acc[section] = [
+          ...acc[section],
+          {
+            type,
+            credentials,
+          },
+        ]
 
-      return acc
-    }, defaultSections)
+        return acc
+      },
+      defaultSections,
+    )
   },
 )
 

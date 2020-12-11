@@ -1,7 +1,7 @@
 import { useAgent } from './sdk'
 import { useDispatch } from 'react-redux'
 import { UICredential } from '~/types/credentials'
-import { isCredentialAttribute } from '~/utils/dataMapping'
+import { isCredentialDocument } from '~/utils/dataMapping'
 import { setCredentials } from '~/modules/credentials/actions'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
@@ -51,7 +51,7 @@ export const useSyncStorageCredentials = () => {
       async (accPromise, cred) => {
         const acc = await accPromise
 
-        if (!isCredentialAttribute(cred)) {
+        if (isCredentialDocument(cred, agent.idw.did)) {
           const uiCredential = await credentialToUICredential(cred)
           acc.push(uiCredential)
         }

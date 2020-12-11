@@ -5,7 +5,8 @@ import DocumentHeader from './DocumentHeader'
 import Dots from './Dots'
 import OptionalFields from './OptionalFields'
 import OtherHeader from './OtherHeader'
-import { DocumentFields, IField, IWithCustomStyle, ICardProps } from './types'
+import { IField, IWithCustomStyle, ICardProps } from './types'
+import { DocumentFields } from '~/types/credentials'
 
 interface ICardContext {
   id: number | string

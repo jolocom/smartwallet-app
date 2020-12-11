@@ -10,7 +10,7 @@ const initialState: InteractionState = {
   details: { flowType: null },
   intermediary: {
     sheetState: IntermediarySheetState.hiding,
-    attributeInputKey: null,
+    attributeInputType: null,
   },
 }
 
@@ -42,12 +42,12 @@ const reducer = (
         ...state,
         intermediary: { ...state.intermediary, sheetState: action.payload },
       }
-    case InteractionActions.setAttributeInputKey:
+    case InteractionActions.setAttributeInputType:
       return {
         ...state,
         intermediary: {
           ...state.intermediary,
-          attributeInputKey: action.payload,
+          attributeInputType: action.payload,
         },
       }
     default:
