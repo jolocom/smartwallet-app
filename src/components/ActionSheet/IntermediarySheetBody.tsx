@@ -76,7 +76,7 @@ const IntermediarySheetBody = () => {
       <InteractionHeader {...{ title, description }} />
       <Form
         config={{
-          id: formConfig.key,
+          key: formConfig.key,
           fields: formConfig.fields,
         }}
         onSubmit={handleSubmit}

@@ -1,28 +1,13 @@
 import React from 'react'
-import { KeyboardTypeOptions } from 'react-native'
 import Btn from '~/components/Btn'
 
 import Input from '~/components/Input'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 import ScreenContainer from '~/components/ScreenContainer'
+import { attributeConfig } from '~/config/claims'
+import { AttributeTypes } from '~/types/credentials'
 import Form, { IFormContext } from '../../Identity/components/Form'
 import Section from '../components/Section'
-
-const nameConfig = {
-  id: 'name',
-  fields: [
-    {
-      id: 'givenName',
-      placeholder: 'Select a given name',
-      keyboardType: 'default' as KeyboardTypeOptions,
-    },
-    {
-      id: 'lastName',
-      placeholder: 'Select a last name',
-      keyboardType: 'default' as KeyboardTypeOptions,
-    },
-  ],
-}
 
 const FormTest = () => {
   return (
@@ -35,23 +20,19 @@ const FormTest = () => {
         style={{ width: '100%' }}
       >
         <Section title="With header" hasBlock={false}>
-          <Form config={nameConfig}>
+          <Form config={attributeConfig[AttributeTypes.name]}>
             <Form.Header>
               <Form.Header.Cancel />
               <Form.Header.Done />
             </Form.Header>
             <Form.Body>
-              {({
-                fields,
-                updateField,
-              }: Pick<IFormContext, 'fields' | 'updateField'>) =>
+              {({ fields, updateField }) =>
                 fields.map((field) => (
                   <Input.Block
-                    key={field.id}
-                    updateInput={(val: string) => updateField(field.id, val)}
+                    key={field.key}
+                    updateInput={(val: string) => updateField(field.key, val)}
                     value={field.value}
-                    placeholder={field.placeholder}
-                    keyboardType={field.keyboardType}
+                    {...field.keyboardOptions}
                   />
                 ))
               }
@@ -59,19 +40,15 @@ const FormTest = () => {
           </Form>
         </Section>
         <Section title="Without header" hasBlock={false}>
-          <Form config={nameConfig}>
+          <Form config={attributeConfig[AttributeTypes.postalAddress]}>
             <Form.Body>
-              {({
-                fields,
-                updateField,
-              }: Pick<IFormContext, 'fields' | 'updateField'>) =>
+              {({ fields, updateField }) =>
                 fields.map((field) => (
                   <Input.Underline
-                    key={field.id}
+                    key={field.key}
                     value={field.value}
-                    updateInput={(val) => updateField(field.id, val)}
-                    placeholder={field.placeholder}
-                    keyboardType={field.keyboardType}
+                    updateInput={(val) => updateField(field.key, val)}
+                    {...field.keyboardOptions}
                   />
                 ))
               }
@@ -79,14 +56,15 @@ const FormTest = () => {
           </Form>
         </Section>
         <Section title="Exposed values in form" hasBlock={false}>
-          <Form config={nameConfig}>
+          <Form config={attributeConfig[AttributeTypes.emailAddress]}>
             <Form.Body>
-              {({ fields, updateField }: IFormContext) =>
+              {({ fields, updateField }) =>
                 fields.map((field) => (
                   <Input.Block
-                    key={field.id}
+                    key={field.key}
                     value={field.value}
-                    updateInput={(val) => updateField(field.id, val)}
+                    updateInput={(val) => updateField(field.key, val)}
+                    {...field.keyboardOptions}
                   />
                 ))
               }

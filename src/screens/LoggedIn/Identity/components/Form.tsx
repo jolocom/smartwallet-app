@@ -8,20 +8,17 @@ import React, {
 import FormBody from './FormBody'
 import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
-import { IAttributeClaimField } from '~/types/credentials'
+import { IAttributeClaimField, IAttributeConfig } from '~/types/credentials'
 import { useCustomContext } from '~/hooks/context'
 
 export interface IFormState extends IAttributeClaimField {
   value: string
 }
 
-interface IConfig {
-  id: string
-  fields: IAttributeClaimField[]
-}
+type TFormConfig = Pick<IAttributeConfig, 'key' | 'fields'>
 
 interface IFormProps {
-  config: IConfig
+  config: TFormConfig
   onSubmit?: (collectedValues: IFormState[]) => void
   onCancel?: (collectedValues: IFormState[]) => void
 }

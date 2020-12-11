@@ -40,6 +40,7 @@ export interface IAttributeClaimField {
   key: ClaimKeys
   label: string
   keyboardOptions: AttributeKeyboardOptions
+  // TODO: add placeholder
 }
 
 export interface IAttributeConfig {
