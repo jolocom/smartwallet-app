@@ -139,7 +139,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = props => {
             <Image source={{ uri: logo.url }} style={styles.icon} />
           ) : (
             <View
-              style={[styles.icon, { backgroundColor: Colors.lightGrey }]}
+              style={[styles.icon, { backgroundColor: 'transparent' }]}
             />
           )}
         </View>
