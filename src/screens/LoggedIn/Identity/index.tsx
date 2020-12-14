@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import ScreenContainer from '~/components/ScreenContainer'
+import ToggleSwitch from '~/components/ToggleSwitch'
+import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
 import { getAttributes } from '~/modules/attributes/selectors'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
-  return <ScreenContainer></ScreenContainer>
+  const [isWizardVisible, setWizardVisibility] = useState(true)
+  const toggleWizardVisibility = () => {
+    setWizardVisibility((prevState) => !prevState)
+  }
+  return (
+    <ScreenContainer>
+      <ToggleSwitch on={isWizardVisible} onToggle={toggleWizardVisibility} />
+      {isWizardVisible && <SingleCredentialWizard />}
+    </ScreenContainer>
+  )
 }
 
 export default Identity

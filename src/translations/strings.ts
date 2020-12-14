@@ -226,8 +226,10 @@ const attributes = {
   CITY_FIELD: 'City',
   COUNTRY_FIELD: 'Country',
   NUMBER: 'Number',
+  BUSINESS_CARD: 'Business Card',
   GIVEN_NAME_FIELD: 'Given name',
   FAMILY_NAME_FIELD: 'Family name',
+  COMPANY_NAME_FIELD: 'Company name',
   MISSING_INFO: 'Missing info',
   SAVE_YOUR_ATTRIBUTE: (name: string) => `Save your attribute ${name}`,
 }
@@ -284,6 +286,13 @@ const history = {
   RECEIVED: 'Received',
 }
 
+const identity = {
+  INTRODUCE_YOURSELF: 'Please, introduce yourself',
+  BEST_WAY_TO_CONTACT_YOU: 'Best way to contact you?',
+  WHAT_COMPANY_DO_YOU_REPRESENT: 'What company do you represent?',
+  NEXT: 'Next',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errors,
@@ -304,4 +313,5 @@ export const strings = {
   ...toasts,
   ...documents,
   ...history,
+  ...identity
 }

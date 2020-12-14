@@ -9,6 +9,7 @@ export enum AttributeKeys {
   mobilePhoneNumber = 'mobilePhoneNumber',
   name = 'name',
   postalAddress = 'postalAddress',
+  businessCard = 'businessCard' // TODO: update to actual value
 }
 
 export enum ClaimKeys {
@@ -22,6 +23,7 @@ export enum ClaimKeys {
   telephone = 'telephone',
   id = 'id',
   photo = 'photo',
+  legalCompanyName = 'legalCompanyName'
 }
 
 export enum AttributeTypes {
@@ -29,6 +31,7 @@ export enum AttributeTypes {
   mobilePhoneNumber = 'ProofOfMobilePhoneNumberCredential',
   name = 'ProofOfNameCredential',
   postalAddress = 'ProofOfPostalAddressCredential',
+  businessCard = 'ProofOfBusinessCardCredential' // TODO: update to actual value
 }
 
 interface AttributeKeyboardOptions {
