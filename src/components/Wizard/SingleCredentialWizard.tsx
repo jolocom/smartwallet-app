@@ -25,7 +25,7 @@ const SingleCredentialWizard = () => {
   }
 
   return (
-    <Wizard config={WIZARD_CONFIG}>
+    <Wizard config={WIZARD_CONFIG} submitLabel={strings.CREATE}>
       <Wizard.Header />
       <Wizard.Form
         config={attributeConfig[AttributeTypes.name]}
