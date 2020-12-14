@@ -291,6 +291,7 @@ const identity = {
   BEST_WAY_TO_CONTACT_YOU: 'Best way to contact you?',
   WHAT_COMPANY_DO_YOU_REPRESENT: 'What company do you represent?',
   NEXT: 'Next',
+  WHAT_IS_YOUR_NAME: 'What is your name?'
 }
 
 export const strings = {

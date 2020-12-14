@@ -11,7 +11,7 @@ import {
 } from '~/types/credentials'
 import Wizard from '.'
 
-const CONFIG = {
+const WIZARD_CONFIG = {
   0: {
     label: strings.INTRODUCE_YOURSELF,
   },
@@ -70,7 +70,7 @@ const SingleCredentialWizard = () => {
   }, [JSON.stringify(fields)])
 
   return (
-    <Wizard config={CONFIG}>
+    <Wizard config={WIZARD_CONFIG}>
       <Wizard.Header />
       <Wizard.Form config={nameFormConfig} onSubmit={addFieldValues} step={0} />
       <Wizard.Form
