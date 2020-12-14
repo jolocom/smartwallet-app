@@ -115,7 +115,7 @@ const businessCardConfig: IAttributeConfig = {
             name: 'Business Card',
             context: [
                 {
-                  ProofOfCompanyNameCredential: 'https://identity.jolocom.com/terms/ProofOfBusinessCardCredential',
+                  ProofOfBusinessCardCredential: 'https://identity.jolocom.com/terms/ProofOfBusinessCardCredential',
                   schema: "http://schema.org/",
                   familyName: "schema:familyName",
                   givenName: "schema:givenName",
