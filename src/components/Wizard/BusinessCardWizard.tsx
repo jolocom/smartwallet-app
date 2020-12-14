@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { ClaimValues } from '~/modules/attributes/types'
-import Form, {
-  IFormContext,
-  IFormState,
-} from '~/screens/LoggedIn/Identity/components/Form'
+import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { strings } from '~/translations'
 import {
   AttributeTypes,
@@ -13,8 +10,6 @@ import {
   IAttributeClaimField,
 } from '~/types/credentials'
 import Wizard from '.'
-import Input from '../Input'
-import WizardFooter from './WizardFooter'
 
 const CONFIG = {
   0: {
@@ -74,52 +69,20 @@ const SingleCredentialWizard = () => {
     }
   }, [JSON.stringify(fields)])
 
-  const renderFields = () => (
-    <Wizard.FormContainer>
-      <Form.Body>
-        {({ fields, updateField }) =>
-          fields.map((field, idx) => (
-            <Input.Block
-              {...field}
-              autoFocus={idx === 0}
-              placeholder={field.label}
-              updateInput={(val) => updateField(field.key, val)}
-            />
-          ))
-        }
-      </Form.Body>
-    </Wizard.FormContainer>
-  )
-
-  const renderFooter = () => (
-    <Form.Expose>
-      {({ fields }: IFormContext) => (
-        <WizardFooter onSubmit={() => addFieldValues(fields)} />
-      )}
-    </Form.Expose>
-  )
-
   return (
     <Wizard config={CONFIG}>
       <Wizard.Header />
-      <Wizard.Body step={0}>
-        <Form config={nameFormConfig}>
-          {renderFields()}
-          {renderFooter()}
-        </Form>
-      </Wizard.Body>
-      <Wizard.Body step={1}>
-        <Form config={emailTelephoneFormConfig}>
-          {renderFields()}
-          {renderFooter()}
-        </Form>
-      </Wizard.Body>
-      <Wizard.Body step={2}>
-        <Form config={companyFormConfig}>
-          {renderFields()}
-          {renderFooter()}
-        </Form>
-      </Wizard.Body>
+      <Wizard.Form config={nameFormConfig} onSubmit={addFieldValues} step={0} />
+      <Wizard.Form
+        config={emailTelephoneFormConfig}
+        onSubmit={addFieldValues}
+        step={1}
+      />
+      <Wizard.Form
+        config={companyFormConfig}
+        onSubmit={addFieldValues}
+        step={2}
+      />
     </Wizard>
   )
 }

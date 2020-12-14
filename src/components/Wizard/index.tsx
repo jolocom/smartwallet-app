@@ -1,7 +1,10 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { useCustomContext } from '~/hooks/context'
+import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
+import { IAttributeConfig } from '~/types/credentials'
 import WizardBody from './WizardBody'
 import WizardFooter from './WizardFooter'
+import WizardForm from './WizardForm'
 import WizardFormContainer from './WizardFormContainer'
 import WizardHeader from './WizardHeader'
 
@@ -17,6 +20,11 @@ export interface IWizardFooterProps {
   onSubmit: () => void
 }
 
+export interface IWizardFormProps extends IWizardBodyProps {
+  config: IAttributeConfig
+  onSubmit: (fields: IFormState[]) => void
+}
+
 interface IWizardContext {
   config: Record<number, IHeader>
   activeStep: number
@@ -28,6 +36,7 @@ interface IWizardComposition {
   Body: React.FC<IWizardBodyProps>
   Footer: React.FC<IWizardFooterProps>
   FormContainer: React.FC
+  Form: React.FC<IWizardFormProps>
 }
 
 interface IWizardProps {
@@ -64,5 +73,6 @@ Wizard.Header = WizardHeader
 Wizard.Body = WizardBody
 Wizard.Footer = WizardFooter
 Wizard.FormContainer = WizardFormContainer
+Wizard.Form = WizardForm
 
 export default Wizard
