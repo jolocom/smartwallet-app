@@ -2,6 +2,7 @@ import React, { createContext, useMemo, useState } from 'react'
 import { useCustomContext } from '~/hooks/context'
 import WizardBody from './WizardBody'
 import WizardFooter from './WizardFooter'
+import WizardFormContainer from './WizardFormContainer'
 import WizardHeader from './WizardHeader'
 
 interface IHeader {
@@ -26,6 +27,7 @@ interface IWizardComposition {
   Header: React.FC
   Body: React.FC<IWizardBodyProps>
   Footer: React.FC<IWizardFooterProps>
+  FormContainer: React.FC
 }
 
 interface IWizardProps {
@@ -61,5 +63,6 @@ const Wizard: React.FC<IWizardProps> & IWizardComposition = ({
 Wizard.Header = WizardHeader
 Wizard.Body = WizardBody
 Wizard.Footer = WizardFooter
+Wizard.FormContainer = WizardFormContainer
 
 export default Wizard

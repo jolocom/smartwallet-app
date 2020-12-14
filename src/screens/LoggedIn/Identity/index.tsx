@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import ScreenContainer from '~/components/ScreenContainer'
 import ToggleSwitch from '~/components/ToggleSwitch'
-import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
+import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
 import { getAttributes } from '~/modules/attributes/selectors'
 
 const Identity = () => {
@@ -14,7 +14,7 @@ const Identity = () => {
   return (
     <ScreenContainer>
       <ToggleSwitch on={isWizardVisible} onToggle={toggleWizardVisibility} />
-      {isWizardVisible && <SingleCredentialWizard />}
+      {isWizardVisible && <BusinessCardWizard />}
     </ScreenContainer>
   )
 }

@@ -74,70 +74,50 @@ const SingleCredentialWizard = () => {
     }
   }, [JSON.stringify(fields)])
 
+  const renderFields = () => (
+    <Wizard.FormContainer>
+      <Form.Body>
+        {({ fields, updateField }) =>
+          fields.map((field, idx) => (
+            <Input.Block
+              {...field}
+              autoFocus={idx === 0}
+              placeholder={field.label}
+              updateInput={(val) => updateField(field.key, val)}
+            />
+          ))
+        }
+      </Form.Body>
+    </Wizard.FormContainer>
+  )
+
+  const renderFooter = () => (
+    <Form.Expose>
+      {({ fields }: IFormContext) => (
+        <WizardFooter onSubmit={() => addFieldValues(fields)} />
+      )}
+    </Form.Expose>
+  )
+
   return (
     <Wizard config={CONFIG}>
       <Wizard.Header />
       <Wizard.Body step={0}>
         <Form config={nameFormConfig}>
-          <Form.Body>
-            {({ fields, updateField }) =>
-              fields.map((field, idx) => (
-                <Input.Block
-                  {...field}
-                  autoFocus={idx === 0}
-                  placeholder={field.label}
-                  updateInput={(val) => updateField(field.key, val)}
-                />
-              ))
-            }
-          </Form.Body>
-          <Form.Expose>
-            {({ fields }: IFormContext) => (
-              <WizardFooter onSubmit={() => addFieldValues(fields)} />
-            )}
-          </Form.Expose>
+          {renderFields()}
+          {renderFooter()}
         </Form>
       </Wizard.Body>
       <Wizard.Body step={1}>
         <Form config={emailTelephoneFormConfig}>
-          <Form.Body>
-            {({ fields, updateField }) =>
-              fields.map((field, idx) => (
-                <Input.Block
-                  {...field}
-                  autoFocus={idx === 0}
-                  placeholder={field.label}
-                  updateInput={(val) => updateField(field.key, val)}
-                />
-              ))
-            }
-          </Form.Body>
-          <Form.Expose>
-            {({ fields }: IFormContext) => (
-              <WizardFooter onSubmit={() => addFieldValues(fields)} />
-            )}
-          </Form.Expose>
+          {renderFields()}
+          {renderFooter()}
         </Form>
       </Wizard.Body>
       <Wizard.Body step={2}>
         <Form config={companyFormConfig}>
-          <Form.Body>
-            {({ fields, updateField }) =>
-              fields.map((field, idx) => (
-                <Input.Block
-                  {...field}
-                  autoFocus={idx === 0}
-                  placeholder={field.label}
-                  updateInput={(val) => updateField(field.key, val)}
-                />
-              ))
-            }
-          </Form.Body>
-          <Form.Expose>
-            {({ fields }: IFormContext) => (
-              <WizardFooter onSubmit={() => addFieldValues(fields)} />
-            )}
-          </Form.Expose>
+          {renderFields()}
+          {renderFooter()}
         </Form>
       </Wizard.Body>
     </Wizard>
