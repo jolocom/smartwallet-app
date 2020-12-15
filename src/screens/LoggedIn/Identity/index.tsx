@@ -7,6 +7,8 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import TopSheet from '~/components/TopSheet'
+import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
+import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
@@ -70,20 +72,12 @@ const Identity = () => {
           </>
         )}
         {activeForm === IdentityForms.SingleCredential && (
-          <>
-            <JoloText>SingleCredential form</JoloText>
-            <Btn onPress={() => animateActiveForm(null)} type={BtnTypes.senary}>
-              {strings.RESET}
-            </Btn>
-          </>
+          <SingleCredentialWizard
+            onFormSubmit={() => animateActiveForm(null)}
+          />
         )}
         {activeForm === IdentityForms.BusinessCard && (
-          <>
-            <JoloText>BusinessCard form</JoloText>
-            <Btn onPress={() => animateActiveForm(null)} type={BtnTypes.senary}>
-              {strings.RESET}
-            </Btn>
-          </>
+          <BusinessCardWizard onFormSubmit={() => animateActiveForm(null)} />
         )}
       </TopSheet>
     </ScreenContainer>

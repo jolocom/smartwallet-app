@@ -226,8 +226,10 @@ const attributes = {
   CITY_FIELD: 'City',
   COUNTRY_FIELD: 'Country',
   NUMBER: 'Number',
+  BUSINESS_CARD: 'Business Card',
   GIVEN_NAME_FIELD: 'Given name',
   FAMILY_NAME_FIELD: 'Family name',
+  COMPANY_NAME_FIELD: 'Company name',
   MISSING_INFO: 'Missing info',
   SAVE_YOUR_ATTRIBUTE: (name: string) => `Save your attribute ${name}`,
 }
@@ -287,7 +289,13 @@ const history = {
 const identity = {
   SINGLE_CREDENTIAL: 'Single Credential',
   BUSINESS_CARD: 'Business Card',
-  IT_IS_TIME_TO_CREATE: 'It’s time to create your first Digital Identity'
+  IT_IS_TIME_TO_CREATE: 'It’s time to create your first Digital Identity',
+  INTRODUCE_YOURSELF: 'Please, introduce yourself',
+  BEST_WAY_TO_CONTACT_YOU: 'Best way to contact you?',
+  WHAT_COMPANY_DO_YOU_REPRESENT: 'What company do you represent?',
+  NEXT: 'Next',
+  WHAT_IS_YOUR_NAME: 'What is your name?',
+  CREATE: 'Create'
 }
 
 export const strings = {
