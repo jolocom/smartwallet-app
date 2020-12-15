@@ -1,5 +1,4 @@
-// TODO: export metadata from @jolocom/protocol-ts
-import { claimsMetadata } from 'cred-types-jolocom-core'
+import { claimsMetadata } from '@jolocom/protocol-ts'
 
 import {
   IAttributeConfig,
