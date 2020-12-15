@@ -10,7 +10,7 @@ import {
 } from '~/modules/interaction/selectors'
 import InteractionSection from '../InteractionSection'
 import CredentialCard from '../CredentialCard'
-import { MultipleShareUICredential, AttributeTypes } from '~/types/credentials'
+import { MultipleShareUICredential } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import Carousel from '../Carousel'
 import InteractionFooter, { FooterContainer } from '../InteractionFooter'

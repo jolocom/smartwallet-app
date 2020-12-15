@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Alert, View } from 'react-native'
+import { View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
@@ -12,12 +12,11 @@ import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import { JoloTextSizes } from '~/utils/fonts'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
-import { accountReset } from '~/modules/account/actions'
+import { resetAccount } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
 import Section from './components/Section'
 import { Colors } from '~/utils/colors'
-import BP from '~/utils/breakpoints'
 import Option from './components/Option'
 import DevelopmentSection from './Development'
 import EnableBiometryOption from './EnableBiometryOption'
@@ -37,7 +36,7 @@ const SettingsGeneral: React.FC = () => {
     try {
       await resetBiometry()
       await resetServiceValuesInKeychain()
-      dispatch(accountReset())
+      dispatch(resetAccount())
     } catch (err) {
       console.log('Error occured while logging out')
       console.warn({ err })
