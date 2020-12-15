@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Image, LayoutAnimation } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -9,7 +8,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import TopSheet from '~/components/TopSheet'
 import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
 import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
-import { getAttributes } from '~/modules/attributes/selectors'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 
@@ -19,7 +17,6 @@ enum IdentityForms {
 }
 
 const Identity = () => {
-  const attributes = useSelector(getAttributes)
   const [isTopSheetVisible, setTopSheetVisibility] = useState(true)
   const [activeForm, setActiveForm] = useState<IdentityForms | null>(null)
 
