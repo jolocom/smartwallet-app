@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
-import { ClaimValues } from '~/modules/attributes/types'
 import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { strings } from '~/translations'
 import {
@@ -9,19 +8,8 @@ import {
   ClaimKeys,
   IAttributeClaimField,
 } from '~/types/credentials'
+import { mapFormFields } from '~/utils/dataMapping'
 import Wizard from '.'
-
-const WIZARD_CONFIG = {
-  0: {
-    label: strings.INTRODUCE_YOURSELF,
-  },
-  1: {
-    label: strings.BEST_WAY_TO_CONTACT_YOU,
-  },
-  2: {
-    label: strings.WHAT_COMPANY_DO_YOU_REPRESENT,
-  },
-}
 
 const getFormSlice = (...claimskeys: ClaimKeys[]) => {
   const config = attributeConfig[AttributeTypes.businessCard]
@@ -43,6 +31,20 @@ const emailTelephoneFormConfig = getFormSlice(
   ClaimKeys.telephone,
 )
 const companyFormConfig = getFormSlice(ClaimKeys.legalCompanyName)
+const WIZARD_CONFIG = {
+  0: {
+    label: strings.INTRODUCE_YOURSELF,
+    form: nameFormConfig,
+  },
+  1: {
+    label: strings.BEST_WAY_TO_CONTACT_YOU,
+    form: emailTelephoneFormConfig,
+  },
+  2: {
+    label: strings.WHAT_COMPANY_DO_YOU_REPRESENT,
+    form: companyFormConfig,
+  },
+}
 
 const SingleCredentialWizard = () => {
   const [fields, setFields] = useState<IFormState[]>([])
@@ -55,10 +57,7 @@ const SingleCredentialWizard = () => {
 
   useEffect(() => {
     const createNewAttribute = async () => {
-      const mappedFields = fields.reduce<ClaimValues>((acc, v) => {
-        acc[v.key] = v.value
-        return acc
-      }, {})
+      const mappedFields = mapFormFields(fields)
       await createAttribute(AttributeTypes.businessCard, mappedFields)
     }
     if (
@@ -72,17 +71,9 @@ const SingleCredentialWizard = () => {
   return (
     <Wizard config={WIZARD_CONFIG}>
       <Wizard.Header />
-      <Wizard.Form config={nameFormConfig} onSubmit={addFieldValues} step={0} />
-      <Wizard.Form
-        config={emailTelephoneFormConfig}
-        onSubmit={addFieldValues}
-        step={1}
-      />
-      <Wizard.Form
-        config={companyFormConfig}
-        onSubmit={addFieldValues}
-        step={2}
-      />
+      <Wizard.Form onSubmit={addFieldValues} step={0} />
+      <Wizard.Form onSubmit={addFieldValues} step={1} />
+      <Wizard.Form onSubmit={addFieldValues} step={2} />
     </Wizard>
   )
 }

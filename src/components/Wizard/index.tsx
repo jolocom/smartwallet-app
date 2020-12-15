@@ -8,8 +8,9 @@ import WizardForm from './WizardForm'
 import WizardFormContainer from './WizardFormContainer'
 import WizardHeader from './WizardHeader'
 
-interface IHeader {
+interface IWizardConfig {
   label: string
+  form: IAttributeConfig
 }
 
 export interface IWizardBodyProps {
@@ -21,12 +22,11 @@ export interface IWizardFooterProps {
 }
 
 export interface IWizardFormProps extends IWizardBodyProps {
-  config: IAttributeConfig
   onSubmit: (fields: IFormState[]) => void
 }
 
 interface IWizardContext {
-  config: Record<number, IHeader>
+  config: Record<number, IWizardConfig>
   activeStep: number
   setActiveStep: React.Dispatch<React.SetStateAction<number>>
   submitLabel?: string
@@ -42,8 +42,7 @@ interface IWizardComposition {
 
 interface IWizardProps {
   submitLabel?: string
-
-  config: Record<number, IHeader>
+  config: Record<number, IWizardConfig>
 }
 
 const WizardContext = createContext<IWizardContext>({

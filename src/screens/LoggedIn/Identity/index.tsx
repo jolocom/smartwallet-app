@@ -15,8 +15,8 @@ const Identity = () => {
   return (
     <ScreenContainer>
       <ToggleSwitch on={isWizardVisible} onToggle={toggleWizardVisibility} />
-      {/* {isWizardVisible && <BusinessCardWizard />} */}
-      {isWizardVisible && <SingleCredentialWizard />}
+      {isWizardVisible && <BusinessCardWizard />}
+      {/* {isWizardVisible && <SingleCredentialWizard />} */}
     </ScreenContainer>
   )
 }
