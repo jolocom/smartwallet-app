@@ -35,14 +35,17 @@ const WIZARD_CONFIG = {
   0: {
     label: strings.INTRODUCE_YOURSELF,
     form: nameFormConfig,
+    submitLabel: strings.NEXT,
   },
   1: {
     label: strings.BEST_WAY_TO_CONTACT_YOU,
     form: emailTelephoneFormConfig,
+    submitLabel: strings.NEXT,
   },
   2: {
     label: strings.WHAT_COMPANY_DO_YOU_REPRESENT,
     form: companyFormConfig,
+    submitLabel: strings.DONE,
   },
 }
 

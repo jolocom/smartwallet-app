@@ -11,6 +11,7 @@ import WizardHeader from './WizardHeader'
 interface IWizardConfig {
   label: string
   form: IAttributeConfig
+  submitLabel: string
 }
 
 export interface IWizardBodyProps {
@@ -29,7 +30,6 @@ interface IWizardContext {
   config: Record<number, IWizardConfig>
   activeStep: number
   setActiveStep: React.Dispatch<React.SetStateAction<number>>
-  submitLabel?: string
   isLastStep: boolean
 }
 
@@ -42,7 +42,6 @@ interface IWizardComposition {
 }
 
 interface IWizardProps {
-  submitLabel?: string
   config: Record<number, IWizardConfig>
 }
 
@@ -59,7 +58,6 @@ export const useWizard = useCustomContext(WizardContext)
 const Wizard: React.FC<IWizardProps> & IWizardComposition = ({
   children,
   config,
-  submitLabel,
 }) => {
   const [activeStep, setActiveStep] = useState(0)
   const isLastStep = Object.keys(config).length - 1 === activeStep
@@ -67,12 +65,11 @@ const Wizard: React.FC<IWizardProps> & IWizardComposition = ({
   const contextValue = useMemo(
     () => ({
       config,
-      submitLabel,
       activeStep,
       setActiveStep,
       isLastStep,
     }),
-    [activeStep, setActiveStep, JSON.stringify(config), submitLabel],
+    [activeStep, setActiveStep, JSON.stringify(config)],
   )
   return <WizardContext.Provider value={contextValue} children={children} />
 }
