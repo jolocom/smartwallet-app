@@ -20,7 +20,7 @@ const reducer = (
       return { ...state, loggedIn: action.payload }
     case AccountActions.setLocalAuth:
       return { ...state, isLocalAuthSet: action.payload }
-    case AccountActions.accountReset:
+    case AccountActions.resetAccount:
       return initialState
     case AccountActions.showTermsConsent:
       return { ...state, showTermsConsent: action.payload }

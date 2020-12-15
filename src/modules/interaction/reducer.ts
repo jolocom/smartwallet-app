@@ -23,7 +23,7 @@ const reducer = (
       return { ...state, details: action.payload }
     case InteractionActions.resetInteraction:
       return initialState
-    case InteractionActions.addOfferReceivedCredentials:
+    case InteractionActions.updateOfferValidation:
       return isCredOfferDetails(state.details)
         ? {
             ...state,

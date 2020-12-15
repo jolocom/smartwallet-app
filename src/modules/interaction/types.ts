@@ -5,7 +5,7 @@ export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
   selectShareCredential = 'selectShareCredential',
-  addOfferReceivedCredentials = 'addOfferReceivedCredentials',
+  updateOfferValidation = 'updateOfferValidation',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputType = 'setAttributeInputType',
 }

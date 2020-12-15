@@ -19,8 +19,8 @@ export const selectShareCredential = createAction<Record<string, string>>(
   InteractionActions.selectShareCredential,
 )
 
-export const addOfferReceivedCredentials = createAction<OfferUICredential[]>(
-  InteractionActions.addOfferReceivedCredentials,
+export const updateOfferValidation = createAction<OfferUICredential[]>(
+  InteractionActions.updateOfferValidation,
 )
 
 export const setIntermediaryState = createAction<IntermediarySheetState>(
