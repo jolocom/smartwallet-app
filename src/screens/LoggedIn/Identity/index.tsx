@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
+
 import ScreenContainer from '~/components/ScreenContainer'
 import { getAttributes } from '~/modules/attributes/selectors'
 import TopSheet from '~/components/TopSheet'
 import Btn, { BtnTypes } from '~/components/Btn'
 import Widget from '~/components/Widget'
+import { AttributeTypes } from '~/types/credentials'
+import { attributeConfig } from '~/config/claims'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
@@ -28,11 +31,15 @@ const Identity = () => {
           style={{ width: '100%', paddingHorizontal: '5%' }}
           showsVerticalScrollIndicator={false}
         >
-          {Object.keys(attributes).map((attrKey) => (
+          {Object.keys(attributes).map((attrType) => (
             <Widget>
-              <Widget.Header.Name value={attrKey} />
-              {attributes[attrKey].map((field) => (
-                <Widget.Field.Static value={field.value} />
+              <Widget.Header.Name
+                value={attributeConfig[attrType as AttributeTypes].label}
+              />
+              {attributes[attrType as AttributeTypes].map((field) => (
+                <Widget.Field.Static
+                  value={Object.values(field.value).join(' ')}
+                />
               ))}
               <Widget>
                 <Widget.Header.Name value="companyName" />
