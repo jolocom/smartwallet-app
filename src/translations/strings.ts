@@ -284,6 +284,12 @@ const history = {
   RECEIVED: 'Received',
 }
 
+const identity = {
+  SINGLE_CREDENTIAL: 'Single Credential',
+  BUSINESS_CARD: 'Business Card',
+  IT_IS_TIME_TO_CREATE: 'It’s time to create your first Digital Identity'
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errors,
@@ -304,4 +310,5 @@ export const strings = {
   ...toasts,
   ...documents,
   ...history,
+  ...identity
 }
