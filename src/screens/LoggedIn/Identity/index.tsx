@@ -26,6 +26,14 @@ const Identity = () => {
   const animateActiveForm = (form: IdentityForms | null) => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
+      create: {
+        ...LayoutAnimation.Presets.easeInEaseOut.create,
+        duration: 200,
+      },
+      delete: {
+        ...LayoutAnimation.Presets.easeInEaseOut.delete,
+        duration: 100,
+      },
       duration: 400,
     })
     setActiveForm(form)
