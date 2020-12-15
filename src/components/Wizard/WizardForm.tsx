@@ -12,10 +12,13 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
         {({ fields, updateField }) =>
           fields.map((field, idx) => (
             <Input.Block
-              {...field}
-              autoFocus={idx === 0}
-              placeholder={field.label}
+              key={field.key}
+              value={field.value}
               updateInput={(val) => updateField(field.key, val)}
+              placeholder={field.label}
+              autoFocus={idx === 0}
+              returnKeyType={idx === fields.length - 1 ? 'done' : 'next'}
+              {...field.keyboardOptions}
             />
           ))
         }
