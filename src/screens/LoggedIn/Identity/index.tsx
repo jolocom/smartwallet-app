@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Image, LayoutAnimation } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 
@@ -23,6 +23,14 @@ const Identity = () => {
 
   const { top } = useSafeArea()
 
+  const animateActiveForm = (form: IdentityForms | null) => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 400,
+    })
+    setActiveForm(form)
+  }
+
   return (
     <ScreenContainer isFullscreen>
       <TopSheet
@@ -43,13 +51,13 @@ const Identity = () => {
             </JoloText>
 
             <Btn
-              onPress={() => setActiveForm(IdentityForms.SingleCredential)}
+              onPress={() => animateActiveForm(IdentityForms.SingleCredential)}
               type={BtnTypes.senary}
             >
               {strings.SINGLE_CREDENTIAL}
             </Btn>
             <Btn
-              onPress={() => setActiveForm(IdentityForms.BusinessCard)}
+              onPress={() => animateActiveForm(IdentityForms.BusinessCard)}
               type={BtnTypes.senary}
             >
               {strings.BUSINESS_CARD}
@@ -59,7 +67,7 @@ const Identity = () => {
         {activeForm === IdentityForms.SingleCredential && (
           <>
             <JoloText>SingleCredential form</JoloText>
-            <Btn onPress={() => setActiveForm(null)} type={BtnTypes.senary}>
+            <Btn onPress={() => animateActiveForm(null)} type={BtnTypes.senary}>
               {strings.RESET}
             </Btn>
           </>
@@ -67,7 +75,7 @@ const Identity = () => {
         {activeForm === IdentityForms.BusinessCard && (
           <>
             <JoloText>BusinessCard form</JoloText>
-            <Btn onPress={() => setActiveForm(null)} type={BtnTypes.senary}>
+            <Btn onPress={() => animateActiveForm(null)} type={BtnTypes.senary}>
               {strings.RESET}
             </Btn>
           </>
