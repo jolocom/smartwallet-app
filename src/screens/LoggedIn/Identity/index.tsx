@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Image, LayoutAnimation } from 'react-native'
-import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -21,8 +20,6 @@ const Identity = () => {
   const attributes = useSelector(getAttributes)
   const [isTopSheetVisible, setTopSheetVisibility] = useState(true)
   const [activeForm, setActiveForm] = useState<IdentityForms | null>(null)
-
-  const { top } = useSafeArea()
 
   const animateActiveForm = (form: IdentityForms | null) => {
     LayoutAnimation.configureNext({
@@ -45,7 +42,7 @@ const Identity = () => {
       <TopSheet
         // isVisible={Boolean(Object.keys(attributes).length)}
         isVisible={isTopSheetVisible}
-        customStyles={{ alignItems: 'center', paddingTop: top }}
+        customStyles={{ alignItems: 'center' }}
       >
         {!activeForm && (
           <>
