@@ -4,7 +4,8 @@ import BP from '~/utils/breakpoints'
 import { useTabs } from '../Tabs/Tabs'
 import { useCard } from './Card'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
-import { DocumentTypes, IWithCustomStyle } from './types'
+import { IWithCustomStyle } from './types'
+import { DocumentTypes } from '~/types/credentials'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,

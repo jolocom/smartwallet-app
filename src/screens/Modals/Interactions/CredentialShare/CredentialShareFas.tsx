@@ -21,7 +21,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import InteractionHeader from '../InteractionHeader'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
-import InteractionAttributesWidget from '~/components/Widget/InteractionAttributesWidget'
+import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
 
 const CredentialShareFas = () => {
   const attributes = useSelector(getAvailableAttributesToShare)
@@ -33,7 +33,6 @@ const CredentialShareFas = () => {
     getPreselectedAttributes,
     isFirstCredential,
     handleSelectCredential,
-    handleCreateAttribute,
     selectionReady,
     getHeaderText,
     getCtaText,
@@ -111,17 +110,7 @@ const CredentialShareFas = () => {
         <InteractionHeader {...getHeaderText()} />
         {!!Object.keys(attributes).length && (
           <AttributeWidgetWrapper>
-            {Object.keys(attributes).map((attrKey) => (
-              <InteractionAttributesWidget
-                key={attrKey}
-                attrKey={attrKey}
-                onCreate={() => handleCreateAttribute(attrKey)}
-                onSelect={(attrKey, id) =>
-                  handleSelectCredential({ [attrKey]: id })
-                }
-                fields={attributes[attrKey]}
-              />
-            ))}
+            <ShareAttributeWidget />
           </AttributeWidgetWrapper>
         )}
         <InteractionSection

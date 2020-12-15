@@ -1,19 +1,29 @@
-import { AttrKeys } from '~/types/credentials'
+import { AttributeTypes, ClaimKeys } from '~/types/credentials'
+import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
 
 export interface AttributesState {
   all: AttrsState<AttributeI>
 }
 
 export type AttrsState<T> = {
-  [key in AttrKeys]?: T[]
+  [key in AttributeTypes]?: T[]
 }
 
 export enum AttrActions {
-  setAttrs = 'setAttrs',
-  updateAttrs = 'updateAttrs', // after we have created a new one and we want to update the whole collection
+  initAttrs = 'initAttrs',
+  updateAttrs = 'updateAttrs',
+}
+
+export type ClaimValues = {
+  [key in ClaimKeys]?: ClaimEntry
 }
 
 export interface AttributeI {
   id: string
-  value: string
+  value: ClaimValues
+}
+
+export interface AttributePayload {
+  type: AttributeTypes
+  attribute: AttributeI
 }

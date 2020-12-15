@@ -14,11 +14,15 @@ interface IHeaderActionComposition {
 }
 
 const CreateNew: React.FC = () => {
-  const { onCreate, name } = useWidget()
+  const widgetContext = useWidget()
+  if (!widgetContext?.onCreate) {
+    throw new Error('No onCreate prop passed to the widget')
+  }
+
   return (
     <TouchableOpacity
       style={styles.createNewBtn}
-      onPress={() => onCreate(name)}
+      onPress={widgetContext.onCreate}
     >
       <View style={styles.plus}>
         <PlusIcon />
@@ -28,7 +32,7 @@ const CreateNew: React.FC = () => {
         size={JoloTextSizes.middle}
         color={Colors.white}
       >
-        {strings.CREATE_NEW_ONE}
+        {strings.ADD_ATTRIBUTE}
       </JoloText>
     </TouchableOpacity>
   )
@@ -46,9 +50,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   plus: {
-    transform: [{ scale: 0.6 }],
-    marginRight: 1,
-    marginBottom: BP({ default: 1, medium: 4, large: 4 }),
+    height: 22,
+    width: 22,
+    marginRight: 10,
   },
 })
 

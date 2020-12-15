@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 
 import {
   resetInteraction,
-  setInteractionDetails,
+  updateOfferValidation,
 } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
@@ -76,10 +76,7 @@ const useCredentialOfferSubmit = () => {
 
         dispatch(resetInteraction())
       } else {
-        const credentials = {
-          service_issued: validatedCredentials,
-        }
-        dispatch(setInteractionDetails({ credentials }))
+        dispatch(updateOfferValidation(validatedCredentials))
         scheduleInfo({
           title: strings.OFFER_RENEGOTIATION_TITLE,
           message: strings.OFFER_RENEGOTIATION_MSG,

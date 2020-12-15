@@ -1,4 +1,3 @@
-import { Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -12,7 +11,11 @@ import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/t
 import { useLoader } from '../loader'
 import { setInteractionDetails } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { getMappedInteraction, isTypeAttribute } from '~/utils/dataMapping'
+import {
+  getMappedInteraction,
+  isTypeAttribute,
+  getCredentialType,
+} from '~/utils/dataMapping'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { useAgent } from '../sdk'
 import { useToasts } from '../toasts'
@@ -62,7 +65,7 @@ export const useInteractionStart = () => {
 
       const missingTypes = requestedCredentialTypes.reduce<string[]>(
         (acc, type) => {
-          const requestedType = type[type.length - 1]
+          const requestedType = getCredentialType(type)
           if (isTypeAttribute(requestedType)) return acc
 
           const creds = credentials.filter(

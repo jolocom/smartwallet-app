@@ -1,23 +1,24 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { View } from 'react-native'
 
 import Section from '../components/Section'
 import Option from '../components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
-import { useRedirect } from '~/hooks/navigation'
+import { useRedirect, useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import PopupMenu from '~/components/PopupMenu'
-import TopSheet from '~/components/TopSheet'
-import Btn, { BtnTypes } from '~/components/Btn'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
-  const [showTopSheet, setShowTopSheet] = useState(false)
   const redirect = useRedirect()
+  const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
+  const redirectToForms = useRedirectTo(ScreenNames.FormTest)
+  const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
+
   const popupRef = useRef<{ show: () => void }>(null)
 
   const handleToggle = (toggled: boolean) => {
@@ -57,22 +58,14 @@ const DevelopmentSection = () => {
           ]}
         />
       </Option>
-      <Option>
-        <Option.Title title="Top ActionSheet" />
-        <TopSheet
-          onClose={() => setShowTopSheet(false)}
-          isVisible={showTopSheet}
-        >
-          <Btn onPress={() => setShowTopSheet(false)} type={BtnTypes.senary}>
-            Test
-          </Btn>
-        </TopSheet>
-        <View style={{ position: 'absolute', right: 16 }}>
-          <ToggleSwitch
-            on={showTopSheet}
-            onToggle={() => setShowTopSheet((prev) => !prev)}
-          />
-        </View>
+      <Option onPress={redirectToNotifications}>
+        <Option.Title title="Notifications" />
+      </Option>
+      <Option onPress={redirectToForms}>
+        <Option.Title title="Forms" />
+      </Option>
+      <Option onPress={redirectToInputs}>
+        <Option.Title title="Inputs" />
       </Option>
     </Section>
   )

@@ -1,12 +1,13 @@
 import { FlowType, IdentitySummary } from 'react-native-jolocom'
-import { AttrKeys, OfferUICredential } from '~/types/credentials'
+import { OfferUICredential, AttributeTypes } from '~/types/credentials'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
   selectShareCredential = 'selectShareCredential',
+  updateOfferValidation = 'updateOfferValidation',
   setIntermediaryState = 'setIntermediaryState',
-  setAttributeInputKey = 'setAttributeInputKey',
+  setAttributeInputType = 'setAttributeInputType',
 }
 
 export type InteractionDetails =
@@ -23,7 +24,7 @@ export type InteractionDetails =
  *
  * @details - mapped flow state. If no active interaction, defaults to { flowType: null }
  * @intermediaryState - status of the Intermediary ActionSheet
- * @attributeInputKey - the attribute type that should be created on the @IntermediaryActionSheet
+ * @attributeInputType - the attribute type that should be created on the @IntermediaryActionSheet
  * @selectedShareCredentials - mapping of selected {[type]: id} credentials within the interaction
  */
 export interface InteractionState {
@@ -32,12 +33,15 @@ export interface InteractionState {
 }
 
 type IntermediaryState =
-  | { sheetState: IntermediarySheetState.showing; attributeInputKey: AttrKeys }
+  | {
+      sheetState: IntermediarySheetState.showing
+      attributeInputType: AttributeTypes
+    }
   | {
       sheetState:
         | IntermediarySheetState.hiding
         | IntermediarySheetState.switching
-      attributeInputKey: null
+      attributeInputType: null
     }
 
 /**
@@ -67,6 +71,7 @@ interface InteractionCommonI {
  */
 export interface NotActiveInteractionDetailsI {
   flowType: null
+  id: null
 }
 
 export interface ResolutionDetailsI extends InteractionCommonI {
@@ -89,7 +94,7 @@ export interface AuthorizationDetailsI extends InteractionCommonI {
 
 export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
-  requestedAttributes: string[]
+  requestedAttributes: AttributeTypes[]
   //TODO: should be renamed to smth else (not @credentials)
   requestedCredentials: string[]
   selectedCredentials: Record<string, string>

@@ -2,7 +2,7 @@ import React from 'react'
 import { strings } from '~/translations'
 import TabsContainer from '~/components/Tabs/Container'
 import { Tabs } from '~/components/Tabs/Tabs'
-import { DocumentTypes } from '~/components/Card/types'
+import { DocumentTypes } from '~/types/credentials'
 
 const TABS = [
   { id: DocumentTypes.document, value: strings.DOCUMENTS },

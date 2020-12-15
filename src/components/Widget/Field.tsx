@@ -1,10 +1,6 @@
 import React from 'react'
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import { StyleSheet, TouchableOpacity, View, TextStyle } from 'react-native'
+
 import { PurpleTickSuccess } from '~/assets/svg'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
@@ -28,15 +24,16 @@ export interface IWidgetField {
   onSelect?: () => void
 }
 
-const FieldText: React.FC<Pick<IWidgetField, 'value' | 'color'>> = ({
-  value,
-  color = Colors.white90,
-}) => {
+const FieldText: React.FC<
+  Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
+> = ({ value, color = Colors.white90, customStyles = {} }) => {
   return (
     <JoloText
+      numberOfLines={1}
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.middle}
       color={color}
+      customStyles={[{ textAlign: 'left' }, customStyles]}
     >
       {value}
     </JoloText>
@@ -45,9 +42,9 @@ const FieldText: React.FC<Pick<IWidgetField, 'value' | 'color'>> = ({
 
 const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => {
   return (
-    <View style={styles.field}>
+    <FieldContainer>
       <FieldText value={value} />
-    </View>
+    </FieldContainer>
   )
 }
 
@@ -55,9 +52,9 @@ const SelectableField: React.FC<
   Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>
 > = ({ value, isSelected, onSelect }) => {
   return (
-    <TouchableWithoutFeedback onPress={onSelect}>
-      <View style={styles.field}>
-        <FieldText value={value} />
+    <TouchableOpacity activeOpacity={1} onPress={onSelect}>
+      <FieldContainer>
+        <FieldText value={value} customStyles={{ width: '85%' }} />
         {isSelected ? (
           <View style={styles.radio}>
             <PurpleTickSuccess />
@@ -65,8 +62,8 @@ const SelectableField: React.FC<
         ) : (
           <View style={[styles.radio, styles.notSelected]} />
         )}
-      </View>
-    </TouchableWithoutFeedback>
+      </FieldContainer>
+    </TouchableOpacity>
   )
 }
 
@@ -77,11 +74,15 @@ const EmptyField: React.FC = () => {
 
   return (
     <TouchableOpacity onPress={widgetContext.onCreate}>
-      <View style={styles.field}>
+      <FieldContainer>
         <FieldText value={strings.MISSING_INFO} color={Colors.error} />
-      </View>
+      </FieldContainer>
     </TouchableOpacity>
   )
+}
+
+const FieldContainer: React.FC = ({ children }) => {
+  return <View style={styles.field}>{children}</View>
 }
 
 const Field: React.FC & IFieldComposition = ({ children }) => {
@@ -95,12 +96,12 @@ const styles = StyleSheet.create({
   radio: {
     width: 20,
     height: 20,
-    borderRadius: 10,
   },
   notSelected: {
     borderColor: Colors.white45,
     opacity: 0.3,
     borderWidth: 1,
+    borderRadius: 10,
   },
   field: {
     alignItems: 'center',

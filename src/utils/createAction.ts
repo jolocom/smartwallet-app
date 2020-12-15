@@ -1,7 +1,7 @@
 import { RootActions } from '~/modules/rootReducer'
 
-const createAction = (type: RootActions) => {
-  const actionCreator = (payload?: any) => ({
+const createAction = <T = any>(type: RootActions) => {
+  const actionCreator = (payload?: T) => ({
     type,
     payload,
   })

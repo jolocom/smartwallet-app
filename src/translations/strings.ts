@@ -1,5 +1,3 @@
-import { AttrKeys } from '~/types/credentials'
-
 const loaderMsgs = {
   CREATING: 'Creating your personal secret number',
   MATCHING: 'Matching two instances',
@@ -219,12 +217,19 @@ const termsConsent = {
 }
 
 const attributes = {
-  CREATE_NEW_ONE: 'Create new one',
+  ADD_ATTRIBUTE: 'Add new one',
   NAME: 'Name',
-  EMAILADDRESS: 'Email',
-  MOBILEPHONENUMBER: 'Number',
+  EMAIL: 'Email',
+  ADDRESS: 'Address',
+  ADDRESS_LINE_FIELD: 'Address line',
+  POSTAL_CODE_FIELD: 'Postal code',
+  CITY_FIELD: 'City',
+  COUNTRY_FIELD: 'Country',
+  NUMBER: 'Number',
+  GIVEN_NAME_FIELD: 'Given name',
+  FAMILY_NAME_FIELD: 'Family name',
   MISSING_INFO: 'Missing info',
-  SAVE_YOUR_ATTRIBUTE: (attr: AttrKeys) => `Save your attribute ${attr}`,
+  SAVE_YOUR_ATTRIBUTE: (name: string) => `Save your attribute ${name}`,
 }
 
 const recoverPin = {
@@ -298,5 +303,5 @@ export const strings = {
   ...termsConsent,
   ...toasts,
   ...documents,
-  ...history
+  ...history,
 }
