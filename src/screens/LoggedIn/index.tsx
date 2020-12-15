@@ -49,6 +49,7 @@ import BackupIdentity from './Settings/BackupIdentity'
 import ButtonsTest from './Settings/Development/ButtonsTest'
 import NotificationsTest from './Settings/Development/NotificationsTest'
 import DragToConfirm from '~/screens/Modals/DragToConfirm'
+import LoaderTest from './Settings/Development/DevLoaders'
 import Identity from './Identity'
 import FormTest from './Settings/Development/FormTest'
 import InputTest from './Settings/Development/InputTest'
@@ -223,6 +224,10 @@ const LoggedInTabs: React.FC = () => {
             name={ScreenNames.ButtonsTest}
             component={ButtonsTest}
             options={settingsScreenTransitionOptions}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.LoaderTest}
+            component={LoaderTest}
           />
           <LoggedInStack.Screen
             name={ScreenNames.NotificationsTest}
