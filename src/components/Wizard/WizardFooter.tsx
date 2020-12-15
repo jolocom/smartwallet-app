@@ -4,8 +4,13 @@ import { IWizardFooterProps, useWizard } from '.'
 import Btn, { BtnTypes } from '../Btn'
 
 const WizardFooter: React.FC<IWizardFooterProps> = ({ onSubmit }) => {
-  const { activeStep, setActiveStep, config, submitLabel } = useWizard()
-  const isLastStep = activeStep === Object.keys(config).length - 1
+  const {
+    activeStep,
+    setActiveStep,
+    config,
+    submitLabel,
+    isLastStep,
+  } = useWizard()
   const btnLabel = !isLastStep
     ? strings.NEXT
     : submitLabel

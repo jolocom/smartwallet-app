@@ -8,7 +8,7 @@ const WizardFormContainer: React.FC = ({ children }) => (
 const styles = StyleSheet.create({
   container: {
     marginTop: 35,
-    marginBottom: 18,
+    marginBottom: 8,
   },
 })
 

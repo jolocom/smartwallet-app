@@ -1,11 +1,15 @@
 import React from 'react'
-import Form, { IFormContext } from '~/screens/LoggedIn/Identity/components/Form'
+import Form, {
+  IFormContext,
+  IFormState,
+} from '~/screens/LoggedIn/Identity/components/Form'
+import { Colors } from '~/utils/colors'
 import Wizard, { IWizardFormProps, useWizard } from '.'
 import Input from '../Input'
 import WizardFooter from './WizardFooter'
 
 const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
-  const { config } = useWizard()
+  const { config, setActiveStep, isLastStep } = useWizard()
   const renderFields = () => (
     <Wizard.FormContainer>
       <Form.Body>
@@ -18,6 +22,8 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
               placeholder={field.label}
               autoFocus={idx === 0}
               returnKeyType={idx === fields.length - 1 ? 'done' : 'next'}
+              containerStyle={{ marginBottom: 10 }}
+              placeholderTextColor={Colors.white30}
               {...field.keyboardOptions}
             />
           ))
@@ -34,9 +40,14 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
     </Form.Expose>
   )
 
+  const handleFormSubmit = (fields: IFormState[]) => {
+    onSubmit(fields)
+    if (!isLastStep) setActiveStep((prevState) => prevState + 1)
+  }
+
   return (
     <Wizard.Body step={step}>
-      <Form config={config[step].form}>
+      <Form config={config[step].form} onSubmit={handleFormSubmit}>
         {renderFields()}
         {renderFooter()}
       </Form>

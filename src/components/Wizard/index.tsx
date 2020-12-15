@@ -30,6 +30,7 @@ interface IWizardContext {
   activeStep: number
   setActiveStep: React.Dispatch<React.SetStateAction<number>>
   submitLabel?: string
+  isLastStep: boolean
 }
 
 interface IWizardComposition {
@@ -49,6 +50,7 @@ const WizardContext = createContext<IWizardContext>({
   config: {},
   activeStep: 0,
   setActiveStep: () => {},
+  isLastStep: false,
 })
 WizardContext.displayName = 'WizardContext'
 
@@ -60,6 +62,7 @@ const Wizard: React.FC<IWizardProps> & IWizardComposition = ({
   submitLabel,
 }) => {
   const [activeStep, setActiveStep] = useState(0)
+  const isLastStep = Object.keys(config).length - 1 === activeStep
 
   const contextValue = useMemo(
     () => ({
@@ -67,6 +70,7 @@ const Wizard: React.FC<IWizardProps> & IWizardComposition = ({
       submitLabel,
       activeStep,
       setActiveStep,
+      isLastStep,
     }),
     [activeStep, setActiveStep, JSON.stringify(config), submitLabel],
   )
