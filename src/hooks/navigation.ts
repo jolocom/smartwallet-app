@@ -8,11 +8,22 @@ interface NestedSceenI {
 }
 
 export const useGoBack = () => {
-  const navigation = useNavigation();
-  if(navigation.canGoBack()) {
+  const navigation = useNavigation()
+  if (navigation.canGoBack()) {
     return navigation.goBack
-  } 
-  return () => {throw new Error('Can\'t go back')}
+  }
+  return () => {
+    throw new Error("Can't go back")
+  }
+}
+
+export const useRedirect = () => {
+  const navigation = useNavigation()
+
+  return (
+    screenName: ScreenNames,
+    params: Record<string, any> & NestedSceenI = {},
+  ) => navigation.navigate(screenName, params)
 }
 
 export const useRedirectTo = (

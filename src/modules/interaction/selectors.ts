@@ -165,7 +165,7 @@ export const getIsFullscreenCredShare = createSelector(
 
     const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
       (acc, v) => {
-        if (!!v.length) {
+        if (v && !!v.length) {
           acc += v.length
         } else {
           acc += 1

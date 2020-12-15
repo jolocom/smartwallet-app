@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Image, LayoutAnimation } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+
 import ScreenContainer from '~/components/ScreenContainer'
 import TopSheet from '~/components/TopSheet'
 import { getAttributes } from '~/modules/attributes/selectors'
@@ -34,7 +35,6 @@ const Identity = () => {
   return (
     <ScreenContainer isFullscreen>
       <TopSheet
-        onClose={() => setTopSheetVisibility(false)}
         // isVisible={Boolean(Object.keys(attributes).length)}
         isVisible={isTopSheetVisible}
         customStyles={{ alignItems: 'center', paddingTop: top }}

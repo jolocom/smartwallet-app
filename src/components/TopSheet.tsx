@@ -7,12 +7,10 @@ import {
 } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 
-import ActionSheet from './ActionSheet/ActionSheet'
 import { Colors } from '~/utils/colors'
 
 interface Props {
   isVisible: boolean
-  onClose: () => void
   customStyles?: ViewStyle
 }
 
@@ -20,7 +18,6 @@ const TopSheet: React.FC<Props> = ({
   isVisible,
   children,
   customStyles = {},
-  onClose,
 }) => {
   const { top } = useSafeArea()
   const heightRef = useRef(0)
@@ -41,7 +38,7 @@ const TopSheet: React.FC<Props> = ({
     if (isVisible) {
       animateSheet(0).start()
     } else {
-      animateSheet(-heightRef.current).start()
+      animateSheet(-heightRef.current - top).start()
     }
   }, [isVisible])
 
@@ -70,6 +67,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
+    zIndex: 1,
   },
 })
 

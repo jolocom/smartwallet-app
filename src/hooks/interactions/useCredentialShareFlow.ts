@@ -55,19 +55,16 @@ export const useCredentialShareFlow = () => {
    * Returns the @id for the first available attribute of each type.
    */
   const getPreselectedAttributes = () =>
-    Object.keys(attributes).reduce<Partial<Record<AttributeTypes, string>>>(
-      (acc, value) => {
-        const attrType = value as AttributeTypes
-        if (!acc[attrType]) {
-          const attr = attributes[attrType] || []
-          if (attr.length) {
-            acc[attrType] = attr[0].id
-          }
+    Object.keys(attributes).reduce<Record<string, string>>((acc, value) => {
+      const attrType = value as AttributeTypes
+      if (!acc[attrType]) {
+        const attr = attributes[attrType] || []
+        if (attr.length) {
+          acc[attrType] = attr[0].id
         }
-        return acc
-      },
-      {},
-    )
+      }
+      return acc
+    }, {})
 
   /**
    * Assures all requested credentials & attributes are selected.
@@ -103,7 +100,7 @@ export const useCredentialShareFlow = () => {
   /**
    * Shows the Intermediary ActionSheet for creating a new attribute.
    */
-  const handleCreateAttribute = (sectionKey: string) => {
+  const handleCreateAttribute = (sectionKey: AttributeTypes) => {
     dispatch(setIntermediaryState(IntermediarySheetState.showing))
     dispatch(setAttributeInputType(sectionKey))
   }
@@ -111,9 +108,7 @@ export const useCredentialShareFlow = () => {
   /**
    * Selects a credential in the @interactions module
    */
-  const handleSelectCredential = (
-    credential: Partial<Record<string, string>>,
-  ) => {
+  const handleSelectCredential = (credential: Record<string, string>) => {
     dispatch(selectShareCredential(credential))
   }
 

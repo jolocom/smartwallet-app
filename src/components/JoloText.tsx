@@ -59,9 +59,10 @@ const JoloText: React.FC<PropsI & TextProps> = (props) => {
         weight === JoloTextWeight.medium ? Fonts.Medium : Fonts.Regular,
     }),
   }
+
   return (
     <TextComponent
-      {...rest}
+      {...(rest as typeof Text)}
       testID={testID}
       style={[styles.title, sizeStyles, customStyles]}
     >
