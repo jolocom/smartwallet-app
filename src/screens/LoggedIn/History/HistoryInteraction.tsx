@@ -26,7 +26,7 @@ const HistoryInteraction: React.FC<{
   return interactionData ? (
     <HistoryField
       type={interactionData.type}
-      issuerName={interactionData.issuer.publicProfile?.name ?? 'Unknown'}
+      issuerName={interactionData.issuer.publicProfile?.name}
       time={interactionData.time}
       image={interactionData.issuer.publicProfile?.image}
     />
