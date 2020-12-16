@@ -81,7 +81,7 @@ const ChangePin: React.FC<PropsI> = ({
   return (
     <ScreenContainer
       customStyles={{
-        // marginTop: '20%',
+        marginTop: '15%',
         justifyContent: 'flex-start',
         paddingTop: 0,
       }}
@@ -90,7 +90,7 @@ const ChangePin: React.FC<PropsI> = ({
       <Passcode onSubmit={isCreateNew ? updatePin : verifyPin}>
         <Passcode.Header
           title={headerTitle}
-          errorTitle={isCreateNew ? strings.WHOOPS : strings.WRONG_PIN}
+          errorTitle={isCreateNew ? strings.WHOOPS : strings.WRONG_PASSCODE}
         />
         <Passcode.Input />
         <Passcode.Forgot />

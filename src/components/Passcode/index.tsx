@@ -5,7 +5,7 @@ import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 
 export interface IPasscodeProps {
-  onSubmit: (passcode: string) => Promise<void>
+  onSubmit: (passcode: string) => void | Promise<void>
 }
 
 export interface IPasscodeHeaderProps {

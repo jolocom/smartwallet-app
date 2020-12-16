@@ -163,7 +163,7 @@ const settings = {
   IMPRINT: 'Imprint',
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
-  WRONG_PIN: 'Wrong PIN',
+  WRONG_PASSCODE: 'Wrong passcode',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
   DE_VERSION: 'DE Version',
