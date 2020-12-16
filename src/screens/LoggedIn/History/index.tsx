@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, SectionList } from 'react-native'
+import React, { useState } from 'react'
+import { View, SectionList, ViewToken } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import HistoryTabs from '~/components/Tabs/HistoryTabs'
@@ -16,9 +16,24 @@ const History: React.FC = () => {
     loadSections,
     groupedInteractions,
   } = useHistory()
-  console.log({ groupedInteractions })
+  const [activeSection, setActiveSection] = useState('')
+
+  const handleSectionChange = (items: ViewToken[]) => {
+    const { section } = items[0]
+    if (activeSection !== section) {
+      setActiveSection(section.section)
+    }
+  }
+
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+      <JoloText
+        kind={JoloTextKind.title}
+        size={JoloTextSizes.middle}
+        customStyles={{ textAlign: 'left', marginBottom: 22, width: '100%' }}
+      >
+        {activeSection}
+      </JoloText>
       <HistoryTabs>
         {!groupedInteractions.length ? (
           <View style={{ marginTop: 32 }}>
@@ -32,6 +47,12 @@ const History: React.FC = () => {
             showsVerticalScrollIndicator={false}
             overScrollMode={'never'}
             onEndReachedThreshold={0.5}
+            onViewableItemsChanged={({ viewableItems }) =>
+              handleSectionChange(viewableItems)
+            }
+            viewabilityConfig={{
+              itemVisiblePercentThreshold: 50,
+            }}
             onEndReached={() => loadSections()}
             contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
             renderSectionHeader={({ section }) => (

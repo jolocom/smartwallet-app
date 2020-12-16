@@ -17,7 +17,6 @@ export const getDateSection = (date: Date) =>
 
 export const groupBySection = (interactions: IInteractionWithSection[]) =>
   interactions.reduce<IHistorySection[]>((acc, v) => {
-    console.log({ v })
     const section = acc.find((s) => s.section === v.section) || {
       section: v.section,
       data: [],

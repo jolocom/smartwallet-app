@@ -1,7 +1,7 @@
-import React from 'react'
+import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 import { useAgent } from '~/hooks/sdk'
-import { useState, useEffect } from 'react'
 import { IInteractionWithSection, IInteractionDetails } from './types'
 import { groupBySection, getDateSection, filterUniqueById } from './utils'
 
@@ -16,7 +16,10 @@ const useHistory = (step: number = 4) => {
   >([])
   const [page, setPage] = useState(0)
 
-  const groupedInteractions = groupBySection(loadedInteractions)
+  const groupedInteractions = useMemo(
+    () => groupBySection(loadedInteractions),
+    [loadedInteractions],
+  )
 
   useEffect(() => {
     getInteractions().then((sections) => {
