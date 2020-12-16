@@ -26,4 +26,5 @@ export interface IHistorySection {
 export interface IInteractionWithSection {
   id: string
   section: string
+  type: FlowType
 }

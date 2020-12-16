@@ -3,7 +3,13 @@ import { useState, useEffect } from 'react'
 
 import { useAgent } from '~/hooks/sdk'
 import { IInteractionWithSection, IInteractionDetails } from './types'
-import { groupBySection, getDateSection, filterUniqueById } from './utils'
+import {
+  groupBySection,
+  getDateSection,
+  filterUniqueById,
+  interactionTypeToFlowType,
+} from './utils'
+import { FlowType } from '@jolocom/sdk'
 
 const useHistory = (step: number = 4) => {
   const agent = useAgent()
@@ -18,6 +24,22 @@ const useHistory = (step: number = 4) => {
 
   const groupedInteractions = useMemo(
     () => groupBySection(loadedInteractions),
+    [loadedInteractions],
+  )
+
+  const groupedReceiveInteractions = useMemo(
+    () =>
+      groupBySection(
+        loadedInteractions.filter((g) => g.type === FlowType.CredentialOffer),
+      ),
+    [loadedInteractions],
+  )
+
+  const groupedShareInteractions = useMemo(
+    () =>
+      groupBySection(
+        loadedInteractions.filter((g) => g.type === FlowType.CredentialShare),
+      ),
     [loadedInteractions],
   )
 
@@ -41,9 +63,10 @@ const useHistory = (step: number = 4) => {
       .interactionTokens({})
       .then((tokens) =>
         tokens
-          .map(({ nonce, issued }) => ({
+          .map(({ nonce, issued, interactionType }) => ({
             id: nonce,
             section: getDateSection(new Date(issued)),
+            type: interactionTypeToFlowType[interactionType],
           }))
           .reverse(),
       )
@@ -69,6 +92,8 @@ const useHistory = (step: number = 4) => {
     loadSections,
     loadedInteractions,
     groupedInteractions,
+    groupedShareInteractions,
+    groupedReceiveInteractions,
   }
 }
 
