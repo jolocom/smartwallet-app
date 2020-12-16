@@ -11,10 +11,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { strings } from '~/translations/strings'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 
-import {
-  useResetKeychainValues,
-  useGetStoredAuthValues,
-} from '~/hooks/deviceAuth'
+import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { useDelay } from '~/hooks/generic'
@@ -33,39 +30,44 @@ const ChangePin: React.FC<PropsI> = ({
   const [pin, setPin] = useState('')
   const [newPin, setNewPin] = useState('')
   const [hasError, setHasError] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const [isCreateNew, setIsCreateNew] = useState(false)
 
   const { keychainPin, isLoadingStorage } = useGetStoredAuthValues()
 
   const dispatch = useDispatch()
-  const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
   const handlePinVerification = async () => {
     if (pin === keychainPin) {
+      setIsSuccess(true)
       await useDelay(() => setIsCreateNew(true), 1000)
     } else {
       setHasError(true)
     }
+    setIsSuccess(false)
   }
 
   const handleSetNewPin = async () => {
-    resetServiceValuesInKeychain()
-    await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
-      service: PIN_SERVICE,
-      storage: Keychain.STORAGE_TYPE.AES,
-    })
-    dispatch(
-      setLoader({
-        type: LoaderTypes.success,
-        msg: strings.PASSWORD_SUCCESSFULLY_CHANGED,
-      }),
-    )
-    await useDelay(() => dispatch(dismissLoader()))
-    if (onSuccessRedirectToScreen) {
-      const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
-      redirectToScreen()
-    } else {
-      navigation.goBack()
+    try {
+      await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
+        service: PIN_SERVICE,
+        storage: Keychain.STORAGE_TYPE.AES,
+      })
+      dispatch(
+        setLoader({
+          type: LoaderTypes.success,
+          msg: strings.PASSWORD_SUCCESSFULLY_CHANGED,
+        }),
+      )
+      await useDelay(() => dispatch(dismissLoader()))
+      if (onSuccessRedirectToScreen) {
+        const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
+        redirectToScreen()
+      } else {
+        navigation.goBack()
+      }
+    } catch (e) {
+      console.warn('Error occured setting new pin', { e })
     }
   }
 
@@ -100,6 +102,7 @@ const ChangePin: React.FC<PropsI> = ({
           errorStateUpdaterFn={setHasError}
           onSubmit={handlePinVerification}
           hasError={hasError}
+          isSuccess={isSuccess}
         />
       )}
     </ScreenContainer>

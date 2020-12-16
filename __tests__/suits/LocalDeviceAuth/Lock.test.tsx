@@ -47,7 +47,7 @@ jest.mock('../../../src/hooks/biometry', () => ({
     }),
     getEnrolledBiometry: jest.fn().mockImplementationOnce(() => {
       return { type: 'FaceID' }
-    })
+    }),
   }),
 }))
 
@@ -61,7 +61,7 @@ describe('Lock screen', () => {
       <Lock />,
     )
 
-    await waitFor(() => getByText(strings.ENTER_YOUR_PIN))
+    await waitFor(() => getByText(strings.ENTER_YOUR_PASSCODE))
 
     expect(getGenericPassword).toHaveBeenCalledTimes(1)
 

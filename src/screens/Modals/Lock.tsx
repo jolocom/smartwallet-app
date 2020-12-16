@@ -26,12 +26,12 @@ import { useBiometry } from '~/hooks/biometry'
 
 const Lock = () => {
   const [pin, setPin] = useState('')
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(false)
 
   const {
     keychainPin,
     isBiometrySelected,
-    isLoadingStorage
+    isLoadingStorage,
   } = useGetStoredAuthValues()
 
   const { keyboardHeight } = useKeyboard()
@@ -55,17 +55,17 @@ const Lock = () => {
   /* this will only be invoked if we stored biometry */
   const handleBiometryAuthentication = async () => {
     try {
-        /* in case user disabled biometrics we don't want to run authenticate */
-        const { available, biometryType } = await getEnrolledBiometry();
-        
-        if(available) {
-          const {success} = await authenticate(biometryType)
-          if(success) {
-            unlockApp()
-          } else {
-            pinInputRef.current?.focus()
-          }
+      /* in case user disabled biometrics we don't want to run authenticate */
+      const { available, biometryType } = await getEnrolledBiometry()
+
+      if (available) {
+        const { success } = await authenticate(biometryType)
+        if (success) {
+          unlockApp()
+        } else {
+          pinInputRef.current?.focus()
         }
+      }
     } catch (err) {
       console.log('Error in authenticating with biometry on Lock', { err })
     }
@@ -95,6 +95,11 @@ const Lock = () => {
       unlockApp()
     } else {
       setHasError(true)
+      setTimeout(() => {
+        setHasError(false)
+        setPin('')
+        pinInputRef.current?.focus()
+      }, 1000)
     }
   }
 
@@ -111,33 +116,32 @@ const Lock = () => {
         weight={JoloTextWeight.regular}
         color={Colors.white90}
       >
-        {strings.ENTER_YOUR_PIN}
+        {strings.ENTER_YOUR_PASSCODE}
       </JoloText>
       {isLoadingStorage ? (
         <ActivityIndicator />
       ) : (
         <>
           <View style={styles.inputContainer}>
-        <PasscodeInput
-          value={pin}
-          stateUpdaterFn={setPin}
-          onSubmit={handlePINSubmit}
-          hasError={hasError}
-          errorStateUpdaterFn={setHasError}
-          ref={pinInputRef}
-        />
-      </View>
-      <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
-        <Btn
-          type={BtnTypes.secondary}
-          onPress={redirectToPinRecoveryInstruction}
-        >
-          {strings.FORGOT_YOUR_PIN}
-        </Btn>
-      </AbsoluteBottom>
+            <PasscodeInput
+              value={pin}
+              stateUpdaterFn={setPin}
+              onSubmit={handlePINSubmit}
+              hasError={hasError}
+              errorStateUpdaterFn={setHasError}
+              ref={pinInputRef}
+            />
+          </View>
+          <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
+            <Btn
+              type={BtnTypes.secondary}
+              onPress={redirectToPinRecoveryInstruction}
+            >
+              {strings.FORGOT_YOUR_PIN}
+            </Btn>
+          </AbsoluteBottom>
         </>
       )}
-      
     </ScreenContainer>
   )
 }

@@ -30,6 +30,7 @@ interface PasscodeInputI {
   onSubmit: () => void
   errorStateUpdaterFn?: Dispatch<SetStateAction<boolean>>
   hasError?: boolean
+  isSuccess?: boolean
 }
 
 type AddPasscodeFnT = (prevState: string, passcode?: string) => string
@@ -38,7 +39,14 @@ type RemovePasscodeFnT = (prevState: string) => string
 /* Forwarding `ref` here to be able to control input outside of this component */
 const PasscodeInput = React.forwardRef<TextInput, PasscodeInputI>(
   (
-    { value, stateUpdaterFn, errorStateUpdaterFn, onSubmit, hasError = false },
+    {
+      value,
+      stateUpdaterFn,
+      errorStateUpdaterFn,
+      onSubmit,
+      hasError = false,
+      isSuccess,
+    },
     ref,
   ) => {
     const [selectedIndex, setSelectedIndex] = useState(-1)
@@ -189,6 +197,7 @@ const PasscodeInput = React.forwardRef<TextInput, PasscodeInputI>(
                     styles.display,
                     isSelected && styles.active,
                     hasError && styles.error,
+                    isSuccess && styles.success,
                   ]}
                   key={index}
                 >
@@ -241,6 +250,9 @@ const styles = StyleSheet.create({
   },
   error: {
     borderColor: Colors.error,
+  },
+  success: {
+    borderColor: Colors.success,
   },
   text: {
     fontSize: 43,
