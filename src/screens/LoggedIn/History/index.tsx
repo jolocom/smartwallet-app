@@ -1,37 +1,45 @@
 import React from 'react'
+import { View, SectionList } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import HistoryTabs from '~/components/Tabs/HistoryTabs'
 import useHistory from '~/hooks/history'
-import { FlatList, View } from 'react-native'
 import { HistoryFieldPlaceholder } from './HistoryField'
 import HistoryInteraction from './HistoryInteraction'
+import JoloText from '~/components/JoloText'
 
 const History: React.FC = () => {
-  const { loadInteraction, loadedIds, loadPageIds } = useHistory()
-
+  const {
+    getInteractionDetails,
+    loadSections,
+    groupedInteractions,
+  } = useHistory()
+  console.log({ groupedInteractions })
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <HistoryTabs>
-        {!loadedIds.length ? (
+        {!groupedInteractions.length ? (
           <View style={{ marginTop: 32 }}>
             {new Array([1, 2, 3, 4, 5]).map(() => (
               <HistoryFieldPlaceholder />
             ))}
           </View>
         ) : (
-          <FlatList
-            data={loadedIds}
+          <SectionList
+            sections={groupedInteractions}
             showsVerticalScrollIndicator={false}
             overScrollMode={'never'}
             onEndReachedThreshold={0.5}
-            onEndReached={() => loadPageIds()}
+            onEndReached={() => loadSections()}
             contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
+            renderSectionHeader={({ section }) => (
+              <JoloText>{section.section}</JoloText>
+            )}
             renderItem={({ item, index }) => (
               <HistoryInteraction
                 key={index}
                 id={item}
-                loadInteraction={loadInteraction}
+                getInteractionDetails={getInteractionDetails}
               />
             )}
           />

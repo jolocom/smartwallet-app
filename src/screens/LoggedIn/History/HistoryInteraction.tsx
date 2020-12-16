@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { LayoutAnimation } from 'react-native'
 
-import { IHistoryInteraction } from '~/hooks/history'
+import { IInteractionDetails } from '~/hooks/history/types'
 import HistoryField, { HistoryFieldPlaceholder } from './HistoryField'
 
 const HistoryInteraction: React.FC<{
-  loadInteraction: (nonce: string) => Promise<IHistoryInteraction>
+  getInteractionDetails: (nonce: string) => Promise<IInteractionDetails>
   id: string
-}> = React.memo(({ loadInteraction, id }) => {
+}> = React.memo(({ getInteractionDetails, id }) => {
   const [
     interactionData,
     setInteractionData,
-  ] = useState<IHistoryInteraction | null>(null)
+  ] = useState<IInteractionDetails | null>(null)
 
   useEffect(() => {
-    loadInteraction(id).then((interaction) => {
+    getInteractionDetails(id).then((interaction) => {
       LayoutAnimation.configureNext({
         ...LayoutAnimation.Presets.easeInEaseOut,
         duration: 500,
