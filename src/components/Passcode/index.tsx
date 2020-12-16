@@ -4,12 +4,13 @@ import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 
-interface IPasscodeProps {
+export interface IPasscodeProps {
   onSubmit: (passcode: string) => Promise<void>
 }
 
 export interface IPasscodeHeaderProps {
   title: string
+  errorTitle: string
 }
 
 interface IPasscodeComposition {
@@ -43,19 +44,6 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
 
-  const handleSubmit = async () => {
-    try {
-      await onSubmit(pin)
-      setPinSuccess(true)
-      setTimeout(() => {
-        setPin('')
-        setPinSuccess(false)
-      }, 1000)
-    } catch (e) {
-      setPinError(true)
-    }
-  }
-
   // this will remove the error after 1000 ms
   useEffect(() => {
     if (pinError) {
@@ -67,12 +55,35 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     }
   }, [pinError])
 
+  const handleSubmit = async () => {
+    try {
+      await onSubmit(pin)
+      setPinSuccess(true)
+      setTimeout(() => {
+        setPin('')
+        setPinSuccess(false)
+      }, 500)
+    } catch (e) {
+      setPinError(true)
+    }
+  }
+
   // submit when full pin is provided
   useEffect(() => {
     if (pin.length === 4) {
       handleSubmit()
     }
   }, [pin])
+
+  // this will remove the error after 1000 ms
+  useEffect(() => {
+    if (pinError) {
+      setTimeout(() => {
+        setPinError(false)
+        setPin('')
+      }, 1000)
+    }
+  }, [pinError])
 
   const contextValue = useMemo(
     () => ({

@@ -19,11 +19,9 @@ const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65
 const DIGIT_MARGIN_RIGHT = 7
 
-const PasscodeInput = () => {
+const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
-
-  const { pinError, pinSuccess, pin, setPin } = usePasscode()
-
+  const { pin, setPin, pinError, pinSuccess } = usePasscode()
   const digits = pin.split('')
 
   const inputRef = useRef<TextInput>(null)
@@ -96,7 +94,6 @@ const PasscodeInput = () => {
       <View style={styles.inputContainer}>
         <TextInput
           value=""
-          // onFocus={handleFocus}
           ref={inputRef}
           onKeyPress={handleRemove}
           onChangeText={handlePinChange}
@@ -106,7 +103,6 @@ const PasscodeInput = () => {
             styles.input,
             {
               left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
-              // opacity: hideInput ? 0 : 1,
             },
           ]}
           keyboardType="numeric"
