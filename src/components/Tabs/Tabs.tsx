@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, ReactNode } from 'react'
 import { useCustomContext } from '~/hooks/context'
 import Panel from './Panel'
 import Subtab from './Subtab'
@@ -20,10 +20,17 @@ export interface ITab {
   tab: ITabProps
 }
 
+//TODO: fix type to accept children which are not functions
+type TFunctionalChildren<T> = React.FC<{
+  children?: (
+    _: T,
+  ) => JSX.Element | JSX.Element[] | React.ReactNode | React.ReactNode[]
+}>
+
 interface ITabsComposition {
   Tab: React.FC<ITab>
   Subtab: React.FC<ITab>
-  Panel: React.FC
+  Panel: TFunctionalChildren<Pick<ITabsContext, 'activeTab' | 'activeSubtab'>>
 }
 
 const TabsContext = React.createContext<ITabsContext | undefined>(undefined)

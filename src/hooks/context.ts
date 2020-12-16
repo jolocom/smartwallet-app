@@ -1,10 +1,10 @@
-import { useContext } from "react"
+import { useContext } from 'react'
 
-export const useCustomContext = <T extends any>(context: React.Context<T>) => {
+export const useCustomContext = <T>(context: React.Context<T | undefined>) => {
   return () => {
     const customContext = useContext(context)
-    if (!customContext)
-      throw new Error(`Cannot be used outside of ${context.displayName}`)
-    return customContext
+    if (customContext) return customContext
+
+    throw new Error(`Cannot be used outside of ${context.displayName}`)
   }
 }
