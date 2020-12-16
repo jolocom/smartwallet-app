@@ -14,6 +14,7 @@ import { FlowType } from '@jolocom/sdk'
 const useHistory = (step: number = 4) => {
   const agent = useAgent()
 
+  const [isLoading, setLoading] = useState(true)
   const [interactions, setInteractions] = useState<IInteractionWithSection[]>(
     [],
   )
@@ -47,6 +48,7 @@ const useHistory = (step: number = 4) => {
     getInteractions().then((sections) => {
       setInteractions(sections)
       loadSections(sections)
+      setLoading(false)
     })
   }, [])
 
@@ -94,6 +96,7 @@ const useHistory = (step: number = 4) => {
     groupedInteractions,
     groupedShareInteractions,
     groupedReceiveInteractions,
+    isLoading,
   }
 }
 
