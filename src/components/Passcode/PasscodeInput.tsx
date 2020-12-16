@@ -33,12 +33,16 @@ const PasscodeInput: React.FC = () => {
     if (appState.match(/active/) && nextAppState === 'inactive') {
       // this is when the alert to use Biometry appears
       inputRef.current?.blur()
-    } else if (
-      ((Platform.OS === 'ios' && appState.match(/inactive/)) ||
-        (Platform.OS === 'android' && appState.match(/background/))) &&
-      nextAppState === 'active'
-    ) {
-      // this is when the alert to use Biometry disappears
+    }
+    // else if (
+    //   ((Platform.OS === 'ios' && appState.match(/inactive/)) ||
+    //     (Platform.OS === 'android' && appState.match(/background/))) &&
+    //   nextAppState === 'active'
+    // ) {
+    //   // this is when the alert to use Biometry disappears
+    //   inputRef.current?.focus()
+    // }
+    else if (appState === 'background' && nextAppState === 'active') {
       inputRef.current?.focus()
     }
     appState = nextAppState

@@ -14,11 +14,7 @@ import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 
 const Lock = () => {
-  const {
-    keychainPin,
-    isBiometrySelected,
-    isLoadingStorage,
-  } = useGetStoredAuthValues()
+  const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
 
   const dispatch = useDispatch()
   const { authenticate, getEnrolledBiometry } = useBiometry()
@@ -30,7 +26,7 @@ const Lock = () => {
     navigation.goBack()
   }, [])
 
-  /* START -> Biometry authentication if applicatble */
+  /* START -> Biometry authentication */
   /* this will only be invoked if we stored biometry */
   const handleBiometryAuthentication = async () => {
     try {
@@ -42,9 +38,6 @@ const Lock = () => {
         if (success) {
           unlockApp()
         }
-        // else {
-        //   pinInputRef.current?.focus()
-        // }
       }
     } catch (err) {
       console.log('Error in authenticating with biometry on Lock', { err })
@@ -59,7 +52,7 @@ const Lock = () => {
     }
     promptBiometry()
   }, [isBiometrySelected])
-  /* START -> Biometry authentication if applicatble */
+  /* END -> Biometry authentication */
 
   /* disable hardwareback button default functionality */
   useBackHandler(() => true)
