@@ -7,7 +7,7 @@ import HistoryField, { HistoryFieldPlaceholder } from './HistoryField'
 const HistoryInteraction: React.FC<{
   getInteractionDetails: (nonce: string) => Promise<IInteractionDetails>
   id: string
-}> = React.memo(({ getInteractionDetails, id }) => {
+}> = ({ getInteractionDetails, id }) => {
   const [
     interactionData,
     setInteractionData,
@@ -33,6 +33,6 @@ const HistoryInteraction: React.FC<{
   ) : (
     <HistoryFieldPlaceholder />
   )
-})
+}
 
 export default HistoryInteraction
