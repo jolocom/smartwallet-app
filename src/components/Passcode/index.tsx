@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useCustomContext } from '~/hooks/context'
 import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
@@ -18,7 +18,19 @@ interface IPasscodeComposition {
   Forgot: React.FC
 }
 
-const PasscodeContext = React.createContext(undefined)
+interface IPasscodeContext {
+  pin: string
+  setPin: React.Dispatch<SetStateAction<string>>
+  pinError: boolean
+  pinSuccess: boolean
+}
+
+const PasscodeContext = React.createContext<IPasscodeContext>({
+  pin: '',
+  setPin: () => {},
+  pinError: false,
+  pinSuccess: false,
+})
 PasscodeContext.displayName = 'PasscodeContext'
 
 export const usePasscode = useCustomContext(PasscodeContext)
@@ -33,8 +45,8 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   const handleSubmit = async () => {
     try {
-      setPinSuccess(true)
       await onSubmit(pin)
+      setPinSuccess(true)
       setTimeout(() => {
         setPin('')
         setPinSuccess(false)

@@ -82,8 +82,17 @@ const PasscodeInput = () => {
     }
   }
 
+  const focusInput = () => {
+    // NOTE: Workaround for the case when the Keyboard is dismissed with Back-button, and it can't @focus() again
+    // https://github.com/facebook/react-native/issues/19366#issuecomment-400603928
+    inputRef.current?.blur()
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 100)
+  }
+
   return (
-    <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
+    <TouchableWithoutFeedback onPress={focusInput}>
       <View style={styles.inputContainer}>
         <TextInput
           value=""

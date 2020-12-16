@@ -4,10 +4,13 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { strings } from '~/translations'
 
 const PasscodeTest = () => {
-  const handleSubmit = async (pin: string) => {
-    setTimeout(() => {
-      console.log('Submitting pin', { pin })
-    }, 1000)
+  const handleSubmit = async (pin: string): Promise<any> => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res('success')
+        rej('ooops')
+      }, 100)
+    })
   }
 
   return (
