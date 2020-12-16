@@ -35,7 +35,10 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     try {
       setPinSuccess(true)
       await onSubmit(pin)
-      setPin('')
+      setTimeout(() => {
+        setPin('')
+        setPinSuccess(false)
+      }, 1000)
     } catch (e) {
       setPinError(true)
     }

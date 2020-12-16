@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   NativeSyntheticEvent,
@@ -26,6 +27,9 @@ const PasscodeInput = () => {
   const digits = pin.split('')
 
   const inputRef = useRef<TextInput>(null)
+
+  // if you go to forgot passcode instruction on go back focus the input
+  useFocusEffect(() => inputRef.current?.focus())
 
   useAppState((appState, nextAppState) => {
     if (appState.match(/active/) && nextAppState === 'inactive') {
@@ -79,8 +83,7 @@ const PasscodeInput = () => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => {}}>
-      {/* <TouchableWithoutFeedback onPress={focusInput}> */}
+    <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
       <View style={styles.inputContainer}>
         <TextInput
           value=""
