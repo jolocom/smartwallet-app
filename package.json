@@ -1,6 +1,6 @@
 {
   "name": "jolocomwallet",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "scripts": {
     "run:ios": "react-native run-ios",
     "run:android": "react-native run-android --appIdSuffix debug",
