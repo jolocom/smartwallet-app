@@ -28,7 +28,6 @@ const HistoryField: React.FC<{
           </JoloText>
 
           <JoloText
-            kind={JoloTextKind.subtitle}
             size={JoloTextSizes.mini}
             color={Colors.white}
             customStyles={{ alignSelf: 'center', marginRight: 16 }}
@@ -36,11 +35,7 @@ const HistoryField: React.FC<{
             {time}
           </JoloText>
         </View>
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.mini}
-          color={Colors.white40}
-        >
+        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
           {issuerName ?? 'Unknown'}
         </JoloText>
       </View>
