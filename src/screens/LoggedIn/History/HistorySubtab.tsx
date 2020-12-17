@@ -41,7 +41,7 @@ const HistorySubtab: React.FC<Props> = React.memo(
         viewabilityConfig={{
           itemVisiblePercentThreshold: 50,
         }}
-        onEndReached={() => loadSections()}
+        onEndReached={loadSections}
         contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
         renderSectionHeader={({ section }) => (
           <JoloText

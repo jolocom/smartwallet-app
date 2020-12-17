@@ -58,7 +58,7 @@ const useHistory = (step: number = 4) => {
     setLoadedInteractions((prev) => [...prev, ...pageInteractions])
   }, [page])
 
-  const getInteractions = async () =>
+  const getInteractions = () =>
     agent.storage.get
       .interactionTokens({})
       .then((tokens) =>
@@ -87,10 +87,8 @@ const useHistory = (step: number = 4) => {
   }
 
   return {
-    getInteractions,
     getInteractionDetails,
     setNextPage,
-    loadedInteractions,
     groupedInteractions,
     groupedShareInteractions,
     groupedReceiveInteractions,
