@@ -10,11 +10,13 @@ import {
   interactionTypeToFlowType,
 } from './utils'
 import { FlowType } from '@jolocom/sdk'
+import { useToasts } from '../toasts'
 
 const ITEMS_PER_PAGE = 4
 
 const useHistory = () => {
   const agent = useAgent()
+  const { scheduleErrorWarning } = useToasts()
 
   const [isLoading, setLoading] = useState(true)
   const [interactions, setInteractions] = useState<IInteractionWithSection[]>(
@@ -48,11 +50,13 @@ const useHistory = () => {
   )
 
   useEffect(() => {
-    getInteractions().then((sections) => {
-      setInteractions(sections)
-      setNextPage()
-      setLoading(false)
-    })
+    getInteractions()
+      .then((sections) => {
+        setInteractions(sections)
+        setNextPage()
+        setLoading(false)
+      })
+      .catch(scheduleErrorWarning)
   }, [])
 
   useEffect(() => {
