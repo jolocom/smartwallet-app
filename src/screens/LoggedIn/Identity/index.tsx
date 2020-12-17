@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import ToggleSwitch from '~/components/ToggleSwitch'
-import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
+import WelcomeSheet from './WelcomeSheet'
+import { getAttributes } from '~/modules/attributes/selectors'
+import { useSelector } from 'react-redux'
 
 const Identity = () => {
-  const [isWizardVisible, setWizardVisibility] = useState(true)
-  const toggleWizardVisibility = () => {
-    setWizardVisibility((prevState) => !prevState)
-  }
+  const attributes = useSelector(getAttributes)
+  const showWelcomeSheet = !Boolean(Object.keys(attributes).length)
+
   return (
-    <ScreenContainer>
-      <ToggleSwitch on={isWizardVisible} onToggle={toggleWizardVisibility} />
-      {isWizardVisible && <BusinessCardWizard />}
-      {/* {isWizardVisible && <SingleCredentialWizard />} */}
+    <ScreenContainer isFullscreen>
+      {showWelcomeSheet && <WelcomeSheet />}
     </ScreenContainer>
   )
 }

@@ -47,6 +47,7 @@ const TopSheet: React.FC<Props> = ({
       onLayout={handleLayout}
       style={[
         styles.container,
+        customStyles,
         { transform: [{ translateY: positionRef }], paddingTop: top },
       ]}
     >
@@ -64,8 +65,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: Colors.lightBlack,
     padding: 20,
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     zIndex: 1,
   },
 })

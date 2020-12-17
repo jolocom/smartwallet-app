@@ -287,6 +287,9 @@ const history = {
 }
 
 const identity = {
+  SINGLE_CREDENTIAL: 'Single Credential',
+  BUSINESS_CARD: 'Business Card',
+  IT_IS_TIME_TO_CREATE: 'It’s time to create your first Digital Identity',
   INTRODUCE_YOURSELF: 'Please, introduce yourself',
   BEST_WAY_TO_CONTACT_YOU: 'Best way to contact you?',
   WHAT_COMPANY_DO_YOU_REPRESENT: 'What company do you represent?',

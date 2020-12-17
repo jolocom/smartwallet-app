@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
@@ -35,18 +35,23 @@ const WIZARD_CONFIG = {
   0: {
     label: strings.INTRODUCE_YOURSELF,
     form: nameFormConfig,
+    submitLabel: strings.NEXT,
   },
   1: {
     label: strings.BEST_WAY_TO_CONTACT_YOU,
     form: emailTelephoneFormConfig,
+    submitLabel: strings.NEXT,
   },
   2: {
     label: strings.WHAT_COMPANY_DO_YOU_REPRESENT,
     form: companyFormConfig,
+    submitLabel: strings.DONE,
   },
 }
 
-const SingleCredentialWizard = () => {
+const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
+  onFormSubmit,
+}) => {
   const [fields, setFields] = useState<IFormState[]>([])
 
   const createAttribute = useCreateAttributes()
@@ -55,11 +60,13 @@ const SingleCredentialWizard = () => {
     setFields((prevState) => [...prevState, ...formFields])
   }
 
+  const createNewAttribute = useCallback(async () => {
+    const mappedFields = mapFormFields(fields)
+    await createAttribute(AttributeTypes.businessCard, mappedFields)
+    onFormSubmit()
+  }, [JSON.stringify(fields)])
+
   useEffect(() => {
-    const createNewAttribute = async () => {
-      const mappedFields = mapFormFields(fields)
-      await createAttribute(AttributeTypes.businessCard, mappedFields)
-    }
     if (
       fields.length ===
       attributeConfig[AttributeTypes.businessCard].fields.length
@@ -78,4 +85,4 @@ const SingleCredentialWizard = () => {
   )
 }
 
-export default SingleCredentialWizard
+export default BusinessCardWizard

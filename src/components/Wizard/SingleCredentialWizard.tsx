@@ -11,19 +11,23 @@ const WIZARD_CONFIG = {
   0: {
     label: strings.WHAT_IS_YOUR_NAME,
     form: attributeConfig[AttributeTypes.name],
+    submitLabel: strings.CREATE,
   },
 }
 
-const SingleCredentialWizard = () => {
+const SingleCredentialWizard: React.FC<{ onFormSubmit: () => void }> = ({
+  onFormSubmit,
+}) => {
   const createAttribute = useCreateAttributes()
 
   const handleSubmit = async (fields: IFormState[]) => {
     const mappedFields = mapFormFields(fields)
     await createAttribute(AttributeTypes.name, mappedFields)
+    onFormSubmit()
   }
 
   return (
-    <Wizard config={WIZARD_CONFIG} submitLabel={strings.CREATE}>
+    <Wizard config={WIZARD_CONFIG}>
       <Wizard.Header />
       <Wizard.Form onSubmit={handleSubmit} step={0} />
     </Wizard>

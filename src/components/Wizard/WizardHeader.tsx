@@ -11,6 +11,7 @@ const WizardHeader: React.FC = () => {
       kind={JoloTextKind.title}
       color={Colors.white90}
       weight={JoloTextWeight.regular}
+      customStyles={{ marginTop: 20 }}
     >
       {btnLabel}
     </JoloText>
