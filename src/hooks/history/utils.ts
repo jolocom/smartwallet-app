@@ -1,9 +1,9 @@
 import moment from 'moment'
-import { IInteractionWithSection, IHistorySection } from './types'
+import { IPreLoadedInteraction, IHistorySection } from './types'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { FlowType } from '@jolocom/sdk'
 
-export const filterUniqueById = (array: IInteractionWithSection[]) =>
+export const filterUniqueById = (array: IPreLoadedInteraction[]) =>
   Array.from(new Set(array.map((i) => i.id))).map((i) => {
     const { id, ...rest } = array.find((id) => i === id.id)!
     return {
@@ -20,7 +20,9 @@ export const getDateSection = (date: Date) =>
     sameElse: 'DD/MM/YYYY',
   })
 
-export const groupBySection = (array: IInteractionWithSection[]) => {
+export const groupBySection = (
+  array: IPreLoadedInteraction[],
+): IHistorySection[] => {
   const groupedObj = array.reduce<Record<string, string[]>>((acc, v) => {
     acc[v.section] = acc[v.section] ? [...acc[v.section], v.id] : [v.id]
     return acc

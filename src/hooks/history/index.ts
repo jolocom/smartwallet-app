@@ -1,19 +1,15 @@
 import { useMemo } from 'react'
 import { useState, useEffect } from 'react'
+import { FlowType } from '@jolocom/sdk'
 
 import { useAgent } from '~/hooks/sdk'
-import {
-  IInteractionWithSection,
-  IInteractionDetails,
-  IHistorySection,
-} from './types'
+import { IPreLoadedInteraction, IInteractionDetails } from './types'
 import {
   groupBySection,
   getDateSection,
   filterUniqueById,
   interactionTypeToFlowType,
 } from './utils'
-import { FlowType } from '@jolocom/sdk'
 import { useToasts } from '../toasts'
 
 const ITEMS_PER_PAGE = 4
@@ -23,19 +19,17 @@ const useHistory = () => {
   const { scheduleErrorWarning } = useToasts()
 
   const [isLoading, setLoading] = useState(true)
-  const [interactions, setInteractions] = useState<IInteractionWithSection[]>(
-    [],
-  )
+  const [allInteractions, setAllInteractions] = useState<
+    IPreLoadedInteraction[]
+  >([])
   const [loadedInteractions, setLoadedInteractions] = useState<
-    IInteractionWithSection[]
+    IPreLoadedInteraction[]
   >([])
   const [page, setPage] = useState(0)
   const setNextPage = () => setPage((prev) => ++prev)
 
   const getGroupedInteractions = (
-    appliedFn: (
-      interact: IInteractionWithSection[],
-    ) => IInteractionWithSection[],
+    appliedFn: (interact: IPreLoadedInteraction[]) => IPreLoadedInteraction[],
   ) =>
     useMemo(() => groupBySection(appliedFn(loadedInteractions)), [
       JSON.stringify(loadedInteractions),
@@ -51,8 +45,8 @@ const useHistory = () => {
 
   useEffect(() => {
     getInteractions()
-      .then((sections) => {
-        setInteractions(sections)
+      .then((all) => {
+        setAllInteractions(all)
         setNextPage()
         setLoading(false)
       })
@@ -60,7 +54,7 @@ const useHistory = () => {
   }, [])
 
   useEffect(() => {
-    const pageInteractions = interactions.slice(
+    const pageInteractions = allInteractions.slice(
       ITEMS_PER_PAGE * page,
       ITEMS_PER_PAGE * page + ITEMS_PER_PAGE,
     )
