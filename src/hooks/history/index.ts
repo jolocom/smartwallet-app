@@ -11,7 +11,9 @@ import {
 } from './utils'
 import { FlowType } from '@jolocom/sdk'
 
-const useHistory = (step: number = 4) => {
+const ITEMS_PER_PAGE = 4
+
+const useHistory = () => {
   const agent = useAgent()
 
   const [isLoading, setLoading] = useState(true)
@@ -54,7 +56,10 @@ const useHistory = (step: number = 4) => {
   }, [])
 
   useEffect(() => {
-    const pageInteractions = interactions.slice(step * page, step * page + step)
+    const pageInteractions = interactions.slice(
+      ITEMS_PER_PAGE * page,
+      ITEMS_PER_PAGE * page + ITEMS_PER_PAGE,
+    )
     setLoadedInteractions((prev) => [...prev, ...pageInteractions])
   }, [page])
 
