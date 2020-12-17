@@ -22,7 +22,7 @@ const SUBTABS = [
 const History: React.FC = () => {
   const {
     getInteractionDetails,
-    loadSections,
+    setNextPage,
     groupedInteractions,
     groupedReceiveInteractions,
     groupedShareInteractions,
@@ -56,7 +56,7 @@ const History: React.FC = () => {
               >
                 <HistorySubtab
                   sections={groupedInteractions}
-                  loadSections={loadSections}
+                  loadSections={setNextPage}
                   getInteractionDetails={getInteractionDetails}
                   onSectionChange={setActiveSection}
                 />
@@ -68,7 +68,7 @@ const History: React.FC = () => {
               >
                 <HistorySubtab
                   sections={groupedShareInteractions}
-                  loadSections={loadSections}
+                  loadSections={setNextPage}
                   getInteractionDetails={getInteractionDetails}
                   onSectionChange={setActiveSection}
                 />
@@ -80,7 +80,7 @@ const History: React.FC = () => {
               >
                 <HistorySubtab
                   sections={groupedReceiveInteractions}
-                  loadSections={loadSections}
+                  loadSections={setNextPage}
                   getInteractionDetails={getInteractionDetails}
                   onSectionChange={setActiveSection}
                 />

@@ -9,7 +9,7 @@ import { Colors } from '~/utils/colors'
 
 interface Props {
   sections: IHistorySection[]
-  loadSections: () => Promise<void>
+  loadSections: () => void
   getInteractionDetails: (id: string) => Promise<IInteractionDetails>
   onSectionChange?: (section: string) => void
 }

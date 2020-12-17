@@ -22,6 +22,7 @@ const useHistory = (step: number = 4) => {
     IInteractionWithSection[]
   >([])
   const [page, setPage] = useState(0)
+  const setNextPage = () => setPage((prev) => ++prev)
 
   const groupedInteractions = useMemo(
     () => groupBySection(loadedInteractions),
@@ -47,18 +48,15 @@ const useHistory = (step: number = 4) => {
   useEffect(() => {
     getInteractions().then((sections) => {
       setInteractions(sections)
-      loadSections(sections)
+      setNextPage()
       setLoading(false)
     })
   }, [])
 
-  const loadSections = async (
-    sec: IInteractionWithSection[] = interactions,
-  ) => {
-    const pageInteractions = sec.slice(step * page, step * page + step)
-    setPage((prev) => ++prev)
+  useEffect(() => {
+    const pageInteractions = interactions.slice(step * page, step * page + step)
     setLoadedInteractions((prev) => [...prev, ...pageInteractions])
-  }
+  }, [page])
 
   const getInteractions = async () =>
     agent.storage.get
@@ -91,7 +89,7 @@ const useHistory = (step: number = 4) => {
   return {
     getInteractions,
     getInteractionDetails,
-    loadSections,
+    setNextPage,
     loadedInteractions,
     groupedInteractions,
     groupedShareInteractions,
