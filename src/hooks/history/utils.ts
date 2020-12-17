@@ -5,7 +5,7 @@ import { FlowType } from '@jolocom/sdk'
 
 export const filterUniqueById = (array: IPreLoadedInteraction[]) =>
   Array.from(new Set(array.map((i) => i.id))).map((i) => {
-    const { id, ...rest } = array.find((id) => i === id.id)!
+    const { id, ...rest } = array.find((interact) => i === interact.id)!
     return {
       id: i,
       ...rest,
