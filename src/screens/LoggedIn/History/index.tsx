@@ -20,7 +20,7 @@ const History: React.FC = () => {
   const {
     getInteractionDetails,
     setNextPage,
-    groupedInteractions,
+    groupedAllInteractions,
     groupedReceiveInteractions,
     groupedShareInteractions,
     isLoading,
@@ -52,7 +52,7 @@ const History: React.FC = () => {
                 }}
               >
                 <HistorySubtab
-                  sections={groupedInteractions}
+                  sections={groupedAllInteractions}
                   loadSections={setNextPage}
                   getInteractionDetails={getInteractionDetails}
                   onSectionChange={setActiveSection}

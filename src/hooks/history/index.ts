@@ -2,7 +2,11 @@ import { useMemo } from 'react'
 import { useState, useEffect } from 'react'
 
 import { useAgent } from '~/hooks/sdk'
-import { IInteractionWithSection, IInteractionDetails } from './types'
+import {
+  IInteractionWithSection,
+  IInteractionDetails,
+  IHistorySection,
+} from './types'
 import {
   groupBySection,
   getDateSection,
@@ -28,25 +32,21 @@ const useHistory = () => {
   const [page, setPage] = useState(0)
   const setNextPage = () => setPage((prev) => ++prev)
 
-  const groupedInteractions = useMemo(
-    () => groupBySection(loadedInteractions),
-    [loadedInteractions],
-  )
+  const getGroupedInteractions = (
+    appliedFn: (
+      interact: IInteractionWithSection[],
+    ) => IInteractionWithSection[],
+  ) =>
+    useMemo(() => groupBySection(appliedFn(loadedInteractions)), [
+      JSON.stringify(loadedInteractions),
+    ])
 
-  const groupedReceiveInteractions = useMemo(
-    () =>
-      groupBySection(
-        loadedInteractions.filter((g) => g.type === FlowType.CredentialOffer),
-      ),
-    [loadedInteractions],
+  const groupedAllInteractions = getGroupedInteractions((n) => n)
+  const groupedReceiveInteractions = getGroupedInteractions((n) =>
+    n.filter((g) => g.type === FlowType.CredentialOffer),
   )
-
-  const groupedShareInteractions = useMemo(
-    () =>
-      groupBySection(
-        loadedInteractions.filter((g) => g.type === FlowType.CredentialShare),
-      ),
-    [loadedInteractions],
+  const groupedShareInteractions = getGroupedInteractions((n) =>
+    n.filter((g) => g.type === FlowType.CredentialShare),
   )
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const useHistory = () => {
   return {
     getInteractionDetails,
     setNextPage,
-    groupedInteractions,
+    groupedAllInteractions,
     groupedShareInteractions,
     groupedReceiveInteractions,
     isLoading,
