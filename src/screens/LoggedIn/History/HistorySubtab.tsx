@@ -24,7 +24,7 @@ const HistorySubtab: React.FC<Props> = React.memo(
 
     const handleSectionChange = (items: ViewToken[]) => {
       const vToken = items[0]
-      if (vToken && activeSection !== vToken.section) {
+      if (vToken && activeSection !== vToken.section.title) {
         setActiveSection(vToken.section.title)
       }
     }
