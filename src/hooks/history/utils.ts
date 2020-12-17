@@ -26,9 +26,9 @@ export const groupBySection = (array: IInteractionWithSection[]) => {
     return acc
   }, {})
 
-  return Object.keys(groupedObj).map((section) => ({
-    section,
-    data: groupedObj[section],
+  return Object.keys(groupedObj).map((title) => ({
+    title,
+    data: groupedObj[title],
   }))
 }
 

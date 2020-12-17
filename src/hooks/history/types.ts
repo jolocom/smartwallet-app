@@ -7,7 +7,7 @@ export interface IInteractionDetails {
 }
 
 export interface IHistorySection {
-  section: string
+  title: string
   data: string[]
 }
 

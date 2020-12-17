@@ -17,7 +17,6 @@ interface Props {
 const HistorySubtab: React.FC<Props> = React.memo(
   ({ sections, loadSections, getInteractionDetails, onSectionChange }) => {
     const [activeSection, setActiveSection] = useState('')
-    const isEmpty = !sections.length
 
     useEffect(() => {
       onSectionChange && onSectionChange(activeSection)
@@ -26,14 +25,11 @@ const HistorySubtab: React.FC<Props> = React.memo(
     const handleSectionChange = (items: ViewToken[]) => {
       const vToken = items[0]
       if (vToken && activeSection !== vToken.section) {
-        setActiveSection(vToken.section.section)
+        setActiveSection(vToken.section.title)
       }
     }
 
-    if (!isEmpty) {
-      console.log(sections)
-    }
-    return isEmpty ? null : (
+    return (
       <SectionList
         sections={sections}
         showsVerticalScrollIndicator={false}
@@ -58,7 +54,7 @@ const HistorySubtab: React.FC<Props> = React.memo(
               marginBottom: 20,
             }}
           >
-            {section.section}
+            {section.title}
           </JoloText>
         )}
         renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
