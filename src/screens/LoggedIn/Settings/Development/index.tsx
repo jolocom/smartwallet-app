@@ -5,7 +5,7 @@ import Section from '../components/Section'
 import Option from '../components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirect, useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
@@ -14,10 +14,11 @@ import PopupMenu from '~/components/PopupMenu'
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
-  const redirectToButtons = useRedirectTo(ScreenNames.ButtonsTest)
+  const redirect = useRedirect()
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToForms = useRedirectTo(ScreenNames.FormTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
+
   const popupRef = useRef<{ show: () => void }>(null)
 
   const handleToggle = (toggled: boolean) => {
@@ -35,8 +36,11 @@ const DevelopmentSection = () => {
           <ToggleSwitch onToggle={handleToggle} />
         </View>
       </Option>
-      <Option onPress={redirectToButtons}>
+      <Option onPress={() => redirect(ScreenNames.ButtonsTest)}>
         <Option.Title title="Buttons" />
+      </Option>
+      <Option onPress={() => redirect(ScreenNames.LoaderTest)}>
+        <Option.Title title="Loader" />
       </Option>
       <Option
         onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}

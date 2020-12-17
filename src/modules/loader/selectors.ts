@@ -1,5 +1,4 @@
 import { RootReducerI } from '~/types/reducer'
-import { LoaderStateI } from './types'
+import { LoaderState } from './types'
 
-export const getLoaderState = (state: RootReducerI): LoaderStateI =>
-  state.loader
+export const getLoaderState = (state: RootReducerI): LoaderState => state.loader

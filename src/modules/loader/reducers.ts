@@ -1,13 +1,13 @@
 import { strings } from '~/translations/strings'
 
-import { LoaderActions, LoaderStateI, LoaderTypes } from './types'
+import { LoaderActions, LoaderState, LoaderTypes } from './types'
 
 type Actions = {
   type: LoaderActions
   payload?: any
 }
 
-const initialState: LoaderStateI = {
+const initialState: LoaderState = {
   type: LoaderTypes.default,
   msg: strings.EMPTY,
   isVisible: false,

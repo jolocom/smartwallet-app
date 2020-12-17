@@ -74,7 +74,7 @@ const mobileNumberConfig: IAttributeConfig = {
       key: ClaimKeys.telephone,
       label: strings.NUMBER,
       keyboardOptions: {
-        keyboardType: 'number-pad',
+        keyboardType: 'phone-pad',
         autoCapitalize: 'none',
       },
     },

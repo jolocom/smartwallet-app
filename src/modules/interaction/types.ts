@@ -5,6 +5,7 @@ export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
   selectShareCredential = 'selectShareCredential',
+  updateOfferValidation = 'updateOfferValidation',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputType = 'setAttributeInputType',
 }
@@ -70,6 +71,7 @@ interface InteractionCommonI {
  */
 export interface NotActiveInteractionDetailsI {
   flowType: null
+  id: null
 }
 
 export interface ResolutionDetailsI extends InteractionCommonI {

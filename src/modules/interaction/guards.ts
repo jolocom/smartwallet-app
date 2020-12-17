@@ -49,6 +49,6 @@ export function isResolutionDetails(
 
 export function isNotActiveInteraction(
   details: InteractionDetails,
-): details is { flowType: null } {
+): details is { flowType: null; id: null } {
   return details.flowType === null
 }
