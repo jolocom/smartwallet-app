@@ -17,10 +17,7 @@ enum IdentityForms {
 }
 
 const WelcomeSheet: React.FC = () => {
-  const attributes = useSelector(getAttributes)
-  const [isTopSheetVisible, setTopSheetVisibility] = useState(
-    Boolean(Object.keys(attributes).length),
-  )
+  const [isTopSheetVisible, setTopSheetVisibility] = useState(true)
   const [activeForm, setActiveForm] = useState<IdentityForms | null>(null)
 
   const animateSheet = () =>
