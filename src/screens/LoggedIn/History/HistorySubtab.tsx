@@ -17,6 +17,7 @@ interface Props {
 const HistorySubtab: React.FC<Props> = React.memo(
   ({ sections, loadSections, getInteractionDetails, onSectionChange }) => {
     const [activeSection, setActiveSection] = useState('')
+    const isEmpty = !sections.length
 
     useEffect(() => {
       onSectionChange && onSectionChange(activeSection)
@@ -29,10 +30,14 @@ const HistorySubtab: React.FC<Props> = React.memo(
       }
     }
 
-    return (
+    if (!isEmpty) {
+      console.log(sections)
+    }
+    return isEmpty ? null : (
       <SectionList
         sections={sections}
         showsVerticalScrollIndicator={false}
+        keyExtractor={(item, i) => 'id:' + item + i}
         overScrollMode={'never'}
         onEndReachedThreshold={0.5}
         onViewableItemsChanged={({ viewableItems }) =>

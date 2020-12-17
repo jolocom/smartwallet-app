@@ -20,17 +20,17 @@ export const getDateSection = (date: Date) =>
     sameElse: 'DD/MM/YYYY',
   })
 
-export const groupBySection = (interactions: IInteractionWithSection[]) =>
-  interactions.reduce<IHistorySection[]>((acc, v) => {
-    const section = acc.find((s) => s.section === v.section) || {
-      section: v.section,
-      data: [],
-    }
-    const filteredAcc = acc.filter((s) => s.section !== v.section)
-    section.data.push(v.id)
-    filteredAcc.push(section)
-    return filteredAcc
-  }, [])
+export const groupBySection = (array: IInteractionWithSection[]) => {
+  const groupedObj = array.reduce<Record<string, string[]>>((acc, v) => {
+    acc[v.section] = acc[v.section] ? [...acc[v.section], v.id] : [v.id]
+    return acc
+  }, {})
+
+  return Object.keys(groupedObj).map((section) => ({
+    section,
+    data: groupedObj[section],
+  }))
+}
 
 export const interactionTypeToFlowType: { [x: string]: FlowType } = {
   [InteractionType.CredentialOfferRequest]: FlowType.CredentialOffer,
@@ -39,6 +39,6 @@ export const interactionTypeToFlowType: { [x: string]: FlowType } = {
   [InteractionType.CredentialRequest]: FlowType.CredentialShare,
   [InteractionType.CredentialResponse]: FlowType.CredentialShare,
   [InteractionType.Authentication]: FlowType.Authentication,
-  authorizationRequest: FlowType.Authorization,
-  authorizationResponse: FlowType.Authorization,
+  AuthorizationRequest: FlowType.Authorization,
+  AuthorizationResponse: FlowType.Authorization,
 }
