@@ -44,6 +44,7 @@ const TopSheet: React.FC<Props> = ({
 
   return (
     <Animated.View
+      testID="top-sheet"
       onLayout={handleLayout}
       style={[
         styles.container,
