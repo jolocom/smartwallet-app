@@ -1,8 +1,13 @@
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
+import { attributeConfig } from '~/config/claims'
 import { strings } from '~/translations'
-import { AttributeTypes } from '~/types/credentials'
+import {
+  AttributeTypes,
+  ClaimKeys,
+  IAttributeConfig,
+} from '~/types/credentials'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const mockCreateAttr = jest.fn()
@@ -12,6 +17,10 @@ jest.mock('../../../src/hooks/attributes.ts', () => ({
     return mockCreateAttr.mockResolvedValue(true)
   }),
 }))
+
+const findLabel = (config: IAttributeConfig, claimKey: ClaimKeys) => {
+  return config.fields.find((el) => el.key === claimKey)?.label
+}
 
 test('Can create a business card credential', () => {
   const { getByText, getAllByTestId } = renderWithSafeArea(
@@ -24,8 +33,18 @@ test('Can create a business card credential', () => {
   const inputs0 = getAllByTestId('core-input')
 
   expect(inputs0.length).toBe(2)
-  expect(inputs0[0].props.placeholder).toBe('Given name')
-  expect(inputs0[1].props.placeholder).toBe('Family name')
+  expect(inputs0[0].props.placeholder).toBe(
+    findLabel(
+      attributeConfig[AttributeTypes.businessCard],
+      ClaimKeys.givenName,
+    ),
+  )
+  expect(inputs0[1].props.placeholder).toBe(
+    findLabel(
+      attributeConfig[AttributeTypes.businessCard],
+      ClaimKeys.familyName,
+    ),
+  )
 
   fireEvent.changeText(inputs0[0], 'Alice')
   expect(inputs0[0].props.value).toBe('Alice')
@@ -40,8 +59,15 @@ test('Can create a business card credential', () => {
   const inputs1 = getAllByTestId('core-input')
 
   expect(inputs1.length).toBe(2)
-  expect(inputs1[0].props.placeholder).toBe('Email')
-  expect(inputs1[1].props.placeholder).toBe('Number')
+  expect(inputs1[0].props.placeholder).toBe(
+    findLabel(attributeConfig[AttributeTypes.businessCard], ClaimKeys.email),
+  )
+  expect(inputs1[1].props.placeholder).toBe(
+    findLabel(
+      attributeConfig[AttributeTypes.businessCard],
+      ClaimKeys.telephone,
+    ),
+  )
 
   fireEvent.changeText(inputs1[0], 'alice@example.com')
   expect(inputs1[0].props.value).toBe('alice@example.com')
@@ -56,7 +82,12 @@ test('Can create a business card credential', () => {
   const inputs2 = getAllByTestId('core-input')
 
   expect(inputs2.length).toBe(1)
-  expect(inputs2[0].props.placeholder).toBe('Company name')
+  expect(inputs2[0].props.placeholder).toBe(
+    findLabel(
+      attributeConfig[AttributeTypes.businessCard],
+      ClaimKeys.legalCompanyName,
+    ),
+  )
 
   fireEvent.changeText(inputs2[0], 'Jolocom')
   expect(inputs2[0].props.value).toBe('Jolocom')
