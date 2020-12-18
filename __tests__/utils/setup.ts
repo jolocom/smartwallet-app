@@ -46,3 +46,11 @@ jest.mock('react-native-jolocom', () => ({
 jest.mock('react-native-localize', () => ({
   findBestAvailableLanguage: (_: Array<string>) => 'en',
 }))
+
+jest.mock('../../src/errors/errorContext.tsx', () => ({
+  useErrorContext: () => ({
+    error: null,
+    errorScreen: null,
+    setError: jest.fn(),
+  }),
+}))
