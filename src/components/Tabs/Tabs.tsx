@@ -1,6 +1,7 @@
 import React, { useMemo, useState, ReactNode } from 'react'
 import { useCustomContext } from '~/hooks/context'
 import Panel from './Panel'
+import PersistChildren from './PersistChildren'
 import Subtab from './Subtab'
 import Tab from './Tab'
 
@@ -20,6 +21,10 @@ export interface ITab {
   tab: ITabProps
 }
 
+export interface ITabPersistChildren {
+  isContentVisible: boolean
+}
+
 //TODO: fix type to accept children which are not functions
 type TFunctionalChildren<T> = React.FC<{
   children?: (
@@ -31,6 +36,7 @@ interface ITabsComposition {
   Tab: React.FC<ITab>
   Subtab: React.FC<ITab>
   Panel: TFunctionalChildren<Pick<ITabsContext, 'activeTab' | 'activeSubtab'>>
+  PersistChildren: React.FC<ITabPersistChildren>
 }
 
 const TabsContext = React.createContext<ITabsContext | undefined>(undefined)
@@ -67,5 +73,6 @@ export const Tabs: React.FC<ITabs> & ITabsComposition = ({
 Tabs.Tab = Tab
 Tabs.Subtab = Subtab
 Tabs.Panel = Panel
+Tabs.PersistChildren = PersistChildren
 
 export default Tabs

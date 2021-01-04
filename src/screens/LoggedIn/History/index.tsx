@@ -39,22 +39,20 @@ const History = () => {
                         ))}
                     </TabsContainer>
                     <Tabs.Panel>
-                        {({ activeSubtab }) => {
-                            if (activeSubtab?.id === 'all') {
-                                return (
+                        {({ activeSubtab }) => (
+                            <>
+                                <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'all'}>
                                     <Record.ItemsList sectionGetter={groupedAllInteractions} />
-                                )
-                            } else if (activeSubtab?.id === 'shared') {
-                                return (
+                                </Tabs.PersistChildren>
+                                <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'shared'}>
                                     <Record.ItemsList sectionGetter={groupedShareInteractions} />
-                                )
-                            } else if (activeSubtab?.id === 'received') {
-                                return (
+                                </Tabs.PersistChildren>
+                                <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'received'}>
                                     <Record.ItemsList sectionGetter={groupedReceiveInteractions} />
-                                )
-                            }
+                                </Tabs.PersistChildren>
 
-                        }}
+                            </>
+                        )}
                     </Tabs.Panel>
                 </Tabs>
             </Record>
