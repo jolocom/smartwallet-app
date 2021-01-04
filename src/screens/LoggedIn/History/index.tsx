@@ -31,30 +31,33 @@ const History = () => {
     return (
         <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
             <Record>
-                <Record.Header />
-                <Tabs initialActiveSubtab={SUBTABS[0]}>
-                    <TabsContainer>
-                        {SUBTABS.map((st) => (
-                            <Tabs.Subtab key={st.id} tab={st} />
-                        ))}
-                    </TabsContainer>
-                    <Tabs.Panel>
-                        {({ activeSubtab }) => (
-                            <>
-                                <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'all'}>
-                                    <Record.ItemsList sectionGetter={groupedAllInteractions} />
-                                </Tabs.PersistChildren>
-                                <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'shared'}>
-                                    <Record.ItemsList sectionGetter={groupedShareInteractions} />
-                                </Tabs.PersistChildren>
-                                <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'received'}>
-                                    <Record.ItemsList sectionGetter={groupedReceiveInteractions} />
-                                </Tabs.PersistChildren>
+                {/* Body will take care of displaying placeholder if there are no interactions */}
+                <Record.Body>
+                    <Record.Header />
+                    <Tabs initialActiveSubtab={SUBTABS[0]}>
+                        <TabsContainer>
+                            {SUBTABS.map((st) => (
+                                <Tabs.Subtab key={st.id} tab={st} />
+                            ))}
+                        </TabsContainer>
+                        <Tabs.Panel>
+                            {({ activeSubtab }) => (
+                                <>
+                                    <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'all'}>
+                                        <Record.ItemsList sectionGetter={groupedAllInteractions} />
+                                    </Tabs.PersistChildren>
+                                    <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'shared'}>
+                                        <Record.ItemsList sectionGetter={groupedShareInteractions} />
+                                    </Tabs.PersistChildren>
+                                    <Tabs.PersistChildren isContentVisible={activeSubtab?.id === 'received'}>
+                                        <Record.ItemsList sectionGetter={groupedReceiveInteractions} />
+                                    </Tabs.PersistChildren>
 
-                            </>
-                        )}
-                    </Tabs.Panel>
-                </Tabs>
+                                </>
+                            )}
+                        </Tabs.Panel>
+                    </Tabs>
+                </Record.Body>
             </Record>
         </ScreenContainer>
     )

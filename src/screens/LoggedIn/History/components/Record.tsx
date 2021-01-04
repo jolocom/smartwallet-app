@@ -8,6 +8,7 @@ import RecordHeader from './RecordHeader'
 import RecordItem from './RecordItem'
 import RecordItemsList from './RecordItemsList'
 import { IHistorySection, IPreLoadedInteraction } from '~/hooks/history/types';
+import RecordBody from './RecordBody';
 
 interface IRecordContext {
   activeSection: string
@@ -28,6 +29,7 @@ interface IRecordComposition {
   Header: React.FC
   ItemsList: React.FC<IRecordItemsListProps>
   Item: React.FC<IRecordItemProps>
+  Body: React.FC
 }
 
 const RecordContext = React.createContext<IRecordContext | undefined>({
@@ -92,5 +94,6 @@ const Record: React.FC & IRecordComposition = ({ children }) => {
 Record.Header = RecordHeader
 Record.ItemsList = RecordItemsList
 Record.Item = RecordItem
+Record.Body = RecordBody
 
 export default Record
