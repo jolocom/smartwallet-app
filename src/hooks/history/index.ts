@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 import { useAgent } from '~/hooks/sdk'
 import { IInteractionDetails } from './types'
 import {
@@ -12,7 +10,7 @@ import {
 export const useHistory = () => {
   const agent = useAgent();
 
-  const getInteractions = useCallback(() => {
+  const getInteractions = () => {
     return agent.storage.get
       .interactionTokens({})
       .then((tokens) =>
@@ -25,9 +23,9 @@ export const useHistory = () => {
           .reverse(),
       )
       .then(filterUniqueById)
-  }, [])
+  }
 
-  const getInteractionDetails = useCallback(async (
+  const getInteractionDetails = async (
     nonce: string,
   ): Promise<IInteractionDetails> => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
@@ -39,7 +37,7 @@ export const useHistory = () => {
         .toTimeString()
         .slice(0, 5),
     }
-  }, [])
+  }
 
   return {
     getInteractions,
