@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, LayoutAnimation, StyleSheet, View } from 'react-native';
+import { LayoutAnimation, StyleSheet, View } from 'react-native';
 import { IdentitySummary, FlowType } from 'react-native-jolocom'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg';
@@ -15,39 +15,6 @@ interface IItemProps {
   type: FlowType
   issuer: IdentitySummary
   time: string
-}
-
-const Item: React.FC<IItemProps> = ({ image, type, time, issuer }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        {/* TODO: seems there is not use case as of now where image is part of returned interaction details */}
-        {image ? (
-          <Image style={styles.image} source={{ uri: image }} />
-        ) : (
-            <InitiatorPlaceholderIcon />
-          )}
-      </View>
-      <View style={[styles.textContainer]}>
-        <View style={styles.topContainer}>
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {type}
-          </JoloText>
-
-          <JoloText
-            size={JoloTextSizes.mini}
-            color={Colors.white}
-            customStyles={{ alignSelf: 'center', marginRight: 16 }}
-          >
-            {time}
-          </JoloText>
-        </View>
-        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
-          {issuer?.publicProfile?.name ?? 'Unknown'}
-        </JoloText>
-      </View>
-    </View>
-  )
 }
 
 const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
@@ -69,14 +36,34 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
       .catch(scheduleErrorWarning)
   }, [])
 
-
-  if (!itemDetails) {
-    return (
-      <Item type={'███████'} issuer={{ publicProfile: { name: '█████' } }} time={'██'} />
-    )
-  }
   return (
-    <Item {...itemDetails} />
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        {/* TODO: seems there is not use case as of now where image is part of returned interaction details */}
+        {/* {image && (
+          <Image style={styles.image} source={{ uri: image }} />
+        )} */}
+        <InitiatorPlaceholderIcon />
+      </View>
+      <View style={[styles.textContainer]}>
+        <View style={styles.topContainer}>
+          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+            {itemDetails ? itemDetails.type : '███████'}
+          </JoloText>
+
+          <JoloText
+            size={JoloTextSizes.mini}
+            color={Colors.white}
+            customStyles={{ alignSelf: 'center', marginRight: 16 }}
+          >
+            {itemDetails ? itemDetails.time : '██'}
+          </JoloText>
+        </View>
+        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
+          {itemDetails ? itemDetails.issuer?.publicProfile?.name ?? 'Unknown' : '█████'}
+        </JoloText>
+      </View>
+    </View>
   )
 }
 

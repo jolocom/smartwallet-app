@@ -3,16 +3,16 @@ import React, { useCallback } from 'react';
 import ScreenContainer from '~/components/ScreenContainer';
 import TabsContainer from '~/components/Tabs/Container';
 import Tabs from '~/components/Tabs/Tabs';
+import { IPreLoadedInteraction } from '~/hooks/history/types';
 import { groupBySection } from '~/hooks/history/utils';
 import { strings } from '~/translations';
-import Record, { IPreLoadedInteraction } from './components/Record';
+import Record from './components/Record';
 
 const SUBTABS = [
     { id: 'all', value: strings.ALL },
     { id: 'shared', value: strings.SHARED },
     { id: 'received', value: strings.RECEIVED },
 ]
-
 
 const History = () => {
     const getGroupedInteractions = (

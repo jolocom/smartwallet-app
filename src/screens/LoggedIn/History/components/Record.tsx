@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlowType } from '@jolocom/sdk';
 
 import { useCustomContext } from '~/hooks/context';
 import { useToasts } from '~/hooks/toasts';
@@ -8,7 +7,7 @@ import { useHistory } from '~/hooks/history';
 import RecordHeader from './RecordHeader'
 import RecordItem from './RecordItem'
 import RecordItemsList from './RecordItemsList'
-import { IHistorySection } from '~/hooks/history/types';
+import { IHistorySection, IPreLoadedInteraction } from '~/hooks/history/types';
 
 interface IRecordContext {
   activeSection: string
@@ -31,12 +30,6 @@ interface IRecordComposition {
   Item: React.FC<IRecordItemProps>
 }
 
-export interface IPreLoadedInteraction {
-  id: string
-  section: string
-  type: FlowType
-}
-
 const RecordContext = React.createContext<IRecordContext | undefined>({
   activeSection: '',
   setActiveSection: () => { },
@@ -50,14 +43,15 @@ export const useRecord = useCustomContext(RecordContext)
 const ITEMS_PER_PAGE = 4
 
 const Record: React.FC & IRecordComposition = ({ children }) => {
-  const [activeSection, setActiveSection] = useState('')
-  const [page, setPage] = useState(-1)
   const [allInteractions, setAllInteractions] = useState<
     IPreLoadedInteraction[]
   >([])
   const [loadedInteractions, setLoadedInteractions] = useState<
     IPreLoadedInteraction[]
   >([])
+  const [activeSection, setActiveSection] = useState('')
+  const [page, setPage] = useState(-1)
+  /* TODO: isLoading isn't used at the moment */
   const [isLoading, setLoading] = useState(true)
 
   const setNextPage = () => setPage((prev) => ++prev)

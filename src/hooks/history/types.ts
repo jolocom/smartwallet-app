@@ -11,6 +11,7 @@ export interface IHistorySection {
   data: string[]
 }
 
+/* TODO: think about a better name */
 export interface IPreLoadedInteraction {
   id: string
   section: string
