@@ -5,6 +5,29 @@ import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import Block from '~/components/Block'
 
+interface TitleProps {
+  text: string
+  customStyles?: TextStyle
+}
+
+const SectionTitle: React.FC<TitleProps> = ({ text, customStyles = {} }) => (
+  <JoloText
+    kind={JoloTextKind.title}
+    size={JoloTextSizes.middle}
+    weight={JoloTextWeight.regular}
+    customStyles={[
+      {
+        textAlign: 'left',
+        marginBottom: BP({ large: 40, medium: 40, default: 20 }),
+        marginTop: 44,
+      },
+      customStyles,
+    ]}
+  >
+    {text}
+  </JoloText>
+)
+
 interface PropsI {
   title: string
   customStyles?: ViewStyle
@@ -12,40 +35,18 @@ interface PropsI {
   hasBlock?: boolean
 }
 
-const Section: React.FC<PropsI> = ({
-  title,
+const Section: React.FC<PropsI> & { Title: React.FC<TitleProps> } = ({
   children,
+  title,
   hasBlock = true,
   customStyles = {},
-  titleStyles = {},
 }) => {
   const ChildrenContainer = hasBlock ? Block : React.Fragment
 
   return (
-    <View
-      style={[
-        styles.sectionContainer,
-        { marginBottom: children ? 44 : 0 },
-        customStyles,
-      ]}
-    >
-      <JoloText
-        kind={JoloTextKind.title}
-        size={JoloTextSizes.middle}
-        weight={JoloTextWeight.regular}
-        customStyles={[
-          {
-            textAlign: 'left',
-            marginBottom: children
-              ? BP({ large: 40, medium: 40, default: 20 })
-              : 0,
-          },
-          titleStyles,
-        ]}
-      >
-        {title}
-      </JoloText>
-      {children && <ChildrenContainer>{children}</ChildrenContainer>}
+    <View style={[styles.sectionContainer, customStyles]}>
+      <Section.Title text={title} />
+      <ChildrenContainer>{children}</ChildrenContainer>
     </View>
   )
 }
@@ -53,10 +54,11 @@ const Section: React.FC<PropsI> = ({
 const styles = StyleSheet.create({
   sectionContainer: {
     justifyContent: 'flex-start',
-    marginBottom: 44,
     alignItems: 'flex-start',
     width: '100%',
   },
 })
+
+Section.Title = SectionTitle
 
 export default Section

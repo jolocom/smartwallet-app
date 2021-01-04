@@ -51,13 +51,12 @@ const SettingsGeneral: React.FC = () => {
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
-        paddingHorizontal: 10,
+        paddingTop: 0,
       }}
     >
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 150,
-          // marginTop: BP({ large: 56, medium: 56, default: 32 }),
         }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
@@ -120,7 +119,11 @@ const SettingsGeneral: React.FC = () => {
         </Section>
         {__DEV__ && <DevelopmentSection />}
 
-        <Btn type={BtnTypes.quinary} onPress={handleLogout}>
+        <Btn
+          type={BtnTypes.quinary}
+          onPress={handleLogout}
+          customContainerStyles={{ marginTop: 60 }}
+        >
           {strings.EMPTY_WALLET}
         </Btn>
         <JoloText
