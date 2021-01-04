@@ -5,7 +5,6 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import { JoloTextSizes } from '~/utils/fonts'
-import { debugView } from '~/utils/dev'
 
 const HistoryField: React.FC<{
   type: string
@@ -22,15 +21,8 @@ const HistoryField: React.FC<{
           <InitiatorPlaceholderIcon />
         )}
       </View>
-      <View style={[styles.flexContainer]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
+      <View style={[styles.textContainer]}>
+        <View style={styles.topContainer}>
           <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
             {type}
           </JoloText>
@@ -80,12 +72,18 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 70,
   },
-  flexContainer: {
+  textContainer: {
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     height: '100%',
     paddingVertical: 18,
     flex: 1,
+  },
+  topContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 })
 
