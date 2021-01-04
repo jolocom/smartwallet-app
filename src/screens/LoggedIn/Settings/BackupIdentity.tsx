@@ -51,7 +51,7 @@ const BackupIdentity = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      customStyles={{ justifyContent: 'space-between', paddingTop: 12 }}
+      customStyles={{ justifyContent: 'space-between', paddingTop: 0 }}
     >
       <ScrollView
         style={{ width: '100%' }}
@@ -61,10 +61,7 @@ const BackupIdentity = () => {
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}
       >
         <View>
-          <Section
-            customStyles={{ marginBottom: BP({ default: 32, xsmall: 24 }) }}
-            title={strings.BACKUP_OPTIONS}
-          />
+          <Section.Title text={strings.BACKUP_OPTIONS} marginTop={6} />
           <BackupBlock
             title={strings.BACKUP_YOUR_DATA}
             description={strings.DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA}

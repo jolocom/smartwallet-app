@@ -18,7 +18,7 @@ const SectionTitle: React.FC<TitleProps> = ({ text, marginTop = 0 }) => (
     customStyles={[
       {
         textAlign: 'left',
-        marginBottom: BP({ large: 40, medium: 40, default: 20 }),
+        marginBottom: BP({ large: 32, medium: 32, default: 24 }),
         marginTop,
       },
     ]}
