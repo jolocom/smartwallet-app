@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
 import { FlowType } from '@jolocom/sdk'
 
@@ -14,7 +14,7 @@ import { useToasts } from '../toasts'
 
 const ITEMS_PER_PAGE = 4
 
-const useHistory = () => {
+const useHistoryOld = () => {
   const agent = useAgent()
   const { scheduleErrorWarning } = useToasts()
 
@@ -99,4 +99,43 @@ const useHistory = () => {
   }
 }
 
-export default useHistory
+export const useHistory = () => {
+  const agent = useAgent();
+
+  const getInteractions = useCallback(() => {
+    return agent.storage.get
+      .interactionTokens({})
+      .then((tokens) =>
+        tokens
+          .map(({ nonce, issued, interactionType }) => ({
+            id: nonce,
+            section: getDateSection(new Date(issued)),
+            type: interactionTypeToFlowType[interactionType],
+          }))
+          .reverse(),
+      )
+      .then(filterUniqueById)
+  }, [])
+
+  const getInteractionDetails = useCallback(async (
+    nonce: string,
+  ): Promise<IInteractionDetails> => {
+    const interaction = await agent.interactionManager.getInteraction(nonce)
+
+    return {
+      type: interaction.flow.type,
+      issuer: interaction.getSummary().initiator,
+      time: new Date(interaction.firstMessage.issued)
+        .toTimeString()
+        .slice(0, 5),
+    }
+  }, [])
+
+  return {
+    getInteractions,
+    getInteractionDetails
+  }
+}
+
+
+export default useHistoryOld
