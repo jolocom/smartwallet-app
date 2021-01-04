@@ -7,10 +7,10 @@ import Block from '~/components/Block'
 
 interface TitleProps {
   text: string
-  customStyles?: TextStyle
+  marginTop?: number | string
 }
 
-const SectionTitle: React.FC<TitleProps> = ({ text, customStyles = {} }) => (
+const SectionTitle: React.FC<TitleProps> = ({ text, marginTop = 0 }) => (
   <JoloText
     kind={JoloTextKind.title}
     size={JoloTextSizes.middle}
@@ -19,9 +19,8 @@ const SectionTitle: React.FC<TitleProps> = ({ text, customStyles = {} }) => (
       {
         textAlign: 'left',
         marginBottom: BP({ large: 40, medium: 40, default: 20 }),
-        marginTop: 44,
+        marginTop,
       },
-      customStyles,
     ]}
   >
     {text}
@@ -56,6 +55,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     width: '100%',
+    marginTop: 44,
   },
 })
 
