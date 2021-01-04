@@ -10,15 +10,48 @@ import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
 import { IRecordItemProps } from './Record';
 
-export interface IInteractionDetails {
+interface IItemProps {
+  image?: string
   type: FlowType
   issuer: IdentitySummary
   time: string
 }
 
+const Item: React.FC<IItemProps> = ({ image, type, time, issuer }) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        {image ? (
+          <Image style={styles.image} source={{ uri: image }} />
+        ) : (
+            <InitiatorPlaceholderIcon />
+          )}
+      </View>
+      <View style={[styles.textContainer]}>
+        <View style={styles.topContainer}>
+          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+            {type}
+          </JoloText>
+
+          <JoloText
+            size={JoloTextSizes.mini}
+            color={Colors.white}
+            customStyles={{ alignSelf: 'center', marginRight: 16 }}
+          >
+            {time}
+          </JoloText>
+        </View>
+        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
+          {issuerName ?? 'Unknown'}
+        </JoloText>
+      </View>
+    </View>
+  )
+}
+
 const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
 
-  const [itemDetails, setItemDetails] = useState<IInteractionDetails | null>(null);
+  const [itemDetails, setItemDetails] = useState<IItemProps | null>(null);
 
   const { scheduleErrorWarning } = useToasts()
   const { getInteractionDetails } = useHistory()
@@ -38,38 +71,11 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
 
   if (!itemDetails) {
     return (
-      <Text>Placeholder...</Text>
+      <Item type={'███████'} issuerName={'█████'} time={'██'} />
     )
   }
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        {itemDetails.image ? (
-          <Image style={styles.image} source={{ uri: itemDetails.image }} />
-        ) : (
-            <InitiatorPlaceholderIcon />
-          )}
-      </View>
-      <View style={[styles.textContainer]}>
-        <View style={styles.topContainer}>
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {itemDetails.type}
-          </JoloText>
-
-          <JoloText
-            size={JoloTextSizes.mini}
-            color={Colors.white}
-            customStyles={{ alignSelf: 'center', marginRight: 16 }}
-          >
-            {itemDetails.time}
-          </JoloText>
-        </View>
-        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
-          {itemDetails.issuerName ?? 'Unknown'}
-        </JoloText>
-      </View>
-    </View>
-
+    <Item {...itemDetails} />
   )
 }
 
