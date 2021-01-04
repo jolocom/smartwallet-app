@@ -42,7 +42,7 @@ const Item: React.FC<IItemProps> = ({ image, type, time, issuer }) => {
           </JoloText>
         </View>
         <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
-          {issuerName ?? 'Unknown'}
+          {issuer.publicProfile?.name ?? 'Unknown'}
         </JoloText>
       </View>
     </View>
