@@ -2,11 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { FlowType } from '@jolocom/sdk';
 
 import { useCustomContext } from '~/hooks/context';
-import RecordHeader from './RecordHeader';
-import RecordItem from './RecordItem';
-import RecordItemsList from './RecordItemsList';
 import { useToasts } from '~/hooks/toasts';
 import { useHistory } from '~/hooks/history';
+
+import RecordHeader from './RecordHeader'
+import RecordItem from './RecordItem'
+import RecordItemsList from './RecordItemsList'
 
 interface IRecordContext {
   activeSection: string
@@ -30,21 +31,20 @@ export interface IPreLoadedInteraction {
   type: FlowType
 }
 
-
 const RecordContext = React.createContext<IRecordContext>({
   activeSection: '',
   setActiveSection: () => { },
-  setNextPage: () => { }
-});
+  setNextPage: () => { },
+})
 RecordContext.displayName = 'RecordContext'
 
-export const useRecord = useCustomContext(RecordContext);
+export const useRecord = useCustomContext(RecordContext)
 
 const ITEMS_PER_PAGE = 4
 
 const Record: React.FC & IRecordComposition = ({ children }) => {
-  const [activeSection, setActiveSection] = useState('Today')
-  const [page, setPage] = useState(0)
+  const [activeSection, setActiveSection] = useState('')
+  const [page, setPage] = useState(-1)
   const [allInteractions, setAllInteractions] = useState<
     IPreLoadedInteraction[]
   >([])
@@ -76,19 +76,20 @@ const Record: React.FC & IRecordComposition = ({ children }) => {
     setLoadedInteractions((prev) => [...prev, ...pageInteractions])
   }, [page])
 
-  const contextValue = useMemo(() => ({
-    activeSection,
-    setActiveSection,
-    setNextPage,
-    loadedInteractions
-  }), []);
-  return (
-    <RecordContext.Provider value={contextValue} children={children} />
+  const contextValue = useMemo(
+    () => ({
+      activeSection,
+      loadedInteractions,
+      setActiveSection,
+      setNextPage,
+    }),
+    [activeSection, JSON.stringify(loadedInteractions)],
   )
+  return <RecordContext.Provider value={contextValue} children={children} />
 }
 
-Record.Header = RecordHeader;
-Record.ItemsList = RecordItemsList;
-Record.Item = RecordItem;
+Record.Header = RecordHeader
+Record.ItemsList = RecordItemsList
+Record.Item = RecordItem
 
-export default Record;
+export default Record
