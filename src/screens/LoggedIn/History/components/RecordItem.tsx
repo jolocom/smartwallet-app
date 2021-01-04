@@ -21,6 +21,7 @@ const Item: React.FC<IItemProps> = ({ image, type, time, issuer }) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
+        {/* TODO: seems there is not use case as of now where image is part of returned interaction details */}
         {image ? (
           <Image style={styles.image} source={{ uri: image }} />
         ) : (

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
-import Record, { useRecord } from './Record'
+import Record, { IRecordItemsListProps, useRecord } from './Record'
 
-const RecordItemsList = ({ sectionGetter }) => {
+const RecordItemsList: React.FC<IRecordItemsListProps> = ({ sectionGetter }) => {
   const {
     loadedInteractions,
     setNextPage,

@@ -8,20 +8,26 @@ import { useHistory } from '~/hooks/history';
 import RecordHeader from './RecordHeader'
 import RecordItem from './RecordItem'
 import RecordItemsList from './RecordItemsList'
+import { IHistorySection } from '~/hooks/history/types';
 
 interface IRecordContext {
   activeSection: string
   setActiveSection: React.Dispatch<React.SetStateAction<string>>
-  setNextPage: React.Dispatch<React.SetStateAction<number>>
+  setNextPage: () => void
+  loadedInteractions: IPreLoadedInteraction[]
 }
 
 export interface IRecordItemProps {
   id: string
 }
 
+export interface IRecordItemsListProps {
+  sectionGetter: (loadedInteractions: IPreLoadedInteraction[]) => IHistorySection[]
+}
+
 interface IRecordComposition {
   Header: React.FC
-  ItemsList: React.FC
+  ItemsList: React.FC<IRecordItemsListProps>
   Item: React.FC<IRecordItemProps>
 }
 
@@ -31,10 +37,11 @@ export interface IPreLoadedInteraction {
   type: FlowType
 }
 
-const RecordContext = React.createContext<IRecordContext>({
+const RecordContext = React.createContext<IRecordContext | undefined>({
   activeSection: '',
   setActiveSection: () => { },
   setNextPage: () => { },
+  loadedInteractions: []
 })
 RecordContext.displayName = 'RecordContext'
 
