@@ -1,29 +1,31 @@
 import React, { useState } from 'react'
-import { View, SectionList, ViewToken } from 'react-native'
+import { View, ActivityIndicator } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import HistoryTabs from '~/components/Tabs/HistoryTabs'
 import useHistory from '~/hooks/history'
-import { HistoryFieldPlaceholder } from './HistoryField'
-import HistoryInteraction from './HistoryInteraction'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { Colors } from '~/utils/colors'
+import Tabs from '~/components/Tabs/Tabs'
+import TabsContainer from '~/components/Tabs/Container'
+import { strings } from '~/translations'
+import HistorySubtab from './HistorySubtab'
+
+const SUBTABS = [
+  { id: 'all', value: strings.ALL },
+  { id: 'shared', value: strings.SHARED },
+  { id: 'received', value: strings.RECEIVED },
+]
 
 const History: React.FC = () => {
   const {
     getInteractionDetails,
-    loadSections,
-    groupedInteractions,
+    setNextPage,
+    groupedAllInteractions,
+    groupedReceiveInteractions,
+    groupedShareInteractions,
+    isLoading,
   } = useHistory()
   const [activeSection, setActiveSection] = useState('')
-
-  const handleSectionChange = (items: ViewToken[]) => {
-    const { section } = items[0]
-    if (activeSection !== section) {
-      setActiveSection(section.section)
-    }
-  }
 
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
@@ -34,51 +36,56 @@ const History: React.FC = () => {
       >
         {activeSection}
       </JoloText>
-      <HistoryTabs>
-        {!groupedInteractions.length ? (
-          <View style={{ marginTop: 32 }}>
-            {new Array([1, 2, 3, 4, 5]).map(() => (
-              <HistoryFieldPlaceholder />
-            ))}
-          </View>
-        ) : (
-          <SectionList
-            sections={groupedInteractions}
-            showsVerticalScrollIndicator={false}
-            overScrollMode={'never'}
-            onEndReachedThreshold={0.5}
-            onViewableItemsChanged={({ viewableItems }) =>
-              handleSectionChange(viewableItems)
-            }
-            viewabilityConfig={{
-              itemVisiblePercentThreshold: 50,
-            }}
-            onEndReached={() => loadSections()}
-            contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
-            renderSectionHeader={({ section }) => (
-              <JoloText
-                kind={JoloTextKind.title}
-                size={JoloTextSizes.middle}
-                color={Colors.white85}
-                customStyles={{
-                  textAlign: 'left',
-                  marginBottom: 20,
+      <Tabs initialActiveSubtab={SUBTABS[0]}>
+        <TabsContainer>
+          {SUBTABS.map((st) => (
+            <Tabs.Subtab key={st.id} tab={st} />
+          ))}
+        </TabsContainer>
+        <Tabs.Panel>
+          {({ activeSubtab }) => (
+            <>
+              {isLoading && <ActivityIndicator style={{ marginTop: '50%' }} />}
+              <View
+                style={{
+                  display: activeSubtab?.id === 'all' ? 'flex' : 'none',
                 }}
               >
-                {section.section}
-              </JoloText>
-            )}
-            renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
-            renderItem={({ item, index }) => (
-              <HistoryInteraction
-                key={index}
-                id={item}
-                getInteractionDetails={getInteractionDetails}
-              />
-            )}
-          />
-        )}
-      </HistoryTabs>
+                <HistorySubtab
+                  sections={groupedAllInteractions}
+                  loadSections={setNextPage}
+                  getInteractionDetails={getInteractionDetails}
+                  onSectionChange={setActiveSection}
+                />
+              </View>
+              <View
+                style={{
+                  display: activeSubtab?.id === 'shared' ? 'flex' : 'none',
+                }}
+              >
+                <HistorySubtab
+                  sections={groupedShareInteractions}
+                  loadSections={setNextPage}
+                  getInteractionDetails={getInteractionDetails}
+                  onSectionChange={setActiveSection}
+                />
+              </View>
+              <View
+                style={{
+                  display: activeSubtab?.id === 'received' ? 'flex' : 'none',
+                }}
+              >
+                <HistorySubtab
+                  sections={groupedReceiveInteractions}
+                  loadSections={setNextPage}
+                  getInteractionDetails={getInteractionDetails}
+                  onSectionChange={setActiveSection}
+                />
+              </View>
+            </>
+          )}
+        </Tabs.Panel>
+      </Tabs>
     </ScreenContainer>
   )
 }

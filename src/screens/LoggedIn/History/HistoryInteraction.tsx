@@ -3,24 +3,28 @@ import { LayoutAnimation } from 'react-native'
 
 import { IInteractionDetails } from '~/hooks/history/types'
 import HistoryField, { HistoryFieldPlaceholder } from './HistoryField'
+import { useToasts } from '~/hooks/toasts'
 
 const HistoryInteraction: React.FC<{
   getInteractionDetails: (nonce: string) => Promise<IInteractionDetails>
   id: string
-}> = React.memo(({ getInteractionDetails, id }) => {
+}> = ({ getInteractionDetails, id }) => {
+  const { scheduleErrorWarning } = useToasts()
   const [
     interactionData,
     setInteractionData,
   ] = useState<IInteractionDetails | null>(null)
 
   useEffect(() => {
-    getInteractionDetails(id).then((interaction) => {
-      LayoutAnimation.configureNext({
-        ...LayoutAnimation.Presets.easeInEaseOut,
-        duration: 500,
+    getInteractionDetails(id)
+      .then((interaction) => {
+        LayoutAnimation.configureNext({
+          ...LayoutAnimation.Presets.easeInEaseOut,
+          duration: 500,
+        })
+        setInteractionData(interaction)
       })
-      setInteractionData(interaction)
-    })
+      .catch(scheduleErrorWarning)
   }, [])
 
   return interactionData ? (
@@ -33,6 +37,6 @@ const HistoryInteraction: React.FC<{
   ) : (
     <HistoryFieldPlaceholder />
   )
-})
+}
 
 export default HistoryInteraction

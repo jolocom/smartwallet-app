@@ -1,49 +1,75 @@
 import { useMemo } from 'react'
 import { useState, useEffect } from 'react'
+import { FlowType } from '@jolocom/sdk'
 
 import { useAgent } from '~/hooks/sdk'
-import { IInteractionWithSection, IInteractionDetails } from './types'
-import { groupBySection, getDateSection, filterUniqueById } from './utils'
+import { IPreLoadedInteraction, IInteractionDetails } from './types'
+import {
+  groupBySection,
+  getDateSection,
+  filterUniqueById,
+  interactionTypeToFlowType,
+} from './utils'
+import { useToasts } from '../toasts'
 
-const useHistory = (step: number = 4) => {
+const ITEMS_PER_PAGE = 4
+
+const useHistory = () => {
   const agent = useAgent()
+  const { scheduleErrorWarning } = useToasts()
 
-  const [interactions, setInteractions] = useState<IInteractionWithSection[]>(
-    [],
-  )
+  const [isLoading, setLoading] = useState(true)
+  const [allInteractions, setAllInteractions] = useState<
+    IPreLoadedInteraction[]
+  >([])
   const [loadedInteractions, setLoadedInteractions] = useState<
-    IInteractionWithSection[]
+    IPreLoadedInteraction[]
   >([])
   const [page, setPage] = useState(0)
+  const setNextPage = () => setPage((prev) => ++prev)
 
-  const groupedInteractions = useMemo(
-    () => groupBySection(loadedInteractions),
-    [loadedInteractions],
+  const getGroupedInteractions = (
+    appliedFn: (interact: IPreLoadedInteraction[]) => IPreLoadedInteraction[],
+  ) =>
+    useMemo(() => groupBySection(appliedFn(loadedInteractions)), [
+      JSON.stringify(loadedInteractions),
+    ])
+
+  const groupedAllInteractions = getGroupedInteractions((n) => n)
+  const groupedReceiveInteractions = getGroupedInteractions((n) =>
+    n.filter((g) => g.type === FlowType.CredentialOffer),
+  )
+  const groupedShareInteractions = getGroupedInteractions((n) =>
+    n.filter((g) => g.type === FlowType.CredentialShare),
   )
 
   useEffect(() => {
-    getInteractions().then((sections) => {
-      setInteractions(sections)
-      loadSections(sections)
-    })
+    getInteractions()
+      .then((all) => {
+        setAllInteractions(all)
+        setNextPage()
+        setLoading(false)
+      })
+      .catch(scheduleErrorWarning)
   }, [])
 
-  const loadSections = async (
-    sec: IInteractionWithSection[] = interactions,
-  ) => {
-    const pageInteractions = sec.slice(step * page, step * page + step)
-    setPage((prev) => ++prev)
+  useEffect(() => {
+    const pageInteractions = allInteractions.slice(
+      ITEMS_PER_PAGE * page,
+      ITEMS_PER_PAGE * page + ITEMS_PER_PAGE,
+    )
     setLoadedInteractions((prev) => [...prev, ...pageInteractions])
-  }
+  }, [page])
 
-  const getInteractions = async () =>
+  const getInteractions = () =>
     agent.storage.get
       .interactionTokens({})
       .then((tokens) =>
         tokens
-          .map(({ nonce, issued }) => ({
+          .map(({ nonce, issued, interactionType }) => ({
             id: nonce,
             section: getDateSection(new Date(issued)),
+            type: interactionTypeToFlowType[interactionType],
           }))
           .reverse(),
       )
@@ -64,11 +90,12 @@ const useHistory = (step: number = 4) => {
   }
 
   return {
-    getInteractions,
     getInteractionDetails,
-    loadSections,
-    loadedInteractions,
-    groupedInteractions,
+    setNextPage,
+    groupedAllInteractions,
+    groupedShareInteractions,
+    groupedReceiveInteractions,
+    isLoading,
   }
 }
 
