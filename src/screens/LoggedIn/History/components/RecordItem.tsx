@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, LayoutAnimation, StyleSheet, Text, View } from 'react-native';
+import { Image, LayoutAnimation, StyleSheet, View } from 'react-native';
 import { IdentitySummary, FlowType } from 'react-native-jolocom'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg';
@@ -42,7 +42,7 @@ const Item: React.FC<IItemProps> = ({ image, type, time, issuer }) => {
           </JoloText>
         </View>
         <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
-          {issuer.publicProfile?.name ?? 'Unknown'}
+          {issuer?.publicProfile?.name ?? 'Unknown'}
         </JoloText>
       </View>
     </View>
@@ -71,7 +71,7 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
 
   if (!itemDetails) {
     return (
-      <Item type={'███████'} issuerName={'█████'} time={'██'} />
+      <Item type={'███████'} issuer={{ publicProfile: { name: '█████' } }} time={'██'} />
     )
   }
   return (
