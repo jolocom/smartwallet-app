@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { LayoutAnimation, StyleSheet, View } from 'react-native';
-import { IdentitySummary, FlowType } from 'react-native-jolocom'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg';
 import JoloText, { JoloTextKind } from '~/components/JoloText';
 import { useHistory } from '~/hooks/history';
+import { IInteractionDetails } from '~/hooks/history/types';
 import { useToasts } from '~/hooks/toasts';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
 import { IRecordItemProps } from './Record';
 
-interface IItemProps {
-  image?: string
-  type: FlowType
-  issuer: IdentitySummary
-  time: string
-}
 
 const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
 
-  const [itemDetails, setItemDetails] = useState<IItemProps | null>(null);
+  const [itemDetails, setItemDetails] = useState<IInteractionDetails | null>(null);
 
   const { scheduleErrorWarning } = useToasts()
   const { getInteractionDetails } = useHistory()
