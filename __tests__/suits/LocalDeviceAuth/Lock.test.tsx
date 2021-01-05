@@ -1,31 +1,29 @@
 import React from 'react'
 import * as redux from 'react-redux'
 
-import Lock from '~/screens/Modals/Lock'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 
+import * as deviceAuthHooks from '~/hooks/deviceAuth';
+import Lock from '~/screens/Modals/Lock'
 import { strings } from '~/translations/strings'
-import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { setAppLocked } from '~/modules/account/actions'
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const mockGetBiometry = jest.fn();
 const mockNavigationBack = jest.fn();
 const mockedDispatch = jest.fn();
+const mockBiometryAuthenticate = jest.fn()
 
 jest.mock('../../../src/hooks/biometry', () => ({
   useBiometry: () => ({
-    getBiometry: mockGetBiometry,
-    getEnrolledBiometry: jest.fn(),
+    getBiometry: jest.fn(),
+    authenticate: mockBiometryAuthenticate,
+    getEnrolledBiometry: jest.fn().mockResolvedValue({
+      available: true,
+      biometryType: 'TouchID'
+    }),
   }),
 }))
-
-jest.mock('../../../src/hooks/deviceAuth', () => ({
-  useGetStoredAuthValues: () => ({
-    keychainPin: '5555',
-    isBiometrySelected: false
-  })
-}))
-
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -41,39 +39,101 @@ jest.mock('react-redux', () => ({
   useDispatch: jest.fn().mockReturnValue(mockedDispatch)
 }))
 
-
-test('Lock screen renders all necessary UI details', () => {
-  const { getByText, getByTestId } = renderWithSafeArea(<Lock />);
-
-  mockGetBiometry.mockResolvedValue(undefined);
-
-  expect(getByText(strings.ENTER_YOUR_PASSCODE)).toBeDefined();
-  expect(getByTestId('passcode-digit-input')).toBeDefined();
-  expect(getByText(strings.FORGOT_YOUR_PIN)).toBeDefined();
-})
-
-test('The app is locked if pins don\'t match', async () => {
-  const { getByTestId, getByText } = renderWithSafeArea(<Lock />);
-
-  const passcodeInput = getByTestId('passcode-digit-input');
-  fireEvent.changeText(passcodeInput, 3333);
-
-  await waitFor(() => expect(getByText(strings.WRONG_PASSCODE)).toBeDefined());
-})
-
-test('The app is unlocked', () => {
+const getMockedDispatch = () => {
   const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
   const mockDispatchFn = jest.fn()
   useDispatchSpy.mockReturnValue(mockDispatchFn)
+  return mockDispatchFn;
+}
+
+describe('Witout biometry', () => {
+  beforeEach(() => {
+    const useGetDeviceAuthParamsSpy = jest.spyOn(deviceAuthHooks, 'useGetStoredAuthValues')
+    useGetDeviceAuthParamsSpy.mockReturnValue({
+      isLoadingStorage: false,
+      biometryType: undefined,
+      keychainPin: '5555',
+      isBiometrySelected: false
+    })
 
 
-  const { getByTestId } = renderWithSafeArea(<Lock />);
+  })
+  test('Lock screen renders all necessary UI details', () => {
+    const { getByText, getByTestId } = renderWithSafeArea(<Lock />);
 
-  const passcodeInput = getByTestId('passcode-digit-input');
-  fireEvent.changeText(passcodeInput, 5555);
+    mockGetBiometry.mockResolvedValue(undefined);
 
-  expect(mockDispatchFn).toHaveBeenCalledTimes(1);
-  expect(mockDispatchFn).toHaveBeenCalledWith(setAppLocked(false));
-  expect(mockNavigationBack).toHaveBeenCalledTimes(1);
+    expect(getByText(strings.ENTER_YOUR_PASSCODE)).toBeDefined();
+    expect(getByTestId('passcode-digit-input')).toBeDefined();
+    expect(getByText(strings.FORGOT_YOUR_PIN)).toBeDefined();
+  })
+
+  test('The app is locked if pins don\'t match', async () => {
+    const { getByTestId, getByText } = renderWithSafeArea(<Lock />);
+
+    const passcodeInput = getByTestId('passcode-digit-input');
+    fireEvent.changeText(passcodeInput, 3333);
+
+    await waitFor(() => expect(getByText(strings.WRONG_PASSCODE)).toBeDefined());
+  })
+
+  test('The app is unlocked', () => {
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
+    const mockDispatchFn = jest.fn()
+    useDispatchSpy.mockReturnValue(mockDispatchFn)
+
+    const { getByTestId } = renderWithSafeArea(<Lock />);
+
+    const passcodeInput = getByTestId('passcode-digit-input');
+    fireEvent.changeText(passcodeInput, 5555);
+
+    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toHaveBeenCalledWith(setAppLocked(false));
+    expect(mockNavigationBack).toHaveBeenCalledTimes(1);
+  })
 })
+
+describe('With biometry', () => {
+  beforeEach(() => {
+    const useGetDeviceAuthParamsSpy = jest.spyOn(deviceAuthHooks, 'useGetStoredAuthValues')
+    useGetDeviceAuthParamsSpy.mockReturnValue({
+      isLoadingStorage: false,
+      biometryType: 'TouchID',
+      keychainPin: '5555',
+      isBiometrySelected: true
+    })
+  })
+
+  test('unlocks the app', async () => {
+
+    mockBiometryAuthenticate.mockResolvedValue({
+      success: true
+    })
+
+    const mockDispatchFn = getMockedDispatch()
+
+    renderWithSafeArea(<Lock />);
+
+    await waitFor(() => {
+      expect(mockBiometryAuthenticate).toBeCalledTimes(1);
+      expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+      expect(mockDispatchFn).toHaveBeenCalledWith(setAppLocked(false));
+    })
+  })
+
+  test('do not unlock the app', async () => {
+    mockBiometryAuthenticate.mockResolvedValue({
+      success: false
+    })
+
+    const mockDispatchFn = getMockedDispatch()
+
+    renderWithSafeArea(<Lock />);
+    await waitFor(() => {
+      expect(mockDispatchFn).toHaveBeenCalledTimes(0)
+    })
+  })
+})
+
+
 
