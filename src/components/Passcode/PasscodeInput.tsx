@@ -1,8 +1,7 @@
-import { useFocusEffect } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 import {
   NativeSyntheticEvent,
-  Platform,
   StyleSheet,
   Text,
   TextInputKeyPressEventData,
@@ -130,8 +129,8 @@ const PasscodeInput: React.FC = () => {
                   {index === selectedIndex
                     ? digits[index]
                     : index < digits.length
-                    ? '*'
-                    : ''}
+                      ? '*'
+                      : ''}
                 </Text>
               </View>
             )
