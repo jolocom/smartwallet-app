@@ -295,7 +295,7 @@ const identity = {
   WHAT_COMPANY_DO_YOU_REPRESENT: 'What company do you represent?',
   NEXT: 'Next',
   WHAT_IS_YOUR_NAME: 'What is your name?',
-  CREATE: 'Create'
+  CREATE: 'Create',
 }
 
 export const strings = {
@@ -318,5 +318,5 @@ export const strings = {
   ...toasts,
   ...documents,
   ...history,
-  ...identity
+  ...identity,
 }
