@@ -12,6 +12,10 @@ interface IRecordContext {
   setActiveSection: React.Dispatch<React.SetStateAction<string>>
 }
 
+export interface IRecordHeader {
+  title?: string
+}
+
 export interface IRecordItemProps {
   id: string
 }
@@ -21,7 +25,7 @@ export interface IRecordItemsListProps {
 }
 
 interface IRecordComposition {
-  Header: React.FC
+  Header: React.FC<IRecordHeader>
   ItemsList: React.FC<IRecordItemsListProps>
   Item: React.FC<IRecordItemProps>
 }

@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { SectionList, Text, View, ViewToken } from 'react-native'
+import { SectionList, View, ViewToken } from 'react-native'
 import { useHistory } from '~/hooks/history'
 import { IPreLoadedInteraction } from '~/hooks/history/types'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
-import Record, { IRecordItemsListProps } from './Record'
+import Record, { IRecordItemsListProps, useRecord } from './Record'
 
 /* This name is misleading, it rather say us TOKENS_PER_BATCH */
 const ITEMS_PER_PAGE = 4
 
 const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type }) => {
+  const { activeSection, setActiveSection } = useRecord()
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
-  const [activeSection, setActiveSection] = useState('')
 
   const { getInteractions: getInteractionTokens } = useHistory()
   const { scheduleErrorWarning } = useToasts()
@@ -47,12 +47,15 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type }) => {
     setPage((prevPage) => ++prevPage)
   }, [])
 
-  const handleSectionChange = (items: ViewToken[]) => {
-    const vToken = items[0]
-    if (vToken && activeSection !== vToken.section.title) {
-      setActiveSection(vToken.section.title)
-    }
-  }
+  const handleSectionChange = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      const vToken = viewableItems[0]
+      if (vToken && activeSection !== vToken.section.title) {
+        setActiveSection(vToken.section.title)
+      }
+    },
+    [activeSection],
+  )
 
   /* Preventing onEndReached cb be called infinitely if there are 
     little of interaction records
@@ -70,19 +73,18 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type }) => {
       keyExtractor={(item, i) => 'id:' + item + i}
       overScrollMode={'never'}
       onEndReachedThreshold={0.5}
-      onViewableItemsChanged={({ viewableItems }) =>
-        handleSectionChange(viewableItems)
-      }
+      onViewableItemsChanged={handleSectionChange}
       viewabilityConfig={{
         itemVisiblePercentThreshold: 50,
       }}
       onEndReached={handleEndReached}
       contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
-      renderSectionHeader={() => (
-        <Text>{activeSection}</Text>
-      )} /* TODO: this will give for each section the same header :( */
+      renderSectionHeader={({ section }) => (
+        <Record.Header title={section.title} />
+      )}
       renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
       renderItem={({ item, index }) => <Record.Item key={index} id={item} />}
+      stickySectionHeadersEnabled={false}
     />
   )
 }
