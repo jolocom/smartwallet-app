@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { LayoutAnimation, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { LayoutAnimation, StyleSheet, View } from 'react-native'
 
-import { InitiatorPlaceholderIcon } from '~/assets/svg';
-import JoloText, { JoloTextKind } from '~/components/JoloText';
-import { useHistory } from '~/hooks/history';
-import { IInteractionDetails } from '~/hooks/history/types';
-import { useToasts } from '~/hooks/toasts';
-import { Colors } from '~/utils/colors';
-import { JoloTextSizes } from '~/utils/fonts';
-import { IRecordItemProps } from './Record';
-
+import { InitiatorPlaceholderIcon } from '~/assets/svg'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { useHistory } from '~/hooks/history'
+import { IInteractionDetails } from '~/hooks/history/types'
+import { useToasts } from '~/hooks/toasts'
+import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
+import { IRecordItemProps } from './Record'
 
 const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
-
-  const [itemDetails, setItemDetails] = useState<IInteractionDetails | null>(null);
+  const [itemDetails, setItemDetails] = useState<IInteractionDetails | null>(
+    null,
+  )
 
   const { scheduleErrorWarning } = useToasts()
   const { getInteractionDetails } = useHistory()
 
   useEffect(() => {
     getInteractionDetails(id)
+      .then((details) => {
+        console.log({ details })
+        return details
+      })
       .then((interaction) => {
         LayoutAnimation.configureNext({
           ...LayoutAnimation.Presets.easeInEaseOut,
@@ -54,7 +58,9 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
           </JoloText>
         </View>
         <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
-          {itemDetails ? itemDetails.issuer?.publicProfile?.name ?? 'Unknown' : '█████'}
+          {itemDetails
+            ? itemDetails.issuer?.publicProfile?.name ?? 'Unknown'
+            : '█████'}
         </JoloText>
       </View>
     </View>
@@ -96,4 +102,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RecordItem;
+export default RecordItem
