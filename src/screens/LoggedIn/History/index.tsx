@@ -1,10 +1,7 @@
-import { FlowType } from '@jolocom/sdk'
-import React, { useCallback } from 'react'
+import React from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
 import Tabs from '~/components/Tabs/Tabs'
-import { IPreLoadedInteraction } from '~/hooks/history/types'
-import { groupBySection } from '~/hooks/history/utils'
 import { strings } from '~/translations'
 import Record from './components/Record'
 
@@ -39,16 +36,18 @@ const History = () => {
                 >
                   <Record.ItemsList />
                 </Tabs.PersistChildren>
-                {/* <Tabs.PersistChildren
+                <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'shared'}
                 >
+                  {/* type prop is missing here  */}
                   <Record.ItemsList />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'received'}
                 >
+                  {/* type prop is missing here  */}
                   <Record.ItemsList />
-                </Tabs.PersistChildren> */}
+                </Tabs.PersistChildren>
               </>
             )}
           </Tabs.Panel>
