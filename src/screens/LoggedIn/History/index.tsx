@@ -1,3 +1,4 @@
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import React from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
@@ -34,19 +35,22 @@ const History = () => {
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'all'}
                 >
+                  {/* ItemsList should have a param type: should be added once there is a
+                    support for passing multiple interaction types to support all subtab usecase
+                  */}
                   <Record.ItemsList />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'shared'}
                 >
-                  {/* type prop is missing here  */}
-                  <Record.ItemsList />
+                  <Record.ItemsList type={InteractionType.CredentialRequest} />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'received'}
                 >
-                  {/* type prop is missing here  */}
-                  <Record.ItemsList />
+                  <Record.ItemsList
+                    type={InteractionType.CredentialOfferRequest}
+                  />
                 </Tabs.PersistChildren>
               </>
             )}

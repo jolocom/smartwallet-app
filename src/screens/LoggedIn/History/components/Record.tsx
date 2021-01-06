@@ -1,3 +1,4 @@
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useMemo, useState } from 'react'
 
 import { useCustomContext } from '~/hooks/context'
@@ -16,7 +17,7 @@ export interface IRecordItemProps {
 }
 
 export interface IRecordItemsListProps {
-  type?: string /* TODO: this doesn't help knowing what type to pass, should be more specific */
+  type?: InteractionType
 }
 
 interface IRecordComposition {

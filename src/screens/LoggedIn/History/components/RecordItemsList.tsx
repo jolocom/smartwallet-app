@@ -1,4 +1,3 @@
-import { FlowType } from '@jolocom/sdk'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SectionList, Text, View, ViewToken } from 'react-native'
 import { useHistory } from '~/hooks/history'
@@ -10,10 +9,7 @@ import Record, { IRecordItemsListProps } from './Record'
 /* This name is misleading, it rather say us TOKENS_PER_BATCH */
 const ITEMS_PER_PAGE = 4
 
-const RecordItemsList: React.FC<IRecordItemsListProps> = ({
-  /* TODO: what is the type type ? */
-  type = FlowType.CredentialShare,
-}) => {
+const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type }) => {
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
   const [activeSection, setActiveSection] = useState('')
@@ -34,8 +30,6 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
     if (page) {
       getInteractionTokens(ITEMS_PER_PAGE, interactions.length, type)
         .then((tokens) => {
-          console.log({ tokens })
-
           setInteractions((prevState) => [...prevState, ...tokens])
         })
         .catch((e) => {
