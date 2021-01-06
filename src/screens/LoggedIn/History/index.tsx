@@ -14,66 +14,64 @@ const SUBTABS = [
   { id: 'received', value: strings.RECEIVED },
 ]
 
+export enum RecordTypes {
+  all = 'all',
+  shared = 'shared',
+  received = 'received',
+}
+
 const History = () => {
-  const getGroupedInteractions = (
-    appliedFn: (interact: IPreLoadedInteraction[]) => IPreLoadedInteraction[],
-  ) =>
-    useCallback(
-      (loadedInteractions: IPreLoadedInteraction[]) =>
-        groupBySection(appliedFn(loadedInteractions)),
-      [],
-    )
-
-  const groupedAllInteractions = getGroupedInteractions((n) => n)
-  const groupedShareInteractions = getGroupedInteractions((n) =>
-    n.filter((g) => g.type === FlowType.CredentialShare),
-  )
-  const groupedReceiveInteractions = getGroupedInteractions((n) =>
-    n.filter((g) => g.type === FlowType.CredentialOffer),
-  )
-
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <Record>
-        {/* Body will take care of displaying placeholder if there are no interactions */}
-        <Record.Body>
+        <Tabs initialActiveSubtab={SUBTABS[0]}>
           <Record.Header />
-          <Tabs initialActiveSubtab={SUBTABS[0]}>
-            <TabsContainer>
-              {SUBTABS.map((st) => (
-                <Tabs.Subtab key={st.id} tab={st} />
-              ))}
-            </TabsContainer>
-            <Tabs.Panel>
-              {({ activeSubtab }) => (
-                <>
-                  <Tabs.PersistChildren
-                    isContentVisible={activeSubtab?.id === 'all'}
-                  >
-                    <Record.ItemsList sectionGetter={groupedAllInteractions} />
-                  </Tabs.PersistChildren>
-                  <Tabs.PersistChildren
-                    isContentVisible={activeSubtab?.id === 'shared'}
-                  >
-                    <Record.ItemsList
-                      sectionGetter={groupedShareInteractions}
-                    />
-                  </Tabs.PersistChildren>
-                  <Tabs.PersistChildren
-                    isContentVisible={activeSubtab?.id === 'received'}
-                  >
-                    <Record.ItemsList
-                      sectionGetter={groupedReceiveInteractions}
-                    />
-                  </Tabs.PersistChildren>
-                </>
-              )}
-            </Tabs.Panel>
-          </Tabs>
-        </Record.Body>
+          <TabsContainer>
+            {SUBTABS.map((st) => (
+              <Tabs.Subtab key={st.id} tab={st} />
+            ))}
+          </TabsContainer>
+          <Tabs.Panel>
+            {({ activeSubtab }) => (
+              <>
+                <Tabs.PersistChildren
+                  isContentVisible={activeSubtab?.id === 'all'}
+                >
+                  <Record.ItemsList />
+                </Tabs.PersistChildren>
+                {/* <Tabs.PersistChildren
+                  isContentVisible={activeSubtab?.id === 'shared'}
+                >
+                  <Record.ItemsList />
+                </Tabs.PersistChildren>
+                <Tabs.PersistChildren
+                  isContentVisible={activeSubtab?.id === 'received'}
+                >
+                  <Record.ItemsList />
+                </Tabs.PersistChildren> */}
+              </>
+            )}
+          </Tabs.Panel>
+        </Tabs>
       </Record>
     </ScreenContainer>
   )
 }
 
 export default History
+
+/*
+  <Record>
+    <Tabs>
+      <Tabs.Panel>
+      {({activeSubtab}) => (
+          <Record.Header /> // activeSubtab + activeSection
+          <Tabs.Subtabs />
+          <Record.ItemsList type={all}    />
+          <Record.ItemsList type={shared} />
+          <Record.ItemsList type={received} />
+          )}
+      </Tabs.Panel>
+    </Tabs>
+  </Record>
+*/

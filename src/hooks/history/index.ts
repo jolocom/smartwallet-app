@@ -10,17 +10,16 @@ import {
 export const useHistory = () => {
   const agent = useAgent();
 
-  const getInteractions = () => {
+  const getInteractions = (take: number, skip: number, type?: string) => {
     return agent.storage.get
-      .interactionTokens({})
-      .then((tokens) =>
+      .interactionTokens({}, {take, skip})
+      .then((tokens) => 
         tokens
-          .map(({ nonce, issued, interactionType }) => ({
-            id: nonce,
-            section: getDateSection(new Date(issued)),
-            type: interactionTypeToFlowType[interactionType],
-          }))
-          .reverse(),
+        .map(({ nonce, issued, interactionType }) => ({
+          id: nonce,
+          section: getDateSection(new Date(issued)),
+          type: interactionTypeToFlowType[interactionType],
+        }))
       )
       .then(filterUniqueById)
   }
