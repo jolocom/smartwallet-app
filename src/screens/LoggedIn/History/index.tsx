@@ -62,19 +62,3 @@ const History = () => {
 }
 
 export default History
-
-/*
-  <Record>
-    <Tabs>
-      <Tabs.Panel>
-      {({activeSubtab}) => (
-          <Record.Header /> // activeSubtab + activeSection
-          <Tabs.Subtabs />
-          <Record.ItemsList type={all}    />
-          <Record.ItemsList type={shared} />
-          <Record.ItemsList type={received} />
-          )}
-      </Tabs.Panel>
-    </Tabs>
-  </Record>
-*/
