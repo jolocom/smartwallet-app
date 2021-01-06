@@ -21,23 +21,25 @@ const TopSheet: React.FC<Props> = ({
 }) => {
   const { top } = useSafeArea()
   const heightRef = useRef(0)
-  const positionRef = useRef(new Animated.Value(-heightRef.current)).current
+  const positionRef = useRef(new Animated.Value(-1000)).current
 
   const handleLayout = (e: LayoutChangeEvent) => {
     heightRef.current = e.nativeEvent.layout.height
+    Animated.sequence([
+      animateSheet(-heightRef.current, 0),
+      animateSheet(0),
+    ]).start()
   }
 
-  const animateSheet = (toValue: number) =>
+  const animateSheet = (toValue: number, duration = 300) =>
     Animated.timing(positionRef, {
       toValue,
-      duration: 300,
+      duration,
       useNativeDriver: true,
     })
 
   useEffect(() => {
-    if (isVisible) {
-      animateSheet(0).start()
-    } else {
+    if (!isVisible) {
       animateSheet(-heightRef.current - top).start()
     }
   }, [isVisible])
