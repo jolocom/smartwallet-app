@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
@@ -27,10 +28,12 @@ const SingleCredentialWizard: React.FC<{ onFormSubmit: () => void }> = ({
   }
 
   return (
-    <Wizard config={WIZARD_CONFIG}>
-      <Wizard.Header />
-      <Wizard.Form onSubmit={handleSubmit} step={0} />
-    </Wizard>
+    <View testID="single-credential-wizard">
+      <Wizard config={WIZARD_CONFIG}>
+        <Wizard.Header />
+        <Wizard.Form onSubmit={handleSubmit} step={0} />
+      </Wizard>
+    </View>
   )
 }
 

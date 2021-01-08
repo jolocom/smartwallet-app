@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
@@ -76,12 +77,14 @@ const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
   }, [JSON.stringify(fields)])
 
   return (
-    <Wizard config={WIZARD_CONFIG}>
-      <Wizard.Header />
-      <Wizard.Form onSubmit={addFieldValues} step={0} />
-      <Wizard.Form onSubmit={addFieldValues} step={1} />
-      <Wizard.Form onSubmit={addFieldValues} step={2} />
-    </Wizard>
+    <View testID="business-card-wizard">
+      <Wizard config={WIZARD_CONFIG}>
+        <Wizard.Header />
+        <Wizard.Form onSubmit={addFieldValues} step={0} />
+        <Wizard.Form onSubmit={addFieldValues} step={1} />
+        <Wizard.Form onSubmit={addFieldValues} step={2} />
+      </Wizard>
+    </View>
   )
 }
 

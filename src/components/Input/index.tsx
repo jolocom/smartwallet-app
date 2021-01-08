@@ -17,6 +17,7 @@ export const CoreInput = forwardRef<TextInput, TextInputProps>((props, ref) => {
   const { style, ...inputProps } = props
   return (
     <TextInput
+      testID="core-input"
       ref={ref}
       autoCorrect={false}
       style={[styles.coreInput, style]}
