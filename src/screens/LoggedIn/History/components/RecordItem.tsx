@@ -1,27 +1,75 @@
 import React, { useEffect, useState } from 'react'
-import { LayoutAnimation, StyleSheet, View } from 'react-native'
+import {
+  LayoutAnimation,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from 'react-native'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { useHistory } from '~/hooks/history'
-import { IInteractionDetails } from '~/hooks/history/types'
+import { IRecordDetails } from '~/hooks/history/types'
 import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { IRecordItemProps } from './Record'
+import RecordDropdown from './RecordDropdown'
+
+const RecordBlock: React.FC<{ details: IRecordDetails | null }> = ({
+  details,
+}) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        {/* TODO: seems there is not use case as of now where image is part of returned interaction details */}
+        {/* {image && (
+          <Image style={styles.image} source={{ uri: image }} />
+        )} */}
+        <InitiatorPlaceholderIcon />
+      </View>
+      <View style={[styles.textContainer]}>
+        <View style={styles.topContainer}>
+          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+            {details ? details.type : '███████'}
+          </JoloText>
+
+          <JoloText
+            size={JoloTextSizes.mini}
+            color={Colors.white}
+            customStyles={{ alignSelf: 'center', marginRight: 16 }}
+          >
+            {details ? details.time : '██'}
+          </JoloText>
+        </View>
+        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
+          {details ? details.issuer?.publicProfile?.name ?? 'Unknown' : '█████'}
+        </JoloText>
+      </View>
+    </View>
+  )
+}
 
 const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
-  const [itemDetails, setItemDetails] = useState<IInteractionDetails | null>(
-    null,
-  )
+  const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
+  const [isOpen, setOpen] = useState(false)
 
   const { scheduleErrorWarning } = useToasts()
   const { getInteractionDetails } = useHistory()
 
+  const handlePress = () => {
+    if (itemDetails) {
+      LayoutAnimation.configureNext({
+        ...LayoutAnimation.Presets.easeInEaseOut,
+        duration: 200,
+      })
+      setOpen((prev) => !prev)
+    }
+  }
+
   useEffect(() => {
     getInteractionDetails(id)
       .then((details) => {
-        console.log({ details })
         return details
       })
       .then((interaction) => {
@@ -35,35 +83,10 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
   }, [])
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        {/* TODO: seems there is not use case as of now where image is part of returned interaction details */}
-        {/* {image && (
-          <Image style={styles.image} source={{ uri: image }} />
-        )} */}
-        <InitiatorPlaceholderIcon />
-      </View>
-      <View style={[styles.textContainer]}>
-        <View style={styles.topContainer}>
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {itemDetails ? itemDetails.type : '███████'}
-          </JoloText>
-
-          <JoloText
-            size={JoloTextSizes.mini}
-            color={Colors.white}
-            customStyles={{ alignSelf: 'center', marginRight: 16 }}
-          >
-            {itemDetails ? itemDetails.time : '██'}
-          </JoloText>
-        </View>
-        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
-          {itemDetails
-            ? itemDetails.issuer?.publicProfile?.name ?? 'Unknown'
-            : '█████'}
-        </JoloText>
-      </View>
-    </View>
+    <TouchableOpacity activeOpacity={0.8} onPress={handlePress}>
+      <RecordBlock details={itemDetails} />
+      {isOpen && itemDetails && <RecordDropdown details={itemDetails} />}
+    </TouchableOpacity>
   )
 }
 

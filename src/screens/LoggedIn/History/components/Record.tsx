@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react'
 
-import { useCustomContext } from '~/hooks/context';
-import { useToasts } from '~/hooks/toasts';
-import { useHistory } from '~/hooks/history';
+import { useCustomContext } from '~/hooks/context'
+import { useToasts } from '~/hooks/toasts'
+import { useHistory } from '~/hooks/history'
 
 import RecordHeader from './RecordHeader'
 import RecordItem from './RecordItem'
 import RecordItemsList from './RecordItemsList'
-import { IHistorySection, IPreLoadedInteraction } from '~/hooks/history/types';
-import RecordBody from './RecordBody';
+import { IHistorySection, IPreLoadedInteraction } from '~/hooks/history/types'
+import RecordBody from './RecordBody'
 
 interface IRecordContext {
   activeSection: string
@@ -22,7 +22,9 @@ export interface IRecordItemProps {
 }
 
 export interface IRecordItemsListProps {
-  sectionGetter: (loadedInteractions: IPreLoadedInteraction[]) => IHistorySection[]
+  sectionGetter: (
+    loadedInteractions: IPreLoadedInteraction[],
+  ) => IHistorySection[]
 }
 
 interface IRecordComposition {
@@ -30,13 +32,14 @@ interface IRecordComposition {
   ItemsList: React.FC<IRecordItemsListProps>
   Item: React.FC<IRecordItemProps>
   Body: React.FC
+  Dropdown: React.FC
 }
 
 const RecordContext = React.createContext<IRecordContext | undefined>({
   activeSection: '',
-  setActiveSection: () => { },
-  setNextPage: () => { },
-  loadedInteractions: []
+  setActiveSection: () => {},
+  setNextPage: () => {},
+  loadedInteractions: [],
 })
 RecordContext.displayName = 'RecordContext'
 
@@ -95,5 +98,6 @@ Record.Header = RecordHeader
 Record.ItemsList = RecordItemsList
 Record.Item = RecordItem
 Record.Body = RecordBody
+//Record.Dropdown = RecordDropdown
 
 export default Record
