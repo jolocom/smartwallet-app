@@ -101,5 +101,3 @@ test('Document Tabs', () => {
   expect(documentCardsContainer.props.style.display).toBe('none')
   expect(otherCardsContainer.props.style.display).toBe('flex')
 })
-
-xtest('History Tabs', () => {})

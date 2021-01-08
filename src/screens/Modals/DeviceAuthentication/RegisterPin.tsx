@@ -1,10 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import PasscodeInput from '~/components/PasscodeInput'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
@@ -23,14 +22,13 @@ import {
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
 import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
+import Passcode from '~/components/Passcode'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const RegisterPin = () => {
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
-  const [passcode, setPasscode] = useState('')
-  const [verifiedPasscode, setVerifiedPasscode] = useState('')
-  const [hasError, setHasError] = useState(false) // to indicate if verifiedPasscode doesn't match passcode
+  const [selectedPasscode, setSelectedPasscode] = useState('')
 
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
 
@@ -39,7 +37,8 @@ const RegisterPin = () => {
 
   const displaySuccessLoader = useSuccess()
 
-  const handlePasscodeSubmit = useCallback(() => {
+  const handlePasscodeSubmit = useCallback((pin) => {
+    setSelectedPasscode(pin)
     setIsCreating(false)
   }, [])
 
@@ -51,11 +50,11 @@ const RegisterPin = () => {
     }
   }
 
-  const handleVerifiedPasscodeSubmit = async () => {
-    if (passcode === verifiedPasscode) {
+  const handleVerifiedPasscodeSubmit = async (pin: string) => {
+    if (selectedPasscode === pin) {
       try {
         // setting up pin in the keychain
-        await Keychain.setGenericPassword(PIN_USERNAME, passcode, {
+        await Keychain.setGenericPassword(PIN_USERNAME, selectedPasscode, {
           service: PIN_SERVICE,
           storage: Keychain.STORAGE_TYPE.AES,
         })
@@ -65,22 +64,14 @@ const RegisterPin = () => {
       }
       redirectTo()
     } else {
-      setHasError(true)
+      throw new Error("Pins don't match")
     }
   }
 
   const resetPasscode = () => {
     setIsCreating(true)
-    setPasscode('')
-    setVerifiedPasscode('')
-    setHasError(false)
+    setSelectedPasscode('')
   }
-
-  useEffect(() => {
-    if (verifiedPasscode.length < 4 && hasError) {
-      setHasError(false)
-    }
-  }, [verifiedPasscode])
 
   useBackHandler(() => true)
 
@@ -101,21 +92,13 @@ const RegisterPin = () => {
         }
       />
       <View style={styles.passcodeContainer}>
-        {isCreating ? (
-          <PasscodeInput
-            value={passcode}
-            stateUpdaterFn={setPasscode}
-            onSubmit={handlePasscodeSubmit}
-          />
-        ) : (
-          <PasscodeInput
-            value={verifiedPasscode}
-            stateUpdaterFn={setVerifiedPasscode}
-            onSubmit={handleVerifiedPasscodeSubmit}
-            errorStateUpdaterFn={setHasError}
-            hasError={hasError}
-          />
-        )}
+        <Passcode
+          onSubmit={
+            isCreating ? handlePasscodeSubmit : handleVerifiedPasscodeSubmit
+          }
+        >
+          <Passcode.Input />
+        </Passcode>
       </View>
       {isCreating && (
         <JoloText
@@ -126,16 +109,6 @@ const RegisterPin = () => {
         >
           {' '}
           {strings.YOU_CAN_CHANGE_THE_PASSCODE}
-        </JoloText>
-      )}
-      {hasError && (
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.middle}
-          color={Colors.error}
-          customStyles={{ marginTop: 20 }}
-        >
-          {strings.PINS_DONT_MATCH}
         </JoloText>
       )}
       {!isCreating && (

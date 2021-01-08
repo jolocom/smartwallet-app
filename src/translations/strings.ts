@@ -141,7 +141,7 @@ const interactions = {
 }
 
 const lock = {
-  ENTER_YOUR_PIN: 'Enter your PIN',
+  ENTER_YOUR_PASSCODE: 'Enter your passcode',
   FORGOT_YOUR_PIN: 'Forgot your PIN?',
   UNLOCK_WITH_BIOMETRY: 'Unlock the app with biometry',
   I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
@@ -163,7 +163,7 @@ const settings = {
   IMPRINT: 'Imprint',
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
-  WRONG_PIN: 'Wrong PIN',
+  WRONG_PASSCODE: 'Wrong passcode',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
   DE_VERSION: 'DE Version',
