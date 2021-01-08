@@ -4,7 +4,7 @@ import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
 
 import RegisterPin from '~/screens/Modals/DeviceAuthentication/RegisterPin';
 import { strings } from '~/translations';
-import { renderWithSafeArea } from '../utils/renderWithSafeArea';
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea';
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
 
@@ -38,7 +38,7 @@ jest.mock('react-native-keychain', () => {
 })
 
 
-test('Register PIN screen behavior', async () => {
+test('User is able to set up pin', async () => {
  const { getByText, getByTestId, queryByText } = renderWithSafeArea(<RegisterPin />)
 
  expect(getByText(strings.CREATE_PASSCODE)).toBeDefined();
