@@ -29,7 +29,7 @@ const DocumentTabs: React.FC = ({ children }) => {
         ))}
       </TabsContainer>
 
-      <Tabs.Panel>{children}</Tabs.Panel>
+      <Tabs.Panel>{() => children}</Tabs.Panel>
     </Tabs>
   )
 }

@@ -2,13 +2,14 @@ import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { BaseMetadata } from 'cred-types-jolocom-core'
+import { BaseMetadata } from '@jolocom/protocol-ts'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
   mobilePhoneNumber = 'mobilePhoneNumber',
   name = 'name',
   postalAddress = 'postalAddress',
+  businessCard = 'businessCard', // TODO: update to actual value
 }
 
 export enum ClaimKeys {
@@ -22,6 +23,7 @@ export enum ClaimKeys {
   telephone = 'telephone',
   id = 'id',
   photo = 'photo',
+  legalCompanyName = 'legalCompanyName',
 }
 
 export enum AttributeTypes {
@@ -29,6 +31,7 @@ export enum AttributeTypes {
   mobilePhoneNumber = 'ProofOfMobilePhoneNumberCredential',
   name = 'ProofOfNameCredential',
   postalAddress = 'ProofOfPostalAddressCredential',
+  businessCard = 'ProofOfBusinessCardCredential', // TODO: update to actual value
 }
 
 interface AttributeKeyboardOptions {

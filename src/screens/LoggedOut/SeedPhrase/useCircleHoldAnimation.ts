@@ -25,9 +25,9 @@ const useCircleHoldAnimation = (animationDuration: number) => {
   }, [gestureState])
 
   const {
-    animatedValues: {magicOpacity, shadowScale, circleScale},
-    animateValues: {riseShadow, resetShadow, resetMagic, hideMagicBtn}} = useMagicBtnAnimations(animationDuration)
-
+    animatedValues: { magicOpacity, shadowScale, circleScale },
+    animateValues: { riseShadow, resetShadow, resetMagic, hideMagicBtn },
+  } = useMagicBtnAnimations(animationDuration)
 
   const onTouchStart = (e: GestureResponderEvent) => {
     if (gestureStateRef.current !== GestureState.Success) {
@@ -74,12 +74,12 @@ const useCircleHoldAnimation = (animationDuration: number) => {
     magicOpacity,
   }
   const animateVaues = {
-    hideMagicBtn
+    hideMagicBtn,
   }
   return {
     gestureState,
     animationValues,
-    animateVaues, 
+    animateVaues,
     gestureHandlers: panResponder.panHandlers,
   }
 }

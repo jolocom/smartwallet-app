@@ -14,11 +14,11 @@ import PopupMenu from '~/components/PopupMenu'
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
-  const redirect = useRedirect()
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToForms = useRedirectTo(ScreenNames.FormTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
+  const redirect = useRedirect()
 
   const popupRef = useRef<{ show: () => void }>(null)
 
@@ -53,9 +53,9 @@ const DevelopmentSection = () => {
         <PopupMenu
           ref={popupRef}
           options={[
-            { title: 'Help', onPress: () => {} },
-            { title: 'Me', onPress: () => {} },
-            { title: 'Please', onPress: () => {} },
+            { title: 'Help', onPress: () => { } },
+            { title: 'Me', onPress: () => { } },
+            { title: 'Please', onPress: () => { } },
           ]}
         />
       </Option>

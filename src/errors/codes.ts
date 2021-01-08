@@ -8,10 +8,9 @@ export enum SWErrorCodes {
   SWInteractioNotFound = 'InteractionNotFound',
 }
 
-export const UIErrors: Partial<Record<
-  SWErrorCodes,
-  { title: string; message: string }
->> = {
+export const UIErrors: Partial<
+  Record<SWErrorCodes, { title: string; message: string }>
+> = {
   [SWErrorCodes.SWUnknown]: {
     title: strings.UNKNOWN_ERROR,
     message:

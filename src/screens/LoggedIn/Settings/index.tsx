@@ -63,7 +63,6 @@ const SettingsGeneral: React.FC = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
-        {__DEV__ && <DevelopmentSection />}
         <Section title={strings.APP_PREFERENCES}>
           <Option onPress={() => handleNavigateToScreen(ScreenNames.Language)}>
             <Option.Title title={strings.LANGUAGE} />
@@ -119,6 +118,8 @@ const SettingsGeneral: React.FC = () => {
             <Option.RightIcon />
           </Option>
         </Section>
+        {__DEV__ && <DevelopmentSection />}
+
         <Btn type={BtnTypes.quinary} onPress={handleLogout}>
           {strings.EMPTY_WALLET}
         </Btn>

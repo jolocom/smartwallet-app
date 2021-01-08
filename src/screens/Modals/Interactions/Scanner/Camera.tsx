@@ -111,7 +111,7 @@ const Camera = () => {
   const { top } = useSafeArea()
 
   return (
-    <ScreenContainer isFullscreen hideStatusBar backgroundColor={Colors.black}>
+    <ScreenContainer isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
         {overlayVisible && (
           <View style={[styles.navigationContainer, { top }]}>

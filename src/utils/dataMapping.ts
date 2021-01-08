@@ -16,6 +16,8 @@ import {
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
+import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
+import { ClaimValues } from '~/modules/attributes/types'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
 
@@ -126,4 +128,11 @@ export const uiCredentialToShareCredential = (
 ): ShareUICredential => {
   const { claim, ...shareCred } = cred
   return shareCred
+}
+
+export const mapFormFields = (fields: IFormState[]): ClaimValues => {
+  return fields.reduce<ClaimValues>((acc, v) => {
+    acc[v.key] = v.value
+    return acc
+  }, {})
 }

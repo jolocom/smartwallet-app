@@ -1,54 +1,17 @@
-import React, { useState } from 'react'
-import { ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
+import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
+import WelcomeSheet from './WelcomeSheet'
 import { getAttributes } from '~/modules/attributes/selectors'
-import TopSheet from '~/components/TopSheet'
-import Btn, { BtnTypes } from '~/components/Btn'
-import Widget from '~/components/Widget'
-import { AttributeTypes } from '~/types/credentials'
-import { attributeConfig } from '~/config/claims'
+import { useSelector } from 'react-redux'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
-  const [showTopSheet, setShowTopSheet] = useState(true)
+  const showWelcomeSheet = !Boolean(Object.keys(attributes).length)
 
   return (
-    <ScreenContainer
-      isFullscreen={showTopSheet}
-      customStyles={{ paddingHorizontal: 0 }}
-    >
-      {showTopSheet ? (
-        <TopSheet isVisible={showTopSheet}>
-          <Btn onPress={() => setShowTopSheet(false)} type={BtnTypes.senary}>
-            Close
-          </Btn>
-        </TopSheet>
-      ) : (
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 100 }}
-          style={{ width: '100%', paddingHorizontal: '5%' }}
-          showsVerticalScrollIndicator={false}
-        >
-          {Object.keys(attributes).map((attrType) => (
-            <Widget>
-              <Widget.Header.Name
-                value={attributeConfig[attrType as AttributeTypes].label}
-              />
-              {attributes[attrType as AttributeTypes].map((field) => (
-                <Widget.Field.Static
-                  value={Object.values(field.value).join(' ')}
-                />
-              ))}
-              <Widget>
-                <Widget.Header.Name value="companyName" />
-                <Widget.Field.Static value="Jolocom" />
-              </Widget>
-            </Widget>
-          ))}
-        </ScrollView>
-      )}
+    <ScreenContainer isFullscreen>
+      {showWelcomeSheet && <WelcomeSheet />}
     </ScreenContainer>
   )
 }

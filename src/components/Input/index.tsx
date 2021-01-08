@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     ...subtitleFontStyles.middle,
     color: Colors.white,
     width: '100%',
+    height: '100%',
   },
 })
 
