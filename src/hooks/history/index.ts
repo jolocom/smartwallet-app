@@ -11,10 +11,10 @@ import truncateDid from '~/utils/truncateDid'
 import {
   CredentialOfferFlowState,
   CredentialRequestFlowState,
-  AuthenticationFlowState,
   AuthorizationFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { getCredentialType } from '~/utils/dataMapping'
+import { capitalizeWord } from '~/utils/stringUtils'
 
 interface IRecordConfig {
   title: string
@@ -23,6 +23,9 @@ interface IRecordConfig {
     unfinished: string[]
   }
 }
+
+// NOTE: the first unfinished step will never be used, due to the fact
+// that there is always a request i.e. first step.
 const recordConfig: Partial<Record<FlowType, IRecordConfig>> = {
   [FlowType.Authentication]: {
     title: 'Authentication',
@@ -133,7 +136,8 @@ class RecordManager {
 
       switch (m.interactionType) {
         case InteractionType.CredentialOfferRequest:
-          // NOTE: no credential names at this point
+          // TODO: when the Credential name is available in the @CredentialOffer,
+          // should replace the type
           return {
             title: this.getFinishedStepTitle(i),
             description: offerState.offerSummary.map((s) => s.type).join(', '),
@@ -188,12 +192,12 @@ class RecordManager {
         case 'AuthorizationRequest':
           return {
             title: this.getFinishedStepTitle(i),
-            description: action,
+            description: capitalizeWord(action),
           }
         case 'AuthorizationResponse':
           return {
             title: this.getFinishedStepTitle(i),
-            description: action,
+            description: capitalizeWord(action),
           }
         default:
           return null
