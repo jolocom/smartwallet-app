@@ -75,6 +75,23 @@ class RecordManager {
     return this
   }
 
+  public getRecordDetails(): IRecordDetails {
+    return {
+      title: this.getTitle(),
+      status: this.status,
+      steps: this.steps,
+      type: this.interaction.flow.type,
+      issuer: this.interaction.getSummary().initiator,
+      time: new Date(this.interaction.firstMessage.issued)
+        .toTimeString()
+        .slice(0, 5),
+    }
+  }
+
+  private getTitle(): string {
+    return this.config?.title ?? 'Unknown'
+  }
+
   private processStatus(): IRecordStatus {
     const { expires } = this.interaction.lastMessage
     return this.isFinished()
@@ -286,17 +303,8 @@ export const useHistory = () => {
   ): Promise<IRecordDetails> => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
     const recordManager = new RecordManager(interaction, recordConfig)
-    const { status, steps } = recordManager
 
-    return {
-      status,
-      steps,
-      type: interaction.flow.type,
-      issuer: interaction.getSummary().initiator,
-      time: new Date(interaction.firstMessage.issued)
-        .toTimeString()
-        .slice(0, 5),
-    }
+    return recordManager.getRecordDetails()
   }
 
   return {

@@ -22,7 +22,7 @@ const RecordBlock: React.FC<{ details: IRecordDetails | null }> = ({
       <View style={[styles.textContainer]}>
         <View style={styles.topContainer}>
           <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {details ? details.type : '███████'}
+            {details ? details.title : '███████'}
           </JoloText>
 
           <JoloText
