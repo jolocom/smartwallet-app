@@ -10,7 +10,10 @@ import Record, { IRecordItemsListProps, useRecord } from './Record'
 /* This name is misleading, it rather say us TOKENS_PER_BATCH */
 const ITEMS_PER_PAGE = 4
 
-const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type, tab }) => {
+const RecordItemsList: React.FC<IRecordItemsListProps> = ({
+  type,
+  isActiveList,
+}) => {
   const { updateActiveSection } = useRecord()
 
   const [activeSection, setActiveSection] = useState('')
@@ -23,7 +26,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type, tab }) => {
   const { activeSubtab } = useTabs()
 
   useEffect(() => {
-    if (activeSubtab?.id === tab.id) {
+    if (activeSection && activeSubtab && isActiveList) {
       updateActiveSection(activeSubtab?.id, activeSection)
     }
   }, [activeSubtab?.id, activeSection])

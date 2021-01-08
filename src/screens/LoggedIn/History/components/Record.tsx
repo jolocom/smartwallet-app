@@ -21,8 +21,9 @@ export interface IRecordItemProps {
   id: string
 }
 
-export interface IRecordItemsListProps extends ITab {
+export interface IRecordItemsListProps {
   type?: InteractionType
+  isActiveList: boolean
 }
 
 interface IRecordComposition {
