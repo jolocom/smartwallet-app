@@ -106,13 +106,16 @@ class RecordManager {
   private assembleSteps(
     assembleFn: (message: JSONWebToken<any>, i: number) => IRecordSteps | null,
   ) {
-    return this.interaction
-      .getMessages()
-      .reduce<IRecordSteps[]>((acc, m, i) => {
-        const step = assembleFn(m, i)
-        if (step) acc.push(step)
-        return acc
-      }, [])
+    // NOTE: adding the Set to assure the same token wasn't assembled twice
+    return [
+      ...new Set(
+        this.interaction.getMessages().reduce<IRecordSteps[]>((acc, m, i) => {
+          const step = assembleFn(m, i)
+          if (step) acc.push(step)
+          return acc
+        }, []),
+      ),
+    ]
   }
 
   private appendUnfinishedStep() {
