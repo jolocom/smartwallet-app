@@ -1,25 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Keychain from 'react-native-keychain'
-import { ActivityIndicator } from 'react-native'
 import { NavigationProp } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
-import PasscodeHeader from '~/components/PasscodeHeader'
-import PasscodeInput from '~/components/PasscodeInput'
 import ScreenContainer from '~/components/ScreenContainer'
 
 import { strings } from '~/translations/strings'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 
-import {
-  useResetKeychainValues,
-  useGetStoredAuthValues,
-} from '~/hooks/deviceAuth'
+import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { useDelay } from '~/hooks/generic'
 import { ScreenNames } from '~/types/screens'
 import { useRedirectTo } from '~/hooks/navigation'
+import Passcode from '~/components/Passcode'
 
 interface PropsI {
   onSuccessRedirectToScreen?: ScreenNames
@@ -30,78 +25,76 @@ const ChangePin: React.FC<PropsI> = ({
   onSuccessRedirectToScreen,
   navigation,
 }) => {
-  const [pin, setPin] = useState('')
-  const [newPin, setNewPin] = useState('')
-  const [hasError, setHasError] = useState(false)
   const [isCreateNew, setIsCreateNew] = useState(false)
+  const [headerTitle, setHeaderTitle] = useState(strings.CURRENT_PASSCODE)
+  const [pinMatch, setPinMatch] = useState(false)
 
-  const { keychainPin, isLoadingStorage } = useGetStoredAuthValues()
-
+  const { keychainPin } = useGetStoredAuthValues()
   const dispatch = useDispatch()
-  const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
 
-  const handlePinVerification = async () => {
+  const verifyPin = async (pin: string) => {
     if (pin === keychainPin) {
-      await useDelay(() => setIsCreateNew(true), 1000)
+      setPinMatch(true)
     } else {
-      setHasError(true)
+      throw new Error("Pins don't match")
     }
   }
 
-  const handleSetNewPin = async () => {
-    resetServiceValuesInKeychain()
-    await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
-      service: PIN_SERVICE,
-      storage: Keychain.STORAGE_TYPE.AES,
-    })
-    dispatch(
-      setLoader({
-        type: LoaderTypes.success,
-        msg: strings.PASSWORD_SUCCESSFULLY_CHANGED,
-      }),
-    )
-    await useDelay(() => dispatch(dismissLoader()))
-    if (onSuccessRedirectToScreen) {
-      const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
-      redirectToScreen()
-    } else {
-      navigation.goBack()
+  // this effect is for letting user see success status of the input
+  useEffect(() => {
+    let id: NodeJS.Timeout
+    if (pinMatch) {
+      id = setTimeout(() => {
+        setIsCreateNew(true)
+        setHeaderTitle(strings.CREATE_NEW_PASSCODE)
+      }, 500)
+    }
+    return () => {
+      clearTimeout(id)
+    }
+  }, [pinMatch])
+
+  const updatePin = async (pin: string) => {
+    try {
+      await Keychain.setGenericPassword(PIN_USERNAME, pin, {
+        service: PIN_SERVICE,
+        storage: Keychain.STORAGE_TYPE.AES,
+      })
+      dispatch(
+        setLoader({
+          type: LoaderTypes.success,
+          msg: strings.PASSWORD_SUCCESSFULLY_CHANGED,
+        }),
+      )
+      await useDelay(() => dispatch(dismissLoader()))
+      if (onSuccessRedirectToScreen) {
+        const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
+        redirectToScreen()
+      } else {
+        navigation.goBack()
+      }
+    } catch (e) {
+      console.warn('Error occured setting new pin', { e })
     }
   }
 
   return (
     <ScreenContainer
       customStyles={{
-        marginTop: '30%',
+        marginTop: '15%',
         justifyContent: 'flex-start',
         paddingTop: 0,
       }}
       hasHeaderBack
     >
-      <PasscodeHeader>
-        {hasError
-          ? strings.WRONG_PIN
-          : isCreateNew
-          ? strings.CREATE_NEW_PASSCODE
-          : strings.CURRENT_PASSCODE}
-      </PasscodeHeader>
-      {isLoadingStorage ? (
-        <ActivityIndicator />
-      ) : isCreateNew ? (
-        <PasscodeInput
-          value={newPin}
-          stateUpdaterFn={setNewPin}
-          onSubmit={handleSetNewPin}
+      <Passcode onSubmit={isCreateNew ? updatePin : verifyPin}>
+        <Passcode.Header
+          title={headerTitle}
+          errorTitle={isCreateNew ? strings.WHOOPS : strings.WRONG_PASSCODE}
         />
-      ) : (
-        <PasscodeInput
-          value={pin}
-          stateUpdaterFn={setPin}
-          errorStateUpdaterFn={setHasError}
-          onSubmit={handlePinVerification}
-          hasError={hasError}
-        />
-      )}
+        <Passcode.Input />
+        <Passcode.Forgot />
+      </Passcode>
     </ScreenContainer>
   )
 }

@@ -1,8 +1,24 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import { useTabs } from './Tabs'
 
 const Panel: React.FC = ({ children }) => {
-  return <View style={{ flex: 1, width: '100%' }}>{children}</View>
+  const { activeTab, activeSubtab } = useTabs()
+  if (children && typeof children === 'function') {
+    return (
+      <View style={styles.container}>
+        {children({ activeTab, activeSubtab })}
+      </View>
+    )
+  }
+  return <View style={styles.container}>{children}</View>
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+  },
+})
 
 export default Panel

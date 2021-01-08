@@ -9,10 +9,13 @@ import {
   ToastBody,
 } from '~/types/toasts'
 import { scheduleToast, removeToastAndUpdate } from '~/modules/toasts/actions'
+import { strings } from '~/translations'
+import useErrors from './useErrors'
 
 export const useToasts = () => {
   const dispatch = useDispatch()
   const activeToast = useSelector(getActiveToast)
+  const { showErrorReporting } = useErrors()
 
   const scheduleInfo = (toast: ToastBody) => {
     dispatch(scheduleToast(createInfoToast(toast)))
@@ -25,6 +28,19 @@ export const useToasts = () => {
   const scheduleSticky = (toast: ToastBody) => {
     dispatch(scheduleToast(createStickyToast(toast)))
   }
+
+  const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) =>
+    scheduleWarning({
+      title: strings.ERROR_TOAST_TITLE,
+      message: strings.ERROR_TOAST_MSG,
+      interact: {
+        label: strings.REPORT,
+        onInteract: () => {
+          showErrorReporting(error)
+        },
+      },
+      ...config,
+    })
 
   const removeToast = (toast: Toast) => {
     dispatch(removeToastAndUpdate(toast))
@@ -61,6 +77,7 @@ export const useToasts = () => {
     scheduleInfo,
     scheduleWarning,
     scheduleSticky,
+    scheduleErrorWarning,
     removeToast,
     invokeInteract,
     invokeDismiss,

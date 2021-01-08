@@ -46,4 +46,5 @@ export enum ScreenNames {
   NotificationsTest = 'NotificationsTest',
   FormTest = 'FormTest',
   InputTest = 'InputTest',
+  PasscodeTest = 'PasscodeTest'
 }
