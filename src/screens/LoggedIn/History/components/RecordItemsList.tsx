@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
+import { useTabs } from '~/components/Tabs/Tabs'
 import { useHistory } from '~/hooks/history'
 import { IPreLoadedInteraction } from '~/hooks/history/types'
 import { groupBySection } from '~/hooks/history/utils'
@@ -9,13 +10,23 @@ import Record, { IRecordItemsListProps, useRecord } from './Record'
 /* This name is misleading, it rather say us TOKENS_PER_BATCH */
 const ITEMS_PER_PAGE = 4
 
-const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type }) => {
-  const { activeSection, setActiveSection } = useRecord()
+const RecordItemsList: React.FC<IRecordItemsListProps> = ({ type, tab }) => {
+  const { updateActiveSection } = useRecord()
+
+  const [activeSection, setActiveSection] = useState('')
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
 
   const { getInteractions: getInteractionTokens } = useHistory()
   const { scheduleErrorWarning } = useToasts()
+
+  const { activeSubtab } = useTabs()
+
+  useEffect(() => {
+    if (activeSubtab?.id === tab.id) {
+      updateActiveSection(activeSubtab?.id, activeSection)
+    }
+  }, [activeSubtab?.id, activeSection])
 
   useEffect(() => {
     setNextPage()

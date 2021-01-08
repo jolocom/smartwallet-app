@@ -12,7 +12,7 @@ const RecordHeader: React.FC<IRecordHeader> = ({ title }) => {
       customStyles={{ textAlign: 'left', marginBottom: 22, width: '100%' }}
     >
       {/* TODO: think about placeholder for the header when no interactions are there */}
-      {title || activeSection}
+      {title || Object.values(activeSection)[0]}
     </JoloText>
   )
 }

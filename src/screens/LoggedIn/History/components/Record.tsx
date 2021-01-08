@@ -1,5 +1,6 @@
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { ITab } from '~/components/Tabs/Tabs'
 
 import { useCustomContext } from '~/hooks/context'
 
@@ -8,8 +9,8 @@ import RecordItem from './RecordItem'
 import RecordItemsList from './RecordItemsList'
 
 interface IRecordContext {
-  activeSection: string
-  setActiveSection: React.Dispatch<React.SetStateAction<string>>
+  activeSection: Record<string, string>
+  updateActiveSection: (id: string, value: string) => void
 }
 
 export interface IRecordHeader {
@@ -20,7 +21,7 @@ export interface IRecordItemProps {
   id: string
 }
 
-export interface IRecordItemsListProps {
+export interface IRecordItemsListProps extends ITab {
   type?: InteractionType
 }
 
@@ -31,22 +32,26 @@ interface IRecordComposition {
 }
 
 const RecordContext = React.createContext<IRecordContext | undefined>({
-  activeSection: '',
-  setActiveSection: () => {},
+  activeSection: {},
+  updateActiveSection: () => {},
 })
 RecordContext.displayName = 'RecordContext'
 
 export const useRecord = useCustomContext(RecordContext)
 
 const Record: React.FC & IRecordComposition = ({ children }) => {
-  const [activeSection, setActiveSection] = useState('')
+  const [activeSection, setActiveSection] = useState({})
+
+  const updateActiveSection = useCallback((id: string, value: string) => {
+    setActiveSection({ [id]: value })
+  }, [])
 
   const contextValue = useMemo(
     () => ({
       activeSection,
-      setActiveSection,
+      updateActiveSection,
     }),
-    [activeSection],
+    [JSON.stringify(activeSection)],
   )
   return <RecordContext.Provider value={contextValue} children={children} />
 }

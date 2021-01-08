@@ -38,17 +38,21 @@ const History = () => {
                   {/* ItemsList should have a param type: should be added once there is a
                     support for passing multiple interaction types to support all subtab usecase
                   */}
-                  <Record.ItemsList />
+                  <Record.ItemsList tab={SUBTABS[0]} />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'shared'}
                 >
-                  <Record.ItemsList type={InteractionType.CredentialRequest} />
+                  <Record.ItemsList
+                    tab={SUBTABS[1]}
+                    type={InteractionType.CredentialRequest}
+                  />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'received'}
                 >
                   <Record.ItemsList
+                    tab={SUBTABS[2]}
                     type={InteractionType.CredentialOfferRequest}
                   />
                 </Tabs.PersistChildren>
