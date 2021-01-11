@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
+import React, { useState } from 'react'
 import {
   LayoutAnimation,
   StyleSheet,
@@ -13,7 +14,11 @@ import Widget from '~/components/Widget'
 import Field from '~/components/Widget/Field'
 import { attributeConfig } from '~/config/claims'
 import { getAttributes } from '~/modules/attributes/selectors'
-import { AttributeTypes } from '~/types/credentials'
+import {
+  AttributeTypes,
+  ClaimKeys,
+  IAttributeConfig,
+} from '~/types/credentials'
 import Form from './components/Form'
 
 const IdentityCredentials = () => {
@@ -28,8 +33,29 @@ const IdentityCredentials = () => {
     cb()
   }
 
-  const handleShowForm = (type: AttributeTypes) =>
+  const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
+
+  const handleShowNewForm = (type: AttributeTypes) => {
     toggleForm(() => setExpandedForm(type))
+    setFormConfig(attributeConfig[type])
+  }
+
+  const handleShowEditForm = (
+    type: AttributeTypes,
+    values: Record<ClaimKeys, ClaimEntry>,
+  ) => {
+    const fieldsWithValues = attributeConfig[type].fields.map((f) => ({
+      ...f,
+      value: values[f.key],
+    }))
+
+    toggleForm(() => setExpandedForm(type))
+    setFormConfig({
+      ...attributeConfig[type],
+      fields: fieldsWithValues,
+    })
+  }
+
   const handleHideForm = () => toggleForm(() => setExpandedForm(null))
 
   return (
@@ -42,7 +68,7 @@ const IdentityCredentials = () => {
       >
         {Object.entries(attributeConfig).map(([aKey, aVal]) => (
           <View style={styles.group}>
-            <Widget onCreate={() => handleShowForm(aKey)}>
+            <Widget onCreate={() => handleShowNewForm(aKey)}>
               <Widget.Header>
                 <Widget.Header.Name value={aVal.label} />
                 {attributes[aKey] && <Widget.Header.Action.CreateNew />}
@@ -50,7 +76,7 @@ const IdentityCredentials = () => {
               {attributes[aKey] ? (
                 attributes[aKey].map((f) => (
                   <TouchableOpacity
-                    onPress={() => handleShowForm(aKey)}
+                    onPress={() => handleShowEditForm(aKey, f.value)}
                     key={f.id}
                   >
                     <Field.Static
@@ -61,12 +87,13 @@ const IdentityCredentials = () => {
                 ))
               ) : (
                 <Field.Empty>
+                  {/* TODO: rething how to pass field placeholder value */}
                   <PencilIcon />
                 </Field.Empty>
               )}
             </Widget>
-            {aKey === expandedForm && (
-              <Form config={attributeConfig[aKey]} onCancel={handleHideForm}>
+            {aKey === expandedForm && formConfig && (
+              <Form config={formConfig} onCancel={handleHideForm}>
                 <Form.Header>
                   <Form.Header.Cancel />
                   <Form.Header.Done />

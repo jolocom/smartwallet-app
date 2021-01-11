@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useMemo,
-  useState,
-  useImperativeHandle,
-} from 'react'
+import React, { createContext, useCallback, useMemo, useState } from 'react'
 import FormBody from './FormBody'
 import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
@@ -46,25 +40,22 @@ const FormContext = createContext<IFormContext>({
   onCancel: () => {},
 })
 
+// TODO: take care of types
 export const useForm = useCustomContext(FormContext)
 
-type FormReturnType = React.ForwardRefExoticComponent<
-  React.PropsWithChildren<IFormProps> &
-    React.RefAttributes<{ state: IFormState[] }>
-> &
-  IFormComposition
-
-const Form = React.forwardRef<
-  { state: IFormState[] },
-  React.PropsWithChildren<IFormProps>
->(({ config, children, onSubmit, onCancel }, ref) => {
-  const initialState = config.fields.map((el) => ({ ...el, value: '' }))
+const Form: React.FC<IFormProps> & IFormComposition = ({
+  config,
+  children,
+  onSubmit,
+  onCancel,
+}) => {
+  const initialState = config.fields.map((el) => ({
+    ...el,
+    // TODO: add optional value property to a field object
+    value: el.value || '',
+  }))
 
   const [state, setState] = useState(initialState)
-
-  useImperativeHandle(ref, () => ({
-    state,
-  }))
 
   const updateField = useCallback(
     (key: string, value: string) => {
@@ -98,7 +89,7 @@ const Form = React.forwardRef<
     [state, onSubmit, onCancel, updateField],
   )
   return <FormContext.Provider children={children} value={contextValue} />
-}) as FormReturnType
+}
 
 Form.Header = FormHeader
 Form.Body = FormBody
