@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -7,6 +7,8 @@ import { useRecoveryState } from './module/recoveryContext'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
+import Btn from '~/components/Btn'
+import ForgotSeedInfo from './ForgotSeedInfo'
 
 interface RecoveryInputMetadataI {
   keyHasError: boolean
@@ -14,8 +16,14 @@ interface RecoveryInputMetadataI {
 
 const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
   ({ keyHasError }) => {
+    const [showInfo, setShowInfo] = useState(false)
+
     return (
       <View style={styles.inputMeta}>
+        <ForgotSeedInfo
+          onClose={() => setShowInfo(false)}
+          isVisible={showInfo}
+        />
         {keyHasError ? (
           <JoloText
             kind={JoloTextKind.subtitle}
@@ -26,6 +34,7 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
           </JoloText>
         ) : (
           <JoloText
+            onPress={() => setShowInfo(true)}
             kind={JoloTextKind.subtitle}
             size={JoloTextSizes.middle}
             color={Colors.white}
