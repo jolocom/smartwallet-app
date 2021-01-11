@@ -67,7 +67,7 @@ const SelectableField: React.FC<
   )
 }
 
-const EmptyField: React.FC = () => {
+const EmptyField: React.FC = ({ children }) => {
   const widgetContext = useWidget()
   if (!widgetContext?.onCreate)
     throw new Error('No method provided for creating new attribute')
@@ -75,7 +75,11 @@ const EmptyField: React.FC = () => {
   return (
     <TouchableOpacity onPress={widgetContext.onCreate}>
       <FieldContainer>
-        <FieldText value={strings.MISSING_INFO} color={Colors.error} />
+        {children ? (
+          children
+        ) : (
+          <FieldText value={strings.MISSING_INFO} color={Colors.error} />
+        )}
       </FieldContainer>
     </TouchableOpacity>
   )

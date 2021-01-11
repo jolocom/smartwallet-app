@@ -10,7 +10,7 @@ interface IWidgetComposition {
 }
 
 interface IProps {
-  onCreate?: () => void
+  onCreate?: () => void // TODO: rename to onAdd
 }
 
 const WidgetContext = createContext<IProps | undefined>(undefined)
