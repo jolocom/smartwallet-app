@@ -150,10 +150,10 @@ class RecordManager {
   }
 
   private assembleCredentialOfferSteps() {
-    this.steps = this.assembleSteps((m, i) => {
-      const offerState = this.interaction.getSummary()
-        .state as CredentialOfferFlowState
+    const offerState = this.interaction.getSummary()
+      .state as CredentialOfferFlowState
 
+    this.steps = this.assembleSteps((m, i) => {
       switch (m.interactionType) {
         case InteractionType.CredentialOfferRequest:
           // TODO: when the Credential name is available in the @CredentialOffer,
@@ -179,9 +179,10 @@ class RecordManager {
   }
 
   private assembleCredentialShareSteps() {
+    const shareState = this.interaction.getSummary()
+      .state as CredentialRequestFlowState
+
     this.steps = this.assembleSteps((m, i) => {
-      const shareState = this.interaction.getSummary()
-        .state as CredentialRequestFlowState
       switch (m.interactionType) {
         case InteractionType.CredentialRequest:
           return {
