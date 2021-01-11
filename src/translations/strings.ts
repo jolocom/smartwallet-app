@@ -69,6 +69,8 @@ const seedphrase = {
   WHY_SO_ANALOGUE: 'Why so analogue?',
   YOU_CAN_CHANGE_THE_PASSCODE:
     'You can change the passcode later by using your secret phrase',
+  WHY_THESE_WORDS_ARE_IMPORTANT_TO_YOU: 'Why these words are important to you',
+  GOT_THIS: 'Got this',
   SEEDPHRASE_INFO_1:
     'Your wallet will store very sensitive data about you. We want to make sure that you keep it safe right from the start.',
   SEEDPHRASE_INFO_HIGHLIGHT_2: 'Only this unique set of words',

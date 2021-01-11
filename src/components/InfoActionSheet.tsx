@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ActionSheet from './ActionSheet/ActionSheet'
 import { Colors } from '~/utils/colors'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import AbsoluteBottom from './AbsoluteBottom'
 import Btn, { BtnTypes } from './Btn'
 import JoloText, { JoloTextKind } from './JoloText'
@@ -28,15 +28,7 @@ const InfoActionSheet: React.FC<Props> = ({
       animationType={'fade'}
       testID="info-action-sheet"
     >
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingHorizontal: 30,
-          flex: 1,
-          paddingBottom: '20%',
-        }}
-      >
+      <View style={styles.container}>
         <JoloText
           kind={JoloTextKind.title}
           color={Colors.white85}
@@ -62,5 +54,15 @@ const InfoActionSheet: React.FC<Props> = ({
     </ActionSheet>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 30,
+    flex: 1,
+    paddingBottom: '20%',
+  },
+})
 
 export default InfoActionSheet

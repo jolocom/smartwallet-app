@@ -14,8 +14,8 @@ const SeedphraseInfo: React.FC<Props> = ({ onClose, isVisible }) => {
     <InfoActionSheet
       onClose={onClose}
       isVisible={isVisible}
-      title={'Why these words are important to you'}
-      closeBtnText={'Got this'}
+      title={strings.WHY_THESE_WORDS_ARE_IMPORTANT_TO_YOU}
+      closeBtnText={strings.GOT_THIS}
     >
       {strings.SEEDPHRASE_INFO_1 + '\n\n'}
       <JoloText color={Colors.white60}>
