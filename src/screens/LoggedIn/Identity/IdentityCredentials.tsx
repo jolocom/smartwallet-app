@@ -24,7 +24,16 @@ const IdentityCredentials = () => {
               <Widget.Header.Name value={aVal.label} />
               <Widget.Header.Action.CreateNew />
             </Widget.Header>
-            <Field.Static value="pencil" />
+            {attributes[aKey] ? (
+              attributes[aKey].map((f) => (
+                <Field.Static
+                  key={f.key}
+                  value={Object.values(f.value).join(' ')}
+                />
+              ))
+            ) : (
+              <Field.Static value="pencil" />
+            )}
           </Widget>
         ))}
       </ScrollView>
