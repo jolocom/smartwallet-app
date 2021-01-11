@@ -35,7 +35,7 @@ const recordConfig: Partial<Record<FlowType, IRecordConfig>> = {
     },
   },
   [FlowType.Authorization]: {
-    title: 'Authentication',
+    title: 'Authorization',
     steps: {
       finished: ['Authorized', 'Confirmed'],
       unfinished: ['Not authorized', 'Not confirmed'],
@@ -96,7 +96,7 @@ class RecordManager {
     const { expires } = this.interaction.lastMessage
     return this.isFinished()
       ? IRecordStatus.finished
-      : new Date(expires) < new Date()
+      : expires < new Date()
       ? IRecordStatus.expired
       : IRecordStatus.pending
   }
@@ -110,7 +110,7 @@ class RecordManager {
         return !!this.interaction
           .getMessages()
           .find((t) => t.interactionType === InteractionType.CredentialsReceive)
-      case FlowType.CredentialOffer:
+      case FlowType.CredentialShare:
         return !!this.interaction
           .getMessages()
           .find((t) => t.interactionType === InteractionType.CredentialResponse)
@@ -155,17 +155,13 @@ class RecordManager {
 
     this.steps = this.assembleSteps((m, i) => {
       switch (m.interactionType) {
+        // TODO: when the Credential name is available in the @CredentialOffer,
+        // should replace the type
         case InteractionType.CredentialOfferRequest:
-          // TODO: when the Credential name is available in the @CredentialOffer,
-          // should replace the type
-          return {
-            title: this.getFinishedStepTitle(i),
-            description: offerState.offerSummary.map((s) => s.type).join(', '),
-          }
         case InteractionType.CredentialOfferResponse:
           return {
             title: this.getFinishedStepTitle(i),
-            description: offerState.issued.map((c) => c.name).join(', '),
+            description: offerState.offerSummary.map((s) => s.type).join(', '),
           }
         case InteractionType.CredentialsReceive:
           return {
@@ -211,10 +207,6 @@ class RecordManager {
     this.steps = this.assembleSteps((m, i) => {
       switch (m.interactionType) {
         case 'AuthorizationRequest':
-          return {
-            title: this.getFinishedStepTitle(i),
-            description: capitalizeWord(action),
-          }
         case 'AuthorizationResponse':
           return {
             title: this.getFinishedStepTitle(i),
@@ -233,10 +225,6 @@ class RecordManager {
     this.steps = this.assembleSteps((m, i) => {
       switch (i) {
         case 0:
-          return {
-            title: this.getFinishedStepTitle(i),
-            description: initiatorDid,
-          }
         case 1:
           return {
             title: this.getFinishedStepTitle(i),

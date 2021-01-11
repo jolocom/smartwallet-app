@@ -25,9 +25,6 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
 
   useEffect(() => {
     getInteractionDetails(id)
-      .then((details) => {
-        return details
-      })
       .then((interaction) => {
         LayoutAnimation.configureNext({
           ...LayoutAnimation.Presets.easeInEaseOut,
