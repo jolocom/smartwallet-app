@@ -11,7 +11,7 @@ const Identity = () => {
   const showIdentityIntro = !Boolean(Object.keys(attributes).length)
 
   return (
-    <ScreenContainer isFullscreen>
+    <ScreenContainer isFullscreen={showIdentityIntro}>
       {showIdentityIntro ? <IdentityIntro /> : <IdentityCredentials />}
     </ScreenContainer>
   )

@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   LayoutAnimation,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 import PencilIcon from '~/assets/svg/PencilIcon'
 import Input from '~/components/Input'
+import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 import Widget from '~/components/Widget'
 import Field from '~/components/Widget/Field'
 import { attributeConfig } from '~/config/claims'
@@ -20,7 +20,6 @@ const IdentityCredentials = () => {
   const attributes = useSelector(getAttributes)
 
   const [expandedForm, setExpandedForm] = useState<AttributeTypes | null>(null)
-
   const toggleForm = (cb: (type?: AttributeTypes) => void) => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
@@ -35,9 +34,14 @@ const IdentityCredentials = () => {
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <JoloKeyboardAwareScroll
+        showsVerticalScrollIndicator={false}
+        /* TODO: double check if these props are actually needed */
+        overScrollMode="never"
+        enableOnAndroid
+      >
         {Object.entries(attributeConfig).map(([aKey, aVal]) => (
-          <>
+          <View style={styles.group}>
             <Widget onCreate={() => handleShowForm(aKey)}>
               <Widget.Header>
                 <Widget.Header.Name value={aVal.label} />
@@ -45,7 +49,10 @@ const IdentityCredentials = () => {
               </Widget.Header>
               {attributes[aKey] ? (
                 attributes[aKey].map((f) => (
-                  <TouchableOpacity onPress={() => handleShowForm(aKey)}>
+                  <TouchableOpacity
+                    onPress={() => handleShowForm(aKey)}
+                    key={f.id}
+                  >
                     <Field.Static
                       key={f.key}
                       value={Object.values(f.value).join(' ')}
@@ -66,24 +73,24 @@ const IdentityCredentials = () => {
                 </Form.Header>
                 <Form.Body>
                   {({ fields, updateField }) =>
-                    fields.map((field) => (
+                    fields.map((field, idx) => (
                       <Input.Block
-                        key={field.key}
                         updateInput={(val: string) =>
                           updateField(field.key, val)
                         }
                         value={field.value}
                         placeholder={field.label}
                         {...field.keyboardOptions}
+                        autoFocus={idx === 0}
                       />
                     ))
                   }
                 </Form.Body>
               </Form>
             )}
-          </>
+          </View>
         ))}
-      </ScrollView>
+      </JoloKeyboardAwareScroll>
     </View>
   )
 }
@@ -91,6 +98,9 @@ const IdentityCredentials = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+  },
+  group: {
+    marginBottom: 20,
   },
 })
 
