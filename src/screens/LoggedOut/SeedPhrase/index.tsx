@@ -24,6 +24,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import MagicButton from '~/components/MagicButton'
+import SeedphraseInfo from './SeedphraseInfo'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -39,6 +40,7 @@ const SeedPhrase: React.FC = () => {
     gestureHandlers,
   } = useCircleHoldAnimation(1200)
 
+  const [showInfoSheet, setShowInfoSheet] = useState(false)
   const [showInfo, setShowInfo] = useState(true)
   const [seedphrase, setSeedphrase] = useState('')
   const getMnemonic = useStoredMnemonic()
@@ -123,7 +125,7 @@ const SeedPhrase: React.FC = () => {
 
   const renderInfoIcon = () => (
     <Animated.View style={[styles.iconContainer, { opacity: buttonOpacity }]}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setShowInfoSheet(true)}>
         <InfoIcon />
       </TouchableOpacity>
     </Animated.View>
@@ -207,6 +209,10 @@ const SeedPhrase: React.FC = () => {
 
   return (
     <>
+      <SeedphraseInfo
+        onClose={() => setShowInfoSheet(false)}
+        isVisible={showInfoSheet}
+      />
       {renderBackgroundCrossfade()}
       <ScreenContainer backgroundColor={Colors.transparent}>
         {/* this should take 3/5 of a screen; justify-content: space-between */}
