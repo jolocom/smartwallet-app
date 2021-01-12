@@ -30,8 +30,21 @@ enum FormModes {
   none = 'none',
 }
 
+type TPrimiveAttributeTypes = Exclude<AttributeTypes, AttributeTypes.businessCard>
+type TPrimitiveAttributesConfig = Omit<Record<AttributeTypes, IAttributeConfig>, AttributeTypes.businessCard>
+
+const attributeConfigPrimitive = Object.keys(attributeConfig)
+  .filter(k => k !== AttributeTypes.businessCard)
+  .reduce<TPrimitiveAttributesConfig>((config, key) => {
+    const k = key as TPrimiveAttributeTypes;
+    config[k] = attributeConfig[k]
+    return config
+  }, {} as TPrimitiveAttributesConfig)
+
 const IdentityCredentials = () => {
-  const [expandedForm, setExpandedForm] = useState<AttributeTypes | undefined>(undefined);
+
+
+  const [expandedForm, setExpandedForm] = useState<TPrimiveAttributeTypes | undefined>(undefined);
   const [formMode, setFormMode] = useState(FormModes.none);
   const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
   const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined); // state that shows what claim are we editing 
@@ -41,11 +54,11 @@ const IdentityCredentials = () => {
   const { scheduleWarning } = useToasts();
 
   // we are not interested in claim id in 'add' mode, therefore reetting value to avoid confusions
-  // useEffect(() => {
-  //   if (formMode === FormModes.add) {
-  //     setEditClaimId(undefined);
-  //   }
-  // }, [formMode])
+  useEffect(() => {
+    if (formMode === FormModes.add) {
+      setEditClaimId(undefined);
+    }
+  }, [formMode])
 
   useEffect(() => {
     if (!expandedForm) {
@@ -58,7 +71,7 @@ const IdentityCredentials = () => {
   // update form config
   useEffect(() => {
     if (formMode === FormModes.add && expandedForm) {
-      setFormConfig(attributeConfig[expandedForm])
+      setFormConfig(attributeConfigPrimitive[expandedForm])
     } else if (formMode === FormModes.edit && expandedForm && editClaimId) {
       // NOTE: in edit more form should be aware of claim values
       const fieldsWithValues = attributeConfig[expandedForm].fields.map((f) =>
@@ -69,7 +82,7 @@ const IdentityCredentials = () => {
       })
       )
       setFormConfig({
-        ...attributeConfig[expandedForm],
+        ...attributeConfigPrimitive[expandedForm],
         fields: fieldsWithValues,
       })
     }
@@ -96,12 +109,12 @@ const IdentityCredentials = () => {
   // const handleShowNewForm = handleShowForm(FormModes.add);
   // const handleShowEditForm = handleShowForm(FormModes.edit);
 
-  const handleShowNewForm = (type: AttributeTypes) => {
+  const handleShowNewForm = (type: TPrimiveAttributeTypes) => {
     setFormMode(FormModes.add);
     toggleForm(() => setExpandedForm(type))
   }
 
-  const handleShowEditForm = (type: AttributeTypes, id: string) => {
+  const handleShowEditForm = (type: TPrimiveAttributeTypes, id: string) => {
     setFormMode(FormModes.edit);
     toggleForm(() => setExpandedForm(type))
     setEditClaimId(id)
@@ -151,62 +164,67 @@ const IdentityCredentials = () => {
     <View testID="identity-credentials-present" style={styles.container}>
       <JoloKeyboardAwareScroll
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps={'handled'} // this for allowing to press cancel or submit on first tap as well, as the issue is if a keyboard is opened it is you need to tap twice for a btn to invoke handler  
         /* TODO: double check if these props are actually needed */
         overScrollMode="never"
         enableOnAndroid
       >
-        {Object.entries(attributeConfig).map(([aKey, aVal]) => (
-          <View style={styles.group} key={aKey}>
-            <Widget onCreate={() => handleShowNewForm(aKey)}>
-              <Widget.Header>
-                <Widget.Header.Name value={aVal.label} />
-                {attributes[aKey] && <Widget.Header.Action.CreateNew />}
-              </Widget.Header>
-              {attributes[aKey] ? (
-                attributes[aKey].map((f) => (
-                  <TouchableOpacity
-                    onPress={() => handleShowEditForm(aKey, f.id)}
-                    key={f.id}
-                  >
-                    <Field.Static
-                      key={f.key}
-                      value={Object.values(f.value).join(' ')}
-                    />
-                  </TouchableOpacity>
-                ))
-              ) : (
-                  <Field.Empty>
-                    {/* TODO: rething how to pass field placeholder value */}
-                    <PencilIcon />
-                  </Field.Empty>
-                )}
-            </Widget>
-            {aKey === expandedForm && formConfig && (
-              <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialSubmit}>
-                <Form.Header>
-                  <Form.Header.Cancel />
-                  <Form.Header.Done />
-                </Form.Header>
-                <Form.Body>
-                  {({ fields, updateField }) =>
-                    fields.map((field, idx) => (
-                      <Input.Block
-                        key={field.key}
-                        updateInput={(val: string) =>
-                          updateField(field.key, val)
-                        }
-                        value={field.value}
-                        placeholder={field.label}
-                        {...field.keyboardOptions}
-                        autoFocus={idx === 0}
+        {Object.entries<IAttributeConfig>(attributeConfigPrimitive).map(([aKey, aVal]) => {
+          const key = aKey as TPrimiveAttributeTypes;
+          return (
+            <View style={styles.group} key={aKey}>
+              <Widget onCreate={() => handleShowNewForm(key)}>
+                <Widget.Header>
+                  <Widget.Header.Name value={aVal.label} />
+                  {attributes[key] && <Widget.Header.Action.CreateNew />}
+                </Widget.Header>
+                {attributes[key] ? (
+                  (attributes[key] || []).map((f) => (
+                    <TouchableOpacity
+                      onPress={() => handleShowEditForm(key, f.id)}
+                      key={f.id}
+                    >
+                      <Field.Static
+                        key={f.id}
+                        value={Object.values(f.value).join(' ')}
                       />
-                    ))
-                  }
-                </Form.Body>
-              </Form>
-            )}
-          </View>
-        ))}
+                    </TouchableOpacity>
+                  )
+                  )
+                ) : (
+                    <Field.Empty>
+                      {/* TODO: rething how to pass field placeholder value */}
+                      <PencilIcon />
+                    </Field.Empty>
+                  )}
+              </Widget>
+              {aKey === expandedForm && formConfig && (
+                <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialSubmit}>
+                  <Form.Header>
+                    <Form.Header.Cancel />
+                    <Form.Header.Done />
+                  </Form.Header>
+                  <Form.Body>
+                    {({ fields, updateField }) =>
+                      fields.map((field, idx) => (
+                        <Input.Block
+                          key={field.key}
+                          updateInput={(val: string) =>
+                            updateField(field.key, val)
+                          }
+                          value={field.value}
+                          placeholder={field.label}
+                          {...field.keyboardOptions}
+                          autoFocus={idx === 0}
+                        />
+                      ))
+                    }
+                  </Form.Body>
+                </Form>
+              )}
+            </View>
+          )
+        })}
       </JoloKeyboardAwareScroll>
     </View>
   )
