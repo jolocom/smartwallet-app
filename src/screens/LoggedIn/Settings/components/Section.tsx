@@ -1,16 +1,26 @@
 import React from 'react'
 import { StyleSheet, View, ViewStyle, TextStyle } from 'react-native'
+
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import Block from '~/components/Block'
 
-interface TitleProps {
-  text: string
-  marginTop?: number | string
+interface CompoundSection {
+  Title: React.FC<TitleProps>
+  Block: React.FC
 }
 
-const SectionTitle: React.FC<TitleProps> = ({ text, marginTop = 0 }) => (
+interface TitleProps {
+  marginTop?: number | string
+  customStyle?: TextStyle
+}
+
+const SectionTitle: React.FC<TitleProps> = ({
+  children,
+  marginTop = 0,
+  customStyle,
+}) => (
   <JoloText
     kind={JoloTextKind.title}
     size={JoloTextSizes.middle}
@@ -20,34 +30,23 @@ const SectionTitle: React.FC<TitleProps> = ({ text, marginTop = 0 }) => (
         textAlign: 'left',
         marginBottom: BP({ large: 32, medium: 32, default: 24 }),
         marginTop,
+        ...customStyle,
       },
     ]}
   >
-    {text}
+    {children}
   </JoloText>
 )
 
-interface PropsI {
-  title: string
-  customStyles?: ViewStyle
-  titleStyles?: TextStyle
-  hasBlock?: boolean
+const SectionBlock: React.FC = ({ children }) => {
+  return <Block>{children}</Block>
 }
 
-const Section: React.FC<PropsI> & { Title: React.FC<TitleProps> } = ({
+const Section: React.FC<{ customStyles?: ViewStyle }> & CompoundSection = ({
   children,
-  title,
-  hasBlock = true,
   customStyles = {},
 }) => {
-  const ChildrenContainer = hasBlock ? Block : React.Fragment
-
-  return (
-    <View style={[styles.sectionContainer, customStyles]}>
-      <Section.Title text={title} />
-      <ChildrenContainer>{children}</ChildrenContainer>
-    </View>
-  )
+  return <View style={[styles.sectionContainer, customStyles]}>{children}</View>
 }
 
 const styles = StyleSheet.create({
@@ -60,5 +59,6 @@ const styles = StyleSheet.create({
 })
 
 Section.Title = SectionTitle
+Section.Block = SectionBlock
 
 export default Section
