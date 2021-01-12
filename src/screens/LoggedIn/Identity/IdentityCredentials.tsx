@@ -1,5 +1,4 @@
-import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   LayoutAnimation,
   StyleSheet,
@@ -26,13 +25,47 @@ import Form, { IFormState } from './components/Form'
 import { mapFormFields } from '~/utils/dataMapping'
 import { useToasts } from '~/hooks/toasts'
 
+enum FormModes {
+  edit = 'edit',
+  add = 'add'
+}
+
 const IdentityCredentials = () => {
-  const [expandedForm, setExpandedForm] = useState<AttributeTypes | null>(null)
+  const [expandedForm, setExpandedForm] = useState<AttributeTypes | undefined>(undefined);
+  const [formMode, setFormMode] = useState(FormModes.add);
   const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
+  const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined); // state that shows what claim are we editing 
 
   const attributes = useSelector(getAttributes)
   const { createSICredential, editSICredential } = useSICActions();
   const { scheduleWarning } = useToasts();
+
+  // we are not interested in claim id in 'add' mode, therefore reetting value to avoid confusions
+  useEffect(() => {
+    if (formMode === FormModes.add) {
+      setEditClaimId(undefined);
+    }
+  }, [formMode])
+
+  // update form config
+  useEffect(() => {
+    if (formMode === FormModes.add && expandedForm) {
+      setFormConfig(attributeConfig[expandedForm])
+    } else if (formMode === FormModes.edit && expandedForm && editClaimId) {
+      // NOTE: in edit more form should be aware of claim values
+      const fieldsWithValues = attributeConfig[expandedForm].fields.map((f) =>
+      ({
+        ...f,
+        value: attributes[expandedForm]
+          .find(a => a.id === editClaimId).value[f.key],
+      })
+      )
+      setFormConfig({
+        ...attributeConfig[expandedForm],
+        fields: fieldsWithValues,
+      })
+    }
+  }, [formMode, expandedForm, editClaimId])
 
   const toggleForm = (cb: (type?: AttributeTypes) => void) => {
     LayoutAnimation.configureNext({
@@ -41,34 +74,35 @@ const IdentityCredentials = () => {
     })
     cb()
   }
-  const handleShowNewForm = (type: AttributeTypes) => {
-    toggleForm(() => setExpandedForm(type))
-    setFormConfig(attributeConfig[type])
-  }
 
-  const handleShowEditForm = (
-    type: AttributeTypes,
-    values: Record<ClaimKeys, ClaimEntry>,
-  ) => {
-    const fieldsWithValues = attributeConfig[type].fields.map((f) => ({
-      ...f,
-      value: values[f.key],
-    }))
 
-    toggleForm(() => setExpandedForm(type))
-    setFormConfig({
-      ...attributeConfig[type],
-      fields: fieldsWithValues,
-    })
+  const handleShowForm = (mode: FormModes) => {
+    return (type: AttributeTypes, id?: string) => {
+      setFormMode(mode);
+      toggleForm(() => setExpandedForm(type))
+      if (id) {
+        setEditClaimId(id)
+      }
+    }
   }
-  const handleHideForm = () => toggleForm(() => setExpandedForm(null))
+  const handleShowNewForm = handleShowForm(FormModes.add);
+  const handleShowEditForm = handleShowForm(FormModes.edit);
+  const handleHideForm = () => toggleForm(() => setExpandedForm(undefined))
+
+  const handleCredentialSubmit = async (formValues: IFormState[]) => {
+    if (formMode === FormModes.add) {
+      await handleCredentialCreate(formValues);
+    } else if (formMode === FormModes.edit) {
+      await handleCredentialEdit(formValues)
+    }
+  }
 
   const handleCredentialCreate = async (formValues: IFormState[]) => {
     if (expandedForm) {
       try {
         const claims = mapFormFields(formValues);
         await createSICredential(expandedForm, claims);
-        setExpandedForm(null)
+        setExpandedForm(undefined)
       } catch (e) {
         scheduleWarning({
           title: 'Error',
@@ -79,9 +113,9 @@ const IdentityCredentials = () => {
     }
   }
 
-  const handleCredentialEdit = async (formValues: IFormState[], id: string) => {
+  const handleCredentialEdit = async (formValues: IFormState[]) => {
     if (expandedForm) {
-      console.log()
+      console.log('in edit mode claim', { editClaimId })
     }
   }
 
@@ -103,7 +137,7 @@ const IdentityCredentials = () => {
               {attributes[aKey] ? (
                 attributes[aKey].map((f) => (
                   <TouchableOpacity
-                    onPress={() => handleShowEditForm(aKey, f.value)}
+                    onPress={() => handleShowEditForm(aKey, f.id)}
                     key={f.id}
                   >
                     <Field.Static
@@ -120,7 +154,7 @@ const IdentityCredentials = () => {
                 )}
             </Widget>
             {aKey === expandedForm && formConfig && (
-              <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialCreate}>
+              <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialSubmit}>
                 <Form.Header>
                   <Form.Header.Cancel />
                   <Form.Header.Done />
