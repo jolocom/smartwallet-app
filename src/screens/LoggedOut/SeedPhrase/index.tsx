@@ -12,7 +12,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirectTo, useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
@@ -24,7 +24,6 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import MagicButton from '~/components/MagicButton'
-import SeedphraseInfo from './SeedphraseInfo'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -32,7 +31,7 @@ const vibrationOptions = {
 }
 
 const SeedPhrase: React.FC = () => {
-  const redirectToRepeatSeedPhrase = useRedirectTo(ScreenNames.SeedPhraseRepeat)
+  const redirect = useRedirect()
   const {
     gestureState,
     animationValues: { shadowScale, circleScale, magicOpacity },
@@ -40,7 +39,6 @@ const SeedPhrase: React.FC = () => {
     gestureHandlers,
   } = useCircleHoldAnimation(1200)
 
-  const [showInfoSheet, setShowInfoSheet] = useState(false)
   const [showInfo, setShowInfo] = useState(true)
   const [seedphrase, setSeedphrase] = useState('')
   const getMnemonic = useStoredMnemonic()
@@ -125,7 +123,7 @@ const SeedPhrase: React.FC = () => {
 
   const renderInfoIcon = () => (
     <Animated.View style={[styles.iconContainer, { opacity: buttonOpacity }]}>
-      <TouchableOpacity onPress={() => setShowInfoSheet(true)}>
+      <TouchableOpacity onPress={() => redirect(ScreenNames.SeedPhraseInfo)}>
         <InfoIcon />
       </TouchableOpacity>
     </Animated.View>
@@ -197,8 +195,8 @@ const SeedPhrase: React.FC = () => {
           type={BtnTypes.primary}
           onPress={
             gestureState === GestureState.Success
-              ? redirectToRepeatSeedPhrase
-              : () => {}
+              ? () => redirect(ScreenNames.SeedPhrase)
+              : () => { }
           }
         >
           {strings.DONE}
@@ -209,10 +207,6 @@ const SeedPhrase: React.FC = () => {
 
   return (
     <>
-      <SeedphraseInfo
-        onClose={() => setShowInfoSheet(false)}
-        isVisible={showInfoSheet}
-      />
       {renderBackgroundCrossfade()}
       <ScreenContainer backgroundColor={Colors.transparent}>
         {/* this should take 3/5 of a screen; justify-content: space-between */}

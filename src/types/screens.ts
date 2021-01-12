@@ -4,7 +4,9 @@ export enum ScreenNames {
   Walkthrough = 'Walkthrough',
   Entropy = 'Entropy',
   Recovery = 'Recovery',
+  LostSeedPhraseInfo = 'LostSeedPhraseInfo',
   SeedPhrase = 'SeedPhrase',
+  SeedPhraseInfo = 'SeedPhraseInfo',
   SeedPhraseRepeat = 'SeedPhraseRepeat',
   // Logged In Tabs
   LoggedIn = 'LoggedIn',
@@ -46,5 +48,5 @@ export enum ScreenNames {
   NotificationsTest = 'NotificationsTest',
   FormTest = 'FormTest',
   InputTest = 'InputTest',
-  PasscodeTest = 'PasscodeTest'
+  PasscodeTest = 'PasscodeTest',
 }
