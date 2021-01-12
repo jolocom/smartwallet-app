@@ -1,71 +1,44 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, TextInput, ActivityIndicator } from 'react-native'
+import React, { useCallback, useEffect } from 'react'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useNavigation } from '@react-navigation/native'
 
 import { strings } from '~/translations/strings'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import PasscodeInput from '~/components/PasscodeInput'
-import Btn, { BtnTypes } from '~/components/Btn'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
-
-import { useKeyboard } from '~/screens/Modals/Recovery/useKeyboard'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
-import { useRedirectTo } from '~/hooks/navigation'
 
-import { Colors } from '~/utils/colors'
-import { JoloTextSizes } from '~/utils/fonts'
-
-import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
+import Passcode from '~/components/Passcode'
 
 const Lock = () => {
-  const [pin, setPin] = useState('')
-  const [hasError, setHasError] = useState(false);
+  const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
 
-  const {
-    keychainPin,
-    isBiometrySelected,
-    isLoadingStorage
-  } = useGetStoredAuthValues()
-
-  const { keyboardHeight } = useKeyboard()
   const dispatch = useDispatch()
   const { authenticate, getEnrolledBiometry } = useBiometry()
 
   const navigation = useNavigation()
-
-  const redirectToPinRecoveryInstruction = useRedirectTo(
-    ScreenNames.PinRecoveryInstructions,
-  )
 
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
     navigation.goBack()
   }, [])
 
-  const pinInputRef = useRef<TextInput>(null)
-
-  /* START -> Biometry authentication if applicatble */
+  /* START -> Biometry authentication */
   /* this will only be invoked if we stored biometry */
   const handleBiometryAuthentication = async () => {
     try {
-        /* in case user disabled biometrics we don't want to run authenticate */
-        const { available, biometryType } = await getEnrolledBiometry();
-        
-        if(available) {
-          const {success} = await authenticate(biometryType)
-          if(success) {
-            unlockApp()
-          } else {
-            pinInputRef.current?.focus()
-          }
+      /* in case user disabled biometrics we don't want to run authenticate */
+      const { available, biometryType } = await getEnrolledBiometry()
+
+      if (available) {
+        const { success } = await authenticate(biometryType)
+        if (success) {
+          unlockApp()
         }
+      }
     } catch (err) {
       console.log('Error in authenticating with biometry on Lock', { err })
     }
@@ -79,73 +52,36 @@ const Lock = () => {
     }
     promptBiometry()
   }, [isBiometrySelected])
-  /* START -> Biometry authentication if applicatble */
+  /* END -> Biometry authentication */
 
   /* disable hardwareback button default functionality */
   useBackHandler(() => true)
 
-  useEffect(() => {
-    if (pin.length < 4 && hasError) {
-      setHasError(false)
-    }
-  }, [pin])
-
-  const handlePINSubmit = () => {
+  const handlePINSubmit = (pin: string) => {
     if (keychainPin.toString() === pin) {
       unlockApp()
     } else {
-      setHasError(true)
+      throw new Error("Pins don't match")
     }
   }
 
   return (
     <ScreenContainer
       customStyles={{
-        marginTop: '30%',
+        marginTop: '20%',
         justifyContent: 'flex-start',
       }}
     >
-      <JoloText
-        kind={JoloTextKind.title}
-        size={JoloTextSizes.middle}
-        weight={JoloTextWeight.regular}
-        color={Colors.white90}
-      >
-        {strings.ENTER_YOUR_PIN}
-      </JoloText>
-      {isLoadingStorage ? (
-        <ActivityIndicator />
-      ) : (
-        <>
-          <View style={styles.inputContainer}>
-        <PasscodeInput
-          value={pin}
-          stateUpdaterFn={setPin}
-          onSubmit={handlePINSubmit}
-          hasError={hasError}
-          errorStateUpdaterFn={setHasError}
-          ref={pinInputRef}
+      <Passcode onSubmit={handlePINSubmit}>
+        <Passcode.Header
+          title={strings.ENTER_YOUR_PASSCODE}
+          errorTitle={strings.WRONG_PASSCODE}
         />
-      </View>
-      <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
-        <Btn
-          type={BtnTypes.secondary}
-          onPress={redirectToPinRecoveryInstruction}
-        >
-          {strings.FORGOT_YOUR_PIN}
-        </Btn>
-      </AbsoluteBottom>
-        </>
-      )}
-      
+        <Passcode.Input />
+        <Passcode.Forgot />
+      </Passcode>
     </ScreenContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    marginTop: 20,
-  },
-})
 
 export default Lock

@@ -17,6 +17,7 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToForms = useRedirectTo(ScreenNames.FormTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
+  const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
   const redirect = useRedirect()
 
   const popupRef = useRef<{ show: () => void }>(null)
@@ -68,6 +69,9 @@ const DevelopmentSection = () => {
         </Option>
         <Option onPress={redirectToInputs}>
           <Option.Title title="Inputs" />
+        </Option>
+        <Option onPress={redirectToPasscode}>
+          <Option.Title title="Passcode" />
         </Option>
       </Section.Block>
     </Section>
