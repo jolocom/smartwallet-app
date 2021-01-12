@@ -1,12 +1,14 @@
-// NOTE: the first unfinished step will never be used, due to the fact
-import { IRecordConfig } from './types'
-import {
-  getDateSection,
-  filterUniqueById,
-  interactionTypeToFlowType,
-} from './utils'
 import { FlowType } from '@jolocom/sdk'
 
+export interface IRecordConfig {
+  title: string
+  steps: {
+    finished: string[]
+    unfinished: string[]
+  }
+}
+
+// NOTE: the first unfinished step will never be used, due to the fact
 // that there is always a request i.e. first step.
 export const recordConfig: Partial<Record<FlowType, IRecordConfig>> = {
   [FlowType.Authentication]: {

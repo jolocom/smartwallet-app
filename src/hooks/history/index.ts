@@ -1,5 +1,5 @@
 import { useAgent } from '~/hooks/sdk'
-import { IRecordDetails } from './types'
+import { IRecordDetails } from '~/types/records'
 import {
   getDateSection,
   filterUniqueById,
@@ -10,8 +10,8 @@ import {
   CredentialRequestFlowState,
   AuthorizationFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
-import { RecordManager } from './recordManager'
-import { recordConfig } from './config'
+import { RecordManager } from '~/middleware/records/recordManager'
+import { recordConfig } from '~/config/records'
 
 export const useHistory = () => {
   const agent = useAgent()

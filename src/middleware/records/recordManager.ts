@@ -1,14 +1,5 @@
-import {
-  IRecordDetails,
-  IRecordStatus,
-  IRecordSteps,
-  IRecordConfig,
-} from './types'
-import {
-  getDateSection,
-  filterUniqueById,
-  interactionTypeToFlowType,
-} from './utils'
+import { IRecordDetails, IRecordStatus, IRecordSteps } from '~/types/records'
+import { IRecordConfig } from '~/config/records'
 import { Interaction, FlowType, JSONWebToken } from '@jolocom/sdk'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import truncateDid from '~/utils/truncateDid'

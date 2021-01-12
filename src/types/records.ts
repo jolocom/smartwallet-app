@@ -31,11 +31,3 @@ export interface IPreLoadedInteraction {
   section: string
   type: FlowType
 }
-
-export interface IRecordConfig {
-  title: string
-  steps: {
-    finished: string[]
-    unfinished: string[]
-  }
-}
