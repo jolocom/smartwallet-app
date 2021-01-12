@@ -10,6 +10,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
+import Section from './Section'
 
 interface Props {
   locale: string
@@ -52,14 +53,7 @@ const LegalTextWrapper: React.FC<Props> = ({
       }}
     >
       <View style={styles.wrapper}>
-        <JoloText
-          color={Colors.white90}
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.middle}
-          customStyles={{ marginBottom: 22, fontFamily: Fonts.Regular }}
-        >
-          {title}
-        </JoloText>
+        <Section.Title>{title}</Section.Title>
         <ScrollView
           contentContainerStyle={{
             paddingBottom: '20%',

@@ -27,7 +27,7 @@ const LoaderTest = () => {
 
   return (
     <ScreenContainer hasHeaderBack>
-      <Section.Title text={'Loaders'} />
+      <Section.Title>Loaders</Section.Title>
       <View style={{ flex: 1, marginTop: 30, width: '100%' }}>
         <Btn
           type={BtnTypes.quinary}

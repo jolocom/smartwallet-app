@@ -33,7 +33,7 @@ const Language = () => {
         alignItems: 'flex-start',
       }}
     >
-      <Section.Title text={t(strings.LANGUAGE)} marginTop={6} />
+      <Section.Title marginTop={6}>{t(strings.LANGUAGE)}</Section.Title>
       <SingleSelectBlock
         initialSelect={storedLanguage}
         selection={languages}
