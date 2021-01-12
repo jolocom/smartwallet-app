@@ -24,7 +24,6 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import MagicButton from '~/components/MagicButton'
-import SeedphraseInfo from './SeedphraseInfo'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -197,7 +196,7 @@ const SeedPhrase: React.FC = () => {
           onPress={
             gestureState === GestureState.Success
               ? () => redirect(ScreenNames.SeedPhrase)
-              : () => {}
+              : () => { }
           }
         >
           {strings.DONE}
