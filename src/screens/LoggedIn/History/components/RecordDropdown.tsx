@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import Dash from 'react-native-dash'
 
-import { IRecordDetails } from '~/hooks/history/types'
+import { IRecordDetails } from '~/types/records'
 import { Colors } from '~/utils/colors'
 import Record from './Record'
 

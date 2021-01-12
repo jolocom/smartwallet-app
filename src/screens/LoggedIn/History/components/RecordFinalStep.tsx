@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import { IRecordSteps, IRecordStatus } from '~/hooks/history/types'
+import { IRecordSteps, IRecordStatus } from '~/types/records'
 import { Colors } from '~/utils/colors'
 import JoloText from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'

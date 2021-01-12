@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { LayoutAnimation, TouchableOpacity } from 'react-native'
 
 import { useHistory } from '~/hooks/history'
-import { IRecordDetails } from '~/hooks/history/types'
+import { IRecordDetails } from '~/types/records'
 import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemProps } from './Record'
 

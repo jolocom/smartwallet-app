@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { IRecordDetails } from '~/hooks/history/types'
+import { IRecordDetails } from '~/types/records'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
