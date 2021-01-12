@@ -7,11 +7,12 @@ import {
   View,
 } from 'react-native'
 import { useSelector } from 'react-redux'
-import PencilIcon from '~/assets/svg/PencilIcon'
+
 import Input from '~/components/Input'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 import Widget from '~/components/Widget'
 import Field from '~/components/Widget/Field'
+import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
 import { getAttributes } from '~/modules/attributes/selectors'
 import {
@@ -19,12 +20,20 @@ import {
   ClaimKeys,
   IAttributeConfig,
 } from '~/types/credentials'
-import Form from './components/Form'
+import { useSICActions } from '~/hooks/attributes';
+
+import Form, { IFormState } from './components/Form'
+import { mapFormFields } from '~/utils/dataMapping'
+import { useToasts } from '~/hooks/toasts'
 
 const IdentityCredentials = () => {
-  const attributes = useSelector(getAttributes)
-
   const [expandedForm, setExpandedForm] = useState<AttributeTypes | null>(null)
+  const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
+
+  const attributes = useSelector(getAttributes)
+  const { createSICredential, editSICredential } = useSICActions();
+  const { scheduleWarning } = useToasts();
+
   const toggleForm = (cb: (type?: AttributeTypes) => void) => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
@@ -32,9 +41,6 @@ const IdentityCredentials = () => {
     })
     cb()
   }
-
-  const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
-
   const handleShowNewForm = (type: AttributeTypes) => {
     toggleForm(() => setExpandedForm(type))
     setFormConfig(attributeConfig[type])
@@ -55,8 +61,29 @@ const IdentityCredentials = () => {
       fields: fieldsWithValues,
     })
   }
-
   const handleHideForm = () => toggleForm(() => setExpandedForm(null))
+
+  const handleCredentialCreate = async (formValues: IFormState[]) => {
+    if (expandedForm) {
+      try {
+        const claims = mapFormFields(formValues);
+        await createSICredential(expandedForm, claims);
+        setExpandedForm(null)
+      } catch (e) {
+        scheduleWarning({
+          title: 'Error',
+          message: 'Failed to create Self Issued Credential'
+        })
+
+      }
+    }
+  }
+
+  const handleCredentialEdit = async (formValues: IFormState[], id: string) => {
+    if (expandedForm) {
+      console.log()
+    }
+  }
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
@@ -86,14 +113,14 @@ const IdentityCredentials = () => {
                   </TouchableOpacity>
                 ))
               ) : (
-                <Field.Empty>
-                  {/* TODO: rething how to pass field placeholder value */}
-                  <PencilIcon />
-                </Field.Empty>
-              )}
+                  <Field.Empty>
+                    {/* TODO: rething how to pass field placeholder value */}
+                    <PencilIcon />
+                  </Field.Empty>
+                )}
             </Widget>
             {aKey === expandedForm && formConfig && (
-              <Form config={formConfig} onCancel={handleHideForm}>
+              <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialCreate}>
                 <Form.Header>
                   <Form.Header.Cancel />
                   <Form.Header.Done />

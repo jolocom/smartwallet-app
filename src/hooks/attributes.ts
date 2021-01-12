@@ -41,6 +41,57 @@ export const useSyncStorageAttributes = () => {
   }
 }
 
+
+export const useSICActions = () => {
+  const agent = useAgent();
+  const did = useSelector(getDid)
+  const dispatch = useDispatch();
+
+  const deleteSICredential = async (id: string) => {
+    try {
+      await agent.storage.delete.verifiableCredential(id)
+    } catch (e) {
+
+    }
+  }
+
+
+  const createSICredential = async (type: AttributeTypes, claims: ClaimValues) => {
+    try {
+      // assemble and store in the storage
+      const signedCredential = await agent.idw.create.signedCredential({
+        metadata: attributeConfig[type].metadata,
+        claim: claims,
+        subject: did
+      }, await agent.passwordStore.getPassword());
+      await agent.storage.store.verifiableCredential(signedCredential)
+
+      // update redux store
+      const attribute = {
+        id: signedCredential.id,
+        value: extractClaims(signedCredential.claim),
+      }
+      dispatch(updateAttrs({ type, attribute }))
+    } catch (err) {
+      console.log({ err });
+      throw new Error(`Error creating a self issued credential of type', ${type}`);
+    }
+  }
+
+  const editSICredential = async (type: AttributeTypes, claims: ClaimValues, id: string) => {
+    try {
+      await deleteSICredential(id);
+      // await createSICredential(type, claims)
+    } catch (err) {
+      console.log({ err });
+      throw new Error(`Error editing a self issued credential of type', ${type}`);
+    }
+  }
+
+  return { createSICredential, editSICredential }
+
+}
+
 export const useCreateAttributes = () => {
   const agent = useAgent()
   const did = useSelector(getDid)

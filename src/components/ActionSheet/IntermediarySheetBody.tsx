@@ -13,8 +13,8 @@ import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { attributeConfig } from '~/config/claims'
 import Input from '../Input'
 import { useToasts } from '~/hooks/toasts'
-import { ClaimKeys } from '~/types/credentials'
 import useInteractionToasts from '~/hooks/interactions/useInteractionToasts'
+import { mapFormFields } from '~/utils/dataMapping'
 
 const IntermediarySheetBody = () => {
   const dispatch = useDispatch()
@@ -32,14 +32,9 @@ const IntermediarySheetBody = () => {
 
   const handleSubmit = async (collectedValues: IFormState[]) => {
     if (collectedValues.length) {
-      const claims = collectedValues.reduce<Partial<Record<ClaimKeys, string>>>(
-        (acc, v) => {
-          acc[v.key] = v.value
-          return acc
-        },
-        {},
-      )
+      const claims = mapFormFields(collectedValues);
 
+      // TODO: update check of non-primitive validity
       const claimsValid = Object.values(claims).every((c) => c && !!c.length)
 
       if (claimsValid) {
