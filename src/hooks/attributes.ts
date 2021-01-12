@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { initAttrs, updateAttrs } from '~/modules/attributes/actions'
+import { initAttrs, removeAttr, updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes } from '~/types/credentials'
 import { useAgent } from './sdk'
 import { AttrsState, AttributeI, ClaimValues } from '~/modules/attributes/types'
@@ -47,14 +47,15 @@ export const useSICActions = () => {
   const did = useSelector(getDid)
   const dispatch = useDispatch();
 
-  const deleteSICredential = async (id: string) => {
+  const deleteSICredential = async (type: AttributeTypes, id: string) => {
     try {
-      await agent.storage.delete.verifiableCredential(id)
-    } catch (e) {
-
+      await agent.storage.delete.verifiableCredential(id);
+      dispatch(removeAttr({ type, id }))
+    } catch (err) {
+      console.log({ err });
+      throw new Error(`Error deleting a self issued credential with', ${id}`);
     }
   }
-
 
   const createSICredential = async (type: AttributeTypes, claims: ClaimValues) => {
     try {
@@ -80,8 +81,9 @@ export const useSICActions = () => {
 
   const editSICredential = async (type: AttributeTypes, claims: ClaimValues, id: string) => {
     try {
-      await deleteSICredential(id);
-      // await createSICredential(type, claims)
+      await deleteSICredential(type, id);
+      await createSICredential(type, claims)
+
     } catch (err) {
       console.log({ err });
       throw new Error(`Error editing a self issued credential of type', ${type}`);

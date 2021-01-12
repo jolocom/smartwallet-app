@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useMemo, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import FormBody from './FormBody'
 import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
@@ -35,9 +35,9 @@ interface IFormComposition {
 
 const FormContext = createContext<IFormContext>({
   fields: [],
-  updateField: () => {},
-  onSubmit: () => {},
-  onCancel: () => {},
+  updateField: () => { },
+  onSubmit: () => { },
+  onCancel: () => { },
 })
 
 // TODO: take care of types
@@ -71,19 +71,28 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
     [setState],
   )
 
+  // TODO: dirty you are
+  useEffect(() => {
+    setState(config.fields.map((el) => ({
+      ...el,
+      // TODO: add optional value property to a field object
+      value: el.value || '',
+    })))
+  }, [JSON.stringify(config)])
+
   const contextValue = useMemo(
     () => ({
       fields: state,
       onSubmit: onSubmit
         ? () => onSubmit(state)
         : () => {
-            console.log('Submitting with values', { state })
-          },
+          console.log('Submitting with values', { state })
+        },
       onCancel: onCancel
         ? () => onCancel(state)
         : () => {
-            console.log('Canceling with values', { state })
-          },
+          console.log('Canceling with values', { state })
+        },
       updateField,
     }),
     [state, onSubmit, onCancel, updateField],

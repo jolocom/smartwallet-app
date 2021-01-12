@@ -12,6 +12,7 @@ export type AttrsState<T> = {
 export enum AttrActions {
   initAttrs = 'initAttrs',
   updateAttrs = 'updateAttrs',
+  removeAttr = 'removeAttr'
 }
 
 export type ClaimValues = {

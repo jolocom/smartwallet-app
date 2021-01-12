@@ -16,7 +16,6 @@ import { attributeConfig } from '~/config/claims'
 import { getAttributes } from '~/modules/attributes/selectors'
 import {
   AttributeTypes,
-  ClaimKeys,
   IAttributeConfig,
 } from '~/types/credentials'
 import { useSICActions } from '~/hooks/attributes';
@@ -26,13 +25,14 @@ import { mapFormFields } from '~/utils/dataMapping'
 import { useToasts } from '~/hooks/toasts'
 
 enum FormModes {
+  add = 'add',
   edit = 'edit',
-  add = 'add'
+  none = 'none',
 }
 
 const IdentityCredentials = () => {
   const [expandedForm, setExpandedForm] = useState<AttributeTypes | undefined>(undefined);
-  const [formMode, setFormMode] = useState(FormModes.add);
+  const [formMode, setFormMode] = useState(FormModes.none);
   const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
   const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined); // state that shows what claim are we editing 
 
@@ -41,11 +41,19 @@ const IdentityCredentials = () => {
   const { scheduleWarning } = useToasts();
 
   // we are not interested in claim id in 'add' mode, therefore reetting value to avoid confusions
+  // useEffect(() => {
+  //   if (formMode === FormModes.add) {
+  //     setEditClaimId(undefined);
+  //   }
+  // }, [formMode])
+
   useEffect(() => {
-    if (formMode === FormModes.add) {
-      setEditClaimId(undefined);
+    if (!expandedForm) {
+      setFormMode(FormModes.none);
+      setFormConfig(null);
+      setEditClaimId(undefined)
     }
-  }, [formMode])
+  }, [expandedForm])
 
   // update form config
   useEffect(() => {
@@ -76,26 +84,30 @@ const IdentityCredentials = () => {
   }
 
 
-  const handleShowForm = (mode: FormModes) => {
-    return (type: AttributeTypes, id?: string) => {
-      setFormMode(mode);
-      toggleForm(() => setExpandedForm(type))
-      if (id) {
-        setEditClaimId(id)
-      }
-    }
-  }
-  const handleShowNewForm = handleShowForm(FormModes.add);
-  const handleShowEditForm = handleShowForm(FormModes.edit);
-  const handleHideForm = () => toggleForm(() => setExpandedForm(undefined))
+  // const handleShowForm = (mode: FormModes) => {
+  //   return (type: AttributeTypes, id?: string) => {
+  //     setFormMode(mode);
+  //     toggleForm(() => setExpandedForm(type))
+  //     if (id) {
+  //       setEditClaimId(id)
+  //     }
+  //   }
+  // }
+  // const handleShowNewForm = handleShowForm(FormModes.add);
+  // const handleShowEditForm = handleShowForm(FormModes.edit);
 
-  const handleCredentialSubmit = async (formValues: IFormState[]) => {
-    if (formMode === FormModes.add) {
-      await handleCredentialCreate(formValues);
-    } else if (formMode === FormModes.edit) {
-      await handleCredentialEdit(formValues)
-    }
+  const handleShowNewForm = (type: AttributeTypes) => {
+    setFormMode(FormModes.add);
+    toggleForm(() => setExpandedForm(type))
   }
+
+  const handleShowEditForm = (type: AttributeTypes, id: string) => {
+    setFormMode(FormModes.edit);
+    toggleForm(() => setExpandedForm(type))
+    setEditClaimId(id)
+  };
+
+  const handleHideForm = () => toggleForm(() => setExpandedForm(undefined))
 
   const handleCredentialCreate = async (formValues: IFormState[]) => {
     if (expandedForm) {
@@ -114,10 +126,26 @@ const IdentityCredentials = () => {
   }
 
   const handleCredentialEdit = async (formValues: IFormState[]) => {
-    if (expandedForm) {
-      console.log('in edit mode claim', { editClaimId })
+    if (expandedForm && editClaimId) {
+      try {
+        const claims = mapFormFields(formValues);
+        await editSICredential(expandedForm, claims, editClaimId);
+        // TODO: you are not DRY
+        // await createSICredential(expandedForm, claims);
+      } catch (err) {
+        console.log({ err });
+      }
     }
   }
+
+  const handleCredentialSubmit = async (formValues: IFormState[]) => {
+    if (formMode === FormModes.add) {
+      await handleCredentialCreate(formValues);
+    } else if (formMode === FormModes.edit) {
+      await handleCredentialEdit(formValues)
+    }
+  }
+
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
@@ -128,7 +156,7 @@ const IdentityCredentials = () => {
         enableOnAndroid
       >
         {Object.entries(attributeConfig).map(([aKey, aVal]) => (
-          <View style={styles.group}>
+          <View style={styles.group} key={aKey}>
             <Widget onCreate={() => handleShowNewForm(aKey)}>
               <Widget.Header>
                 <Widget.Header.Name value={aVal.label} />
@@ -163,6 +191,7 @@ const IdentityCredentials = () => {
                   {({ fields, updateField }) =>
                     fields.map((field, idx) => (
                       <Input.Block
+                        key={field.key}
                         updateInput={(val: string) =>
                           updateField(field.key, val)
                         }

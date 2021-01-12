@@ -17,6 +17,12 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
           [type]: availableAttr ? [...availableAttr, attribute] : [attribute],
         },
       }
+    case AttrActions.removeAttr:
+      const updatedAttr = state.all[action.payload.type]?.filter(a => a.id !== action.payload.id)
+      return {
+        ...state,
+        all: updatedAttr,
+      }
     default:
       return state
   }
