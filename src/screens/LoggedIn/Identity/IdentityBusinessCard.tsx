@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import Block from '~/components/Block';
 import JoloText from '~/components/JoloText';
+import { attributeConfig } from '~/config/claims';
+import { getAttributes } from '~/modules/attributes/selectors';
 import { strings } from '~/translations';
+import { AttributeTypes } from '~/types/credentials';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
 
@@ -20,20 +24,45 @@ const Placeholder = {
 
 const BusinessCardPlaceholder = () => {
  return (
-  <View style={{ width: '100%' }}>
+  <>
    {[...Array(3).keys()].map(el => (
-    <>
+    <View key={el}>
      <Placeholder.Mini />
      <Placeholder.Big />
-    </>
+    </View>
    ))}
-  </View>
+  </>
  )
 }
 
+// const businessCardFields = attributeConfig[AttributeTypes.businessCard].fields.reduce((formattedFields, field) => {
+//  if(field.key === (ClaimKeys.familyName || ClaimKeys.givenName)) {
+//   const nameField = formattedFields.find(f => f.key === 'fullName');
+//   const fullName = nameField ? {...nameField, } : {key: 'fullName', label: 'Name', keyboardOptions: {keyboardType: 'default', autoCapitalize: 'words'}}
+//   formattedFields = [...formattedFields, nameField ? ]
+//  } else {
+//   formattedFields = [...formattedFields, field]
+//  }
+//  return formattedFields;
+//  }, []);
+
+const businessCardFields = attributeConfig[AttributeTypes.businessCard].fields
+
 const BusinessCardCredential = () => {
+ const attributes = useSelector(getAttributes);
+ const businessCardAttributes = attributes[AttributeTypes.businessCard] || [];
+
  return (
-  <JoloText>In progress...</JoloText>
+  <>
+   {businessCardFields.map(field => (
+    <View key={field.key}>
+     <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ textAlign: 'left', marginBottom: 3 }}>{field.label}</JoloText>
+     {businessCardAttributes.length && (
+      <JoloText size={JoloTextSizes.big} color={Colors.white80} customStyles={{ textAlign: 'left', marginBottom: 13 }}>{businessCardAttributes[0].value[field.key]}</JoloText>
+     )}
+    </View>
+   ))}
+  </>
  )
 }
 
@@ -53,9 +82,10 @@ const IdentityBusinessCard = () => {
    ))}
    <TouchableOpacity onPress={handlePlaceholderToggle}>
     <Block customStyle={{ padding: 26, alignItems: 'center', marginTop: 30 }}>
-     {isPlaceholder ? <BusinessCard.Placeholder /> : <BusinessCard.Credential />}
+     <View style={{ width: '100%' }}>
+      {isPlaceholder ? <BusinessCard.Placeholder /> : <BusinessCard.Credential />}
+     </View>
     </Block>
-
    </TouchableOpacity>
   </View>
  )
