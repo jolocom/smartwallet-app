@@ -21,6 +21,17 @@ export const recovery = {
   WHAT_IF_I_FORGOT: 'What if I forgot my phrase?',
   CONFIRM: 'Confirm',
   BACK: 'Back',
+  WHAT_TO_DO_IF_YOU_FORGOT_YOUR_SECRET_PHRASE:
+    'What to do if you forgot your secret phrase',
+  CONTINUE: 'Continue',
+  FORGOT_SEED_INFO_HIGHLIGHT_1:
+    'Without your secret phrase you will not be able to re-activate your identity.',
+  FORGOT_SEED_INFO_HIGHLIGHT_2:
+    'Recovering your entire wallet requires both the secret phrase and a backup file.',
+  FORGOT_SEED_INFO_3:
+    'Are you sure you do not have a copy stored somewhere safe?',
+  FORGOT_SEED_INFO_HIGHLIGHT_4:
+    'Think back to when you first created your identity…',
 }
 
 const walkthrough = {
