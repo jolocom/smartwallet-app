@@ -317,6 +317,7 @@ const identity = {
   NEXT: 'Next',
   WHAT_IS_YOUR_NAME: 'What is your name?',
   CREATE: 'Create',
+  BUSINESS_CARD_CTA_CREATE: 'So far it\'s empty, Just tap to start creation'
 }
 
 export const strings = {
