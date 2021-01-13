@@ -5,6 +5,9 @@ import IdentityIntro from './IdentityIntro'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { useSelector } from 'react-redux'
 import IdentityCredentials from './IdentityCredentials'
+import IdentityTabs from './tabs'
+import { View } from 'react-native'
+import { debugView } from '~/utils/dev'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
@@ -12,9 +15,43 @@ const Identity = () => {
 
   return (
     <ScreenContainer isFullscreen>
-      {showIdentityIntro ? <IdentityIntro /> : <IdentityCredentials />}
+      {showIdentityIntro ? (
+        <IdentityIntro />
+      ) : (
+        <View
+          style={{
+            paddingHorizontal: '5%',
+            marginTop: 30,
+            width: '100%',
+            flex: 1,
+            ...debugView(),
+          }}
+        >
+          <IdentityTabs initialTab="credentials">
+            <IdentityTabs.Header>
+              <IdentityTabs.Tab id="credentials">
+                <IdentityTabs.Tab.Icon>
+                  <View
+                    style={{ width: 55, height: 55, backgroundColor: 'red' }}
+                  />
+                </IdentityTabs.Tab.Icon>
+                <IdentityTabs.Tab.Title>Credentials</IdentityTabs.Tab.Title>
+              </IdentityTabs.Tab>
+              <IdentityTabs.Tab id="business-card">
+                <IdentityTabs.Tab.Icon>
+                  <View
+                    style={{ width: 55, height: 55, backgroundColor: 'red' }}
+                  />
+                </IdentityTabs.Tab.Icon>
+                <IdentityTabs.Tab.Title>Business Card</IdentityTabs.Tab.Title>
+              </IdentityTabs.Tab>
+            </IdentityTabs.Header>
+          </IdentityTabs>
+        </View>
+      )}
     </ScreenContainer>
   )
 }
+/* <IdentityCredentials /> */
 
 export default Identity
