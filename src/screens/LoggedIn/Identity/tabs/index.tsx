@@ -4,7 +4,6 @@ import { ScrollView } from 'react-native'
 import IdentityTab from './IdentityTab'
 import { useCustomContext } from '~/hooks/context'
 import IdentityTabsHeader from './IdentityTabsHeader'
-import IdentityTabsContent from './IdentityTabsContent'
 import IdentityTabsPage from './IdentityTabsPage'
 
 interface ITabsContext {
@@ -22,7 +21,6 @@ interface IIdentityTabs {
 interface ITabsComposition {
   Tab: React.FC<{ id: string; title: string }>
   Header: React.FC
-  Content: React.FC
   Page: React.FC<{ id: string }>
 }
 
@@ -53,7 +51,6 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
 
 IdentityTabs.Header = IdentityTabsHeader
 IdentityTabs.Tab = IdentityTab
-IdentityTabs.Content = IdentityTabsContent
 IdentityTabs.Page = IdentityTabsPage
 
 export const useIdentityTabs = useCustomContext(TabsContext)

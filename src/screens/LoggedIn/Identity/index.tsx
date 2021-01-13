@@ -55,14 +55,12 @@ const Identity = () => {
                 <IdentityTabBusinessCardIcon />
               </IdentityTabs.Tab>
             </IdentityTabs.Header>
-            <IdentityTabs.Content>
-              <IdentityTabs.Page id={IdentityTabIds.credentials}>
-                <IdentityCredentials />
-              </IdentityTabs.Page>
-              <IdentityTabs.Page id={IdentityTabIds.businessCard}>
-                {/* Business Card components */}
-              </IdentityTabs.Page>
-            </IdentityTabs.Content>
+            <IdentityTabs.Page id={IdentityTabIds.credentials}>
+              <IdentityCredentials />
+            </IdentityTabs.Page>
+            <IdentityTabs.Page id={IdentityTabIds.businessCard}>
+              {/* Business Card components */}
+            </IdentityTabs.Page>
           </IdentityTabs>
         </View>
       )}
