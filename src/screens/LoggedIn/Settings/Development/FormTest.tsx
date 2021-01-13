@@ -19,7 +19,8 @@ const FormTest = () => {
         showsVerticalScrollIndicator={false}
         style={{ width: '100%' }}
       >
-        <Section title="With header" hasBlock={false}>
+        <Section>
+          <Section.Title>With header</Section.Title>
           <Form config={attributeConfig[AttributeTypes.name]}>
             <Form.Header>
               <Form.Header.Cancel />
@@ -40,7 +41,8 @@ const FormTest = () => {
             </Form.Body>
           </Form>
         </Section>
-        <Section title="Without header" hasBlock={false}>
+        <Section>
+          <Section.Title>Without header</Section.Title>
           <Form config={attributeConfig[AttributeTypes.postalAddress]}>
             <Form.Body>
               {({ fields, updateField }) =>
@@ -57,7 +59,8 @@ const FormTest = () => {
             </Form.Body>
           </Form>
         </Section>
-        <Section title="Exposed values in form" hasBlock={false}>
+        <Section>
+          <Section.Title>Exposed values in form</Section.Title>
           <Form config={attributeConfig[AttributeTypes.emailAddress]}>
             <Form.Body>
               {({ fields, updateField }) =>

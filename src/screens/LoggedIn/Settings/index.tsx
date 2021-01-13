@@ -51,76 +51,96 @@ const SettingsGeneral: React.FC = () => {
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
-        paddingHorizontal: 10,
+        paddingTop: 0,
       }}
     >
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 150,
-          // marginTop: BP({ large: 56, medium: 56, default: 32 }),
         }}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
-        <Section title={strings.APP_PREFERENCES}>
-          <Option onPress={() => handleNavigateToScreen(ScreenNames.Language)}>
-            <Option.Title title={strings.LANGUAGE} />
-            <Option.RightIcon />
-          </Option>
+        <Section>
+          <Section.Title>{strings.APP_PREFERENCES}</Section.Title>
+          <Section.Block>
+            <Option
+              onPress={() => handleNavigateToScreen(ScreenNames.Language)}
+            >
+              <Option.Title title={strings.LANGUAGE} />
+              <Option.RightIcon />
+            </Option>
+          </Section.Block>
         </Section>
-        <Section title={strings.SECURITY}>
-          <Option onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}>
-            <Option.Title title={strings.CHANGE_PIN} />
-            <Option.RightIcon />
-          </Option>
-          <EnableBiometryOption />
-          <Option
-            onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
-          >
-            <View style={{ alignItems: 'flex-start' }}>
-              <Option.Title title={strings.BACKUP_IDENTITY} />
-              {shouldWarnBackup() && (
-                <JoloText
-                  kind={JoloTextKind.subtitle}
-                  size={JoloTextSizes.tiniest}
-                  color={Colors.error}
-                  customStyles={{
-                    textAlign: 'left',
-                    lineHeight: 14,
-                    marginTop: 10,
-                  }}
-                >
-                  {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
-                </JoloText>
-              )}
-            </View>
-          </Option>
+
+        <Section>
+          <Section.Title>{strings.SECURITY}</Section.Title>
+          <Section.Block>
+            <Option
+              onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
+            >
+              <Option.Title title={strings.CHANGE_PIN} />
+              <Option.RightIcon />
+            </Option>
+            <EnableBiometryOption />
+            <Option
+              onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
+            >
+              <View style={{ alignItems: 'flex-start' }}>
+                <Option.Title title={strings.BACKUP_IDENTITY} />
+                {shouldWarnBackup() && (
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    size={JoloTextSizes.tiniest}
+                    color={Colors.error}
+                    customStyles={{
+                      textAlign: 'left',
+                      lineHeight: 14,
+                      marginTop: 10,
+                    }}
+                  >
+                    {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
+                  </JoloText>
+                )}
+              </View>
+            </Option>
+          </Section.Block>
         </Section>
-        <Section title={strings.GENERAL}>
-          <Option onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}>
-            <Option.Title title={strings.FAQ} />
-            <Option.RightIcon />
-          </Option>
-          <Option onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}>
-            <Option.Title title={strings.CONTACT_US} />
-            <Option.RightIcon />
-          </Option>
-          <Option onPress={rateApp}>
-            <Option.Title title={strings.RATE_US} />
-          </Option>
-          <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
-            <Option.Title title={strings.IMPRINT} />
-            <Option.RightIcon />
-          </Option>
-          <Option onPress={() => handleNavigateToScreen(ScreenNames.About)}>
-            <Option.Title title={strings.ABOUT} />
-            <Option.RightIcon />
-          </Option>
+
+        <Section>
+          <Section.Title>{strings.GENERAL}</Section.Title>
+          <Section.Block>
+            <Option onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}>
+              <Option.Title title={strings.FAQ} />
+              <Option.RightIcon />
+            </Option>
+            <Option
+              onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}
+            >
+              <Option.Title title={strings.CONTACT_US} />
+              <Option.RightIcon />
+            </Option>
+            <Option onPress={rateApp}>
+              <Option.Title title={strings.RATE_US} />
+            </Option>
+            <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
+              <Option.Title title={strings.IMPRINT} />
+              <Option.RightIcon />
+            </Option>
+            <Option onPress={() => handleNavigateToScreen(ScreenNames.About)}>
+              <Option.Title title={strings.ABOUT} />
+              <Option.RightIcon />
+            </Option>
+          </Section.Block>
         </Section>
         {__DEV__ && <DevelopmentSection />}
 
-        <Btn type={BtnTypes.quinary} onPress={handleLogout}>
+        <Btn
+          type={BtnTypes.quinary}
+          onPress={handleLogout}
+          customContainerStyles={{ marginTop: 60 }}
+        >
           {strings.EMPTY_WALLET}
         </Btn>
         <JoloText

@@ -1,62 +1,64 @@
 import React from 'react'
 import { StyleSheet, View, ViewStyle, TextStyle } from 'react-native'
+
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import Block from '~/components/Block'
 
-interface PropsI {
-  title: string
-  customStyles?: ViewStyle
-  titleStyles?: TextStyle
-  hasBlock?: boolean
+interface CompoundSection {
+  Title: React.FC<TitleProps>
+  Block: React.FC
 }
 
-const Section: React.FC<PropsI> = ({
-  title,
-  children,
-  hasBlock = true,
-  customStyles = {},
-  titleStyles = {},
-}) => {
-  const ChildrenContainer = hasBlock ? Block : React.Fragment
+interface TitleProps {
+  marginTop?: number | string
+  customStyle?: TextStyle
+}
 
-  return (
-    <View
-      style={[
-        styles.sectionContainer,
-        { marginBottom: children ? 44 : 0 },
-        customStyles,
-      ]}
-    >
-      <JoloText
-        kind={JoloTextKind.title}
-        size={JoloTextSizes.middle}
-        weight={JoloTextWeight.regular}
-        customStyles={[
-          {
-            textAlign: 'left',
-            marginBottom: children
-              ? BP({ large: 40, medium: 40, default: 20 })
-              : 0,
-          },
-          titleStyles,
-        ]}
-      >
-        {title}
-      </JoloText>
-      {children && <ChildrenContainer>{children}</ChildrenContainer>}
-    </View>
-  )
+const SectionTitle: React.FC<TitleProps> = ({
+  children,
+  marginTop = 0,
+  customStyle,
+}) => (
+  <JoloText
+    kind={JoloTextKind.title}
+    size={JoloTextSizes.middle}
+    weight={JoloTextWeight.regular}
+    customStyles={[
+      {
+        textAlign: 'left',
+        marginBottom: BP({ large: 32, medium: 32, default: 24 }),
+        marginTop,
+        ...customStyle,
+      },
+    ]}
+  >
+    {children}
+  </JoloText>
+)
+
+const SectionBlock: React.FC = ({ children }) => {
+  return <Block>{children}</Block>
+}
+
+const Section: React.FC<{ customStyles?: ViewStyle }> & CompoundSection = ({
+  children,
+  customStyles = {},
+}) => {
+  return <View style={[styles.sectionContainer, customStyles]}>{children}</View>
 }
 
 const styles = StyleSheet.create({
   sectionContainer: {
     justifyContent: 'flex-start',
-    marginBottom: 44,
     alignItems: 'flex-start',
     width: '100%',
+    marginTop: 44,
   },
 })
+
+Section.Title = SectionTitle
+Section.Block = SectionBlock
 
 export default Section

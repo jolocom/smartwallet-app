@@ -30,47 +30,50 @@ const DevelopmentSection = () => {
   }
 
   return (
-    <Section title="Development">
-      <Option>
-        <Option.Title title="Toggle Switch" />
-        <View style={{ position: 'absolute', right: 16 }}>
-          <ToggleSwitch onToggle={handleToggle} />
-        </View>
-      </Option>
-      <Option onPress={() => redirect(ScreenNames.ButtonsTest)}>
-        <Option.Title title="Buttons" />
-      </Option>
-      <Option onPress={() => redirect(ScreenNames.LoaderTest)}>
-        <Option.Title title="Loader" />
-      </Option>
-      <Option
-        onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
-      >
-        <Option.Title title="Throw error" />
-      </Option>
-      <Option onPress={() => popupRef.current?.show()}>
-        <Option.Title title="Popup menu" />
-        <PopupMenu
-          ref={popupRef}
-          options={[
-            { title: 'Help', onPress: () => { } },
-            { title: 'Me', onPress: () => { } },
-            { title: 'Please', onPress: () => { } },
-          ]}
-        />
-      </Option>
-      <Option onPress={redirectToNotifications}>
-        <Option.Title title="Notifications" />
-      </Option>
-      <Option onPress={redirectToForms}>
-        <Option.Title title="Forms" />
-      </Option>
-      <Option onPress={redirectToInputs}>
-        <Option.Title title="Inputs" />
-      </Option>
-      <Option onPress={redirectToPasscode}>
-        <Option.Title title="Passcode" />
-      </Option>
+    <Section>
+      <Section.Title>Development</Section.Title>
+      <Section.Block>
+        <Option>
+          <Option.Title title="Toggle Switch" />
+          <View style={{ position: 'absolute', right: 16 }}>
+            <ToggleSwitch onToggle={handleToggle} />
+          </View>
+        </Option>
+        <Option onPress={() => redirect(ScreenNames.ButtonsTest)}>
+          <Option.Title title="Buttons" />
+        </Option>
+        <Option onPress={() => redirect(ScreenNames.LoaderTest)}>
+          <Option.Title title="Loader" />
+        </Option>
+        <Option
+          onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
+        >
+          <Option.Title title="Throw error" />
+        </Option>
+        <Option onPress={() => popupRef.current?.show()}>
+          <Option.Title title="Popup menu" />
+          <PopupMenu
+            ref={popupRef}
+            options={[
+              { title: 'Help', onPress: () => {} },
+              { title: 'Me', onPress: () => {} },
+              { title: 'Please', onPress: () => {} },
+            ]}
+          />
+        </Option>
+        <Option onPress={redirectToNotifications}>
+          <Option.Title title="Notifications" />
+        </Option>
+        <Option onPress={redirectToForms}>
+          <Option.Title title="Forms" />
+        </Option>
+        <Option onPress={redirectToInputs}>
+          <Option.Title title="Inputs" />
+        </Option>
+        <Option onPress={redirectToPasscode}>
+          <Option.Title title="Passcode" />
+        </Option>
+      </Section.Block>
     </Section>
   )
 }

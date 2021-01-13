@@ -70,7 +70,7 @@ const ContactUs: React.FC = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      customStyles={{ justifyContent: 'flex-end', flex: 1 }}
+      customStyles={{ justifyContent: 'flex-end', flex: 1, paddingTop: 0 }}
     >
       <JoloKeyboardAwareScroll
         style={{ width: '100%', flexGrow: 1 }}
@@ -78,17 +78,16 @@ const ContactUs: React.FC = () => {
         overScrollMode="never"
         enableOnAndroid={true}
       >
-        <Section
-          hasBlock={false}
-          title={strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
-        >
+        <Section>
+          <Section.Title>
+            {strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
+          </Section.Title>
           <Dropdown options={options} onSelect={handleDropdownSelect} />
         </Section>
-        <Section
-          hasBlock={false}
-          title={strings.ANYTHING_SPECIFIC_TO_MENTION}
-          titleStyles={{ marginBottom: 14 }}
-        >
+        <Section>
+          <Section.Title customStyle={{ marginBottom: 14 }}>
+            {strings.ANYTHING_SPECIFIC_TO_MENTION}
+          </Section.Title>
           <JoloText
             size={JoloTextSizes.mini}
             kind={JoloTextKind.subtitle}
@@ -107,12 +106,10 @@ const ContactUs: React.FC = () => {
           </JoloKeyboardAwareScroll.InputContainer>
         </Section>
 
-        <Section
-          hasBlock={false}
-          title={strings.WANT_TO_GET_IN_TOUCH}
-          titleStyles={{ marginBottom: 0 }}
-          customStyles={{ marginBottom: 84 }}
-        >
+        <Section customStyles={{ marginBottom: 84 }}>
+          <Section.Title customStyle={{ marginBottom: 0 }}>
+            {strings.WANT_TO_GET_IN_TOUCH}
+          </Section.Title>
           <JoloKeyboardAwareScroll.InputContainer>
             {({ focusInput }) => (
               <Input.Underline

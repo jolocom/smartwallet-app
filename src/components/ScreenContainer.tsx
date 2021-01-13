@@ -38,7 +38,7 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
       style={{
         flex: 1,
         backgroundColor,
-        paddingTop: isFullscreen
+        paddingTop: hideStatusBar
           ? 0
           : Platform.select({
               android: StatusBar.currentHeight,

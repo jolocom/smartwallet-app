@@ -6,6 +6,7 @@ import {
   Modal,
   Easing,
   Dimensions,
+  StatusBar,
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -181,8 +182,11 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     }
   })
 
+  // NOTE: @StatusBar component is here (aside from the one in @Overlays) b/c there is an issue
+  // with translucent status bars and the @Modal component
   return (
     <Modal animationType="fade" visible presentationStyle="overFullScreen">
+      <StatusBar backgroundColor={Colors.black} barStyle="light-content" />
       <View style={[styles.modalBodyContainer, { backgroundColor: bgColor }]}>
         <View
           style={{
