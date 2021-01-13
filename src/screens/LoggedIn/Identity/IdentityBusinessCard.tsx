@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Block from '~/components/Block';
 import JoloText from '~/components/JoloText';
 import { attributeConfig } from '~/config/claims';
 import { getAttributes } from '~/modules/attributes/selectors';
+import { AttributeI } from '~/modules/attributes/types';
 import { strings } from '~/translations';
-import { AttributeTypes } from '~/types/credentials';
+import { AttributeTypes, ClaimKeys } from '~/types/credentials';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
 
@@ -35,30 +36,39 @@ const BusinessCardPlaceholder = () => {
  )
 }
 
-// const businessCardFields = attributeConfig[AttributeTypes.businessCard].fields.reduce((formattedFields, field) => {
-//  if(field.key === (ClaimKeys.familyName || ClaimKeys.givenName)) {
-//   const nameField = formattedFields.find(f => f.key === 'fullName');
-//   const fullName = nameField ? {...nameField, } : {key: 'fullName', label: 'Name', keyboardOptions: {keyboardType: 'default', autoCapitalize: 'words'}}
-//   formattedFields = [...formattedFields, nameField ? ]
-//  } else {
-//   formattedFields = [...formattedFields, field]
-//  }
-//  return formattedFields;
-//  }, []);
+const getBusinessCardCredentialIntoUI = (businessCardCredential: AttributeI) => attributeConfig[AttributeTypes.businessCard].fields.reduce((formattedFields, field) => {
+ if (field.key === ClaimKeys.familyName || field.key === ClaimKeys.givenName) {
+  const nameField = formattedFields.find(f => f.key === 'fullName');
+  const fullName = nameField ? { ...nameField, value: `${nameField.value} ${businessCardCredential.value[field.key]}` } : { key: 'fullName', label: 'Name', value: `${businessCardCredential.value[field.key]}`, keyboardOptions: { keyboardType: 'default', autoCapitalize: 'words' } };
+  formattedFields = formattedFields.filter(f => f.key !== 'fullName');
+  formattedFields = [...formattedFields, fullName]
+ } else if (field.key === ClaimKeys.telephone) {
+  const editedTelephone = { ...field, label: 'Contact', value: businessCardCredential.value[field.key] }
+  formattedFields = [...formattedFields, editedTelephone]
+ }
+ else if (field.key === ClaimKeys.legalCompanyName) {
+  formattedFields = [...formattedFields, { ...field, value: businessCardCredential.value[field.key] }]
+ }
+ return formattedFields;
+}, []);
 
-const businessCardFields = attributeConfig[AttributeTypes.businessCard].fields
 
 const BusinessCardCredential = () => {
  const attributes = useSelector(getAttributes);
  const businessCardAttributes = attributes[AttributeTypes.businessCard] || [];
+ const businessCardFormatted = useMemo(() => {
+  return getBusinessCardCredentialIntoUI(businessCardAttributes[0]);
+ }, [JSON.stringify(businessCardAttributes[0])])
+
+ console.log({ businessCardFormatted });
 
  return (
   <>
-   {businessCardFields.map(field => (
+   {businessCardFormatted.length && businessCardFormatted.map(field => (
     <View key={field.key}>
      <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ textAlign: 'left', marginBottom: 3 }}>{field.label}</JoloText>
      {businessCardAttributes.length && (
-      <JoloText size={JoloTextSizes.big} color={Colors.white80} customStyles={{ textAlign: 'left', marginBottom: 13 }}>{businessCardAttributes[0].value[field.key]}</JoloText>
+      <JoloText size={JoloTextSizes.big} color={Colors.white80} customStyles={{ textAlign: 'left', marginBottom: 13 }}>{field.value}</JoloText>
      )}
     </View>
    ))}
