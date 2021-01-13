@@ -7,6 +7,10 @@ import { useSelector } from 'react-redux'
 import IdentityCredentials from './IdentityCredentials'
 import IdentityTabs from './tabs'
 import { View } from 'react-native'
+import {
+  IdentityTabCredentialsIcon,
+  IdentityTabBusinessCardIcon,
+} from '~/assets/svg'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
@@ -30,14 +34,10 @@ const Identity = () => {
           <IdentityTabs initialTab="credentials">
             <IdentityTabs.Header>
               <IdentityTabs.Tab id="credentials" title="Credentials">
-                <View
-                  style={{ width: 55, height: 55, backgroundColor: 'red' }}
-                />
+                <IdentityTabCredentialsIcon />
               </IdentityTabs.Tab>
               <IdentityTabs.Tab title="Business Card" id="business-card">
-                <View
-                  style={{ width: 55, height: 55, backgroundColor: 'red' }}
-                />
+                <IdentityTabBusinessCardIcon />
               </IdentityTabs.Tab>
             </IdentityTabs.Header>
             <IdentityTabs.Content>

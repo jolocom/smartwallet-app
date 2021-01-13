@@ -30,9 +30,6 @@ const IdentityTab: React.FC<ITabProps> = ({ id, title, children }) => {
         <JoloText
           color={isActive ? Colors.white : Colors.white50}
           size={JoloTextSizes.tiniest}
-          customStyles={{
-            marginTop: 4,
-          }}
         >
           {title}
         </JoloText>
