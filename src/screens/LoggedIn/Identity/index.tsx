@@ -13,6 +13,8 @@ const Identity = () => {
   const attributes = useSelector(getAttributes)
   const showIdentityIntro = !Boolean(Object.keys(attributes).length)
 
+  // TODO: could we use a modal for the @IdentityIntro (@TopSheet)? Otherwise we
+  // lose the functionality of the @ScreenContainer and it's styles.
   return (
     <ScreenContainer isFullscreen>
       {showIdentityIntro ? (
@@ -45,12 +47,19 @@ const Identity = () => {
                 <IdentityTabs.Tab.Title>Business Card</IdentityTabs.Tab.Title>
               </IdentityTabs.Tab>
             </IdentityTabs.Header>
+            <IdentityTabs.Content>
+              <IdentityTabs.Page id="credentials">
+                <IdentityCredentials />
+              </IdentityTabs.Page>
+              <IdentityTabs.Page id="business-card">
+                {/* Business Card components */}
+              </IdentityTabs.Page>
+            </IdentityTabs.Content>
           </IdentityTabs>
         </View>
       )}
     </ScreenContainer>
   )
 }
-/* <IdentityCredentials /> */
 
 export default Identity
