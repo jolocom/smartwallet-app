@@ -12,7 +12,7 @@ export type AttrsState<T> = {
 export enum AttrActions {
   initAttrs = 'initAttrs',
   updateAttrs = 'updateAttrs',
-  removeAttr = 'removeAttr'
+  editAttr = 'editAttr'
 }
 
 export type ClaimValues = {
@@ -27,4 +27,8 @@ export interface AttributeI {
 export interface AttributePayload {
   type: AttributeTypes
   attribute: AttributeI
+}
+
+export interface AttributePayloadEdit extends AttributePayload {
+  id: string
 }

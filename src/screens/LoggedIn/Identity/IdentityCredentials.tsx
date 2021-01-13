@@ -33,6 +33,7 @@ enum FormModes {
 type TPrimiveAttributeTypes = Exclude<AttributeTypes, AttributeTypes.businessCard>
 type TPrimitiveAttributesConfig = Omit<Record<AttributeTypes, IAttributeConfig>, AttributeTypes.businessCard>
 
+// all self issued credentials without business card
 const attributeConfigPrimitive = Object.keys(attributeConfig)
   .filter(k => k !== AttributeTypes.businessCard)
   .reduce<TPrimitiveAttributesConfig>((config, key) => {
@@ -88,7 +89,7 @@ const IdentityCredentials = () => {
     }
   }, [formMode, expandedForm, editClaimId])
 
-  const toggleForm = (cb: (type?: AttributeTypes) => void) => {
+  const toggleForm = (cb: (type?: TPrimiveAttributeTypes) => void) => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 200,
@@ -97,28 +98,17 @@ const IdentityCredentials = () => {
   }
 
 
-  // const handleShowForm = (mode: FormModes) => {
-  //   return (type: AttributeTypes, id?: string) => {
-  //     setFormMode(mode);
-  //     toggleForm(() => setExpandedForm(type))
-  //     if (id) {
-  //       setEditClaimId(id)
-  //     }
-  //   }
-  // }
-  // const handleShowNewForm = handleShowForm(FormModes.add);
-  // const handleShowEditForm = handleShowForm(FormModes.edit);
-
-  const handleShowNewForm = (type: TPrimiveAttributeTypes) => {
-    setFormMode(FormModes.add);
-    toggleForm(() => setExpandedForm(type))
+  const handleShowForm = (mode: FormModes) => {
+    return (type: TPrimiveAttributeTypes, id?: string) => {
+      setFormMode(mode);
+      toggleForm(() => setExpandedForm(type))
+      if (id) {
+        setEditClaimId(id)
+      }
+    }
   }
-
-  const handleShowEditForm = (type: TPrimiveAttributeTypes, id: string) => {
-    setFormMode(FormModes.edit);
-    toggleForm(() => setExpandedForm(type))
-    setEditClaimId(id)
-  };
+  const handleShowNewForm = handleShowForm(FormModes.add);
+  const handleShowEditForm = handleShowForm(FormModes.edit);
 
   const handleHideForm = () => toggleForm(() => setExpandedForm(undefined))
 
@@ -130,7 +120,7 @@ const IdentityCredentials = () => {
         setExpandedForm(undefined)
       } catch (e) {
         scheduleWarning({
-          title: 'Error',
+          title: 'Error adding',
           message: 'Failed to create Self Issued Credential'
         })
 
@@ -143,10 +133,13 @@ const IdentityCredentials = () => {
       try {
         const claims = mapFormFields(formValues);
         await editSICredential(expandedForm, claims, editClaimId);
-        // TODO: you are not DRY
-        // await createSICredential(expandedForm, claims);
+        setExpandedForm(undefined)
       } catch (err) {
-        console.log({ err });
+        scheduleWarning({
+          title: 'Error editing',
+          message: `Failed to edit Self Issued Credential ${editClaimId}`
+        })
+
       }
     }
   }
@@ -163,8 +156,9 @@ const IdentityCredentials = () => {
   return (
     <View testID="identity-credentials-present" style={styles.container}>
       <JoloKeyboardAwareScroll
+        style={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'handled'} // this for allowing to press cancel or submit on first tap as well, as the issue is if a keyboard is opened it is you need to tap twice for a btn to invoke handler  
+        keyboardShouldPersistTaps={'handled'} // this for allowing to press cancel or submit on first tap: without this prop the issue is - if a keyboard is opened it is you need to tap twice for a btn to invoke handler  
         /* TODO: double check if these props are actually needed */
         overScrollMode="never"
         enableOnAndroid
@@ -193,7 +187,7 @@ const IdentityCredentials = () => {
                   )
                 ) : (
                     <Field.Empty>
-                      {/* TODO: rething how to pass field placeholder value */}
+                      {/* TODO: rethink how to pass field placeholder value */}
                       <PencilIcon />
                     </Field.Empty>
                   )}

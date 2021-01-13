@@ -1,27 +1,38 @@
 import { ActionI } from '~/types/action'
-import { AttributesState, AttrActions, AttributePayload } from './types'
+import { AttributesState, AttrActions, AttributePayloadEdit, AttributePayload } from './types'
 
 export const initialState: AttributesState = { all: {} }
 
 const reducer = (state = initialState, action: ActionI<AttrActions>) => {
   switch (action.type) {
     case AttrActions.initAttrs:
-      return { ...state, all: action.payload }
-    case AttrActions.updateAttrs:
-      const { type, attribute } = action.payload as AttributePayload
-      const availableAttr = state.all[type]
-      return {
-        ...state,
-        all: {
-          ...state.all,
-          [type]: availableAttr ? [...availableAttr, attribute] : [attribute],
-        },
+      {
+        return { ...state, all: action.payload }
       }
-    case AttrActions.removeAttr:
-      const updatedAttr = state.all[action.payload.type]?.filter(a => a.id !== action.payload.id)
-      return {
-        ...state,
-        all: updatedAttr,
+    case AttrActions.updateAttrs:
+      {
+
+        const { type, attribute } = action.payload as AttributePayload
+        const availableAttr = state.all[type]
+        return {
+          ...state,
+          all: {
+            ...state.all,
+            [type]: availableAttr ? [...availableAttr, attribute] : [attribute],
+          },
+        }
+      }
+    case AttrActions.editAttr:
+      {
+        const { type, attribute, id } = action.payload as AttributePayloadEdit;
+        const updatedAttrsOfType = state.all[type]?.filter(a => a.id !== id) || [];
+        return {
+          ...state,
+          all: {
+            ...state.all,
+            [action.payload.type]: [...updatedAttrsOfType, attribute]
+          },
+        }
       }
     default:
       return state

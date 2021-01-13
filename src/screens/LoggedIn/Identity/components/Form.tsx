@@ -41,7 +41,15 @@ const FormContext = createContext<IFormContext>({
 })
 
 // TODO: take care of types
-export const useForm = useCustomContext(FormContext)
+export const useForm = useCustomContext(FormContext);
+
+const getPopulatedFieldsWithValue = (config: TFormConfig) => {
+  return config.fields.map((el) => ({
+    ...el,
+    // TODO: add optional value property to a field object
+    value: el.value || '',
+  }))
+}
 
 const Form: React.FC<IFormProps> & IFormComposition = ({
   config,
@@ -49,13 +57,9 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
   onSubmit,
   onCancel,
 }) => {
-  const initialState = config.fields.map((el) => ({
-    ...el,
-    // TODO: add optional value property to a field object
-    value: el.value || '',
-  }))
+  const initialState = getPopulatedFieldsWithValue(config);
 
-  const [state, setState] = useState(initialState)
+  const [state, setState] = useState(initialState);
 
   const updateField = useCallback(
     (key: string, value: string) => {
@@ -71,13 +75,8 @@ const Form: React.FC<IFormProps> & IFormComposition = ({
     [setState],
   )
 
-  // TODO: dirty you are
   useEffect(() => {
-    setState(config.fields.map((el) => ({
-      ...el,
-      // TODO: add optional value property to a field object
-      value: el.value || '',
-    })))
+    setState(initialState);
   }, [JSON.stringify(config)])
 
   const contextValue = useMemo(
