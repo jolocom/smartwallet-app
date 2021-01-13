@@ -4,20 +4,13 @@ import { useIdentityTabs } from '.'
 import { Colors } from '~/utils/colors'
 import JoloText from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { debugView } from '~/utils/dev'
 
 interface ITabProps {
   id: string
+  title: string
 }
 
-interface IIdentityTabComposition {
-  Icon: React.FC
-  Title: React.FC
-}
-
-export type IdentityTabType = React.FC<ITabProps> & IIdentityTabComposition
-
-const IdentityTab: IdentityTabType = ({ id, children }) => {
+const IdentityTab: React.FC<ITabProps> = ({ id, title, children }) => {
   const { setActiveTab, activeTab } = useIdentityTabs()
   const isActive = activeTab === id
 
@@ -34,25 +27,19 @@ const IdentityTab: IdentityTabType = ({ id, children }) => {
         onPress={() => setActiveTab(id)}
       >
         {children}
+        <JoloText
+          color={isActive ? Colors.white : Colors.white50}
+          size={JoloTextSizes.tiniest}
+          customStyles={{
+            marginTop: 4,
+          }}
+        >
+          {title}
+        </JoloText>
       </TouchableOpacity>
     </View>
   )
 }
-
-const TabTitle: React.FC = ({ children }) => {
-  return (
-    <JoloText color={Colors.white} size={JoloTextSizes.tiniest}>
-      {children}
-    </JoloText>
-  )
-}
-
-const TabIcon: React.FC = ({ children }) => {
-  return <View style={{ marginBottom: 4 }}>{children}</View>
-}
-
-IdentityTab.Title = TabTitle
-IdentityTab.Icon = TabIcon
 
 const styles = StyleSheet.create({
   container: {
@@ -75,7 +62,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
   },
   inactiveContainer: {
-    opacity: 0.5,
+    backgroundColor: Colors.black50,
   },
   button: {
     flex: 1,

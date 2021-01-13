@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react'
+import { ScrollView } from 'react-native'
 
-import IdentityTab, { IdentityTabType } from './IdentityTab'
+import IdentityTab from './IdentityTab'
 import { useCustomContext } from '~/hooks/context'
 import IdentityTabsHeader from './IdentityTabsHeader'
 import IdentityTabsContent from './IdentityTabsContent'
 import IdentityTabsPage from './IdentityTabsPage'
-import { ScrollView } from 'react-native'
 
 interface ITabsContext {
   activeTab: string | undefined
@@ -20,7 +20,7 @@ interface IIdentityTabs {
 }
 
 interface ITabsComposition {
-  Tab: IdentityTabType
+  Tab: React.FC<{ id: string; title: string }>
   Header: React.FC
   Content: React.FC
   Page: React.FC<{ id: string }>

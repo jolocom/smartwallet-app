@@ -35,6 +35,7 @@ export enum Colors {
   white35 = 'rgba(255, 255, 255, 0.35)',
   white40 = 'rgba(255, 255, 255, 0.4)',
   white45 = 'rgba(255, 255, 255, 0.45)',
+  white50 = 'rgba(255, 255, 255, 0.50)',
   white60 = 'rgba(255, 255, 255, 0.60)',
   white70 = 'rgba(255, 255, 255, 0.7)',
   white80 = 'rgba(255, 255, 255, 0.8)',
