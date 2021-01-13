@@ -21,7 +21,7 @@ const Identity = () => {
         <View
           style={{
             paddingHorizontal: '5%',
-            paddingTop: 100,
+            paddingTop: 20,
             width: '100%',
             flex: 1,
           }}

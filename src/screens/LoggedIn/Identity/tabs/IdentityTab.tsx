@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   activeContainer: {
     borderWidth: 0.6,
     borderColor: Colors.electricViolet,
+    elevation: 20,
   },
   inactiveContainer: {
     opacity: 0.5,
