@@ -36,6 +36,7 @@ const BusinessCardPlaceholder = () => {
  )
 }
 
+// TODO: remove claim if it is empty 
 const getBusinessCardCredentialIntoUI = (businessCardCredential: AttributeI) => attributeConfig[AttributeTypes.businessCard].fields.reduce((formattedFields, field) => {
  if (field.key === ClaimKeys.familyName || field.key === ClaimKeys.givenName) {
   const nameField = formattedFields.find(f => f.key === 'fullName');
@@ -59,8 +60,6 @@ const BusinessCardCredential = () => {
  const businessCardFormatted = useMemo(() => {
   return getBusinessCardCredentialIntoUI(businessCardAttributes[0]);
  }, [JSON.stringify(businessCardAttributes[0])])
-
- console.log({ businessCardFormatted });
 
  return (
   <>
