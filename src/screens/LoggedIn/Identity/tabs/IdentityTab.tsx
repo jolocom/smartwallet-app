@@ -66,6 +66,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.6,
     borderColor: Colors.electricViolet,
     elevation: 20,
+    shadowColor: Colors.white06,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 14,
+    shadowOpacity: 1,
   },
   inactiveContainer: {
     opacity: 0.5,

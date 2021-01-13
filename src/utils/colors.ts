@@ -29,6 +29,7 @@ export enum Colors {
   success = '#5251c1',
   serenade = '#fff1e3',
   white = '#ffffff',
+  white06 = 'rgba(255, 255, 255, 0.06)',
   white21 = 'rgba(255, 255, 255, 0.21)',
   white30 = 'rgba(255, 255, 255, 0.3)',
   white35 = 'rgba(255, 255, 255, 0.35)',
