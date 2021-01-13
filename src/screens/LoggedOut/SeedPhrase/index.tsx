@@ -195,7 +195,7 @@ const SeedPhrase: React.FC = () => {
           type={BtnTypes.primary}
           onPress={
             gestureState === GestureState.Success
-              ? () => redirect(ScreenNames.SeedPhrase)
+              ? () => redirect(ScreenNames.SeedPhraseRepeat)
               : () => { }
           }
         >
