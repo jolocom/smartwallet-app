@@ -21,10 +21,9 @@ const Identity = () => {
         <View
           style={{
             paddingHorizontal: '5%',
-            marginTop: 30,
+            paddingTop: 100,
             width: '100%',
             flex: 1,
-            ...debugView(),
           }}
         >
           <IdentityTabs initialTab="credentials">

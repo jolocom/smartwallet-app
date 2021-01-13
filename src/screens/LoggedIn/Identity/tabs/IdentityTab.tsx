@@ -22,15 +22,20 @@ const IdentityTab: IdentityTabType = ({ id, children }) => {
   const isActive = activeTab === id
 
   return (
-    <TouchableOpacity
+    <View
       style={[
         styles.container,
         isActive ? styles.activeContainer : styles.inactiveContainer,
       ]}
-      onPress={() => setActiveTab(id)}
     >
-      {children}
-    </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={styles.button}
+        onPress={() => setActiveTab(id)}
+      >
+        {children}
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -51,13 +56,11 @@ IdentityTab.Icon = TabIcon
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.dark,
+    backgroundColor: Colors.black,
     height: 96,
     borderRadius: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
     paddingVertical: 12,
-    width: '45%',
+    width: '48%',
   },
   activeContainer: {
     borderWidth: 0.6,
@@ -65,6 +68,11 @@ const styles = StyleSheet.create({
   },
   inactiveContainer: {
     opacity: 0.5,
+  },
+  button: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 
