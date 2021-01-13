@@ -308,6 +308,7 @@ const history = {
 }
 
 const identity = {
+  YOUR_INFO: 'Your info',
   SINGLE_CREDENTIAL: 'Single Credential',
   CREDENTIALS: 'Credentials',
   BUSINESS_CARD: 'Business Card',

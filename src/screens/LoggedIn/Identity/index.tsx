@@ -12,6 +12,7 @@ import {
   IdentityTabBusinessCardIcon,
 } from '~/assets/svg'
 import { strings } from '~/translations'
+import Section from '../Settings/components/Section'
 
 enum IdentityTabIds {
   credentials = 'credentials',
@@ -38,6 +39,7 @@ const Identity = () => {
             flex: 1,
           }}
         >
+          <Section.Title marginTop={16}>{strings.YOUR_INFO}</Section.Title>
           <IdentityTabs initialTab={IdentityTabIds.credentials}>
             <IdentityTabs.Header>
               <IdentityTabs.Tab
