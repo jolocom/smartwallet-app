@@ -1,10 +1,8 @@
-import { FlowType } from '@jolocom/sdk'
-import React, { useCallback } from 'react'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import React from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
 import Tabs from '~/components/Tabs/Tabs'
-import { IPreLoadedInteraction } from '~/hooks/history/types'
-import { groupBySection } from '~/hooks/history/utils'
 import { strings } from '~/translations'
 import Record from './components/Record'
 
@@ -14,63 +12,54 @@ const SUBTABS = [
   { id: 'received', value: strings.RECEIVED },
 ]
 
+export enum RecordTypes {
+  all = 'all',
+  shared = 'shared',
+  received = 'received',
+}
+
 const History = () => {
-  const getGroupedInteractions = (
-    appliedFn: (interact: IPreLoadedInteraction[]) => IPreLoadedInteraction[],
-  ) =>
-    useCallback(
-      (loadedInteractions: IPreLoadedInteraction[]) =>
-        groupBySection(appliedFn(loadedInteractions)),
-      [],
-    )
-
-  const groupedAllInteractions = getGroupedInteractions((n) => n)
-  const groupedShareInteractions = getGroupedInteractions((n) =>
-    n.filter((g) => g.type === FlowType.CredentialShare),
-  )
-  const groupedReceiveInteractions = getGroupedInteractions((n) =>
-    n.filter((g) => g.type === FlowType.CredentialOffer),
-  )
-
   return (
     <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
       <Record>
-        {/* Body will take care of displaying placeholder if there are no interactions */}
-        <Record.Body>
+        <Tabs initialActiveSubtab={SUBTABS[0]}>
           <Record.Header />
-          <Tabs initialActiveSubtab={SUBTABS[0]}>
-            <TabsContainer>
-              {SUBTABS.map((st) => (
-                <Tabs.Subtab key={st.id} tab={st} />
-              ))}
-            </TabsContainer>
-            <Tabs.Panel>
-              {({ activeSubtab }) => (
-                <>
-                  <Tabs.PersistChildren
-                    isContentVisible={activeSubtab?.id === 'all'}
-                  >
-                    <Record.ItemsList sectionGetter={groupedAllInteractions} />
-                  </Tabs.PersistChildren>
-                  <Tabs.PersistChildren
-                    isContentVisible={activeSubtab?.id === 'shared'}
-                  >
-                    <Record.ItemsList
-                      sectionGetter={groupedShareInteractions}
-                    />
-                  </Tabs.PersistChildren>
-                  <Tabs.PersistChildren
-                    isContentVisible={activeSubtab?.id === 'received'}
-                  >
-                    <Record.ItemsList
-                      sectionGetter={groupedReceiveInteractions}
-                    />
-                  </Tabs.PersistChildren>
-                </>
-              )}
-            </Tabs.Panel>
-          </Tabs>
-        </Record.Body>
+          <TabsContainer>
+            {SUBTABS.map((st) => (
+              <Tabs.Subtab key={st.id} tab={st} />
+            ))}
+          </TabsContainer>
+          <Tabs.Panel>
+            {({ activeSubtab }) => (
+              <>
+                <Tabs.PersistChildren
+                  isContentVisible={activeSubtab?.id === 'all'}
+                >
+                  {/* ItemsList should have a param type: should be added once there is a
+                    support for passing multiple interaction types to support all subtab usecase
+                  */}
+                  <Record.ItemsList isActiveList={activeSubtab?.id === 'all'} />
+                </Tabs.PersistChildren>
+                <Tabs.PersistChildren
+                  isContentVisible={activeSubtab?.id === 'shared'}
+                >
+                  <Record.ItemsList
+                    isActiveList={activeSubtab?.id === 'shared'}
+                    type={InteractionType.CredentialRequest}
+                  />
+                </Tabs.PersistChildren>
+                <Tabs.PersistChildren
+                  isContentVisible={activeSubtab?.id === 'received'}
+                >
+                  <Record.ItemsList
+                    isActiveList={activeSubtab?.id === 'received'}
+                    type={InteractionType.CredentialOfferRequest}
+                  />
+                </Tabs.PersistChildren>
+              </>
+            )}
+          </Tabs.Panel>
+        </Tabs>
       </Record>
     </ScreenContainer>
   )
