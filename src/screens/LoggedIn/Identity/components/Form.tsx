@@ -2,14 +2,17 @@ import React, { createContext, useCallback, useEffect, useMemo, useState } from 
 import FormBody from './FormBody'
 import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
-import { IAttributeClaimField, IAttributeConfig } from '~/types/credentials'
+import { AttributeKeys, IAttributeClaimField, IAttributeClaimFieldWithValue, IAttributeConfig } from '~/types/credentials'
 import { useCustomContext } from '~/hooks/context'
 
 export interface IFormState extends IAttributeClaimField {
   value: string
 }
 
-type TFormConfig = Pick<IAttributeConfig, 'key' | 'fields'>
+interface IFormConfig {
+  key: AttributeKeys
+  fields: IAttributeClaimFieldWithValue[]
+}
 
 export interface IFormContext {
   fields: IFormState[]
@@ -20,7 +23,7 @@ export interface IFormContext {
 
 interface IFormProps
   extends Partial<Pick<IFormContext, 'onSubmit' | 'onCancel'>> {
-  config: TFormConfig
+  config: IFormConfig
 }
 
 interface IFormComposition {
@@ -40,13 +43,11 @@ const FormContext = createContext<IFormContext>({
   onCancel: () => { },
 })
 
-// TODO: take care of types
 export const useForm = useCustomContext(FormContext);
 
-const getPopulatedFieldsWithValue = (config: TFormConfig) => {
+const getPopulatedFieldsWithValue = (config: IFormConfig) => {
   return config.fields.map((el) => ({
     ...el,
-    // TODO: add optional value property to a field object
     value: el.value || '',
   }))
 }

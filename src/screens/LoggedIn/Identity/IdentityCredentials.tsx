@@ -167,7 +167,7 @@ const IdentityCredentials = () => {
           const key = aKey as TPrimiveAttributeTypes;
           return (
             <View style={styles.group} key={aKey}>
-              <Widget onCreate={() => handleShowNewForm(key)}>
+              <Widget onAdd={() => handleShowNewForm(key)}>
                 <Widget.Header>
                   <Widget.Header.Name value={aVal.label} />
                   {attributes[key] && <Widget.Header.Action.CreateNew />}
@@ -187,7 +187,6 @@ const IdentityCredentials = () => {
                   )
                 ) : (
                     <Field.Empty>
-                      {/* TODO: rethink how to pass field placeholder value */}
                       <PencilIcon />
                     </Field.Empty>
                   )}
