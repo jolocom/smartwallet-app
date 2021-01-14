@@ -55,29 +55,34 @@ const BusinessCardCredential = () => {
   },
  ]), [])
 
- if (mode === Modes.edit) {
+ // NOTO: this is only for testing purposes
+ if (!businessCardAttribute.length && __DEV__) {
+  return <JoloText>Create business card to see its content</JoloText>
+ } else if (mode === Modes.edit) {
   return (
    <>
     <JoloText>Business Card Form...</JoloText>
     <Btn type={BtnTypes.senary} onPress={resetMode}>Cancel</Btn>
    </>
   )
+ } else {
+  return (
+   <>
+    <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
+    {businessCardAttribute.length ? businessCardAttribute.map(field => (
+     <View key={field.key}>
+      <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ textAlign: 'left', marginBottom: 3 }}>{field.label}</JoloText>
+      {businessCardAttribute.length && (
+       <JoloText size={JoloTextSizes.big} color={Colors.white80} customStyles={{ textAlign: 'left', marginBottom: 13 }}>{field.value}</JoloText>
+      )}
+     </View>
+    )
+    ) : null}
+   </>
+  )
  }
 
- return (
-  <>
-   <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
-   {businessCardAttribute.length ? businessCardAttribute.map(field => (
-    <View key={field.key}>
-     <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ textAlign: 'left', marginBottom: 3 }}>{field.label}</JoloText>
-     {businessCardAttribute.length && (
-      <JoloText size={JoloTextSizes.big} color={Colors.white80} customStyles={{ textAlign: 'left', marginBottom: 13 }}>{field.value}</JoloText>
-     )}
-    </View>
-   )
-   ) : null}
-  </>
- )
+
 }
 
 const BusinessCard = {
