@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import { attributeConfig } from '~/config/claims'
-import { AttributeTypes, ClaimKeys } from '~/types/credentials'
+import { strings } from '~/translations'
+import { AttributeTypes, ClaimKeys, IAttributeClaimFieldWithValue } from '~/types/credentials'
 import { RootReducerI } from '~/types/reducer'
 import { AttrsState, AttributeI } from './types'
 
@@ -8,26 +9,30 @@ export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
   state.attrs.all
 
 // TODO: remove claim if it is empty 
-export const getBusinessCardAttributeWithValues = createSelector(
+export const getBusinessCardAttributeWithValuesUI = createSelector(
   [getAttributes],
   (attributes) => {
     const businessCardCredentials = attributes[AttributeTypes.businessCard] ?? [];
     if (businessCardCredentials.length) {
-      return attributeConfig[AttributeTypes.businessCard].fields.reduce((formattedFields, field) => {
+      const businessCardClaimFields = attributeConfig[AttributeTypes.businessCard].fields.reduce<IAttributeClaimFieldWithValue[]>((formattedFields, field) => {
+        let updatedFieldToAdd: IAttributeClaimFieldWithValue;
+        const fieldValue = businessCardCredentials[0].value[field.key];
+
         if (field.key === ClaimKeys.familyName || field.key === ClaimKeys.givenName) {
-          const nameField = formattedFields.find(f => f.key === 'fullName');
-          const fullName = nameField ? { ...nameField, value: `${nameField.value} ${businessCardCredentials[0].value[field.key]}` } : { key: 'fullName', label: 'Name', value: `${businessCardCredentials[0].value[field.key]}`, keyboardOptions: { keyboardType: 'default', autoCapitalize: 'words' } };
-          formattedFields = formattedFields.filter(f => f.key !== 'fullName');
-          formattedFields = [...formattedFields, fullName]
+          const nameField: IAttributeClaimFieldWithValue | undefined = formattedFields.find(f => f.key === ClaimKeys.fullName);
+          updatedFieldToAdd = nameField
+            ? { ...nameField, value: `${nameField.value} ${fieldValue}` }
+            : { key: ClaimKeys.fullName, label: strings.NAME, value: `${fieldValue}`, keyboardOptions: { keyboardType: 'default', autoCapitalize: 'words' } };
+          formattedFields = formattedFields.filter(f => f.key !== ClaimKeys.fullName);
         } else if (field.key === ClaimKeys.telephone) {
-          const editedTelephone = { ...field, label: 'Contact', value: businessCardCredentials[0].value[field.key] }
-          formattedFields = [...formattedFields, editedTelephone]
+          updatedFieldToAdd = { ...field, label: strings.CONTACT, value: fieldValue };
+        } else {
+          updatedFieldToAdd = { ...field, value: fieldValue }
         }
-        else if (field.key === ClaimKeys.legalCompanyName) {
-          formattedFields = [...formattedFields, { ...field, value: businessCardCredentials[0].value[field.key] }]
-        }
-        return formattedFields;
+
+        return [...formattedFields, updatedFieldToAdd]
       }, []);
+      return businessCardClaimFields;
     }
     return []
   }

@@ -5,7 +5,7 @@ import Block from '~/components/Block';
 import Btn, { BtnTypes } from '~/components/Btn';
 import Dots from '~/components/Dots';
 import JoloText from '~/components/JoloText';
-import { getBusinessCardAttributeWithValues } from '~/modules/attributes/selectors';
+import { getBusinessCardAttributeWithValuesUI } from '~/modules/attributes/selectors';
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
@@ -41,7 +41,7 @@ enum Modes {
 }
 
 const BusinessCardCredential = () => {
- const businessCardAttribute = useSelector(getBusinessCardAttributeWithValues);
+ const businessCardAttribute = useSelector(getBusinessCardAttributeWithValuesUI);
 
  const [mode, setMode] = useState(Modes.none);
 

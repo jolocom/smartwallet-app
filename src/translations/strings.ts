@@ -318,7 +318,8 @@ const identity = {
   WHAT_IS_YOUR_NAME: 'What is your name?',
   CREATE: 'Create',
   BUSINESS_CARD_CTA_CREATE: 'So far it\'s empty, Just tap to start creation',
-  EDIT: 'Edit'
+  EDIT: 'Edit',
+  CONTACT: 'Contact'
 }
 
 export const strings = {

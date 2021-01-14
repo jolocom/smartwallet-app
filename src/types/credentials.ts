@@ -2,7 +2,7 @@ import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { BaseMetadata } from '@jolocom/protocol-ts'
+import { BaseMetadata, ClaimInterface } from '@jolocom/protocol-ts'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -15,6 +15,7 @@ export enum AttributeKeys {
 export enum ClaimKeys {
   givenName = 'givenName',
   familyName = 'familyName',
+  fullName = 'fullName',
   email = 'email',
   addressLine = 'addressLine1',
   postalCode = 'postalCode',
@@ -45,6 +46,11 @@ export interface IAttributeClaimField {
   keyboardOptions: AttributeKeyboardOptions
 }
 
+export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
+  // TODO; it seems that this type already exists somewhere
+  value: string | number | {} | boolean | ClaimInterface | undefined
+}
+
 export interface IAttributeConfig {
   // NOTE: if not used anywhere -> remove
   key: AttributeKeys
@@ -69,7 +75,7 @@ export type UICredentialMetadata = Pick<
 
 export interface UICredential
   extends BaseUICredential,
-    Pick<SignedCredential, 'id' | 'claim'> {
+  Pick<SignedCredential, 'id' | 'claim'> {
   metadata: UICredentialMetadata
 }
 
