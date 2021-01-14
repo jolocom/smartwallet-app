@@ -22,16 +22,24 @@ const Placeholder = {
  Big: PlaceholderBig
 }
 
+const CardWrapper: React.FC = ({ children }) => {
+ return (
+  <Block customStyle={{ padding: 26, alignItems: 'center', marginTop: 30 }}>
+   <View style={{ width: '100%' }}>{children}</View>
+  </Block>
+ )
+}
+
 const BusinessCardPlaceholder = () => {
  return (
-  <>
+  <CardWrapper>
    {[...Array(3).keys()].map(el => (
     <View key={el}>
      <Placeholder.Mini />
      <Placeholder.Big />
     </View>
    ))}
-  </>
+  </CardWrapper>
  )
 }
 
@@ -67,7 +75,7 @@ const BusinessCardCredential = () => {
   )
  } else {
   return (
-   <>
+   <CardWrapper>
     <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
     {businessCardAttribute.length ? businessCardAttribute.map(field => (
      <View key={field.key}>
@@ -78,18 +86,17 @@ const BusinessCardCredential = () => {
      </View>
     )
     ) : null}
-   </>
+   </CardWrapper>
   )
  }
-
-
 }
 
-const BusinessCard = {
+export const BusinessCard = {
  Placeholder: BusinessCardPlaceholder,
  Credential: BusinessCardCredential
 }
 
+// NOTE: This is a temproarily component till the moment we procceed with Indentity screen assemling
 const IdentityBusinessCard = () => {
  const [isPlaceholder, setIsPlaceholder] = useState(true);
  const handlePlaceholderToggle = () => setIsPlaceholder(prevState => !prevState);
@@ -100,11 +107,7 @@ const IdentityBusinessCard = () => {
     <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ lineHeight: 10 }}>{t}</JoloText>
    ))}
    <TouchableOpacity onPress={handlePlaceholderToggle}>
-    <Block customStyle={{ padding: 26, alignItems: 'center', marginTop: 30 }}>
-     <View style={{ width: '100%' }}>
-      {isPlaceholder ? <BusinessCard.Placeholder /> : <BusinessCard.Credential />}
-     </View>
-    </Block>
+    {isPlaceholder ? <BusinessCard.Placeholder /> : <BusinessCard.Credential />}
    </TouchableOpacity>
   </View>
  )
