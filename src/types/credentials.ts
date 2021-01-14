@@ -47,7 +47,6 @@ export interface IAttributeClaimField {
 }
 
 export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
-  // TODO; it seems that this type already exists somewhere
   value: string | number | {} | boolean | ClaimInterface | undefined
 }
 
