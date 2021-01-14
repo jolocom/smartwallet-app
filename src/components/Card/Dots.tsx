@@ -17,6 +17,7 @@ const deleteDocMock = (id: string | number): Promise<string> => {
   })
 }
 
+// TODO: Update to use Dots component
 const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)

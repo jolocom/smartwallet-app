@@ -1,7 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import Block from '~/components/Block';
+import Btn, { BtnTypes } from '~/components/Btn';
+import Dots from '~/components/Dots';
 import JoloText from '~/components/JoloText';
 import { attributeConfig } from '~/config/claims';
 import { getAttributes } from '~/modules/attributes/selectors';
@@ -53,24 +55,55 @@ const getBusinessCardCredentialIntoUI = (businessCardCredential: AttributeI) => 
  return formattedFields;
 }, []);
 
+enum Modes {
+ none = 'none',
+ edit = 'edit'
+}
+
 
 const BusinessCardCredential = () => {
  const attributes = useSelector(getAttributes);
- const businessCardAttributes = attributes[AttributeTypes.businessCard] || [];
+ const businessCardAttributes = attributes[AttributeTypes.businessCard] ?? [];
  const businessCardFormatted = useMemo(() => {
-  return getBusinessCardCredentialIntoUI(businessCardAttributes[0]);
+  if (businessCardAttributes.length) {
+   return getBusinessCardCredentialIntoUI(businessCardAttributes[0]);
+  }
+  return []
  }, [JSON.stringify(businessCardAttributes[0])])
+
+ const [mode, setMode] = useState(Modes.none);
+
+ const setEditMode = () => setMode(Modes.edit)
+ const resetMode = () => setMode(Modes.none);
+
+ const popupOptions = useMemo(() => ([
+  {
+   title: strings.EDIT,
+   onPress: setEditMode
+  },
+ ]), [])
+
+ if (mode === Modes.edit) {
+  return (
+   <>
+    <JoloText>Business Card Form...</JoloText>
+    <Btn type={BtnTypes.senary} onPress={resetMode}>Cancel</Btn>
+   </>
+  )
+ }
 
  return (
   <>
-   {businessCardFormatted.length && businessCardFormatted.map(field => (
+   <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
+   {businessCardFormatted.length ? businessCardFormatted.map(field => (
     <View key={field.key}>
      <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ textAlign: 'left', marginBottom: 3 }}>{field.label}</JoloText>
      {businessCardAttributes.length && (
       <JoloText size={JoloTextSizes.big} color={Colors.white80} customStyles={{ textAlign: 'left', marginBottom: 13 }}>{field.value}</JoloText>
      )}
     </View>
-   ))}
+   )
+   ) : null}
   </>
  )
 }
@@ -86,7 +119,7 @@ const IdentityBusinessCard = () => {
  return (
   <View style={{ width: '100%' }}>
    {/* TODO: below should be moved inside of IdentityTabs component */}
-   {strings.BUSINESS_CARD_CTA_CREATE.split(',').map(t => (
+   {isPlaceholder && strings.BUSINESS_CARD_CTA_CREATE.split(',').map(t => (
     <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ lineHeight: 10 }}>{t}</JoloText>
    ))}
    <TouchableOpacity onPress={handlePlaceholderToggle}>
