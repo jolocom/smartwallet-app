@@ -18,6 +18,7 @@ const DevelopmentSection = () => {
   const redirectToForms = useRedirectTo(ScreenNames.FormTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
+  const redirectToBusinessCard = useRedirectTo(ScreenNames.BusinessCard)
   const redirect = useRedirect()
 
   const popupRef = useRef<{ show: () => void }>(null)
@@ -55,9 +56,9 @@ const DevelopmentSection = () => {
           <PopupMenu
             ref={popupRef}
             options={[
-              { title: 'Help', onPress: () => {} },
-              { title: 'Me', onPress: () => {} },
-              { title: 'Please', onPress: () => {} },
+              { title: 'Help', onPress: () => { } },
+              { title: 'Me', onPress: () => { } },
+              { title: 'Please', onPress: () => { } },
             ]}
           />
         </Option>
@@ -72,6 +73,9 @@ const DevelopmentSection = () => {
         </Option>
         <Option onPress={redirectToPasscode}>
           <Option.Title title="Passcode" />
+        </Option>
+        <Option onPress={redirectToBusinessCard}>
+          <Option.Title title="Business Card" />
         </Option>
       </Section.Block>
     </Section>
