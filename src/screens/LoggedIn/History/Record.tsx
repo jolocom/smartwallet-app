@@ -1,19 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
 import { useCustomContext } from '~/hooks/context'
-import { useToasts } from '~/hooks/toasts'
-import { useHistory } from '~/hooks/history'
 
 import RecordHeader from './RecordHeader'
 import RecordItemsList from './RecordItemsList'
-import { IHistorySection, IPreLoadedInteraction } from '~/types/records'
-import RecordBody from './RecordBody'
 
 interface IRecordContext {
-  activeSection: string
-  setActiveSection: React.Dispatch<React.SetStateAction<string>>
-  setNextPage: () => void
-  loadedInteractions: IPreLoadedInteraction[]
+  activeSection: Record<string, string>
+  updateActiveSection: (id: string, value: string) => void
+}
+
+export interface IRecordHeader {
+  title?: string
 }
 
 export interface IRecordItemProps {
@@ -21,78 +20,42 @@ export interface IRecordItemProps {
 }
 
 export interface IRecordItemsListProps {
-  sectionGetter: (
-    loadedInteractions: IPreLoadedInteraction[],
-  ) => IHistorySection[]
+  type?: InteractionType
+  isActiveList: boolean
 }
 
 interface IRecordComposition {
-  Header: React.FC
+  Header: React.FC<IRecordHeader>
   ItemsList: React.FC<IRecordItemsListProps>
   Body: React.FC
 }
 
 const RecordContext = React.createContext<IRecordContext | undefined>({
-  activeSection: '',
-  setActiveSection: () => {},
-  setNextPage: () => {},
-  loadedInteractions: [],
+  activeSection: {},
+  updateActiveSection: () => {},
 })
 RecordContext.displayName = 'RecordContext'
 
 export const useRecord = useCustomContext(RecordContext)
 
-const ITEMS_PER_PAGE = 4
-
 const Record: React.FC & IRecordComposition = ({ children }) => {
-  const [allInteractions, setAllInteractions] = useState<
-    IPreLoadedInteraction[]
-  >([])
-  const [loadedInteractions, setLoadedInteractions] = useState<
-    IPreLoadedInteraction[]
-  >([])
-  const [activeSection, setActiveSection] = useState('')
-  const [page, setPage] = useState(-1)
-  /* TODO: isLoading isn't used at the moment */
-  const [isLoading, setLoading] = useState(true)
+  const [activeSection, setActiveSection] = useState({})
 
-  const setNextPage = () => setPage((prev) => ++prev)
-
-  const { scheduleErrorWarning } = useToasts()
-  const { getInteractions } = useHistory()
-
-  useEffect(() => {
-    getInteractions()
-      .then((all) => {
-        setAllInteractions(all)
-        setNextPage()
-        setLoading(false)
-      })
-      .catch(scheduleErrorWarning)
+  const updateActiveSection = useCallback((id: string, value: string) => {
+    setActiveSection({ [id]: value })
   }, [])
-
-  useEffect(() => {
-    const pageInteractions = allInteractions.slice(
-      ITEMS_PER_PAGE * page,
-      ITEMS_PER_PAGE * page + ITEMS_PER_PAGE,
-    )
-    setLoadedInteractions((prev) => [...prev, ...pageInteractions])
-  }, [page])
 
   const contextValue = useMemo(
     () => ({
       activeSection,
-      loadedInteractions,
-      setActiveSection,
-      setNextPage,
+      updateActiveSection,
     }),
-    [activeSection, JSON.stringify(loadedInteractions)],
+    [JSON.stringify(activeSection)],
   )
   return <RecordContext.Provider value={contextValue} children={children} />
 }
 
 Record.Header = RecordHeader
 Record.ItemsList = RecordItemsList
-Record.Body = RecordBody
 
 export default Record

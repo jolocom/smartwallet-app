@@ -26,7 +26,7 @@ const FAQ = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      customStyles={{ justifyContent: 'flex-start' }}
+      customStyles={{ justifyContent: 'flex-start', paddingTop: 0 }}
     >
       <FlatList
         ref={flatlistRef}
@@ -43,10 +43,9 @@ const FAQ = () => {
           />
         )}
         ListHeaderComponent={() => (
-          <Section
-            customStyles={{ marginBottom: 32 }}
-            title={strings.POPULAR_QUESTIONS}
-          />
+          <Section.Title marginTop={6}>
+            {strings.POPULAR_QUESTIONS}
+          </Section.Title>
         )}
       />
     </ScreenContainer>

@@ -17,11 +17,7 @@ import { useGenerateSeed } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/loader'
 
 //NOTE: Determines the duration of entropy collection
-const ENOUGH_ENTROPY_PROGRESS = Platform.select({
-  ios: 0.6,
-  android: 0.3,
-  default: 0.3,
-})
+const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 const Entropy: React.FC = () => {
   const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)

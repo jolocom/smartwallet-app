@@ -12,21 +12,24 @@ const InputTest = () => {
       customStyles={{ justifyContent: 'flex-start' }}
     >
       <JoloKeyboardAwareScroll showsVerticalScrollIndicator={false}>
-        <Section title="Block" hasBlock={false}>
+        <Section>
+          <Section.Title>Block</Section.Title>
           <Input.Block
             placeholder="Write something"
             value={val}
             updateInput={setVal}
           />
         </Section>
-        <Section title="Underline" hasBlock={false}>
+        <Section>
+          <Section.Title>Underline</Section.Title>
           <Input.Underline
             value={val}
             updateInput={setVal}
             placeholder="Write something"
           />
         </Section>
-        <Section title="Text Area" hasBlock={false}>
+        <Section>
+          <Section.Title>Text Area</Section.Title>
           <Input.TextArea value={val} updateInput={setVal} />
         </Section>
       </JoloKeyboardAwareScroll>

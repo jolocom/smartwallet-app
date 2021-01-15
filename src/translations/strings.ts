@@ -21,6 +21,17 @@ export const recovery = {
   WHAT_IF_I_FORGOT: 'What if I forgot my phrase?',
   CONFIRM: 'Confirm',
   BACK: 'Back',
+  WHAT_TO_DO_IF_YOU_FORGOT_YOUR_SECRET_PHRASE:
+    'What to do if you forgot your secret phrase',
+  CONTINUE: 'Continue',
+  FORGOT_SEED_INFO_HIGHLIGHT_1:
+    'Without your secret phrase you will not be able to re-activate your identity.',
+  FORGOT_SEED_INFO_HIGHLIGHT_2:
+    'Recovering your entire wallet requires both the secret phrase and a backup file.',
+  FORGOT_SEED_INFO_3:
+    'Are you sure you do not have a copy stored somewhere safe?',
+  FORGOT_SEED_INFO_HIGHLIGHT_4:
+    'Think back to when you first created your identity…',
 }
 
 const walkthrough = {
@@ -69,6 +80,16 @@ const seedphrase = {
   WHY_SO_ANALOGUE: 'Why so analogue?',
   YOU_CAN_CHANGE_THE_PASSCODE:
     'You can change the passcode later by using your secret phrase',
+  WHY_THESE_WORDS_ARE_IMPORTANT_TO_YOU: 'Why these words are important to you',
+  GOT_THIS: 'Got this',
+  SEEDPHRASE_INFO_1:
+    'Your wallet will store very sensitive data about you. We want to make sure that you keep it safe right from the start.',
+  SEEDPHRASE_INFO_HIGHLIGHT_2: 'Only this unique set of words',
+  SEEDPHRASE_INFO_3:
+    'can be used to regenerate your identity when your phone is lost or broken.',
+  SEEDPHRASE_INFO_HIGHLIGHT_4:
+    'We strongly recommend storing your set of words in a safe place. Writing it down or using an encrypted password manager are the best options.',
+  SEEDPHRASE_INFO_5: 'Do not share your secret phrase with anyone.',
 }
 
 const deviceAuthentication = {
@@ -141,7 +162,7 @@ const interactions = {
 }
 
 const lock = {
-  ENTER_YOUR_PIN: 'Enter your PIN',
+  ENTER_YOUR_PASSCODE: 'Enter your passcode',
   FORGOT_YOUR_PIN: 'Forgot your PIN?',
   UNLOCK_WITH_BIOMETRY: 'Unlock the app with biometry',
   I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
@@ -163,7 +184,7 @@ const settings = {
   IMPRINT: 'Imprint',
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
-  WRONG_PIN: 'Wrong PIN',
+  WRONG_PASSCODE: 'Wrong passcode',
   PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
   LOG_OUT: 'Log out',
   DE_VERSION: 'DE Version',

@@ -1,3 +1,4 @@
+import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { useAgent } from '~/hooks/sdk'
 import { IRecordDetails } from '~/types/records'
 import {
@@ -11,19 +12,24 @@ import { recordConfig } from '~/config/records'
 export const useHistory = () => {
   const agent = useAgent()
 
-  const getInteractions = async () => {
-    return agent.storage.get
-      .interactionTokens({})
-      .then((tokens) =>
-        tokens
-          .map(({ nonce, issued, interactionType }) => ({
+  const getInteractions = (
+    take: number,
+    skip: number,
+    type?: InteractionType,
+  ) => {
+    return (
+      agent.storage.get
+        // .interactionTokens({...(type && {type})}, {take, skip})
+        .interactionTokens({ ...(type && { type }) })
+        .then((tokens) => {
+          return tokens.map(({ nonce, issued, interactionType }) => ({
             id: nonce,
             section: getDateSection(new Date(issued)),
             type: interactionTypeToFlowType[interactionType],
           }))
-          .reverse(),
-      )
-      .then(filterUniqueById)
+        })
+        .then(filterUniqueById)
+    )
   }
 
   const getInteractionDetails = async (

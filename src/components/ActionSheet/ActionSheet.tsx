@@ -4,7 +4,7 @@ import { Colors } from '~/utils/colors'
 
 interface Props {
   isVisible: boolean
-  onClose: () => void
+  onClose?: () => void
   overlayColor?: Colors
   animationType?: 'slide' | 'fade' | 'none'
   testID?: string

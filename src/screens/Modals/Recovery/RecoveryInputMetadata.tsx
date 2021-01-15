@@ -7,6 +7,8 @@ import { useRecoveryState } from './module/recoveryContext'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
+import { useRedirect } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 interface RecoveryInputMetadataI {
   keyHasError: boolean
@@ -14,6 +16,8 @@ interface RecoveryInputMetadataI {
 
 const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
   ({ keyHasError }) => {
+    const redirect = useRedirect()
+
     return (
       <View style={styles.inputMeta}>
         {keyHasError ? (
@@ -26,6 +30,7 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
           </JoloText>
         ) : (
           <JoloText
+            onPress={() => redirect(ScreenNames.LostSeedPhraseInfo)}
             kind={JoloTextKind.subtitle}
             size={JoloTextSizes.middle}
             color={Colors.white}

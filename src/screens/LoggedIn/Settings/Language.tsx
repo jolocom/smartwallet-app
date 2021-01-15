@@ -27,9 +27,13 @@ const Language = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      customStyles={{ justifyContent: 'flex-start' }}
+      customStyles={{
+        paddingTop: 0,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+      }}
     >
-      <Section title={t(strings.LANGUAGE)} customStyles={{ marginBottom: 0 }} />
+      <Section.Title marginTop={6}>{t(strings.LANGUAGE)}</Section.Title>
       <SingleSelectBlock
         initialSelect={storedLanguage}
         selection={languages}

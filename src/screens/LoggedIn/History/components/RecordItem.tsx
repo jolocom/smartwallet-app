@@ -34,7 +34,11 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
         })
         setItemDetails(interaction)
       })
-      .catch(scheduleErrorWarning)
+      .catch((e) => {
+        console.log('Error occured in RecordItem', e)
+
+        // scheduleErrorWarning(e)
+      })
   }, [])
 
   return (
