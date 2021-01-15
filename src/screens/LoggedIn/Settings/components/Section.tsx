@@ -27,6 +27,7 @@ const SectionTitle: React.FC<TitleProps> = ({
     weight={JoloTextWeight.regular}
     customStyles={[
       {
+        alignSelf: 'flex-start',
         textAlign: 'left',
         marginBottom: BP({ large: 32, medium: 32, default: 24 }),
         marginTop,

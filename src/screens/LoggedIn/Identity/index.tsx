@@ -27,18 +27,11 @@ const Identity = () => {
   // lose the functionality of the @ScreenContainer and it's styles, having to manually
   // add the container styles in a nested @View.
   return (
-    <ScreenContainer isFullscreen>
+    <ScreenContainer isFullscreen={showIdentityIntro}>
       {showIdentityIntro ? (
         <IdentityIntro />
       ) : (
-        <View
-          style={{
-            paddingHorizontal: '5%',
-            paddingTop: 20,
-            width: '100%',
-            flex: 1,
-          }}
-        >
+        <>
           <Section.Title marginTop={16}>{strings.YOUR_INFO}</Section.Title>
           <IdentityTabs initialTab={IdentityTabIds.credentials}>
             <IdentityTabs.Styled.Header>
@@ -62,7 +55,7 @@ const Identity = () => {
               {/* Business Card components */}
             </IdentityTabs.Page>
           </IdentityTabs>
-        </View>
+        </>
       )}
     </ScreenContainer>
   )
