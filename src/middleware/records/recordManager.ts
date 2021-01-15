@@ -62,7 +62,7 @@ export class RecordManager {
         return !!this.interaction
           .getMessages()
           .find((t) => t.interactionType === InteractionType.CredentialsReceive)
-      case FlowType.CredentialOffer:
+      case FlowType.CredentialShare:
         return !!this.interaction
           .getMessages()
           .find((t) => t.interactionType === InteractionType.CredentialResponse)
