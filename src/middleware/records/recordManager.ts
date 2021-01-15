@@ -24,9 +24,7 @@ export class RecordManager {
     this.interaction = interaction
     this.config = config[interaction.flow.type]
     this.status = this.processStatus()
-    // NOTE: it's a bit weird that it is different from how this.status is initialized
-    this.processSteps()
-    return this
+    this.steps = this.processSteps()
   }
 
   public getRecordDetails(): IRecordDetails {
@@ -50,7 +48,7 @@ export class RecordManager {
     const { expires } = this.interaction.lastMessage
     return this.isFinished()
       ? IRecordStatus.finished
-      : new Date(expires) < new Date()
+      : expires < Date.now()
       ? IRecordStatus.expired
       : IRecordStatus.pending
   }
@@ -74,11 +72,11 @@ export class RecordManager {
     }
   }
 
-  private assembleSteps(
+  private assembleAllSteps(
     assembleFn: (message: JSONWebToken<any>, i: number) => IRecordSteps | null,
   ) {
     // NOTE: adding the Set to assure the same token wasn't assembled twice
-    return [
+    const steps = [
       ...new Set(
         this.interaction.getMessages().reduce<IRecordSteps[]>((acc, m, i) => {
           const step = assembleFn(m, i)
@@ -87,16 +85,20 @@ export class RecordManager {
         }, []),
       ),
     ]
+
+    if (this.status !== IRecordStatus.finished) {
+      this.appendUnfinishedStep(steps)
+    }
+
+    return steps
   }
 
-  private appendUnfinishedStep() {
-    if (this.status !== IRecordStatus.finished) {
-      this.steps.push({
-        title: this.config?.steps.unfinished[this.steps.length] ?? 'Unknown',
-        description:
-          this.status === IRecordStatus.expired ? 'Expired' : 'Pending',
-      })
-    }
+  private appendUnfinishedStep(steps: IRecordSteps[]) {
+    steps.push({
+      title: this.config?.steps.unfinished[steps.length] ?? 'Unknown',
+      description:
+        this.status === IRecordStatus.expired ? 'Expired' : 'Pending',
+    })
   }
 
   private getFinishedStepTitle(index: number) {
@@ -107,7 +109,7 @@ export class RecordManager {
     const offerState = this.interaction.getSummary()
       .state as CredentialOfferFlowState
 
-    this.steps = this.assembleSteps((m, i) => {
+    return this.assembleAllSteps((m, i) => {
       switch (m.interactionType) {
         // TODO: when the Credential name is available in the @CredentialOffer,
         // should replace the type
@@ -132,7 +134,7 @@ export class RecordManager {
     const shareState = this.interaction.getSummary()
       .state as CredentialRequestFlowState
 
-    this.steps = this.assembleSteps((m, i) => {
+    return this.assembleAllSteps((m, i) => {
       switch (m.interactionType) {
         case InteractionType.CredentialRequest:
           return {
@@ -158,7 +160,7 @@ export class RecordManager {
     const { action = 'Authorize' } = this.interaction.getSummary()
       .state as AuthorizationFlowState
 
-    this.steps = this.assembleSteps((m, i) => {
+    return this.assembleAllSteps((m, i) => {
       switch (m.interactionType) {
         case 'AuthorizationRequest':
         case 'AuthorizationResponse':
@@ -176,7 +178,7 @@ export class RecordManager {
     const { initiator } = this.interaction.getSummary()
     const initiatorDid = truncateDid(initiator.did)
 
-    this.steps = this.assembleSteps((m, i) => {
+    return this.assembleAllSteps((m, i) => {
       switch (i) {
         case 0:
         case 1:
@@ -191,7 +193,7 @@ export class RecordManager {
   }
 
   private assembleUnknownSteps() {
-    this.steps = this.assembleSteps((m, i) => ({
+    return this.assembleAllSteps((m, i) => ({
       title: this.getFinishedStepTitle(i),
       description: 'Unknown',
     }))
@@ -200,25 +202,15 @@ export class RecordManager {
   private processSteps() {
     switch (this.interaction.flow.type) {
       case FlowType.CredentialOffer:
-        this.assembleCredentialOfferSteps()
-        this.appendUnfinishedStep()
-        break
+        return this.assembleCredentialOfferSteps()
       case FlowType.CredentialShare:
-        this.assembleCredentialShareSteps()
-        this.appendUnfinishedStep()
-        break
+        return this.assembleCredentialShareSteps()
       case FlowType.Authorization:
-        this.assembleAuthorizationSteps()
-        this.appendUnfinishedStep()
-        break
+        return this.assembleAuthorizationSteps()
       case FlowType.Authentication:
-        this.assembleAuthenticationSteps()
-        this.appendUnfinishedStep()
-        break
+        return this.assembleAuthenticationSteps()
       default:
-        this.assembleUnknownSteps()
-        this.appendUnfinishedStep()
-        break
+        return this.assembleUnknownSteps()
     }
   }
 }
