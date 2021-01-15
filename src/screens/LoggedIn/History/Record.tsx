@@ -5,20 +5,9 @@ import { useToasts } from '~/hooks/toasts'
 import { useHistory } from '~/hooks/history'
 
 import RecordHeader from './RecordHeader'
-import RecordItem from './RecordItem'
 import RecordItemsList from './RecordItemsList'
-import {
-  IHistorySection,
-  IPreLoadedInteraction,
-  IRecordDetails,
-  IRecordSteps,
-  IRecordStatus,
-} from '~/hooks/history/types'
+import { IHistorySection, IPreLoadedInteraction } from '~/types/records'
 import RecordBody from './RecordBody'
-import RecordDropdown from './RecordDropdown'
-import RecordStep from './RecordStep'
-import RecordFinalStep from './RecordFinalStep'
-import RecordBlock from './RecordBlock'
 
 interface IRecordContext {
   activeSection: string
@@ -40,12 +29,7 @@ export interface IRecordItemsListProps {
 interface IRecordComposition {
   Header: React.FC
   ItemsList: React.FC<IRecordItemsListProps>
-  Item: React.FC<IRecordItemProps>
   Body: React.FC
-  Dropdown: React.FC<{ details: IRecordDetails }>
-  Step: React.FC<IRecordSteps>
-  FinalStep: React.FC<IRecordSteps & { status: IRecordStatus }>
-  Block: React.FC<{ details: IRecordDetails | null }>
 }
 
 const RecordContext = React.createContext<IRecordContext | undefined>({
@@ -109,11 +93,6 @@ const Record: React.FC & IRecordComposition = ({ children }) => {
 
 Record.Header = RecordHeader
 Record.ItemsList = RecordItemsList
-Record.Item = RecordItem
 Record.Body = RecordBody
-Record.Step = RecordStep
-Record.Block = RecordBlock
-Record.FinalStep = RecordFinalStep
-Record.Dropdown = RecordDropdown
 
 export default Record

@@ -16,7 +16,7 @@ import { recordConfig } from '~/config/records'
 export const useHistory = () => {
   const agent = useAgent()
 
-  const getInteractions = () => {
+  const getInteractions = async () => {
     return agent.storage.get
       .interactionTokens({})
       .then((tokens) =>

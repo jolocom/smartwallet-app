@@ -4,9 +4,10 @@ import Dash from 'react-native-dash'
 
 import { IRecordDetails } from '~/types/records'
 import { Colors } from '~/utils/colors'
-import Record from './Record'
+import RecordStep from './RecordStep'
+import RecordFinalStep from './RecordFinalStep'
 
-const RecordDropdown: React.FC<{ details: IRecordDetails }> = ({ details }) => {
+const RecordSteps: React.FC<{ details: IRecordDetails }> = ({ details }) => {
   return (
     <View>
       <View style={styles.dashContainer}>
@@ -21,13 +22,13 @@ const RecordDropdown: React.FC<{ details: IRecordDetails }> = ({ details }) => {
       {details.steps.map((s, i) => {
         const isLastStep = i === details.steps.length - 1
         return isLastStep ? (
-          <Record.FinalStep
+          <RecordFinalStep
             title={s.title}
             description={s.description}
             status={details.status}
           />
         ) : (
-          <Record.Step title={s.title} description={s.description} />
+          <RecordStep title={s.title} description={s.description} />
         )
       })}
     </View>
@@ -52,4 +53,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RecordDropdown
+export default RecordSteps

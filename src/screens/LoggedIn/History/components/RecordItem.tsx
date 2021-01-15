@@ -4,7 +4,9 @@ import { LayoutAnimation, TouchableOpacity } from 'react-native'
 import { useHistory } from '~/hooks/history'
 import { IRecordDetails } from '~/types/records'
 import { useToasts } from '~/hooks/toasts'
-import Record, { IRecordItemProps } from './Record'
+import { IRecordItemProps } from '../Record'
+import RecordBlock from './RecordBlock'
+import RecordSteps from './RecordSteps'
 
 const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
   const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
@@ -37,8 +39,8 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={handlePress}>
-      <Record.Block details={itemDetails} />
-      {isOpen && itemDetails && <Record.Dropdown details={itemDetails} />}
+      <RecordBlock details={itemDetails} />
+      {isOpen && itemDetails && <RecordSteps details={itemDetails} />}
     </TouchableOpacity>
   )
 }

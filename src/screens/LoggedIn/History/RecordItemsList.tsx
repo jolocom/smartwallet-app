@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
+import RecordItem from './components/RecordItem'
 
-const RecordItemsList: React.FC<IRecordItemsListProps> = ({ sectionGetter }) => {
+const RecordItemsList: React.FC<IRecordItemsListProps> = ({
+  sectionGetter,
+}) => {
   const {
     loadedInteractions,
     setNextPage,
@@ -42,7 +45,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ sectionGetter }) => 
       contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
       renderSectionHeader={() => <Record.Header />}
       renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
-      renderItem={({ item, index }) => <Record.Item key={index} id={item} />}
+      renderItem={({ item, index }) => <RecordItem key={index} id={item} />}
     />
   )
 }
