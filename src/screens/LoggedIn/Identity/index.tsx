@@ -1,5 +1,4 @@
 import React from 'react'
-import { View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import IdentityIntro from './IdentityIntro'
