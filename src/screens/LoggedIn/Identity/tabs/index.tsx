@@ -20,7 +20,9 @@ interface IIdentityTabs {
 
 interface ITabsComposition {
   Tab: React.FC<{ id: string; title: string }>
-  Header: React.FC
+  Styled: {
+    Header: React.FC
+  }
   Page: React.FC<{ id: string }>
 }
 
@@ -49,7 +51,7 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
   )
 }
 
-IdentityTabs.Header = IdentityTabsHeader
+IdentityTabs.Styled.Header = IdentityTabsHeader
 IdentityTabs.Tab = IdentityTab
 IdentityTabs.Page = IdentityTabsPage
 

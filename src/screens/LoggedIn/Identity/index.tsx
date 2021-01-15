@@ -41,7 +41,7 @@ const Identity = () => {
         >
           <Section.Title marginTop={16}>{strings.YOUR_INFO}</Section.Title>
           <IdentityTabs initialTab={IdentityTabIds.credentials}>
-            <IdentityTabs.Header>
+            <IdentityTabs.Styled.Header>
               <IdentityTabs.Tab
                 id={IdentityTabIds.credentials}
                 title={strings.CREDENTIALS}
@@ -54,7 +54,7 @@ const Identity = () => {
               >
                 <IdentityTabBusinessCardIcon />
               </IdentityTabs.Tab>
-            </IdentityTabs.Header>
+            </IdentityTabs.Styled.Header>
             <IdentityTabs.Page id={IdentityTabIds.credentials}>
               <IdentityCredentials />
             </IdentityTabs.Page>
