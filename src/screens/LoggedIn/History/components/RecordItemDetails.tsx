@@ -7,7 +7,9 @@ import { Colors } from '~/utils/colors'
 import RecordStep from './RecordStep'
 import RecordFinalStep from './RecordFinalStep'
 
-const RecordSteps: React.FC<{ details: IRecordDetails }> = ({ details }) => {
+const RecordItemDetails: React.FC<{ details: IRecordDetails }> = ({
+  details,
+}) => {
   return (
     <View>
       <View style={styles.dashContainer}>
@@ -53,4 +55,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RecordSteps
+export default RecordItemDetails

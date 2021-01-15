@@ -7,7 +7,7 @@ import { IRecordDetails } from '~/types/records'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-const RecordBlock: React.FC<{ details: IRecordDetails | null }> = ({
+const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
   details,
 }) => {
   return (
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RecordBlock
+export default RecordItemHeader

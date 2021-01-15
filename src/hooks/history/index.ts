@@ -5,11 +5,6 @@ import {
   filterUniqueById,
   interactionTypeToFlowType,
 } from './utils'
-import {
-  CredentialOfferFlowState,
-  CredentialRequestFlowState,
-  AuthorizationFlowState,
-} from '@jolocom/sdk/js/interactionManager/types'
 import { RecordManager } from '~/middleware/records/recordManager'
 import { recordConfig } from '~/config/records'
 

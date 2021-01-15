@@ -5,8 +5,8 @@ import { useHistory } from '~/hooks/history'
 import { IRecordDetails } from '~/types/records'
 import { useToasts } from '~/hooks/toasts'
 import { IRecordItemProps } from '../Record'
-import RecordBlock from './RecordBlock'
-import RecordSteps from './RecordSteps'
+import RecordItemHeader from './RecordItemHeader'
+import RecordItemDetails from './RecordItemDetails'
 
 const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
   const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
@@ -39,8 +39,8 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={handlePress}>
-      <RecordBlock details={itemDetails} />
-      {isOpen && itemDetails && <RecordSteps details={itemDetails} />}
+      <RecordItemHeader details={itemDetails} />
+      {isOpen && itemDetails && <RecordItemDetails details={itemDetails} />}
     </TouchableOpacity>
   )
 }
