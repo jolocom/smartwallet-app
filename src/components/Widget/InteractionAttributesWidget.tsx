@@ -6,7 +6,7 @@ import Field, { IWidgetField } from './Field'
 import { AttributeTypes } from '~/types/credentials'
 
 interface IProps {
-  onCreate: () => void
+  onAdd: () => void
   onSelect: (attrType: AttributeTypes, id: string) => void
   fields: IWidgetField[]
   name: string
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 const InteractionAttributesWidget: React.FC<IProps> = ({
-  onCreate,
+  onAdd,
   onSelect,
   fields,
   name,
@@ -22,7 +22,7 @@ const InteractionAttributesWidget: React.FC<IProps> = ({
 }) => {
   const selectedCredentials = useSelector(getSelectedShareCredentials)
   return (
-    <Widget onCreate={onCreate}>
+    <Widget onAdd={onAdd}>
       <Widget.Header>
         <Widget.Header.Name value={name} />
         <Widget.Header.Action.CreateNew />
@@ -30,19 +30,19 @@ const InteractionAttributesWidget: React.FC<IProps> = ({
       {!fields.length ? (
         <Field.Empty />
       ) : (
-        fields.map((field) => (
-          <Field.Selectable
-            key={field.id}
-            value={field.value}
-            onSelect={() => onSelect(type, field.id)}
-            isSelected={
-              selectedCredentials
-                ? selectedCredentials[type] === field.id
-                : false
-            }
-          />
-        ))
-      )}
+          fields.map((field) => (
+            <Field.Selectable
+              key={field.id}
+              value={field.value}
+              onSelect={() => onSelect(type, field.id)}
+              isSelected={
+                selectedCredentials
+                  ? selectedCredentials[type] === field.id
+                  : false
+              }
+            />
+          ))
+        )}
     </Widget>
   )
 }

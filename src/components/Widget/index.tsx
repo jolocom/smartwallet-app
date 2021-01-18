@@ -10,7 +10,7 @@ interface IWidgetComposition {
 }
 
 interface IProps {
-  onCreate?: () => void
+  onAdd?: () => void
 }
 
 const WidgetContext = createContext<IProps | undefined>(undefined)
@@ -19,13 +19,13 @@ export const useWidget = useCustomContext(WidgetContext)
 
 const Widget: React.FC<IProps> & IWidgetComposition = ({
   children,
-  onCreate,
+  onAdd,
 }) => {
   const contextValue = useMemo(
     () => ({
-      onCreate,
+      onAdd,
     }),
-    [onCreate],
+    [onAdd],
   )
   return (
     <WidgetContext.Provider value={contextValue}>

@@ -45,12 +45,16 @@ export interface IAttributeClaimField {
   keyboardOptions: AttributeKeyboardOptions
 }
 
-export interface IAttributeConfig {
+export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
+  value: string
+}
+
+export interface IAttributeConfig<T = IAttributeClaimField> {
   // NOTE: if not used anywhere -> remove
   key: AttributeKeys
   label: string
   metadata: BaseMetadata
-  fields: IAttributeClaimField[]
+  fields: T[]
 }
 
 // NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties
@@ -69,7 +73,7 @@ export type UICredentialMetadata = Pick<
 
 export interface UICredential
   extends BaseUICredential,
-    Pick<SignedCredential, 'id' | 'claim'> {
+  Pick<SignedCredential, 'id' | 'claim'> {
   metadata: UICredentialMetadata
 }
 

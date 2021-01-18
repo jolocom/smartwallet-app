@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { initAttrs, updateAttrs } from '~/modules/attributes/actions'
+import { editAttr, initAttrs, updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes } from '~/types/credentials'
 import { useAgent } from './sdk'
 import { AttrsState, AttributeI, ClaimValues } from '~/modules/attributes/types'
@@ -11,6 +11,8 @@ import {
 } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
 import { attributeConfig } from '~/config/claims'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { BaseMetadata } from '@jolocom/protocol-ts'
 
 export const useSyncStorageAttributes = () => {
   const dispatch = useDispatch()
@@ -20,7 +22,7 @@ export const useSyncStorageAttributes = () => {
     try {
       const verifiableCredentials = await agent.storage.get.verifiableCredential()
 
-      const attributes = verifiableCredentials.reduce<AttrsState<AttributeI>>(
+      const attributes = verifiableCredentials.reduce(
         (acc, cred) => {
           if (isCredentialAttribute(cred, agent.idw.did)) {
             const type = extractCredentialType(cred) as AttributeTypes
@@ -31,7 +33,7 @@ export const useSyncStorageAttributes = () => {
           }
           return acc
         },
-        {},
+        {} as AttrsState<AttributeI>,
       )
 
       dispatch(initAttrs(attributes))
@@ -41,6 +43,71 @@ export const useSyncStorageAttributes = () => {
   }
 }
 
+const formAttribute = (signedCredential: SignedCredential) => {
+  const attribute = {
+    id: signedCredential.id,
+    value: extractClaims(signedCredential.claim),
+  }
+  return attribute;
+}
+
+export const useSICActions = () => {
+  const agent = useAgent();
+  const did = useSelector(getDid)
+  const dispatch = useDispatch();
+
+  const constructCredentialAndStore = async (metadata: BaseMetadata, claims: ClaimValues) => {
+    const signedCredential = await agent.idw.create.signedCredential({
+      metadata,
+      claim: claims,
+      subject: did
+    }, await agent.passwordStore.getPassword());
+    await agent.storage.store.verifiableCredential(signedCredential)
+    return signedCredential;
+  }
+
+  const deleteSICredential = async (id: string) => {
+    try {
+      await agent.storage.delete.verifiableCredential(id);
+      return id;
+    } catch (err) {
+      console.log({ err });
+      throw new Error(`Error deleting a self issued credential with', ${id}`);
+    }
+  }
+
+  const createSICredential = async (type: AttributeTypes, claims: ClaimValues, metadata: BaseMetadata) => {
+    try {
+      // assemble and store in the storage
+      const signedCredential = await constructCredentialAndStore(metadata, claims);
+
+      // update redux store
+      const attribute = formAttribute(signedCredential);
+      dispatch(updateAttrs({ type, attribute }))
+    } catch (err) {
+      console.log({ err });
+      throw new Error(`Error creating a self issued credential of type', ${type}`);
+    }
+  }
+
+  const editSICredential = async (type: AttributeTypes, claims: ClaimValues, metadata: BaseMetadata, id: string) => {
+    try {
+      const signedCredential = await constructCredentialAndStore(metadata, claims);
+      const removedCredentialId = await deleteSICredential(id);
+
+      const attribute = formAttribute(signedCredential);
+      dispatch(editAttr({ type, attribute, id: removedCredentialId }))
+    } catch (err) {
+      console.log({ err });
+      throw new Error(`Error editing a self issued credential of type', ${type}`);
+    }
+  }
+
+  return { createSICredential, editSICredential }
+
+}
+
+// TODO: remove this one and use useSICActions instead
 export const useCreateAttributes = () => {
   const agent = useAgent()
   const did = useSelector(getDid)

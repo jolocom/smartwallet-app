@@ -2,9 +2,8 @@ import React from 'react'
 import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
-import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { strings } from '~/translations'
-import { AttributeTypes } from '~/types/credentials'
+import { AttributeTypes, IAttributeClaimFieldWithValue } from '~/types/credentials'
 import { mapFormFields } from '~/utils/dataMapping'
 import Wizard from '.'
 
@@ -21,7 +20,7 @@ const SingleCredentialWizard: React.FC<{ onFormSubmit: () => void }> = ({
 }) => {
   const createAttribute = useCreateAttributes()
 
-  const handleSubmit = async (fields: IFormState[]) => {
+  const handleSubmit = async (fields: IAttributeClaimFieldWithValue[]) => {
     const mappedFields = mapFormFields(fields)
     await createAttribute(AttributeTypes.name, mappedFields)
     onFormSubmit()

@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
-import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { strings } from '~/translations'
 import {
   AttributeTypes,
   ClaimKeys,
   IAttributeClaimField,
+  IAttributeClaimFieldWithValue,
 } from '~/types/credentials'
 import { mapFormFields } from '~/utils/dataMapping'
 import Wizard from '.'
@@ -53,11 +53,11 @@ const WIZARD_CONFIG = {
 const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
   onFormSubmit,
 }) => {
-  const [fields, setFields] = useState<IFormState[]>([])
+  const [fields, setFields] = useState<IAttributeClaimFieldWithValue[]>([])
 
   const createAttribute = useCreateAttributes()
 
-  const addFieldValues = (formFields: IFormState[]) => {
+  const addFieldValues = (formFields: IAttributeClaimFieldWithValue[]) => {
     setFields((prevState) => [...prevState, ...formFields])
   }
 

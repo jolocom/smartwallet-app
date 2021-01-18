@@ -15,14 +15,14 @@ interface IHeaderActionComposition {
 
 const CreateNew: React.FC = () => {
   const widgetContext = useWidget()
-  if (!widgetContext?.onCreate) {
+  if (!widgetContext?.onAdd) {
     throw new Error('No onCreate prop passed to the widget')
   }
 
   return (
     <TouchableOpacity
       style={styles.createNewBtn}
-      onPress={widgetContext.onCreate}
+      onPress={widgetContext.onAdd}
     >
       <View style={styles.plus}>
         <PlusIcon />
