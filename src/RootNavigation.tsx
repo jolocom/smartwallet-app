@@ -14,6 +14,7 @@ import Recovery from '~/screens/Modals/Recovery'
 import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
+import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
 
 export type RootStackParamList = {
   Recovery: {
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   }
   LoggedIn: undefined
   LoggedOut: undefined
+  LostSeedPhraseInfo: undefined
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -51,6 +53,10 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
 
         {/* Modals -> Start */}
         <RootStack.Screen name={ScreenNames.Recovery} component={Recovery} />
+        <RootStack.Screen
+          name={ScreenNames.LostSeedPhraseInfo}
+          component={LostSeedPhraseInfo}
+        />
         {/* Modals -> End */}
       </RootStack.Navigator>
     </NavigationContainer>

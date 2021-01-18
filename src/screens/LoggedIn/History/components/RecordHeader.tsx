@@ -1,10 +1,10 @@
-import React from 'react';
-import JoloText, { JoloTextKind } from '~/components/JoloText';
-import { JoloTextSizes } from '~/utils/fonts';
-import { useRecord } from './Record';
+import React from 'react'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
+import { IRecordHeader, useRecord } from './Record'
 
-const RecordHeader = () => {
-  const { activeSection } = useRecord();
+const RecordHeader: React.FC<IRecordHeader> = ({ title }) => {
+  const { activeSection } = useRecord()
   return (
     <JoloText
       kind={JoloTextKind.title}
@@ -12,9 +12,9 @@ const RecordHeader = () => {
       customStyles={{ textAlign: 'left', marginBottom: 22, width: '100%' }}
     >
       {/* TODO: think about placeholder for the header when no interactions are there */}
-      {activeSection || 'No interactions yet...'}
+      {title || Object.values(activeSection)[0] || 'Loading...'}
     </JoloText>
   )
 }
 
-export default RecordHeader;
+export default RecordHeader
