@@ -1,35 +1,40 @@
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { FlowType } from '@jolocom/sdk'
+
 import { useAgent } from '~/hooks/sdk'
-import { IRecordDetails } from '~/types/records'
-import {
-  getDateSection,
-  filterUniqueById,
-  interactionTypeToFlowType,
-} from './utils'
+import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
+import { getDateSection, interactionTypeToFlowType } from './utils'
 import { RecordManager } from '~/middleware/records/recordManager'
 import { recordConfig } from '~/config/records'
 
 export const useHistory = () => {
   const agent = useAgent()
 
-  const getInteractions = (
+  const getInteractions = async (
     take: number,
     skip: number,
-    type?: InteractionType,
+    flows?: FlowType[],
   ) => {
-    return (
-      agent.storage.get
-        // .interactionTokens({...(type && {type})}, {take, skip})
-        .interactionTokens({ ...(type && { type }) })
-        .then((tokens) => {
-          return tokens.map(({ nonce, issued, interactionType }) => ({
-            id: nonce,
-            section: getDateSection(new Date(issued)),
-            type: interactionTypeToFlowType[interactionType],
-          }))
-        })
-        .then(filterUniqueById)
+    const allInteractions = await agent.interactionManager.listInteractions({
+      take,
+      skip,
+      flows,
+      reverse: true,
+    })
+
+    const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>(
+      (mappedIntxs, intx) => {
+        const { nonce, issued, interactionType } = intx.firstMessage
+        const interactionBySection = {
+          id: nonce,
+          section: getDateSection(new Date(issued)),
+          type: interactionTypeToFlowType[interactionType],
+        }
+        return [...mappedIntxs, interactionBySection]
+      },
+      [],
     )
+
+    return groupedInteractions
   }
 
   const getInteractionDetails = async (

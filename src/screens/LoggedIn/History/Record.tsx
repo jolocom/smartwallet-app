@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { FlowType } from '@jolocom/sdk'
 
 import { useCustomContext } from '~/hooks/context'
 
@@ -20,7 +20,7 @@ export interface IRecordItemProps {
 }
 
 export interface IRecordItemsListProps {
-  type?: InteractionType
+  flows?: FlowType[]
   isActiveList: boolean
 }
 

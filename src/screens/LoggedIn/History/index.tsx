@@ -1,5 +1,5 @@
+import { FlowType } from '@jolocom/sdk'
 import React from 'react'
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
@@ -46,7 +46,7 @@ const History = () => {
                 >
                   <Record.ItemsList
                     isActiveList={activeSubtab?.id === 'shared'}
-                    type={InteractionType.CredentialRequest}
+                    flows={[FlowType.CredentialShare]}
                   />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
@@ -54,7 +54,7 @@ const History = () => {
                 >
                   <Record.ItemsList
                     isActiveList={activeSubtab?.id === 'received'}
-                    type={InteractionType.CredentialOfferRequest}
+                    flows={[FlowType.CredentialOffer]}
                   />
                 </Tabs.PersistChildren>
               </>

@@ -9,11 +9,10 @@ import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
 import RecordItem from './components/RecordItem'
 
-/* This name is misleading, it rather say us TOKENS_PER_BATCH */
-const ITEMS_PER_PAGE = 4
+const ITEMS_PER_PAGE = 5
 
 const RecordItemsList: React.FC<IRecordItemsListProps> = ({
-  type,
+  flows,
   isActiveList,
 }) => {
   const { updateActiveSection } = useRecord()
@@ -38,13 +37,8 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
   }, [])
 
   useEffect(() => {
-    /* TODO: an issue is that is doesn't take ITEMS_PER_PAGE
-      as distinct tokens, it actually takes all, even duplicate tokens,
-      so there is no match between how many items you see and 
-      ITEMS_PER_PAGE 
-    */
     if (page) {
-      getInteractionTokens(ITEMS_PER_PAGE, interactions.length, type)
+      getInteractionTokens(ITEMS_PER_PAGE, interactions.length, flows)
         .then((tokens) => {
           setInteractions((prevState) => [...prevState, ...tokens])
         })
@@ -88,11 +82,8 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
       showsVerticalScrollIndicator={false}
       keyExtractor={(item, i) => 'id:' + item + i}
       overScrollMode={'never'}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={0.9}
       onViewableItemsChanged={handleSectionChange}
-      viewabilityConfig={{
-        itemVisiblePercentThreshold: 50,
-      }}
       onEndReached={handleEndReached}
       contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
       renderSectionHeader={({ section }) => (
