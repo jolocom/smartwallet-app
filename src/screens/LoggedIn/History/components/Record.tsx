@@ -1,6 +1,5 @@
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import { FlowType } from '@jolocom/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
-import { ITab } from '~/components/Tabs/Tabs'
 
 import { useCustomContext } from '~/hooks/context'
 
@@ -22,7 +21,7 @@ export interface IRecordItemProps {
 }
 
 export interface IRecordItemsListProps {
-  type?: InteractionType
+  flows?: FlowType[]
   isActiveList: boolean
 }
 
@@ -34,7 +33,7 @@ interface IRecordComposition {
 
 const RecordContext = React.createContext<IRecordContext | undefined>({
   activeSection: {},
-  updateActiveSection: () => {},
+  updateActiveSection: () => { },
 })
 RecordContext.displayName = 'RecordContext'
 
