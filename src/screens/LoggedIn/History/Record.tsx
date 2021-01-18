@@ -27,7 +27,6 @@ export interface IRecordItemsListProps {
 interface IRecordComposition {
   Header: React.FC<IRecordHeader>
   ItemsList: React.FC<IRecordItemsListProps>
-  Body: React.FC
 }
 
 const RecordContext = React.createContext<IRecordContext | undefined>({

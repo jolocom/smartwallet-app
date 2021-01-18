@@ -25,12 +25,13 @@ const RecordItemDetails: React.FC<{ details: IRecordDetails }> = ({
         const isLastStep = i === details.steps.length - 1
         return isLastStep ? (
           <RecordFinalStep
+            key={i}
             title={s.title}
             description={s.description}
             status={details.status}
           />
         ) : (
-          <RecordStep title={s.title} description={s.description} />
+          <RecordStep key={i} title={s.title} description={s.description} />
         )
       })}
     </View>
