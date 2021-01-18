@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { IPreLoadedInteraction, IHistorySection } from './types'
+import { IPreLoadedInteraction, IHistorySection } from '~/types/records'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { FlowType } from '@jolocom/sdk'
 

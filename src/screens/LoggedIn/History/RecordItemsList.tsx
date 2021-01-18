@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
+
 import { useTabs } from '~/components/Tabs/Tabs'
 import { useHistory } from '~/hooks/history'
-import { IPreLoadedInteraction } from '~/hooks/history/types'
+import { IPreLoadedInteraction } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
+import RecordItem from './components/RecordItem'
 
 const ITEMS_PER_PAGE = 5
 
@@ -88,7 +90,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
         <Record.Header title={section.title} />
       )}
       renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
-      renderItem={({ item, index }) => <Record.Item key={index} id={item} />}
+      renderItem={({ item, index }) => <RecordItem key={index} id={item} />}
       stickySectionHeadersEnabled={false}
     />
   )

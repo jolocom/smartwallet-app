@@ -1,42 +1,53 @@
-import { FlowType } from '@jolocom/sdk';
+import { FlowType } from '@jolocom/sdk'
+
 import { useAgent } from '~/hooks/sdk'
-import { IInteractionDetails, IPreLoadedInteraction } from './types'
-import {
-  getDateSection,
-  interactionTypeToFlowType,
-} from './utils'
+import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
+import { getDateSection, interactionTypeToFlowType } from './utils'
+import { RecordManager } from '~/middleware/records/recordManager'
+import { recordConfig } from '~/config/records'
 
 export const useHistory = () => {
-  const agent = useAgent();
+  const agent = useAgent()
 
-  const getInteractions = async (take: number, skip: number, flows?: FlowType[]) => {
-    const allInteractions = await agent.interactionManager.listInteractions({ take, skip, flows, reverse: true });
+  const getInteractions = async (
+    take: number,
+    skip: number,
+    flows?: FlowType[],
+  ) => {
+    const allInteractions = await agent.interactionManager.listInteractions({
+      take,
+      skip,
+      flows,
+      reverse: true,
+    })
 
-    const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>((mappedIntxs, intx) => {
-      const { nonce, issued, interactionType } = intx.firstMessage;
-      const interactionBySection = { id: nonce, section: getDateSection(new Date(issued)), type: interactionTypeToFlowType[interactionType] }
-      return [...mappedIntxs, interactionBySection]
-    }, [])
+    const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>(
+      (mappedIntxs, intx) => {
+        const { nonce, issued, interactionType } = intx.firstMessage
+        const interactionBySection = {
+          id: nonce,
+          section: getDateSection(new Date(issued)),
+          type: interactionTypeToFlowType[interactionType],
+        }
+        return [...mappedIntxs, interactionBySection]
+      },
+      [],
+    )
 
-    return groupedInteractions;
+    return groupedInteractions
   }
 
   const getInteractionDetails = async (
     nonce: string,
-  ): Promise<IInteractionDetails> => {
+  ): Promise<IRecordDetails> => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
+    const recordManager = new RecordManager(interaction, recordConfig)
 
-    return {
-      type: interaction.flow.type,
-      issuer: interaction.getSummary().initiator,
-      time: new Date(interaction.firstMessage.issued)
-        .toTimeString()
-        .slice(0, 5),
-    }
+    return recordManager.getRecordDetails()
   }
 
   return {
     getInteractions,
-    getInteractionDetails
+    getInteractionDetails,
   }
 }

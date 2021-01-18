@@ -1,10 +1,11 @@
 import { FlowType } from '@jolocom/sdk'
 import React from 'react'
+
 import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
 import Tabs from '~/components/Tabs/Tabs'
 import { strings } from '~/translations'
-import Record from './components/Record'
+import Record from './Record'
 
 const SUBTABS = [
   { id: 'all', value: strings.ALL },
