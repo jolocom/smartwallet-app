@@ -13,14 +13,16 @@ import Widget from '~/components/Widget'
 import Field from '~/components/Widget/Field'
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
-import { getAttributes } from '~/modules/attributes/selectors'
+import { getPrimitiveAttributes } from '~/modules/attributes/selectors'
 import {
   AttributeTypes,
+  IAttributeClaimField,
+  IAttributeClaimFieldWithValue,
   IAttributeConfig,
 } from '~/types/credentials'
 import { useSICActions } from '~/hooks/attributes';
 
-import Form, { IFormState } from './components/Form'
+import Form from './components/Form'
 import { mapFormFields } from '~/utils/dataMapping'
 import { useToasts } from '~/hooks/toasts'
 
@@ -33,24 +35,23 @@ enum FormModes {
 type TPrimiveAttributeTypes = Exclude<AttributeTypes, AttributeTypes.businessCard>
 type TPrimitiveAttributesConfig = Omit<Record<AttributeTypes, IAttributeConfig>, AttributeTypes.businessCard>
 
-// all self issued credentials without business card
-const attributeConfigPrimitive = Object.keys(attributeConfig)
-  .filter(k => k !== AttributeTypes.businessCard)
-  .reduce<TPrimitiveAttributesConfig>((config, key) => {
-    const k = key as TPrimiveAttributeTypes;
-    config[k] = attributeConfig[k]
-    return config
-  }, {} as TPrimitiveAttributesConfig)
+const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
+  const { ProofOfBusinessCardCredential, ...primitiveAttributesConfig } = attributeConfig;
+  return primitiveAttributesConfig;
+}
+
+const primitiveAttributesConfig = getAttributeConfigPrimitive();
 
 const IdentityCredentials = () => {
   const [expandedForm, setExpandedForm] = useState<TPrimiveAttributeTypes | undefined>(undefined);
   const [formMode, setFormMode] = useState(FormModes.none);
-  const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
+  const [formConfig, setFormConfig] = useState<IAttributeConfig<IAttributeClaimFieldWithValue | IAttributeClaimField> | null>(null)
   const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined); // state that shows what claim are we editing 
 
-  const attributes = useSelector(getAttributes);
+  const attributes = useSelector(getPrimitiveAttributes);
   const { createSICredential, editSICredential } = useSICActions();
   const { scheduleWarning } = useToasts();
+
 
   // we are not interested in claim id in 'add' mode, therefore reetting value to avoid confusions
   useEffect(() => {
@@ -70,7 +71,7 @@ const IdentityCredentials = () => {
   // update form config
   useEffect(() => {
     if (formMode === FormModes.add && expandedForm) {
-      setFormConfig(attributeConfigPrimitive[expandedForm])
+      setFormConfig(primitiveAttributesConfig[expandedForm])
     } else if (formMode === FormModes.edit && expandedForm && editClaimId) {
       // NOTE: in edit more form should be aware of claim values
       const fieldsWithValues = attributeConfig[expandedForm].fields.map((f) =>
@@ -80,7 +81,7 @@ const IdentityCredentials = () => {
       })
       )
       setFormConfig({
-        ...attributeConfigPrimitive[expandedForm],
+        ...primitiveAttributesConfig[expandedForm],
         fields: fieldsWithValues,
       })
     }
@@ -109,11 +110,11 @@ const IdentityCredentials = () => {
 
   const handleHideForm = () => toggleForm(() => setExpandedForm(undefined))
 
-  const handleCredentialCreate = async (formValues: IFormState[]) => {
+  const handleCredentialCreate = async (formValues: IAttributeClaimFieldWithValue[]) => {
     if (expandedForm) {
       try {
         const claims = mapFormFields(formValues);
-        await createSICredential(expandedForm, claims);
+        await createSICredential(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata);
         setExpandedForm(undefined)
       } catch (e) {
         scheduleWarning({
@@ -125,11 +126,11 @@ const IdentityCredentials = () => {
     }
   }
 
-  const handleCredentialEdit = async (formValues: IFormState[]) => {
+  const handleCredentialEdit = async (formValues: IAttributeClaimFieldWithValue[]) => {
     if (expandedForm && editClaimId) {
       try {
         const claims = mapFormFields(formValues);
-        await editSICredential(expandedForm, claims, editClaimId);
+        await editSICredential(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata, editClaimId);
         setExpandedForm(undefined)
       } catch (err) {
         scheduleWarning({
@@ -141,7 +142,7 @@ const IdentityCredentials = () => {
     }
   }
 
-  const handleCredentialSubmit = async (formValues: IFormState[]) => {
+  const handleCredentialSubmit = async (formValues: IAttributeClaimFieldWithValue[]) => {
     if (formMode === FormModes.add) {
       await handleCredentialCreate(formValues);
     } else if (formMode === FormModes.edit) {
@@ -177,7 +178,7 @@ const IdentityCredentials = () => {
         overScrollMode="never"
         enableOnAndroid
       >
-        {Object.entries<IAttributeConfig>(attributeConfigPrimitive).map(([aKey, aVal]) => {
+        {Object.entries<IAttributeConfig>(primitiveAttributesConfig).map(([aKey, aVal]) => {
           const key = aKey as TPrimiveAttributeTypes;
           return (
             <View style={styles.group} key={aKey}>

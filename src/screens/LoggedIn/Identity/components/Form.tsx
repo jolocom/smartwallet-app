@@ -2,23 +2,19 @@ import React, { createContext, useCallback, useEffect, useMemo, useState } from 
 import FormBody from './FormBody'
 import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
-import { AttributeKeys, IAttributeClaimField, IAttributeClaimFieldWithValue, IAttributeConfig } from '~/types/credentials'
+import { AttributeKeys, IAttributeClaimField, IAttributeClaimFieldWithValue } from '~/types/credentials'
 import { useCustomContext } from '~/hooks/context'
-
-export interface IFormState extends IAttributeClaimField {
-  value: string
-}
 
 interface IFormConfig {
   key: AttributeKeys
-  fields: IAttributeClaimFieldWithValue[]
+  fields: IAttributeClaimField[] | IAttributeClaimFieldWithValue[]
 }
 
 export interface IFormContext {
-  fields: IFormState[]
+  fields: IAttributeClaimFieldWithValue[]
   updateField: (id: string, value: string) => void
-  onSubmit: (collectedValues: IFormState[]) => void | Promise<void>
-  onCancel: (collectedValues: IFormState[]) => void | Promise<void>
+  onSubmit: (collectedValues: IAttributeClaimFieldWithValue[]) => void | Promise<void>
+  onCancel: (collectedValues: IAttributeClaimFieldWithValue[]) => void | Promise<void>
 }
 
 interface IFormProps
@@ -45,11 +41,20 @@ const FormContext = createContext<IFormContext>({
 
 export const useForm = useCustomContext(FormContext);
 
+function isFieldWithValue(fields: any): fields is IAttributeClaimFieldWithValue[] {
+  return fields[0].hasOwnProperty('value');
+}
+
 const getPopulatedFieldsWithValue = (config: IFormConfig) => {
-  return config.fields.map((el) => ({
-    ...el,
-    value: el.value || '',
-  }))
+  const { fields } = config;
+  if (isFieldWithValue(fields)) {
+    return fields
+  } else {
+    return fields.map(el => ({
+      ...el,
+      value: ''
+    }))
+  }
 }
 
 const Form: React.FC<IFormProps> & IFormComposition = ({

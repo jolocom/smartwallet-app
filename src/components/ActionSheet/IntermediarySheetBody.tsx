@@ -9,12 +9,13 @@ import { useCreateAttributes } from '~/hooks/attributes'
 import { useLoader } from '~/hooks/loader'
 import { strings } from '~/translations/strings'
 import InteractionHeader from '~/screens/Modals/Interactions/InteractionHeader'
-import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
+import Form from '~/screens/LoggedIn/Identity/components/Form'
 import { attributeConfig } from '~/config/claims'
 import Input from '../Input'
 import { useToasts } from '~/hooks/toasts'
 import useInteractionToasts from '~/hooks/interactions/useInteractionToasts'
 import { mapFormFields } from '~/utils/dataMapping'
+import { IAttributeClaimFieldWithValue } from '~/types/credentials'
 
 const IntermediarySheetBody = () => {
   const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const IntermediarySheetBody = () => {
 
   const createAttribute = useCreateAttributes()
 
-  const handleSubmit = async (collectedValues: IFormState[]) => {
+  const handleSubmit = async (collectedValues: IAttributeClaimFieldWithValue[]) => {
     if (collectedValues.length) {
       const claims = mapFormFields(collectedValues);
 

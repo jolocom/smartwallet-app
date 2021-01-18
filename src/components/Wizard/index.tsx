@@ -1,7 +1,6 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { useCustomContext } from '~/hooks/context'
-import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
-import { IAttributeConfig } from '~/types/credentials'
+import { IAttributeClaimFieldWithValue, IAttributeConfig } from '~/types/credentials'
 import WizardBody from './WizardBody'
 import WizardFooter from './WizardFooter'
 import WizardForm from './WizardForm'
@@ -23,7 +22,7 @@ export interface IWizardFooterProps {
 }
 
 export interface IWizardFormProps extends IWizardBodyProps {
-  onSubmit: (fields: IFormState[]) => void
+  onSubmit: (fields: IAttributeClaimFieldWithValue[]) => void
 }
 
 interface IWizardContext {
@@ -48,7 +47,7 @@ interface IWizardProps {
 const WizardContext = createContext<IWizardContext>({
   config: {},
   activeStep: 0,
-  setActiveStep: () => {},
+  setActiveStep: () => { },
   isLastStep: false,
 })
 WizardContext.displayName = 'WizardContext'

@@ -49,12 +49,12 @@ export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
   value: string
 }
 
-export interface IAttributeConfig {
+export interface IAttributeConfig<T = IAttributeClaimField> {
   // NOTE: if not used anywhere -> remove
   key: AttributeKeys
   label: string
   metadata: BaseMetadata
-  fields: IAttributeClaimField[]
+  fields: T[]
 }
 
 // NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties

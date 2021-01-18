@@ -1,8 +1,8 @@
 import React from 'react'
 import Form, {
   IFormContext,
-  IFormState,
 } from '~/screens/LoggedIn/Identity/components/Form'
+import { IAttributeClaimFieldWithValue } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import Wizard, { IWizardFormProps, useWizard } from '.'
 import Input from '../Input'
@@ -40,7 +40,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
     </Form.Expose>
   )
 
-  const handleFormSubmit = (fields: IFormState[]) => {
+  const handleFormSubmit = (fields: IAttributeClaimFieldWithValue[]) => {
     onSubmit(fields)
     if (!isLastStep) setActiveStep((prevState) => prevState + 1)
   }
