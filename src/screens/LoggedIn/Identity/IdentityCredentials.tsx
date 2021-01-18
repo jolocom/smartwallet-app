@@ -43,14 +43,12 @@ const attributeConfigPrimitive = Object.keys(attributeConfig)
   }, {} as TPrimitiveAttributesConfig)
 
 const IdentityCredentials = () => {
-
-
   const [expandedForm, setExpandedForm] = useState<TPrimiveAttributeTypes | undefined>(undefined);
   const [formMode, setFormMode] = useState(FormModes.none);
   const [formConfig, setFormConfig] = useState<IAttributeConfig | null>(null)
   const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined); // state that shows what claim are we editing 
 
-  const attributes = useSelector(getAttributes)
+  const attributes = useSelector(getAttributes);
   const { createSICredential, editSICredential } = useSICActions();
   const { scheduleWarning } = useToasts();
 
@@ -78,8 +76,7 @@ const IdentityCredentials = () => {
       const fieldsWithValues = attributeConfig[expandedForm].fields.map((f) =>
       ({
         ...f,
-        value: attributes[expandedForm]
-          .find(a => a.id === editClaimId).value[f.key],
+        value: attributes[expandedForm]?.find(a => a.id === editClaimId)?.value[f.key],
       })
       )
       setFormConfig({
@@ -152,6 +149,23 @@ const IdentityCredentials = () => {
     }
   }
 
+  const getIsWidgetShown = (type: AttributeTypes) => {
+    if (type === expandedForm) {
+      LayoutAnimation.configureNext({
+        ...LayoutAnimation.Presets.easeInEaseOut,
+        duration: 200,
+      })
+      if (formMode === FormModes.edit) {
+        return expandedForm && Boolean(attributes[type]?.length > 1);
+      } else if (formMode === FormModes.add) {
+        return expandedForm && Boolean(attributes[type]?.length);
+      } else {
+        return true;
+      }
+    }
+    return true;
+  }
+
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
@@ -167,30 +181,36 @@ const IdentityCredentials = () => {
           const key = aKey as TPrimiveAttributeTypes;
           return (
             <View style={styles.group} key={aKey}>
-              <Widget onAdd={() => handleShowNewForm(key)}>
-                <Widget.Header>
-                  <Widget.Header.Name value={aVal.label} />
-                  {attributes[key] && <Widget.Header.Action.CreateNew />}
-                </Widget.Header>
-                {attributes[key] ? (
-                  (attributes[key] || []).map((f) => (
-                    <TouchableOpacity
-                      onPress={() => handleShowEditForm(key, f.id)}
-                      key={f.id}
-                    >
-                      <Field.Static
-                        key={f.id}
-                        value={Object.values(f.value).join(' ')}
-                      />
-                    </TouchableOpacity>
-                  )
-                  )
-                ) : (
-                    <Field.Empty>
-                      <PencilIcon />
-                    </Field.Empty>
-                  )}
-              </Widget>
+              {
+                getIsWidgetShown(key) ? (
+                  <Widget onAdd={() => handleShowNewForm(key)}>
+                    <Widget.Header>
+                      <Widget.Header.Name value={aVal.label} />
+                      {attributes[key] && <Widget.Header.Action.CreateNew />}
+                    </Widget.Header>
+                    {attributes[key] ? (
+                      (attributes[key] || []).map((f) => (
+                        <TouchableOpacity
+                          onPress={() => handleShowEditForm(key, f.id)}
+                          key={f.id}
+                        >
+                          <Field.Static
+                            key={f.id}
+                            value={Object.values(f.value).join(' ')}
+                          />
+                        </TouchableOpacity>
+                      )
+                      )
+                    ) : (
+
+                        <Field.Empty>
+                          <PencilIcon />
+                        </Field.Empty>
+                      )}
+                  </Widget>
+                ) : null
+              }
+
               {aKey === expandedForm && formConfig && (
                 <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialSubmit}>
                   <Form.Header>

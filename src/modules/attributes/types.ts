@@ -5,9 +5,8 @@ export interface AttributesState {
   all: AttrsState<AttributeI>
 }
 
-export type AttrsState<T> = {
-  [key in AttributeTypes]?: T[]
-}
+// TODO: fix type issues 
+export type AttrsState<T> = Record<AttributeTypes, T[]>
 
 export enum AttrActions {
   initAttrs = 'initAttrs',
