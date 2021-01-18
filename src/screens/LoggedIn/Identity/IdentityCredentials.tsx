@@ -190,17 +190,20 @@ const IdentityCredentials = () => {
                       {attributes[key] && <Widget.Header.Action.CreateNew />}
                     </Widget.Header>
                     {attributes[key] ? (
-                      (attributes[key] || []).map((f) => (
-                        <TouchableOpacity
-                          onPress={() => handleShowEditForm(key, f.id)}
-                          key={f.id}
-                        >
-                          <Field.Static
+                      (attributes[key] || []).map((f) => {
+                        if (f.id === editClaimId) return null
+                        return (
+                          <TouchableOpacity
+                            onPress={() => handleShowEditForm(key, f.id)}
                             key={f.id}
-                            value={Object.values(f.value).join(' ')}
-                          />
-                        </TouchableOpacity>
-                      )
+                          >
+                            <Field.Static
+                              key={f.id}
+                              value={Object.values(f.value).join(' ')}
+                            />
+                          </TouchableOpacity>
+                        )
+                      }
                       )
                     ) : (
 
