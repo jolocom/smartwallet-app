@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Image } from 'react-native'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -10,14 +10,16 @@ import { JoloTextSizes } from '~/utils/fonts'
 const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
   details,
 }) => {
+  const image = details?.issuer.publicProfile?.image
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        {/* TODO: seems there is not use case as of now where image is part of returned interaction details */}
-        {/* {image && (
+        {image ? (
           <Image style={styles.image} source={{ uri: image }} />
-        )} */}
-        <InitiatorPlaceholderIcon />
+        ) : (
+          <InitiatorPlaceholderIcon />
+        )}
       </View>
       <View style={[styles.textContainer]}>
         <View style={styles.topContainer}>
