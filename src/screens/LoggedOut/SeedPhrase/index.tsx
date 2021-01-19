@@ -12,7 +12,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
-import { useRedirectTo, useRedirect } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
@@ -217,8 +217,10 @@ const SeedPhrase: React.FC = () => {
         {/* this should take 2/5 of a screen */}
         <View style={styles.helpersContainer}>
           <View style={styles.bottomContainer}>
-            {renderMagicButton()}
-            {renderMagicInfo()}
+            <View style={styles.nestedInBottomContainer}>
+              {renderMagicButton()}
+              {renderMagicInfo()}
+            </View>
           </View>
           {renderBottomButtons()}
         </View>
@@ -272,6 +274,9 @@ const styles = StyleSheet.create({
   bottomContainer: {
     alignItems: 'flex-end',
     paddingRight: 10,
+  },
+  nestedInBottomContainer: {
+    alignItems: 'center',
   },
   gradient: {
     width: 160,
