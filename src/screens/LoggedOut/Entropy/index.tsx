@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
-import { View, StyleSheet, Platform } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
@@ -20,7 +20,7 @@ import { useLoader } from '~/hooks/loader'
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 const Entropy: React.FC = () => {
-  const redirectToSeedPhrase = useReplaceWith(ScreenNames.SeedPhrase)
+  const redirectToSeedPhraseWrite = useReplaceWith(ScreenNames.SeedPhraseWrite)
   const refreshEntropy = useReplaceWith(ScreenNames.Entropy)
   const generateSeed = useGenerateSeed()
   const loader = useLoader()
@@ -30,7 +30,7 @@ const Entropy: React.FC = () => {
     const success = await loader(generateSeed, { showSuccess: false })
 
     if (success) {
-      return redirectToSeedPhrase()
+      return redirectToSeedPhraseWrite()
     }
     return refreshEntropy()
   }
@@ -48,8 +48,8 @@ const Entropy: React.FC = () => {
           >{`${Math.trunc(entropyProgress * 100)} %`}</JoloText>
         </View>
       ) : (
-        <EntropyIntro />
-      )}
+          <EntropyIntro />
+        )}
       <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
     </ScreenContainer>
   )
@@ -62,7 +62,7 @@ export const useEntropyProgress = (submit: (entropy: string) => void) => {
 
   useEffect(() => {
     if (entropyProgress === 1) {
-      ;(async () => {
+      ; (async () => {
         await supplementEntropyProgress()
         submit(entropyGenerator.current.generateRandomString(4))
       })()
