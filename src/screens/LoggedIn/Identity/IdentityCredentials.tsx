@@ -25,6 +25,7 @@ import { useSICActions } from '~/hooks/attributes';
 import Form from './components/Form'
 import { mapFormFields } from '~/utils/dataMapping'
 import { useToasts } from '~/hooks/toasts'
+import EmptyPlaceholder, { IdentityPlaceholderTypes } from './components/EmptyPlaceholder'
 
 enum FormModes {
   add = 'add',
@@ -167,6 +168,11 @@ const IdentityCredentials = () => {
     return true;
   }
 
+  if (!Object.keys(primitiveAttributesConfig).length) {
+    return (
+      <EmptyPlaceholder type={IdentityPlaceholderTypes.primitive} />
+    )
+  }
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>

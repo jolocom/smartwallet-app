@@ -319,6 +319,8 @@ const identity = {
   NEXT: 'Next',
   WHAT_IS_YOUR_NAME: 'What is your name?',
   CREATE: 'Create',
+  YOUR_INFO_IS_QUITE_EMPTY: 'Your info is quite empty. Fill it in for the future cases',
+  SO_FAR_IT_IS_EMPTY: 'So far, it\'s empty. Just tap to start creation'
 }
 
 export const strings = {

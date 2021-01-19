@@ -12,3 +12,11 @@ export const getPrimitiveAttributes = createSelector(
     return primitiveAttributes
   }
 )
+
+export const getBusinessCardAttributes = createSelector(
+  [getAttributes],
+  attributes => {
+    const { ProofOfBusinessCardCredential } = attributes;
+    return ProofOfBusinessCardCredential
+  }
+)
