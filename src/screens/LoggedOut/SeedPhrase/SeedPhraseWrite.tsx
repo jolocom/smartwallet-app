@@ -4,20 +4,19 @@ import {
   StyleSheet,
   Animated,
   Platform,
-  TouchableOpacity,
 } from 'react-native'
 // @ts-ignore no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import Btn, { BtnTypes } from '~/components/Btn'
-import { useRedirect } from '~/hooks/navigation'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useStoredMnemonic } from '~/hooks/sdk'
-import { InfoIcon } from '~/assets/svg'
+import { BackArrowIcon, InfoIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
@@ -30,6 +29,7 @@ const vibrationOptions = {
 
 const SeedPhraseWrite: React.FC = () => {
   const redirect = useRedirect()
+  const goBack = useGoBack();
   const { gestureState,
     animationValues: { shadowScale, circleScale, magicOpacity },
     animateVaues: { hideMagicBtn },
@@ -118,14 +118,6 @@ const SeedPhraseWrite: React.FC = () => {
     </>
   )
 
-  const renderInfoIcon = () => (
-    <Animated.View style={[styles.iconContainer, { opacity: buttonOpacity }]}>
-      <TouchableOpacity onPress={() => redirect(ScreenNames.SeedPhraseInfo)}>
-        <InfoIcon />
-      </TouchableOpacity>
-    </Animated.View>
-  )
-
   const renderSeedphrase = () => {
     return (
       <Animated.View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', opacity: gestureState === GestureState.Success ? 1 : phraseOpacity }}>
@@ -179,6 +171,16 @@ const SeedPhraseWrite: React.FC = () => {
       {renderBackgroundCrossfade()}
       <SeedPhrase.Styled.ScreenContainer>
         <Animated.View style={{ opacity: buttonOpacity }}>
+          <SeedPhrase.Styled.Header>
+            <SeedPhrase.Styled.Header.Left onPress={goBack}>
+              <BackArrowIcon />
+            </SeedPhrase.Styled.Header.Left>
+            <SeedPhrase.Styled.Header.Right onPress={() => redirect(ScreenNames.SeedPhraseInfo)}>
+              <InfoIcon />
+            </SeedPhrase.Styled.Header.Right>
+          </SeedPhrase.Styled.Header>
+        </Animated.View>
+        <Animated.View style={{ opacity: buttonOpacity }}>
           <SeedPhrase.Styled.HelperText>
             {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
           </SeedPhrase.Styled.HelperText>
@@ -186,8 +188,6 @@ const SeedPhraseWrite: React.FC = () => {
         <SeedPhrase.Styled.ActiveArea>
           {/* this should take 3/5 of a screen; justify-content: space-between */}
           <View style={styles.phraseContainer}>
-            {/* TODO: move info icon in the header */}
-            {/* {renderInfoIcon()} */}
             {renderSeedphrase()}
           </View>
           {/* this should take 2/5 of a screen */}
