@@ -1,11 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import AbsoluteBottom from '~/components/AbsoluteBottom';
 import JoloText, { JoloTextWeight } from '~/components/JoloText';
 import ScreenContainer from '~/components/ScreenContainer';
 import BP from '~/utils/breakpoints';
-import { debugView } from '~/utils/dev';
+import { Colors } from '~/utils/colors';
 
 const StyledScreenContainer: React.FC = ({ children }) => {
  return (
@@ -47,13 +46,9 @@ const SeedPhrase = {
 const styles = StyleSheet.create({
  activeArea: {
   marginTop: BP({ default: 60, small: 40, xsmall: 30 }),
-  height: 200,
   width: '100%',
-  ...debugView()
+  flex: 1,
  },
- cta: {
-  ...debugView()
- }
 })
 
 export default SeedPhrase;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import JoloText, { JoloTextWeight } from '~/components/JoloText';
+import BP from '~/utils/breakpoints';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
 
@@ -25,8 +26,8 @@ const styles = StyleSheet.create({
   backgroundColor: Colors.bastille1,
   paddingHorizontal: 20,
   paddingVertical: 10,
-  marginHorizontal: 5,
-  marginVertical: 7
+  marginHorizontal: BP({ default: 5, small: 3, xsmall: 3 }),
+  marginVertical: BP({ default: 7, small: 5, xsmall: 5 })
  },
  text: {
   color: Colors.activity,
