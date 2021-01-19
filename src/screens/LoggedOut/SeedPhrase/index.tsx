@@ -24,6 +24,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import MagicButton from '~/components/MagicButton'
+import WordPill from './components/WordPill'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -129,36 +130,49 @@ const SeedPhrase: React.FC = () => {
     </Animated.View>
   )
 
-  const renderSeedphrase = () => (
-    <Animated.View
-      style={{
-        opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
-        marginTop: BP({ default: 40, small: 20, xsmall: 20 }),
-      }}
-    >
-      <Text style={styles.seedphrase}>{seedphrase}</Text>
+  const renderSeedphrase = () => {
+    return (
+      <Animated.View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', opacity: gestureState === GestureState.Success ? 1 : phraseOpacity }}>
+        {
+          seedphrase.split(' ').map(w => (
+            <WordPill key={w}>{w}</WordPill>
+          ))
+        }
+      </Animated.View>
+    )
+
+    // TODO: remove it after shadow adoptation
+    return (
       <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          },
-          { opacity: shadowAnimation },
-        ]}
+        style={{
+          opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+          marginTop: BP({ default: 40, small: 20, xsmall: 20 }),
+        }}
       >
-        <Text
+        <Text style={styles.seedphrase}>{seedphrase}</Text>
+        <Animated.View
           style={[
-            styles.seedphrase,
-            Platform.OS === 'android' && { color: Colors.transparent },
-            styles.seedphraseShadow,
+            {
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            },
+            { opacity: shadowAnimation },
           ]}
         >
-          {seedphrase}
-        </Text>
+          <Text
+            style={[
+              styles.seedphrase,
+              Platform.OS === 'android' && { color: Colors.transparent },
+              styles.seedphraseShadow,
+            ]}
+          >
+            {seedphrase}
+          </Text>
+        </Animated.View>
       </Animated.View>
-    </Animated.View>
-  )
+    )
+  }
 
   const renderMagicButton = () => (
     <MagicButton
