@@ -123,7 +123,6 @@ const SeedPhraseWrite: React.FC = () => {
       <Animated.View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', opacity: gestureState === GestureState.Success ? 1 : phraseOpacity }}>
         {
           seedphrase.split(' ').map(w => (
-            // TODO: shadows are missing
             <WordPill key={w}>{w}</WordPill>
           ))
         }

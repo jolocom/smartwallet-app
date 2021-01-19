@@ -27,7 +27,16 @@ const styles = StyleSheet.create({
   paddingHorizontal: 20,
   paddingVertical: 10,
   marginHorizontal: BP({ default: 5, small: 3, xsmall: 3 }),
-  marginVertical: BP({ default: 7, small: 5, xsmall: 5 })
+  marginVertical: BP({ default: 7, small: 5, xsmall: 5 }),
+  shadowColor: Colors.bastille1,
+  shadowOffset: {
+   width: 5,
+   height: 4,
+  },
+  shadowOpacity: 0.67,
+  shadowRadius: 4.65,
+
+  elevation: 6,
  },
  text: {
   color: Colors.activity,
