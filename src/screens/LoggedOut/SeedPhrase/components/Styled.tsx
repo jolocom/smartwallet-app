@@ -10,14 +10,18 @@ interface IHeaderBtn {
  onPress: () => void
 }
 
+interface IContainer {
+ bgColor?: Colors
+}
+
 interface IStyledHeaderComposition {
  Left: React.FC<IHeaderBtn>
  Right: React.FC<IHeaderBtn>
 }
 
-const StyledScreenContainer: React.FC = ({ children }) => {
+const StyledScreenContainer: React.FC<IContainer> = ({ children, bgColor = Colors.transparent }) => {
  return (
-  <ScreenContainer backgroundColor={Colors.transparent} customStyles={{ justifyContent: 'flex-start' }}>
+  <ScreenContainer backgroundColor={bgColor} customStyles={{ justifyContent: 'flex-start' }}>
    {children}
   </ScreenContainer>
  )
