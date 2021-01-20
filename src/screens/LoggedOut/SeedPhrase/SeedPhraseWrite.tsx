@@ -89,11 +89,6 @@ const SeedPhraseWrite: React.FC = () => {
     outputRange: [1, 0],
   })
 
-  const shadowAnimation = shadowScale.interpolate({
-    inputRange: [0.8, 1],
-    outputRange: [0, 1],
-  })
-
   const renderBackgroundCrossfade = () => (
     <>
       <View
@@ -123,7 +118,7 @@ const SeedPhraseWrite: React.FC = () => {
       <Animated.View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', opacity: gestureState === GestureState.Success ? 1 : phraseOpacity }}>
         {
           seedphrase.split(' ').map(w => (
-            <WordPill key={w}>{w}</WordPill>
+            <WordPill customContainerStyles={{ shadowColor: Colors.bastille1 }} customTextStyles={{ color: Colors.activity }} key={w}>{w}</WordPill>
           ))
         }
       </Animated.View>

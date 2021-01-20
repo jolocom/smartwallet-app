@@ -7,13 +7,13 @@ import { JoloTextSizes } from '~/utils/fonts';
 
 interface IWordPill {
  customContainerStyles?: StyleProp<ViewStyle>
- customTextStyles?: StyleProp<TextStyle>
+ customTextStyles?: TextStyle
 }
 
 const WordPill: React.FC<IWordPill> = ({ customContainerStyles, customTextStyles, children }) => {
  return (
   <View style={[styles.container, customContainerStyles]}>
-   <JoloText size={JoloTextSizes.big} weight={JoloTextWeight.medium} customStyles={[styles.text, customTextStyles]}>{children}</JoloText>
+   <JoloText size={JoloTextSizes.big} weight={JoloTextWeight.medium} customStyles={customTextStyles}>{children}</JoloText>
   </View>
  )
 }
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   paddingVertical: 10,
   marginHorizontal: BP({ default: 5, small: 3, xsmall: 3 }),
   marginVertical: BP({ default: 7, small: 5, xsmall: 5 }),
-  shadowColor: Colors.bastille1,
   shadowOffset: {
    width: 5,
    height: 4,
@@ -38,10 +37,6 @@ const styles = StyleSheet.create({
 
   elevation: 6,
  },
- text: {
-  color: Colors.activity,
-  flex: 0,
- }
 })
 
 export default WordPill;

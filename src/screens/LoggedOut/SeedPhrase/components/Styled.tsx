@@ -5,7 +5,6 @@ import JoloText, { JoloTextWeight } from '~/components/JoloText';
 import ScreenContainer from '~/components/ScreenContainer';
 import BP from '~/utils/breakpoints';
 import { Colors } from '~/utils/colors';
-import { debugView } from '~/utils/dev';
 
 interface IHeaderBtn {
  onPress: () => void
