@@ -15,12 +15,12 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
-import { useStoredMnemonic } from '~/hooks/sdk'
 import { BackArrowIcon, InfoIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
 import SeedPhrase from './components/Styled'
+import { useGetSeedPhrase } from '~/hooks/seedPhrase'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -37,8 +37,7 @@ const SeedPhraseWrite: React.FC = () => {
   } = useCircleHoldAnimation(1200)
 
   const [showInfo, setShowInfo] = useState(true)
-  const [seedphrase, setSeedphrase] = useState('')
-  const getMnemonic = useStoredMnemonic()
+  const seedphrase = useGetSeedPhrase()
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
@@ -47,10 +46,6 @@ const SeedPhraseWrite: React.FC = () => {
     inputRange: [0.8, 1],
     outputRange: [0, 1],
   })
-
-  useEffect(() => {
-    getMnemonic().then(setSeedphrase)
-  }, [])
 
   useEffect(() => {
     switch (gestureState) {

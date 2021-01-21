@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LayoutAnimation, PanResponder, StyleSheet, View } from 'react-native'
 import { isPointWithinArea, moveArrayElement } from './utils'
 import { TagObject, GestureState } from './types'
@@ -7,12 +7,15 @@ import Pill from './Pill'
 interface PropsI {
   tags: string[]
   animationDuration?: number
+  updateTags: Dispatch<SetStateAction<string[] | null>>
 }
 
-const Pills: React.FC<PropsI> = ({ tags, animationDuration = 400 }) => {
+const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 400 }) => {
   const [keys, setKeys] = useState<TagObject[]>(() =>
     tags.map((title: string) => ({ title })),
   )
+  const reorderedKeys = useMemo(() => keys.map(k => k.title), [JSON.stringify(keys)])
+
   const [dndEnabled, setDndEnabled] = useState(true)
   const tagBeingDragged = useRef<TagObject | undefined>()
 
@@ -23,13 +26,16 @@ const Pills: React.FC<PropsI> = ({ tags, animationDuration = 400 }) => {
   useEffect(() => {
     setTimeout(() => {
       setWordsVisibility(true)
-
     }, 100)
   }, [])
 
   useEffect(() => {
-    enableDndAfterAnimating()
+    enableDndAfterAnimating();
   }, [JSON.stringify(keys)])
+
+  useEffect(() => {
+    updateTags(reorderedKeys);
+  }, [JSON.stringify(reorderedKeys)])
 
   useEffect(() => {
     LayoutAnimation.configureNext({
