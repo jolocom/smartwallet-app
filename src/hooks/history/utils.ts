@@ -1,16 +1,7 @@
 import moment from 'moment'
-import { IPreLoadedInteraction, IHistorySection } from './types'
+import { IPreLoadedInteraction, IHistorySection } from '~/types/records'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { FlowType } from '@jolocom/sdk'
-
-export const filterUniqueById = (array: IPreLoadedInteraction[]) =>
-  Array.from(new Set(array.map((i) => i.id))).map((i) => {
-    const { id, ...rest } = array.find((interact) => i === interact.id)!
-    return {
-      id: i,
-      ...rest,
-    }
-  })
 
 export const getDateSection = (date: Date) =>
   moment(date).calendar(null, {
