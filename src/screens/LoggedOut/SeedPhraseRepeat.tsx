@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import { setLogged } from '~/modules/account/actions'
@@ -24,7 +24,6 @@ const SEED_KEYS = [
 
 
 const SeedPhraseRepeat: React.FC = () => {
-  const [dndVisible, setDndVisibility] = useState(false)
   const goBack = useGoBack();
   const dispatch = useDispatch()
   const submitIdentity = useSubmitIdentity()
@@ -46,19 +45,14 @@ const SeedPhraseRepeat: React.FC = () => {
         {strings.DRAG_AND_DROP_THE_WORDS}
       </SeedPhrase.Styled.HelperText>
       <SeedPhrase.Styled.ActiveArea>
-        {dndVisible ? (
-          <Pills tags={SEED_KEYS}/>
-        ) : (
-          <Btn type={BtnTypes.quaternary} onPress={() => setDndVisibility(true)}>Begin</Btn>
-        )}
+
+            <Pills tags={SEED_KEYS}/>
       </SeedPhrase.Styled.ActiveArea>
       <SeedPhrase.Styled.CTA>
-        {dndVisible && (
 
           <Btn onPress={onSubmit} type={BtnTypes.primary}>
           {strings.DONE}
         </Btn>
-          )}
       </SeedPhrase.Styled.CTA>
     </SeedPhrase.Styled.ScreenContainer>
   )

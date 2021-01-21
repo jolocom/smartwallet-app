@@ -9,12 +9,23 @@ interface PropsI {
   animationDuration?: number
 }
 
-const Pills: React.FC<PropsI> = ({ tags, animationDuration = 350 }) => {
+const Pills: React.FC<PropsI> = ({ tags, animationDuration = 400 }) => {
   const [keys, setKeys] = useState<TagObject[]>(() =>
     tags.map((title: string) => ({ title })),
   )
   const [dndEnabled, setDndEnabled] = useState(true)
   const tagBeingDragged = useRef<TagObject | undefined>()
+
+  const [wordsAreVisible, setWordsVisibility] = useState(false)
+
+  // NOTO: there is an issue with Pill measurement not being calculated correctly initially
+  // delaying rendering of Pill-s solves it
+  useEffect(() => {
+    setTimeout(() => {
+      setWordsVisibility(true)
+
+    }, 100)
+  }, [])
 
   useEffect(() => {
     enableDndAfterAnimating()
@@ -30,8 +41,6 @@ const Pills: React.FC<PropsI> = ({ tags, animationDuration = 350 }) => {
   // Find out if we need to start handling tag dragging gesture
   const onMoveShouldSetPanResponder = (gestureState: GestureState) => {
     const { dx, dy, moveX, moveY, numberActiveTouches } = gestureState
-    console.log({gestureState});
-    
 
     // Do not set pan responder if a multi touch gesture is occurring
     if (numberActiveTouches !== 1) {
@@ -183,9 +192,9 @@ const Pills: React.FC<PropsI> = ({ tags, animationDuration = 350 }) => {
 
   return (
     <View {...panResponder.panHandlers} style={styles.container}>
-          {keys.map((tag) => (
+          {wordsAreVisible ? (keys.map((tag) => (
       <Pill key={tag.title} tag={tag} onRender={onRenderTag} />
-    ))}
+    ))) : null}
 
     </View>
   )
