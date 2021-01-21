@@ -2,38 +2,35 @@ import React, { useRef, useState, useEffect } from 'react'
 import {
   View,
   StyleSheet,
-  Text,
   Animated,
   Platform,
-  TouchableOpacity,
 } from 'react-native'
 // @ts-ignore no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
-import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
-import { useRedirectTo, useRedirect } from '~/hooks/navigation'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import { Fonts, JoloTextSizes } from '~/utils/fonts'
+import { JoloTextSizes } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { useStoredMnemonic } from '~/hooks/sdk'
-import { InfoIcon } from '~/assets/svg'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
+import { BackArrowIcon, InfoIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import BP from '~/utils/breakpoints'
 import MagicButton from '~/components/MagicButton'
+import WordPill from './components/WordPill'
+import SeedPhrase from './components/Styled'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
   ignoreAndroidSystemSettings: true,
 }
 
-const SeedPhrase: React.FC = () => {
+const SeedPhraseWrite: React.FC = () => {
   const redirect = useRedirect()
-  const {
-    gestureState,
+  const goBack = useGoBack();
+  const { gestureState,
     animationValues: { shadowScale, circleScale, magicOpacity },
     animateVaues: { hideMagicBtn },
     gestureHandlers,
@@ -92,11 +89,6 @@ const SeedPhrase: React.FC = () => {
     outputRange: [1, 0],
   })
 
-  const shadowAnimation = shadowScale.interpolate({
-    inputRange: [0.8, 1],
-    outputRange: [0, 1],
-  })
-
   const renderBackgroundCrossfade = () => (
     <>
       <View
@@ -121,44 +113,17 @@ const SeedPhrase: React.FC = () => {
     </>
   )
 
-  const renderInfoIcon = () => (
-    <Animated.View style={[styles.iconContainer, { opacity: buttonOpacity }]}>
-      <TouchableOpacity onPress={() => redirect(ScreenNames.SeedPhraseInfo)}>
-        <InfoIcon />
-      </TouchableOpacity>
-    </Animated.View>
-  )
-
-  const renderSeedphrase = () => (
-    <Animated.View
-      style={{
-        opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
-        marginTop: BP({ default: 40, small: 20, xsmall: 20 }),
-      }}
-    >
-      <Text style={styles.seedphrase}>{seedphrase}</Text>
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          },
-          { opacity: shadowAnimation },
-        ]}
-      >
-        <Text
-          style={[
-            styles.seedphrase,
-            Platform.OS === 'android' && { color: Colors.transparent },
-            styles.seedphraseShadow,
-          ]}
-        >
-          {seedphrase}
-        </Text>
+  const renderSeedphrase = () => {
+    return (
+      <Animated.View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', opacity: gestureState === GestureState.Success ? 1 : phraseOpacity }}>
+        {
+          seedphrase.split(' ').map(w => (
+            <WordPill customContainerStyles={{ shadowColor: Colors.bastille1 }} customTextStyles={{ color: Colors.activity }} key={w}>{w}</WordPill>
+          ))
+        }
       </Animated.View>
-    </Animated.View>
-  )
+    )
+  }
 
   const renderMagicButton = () => (
     <MagicButton
@@ -180,49 +145,59 @@ const SeedPhrase: React.FC = () => {
     </Animated.View>
   )
 
-  const renderBottomButtons = () => (
-    <AbsoluteBottom>
-      <Animated.View style={[{ opacity: buttonOpacity }]}>
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.middle}
-          color={Colors.white}
-          customStyles={{ marginBottom: 10 }}
-        >
-          {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
-        </JoloText>
-        <Btn
-          type={BtnTypes.primary}
-          onPress={
-            gestureState === GestureState.Success
-              ? () => redirect(ScreenNames.SeedPhraseRepeat)
-              : () => { }
-          }
-        >
-          {strings.DONE}
-        </Btn>
-      </Animated.View>
-    </AbsoluteBottom>
+  const renderCTABtn = () => (
+    <Animated.View style={{ opacity: buttonOpacity }}>
+      <Btn
+        type={BtnTypes.primary}
+        onPress={
+          gestureState === GestureState.Success
+            ? () => redirect(ScreenNames.SeedPhraseRepeat)
+            : () => { }
+        }
+      >
+        {strings.DONE}
+      </Btn>
+    </Animated.View>
   )
 
   return (
     <>
       {renderBackgroundCrossfade()}
-      <ScreenContainer backgroundColor={Colors.transparent}>
-        {/* this should take 3/5 of a screen; justify-content: space-between */}
-        <View style={styles.phraseContainer}>
-          {renderInfoIcon()}
-          {renderSeedphrase()}
-        </View>
-        {/* this should take 2/5 of a screen */}
-        <View style={styles.helpersContainer}>
-          <View style={styles.bottomContainer}>
-            {renderMagicButton()}
-            {renderMagicInfo()}
+      <SeedPhrase.Styled.ScreenContainer>
+        <Animated.View style={{ opacity: buttonOpacity }}>
+          <SeedPhrase.Styled.Header>
+            <SeedPhrase.Styled.Header.Left onPress={goBack}>
+              <BackArrowIcon />
+            </SeedPhrase.Styled.Header.Left>
+            <SeedPhrase.Styled.Header.Right onPress={() => redirect(ScreenNames.SeedPhraseInfo)}>
+              <InfoIcon />
+            </SeedPhrase.Styled.Header.Right>
+          </SeedPhrase.Styled.Header>
+        </Animated.View>
+        <Animated.View style={{ opacity: buttonOpacity }}>
+          <SeedPhrase.Styled.HelperText>
+            {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
+          </SeedPhrase.Styled.HelperText>
+        </Animated.View>
+        <SeedPhrase.Styled.ActiveArea>
+          {/* this should take 3/5 of a screen; justify-content: space-between */}
+          <View style={styles.phraseContainer}>
+            {renderSeedphrase()}
           </View>
-          {renderBottomButtons()}
-        </View>
-      </ScreenContainer>
+          {/* this should take 2/5 of a screen */}
+          <View style={styles.helpersContainer}>
+            <View style={styles.bottomContainer}>
+              <View style={styles.nestedInBottomContainer}>
+                {renderMagicButton()}
+                {renderMagicInfo()}
+              </View>
+            </View>
+          </View>
+        </SeedPhrase.Styled.ActiveArea>
+        <SeedPhrase.Styled.CTA>
+          {renderCTABtn()}
+        </SeedPhrase.Styled.CTA>
+      </SeedPhrase.Styled.ScreenContainer>
     </>
   )
 }
@@ -231,32 +206,14 @@ const styles = StyleSheet.create({
   phraseContainer: {
     flex: 0.6,
     width: '100%',
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-  },
-  iconContainer: {
-    alignSelf: 'flex-end',
-  },
-  seedphrase: {
-    textAlign: 'center',
-    fontFamily: Fonts.Medium,
-    fontSize: BP({ default: 32, large: 40, medium: 40 }),
-    lineHeight: BP({ default: 46, large: 54, medium: 54 }),
-    letterSpacing: 0,
-    color: Colors.activity,
-  },
-  seedphraseShadow: {
-    textShadowColor: Colors.white45,
-    textShadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    textShadowRadius: 10,
   },
   helpersContainer: {
     flex: 0.4,
     width: '100%',
     justifyContent: 'flex-start',
+  },
+  iconContainer: {
+    alignSelf: 'flex-end',
   },
   info: {
     width: '40%',
@@ -268,10 +225,12 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
   },
-
   bottomContainer: {
     alignItems: 'flex-end',
     paddingRight: 10,
+  },
+  nestedInBottomContainer: {
+    alignItems: 'center',
   },
   gradient: {
     width: 160,
@@ -294,4 +253,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default SeedPhrase
+export default SeedPhraseWrite

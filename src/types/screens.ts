@@ -5,7 +5,7 @@ export enum ScreenNames {
   Entropy = 'Entropy',
   Recovery = 'Recovery',
   LostSeedPhraseInfo = 'LostSeedPhraseInfo',
-  SeedPhrase = 'SeedPhrase',
+  SeedPhraseWrite = 'SeedPhraseWrite',
   SeedPhraseInfo = 'SeedPhraseInfo',
   SeedPhraseRepeat = 'SeedPhraseRepeat',
   // Logged In Tabs
