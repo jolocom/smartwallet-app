@@ -2,7 +2,7 @@ import React, {useRef } from 'react'
 import {StyleSheet, View } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import WordPill from '../components/WordPill'
+import WordPill from '../../components/WordPill'
 import type { TagObject } from './types'
 
 type Props = {
