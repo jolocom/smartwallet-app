@@ -27,6 +27,7 @@ const StyledScreenContainer: React.FC<IContainer> = ({ children, bgColor = Color
  )
 }
 
+// TODO: update with necessary styles after Navigation Header refactoring
 const StyledHeader: React.FC & IStyledHeaderComposition = ({ children }) => {
  return (
   <View style={styles.header}>
