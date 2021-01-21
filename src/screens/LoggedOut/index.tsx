@@ -5,8 +5,8 @@ import { ScreenNames } from '~/types/screens'
 
 import Walkthrough from './Walkthrough'
 import Entropy from './Entropy'
-import SeedPhraseRepeat from './SeedPhraseRepeat'
-import SeedPhraseInfo from './SeedPhraseInfo'
+import SeedPhraseRepeat from './SeedPhrase/SeedPhraseRepeat'
+import SeedPhraseInfo from './SeedPhrase/SeedPhraseInfo'
 import SeedPhraseWrite from './SeedPhrase/SeedPhraseWrite'
 
 const Stack = createStackNavigator()

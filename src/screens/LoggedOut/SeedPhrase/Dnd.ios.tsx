@@ -1,13 +1,10 @@
 import React from 'react';
 import Pills from './draggable/Pills';
+import { IDndProps } from './SeedPhraseRepeat';
 
-interface IProps {
- tags: string[]
-}
-
-const Dnd: React.FC<IProps> = ({tags}) => {
+const Dnd: React.FC<IDndProps> = ({tags, updateTags}) => {
  return (
-  <Pills tags={tags}/>
+  <Pills tags={tags} updateTags={updateTags} />
  )
 }
 

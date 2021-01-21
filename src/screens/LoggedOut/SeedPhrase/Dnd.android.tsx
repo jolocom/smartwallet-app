@@ -1,11 +1,8 @@
 import React from 'react';
 import JoloText from '~/components/JoloText';
+import { IDndProps } from './SeedPhraseRepeat';
 
-interface IProps {
- tags: string[]
-}
-
-const Dnd: React.FC<IProps> = ({tags}) => {
+const Dnd: React.FC<IDndProps> = ({tags}) => {
  return (
   <JoloText>Coming soon ...</JoloText>
  )

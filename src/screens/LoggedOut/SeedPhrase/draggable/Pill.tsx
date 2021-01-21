@@ -42,9 +42,9 @@ const Pill: React.FC<Props> = ({ tag, onRender }) => {
     
   return (      
         <View ref={containerRef} style={styles.container} onLayout={onLayout}>
-          <WordPill customContainerStyles={{shadowColor: Colors.white21, shadowOffset: {width: -3,height: -2}, shadowOpacity: 0.4}} customTextStyles={{color: Colors.serenade}}>
+          <WordPill.Repeat>
         {title}
-            </WordPill> 
+          </WordPill.Repeat>
     </View>
   )
 }

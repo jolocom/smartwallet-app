@@ -10,13 +10,33 @@ interface IWordPill {
  customTextStyles?: TextStyle
 }
 
-const WordPill: React.FC<IWordPill> = ({ customContainerStyles, customTextStyles, children }) => {
+interface IWordPillComposition {
+ Write: React.FC
+ Repeat: React.FC
+}
+
+const WordPill: React.FC<IWordPill> & IWordPillComposition = ({ customContainerStyles, customTextStyles, children }) => {
  return (
   <View style={[styles.container, customContainerStyles]}>
    <JoloText size={JoloTextSizes.big} weight={JoloTextWeight.medium} customStyles={customTextStyles}>{children}</JoloText>
   </View>
  )
 }
+
+const WordPillWrite: React.FC = ({children}) => {
+ return (
+<WordPill customContainerStyles={{ shadowColor: Colors.bastille1 }} customTextStyles={{ color: Colors.activity }}>{children}</WordPill>
+ )
+}
+
+const WordPillRepeat: React.FC = ({ children }) => {
+ return (
+  <WordPill customContainerStyles={{shadowColor: Colors.white21, shadowOffset: {width: -3,height: -2}, shadowOpacity: 0.4}} customTextStyles={{color: Colors.serenade}}>{children}</WordPill>
+ )
+}
+
+WordPill.Write = WordPillWrite;
+WordPill.Repeat = WordPillRepeat;
 
 const styles = StyleSheet.create({
  container: {

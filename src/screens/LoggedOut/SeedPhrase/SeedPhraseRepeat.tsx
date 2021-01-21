@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { setLogged } from '~/modules/account/actions'
@@ -8,13 +8,18 @@ import { BackArrowIcon } from '~/assets/svg'
 import { useGoBack } from '~/hooks/navigation'
 import { strings } from '~/translations/strings';
 
-import SeedPhrase from './SeedPhrase/components/Styled'
+import SeedPhrase from './components/Styled'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
-import Pills from './SeedPhrase/draggable/Pills'
 import { useGetSeedPhrase } from '~/hooks/seedPhrase'
 import shuffleArray from '~/utils/arrayUtils'
 import { useToasts } from '~/hooks/toasts'
+import Dnd from './Dnd'
+
+export interface IDndProps {
+  tags: string[],
+  updateTags: Dispatch<SetStateAction<string[] | null>>
+ }
 
 const SeedPhraseRepeat: React.FC = () => {
   const goBack = useGoBack();
@@ -48,7 +53,6 @@ const SeedPhraseRepeat: React.FC = () => {
     else return seedphrase.split(' ').splice(0, 6).join(' ') === shuffledSeedphrase.join(' ');
   }, [JSON.stringify(shuffledSeedphrase), seedphrase]);
   
-
   return (
     <SeedPhrase.Styled.ScreenContainer bgColor={Colors.mainBlack}>
       <SeedPhrase.Styled.Header>
@@ -61,11 +65,10 @@ const SeedPhraseRepeat: React.FC = () => {
       </SeedPhrase.Styled.HelperText>
       <SeedPhrase.Styled.ActiveArea>
         {shuffledSeedphrase && shuffledSeedphrase.length > 1 ? (
-          <Pills tags={shuffledSeedphrase} updateTags={setShuffledSeedphrase} />
+          <Dnd tags={shuffledSeedphrase} updateTags={setShuffledSeedphrase} />
         ) : null}
       </SeedPhrase.Styled.ActiveArea>
       <SeedPhrase.Styled.CTA>
-
           <Btn onPress={onSubmit} type={BtnTypes.primary}>
           {strings.DONE}
         </Btn>
