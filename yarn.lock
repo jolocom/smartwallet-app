@@ -8018,6 +8018,11 @@ react-native-crypto@^2.1.0, react-native-crypto@^2.2.0:
     public-encrypt "^4.0.0"
     randomfill "^1.0.3"
 
+react-native-draggable-flatlist@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.5.2.tgz#4a348f2f048572b4dfafc465681c8219ec677121"
+  integrity sha512-MbNxay+NiYHW0k6LTTwtd9VznL0cWly+cIfnJA2rxg9Fed0SPqog2O5l193EcZQ0Z7B7e+UrAZcSWdq1Z+hqpw==
+
 react-native-gesture-handler@^1.6.1:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.9.0.tgz#e441b1c0277c3fd4ca3e5c58fdd681e2f0ceddf0"
