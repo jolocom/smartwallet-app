@@ -8,7 +8,6 @@ import { AttrsState, AttributeI } from './types'
 export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
   state.attrs.all
 
-// TODO: remove claim if it is empty 
 export const getBusinessCardAttributeWithValuesUI = createSelector(
   [getAttributes],
   (attributes) => {
@@ -24,8 +23,14 @@ export const getBusinessCardAttributeWithValuesUI = createSelector(
             ? { ...nameField, value: `${nameField.value} ${fieldValue}` }
             : { key: ClaimKeys.fullName, label: strings.NAME, value: `${fieldValue}`, keyboardOptions: { keyboardType: 'default', autoCapitalize: 'words' } };
           formattedFields = formattedFields.filter(f => f.key !== ClaimKeys.fullName);
-        } else if (field.key === ClaimKeys.telephone) {
-          updatedFieldToAdd = { ...field, label: strings.CONTACT, value: fieldValue };
+        } else if (field.key === ClaimKeys.telephone || field.key === ClaimKeys.email) {
+          const contactField: IAttributeClaimFieldWithValue | undefined = formattedFields.find(f => f.key === ClaimKeys.contact);
+          updatedFieldToAdd = contactField
+          ? { ...contactField, value: `${contactField.value} ${fieldValue}` }
+          : { key: ClaimKeys.contact, label: strings.CONTACT_ME, value: `${fieldValue}`, keyboardOptions: { keyboardType: 'default', autoCapitalize: 'words' } };
+          formattedFields = formattedFields.filter(f => f.key !== ClaimKeys.contact);
+        } else if(field.key === ClaimKeys.legalCompanyName) {
+          updatedFieldToAdd = { ...field, label: strings.COMPANY, value: fieldValue };
         } else {
           updatedFieldToAdd = { ...field, value: fieldValue }
         }

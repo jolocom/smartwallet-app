@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { useSelector } from 'react-redux';
-import Block from '~/components/Block';
 import Btn, { BtnTypes } from '~/components/Btn';
 import Dots from '~/components/Dots';
 import JoloText from '~/components/JoloText';
@@ -9,47 +8,58 @@ import { getBusinessCardAttributeWithValuesUI } from '~/modules/attributes/selec
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
-
-const getPlaceholderStyles = (height: number, width: string | number, bg: Colors, br: number, mb: number) => ({
- height, width, backgroundColor: bg, borderRadius: br, marginBottom: mb
-})
-
-const PlaceholderMini = () => <Block customStyle={getPlaceholderStyles(16, '33.1%', Colors.portGore, 5, 10)} />
-const PlaceholderBig = () => <Block customStyle={getPlaceholderStyles(33, '100%', Colors.portGore, 5, 15)} />
-
-const Placeholder = {
- Mini: PlaceholderMini,
- Big: PlaceholderBig
-}
-
-const CardWrapper: React.FC = ({ children }) => {
- return (
-  <Block customStyle={{ padding: 26, alignItems: 'center', marginTop: 30 }}>
-   <View style={{ width: '100%' }}>{children}</View>
-  </Block>
- )
-}
-
-const BusinessCardPlaceholder = () => {
- return (
-  <CardWrapper>
-   {[...Array(3).keys()].map(el => (
-    <View key={el}>
-     <Placeholder.Mini />
-     <Placeholder.Big />
-    </View>
-   ))}
-  </CardWrapper>
- )
-}
+import Styled from './components/Styled';
 
 enum Modes {
  none = 'none',
  edit = 'edit'
 }
 
+const BusinessCard: React.FC = ({children}) => {
+ const [mode, setMode] = useState(Modes.none);
+
+ const setEditMode = () => setMode(Modes.edit)
+ const resetMode = () => setMode(Modes.none);
+
+ const popupOptions = useMemo(() => ([
+  {
+   title: strings.EDIT,
+   onPress: setEditMode
+  },
+ ]), [])
+
+ return (
+  <BusinessCard.Styled.Container>
+    <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
+    {children}
+  </BusinessCard.Styled.Container>
+ )
+}
+
+BusinessCard.Styled = Styled;
+
+export const BusinessCardPlaceholder = () => {
+ return (
+  <BusinessCard>
+   <View>
+    <BusinessCard.Styled.Title color={Colors.white45}>{strings.YOUR_NAME}</BusinessCard.Styled.Title>
+    <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
+    <BusinessCard.Styled.FieldName>{strings.COMPANY}:</BusinessCard.Styled.FieldName>
+    <BusinessCard.Styled.FieldValue color={Colors.white21}>{strings.NOT_SPECIFIED}</BusinessCard.Styled.FieldValue>
+   </BusinessCard.Styled.FieldGroup>
+   </View>
+   <BusinessCard.Styled.FieldGroup>
+    <BusinessCard.Styled.FieldName>{strings.CONTACT_ME}:</BusinessCard.Styled.FieldName>
+    <BusinessCard.Styled.FieldValue color={Colors.white21}>{strings.NOT_SPECIFIED}</BusinessCard.Styled.FieldValue>
+   </BusinessCard.Styled.FieldGroup>
+  </BusinessCard>
+ )
+}
+
 const BusinessCardCredential = () => {
  const businessCardAttribute = useSelector(getBusinessCardAttributeWithValuesUI);
+ console.log({businessCardAttribute});
+ 
 
  const [mode, setMode] = useState(Modes.none);
 
@@ -75,8 +85,7 @@ const BusinessCardCredential = () => {
   )
  } else {
   return (
-   <CardWrapper>
-    <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
+   <BusinessCard>
     {businessCardAttribute.length ? businessCardAttribute.map(field => (
      <View key={field.key}>
       <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ textAlign: 'left', marginBottom: 3 }}>{field.label}</JoloText>
@@ -86,31 +95,9 @@ const BusinessCardCredential = () => {
      </View>
     )
     ) : null}
-   </CardWrapper>
+   </BusinessCard>
   )
  }
 }
 
-export const BusinessCard = {
- Placeholder: BusinessCardPlaceholder,
- Credential: BusinessCardCredential
-}
 
-// NOTE: This is a temproarily component till the moment we procceed with Indentity screen assemling
-const IdentityBusinessCard = () => {
- const [isPlaceholder, setIsPlaceholder] = useState(true);
- const handlePlaceholderToggle = () => setIsPlaceholder(prevState => !prevState);
- return (
-  <View style={{ width: '100%' }}>
-   {/* TODO: below should be moved inside of IdentityTabs component */}
-   {isPlaceholder && strings.BUSINESS_CARD_CTA_CREATE.split(',').map(t => (
-    <JoloText size={JoloTextSizes.mini} color={Colors.white40} customStyles={{ lineHeight: 10 }}>{t}</JoloText>
-   ))}
-   <TouchableOpacity onPress={handlePlaceholderToggle}>
-    {isPlaceholder ? <BusinessCard.Placeholder /> : <BusinessCard.Credential />}
-   </TouchableOpacity>
-  </View>
- )
-}
-
-export default IdentityBusinessCard;

@@ -25,6 +25,7 @@ export enum ClaimKeys {
   id = 'id',
   photo = 'photo',
   legalCompanyName = 'legalCompanyName',
+  contact = 'contact'
 }
 
 export enum AttributeTypes {

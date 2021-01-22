@@ -319,7 +319,10 @@ const identity = {
   CREATE: 'Create',
   BUSINESS_CARD_CTA_CREATE: 'So far it\'s empty, Just tap to start creation',
   EDIT: 'Edit',
-  CONTACT: 'Contact'
+  CONTACT_ME: 'Contact me',
+  COMPANY: 'Company',
+  YOUR_NAME: 'Your name',
+  NOT_SPECIFIED: 'Not specified'
 }
 
 export const strings = {
