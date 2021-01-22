@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native'
+import { Platform, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native'
 
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
@@ -92,8 +92,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.67,
     shadowRadius: 4.65,
-
     elevation: 6,
+    ...Platform.select({
+      ios: {
+        borderWidth: 1.7,
+        borderColor: Colors.bastille1
+      }
+    })
   },
   spacings: {
     paddingHorizontal: 20,

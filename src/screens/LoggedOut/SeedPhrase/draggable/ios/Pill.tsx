@@ -14,9 +14,10 @@ type Props = {
     width: number,
     height: number,
   ) => void
+  isActive: boolean
 }
 
-const Pill: React.FC<Props> = ({ tag, onRender }) => {
+const Pill: React.FC<Props> = ({ tag, onRender, isActive }) => {
   const { title } = tag
   const containerRef = useRef<View>(null)
 
@@ -42,7 +43,7 @@ const Pill: React.FC<Props> = ({ tag, onRender }) => {
     
   return (      
         <View ref={containerRef} style={styles.container} onLayout={onLayout}>
-          <WordPill.Repeat>
+          <WordPill.Repeat active={isActive}>
         {title}
           </WordPill.Repeat>
     </View>
