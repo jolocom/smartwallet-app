@@ -26,7 +26,7 @@ const StyledScreenContainer: React.FC<IContainer> = ({
   return (
     <ScreenContainer
       backgroundColor={bgColor}
-      customStyles={{ justifyContent: 'flex-start' }}
+      customStyles={{ justifyContent: 'flex-start', paddingTop: 0 }}
     >
       {children}
     </ScreenContainer>
@@ -92,13 +92,16 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     marginBottom: 15,
     height: 50,
     alignItems: 'center',
   },
   pressable: {
-    paddingVertical: 5,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerLeft: {
     alignSelf: 'center',
