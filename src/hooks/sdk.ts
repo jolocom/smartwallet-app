@@ -11,6 +11,7 @@ import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
+import { useGetSeedPhrase } from './seedPhrase'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -113,13 +114,12 @@ export const useIdentityCreate = () => {
   const agent = useAgent()
   const loader = useLoader()
   const dispatch = useDispatch()
-  const getStoredMnemonic = useStoredMnemonic()
+  const seedphrase = useGetSeedPhrase()
 
   return async () => {
     return loader(
       async () => {
-        const mnemonic = await getStoredMnemonic()
-        const identity = await agent.loadFromMnemonic(mnemonic)
+        const identity = await agent.loadFromMnemonic(seedphrase)
         await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
           finished: true,
         })
@@ -179,31 +179,5 @@ export const useShouldRecoverFromSeed = (phrase: string[]) => {
     }
 
     return recovered
-  }
-}
-
-/**
- * Returns a function which gets the seedphrase from the stored @encryptedEntropy.
- *
- * @returns () => Promise<string>
- */
-export const useStoredMnemonic = () => {
-  const agent = useAgent()
-
-  return async () => {
-    const encryptedSeed = await agent.storage.get.setting(
-      StorageKeys.encryptedSeed,
-    )
-
-    if (!encryptedSeed) {
-      throw new Error('Can not retrieve Seed from database')
-    }
-
-    const decrypted = await agent.idw.asymDecrypt(
-      Buffer.from(encryptedSeed.b64Encoded, 'base64'),
-      await agent.passwordStore.getPassword(),
-    )
-
-    return entropyToMnemonic(decrypted)
   }
 }
