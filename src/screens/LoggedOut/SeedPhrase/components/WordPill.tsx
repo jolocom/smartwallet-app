@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native'
+
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
