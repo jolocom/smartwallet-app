@@ -76,14 +76,14 @@ export const useLoader = () => {
   }
 }
 
-export const useSuccess = (delay: number = 4000) => {
+const openLoader = (type: LoaderTypes, msg: string) => (delay: number = 4000) => {
   const dispatch = useDispatch()
 
   return async () => {
     dispatch(
       setLoader({
-        type: LoaderTypes.success,
-        msg: strings.SUCCESS,
+        type,
+        msg,
       }),
     )
 
@@ -92,3 +92,7 @@ export const useSuccess = (delay: number = 4000) => {
     }, delay)
   }
 }
+
+export const useSuccess = openLoader(LoaderTypes.success, strings.SUCCESS)
+export const useFailed = openLoader(LoaderTypes.error, strings.FAILED)
+

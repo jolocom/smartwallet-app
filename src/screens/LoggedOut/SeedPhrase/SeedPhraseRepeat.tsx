@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'r
 import { useDispatch } from 'react-redux'
 
 import { setLogged } from '~/modules/account/actions'
-import { useLoader } from '~/hooks/loader'
+import { useFailed, useLoader } from '~/hooks/loader'
 import { useSubmitIdentity } from '~/hooks/sdk'
 import { BackArrowIcon } from '~/assets/svg'
 import { useGoBack } from '~/hooks/navigation'
@@ -13,7 +13,6 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 import { useGetSeedPhrase } from '~/hooks/seedPhrase'
 import shuffleArray from '~/utils/arrayUtils'
-import { useToasts } from '~/hooks/toasts'
 import Dnd from './Dnd'
 
 export interface IDndProps {
@@ -27,7 +26,7 @@ const SeedPhraseRepeat: React.FC = () => {
   const submitIdentity = useSubmitIdentity()
   const loader = useLoader()
   const seedphrase = useGetSeedPhrase();
-  const {scheduleWarning} = useToasts();
+  const showFailedLoader = useFailed()
 
   const [shuffledSeedphrase, setShuffledSeedphrase] = useState<string[] | null>(null);
   
@@ -41,10 +40,7 @@ const SeedPhraseRepeat: React.FC = () => {
       const success = await loader(submitIdentity)
       if (success) dispatch(setLogged(true))
     } else {
-      scheduleWarning({
-        title: 'No match',
-        message: 'Phrases don\'t match '
-      })
+      showFailedLoader()
     }
   }
 
