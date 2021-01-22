@@ -17,7 +17,7 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 400 }) 
   const reorderedKeys = useMemo(() => keys.map(k => k.title), [JSON.stringify(keys)])
 
   const [dndEnabled, setDndEnabled] = useState(true)
-  const tagBeingDragged = useRef<TagObject | undefined>()
+  const [tagBeingDragged, setTagBeingDragged] = useState<TagObject | undefined>(undefined)
 
   const [wordsAreVisible, setWordsVisibility] = useState(false)
 
@@ -62,7 +62,7 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 400 }) 
     const tag = findTagAtCoordinates(moveX, moveY)
 
     if (tag) {
-      tagBeingDragged.current = tag
+      setTagBeingDragged(tag)
       // and tell PanResponder to start handling the gesture by calling `onPanResponderMove`
       return true
     }
@@ -72,8 +72,8 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 400 }) 
 
   // Called when gesture is granted
   const onPanResponderGrant = () => {
-    if (tagBeingDragged.current) {
-      updateTagState(tagBeingDragged.current, { isBeingDragged: true })
+    if (tagBeingDragged) {
+      updateTagState(tagBeingDragged, { isBeingDragged: true })
     }
   }
 
@@ -88,19 +88,20 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 400 }) 
     const draggedOverTag = findTagAtCoordinates(
       moveX,
       moveY,
-      tagBeingDragged.current,
+      tagBeingDragged
     )
-    if (draggedOverTag && tagBeingDragged.current) {
-      swapTags(tagBeingDragged.current, draggedOverTag)
+    if (draggedOverTag && tagBeingDragged) {
+      swapTags(tagBeingDragged, draggedOverTag)
     }
   }
 
   // Called after gesture ends
   const onPanResponderEnd = () => {
-    if (tagBeingDragged.current) {
-      updateTagState(tagBeingDragged.current, { isBeingDragged: false })
+    // if (tagBeingDragged.current) {
+    if (tagBeingDragged) {
+      updateTagState(tagBeingDragged, { isBeingDragged: false })
     }
-    tagBeingDragged.current = undefined
+    setTagBeingDragged(undefined) 
   }
 
   const enableDndAfterAnimating = () => {
@@ -175,31 +176,27 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 400 }) 
     [],
   )
 
-  const createPanResponder = useCallback(
-    () =>
-      PanResponder.create({
-        // Handle drag gesture
-        onMoveShouldSetPanResponder: (_, gestureState: GestureState) =>
-          onMoveShouldSetPanResponder(gestureState),
-        onPanResponderGrant: () => onPanResponderGrant(),
-        onPanResponderMove: (_, gestureState: GestureState) =>
-          onPanResponderMove(gestureState),
-        // Handle drop gesture
-        onPanResponderRelease: () => onPanResponderEnd(),
-        onPanResponderTerminate: () => onPanResponderEnd(),
-      }),
-    [JSON.stringify(keys), dndEnabled],
-  )
-
-  const panResponder = useMemo(() => createPanResponder(), [
+  const panResponder = useMemo(() => PanResponder.create({
+    // Handle drag gesture
+    onMoveShouldSetPanResponder: (_, gestureState: GestureState) =>
+      onMoveShouldSetPanResponder(gestureState),
+    onPanResponderGrant: () => onPanResponderGrant(),
+    onPanResponderMove: (_, gestureState: GestureState) =>
+      onPanResponderMove(gestureState),
+    // Handle drop gesture
+    onPanResponderRelease: () => onPanResponderEnd(),
+    onPanResponderTerminate: () => onPanResponderEnd(),
+  }), [
     JSON.stringify(keys),
     dndEnabled,
+    JSON.stringify(tagBeingDragged)
   ])
+  
 
   return (
     <View {...panResponder.panHandlers} style={styles.container}>
           {wordsAreVisible ? (keys.map((tag) => (
-      <Pill key={tag.title} tag={tag} onRender={onRenderTag} />
+      <Pill key={tag.title} tag={tag} onRender={onRenderTag} isActive={tagBeingDragged?.title === tag.title} />
     ))) : null}
 
     </View>
