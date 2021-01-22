@@ -10,9 +10,6 @@ const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
     <View style={{ flex: 1, alignItems: 'center' }}>
       <DraggableFlatList
         data={tags}
-        // NOTE: the padding compensates for the active pill's border, which
-        // may distort the content of the pill otherwise
-        style={{ paddingHorizontal: 1.7 }}
         // NOTE: allows the pill size to be based on the content, as opposed
         // to being of fixed size
         contentContainerStyle={{ alignItems: 'center' }}
