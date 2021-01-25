@@ -9,21 +9,20 @@ import { AttrsState, AttributeI } from './types'
 export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
   state.attrs.all
 
-
 export const getPrimitiveAttributes = createSelector(
   [getAttributes],
-  attributes => {
-    const { ProofOfBusinessCardCredential, ...primitiveAttributes } = attributes;
+  (attributes) => {
+    const { ProofOfBusinessCardCredential, ...primitiveAttributes } = attributes
     return primitiveAttributes
-  }
+  },
 )
 
 export const getBusinessCardAttributes = createSelector(
   [getAttributes],
-  attributes => {
-    const { ProofOfBusinessCardCredential } = attributes;
+  (attributes) => {
+    const { ProofOfBusinessCardCredential } = attributes
     return ProofOfBusinessCardCredential
-  }
+  },
 )
 
 export const getGroupedValuesForBusinessCard = createSelector(

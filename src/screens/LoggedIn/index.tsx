@@ -252,7 +252,7 @@ const LoggedInTabs: React.FC = () => {
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.BusinessCard}
+            name={ScreenNames.BusinessCardTest}
             component={BusinessCardTest}
             options={settingsScreenTransitionOptions}
           />

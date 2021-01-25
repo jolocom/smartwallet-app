@@ -5,14 +5,14 @@ export interface AttributesState {
   all: AttrsState<AttributeI>
 }
 
-// TODO: fix type issues 
+// TODO: fix type issues
 export type AttrsState<T> = Record<AttributeTypes, T[]>
 
 export enum AttrActions {
   initAttrs = 'initAttrs',
   updateAttrs = 'updateAttrs',
   editAttr = 'editAttr',
-  deleteAttr = 'deleteAttr'
+  deleteAttr = 'deleteAttr',
 }
 
 export type ClaimValues = {

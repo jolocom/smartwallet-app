@@ -16,7 +16,6 @@ export enum AttributeKeys {
 export enum ClaimKeys {
   givenName = 'givenName',
   familyName = 'familyName',
-  fullName = 'fullName',
   email = 'email',
   addressLine = 'addressLine1',
   postalCode = 'postalCode',
@@ -26,7 +25,6 @@ export enum ClaimKeys {
   id = 'id',
   photo = 'photo',
   legalCompanyName = 'legalCompanyName',
-  contact = 'contact',
 }
 
 export enum AttributeTypes {
@@ -76,7 +74,7 @@ export type UICredentialMetadata = Pick<
 
 export interface UICredential
   extends BaseUICredential,
-  Pick<SignedCredential, 'id' | 'claim'> {
+    Pick<SignedCredential, 'id' | 'claim'> {
   metadata: UICredentialMetadata
 }
 

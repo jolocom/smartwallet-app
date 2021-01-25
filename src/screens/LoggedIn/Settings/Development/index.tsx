@@ -18,7 +18,7 @@ const DevelopmentSection = () => {
   const redirectToForms = useRedirectTo(ScreenNames.FormTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
-  const redirectToBusinessCard = useRedirectTo(ScreenNames.BusinessCard)
+  const redirectToBusinessCard = useRedirectTo(ScreenNames.BusinessCardTest)
   const redirect = useRedirect()
 
   const popupRef = useRef<{ show: () => void }>(null)

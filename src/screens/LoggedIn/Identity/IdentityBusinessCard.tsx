@@ -71,7 +71,7 @@ const BusinessCardCredential: React.FC = () => {
   )
 }
 
-const BusinessCard: React.FC & IBusinessCardComposition = ({children}) => {
+const BusinessCard: React.FC & IBusinessCardComposition = () => {
   const [mode, setMode] = useState(Modes.none);
   const {handleDeleteCredentialSI} = useSICActions();
  
@@ -120,7 +120,6 @@ const BusinessCard: React.FC & IBusinessCardComposition = ({children}) => {
      ) : (
        <BusinessCardCredential />
      )}
-     {children}
    </BusinessCard.Styled.Container>
   )
  }
