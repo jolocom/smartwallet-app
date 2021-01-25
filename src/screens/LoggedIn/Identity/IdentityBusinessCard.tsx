@@ -6,7 +6,7 @@ import { getGroupedValuesForBusinessCard } from '~/modules/attributes/selectors'
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
 import { TClaimGroups } from '~/utils/credentialsBySection';
-import Styled from './components/Styled';
+import Styled, {IStyledComposition} from './components/Styled';
 
 enum Modes {
  none = 'none',
@@ -15,6 +15,10 @@ enum Modes {
 
 interface ICredentialBC {
   groups: TClaimGroups
+}
+
+interface IBusinessCardComposition {
+  Styled: IStyledComposition
 }
 
 const BusinessCardPlaceholder = () => {
@@ -44,11 +48,11 @@ const BusinessCardCredential: React.FC<ICredentialBC> = ({groups}) => {
   return (
     <>
       <View>
-        <BusinessCard.Styled.Title>{displyedName}</BusinessCard.Styled.Title>
+        <BusinessCard.Styled.Title color={Colors.white}>{displyedName}</BusinessCard.Styled.Title>
         <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
           <BusinessCard.Styled.FieldName>{company.label}</BusinessCard.Styled.FieldName>
           {company.fields.map(f => (
-          <BusinessCard.Styled.FieldValue color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
+          <BusinessCard.Styled.FieldValue key={f.key} color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
           ))}
         </BusinessCard.Styled.FieldGroup>
       </View>
@@ -58,7 +62,7 @@ const BusinessCardCredential: React.FC<ICredentialBC> = ({groups}) => {
             <>
             {f.value ? (
 
-              <BusinessCard.Styled.FieldValue color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
+              <BusinessCard.Styled.FieldValue key={f.key} color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
               ): null}
           </>
           ))}
@@ -68,7 +72,7 @@ const BusinessCardCredential: React.FC<ICredentialBC> = ({groups}) => {
   )
 }
 
-const BusinessCard: React.FC = ({children}) => {
+const BusinessCard: React.FC & IBusinessCardComposition = ({children}) => {
   const [mode, setMode] = useState(Modes.none);
  
   const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);

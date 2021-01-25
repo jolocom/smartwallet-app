@@ -317,12 +317,12 @@ const identity = {
   NEXT: 'Next',
   WHAT_IS_YOUR_NAME: 'What is your name?',
   CREATE: 'Create',
-  BUSINESS_CARD_CTA_CREATE: 'So far it\'s empty, Just tap to start creation',
+  BUSINESS_CARD_CTA_CREATE: "So far it's empty, Just tap to start creation",
   EDIT: 'Edit',
   CONTACT_ME: 'Contact me',
   COMPANY: 'Company',
   YOUR_NAME: 'Your name',
-  NOT_SPECIFIED: 'Not specified'
+  NOT_SPECIFIED: 'Not specified',
 }
 
 export const strings = {

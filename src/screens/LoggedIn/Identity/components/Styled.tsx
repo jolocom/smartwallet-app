@@ -2,9 +2,22 @@ import React from 'react'
 import { StyleSheet, View } from "react-native"
 
 import Block from "~/components/Block"
+import { IWithCustomStyle } from '~/components/Card/types'
 import JoloText, { JoloTextKind } from "~/components/JoloText"
 import { Colors } from "~/utils/colors"
 import { JoloTextSizes } from "~/utils/fonts"
+
+export interface IStyledComposition {
+ Container: React.FC,
+ Title: React.FC<IWithColor>,
+ FieldName: React.FC,
+ FieldValue: React.FC<IWithColor>,
+ FieldGroup: React.FC<IWithCustomStyle>
+}
+
+interface IWithColor {
+ color: Colors
+}
 
 const CardContainer: React.FC = ({ children }) => {
  return (
@@ -14,7 +27,7 @@ const CardContainer: React.FC = ({ children }) => {
  )
 }
 
-const CardTitle: React.FC = ({children, color}) => {
+const CardTitle: React.FC<IWithColor> = ({children, color}) => {
  return (
   <JoloText size={JoloTextSizes.big} color={color} customStyles={{textAlign: 'left'}}>
    {children}
@@ -30,7 +43,7 @@ const CardFieldName: React.FC = ({children}) => {
  )
 }
 
-const CardFieldValue: React.FC = ({children, color}) => {
+const CardFieldValue: React.FC<IWithColor> = ({children, color}) => {
  return (
   <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini} color={color} customStyles={{paddingTop: 0}}>
    {children}
@@ -38,7 +51,7 @@ const CardFieldValue: React.FC = ({children, color}) => {
  )
 }
 
-const CardFieldGroup: React.FC = ({children, customStyles}) => {
+const CardFieldGroup: React.FC<IWithCustomStyle> = ({children, customStyles}) => {
  return (
   <View style={[styles.fieldGroup, customStyles]}>
    {children}
@@ -46,7 +59,7 @@ const CardFieldGroup: React.FC = ({children, customStyles}) => {
  )
 }
 
-const Styled = {
+const Styled: IStyledComposition = {
  Container: CardContainer,
  Title: CardTitle,
  FieldName: CardFieldName,
