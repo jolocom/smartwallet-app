@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
+import { useSelector } from 'react-redux';
 import Dots from '~/components/Dots';
+import { getGroupedValuesForBusinessCard } from '~/modules/attributes/selectors';
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
-import { getGroupedClaimsForBusinessCard } from '~/utils/credentialsBySection';
 import Styled from './components/Styled';
 
 enum Modes {
@@ -40,12 +41,12 @@ export const BusinessCardPlaceholder = () => {
    <View>
     <BusinessCard.Styled.Title color={Colors.white45}>{strings.YOUR_NAME}</BusinessCard.Styled.Title>
     <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
-    <BusinessCard.Styled.FieldName>{strings.COMPANY}:</BusinessCard.Styled.FieldName>
+    <BusinessCard.Styled.FieldName>{strings.COMPANY}</BusinessCard.Styled.FieldName>
     <BusinessCard.Styled.FieldValue color={Colors.white21}>{strings.NOT_SPECIFIED}</BusinessCard.Styled.FieldValue>
    </BusinessCard.Styled.FieldGroup>
    </View>
    <BusinessCard.Styled.FieldGroup>
-    <BusinessCard.Styled.FieldName>{strings.CONTACT_ME}:</BusinessCard.Styled.FieldName>
+    <BusinessCard.Styled.FieldName>{strings.CONTACT_ME}</BusinessCard.Styled.FieldName>
     <BusinessCard.Styled.FieldValue color={Colors.white21}>{strings.NOT_SPECIFIED}</BusinessCard.Styled.FieldValue>
    </BusinessCard.Styled.FieldGroup>
   </BusinessCard>
@@ -53,14 +54,27 @@ export const BusinessCardPlaceholder = () => {
 }
 
 export const BusinessCardCredential = () => {
-  const groupedClaims = getGroupedClaimsForBusinessCard();
-  console.log({groupedClaims});
+  const {name, contact, company} = useSelector(getGroupedValuesForBusinessCard);
+  const displyedName = name.fields.map(f => f.value).join(' ');
   
   return (
     <BusinessCard>
       <View>
-        
+        <BusinessCard.Styled.Title>{displyedName}</BusinessCard.Styled.Title>
+        <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
+          <BusinessCard.Styled.FieldName>{company.label}</BusinessCard.Styled.FieldName>
+          {company.fields.map(f => (
+          <BusinessCard.Styled.FieldValue color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
+          ))}
+        </BusinessCard.Styled.FieldGroup>
       </View>
+      <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
+          <BusinessCard.Styled.FieldName>{contact.label}</BusinessCard.Styled.FieldName>
+          {contact.fields.map(f => (
+          <BusinessCard.Styled.FieldValue color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
+          ))}
+        </BusinessCard.Styled.FieldGroup>
+
     </BusinessCard>
   )
 }

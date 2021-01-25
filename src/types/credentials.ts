@@ -3,6 +3,7 @@ import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata, ClaimInterface } from '@jolocom/protocol-ts'
+import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -48,7 +49,7 @@ export interface IAttributeClaimField {
 }
 
 export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
-  value: string | number | {} | boolean | ClaimInterface | undefined
+  value: ClaimEntry
 }
 
 export interface IAttributeConfig {

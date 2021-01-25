@@ -3,10 +3,13 @@ import {
   CredentialSection,
   BaseUICredential,
   ClaimKeys,
+  IAttributeClaimFieldWithValue,
 } from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { attributeConfig } from '~/config/claims'
 import { strings } from '~/translations'
+import { AttributeI, ClaimValues } from '~/modules/attributes/types'
+import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 
 export const getCredentialsBySection = <T extends BaseUICredential>(
   creds: T[],
@@ -33,28 +36,34 @@ export const getCredentialSection = <T extends BaseUICredential>(cred: T) =>
 
 
 // TODO: these declarations should not sit in this file probably 
-type TClaimGroups = Record<string, Group> 
+export type TClaimGroups = Record<string, Group> 
+// TODO: this appears too often by now
+type TField = Pick<IAttributeClaimFieldWithValue, 'key' | 'value'>
 
 class Group {
   label: string
-  fields: ClaimKeys[]
+  fields: TField[]
   constructor(label: string) {
     this.label = label;
     this.fields = []
   }
-  public addField(field: ClaimKeys) {
-    this.fields = [...this.fields, field];
+  public addField(fieldKey: ClaimKeys) {
+    this.fields = [...this.fields, {key: fieldKey, value: ''}];
     return this
+  }
+  public setGroupValues(values: ClaimValues) {
+    this.fields = this.fields.map(f => ({...f, value: values[f.key] || ''}))
+    return this;
   }
 }
 
-const managePopulateGroup = (groupLabel: string, field: ClaimKeys, group?: Group) => {
+const managePopulateGroup = (groupLabel: string, fieldKey: ClaimKeys, group?: Group) => {
   if(group) {
-    group.addField(field)
+    group.addField(fieldKey)
     return group;
   } else {
     const group = new Group(groupLabel);
-    group.addField(field);
+    group.addField(fieldKey);
     return group;
   }
 } 
