@@ -3,7 +3,7 @@ import { RootReducerI } from '~/types/reducer'
 import {
   getGroupedClaimsForBusinessCard,
   TClaimGroups,
-} from '~/utils/credentialsBySection'
+} from '~/utils/mappings/groupBusinessCard'
 import { AttrsState, AttributeI } from './types'
 
 export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
