@@ -60,22 +60,26 @@ const SelectableField: React.FC<
             <PurpleTickSuccess />
           </View>
         ) : (
-          <View style={[styles.radio, styles.notSelected]} />
-        )}
+            <View style={[styles.radio, styles.notSelected]} />
+          )}
       </FieldContainer>
     </TouchableOpacity>
   )
 }
 
-const EmptyField: React.FC = () => {
+const EmptyField: React.FC = ({ children }) => {
   const widgetContext = useWidget()
-  if (!widgetContext?.onCreate)
+  if (!widgetContext?.onAdd)
     throw new Error('No method provided for creating new attribute')
 
   return (
-    <TouchableOpacity onPress={widgetContext.onCreate}>
+    <TouchableOpacity onPress={widgetContext.onAdd}>
       <FieldContainer>
-        <FieldText value={strings.MISSING_INFO} color={Colors.error} />
+        {children ? (
+          children
+        ) : (
+            <FieldText value={strings.MISSING_INFO} color={Colors.error} />
+          )}
       </FieldContainer>
     </TouchableOpacity>
   )

@@ -9,16 +9,32 @@ import { AttrsState, AttributeI } from './types'
 export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
   state.attrs.all
 
-export const getGroupedValuesForBusinessCard = createSelector(
+
+export const getPrimitiveAttributes = createSelector(
   [getAttributes],
+  attributes => {
+    const { ProofOfBusinessCardCredential, ...primitiveAttributes } = attributes;
+    return primitiveAttributes
+  }
+)
+
+export const getBusinessCardAttributes = createSelector(
+  [getAttributes],
+  attributes => {
+    const { ProofOfBusinessCardCredential } = attributes;
+    return ProofOfBusinessCardCredential
+  }
+)
+
+export const getGroupedValuesForBusinessCard = createSelector(
+  [getBusinessCardAttributes],
   (attributes) => {
-    const { ProofOfBusinessCardCredential } = attributes
-    if (ProofOfBusinessCardCredential) {
+    if (attributes) {
       const groupedClaimsBC = getGroupedClaimsForBusinessCard()
       return Object.keys(groupedClaimsBC).reduce<TClaimGroups>(
         (groups, groupKey) => {
           const groupWithValues = groupedClaimsBC[groupKey].setGroupValues(
-            ProofOfBusinessCardCredential[0].value,
+            attributes[0].value,
           )
           groups[groupKey] = groupWithValues
           return groups

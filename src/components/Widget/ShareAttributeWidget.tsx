@@ -25,7 +25,7 @@ const ShareAttributeWidget = () => {
               key={attrType}
               name={config.label}
               type={attrType}
-              onCreate={() => handleCreateAttribute(attrType)}
+              onAdd={() => handleCreateAttribute(attrType)}
               onSelect={(attrType, id) =>
                 handleSelectCredential({ [attrType]: id })
               }

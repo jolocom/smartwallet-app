@@ -1,32 +1,25 @@
-import React, {
-  createContext,
-  useCallback,
-  useMemo,
-  useState,
-  useImperativeHandle,
-} from 'react'
+import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import FormBody from './FormBody'
 import FormExpose from './FormExpose'
 import FormHeader, { IFormHeaderComposition } from './FormHeader'
-import { IAttributeClaimField, IAttributeConfig } from '~/types/credentials'
+import { AttributeKeys, IAttributeClaimField, IAttributeClaimFieldWithValue } from '~/types/credentials'
 import { useCustomContext } from '~/hooks/context'
 
-export interface IFormState extends IAttributeClaimField {
-  value: string
+interface IFormConfig {
+  key: AttributeKeys
+  fields: IAttributeClaimField[] | IAttributeClaimFieldWithValue[]
 }
 
-type TFormConfig = Pick<IAttributeConfig, 'key' | 'fields'>
-
 export interface IFormContext {
-  fields: IFormState[]
+  fields: IAttributeClaimFieldWithValue[]
   updateField: (id: string, value: string) => void
-  onSubmit: (collectedValues: IFormState[]) => void | Promise<void>
-  onCancel: (collectedValues: IFormState[]) => void | Promise<void>
+  onSubmit: (collectedValues: IAttributeClaimFieldWithValue[]) => void | Promise<void>
+  onCancel: (collectedValues: IAttributeClaimFieldWithValue[]) => void | Promise<void>
 }
 
 interface IFormProps
   extends Partial<Pick<IFormContext, 'onSubmit' | 'onCancel'>> {
-  config: TFormConfig
+  config: IFormConfig
 }
 
 interface IFormComposition {
@@ -41,30 +34,38 @@ interface IFormComposition {
 
 const FormContext = createContext<IFormContext>({
   fields: [],
-  updateField: () => {},
-  onSubmit: () => {},
-  onCancel: () => {},
+  updateField: () => { },
+  onSubmit: () => { },
+  onCancel: () => { },
 })
 
-export const useForm = useCustomContext(FormContext)
+export const useForm = useCustomContext(FormContext);
 
-type FormReturnType = React.ForwardRefExoticComponent<
-  React.PropsWithChildren<IFormProps> &
-    React.RefAttributes<{ state: IFormState[] }>
-> &
-  IFormComposition
+function isFieldWithValue(fields: any): fields is IAttributeClaimFieldWithValue[] {
+  return fields[0].hasOwnProperty('value');
+}
 
-const Form = React.forwardRef<
-  { state: IFormState[] },
-  React.PropsWithChildren<IFormProps>
->(({ config, children, onSubmit, onCancel }, ref) => {
-  const initialState = config.fields.map((el) => ({ ...el, value: '' }))
+const getPopulatedFieldsWithValue = (config: IFormConfig) => {
+  const { fields } = config;
+  if (isFieldWithValue(fields)) {
+    return fields
+  } else {
+    return fields.map(el => ({
+      ...el,
+      value: ''
+    }))
+  }
+}
 
-  const [state, setState] = useState(initialState)
+const Form: React.FC<IFormProps> & IFormComposition = ({
+  config,
+  children,
+  onSubmit,
+  onCancel,
+}) => {
+  const initialState = getPopulatedFieldsWithValue(config);
 
-  useImperativeHandle(ref, () => ({
-    state,
-  }))
+  const [state, setState] = useState(initialState);
 
   const updateField = useCallback(
     (key: string, value: string) => {
@@ -80,25 +81,29 @@ const Form = React.forwardRef<
     [setState],
   )
 
+  useEffect(() => {
+    setState(initialState);
+  }, [JSON.stringify(config)])
+
   const contextValue = useMemo(
     () => ({
       fields: state,
       onSubmit: onSubmit
         ? () => onSubmit(state)
         : () => {
-            console.log('Submitting with values', { state })
-          },
+          console.log('Submitting with values', { state })
+        },
       onCancel: onCancel
         ? () => onCancel(state)
         : () => {
-            console.log('Canceling with values', { state })
-          },
+          console.log('Canceling with values', { state })
+        },
       updateField,
     }),
     [state, onSubmit, onCancel, updateField],
   )
   return <FormContext.Provider children={children} value={contextValue} />
-}) as FormReturnType
+}
 
 Form.Header = FormHeader
 Form.Body = FormBody
