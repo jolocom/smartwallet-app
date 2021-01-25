@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native';
 import JoloText, { JoloTextKind } from '~/components/JoloText';
 import ScreenContainer from '~/components/ScreenContainer';
 import { StyleSheet, View } from 'react-native';
-import { BusinessCardCredential, BusinessCardPlaceholder } from '../../Identity/IdentityBusinessCard';
+import BusinessCard from '../../Identity/IdentityBusinessCard';
 
 const BusinessCardTest = () => {
   return (
@@ -19,21 +19,10 @@ const BusinessCardTest = () => {
             kind={JoloTextKind.title}
             customStyles={{ textAlign: 'left' }}
           >
-            Business Card Placeholder
+            Business Card
     </JoloText>
-          <BusinessCardPlaceholder />
+          <BusinessCard />
         </View>
-
-        <View style={styles.group}>
-          <JoloText
-            kind={JoloTextKind.title}
-            customStyles={{ textAlign: 'left' }}
-          >
-            Business Card Credential
-    </JoloText>
-          <BusinessCardCredential />
-        </View>
-
       </ScrollView>
     </ScreenContainer>
   )

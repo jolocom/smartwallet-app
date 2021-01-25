@@ -9,7 +9,6 @@ export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
 export const getGroupedValuesForBusinessCard = createSelector(
   [getAttributes],
   (attributes) => {
-    // TODO: 
     const {ProofOfBusinessCardCredential} = attributes;
     if(ProofOfBusinessCardCredential) {
       const groupedClaimsBC = getGroupedClaimsForBusinessCard();

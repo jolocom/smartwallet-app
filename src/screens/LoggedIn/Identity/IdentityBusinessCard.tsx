@@ -5,6 +5,7 @@ import Dots from '~/components/Dots';
 import { getGroupedValuesForBusinessCard } from '~/modules/attributes/selectors';
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
+import { TClaimGroups } from '~/utils/credentialsBySection';
 import Styled from './components/Styled';
 
 enum Modes {
@@ -12,53 +13,36 @@ enum Modes {
  edit = 'edit'
 }
 
-const BusinessCard: React.FC = ({children}) => {
- const [mode, setMode] = useState(Modes.none);
-
- const setEditMode = () => setMode(Modes.edit)
- const resetMode = () => setMode(Modes.none);
-
- const popupOptions = useMemo(() => ([
-  {
-   title: strings.EDIT,
-   onPress: setEditMode
-  },
- ]), [])
-
- return (
-  <BusinessCard.Styled.Container>
-    <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
-    {children}
-  </BusinessCard.Styled.Container>
- )
+interface ICredentialBC {
+  groups: TClaimGroups
 }
 
-BusinessCard.Styled = Styled;
-
-export const BusinessCardPlaceholder = () => {
+const BusinessCardPlaceholder = () => {
  return (
-  <BusinessCard>
+  <>
    <View>
     <BusinessCard.Styled.Title color={Colors.white45}>{strings.YOUR_NAME}</BusinessCard.Styled.Title>
     <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
-    <BusinessCard.Styled.FieldName>{strings.COMPANY}</BusinessCard.Styled.FieldName>
-    <BusinessCard.Styled.FieldValue color={Colors.white21}>{strings.NOT_SPECIFIED}</BusinessCard.Styled.FieldValue>
-   </BusinessCard.Styled.FieldGroup>
+      <BusinessCard.Styled.FieldName>{strings.COMPANY}</BusinessCard.Styled.FieldName>
+      <BusinessCard.Styled.FieldValue color={Colors.white21}>{strings.NOT_SPECIFIED}</BusinessCard.Styled.FieldValue>
+    </BusinessCard.Styled.FieldGroup>
    </View>
    <BusinessCard.Styled.FieldGroup>
     <BusinessCard.Styled.FieldName>{strings.CONTACT_ME}</BusinessCard.Styled.FieldName>
     <BusinessCard.Styled.FieldValue color={Colors.white21}>{strings.NOT_SPECIFIED}</BusinessCard.Styled.FieldValue>
    </BusinessCard.Styled.FieldGroup>
-  </BusinessCard>
+  </>
  )
 }
 
-export const BusinessCardCredential = () => {
-  const {name, contact, company} = useSelector(getGroupedValuesForBusinessCard);
+const BusinessCardCredential: React.FC<ICredentialBC> = ({groups}) => {
+  const {name, contact, company} = groups;
+  if(!name && !contact && !company) return null;
+
   const displyedName = name.fields.map(f => f.value).join(' ');
   
   return (
-    <BusinessCard>
+    <>
       <View>
         <BusinessCard.Styled.Title>{displyedName}</BusinessCard.Styled.Title>
         <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
@@ -71,12 +55,66 @@ export const BusinessCardCredential = () => {
       <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
           <BusinessCard.Styled.FieldName>{contact.label}</BusinessCard.Styled.FieldName>
           {contact.fields.map(f => (
-          <BusinessCard.Styled.FieldValue color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
+            <>
+            {f.value ? (
+
+              <BusinessCard.Styled.FieldValue color={Colors.white}>{f.value}</BusinessCard.Styled.FieldValue>
+              ): null}
+          </>
           ))}
         </BusinessCard.Styled.FieldGroup>
 
-    </BusinessCard>
+    </>
   )
 }
+
+const BusinessCard: React.FC = ({children}) => {
+  const [mode, setMode] = useState(Modes.none);
+ 
+  const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);
+  
+  const isPlaceholder = !Boolean(Object.keys(groupedValuesBC).length);
+ 
+  const setEditMode = () => setMode(Modes.edit)
+  const resetMode = () => setMode(Modes.none);
+ 
+  const handleDeleteBC = () => {
+    console.log('Deleting BC');
+    resetMode();  
+  }
+ 
+  const popupOptions = useMemo(() => ([
+   {
+    title: strings.EDIT,
+    onPress: setEditMode
+   },
+     ...(!isPlaceholder ? [{
+       title: strings.DELETE,
+       onPress: handleDeleteBC
+      }] : [])
+  ]), [])
+ 
+  /* TODO: business card form will go here
+  if(mode === Modes.edit) {
+    return null
+  }
+  */
+  return (
+   <BusinessCard.Styled.Container>
+     <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
+     {isPlaceholder ? (
+       <BusinessCardPlaceholder />
+     ) : (
+       <BusinessCardCredential groups={groupedValuesBC} />
+     )}
+     {children}
+   </BusinessCard.Styled.Container>
+  )
+ }
+
+BusinessCard.Styled = Styled;
+
+
+export default BusinessCard
 
 
