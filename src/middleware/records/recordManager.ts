@@ -14,6 +14,7 @@ import { capitalizeWord } from '~/utils/stringUtils'
 export class RecordManager {
   private interaction: Interaction
   private config: IRecordConfig | undefined
+  private messageTypes: string[]
   public status: IRecordStatus
   public steps: IRecordSteps[] = []
 
@@ -23,6 +24,7 @@ export class RecordManager {
   ) {
     this.interaction = interaction
     this.config = config[interaction.flow.type]
+    this.messageTypes = this.getMessageTypes()
     this.status = this.processStatus()
     this.steps = this.processSteps()
   }
@@ -42,6 +44,10 @@ export class RecordManager {
 
   private getTitle(): string {
     return this.config?.title ?? 'Unknown'
+  }
+
+  private getMessageTypes(): string[] {
+    return this.interaction.getMessages().map((m) => m.interactionType)
   }
 
   private processStatus(): IRecordStatus {
@@ -73,12 +79,12 @@ export class RecordManager {
   }
 
   private assembleAllSteps(
-    assembleFn: (message: JSONWebToken<any>, i: number) => IRecordSteps | null,
+    assembleFn: (messageType: string, i: number) => IRecordSteps | null,
   ) {
     // NOTE: adding the Set to assure the same token wasn't assembled twice
     const steps = [
       ...new Set(
-        this.interaction.getMessages().reduce<IRecordSteps[]>((acc, m, i) => {
+        this.messageTypes.reduce<IRecordSteps[]>((acc, m, i) => {
           const step = assembleFn(m, i)
           if (step) acc.push(step)
           return acc
@@ -109,8 +115,8 @@ export class RecordManager {
     const offerState = this.interaction.getSummary()
       .state as CredentialOfferFlowState
 
-    return this.assembleAllSteps((m, i) => {
-      switch (m.interactionType) {
+    return this.assembleAllSteps((type, i) => {
+      switch (type) {
         // TODO: when the Credential name is available in the @CredentialOffer,
         // should replace the type
         case InteractionType.CredentialOfferRequest:
@@ -134,8 +140,8 @@ export class RecordManager {
     const shareState = this.interaction.getSummary()
       .state as CredentialRequestFlowState
 
-    return this.assembleAllSteps((m, i) => {
-      switch (m.interactionType) {
+    return this.assembleAllSteps((type, i) => {
+      switch (type) {
         case InteractionType.CredentialRequest:
           return {
             title: this.getFinishedStepTitle(i),
@@ -160,8 +166,8 @@ export class RecordManager {
     const { action = 'Authorize' } = this.interaction.getSummary()
       .state as AuthorizationFlowState
 
-    return this.assembleAllSteps((m, i) => {
-      switch (m.interactionType) {
+    return this.assembleAllSteps((type, i) => {
+      switch (type) {
         case 'AuthorizationRequest':
         case 'AuthorizationResponse':
           return {
@@ -178,7 +184,7 @@ export class RecordManager {
     const { initiator } = this.interaction.getSummary()
     const initiatorDid = truncateDid(initiator.did)
 
-    return this.assembleAllSteps((m, i) => {
+    return this.assembleAllSteps((_, i) => {
       switch (i) {
         case 0:
         case 1:
@@ -193,7 +199,7 @@ export class RecordManager {
   }
 
   private assembleUnknownSteps() {
-    return this.assembleAllSteps((m, i) => ({
+    return this.assembleAllSteps((_, i) => ({
       title: this.getFinishedStepTitle(i),
       description: 'Unknown',
     }))
