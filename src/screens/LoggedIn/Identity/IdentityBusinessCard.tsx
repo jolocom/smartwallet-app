@@ -2,19 +2,16 @@ import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Dots from '~/components/Dots';
-import { getGroupedValuesForBusinessCard } from '~/modules/attributes/selectors';
+import { useSICActions } from '~/hooks/attributes';
+import { useToasts } from '~/hooks/toasts';
+import { getBusinessCardAttributes, getGroupedValuesForBusinessCard } from '~/modules/attributes/selectors';
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
-import { TClaimGroups } from '~/utils/credentialsBySection';
 import Styled, {IStyledComposition} from './components/Styled';
 
 enum Modes {
  none = 'none',
  edit = 'edit'
-}
-
-interface ICredentialBC {
-  groups: TClaimGroups
 }
 
 interface IBusinessCardComposition {
@@ -39,8 +36,10 @@ const BusinessCardPlaceholder = () => {
  )
 }
 
-const BusinessCardCredential: React.FC<ICredentialBC> = ({groups}) => {
-  const {name, contact, company} = groups;
+const BusinessCardCredential: React.FC = () => {
+  const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);
+
+  const {name, contact, company} = groupedValuesBC;
   if(!name && !contact && !company) return null;
 
   const displyedName = name.fields.map(f => f.value).join(' ');
@@ -74,17 +73,27 @@ const BusinessCardCredential: React.FC<ICredentialBC> = ({groups}) => {
 
 const BusinessCard: React.FC & IBusinessCardComposition = ({children}) => {
   const [mode, setMode] = useState(Modes.none);
+  const {handleDeleteCredentialSI} = useSICActions();
  
-  const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);
+  const businessCardCredenetials = useSelector(getBusinessCardAttributes);
+  const {scheduleWarning} = useToasts();
   
-  const isPlaceholder = !Boolean(Object.keys(groupedValuesBC).length);
+  const isPlaceholder = !Boolean(businessCardCredenetials?.length);
  
   const setEditMode = () => setMode(Modes.edit)
   const resetMode = () => setMode(Modes.none);
  
-  const handleDeleteBC = () => {
-    console.log('Deleting BC');
-    resetMode();  
+  const handleDeleteBC = async () => {
+    try {
+      await handleDeleteCredentialSI(businessCardCredenetials[0].id);
+    } catch(e) {
+      scheduleWarning({
+        title: 'Could not delete',
+        message: 'Failed to delete business card'
+      })
+    } finally {
+      resetMode();  
+    }
   }
  
   const popupOptions = useMemo(() => ([
@@ -109,7 +118,7 @@ const BusinessCard: React.FC & IBusinessCardComposition = ({children}) => {
      {isPlaceholder ? (
        <BusinessCardPlaceholder />
      ) : (
-       <BusinessCardCredential groups={groupedValuesBC} />
+       <BusinessCardCredential />
      )}
      {children}
    </BusinessCard.Styled.Container>

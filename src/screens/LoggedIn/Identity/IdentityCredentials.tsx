@@ -50,7 +50,7 @@ const IdentityCredentials = () => {
   const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined); // state that shows what claim are we editing 
 
   const attributes = useSelector(getPrimitiveAttributes);
-  const { createSICredential, editSICredential } = useSICActions();
+  const { handleCreateCredentialSI, handleEditCredentialSI } = useSICActions();
   const { scheduleWarning } = useToasts();
 
 
@@ -115,7 +115,7 @@ const IdentityCredentials = () => {
     if (expandedForm) {
       try {
         const claims = mapFormFields(formValues);
-        await createSICredential(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata);
+        await handleCreateCredentialSI(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata);
         setExpandedForm(undefined)
       } catch (e) {
         scheduleWarning({
@@ -131,7 +131,7 @@ const IdentityCredentials = () => {
     if (expandedForm && editClaimId) {
       try {
         const claims = mapFormFields(formValues);
-        await editSICredential(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata, editClaimId);
+        await handleEditCredentialSI(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata, editClaimId);
         setExpandedForm(undefined)
       } catch (err) {
         scheduleWarning({

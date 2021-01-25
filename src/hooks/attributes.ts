@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { editAttr, initAttrs, updateAttrs } from '~/modules/attributes/actions'
+import { deleteAttr, editAttr, initAttrs, updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes } from '~/types/credentials'
 import { useAgent } from './sdk'
 import { AttrsState, AttributeI, ClaimValues } from '~/modules/attributes/types'
@@ -66,17 +66,22 @@ export const useSICActions = () => {
     return signedCredential;
   }
 
-  const deleteSICredential = async (id: string) => {
+  const deleteStoredCredential = async (id: string) => {
+    await agent.storage.delete.verifiableCredential(id);
+    return id;
+  }
+
+  const handleDeleteCredentialSI = async (id: string) => {
     try {
-      await agent.storage.delete.verifiableCredential(id);
-      return id;
+      await deleteStoredCredential(id);
+      dispatch(deleteAttr({type: AttributeTypes.businessCard}))
     } catch (err) {
       console.log({ err });
       throw new Error(`Error deleting a self issued credential with', ${id}`);
     }
   }
 
-  const createSICredential = async (type: AttributeTypes, claims: ClaimValues, metadata: BaseMetadata) => {
+  const handleCreateCredentialSI = async (type: AttributeTypes, claims: ClaimValues, metadata: BaseMetadata) => {
     try {
       // assemble and store in the storage
       const signedCredential = await constructCredentialAndStore(metadata, claims);
@@ -90,10 +95,10 @@ export const useSICActions = () => {
     }
   }
 
-  const editSICredential = async (type: AttributeTypes, claims: ClaimValues, metadata: BaseMetadata, id: string) => {
+  const handleEditCredentialSI = async (type: AttributeTypes, claims: ClaimValues, metadata: BaseMetadata, id: string) => {
     try {
       const signedCredential = await constructCredentialAndStore(metadata, claims);
-      const removedCredentialId = await deleteSICredential(id);
+      const removedCredentialId = await deleteStoredCredential(id);
 
       const attribute = formAttribute(signedCredential);
       dispatch(editAttr({ type, attribute, id: removedCredentialId }))
@@ -103,7 +108,7 @@ export const useSICActions = () => {
     }
   }
 
-  return { createSICredential, editSICredential }
+  return { handleCreateCredentialSI, handleEditCredentialSI, handleDeleteCredentialSI }
 
 }
 

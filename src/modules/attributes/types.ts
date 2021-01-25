@@ -11,7 +11,8 @@ export type AttrsState<T> = Record<AttributeTypes, T[]>
 export enum AttrActions {
   initAttrs = 'initAttrs',
   updateAttrs = 'updateAttrs',
-  editAttr = 'editAttr'
+  editAttr = 'editAttr',
+  deleteAttr = 'deleteAttr'
 }
 
 export type ClaimValues = {
