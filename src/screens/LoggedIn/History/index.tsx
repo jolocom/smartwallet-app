@@ -21,7 +21,10 @@ export enum RecordTypes {
 
 const History = () => {
   return (
-    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+    <ScreenContainer
+      testID="history-screen"
+      customStyles={{ justifyContent: 'flex-start' }}
+    >
       <Record>
         <Tabs initialActiveSubtab={SUBTABS[0]}>
           <Record.Header />

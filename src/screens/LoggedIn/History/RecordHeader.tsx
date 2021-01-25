@@ -7,6 +7,7 @@ const RecordHeader: React.FC<IRecordHeader> = ({ title }) => {
   const { activeSection } = useRecord()
   return (
     <JoloText
+      testID="record-header"
       kind={JoloTextKind.title}
       size={JoloTextSizes.middle}
       customStyles={{ textAlign: 'left', marginBottom: 22, width: '100%' }}

@@ -99,6 +99,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
 
   return (
     <SectionList<string>
+      testID="record-item-list"
       ref={sectionListRef}
       sections={sections}
       showsVerticalScrollIndicator={false}
