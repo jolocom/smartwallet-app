@@ -1,15 +1,17 @@
 import { IRecordDetails, IRecordStatus, IRecordSteps } from '~/types/records'
 import { IRecordConfig } from '~/config/records'
-import { Interaction, FlowType, JSONWebToken } from '@jolocom/sdk'
+import { Interaction, FlowType } from '@jolocom/sdk'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import truncateDid from '~/utils/truncateDid'
 import {
   CredentialOfferFlowState,
   CredentialRequestFlowState,
   AuthorizationFlowState,
+  AuthenticationFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
+import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
 
 export class RecordManager {
   private interaction: Interaction
@@ -63,33 +65,27 @@ export class RecordManager {
     switch (this.interaction.flow.type) {
       case FlowType.Authorization:
       case FlowType.Authentication:
-        return this.interaction.getMessages().length === 2
+        return this.messageTypes.length === 2
       case FlowType.CredentialOffer:
-        return !!this.interaction
-          .getMessages()
-          .find((t) => t.interactionType === InteractionType.CredentialsReceive)
+        return !!this.messageTypes.find(
+          (t) => t === InteractionType.CredentialsReceive,
+        )
       case FlowType.CredentialShare:
-        return !!this.interaction
-          .getMessages()
-          .find((t) => t.interactionType === InteractionType.CredentialResponse)
+        return !!this.messageTypes.find(
+          (t) => t === InteractionType.CredentialResponse,
+        )
       default:
         // TODO: how do we handle un-suported interactions (e.g. EstablishChannel)?
         return false
     }
   }
 
-  private assembleAllSteps(
-    assembleFn: (messageType: string, i: number) => IRecordSteps | null,
+  private assembleAllSteps<T extends FlowState>(
+    assembleFn: (messageType: string, i: number, flowState: T) => IRecordSteps,
   ) {
-    // NOTE: adding the Set to assure the same token wasn't assembled twice
+    const flowState = this.interaction.getSummary().state as T
     const steps = [
-      ...new Set(
-        this.messageTypes.reduce<IRecordSteps[]>((acc, m, i) => {
-          const step = assembleFn(m, i)
-          if (step) acc.push(step)
-          return acc
-        }, []),
-      ),
+      ...new Set(this.messageTypes.map((t, i) => assembleFn(t, i, flowState))),
     ]
 
     if (this.status !== IRecordStatus.finished) {
@@ -112,10 +108,7 @@ export class RecordManager {
   }
 
   private assembleCredentialOfferSteps() {
-    const offerState = this.interaction.getSummary()
-      .state as CredentialOfferFlowState
-
-    return this.assembleAllSteps((type, i) => {
+    return this.assembleAllSteps<CredentialOfferFlowState>((type, i, state) => {
       switch (type) {
         // TODO: when the Credential name is available in the @CredentialOffer,
         // should replace the type
@@ -123,59 +116,55 @@ export class RecordManager {
         case InteractionType.CredentialOfferResponse:
           return {
             title: this.getFinishedStepTitle(i),
-            description: offerState.offerSummary.map((s) => s.type).join(', '),
+            description: state.offerSummary.map((s) => s.type).join(', '),
           }
         case InteractionType.CredentialsReceive:
           return {
             title: this.getFinishedStepTitle(i),
-            description: offerState.issued.map((c) => c.name).join(', '),
+            description: state.issued.map((c) => c.name).join(', '),
           }
         default:
-          return null
+          throw new Error('Wrong interaction type for flow')
       }
     })
   }
 
   private assembleCredentialShareSteps() {
-    const shareState = this.interaction.getSummary()
-      .state as CredentialRequestFlowState
-
-    return this.assembleAllSteps((type, i) => {
-      switch (type) {
-        case InteractionType.CredentialRequest:
-          return {
-            title: this.getFinishedStepTitle(i),
-            description: shareState.constraints[0].requestedCredentialTypes
-              .map((types) => getCredentialType(types))
-              .join(',  '),
-          }
-        case InteractionType.CredentialOfferResponse:
-          return {
-            title: this.getFinishedStepTitle(i),
-            description: shareState.providedCredentials[0].suppliedCredentials
-              .map((c) => c.name)
-              .join(',  '),
-          }
-        default:
-          return null
-      }
-    })
+    return this.assembleAllSteps<CredentialRequestFlowState>(
+      (type, i, state) => {
+        switch (type) {
+          case InteractionType.CredentialRequest:
+            return {
+              title: this.getFinishedStepTitle(i),
+              description: state.constraints[0].requestedCredentialTypes
+                .map((types) => getCredentialType(types))
+                .join(',  '),
+            }
+          case InteractionType.CredentialOfferResponse:
+            return {
+              title: this.getFinishedStepTitle(i),
+              description: state.providedCredentials[0].suppliedCredentials
+                .map((c) => c.name)
+                .join(',  '),
+            }
+          default:
+            throw new Error('Wrong interaction type for flow')
+        }
+      },
+    )
   }
 
   private assembleAuthorizationSteps() {
-    const { action = 'Authorize' } = this.interaction.getSummary()
-      .state as AuthorizationFlowState
-
-    return this.assembleAllSteps((type, i) => {
+    return this.assembleAllSteps<AuthorizationFlowState>((type, i, state) => {
       switch (type) {
         case 'AuthorizationRequest':
         case 'AuthorizationResponse':
           return {
             title: this.getFinishedStepTitle(i),
-            description: capitalizeWord(action),
+            description: capitalizeWord(state.action ?? 'Authorize'),
           }
         default:
-          return null
+          throw new Error('Wrong interaction type for flow')
       }
     })
   }
@@ -184,7 +173,7 @@ export class RecordManager {
     const { initiator } = this.interaction.getSummary()
     const initiatorDid = truncateDid(initiator.did)
 
-    return this.assembleAllSteps((_, i) => {
+    return this.assembleAllSteps<AuthenticationFlowState>((_, i) => {
       switch (i) {
         case 0:
         case 1:
@@ -193,7 +182,7 @@ export class RecordManager {
             description: initiatorDid,
           }
         default:
-          return null
+          throw new Error('Wrong interaction type for flow')
       }
     })
   }
