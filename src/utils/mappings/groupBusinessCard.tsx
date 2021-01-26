@@ -5,11 +5,12 @@ import {
  ClaimKeys,
  IAttributeClaimFieldWithValue,
 } from '~/types/credentials'
+import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 
 export type TClaimGroups = Record<string, Group>
 type TField = Pick<IAttributeClaimFieldWithValue, 'key' | 'value'>
 
-class Group {
+export class Group {
   label: string
   fields: TField[]
   constructor(label: string) {
@@ -19,6 +20,9 @@ class Group {
   public addField(fieldKey: ClaimKeys) {
     this.fields = [...this.fields, { key: fieldKey, value: '' }]
     return this
+  }
+  public updateFieldValue(fieldKey: ClaimKeys, fieldValue: ClaimEntry) {
+    this.fields = this.fields.map(f => f.key === fieldKey ? ({...f, value: fieldValue}) : f)
   }
   public setGroupValues(values: ClaimValues) {
     this.fields = this.fields.map((f) => ({ ...f, value: values[f.key] || '' }))

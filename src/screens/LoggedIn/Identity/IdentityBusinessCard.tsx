@@ -1,12 +1,17 @@
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
+import Btn from '~/components/Btn';
 import Dots from '~/components/Dots';
+import SectionForm from '~/components/Form/SectionForm';
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import { useSICActions } from '~/hooks/attributes';
 import { useToasts } from '~/hooks/toasts';
 import { getBusinessCardAttributes, getGroupedValuesForBusinessCard } from '~/modules/attributes/selectors';
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
+import { JoloTextSizes } from '~/utils/fonts';
+import { getGroupedClaimsForBusinessCard, TClaimGroups } from '~/utils/mappings/groupBusinessCard';
 import Styled, {IStyledComposition} from './components/Styled';
 
 enum Modes {
@@ -71,10 +76,19 @@ const BusinessCardCredential: React.FC = () => {
   )
 }
 
-const BusinessCardEdit = () => {
-  const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);
-  if (!groupedValuesBC) return null;
-  return null
+const BusinessCardEdit = ({onCancel}) => {
+  const groupedClaimsBC = getGroupedClaimsForBusinessCard()
+  return (
+    <>
+    <Btn onPress={onCancel}>cancel</Btn>
+    <SectionForm
+      config={groupedClaimsBC}
+      renderFormHeader={(formState: TClaimGroups) => <JoloText>Form Header</JoloText>}
+      renderSectionHeader={(section) => <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini} color={Colors.white50} weight={JoloTextWeight.regular} customStyles={{ marginBottom: 5 }}>{section.label}</JoloText>}
+      renderSectionFooter={() => <View style={{marginBottom: 15}} />}
+      />
+    </>
+  )
 }
 
 const BusinessCard: React.FC & IBusinessCardComposition = () => {
@@ -114,7 +128,7 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
   ]), [])
  
   if(mode === Modes.edit) {
-    return <BusinessCardEdit />
+    return <BusinessCardEdit onCancel={resetMode} />
   }
   return (
    <BusinessCard.Styled.Container>
