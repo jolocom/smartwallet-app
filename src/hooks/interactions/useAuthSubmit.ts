@@ -3,9 +3,11 @@ import { useDispatch } from 'react-redux'
 import { resetInteraction } from '~/modules/interaction/actions'
 import { useInteraction } from '.'
 import useInteractionToasts from './useInteractionToasts'
+import { useAgent } from '../sdk'
 
 const useAuthSubmit = () => {
   const getInteraction = useInteraction()
+  const agent = useAgent()
   const dispatch = useDispatch()
   const {
     scheduleErrorInteraction,
@@ -16,7 +18,7 @@ const useAuthSubmit = () => {
     try {
       const interaction = await getInteraction()
       const authResponse = await interaction.createAuthenticationResponse()
-      await interaction.processInteractionToken(authResponse)
+      await agent.processJWT(authResponse)
       await interaction.send(authResponse)
 
       scheduleSuccessInteraction()
