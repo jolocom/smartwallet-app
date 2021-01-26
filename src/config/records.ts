@@ -1,4 +1,5 @@
 import { FlowType } from '@jolocom/sdk'
+import { strings } from '~/translations'
 
 export interface IRecordConfig {
   title: string
@@ -12,31 +13,35 @@ export interface IRecordConfig {
 // that there is always a request i.e. first step.
 export const recordConfig: Partial<Record<FlowType, IRecordConfig>> = {
   [FlowType.Authentication]: {
-    title: 'Authentication',
+    title: strings.AUTHENTICATION,
     steps: {
-      finished: ['Requested', 'Confirmed'],
-      unfinished: ['Not requested', 'Not confirmed'],
+      finished: [strings.REQUESTED, strings.CONFIRMED],
+      unfinished: [strings.NOT_REQUESTED, strings.NOT_CONFIRMED],
     },
   },
   [FlowType.Authorization]: {
-    title: 'Authorization',
+    title: strings.AUTHORIZATION,
     steps: {
-      finished: ['Authorized', 'Confirmed'],
-      unfinished: ['Not authorized', 'Not confirmed'],
+      finished: [strings.AUTHORIZED, strings.CONFIRMED],
+      unfinished: [strings.NOT_AUTHORIZED, strings.NOT_CONFIRMED],
     },
   },
   [FlowType.CredentialOffer]: {
-    title: 'Incoming offer',
+    title: strings.INCOMING_OFFER,
     steps: {
-      finished: ['Offered', 'Selected', 'Issued'],
-      unfinished: ['Not offered', 'Not selected', 'Not issued'],
+      finished: [strings.OFFERED, strings.SELECTED, strings.ISSUED],
+      unfinished: [
+        strings.NOT_OFFERED,
+        strings.NOT_SELECTED,
+        strings.NOT_ISSUED,
+      ],
     },
   },
   [FlowType.CredentialShare]: {
-    title: 'Incoming request',
+    title: strings.INCOMING_REQUEST,
     steps: {
-      finished: ['Requested', 'Shared'],
-      unfinished: ['Not requested', 'Not shared'],
+      finished: [strings.REQUESTED, strings.SHARED],
+      unfinished: [strings.NOT_REQUESTED, strings.NOT_SHARED],
     },
   },
 }
