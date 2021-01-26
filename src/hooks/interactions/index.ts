@@ -108,7 +108,7 @@ export const useInteractionStart = () => {
           dispatch(
             setInteractionDetails({
               id: interaction.id,
-              flowType: interaction.flow.type,
+              flowType: interaction.flow.type as FlowType,
               ...mappedInteraction,
             }),
           )
