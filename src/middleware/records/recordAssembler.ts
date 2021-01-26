@@ -13,7 +13,7 @@ import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
 
-export class RecordManager {
+export class RecordAssembler {
   private interaction: Interaction
   private config: IRecordConfig | undefined
   private messageTypes: string[]

@@ -3,7 +3,7 @@ import { FlowType } from '@jolocom/sdk'
 import { useAgent } from '~/hooks/sdk'
 import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
 import { getDateSection, interactionTypeToFlowType } from './utils'
-import { RecordManager } from '~/middleware/records/recordManager'
+import { RecordAssembler } from '~/middleware/records/recordAssembler'
 import { recordConfig } from '~/config/records'
 
 export const useHistory = () => {
@@ -41,9 +41,9 @@ export const useHistory = () => {
     nonce: string,
   ): Promise<IRecordDetails> => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
-    const recordManager = new RecordManager(interaction, recordConfig)
+    const recordAssembler = new RecordAssembler(interaction, recordConfig)
 
-    return recordManager.getRecordDetails()
+    return recordAssembler.getRecordDetails()
   }
 
   return {
