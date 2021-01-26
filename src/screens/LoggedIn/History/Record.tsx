@@ -17,6 +17,7 @@ export interface IRecordHeader {
 
 export interface IRecordItemProps {
   id: string
+  onDropdown: () => void
 }
 
 export interface IRecordItemsListProps {

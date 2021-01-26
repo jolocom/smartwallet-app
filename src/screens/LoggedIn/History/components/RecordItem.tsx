@@ -8,15 +8,15 @@ import { IRecordItemProps } from '../Record'
 import RecordItemHeader from './RecordItemHeader'
 import RecordItemDetails from './RecordItemDetails'
 
-const RecordItem: React.FC<IRecordItemProps> = ({ id }) => {
+const RecordItem: React.FC<IRecordItemProps> = ({ id, onDropdown }) => {
   const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
   const [isOpen, setOpen] = useState(false)
 
-  const { scheduleErrorWarning } = useToasts()
   const { getInteractionDetails } = useHistory()
 
   const handlePress = () => {
     if (itemDetails) {
+      !isOpen && onDropdown()
       LayoutAnimation.configureNext({
         ...LayoutAnimation.Presets.easeInEaseOut,
         duration: 200,
