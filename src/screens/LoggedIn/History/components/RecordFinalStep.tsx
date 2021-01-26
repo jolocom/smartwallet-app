@@ -35,6 +35,7 @@ const RecordFinalStep: React.FC<IRecordSteps & { status: IRecordStatus }> = ({
           }
           size={JoloTextSizes.tiniest}
           customStyles={{ textAlign: 'left' }}
+          numberOfLines={1}
         >
           {description}
         </JoloText>
