@@ -38,16 +38,16 @@ const BusinessCardPlaceholder = () => {
 
 const BusinessCardCredential: React.FC = () => {
   const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);
+  if(!groupedValuesBC) return null;
 
   const {name, contact, company} = groupedValuesBC;
-  if(!name && !contact && !company) return null;
 
-  const displyedName = name.fields.map(f => f.value).join(' ');
+  const displayedName = name.fields.map(f => f.value).join(' ');
   
   return (
     <>
       <View>
-        <BusinessCard.Styled.Title color={Colors.white}>{displyedName}</BusinessCard.Styled.Title>
+        <BusinessCard.Styled.Title color={Colors.white}>{displayedName}</BusinessCard.Styled.Title>
         <BusinessCard.Styled.FieldGroup customStyles={{marginTop: 3}}>
           <BusinessCard.Styled.FieldName>{company.label}</BusinessCard.Styled.FieldName>
           {company.fields.map(f => (

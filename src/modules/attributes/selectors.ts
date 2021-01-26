@@ -41,6 +41,6 @@ export const getGroupedValuesForBusinessCard = createSelector(
         {},
       )
     }
-    return {}
+    return null;
   },
 )
