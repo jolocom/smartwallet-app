@@ -1385,10 +1385,10 @@
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.1.0-rc1":
-  version "1.1.0-rc1"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.1.0-rc1.tgz#cbb2d3a8fef394b7a8b5de9078ecf44451676a54"
-  integrity sha512-XsMyn1ASe+uxqePH+dA83cxGkTXTNkaTS5mEiTt6h14YVQ4FlJZfauoeZ1rCAfx9gL5Bi59LRGPNjVMOkuCXWA==
+"@jolocom/sdk@^1.1.0-rc2":
+  version "1.1.0-rc2"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.1.0-rc2.tgz#c13705b225546d1c9b5cd317a16cd2028008b28a"
+  integrity sha512-1YTG4SsVbCZ5OezrnPFZkJENOtzrs4P8JcTTcO7H/P/w/j9QSRevl0vN/n0nudQPi2DopmiYA8qkEKKzJSJYeQ==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.2"
     form-data "^3.0.0"
@@ -8018,11 +8018,6 @@ react-native-crypto@^2.1.0, react-native-crypto@^2.2.0:
     public-encrypt "^4.0.0"
     randomfill "^1.0.3"
 
-react-native-draggable-flatlist@^2.5.2:
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.5.2.tgz#4a348f2f048572b4dfafc465681c8219ec677121"
-  integrity sha512-MbNxay+NiYHW0k6LTTwtd9VznL0cWly+cIfnJA2rxg9Fed0SPqog2O5l193EcZQ0Z7B7e+UrAZcSWdq1Z+hqpw==
-
 react-native-dash@^0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/react-native-dash/-/react-native-dash-0.0.11.tgz#cf1b0108e4660217cf0300b872231a5cadb9c4a8"
@@ -8030,6 +8025,11 @@ react-native-dash@^0.0.11:
   dependencies:
     prop-types "^15.5.10"
     react-native-measureme "0.0.2"
+
+react-native-draggable-flatlist@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.5.2.tgz#4a348f2f048572b4dfafc465681c8219ec677121"
+  integrity sha512-MbNxay+NiYHW0k6LTTwtd9VznL0cWly+cIfnJA2rxg9Fed0SPqog2O5l193EcZQ0Z7B7e+UrAZcSWdq1Z+hqpw==
 
 react-native-gesture-handler@^1.6.1:
   version "1.9.0"
