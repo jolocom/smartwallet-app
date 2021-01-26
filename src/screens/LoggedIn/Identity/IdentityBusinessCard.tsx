@@ -71,21 +71,27 @@ const BusinessCardCredential: React.FC = () => {
   )
 }
 
+const BusinessCardEdit = () => {
+  const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);
+  if (!groupedValuesBC) return null;
+  return null
+}
+
 const BusinessCard: React.FC & IBusinessCardComposition = () => {
   const [mode, setMode] = useState(Modes.none);
   const {handleDeleteCredentialSI} = useSICActions();
  
-  const businessCardCredenetials = useSelector(getBusinessCardAttributes);
+  const businessCardCredentials = useSelector(getBusinessCardAttributes);
   const {scheduleWarning} = useToasts();
   
-  const isPlaceholder = !Boolean(businessCardCredenetials?.length);
+  const isPlaceholder = !Boolean(businessCardCredentials?.length);
  
   const setEditMode = () => setMode(Modes.edit)
   const resetMode = () => setMode(Modes.none);
  
   const handleDeleteBC = async () => {
     try {
-      await handleDeleteCredentialSI(businessCardCredenetials[0].id);
+      await handleDeleteCredentialSI(businessCardCredentials[0].id);
     } catch(e) {
       scheduleWarning({
         title: 'Could not delete',
@@ -107,11 +113,9 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
       }] : [])
   ]), [])
  
-  /* TODO: business card form will go here
   if(mode === Modes.edit) {
-    return null
+    return <BusinessCardEdit />
   }
-  */
   return (
    <BusinessCard.Styled.Container>
      <Dots color={Colors.white} customStyles={{ right: -10, top: -12 }} options={popupOptions} />
