@@ -25,7 +25,6 @@ export class RecordAssembler {
     config: Partial<Record<FlowType, IRecordConfig>>,
   ) {
     this.interaction = interaction
-    // @ts-ignore Flow.type became any
     this.config = config[interaction.flow.type]
     this.messageTypes = this.getMessageTypes()
     this.status = this.processStatus()
