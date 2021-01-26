@@ -22,7 +22,7 @@ import {
 } from '~/types/credentials'
 import { useSICActions } from '~/hooks/attributes';
 
-import Form from './components/Form'
+import Form from '~/components/Form'
 import { mapFormFields } from '~/utils/dataMapping'
 import { useToasts } from '~/hooks/toasts'
 import EmptyPlaceholder, { IdentityPlaceholderTypes } from './components/EmptyPlaceholder'

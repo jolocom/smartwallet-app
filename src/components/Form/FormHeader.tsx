@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
-import { useForm } from './Form'
+import { useForm } from '.'
 
 interface IAction {
   onPress: () => void

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { TextInput } from 'react-native'
-import { useForm } from './Form'
+import { useForm } from '.'
 
 const FormBody: React.FC = ({ children }) => {
   const formContext = useForm()

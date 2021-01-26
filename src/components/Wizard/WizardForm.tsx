@@ -1,7 +1,7 @@
 import React from 'react'
 import Form, {
   IFormContext,
-} from '~/screens/LoggedIn/Identity/components/Form'
+} from '~/components/Form'
 import { IAttributeClaimFieldWithValue } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import Wizard, { IWizardFormProps, useWizard } from '.'
