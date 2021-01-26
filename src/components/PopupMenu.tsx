@@ -7,7 +7,7 @@ import JoloText from './JoloText'
 import ActionSheet from './ActionSheet/ActionSheet'
 import { useSafeArea } from 'react-native-safe-area-context'
 
-interface IPopupOption {
+export interface IPopupOption {
   title: string
   onPress: () => void
 }

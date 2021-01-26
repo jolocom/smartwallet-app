@@ -130,7 +130,9 @@ export const uiCredentialToShareCredential = (
   return shareCred
 }
 
-export const mapFormFields = (fields: IAttributeClaimFieldWithValue[]): ClaimValues => {
+export const mapFormFields = (
+  fields: IAttributeClaimFieldWithValue[],
+): ClaimValues => {
   return fields.reduce<ClaimValues>((acc, v) => {
     acc[v.key] = v.value
     return acc
