@@ -45,7 +45,7 @@ export const useHistory = () => {
     const { expires, issued } = interaction.lastMessage
     const recordAssembler = new RecordAssembler(
       messageTypes,
-      interaction.flow.type as FlowType,
+      interaction.flow.type,
       interaction.getSummary(),
       issued,
       expires,
