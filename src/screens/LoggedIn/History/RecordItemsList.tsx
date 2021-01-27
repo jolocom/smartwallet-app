@@ -21,6 +21,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
   const [activeSection, setActiveSection] = useState('')
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
+  const [focusedItem, setFocusedItem] = useState<string | null>(null)
 
   const { getInteractions: getInteractionTokens } = useHistory()
   const { scheduleErrorWarning } = useToasts()
@@ -77,18 +78,23 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
     }
   }, [page, JSON.stringify(interactions)])
 
-  const handleFocusItem = (index: number, section: string) => {
-    const sectionIndex = sections.findIndex((s) => s.title === section)
-    setTimeout(
-      () =>
-        sectionListRef.current?.scrollToLocation({
-          sectionIndex,
-          itemIndex: index,
-          viewPosition: 0,
-          animated: true,
-        }),
-      100,
-    )
+  const handleFocusItem = (id: string, index: number, section: string) => {
+    const isFocused = focusedItem === id
+    setFocusedItem(isFocused ? null : id)
+
+    if (!isFocused) {
+      const sectionIndex = sections.findIndex((s) => s.title === section)
+      setTimeout(
+        () =>
+          sectionListRef.current?.scrollToLocation({
+            sectionIndex,
+            itemIndex: index,
+            viewPosition: 0,
+            animated: true,
+          }),
+        100,
+      )
+    }
   }
 
   return (
@@ -109,8 +115,9 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
       renderItem={({ item, index, section }) => (
         <RecordItem
           key={index}
+          isFocused={focusedItem === item}
           id={item}
-          onDropdown={() => handleFocusItem(index, section.title)}
+          onDropdown={() => handleFocusItem(item, index, section.title)}
         />
       )}
       stickySectionHeadersEnabled={false}

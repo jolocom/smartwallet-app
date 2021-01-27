@@ -8,20 +8,22 @@ import { IRecordItemProps } from '../Record'
 import RecordItemHeader from './RecordItemHeader'
 import RecordItemDetails from './RecordItemDetails'
 
-const RecordItem: React.FC<IRecordItemProps> = ({ id, onDropdown }) => {
+const RecordItem: React.FC<IRecordItemProps> = ({
+  id,
+  onDropdown,
+  isFocused,
+}) => {
   const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
-  const [isOpen, setOpen] = useState(false)
 
   const { getInteractionDetails } = useHistory()
 
   const handlePress = () => {
     if (itemDetails) {
-      !isOpen && onDropdown()
+      onDropdown()
       LayoutAnimation.configureNext({
         ...LayoutAnimation.Presets.easeInEaseOut,
         duration: 200,
       })
-      setOpen((prev) => !prev)
     }
   }
 
@@ -44,7 +46,7 @@ const RecordItem: React.FC<IRecordItemProps> = ({ id, onDropdown }) => {
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={handlePress}>
       <RecordItemHeader details={itemDetails} />
-      {isOpen && itemDetails && <RecordItemDetails details={itemDetails} />}
+      {isFocused && itemDetails && <RecordItemDetails details={itemDetails} />}
     </TouchableOpacity>
   )
 }
