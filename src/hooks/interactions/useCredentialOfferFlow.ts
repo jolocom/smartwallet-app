@@ -11,12 +11,14 @@ import { OfferUICredential } from '~/types/credentials'
 import { strings } from '~/translations/strings'
 import { getCounterpartyName } from '~/modules/interaction/selectors'
 import { useInteraction } from '.'
+import { useAgent } from '../sdk'
 
 /**
  * Custom hook that exposes a collection of utils for the Credential Offer interaction
  */
 const useCredentialOfferFlow = () => {
   const getInteraction = useInteraction()
+  const agent = useAgent()
   const serviceName = useSelector(getCounterpartyName)
 
   /**
@@ -34,7 +36,7 @@ const useCredentialOfferFlow = () => {
     const responseToken = await interaction.createCredentialOfferResponseToken(
       selectedCredentials,
     )
-    await interaction.processInteractionToken(responseToken)
+    await agent.processJWT(responseToken)
   }
 
   /**

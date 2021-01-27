@@ -22,7 +22,7 @@ export class RecordManager {
     config: Partial<Record<FlowType, IRecordConfig>>,
   ) {
     this.interaction = interaction
-    this.config = config[interaction.flow.type]
+    this.config = config[interaction.flow.type as FlowType]
     this.status = this.processStatus()
     this.steps = this.processSteps()
   }
@@ -32,7 +32,7 @@ export class RecordManager {
       title: this.getTitle(),
       status: this.status,
       steps: this.steps,
-      type: this.interaction.flow.type,
+      type: this.interaction.flow.type as FlowType,
       issuer: this.interaction.getSummary().initiator,
       time: new Date(this.interaction.firstMessage.issued)
         .toTimeString()
