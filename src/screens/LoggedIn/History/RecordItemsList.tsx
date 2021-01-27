@@ -11,10 +11,7 @@ import RecordItem from './components/RecordItem'
 
 const ITEMS_PER_PAGE = 5
 
-const RecordItemsList: React.FC<IRecordItemsListProps> = ({
-  flows,
-  isActiveList,
-}) => {
+const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   const sectionListRef = useRef<SectionList | null>(null)
   const { updateActiveSection } = useRecord()
 
@@ -29,7 +26,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
   const { activeSubtab } = useTabs()
 
   useEffect(() => {
-    if (activeSection && activeSubtab && isActiveList) {
+    if (activeSection && activeSubtab && activeSubtab.id === id) {
       updateActiveSection(activeSubtab?.id, activeSection)
     }
   }, [activeSubtab?.id, activeSection])

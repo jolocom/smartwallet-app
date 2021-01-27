@@ -22,8 +22,8 @@ export interface IRecordItemProps {
 }
 
 export interface IRecordItemsListProps {
+  id: string
   flows?: FlowType[]
-  isActiveList: boolean
 }
 
 interface IRecordComposition {

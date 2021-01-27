@@ -10,7 +10,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
   details,
 }) => {
-  const image = details?.issuer.publicProfile?.image
+  const image = details?.issuer?.publicProfile?.image
 
   return (
     <View style={styles.container}>
