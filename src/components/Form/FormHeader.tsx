@@ -28,7 +28,7 @@ const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
   )
 }
 
-// TODO: this will break some forms - fix it
+// TODO: this will break forms for primitive claims, fix it
 const Cancel: IFormHeaderComposition['Cancel'] = ({ onCancel }) => {
   return (
     <ActionBtn

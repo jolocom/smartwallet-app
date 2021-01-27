@@ -13,7 +13,7 @@ import { strings } from '~/translations';
 import { AttributeTypes } from '~/types/credentials';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
-import { getGroupedClaimsForBusinessCard, getUngroupedClaimsForBusinessCard, Group, TClaimGroups } from '~/utils/mappings/groupBusinessCard';
+import { getGroupedClaimsForBusinessCard, getUngroupedClaimsForBusinessCard, Group, TField, TClaimGroups } from '~/utils/mappings/groupBusinessCard';
 import Styled, {IStyledComposition} from './components/Styled';
 
 enum Modes {
@@ -82,8 +82,7 @@ const BusinessCardCredential: React.FC = () => {
   )
 }
 
-// TODO: specify type
-const getCopiedGroups = (groups: any) => {
+const getCopiedGroups = (groups: Record<string, {label: string, fields: TField[]}>) => {
   return Object.keys(groups).reduce<TClaimGroups>((copiedGroups, grKey) => {
     const { label, fields } = groups[grKey];
     copiedGroups[grKey] = new Group(label, fields);
@@ -97,13 +96,12 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
   const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard) ?? getGroupedClaimsForBusinessCard();
   // we don't want to manipulate existing credential directly, and the below provide a copy of grouped claims 
   const copyGroupedValuesBC = useMemo(() => getCopiedGroups(JSON.parse(JSON.stringify(groupedValuesBC))), [JSON.stringify(groupedValuesBC)])
-  const hasFormChanged = useMemo(() => JSON.stringify(groupedValuesBC) !== JSON.stringify(copyGroupedValuesBC), [JSON.stringify(groupedValuesBC)])
-
+  
   const { handleEditCredentialSI, handleCreateCredentialSI } = useSICActions();
   const { scheduleWarning } = useToasts()
-
+  
   const handleFormSubmit = async (formState: TClaimGroups) => {
-    if (hasFormChanged) {
+    if (JSON.stringify(groupedValuesBC) !== JSON.stringify(copyGroupedValuesBC)) {
       try {
         if (businessCardId) {
           // edit mode
@@ -122,6 +120,8 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
       }
     }
     else {
+      console.log('just closing the form');
+      
       onCancel();
     }
   }

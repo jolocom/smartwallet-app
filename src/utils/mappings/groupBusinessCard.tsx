@@ -8,9 +8,8 @@ import {
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 
 export type TClaimGroups = Record<string, Group>
-type TField = Pick<IAttributeClaimFieldWithValue, 'key' | 'value'>
+export type TField = Pick<IAttributeClaimFieldWithValue, 'key' | 'value'>
 
-// TODO: make separate class for Fields
 export class Group {
   label: string
   fields: TField[]
