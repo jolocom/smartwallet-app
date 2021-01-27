@@ -15,7 +15,6 @@ const useMoveToNext = useCustomContext(MoveToNextContext)
 
 const MoveToNext: React.FC & IMoveToNextComposition = ({children}) => {
   const inputs = useRef<TextInput[]>([])
-  console.log({inputs});
   
   return (
     <MoveToNextContext.Provider value={{inputs}} children={children} />

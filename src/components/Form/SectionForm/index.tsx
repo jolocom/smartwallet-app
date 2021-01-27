@@ -1,6 +1,6 @@
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential';
 import React, { useState } from 'react';
-import {View } from 'react-native';
+import Block from '~/components/Block';
 import Input from '~/components/Input';
 import { ClaimKeys } from '~/types/credentials';
 // TODO: think about where to place this file
@@ -9,9 +9,9 @@ import MoveToNext from '../MoveToNext';
 
 interface ISectionForm {
   config: TClaimGroups,
-  renderFormHeader?: (formState: TClaimGroups) => React.FC
-  renderSectionHeader?: (section: Group) => React.FC
-  renderSectionFooter?: (section: Group) => React.FC
+  renderFormHeader?: (formState: TClaimGroups) => JSX.Element
+  renderSectionHeader?: (section: Group) => JSX.Element
+  renderSectionFooter?: (section: Group) => JSX.Element
 }
 
 const SectionForm: React.FC<ISectionForm> = ({ config, renderFormHeader, renderSectionHeader, renderSectionFooter }) => {
@@ -24,8 +24,8 @@ const SectionForm: React.FC<ISectionForm> = ({ config, renderFormHeader, renderS
   }
 
   return (
-    <View>
-      {renderFormHeader ? renderFormHeader(state) : renderFormHeader}
+    <Block customStyle={{paddingHorizontal: 20, paddingVertical: 25}}>
+      {renderFormHeader ? renderFormHeader(state) : null}
       <MoveToNext>
       {Object.keys(state).map(sectionKey => {
         const section = state[sectionKey];
@@ -42,7 +42,7 @@ const SectionForm: React.FC<ISectionForm> = ({ config, renderFormHeader, renderS
         )
       })}
       </MoveToNext>
-    </View>
+    </Block>
   )
 }
 

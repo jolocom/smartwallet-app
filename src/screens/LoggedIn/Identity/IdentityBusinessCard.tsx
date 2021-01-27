@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
-import Btn from '~/components/Btn';
 import Dots from '~/components/Dots';
+import FormHeader from '~/components/Form/FormHeader';
 import SectionForm from '~/components/Form/SectionForm';
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import { useSICActions } from '~/hooks/attributes';
@@ -21,6 +21,10 @@ enum Modes {
 
 interface IBusinessCardComposition {
   Styled: IStyledComposition
+}
+
+interface IEditBC {
+  onCancel: () => void
 }
 
 const BusinessCardPlaceholder = () => {
@@ -76,18 +80,26 @@ const BusinessCardCredential: React.FC = () => {
   )
 }
 
-const BusinessCardEdit = ({onCancel}) => {
-  const groupedClaimsBC = getGroupedClaimsForBusinessCard()
+const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
+  const groupedClaimsBC = getGroupedClaimsForBusinessCard();
+  const handleFormSubmit = async (formState: TClaimGroups) => {
+    onCancel();
+  }
+  const handleRenderFormHeader = (formState: TClaimGroups) => {
+    return (
+      <FormHeader>
+        <FormHeader.Cancel onCancel={onCancel} />
+        <FormHeader.Done onSubmit={() => handleFormSubmit(formState)} />
+      </FormHeader>
+    )
+  }
   return (
-    <>
-    <Btn onPress={onCancel}>cancel</Btn>
     <SectionForm
       config={groupedClaimsBC}
-      renderFormHeader={(formState: TClaimGroups) => <JoloText>Form Header</JoloText>}
+      renderFormHeader={(formState) => handleRenderFormHeader(formState)}
       renderSectionHeader={(section) => <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini} color={Colors.white50} weight={JoloTextWeight.regular} customStyles={{ marginBottom: 5 }}>{section.label}</JoloText>}
       renderSectionFooter={() => <View style={{marginBottom: 15}} />}
-      />
-    </>
+    />
   )
 }
 
