@@ -1,6 +1,6 @@
 import { IRecordDetails, IRecordStatus, IRecordSteps } from '~/types/records'
 import { IRecordConfig } from '~/config/records'
-import { Interaction, FlowType } from '@jolocom/sdk'
+import { FlowType } from '@jolocom/sdk'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import truncateDid from '~/utils/truncateDid'
 import {
@@ -8,27 +8,40 @@ import {
   CredentialRequestFlowState,
   AuthorizationFlowState,
   AuthenticationFlowState,
+  InteractionSummary,
 } from '@jolocom/sdk/js/interactionManager/types'
 import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
 
 export class RecordAssembler {
-  private interaction: Interaction
   private config: IRecordConfig | undefined
   private messageTypes: string[]
-  public status: IRecordStatus
-  public steps: IRecordSteps[] = []
+  private flowType: FlowType
+  private summary: InteractionSummary
+  private expirationDate: number
+  private lastMessageDate: number
+
+  private status: IRecordStatus
+  private steps: IRecordSteps[] = []
 
   constructor(
-    interaction: Interaction,
+    messageTypes: string[],
+    flowType: FlowType,
+    summary: InteractionSummary,
+    lastMessageDate: number,
+    expirationDate: number,
     config: Partial<Record<FlowType, IRecordConfig>>,
   ) {
-    this.interaction = interaction
-    this.config = config[interaction.flow.type]
-    this.messageTypes = this.getMessageTypes()
+    this.messageTypes = messageTypes
+    this.flowType = flowType
+    this.summary = summary
+    this.expirationDate = expirationDate
+    this.lastMessageDate = lastMessageDate
+    this.config = config[flowType]
     this.status = this.processStatus()
     this.steps = this.processSteps()
+    console.log(this)
   }
 
   public getRecordDetails(): IRecordDetails {
@@ -36,11 +49,9 @@ export class RecordAssembler {
       title: this.getTitle(),
       status: this.status,
       steps: this.steps,
-      type: this.interaction.flow.type,
-      issuer: this.interaction.getSummary().initiator,
-      time: new Date(this.interaction.firstMessage.issued)
-        .toTimeString()
-        .slice(0, 5),
+      type: this.flowType,
+      issuer: this.summary.initiator,
+      time: new Date(this.lastMessageDate).toTimeString().slice(0, 5),
     }
   }
 
@@ -48,21 +59,16 @@ export class RecordAssembler {
     return this.config?.title ?? 'Unknown'
   }
 
-  private getMessageTypes(): string[] {
-    return this.interaction.getMessages().map((m) => m.interactionType)
-  }
-
   private processStatus(): IRecordStatus {
-    const { expires } = this.interaction.lastMessage
     return this.isFinished()
       ? IRecordStatus.finished
-      : expires < Date.now()
+      : this.expirationDate < Date.now()
       ? IRecordStatus.expired
       : IRecordStatus.pending
   }
 
   private isFinished(): boolean {
-    switch (this.interaction.flow.type) {
+    switch (this.flowType) {
       case FlowType.Authorization:
       case FlowType.Authentication:
         return this.messageTypes.length === 2
@@ -83,7 +89,7 @@ export class RecordAssembler {
   private assembleAllSteps<T extends FlowState>(
     assembleFn: (messageType: string, i: number, flowState: T) => IRecordSteps,
   ) {
-    const flowState = this.interaction.getSummary().state as T
+    const flowState = this.summary.state as T
     const steps = [
       ...new Set(this.messageTypes.map((t, i) => assembleFn(t, i, flowState))),
     ]
@@ -170,7 +176,7 @@ export class RecordAssembler {
   }
 
   private assembleAuthenticationSteps() {
-    const { initiator } = this.interaction.getSummary()
+    const { initiator } = this.summary
     const initiatorDid = truncateDid(initiator.did)
 
     return this.assembleAllSteps<AuthenticationFlowState>((_, i) => {
@@ -195,7 +201,7 @@ export class RecordAssembler {
   }
 
   private processSteps() {
-    switch (this.interaction.flow.type) {
+    switch (this.flowType) {
       case FlowType.CredentialOffer:
         return this.assembleCredentialOfferSteps()
       case FlowType.CredentialShare:

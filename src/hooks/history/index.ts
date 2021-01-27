@@ -41,7 +41,16 @@ export const useHistory = () => {
     nonce: string,
   ): Promise<IRecordDetails> => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
-    const recordAssembler = new RecordAssembler(interaction, recordConfig)
+    const messageTypes = interaction.getMessages().map((m) => m.interactionType)
+    const { expires, issued } = interaction.lastMessage
+    const recordAssembler = new RecordAssembler(
+      messageTypes,
+      interaction.flow.type as FlowType,
+      interaction.getSummary(),
+      issued,
+      expires,
+      recordConfig,
+    )
 
     return recordAssembler.getRecordDetails()
   }
