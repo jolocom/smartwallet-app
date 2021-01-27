@@ -45,6 +45,7 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps={'handled'}
       overScrollMode="never"
+      style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: '40%' }}
     >
       <TabsContext.Provider value={contextValue} children={children} />
