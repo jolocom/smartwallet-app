@@ -41,7 +41,6 @@ export class RecordAssembler {
     this.config = config[flowType]
     this.status = this.processStatus()
     this.steps = this.processSteps()
-    console.log(this)
   }
 
   public getRecordDetails(): IRecordDetails {
