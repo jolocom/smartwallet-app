@@ -17,6 +17,7 @@ import {
 import { strings } from '~/translations/strings'
 import { useInteraction } from '.'
 import { attributeConfig } from '~/config/claims'
+import { useAgent } from '../sdk'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction
@@ -24,6 +25,7 @@ import { attributeConfig } from '~/config/claims'
 export const useCredentialShareFlow = () => {
   const dispatch = useDispatch()
   const getInteraction = useInteraction()
+  const agent = useAgent()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
   const attributes = useSelector(getAvailableAttributesToShare)
   const { requestedAttributes, requestedCredentials } = useSelector(
@@ -46,7 +48,7 @@ export const useCredentialShareFlow = () => {
         mappedSelection,
       )
 
-      await interaction.processInteractionToken(response)
+      await agent.processJWT(response)
       await interaction.send(response)
     }
   }
