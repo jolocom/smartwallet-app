@@ -1,8 +1,9 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Image, View } from 'react-native'
 
 const IdentityCredentials = () => {
-  return <View testID="identity-credentials-present" />
+  // TODO: remove rect when testing finished
+  return <View testID="identity-credentials-present"><View style={{width: 200, height: 200, backgroundColor: 'pink'}} /></View>
 }
 
 export default IdentityCredentials

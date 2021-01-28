@@ -2,6 +2,7 @@ import React from 'react'
 import {
   NavigationContainer,
   NavigationContainerRef,
+  useRoute,
 } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
@@ -15,6 +16,7 @@ import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
+import AfterIdentity from './screens/AfterIdentity'
 
 export type RootStackParamList = {
   Recovery: {
@@ -39,10 +41,11 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
     <NavigationContainer ref={ref}>
       <RootStack.Navigator headerMode="none" mode="modal">
         {isLoggedIn ? (
+          // TODO: fix type errors
           <RootStack.Screen
-            name={ScreenNames.LoggedIn}
-            component={LoggedIn}
-            options={{ gestureEnabled: false }}
+            name={ScreenNames.AfterIdentity}
+            component={AfterIdentity}
+            options={{gestureEnabled: false}}
           />
         ) : (
           <RootStack.Screen

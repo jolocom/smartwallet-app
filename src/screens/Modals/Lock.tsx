@@ -24,6 +24,9 @@ const Lock = () => {
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
     navigation.goBack()
+    // navigation.dispatch(
+    //   StackActions.replace(ScreenNames.LoggedIn, {screen: ScreenNames.Tabs})
+    // );
   }, [])
 
   /* START -> Biometry authentication */
