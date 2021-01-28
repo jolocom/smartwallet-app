@@ -27,7 +27,7 @@ const History = () => {
     >
       <Record>
         <Tabs initialActiveSubtab={SUBTABS[0]}>
-          <Record.Header />
+          <Record.Header testID="history-main-header" />
           <TabsContainer>
             {SUBTABS.map((st) => (
               <Tabs.Subtab key={st.id} tab={st} />

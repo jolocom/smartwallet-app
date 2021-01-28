@@ -96,7 +96,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
 
   return (
     <SectionList<string>
-      testID="record-item-list"
+      testID={`record-list-${id}`}
       ref={sectionListRef}
       sections={sections}
       showsVerticalScrollIndicator={false}

@@ -13,6 +13,7 @@ interface IRecordContext {
 
 export interface IRecordHeader {
   title?: string
+  testID?: string
 }
 
 export interface IRecordItemProps {
