@@ -48,7 +48,6 @@ export class RecordAssembler {
       title: this.getTitle(),
       status: this.status,
       steps: this.steps,
-      type: this.flowType,
       issuer: this.summary.initiator,
       time: new Date(this.lastMessageDate).toTimeString().slice(0, 5),
     }

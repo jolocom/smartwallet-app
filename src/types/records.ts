@@ -12,7 +12,6 @@ export enum IRecordStatus {
 }
 
 export interface IRecordDetails {
-  type: FlowType
   title: string
   issuer: IdentitySummary
   status: IRecordStatus
