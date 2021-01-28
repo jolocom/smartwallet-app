@@ -224,7 +224,7 @@ const IdentityCredentials = () => {
               {aKey === expandedForm && formConfig && (
                 <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialSubmit}>
                   <Form.Header>
-                    // TODO: fix it when working with claims add/edit
+                    {/* TODO: fix it when working with claims add/edit */}
                     <Form.Header.Cancel onCancel={handleHideForm} />
                     <Form.Header.Done onSubmit={handleCredentialSubmit} />
                   </Form.Header>
