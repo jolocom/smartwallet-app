@@ -11,13 +11,13 @@ import { useDispatch } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
-import { useAppState } from '~/hooks/useAppState';
-import { AppStateStatus, Platform } from 'react-native';
+import { useAppState } from '~/hooks/useAppState'
+import { AppStateStatus, Platform } from 'react-native'
 
 const Lock = () => {
   const dispatch = useDispatch()
   const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
-  const { authenticate, getEnrolledBiometry } = useBiometry();
+  const { authenticate, getEnrolledBiometry } = useBiometry()
 
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
@@ -25,7 +25,7 @@ const Lock = () => {
 
   // do not run biometry authentication when the app is in the background
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    if (Platform.OS === 'ios' && appState.match(/background/) && nextAppState.match(/active/)) {
+    if (appState.match(/background/) && nextAppState.match(/active/)) {
       promptBiometry()
     }
     appState = nextAppState
@@ -52,11 +52,9 @@ const Lock = () => {
         await handleBiometryAuthentication()
       }
     } catch (e) {
-      console.log('Prompting biometry has failed', {e});
-      
+      console.log('Prompting biometry has failed', { e })
     }
   }, [isBiometrySelected])
-
 
   /* disable hardwareback button default functionality */
   useBackHandler(() => true)

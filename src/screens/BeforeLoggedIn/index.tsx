@@ -102,11 +102,7 @@ const BeforeLoggedIn = () => {
 
   /* This watches app state change and locks app when necessary */
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    if (
-      Platform.OS === 'ios' &&
-      appState.match(/active/) &&
-      nextAppState.match(/inactive/)
-    ) {
+    if (appState.match(/active/) && nextAppState.match(/inactive|background/)) {
       if (isAuthSet) {
         if (!isPopupRef.current) {
           dispatch(setAppLocked(true))
