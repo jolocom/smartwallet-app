@@ -1,4 +1,4 @@
-import { StackActions, useNavigation, useNavigationState } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { AppStateStatus, Platform } from 'react-native';
@@ -15,6 +15,7 @@ import { setPopup } from '~/modules/appState/actions';
 import { getIsPopup } from '~/modules/appState/selectors';
 import { resetInteraction } from '~/modules/interaction/actions';
 import { dismissLoader } from '~/modules/loader/actions';
+import { getLoaderState } from '~/modules/loader/selectors';
 import { ScreenNames } from '~/types/screens';
 import { Colors } from '~/utils/colors';
 import LoggedInTabs from '../LoggedIn';
@@ -47,6 +48,8 @@ const BeforeLoggedIn = () => {
   const isAuthSet = useSelector(isLocalAuthSet);
   const isAppLocked = useSelector(getIsAppLocked);
 
+  const {isVisible: isLoaderVisible} = useSelector(getLoaderState)
+
   const showLock = isAppLocked && isAuthSet;
   const showRegisterPin = !isAuthSet;
   const showTabs = !isAppLocked && isAuthSet
@@ -66,15 +69,19 @@ const BeforeLoggedIn = () => {
 
   // decide wether to show Lock or Register Pin or App
   useEffect(() => {
+    if (!isLoaderVisible) {
+      
     if (showLock) {
-      navigation.dispatch(StackActions.push(ScreenNames.Lock))
+      navigation.dispatch(StackActions.push(ScreenNames.Lock))      
     } else if (showRegisterPin) {
       // Show passcode registration screen
       navigation.navigate(ScreenNames.DeviceAuth);
     } else if (showTabs) {
       navigation.navigate(ScreenNames.LoggedIn)
     }
-  }, [isAppLocked, isAuthSet])
+    }
+      
+  }, [isAppLocked, isAuthSet, isLoaderVisible])
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
@@ -110,6 +117,11 @@ const BeforeLoggedIn = () => {
     <BeforeLoggedInStack.Navigator
       headerMode="none"
     >
+      {/* NOTE: idle screen functions as a background:
+      when a user is redirected from LoggedOut to BeforeLoggedIn
+      we don't want to see noticeable screen switching
+      (from Lock to Register Passcode, because Lock served as a initialRouteName),
+      but rather displaying just a background screen */}
       <BeforeLoggedInStack.Screen
         name="Idle"
         component={Idle}
