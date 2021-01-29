@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { strings } from '~/translations/strings'
@@ -11,19 +11,26 @@ import { useDispatch } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
+import { useAppState } from '~/hooks/useAppState';
+import { AppStateStatus, Platform } from 'react-native';
 
 const Lock = () => {
-  const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
   const dispatch = useDispatch()
+  const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
   const { authenticate, getEnrolledBiometry } = useBiometry();
-
 
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
   }, [])
 
-  /* START -> Biometry authentication */
-  /* this will only be invoked if we stored biometry */
+  // do not run biometry authentication when the app is in the background
+  useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
+    if (Platform.OS === 'ios' && appState.match(/background/) && nextAppState.match(/active/)) {
+      promptBiometry()
+    }
+    appState = nextAppState
+  })
+
   const handleBiometryAuthentication = async () => {
     try {
       /* in case user disabled biometrics we don't want to run authenticate */
@@ -39,16 +46,17 @@ const Lock = () => {
       console.log('Error in authenticating with biometry on Lock', { err })
     }
   }
-
-  useEffect(() => {
-    const promptBiometry = async () => {
+  const promptBiometry = useCallback(async () => {
+    try {
       if (isBiometrySelected) {
         await handleBiometryAuthentication()
       }
+    } catch (e) {
+      console.log('Prompting biometry has failed', {e});
+      
     }
-    promptBiometry()
   }, [isBiometrySelected])
-  /* END -> Biometry authentication */
+
 
   /* disable hardwareback button default functionality */
   useBackHandler(() => true)

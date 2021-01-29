@@ -3,6 +3,7 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import React, { useCallback, useEffect, useRef } from 'react';
 import { AppStateStatus, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import ScreenContainer from '~/components/ScreenContainer';
 import { useSyncStorageAttributes } from '~/hooks/attributes';
 import useTermsConsent from '~/hooks/consent';
 import { useSyncStorageCredentials } from '~/hooks/credentials';
@@ -36,12 +37,15 @@ const settingsScreenTransitionOptions = {
   }
 }
 
+const Idle = () => {
+  return <ScreenContainer />
+}
+
 const BeforeLoggedIn = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isAuthSet = useSelector(isLocalAuthSet);
   const isAppLocked = useSelector(getIsAppLocked);
-  const routeState = useNavigationState(state => state);
 
   const showLock = isAppLocked && isAuthSet;
   const showRegisterPin = !isAuthSet;
@@ -63,13 +67,7 @@ const BeforeLoggedIn = () => {
   // decide wether to show Lock or Register Pin or App
   useEffect(() => {
     if (showLock) {
-      const childrenRoutes = routeState?.routes?.[0]?.state;
-      if (childrenRoutes) {
-        const {routes, index} = childrenRoutes
-        if (index && routes?.[index].name !== ScreenNames.Lock) {
-          navigation.dispatch(StackActions.push(ScreenNames.Lock))
-        }
-      }
+      navigation.dispatch(StackActions.push(ScreenNames.Lock))
     } else if (showRegisterPin) {
       // Show passcode registration screen
       navigation.navigate(ScreenNames.DeviceAuth);
@@ -96,7 +94,6 @@ const BeforeLoggedIn = () => {
 
   /* This watches app state change and locks app when necessary */
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    // TODO: android is missing here
     if (Platform.OS === 'ios' && appState.match(/active/) && nextAppState.match(/inactive/)) {
       if (isAuthSet) {
         if (!isPopupRef.current) {
@@ -113,6 +110,11 @@ const BeforeLoggedIn = () => {
     <BeforeLoggedInStack.Navigator
       headerMode="none"
     >
+      <BeforeLoggedInStack.Screen
+        name="Idle"
+        component={Idle}
+        options={{...settingsScreenTransitionOptions, gestureEnabled: false}}
+      />
       <BeforeLoggedInStack.Screen
         name={ScreenNames.Lock}
         component={Lock}
