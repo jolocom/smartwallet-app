@@ -1,26 +1,29 @@
-import { StackActions, useNavigation } from '@react-navigation/native';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { AppStateStatus, Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import ScreenContainer from '~/components/ScreenContainer';
-import { useSyncStorageAttributes } from '~/hooks/attributes';
-import useTermsConsent from '~/hooks/consent';
-import { useSyncStorageCredentials } from '~/hooks/credentials';
+import { StackActions, useNavigation } from '@react-navigation/native'
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack'
+import React, { useCallback, useEffect, useRef } from 'react'
+import { AppStateStatus, Platform } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useSyncStorageAttributes } from '~/hooks/attributes'
+import useTermsConsent from '~/hooks/consent'
+import { useSyncStorageCredentials } from '~/hooks/credentials'
 
 import { useAppState } from '~/hooks/useAppState'
-import { setAppLocked } from '~/modules/account/actions';
-import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors';
-import { setPopup } from '~/modules/appState/actions';
-import { getIsPopup } from '~/modules/appState/selectors';
-import { resetInteraction } from '~/modules/interaction/actions';
-import { dismissLoader } from '~/modules/loader/actions';
-import { getLoaderState } from '~/modules/loader/selectors';
-import { ScreenNames } from '~/types/screens';
-import { Colors } from '~/utils/colors';
-import LoggedInTabs from '../LoggedIn';
-import DeviceAuthentication from '../Modals/DeviceAuthentication';
-import Lock from '../Modals/Lock';
+import { setAppLocked } from '~/modules/account/actions'
+import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
+import { setPopup } from '~/modules/appState/actions'
+import { getIsPopup } from '~/modules/appState/selectors'
+import { resetInteraction } from '~/modules/interaction/actions'
+import { dismissLoader } from '~/modules/loader/actions'
+import { getLoaderState } from '~/modules/loader/selectors'
+import { ScreenNames } from '~/types/screens'
+import { Colors } from '~/utils/colors'
+import LoggedInTabs from '../LoggedIn'
+import DeviceAuthentication from '../Modals/DeviceAuthentication'
+import Lock from '../Modals/Lock'
 
 const BeforeLoggedInStack = createStackNavigator()
 
@@ -34,8 +37,8 @@ const settingsScreenTransitionOptions = {
     },
   }),
   cardStyle: {
-    backgroundColor: Colors.mainBlack
-  }
+    backgroundColor: Colors.mainBlack,
+  },
 }
 
 const Idle = () => {
@@ -43,15 +46,15 @@ const Idle = () => {
 }
 
 const BeforeLoggedIn = () => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const isAuthSet = useSelector(isLocalAuthSet);
-  const isAppLocked = useSelector(getIsAppLocked);
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const isAuthSet = useSelector(isLocalAuthSet)
+  const isAppLocked = useSelector(getIsAppLocked)
 
-  const {isVisible: isLoaderVisible} = useSelector(getLoaderState)
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
-  const showLock = isAppLocked && isAuthSet;
-  const showRegisterPin = !isAuthSet;
+  const showLock = isAppLocked && isAuthSet
+  const showRegisterPin = !isAuthSet
   const showTabs = !isAppLocked && isAuthSet
 
   const syncAttributes = useSyncStorageAttributes()
@@ -70,17 +73,15 @@ const BeforeLoggedIn = () => {
   // decide wether to show Lock or Register Pin or App
   useEffect(() => {
     if (!isLoaderVisible) {
-      
-    if (showLock) {
-      navigation.dispatch(StackActions.push(ScreenNames.Lock))      
-    } else if (showRegisterPin) {
-      // Show passcode registration screen
-      navigation.navigate(ScreenNames.DeviceAuth);
-    } else if (showTabs) {
-      navigation.navigate(ScreenNames.LoggedIn)
+      if (showLock) {
+        navigation.dispatch(StackActions.push(ScreenNames.Lock))
+      } else if (showRegisterPin) {
+        // Show passcode registration screen
+        navigation.navigate(ScreenNames.DeviceAuth)
+      } else if (showTabs) {
+        navigation.navigate(ScreenNames.LoggedIn)
+      }
     }
-    }
-      
   }, [isAppLocked, isAuthSet, isLoaderVisible])
 
   const dismissOverlays = useCallback(() => {
@@ -88,7 +89,7 @@ const BeforeLoggedIn = () => {
     dispatch(resetInteraction())
   }, [])
 
-/* All about when lock screen comes up - START */
+  /* All about when lock screen comes up - START */
   const isPopup = useSelector(
     getIsPopup,
   ) /* isPopup is used as a workaround for Android app state change */
@@ -101,7 +102,11 @@ const BeforeLoggedIn = () => {
 
   /* This watches app state change and locks app when necessary */
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    if (Platform.OS === 'ios' && appState.match(/active/) && nextAppState.match(/inactive/)) {
+    if (
+      Platform.OS === 'ios' &&
+      appState.match(/active/) &&
+      nextAppState.match(/inactive/)
+    ) {
       if (isAuthSet) {
         if (!isPopupRef.current) {
           dispatch(setAppLocked(true))
@@ -111,12 +116,10 @@ const BeforeLoggedIn = () => {
     }
     appState = nextAppState
   })
-/* All about when lock screen comes up - END */
-  
+  /* All about when lock screen comes up - END */
+
   return (
-    <BeforeLoggedInStack.Navigator
-      headerMode="none"
-    >
+    <BeforeLoggedInStack.Navigator headerMode="none">
       {/* NOTE: idle screen functions as a background:
       when a user is redirected from LoggedOut to BeforeLoggedIn
       we don't want to see noticeable screen switching
@@ -125,25 +128,25 @@ const BeforeLoggedIn = () => {
       <BeforeLoggedInStack.Screen
         name="Idle"
         component={Idle}
-        options={{...settingsScreenTransitionOptions, gestureEnabled: false}}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
       <BeforeLoggedInStack.Screen
         name={ScreenNames.Lock}
         component={Lock}
-        options={{...settingsScreenTransitionOptions, gestureEnabled: false}}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
       <BeforeLoggedInStack.Screen
         name={ScreenNames.LoggedIn}
         component={LoggedInTabs}
-        options={{gestureEnabled: false}}
+        options={{ gestureEnabled: false }}
       />
       <BeforeLoggedInStack.Screen
         name={ScreenNames.DeviceAuth}
         component={DeviceAuthentication}
-        options={{...settingsScreenTransitionOptions, gestureEnabled: false}}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
     </BeforeLoggedInStack.Navigator>
   )
 }
 
-export default BeforeLoggedIn;
+export default BeforeLoggedIn
