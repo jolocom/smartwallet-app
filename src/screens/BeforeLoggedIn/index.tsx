@@ -3,7 +3,6 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import React, { useCallback, useEffect, useRef } from 'react';
 import { AppStateStatus, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import ScreenContainer from '~/components/ScreenContainer';
 import { useSyncStorageAttributes } from '~/hooks/attributes';
 import useTermsConsent from '~/hooks/consent';
 import { useSyncStorageCredentials } from '~/hooks/credentials';
@@ -21,7 +20,7 @@ import LoggedInTabs from '../LoggedIn';
 import DeviceAuthentication from '../Modals/DeviceAuthentication';
 import Lock from '../Modals/Lock';
 
-const AfterIdentityStack = createStackNavigator()
+const BeforeLoggedInStack = createStackNavigator()
 
 const settingsScreenTransitionOptions = {
   ...Platform.select({
@@ -37,8 +36,17 @@ const settingsScreenTransitionOptions = {
   }
 }
 
-// TODO: move fetching of credentials and logic for showing consent somewhere else 
-const UndeterminedForNow = () => {
+const BeforeLoggedIn = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const isAuthSet = useSelector(isLocalAuthSet);
+  const isAppLocked = useSelector(getIsAppLocked);
+  const routeState = useNavigationState(state => state);
+
+  const showLock = isAppLocked && isAuthSet;
+  const showRegisterPin = !isAuthSet;
+  const showTabs = !isAppLocked && isAuthSet
+
   const syncAttributes = useSyncStorageAttributes()
   const syncCredentials = useSyncStorageCredentials()
   const { checkConsent } = useTermsConsent()
@@ -52,29 +60,13 @@ const UndeterminedForNow = () => {
     syncCredentials()
   }, [])
 
-  return (
-    <ScreenContainer />
-  )
-}
-
-export default () => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const isAuthSet = useSelector(isLocalAuthSet);
-  const isAppLocked = useSelector(getIsAppLocked);
-  const routeState = useNavigationState(state => state);
-  console.log({routeState});
-
-  const showLock = isAppLocked && isAuthSet;
-  const showRegisterPin = !isAuthSet;
-  const showTabs = !isAppLocked && isAuthSet
-
   // decide wether to show Lock or Register Pin or App
   useEffect(() => {
     if (showLock) {
       const childrenRoutes = routeState?.routes?.[0]?.state;
       if (childrenRoutes) {
-        if (childrenRoutes.routes[childrenRoutes.index].name !== ScreenNames.Lock) {
+        const {routes, index} = childrenRoutes
+        if (index && routes?.[index].name !== ScreenNames.Lock) {
           navigation.dispatch(StackActions.push(ScreenNames.Lock))
         }
       }
@@ -118,24 +110,26 @@ export default () => {
 /* All about when lock screen comes up - END */
   
   return (
-    <AfterIdentityStack.Navigator
+    <BeforeLoggedInStack.Navigator
       headerMode="none"
     >
-      <AfterIdentityStack.Screen
+      <BeforeLoggedInStack.Screen
         name={ScreenNames.Lock}
         component={Lock}
         options={{...settingsScreenTransitionOptions, gestureEnabled: false}}
       />
-      <AfterIdentityStack.Screen
+      <BeforeLoggedInStack.Screen
         name={ScreenNames.LoggedIn}
         component={LoggedInTabs}
         options={{gestureEnabled: false}}
       />
-      <AfterIdentityStack.Screen
+      <BeforeLoggedInStack.Screen
         name={ScreenNames.DeviceAuth}
         component={DeviceAuthentication}
         options={{...settingsScreenTransitionOptions, gestureEnabled: false}}
       />
-    </AfterIdentityStack.Navigator>
+    </BeforeLoggedInStack.Navigator>
   )
 }
+
+export default BeforeLoggedIn;

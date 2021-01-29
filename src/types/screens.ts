@@ -10,7 +10,7 @@ export enum ScreenNames {
   SeedPhraseRepeat = 'SeedPhraseRepeat',
 
   // After identity
-  AfterIdentity = 'AfterIdentity',
+  BeforeLoggedIn = 'BeforeLoggedIn',
 
   // Logged In Tabs
   LoggedIn = 'LoggedIn',
