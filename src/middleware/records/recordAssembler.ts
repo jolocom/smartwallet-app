@@ -14,6 +14,15 @@ import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
 
+interface IRecordAssembler {
+  messageTypes: string[]
+  flowType: FlowType
+  summary: InteractionSummary
+  lastMessageDate: number
+  expirationDate: number
+  config: Partial<Record<FlowType, IRecordConfig>>
+}
+
 export class RecordAssembler {
   private config: IRecordConfig | undefined
   private messageTypes: string[]
@@ -25,14 +34,14 @@ export class RecordAssembler {
   private status: IRecordStatus
   private steps: IRecordSteps[] = []
 
-  constructor(
-    messageTypes: string[],
-    flowType: FlowType,
-    summary: InteractionSummary,
-    lastMessageDate: number,
-    expirationDate: number,
-    config: Partial<Record<FlowType, IRecordConfig>>,
-  ) {
+  constructor({
+    messageTypes,
+    flowType,
+    summary,
+    expirationDate,
+    lastMessageDate,
+    config,
+  }: IRecordAssembler) {
     this.messageTypes = messageTypes
     this.flowType = flowType
     this.summary = summary
@@ -136,20 +145,26 @@ export class RecordAssembler {
   private assembleCredentialShareSteps() {
     return this.assembleAllSteps<CredentialRequestFlowState>(
       (type, i, state) => {
+        const areCredsSupplied = !!state.providedCredentials.length
+
+        const requestedCreds = state.constraints[0].requestedCredentialTypes
+          .map((types) => getCredentialType(types))
+          .join(',  ')
+
+        const suppliedCreds = state.providedCredentials[0].suppliedCredentials
+          .map((c) => c.name)
+          .join(',  ')
+
         switch (type) {
           case InteractionType.CredentialRequest:
             return {
               title: this.getFinishedStepTitle(i),
-              description: state.constraints[0].requestedCredentialTypes
-                .map((types) => getCredentialType(types))
-                .join(',  '),
+              description: areCredsSupplied ? suppliedCreds : requestedCreds,
             }
           case InteractionType.CredentialResponse:
             return {
               title: this.getFinishedStepTitle(i),
-              description: state.providedCredentials[0].suppliedCredentials
-                .map((c) => c.name)
-                .join(',  '),
+              description: suppliedCreds,
             }
           default:
             throw new Error('Wrong interaction type for flow')

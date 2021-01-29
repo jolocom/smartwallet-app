@@ -43,14 +43,14 @@ export const useHistory = () => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
     const messageTypes = interaction.getMessages().map((m) => m.interactionType)
     const { expires, issued } = interaction.lastMessage
-    const recordAssembler = new RecordAssembler(
+    const recordAssembler = new RecordAssembler({
       messageTypes,
-      interaction.flow.type,
-      interaction.getSummary(),
-      issued,
-      expires,
-      recordConfig,
-    )
+      flowType: interaction.flow.type,
+      summary: interaction.getSummary(),
+      lastMessageDate: issued,
+      expirationDate: expires,
+      config: recordConfig,
+    })
 
     return recordAssembler.getRecordDetails()
   }
