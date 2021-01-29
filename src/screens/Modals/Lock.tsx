@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
 import { useBackHandler } from '@react-native-community/hooks'
-import { useNavigation } from '@react-navigation/native'
 
 import { strings } from '~/translations/strings'
 
@@ -15,18 +14,12 @@ import Passcode from '~/components/Passcode'
 
 const Lock = () => {
   const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
-
   const dispatch = useDispatch()
-  const { authenticate, getEnrolledBiometry } = useBiometry()
+  const { authenticate, getEnrolledBiometry } = useBiometry();
 
-  const navigation = useNavigation()
 
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
-    navigation.goBack()
-    // navigation.dispatch(
-    //   StackActions.replace(ScreenNames.LoggedIn, {screen: ScreenNames.Tabs})
-    // );
   }, [])
 
   /* START -> Biometry authentication */

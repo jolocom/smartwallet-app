@@ -6,7 +6,7 @@ const initialState: AccountState = {
   loggedIn: false,
   isLocalAuthSet: false, // this value indicates where user went through local auth registration
   showTermsConsent: false,
-  isAppLocked: false,
+  isAppLocked: true,
 }
 
 const reducer = (
