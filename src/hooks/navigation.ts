@@ -1,7 +1,7 @@
 import { useNavigation, StackActions } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
-import { setLocalAuth } from '~/modules/account/actions'
+import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
 
 interface NestedSceenI {
   screen?: ScreenNames
@@ -46,6 +46,7 @@ export const useRedirectToLoggedIn = () => {
 
   return () => {
     dispatch(setLocalAuth(true))
+    dispatch(setAppLocked(false))
     redirectToLoggedIn()
   }
 }
