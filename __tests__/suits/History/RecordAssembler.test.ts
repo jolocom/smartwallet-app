@@ -3,6 +3,8 @@ import { FlowType } from '@jolocom/sdk'
 import { recordConfig } from '~/config/records'
 import { IRecordStatus } from '~/types/records'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
+import truncateDid from '~/utils/truncateDid'
+import { capitalizeWord } from '~/utils/stringUtils'
 
 const addDays = (days: number) => {
   var result = new Date()
@@ -16,7 +18,7 @@ const subDays = (days: number) => {
   return result.getTime()
 }
 
-const buildSummary = (state: any) => ({
+const buildSummary = <T>(state: T) => ({
   summary: { initiator: { did: 'test' }, state },
 })
 
@@ -63,15 +65,12 @@ const genericRequestArgs = {
     providedCredentials: [
       { suppliedCredentials: [{ name: 'test-cred-name' }] },
     ],
-    requestedCredentials: [
-      { requestedCredentialTypes: [{ name: 'test-cred-type' }] },
-    ],
+    constraints: [{ requestedCredentialTypes: [{ name: 'test-cred-type' }] }],
   }),
-  flowType: FlowType.CredentialOffer,
+  flowType: FlowType.CredentialShare,
   messageTypes: [
-    InteractionType.CredentialOfferRequest,
-    InteractionType.CredentialOfferResponse,
-    InteractionType.CredentialsReceive,
+    InteractionType.CredentialRequest,
+    InteractionType.CredentialResponse,
   ],
 }
 
@@ -145,17 +144,109 @@ describe('Record Assembler', () => {
         it('finished', () => {
           const assembler = new RecordAssembler({
             ...genericOfferArgs,
-            messageTypes: [
-              InteractionType.CredentialOfferRequest,
-              InteractionType.CredentialOfferResponse,
-              InteractionType.CredentialsReceive,
-            ],
           })
           expect(assembler.getRecordDetails().status).toEqual(
             IRecordStatus.finished,
           )
         })
       })
+
+      describe('credential request', () => {
+        it('pending', () => {
+          const assembler = new RecordAssembler({
+            ...genericRequestArgs,
+            messageTypes: [InteractionType.CredentialRequest],
+          })
+          expect(assembler.getRecordDetails().status).toEqual(
+            IRecordStatus.pending,
+          )
+        })
+        it('finished', () => {
+          const assembler = new RecordAssembler({
+            ...genericRequestArgs,
+          })
+          expect(assembler.getRecordDetails().status).toEqual(
+            IRecordStatus.finished,
+          )
+        })
+      })
+    })
+  })
+
+  describe('Steps', () => {
+    it('should add an additional step if the record was un-finished', () => {
+      const assembler = new RecordAssembler({
+        ...genericAuthArgs,
+        messageTypes: [InteractionType.Authentication],
+        expirationDate: subDays(1),
+      })
+      const steps = assembler.getRecordDetails().steps
+
+      expect(steps[steps.length - 1]).toStrictEqual({
+        title: recordConfig.Authentication?.steps.unfinished[1],
+        description: 'Expired',
+      })
+    })
+
+    it('should return the correct authentication steps', () => {
+      const assembler = new RecordAssembler(genericAuthArgs)
+
+      const expectedSteps = recordConfig.Authentication?.steps.finished.map(
+        (title) => ({
+          title,
+          description: truncateDid(genericAuthArgs.summary.initiator.did),
+        }),
+      )
+
+      expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
+    })
+
+    it('should return the correct authorization steps', () => {
+      const assembler = new RecordAssembler(genericAuthzArgs)
+
+      const expectedSteps = recordConfig.Authorization?.steps.finished.map(
+        (title) => ({
+          title,
+          description: capitalizeWord(genericAuthzArgs.summary.state.action),
+        }),
+      )
+
+      expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
+    })
+
+    it('should return the correct offer steps', () => {
+      const assembler = new RecordAssembler(genericOfferArgs)
+
+      const expectedSteps = recordConfig.CredentialOffer?.steps.finished.map(
+        (title, i) => ({
+          title,
+          description:
+            i !== 2
+              ? genericOfferArgs.summary.state.offerSummary
+                  .map((s) => s.type)
+                  .join(', ')
+              : genericOfferArgs.summary.state.issued
+                  .map((s) => s.name)
+                  .join(', '),
+        }),
+      )
+
+      expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
+    })
+
+    it('should return the correct share steps', () => {
+      const assembler = new RecordAssembler(genericRequestArgs)
+
+      const expectedSteps = recordConfig.CredentialShare?.steps.finished.map(
+        (title) => ({
+          title,
+          description: genericRequestArgs.summary.state.providedCredentials[0].suppliedCredentials
+            .map((c) => c.name)
+            .join(', '),
+        }),
+      )
+
+      expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
     })
   })
 })
