@@ -23,6 +23,7 @@ import {
 import { showBiometry } from './module/deviceAuthActions'
 import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 import Passcode from '~/components/Passcode'
+import { useToasts } from '~/hooks/toasts'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -36,6 +37,7 @@ const RegisterPin = () => {
   const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
+  const {scheduleWarning} = useToasts()
 
   const handlePasscodeSubmit = useCallback((pin) => {
     setSelectedPasscode(pin)
@@ -43,6 +45,8 @@ const RegisterPin = () => {
   }, [])
 
   const redirectTo = () => {
+    console.log('redirecting');
+    
     if (biometryType) {
       dispatchToLocalAuth(showBiometry())
     } else {
@@ -58,11 +62,15 @@ const RegisterPin = () => {
           service: PIN_SERVICE,
           storage: Keychain.STORAGE_TYPE.AES,
         })
-        displaySuccessLoader()
+        displaySuccessLoader(redirectTo)
       } catch (err) {
-        console.log({ err })
-      }
-      redirectTo()
+        // an error with storing PIN to the keychain -> redirect back to create passcode
+        scheduleWarning({
+          title: 'Try again',
+          message: 'We could not store your passcode. Please try again'
+        })
+        resetPasscode();
+      } 
     } else {
       throw new Error("Pins don't match")
     }

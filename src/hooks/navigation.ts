@@ -42,11 +42,9 @@ export const useReplaceWith = (screenName: ScreenNames) => {
 
 export const useRedirectToLoggedIn = () => {
   const dispatch = useDispatch()
-  const redirectToLoggedIn = useRedirectTo(ScreenNames.LoggedIn)
 
   return () => {
-    dispatch(setLocalAuth(true))
     dispatch(setAppLocked(false))
-    redirectToLoggedIn()
+    dispatch(setLocalAuth(true))
   }
 }
