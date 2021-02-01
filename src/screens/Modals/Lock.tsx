@@ -12,7 +12,7 @@ import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useAppState } from '~/hooks/useAppState'
-import { AppStateStatus, Platform } from 'react-native'
+import {AppStateStatus } from 'react-native'
 
 const Lock = () => {
   const dispatch = useDispatch()
@@ -25,10 +25,9 @@ const Lock = () => {
 
   // do not run biometry authentication when the app is in the background
   useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    if (appState.match(/background/) && nextAppState.match(/active/)) {
+    if (appState === 'background' && nextAppState === 'active') {
       promptBiometry()
     }
-    appState = nextAppState
   })
 
   const handleBiometryAuthentication = async () => {

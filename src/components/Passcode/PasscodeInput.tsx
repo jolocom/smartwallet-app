@@ -29,7 +29,7 @@ const PasscodeInput: React.FC = () => {
   useFocusEffect(() => inputRef.current?.focus())
 
   useAppState((appState, nextAppState) => {
-    if (appState.match(/active/) && nextAppState === 'inactive') {
+    if (appState === "active" && nextAppState === 'inactive') {
       // this is when the alert to use Biometry appears
       inputRef.current?.blur()
     }
