@@ -27,16 +27,24 @@ const SectionForm: React.FC<ISectionForm> = ({ config, renderFormHeader, renderS
     <Block customStyle={{paddingHorizontal: 20, paddingVertical: 25}}>
       {renderFormHeader ? renderFormHeader(state) : null}
       <MoveToNext>
-      {Object.keys(state).map(sectionKey => {
+      {Object.keys(state).map((sectionKey, idxKey) => {
         const section = state[sectionKey];
         return (
           <>
             {renderSectionHeader ? renderSectionHeader(section) : null}
-              {section.fields.map(f => (
+            {section.fields.map((f, idx) => {
+              return (
                 <MoveToNext.InputsCollector key={f.key}>
-                  <Input.Block value={f.value} updateInput={(val) => handleFieldValueChange(sectionKey, f.key, val)}  />
+                  <Input.Block
+                    autoFocus={idxKey === 0 && idx === 0}
+                    value={f.value}
+                    updateInput={(val) => handleFieldValueChange(sectionKey, f.key, val)}
+                    // TODO: address type issues
+                    placeholder={f.label}
+                    {...f.keyboardOptions}
+                  />
                 </MoveToNext.InputsCollector>
-              ))}
+              )})}
               {renderSectionFooter ? renderSectionFooter(section) : null}
           </>
         )
