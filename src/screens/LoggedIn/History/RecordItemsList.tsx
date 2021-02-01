@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
 
 import { useTabs } from '~/components/Tabs/Tabs'
@@ -15,11 +15,13 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
   flows,
   isActiveList,
 }) => {
+  const sectionListRef = useRef<SectionList | null>(null)
   const { updateActiveSection } = useRecord()
 
   const [activeSection, setActiveSection] = useState('')
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
+  const [focusedItem, setFocusedItem] = useState<string | null>(null)
 
   const { getInteractions: getInteractionTokens } = useHistory()
   const { scheduleErrorWarning } = useToasts()
@@ -76,8 +78,28 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
     }
   }, [page, JSON.stringify(interactions)])
 
+  const handleFocusItem = (id: string, index: number, section: string) => {
+    const isFocused = focusedItem === id
+    setFocusedItem(isFocused ? null : id)
+
+    if (!isFocused) {
+      const sectionIndex = sections.findIndex((s) => s.title === section)
+      setTimeout(
+        () =>
+          sectionListRef.current?.scrollToLocation({
+            sectionIndex,
+            itemIndex: index,
+            viewPosition: 0,
+            animated: true,
+          }),
+        100,
+      )
+    }
+  }
+
   return (
-    <SectionList
+    <SectionList<string>
+      ref={sectionListRef}
       sections={sections}
       showsVerticalScrollIndicator={false}
       keyExtractor={(item, i) => 'id:' + item + i}
@@ -85,12 +107,19 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
       onEndReachedThreshold={0.9}
       onViewableItemsChanged={handleSectionChange}
       onEndReached={handleEndReached}
-      contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
+      contentContainerStyle={{ marginTop: 32, paddingBottom: '100%' }}
       renderSectionHeader={({ section }) => (
         <Record.Header title={section.title} />
       )}
       renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
-      renderItem={({ item, index }) => <RecordItem key={index} id={item} />}
+      renderItem={({ item, index, section }) => (
+        <RecordItem
+          key={index}
+          isFocused={focusedItem === item}
+          id={item}
+          onDropdown={() => handleFocusItem(item, index, section.title)}
+        />
+      )}
       stickySectionHeadersEnabled={false}
     />
   )

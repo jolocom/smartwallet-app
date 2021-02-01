@@ -90,7 +90,8 @@ const seedphrase = {
   SEEDPHRASE_INFO_HIGHLIGHT_4:
     'We strongly recommend storing your set of words in a safe place. Writing it down or using an encrypted password manager are the best options.',
   SEEDPHRASE_INFO_5: 'Do not share your secret phrase with anyone.',
-  DRAG_AND_DROP_THE_WORDS: 'Drag and drop the words until they are in the correct order'
+  DRAG_AND_DROP_THE_WORDS:
+    'Drag and drop the words until they are in the correct order',
 }
 
 const deviceAuthentication = {
@@ -306,6 +307,21 @@ const history = {
   ALL: 'All',
   SHARED: 'Shared',
   RECEIVED: 'Received',
+  AUTHENTICATION: 'Authentication',
+  REQUESTED: 'Requested',
+  CONFIRMED: 'Confirmed',
+  NOT_REQUESTED: 'Not requested',
+  NOT_CONFIRMED: 'Not confirmed',
+  AUTHORIZATION: 'Authorization',
+  AUTHORIZED: 'Authorized',
+  NOT_AUTHORIZED: 'Not authorized',
+  OFFERED: 'Offered',
+  SELECTED: 'Selected',
+  ISSUED: 'Issued',
+  NOT_OFFERED: 'Not offered',
+  NOT_SELECTED: 'Not selected',
+  NOT_ISSUED: 'Not issued',
+  NOT_SHARED: 'Not shared',
 }
 
 const identity = {
