@@ -145,7 +145,7 @@ export class RecordAssembler {
                 .map((types) => getCredentialType(types))
                 .join(',  '),
             }
-          case InteractionType.CredentialOfferResponse:
+          case InteractionType.CredentialResponse:
             return {
               title: this.getFinishedStepTitle(i),
               description: state.providedCredentials[0].suppliedCredentials
