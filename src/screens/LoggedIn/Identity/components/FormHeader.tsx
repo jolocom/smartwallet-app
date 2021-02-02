@@ -3,16 +3,15 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
-import { useForm } from './Form'
 
 interface IAction {
-  onPress: () => void
+  onPress: Function
   color: Colors
 }
 
 export interface IFormHeaderComposition {
-  Cancel: React.FC
-  Done: React.FC
+  Cancel: React.FC<{ onCancel: Function }>
+  Done: React.FC<{ onSubmit: Function }>
 }
 
 const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
@@ -27,8 +26,7 @@ const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
   )
 }
 
-const Cancel = () => {
-  const { onCancel = () => {} } = useForm()
+const Cancel: React.FC<{ onCancel: Function }> = ({ onCancel }) => {
   return (
     <ActionBtn
       onPress={onCancel}
@@ -37,8 +35,7 @@ const Cancel = () => {
     />
   )
 }
-const Done = () => {
-  const { onSubmit = () => {} } = useForm()
+const Done: React.FC<{ onSubmit: Function }> = ({ onSubmit }) => {
   return (
     <ActionBtn
       onPress={onSubmit}
