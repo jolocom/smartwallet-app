@@ -39,7 +39,6 @@ const SectionForm: React.FC<ISectionForm> = ({ config, renderFormHeader, renderS
                     autoFocus={idxKey === 0 && idx === 0}
                     value={f.value}
                     updateInput={(val) => handleFieldValueChange(sectionKey, f.key, val)}
-                    // TODO: address type issues
                     placeholder={f.label}
                     {...f.keyboardOptions}
                   />

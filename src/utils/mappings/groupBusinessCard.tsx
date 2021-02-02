@@ -9,18 +9,22 @@ import {
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 
 export type TClaimGroups = Record<string, Group>
-export type TField = Pick<IAttributeClaimFieldWithValue, 'key' | 'value'>
+// export type TField = Pick<IAttributeClaimFieldWithValue, 'key' | 'value'>
 
 export class Group {
   label: string
-  fields: TField[]
-  constructor(label: string, fields?: TField[]) {
+  fields: IAttributeClaimFieldWithValue[]
+  constructor(label: string, fields?: IAttributeClaimFieldWithValue[]) {
     this.label = label
     this.fields = fields ?? []
   }
   public addField(fieldKey: ClaimKeys, type: AttributeTypes) {
     const fieldConfig = attributeConfig[type].fields.find(f => f.key === fieldKey);
-    this.fields = [...this.fields, { ...fieldConfig, value: '' }]
+    if (!fieldConfig) {
+      this.fields = [...this.fields, {key: fieldKey, value: '', label: fieldKey, keyboardOptions: {keyboardType: 'default', autoCapitalize: 'none'}}]
+    } else {
+      this.fields = [...this.fields, { ...fieldConfig, value: '' }]
+    }
     return this
   }
   // Update field value individually
