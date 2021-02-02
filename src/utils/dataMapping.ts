@@ -14,6 +14,7 @@ import {
   ShareUICredential,
   AttributeTypes,
   IAttributeClaimFieldWithValue,
+  IAttributeClaimField,
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
@@ -130,11 +131,12 @@ export const uiCredentialToShareCredential = (
   return shareCred
 }
 
-export const mapFormFields = (
-  fields: IAttributeClaimFieldWithValue[],
-): ClaimValues => {
-  return fields.reduce<ClaimValues>((acc, v) => {
-    acc[v.key] = v.value
+export const assembleFormInitialValues = (
+  fields: Array<IAttributeClaimField | IAttributeClaimFieldWithValue>,
+) => {
+  return fields.reduce<Record<string, string>>((acc, f) => {
+    // @ts-ignore
+    acc[f.key] = f.value ?? ''
     return acc
   }, {})
 }

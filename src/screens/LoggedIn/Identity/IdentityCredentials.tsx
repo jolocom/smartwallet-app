@@ -31,6 +31,7 @@ import EmptyPlaceholder, {
   IdentityPlaceholderTypes,
 } from './components/EmptyPlaceholder'
 import FormHeader from './components/FormHeader'
+import { assembleFormInitialValues } from '~/utils/dataMapping'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
@@ -198,11 +199,7 @@ const IdentityCredentials = () => {
   }
 
   const formInitial = formConfig
-    ? formConfig.fields.reduce<Record<string, string>>((acc, f) => {
-        // @ts-ignore
-        acc[f.key] = f.value ?? ''
-        return acc
-      }, {})
+    ? assembleFormInitialValues(formConfig.fields)
     : {}
 
   return (

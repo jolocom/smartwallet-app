@@ -7,9 +7,7 @@ import {
   AttributeTypes,
   ClaimKeys,
   IAttributeClaimField,
-  IAttributeClaimFieldWithValue,
 } from '~/types/credentials'
-import { mapFormFields } from '~/utils/dataMapping'
 import Wizard from '.'
 
 const getFormSlice = (...claimskeys: ClaimKeys[]) => {
@@ -53,23 +51,23 @@ const WIZARD_CONFIG = {
 const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
   onFormSubmit,
 }) => {
-  const [fields, setFields] = useState<IAttributeClaimFieldWithValue[]>([])
+  //const [fields, setFields] = useState<IAttributeClaimFieldWithValue[]>([])
+  const [fields, setFields] = useState<Record<string, string>>({})
 
   const createAttribute = useCreateAttributes()
 
-  const addFieldValues = (formFields: IAttributeClaimFieldWithValue[]) => {
-    setFields((prevState) => [...prevState, ...formFields])
+  const addFieldValues = (fields: Record<string, string>) => {
+    setFields((prevState) => ({ ...prevState, ...fields }))
   }
 
   const createNewAttribute = useCallback(async () => {
-    const mappedFields = mapFormFields(fields)
-    await createAttribute(AttributeTypes.businessCard, mappedFields)
+    await createAttribute(AttributeTypes.businessCard, fields)
     onFormSubmit()
   }, [JSON.stringify(fields)])
 
   useEffect(() => {
     if (
-      fields.length ===
+      Object.keys(fields).length ===
       attributeConfig[AttributeTypes.businessCard].fields.length
     ) {
       createNewAttribute()
