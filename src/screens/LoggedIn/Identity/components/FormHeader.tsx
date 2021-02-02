@@ -5,13 +5,13 @@ import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 
 interface IAction {
-  onPress: Function
+  onPress: () => void
   color: Colors
 }
 
 export interface IFormHeaderComposition {
-  Cancel: React.FC<{ onCancel: Function }>
-  Done: React.FC<{ onSubmit: Function }>
+  Cancel: React.FC<{ onCancel: () => void }>
+  Done: React.FC<{ onSubmit: () => void }>
 }
 
 const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
@@ -26,7 +26,7 @@ const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
   )
 }
 
-const Cancel: React.FC<{ onCancel: Function }> = ({ onCancel }) => {
+const Cancel: IFormHeaderComposition['Cancel'] = ({ onCancel }) => {
   return (
     <ActionBtn
       onPress={onCancel}
@@ -35,7 +35,7 @@ const Cancel: React.FC<{ onCancel: Function }> = ({ onCancel }) => {
     />
   )
 }
-const Done: React.FC<{ onSubmit: Function }> = ({ onSubmit }) => {
+const Done: IFormHeaderComposition['Done'] = ({ onSubmit }) => {
   return (
     <ActionBtn
       onPress={onSubmit}
