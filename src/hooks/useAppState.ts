@@ -1,6 +1,8 @@
 import { useRef, useEffect } from 'react'
 import { AppState, AppStateStatus } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useAppState as useAppStateComm } from '@react-native-community/hooks'
+
 import { isLocalAuthSet } from '~/modules/account/selectors'
 
 export const useAppState = (
@@ -23,3 +25,17 @@ export const useAppState = (
     }
   }, [isAuthSet])
 }
+
+export const useAppStateNew = () => {
+  const prevAppState = useRef<AppStateStatus | undefined>(undefined)
+  const currentAppState = useAppStateComm();
+
+  useEffect(() => {
+    prevAppState.current = currentAppState;
+  })
+
+  return {
+    currentAppState,
+    prevAppState: prevAppState.current
+  }
+} 
