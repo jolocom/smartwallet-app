@@ -12,6 +12,7 @@ import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useAppStateNew } from '~/hooks/useAppState'
+import { setPopup } from '~/modules/appState/actions'
 
 const Lock = () => {
   const dispatch = useDispatch()
@@ -40,6 +41,7 @@ const Lock = () => {
     
   const handleBiometryAuthentication = async () => {
     try {
+      dispatch(setPopup(true));
       /* in case user disabled biometrics we don't want to run authenticate */
       const { available, biometryType } = await getEnrolledBiometry()
       
@@ -51,6 +53,8 @@ const Lock = () => {
       }
     } catch (err) {
       console.log('Error in authenticating with biometry on Lock', { err })
+    } finally {
+      dispatch(setPopup(false))
     }
   }
 

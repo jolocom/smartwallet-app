@@ -4,14 +4,14 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { AppStateStatus, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import useTermsConsent from '~/hooks/consent'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 
-import { useAppState } from '~/hooks/useAppState'
+import { useAppStateNew } from '~/hooks/useAppState'
 import { setAppLocked } from '~/modules/account/actions'
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { setPopup } from '~/modules/appState/actions'
@@ -100,18 +100,18 @@ const BeforeLoggedIn = () => {
     isPopupRef.current = isPopup
   }, [isPopup])
 
-  /* This watches app state change and locks app when necessary */
-  useAppState((appState: AppStateStatus, nextAppState: AppStateStatus) => {
-    if (appState.match(/active/) && nextAppState.match(/inactive|background/)) {
+  const { currentAppState, prevAppState } = useAppStateNew();
+
+  useEffect(() => {
+    if (prevAppState && prevAppState.match(/active/) && currentAppState.match(/inactive|background/)) {
       if (isAuthSet) {
         if (!isPopupRef.current) {
           dispatch(setAppLocked(true))
           dismissOverlays()
         } else dispatch(setPopup(false))
-      }
+      }      
     }
-    appState = nextAppState
-  })
+  }, [currentAppState])
   /* All about when lock screen comes up - END */
 
   return (
