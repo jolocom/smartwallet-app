@@ -11,7 +11,7 @@ import { useSyncStorageAttributes } from '~/hooks/attributes'
 import useTermsConsent from '~/hooks/consent'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 
-import { useAppStateNew } from '~/hooks/useAppState'
+import { useGetAppStates } from '~/hooks/useAppState'
 import { setAppLocked } from '~/modules/account/actions'
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { setPopup } from '~/modules/appState/actions'
@@ -100,7 +100,7 @@ const BeforeLoggedIn = () => {
     isPopupRef.current = isPopup
   }, [isPopup])
 
-  const { currentAppState, prevAppState } = useAppStateNew();
+  const { currentAppState, prevAppState } = useGetAppStates();
 
   useEffect(() => {
     if (prevAppState && prevAppState.match(/active/) && currentAppState.match(/inactive|background/)) {

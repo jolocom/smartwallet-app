@@ -136,7 +136,6 @@ describe('With biometry', () => {
     
     await waitFor(() => {
       expect(mockBiometryAuthenticate).toBeCalledTimes(1);
-      expect(mockDispatchFn).toHaveBeenCalledTimes(1);
       expect(mockDispatchFn).toHaveBeenCalledWith(setAppLocked(false));
     })
   })
@@ -157,7 +156,7 @@ describe('With biometry', () => {
     AppState.emit('change', 'active')
 
     await waitFor(() => {
-      expect(mockDispatchFn).toHaveBeenCalledTimes(0)
+      expect(mockDispatchFn).not.toHaveBeenCalledWith(setAppLocked(true));
     })
   })
 })

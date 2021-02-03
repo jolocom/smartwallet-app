@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
-import { useAppStateNew } from '~/hooks/useAppState'
+import { useGetAppStates } from '~/hooks/useAppState'
 import { setPopup } from '~/modules/appState/actions'
 
 const Lock = () => {
@@ -19,8 +19,7 @@ const Lock = () => {
   const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
   const { authenticate, getEnrolledBiometry } = useBiometry();
 
-  // TODO: remove deprecate useAppState
-  const { currentAppState, prevAppState } = useAppStateNew();
+  const { currentAppState, prevAppState } = useGetAppStates();
 
   const promptedTimes = useRef(0)
 
