@@ -31,13 +31,14 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
 }) => {
   hideStatusBar && useHideStatusBar()
 
-  const { top } = useSafeArea()
+  const { top, bottom } = useSafeArea()
 
   return (
     <SafeAreaView
       style={{
         flex: 1,
         backgroundColor,
+        paddingBottom: isFullscreen ? 0 : bottom,
         paddingTop:
           hideStatusBar || isFullscreen
             ? 0
