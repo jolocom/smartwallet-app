@@ -38,12 +38,13 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
       style={{
         flex: 1,
         backgroundColor,
-        paddingTop: hideStatusBar
-          ? 0
-          : Platform.select({
-              android: StatusBar.currentHeight,
-              ios: top,
-            }),
+        paddingTop:
+          hideStatusBar || isFullscreen
+            ? 0
+            : Platform.select({
+                android: StatusBar.currentHeight,
+                ios: top,
+              }),
       }}
       mode="padding"
     >
