@@ -1,12 +1,6 @@
 import React from 'react'
-import { useHistory } from '~/hooks/history'
-import { FlowType } from '@jolocom/sdk'
-import { IRecordStatus } from '~/types/records'
-import { useTabs } from '~/components/Tabs/Tabs'
-import { waitFor, render, act, fireEvent } from '@testing-library/react-native'
-import Record from '~/screens/LoggedIn/History/Record'
+import { waitFor, act, fireEvent } from '@testing-library/react-native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import RecordItemsList from '~/screens/LoggedIn/History/RecordItemsList'
 import History from '~/screens/LoggedIn/History'
 
 jest.mock('../../../src/hooks/history', () => ({
@@ -40,15 +34,9 @@ jest.mock('../../../src/hooks/toasts', () => ({
 
 describe('Record', () => {
   it('should open the item details when pressed', async () => {
-    const { getByTestId, getAllByTestId, debug } = await waitFor(() =>
+    const { getByTestId, getAllByTestId } = await waitFor(() =>
       renderWithSafeArea(<History />),
     )
-    /*
-     *     const { getByTestId, getAllByTestId, debug } = renderWithSafeArea(
-     *       <History />,
-     *     ) */
-
-    debug()
 
     const item = getAllByTestId('record-item')[0]
     act(() => fireEvent(item, 'press'))
