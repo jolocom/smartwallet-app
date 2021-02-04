@@ -45,8 +45,6 @@ const RegisterPin = () => {
   }, [])
 
   const redirectTo = () => {
-    console.log('redirecting');
-    
     if (biometryType) {
       dispatchToLocalAuth(showBiometry())
     } else {
