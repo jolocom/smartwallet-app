@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View } from 'react-native'
 import Biometry, { BiometryType } from 'react-native-biometrics'
+import { useDispatch } from 'react-redux'
 
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useBiometry } from '~/hooks/biometry'
 import { useToasts } from '~/hooks/toasts'
+import { setPopup } from '~/modules/appState/actions'
 import { strings } from '~/translations/strings'
 import Option from './components/Option'
 
@@ -16,7 +18,9 @@ const EnableBiometryOption = () => {
   /* State represent what biometrics were enrolled */
   const [enrolledBiometry, setEnrolledBiometry] = useState<
     BiometryType | undefined
-  >(undefined)
+    >(undefined)
+  
+  const dispatch = useDispatch();
 
   const {
     resetBiometry,
@@ -59,6 +63,7 @@ const EnableBiometryOption = () => {
   }, [])
 
   const handleToggle = async () => {
+    dispatch(setPopup(true));
     try {
       if (!isOn) {
         /* if next state is on */
@@ -85,6 +90,8 @@ const EnableBiometryOption = () => {
         title: strings.WHOOPS,
         message: isOn ? strings.COULDNOT_DEACTIVATE : strings.COULDNOT_ACTIVATE,
       })
+    } finally {
+      dispatch(setPopup(false))
     }
   }
 

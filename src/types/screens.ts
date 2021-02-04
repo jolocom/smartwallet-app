@@ -8,6 +8,10 @@ export enum ScreenNames {
   SeedPhraseWrite = 'SeedPhraseWrite',
   SeedPhraseInfo = 'SeedPhraseInfo',
   SeedPhraseRepeat = 'SeedPhraseRepeat',
+
+  // After identity
+  BeforeLoggedIn = 'BeforeLoggedIn',
+
   // Logged In Tabs
   LoggedIn = 'LoggedIn',
   Tabs = 'Tabs',

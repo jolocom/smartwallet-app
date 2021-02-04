@@ -15,10 +15,6 @@ jest.mock('@react-navigation/native', () => ({
  })
 }))
 
-jest.mock('../../../src/hooks/useAppState', () => ({
- useAppState: jest.fn()
-}))
-
 test('Passcode input displays asterics and submits correct value', async () => {
  mockSubmit.mockResolvedValue(true);
 

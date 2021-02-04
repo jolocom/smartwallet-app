@@ -1,5 +1,6 @@
 import React from 'react'
 import * as redux from 'react-redux'
+import { AppState } from 'react-native';
 
 import { fireEvent, waitFor } from '@testing-library/react-native'
 
@@ -8,9 +9,9 @@ import Lock from '~/screens/Modals/Lock'
 import { strings } from '~/translations/strings'
 import { setAppLocked } from '~/modules/account/actions'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
+import { AppStatusState } from '~/modules/appState/types';
 
 const mockGetBiometry = jest.fn();
-const mockNavigationBack = jest.fn();
 const mockedDispatch = jest.fn();
 const mockBiometryAuthenticate = jest.fn()
 
@@ -28,9 +29,7 @@ jest.mock('../../../src/hooks/biometry', () => ({
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useFocusEffect: jest.fn().mockImplementation(() => { }),
-  useNavigation: () => ({
-    goBack: mockNavigationBack,
-  }),
+  useNavigation: () => ({}),
 }))
 
 jest.mock('react-redux', () => ({
@@ -39,6 +38,24 @@ jest.mock('react-redux', () => ({
   useDispatch: jest.fn().mockReturnValue(mockedDispatch)
 }))
 
+jest.mock('../../../node_modules/react-native/Libraries/AppState/AppState', () => {
+  const listeners: Array<(status: AppStatusState) => void> = [];
+  return {
+    addEventListener: jest.fn((event, handler) => {
+      if (event === 'change') {
+        listeners.push(handler)
+      }
+    }),
+    removeEventListener: jest.fn((event, handler) => {
+      return undefined;
+    }),
+    emit: jest.fn((event, nextAppState: AppStatusState) => {
+      listeners.forEach(l => l(nextAppState))
+    }) 
+  }
+  }
+)
+
 const getMockedDispatch = () => {
   const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
   const mockDispatchFn = jest.fn()
@@ -46,7 +63,7 @@ const getMockedDispatch = () => {
   return mockDispatchFn;
 }
 
-describe('Witout biometry', () => {
+describe('Without biometry', () => {
   beforeEach(() => {
     const useGetDeviceAuthParamsSpy = jest.spyOn(deviceAuthHooks, 'useGetStoredAuthValues')
     useGetDeviceAuthParamsSpy.mockReturnValue({
@@ -55,8 +72,6 @@ describe('Witout biometry', () => {
       keychainPin: '5555',
       isBiometrySelected: false
     })
-
-
   })
   test('Lock screen renders all necessary UI details', () => {
     const { getByText, getByTestId } = renderWithSafeArea(<Lock />);
@@ -89,7 +104,6 @@ describe('Witout biometry', () => {
 
     expect(mockDispatchFn).toHaveBeenCalledTimes(1);
     expect(mockDispatchFn).toHaveBeenCalledWith(setAppLocked(false));
-    expect(mockNavigationBack).toHaveBeenCalledTimes(1);
   })
 })
 
@@ -114,23 +128,35 @@ describe('With biometry', () => {
 
     renderWithSafeArea(<Lock />);
 
+    // ACT: this imitates the app going to the background 
+    // @ts-ignore - because it is a custom method, and react native App State has no emit method available
+    AppState.emit('change', 'background');
+    // @ts-ignore
+    AppState.emit('change', 'active')
+    
     await waitFor(() => {
       expect(mockBiometryAuthenticate).toBeCalledTimes(1);
-      expect(mockDispatchFn).toHaveBeenCalledTimes(1);
       expect(mockDispatchFn).toHaveBeenCalledWith(setAppLocked(false));
     })
   })
-
+  
   test('do not unlock the app', async () => {
     mockBiometryAuthenticate.mockResolvedValue({
       success: false
     })
-
+    
     const mockDispatchFn = getMockedDispatch()
-
+    
     renderWithSafeArea(<Lock />);
+
+    // ACT: this imitates the app going to the background 
+    // @ts-ignore
+    AppState.emit('change', 'background');
+    // @ts-ignore
+    AppState.emit('change', 'active')
+
     await waitFor(() => {
-      expect(mockDispatchFn).toHaveBeenCalledTimes(0)
+      expect(mockDispatchFn).not.toHaveBeenCalledWith(setAppLocked(true));
     })
   })
 })

@@ -7,7 +7,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'
-import LoggedIn from '~/screens/LoggedIn'
 
 import Recovery from '~/screens/Modals/Recovery'
 
@@ -15,6 +14,7 @@ import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
+import BeforeLoggedIn from './screens/BeforeLoggedIn'
 
 export type RootStackParamList = {
   Recovery: {
@@ -25,7 +25,7 @@ export type RootStackParamList = {
     cancelText: string
     onComplete: () => void
   }
-  LoggedIn: undefined
+  BeforeLoggedIn: undefined
   LoggedOut: undefined
   LostSeedPhraseInfo: undefined
 }
@@ -40,9 +40,9 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
       <RootStack.Navigator headerMode="none" mode="modal">
         {isLoggedIn ? (
           <RootStack.Screen
-            name={ScreenNames.LoggedIn}
-            component={LoggedIn}
-            options={{ gestureEnabled: false }}
+            name={ScreenNames.BeforeLoggedIn}
+            component={BeforeLoggedIn}
+            options={{gestureEnabled: false}}
           />
         ) : (
           <RootStack.Screen

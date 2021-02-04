@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -10,7 +9,6 @@ import {
   TextInput,
 } from 'react-native'
 import { useDelay } from '~/hooks/generic'
-import { useAppState } from '~/hooks/useAppState'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from '.'
 
@@ -21,23 +19,9 @@ const DIGIT_MARGIN_RIGHT = 7
 const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const { pin, setPin, pinError, pinSuccess } = usePasscode()
-  const digits = pin.split('')
+  const digits = pin.split('');
 
   const inputRef = useRef<TextInput>(null)
-
-  // if you go to forgot passcode instruction on go back focus the input
-  useFocusEffect(() => inputRef.current?.focus())
-
-  useAppState((appState, nextAppState) => {
-    if (appState.match(/active/) && nextAppState === 'inactive') {
-      // this is when the alert to use Biometry appears
-      inputRef.current?.blur()
-    }
-    else if (appState === 'background' && nextAppState === 'active') {
-      inputRef.current?.focus()
-    }
-    appState = nextAppState
-  })
 
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {

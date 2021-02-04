@@ -57,8 +57,7 @@ const ContactUs: React.FC = () => {
 
   const handleSubmit = () => {
     sendReport(assembledData)
-    showSuccess()
-    navigateBack()
+    showSuccess(navigateBack)
   }
 
   const isBtnEnabled = () => {

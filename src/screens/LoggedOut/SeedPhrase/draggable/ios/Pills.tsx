@@ -10,7 +10,7 @@ interface PropsI {
   updateTags: Dispatch<SetStateAction<string[] | null>>
 }
 
-const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 400 }) => {
+const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 300 }) => {
   const [keys, setKeys] = useState<TagObject[]>(() =>
     tags.map((title: string) => ({ title })),
   )
