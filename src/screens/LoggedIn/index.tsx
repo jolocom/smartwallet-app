@@ -164,7 +164,8 @@ const LoggedInTabs: React.FC = () => {
       {/* Modals -> Start */}
       <LoggedInStack.Screen
         name={ScreenNames.Camera}
-        component={Interactions}
+          component={Interactions}
+          options={{gestureEnabled: false}}
       />
       {/* Modals -> End */}
         </LoggedInStack.Navigator>

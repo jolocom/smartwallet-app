@@ -5,8 +5,8 @@ import { ScreenNames } from '~/types/screens'
 import Scanner from '~/screens/Modals/Interactions/Scanner'
 import { useSelector } from 'react-redux'
 import { getInteractionType } from '~/modules/interaction/selectors'
-import Interaction from './InteractionScreen'
 import { useNavigation } from '@react-navigation/native'
+import ActionSheetManager from '~/components/ActionSheet/ActionSheetManager'
 
 const Stack = createStackNavigator()
 
@@ -48,7 +48,7 @@ const Interactions: React.FC = () => {
           }),
         }}
         name={ScreenNames.Interaction}
-        component={Interaction} />
+        component={ActionSheetManager} />
     </Stack.Navigator>
   )
 }
