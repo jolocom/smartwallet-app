@@ -130,16 +130,17 @@ const ActionSheetManager: React.FC = () => {
    */
   return (
     <>
-      <ActionSheet
+      {/* <ActionSheet
         onClose={handleCloseInteractionSheet}
         isVisible={activeSheet === ActionSheetTypes.InteractionSheet}
       >
         {Platform.OS === 'ios' && <Loader />}
-        <Toasts />
-        {renderInteractionBody()}
-      </ActionSheet>
+        <Toasts /> */}
+        {activeSheet === ActionSheetTypes.InteractionSheet && renderInteractionBody()}
+      {/* </ActionSheet> */}
 
-      {sheetState === IntermediarySheetState.showing && (
+        {sheetState === IntermediarySheetState.showing && <IntermediarySheetBody />}
+      {/* {sheetState === IntermediarySheetState.showing && (
         <ActionSheet
           onClose={handleCloseIntermediarySheet}
           isVisible={activeSheet === ActionSheetTypes.IntermediateSheet}
@@ -148,7 +149,7 @@ const ActionSheetManager: React.FC = () => {
           <Toasts />
           <IntermediarySheetBody />
         </ActionSheet>
-      )}
+      )} */}
     </>
   )
 }

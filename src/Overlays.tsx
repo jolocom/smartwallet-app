@@ -31,7 +31,8 @@ const Overlays: React.FC<Props> = ({ navRef }) => {
         translucent
         barStyle="light-content"
       />
-      {isInteracting ? <ActionSheetManager /> : <Toasts />}
+      {/* {isInteracting ? <ActionSheetManager /> : <Toasts />} */}
+      {!isInteracting && <Toasts />}
       <Loader />
       {!isAppLocked && <TermsConsent />}
     </NavigationContextProvider>

@@ -163,7 +163,7 @@ const LoggedInTabs: React.FC = () => {
 
       {/* Modals -> Start */}
       <LoggedInStack.Screen
-        name={ScreenNames.Interactions}
+        name={ScreenNames.Camera}
         component={Interactions}
       />
       {/* Modals -> End */}
