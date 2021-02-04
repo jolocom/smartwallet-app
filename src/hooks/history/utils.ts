@@ -24,14 +24,3 @@ export const groupBySection = (
     data: groupedObj[title],
   }))
 }
-
-export const interactionTypeToFlowType: { [x: string]: FlowType } = {
-  [InteractionType.CredentialOfferRequest]: FlowType.CredentialOffer,
-  [InteractionType.CredentialOfferResponse]: FlowType.CredentialOffer,
-  [InteractionType.CredentialsReceive]: FlowType.CredentialOffer,
-  [InteractionType.CredentialRequest]: FlowType.CredentialShare,
-  [InteractionType.CredentialResponse]: FlowType.CredentialShare,
-  [InteractionType.Authentication]: FlowType.Authentication,
-  AuthorizationRequest: FlowType.Authorization,
-  AuthorizationResponse: FlowType.Authorization,
-}
