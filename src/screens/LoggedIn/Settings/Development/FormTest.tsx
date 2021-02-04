@@ -6,7 +6,7 @@ import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 import ScreenContainer from '~/components/ScreenContainer'
 import { attributeConfig } from '~/config/claims'
 import { AttributeTypes } from '~/types/credentials'
-import Form, { IFormContext } from '../../Identity/components/Form'
+import Form, { IFormContext } from '~/components/Form'
 import Section from '../components/Section'
 
 const FormTest = () => {

@@ -3,16 +3,17 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
-import { useForm } from './Form'
 
 interface IAction {
   onPress: () => void
   color: Colors
 }
 
+type TActionCTA = () => void
+
 export interface IFormHeaderComposition {
-  Cancel: React.FC
-  Done: React.FC
+  Cancel: React.FC<{onCancel: TActionCTA}>
+  Done: React.FC<{onSubmit: TActionCTA}>
 }
 
 const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
@@ -27,8 +28,8 @@ const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
   )
 }
 
-const Cancel = () => {
-  const { onCancel = () => {} } = useForm()
+// TODO: this will break forms for primitive claims, fix it
+const Cancel: IFormHeaderComposition['Cancel'] = ({ onCancel }) => {
   return (
     <ActionBtn
       onPress={onCancel}
@@ -37,8 +38,9 @@ const Cancel = () => {
     />
   )
 }
-const Done = () => {
-  const { onSubmit = () => {} } = useForm()
+
+// TODO: this will break some forms - fix it
+const Done: IFormHeaderComposition['Done'] = ({onSubmit}) => {
   return (
     <ActionBtn
       onPress={onSubmit}
@@ -59,9 +61,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
   },
 })
 

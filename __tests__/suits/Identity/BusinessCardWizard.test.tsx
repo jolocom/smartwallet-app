@@ -1,6 +1,6 @@
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
-import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
+import BusinessCardWizard from '~/screens/LoggedIn/Identity/BusinessCardWizard'
 import { attributeConfig } from '~/config/claims'
 import { strings } from '~/translations'
 import {
@@ -8,7 +8,7 @@ import {
   ClaimKeys,
   IAttributeConfig,
 } from '~/types/credentials'
-import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
+import { renderWithSafeArea } from '~/utils/renderWithSafeArea'
 
 const mockCreateAttr = jest.fn()
 

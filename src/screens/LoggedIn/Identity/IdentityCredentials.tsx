@@ -22,7 +22,7 @@ import {
 } from '~/types/credentials'
 import { useSICActions } from '~/hooks/attributes';
 
-import Form from './components/Form'
+import Form from '~/components/Form'
 import { mapFormFields } from '~/utils/dataMapping'
 import { useToasts } from '~/hooks/toasts'
 import EmptyPlaceholder, { IdentityPlaceholderTypes } from './components/EmptyPlaceholder'
@@ -224,8 +224,9 @@ const IdentityCredentials = () => {
               {aKey === expandedForm && formConfig && (
                 <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialSubmit}>
                   <Form.Header>
-                    <Form.Header.Cancel />
-                    <Form.Header.Done />
+                    {/* TODO: fix it when working with claims add/edit */}
+                    <Form.Header.Cancel onCancel={handleHideForm} />
+                    <Form.Header.Done onSubmit={handleCredentialSubmit} />
                   </Form.Header>
                   <Form.Body>
                     {({ fields, updateField }) =>

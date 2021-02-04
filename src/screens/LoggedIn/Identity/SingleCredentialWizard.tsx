@@ -5,7 +5,7 @@ import { useCreateAttributes } from '~/hooks/attributes'
 import { strings } from '~/translations'
 import { AttributeTypes, IAttributeClaimFieldWithValue } from '~/types/credentials'
 import { mapFormFields } from '~/utils/dataMapping'
-import Wizard from '.'
+import Wizard from '~/components/Wizard'
 
 const WIZARD_CONFIG = {
   0: {

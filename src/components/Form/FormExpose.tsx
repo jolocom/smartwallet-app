@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm } from './Form'
+import { useForm } from '.'
 
 const FormExpose: React.FC = ({ children }) => {
   const formContext = useForm()
