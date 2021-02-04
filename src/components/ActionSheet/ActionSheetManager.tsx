@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Platform } from 'react-native'
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { FlowType } from 'react-native-jolocom'
@@ -14,15 +14,12 @@ import {
   getIntermediaryState,
 } from '~/modules/interaction/selectors'
 import {
-  resetInteraction,
   setIntermediaryState,
 } from '~/modules/interaction/actions'
 import IntermediarySheetBody from './IntermediarySheetBody'
 import { IntermediarySheetState } from '~/modules/interaction/types'
-import Loader from '~/modals/Loader'
-import ActionSheet from './ActionSheet'
 import Resolution from '~/screens/Modals/Interactions/Resolution'
-import Toasts from '../Toasts'
+import { useFinishInteraction } from '~/hooks/interactions'
 
 enum ActionSheetTypes {
   InteractionSheet,
@@ -39,6 +36,8 @@ const ActionSheetManager: React.FC = () => {
   const dispatch = useDispatch()
   const interactionType = useSelector(getInteractionType)
   const { sheetState } = useSelector(getIntermediaryState)
+
+  const finishInteraction = useFinishInteraction();
 
   const [activeSheet, setActiveSheet] = useState(ActionSheetTypes.None)
 
@@ -81,31 +80,6 @@ const ActionSheetManager: React.FC = () => {
     }
   }, [sheetState])
 
-  /**
-   * Handles the dismissal of the @InteractionSheet when the @ActionSheet closes. The @InteractionSheet
-   * can be dismissed by canceling the interaction (DENY button), or by tapping outside the @ActionSheet
-   * (only relevant to @BAS). Hence, @handleCloseInteractionSheet will be called when there is a tap outside
-   * the @ActionSheet, when the @InteractionSheet is @showing and when the interaction is canceled (by tapping
-   * the DENY button). Furthermore, the interaction should be reset only when the user taps outside the @ActionSheet.
-   */
-  const handleCloseInteractionSheet = () => {
-    if (sheetState !== IntermediarySheetState.showing && interactionType) {
-      dispatch(resetInteraction())
-    }
-  }
-
-  /**
-   * Handles the dismissal of the @IntermediarySheet when called by the @onClose prop (@ActionSheet).
-   * Similarly to @handleCloseInteractionSheet, the @IntermediarySheet can be closed by @switching with
-   * the @InteractionSheet, as well as when there is a tap outside the @ActionSheet. On tap, the @IntermediarySheet
-   * should be replaced with the @InteractionSheet
-   */
-  const handleCloseIntermediarySheet = () => {
-    if (sheetState !== IntermediarySheetState.switching) {
-      dispatch(setIntermediaryState(IntermediarySheetState.switching))
-    }
-  }
-
   const renderInteractionBody = () => {
     switch (interactionType) {
       case FlowType.Authentication:
@@ -123,35 +97,43 @@ const ActionSheetManager: React.FC = () => {
     }
   }
 
-  /**
-   * NOTE: On iOS the @Loader doesn't show up while an @ActionSheet is active. This is due
-   * to a RN limitation of showing 2 modals simultaneously. Fixed by rendering the @Loader
-   * inside each @ActionSheet (only for iOS).
-   */
-  return (
-    <>
-      {/* <ActionSheet
-        onClose={handleCloseInteractionSheet}
-        isVisible={activeSheet === ActionSheetTypes.InteractionSheet}
-      >
-        {Platform.OS === 'ios' && <Loader />}
-        <Toasts /> */}
-        {activeSheet === ActionSheetTypes.InteractionSheet && renderInteractionBody()}
-      {/* </ActionSheet> */}
+  const handleDismissInteraction = () => {
+    /**
+     * Handles the dismissal of the @InteractionSheet when the @ActionSheet closes. The @InteractionSheet
+     * can be dismissed by canceling the interaction (DENY button), or by tapping outside the @ActionSheet
+     * (only relevant to @BAS). Hence, @handleCloseInteractionSheet will be called when there is a tap outside
+     * the @ActionSheet, when the @InteractionSheet is @showing and when the interaction is canceled (by tapping
+     * the DENY button). Furthermore, the interaction should be reset only when the user taps outside the @ActionSheet.
+     */
+    if (sheetState !== IntermediarySheetState.showing && interactionType) {
+      finishInteraction()
+    /**
+     * Handles the dismissal of the @IntermediarySheet when called by the @onClose prop (@ActionSheet).
+     * Similarly to @handleCloseInteractionSheet, the @IntermediarySheet can be closed by @switching with
+     * the @InteractionSheet, as well as when there is a tap outside the @ActionSheet. On tap, the @IntermediarySheet
+     * should be replaced with the @InteractionSheet
+     */
+    } else if (sheetState !== IntermediarySheetState.switching) {
+      dispatch(setIntermediaryState(IntermediarySheetState.switching))
+    }
 
-        {sheetState === IntermediarySheetState.showing && <IntermediarySheetBody />}
-      {/* {sheetState === IntermediarySheetState.showing && (
-        <ActionSheet
-          onClose={handleCloseIntermediarySheet}
-          isVisible={activeSheet === ActionSheetTypes.IntermediateSheet}
-        >
-          {Platform.OS === 'ios' && <Loader />}
-          <Toasts />
-          <IntermediarySheetBody />
-        </ActionSheet>
-      )} */}
-    </>
+  }
+
+  return (
+    <TouchableWithoutFeedback onPress={handleDismissInteraction}>
+      <View style={styles.fullScreen}>
+        {activeSheet === ActionSheetTypes.InteractionSheet && renderInteractionBody()}
+        {sheetState === IntermediarySheetState.showing && <IntermediarySheetBody />} 
+      </View>      
+    </TouchableWithoutFeedback>
   )
 }
+
+const styles = StyleSheet.create({
+  fullScreen: {
+    width: '100%',
+    height: '100%',
+  }
+})
 
 export default ActionSheetManager
