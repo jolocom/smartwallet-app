@@ -5,23 +5,21 @@ import History from '~/screens/LoggedIn/History'
 
 jest.mock('../../../src/hooks/history', () => ({
   useHistory: () => ({
-    getInteractions: jest.fn().mockResolvedValue([
+    getInteractions: jest.fn().mockResolvedValueOnce([
       { id: 'test-offer', section: 'Today', type: 'CredentialOffer' },
       { id: 'test-auth', section: 'Yesterday', type: 'Authentication' },
       { id: 'test-share', section: 'Yesterday', type: 'CredentialShare' },
     ]),
-    getInteractionDetails: jest.fn().mockImplementation(async (id: string) => {
-      return {
-        issuer: { did: 'did: test' },
-        status: 'finished',
-        steps: [
-          { title: 'Test Step 1', description: '...' },
-          { title: 'Test Step 2', description: '...' },
-        ],
-        time: '00:00',
-        //NOTE: using id as the title for convenience
-        title: id,
-      }
+    getInteractionDetails: jest.fn().mockResolvedValueOnce({
+      issuer: { did: 'did: test' },
+      status: 'finished',
+      steps: [
+        { title: 'Test Step 1', description: '...' },
+        { title: 'Test Step 2', description: '...' },
+      ],
+      time: '00:00',
+      //NOTE: using id as the title for convenience
+      title: 'Test',
     }),
   }),
 }))
