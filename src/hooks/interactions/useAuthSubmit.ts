@@ -1,20 +1,15 @@
-import { useDispatch } from 'react-redux'
-
-import { resetInteraction } from '~/modules/interaction/actions'
-import { useInteraction } from '.'
+import { useFinishInteraction, useInteraction } from '.'
 import useInteractionToasts from './useInteractionToasts'
 import { useAgent } from '../sdk'
-import { useNavigation } from '@react-navigation/native'
 
 const useAuthSubmit = () => {
   const getInteraction = useInteraction()
   const agent = useAgent()
-  const dispatch = useDispatch()
-  const navigation = useNavigation();
   const {
     scheduleErrorInteraction,
     scheduleSuccessInteraction,
   } = useInteractionToasts()
+  const finishInteraction = useFinishInteraction()
 
   return async () => {
     try {
@@ -24,11 +19,10 @@ const useAuthSubmit = () => {
       await interaction.send(authResponse)
 
       scheduleSuccessInteraction()
-      navigation.goBack()
-      dispatch(resetInteraction())
     } catch (e) {
       scheduleErrorInteraction()
-      dispatch(resetInteraction())
+    } finally {
+      finishInteraction()
     }
   }
 }
