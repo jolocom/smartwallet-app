@@ -6,9 +6,13 @@ import {
   View,
 } from 'react-native'
 import { useSelector } from 'react-redux'
+import { Formik } from 'formik'
+import {
+  withNextInputAutoFocusForm,
+  withNextInputAutoFocusInput,
+} from 'react-native-formik'
 
 import Input from '~/components/Input'
-import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 import Widget from '~/components/Widget'
 import Field from '~/components/Widget/Field'
 import PencilIcon from '~/assets/svg/PencilIcon'
@@ -20,12 +24,17 @@ import {
   IAttributeClaimFieldWithValue,
   IAttributeConfig,
 } from '~/types/credentials'
-import { useSICActions } from '~/hooks/attributes';
+import { useSICActions } from '~/hooks/attributes'
 
-import Form from '~/components/Form'
-import { mapFormFields } from '~/utils/dataMapping'
 import { useToasts } from '~/hooks/toasts'
-import EmptyPlaceholder, { IdentityPlaceholderTypes } from './components/EmptyPlaceholder'
+import EmptyPlaceholder, {
+  IdentityPlaceholderTypes,
+} from './components/EmptyPlaceholder'
+import FormHeader from '~/components/FormHeader'
+import { assembleFormInitialValues } from '~/utils/dataMapping'
+
+const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
+const AutofocusContainer = withNextInputAutoFocusForm(View)
 
 enum FormModes {
   add = 'add',
@@ -33,38 +42,50 @@ enum FormModes {
   none = 'none',
 }
 
-type TPrimiveAttributeTypes = Exclude<AttributeTypes, AttributeTypes.businessCard>
-type TPrimitiveAttributesConfig = Omit<Record<AttributeTypes, IAttributeConfig>, AttributeTypes.businessCard>
+type TPrimiveAttributeTypes = Exclude<
+  AttributeTypes,
+  AttributeTypes.businessCard
+>
+type TPrimitiveAttributesConfig = Omit<
+  Record<AttributeTypes, IAttributeConfig>,
+  AttributeTypes.businessCard
+>
 
 const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
-  const { ProofOfBusinessCardCredential, ...primitiveAttributesConfig } = attributeConfig;
-  return primitiveAttributesConfig;
+  const {
+    ProofOfBusinessCardCredential,
+    ...primitiveAttributesConfig
+  } = attributeConfig
+  return primitiveAttributesConfig
 }
 
-const primitiveAttributesConfig = getAttributeConfigPrimitive();
+const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
 const IdentityCredentials = () => {
-  const [expandedForm, setExpandedForm] = useState<TPrimiveAttributeTypes | undefined>(undefined);
-  const [formMode, setFormMode] = useState(FormModes.none);
-  const [formConfig, setFormConfig] = useState<IAttributeConfig<IAttributeClaimFieldWithValue | IAttributeClaimField> | null>(null)
-  const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined); // state that shows what claim are we editing 
+  const [expandedForm, setExpandedForm] = useState<
+    TPrimiveAttributeTypes | undefined
+  >(undefined)
+  const [formMode, setFormMode] = useState(FormModes.none)
+  const [formConfig, setFormConfig] = useState<IAttributeConfig<
+    IAttributeClaimFieldWithValue | IAttributeClaimField
+  > | null>(null)
+  const [editClaimId, setEditClaimId] = useState<string | undefined>(undefined) // state that shows what claim are we editing
 
-  const attributes = useSelector(getPrimitiveAttributes);
-  const { handleCreateCredentialSI, handleEditCredentialSI } = useSICActions();
-  const { scheduleWarning } = useToasts();
-
+  const attributes = useSelector(getPrimitiveAttributes)
+  const { handleCreateCredentialSI, handleEditCredentialSI } = useSICActions()
+  const { scheduleWarning } = useToasts()
 
   // we are not interested in claim id in 'add' mode, therefore reetting value to avoid confusions
   useEffect(() => {
     if (formMode === FormModes.add) {
-      setEditClaimId(undefined);
+      setEditClaimId(undefined)
     }
   }, [formMode])
 
   useEffect(() => {
     if (!expandedForm) {
-      setFormMode(FormModes.none);
-      setFormConfig(null);
+      setFormMode(FormModes.none)
+      setFormConfig(null)
       setEditClaimId(undefined)
     }
   }, [expandedForm])
@@ -75,11 +96,12 @@ const IdentityCredentials = () => {
       setFormConfig(primitiveAttributesConfig[expandedForm])
     } else if (formMode === FormModes.edit && expandedForm && editClaimId) {
       // NOTE: in edit more form should be aware of claim values
-      const fieldsWithValues = attributeConfig[expandedForm].fields.map((f) =>
-      ({
-        ...f,
-        value: attributes[expandedForm]?.find(a => a.id === editClaimId)?.value[f.key],
-      })
+      const fieldsWithValues = attributeConfig[expandedForm].fields.map(
+        (f) => ({
+          ...f,
+          value: attributes[expandedForm]?.find((a) => a.id === editClaimId)
+            ?.value[f.key],
+        }),
       )
       setFormConfig({
         ...primitiveAttributesConfig[expandedForm],
@@ -96,58 +118,62 @@ const IdentityCredentials = () => {
     cb()
   }
 
-
   const handleShowForm = (mode: FormModes) => {
     return (type: TPrimiveAttributeTypes, id?: string) => {
-      setFormMode(mode);
+      setFormMode(mode)
       toggleForm(() => setExpandedForm(type))
       if (id) {
         setEditClaimId(id)
       }
     }
   }
-  const handleShowNewForm = handleShowForm(FormModes.add);
-  const handleShowEditForm = handleShowForm(FormModes.edit);
+  const handleShowNewForm = handleShowForm(FormModes.add)
+  const handleShowEditForm = handleShowForm(FormModes.edit)
 
   const handleHideForm = () => toggleForm(() => setExpandedForm(undefined))
 
-  const handleCredentialCreate = async (formValues: IAttributeClaimFieldWithValue[]) => {
+  const handleCredentialCreate = async (claims: Record<string, string>) => {
     if (expandedForm) {
       try {
-        const claims = mapFormFields(formValues);
-        await handleCreateCredentialSI(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata);
+        await handleCreateCredentialSI(
+          expandedForm,
+          claims,
+          primitiveAttributesConfig[expandedForm].metadata,
+        )
         setExpandedForm(undefined)
       } catch (e) {
         scheduleWarning({
           title: 'Error adding',
-          message: 'Failed to create Self Issued Credential'
+          message: 'Failed to create Self Issued Credential',
         })
-
       }
     }
   }
 
-  const handleCredentialEdit = async (formValues: IAttributeClaimFieldWithValue[]) => {
+  const handleCredentialEdit = async (claims: Record<string, string>) => {
     if (expandedForm && editClaimId) {
       try {
-        const claims = mapFormFields(formValues);
-        await handleEditCredentialSI(expandedForm, claims, primitiveAttributesConfig[expandedForm].metadata, editClaimId);
+        await handleEditCredentialSI(
+          expandedForm,
+          claims,
+          primitiveAttributesConfig[expandedForm].metadata,
+          editClaimId,
+        )
         setExpandedForm(undefined)
       } catch (err) {
         scheduleWarning({
           title: 'Error editing',
-          message: `Failed to edit Self Issued Credential ${editClaimId}`
+          message: `Failed to edit Self Issued Credential ${editClaimId}`,
         })
-
       }
     }
   }
 
-  const handleCredentialSubmit = async (formValues: IAttributeClaimFieldWithValue[]) => {
+  const handleCredentialSubmit = (values: Record<string, string>) => {
     if (formMode === FormModes.add) {
-      await handleCredentialCreate(formValues);
+      handleCredentialCreate(values)
     } else if (formMode === FormModes.edit) {
-      await handleCredentialEdit(formValues)
+      handleCredentialEdit(values)
     }
   }
 
@@ -158,98 +184,94 @@ const IdentityCredentials = () => {
         duration: 200,
       })
       if (formMode === FormModes.edit) {
-        return expandedForm && Boolean(attributes[type]?.length > 1);
+        return expandedForm && Boolean(attributes[type]?.length > 1)
       } else if (formMode === FormModes.add) {
-        return expandedForm && Boolean(attributes[type]?.length);
+        return expandedForm && Boolean(attributes[type]?.length)
       } else {
-        return true;
+        return true
       }
     }
-    return true;
+    return true
   }
 
   if (!Object.keys(primitiveAttributesConfig).length) {
-    return (
-      <EmptyPlaceholder type={IdentityPlaceholderTypes.primitive} />
-    )
+    return <EmptyPlaceholder type={IdentityPlaceholderTypes.primitive} />
   }
+
+  const formInitial = formConfig
+    ? assembleFormInitialValues(formConfig.fields)
+    : {}
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
-      <JoloKeyboardAwareScroll
-        style={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'handled'} // this for allowing to press cancel or submit on first tap: without this prop the issue is - if a keyboard is opened it is you need to tap twice for a btn to invoke handler  
-        /* TODO: double check if these props are actually needed */
-        overScrollMode="never"
-        enableOnAndroid
-      >
-        {Object.entries<IAttributeConfig>(primitiveAttributesConfig).map(([aKey, aVal]) => {
-          const key = aKey as TPrimiveAttributeTypes;
+      {Object.entries<IAttributeConfig>(primitiveAttributesConfig).map(
+        ([aKey, aVal]) => {
+          const key = aKey as TPrimiveAttributeTypes
           return (
             <View style={styles.group} key={aKey}>
-              {
-                getIsWidgetShown(key) ? (
-                  <Widget onAdd={() => handleShowNewForm(key)}>
-                    <Widget.Header>
-                      <Widget.Header.Name value={aVal.label} />
-                      {attributes[key] && <Widget.Header.Action.CreateNew />}
-                    </Widget.Header>
-                    {attributes[key] ? (
-                      (attributes[key] || []).map((f) => {
-                        if (f.id === editClaimId) return null
-                        return (
-                          <TouchableOpacity
-                            onPress={() => handleShowEditForm(key, f.id)}
+              {getIsWidgetShown(key) ? (
+                <Widget onAdd={() => handleShowNewForm(key)}>
+                  <Widget.Header>
+                    <Widget.Header.Name value={aVal.label} />
+                    {attributes[key] && <Widget.Header.Action.CreateNew />}
+                  </Widget.Header>
+                  {attributes[key] ? (
+                    (attributes[key] || []).map((f) => {
+                      if (f.id === editClaimId) return null
+                      return (
+                        <TouchableOpacity
+                          onPress={() => handleShowEditForm(key, f.id)}
+                          key={f.id}
+                        >
+                          <Field.Static
                             key={f.id}
-                          >
-                            <Field.Static
-                              key={f.id}
-                              value={Object.values(f.value).join(' ')}
-                            />
-                          </TouchableOpacity>
-                        )
-                      }
+                            value={Object.values(f.value).join(' ')}
+                          />
+                        </TouchableOpacity>
                       )
-                    ) : (
-
-                        <Field.Empty>
-                          <PencilIcon />
-                        </Field.Empty>
-                      )}
-                  </Widget>
-                ) : null
-              }
-
+                    })
+                  ) : (
+                    <Field.Empty>
+                      <PencilIcon />
+                    </Field.Empty>
+                  )}
+                </Widget>
+              ) : null}
               {aKey === expandedForm && formConfig && (
-                <Form config={formConfig} onCancel={handleHideForm} onSubmit={handleCredentialSubmit}>
-                  <Form.Header>
-                    {/* TODO: fix it when working with claims add/edit */}
-                    <Form.Header.Cancel onCancel={handleHideForm} />
-                    <Form.Header.Done onSubmit={handleCredentialSubmit} />
-                  </Form.Header>
-                  <Form.Body>
-                    {({ fields, updateField }) =>
-                      fields.map((field, idx) => (
-                        <Input.Block
-                          key={field.key}
-                          updateInput={(val: string) =>
-                            updateField(field.key, val)
-                          }
-                          value={field.value}
-                          placeholder={field.label}
-                          {...field.keyboardOptions}
-                          autoFocus={idx === 0}
-                        />
-                      ))
-                    }
-                  </Form.Body>
-                </Form>
+                <Formik
+                  onSubmit={handleCredentialSubmit}
+                  initialValues={formInitial}
+                >
+                  {({ handleChange, handleSubmit, values }) => (
+                    <View>
+                      <FormHeader>
+                        <FormHeader.Cancel onCancel={handleHideForm} />
+                        <FormHeader.Done onSubmit={handleSubmit} />
+                      </FormHeader>
+                      <AutofocusContainer>
+                        {formConfig.fields.map((field, i) => {
+                          return (
+                            <AutofocusInput
+                              // @ts-ignore no idea why it's complaining
+                              name={field.key as string}
+                              key={field.key}
+                              updateInput={handleChange(field.key)}
+                              value={values[field.key]}
+                              placeholder={field.label}
+                              autoFocus={i === 0}
+                              {...field.keyboardOptions}
+                            />
+                          )
+                        })}
+                      </AutofocusContainer>
+                    </View>
+                  )}
+                </Formik>
               )}
             </View>
           )
-        })}
-      </JoloKeyboardAwareScroll>
+        },
+      )}
     </View>
   )
 }

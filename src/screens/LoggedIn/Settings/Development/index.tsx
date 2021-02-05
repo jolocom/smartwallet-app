@@ -15,7 +15,6 @@ const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
-  const redirectToForms = useRedirectTo(ScreenNames.FormTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
   const redirectToBusinessCard = useRedirectTo(ScreenNames.BusinessCardTest)
@@ -56,17 +55,14 @@ const DevelopmentSection = () => {
           <PopupMenu
             ref={popupRef}
             options={[
-              { title: 'Help', onPress: () => { } },
-              { title: 'Me', onPress: () => { } },
-              { title: 'Please', onPress: () => { } },
+              { title: 'Help', onPress: () => {} },
+              { title: 'Me', onPress: () => {} },
+              { title: 'Please', onPress: () => {} },
             ]}
           />
         </Option>
         <Option onPress={redirectToNotifications}>
           <Option.Title title="Notifications" />
-        </Option>
-        <Option onPress={redirectToForms}>
-          <Option.Title title="Forms" />
         </Option>
         <Option onPress={redirectToInputs}>
           <Option.Title title="Inputs" />

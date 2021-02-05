@@ -237,11 +237,6 @@ const LoggedInTabs: React.FC = () => {
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.FormTest}
-            component={FormTest}
-            options={settingsScreenTransitionOptions}
-          />
-          <LoggedInStack.Screen
             name={ScreenNames.InputTest}
             component={InputTest}
             options={settingsScreenTransitionOptions}
