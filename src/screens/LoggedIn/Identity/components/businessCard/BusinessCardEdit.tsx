@@ -107,7 +107,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
                   {groupedBC[groupKey].map((f, idx) => (
                     <AutofocusInput
                       autoFocus={groupIdx === 0 && idx === 0}
-                      // TODO: fix type issues
+                      // @ts-ignore name prop isn't supported by TextInput component
                       name={f.key}
                       key={f.key}
                       value={values[f.key]}
