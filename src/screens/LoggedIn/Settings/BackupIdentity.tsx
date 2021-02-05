@@ -61,7 +61,7 @@ const BackupIdentity = () => {
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}
       >
         <View>
-          <Section.Title marginTop={6}>{strings.BACKUP_OPTIONS}</Section.Title>
+          <Section.Title>{strings.BACKUP_OPTIONS}</Section.Title>
           <BackupBlock
             title={strings.BACKUP_YOUR_DATA}
             description={strings.DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA}

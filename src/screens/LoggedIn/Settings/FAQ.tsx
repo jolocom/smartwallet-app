@@ -43,9 +43,7 @@ const FAQ = () => {
           />
         )}
         ListHeaderComponent={() => (
-          <Section.Title marginTop={6}>
-            {strings.POPULAR_QUESTIONS}
-          </Section.Title>
+          <Section.Title>{strings.POPULAR_QUESTIONS}</Section.Title>
         )}
       />
     </ScreenContainer>

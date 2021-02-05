@@ -48,7 +48,6 @@ const LegalTextWrapper: React.FC<Props> = ({
     <ScreenContainer
       hasHeaderBack
       customStyles={{
-        paddingTop: 24,
         paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
       }}
     >
