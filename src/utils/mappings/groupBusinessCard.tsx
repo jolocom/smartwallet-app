@@ -36,7 +36,7 @@ export class Group {
   }
 }
 
-export const getGroupedClaimsBusinessCard = (config: IAttributeConfig) => {
+export const getGroupedClaimsBusinessCard = (config: IAttributeConfig<IAttributeClaimFieldWithValue>) => {
     return config.fields.reduce<Record<string, IAttributeClaimFieldWithValue[]>>(
     (groups, claim) => {
       switch (claim.key) {
@@ -46,7 +46,7 @@ export const getGroupedClaimsBusinessCard = (config: IAttributeConfig) => {
           break
         }
         case ClaimKeys.email:
-        case ClaimKeys.telephone: {
+          case ClaimKeys.telephone: {
           groups[strings.CONTACT_ME] = groups[strings.CONTACT_ME] ? [...groups[strings.CONTACT_ME], claim] : [claim];
           break
         }
@@ -61,7 +61,7 @@ export const getGroupedClaimsBusinessCard = (config: IAttributeConfig) => {
   )
 }
 
-export const getAttributeConfigWithValues = (type: AttributeTypes, values?: ClaimValues): IAttributeConfig => {
+export const getAttributeConfigWithValues = (type: AttributeTypes, values?: ClaimValues): IAttributeConfig<IAttributeClaimFieldWithValue> => {
   const updatedFields = attributeConfig[type].fields.map(
     (f) => ({
       ...f,

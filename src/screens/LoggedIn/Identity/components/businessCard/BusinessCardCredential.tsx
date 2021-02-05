@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Colors } from '~/utils/colors';
-import {getGroupedValuesForBusinessCard} from '~/modules/attributes/selectors'
+import {getBusinessCardConfigWithValues} from '~/modules/attributes/selectors'
 import BusinessCard from '../../IdentityBusinessCard';
 import { ClaimKeys, IAttributeClaimFieldWithValue } from '~/types/credentials';
 import { strings } from '~/translations';
@@ -10,7 +10,7 @@ import { strings } from '~/translations';
 const findClaimValueForKey = (fields: IAttributeClaimFieldWithValue[]) => (key: ClaimKeys) => fields.find(f => f.key === key)?.value;
 
 const BusinessCardCredential: React.FC = () => {
-  const groupedValuesBC = useSelector(getGroupedValuesForBusinessCard);
+  const groupedValuesBC = useSelector(getBusinessCardConfigWithValues);
   if (!groupedValuesBC) return null
 
   const { fields } = groupedValuesBC;

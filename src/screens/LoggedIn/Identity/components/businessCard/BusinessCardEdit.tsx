@@ -24,9 +24,6 @@ interface IEditBC {
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
 
-// TODO: pass real submit instead of this
-const noop = () => {}
-
 const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
   // if selector returns something we edit claim, otherwise we add new claim
   const businessCardId = useSelector(getBusinessCardId)
@@ -95,7 +92,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
 
   return (
     <Block customStyle={{paddingHorizontal: 20, paddingVertical: 25}}>
-      <Formik initialValues={formInitial} onSubmit={noop}>
+      <Formik initialValues={formInitial} onSubmit={handleFormSubmit}>
         {({ handleChange, values }) => (
         <>
           {renderFormHeader(values)}
