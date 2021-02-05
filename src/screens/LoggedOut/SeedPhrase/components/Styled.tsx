@@ -74,6 +74,15 @@ const StyledCTA: React.FC = ({ children }) => {
   return <AbsoluteBottom>{children}</AbsoluteBottom>
 }
 
+const StyledErrorText: React.FC = ({ children }) => (
+  <JoloText
+    color={Colors.error}
+    customStyles={{ marginBottom: BP({ large: 32, medium: 24, default: 12 }) }}
+  >
+    {children}
+  </JoloText>
+)
+
 StyledHeader.Left = StyledHeaderLeft
 StyledHeader.Right = StyledHeaderRight
 
@@ -82,6 +91,7 @@ const SeedPhrase = {
     ScreenContainer: StyledScreenContainer,
     Header: StyledHeader,
     HelperText: StyledHelperText,
+    ErrorText: StyledErrorText,
     ActiveArea: StyledActiveArea,
     CTA: StyledCTA,
   },

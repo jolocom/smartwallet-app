@@ -14,6 +14,7 @@ import { Colors } from '~/utils/colors'
 import { useGetSeedPhrase } from '~/hooks/seedPhrase'
 import shuffleArray from '~/utils/arrayUtils'
 import Dnd from './Dnd'
+import JoloText from '~/components/JoloText'
 
 export interface IDndProps {
   tags: string[]
@@ -28,6 +29,7 @@ const SeedPhraseRepeat: React.FC = () => {
   const seedphrase = useGetSeedPhrase()
   const showFailedLoader = useFailed()
 
+  const [wrongOrder, setWrongOrder] = useState(false)
   const [readyToSubmit, setReadyToSubmit] = useState(false)
   const [shuffledSeedphrase, setShuffledSeedphrase] = useState<string[] | null>(
     null,
@@ -58,6 +60,9 @@ const SeedPhraseRepeat: React.FC = () => {
       if (success) dispatch(setLogged(true))
     } else {
       showFailedLoader()
+      setTimeout(() => {
+        setWrongOrder(true)
+      }, 400)
     }
   }
 
@@ -83,6 +88,11 @@ const SeedPhraseRepeat: React.FC = () => {
         ) : null}
       </SeedPhrase.Styled.ActiveArea>
       <SeedPhrase.Styled.CTA>
+        {wrongOrder && (
+          <SeedPhrase.Styled.ErrorText>
+            {strings.CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN}
+          </SeedPhrase.Styled.ErrorText>
+        )}
         <Btn
           disabled={!readyToSubmit}
           onPress={onSubmit}
