@@ -39,7 +39,11 @@ const SeedPhraseRepeat: React.FC = () => {
   )
 
   useEffect(() => {
-    const shuffled = shuffleArray(seedphrase.split(' ').slice(0, 6))
+    const phraseArr = seedphrase.split(' ')
+    const slice = Math.round(Math.random())
+      ? phraseArr.slice(0, 6)
+      : phraseArr.slice(6, 12)
+    const shuffled = shuffleArray(slice)
     setShuffledSeedphrase(shuffled)
   }, [seedphrase])
 
