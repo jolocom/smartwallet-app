@@ -73,7 +73,7 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
           ]
         : []),
     ],
-    [],
+    [businessCardId],
   )
 
   if (mode === Modes.edit) {
