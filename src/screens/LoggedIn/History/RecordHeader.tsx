@@ -8,7 +8,6 @@ const RecordHeader: React.FC<IRecordHeader> = ({
   testID = 'record-header',
 }) => {
   const { activeSection } = useRecord()
-  testID === 'history-main-header' && console.log({ activeSection })
   return (
     <JoloText
       testID={testID}
