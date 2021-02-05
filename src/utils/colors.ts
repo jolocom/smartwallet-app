@@ -26,6 +26,7 @@ export enum Colors {
   abbey = '#04040c',
   haiti = '#0b030d',
   bastille = '#201A21',
+  bastille1 = '#161217',
   success = '#5251c1',
   serenade = '#fff1e3',
   white = '#ffffff',

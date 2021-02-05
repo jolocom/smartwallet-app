@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { strings } from '~/translations/strings'
-import { useDelay } from './generic'
 
 export interface LoaderConfig {
   showFailed?: boolean
@@ -76,19 +75,27 @@ export const useLoader = () => {
   }
 }
 
-export const useSuccess = (delay: number = 4000) => {
+const openLoader = (type: LoaderTypes, msg: string) => (delay: number = 4000) => {
   const dispatch = useDispatch()
 
-  return async () => {
+  return (onComplete?: () => void) => {
     dispatch(
       setLoader({
-        type: LoaderTypes.success,
-        msg: strings.SUCCESS,
+        type,
+        msg,
       }),
     )
-
-    await useDelay(() => {
+    if (onComplete) {
+      setTimeout(() => {
+        onComplete();
+      }, 100)      
+    }
+    setTimeout(() => {
       dispatch(dismissLoader())
     }, delay)
   }
 }
+
+export const useSuccess = openLoader(LoaderTypes.success, strings.SUCCESS)
+export const useFailed = openLoader(LoaderTypes.error, strings.FAILED)
+

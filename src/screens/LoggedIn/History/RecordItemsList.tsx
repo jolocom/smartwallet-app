@@ -1,24 +1,27 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
+
 import { useTabs } from '~/components/Tabs/Tabs'
 import { useHistory } from '~/hooks/history'
-import { IPreLoadedInteraction } from '~/hooks/history/types'
+import { IPreLoadedInteraction } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
+import RecordItem from './components/RecordItem'
 
-/* This name is misleading, it rather say us TOKENS_PER_BATCH */
-const ITEMS_PER_PAGE = 4
+const ITEMS_PER_PAGE = 5
 
 const RecordItemsList: React.FC<IRecordItemsListProps> = ({
-  type,
+  flows,
   isActiveList,
 }) => {
+  const sectionListRef = useRef<SectionList | null>(null)
   const { updateActiveSection } = useRecord()
 
   const [activeSection, setActiveSection] = useState('')
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
+  const [focusedItem, setFocusedItem] = useState<string | null>(null)
 
   const { getInteractions: getInteractionTokens } = useHistory()
   const { scheduleErrorWarning } = useToasts()
@@ -36,13 +39,8 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
   }, [])
 
   useEffect(() => {
-    /* TODO: an issue is that is doesn't take ITEMS_PER_PAGE
-      as distinct tokens, it actually takes all, even duplicate tokens,
-      so there is no match between how many items you see and 
-      ITEMS_PER_PAGE 
-    */
     if (page) {
-      getInteractionTokens(ITEMS_PER_PAGE, interactions.length, type)
+      getInteractionTokens(ITEMS_PER_PAGE, interactions.length, flows)
         .then((tokens) => {
           setInteractions((prevState) => [...prevState, ...tokens])
         })
@@ -80,24 +78,48 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
     }
   }, [page, JSON.stringify(interactions)])
 
+  const handleFocusItem = (id: string, index: number, section: string) => {
+    const isFocused = focusedItem === id
+    setFocusedItem(isFocused ? null : id)
+
+    if (!isFocused) {
+      const sectionIndex = sections.findIndex((s) => s.title === section)
+      setTimeout(
+        () =>
+          sectionListRef.current?.scrollToLocation({
+            sectionIndex,
+            itemIndex: index,
+            viewPosition: 0,
+            animated: true,
+          }),
+        100,
+      )
+    }
+  }
+
   return (
-    <SectionList
+    <SectionList<string>
+      ref={sectionListRef}
       sections={sections}
       showsVerticalScrollIndicator={false}
       keyExtractor={(item, i) => 'id:' + item + i}
       overScrollMode={'never'}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={0.9}
       onViewableItemsChanged={handleSectionChange}
-      viewabilityConfig={{
-        itemVisiblePercentThreshold: 50,
-      }}
       onEndReached={handleEndReached}
-      contentContainerStyle={{ marginTop: 32, paddingBottom: '40%' }}
+      contentContainerStyle={{ marginTop: 32, paddingBottom: '100%' }}
       renderSectionHeader={({ section }) => (
         <Record.Header title={section.title} />
       )}
       renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
-      renderItem={({ item, index }) => <Record.Item key={index} id={item} />}
+      renderItem={({ item, index, section }) => (
+        <RecordItem
+          key={index}
+          isFocused={focusedItem === item}
+          id={item}
+          onDropdown={() => handleFocusItem(item, index, section.title)}
+        />
+      )}
       stickySectionHeadersEnabled={false}
     />
   )

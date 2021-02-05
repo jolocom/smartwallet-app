@@ -2,15 +2,17 @@ import { useDispatch } from 'react-redux'
 
 import { resetInteraction } from '~/modules/interaction/actions'
 import { useInteraction } from '.'
+import { useAgent } from '../sdk'
 
 const useResolutionSubmit = () => {
   const getInteraction = useInteraction()
+  const agent = useAgent()
   const dispatch = useDispatch()
 
   return async () => {
     const interaction = await getInteraction()
     const resolutionResponse = await interaction.createResolutionResponse()
-    await interaction.processInteractionToken(resolutionResponse)
+    await agent.processJWT(resolutionResponse)
     await interaction.send(resolutionResponse)
 
     dispatch(resetInteraction())

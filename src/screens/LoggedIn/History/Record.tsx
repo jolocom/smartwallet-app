@@ -1,11 +1,9 @@
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useCallback, useMemo, useState } from 'react'
-import { ITab } from '~/components/Tabs/Tabs'
+import { FlowType } from '@jolocom/sdk'
 
 import { useCustomContext } from '~/hooks/context'
 
 import RecordHeader from './RecordHeader'
-import RecordItem from './RecordItem'
 import RecordItemsList from './RecordItemsList'
 
 interface IRecordContext {
@@ -19,17 +17,18 @@ export interface IRecordHeader {
 
 export interface IRecordItemProps {
   id: string
+  isFocused: boolean
+  onDropdown: () => void
 }
 
 export interface IRecordItemsListProps {
-  type?: InteractionType
+  flows?: FlowType[]
   isActiveList: boolean
 }
 
 interface IRecordComposition {
   Header: React.FC<IRecordHeader>
   ItemsList: React.FC<IRecordItemsListProps>
-  Item: React.FC<IRecordItemProps>
 }
 
 const RecordContext = React.createContext<IRecordContext | undefined>({
@@ -59,6 +58,5 @@ const Record: React.FC & IRecordComposition = ({ children }) => {
 
 Record.Header = RecordHeader
 Record.ItemsList = RecordItemsList
-Record.Item = RecordItem
 
 export default Record

@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useBackHandler } from '@react-native-community/hooks'
-import { useNavigation } from '@react-navigation/native'
 
 import { strings } from '~/translations/strings'
 
@@ -12,27 +11,39 @@ import { useDispatch } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
+import { useGetAppStates } from '~/hooks/useAppState'
+import { setPopup } from '~/modules/appState/actions'
 
 const Lock = () => {
-  const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
-
   const dispatch = useDispatch()
-  const { authenticate, getEnrolledBiometry } = useBiometry()
+  const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
+  const { authenticate, getEnrolledBiometry } = useBiometry();
 
-  const navigation = useNavigation()
+  const { currentAppState, prevAppState } = useGetAppStates();
 
+  const promptedTimes = useRef(0)
+
+  useEffect(() => {
+    if (isBiometrySelected) { 
+      if ((currentAppState === 'active' && prevAppState === 'active') || currentAppState === 'active' && prevAppState === 'background') {
+        promptedTimes.current += 1;
+        if (promptedTimes.current === 1) {
+          handleBiometryAuthentication()
+        }
+      }
+    }
+  }, [currentAppState, prevAppState, isBiometrySelected])
+  
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
-    navigation.goBack()
   }, [])
-
-  /* START -> Biometry authentication */
-  /* this will only be invoked if we stored biometry */
+    
   const handleBiometryAuthentication = async () => {
     try {
+      dispatch(setPopup(true));
       /* in case user disabled biometrics we don't want to run authenticate */
       const { available, biometryType } = await getEnrolledBiometry()
-
+      
       if (available) {
         const { success } = await authenticate(biometryType)
         if (success) {
@@ -41,18 +52,10 @@ const Lock = () => {
       }
     } catch (err) {
       console.log('Error in authenticating with biometry on Lock', { err })
+    } finally {
+      dispatch(setPopup(false))
     }
   }
-
-  useEffect(() => {
-    const promptBiometry = async () => {
-      if (isBiometrySelected) {
-        await handleBiometryAuthentication()
-      }
-    }
-    promptBiometry()
-  }, [isBiometrySelected])
-  /* END -> Biometry authentication */
 
   /* disable hardwareback button default functionality */
   useBackHandler(() => true)
