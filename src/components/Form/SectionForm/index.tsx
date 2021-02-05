@@ -1,54 +1,64 @@
-import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential';
-import React, { useState } from 'react';
+import { Formik } from 'formik';
+import React from 'react';
+import { View } from 'react-native';
+import { withNextInputAutoFocusForm, withNextInputAutoFocusInput } from 'react-native-formik';
+import { useSelector } from 'react-redux';
 import Block from '~/components/Block';
 import Input from '~/components/Input';
-import { ClaimKeys } from '~/types/credentials';
+import { getBusinessCardAttributes } from '~/modules/attributes/selectors';
+import { AttributeTypes } from '~/types/credentials';
+import { assembleFormInitialValues } from '~/utils/dataMapping';
 // TODO: think about where to place this file
-import { TClaimGroups, Group } from '~/utils/mappings/groupBusinessCard';
-import MoveToNext from '../MoveToNext';
+import { getAttributeConfigWithValues, getGroupedClaimsBusinessCard } from '~/utils/mappings/groupBusinessCard';
 
 interface ISectionForm {
-  config: TClaimGroups,
-  renderFormHeader?: (formState: TClaimGroups) => JSX.Element
-  renderSectionHeader?: (section: Group) => JSX.Element
-  renderSectionFooter?: (section: Group) => JSX.Element
+  renderFormHeader?: (formState: Record<string, string>) => JSX.Element
+  renderSectionHeader?: (sectionLabel: string) => JSX.Element
+  renderSectionFooter?: (sectionLabel: string) => JSX.Element
 }
 
-const SectionForm: React.FC<ISectionForm> = ({ config, renderFormHeader, renderSectionHeader, renderSectionFooter }) => {
-  const initialState = config;
-  const [state, setState] = useState<TClaimGroups>(initialState);
+const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
+const AutofocusContainer = withNextInputAutoFocusForm(View)
 
-  const handleFieldValueChange = (sectionKey: string, fieldKey: ClaimKeys, fieldValue: ClaimEntry) => {
-    state[sectionKey].updateFieldValue(fieldKey, fieldValue);
-    setState(prevState => ({...prevState, [sectionKey]: state[sectionKey]}))
-  }
+const noop = () => {}
+
+const SectionForm: React.FC<ISectionForm> = ({ renderFormHeader, renderSectionHeader, renderSectionFooter }) => {
+  const businessCards = useSelector(getBusinessCardAttributes);
+  const businessCardWithValues = getAttributeConfigWithValues(AttributeTypes.businessCard, businessCards ? businessCards[0].value : undefined); 
+  const formInitial = assembleFormInitialValues(businessCardWithValues.fields);
+
+  const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues);
 
   return (
     <Block customStyle={{paddingHorizontal: 20, paddingVertical: 25}}>
-      {renderFormHeader ? renderFormHeader(state) : null}
-      <MoveToNext>
-      {Object.keys(state).map((sectionKey, idxKey) => {
-        const section = state[sectionKey];
-        return (
-          <>
-            {renderSectionHeader ? renderSectionHeader(section) : null}
-            {section.fields.map((f, idx) => {
+      <Formik initialValues={formInitial} onSubmit={noop}>
+        {({ handleChange, values }) => (
+        <>
+          {renderFormHeader ? renderFormHeader(values) : null}
+          <AutofocusContainer>
+            {Object.keys(groupedBC).map((groupKey: string, groupIdx) => {
               return (
-                <MoveToNext.InputsCollector key={f.key}>
-                  <Input.Block
-                    autoFocus={idxKey === 0 && idx === 0}
-                    value={f.value}
-                    updateInput={(val) => handleFieldValueChange(sectionKey, f.key, val)}
-                    placeholder={f.label}
-                    {...f.keyboardOptions}
-                  />
-                </MoveToNext.InputsCollector>
-              )})}
-              {renderSectionFooter ? renderSectionFooter(section) : null}
-          </>
-        )
-      })}
-      </MoveToNext>
+                <>
+                  {renderSectionHeader ? renderSectionHeader(groupKey) : null}
+                  {groupedBC[groupKey].map((f, idx) => (
+                    <AutofocusInput
+                      autoFocus={groupIdx === 0 && idx === 0}
+                      name={f.key as string}
+                      key={f.key}
+                      value={values[f.key]}
+                      updateInput={handleChange(f.key)}
+                      placeholder={f.label}
+                      {...f.keyboardOptions}
+                    />
+                  ))}                  
+                  {renderSectionFooter ? renderSectionFooter(groupKey) : null}
+                </>
+              )
+            })}
+            </AutofocusContainer> 
+          </>  
+        )}
+      </Formik>
     </Block>
   )
 }
