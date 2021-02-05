@@ -42,6 +42,15 @@ describe('Record', () => {
     expect(getByTestId('record-item-details')).toBeDefined()
   })
 
+  it('should correctly format the time', async () => {
+    const { getAllByTestId } = await waitFor(() =>
+      renderWithSafeArea(<History />),
+    )
+
+    const item = getAllByTestId('record-item-time')[0]
+    expect(item).toBeDefined()
+  })
+
   //FIXME: @onViewableItemsChanged on @SectionList is never called
   it.skip('should update the section when scrolled', async () => {
     const { getByTestId, getAllByTestId } = await waitFor(() =>

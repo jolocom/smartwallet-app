@@ -28,6 +28,7 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
           </JoloText>
 
           <JoloText
+            testID="record-item-time"
             size={JoloTextSizes.mini}
             color={Colors.white}
             customStyles={{ alignSelf: 'center', marginRight: 16 }}
