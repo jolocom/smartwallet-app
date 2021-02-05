@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { View, StyleSheet, ViewStyle, Platform, Animated, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, ViewStyle, Platform, Animated } from 'react-native'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
@@ -48,7 +48,6 @@ const BasWrapper: React.FC<Props> = ({
         { opacity: animatedOpacity },
       ]}
     >
-      <TouchableOpacity activeOpacity={1}>
         {showIcon && (
           <IconWrapper customStyle={{ marginBottom: -35 }}>
             <View style={styles.basIcon}>
@@ -57,14 +56,12 @@ const BasWrapper: React.FC<Props> = ({
           </IconWrapper>
         )}
         <View style={[styles.childrenWrapper, customStyles]}>{children}</View>
-      </TouchableOpacity>
     </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: 'absolute',
     alignSelf: 'center',
     width: '98%',
   },

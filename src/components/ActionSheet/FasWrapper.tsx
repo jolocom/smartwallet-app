@@ -1,13 +1,10 @@
 import React from 'react'
-import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import InteractionIcon, { IconWrapper } from './InteractionIcon'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-
-const WINDOW = Dimensions.get('window')
-const SCREEN_HEIGHT = WINDOW.height
 
 interface Props {
   // NOTE: the string that will be shown by @CollapsedScrollView after it collapses. Usually
@@ -17,8 +14,6 @@ interface Props {
 
 const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
   return (
-    <TouchableOpacity onPress={e => e.preventDefault()}>
-
     <View style={styles.wrapper}>
       <CollapsedScrollView
         collapsedTitle={collapsedTitle}
@@ -35,15 +30,13 @@ const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
         {children}
       </CollapsedScrollView>
     </View>
-    </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: SCREEN_HEIGHT,
+    height: '100%',
     backgroundColor: Colors.mainBlack,
-    zIndex: 10
   },
 })
 

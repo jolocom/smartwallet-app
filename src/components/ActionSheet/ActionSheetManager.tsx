@@ -120,12 +120,15 @@ const ActionSheetManager: React.FC = () => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={handleDismissInteraction}>
-      <View style={styles.fullScreen}>
+    <View style={styles.fullScreen}>
+      <TouchableWithoutFeedback onPress={handleDismissInteraction}>
+        <View style={styles.tapArea} />
+      </TouchableWithoutFeedback>
+      <View style={styles.interactionBody}>
         {activeSheet === ActionSheetTypes.InteractionSheet && renderInteractionBody()}
         {sheetState === IntermediarySheetState.showing && <IntermediarySheetBody />} 
-      </View>      
-    </TouchableWithoutFeedback>
+      </View>
+    </View>      
   )
 }
 
@@ -133,6 +136,13 @@ const styles = StyleSheet.create({
   fullScreen: {
     width: '100%',
     height: '100%',
+    justifyContent: 'space-between',
+  },
+  tapArea: {
+    flex: 1,  
+  },
+  interactionBody: {
+    flex: 0,
   }
 })
 

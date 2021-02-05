@@ -24,6 +24,7 @@ const Interactions: React.FC = () => {
     <Stack.Navigator
       headerMode="none"
       mode="modal"
+      screenOptions={{ gestureEnabled: false}}
     >
       <Stack.Screen name={ScreenNames.Scanner} component={Scanner} />
       <Stack.Screen
