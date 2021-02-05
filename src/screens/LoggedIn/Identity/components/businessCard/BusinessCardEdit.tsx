@@ -1,24 +1,40 @@
+import { Formik } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
+import { withNextInputAutoFocusForm, withNextInputAutoFocusInput } from 'react-native-formik';
 import { useSelector } from 'react-redux';
-import SectionForm from '~/components/Form/SectionForm';
+import Block from '~/components/Block';
 import FormHeader from '~/components/FormHeader';
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import { attributeConfig } from '~/config/claims';
 import { useSICActions } from '~/hooks/attributes';
 import { useToasts } from '~/hooks/toasts';
-import { getBusinessCardId } from '~/modules/attributes/selectors';
+import { getBusinessCardAttributes, getBusinessCardId } from '~/modules/attributes/selectors';
 import { AttributeTypes } from '~/types/credentials';
-import { Colors } from '~/utils/colors';
+import { assembleFormInitialValues } from '~/utils/dataMapping';
+import { getAttributeConfigWithValues, getGroupedClaimsBusinessCard } from '~/utils/mappings/groupBusinessCard';
+import Input from '~/components/Input';
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import { JoloTextSizes } from '~/utils/fonts';
+import { Colors } from '~/utils/colors';
 
 interface IEditBC {
   onCancel: () => void
 }
 
+const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
+const AutofocusContainer = withNextInputAutoFocusForm(View)
+
+// TODO: pass real submit instead of this
+const noop = () => {}
+
 const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
   // if selector returns something we edit claim, otherwise we add new claim
   const businessCardId = useSelector(getBusinessCardId)
+  const businessCards = useSelector(getBusinessCardAttributes);
+  const businessCardWithValues = getAttributeConfigWithValues(AttributeTypes.businessCard, businessCardId ? businessCards[0].value : undefined); 
+  const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues);
+
+  const formInitial = assembleFormInitialValues(businessCardWithValues.fields);
 
   const { handleEditCredentialSI, handleCreateCredentialSI } = useSICActions()
   const { scheduleWarning } = useToasts();
@@ -52,7 +68,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
     }
   }
   
-  const handleRenderFormHeader = (claims: Record<string, string>) => {
+  const renderFormHeader = (claims: Record<string, string>) => {
     return (
       <FormHeader>
         <FormHeader.Cancel onCancel={onCancel} />
@@ -60,22 +76,55 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
       </FormHeader>
     )
   }
+
+  const renderSectionHeader = (sectionLabel: string) => {
+    return (
+      <JoloText
+        kind={JoloTextKind.title}
+        size={JoloTextSizes.mini}
+        color={Colors.white50}
+        weight={JoloTextWeight.regular}
+        customStyles={{ marginBottom: 5 }}
+      >
+        {sectionLabel}
+      </JoloText>
+    )
+  }
+
+  const renderSectionFooter = (sectionLabel: string) => <View style={{ marginBottom: 15 }} />
+
   return (
-    <SectionForm
-      renderFormHeader={handleRenderFormHeader}
-      renderSectionHeader={(sectionLabel) => (
-        <JoloText
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.mini}
-          color={Colors.white50}
-          weight={JoloTextWeight.regular}
-          customStyles={{ marginBottom: 5 }}
-        >
-          {sectionLabel}
-        </JoloText>
-      )}
-      renderSectionFooter={() => <View style={{ marginBottom: 15 }} />}
-    />
+    <Block customStyle={{paddingHorizontal: 20, paddingVertical: 25}}>
+      <Formik initialValues={formInitial} onSubmit={noop}>
+        {({ handleChange, values }) => (
+        <>
+          {renderFormHeader(values)}
+          <AutofocusContainer>
+            {Object.keys(groupedBC).map((groupKey: string, groupIdx) => {
+              return (
+                <>
+                  {renderSectionHeader(groupKey)}
+                  {groupedBC[groupKey].map((f, idx) => (
+                    <AutofocusInput
+                      autoFocus={groupIdx === 0 && idx === 0}
+                      // TODO: fix type issues
+                      name={f.key}
+                      key={f.key}
+                      value={values[f.key]}
+                      updateInput={handleChange(f.key)}
+                      placeholder={f.label}
+                      {...f.keyboardOptions}
+                    />
+                  ))}                  
+                  {renderSectionFooter(groupKey)}
+                </>
+              )
+            })}
+            </AutofocusContainer> 
+          </>  
+        )}
+      </Formik>
+    </Block>
   )
 }
 
