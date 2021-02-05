@@ -322,6 +322,7 @@ const history = {
   NOT_SELECTED: 'Not selected',
   NOT_ISSUED: 'Not issued',
   NOT_SHARED: 'Not shared',
+  NO_HISTORY_YET: 'No history yet',
 }
 
 const identity = {
@@ -345,6 +346,15 @@ const identity = {
   YOUR_INFO_IS_QUITE_EMPTY:
     'Your info is quite empty. Fill it in for the future cases',
   SO_FAR_IT_IS_EMPTY: "So far, it's empty. Just tap to start creation",
+  YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
+    'You dont have any completed interactions yet. Make one today!',
+}
+
+const bottomBar = {
+  IDENTITY: 'Identity',
+  HISTORY: 'History',
+  DOCUMENTS: 'Document',
+  SETTINGS: 'Settings',
 }
 
 export const strings = {
@@ -368,4 +378,5 @@ export const strings = {
   ...documents,
   ...history,
   ...identity,
+  ...bottomBar,
 }
