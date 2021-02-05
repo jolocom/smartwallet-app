@@ -29,6 +29,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
   const businessCardId = useSelector(getBusinessCardId)
   const businessCards = useSelector(getBusinessCardAttributes);
   const businessCardWithValues = getAttributeConfigWithValues(AttributeTypes.businessCard, businessCardId ? businessCards[0].value : undefined); 
+  // used to support UI groupings 
   const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues);
 
   const formInitial = assembleFormInitialValues(businessCardWithValues.fields);
