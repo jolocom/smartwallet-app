@@ -6,6 +6,12 @@ import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
 import BP from '~/utils/breakpoints'
 import { useHideStatusBar } from '~/hooks/generic'
+import JoloText, {
+  JoloTextKind,
+  JoloTextWeight,
+  IJoloTextProps,
+} from './JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -18,7 +24,12 @@ interface ScreenContainerI {
   onClose?: () => void
 }
 
-const ScreenContainer: React.FC<ScreenContainerI> = ({
+interface IScreenContainerCompound {
+  Header: React.FC<IJoloTextProps>
+}
+
+const ScreenContainer: React.FC<ScreenContainerI> &
+  IScreenContainerCompound = ({
   children,
   isTransparent = false,
   isFullscreen = false,
@@ -72,6 +83,34 @@ const ScreenContainer: React.FC<ScreenContainerI> = ({
   )
 }
 
+const ScreenContainerHeader: React.FC<IJoloTextProps> = ({
+  children,
+  customStyles,
+  ...props
+}) => {
+  return (
+    <JoloText
+      kind={JoloTextKind.title}
+      size={JoloTextSizes.middle}
+      weight={JoloTextWeight.regular}
+      {...props}
+      customStyles={[
+        {
+          alignSelf: 'flex-start',
+          textAlign: 'left',
+          marginTop: 16,
+          marginBottom: 8,
+        },
+        customStyles,
+      ]}
+    >
+      {children}
+    </JoloText>
+  )
+}
+
+ScreenContainer.Header = ScreenContainerHeader
+
 const styles = StyleSheet.create({
   navContainer: {
     flex: 1,
@@ -84,11 +123,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '5%',
-    paddingTop: BP({
-      default: 40,
-      small: 15,
-      xsmall: 15,
-    }),
+    /* paddingTop: BP({
+     *   default: 40,
+     *   small: 15,
+     *   xsmall: 15,
+     * }), */
   },
   transparent: {
     backgroundColor: 'transparent',
