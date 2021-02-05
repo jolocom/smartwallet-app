@@ -25,7 +25,7 @@ export enum JoloTextWeight {
   regular = 'regular',
 }
 
-interface PropsI {
+export interface IJoloTextProps extends TextProps {
   kind?: JoloTextKind
   size?: JoloTextSizes
   weight?: JoloTextWeight
@@ -35,7 +35,7 @@ interface PropsI {
   testID?: string
 }
 
-const JoloText: React.FC<PropsI & TextProps> = (props) => {
+const JoloText: React.FC<IJoloTextProps> = (props) => {
   const {
     children,
     kind = JoloTextKind.subtitle,
