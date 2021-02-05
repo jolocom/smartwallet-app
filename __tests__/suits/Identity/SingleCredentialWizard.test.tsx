@@ -1,9 +1,9 @@
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
-import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
+import SingleCredentialWizard from '~/screens/LoggedIn/Identity/SingleCredentialWizard'
 import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
-import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
+import { renderWithSafeArea } from '~/utils/renderWithSafeArea'
 
 const mockCreateAttr = jest.fn()
 

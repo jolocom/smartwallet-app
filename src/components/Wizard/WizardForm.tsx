@@ -3,7 +3,6 @@ import { View } from 'react-native'
 import { Formik } from 'formik'
 import { withNextInputAutoFocusInput } from 'react-native-formik'
 import { withNextInputAutoFocusForm } from 'react-native-formik'
-
 import { Colors } from '~/utils/colors'
 import Wizard, { IWizardFormProps, useWizard } from '.'
 import Input from '../Input'

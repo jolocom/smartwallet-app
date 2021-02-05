@@ -17,7 +17,18 @@ export const getPrimitiveAttributes = createSelector(
   },
 )
 
-export const getBusinessCardAttributes = createSelector(
+export const getBusinessCardId = createSelector(
+  [getAttributes],
+  (attributes) => {
+    const { ProofOfBusinessCardCredential } = attributes
+    if (ProofOfBusinessCardCredential) {
+      return ProofOfBusinessCardCredential[0].id
+    }
+    return undefined
+  },
+)
+
+const getBusinessCardAttributes = createSelector(
   [getAttributes],
   (attributes) => {
     const { ProofOfBusinessCardCredential } = attributes
@@ -41,6 +52,6 @@ export const getGroupedValuesForBusinessCard = createSelector(
         {},
       )
     }
-    return null;
+    return null
   },
 )

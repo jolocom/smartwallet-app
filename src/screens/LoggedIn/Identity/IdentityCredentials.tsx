@@ -30,7 +30,7 @@ import { useToasts } from '~/hooks/toasts'
 import EmptyPlaceholder, {
   IdentityPlaceholderTypes,
 } from './components/EmptyPlaceholder'
-import FormHeader from './components/FormHeader'
+import FormHeader from '~/components/FormHeader'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)

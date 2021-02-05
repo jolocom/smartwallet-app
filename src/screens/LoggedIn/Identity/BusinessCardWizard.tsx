@@ -8,7 +8,7 @@ import {
   ClaimKeys,
   IAttributeClaimField,
 } from '~/types/credentials'
-import Wizard from '.'
+import Wizard from '~/components/Wizard'
 
 const getFormSlice = (...claimskeys: ClaimKeys[]) => {
   const config = attributeConfig[AttributeTypes.businessCard]

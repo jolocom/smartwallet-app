@@ -9,9 +9,11 @@ interface IAction {
   color: Colors
 }
 
+type TActionCTA = () => void
+
 export interface IFormHeaderComposition {
-  Cancel: React.FC<{ onCancel: () => void }>
-  Done: React.FC<{ onSubmit: () => void }>
+  Cancel: React.FC<{ onCancel: TActionCTA }>
+  Done: React.FC<{ onSubmit: TActionCTA }>
 }
 
 const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
@@ -56,9 +58,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
   },
 })
 

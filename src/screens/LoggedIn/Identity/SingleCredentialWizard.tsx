@@ -4,7 +4,7 @@ import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
-import Wizard from '.'
+import Wizard from '~/components/Wizard'
 
 const WIZARD_CONFIG = {
   0: {
