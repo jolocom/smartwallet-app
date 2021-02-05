@@ -87,6 +87,7 @@ const RegisterPin = () => {
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
+        paddingTop: BP({ default: 36, small: 28, xsmall: 20 }),
       }}
     >
       <ScreenHeader

@@ -123,11 +123,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '5%',
-    /* paddingTop: BP({
-     *   default: 40,
-     *   small: 15,
-     *   xsmall: 15,
-     * }), */
   },
   transparent: {
     backgroundColor: 'transparent',
