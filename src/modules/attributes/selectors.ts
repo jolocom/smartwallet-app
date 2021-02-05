@@ -36,7 +36,6 @@ export const getBusinessCardAttributes = createSelector(
   },
 )
 
-// TODO: rename this as this selectors isn't doing what it describes in name
 export const getBusinessCardConfigWithValues = createSelector(
   [getBusinessCardAttributes],
   (attributes) => {
