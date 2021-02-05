@@ -51,7 +51,6 @@ const WIZARD_CONFIG = {
 const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
   onFormSubmit,
 }) => {
-  //const [fields, setFields] = useState<IAttributeClaimFieldWithValue[]>([])
   const [fields, setFields] = useState<Record<string, string>>({})
 
   const createAttribute = useCreateAttributes()
