@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LayoutAnimation, PanResponder, StyleSheet, View } from 'react-native'
 import { isPointWithinArea, moveArrayElement } from './utils'
 import { TagObject, GestureState } from './types'
@@ -7,17 +7,25 @@ import Pill from './Pill'
 interface PropsI {
   tags: string[]
   animationDuration?: number
-  updateTags: Dispatch<SetStateAction<string[] | null>>
+  updateTags: (phrase: string[]) => void
 }
 
-const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 300 }) => {
+const Pills: React.FC<PropsI> = ({
+  tags,
+  updateTags,
+  animationDuration = 300,
+}) => {
   const [keys, setKeys] = useState<TagObject[]>(() =>
     tags.map((title: string) => ({ title })),
   )
-  const reorderedKeys = useMemo(() => keys.map(k => k.title), [JSON.stringify(keys)])
+  const reorderedKeys = useMemo(() => keys.map((k) => k.title), [
+    JSON.stringify(keys),
+  ])
 
   const [dndEnabled, setDndEnabled] = useState(true)
-  const [tagBeingDragged, setTagBeingDragged] = useState<TagObject | undefined>(undefined)
+  const [tagBeingDragged, setTagBeingDragged] = useState<TagObject | undefined>(
+    undefined,
+  )
 
   const [wordsAreVisible, setWordsVisibility] = useState(false)
 
@@ -30,11 +38,11 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 300 }) 
   }, [])
 
   useEffect(() => {
-    enableDndAfterAnimating();
+    enableDndAfterAnimating()
   }, [JSON.stringify(keys)])
 
   useEffect(() => {
-    updateTags(reorderedKeys);
+    updateTags(reorderedKeys)
   }, [JSON.stringify(reorderedKeys)])
 
   useEffect(() => {
@@ -85,11 +93,7 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 300 }) 
       return
     }
     // Find the tag we're dragging the current tag over
-    const draggedOverTag = findTagAtCoordinates(
-      moveX,
-      moveY,
-      tagBeingDragged
-    )
+    const draggedOverTag = findTagAtCoordinates(moveX, moveY, tagBeingDragged)
     if (draggedOverTag && tagBeingDragged) {
       swapTags(tagBeingDragged, draggedOverTag)
     }
@@ -101,7 +105,7 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 300 }) 
     if (tagBeingDragged) {
       updateTagState(tagBeingDragged, { isBeingDragged: false })
     }
-    setTagBeingDragged(undefined) 
+    setTagBeingDragged(undefined)
   }
 
   const enableDndAfterAnimating = () => {
@@ -176,29 +180,34 @@ const Pills: React.FC<PropsI> = ({ tags, updateTags, animationDuration = 300 }) 
     [],
   )
 
-  const panResponder = useMemo(() => PanResponder.create({
-    // Handle drag gesture
-    onMoveShouldSetPanResponder: (_, gestureState: GestureState) =>
-      onMoveShouldSetPanResponder(gestureState),
-    onPanResponderGrant: () => onPanResponderGrant(),
-    onPanResponderMove: (_, gestureState: GestureState) =>
-      onPanResponderMove(gestureState),
-    // Handle drop gesture
-    onPanResponderRelease: () => onPanResponderEnd(),
-    onPanResponderTerminate: () => onPanResponderEnd(),
-  }), [
-    JSON.stringify(keys),
-    dndEnabled,
-    JSON.stringify(tagBeingDragged)
-  ])
-  
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        // Handle drag gesture
+        onMoveShouldSetPanResponder: (_, gestureState: GestureState) =>
+          onMoveShouldSetPanResponder(gestureState),
+        onPanResponderGrant: () => onPanResponderGrant(),
+        onPanResponderMove: (_, gestureState: GestureState) =>
+          onPanResponderMove(gestureState),
+        // Handle drop gesture
+        onPanResponderRelease: () => onPanResponderEnd(),
+        onPanResponderTerminate: () => onPanResponderEnd(),
+      }),
+    [JSON.stringify(keys), dndEnabled, JSON.stringify(tagBeingDragged)],
+  )
 
   return (
     <View {...panResponder.panHandlers} style={styles.container}>
-          {wordsAreVisible ? (keys.map((tag) => (
-      <Pill key={tag.title} tag={tag} onRender={onRenderTag} isActive={tagBeingDragged?.title === tag.title} />
-    ))) : null}
-
+      {wordsAreVisible
+        ? keys.map((tag) => (
+            <Pill
+              key={tag.title}
+              tag={tag}
+              onRender={onRenderTag}
+              isActive={tagBeingDragged?.title === tag.title}
+            />
+          ))
+        : null}
     </View>
   )
 }
@@ -212,6 +221,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 })
-
 
 export default Pills
