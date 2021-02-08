@@ -210,7 +210,7 @@ const IdentityCredentials = () => {
                 <Widget onAdd={() => handleShowNewForm(key)}>
                   <Widget.Header>
                     <Widget.Header.Name value={aVal.label} />
-                    {attributes[key] && <Widget.Header.Action.CreateNew />}
+                    <Widget.Header.Action.CreateNew />
                   </Widget.Header>
                   {attributes[key] ? (
                     (attributes[key] || []).map((f) => {
