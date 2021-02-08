@@ -40,7 +40,7 @@ enum FormModes {
   none = 'none',
 }
 
-type TPrimiveAttributeTypes = Exclude<
+type TPrimitiveAttributeTypes = Exclude<
   AttributeTypes,
   AttributeTypes.businessCard
 >
@@ -61,7 +61,7 @@ const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
 const IdentityCredentials = () => {
   const [expandedForm, setExpandedForm] = useState<
-    TPrimiveAttributeTypes | undefined
+    TPrimitiveAttributeTypes | undefined
   >(undefined)
   const [formMode, setFormMode] = useState(FormModes.none)
   const [formConfig, setFormConfig] = useState<IAttributeConfig<
@@ -108,7 +108,7 @@ const IdentityCredentials = () => {
     }
   }, [formMode, expandedForm, editClaimId])
 
-  const toggleForm = (cb: (type?: TPrimiveAttributeTypes) => void) => {
+  const toggleForm = (cb: (type?: TPrimitiveAttributeTypes) => void) => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 200,
@@ -117,7 +117,7 @@ const IdentityCredentials = () => {
   }
 
   const handleShowForm = (mode: FormModes) => {
-    return (type: TPrimiveAttributeTypes, id?: string) => {
+    return (type: TPrimitiveAttributeTypes, id?: string) => {
       setFormMode(mode)
       toggleForm(() => setExpandedForm(type))
       if (id) {
@@ -196,42 +196,53 @@ const IdentityCredentials = () => {
     ? assembleFormInitialValues(formConfig.fields)
     : {}
 
-  const sortedPrimitiveAttributes = Object.entries<IAttributeConfig>(
+  const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
     primitiveAttributesConfig,
-  ).sort(([a, _a], [b, _b]) => {
-    const aVal = attributes[a as TPrimiveAttributeTypes]
-    const bVal = attributes[b as TPrimiveAttributeTypes]
-    if ((!aVal && !bVal) || (aVal && bVal)) return 0
-    else if (aVal && !bVal) return -1
-    else return 1
+  ).map(([key, config]) => {
+    return {
+      key: key as TPrimitiveAttributeTypes,
+      config,
+      values: attributes[key as TPrimitiveAttributeTypes] ?? [],
+    }
   })
+
+  const sortedPrimitiveAttributes = primitiveAttributesWithValues.sort(
+    (a, b) => {
+      const aValues = !!a.values.length
+      const bValues = !!b.values.length
+      if ((!aValues && !bValues) || (aValues && bValues)) return 0
+      else if (aValues && !bValues) return -1
+      else return 1
+    },
+  )
+
+  const isPrimitiveAttributesEmpty = primitiveAttributesWithValues.every(
+    (a) => !a.values.length,
+  )
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
-      <IdentityTabs.Styled.Placeholder
-        show={!Object.keys(primitiveAttributesConfig).length}
-      />
-      {sortedPrimitiveAttributes.map(([aKey, aVal]) => {
-        const key = aKey as TPrimiveAttributeTypes
+      <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty} />
+      {sortedPrimitiveAttributes.map(({ key, config, values }) => {
         return (
-          <View style={styles.group} key={aKey}>
+          <View style={styles.group} key={key}>
             {getIsWidgetShown(key) ? (
               <Widget onAdd={() => handleShowNewForm(key)}>
                 <Widget.Header>
-                  <Widget.Header.Name value={aVal.label} />
+                  <Widget.Header.Name value={config.label} />
                   <Widget.Header.Action.CreateNew />
                 </Widget.Header>
-                {attributes[key] ? (
-                  (attributes[key] || []).map((f) => {
-                    if (f.id === editClaimId) return null
+                {values.length ? (
+                  values.map((field) => {
+                    if (field.id === editClaimId) return null
                     return (
                       <TouchableOpacity
-                        onPress={() => handleShowEditForm(key, f.id)}
-                        key={f.id}
+                        onPress={() => handleShowEditForm(key, field.id)}
+                        key={field.id}
                       >
                         <Field.Static
-                          key={f.id}
-                          value={Object.values(f.value).join(' ')}
+                          key={field.id}
+                          value={Object.values(field.value).join(' ')}
                         />
                       </TouchableOpacity>
                     )
@@ -243,7 +254,7 @@ const IdentityCredentials = () => {
                 )}
               </Widget>
             ) : null}
-            {aKey === expandedForm && formConfig && (
+            {key === expandedForm && formConfig && (
               <Formik
                 onSubmit={handleCredentialSubmit}
                 initialValues={formInitial}
