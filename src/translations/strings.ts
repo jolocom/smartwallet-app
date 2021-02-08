@@ -343,8 +343,9 @@ const identity = {
   YOUR_NAME: 'Your name',
   NOT_SPECIFIED: 'Not specified',
   SO_FAR_IT_IS_EMPTY: "So far, it's empty. Just tap to start creation",
-  YOUR_INFO_IS_QUITE_EMPTY: 'Your info is quite empty',
-  FILL_IT_IN_FOR_THE_FUTURE_CASES: 'Fill it in for the future cases',
+  YOUR_INFO_IS_QUITE_EMPTY:
+    'Your info is quite empty\nFill it in for the future cases',
+  PLEASE_INTRODUCE_YOURSELF: 'Please introduce yourself',
 }
 
 export const strings = {

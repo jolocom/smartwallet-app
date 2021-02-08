@@ -30,6 +30,7 @@ import { useToasts } from '~/hooks/toasts'
 import FormHeader from '~/components/FormHeader'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
 import IdentityTabs from './tabs'
+import { strings } from '~/translations'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
@@ -222,7 +223,9 @@ const IdentityCredentials = () => {
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
-      <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty} />
+      <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
+        {strings.YOUR_INFO_IS_QUITE_EMPTY}
+      </IdentityTabs.Styled.Placeholder>
       {sortedPrimitiveAttributes.map(({ key, config, values }) => {
         return (
           <View style={styles.group} key={key}>
@@ -276,7 +279,7 @@ const IdentityCredentials = () => {
                             value={values[field.key]}
                             placeholder={field.label}
                             autoFocus={i === 0}
-                            containerStyle={{ marginVertical: 12 }}
+                            containerStyle={{ marginBottom: 12 }}
                             {...field.keyboardOptions}
                           />
                         )
