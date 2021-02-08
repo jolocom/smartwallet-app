@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { debugView } from '~/utils/dev'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { strings } from '~/translations'
 import { JoloTextSizes } from '~/utils/fonts'

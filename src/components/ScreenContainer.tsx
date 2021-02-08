@@ -4,7 +4,6 @@ import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
-import BP from '~/utils/breakpoints'
 import { useHideStatusBar } from '~/hooks/generic'
 import JoloText, {
   JoloTextKind,
@@ -93,6 +92,7 @@ const ScreenContainerHeader: React.FC<IJoloTextProps> = ({
       kind={JoloTextKind.title}
       size={JoloTextSizes.middle}
       weight={JoloTextWeight.regular}
+      color={Colors.white85}
       {...props}
       customStyles={[
         {
