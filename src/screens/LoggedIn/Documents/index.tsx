@@ -160,7 +160,6 @@ const Documents: React.FC = () => {
   return (
     <ScreenContainer
       customStyles={{
-        paddingHorizontal: 28,
         justifyContent: 'flex-start',
       }}
     >

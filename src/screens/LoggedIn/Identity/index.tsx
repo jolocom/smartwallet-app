@@ -31,32 +31,32 @@ const Identity = () => {
       {showIdentityIntro ? (
         <IdentityIntro />
       ) : (
-          <>
-            <Section.Title marginTop={16}>{strings.YOUR_INFO}</Section.Title>
-            <IdentityTabs initialTab={IdentityTabIds.credentials}>
-              <IdentityTabs.Styled.Header>
-                <IdentityTabs.Tab
-                  id={IdentityTabIds.credentials}
-                  title={strings.CREDENTIALS}
-                >
-                  <IdentityTabCredentialsIcon />
-                </IdentityTabs.Tab>
-                <IdentityTabs.Tab
-                  id={IdentityTabIds.businessCard}
-                  title={strings.BUSINESS_CARD}
-                >
-                  <IdentityTabBusinessCardIcon />
-                </IdentityTabs.Tab>
-              </IdentityTabs.Styled.Header>
-              <IdentityTabs.Page id={IdentityTabIds.credentials}>
-                <IdentityCredentials />
-              </IdentityTabs.Page>
-              <IdentityTabs.Page id={IdentityTabIds.businessCard}>
-                <IdentityBusinessCard />
-              </IdentityTabs.Page>
-            </IdentityTabs>
-          </>
-        )}
+        <>
+          <ScreenContainer.Header>{strings.YOUR_INFO}</ScreenContainer.Header>
+          <IdentityTabs initialTab={IdentityTabIds.credentials}>
+            <IdentityTabs.Styled.Header>
+              <IdentityTabs.Tab
+                id={IdentityTabIds.credentials}
+                title={strings.CREDENTIALS}
+              >
+                <IdentityTabCredentialsIcon />
+              </IdentityTabs.Tab>
+              <IdentityTabs.Tab
+                id={IdentityTabIds.businessCard}
+                title={strings.BUSINESS_CARD}
+              >
+                <IdentityTabBusinessCardIcon />
+              </IdentityTabs.Tab>
+            </IdentityTabs.Styled.Header>
+            <IdentityTabs.Page id={IdentityTabIds.credentials}>
+              <IdentityCredentials />
+            </IdentityTabs.Page>
+            <IdentityTabs.Page id={IdentityTabIds.businessCard}>
+              <IdentityBusinessCard />
+            </IdentityTabs.Page>
+          </IdentityTabs>
+        </>
+      )}
     </ScreenContainer>
   )
 }

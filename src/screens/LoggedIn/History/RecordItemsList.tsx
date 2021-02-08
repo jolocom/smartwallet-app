@@ -8,6 +8,7 @@ import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
 import RecordItem from './components/RecordItem'
+import HistoryPlaceholder from './components/HistoryPlaceholder'
 
 const ITEMS_PER_PAGE = 5
 
@@ -97,7 +98,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
     }
   }
 
-  return (
+  return sections.length ? (
     <SectionList<string>
       ref={sectionListRef}
       sections={sections}
@@ -122,6 +123,8 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
       )}
       stickySectionHeadersEnabled={false}
     />
+  ) : (
+    <HistoryPlaceholder />
   )
 }
 
