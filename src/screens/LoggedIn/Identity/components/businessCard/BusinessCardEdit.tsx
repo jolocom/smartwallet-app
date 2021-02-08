@@ -1,21 +1,30 @@
-import { Formik } from 'formik';
-import React from 'react';
-import { View } from 'react-native';
-import { withNextInputAutoFocusForm, withNextInputAutoFocusInput } from 'react-native-formik';
-import { useSelector } from 'react-redux';
-import Block from '~/components/Block';
-import FormHeader from '~/components/FormHeader';
-import { attributeConfig } from '~/config/claims';
-import { useSICActions } from '~/hooks/attributes';
-import { useToasts } from '~/hooks/toasts';
-import { getBusinessCardAttributes, getBusinessCardId } from '~/modules/attributes/selectors';
-import { AttributeTypes } from '~/types/credentials';
-import { assembleFormInitialValues } from '~/utils/dataMapping';
-import { getAttributeConfigWithValues, getGroupedClaimsBusinessCard } from '~/utils/mappings/groupBusinessCard';
-import Input from '~/components/Input';
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
-import { JoloTextSizes } from '~/utils/fonts';
-import { Colors } from '~/utils/colors';
+import { Formik } from 'formik'
+import React from 'react'
+import { View } from 'react-native'
+import {
+  withNextInputAutoFocusForm,
+  withNextInputAutoFocusInput,
+} from 'react-native-formik'
+import { useSelector } from 'react-redux'
+import Block from '~/components/Block'
+import FormHeader from '~/components/FormHeader'
+import { attributeConfig } from '~/config/claims'
+import { useSICActions } from '~/hooks/attributes'
+import { useToasts } from '~/hooks/toasts'
+import {
+  getBusinessCardAttributes,
+  getBusinessCardId,
+} from '~/modules/attributes/selectors'
+import { AttributeTypes } from '~/types/credentials'
+import { assembleFormInitialValues } from '~/utils/dataMapping'
+import {
+  getAttributeConfigWithValues,
+  getGroupedClaimsBusinessCard,
+} from '~/utils/mappings/groupBusinessCard'
+import Input from '~/components/Input'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
+import { Colors } from '~/utils/colors'
 
 interface IEditBC {
   onCancel: () => void
@@ -27,18 +36,21 @@ const AutofocusContainer = withNextInputAutoFocusForm(View)
 const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
   // if selector returns something we edit claim, otherwise we add new claim
   const businessCardId = useSelector(getBusinessCardId)
-  const businessCards = useSelector(getBusinessCardAttributes);
-  const businessCardWithValues = getAttributeConfigWithValues(AttributeTypes.businessCard, businessCardId ? businessCards[0].value : undefined); 
-  // used to support UI groupings 
-  const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues);
+  const businessCards = useSelector(getBusinessCardAttributes)
+  const businessCardWithValues = getAttributeConfigWithValues(
+    AttributeTypes.businessCard,
+    businessCardId ? businessCards[0].value : undefined,
+  )
+  // used to support UI groupings
+  const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues)
 
-  const formInitial = assembleFormInitialValues(businessCardWithValues.fields);
+  const formInitial = assembleFormInitialValues(businessCardWithValues.fields)
 
   const { handleEditCredentialSI, handleCreateCredentialSI } = useSICActions()
-  const { scheduleWarning } = useToasts();
+  const { scheduleWarning } = useToasts()
 
   const handleFormSubmit = async (claims: Record<string, string>) => {
-    // TODO: check if id values are the same or dismiss 
+    // TODO: check if id values are the same or dismiss
     try {
       if (businessCardId) {
         // edit mode
@@ -46,7 +58,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
           AttributeTypes.businessCard,
           claims,
           attributeConfig[AttributeTypes.businessCard].metadata,
-          businessCardId
+          businessCardId,
         )
       } else {
         // add mode
@@ -65,7 +77,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
       onCancel()
     }
   }
-  
+
   const renderFormHeader = (claims: Record<string, string>) => {
     return (
       <FormHeader>
@@ -89,37 +101,45 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
     )
   }
 
-  const renderSectionFooter = (sectionLabel: string) => <View style={{ marginBottom: 15 }} />
+  const renderSectionFooter = (sectionLabel: string) => (
+    <View style={{ marginBottom: 15 }} />
+  )
 
   return (
-    <Block customStyle={{paddingHorizontal: 20, paddingVertical: 25}}>
+    <Block
+      customStyle={{
+        paddingHorizontal: 20,
+        paddingVertical: 25,
+        marginBottom: '30%',
+      }}
+    >
       <Formik initialValues={formInitial} onSubmit={handleFormSubmit}>
         {({ handleChange, values }) => (
-        <>
-          {renderFormHeader(values)}
-          <AutofocusContainer>
-            {Object.keys(groupedBC).map((groupKey: string, groupIdx) => {
-              return (
-                <>
-                  {renderSectionHeader(groupKey)}
-                  {groupedBC[groupKey].map((f, idx) => (
-                    <AutofocusInput
-                      autoFocus={groupIdx === 0 && idx === 0}
-                      // @ts-ignore name prop isn't supported by TextInput component
-                      name={f.key}
-                      key={f.key}
-                      value={values[f.key]}
-                      updateInput={handleChange(f.key)}
-                      placeholder={f.label}
-                      {...f.keyboardOptions}
-                    />
-                  ))}                  
-                  {renderSectionFooter(groupKey)}
-                </>
-              )
-            })}
-            </AutofocusContainer> 
-          </>  
+          <>
+            {renderFormHeader(values)}
+            <AutofocusContainer>
+              {Object.keys(groupedBC).map((groupKey: string, groupIdx) => {
+                return (
+                  <>
+                    {renderSectionHeader(groupKey)}
+                    {groupedBC[groupKey].map((f, idx) => (
+                      <AutofocusInput
+                        autoFocus={groupIdx === 0 && idx === 0}
+                        // @ts-ignore name prop isn't supported by TextInput component
+                        name={f.key}
+                        key={f.key}
+                        value={values[f.key]}
+                        updateInput={handleChange(f.key)}
+                        placeholder={f.label}
+                        {...f.keyboardOptions}
+                      />
+                    ))}
+                    {renderSectionFooter(groupKey)}
+                  </>
+                )
+              })}
+            </AutofocusContainer>
+          </>
         )}
       </Formik>
     </Block>
