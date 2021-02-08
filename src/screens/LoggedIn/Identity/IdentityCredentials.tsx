@@ -276,6 +276,7 @@ const IdentityCredentials = () => {
                             value={values[field.key]}
                             placeholder={field.label}
                             autoFocus={i === 0}
+                            containerStyle={{ marginVertical: 12 }}
                             {...field.keyboardOptions}
                           />
                         )
