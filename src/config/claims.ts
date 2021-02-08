@@ -170,9 +170,9 @@ const businessCardConfig: IAttributeConfig = {
 }
 
 export const attributeConfig: Record<AttributeTypes, IAttributeConfig> = {
-  [AttributeTypes.emailAddress]: emailConfig,
-  [AttributeTypes.postalAddress]: postalAddressConfig,
-  [AttributeTypes.mobilePhoneNumber]: mobileNumberConfig,
   [AttributeTypes.name]: nameConfig,
+  [AttributeTypes.emailAddress]: emailConfig,
+  [AttributeTypes.mobilePhoneNumber]: mobileNumberConfig,
+  [AttributeTypes.postalAddress]: postalAddressConfig,
   [AttributeTypes.businessCard]: businessCardConfig,
 }

@@ -196,79 +196,87 @@ const IdentityCredentials = () => {
     ? assembleFormInitialValues(formConfig.fields)
     : {}
 
+  const sortedPrimitiveAttributes = Object.entries<IAttributeConfig>(
+    primitiveAttributesConfig,
+  ).sort(([a, _a], [b, _b]) => {
+    const aVal = attributes[a as TPrimiveAttributeTypes]
+    const bVal = attributes[b as TPrimiveAttributeTypes]
+    if ((!aVal && !bVal) || (aVal && bVal)) return 0
+    else if (aVal && !bVal) return -1
+    else return 1
+  })
+
   return (
     <View testID="identity-credentials-present" style={styles.container}>
       <IdentityTabs.Styled.Placeholder
         show={!Object.keys(primitiveAttributesConfig).length}
       />
-      {Object.entries<IAttributeConfig>(primitiveAttributesConfig).map(
-        ([aKey, aVal]) => {
-          const key = aKey as TPrimiveAttributeTypes
-          return (
-            <View style={styles.group} key={aKey}>
-              {getIsWidgetShown(key) ? (
-                <Widget onAdd={() => handleShowNewForm(key)}>
-                  <Widget.Header>
-                    <Widget.Header.Name value={aVal.label} />
-                    <Widget.Header.Action.CreateNew />
-                  </Widget.Header>
-                  {attributes[key] ? (
-                    (attributes[key] || []).map((f) => {
-                      if (f.id === editClaimId) return null
-                      return (
-                        <TouchableOpacity
-                          onPress={() => handleShowEditForm(key, f.id)}
+      {sortedPrimitiveAttributes.map(([aKey, aVal]) => {
+        const key = aKey as TPrimiveAttributeTypes
+        return (
+          <View style={styles.group} key={aKey}>
+            {getIsWidgetShown(key) ? (
+              <Widget onAdd={() => handleShowNewForm(key)}>
+                <Widget.Header>
+                  <Widget.Header.Name value={aVal.label} />
+                  <Widget.Header.Action.CreateNew />
+                </Widget.Header>
+                {attributes[key] ? (
+                  (attributes[key] || []).map((f) => {
+                    if (f.id === editClaimId) return null
+                    return (
+                      <TouchableOpacity
+                        onPress={() => handleShowEditForm(key, f.id)}
+                        key={f.id}
+                      >
+                        <Field.Static
                           key={f.id}
-                        >
-                          <Field.Static
-                            key={f.id}
-                            value={Object.values(f.value).join(' ')}
+                          value={Object.values(f.value).join(' ')}
+                        />
+                      </TouchableOpacity>
+                    )
+                  })
+                ) : (
+                  <Field.Empty>
+                    <PencilIcon />
+                  </Field.Empty>
+                )}
+              </Widget>
+            ) : null}
+            {aKey === expandedForm && formConfig && (
+              <Formik
+                onSubmit={handleCredentialSubmit}
+                initialValues={formInitial}
+              >
+                {({ handleChange, handleSubmit, values }) => (
+                  <View>
+                    <FormHeader>
+                      <FormHeader.Cancel onCancel={handleHideForm} />
+                      <FormHeader.Done onSubmit={handleSubmit} />
+                    </FormHeader>
+                    <AutofocusContainer>
+                      {formConfig.fields.map((field, i) => {
+                        return (
+                          <AutofocusInput
+                            // @ts-ignore no idea why it's complaining
+                            name={field.key as string}
+                            key={field.key}
+                            updateInput={handleChange(field.key)}
+                            value={values[field.key]}
+                            placeholder={field.label}
+                            autoFocus={i === 0}
+                            {...field.keyboardOptions}
                           />
-                        </TouchableOpacity>
-                      )
-                    })
-                  ) : (
-                    <Field.Empty>
-                      <PencilIcon />
-                    </Field.Empty>
-                  )}
-                </Widget>
-              ) : null}
-              {aKey === expandedForm && formConfig && (
-                <Formik
-                  onSubmit={handleCredentialSubmit}
-                  initialValues={formInitial}
-                >
-                  {({ handleChange, handleSubmit, values }) => (
-                    <View>
-                      <FormHeader>
-                        <FormHeader.Cancel onCancel={handleHideForm} />
-                        <FormHeader.Done onSubmit={handleSubmit} />
-                      </FormHeader>
-                      <AutofocusContainer>
-                        {formConfig.fields.map((field, i) => {
-                          return (
-                            <AutofocusInput
-                              // @ts-ignore no idea why it's complaining
-                              name={field.key as string}
-                              key={field.key}
-                              updateInput={handleChange(field.key)}
-                              value={values[field.key]}
-                              placeholder={field.label}
-                              autoFocus={i === 0}
-                              {...field.keyboardOptions}
-                            />
-                          )
-                        })}
-                      </AutofocusContainer>
-                    </View>
-                  )}
-                </Formik>
-              )}
-            </View>
-          )
-        },
-      )}
+                        )
+                      })}
+                    </AutofocusContainer>
+                  </View>
+                )}
+              </Formik>
+            )}
+          </View>
+        )
+      })}
     </View>
   )
 }
