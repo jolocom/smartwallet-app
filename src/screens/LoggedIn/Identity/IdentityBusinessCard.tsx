@@ -24,6 +24,7 @@ import {
   TClaimGroups,
 } from '~/utils/mappings/groupBusinessCard'
 import Styled, { IStyledComposition } from './components/Styled'
+import IdentityTabs from './tabs'
 
 enum Modes {
   display = 'display',
@@ -252,15 +253,23 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
   if (mode === Modes.edit) {
     return <BusinessCardEdit onCancel={() => transitionMode(Modes.display)} />
   }
+
   return (
-    <BusinessCard.Styled.Container>
-      <Dots
-        color={Colors.white}
-        customStyles={{ right: -10, top: -12 }}
-        options={popupOptions}
-      />
-      {isPlaceholder ? <BusinessCardPlaceholder /> : <BusinessCardCredential />}
-    </BusinessCard.Styled.Container>
+    <View>
+      <IdentityTabs.Styled.Placeholder show={!businessCardId} />
+      <BusinessCard.Styled.Container>
+        <Dots
+          color={Colors.white}
+          customStyles={{ right: -10, top: -12 }}
+          options={popupOptions}
+        />
+        {isPlaceholder ? (
+          <BusinessCardPlaceholder />
+        ) : (
+          <BusinessCardCredential />
+        )}
+      </BusinessCard.Styled.Container>
+    </View>
   )
 }
 

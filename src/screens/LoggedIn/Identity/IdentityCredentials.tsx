@@ -27,11 +27,9 @@ import {
 import { useSICActions } from '~/hooks/attributes'
 
 import { useToasts } from '~/hooks/toasts'
-import EmptyPlaceholder, {
-  IdentityPlaceholderTypes,
-} from './components/EmptyPlaceholder'
 import FormHeader from '~/components/FormHeader'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
+import IdentityTabs from './tabs'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
@@ -194,16 +192,15 @@ const IdentityCredentials = () => {
     return true
   }
 
-  if (!Object.keys(primitiveAttributesConfig).length) {
-    return <EmptyPlaceholder type={IdentityPlaceholderTypes.primitive} />
-  }
-
   const formInitial = formConfig
     ? assembleFormInitialValues(formConfig.fields)
     : {}
 
   return (
     <View testID="identity-credentials-present" style={styles.container}>
+      <IdentityTabs.Styled.Placeholder
+        show={!Object.keys(primitiveAttributesConfig).length}
+      />
       {Object.entries<IAttributeConfig>(primitiveAttributesConfig).map(
         ([aKey, aVal]) => {
           const key = aKey as TPrimiveAttributeTypes
