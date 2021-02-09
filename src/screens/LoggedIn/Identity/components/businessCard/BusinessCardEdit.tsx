@@ -16,6 +16,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import { JoloTextSizes } from '~/utils/fonts';
 import { Colors } from '~/utils/colors';
 import MoveToNext from '~/components/MoveToNext';
+import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll';
 
 interface IEditBC {
   onCancel: () => void
@@ -125,17 +126,22 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
                   <View key={groupKey}>
                     {renderSectionHeader(groupKey)}
                     {areFieldsVisible && groupedBC[groupKey].map((f, idx) => (
-                      <MoveToNext.InputsCollector key={f.key}>
-                        <Input.Block
-                          {...(groupIdx === 0 && idx === 0 ? {autoFocus: true} : {autoFocus: false})}
-                          // @ts-ignore name prop isn't supported by TextInput component
-                          name={f.key}
-                          value={values[f.key]}
-                          updateInput={handleChange(f.key)}
-                          placeholder={f.label}
-                          {...f.keyboardOptions}
-                        />
-                      </MoveToNext.InputsCollector>
+                      <JoloKeyboardAwareScroll.InputContainer>
+                        {({ focusInput }) => (
+                          <MoveToNext.InputsCollector key={f.key}>
+                            <Input.Block
+                              {...(groupIdx === 0 && idx === 0 ? {autoFocus: true} : {autoFocus: false})}
+                              // @ts-ignore name prop isn't supported by TextInput component
+                              name={f.key}
+                              value={values[f.key]}
+                              updateInput={handleChange(f.key)}
+                              placeholder={f.label}
+                              onFocus={focusInput}
+                              {...f.keyboardOptions}
+                              />
+                          </MoveToNext.InputsCollector>
+                        )}
+                      </JoloKeyboardAwareScroll.InputContainer>
                       ))}                  
                     {renderSectionFooter(groupKey)}
                   </View>
