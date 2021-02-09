@@ -11,11 +11,16 @@ const findClaimValueForKey = (fields: IAttributeClaimFieldWithValue[]) => (key: 
 
 const BusinessCardCredential: React.FC = () => {
   const groupedValuesBC = useSelector(getBusinessCardConfigWithValues);
+  console.log({groupedValuesBC});
+  
   if (!groupedValuesBC) return null
 
   const { fields } = groupedValuesBC;
   const getClaimValue = findClaimValueForKey(fields);
   const displayedName = `${getClaimValue(ClaimKeys.givenName)} ${getClaimValue(ClaimKeys.familyName)}`;
+
+  const email = getClaimValue(ClaimKeys.email);
+  const telephone = getClaimValue(ClaimKeys.telephone);
 
   return (
     <>
@@ -36,13 +41,16 @@ const BusinessCardCredential: React.FC = () => {
         <BusinessCard.Styled.FieldName>
           {strings.CONTACT_ME}
         </BusinessCard.Styled.FieldName>
-        {/* TODO: don't display empty claims */}
-        <BusinessCard.Styled.FieldValue color={Colors.white}>
-          { getClaimValue(ClaimKeys.email)}
-        </BusinessCard.Styled.FieldValue>
-        <BusinessCard.Styled.FieldValue color={Colors.white}>
-          { getClaimValue(ClaimKeys.telephone)}
-        </BusinessCard.Styled.FieldValue>
+        {!!email && (
+          <BusinessCard.Styled.FieldValue color={Colors.white}>
+            { email }
+          </BusinessCard.Styled.FieldValue>
+        )}
+        {!!telephone && (
+          <BusinessCard.Styled.FieldValue color={Colors.white}>
+            { telephone }
+          </BusinessCard.Styled.FieldValue>
+        )}
       </BusinessCard.Styled.FieldGroup>
     </>
   )
