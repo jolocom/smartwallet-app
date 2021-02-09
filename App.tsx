@@ -15,8 +15,6 @@ import { NavigationContainerRef } from '@react-navigation/native'
 import { i18n } from '~/translations'
 import { ErrorContextProvider } from '~/errors/errorContext'
 
-import '~/utils/libs/extensions/yup';
-
 const store = configureStore()
 
 if (Platform.OS === 'android') {
