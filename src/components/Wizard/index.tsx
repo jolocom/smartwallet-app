@@ -18,6 +18,7 @@ export interface IWizardBodyProps {
 
 export interface IWizardFooterProps {
   onSubmit: () => void
+  isDisabled: boolean
 }
 
 export interface IWizardFormProps extends IWizardBodyProps {
