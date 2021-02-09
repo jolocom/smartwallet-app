@@ -24,18 +24,21 @@ interface IEditBC {
 const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
   // if selector returns something we edit claim, otherwise we add new claim
   const businessCardId = useSelector(getBusinessCardId)
-  const businessCards = useSelector(getBusinessCardAttributes);
-  const businessCardWithValues = getAttributeConfigWithValues(AttributeTypes.businessCard, businessCardId ? businessCards[0].value : undefined); 
-  // used to support UI groupings 
-  const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues);
+  const businessCards = useSelector(getBusinessCardAttributes)
+  const businessCardWithValues = getAttributeConfigWithValues(
+    AttributeTypes.businessCard,
+    businessCardId ? businessCards[0].value : undefined,
+  )
+  // used to support UI groupings
+  const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues)
 
-  const formInitial = assembleFormInitialValues(businessCardWithValues.fields);
+  const formInitial = assembleFormInitialValues(businessCardWithValues.fields)
 
   const { handleEditCredentialSI, handleCreateCredentialSI } = useSICActions()
-  const { scheduleWarning } = useToasts();
+  const { scheduleWarning } = useToasts()
 
   const handleFormSubmit = async (claims: Record<string, string>) => {
-    // TODO: check if id values are the same or dismiss 
+    // TODO: check if id values are the same or dismiss
     try {
       if (businessCardId) {
         // edit mode
@@ -43,7 +46,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
           AttributeTypes.businessCard,
           claims,
           attributeConfig[AttributeTypes.businessCard].metadata,
-          businessCardId
+          businessCardId,
         )
       } else {
         // add mode
@@ -62,7 +65,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
       onCancel()
     }
   }
-  
+
   const renderFormHeader = (claims: Record<string, string>) => {
     return (
       <FormHeader>
@@ -86,7 +89,9 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
     )
   }
 
-  const renderSectionFooter = (sectionLabel: string) => <View style={{ marginBottom: 15 }} />
+  const renderSectionFooter = (sectionLabel: string) => (
+    <View style={{ marginBottom: 15 }} />
+  )
 
   /* This delay is for managing to autofocus the first field in the form,
      otherwise, it focuses and blurs for unknown reasons 
@@ -100,7 +105,13 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
   }, [])
 
   return (
-    <Block customStyle={{paddingHorizontal: 20, paddingVertical: 25}}>
+    <Block
+      customStyle={{
+        paddingHorizontal: 20,
+        paddingVertical: 25,
+        marginBottom: '30%',
+      }}
+    >
       <Formik initialValues={formInitial} onSubmit={handleFormSubmit}>
         {({ handleChange, values }) => (
         <>
@@ -114,12 +125,11 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
                   <View key={groupKey}>
                     {renderSectionHeader(groupKey)}
                     {areFieldsVisible && groupedBC[groupKey].map((f, idx) => (
-                      <MoveToNext.InputsCollector>
+                      <MoveToNext.InputsCollector key={f.key}>
                         <Input.Block
                           {...(groupIdx === 0 && idx === 0 ? {autoFocus: true} : {autoFocus: false})}
                           // @ts-ignore name prop isn't supported by TextInput component
                           name={f.key}
-                          key={f.key}
                           value={values[f.key]}
                           updateInput={handleChange(f.key)}
                           placeholder={f.label}
