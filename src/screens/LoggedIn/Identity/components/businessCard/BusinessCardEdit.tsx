@@ -128,7 +128,7 @@ const BusinessCardEdit: React.FC<IEditBC> = ({ onCancel }) => {
                     {areFieldsVisible && groupedBC[groupKey].map((f, idx) => (
                       <JoloKeyboardAwareScroll.InputContainer>
                         {({ focusInput }) => (
-                          <MoveToNext.InputsCollector key={f.key}>
+                          <MoveToNext.InputsCollector key={f.key} onSubmit={() => handleFormSubmit(values)}>
                             <Input.Block
                               {...(groupIdx === 0 && idx === 0 ? {autoFocus: true} : {autoFocus: false})}
                               // @ts-ignore name prop isn't supported by TextInput component

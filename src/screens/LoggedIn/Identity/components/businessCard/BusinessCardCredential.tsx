@@ -11,8 +11,6 @@ const findClaimValueForKey = (fields: IAttributeClaimFieldWithValue[]) => (key: 
 
 const BusinessCardCredential: React.FC = () => {
   const groupedValuesBC = useSelector(getBusinessCardConfigWithValues);
-  console.log({groupedValuesBC});
-  
   if (!groupedValuesBC) return null
 
   const { fields } = groupedValuesBC;
