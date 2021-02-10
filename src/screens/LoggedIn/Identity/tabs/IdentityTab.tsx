@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, Platform } from 'react-native'
 import { useIdentityTabs } from '.'
 import { Colors } from '~/utils/colors'
 import JoloText from '~/components/JoloText'
@@ -47,16 +47,16 @@ const styles = StyleSheet.create({
     width: '48%',
   },
   activeContainer: {
-    borderWidth: 0.6,
+    borderWidth: Platform.OS === 'ios' ? 1 : 0.6,
     borderColor: Colors.electricViolet,
     elevation: 20,
-    shadowColor: Colors.white06,
+    shadowColor: Colors.black90,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowRadius: 14,
-    shadowOpacity: 1,
+    shadowRadius: 5,
+    shadowOpacity: 0.7,
   },
   inactiveContainer: {
     backgroundColor: Colors.black50,

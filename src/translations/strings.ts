@@ -343,9 +343,10 @@ const identity = {
   COMPANY: 'Company',
   YOUR_NAME: 'Your name',
   NOT_SPECIFIED: 'Not specified',
-  YOUR_INFO_IS_QUITE_EMPTY:
-    'Your info is quite empty. Fill it in for the future cases',
   SO_FAR_IT_IS_EMPTY: "So far, it's empty. Just tap to start creation",
+  YOUR_INFO_IS_QUITE_EMPTY:
+    'Your info is quite empty\nFill it in for the future cases',
+  PLEASE_INTRODUCE_YOURSELF: 'Please introduce yourself',
   YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
     'You dont have any completed interactions yet. Make one today!',
 }
