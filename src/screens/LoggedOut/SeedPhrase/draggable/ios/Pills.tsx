@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { LayoutAnimation, PanResponder, StyleSheet, View } from 'react-native'
 import { isPointWithinArea, moveArrayElement } from './utils'
 import { TagObject, GestureState } from './types'
