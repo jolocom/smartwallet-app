@@ -205,6 +205,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
                 },
               ]
             }
+            testID="record-item-time"
           >
             00:00
           </Text>
@@ -440,6 +441,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                 },
               ]
             }
+            testID="record-item-time"
           >
             00:00
           </Text>
@@ -950,6 +952,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                 },
               ]
             }
+            testID="record-item-time"
           >
             00:00
           </Text>
@@ -1460,6 +1463,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                 },
               ]
             }
+            testID="record-item-time"
           >
             00:00
           </Text>
@@ -1970,6 +1974,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
                 },
               ]
             }
+            testID="record-item-time"
           >
             ██
           </Text>
