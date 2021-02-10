@@ -293,7 +293,7 @@ const toasts = {
 }
 
 const documents = {
-  DROP_THE_BALL: 'Drag and drop the ball to delete',
+  DROP_THE_BALL: 'Drop the ball to delete',
   DO_YOU_WANT_TO_DELETE: 'Do you want to delete',
   DOCUMENT: 'Document',
   TYPE: 'Type',
@@ -301,6 +301,11 @@ const documents = {
   TYPE_OF_DOCUMENT: 'Type of the document',
   INFO: 'Info',
   DELETE: 'Delete',
+  ITS_STILL_EMPTY: 'It’s still empty',
+  YOU_HAVENT_SAVED_ANY_DOCUMENTS_YET:
+    "You haven't saved any documents yet. Get one today!",
+  NOTHING_HERE_YET: 'Nothing here yet',
+  YOU_HAVENT_SAVED_ANYTHING_YET: "You haven't saved anything yet",
 }
 
 const history = {
@@ -322,6 +327,7 @@ const history = {
   NOT_SELECTED: 'Not selected',
   NOT_ISSUED: 'Not issued',
   NOT_SHARED: 'Not shared',
+  NO_HISTORY_YET: 'No history yet',
 }
 
 const identity = {
@@ -342,9 +348,19 @@ const identity = {
   COMPANY: 'Company',
   YOUR_NAME: 'Your name',
   NOT_SPECIFIED: 'Not specified',
-  YOUR_INFO_IS_QUITE_EMPTY:
-    'Your info is quite empty. Fill it in for the future cases',
   SO_FAR_IT_IS_EMPTY: "So far, it's empty. Just tap to start creation",
+  YOUR_INFO_IS_QUITE_EMPTY:
+    'Your info is quite empty\nFill it in for the future cases',
+  PLEASE_INTRODUCE_YOURSELF: 'Please introduce yourself',
+  YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
+    'You dont have any completed interactions yet. Make one today!',
+}
+
+const bottomBar = {
+  IDENTITY: 'Identity',
+  HISTORY: 'History',
+  DOCUMENTS: 'Document',
+  SETTINGS: 'Settings',
 }
 
 export const strings = {
@@ -368,4 +384,5 @@ export const strings = {
   ...documents,
   ...history,
   ...identity,
+  ...bottomBar,
 }

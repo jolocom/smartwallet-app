@@ -27,11 +27,10 @@ import {
 import { useSICActions } from '~/hooks/attributes'
 
 import { useToasts } from '~/hooks/toasts'
-import EmptyPlaceholder, {
-  IdentityPlaceholderTypes,
-} from './components/EmptyPlaceholder'
 import FormHeader from '~/components/FormHeader'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
+import IdentityTabs from './tabs'
+import { strings } from '~/translations'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
@@ -42,7 +41,7 @@ enum FormModes {
   none = 'none',
 }
 
-type TPrimiveAttributeTypes = Exclude<
+type TPrimitiveAttributeTypes = Exclude<
   AttributeTypes,
   AttributeTypes.businessCard
 >
@@ -63,7 +62,7 @@ const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
 const IdentityCredentials = () => {
   const [expandedForm, setExpandedForm] = useState<
-    TPrimiveAttributeTypes | undefined
+    TPrimitiveAttributeTypes | undefined
   >(undefined)
   const [formMode, setFormMode] = useState(FormModes.none)
   const [formConfig, setFormConfig] = useState<IAttributeConfig<
@@ -110,7 +109,7 @@ const IdentityCredentials = () => {
     }
   }, [formMode, expandedForm, editClaimId])
 
-  const toggleForm = (cb: (type?: TPrimiveAttributeTypes) => void) => {
+  const toggleForm = (cb: (type?: TPrimitiveAttributeTypes) => void) => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 200,
@@ -119,7 +118,7 @@ const IdentityCredentials = () => {
   }
 
   const handleShowForm = (mode: FormModes) => {
-    return (type: TPrimiveAttributeTypes, id?: string) => {
+    return (type: TPrimitiveAttributeTypes, id?: string) => {
       setFormMode(mode)
       toggleForm(() => setExpandedForm(type))
       if (id) {
@@ -194,84 +193,105 @@ const IdentityCredentials = () => {
     return true
   }
 
-  if (!Object.keys(primitiveAttributesConfig).length) {
-    return <EmptyPlaceholder type={IdentityPlaceholderTypes.primitive} />
-  }
-
   const formInitial = formConfig
     ? assembleFormInitialValues(formConfig.fields)
     : {}
 
+  const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
+    primitiveAttributesConfig,
+  ).map(([key, config]) => {
+    return {
+      key: key as TPrimitiveAttributeTypes,
+      config,
+      values: attributes[key as TPrimitiveAttributeTypes] ?? [],
+    }
+  })
+
+  const sortedPrimitiveAttributes = primitiveAttributesWithValues.sort(
+    (a, b) => {
+      const aValues = !!a.values.length
+      const bValues = !!b.values.length
+      if ((!aValues && !bValues) || (aValues && bValues)) return 0
+      else if (aValues && !bValues) return -1
+      else return 1
+    },
+  )
+
+  const isPrimitiveAttributesEmpty = primitiveAttributesWithValues.every(
+    (a) => !a.values.length,
+  )
+
   return (
     <View testID="identity-credentials-present" style={styles.container}>
-      {Object.entries<IAttributeConfig>(primitiveAttributesConfig).map(
-        ([aKey, aVal]) => {
-          const key = aKey as TPrimiveAttributeTypes
-          return (
-            <View style={styles.group} key={aKey}>
-              {getIsWidgetShown(key) ? (
-                <Widget onAdd={() => handleShowNewForm(key)}>
-                  <Widget.Header>
-                    <Widget.Header.Name value={aVal.label} />
-                    {attributes[key] && <Widget.Header.Action.CreateNew />}
-                  </Widget.Header>
-                  {attributes[key] ? (
-                    (attributes[key] || []).map((f) => {
-                      if (f.id === editClaimId) return null
-                      return (
-                        <TouchableOpacity
-                          onPress={() => handleShowEditForm(key, f.id)}
-                          key={f.id}
-                        >
-                          <Field.Static
-                            key={f.id}
-                            value={Object.values(f.value).join(' ')}
+      <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
+        {strings.YOUR_INFO_IS_QUITE_EMPTY}
+      </IdentityTabs.Styled.Placeholder>
+      {sortedPrimitiveAttributes.map(({ key, config, values }) => {
+        return (
+          <View style={styles.group} key={key}>
+            {getIsWidgetShown(key) ? (
+              <Widget onAdd={() => handleShowNewForm(key)}>
+                <Widget.Header>
+                  <Widget.Header.Name value={config.label} />
+                  <Widget.Header.Action.CreateNew />
+                </Widget.Header>
+                {values.length ? (
+                  values.map((field) => {
+                    if (field.id === editClaimId) return null
+                    return (
+                      <TouchableOpacity
+                        onPress={() => handleShowEditForm(key, field.id)}
+                        key={field.id}
+                      >
+                        <Field.Static
+                          key={field.id}
+                          value={Object.values(field.value).join(' ')}
+                        />
+                      </TouchableOpacity>
+                    )
+                  })
+                ) : (
+                  <Field.Empty>
+                    <PencilIcon />
+                  </Field.Empty>
+                )}
+              </Widget>
+            ) : null}
+            {key === expandedForm && formConfig && (
+              <Formik
+                onSubmit={handleCredentialSubmit}
+                initialValues={formInitial}
+              >
+                {({ handleChange, handleSubmit, values }) => (
+                  <View>
+                    <FormHeader>
+                      <FormHeader.Cancel onCancel={handleHideForm} />
+                      <FormHeader.Done onSubmit={handleSubmit} />
+                    </FormHeader>
+                    <AutofocusContainer>
+                      {formConfig.fields.map((field, i) => {
+                        return (
+                          <AutofocusInput
+                            // @ts-ignore no idea why it's complaining
+                            name={field.key as string}
+                            key={field.key}
+                            updateInput={handleChange(field.key)}
+                            value={values[field.key]}
+                            placeholder={field.label}
+                            autoFocus={i === 0}
+                            containerStyle={{ marginBottom: 12 }}
+                            {...field.keyboardOptions}
                           />
-                        </TouchableOpacity>
-                      )
-                    })
-                  ) : (
-                    <Field.Empty>
-                      <PencilIcon />
-                    </Field.Empty>
-                  )}
-                </Widget>
-              ) : null}
-              {aKey === expandedForm && formConfig && (
-                <Formik
-                  onSubmit={handleCredentialSubmit}
-                  initialValues={formInitial}
-                >
-                  {({ handleChange, handleSubmit, values }) => (
-                    <View>
-                      <FormHeader>
-                        <FormHeader.Cancel onCancel={handleHideForm} />
-                        <FormHeader.Done onSubmit={handleSubmit} />
-                      </FormHeader>
-                      <AutofocusContainer>
-                        {formConfig.fields.map((field, i) => {
-                          return (
-                            <AutofocusInput
-                              // @ts-ignore no idea why it's complaining
-                              name={field.key as string}
-                              key={field.key}
-                              updateInput={handleChange(field.key)}
-                              value={values[field.key]}
-                              placeholder={field.label}
-                              autoFocus={i === 0}
-                              {...field.keyboardOptions}
-                            />
-                          )
-                        })}
-                      </AutofocusContainer>
-                    </View>
-                  )}
-                </Formik>
-              )}
-            </View>
-          )
-        },
-      )}
+                        )
+                      })}
+                    </AutofocusContainer>
+                  </View>
+                )}
+              </Formik>
+            )}
+          </View>
+        )
+      })}
     </View>
   )
 }

@@ -75,7 +75,9 @@ export const useLoader = () => {
   }
 }
 
-const openLoader = (type: LoaderTypes, msg: string) => (delay: number = 4000) => {
+const openLoader = (type: LoaderTypes, msg: string) => (
+  delay: number = 4000,
+) => {
   const dispatch = useDispatch()
 
   return (onComplete?: () => void) => {
@@ -87,8 +89,8 @@ const openLoader = (type: LoaderTypes, msg: string) => (delay: number = 4000) =>
     )
     if (onComplete) {
       setTimeout(() => {
-        onComplete();
-      }, 100)      
+        onComplete()
+      }, 100)
     }
     setTimeout(() => {
       dispatch(dismissLoader())
@@ -98,4 +100,3 @@ const openLoader = (type: LoaderTypes, msg: string) => (delay: number = 4000) =>
 
 export const useSuccess = openLoader(LoaderTypes.success, strings.SUCCESS)
 export const useFailed = openLoader(LoaderTypes.error, strings.FAILED)
-

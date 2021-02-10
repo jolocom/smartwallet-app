@@ -18,7 +18,7 @@ export const CardBody: React.FC<IWithCustomStyle> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginTop: 10,
+    marginBottom: 24,
   },
   bodyContainer: {
     height: '100%',

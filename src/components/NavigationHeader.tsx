@@ -5,24 +5,26 @@ import CloseIcon from '~/assets/svg/CloseIcon'
 import { useGoBack } from '~/hooks/navigation'
 import IconBtn from './IconBtn'
 import { BackArrowIcon } from '~/assets/svg'
+import { IWithCustomStyle } from './Card/types'
 
 export enum NavHeaderType {
   Back = 'back',
   Close = 'close',
 }
 
-interface Props {
+interface Props extends IWithCustomStyle {
   type: NavHeaderType
   onPress?: () => void
 }
 
-const NavigationHeader: React.FC<Props> = ({ type, onPress }) => {
+const NavigationHeader: React.FC<Props> = ({ type, onPress, customStyles }) => {
   const navigateBack = onPress ?? useGoBack()
 
   return (
     <View
       style={[
         styles.navContainer,
+        customStyles,
         {
           justifyContent:
             type === NavHeaderType.Close ? 'flex-end' : 'flex-start',

@@ -8,6 +8,9 @@ import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
 import RecordItem from './components/RecordItem'
+import HistoryPlaceholder from './components/HistoryPlaceholder'
+import ScreenPlaceholder from '~/components/ScreenPlaceholder'
+import { strings } from '~/translations'
 
 const ITEMS_PER_PAGE = 5
 
@@ -94,7 +97,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
     }
   }
 
-  return (
+  return sections.length ? (
     <SectionList<string>
       testID={`record-list-${id}`}
       ref={sectionListRef}
@@ -119,6 +122,13 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
         />
       )}
       stickySectionHeadersEnabled={false}
+    />
+  ) : (
+    <ScreenPlaceholder
+      title={strings.NO_HISTORY_YET}
+      description={
+        strings.YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY
+      }
     />
   )
 }
