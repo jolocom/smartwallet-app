@@ -1,12 +1,17 @@
-import React from 'react';
-import { View } from 'react-native';
-import { ITabPersistChildren } from './Tabs';
+import React from 'react'
+import { View } from 'react-native'
+import { ITabPersistChildren } from './Tabs'
+import { debugView } from '~/utils/dev'
 
-const PersistChildren: React.FC<ITabPersistChildren> = ({ children, isContentVisible }) => {
+const PersistChildren: React.FC<ITabPersistChildren> = ({
+  children,
+  isContentVisible,
+}) => {
   return (
     <View
       style={{
         display: isContentVisible ? 'flex' : 'none',
+        flex: 1,
       }}
     >
       {children}
@@ -14,4 +19,4 @@ const PersistChildren: React.FC<ITabPersistChildren> = ({ children, isContentVis
   )
 }
 
-export default PersistChildren;
+export default PersistChildren
