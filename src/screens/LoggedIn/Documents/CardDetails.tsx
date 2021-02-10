@@ -9,6 +9,7 @@ import Block from '~/components/Block'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import { IField } from '~/components/Card/types'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 interface Props {
   fields: IField[]
@@ -16,7 +17,7 @@ interface Props {
   image?: string
 }
 
-const IMAGE_SIZE = BP({ default: 100, small: 90, xsmall: 90 })
+const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CardDetails = React.forwardRef<{ show: () => void }, Props>(
   ({ fields, title, image }, ref) => {
@@ -31,10 +32,10 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
     return (
       <ActionSheet isVisible={modalVisible} onClose={handleClose}>
         <ScreenContainer
-          hasHeaderClose
-          onClose={handleClose}
-          customStyles={{ paddingTop: 0 }}
+          isFullscreen
+          customStyles={{ paddingHorizontal: '5%' }}
         >
+          <NavigationHeader type={NavHeaderType.Close} onPress={handleClose} />
           <ScrollView
             showsVerticalScrollIndicator={false}
             overScrollMode="never"
@@ -47,7 +48,6 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               style={[
                 styles.titleContainer,
                 {
-                  paddingTop: 20,
                   paddingRight: image ? '40%' : 0,
                 },
               ]}

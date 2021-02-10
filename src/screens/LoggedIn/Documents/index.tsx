@@ -134,7 +134,15 @@ const DocumentList = () => {
   const { activeTab, activeSubtab } = useTabs()
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      overScrollMode={'never'}
+      contentContainerStyle={{
+        paddingBottom: '40%',
+        paddingHorizontal: 8,
+        paddingTop: 32,
+      }}
+    >
       <View
         style={{
           display: activeTab?.id === DocumentTypes.document ? 'flex' : 'none',
@@ -151,7 +159,6 @@ const DocumentList = () => {
       >
         <OtherCards other={other} />
       </View>
-      <View style={{ height: 100 }} />
     </ScrollView>
   )
 }
