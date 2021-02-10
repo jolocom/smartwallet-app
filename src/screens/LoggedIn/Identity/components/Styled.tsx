@@ -68,7 +68,7 @@ const Styled: IStyledComposition = {
 }
 
 const styles = StyleSheet.create({
- cardContainer: { padding: 20, alignItems: 'center', marginTop: 30, height: 212 },
+ cardContainer: { padding: 20, alignItems: 'center', height: 212, },
  cardNestedContainer: { width: '100%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-between' },
  fieldGroup: {
   alignItems: 'flex-start'

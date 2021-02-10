@@ -262,7 +262,7 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
   }
 
   return (
-    <View>
+    <View style={{marginTop: !isPlaceholder ? 30 : 0 }}>
       <IdentityTabs.Styled.Placeholder show={!businessCardId}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>

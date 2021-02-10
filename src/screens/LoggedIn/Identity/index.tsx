@@ -11,7 +11,6 @@ import {
   IdentityTabBusinessCardIcon,
 } from '~/assets/svg'
 import { strings } from '~/translations'
-import Section from '../Settings/components/Section'
 import IdentityBusinessCard from './IdentityBusinessCard'
 
 enum IdentityTabIds {
