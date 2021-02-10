@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect'
+import { AttributeTypes } from '~/types/credentials'
 import { RootReducerI } from '~/types/reducer'
 import {
-  getGroupedClaimsForBusinessCard,
-  TClaimGroups,
+  getAttributeConfigWithValues,
 } from '~/utils/mappings/groupBusinessCard'
 import { AttrsState, AttributeI } from './types'
 
@@ -20,7 +20,7 @@ export const getPrimitiveAttributes = createSelector(
 export const getBusinessCardId = createSelector(
   [getAttributes],
   (attributes) => {
-    const { ProofOfBusinessCardCredential } = attributes
+    const { ProofOfBusinessCardCredential } = attributes;
     if (ProofOfBusinessCardCredential) {
       return ProofOfBusinessCardCredential[0].id
     }
@@ -28,7 +28,7 @@ export const getBusinessCardId = createSelector(
   },
 )
 
-const getBusinessCardAttributes = createSelector(
+export const getBusinessCardAttributes = createSelector(
   [getAttributes],
   (attributes) => {
     const { ProofOfBusinessCardCredential } = attributes
@@ -36,21 +36,11 @@ const getBusinessCardAttributes = createSelector(
   },
 )
 
-export const getGroupedValuesForBusinessCard = createSelector(
+export const getBusinessCardConfigWithValues = createSelector(
   [getBusinessCardAttributes],
   (attributes) => {
     if (attributes) {
-      const groupedClaimsBC = getGroupedClaimsForBusinessCard()
-      return Object.keys(groupedClaimsBC).reduce<TClaimGroups>(
-        (groups, groupKey) => {
-          const groupWithValues = groupedClaimsBC[groupKey].setGroupValues(
-            attributes[0].value,
-          )
-          groups[groupKey] = groupWithValues
-          return groups
-        },
-        {},
-      )
+      return getAttributeConfigWithValues(AttributeTypes.businessCard, attributes[0].value)
     }
     return null
   },

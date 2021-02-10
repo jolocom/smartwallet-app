@@ -99,7 +99,7 @@ export const useSICActions = () => {
       const signedCredential = await constructCredentialAndStore(
         metadata,
         claims,
-      )
+      )      
 
       // update redux store
       const attribute = formAttribute(signedCredential)

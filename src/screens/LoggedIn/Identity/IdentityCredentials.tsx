@@ -75,7 +75,7 @@ const IdentityCredentials = () => {
   const { handleCreateCredentialSI, handleEditCredentialSI } = useSICActions()
   const { scheduleWarning } = useToasts()
 
-  // we are not interested in claim id in 'add' mode, therefore reetting value to avoid confusions
+  // we are not interested in claim id in 'add' mode, therefore resetting value to avoid confusions
   useEffect(() => {
     if (formMode === FormModes.add) {
       setEditClaimId(undefined)

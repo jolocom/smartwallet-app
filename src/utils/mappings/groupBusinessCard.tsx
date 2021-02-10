@@ -5,11 +5,9 @@ import {
   AttributeTypes,
  ClaimKeys,
  IAttributeClaimFieldWithValue,
+ IAttributeConfig,
 } from '~/types/credentials'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
-
-export type TClaimGroups = Record<string, Group>
-// export type TField = Pick<IAttributeClaimFieldWithValue, 'key' | 'value'>
 
 export class Group {
   label: string
@@ -38,56 +36,22 @@ export class Group {
   }
 }
 
-const managePopulateGroup = (
-  groupLabel: string,
-  fieldKey: ClaimKeys,
-  type: AttributeTypes,
-  group?: Group,
-) => {
-  if (group) {
-    group.addField(fieldKey, type)
-    return group
-  } else {
-    const group = new Group(groupLabel)
-    group.addField(fieldKey, type)
-    return group
-  }
-}
-
-export const getGroupedClaimsForBusinessCard = () => {
-  return attributeConfig.ProofOfBusinessCardCredential.fields.reduce<TClaimGroups>(
+export const getGroupedClaimsBusinessCard = (config: IAttributeConfig<IAttributeClaimFieldWithValue>) => {
+    return config.fields.reduce<Record<string, IAttributeClaimFieldWithValue[]>>(
     (groups, claim) => {
       switch (claim.key) {
         case ClaimKeys.givenName:
         case ClaimKeys.familyName: {
-          const groupName = 'name'
-          groups[groupName] = managePopulateGroup(
-            strings.NAME,
-            claim.key,
-            AttributeTypes.businessCard,
-            groups[groupName],
-          )
+          groups[strings.NAME] = groups[strings.NAME] ? [...groups[strings.NAME], claim] : [claim];
           break
         }
         case ClaimKeys.email:
-        case ClaimKeys.telephone: {
-          const groupName = 'contact'
-          groups[groupName] = managePopulateGroup(
-            strings.CONTACT_ME,
-            claim.key,
-            AttributeTypes.businessCard,
-            groups[groupName],
-            )
-            break
-          }
-          case ClaimKeys.legalCompanyName: {
-            const groupName = 'company'
-            groups[groupName] = managePopulateGroup(
-              strings.COMPANY,
-              claim.key,
-              AttributeTypes.businessCard,
-              groups[groupName],
-          )
+          case ClaimKeys.telephone: {
+          groups[strings.CONTACT_ME] = groups[strings.CONTACT_ME] ? [...groups[strings.CONTACT_ME], claim] : [claim];
+          break
+        }
+        case ClaimKeys.legalCompanyName: {
+          groups[strings.COMPANY] = groups[strings.COMPANY] ? [...groups[strings.COMPANY], claim] : [claim];
           break
         }
       }
@@ -97,11 +61,15 @@ export const getGroupedClaimsForBusinessCard = () => {
   )
 }
 
-export const getUngroupedClaimsForBusinessCard = (groups: TClaimGroups) => {
-  return Object.values(groups).reduce<ClaimValues>((ungroupedClaims, val) => {
-    val.fields.forEach((field) => {
-      ungroupedClaims[field.key] = field.value;
-    })
-    return ungroupedClaims;
-  }, {})
+export const getAttributeConfigWithValues = (type: AttributeTypes, values?: ClaimValues): IAttributeConfig<IAttributeClaimFieldWithValue> => {
+  const updatedFields = attributeConfig[type].fields.map(
+    (f) => ({
+      ...f,
+      value: values?.[f.key] || ''
+    }),
+  )
+  return {
+    ...attributeConfig[type],
+    fields: updatedFields
+  }
 }
