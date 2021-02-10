@@ -38,19 +38,19 @@ const SeedPhraseRepeat: React.FC = () => {
     null,
   )
 
-  const [phraseFragmentCount] = useState(Math.round(Math.random()));
+  const phraseFragmentCount = Math.round(Math.random())
 
   const phraseArr = seedphrase.split(' ')
   const phraseFragmentFirst = phraseArr.slice(0, 6)
   const phraseFragmentLast = phraseArr.slice(6, 12)
+  const usedFragment = phraseFragmentCount
+    ? phraseFragmentFirst
+    : phraseFragmentLast
 
   useEffect(() => {
-    const slice = phraseFragmentCount
-      ? phraseFragmentFirst
-      : phraseFragmentLast
-    const shuffled = shuffleArray(slice)
+    const shuffled = shuffleArray(usedFragment)
     setShuffledSeedphrase(shuffled)
-  }, [seedphrase, phraseFragmentCount])
+  }, [seedphrase])
 
   const onSubmit = async () => {
     if (isPhraseValid) {
@@ -63,15 +63,8 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const isPhraseValid = useMemo(() => {
     if (!shuffledSeedphrase) return false
-    else {
-      if (phraseFragmentCount) {
-        return seedphrase.split(' ').splice(0, 6).join(' ') ===
-        shuffledSeedphrase.join(' ')
-      } else {
-        return seedphrase.split(' ').splice(6, 12).join(' ') ===
-        shuffledSeedphrase.join(' ')
-      }
-    }
+
+    return shuffledSeedphrase.join(' ') === usedFragment.join(' ')
   }, [JSON.stringify(shuffledSeedphrase), seedphrase])
 
   return (
