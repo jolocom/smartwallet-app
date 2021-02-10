@@ -31,6 +31,7 @@ import JoloText, {
   JoloTextWeight,
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
+import BP from '~/utils/breakpoints'
 
 const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
@@ -173,7 +174,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       backgroundColor={Colors.black}
       customStyles={{
         justifyContent: 'flex-start',
-        paddingTop: 60,
+        paddingTop: BP({ default: 60, small: 32, xsmall: 24 }),
         paddingHorizontal: 36,
       }}
     >
@@ -247,7 +248,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
 const styles = StyleSheet.create({
   ballContainer: {
     alignSelf: 'center',
-    paddingBottom: '20%',
+    paddingBottom: BP({ default: '20%', small: '10%', xsmall: '10%' }),
   },
   ball: {
     width: BALL_DIAMETER,
