@@ -301,6 +301,11 @@ const documents = {
   TYPE_OF_DOCUMENT: 'Type of the document',
   INFO: 'Info',
   DELETE: 'Delete',
+  ITS_STILL_EMPTY: 'It’s still empty',
+  YOU_HAVENT_SAVED_ANY_DOCUMENTS_YET:
+    "You haven't saved any documents yet. Get one today!",
+  NOTHING_HERE_YET: 'Nothing here yet',
+  YOU_HAVENT_SAVED_ANYTHING_YET: "You haven't saved anything yet",
 }
 
 const history = {

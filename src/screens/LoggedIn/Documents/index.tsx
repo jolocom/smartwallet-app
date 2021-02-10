@@ -17,6 +17,8 @@ import {
 } from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
 import { IdentitySummary } from '@jolocom/sdk'
+import ScreenPlaceholder from '~/components/ScreenPlaceholder'
+import { strings } from '~/translations'
 
 const formatClaims = (claims: IClaimSection) =>
   Object.keys(claims).map((key) => ({
@@ -141,23 +143,40 @@ const DocumentList = () => {
         paddingBottom: '40%',
         paddingHorizontal: 8,
         paddingTop: 32,
+        flex: 1,
       }}
     >
       <View
         style={{
           display: activeTab?.id === DocumentTypes.document ? 'flex' : 'none',
+          flex: 1,
         }}
         testID="document-cards-container"
       >
-        <DocumentCards documents={documents} />
+        {!!documents.length ? (
+          <ScreenPlaceholder
+            title={strings.ITS_STILL_EMPTY}
+            description={strings.YOU_HAVENT_SAVED_ANY_DOCUMENTS_YET}
+          />
+        ) : (
+          <DocumentCards documents={documents} />
+        )}
       </View>
       <View
         style={{
           display: activeTab?.id === DocumentTypes.document ? 'none' : 'flex',
+          flex: 1,
         }}
         testID="other-cards-container"
       >
-        <OtherCards other={other} />
+        {!!other.length ? (
+          <ScreenPlaceholder
+            title={strings.NOTHING_HERE_YET}
+            description={strings.YOU_HAVENT_SAVED_ANYTHING_YET}
+          />
+        ) : (
+          <OtherCards other={other} />
+        )}
       </View>
     </ScrollView>
   )
