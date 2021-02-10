@@ -4,14 +4,14 @@ import { useAppState } from '@react-native-community/hooks'
 
 export const useGetAppStates = () => {
   const prevAppState = useRef<AppStateStatus | undefined>(undefined)
-  const currentAppState = useAppState();
+  const currentAppState = useAppState()
 
   useEffect(() => {
-    prevAppState.current = currentAppState;
+    prevAppState.current = currentAppState
   })
 
   return {
     currentAppState,
-    prevAppState: prevAppState.current
+    prevAppState: prevAppState.current,
   }
-} 
+}

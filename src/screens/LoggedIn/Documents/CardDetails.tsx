@@ -2,7 +2,7 @@ import React, { useState, useImperativeHandle } from 'react'
 import { View, Image, StyleSheet, ScrollView } from 'react-native'
 
 import ActionSheet from '~/components/ActionSheet/ActionSheet'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import Block from '~/components/Block'
@@ -35,7 +35,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
           isFullscreen
           customStyles={{ paddingHorizontal: '5%' }}
         >
-          <NavigationHeader type={NavHeaderType.Close} onPress={handleClose} />
+          <NavigationHeader type={NavHeaderType.Close} onPress={handleClose} customStyles={{paddingHorizontal: 0}} />
           <ScrollView
             showsVerticalScrollIndicator={false}
             overScrollMode="never"
@@ -53,9 +53,12 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               ]}
             >
               <JoloText
-                customStyles={styles.fieldText}
+                customStyles={{...styles.fieldText, lineHeight: BP({ xsmall: 24, default: 28 })}}
                 kind={JoloTextKind.title}
                 size={JoloTextSizes.middle}
+                color={Colors.white90}
+                weight={JoloTextWeight.regular}
+                
               >
                 {title}
               </JoloText>
