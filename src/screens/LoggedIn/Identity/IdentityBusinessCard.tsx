@@ -1,12 +1,10 @@
 import React, { useMemo, useState } from 'react'
-import { LayoutAnimation } from 'react-native'
+import { LayoutAnimation, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Dots from '~/components/Dots'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
-import {
-  getBusinessCardId,
-} from '~/modules/attributes/selectors'
+import { getBusinessCardId } from '~/modules/attributes/selectors'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import BusinessCardCredential from './components/businessCard/BusinessCardCredential'
@@ -23,7 +21,6 @@ enum Modes {
 interface IBusinessCardComposition {
   Styled: IStyledComposition
 }
-
 
 const BusinessCard: React.FC & IBusinessCardComposition = () => {
   const [mode, setMode] = useState(Modes.display)
@@ -89,7 +86,7 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
   }
 
   return (
-    <View style={{marginTop: !isPlaceholder ? 30 : 0 }}>
+    <View style={{ marginTop: !isPlaceholder ? 30 : 0 }}>
       <IdentityTabs.Styled.Placeholder show={!businessCardId}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
