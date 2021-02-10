@@ -3,10 +3,14 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { IRecordHeader, useRecord } from './Record'
 
-const RecordHeader: React.FC<IRecordHeader> = ({ title }) => {
+const RecordHeader: React.FC<IRecordHeader> = ({
+  title,
+  testID = 'record-header',
+}) => {
   const { activeSection } = useRecord()
   return (
     <JoloText
+      testID={testID}
       kind={JoloTextKind.title}
       size={JoloTextSizes.middle}
       customStyles={{ textAlign: 'left', marginBottom: 22, width: '100%' }}
