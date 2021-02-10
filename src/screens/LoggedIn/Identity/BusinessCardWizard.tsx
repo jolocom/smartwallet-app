@@ -2,15 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
 import { useCreateAttributes } from '~/hooks/attributes'
-import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { strings } from '~/translations'
 import {
   AttributeTypes,
   ClaimKeys,
   IAttributeClaimField,
 } from '~/types/credentials'
-import { mapFormFields } from '~/utils/dataMapping'
-import Wizard from '.'
+import Wizard from '~/components/Wizard'
 
 const getFormSlice = (...claimskeys: ClaimKeys[]) => {
   const config = attributeConfig[AttributeTypes.businessCard]
@@ -53,23 +51,22 @@ const WIZARD_CONFIG = {
 const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
   onFormSubmit,
 }) => {
-  const [fields, setFields] = useState<IFormState[]>([])
+  const [fields, setFields] = useState<Record<string, string>>({})
 
   const createAttribute = useCreateAttributes()
 
-  const addFieldValues = (formFields: IFormState[]) => {
-    setFields((prevState) => [...prevState, ...formFields])
+  const addFieldValues = (fields: Record<string, string>) => {
+    setFields((prevState) => ({ ...prevState, ...fields }))
   }
 
   const createNewAttribute = useCallback(async () => {
-    const mappedFields = mapFormFields(fields)
-    await createAttribute(AttributeTypes.businessCard, mappedFields)
+    await createAttribute(AttributeTypes.businessCard, fields)
     onFormSubmit()
   }, [JSON.stringify(fields)])
 
   useEffect(() => {
     if (
-      fields.length ===
+      Object.keys(fields).length ===
       attributeConfig[AttributeTypes.businessCard].fields.length
     ) {
       createNewAttribute()

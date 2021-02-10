@@ -2,7 +2,7 @@ import React, { createContext, useContext, useMemo } from 'react'
 import CardHighlight from './CardHighlight'
 import CardPhoto from './CardPhoto'
 import DocumentHeader from './DocumentHeader'
-import Dots from './Dots'
+import DocumentDots from './DocumentDots'
 import OptionalFields from './OptionalFields'
 import OtherHeader from './OtherHeader'
 import { IField, IWithCustomStyle, ICardProps } from './types'
@@ -72,6 +72,6 @@ Card.DocumentHeader = DocumentHeader
 Card.OtherHeader = OtherHeader
 Card.Highlight = CardHighlight
 Card.Photo = CardPhoto
-Card.Dots = Dots
+Card.Dots = DocumentDots
 
 export default Card

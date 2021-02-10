@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import {
   Animated,
   StyleSheet,
@@ -20,23 +20,31 @@ const TopSheet: React.FC<Props> = ({
   customStyles = {},
 }) => {
   const { top } = useSafeArea()
-  const heightRef = useRef(0)
+  const heightRef = useRef(9999)
   const positionRef = useRef(new Animated.Value(-heightRef.current)).current
+  const [layoutDone, setLayoutDone] = useState(false)
 
   const handleLayout = (e: LayoutChangeEvent) => {
-    heightRef.current = e.nativeEvent.layout.height
+    if (!layoutDone) {
+      heightRef.current = e.nativeEvent.layout.height
+      positionRef.setValue(-heightRef.current)
+      setLayoutDone(true)
+    }
+
   }
 
   const animateSheet = (toValue: number) =>
     Animated.timing(positionRef, {
       toValue,
-      duration: 300,
+      duration: 500,
       useNativeDriver: true,
     })
 
   useEffect(() => {
     if (isVisible) {
-      animateSheet(0).start()
+      setTimeout(() => {
+        animateSheet(0).start()
+      }, 200)
     } else {
       animateSheet(-heightRef.current - top).start()
     }

@@ -75,7 +75,7 @@ const ContactUs: React.FC = () => {
         style={{ width: '100%', flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        enableOnAndroid={true}
+        enableOnAndroid
       >
         <Section>
           <Section.Title>

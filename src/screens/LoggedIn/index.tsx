@@ -36,6 +36,7 @@ import Identity from './Identity'
 import FormTest from './Settings/Development/FormTest'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
+import BusinessCardTest from './Settings/Development/BusinessCardTest'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -143,11 +144,6 @@ const LoggedInTabs: React.FC = () => {
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.FormTest}
-            component={FormTest}
-            options={settingsScreenTransitionOptions}
-          />
-          <LoggedInStack.Screen
             name={ScreenNames.InputTest}
             component={InputTest}
             options={settingsScreenTransitionOptions}
@@ -155,6 +151,11 @@ const LoggedInTabs: React.FC = () => {
           <LoggedInStack.Screen
             name={ScreenNames.PasscodeTest}
             component={PasscodeTest}
+            options={settingsScreenTransitionOptions}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.BusinessCardTest}
+            component={BusinessCardTest}
             options={settingsScreenTransitionOptions}
           />
         </>

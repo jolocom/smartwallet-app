@@ -22,6 +22,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
         Object {
           "backgroundColor": "#201a21",
           "flex": 1,
+          "paddingBottom": 0,
           "paddingTop": 0,
         },
       ]

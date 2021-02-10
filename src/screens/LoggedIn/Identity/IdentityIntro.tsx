@@ -4,10 +4,11 @@ import { Image, LayoutAnimation } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import TopSheet from '~/components/TopSheet'
-import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
-import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
+
+import SingleCredentialWizard from './SingleCredentialWizard'
+import BusinessCardWizard from './BusinessCardWizard'
 
 enum IdentityForms {
   SingleCredential = 'SingleCredential',
