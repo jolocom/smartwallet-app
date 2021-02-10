@@ -171,7 +171,11 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
   return (
     <ScreenContainer
       backgroundColor={Colors.black}
-      customStyles={{ justifyContent: 'flex-start' }}
+      customStyles={{
+        justifyContent: 'flex-start',
+        paddingTop: 60,
+        paddingHorizontal: 36,
+      }}
     >
       <JoloText
         color={Colors.white90}
@@ -243,6 +247,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
 const styles = StyleSheet.create({
   ballContainer: {
     alignSelf: 'center',
+    paddingBottom: '20%',
   },
   ball: {
     width: BALL_DIAMETER,

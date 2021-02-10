@@ -293,7 +293,7 @@ const toasts = {
 }
 
 const documents = {
-  DROP_THE_BALL: 'Drag and drop the ball to delete',
+  DROP_THE_BALL: 'Drop the ball to delete',
   DO_YOU_WANT_TO_DELETE: 'Do you want to delete',
   DOCUMENT: 'Document',
   TYPE: 'Type',
