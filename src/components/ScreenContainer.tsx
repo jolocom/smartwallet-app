@@ -21,6 +21,7 @@ interface ScreenContainerI {
   hasHeaderClose?: boolean
   hideStatusBar?: boolean
   onClose?: () => void
+  testID?: string
 }
 
 interface IScreenContainerCompound {
@@ -38,6 +39,7 @@ const ScreenContainer: React.FC<ScreenContainerI> &
   hasHeaderClose = false,
   hideStatusBar = false,
   onClose,
+  testID,
 }) => {
   hideStatusBar && useHideStatusBar()
 
@@ -45,6 +47,7 @@ const ScreenContainer: React.FC<ScreenContainerI> &
 
   return (
     <SafeAreaView
+      testID={testID}
       style={{
         flex: 1,
         backgroundColor,

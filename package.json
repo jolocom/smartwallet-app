@@ -52,6 +52,7 @@
     "react-native-draggable-flatlist": "^2.5.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-haptic-feedback": "^1.10.0",
+    "react-native-hide-with-keyboard": "^1.2.1",
     "react-native-hyperlink": "^0.0.19",
     "react-native-indicators": "^0.17.0",
     "react-native-jolocom": "^2.3.0-rc1",
