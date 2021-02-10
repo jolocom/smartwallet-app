@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle } from 'react'
-import { View, Image, StyleSheet, ScrollView } from 'react-native'
+import { View, Image, StyleSheet, ScrollView, Platform } from 'react-native'
 
 import ActionSheet from '~/components/ActionSheet/ActionSheet'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -10,6 +10,7 @@ import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import { IField } from '~/components/Card/types'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 interface Props {
   fields: IField[]
@@ -21,6 +22,7 @@ const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CardDetails = React.forwardRef<{ show: () => void }, Props>(
   ({ fields, title, image }, ref) => {
+    const { top } = useSafeArea()
     const [modalVisible, setModalVisible] = useState(false)
 
     const handleClose = () => setModalVisible(false)
@@ -33,14 +35,22 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
       <ActionSheet isVisible={modalVisible} onClose={handleClose}>
         <ScreenContainer
           isFullscreen
-          customStyles={{ paddingHorizontal: '5%' }}
+          customStyles={{
+            paddingHorizontal: '5%',
+            paddingTop: Platform.OS === 'ios' ? top : 0,
+          }}
         >
-          <NavigationHeader type={NavHeaderType.Close} onPress={handleClose} customStyles={{paddingHorizontal: 0}} />
+          <NavigationHeader
+            type={NavHeaderType.Close}
+            onPress={handleClose}
+            customStyles={{ paddingHorizontal: 0 }}
+          />
           <ScrollView
             showsVerticalScrollIndicator={false}
             overScrollMode="never"
             style={{ width: '100%' }}
             contentContainerStyle={{
+              paddingTop: 32,
               paddingBottom: 50,
             }}
           >
@@ -53,12 +63,14 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               ]}
             >
               <JoloText
-                customStyles={{...styles.fieldText, lineHeight: BP({ xsmall: 24, default: 28 })}}
+                customStyles={{
+                  ...styles.fieldText,
+                  lineHeight: BP({ xsmall: 24, default: 28 }),
+                }}
                 kind={JoloTextKind.title}
                 size={JoloTextSizes.middle}
                 color={Colors.white90}
                 weight={JoloTextWeight.regular}
-                
               >
                 {title}
               </JoloText>

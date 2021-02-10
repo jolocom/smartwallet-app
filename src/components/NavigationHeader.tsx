@@ -6,7 +6,6 @@ import { useGoBack } from '~/hooks/navigation'
 import IconBtn from './IconBtn'
 import { BackArrowIcon } from '~/assets/svg'
 import { IWithCustomStyle } from './Card/types'
-import { useSafeArea } from 'react-native-safe-area-context'
 
 export enum NavHeaderType {
   Back = 'back',
@@ -19,14 +18,12 @@ interface Props extends IWithCustomStyle {
 }
 
 const NavigationHeader: React.FC<Props> = ({ type, onPress, customStyles }) => {
-  const navigateBack = onPress ?? useGoBack();
-  const { top } = useSafeArea();
+  const navigateBack = onPress ?? useGoBack()
 
   return (
     <View
       style={[
         styles.navContainer,
-        (top ? { paddingTop: top } : {}),
         customStyles,
         {
           justifyContent:
