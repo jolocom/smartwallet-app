@@ -9,7 +9,7 @@ import { IField, IWithCustomStyle, ICardProps } from './types'
 import { DocumentFields } from '~/types/credentials'
 
 interface ICardContext {
-  id: number | string
+  id: string
   document: IField | undefined | null
   restMandatoryField: IField | undefined | null
   optionalFields: IField[]

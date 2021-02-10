@@ -1,21 +1,26 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
+
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
-import { strings } from '~/translations'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 
-const HistoryPlaceholder = () => {
+interface Props {
+  title: string
+  description: string
+}
+
+const ScreenPlaceholder: React.FC<Props> = ({ title, description }) => {
   return (
     <View style={styles.container}>
-      <JoloText kind={JoloTextKind.title}>{strings.NO_HISTORY_YET}</JoloText>
+      <JoloText kind={JoloTextKind.title}>{title}</JoloText>
       <JoloText
         size={JoloTextSizes.mini}
         color={Colors.white50}
         weight={JoloTextWeight.regular}
         customStyles={{ marginTop: 12, paddingHorizontal: 32 }}
       >
-        {strings.YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY}
+        {description}
       </JoloText>
     </View>
   )
@@ -32,4 +37,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default HistoryPlaceholder
+export default ScreenPlaceholder

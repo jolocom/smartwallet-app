@@ -2,7 +2,7 @@ import { useAgent } from './sdk'
 import { useDispatch } from 'react-redux'
 import { UICredential } from '~/types/credentials'
 import { isCredentialDocument } from '~/utils/dataMapping'
-import { setCredentials } from '~/modules/credentials/actions'
+import { setCredentials, deleteCredential } from '~/modules/credentials/actions'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 /**
@@ -61,5 +61,16 @@ export const useSyncStorageCredentials = () => {
       Promise.resolve([]),
     )
     dispatch(setCredentials(credentials))
+  }
+}
+
+export const useDeleteCredential = () => {
+  const agent = useAgent()
+  const dispatch = useDispatch()
+
+  return async (id: string) => {
+    await agent.storage.delete.verifiableCredential(id)
+
+    dispatch(deleteCredential(id))
   }
 }

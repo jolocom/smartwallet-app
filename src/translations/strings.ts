@@ -293,7 +293,7 @@ const toasts = {
 }
 
 const documents = {
-  DROP_THE_BALL: 'Drag and drop the ball to delete',
+  DROP_THE_BALL: 'Drop the ball to delete',
   DO_YOU_WANT_TO_DELETE: 'Do you want to delete',
   DOCUMENT: 'Document',
   TYPE: 'Type',
@@ -301,6 +301,11 @@ const documents = {
   TYPE_OF_DOCUMENT: 'Type of the document',
   INFO: 'Info',
   DELETE: 'Delete',
+  ITS_STILL_EMPTY: 'It’s still empty',
+  YOU_HAVENT_SAVED_ANY_DOCUMENTS_YET:
+    "You haven't saved any documents yet. Get one today!",
+  NOTHING_HERE_YET: 'Nothing here yet',
+  YOU_HAVENT_SAVED_ANYTHING_YET: "You haven't saved anything yet",
 }
 
 const history = {

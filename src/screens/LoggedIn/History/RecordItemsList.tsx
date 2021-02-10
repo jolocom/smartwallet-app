@@ -9,6 +9,8 @@ import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
 import RecordItem from './components/RecordItem'
 import HistoryPlaceholder from './components/HistoryPlaceholder'
+import ScreenPlaceholder from '~/components/ScreenPlaceholder'
+import { strings } from '~/translations'
 
 const ITEMS_PER_PAGE = 5
 
@@ -122,7 +124,12 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
       stickySectionHeadersEnabled={false}
     />
   ) : (
-    <HistoryPlaceholder />
+    <ScreenPlaceholder
+      title={strings.NO_HISTORY_YET}
+      description={
+        strings.YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY
+      }
+    />
   )
 }
 
