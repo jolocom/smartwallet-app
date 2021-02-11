@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, LayoutChangeEvent, StyleSheet } from 'react-native';
-import { debugView } from '~/utils/dev';
 
 type FallinFrom = 'top' | 'bottom'
 
@@ -67,7 +66,7 @@ const Fallin: React.FC<IFallinProps> = ({ children, isFallingIn, from }) => {
 
 const styles = StyleSheet.create({
   container: {
-    ...debugView()
+    width: '100%',
   }
 })
 

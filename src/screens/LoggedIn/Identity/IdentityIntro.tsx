@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Image, LayoutAnimation } from 'react-native'
+import { Image, LayoutAnimation, StyleSheet, View } from 'react-native'
+import Fallin from '~/components/animation/Fallin'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import TopSheet from '~/components/TopSheet'
 import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
 import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
 import { strings } from '~/translations'
@@ -45,41 +45,50 @@ const WelcomeSheet: React.FC = () => {
   }
 
   return (
-    <TopSheet
-      isVisible={isTopSheetVisible}
-      customStyles={{ alignItems: 'center' }}
-    >
-      {activeForm === IdentityForms.SingleCredential ? (
-        <SingleCredentialWizard onFormSubmit={() => changeActiveForm(null)} />
-      ) : activeForm === IdentityForms.BusinessCard ? (
-        <BusinessCardWizard onFormSubmit={() => changeActiveForm(null)} />
-      ) : (
-        <>
-          <Image source={require('~/assets/images/identityIntro.png')} />
-          <JoloText
-            kind={JoloTextKind.title}
-            color={Colors.white90}
-            customStyles={{ marginVertical: 10 }}
-          >
-            {strings.IT_IS_TIME_TO_CREATE}
-          </JoloText>
+    <Fallin isFallingIn={isTopSheetVisible} from="top">
+      <View style={styles.container}>
+          {activeForm === IdentityForms.SingleCredential ? (
+            <SingleCredentialWizard onFormSubmit={() => changeActiveForm(null)} />
+            ) : activeForm === IdentityForms.BusinessCard ? (
+              <BusinessCardWizard onFormSubmit={() => changeActiveForm(null)} />
+              ) : (
+                <>
+              <Image source={require('~/assets/images/identityIntro.png')} />
+              <JoloText
+                kind={JoloTextKind.title}
+                color={Colors.white90}
+                customStyles={{ marginVertical: 10 }}
+                >
+                {strings.IT_IS_TIME_TO_CREATE}
+              </JoloText>
 
-          <Btn
-            onPress={() => changeActiveForm(IdentityForms.SingleCredential)}
-            type={BtnTypes.senary}
-          >
-            {strings.SINGLE_CREDENTIAL}
-          </Btn>
-          <Btn
-            onPress={() => changeActiveForm(IdentityForms.BusinessCard)}
-            type={BtnTypes.senary}
-          >
-            {strings.BUSINESS_CARD}
-          </Btn>
-        </>
-      )}
-    </TopSheet>
+              <Btn
+                onPress={() => changeActiveForm(IdentityForms.SingleCredential)}
+                type={BtnTypes.senary}
+                >
+                {strings.SINGLE_CREDENTIAL}
+              </Btn>
+              <Btn
+                onPress={() => changeActiveForm(IdentityForms.BusinessCard)}
+                type={BtnTypes.senary}
+                >
+                {strings.BUSINESS_CARD}
+              </Btn>
+            </>
+          )}
+      </View>
+    </Fallin>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.lightBlack,
+    padding: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    zIndex: 1
+  }
+})
 
 export default WelcomeSheet

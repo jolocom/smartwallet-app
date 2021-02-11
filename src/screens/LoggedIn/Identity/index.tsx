@@ -10,9 +10,17 @@ const Identity = () => {
   const attributes = useSelector(getAttributes)
   const showIdentityIntro = !Boolean(Object.keys(attributes).length)
 
+  if (showIdentityIntro) {
+    return (
+      <ScreenContainer isFullscreen customStyles={{justifyContent: 'flex-start'}}>
+        <IdentityIntro />
+      </ScreenContainer>
+    )
+  }
+
   return (
-    <ScreenContainer isFullscreen>
-      {showIdentityIntro ? <IdentityIntro /> : <IdentityCredentials />}
+    <ScreenContainer>
+      <IdentityCredentials />
     </ScreenContainer>
   )
 }
