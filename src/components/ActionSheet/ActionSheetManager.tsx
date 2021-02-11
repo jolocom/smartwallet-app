@@ -20,6 +20,7 @@ import IntermediarySheetBody from './IntermediarySheetBody'
 import { IntermediarySheetState } from '~/modules/interaction/types'
 import Resolution from '~/screens/Modals/Interactions/Resolution'
 import { useFinishInteraction } from '~/hooks/interactions'
+import Fallin from '../animation/Fallin'
 
 enum ActionSheetTypes {
   InteractionSheet,
@@ -125,8 +126,12 @@ const ActionSheetManager: React.FC = () => {
         <View style={styles.tapArea} />
       </TouchableWithoutFeedback>
       <View style={styles.interactionBody}>
-        {activeSheet === ActionSheetTypes.InteractionSheet && renderInteractionBody()}
-        {sheetState === IntermediarySheetState.showing && <IntermediarySheetBody />} 
+        <Fallin isFallingIn={activeSheet === ActionSheetTypes.InteractionSheet} from='bottom'>
+          {renderInteractionBody()}
+        </Fallin>
+        <Fallin isFallingIn={sheetState === IntermediarySheetState.showing} from='bottom'>
+          <IntermediarySheetBody /> 
+        </Fallin>
       </View>
     </View>      
   )
