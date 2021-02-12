@@ -1,21 +1,18 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-
-import BasWrapper from './BasWrapper'
-import { useCreateAttributes } from '~/hooks/attributes'
-import { useLoader } from '~/hooks/loader'
-import { strings } from '~/translations/strings'
-import InteractionHeader from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionHeader'
-import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
-import { attributeConfig } from '~/config/claims'
-import Input from '../Input'
-import { useToasts } from '~/hooks/toasts'
-import { ClaimKeys } from '~/types/credentials'
-import useInteractionToasts from '~/hooks/interactions/useInteractionToasts'
 import { useRoute } from '@react-navigation/native'
 
+import Input from '~/components/Input'
+import { useCreateAttributes } from '~/hooks/attributes'
+import { useLoader } from '~/hooks/loader'
+import { useToasts } from '~/hooks/toasts'
+import useInteractionToasts from '~/hooks/interactions/useInteractionToasts'
+import InteractionHeader from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionHeader'
+import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
+import { strings } from '~/translations/strings'
+import { attributeConfig } from '~/config/claims'
+import { ClaimKeys } from '~/types/credentials'
+
 const IntermediarySheetBody = () => {
-  const dispatch = useDispatch()
   const loader = useLoader()
   const { scheduleInfo } = useToasts()
   const { scheduleErrorInteraction } = useInteractionToasts()
@@ -68,12 +65,7 @@ const IntermediarySheetBody = () => {
   }
 
   return (
-    <BasWrapper
-      showIcon={false}
-      customStyles={{
-        paddingTop: 10,
-      }}
-    >
+    <>
       <InteractionHeader {...{ title, description }} />
       <Form
         config={{
@@ -88,7 +80,6 @@ const IntermediarySheetBody = () => {
               const isLastInput = i === fields.length - 1
               return (
                 <Input.Block
-                  // autoFocus={i === 0}
                   placeholder={f.label}
                   key={f.key}
                   updateInput={(val) => updateField(f.key, val)}
@@ -102,7 +93,7 @@ const IntermediarySheetBody = () => {
           }
         </Form.Body>
       </Form>
-    </BasWrapper>
+      </>
   )
 }
 

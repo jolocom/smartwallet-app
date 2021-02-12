@@ -15,7 +15,7 @@ import {
 
 import Resolution from '~/screens/Modals/Interaction/InteractionFlow/Resolution'
 import { useFinishInteraction } from '~/hooks/interactions'
-import ScreenDismissable from '~/components/ScreenDismissArea'
+import ScreenDismissArea from '~/components/ScreenDismissArea'
 
 const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
@@ -45,7 +45,7 @@ const InteractionFlow: React.FC = () => {
 
   return (
     <View style={styles.fullScreen}>
-      <ScreenDismissable onDismiss={handleDismissInteraction} />
+      <ScreenDismissArea onDismiss={handleDismissInteraction} />
       <View style={styles.interactionBody}>
         {renderInteractionBody()}
       </View>
@@ -57,13 +57,13 @@ const styles = StyleSheet.create({
   fullScreen: {
     width: '100%',
     height: '100%',
-    justifyContent: 'space-between',
   },
   tapArea: {
     flex: 1,  
   },
   interactionBody: {
     flex: 0,
+    alignItems: 'center'
   }
 })
 
