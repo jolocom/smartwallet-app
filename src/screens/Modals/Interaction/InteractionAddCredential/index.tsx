@@ -10,7 +10,7 @@ const InteractionAddCredential = () => {
   const handleNavigateToInteraction = () => {
     navigation.goBack();
     setTimeout(() => {
-      navigation.navigate(ScreenNames.Interaction)
+      navigation.navigate(ScreenNames.InteractionFlow)
     }, 500)
   }
   return (

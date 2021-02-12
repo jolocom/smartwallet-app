@@ -9,9 +9,9 @@ import {
   getAuthorizationDetails,
   getCounterpartyName,
 } from '~/modules/interaction/selectors'
-import InteractionHeader from './InteractionHeader'
+import InteractionHeader from './components/InteractionHeader'
 import { strings } from '~/translations/strings'
-import InteractionFooter from './InteractionFooter'
+import InteractionFooter from './components/InteractionFooter'
 import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 

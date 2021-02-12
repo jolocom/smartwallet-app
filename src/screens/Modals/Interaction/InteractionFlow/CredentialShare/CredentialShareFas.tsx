@@ -8,18 +8,18 @@ import {
   getAvailableAttributesToShare,
   getCredShareDetails,
 } from '~/modules/interaction/selectors'
-import InteractionSection from '../InteractionSection'
-import CredentialCard from '../CredentialCard'
+import InteractionSection from '../components/InteractionSection'
+import CredentialCard from '../components/CredentialCard'
 import { MultipleShareUICredential } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
-import Carousel from '../Carousel'
-import InteractionFooter, { FooterContainer } from '../InteractionFooter'
+import Carousel from '../components/Carousel'
+import InteractionFooter, { FooterContainer } from '../components/InteractionFooter'
 import AttributeWidgetWrapper from './AttributeWidgetWrapper'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import InteractionHeader from '../InteractionHeader'
+import InteractionHeader from '../components/InteractionHeader'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
 

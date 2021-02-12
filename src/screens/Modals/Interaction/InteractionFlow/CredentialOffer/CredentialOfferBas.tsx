@@ -4,16 +4,16 @@ import { useSelector } from 'react-redux'
 import BasWrapper, {
   BasInteractionBody,
 } from '~/components/ActionSheet/BasWrapper'
-import CredentialCard from '../CredentialCard'
+import CredentialCard from '../components/CredentialCard'
 import { getCredOfferDetails } from '~/modules/interaction/selectors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import InteractionHeader from '../InteractionHeader'
+import InteractionHeader from '../components/InteractionHeader'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import { strings } from '~/translations/strings'
-import InteractionFooter from '../InteractionFooter'
+import InteractionFooter from '../components/InteractionFooter'
 
 const CredentialOfferBas = () => {
   const details = useSelector(getCredOfferDetails)

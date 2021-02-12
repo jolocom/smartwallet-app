@@ -26,7 +26,7 @@ export enum ScreenNames {
   // Interactions
   Camera = 'Camera', // root screen
   Scanner = 'Scanner',
-  Interaction = 'Interaction',
+  InteractionFlow = 'InteractionFlow',
   InteractionAddCredential = 'InteractionAddCredential',
   // Modals
   Loader = 'Loader',

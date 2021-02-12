@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
 import { getResolutionDetails } from '~/modules/interaction/selectors'
-import InteractionHeader from './InteractionHeader'
-import InteractionFooter from './InteractionFooter'
+import InteractionHeader from './components/InteractionHeader'
+import InteractionFooter from './components/InteractionFooter'
 import useResolutionSubmit from '~/hooks/interactions/useResolutionSubmit'
 
 const Resolution = () => {

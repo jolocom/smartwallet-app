@@ -4,31 +4,20 @@ import { useSelector } from 'react-redux'
 
 import { FlowType } from 'react-native-jolocom'
 
-import Authentication from '~/screens/Modals/Interactions/Authentication'
-import Authorization from '~/screens/Modals/Interactions/Authorization'
-import CredentialShare from '~/screens/Modals/Interactions/CredentialShare'
-import CredentialOffer from '~/screens/Modals/Interactions/CredentialOffer'
+import Authentication from './Authentication'
+import Authorization from './Authorization'
+import CredentialShare from './CredentialShare'
+import CredentialOffer from './CredentialOffer'
 
 import {
   getInteractionType,
 } from '~/modules/interaction/selectors'
 
-import Resolution from '~/screens/Modals/Interactions/Resolution'
+import Resolution from '~/screens/Modals/Interaction/InteractionFlow/Resolution'
 import { useFinishInteraction } from '~/hooks/interactions'
-import ScreenDismissable from '../ScreenDismissArea'
+import ScreenDismissable from '~/components/ScreenDismissArea'
 
-enum ActionSheetTypes {
-  InteractionSheet,
-  IntermediateSheet,
-  None,
-}
-
-/**
- * Manages @ActionSheets: @InteractionSheet (default) and @IntermediarySheet (inputs). Only one
- * @ActionSheet should be active at a time.
- */
-
-const ActionSheetManager: React.FC = () => {
+const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
 
   const finishInteraction = useFinishInteraction();
@@ -78,4 +67,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ActionSheetManager
+export default InteractionFlow
