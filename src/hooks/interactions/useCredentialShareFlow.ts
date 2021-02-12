@@ -8,16 +8,15 @@ import {
   getCounterpartyName,
 } from '~/modules/interaction/selectors'
 import { AttributeTypes } from '~/types/credentials'
-import { IntermediarySheetState } from '~/modules/interaction/types'
 import {
-  setIntermediaryState,
-  setAttributeInputType,
   selectShareCredential,
 } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
 import { useInteraction } from '.'
 import { attributeConfig } from '~/config/claims'
 import { useAgent } from '../sdk'
+import { useNavigation } from '@react-navigation/native'
+import { ScreenNames } from '~/types/screens'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction
@@ -32,7 +31,8 @@ export const useCredentialShareFlow = () => {
     getShareCredentialTypes,
   )
   const { documents, other } = useSelector(getShareCredentialsBySection)
-  const serviceName = useSelector(getCounterpartyName)
+  const serviceName = useSelector(getCounterpartyName);
+  const navigation = useNavigation();
 
   /**
    * Assembles a @CredentialRequestResponse token with the selected
@@ -99,12 +99,12 @@ export const useCredentialShareFlow = () => {
     }
   }
 
-  /**
-   * Shows the Intermediary ActionSheet for creating a new attribute.
-   */
+  // TODO: rename this one because it only redirects user from one screen to the other
   const handleCreateAttribute = (sectionKey: AttributeTypes) => {
-    dispatch(setIntermediaryState(IntermediarySheetState.showing))
-    dispatch(setAttributeInputType(sectionKey))
+    navigation.goBack();
+    setTimeout(() => {
+      navigation.navigate(ScreenNames.InteractionAddCredential, {type: sectionKey})
+    }, 500)
   }
 
   /**

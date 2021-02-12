@@ -1,9 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { setIntermediaryState } from '~/modules/interaction/actions'
-import { IntermediarySheetState } from '~/modules/interaction/types'
-import { getAttributeInputType } from '~/modules/interaction/selectors'
 import BasWrapper from './BasWrapper'
 import { useCreateAttributes } from '~/hooks/attributes'
 import { useLoader } from '~/hooks/loader'
@@ -15,14 +12,19 @@ import Input from '../Input'
 import { useToasts } from '~/hooks/toasts'
 import { ClaimKeys } from '~/types/credentials'
 import useInteractionToasts from '~/hooks/interactions/useInteractionToasts'
+import { useRoute } from '@react-navigation/native'
 
 const IntermediarySheetBody = () => {
   const dispatch = useDispatch()
   const loader = useLoader()
   const { scheduleInfo } = useToasts()
   const { scheduleErrorInteraction } = useInteractionToasts()
-  const inputType = useSelector(getAttributeInputType)
 
+  const route = useRoute()
+  // TODO: fix types
+  const { type: inputType } = route.params;
+  
+  // TODO: fix types
   const formConfig = attributeConfig[inputType]
   const title = strings.ADD_YOUR_ATTRIBUTE(formConfig.label.toLowerCase())
   const description =
@@ -45,14 +47,13 @@ const IntermediarySheetBody = () => {
       if (claimsValid) {
         const success = await loader(
           async () => {
-            await createAttribute(inputType, claims)
-            dispatch(setIntermediaryState(IntermediarySheetState.switching))
+            await createAttribute(inputType, claims);
+            // TODO: return user back to Interaction screen
           },
           { showSuccess: false },
         )
 
         if (!success) {
-          dispatch(setIntermediaryState(IntermediarySheetState.switching))
           scheduleErrorInteraction()
         }
       } else {
@@ -87,7 +88,7 @@ const IntermediarySheetBody = () => {
               const isLastInput = i === fields.length - 1
               return (
                 <Input.Block
-                  autoFocus={i === 0}
+                  // autoFocus={i === 0}
                   placeholder={f.label}
                   key={f.key}
                   updateInput={(val) => updateField(f.key, val)}

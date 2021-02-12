@@ -62,7 +62,6 @@ const BasWrapper: React.FC<Props> = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    alignSelf: 'center',
     width: '98%',
   },
   basIcon: {
