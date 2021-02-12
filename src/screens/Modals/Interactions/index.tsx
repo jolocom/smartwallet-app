@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 
 import { ScreenNames } from '~/types/screens'
 import Scanner from '~/screens/Modals/Interactions/Scanner'
@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { getInteractionType } from '~/modules/interaction/selectors'
 import { useNavigation } from '@react-navigation/native'
 import ActionSheetManager from '~/components/ActionSheet/ActionSheetManager'
+import { Platform } from 'react-native'
 
 const Stack = createStackNavigator()
 
@@ -32,21 +33,7 @@ const Interactions: React.FC = () => {
           headerShown: false,
           cardStyle: { backgroundColor: 'transparent' },
           cardOverlayEnabled: true,
-          cardStyleInterpolator: ({ current: { progress } }) => ({
-            cardStyle: {
-              opacity: progress.interpolate({
-                inputRange: [0, 0.5, 0.9, 1],
-                outputRange: [0, 0.25, 0.7, 1],
-              }),
-            },
-            overlayStyle: {
-              opacity: progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 0.5],
-                extrapolate: 'clamp',
-              }),
-            },
-          }),
+          cardStyleInterpolator: Platform.OS === 'ios' ? CardStyleInterpolators.forVerticalIOS : CardStyleInterpolators.forRevealFromBottomAndroid
         }}
         name={ScreenNames.Interaction}
         component={ActionSheetManager} />

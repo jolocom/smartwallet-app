@@ -134,6 +134,8 @@ export const useFinishInteraction = () => {
         navigation.navigate(ScreenNames.LoggedIn);
       }
     }
-    dispatch(resetInteraction());
+    setTimeout(() => {
+      dispatch(resetInteraction());
+    }, 500)
   }
 }
