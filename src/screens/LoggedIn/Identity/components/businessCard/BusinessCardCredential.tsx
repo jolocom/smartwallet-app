@@ -1,24 +1,28 @@
-import React from 'react';
-import { View } from 'react-native';
-import { useSelector } from 'react-redux';
-import { Colors } from '~/utils/colors';
-import {getBusinessCardConfigWithValues} from '~/modules/attributes/selectors'
-import BusinessCard from '../../IdentityBusinessCard';
-import { ClaimKeys, IAttributeClaimFieldWithValue } from '~/types/credentials';
-import { strings } from '~/translations';
+import React from 'react'
+import { View } from 'react-native'
+import { useSelector } from 'react-redux'
+import { Colors } from '~/utils/colors'
+import { getBusinessCardConfigWithValues } from '~/modules/attributes/selectors'
+import BusinessCard from '../../IdentityBusinessCard'
+import { ClaimKeys, IAttributeClaimFieldWithValue } from '~/types/credentials'
+import { strings } from '~/translations'
 
-const findClaimValueForKey = (fields: IAttributeClaimFieldWithValue[]) => (key: ClaimKeys) => fields.find(f => f.key === key)?.value;
+const findClaimValueForKey = (fields: IAttributeClaimFieldWithValue[]) => (
+  key: ClaimKeys,
+) => fields.find((f) => f.key === key)?.value
 
 const BusinessCardCredential: React.FC = () => {
-  const groupedValuesBC = useSelector(getBusinessCardConfigWithValues);
+  const groupedValuesBC = useSelector(getBusinessCardConfigWithValues)
   if (!groupedValuesBC) return null
 
-  const { fields } = groupedValuesBC;
-  const getClaimValue = findClaimValueForKey(fields);
-  const displayedName = `${getClaimValue(ClaimKeys.givenName)} ${getClaimValue(ClaimKeys.familyName)}`;
+  const { fields } = groupedValuesBC
+  const getClaimValue = findClaimValueForKey(fields)
+  const displayedName = `${getClaimValue(ClaimKeys.givenName)} ${getClaimValue(
+    ClaimKeys.familyName,
+  )}`
 
-  const email = getClaimValue(ClaimKeys.email);
-  const telephone = getClaimValue(ClaimKeys.telephone);
+  const email = getClaimValue(ClaimKeys.email)
+  const telephone = getClaimValue(ClaimKeys.telephone)
 
   return (
     <>
@@ -41,12 +45,12 @@ const BusinessCardCredential: React.FC = () => {
         </BusinessCard.Styled.FieldName>
         {!!email && (
           <BusinessCard.Styled.FieldValue color={Colors.white}>
-            { email }
+            {email}
           </BusinessCard.Styled.FieldValue>
         )}
         {!!telephone && (
           <BusinessCard.Styled.FieldValue color={Colors.white}>
-            { telephone }
+            {telephone}
           </BusinessCard.Styled.FieldValue>
         )}
       </BusinessCard.Styled.FieldGroup>
