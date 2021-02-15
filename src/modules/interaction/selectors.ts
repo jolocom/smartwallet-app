@@ -21,9 +21,17 @@ import {
   isNotActiveInteraction,
   isResolutionDetails,
 } from './guards'
-import { createInteractionSelector } from './utils'
 import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
+
+const createInteractionSelector = <T extends InteractionDetails>(
+  guard: (details: InteractionDetails) => details is T,
+) =>
+  createSelector([getActiveInteraction], (details) => {
+    if (!guard(details)) throw new Error('Wrong interaction details')
+
+    return details
+  })
 
 /**
  * Gets the @IntermediaryState of the @IntermediarySheet
