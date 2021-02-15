@@ -72,7 +72,7 @@ const CredentialShareBas = () => {
         cta={getCtaText()}
         onSubmit={() => {
           return hasMissingAttribute
-            ? handleSwitchScreens(hasMissingAttribute)
+            ? handleSwitchScreens({type: hasMissingAttribute})
             : handleSubmit()
         }}
       />

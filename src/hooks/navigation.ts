@@ -54,10 +54,10 @@ export const useRedirectToLoggedIn = () => {
 export const useSwitchScreens = (screenToSwitchTo: ScreenNames) => {
   const navigation = useNavigation();
 
-  return (sectionKey: AttributeTypes) => {
+  return <T extends {}>(params?: T) => {
     navigation.goBack();
     setTimeout(() => {
-      navigation.navigate(screenToSwitchTo, {type: sectionKey})
+      navigation.navigate(screenToSwitchTo, params)
     }, 500)
   }
 }

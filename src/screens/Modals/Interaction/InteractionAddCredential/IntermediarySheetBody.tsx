@@ -11,11 +11,14 @@ import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { strings } from '~/translations/strings'
 import { attributeConfig } from '~/config/claims'
 import { ClaimKeys } from '~/types/credentials'
+import { useSwitchScreens } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 const IntermediarySheetBody = () => {
   const loader = useLoader()
   const { scheduleInfo } = useToasts()
-  const { scheduleErrorInteraction } = useInteractionToasts()
+  const { scheduleErrorInteraction } = useInteractionToasts();
+  const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionFlow);
 
   const route = useRoute()
   // TODO: fix types
@@ -45,7 +48,7 @@ const IntermediarySheetBody = () => {
         const success = await loader(
           async () => {
             await createAttribute(inputType, claims);
-            // TODO: return user back to Interaction screen
+            handleSwitchScreens()
           },
           { showSuccess: false },
         )
