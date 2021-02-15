@@ -3,8 +3,7 @@ import { LayoutAnimation, TouchableOpacity } from 'react-native'
 
 import { useHistory } from '~/hooks/history'
 import { IRecordDetails } from '~/types/records'
-import { useToasts } from '~/hooks/toasts'
-import { IRecordItemProps } from '../Record'
+import { IRecordItemProps } from '../types'
 import RecordItemHeader from './RecordItemHeader'
 import RecordItemDetails from './RecordItemDetails'
 
