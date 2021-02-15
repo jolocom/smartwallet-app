@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
-import { useTabs } from '../Tabs/Tabs'
+import { useTabs } from '../Tabs/context'
 import { useCard } from './Card'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
 import { IWithCustomStyle } from './types'

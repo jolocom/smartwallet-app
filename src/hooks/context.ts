@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-export const useCustomContext = <T>(context: React.Context<T>) => {
+export const useCustomContext = <T>(context: React.Context<T | undefined>) => {
   return () => {
     const customContext = useContext(context)
     if (customContext) return customContext

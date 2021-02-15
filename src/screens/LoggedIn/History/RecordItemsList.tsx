@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
 
-import { useTabs } from '~/components/Tabs/Tabs'
+import { useTabs } from '~/components/Tabs/context'
 import { useHistory } from '~/hooks/history'
 import { IPreLoadedInteraction } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
 import Record, { IRecordItemsListProps, useRecord } from './Record'
 import RecordItem from './components/RecordItem'
-import HistoryPlaceholder from './components/HistoryPlaceholder'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 
