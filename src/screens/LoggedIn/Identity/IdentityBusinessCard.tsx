@@ -10,7 +10,7 @@ import { Colors } from '~/utils/colors'
 import BusinessCardCredential from './components/businessCard/BusinessCardCredential'
 import BusinessCardEdit from './components/businessCard/BusinessCardEdit'
 import BusinessCardPlaceholder from './components/businessCard/BusinessCardPlaceholder'
-import Styled, { IStyledComposition } from './components/Styled'
+import BusinessCardStyled from './components/BusinessCardStyled'
 import IdentityTabs from './tabs'
 
 enum Modes {
@@ -18,11 +18,7 @@ enum Modes {
   edit = 'edit',
 }
 
-interface IBusinessCardComposition {
-  Styled: IStyledComposition
-}
-
-const BusinessCard: React.FC & IBusinessCardComposition = () => {
+const BusinessCard: React.FC = () => {
   const [mode, setMode] = useState(Modes.display)
   const { handleDeleteCredentialSI } = useSICActions()
 
@@ -90,7 +86,7 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
       <IdentityTabs.Styled.Placeholder show={!businessCardId}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
-      <BusinessCard.Styled.Container>
+      <BusinessCardStyled.Container>
         <Dots
           color={Colors.white}
           customStyles={{ right: -10, top: -12 }}
@@ -101,11 +97,9 @@ const BusinessCard: React.FC & IBusinessCardComposition = () => {
         ) : (
           <BusinessCardCredential />
         )}
-      </BusinessCard.Styled.Container>
+      </BusinessCardStyled.Container>
     </View>
   )
 }
-
-BusinessCard.Styled = Styled
 
 export default BusinessCard

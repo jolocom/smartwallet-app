@@ -7,14 +7,6 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-export interface IStyledComposition {
-  Container: React.FC
-  Title: React.FC<IWithColor>
-  FieldName: React.FC
-  FieldValue: React.FC<IWithColor>
-  FieldGroup: React.FC<IWithCustomStyle>
-}
-
 interface IWithColor {
   color: Colors
 }
@@ -67,14 +59,6 @@ const CardFieldGroup: React.FC<IWithCustomStyle> = ({
   return <View style={[styles.fieldGroup, customStyles]}>{children}</View>
 }
 
-const Styled: IStyledComposition = {
-  Container: CardContainer,
-  Title: CardTitle,
-  FieldName: CardFieldName,
-  FieldValue: CardFieldValue,
-  FieldGroup: CardFieldGroup,
-}
-
 const styles = StyleSheet.create({
   cardContainer: { padding: 20, alignItems: 'center', height: 212 },
   cardNestedContainer: {
@@ -88,4 +72,12 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Styled
+const BusinessCardStyled = {
+  Container: CardContainer,
+  Title: CardTitle,
+  FieldName: CardFieldName,
+  FieldValue: CardFieldValue,
+  FieldGroup: CardFieldGroup,
+}
+
+export default BusinessCardStyled
