@@ -15,13 +15,14 @@ import InteractionHeader from '../components/InteractionHeader'
 import InteractionFooter from '../components/InteractionFooter'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
+import { useSwitchScreens } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
   const attributes = useSelector(getAvailableAttributesToShare)
   const {
     getPreselectedAttributes,
-    handleCreateAttribute,
     handleSelectCredential,
     getSingleMissingAttribute,
     getHeaderText,
@@ -29,6 +30,7 @@ const CredentialShareBas = () => {
     selectionReady,
   } = useCredentialShareFlow()
   const hasMissingAttribute = getSingleMissingAttribute()
+  const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionAddCredential)
 
   const handleSubmit = useCredentialShareSubmit()
 
@@ -70,7 +72,7 @@ const CredentialShareBas = () => {
         cta={getCtaText()}
         onSubmit={() => {
           return hasMissingAttribute
-            ? handleCreateAttribute(hasMissingAttribute)
+            ? handleSwitchScreens(hasMissingAttribute)
             : handleSubmit()
         }}
       />

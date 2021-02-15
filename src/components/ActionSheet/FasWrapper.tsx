@@ -36,6 +36,7 @@ const FasWrapper: React.FC<Props> = ({ children, collapsedTitle }) => {
 const styles = StyleSheet.create({
   wrapper: {
     height: '100%',
+    width: '100%',
     backgroundColor: Colors.mainBlack,
   },
 })

@@ -99,14 +99,6 @@ export const useCredentialShareFlow = () => {
     }
   }
 
-  // TODO: rename this one because it only redirects user from one screen to the other
-  const handleCreateAttribute = (sectionKey: AttributeTypes) => {
-    navigation.goBack();
-    setTimeout(() => {
-      navigation.navigate(ScreenNames.InteractionAddCredential, {type: sectionKey})
-    }, 500)
-  }
-
   /**
    * Selects a credential in the @interactions module
    */
@@ -154,7 +146,6 @@ export const useCredentialShareFlow = () => {
     getPreselectedAttributes,
     selectionReady,
     isFirstCredential,
-    handleCreateAttribute,
     handleSelectCredential,
     getSingleMissingAttribute,
     getHeaderText,

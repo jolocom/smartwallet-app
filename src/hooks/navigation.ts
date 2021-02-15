@@ -2,6 +2,7 @@ import { useNavigation, StackActions } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
+import { AttributeTypes } from '~/types/credentials'
 
 interface NestedSceenI {
   screen?: ScreenNames
@@ -46,5 +47,17 @@ export const useRedirectToLoggedIn = () => {
   return () => {
     dispatch(setAppLocked(false))
     dispatch(setLocalAuth(true))
+  }
+}
+
+/* Used to switch between InteractionFlow and InteractionAddCredential screens */
+export const useSwitchScreens = (screenToSwitchTo: ScreenNames) => {
+  const navigation = useNavigation();
+
+  return (sectionKey: AttributeTypes) => {
+    navigation.goBack();
+    setTimeout(() => {
+      navigation.navigate(screenToSwitchTo, {type: sectionKey})
+    }, 500)
   }
 }
