@@ -15,19 +15,21 @@ import { ScreenNames } from '~/types/screens'
 import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
 import BeforeLoggedIn from './screens/BeforeLoggedIn'
+import { AttributeTypes } from './types/credentials'
 
 export type RootStackParamList = {
-  Recovery: {
+  [ScreenNames.Recovery]: {
     isAccessRestore: boolean
   }
-  DragToConfirm: {
+  [ScreenNames.DragToConfirm]: {
     title: string
     cancelText: string
     onComplete: () => void
   }
-  BeforeLoggedIn: undefined
-  LoggedOut: undefined
-  LostSeedPhraseInfo: undefined
+  [ScreenNames.BeforeLoggedIn]: undefined,
+  [ScreenNames.LoggedOut]: undefined,
+  [ScreenNames.LostSeedPhraseInfo]: undefined,
+  [ScreenNames.InteractionAddCredential]: { type: AttributeTypes },
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()

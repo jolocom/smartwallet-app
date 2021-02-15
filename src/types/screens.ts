@@ -24,7 +24,7 @@ export enum ScreenNames {
   RegisterPin = 'RegisterPin',
   RegisterBiometry = 'RegisterBiometry',
   // Interactions
-  Camera = 'Camera', // root screen
+  Interaction = 'Interaction', // root screen
   Scanner = 'Scanner',
   InteractionFlow = 'InteractionFlow',
   InteractionAddCredential = 'InteractionAddCredential',
