@@ -8,15 +8,11 @@ import {
   getCounterpartyName,
 } from '~/modules/interaction/selectors'
 import { AttributeTypes } from '~/types/credentials'
-import {
-  selectShareCredential,
-} from '~/modules/interaction/actions'
+import { selectShareCredential } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
 import { useInteraction } from '.'
 import { attributeConfig } from '~/config/claims'
 import { useAgent } from '../sdk'
-import { useNavigation } from '@react-navigation/native'
-import { ScreenNames } from '~/types/screens'
 
 /**
  * A custom hook which exposes a collection of utils for the Credential Share interaction
@@ -31,8 +27,7 @@ export const useCredentialShareFlow = () => {
     getShareCredentialTypes,
   )
   const { documents, other } = useSelector(getShareCredentialsBySection)
-  const serviceName = useSelector(getCounterpartyName);
-  const navigation = useNavigation();
+  const serviceName = useSelector(getCounterpartyName)
 
   /**
    * Assembles a @CredentialRequestResponse token with the selected

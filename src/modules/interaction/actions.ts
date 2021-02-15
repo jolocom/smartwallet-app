@@ -1,8 +1,5 @@
 import createAction from '~/utils/createAction'
-import {
-  InteractionActions,
-  InteractionDetails,
-} from './types'
+import { InteractionActions, InteractionDetails } from './types'
 import { FlowType } from '@jolocom/sdk'
 import { OfferUICredential } from '~/types/credentials'
 

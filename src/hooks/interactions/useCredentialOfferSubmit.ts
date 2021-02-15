@@ -1,8 +1,6 @@
 import { useDispatch } from 'react-redux'
 
-import {
-  updateOfferValidation,
-} from '~/modules/interaction/actions'
+import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { useToasts } from '../toasts'
@@ -29,7 +27,7 @@ const useCredentialOfferSubmit = () => {
   } = useInteractionToasts()
   const { scheduleInfo } = useToasts()
   const redirect = useRedirect()
-  const finishInteraction = useFinishInteraction();
+  const finishInteraction = useFinishInteraction()
 
   const scheduleSuccess = () =>
     scheduleSuccessInteraction({

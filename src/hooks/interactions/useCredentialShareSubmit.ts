@@ -8,7 +8,7 @@ const useCredentialShareSubmit = () => {
     scheduleSuccessInteraction,
     scheduleErrorInteraction,
   } = useInteractionToasts()
-  const finishInteraction = useFinishInteraction();
+  const finishInteraction = useFinishInteraction()
 
   return async () => {
     try {

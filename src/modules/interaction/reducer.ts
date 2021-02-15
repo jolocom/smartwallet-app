@@ -1,7 +1,4 @@
-import {
-  InteractionActions,
-  InteractionState,
-} from './types'
+import { InteractionActions, InteractionState } from './types'
 import { Action } from '~/types/actions'
 import { isCredShareDetails, isCredOfferDetails } from './guards'
 
