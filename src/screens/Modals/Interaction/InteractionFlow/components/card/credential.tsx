@@ -20,7 +20,7 @@ export const BodyContainer: React.FC = ({ children }) => {
   )
 }
 
-export const BodyFieldsContainer: React.FC = ({ children }) => {
+export const BodyFieldsContainer: React.FC = ({ children, isStretched }) => {
   const childrenToDisplay = Children.map(children, (child, idx) => {
     if (idx > 3) return null;
     // field label
@@ -35,7 +35,7 @@ export const BodyFieldsContainer: React.FC = ({ children }) => {
   })
   
   return (
-    <View style={styles.bodyFieldsContainer} children={childrenToDisplay} />
+    <View style={[styles.bodyFieldsContainer, {flex: isStretched ? 1 : 0.68, paddingRight: isStretched ? 20 : 0}]} children={childrenToDisplay} />
   )
 }
 
@@ -80,8 +80,6 @@ export const CredentialHighlight: React.FC = ({ children }) => {
     </View>
   )
 }
-
-
 
 const styles = StyleSheet.create({
   cardImage: {
@@ -135,5 +133,5 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 13,
     borderBottomRightRadius: 13,
     zIndex: 0
-  }
+}
 })

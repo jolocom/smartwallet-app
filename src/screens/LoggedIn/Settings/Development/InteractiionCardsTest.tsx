@@ -75,6 +75,22 @@ const InteractionCardsTest = () => {
         </BodyContainer>
         </CardImage>
         <View style={{ height: 20 }} />
+        <CardImage>
+        <HeaderContainer>
+          <CredentialName>Friendly document name</CredentialName>
+          <CredentialHolderName>Jane Fransis Scott Adelina Fitzgerald </CredentialHolderName>
+        </HeaderContainer>
+        <BodyContainer>
+          <BodyFieldsContainer isStretched>
+            <FieldLabel>Description of the input:</FieldLabel>
+            <FieldValue>Some more info that can fit in here and if it is not going on sjdsjd</FieldValue>
+            <FieldLabel>Extra long description of the input:</FieldLabel>
+            <FieldValue>Some more info that can fit asjdasdjs</FieldValue>
+          </BodyFieldsContainer>
+          {/* NOTE: Should be displayed only if there is an image */} 
+        </BodyContainer>
+        </CardImage>
+        <View style={{ height: 20 }} />
       </ScrollView>
       
     </ScreenContainer>
