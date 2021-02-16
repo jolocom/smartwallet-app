@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
-import { useTabs } from '../Tabs/Tabs'
 import { useCard } from './Card'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
 import { IWithCustomStyle } from './types'
@@ -15,8 +14,6 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
     optionalFields.slice(0, 3),
   )
 
-  const { activeTab } = useTabs()
-
   const lines = useRef(0)
 
   const handleOptionalFieldTextLayout = () => {
@@ -24,7 +21,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
     return (e: TextLayoutEvent) => {
       calculatedTimes++
       // disable lines manipulation if the number of times this function was invoked
-      // exceeds length of otional firlds twice (because we calculate field name and
+      // exceeds length of optional fields twice (because we calculate field name and
       // field value )
       if (calculatedTimes < optionalFields.length * 2 + 1) {
         const numberOfLines = e.nativeEvent.lines.length

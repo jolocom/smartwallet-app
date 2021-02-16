@@ -30,7 +30,6 @@ const InteractionCardsTest = () => {
             <FieldLabel>Expiry date</FieldLabel>
             <FieldValue>11.04.2023</FieldValue>
           </BodyFieldsContainer>
-          {/* NOTE: Should be displayed only if there is an image */} 
           <BodyImageContainer />
           <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
         </BodyContainer>
@@ -50,7 +49,6 @@ const InteractionCardsTest = () => {
               <FieldLabel>Expiry date</FieldLabel>
               <FieldValue>11.04.2023</FieldValue>
             </BodyFieldsContainer>
-            {/* Should be displayed only if there is an image */}
             <BodyImageContainer /> 
           </BodyContainer>
           <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
@@ -69,7 +67,6 @@ const InteractionCardsTest = () => {
             <FieldLabel>Extra long description of the input:</FieldLabel>
             <FieldValue>Some more info that can fit asjdasdjs</FieldValue>
           </BodyFieldsContainer>
-          {/* NOTE: Should be displayed only if there is an image */} 
           <BodyImageContainer />
           <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
         </BodyContainer>
@@ -83,14 +80,30 @@ const InteractionCardsTest = () => {
         <BodyContainer>
           <BodyFieldsContainer isStretched>
             <FieldLabel>Description of the input:</FieldLabel>
-            <FieldValue>Some more info that can fit in here and if it is not going on sjdsjd</FieldValue>
+            <FieldValue>Some more info that can </FieldValue>
             <FieldLabel>Extra long description of the input:</FieldLabel>
-            <FieldValue>Some more info that can fit asjdasdjs</FieldValue>
+            <FieldValue>Some more info that can fit asjdasdjs fit in here and if it is not going on sjdsjd</FieldValue>
           </BodyFieldsContainer>
-          {/* NOTE: Should be displayed only if there is an image */} 
         </BodyContainer>
         </CardImage>
         <View style={{ height: 20 }} />
+        <CardImage>
+          <HeaderContainer>
+            <CredentialName>Digital Passport</CredentialName>
+            <CredentialHolderName>Jane Fitzgerald</CredentialHolderName>
+          </HeaderContainer>
+          <BodyContainer>
+            <BodyFieldsContainer hasHighlight>
+              <FieldLabel>Description of the input:</FieldLabel>
+            <FieldValue>Some more info that can fit in here and if it is not going on sjdsjd</FieldValue>
+            <FieldLabel>Extra long description of the input:</FieldLabel>
+            <FieldValue>Some more info that can fit asjdasdjs</FieldValue>
+            </BodyFieldsContainer>
+            <BodyImageContainer /> 
+          </BodyContainer>
+          <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
+          <CredentialHighlight>SPECI2014</CredentialHighlight>
+        </CardImage>
       </ScrollView>
       
     </ScreenContainer>
