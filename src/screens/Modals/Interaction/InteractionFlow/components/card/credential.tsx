@@ -40,9 +40,9 @@ export const BodyFieldsContainer: React.FC = ({ children }) => {
   )
 }
 
-export const BodyImageContainer: React.FC = ({ children }) => {
+export const BodyImageContainer: React.FC = () => {
   return (
-    <View style={styles.bodyImageContainer} children={children}></View>
+    <View style={styles.bodyImageContainer} />
   )
 }
 
@@ -156,22 +156,20 @@ const styles = StyleSheet.create({
   },
   bodyImageContainer: {
     flex: 0.32,
-    // ...debugView(),
+    ...debugView(),
     alignItems: 'flex-start',
-    zIndex: 100,
     paddingRight: 20,
   },
   image: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 18,
+    right: 18,
     width: 105,
     height: 105,
     borderRadius: 105/2,
     zIndex: 100
   },
   highlight: {
-    position: 'absolute',
-    bottom: 0,
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: Colors.black,

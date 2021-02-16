@@ -29,9 +29,9 @@ const InteractionCardsTest = () => {
             <FieldLabel>Expiry date</FieldLabel>
             <FieldValue>11.04.2023</FieldValue>
           </BodyFieldsContainer>
-          <BodyImageContainer>
-            <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
-          </BodyImageContainer>
+          {/* NOTE: Should be displayed only if there is an image */} 
+          <BodyImageContainer />
+          <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
         </BodyContainer>
       </CardImage>
       <View style={{height: 20}} />
@@ -47,9 +47,9 @@ const InteractionCardsTest = () => {
             <FieldLabel>Extra long description of the input:</FieldLabel>
             <FieldValue>Some more info that can fit asjdasdjs</FieldValue>
           </BodyFieldsContainer>
-          <BodyImageContainer>
-            <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
-          </BodyImageContainer>
+          {/* NOTE: Should be displayed only if there is an image */} 
+          <BodyImageContainer />
+          <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
         </BodyContainer>
         </CardImage>
         <View style={{ height: 20 }} />
@@ -67,11 +67,11 @@ const InteractionCardsTest = () => {
               <FieldLabel>Expiry date</FieldLabel>
               <FieldValue>11.04.2023</FieldValue>
             </BodyFieldsContainer>
-            <BodyImageContainer>
-              <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
-            </BodyImageContainer>
-            <CredentialHighlight>SPECI2014</CredentialHighlight>
+            {/* Should be displayed only if there is an image */}
+            <BodyImageContainer /> 
           </BodyContainer>
+          <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
+          <CredentialHighlight>SPECI2014</CredentialHighlight>
       </CardImage>
       </ScrollView>
       
