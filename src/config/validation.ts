@@ -2,34 +2,28 @@ import * as yup from 'yup';
 import { ClaimKeys } from '~/types/credentials';
 
 const AT_LEAST_ONE_ERROR = 'Please provide at least one of the values';
-
-yup.addMethod(yup.string, 'atLeastOne', function (list: string[], message): yup.StringSchema {
-    return this.test({
-      message,
-      test: function (value) {
-        const atLeastOneIsPopulated = list.reduce((acc, f) => {
-          if (acc === true) {
-            acc = !!this.parent[f];
-          }
-          return acc;
-        }, true);
-        console.log();
-        if (value || (!value && atLeastOneIsPopulated)) return true;
-        else if (!value && !atLeastOneIsPopulated) return false
-        else return true;
-      }
-    })
+  
+yup.addMethod(yup.object, 'atLeastOneOf', function (list: string[], message) {
+  return this.test({
+    message,
+    test: function (values) {
+      const atLeastOneIsPopulated = list.some(el => Boolean(values[el]));
+      if (atLeastOneIsPopulated) return true
+      else return this.createError({path: list[0], message})
+    }
   })
+})
 
 export const nameValidation = yup.object().shape({
-  [ClaimKeys.givenName]: yup.string().atLeastOne(['familyName'], AT_LEAST_ONE_ERROR),
+  [ClaimKeys.givenName]: yup.string(),
   [ClaimKeys.familyName]: yup.string(),
-});
+}).atLeastOneOf([ClaimKeys.givenName, ClaimKeys.familyName], AT_LEAST_ONE_ERROR);
+
 
 export const contactValidation = yup.object().shape({
-  [ClaimKeys.email]: yup.string().email('Seems like this is not a valid email').atLeastOne([ClaimKeys.telephone], AT_LEAST_ONE_ERROR),
+  [ClaimKeys.email]: yup.string().email('Seems like this is not a valid email'),
   [ClaimKeys.telephone]: yup.string()
-})
+}).atLeastOneOf([ClaimKeys.email, ClaimKeys.telephone], AT_LEAST_ONE_ERROR)
 
 export const companyValidation = yup.object().shape({
   [ClaimKeys.legalCompanyName]: yup.string().required('Please provide a company name')

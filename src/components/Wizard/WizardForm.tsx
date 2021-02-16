@@ -29,7 +29,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
         onSubmit={handleFormSubmit}
         validationSchema={validationSchema}
       >
-        {({ handleChange, handleSubmit, values, isValid, errors }) => (
+        {({ handleChange, handleSubmit, values, isValid, errors, dirty }) => (
           <>
             <AutofocusContainer
               style={{
@@ -62,7 +62,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                 </View>
               ))}
             </AutofocusContainer>
-            <Wizard.Footer onSubmit={handleSubmit} isDisabled={!isValid} />
+              <Wizard.Footer onSubmit={handleSubmit} isDisabled={!dirty || (dirty && !isValid) } />
           </>
         )}
       </Formik>
