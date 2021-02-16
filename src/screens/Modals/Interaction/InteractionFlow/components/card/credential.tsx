@@ -2,7 +2,6 @@ import React, { Children } from 'react';
 import { StyleSheet, View, Image } from "react-native";
 
 import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
-import { JoloTextSizes } from "~/utils/fonts";
 import { Colors } from "~/utils/colors";
 import { debugView } from "~/utils/dev";
 import BP from '~/utils/breakpoints';
@@ -46,17 +45,7 @@ export const BodyImageContainer: React.FC = () => {
   )
 }
 
-export const CredentialName: React.FC = ({ children }) => {
-  return (
-    <JoloText
-      size={JoloTextSizes.big}
-      weight={JoloTextWeight.regular}
-      color={Colors.black80}
-      customStyles={{marginTop: -5}}
-      numberOfLines={1}
-    >{children}</JoloText>
-  )
-}
+
 
 export const CredentialHolderName: React.FC = ({ children }) => {
   return (
@@ -71,39 +60,6 @@ export const CredentialHolderName: React.FC = ({ children }) => {
   )
 }
 
-export const FieldLabel: React.FC = ({ children }) => {
-  return (
-    <JoloText
-      kind={JoloTextKind.title}
-      size={JoloTextSizes.tiniest}
-      weight={JoloTextWeight.regular}
-      color={Colors.black50}
-      customStyles={{marginTop: -5}}
-      numberOfLines={1}
-    >
-      {children}
-    </JoloText>
-  )
-}
-
-// TODO: should support scaling 
-export const FieldValue: React.FC = ({ children, ...props }) => {
-  console.log({props});
-  
-  return (
-    <JoloText
-      kind={JoloTextKind.title}
-      size={JoloTextSizes.mini}
-      weight={JoloTextWeight.regular}
-      color={Colors.black}
-      customStyles={{ marginTop: -7, textAlign: 'left', lineHeight: BP({default: 18, xsmall: 14}) }}
-      // numberOfLines={2}
-      {...props}
-    >
-      {children}
-    </JoloText>
-  )
-}
 
 export const CredentialImage: React.FC = ({ imageUrl }) => {
   return (
@@ -156,7 +112,7 @@ const styles = StyleSheet.create({
   },
   bodyImageContainer: {
     flex: 0.32,
-    ...debugView(),
+    // ...debugView(),
     alignItems: 'flex-start',
     paddingRight: 20,
   },
