@@ -359,7 +359,7 @@ const identity = {
 const bottomBar = {
   IDENTITY: 'Identity',
   HISTORY: 'History',
-  DOCUMENTS: 'Document',
+  DOCUMENTS: 'Documents',
   SETTINGS: 'Settings',
 }
 

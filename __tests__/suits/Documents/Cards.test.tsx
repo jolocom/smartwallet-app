@@ -67,6 +67,10 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/credentials', () => ({
+  useDeleteCredential: () => jest.fn(),
+}))
+
 const [mandatoryFields] = FIELDS.map((f) => f.details.mandatoryFields)
 
 const [optionalFields] = FIELDS.map((f) => f.details.optionalFields)
