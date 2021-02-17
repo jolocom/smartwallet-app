@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { setLogged } from '~/modules/account/actions'
@@ -15,11 +15,6 @@ import { useGetSeedPhrase } from '~/hooks/sdk'
 import shuffleArray from '~/utils/arrayUtils'
 import Dnd from './Dnd'
 
-export interface IDndProps {
-  tags: string[]
-  updateTags: (phrase: string[]) => void
-}
-
 const SeedPhraseRepeat: React.FC = () => {
   const goBack = useGoBack()
   const dispatch = useDispatch()
@@ -34,18 +29,13 @@ const SeedPhraseRepeat: React.FC = () => {
     null,
   )
 
-  const handlePhraseUpdate = (phrase: string[]) => {
-    if (!readyToSubmit) setReadyToSubmit(true)
-    setWrongOrder(false)
-    setShuffledSeedphrase(phrase)
-  }
-
-  const phraseFragmentCount = Math.round(Math.random())
+  const isFirstFragment = useRef(Boolean(Math.round(Math.random())))
 
   const phraseArr = seedphrase.split(' ')
   const phraseFragmentFirst = phraseArr.slice(0, 6)
   const phraseFragmentLast = phraseArr.slice(6, 12)
-  const usedFragment = phraseFragmentCount
+
+  const usedFragment = isFirstFragment.current
     ? phraseFragmentFirst
     : phraseFragmentLast
 
@@ -53,6 +43,12 @@ const SeedPhraseRepeat: React.FC = () => {
     const shuffled = shuffleArray(usedFragment)
     setShuffledSeedphrase(shuffled)
   }, [seedphrase])
+
+  const handlePhraseUpdate = (phrase: string[]) => {
+    if (!readyToSubmit) setReadyToSubmit(true)
+    setWrongOrder(false)
+    setShuffledSeedphrase(phrase)
+  }
 
   const onSubmit = async () => {
     if (isPhraseValid) {
@@ -80,7 +76,7 @@ const SeedPhraseRepeat: React.FC = () => {
         </SeedPhrase.Styled.Header.Left>
       </SeedPhrase.Styled.Header>
       <SeedPhrase.Styled.HelperText>
-        {strings.DRAG_AND_DROP_THE_WORDS(phraseFragmentCount)}
+        {strings.DRAG_AND_DROP_THE_WORDS(isFirstFragment.current)}
       </SeedPhrase.Styled.HelperText>
       <SeedPhrase.Styled.ActiveArea>
         {shuffledSeedphrase && shuffledSeedphrase.length > 1 ? (

@@ -90,9 +90,9 @@ const seedphrase = {
   SEEDPHRASE_INFO_HIGHLIGHT_4:
     'We strongly recommend storing your set of words in a safe place. Writing it down or using an encrypted password manager are the best options.',
   SEEDPHRASE_INFO_5: 'Do not share your secret phrase with anyone.',
-  DRAG_AND_DROP_THE_WORDS: (fragment: number) =>
+  DRAG_AND_DROP_THE_WORDS: (isFirst: boolean) =>
     `Drag and drop ${
-      !fragment ? 'last' : 'first'
+      isFirst ? 'first' : 'last'
     } 6 words until they are in the correct order`,
   CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN:
     'Check carefully for mistakes and try again',
