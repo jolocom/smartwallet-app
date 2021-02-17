@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import { LayoutAnimation, Platform, View } from 'react-native'
+import { useKeyboard } from '@react-native-community/hooks'
+import { useSafeArea } from 'react-native-safe-area-context'
 import { RouteProp } from '@react-navigation/native'
+import {
+  withNextInputAutoFocusInput,
+  withNextInputAutoFocusForm,
+} from 'react-native-formik'
+import { Formik } from 'formik'
 
 import Input from '~/components/Input'
 import { useCreateAttributes } from '~/hooks/attributes'
@@ -12,17 +20,15 @@ import { attributeConfig } from '~/config/claims'
 import { useSwitchScreens } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
-import { Keyboard, LayoutAnimation, Platform, View } from 'react-native'
 import Block from '~/components/Block'
 import { Colors } from '~/utils/colors'
-import { useKeyboard } from '@react-native-community/hooks'
-import { useSafeArea } from 'react-native-safe-area-context'
-import { InteractionStackParamList } from '../index';
-import { Formik } from 'formik'
+import { InteractionStackParamList } from '../index'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
-import { withNextInputAutoFocusInput, withNextInputAutoFocusForm } from 'react-native-formik'
 
-type InteractionAddCredentialRouteProps = RouteProp<InteractionStackParamList, ScreenNames.InteractionAddCredential>
+type InteractionAddCredentialRouteProps = RouteProp<
+  InteractionStackParamList,
+  ScreenNames.InteractionAddCredential
+>
 
 interface IInteractionAddCredential {
   route: InteractionAddCredentialRouteProps
@@ -31,38 +37,20 @@ interface IInteractionAddCredential {
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
 
-
-const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({route}) => {
+const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
+  route,
+}) => {
   const loader = useLoader()
   const { scheduleInfo } = useToasts()
-  const { scheduleErrorInteraction } = useInteractionToasts();
-  const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionFlow);
+  const { scheduleErrorInteraction } = useInteractionToasts()
+  const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionFlow)
 
   const createAttribute = useCreateAttributes()
 
-  const { type: inputType } = route.params;
+  const { type: inputType } = route.params
 
-  const [keyboardShown, setKeyboardVisibility] = useState(false);
-  const { keyboardHeight } = useKeyboard();
+  const { keyboardHeight, keyboardShown } = useKeyboard()
   const [pushUpTo, setPushUpTo] = useState(0)
-
-  const handleKeyboardShow = () => {
-    setKeyboardVisibility(true);
-  }
-
-  const handleKeyboardHide = () => {
-    setKeyboardVisibility(false);
-  }
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
-    Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
-
-    return () => {
-      Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
-      Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
-    }
-  }, [])
 
   useEffect(() => {
     LayoutAnimation.configureNext({
@@ -82,7 +70,7 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({route}) 
       setPushUpTo(0)
     }
   }, [keyboardShown, keyboardHeight])
-  
+
   const formConfig = attributeConfig[inputType]
   const title = strings.ADD_YOUR_ATTRIBUTE(formConfig.label.toLowerCase())
   const description =
@@ -116,14 +104,29 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({route}) 
     }
   }
 
-  const { bottom } = useSafeArea();
-  const initialValues = assembleFormInitialValues(attributeConfig[inputType].fields);
+  const { bottom } = useSafeArea()
+  const initialValues = assembleFormInitialValues(
+    attributeConfig[inputType].fields,
+  )
 
   return (
     <>
       <ScreenDismissArea onDismiss={handleSwitchScreens} />
-      <View style={{ padding: 8, alignItems: 'center', paddingBottom: pushUpTo || bottom }}>
-        <Block customStyle={{ borderRadius: 20, backgroundColor: Colors.codGrey, padding: 16, paddingBottom: 34 }}>
+      <View
+        style={{
+          padding: 8,
+          alignItems: 'center',
+          paddingBottom: pushUpTo || bottom,
+        }}
+      >
+        <Block
+          customStyle={{
+            borderRadius: 20,
+            backgroundColor: Colors.codGrey,
+            padding: 16,
+            paddingBottom: 34,
+          }}
+        >
           <InteractionHeader {...{ title, description }} />
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {({ handleChange, values }) => (
@@ -148,7 +151,7 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({route}) 
           </Formik>
         </Block>
       </View>
-      </>
+    </>
   )
 }
 
