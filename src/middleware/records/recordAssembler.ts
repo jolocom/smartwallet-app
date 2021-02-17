@@ -151,20 +151,22 @@ export class RecordAssembler {
           .map((types) => getCredentialType(types))
           .join(',  ')
 
-        const suppliedCreds = state.providedCredentials[0].suppliedCredentials
-          .map((c) => c.name)
-          .join(',  ')
+        const displayCreds = areCredsSupplied
+          ? state.providedCredentials[0].suppliedCredentials
+              .map((c) => c.name)
+              .join(',  ')
+          : requestedCreds
 
         switch (type) {
           case InteractionType.CredentialRequest:
             return {
               title: this.getFinishedStepTitle(i),
-              description: areCredsSupplied ? suppliedCreds : requestedCreds,
+              description: displayCreds,
             }
           case InteractionType.CredentialResponse:
             return {
               title: this.getFinishedStepTitle(i),
-              description: suppliedCreds,
+              description: displayCreds,
             }
           default:
             throw new Error('Wrong interaction type for flow')

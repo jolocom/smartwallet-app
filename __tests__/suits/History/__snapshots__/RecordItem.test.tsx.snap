@@ -149,8 +149,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
               "alignItems": "flex-start",
               "flex": 1,
               "height": "100%",
-              "justifyContent": "space-between",
-              "paddingVertical": 18,
+              "justifyContent": "center",
             },
           ]
         }
@@ -161,6 +160,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
+              "marginBottom": 8,
               "width": "100%",
             }
           }
@@ -385,8 +385,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
               "alignItems": "flex-start",
               "flex": 1,
               "height": "100%",
-              "justifyContent": "space-between",
-              "paddingVertical": 18,
+              "justifyContent": "center",
             },
           ]
         }
@@ -397,6 +396,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
+              "marginBottom": 8,
               "width": "100%",
             }
           }
@@ -896,8 +896,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
               "alignItems": "flex-start",
               "flex": 1,
               "height": "100%",
-              "justifyContent": "space-between",
-              "paddingVertical": 18,
+              "justifyContent": "center",
             },
           ]
         }
@@ -908,6 +907,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
+              "marginBottom": 8,
               "width": "100%",
             }
           }
@@ -1407,8 +1407,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
               "alignItems": "flex-start",
               "flex": 1,
               "height": "100%",
-              "justifyContent": "space-between",
-              "paddingVertical": 18,
+              "justifyContent": "center",
             },
           ]
         }
@@ -1419,6 +1418,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
+              "marginBottom": 8,
               "width": "100%",
             }
           }
@@ -1918,8 +1918,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
               "alignItems": "flex-start",
               "flex": 1,
               "height": "100%",
-              "justifyContent": "space-between",
-              "paddingVertical": 18,
+              "justifyContent": "center",
             },
           ]
         }
@@ -1930,6 +1929,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
+              "marginBottom": 8,
               "width": "100%",
             }
           }
