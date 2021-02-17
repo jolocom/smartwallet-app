@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState } from 'react'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 
 import Input from '~/components/Input'
 import { useCreateAttributes } from '~/hooks/attributes'
@@ -10,18 +10,18 @@ import InteractionHeader from '~/screens/Modals/Interaction/InteractionFlow/comp
 import Form, { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { strings } from '~/translations/strings'
 import { attributeConfig } from '~/config/claims'
-import { AttributeTypes, ClaimKeys } from '~/types/credentials'
+import { ClaimKeys } from '~/types/credentials'
 import { useSwitchScreens } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
-import { LayoutAnimation, View } from 'react-native'
+import { Keyboard, LayoutAnimation, Platform, View } from 'react-native'
 import Block from '~/components/Block'
 import { Colors } from '~/utils/colors'
 import { useKeyboard } from '@react-native-community/hooks'
 import { useSafeArea } from 'react-native-safe-area-context'
-import { RootStackParamList } from '~/RootNavigation'
+import { InteractionStackParamList } from '../index';
 
-type InteractionAddCredentialRouteProps = RouteProp<RootStackParamList, ScreenNames.InteractionAddCredential>
+type InteractionAddCredentialRouteProps = RouteProp<InteractionStackParamList, ScreenNames.InteractionAddCredential>
 
 interface IInteractionAddCredential {
   route: InteractionAddCredentialRouteProps
@@ -38,16 +38,47 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({route}) 
   const navigation = useNavigation()
   const { type: inputType } = route.params;
 
-    const { keyboardHeight } = useKeyboard();
+  const [keyboardShown, setKeyboardVisibility] = useState(false);
+  const { keyboardHeight } = useKeyboard();
   const [pushUpTo, setPushUpTo] = useState(0)
 
-  useLayoutEffect(() => {
-      LayoutAnimation.configureNext({
+  const handleKeyboardShow = () => {
+    setKeyboardVisibility(true);
+  }
+
+  const handleKeyboardHide = () => {
+    setKeyboardVisibility(false);
+  }
+
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
+    Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
+      Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
+    }
+  }, [])
+
+  useEffect(() => {
+    LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.linear,
       duration: 200,
+    })
+    if (keyboardShown) {
+      const extraMargin = Platform.select({
+        ios: keyboardHeight + 8,
+        // NOTE: margin independent from keyboard, since android
+        // has native keyboard behavior
+        android: 60,
+        default: 0,
       })
-    setPushUpTo(keyboardHeight + 8)
-  }, [keyboardHeight])
+      setPushUpTo(extraMargin)
+    } else {
+      setPushUpTo(0)
+    }
+  }, [keyboardShown, keyboardHeight])
   
   const formConfig = attributeConfig[inputType]
   const title = strings.ADD_YOUR_ATTRIBUTE(formConfig.label.toLowerCase())
