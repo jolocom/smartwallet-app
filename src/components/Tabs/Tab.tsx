@@ -1,7 +1,7 @@
 import React from 'react'
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 
-import { ITab, useTabs } from './Tabs'
+import { ITab } from './types'
+import { useTabs } from './context'
 import { Colors } from '~/utils/colors'
 import { TouchableOpacity } from 'react-native'
 import ScreenContainer from '../ScreenContainer'

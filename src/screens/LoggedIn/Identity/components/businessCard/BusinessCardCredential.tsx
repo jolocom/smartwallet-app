@@ -1,55 +1,59 @@
-import React from 'react';
-import { View } from 'react-native';
-import { useSelector } from 'react-redux';
-import { Colors } from '~/utils/colors';
-import {getBusinessCardConfigWithValues} from '~/modules/attributes/selectors'
-import BusinessCard from '../../IdentityBusinessCard';
-import { ClaimKeys, IAttributeClaimFieldWithValue } from '~/types/credentials';
-import { strings } from '~/translations';
+import React from 'react'
+import { View } from 'react-native'
+import { useSelector } from 'react-redux'
+import { Colors } from '~/utils/colors'
+import { getBusinessCardConfigWithValues } from '~/modules/attributes/selectors'
+import BusinessCardStyled from '../BusinessCardStyled'
+import { ClaimKeys, IAttributeClaimFieldWithValue } from '~/types/credentials'
+import { strings } from '~/translations'
 
-const findClaimValueForKey = (fields: IAttributeClaimFieldWithValue[]) => (key: ClaimKeys) => fields.find(f => f.key === key)?.value;
+const findClaimValueForKey = (fields: IAttributeClaimFieldWithValue[]) => (
+  key: ClaimKeys,
+) => fields.find((f) => f.key === key)?.value
 
 const BusinessCardCredential: React.FC = () => {
-  const groupedValuesBC = useSelector(getBusinessCardConfigWithValues);
+  const groupedValuesBC = useSelector(getBusinessCardConfigWithValues)
   if (!groupedValuesBC) return null
 
-  const { fields } = groupedValuesBC;
-  const getClaimValue = findClaimValueForKey(fields);
-  const displayedName = `${getClaimValue(ClaimKeys.givenName)} ${getClaimValue(ClaimKeys.familyName)}`;
+  const { fields } = groupedValuesBC
+  const getClaimValue = findClaimValueForKey(fields)
+  const displayedName = `${getClaimValue(ClaimKeys.givenName)} ${getClaimValue(
+    ClaimKeys.familyName,
+  )}`
 
-  const email = getClaimValue(ClaimKeys.email);
-  const telephone = getClaimValue(ClaimKeys.telephone);
+  const email = getClaimValue(ClaimKeys.email)
+  const telephone = getClaimValue(ClaimKeys.telephone)
 
   return (
     <>
       <View>
-        <BusinessCard.Styled.Title color={Colors.white}>
+        <BusinessCardStyled.Title color={Colors.white}>
           {displayedName}
-        </BusinessCard.Styled.Title>
-        <BusinessCard.Styled.FieldGroup customStyles={{ marginTop: 3 }}>
-          <BusinessCard.Styled.FieldName>
+        </BusinessCardStyled.Title>
+        <BusinessCardStyled.FieldGroup customStyles={{ marginTop: 3 }}>
+          <BusinessCardStyled.FieldName>
             {strings.COMPANY}
-          </BusinessCard.Styled.FieldName>
-          <BusinessCard.Styled.FieldValue color={Colors.white}>
+          </BusinessCardStyled.FieldName>
+          <BusinessCardStyled.FieldValue color={Colors.white}>
             {getClaimValue(ClaimKeys.legalCompanyName)}
-          </BusinessCard.Styled.FieldValue>
-        </BusinessCard.Styled.FieldGroup>
+          </BusinessCardStyled.FieldValue>
+        </BusinessCardStyled.FieldGroup>
       </View>
-      <BusinessCard.Styled.FieldGroup customStyles={{ marginTop: 3 }}>
-        <BusinessCard.Styled.FieldName>
+      <BusinessCardStyled.FieldGroup customStyles={{ marginTop: 3 }}>
+        <BusinessCardStyled.FieldName>
           {strings.CONTACT_ME}
-        </BusinessCard.Styled.FieldName>
+        </BusinessCardStyled.FieldName>
         {!!email && (
-          <BusinessCard.Styled.FieldValue color={Colors.white}>
-            { email }
-          </BusinessCard.Styled.FieldValue>
+          <BusinessCardStyled.FieldValue color={Colors.white}>
+            {email}
+          </BusinessCardStyled.FieldValue>
         )}
         {!!telephone && (
-          <BusinessCard.Styled.FieldValue color={Colors.white}>
-            { telephone }
-          </BusinessCard.Styled.FieldValue>
+          <BusinessCardStyled.FieldValue color={Colors.white}>
+            {telephone}
+          </BusinessCardStyled.FieldValue>
         )}
-      </BusinessCard.Styled.FieldGroup>
+      </BusinessCardStyled.FieldGroup>
     </>
   )
 }

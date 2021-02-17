@@ -1,6 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
-import { ITabPersistChildren } from './Tabs'
+import { ITabPersistChildren } from './types'
 import { debugView } from '~/utils/dev'
 
 const PersistChildren: React.FC<ITabPersistChildren> = ({

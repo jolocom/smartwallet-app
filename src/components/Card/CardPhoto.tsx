@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
-import { useCard } from './Card'
+import { useCard } from './context'
 
 const PHOTO_SIZE = BP({ default: 82, xsmall: 60 })
 

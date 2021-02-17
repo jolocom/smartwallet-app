@@ -4,7 +4,7 @@ import { ScrollView, View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
-import { useTabs } from '~/components/Tabs/Tabs'
+import { useTabs } from '~/components/Tabs/context'
 import { getCredentialsBySection } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
