@@ -1,10 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import {
-  View,
-  StyleSheet,
-  Animated,
-  Platform,
-} from 'react-native'
+import { View, StyleSheet, Animated, Platform } from 'react-native'
 // @ts-ignore no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
@@ -20,7 +15,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
 import SeedPhrase from './components/Styled'
-import { useGetSeedPhrase } from '~/hooks/seedPhrase'
+import { useGetSeedPhrase } from '~/hooks/sdk'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -29,8 +24,9 @@ const vibrationOptions = {
 
 const SeedPhraseWrite: React.FC = () => {
   const redirect = useRedirect()
-  const goBack = useGoBack();
-  const { gestureState,
+  const goBack = useGoBack()
+  const {
+    gestureState,
     animationValues: { shadowScale, circleScale, magicOpacity },
     animateVaues: { hideMagicBtn },
     gestureHandlers,
@@ -110,14 +106,17 @@ const SeedPhraseWrite: React.FC = () => {
 
   const renderSeedphrase = () => {
     return (
-      <Animated.View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', opacity: gestureState === GestureState.Success ? 1 : phraseOpacity }}>
-        {
-          seedphrase.split(' ').map(w => (
-            <WordPill.Write key={w}>
-              {w}
-            </WordPill.Write>
-          ))
-        }
+      <Animated.View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+        }}
+      >
+        {seedphrase.split(' ').map((w) => (
+          <WordPill.Write key={w}>{w}</WordPill.Write>
+        ))}
       </Animated.View>
     )
   }
@@ -149,7 +148,7 @@ const SeedPhraseWrite: React.FC = () => {
         onPress={
           gestureState === GestureState.Success
             ? () => redirect(ScreenNames.SeedPhraseRepeat)
-            : () => { }
+            : () => {}
         }
       >
         {strings.DONE}
@@ -166,7 +165,9 @@ const SeedPhraseWrite: React.FC = () => {
             <SeedPhrase.Styled.Header.Left onPress={goBack}>
               <BackArrowIcon />
             </SeedPhrase.Styled.Header.Left>
-            <SeedPhrase.Styled.Header.Right onPress={() => redirect(ScreenNames.SeedPhraseInfo)}>
+            <SeedPhrase.Styled.Header.Right
+              onPress={() => redirect(ScreenNames.SeedPhraseInfo)}
+            >
               <InfoIcon />
             </SeedPhrase.Styled.Header.Right>
           </SeedPhrase.Styled.Header>
@@ -178,9 +179,7 @@ const SeedPhraseWrite: React.FC = () => {
         </Animated.View>
         <SeedPhrase.Styled.ActiveArea>
           {/* this should take 3/5 of a screen; justify-content: space-between */}
-          <View style={styles.phraseContainer}>
-            {renderSeedphrase()}
-          </View>
+          <View style={styles.phraseContainer}>{renderSeedphrase()}</View>
           {/* this should take 2/5 of a screen */}
           <View style={styles.helpersContainer}>
             <View style={styles.bottomContainer}>
@@ -191,9 +190,7 @@ const SeedPhraseWrite: React.FC = () => {
             </View>
           </View>
         </SeedPhrase.Styled.ActiveArea>
-        <SeedPhrase.Styled.CTA>
-          {renderCTABtn()}
-        </SeedPhrase.Styled.CTA>
+        <SeedPhrase.Styled.CTA>{renderCTABtn()}</SeedPhrase.Styled.CTA>
       </SeedPhrase.Styled.ScreenContainer>
     </>
   )

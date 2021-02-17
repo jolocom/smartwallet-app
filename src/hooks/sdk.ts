@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
 import Keychain from 'react-native-keychain'
@@ -11,7 +11,6 @@ import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
-import { useGetSeedPhrase } from './seedPhrase'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -180,4 +179,32 @@ export const useShouldRecoverFromSeed = (phrase: string[]) => {
 
     return recovered
   }
+}
+
+export const useGetSeedPhrase = () => {
+  const [seedphrase, setSeedphrase] = useState('')
+  const agent = useAgent()
+
+  const getMnemonic = async () => {
+    const encryptedSeed = await agent.storage.get.setting(
+      StorageKeys.encryptedSeed,
+    )
+
+    if (!encryptedSeed) {
+      throw new Error('Can not retrieve Seed from database')
+    }
+
+    const decrypted = await agent.idw.asymDecrypt(
+      Buffer.from(encryptedSeed.b64Encoded, 'base64'),
+      await agent.passwordStore.getPassword(),
+    )
+
+    return entropyToMnemonic(decrypted)
+  }
+
+  useEffect(() => {
+    getMnemonic().then(setSeedphrase)
+  }, [])
+
+  return seedphrase
 }

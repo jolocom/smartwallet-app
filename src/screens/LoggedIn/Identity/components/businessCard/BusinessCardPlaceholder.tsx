@@ -1,33 +1,33 @@
-import React from 'react';
-import { View } from 'react-native';
-import { strings } from '~/translations';
-import { Colors } from '~/utils/colors';
-import BusinessCard from '../../IdentityBusinessCard';
+import React from 'react'
+import { View } from 'react-native'
+import { strings } from '~/translations'
+import { Colors } from '~/utils/colors'
+import BusinessCardStyled from '../BusinessCardStyled'
 
 const BusinessCardPlaceholder = () => {
   return (
     <>
       <View>
-        <BusinessCard.Styled.Title color={Colors.white45}>
+        <BusinessCardStyled.Title color={Colors.white45}>
           {strings.YOUR_NAME}
-        </BusinessCard.Styled.Title>
-        <BusinessCard.Styled.FieldGroup customStyles={{ marginTop: 3 }}>
-          <BusinessCard.Styled.FieldName>
+        </BusinessCardStyled.Title>
+        <BusinessCardStyled.FieldGroup customStyles={{ marginTop: 3 }}>
+          <BusinessCardStyled.FieldName>
             {strings.COMPANY}
-          </BusinessCard.Styled.FieldName>
-          <BusinessCard.Styled.FieldValue color={Colors.white21}>
+          </BusinessCardStyled.FieldName>
+          <BusinessCardStyled.FieldValue color={Colors.white21}>
             {strings.NOT_SPECIFIED}
-          </BusinessCard.Styled.FieldValue>
-        </BusinessCard.Styled.FieldGroup>
+          </BusinessCardStyled.FieldValue>
+        </BusinessCardStyled.FieldGroup>
       </View>
-      <BusinessCard.Styled.FieldGroup>
-        <BusinessCard.Styled.FieldName>
+      <BusinessCardStyled.FieldGroup>
+        <BusinessCardStyled.FieldName>
           {strings.CONTACT_ME}
-        </BusinessCard.Styled.FieldName>
-        <BusinessCard.Styled.FieldValue color={Colors.white21}>
+        </BusinessCardStyled.FieldName>
+        <BusinessCardStyled.FieldValue color={Colors.white21}>
           {strings.NOT_SPECIFIED}
-        </BusinessCard.Styled.FieldValue>
-      </BusinessCard.Styled.FieldGroup>
+        </BusinessCardStyled.FieldValue>
+      </BusinessCardStyled.FieldGroup>
     </>
   )
 }
