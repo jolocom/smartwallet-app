@@ -1,16 +1,14 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useDispatch } from 'react-redux'
 import { useSafeArea } from 'react-native-safe-area-context'
 
 import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-import { resetInteraction } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useLoader } from '~/hooks/loader'
-import BP from '~/utils/breakpoints'
+import { useFinishInteraction } from '~/hooks/interactions'
 
 export const FooterContainer: React.FC = ({ children }) => {
   const insets = useSafeArea()
@@ -37,8 +35,8 @@ const InteractionFooter: React.FC<Props> = ({
   cta,
   disabled = false,
 }) => {
-  const dispatch = useDispatch()
   const loader = useLoader()
+  const finishInteraction = useFinishInteraction()
 
   const handleSubmit = async () => {
     await loader(
@@ -50,7 +48,7 @@ const InteractionFooter: React.FC<Props> = ({
   }
 
   const handleCancel = () => {
-    dispatch(resetInteraction())
+    finishInteraction()
   }
 
   return (

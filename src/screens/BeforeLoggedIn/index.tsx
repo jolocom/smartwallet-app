@@ -86,7 +86,6 @@ const BeforeLoggedIn = () => {
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
-    dispatch(resetInteraction())
   }, [])
 
   /* All about when lock screen comes up - START */

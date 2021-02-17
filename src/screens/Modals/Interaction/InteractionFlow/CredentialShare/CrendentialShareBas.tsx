@@ -6,22 +6,23 @@ import BasWrapper, {
 } from '~/components/ActionSheet/BasWrapper'
 import { getFirstShareDocument } from '~/modules/interaction/selectors'
 import { getAvailableAttributesToShare } from '~/modules/interaction/selectors'
-import CredentialCard from '../CredentialCard'
+import CredentialCard from '../components/CredentialCard'
 import { Colors } from '~/utils/colors'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import InteractionHeader from '../InteractionHeader'
-import InteractionFooter from '../InteractionFooter'
+import InteractionHeader from '../components/InteractionHeader'
+import InteractionFooter from '../components/InteractionFooter'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
+import { useSwitchScreens } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 const CredentialShareBas = () => {
   const shareDocument = useSelector(getFirstShareDocument)
   const attributes = useSelector(getAvailableAttributesToShare)
   const {
     getPreselectedAttributes,
-    handleCreateAttribute,
     handleSelectCredential,
     getSingleMissingAttribute,
     getHeaderText,
@@ -29,6 +30,7 @@ const CredentialShareBas = () => {
     selectionReady,
   } = useCredentialShareFlow()
   const hasMissingAttribute = getSingleMissingAttribute()
+  const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionAddCredential)
 
   const handleSubmit = useCredentialShareSubmit()
 
@@ -70,7 +72,7 @@ const CredentialShareBas = () => {
         cta={getCtaText()}
         onSubmit={() => {
           return hasMissingAttribute
-            ? handleCreateAttribute(hasMissingAttribute)
+            ? handleSwitchScreens({type: hasMissingAttribute})
             : handleSubmit()
         }}
       />

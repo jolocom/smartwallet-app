@@ -2,11 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import BasWrapper from '~/components/ActionSheet/BasWrapper'
-import InteractionHeader from './InteractionHeader'
+import InteractionHeader from './components/InteractionHeader'
 import { strings } from '~/translations/strings'
 import { getCounterpartyName } from '~/modules/interaction/selectors'
 import useAuthSubmit from '~/hooks/interactions/useAuthSubmit'
-import InteractionFooter from './InteractionFooter'
+import InteractionFooter from './components/InteractionFooter'
 
 const Authentication: React.FC = () => {
   const serviceName = useSelector(getCounterpartyName)

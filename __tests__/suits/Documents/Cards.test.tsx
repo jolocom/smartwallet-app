@@ -2,7 +2,6 @@ import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import DocumentCard from '~/components/Card/DocumentCard'
 import OtherCard from '~/components/Card/OtherCard'
-import { ScreenNames } from '~/types/screens'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const HIGHLIGHT = 'ABC123'
@@ -46,8 +45,7 @@ const testIds = {
 
 const mockedNavigate = jest.fn()
 
-jest.mock('../../../src/components/Tabs/Tabs', () => ({
-  ...jest.requireActual('../../../src/components/Tabs/Tabs'),
+jest.mock('../../../src/components/Tabs/context', () => ({
   useTabs: jest.fn().mockReturnValue({
     activeTab: { id: 'document', value: 'Documents' },
     setActiveTab: jest.fn(),

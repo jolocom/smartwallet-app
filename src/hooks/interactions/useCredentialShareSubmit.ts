@@ -1,8 +1,6 @@
-import { useDispatch } from 'react-redux'
-
 import { useCredentialShareFlow } from './useCredentialShareFlow'
-import { resetInteraction } from '~/modules/interaction/actions'
 import useInteractionToasts from './useInteractionToasts'
+import { useFinishInteraction } from '.'
 
 const useCredentialShareSubmit = () => {
   const { assembleShareResponseToken } = useCredentialShareFlow()
@@ -10,7 +8,7 @@ const useCredentialShareSubmit = () => {
     scheduleSuccessInteraction,
     scheduleErrorInteraction,
   } = useInteractionToasts()
-  const dispatch = useDispatch()
+  const finishInteraction = useFinishInteraction()
 
   return async () => {
     try {
@@ -19,7 +17,7 @@ const useCredentialShareSubmit = () => {
     } catch (e) {
       scheduleErrorInteraction()
     } finally {
-      dispatch(resetInteraction())
+      finishInteraction()
     }
   }
 }

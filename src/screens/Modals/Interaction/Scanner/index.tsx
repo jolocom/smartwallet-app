@@ -4,10 +4,10 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useCameraPermissions, {
   Results,
-} from '~/screens/Modals/Interactions/Scanner/useCameraPermissions'
+} from '~/screens/Modals/Interaction/Scanner/useCameraPermissions'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations/strings'
-import Camera from '~/screens/Modals/Interactions/Scanner/Camera'
+import Camera from '~/screens/Modals/Interaction/Scanner/Camera'
 import ScreenHeader from '~/components/ScreenHeader'
 
 const Scanner: React.FC = () => {

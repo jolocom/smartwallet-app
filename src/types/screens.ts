@@ -23,9 +23,14 @@ export enum ScreenNames {
   DeviceAuth = 'DeviceAuth',
   RegisterPin = 'RegisterPin',
   RegisterBiometry = 'RegisterBiometry',
+  // Interactions
+  Interaction = 'Interaction', // root screen
+  Scanner = 'Scanner',
+  InteractionFlow = 'InteractionFlow',
+  InteractionAddCredential = 'InteractionAddCredential',
   // Modals
   Loader = 'Loader',
-  Interactions = 'Interactions',
+
   Lock = 'Lock',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
@@ -41,10 +46,6 @@ export enum ScreenNames {
   Imprint = 'Imprint',
   TermsOfService = 'TermsOfService',
   PrivacyPolicy = 'PrivacyPolicy',
-  // Interactions
-  Scanner = 'Scanner',
-  ScannerPermission = 'ScannerPermission',
-  Details = 'Details',
 
   //Development
   ButtonsTest = 'ButtonsTest',

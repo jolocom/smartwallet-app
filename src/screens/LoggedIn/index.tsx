@@ -11,7 +11,7 @@ import { Platform } from 'react-native'
 
 import { ScreenNames } from '~/types/screens'
 
-import Interactions from '~/screens/Modals/Interactions'
+import Interaction from '~/screens/Modals/Interaction'
 
 import History from './History'
 import Documents from './Documents'
@@ -163,8 +163,9 @@ const LoggedInTabs: React.FC = () => {
 
       {/* Modals -> Start */}
       <LoggedInStack.Screen
-        name={ScreenNames.Interactions}
-        component={Interactions}
+        name={ScreenNames.Interaction}
+        component={Interaction}
+        options={{gestureEnabled: false}}
       />
       {/* Modals -> End */}
         </LoggedInStack.Navigator>

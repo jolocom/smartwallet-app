@@ -1,18 +1,15 @@
-import { useDispatch } from 'react-redux'
-
-import { resetInteraction } from '~/modules/interaction/actions'
-import { useInteraction } from '.'
+import { useFinishInteraction, useInteraction } from '.'
 import useInteractionToasts from './useInteractionToasts'
 import { useAgent } from '../sdk'
 
 const useAuthSubmit = () => {
   const getInteraction = useInteraction()
   const agent = useAgent()
-  const dispatch = useDispatch()
   const {
     scheduleErrorInteraction,
     scheduleSuccessInteraction,
   } = useInteractionToasts()
+  const finishInteraction = useFinishInteraction()
 
   return async () => {
     try {
@@ -22,10 +19,10 @@ const useAuthSubmit = () => {
       await interaction.send(authResponse)
 
       scheduleSuccessInteraction()
-      dispatch(resetInteraction())
     } catch (e) {
       scheduleErrorInteraction()
-      dispatch(resetInteraction())
+    } finally {
+      finishInteraction()
     }
   }
 }

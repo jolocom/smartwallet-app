@@ -17,17 +17,17 @@ import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
 import BeforeLoggedIn from './screens/BeforeLoggedIn'
 
 export type RootStackParamList = {
-  Recovery: {
+  [ScreenNames.Recovery]: {
     isAccessRestore: boolean
   }
-  DragToConfirm: {
+  [ScreenNames.DragToConfirm]: {
     title: string
     cancelText: string
     onComplete: () => void
   }
-  BeforeLoggedIn: undefined
-  LoggedOut: undefined
-  LostSeedPhraseInfo: undefined
+  [ScreenNames.BeforeLoggedIn]: undefined,
+  [ScreenNames.LoggedOut]: undefined,
+  [ScreenNames.LostSeedPhraseInfo]: undefined,
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()

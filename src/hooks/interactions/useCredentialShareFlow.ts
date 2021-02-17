@@ -8,12 +8,7 @@ import {
   getCounterpartyName,
 } from '~/modules/interaction/selectors'
 import { AttributeTypes } from '~/types/credentials'
-import { IntermediarySheetState } from '~/modules/interaction/types'
-import {
-  setIntermediaryState,
-  setAttributeInputType,
-  selectShareCredential,
-} from '~/modules/interaction/actions'
+import { selectShareCredential } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
 import { useInteraction } from '.'
 import { attributeConfig } from '~/config/claims'
@@ -100,14 +95,6 @@ export const useCredentialShareFlow = () => {
   }
 
   /**
-   * Shows the Intermediary ActionSheet for creating a new attribute.
-   */
-  const handleCreateAttribute = (sectionKey: AttributeTypes) => {
-    dispatch(setIntermediaryState(IntermediarySheetState.showing))
-    dispatch(setAttributeInputType(sectionKey))
-  }
-
-  /**
    * Selects a credential in the @interactions module
    */
   const handleSelectCredential = (credential: Record<string, string>) => {
@@ -154,7 +141,6 @@ export const useCredentialShareFlow = () => {
     getPreselectedAttributes,
     selectionReady,
     isFirstCredential,
-    handleCreateAttribute,
     handleSelectCredential,
     getSingleMissingAttribute,
     getHeaderText,
