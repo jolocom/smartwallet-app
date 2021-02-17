@@ -11,6 +11,7 @@ export interface IInput extends TextInputProps {
   value: string
   updateInput: (val: string) => void
   containerStyle?: ViewStyle
+  isValid?: boolean
 }
 
 export const CoreInput = forwardRef<TextInput, TextInputProps>((props, ref) => {

@@ -1,6 +1,7 @@
 import React, { createContext, useMemo, useState } from 'react'
+import { ObjectSchema, StringSchema } from 'yup';
 import { useCustomContext } from '~/hooks/context'
-import { IAttributeConfig } from '~/types/credentials'
+import { ClaimKeys, IAttributeConfig } from '~/types/credentials'
 import WizardBody from './WizardBody'
 import WizardFooter from './WizardFooter'
 import WizardForm from './WizardForm'
@@ -10,6 +11,7 @@ interface IWizardConfig {
   label: string
   form: IAttributeConfig
   submitLabel: string
+  validationSchema: ObjectSchema<Record<ClaimKeys, StringSchema>>
 }
 
 export interface IWizardBodyProps {
@@ -18,6 +20,7 @@ export interface IWizardBodyProps {
 
 export interface IWizardFooterProps {
   onSubmit: () => void
+  isDisabled: boolean
 }
 
 export interface IWizardFormProps extends IWizardBodyProps {

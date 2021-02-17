@@ -1,19 +1,20 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Formik } from 'formik'
-import { withNextInputAutoFocusInput } from 'react-native-formik'
-import { withNextInputAutoFocusForm } from 'react-native-formik'
+import { withNextInputAutoFocusInput, withNextInputAutoFocusForm } from 'react-native-formik'
 import { Colors } from '~/utils/colors'
 import Wizard, { IWizardFormProps, useWizard } from '.'
 import Input from '../Input'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
+import JoloText from '../JoloText';
+import { JoloTextSizes } from '~/utils/fonts';
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
 
 const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
   const { config, setActiveStep, isLastStep } = useWizard()
-  const formConfig = config[step].form
+  const {form: formConfig, validationSchema} = config[step]
   const initialValues = assembleFormInitialValues(formConfig.fields)
 
   const handleFormSubmit = (fields: Record<string, string>) => {
@@ -23,8 +24,12 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
 
   return (
     <Wizard.Body step={step}>
-      <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
-        {({ handleChange, handleSubmit, values }) => (
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleFormSubmit}
+        validationSchema={validationSchema}
+      >
+        {({ handleChange, values, isValid, errors, dirty }) => (
           <>
             <AutofocusContainer
               style={{
@@ -33,22 +38,31 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
               }}
             >
               {formConfig.fields.map((field, idx) => (
-                <AutofocusInput
-                  // @ts-ignore
-                  name={field.key}
-                  key={field.key}
-                  // @ts-ignore
-                  value={values[field.key]}
-                  updateInput={handleChange(field.key)}
-                  placeholder={field.label}
-                  autoFocus={idx === 0}
-                  containerStyle={{ marginBottom: 10 }}
-                  placeholderTextColor={Colors.white30}
-                  {...field.keyboardOptions}
-                />
+                <View style={{ marginBottom: 10 }}>
+                  <AutofocusInput
+                    // @ts-ignore
+                    name={field.key}
+                    key={field.key}
+                    // @ts-ignore
+                    value={values[field.key]}
+                    updateInput={handleChange(field.key)}
+                    placeholder={field.label}
+                    autoFocus={idx === 0}
+                    placeholderTextColor={Colors.white30}
+                    // TODO: remove if not used here 
+                    // onBlur={() => setFieldTouched(field.key, true, false)}
+                    containerStyle={errors[field.key] ? { borderColor: Colors.error } : {}}
+                    {...field.keyboardOptions}
+                  />
+                  {errors[field.key] && (
+                    <JoloText size={JoloTextSizes.mini} color={Colors.error}>
+                      {errors[field.key]}
+                    </JoloText>
+                  )}
+                </View>
               ))}
             </AutofocusContainer>
-            <Wizard.Footer onSubmit={handleSubmit} />
+              <Wizard.Footer onSubmit={() => handleFormSubmit(values)} isDisabled={!dirty || (dirty && !isValid) } />
           </>
         )}
       </Formik>
