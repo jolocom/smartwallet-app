@@ -14,8 +14,6 @@ import { Colors } from '~/utils/colors'
 import { useGetSeedPhrase } from '~/hooks/seedPhrase'
 import shuffleArray from '~/utils/arrayUtils'
 import Dnd from './Dnd'
-import { Platform } from 'react-native'
-import { usePrevious } from '~/hooks/generic'
 
 export interface IDndProps {
   tags: string[]
@@ -34,8 +32,6 @@ const SeedPhraseRepeat: React.FC = () => {
   const [shuffledSeedphrase, setShuffledSeedphrase] = useState<string[] | null>(
     null,
   )
-
-  const shuffledSeedphrasePrev = usePrevious(shuffledSeedphrase);
 
   const handlePhraseUpdate = (phrase: string[]) => {
     if (!readyToSubmit) setReadyToSubmit(true)
@@ -63,7 +59,7 @@ const SeedPhraseRepeat: React.FC = () => {
         seedphrase.split(' ').splice(0, 6).join(' ') ===
         shuffledSeedphrase.join(' ')
       )
-  }, [JSON.stringify(shuffledSeedphrase), seedphrase]);
+  }, [JSON.stringify(shuffledSeedphrase), seedphrase])
 
   return (
     <SeedPhrase.Styled.ScreenContainer bgColor={Colors.mainBlack}>
@@ -82,7 +78,7 @@ const SeedPhraseRepeat: React.FC = () => {
       </SeedPhrase.Styled.ActiveArea>
       <SeedPhrase.Styled.CTA>
         <Btn
-          disabled={Platform.OS === 'ios' ? JSON.stringify(shuffledSeedphrase) === JSON.stringify(shuffledSeedphrasePrev) : !readyToSubmit}
+          disabled={!readyToSubmit}
           onPress={onSubmit}
           type={BtnTypes.primary}
         >
