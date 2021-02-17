@@ -11,10 +11,9 @@ import { strings } from '~/translations/strings'
 import SeedPhrase from './components/Styled'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
-import { useGetSeedPhrase } from '~/hooks/seedPhrase'
+import { useGetSeedPhrase } from '~/hooks/sdk'
 import shuffleArray from '~/utils/arrayUtils'
 import Dnd from './Dnd'
-import JoloText from '~/components/JoloText'
 
 export interface IDndProps {
   tags: string[]

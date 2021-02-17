@@ -1,11 +1,9 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { useCustomContext } from '~/hooks/context'
-import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { IAttributeConfig } from '~/types/credentials'
 import WizardBody from './WizardBody'
 import WizardFooter from './WizardFooter'
 import WizardForm from './WizardForm'
-import WizardFormContainer from './WizardFormContainer'
 import WizardHeader from './WizardHeader'
 
 interface IWizardConfig {
@@ -23,7 +21,7 @@ export interface IWizardFooterProps {
 }
 
 export interface IWizardFormProps extends IWizardBodyProps {
-  onSubmit: (fields: IFormState[]) => void
+  onSubmit: (fields: Record<string, string>) => void
 }
 
 interface IWizardContext {
@@ -37,7 +35,6 @@ interface IWizardComposition {
   Header: React.FC
   Body: React.FC<IWizardBodyProps>
   Footer: React.FC<IWizardFooterProps>
-  FormContainer: React.FC
   Form: React.FC<IWizardFormProps>
 }
 
@@ -77,7 +74,6 @@ const Wizard: React.FC<IWizardProps> & IWizardComposition = ({
 Wizard.Header = WizardHeader
 Wizard.Body = WizardBody
 Wizard.Footer = WizardFooter
-Wizard.FormContainer = WizardFormContainer
 Wizard.Form = WizardForm
 
 export default Wizard

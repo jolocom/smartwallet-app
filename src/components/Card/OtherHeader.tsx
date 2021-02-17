@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
-import { useCard } from './Card'
-import { FieldName, TitleField } from './Field'
+import { useCard } from './context'
+import { FieldName, TitleField, TextLayoutEvent } from './Field'
 
 const LARGE_LOGO_SIZE = BP({ default: 78, xsmall: 60 })
 const SMALL_LOGO_SIZE = 37
@@ -12,7 +12,7 @@ const OtherHeader: React.FC = () => {
   const { document, image: logo } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
 
-  const handleHeaderTextLayout = (e) => {
+  const handleHeaderTextLayout = (e: TextLayoutEvent) => {
     if (!isHeaderScalled) {
       setIsHeaderScaled(e.nativeEvent.lines.length > 2)
     }

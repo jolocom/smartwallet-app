@@ -5,7 +5,7 @@ import { Colors } from '~/utils/colors'
 import useCollapsedScrollViewAnimations from '~/hooks/useScrollAnimation'
 import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { INTERACTION_SHEET_PADDING } from '~/screens/Modals/Interactions/consts'
+import { INTERACTION_SHEET_PADDING } from '~/screens/Modals/Interaction/InteractionFlow/utils/consts'
 import { useSafeArea } from 'react-native-safe-area-context'
 
 interface Props {

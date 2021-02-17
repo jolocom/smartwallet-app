@@ -7,7 +7,7 @@ import { ConsentText } from './ConsentText'
 import ConsentButton from './ConsentTextButton'
 import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes, Fonts } from '~/utils/fonts'
+import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import Section from './Section'
@@ -48,7 +48,6 @@ const LegalTextWrapper: React.FC<Props> = ({
     <ScreenContainer
       hasHeaderBack
       customStyles={{
-        paddingTop: 24,
         paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
       }}
     >

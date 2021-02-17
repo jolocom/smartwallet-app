@@ -10,7 +10,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
   details,
 }) => {
-  const image = details?.issuer.publicProfile?.image
+  const image = details?.issuer?.publicProfile?.image
 
   return (
     <View style={styles.container}>
@@ -28,6 +28,7 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
           </JoloText>
 
           <JoloText
+            testID="record-item-time"
             size={JoloTextSizes.mini}
             color={Colors.white}
             customStyles={{ alignSelf: 'center', marginRight: 16 }}

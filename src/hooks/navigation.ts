@@ -48,3 +48,15 @@ export const useRedirectToLoggedIn = () => {
     dispatch(setLocalAuth(true))
   }
 }
+
+/* Used to switch between InteractionFlow and InteractionAddCredential screens */
+export const useSwitchScreens = (screenToSwitchTo: ScreenNames) => {
+  const navigation = useNavigation()
+
+  return <T extends {}>(params?: T) => {
+    navigation.goBack()
+    setTimeout(() => {
+      navigation.navigate(screenToSwitchTo, params)
+    }, 500)
+  }
+}

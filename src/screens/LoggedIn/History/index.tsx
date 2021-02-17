@@ -21,10 +21,13 @@ export enum RecordTypes {
 
 const History = () => {
   return (
-    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+    <ScreenContainer
+      testID="history-screen"
+      customStyles={{ justifyContent: 'flex-start' }}
+    >
       <Record>
         <Tabs initialActiveSubtab={SUBTABS[0]}>
-          <Record.Header />
+          <Record.Header testID="history-main-header" />
           <TabsContainer>
             {SUBTABS.map((st) => (
               <Tabs.Subtab key={st.id} tab={st} />
@@ -39,13 +42,13 @@ const History = () => {
                   {/* ItemsList should have a param type: should be added once there is a
                     support for passing multiple interaction types to support all subtab usecase
                   */}
-                  <Record.ItemsList isActiveList={activeSubtab?.id === 'all'} />
+                  <Record.ItemsList id="all" />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'shared'}
                 >
                   <Record.ItemsList
-                    isActiveList={activeSubtab?.id === 'shared'}
+                    id="shared"
                     flows={[FlowType.CredentialShare]}
                   />
                 </Tabs.PersistChildren>
@@ -53,7 +56,7 @@ const History = () => {
                   isContentVisible={activeSubtab?.id === 'received'}
                 >
                   <Record.ItemsList
-                    isActiveList={activeSubtab?.id === 'received'}
+                    id="received"
                     flows={[FlowType.CredentialOffer]}
                   />
                 </Tabs.PersistChildren>

@@ -54,3 +54,10 @@ jest.mock('../../src/errors/errorContext.tsx', () => ({
     setError: jest.fn(),
   }),
 }))
+
+jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation', () => ({
+  ...require.requireActual(
+    'react-native/Libraries/LayoutAnimation/LayoutAnimation',
+  ),
+  configureNext: jest.fn(),
+}))

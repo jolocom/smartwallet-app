@@ -2,7 +2,8 @@ import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { BaseMetadata } from '@jolocom/protocol-ts'
+import { BaseMetadata, ClaimInterface } from '@jolocom/protocol-ts'
+import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -45,12 +46,16 @@ export interface IAttributeClaimField {
   keyboardOptions: AttributeKeyboardOptions
 }
 
-export interface IAttributeConfig {
+export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
+  value: ClaimEntry
+}
+
+export interface IAttributeConfig<T = IAttributeClaimField> {
   // NOTE: if not used anywhere -> remove
   key: AttributeKeys
   label: string
   metadata: BaseMetadata
-  fields: IAttributeClaimField[]
+  fields: T[]
 }
 
 // NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties

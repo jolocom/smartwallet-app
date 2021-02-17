@@ -9,7 +9,10 @@ import {
 import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
 
 import { useLoader } from '../loader'
-import { setInteractionDetails } from '~/modules/interaction/actions'
+import {
+  resetInteraction,
+  setInteractionDetails,
+} from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import {
   getMappedInteraction,
@@ -20,6 +23,8 @@ import { getAllCredentials } from '~/modules/credentials/selectors'
 import { useAgent } from '../sdk'
 import { useToasts } from '../toasts'
 import { strings } from '~/translations/strings'
+import { useNavigation } from '@react-navigation/native'
+import { ScreenNames } from '~/types/screens'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -115,5 +120,25 @@ export const useInteractionStart = () => {
       },
       { showSuccess: false },
     )
+  }
+}
+
+export const useFinishInteraction = () => {
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
+
+  return (screen?: ScreenNames) => {
+    if (screen) {
+      navigation.navigate(screen)
+    } else {
+      if (navigation.canGoBack()) {
+        navigation.goBack()
+      } else {
+        navigation.navigate(ScreenNames.LoggedIn)
+      }
+    }
+    setTimeout(() => {
+      dispatch(resetInteraction())
+    }, 500)
   }
 }

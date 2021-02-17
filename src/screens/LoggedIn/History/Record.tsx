@@ -1,44 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { FlowType } from '@jolocom/sdk'
-
-import { useCustomContext } from '~/hooks/context'
 
 import RecordHeader from './RecordHeader'
 import RecordItemsList from './RecordItemsList'
-
-interface IRecordContext {
-  activeSection: Record<string, string>
-  updateActiveSection: (id: string, value: string) => void
-}
-
-export interface IRecordHeader {
-  title?: string
-}
-
-export interface IRecordItemProps {
-  id: string
-  isFocused: boolean
-  onDropdown: () => void
-}
-
-export interface IRecordItemsListProps {
-  flows?: FlowType[]
-  isActiveList: boolean
-}
+import { IRecordHeader, IRecordItemsListProps } from './types'
+import { RecordContext } from './context'
 
 interface IRecordComposition {
   Header: React.FC<IRecordHeader>
   ItemsList: React.FC<IRecordItemsListProps>
 }
-
-const RecordContext = React.createContext<IRecordContext | undefined>({
-  activeSection: {},
-  updateActiveSection: () => {},
-})
-RecordContext.displayName = 'RecordContext'
-
-export const useRecord = useCustomContext(RecordContext)
-
 const Record: React.FC & IRecordComposition = ({ children }) => {
   const [activeSection, setActiveSection] = useState({})
 

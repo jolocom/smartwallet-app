@@ -17,6 +17,7 @@ import { useDeviceAuthState } from './module/deviceAuthContext'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
 import { getBiometryHeader } from './utils/getText'
 
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useBiometry } from '~/hooks/biometry'
@@ -48,7 +49,12 @@ const RegisterBiometry: React.FC = () => {
   useBackHandler(() => true)
 
   return (
-    <ScreenContainer customStyles={{ justifyContent: 'flex-start' }}>
+    <ScreenContainer
+      customStyles={{
+        justifyContent: 'flex-start',
+        paddingTop: BP({ default: 36, small: 28, xsmall: 20 }),
+      }}
+    >
       <ScreenHeader
         title={getBiometryHeader(biometryType)}
         subtitle={strings.SO_YOU_DONT_NEED_TO_CONFIRM}

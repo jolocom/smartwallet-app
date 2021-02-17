@@ -11,7 +11,7 @@ import { Platform } from 'react-native'
 
 import { ScreenNames } from '~/types/screens'
 
-import Interactions from '~/screens/Modals/Interactions'
+import Interaction from '~/screens/Modals/Interaction'
 
 import History from './History'
 import Documents from './Documents'
@@ -33,9 +33,9 @@ import NotificationsTest from './Settings/Development/NotificationsTest'
 import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import LoaderTest from './Settings/Development/DevLoaders'
 import Identity from './Identity'
-import FormTest from './Settings/Development/FormTest'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
+import BusinessCardTest from './Settings/Development/BusinessCardTest'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -143,11 +143,6 @@ const LoggedInTabs: React.FC = () => {
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.FormTest}
-            component={FormTest}
-            options={settingsScreenTransitionOptions}
-          />
-          <LoggedInStack.Screen
             name={ScreenNames.InputTest}
             component={InputTest}
             options={settingsScreenTransitionOptions}
@@ -157,14 +152,20 @@ const LoggedInTabs: React.FC = () => {
             component={PasscodeTest}
             options={settingsScreenTransitionOptions}
           />
+          <LoggedInStack.Screen
+            name={ScreenNames.BusinessCardTest}
+            component={BusinessCardTest}
+            options={settingsScreenTransitionOptions}
+          />
         </>
       )}
       {/* Settings Screens -> End   */}
 
       {/* Modals -> Start */}
       <LoggedInStack.Screen
-        name={ScreenNames.Interactions}
-        component={Interactions}
+        name={ScreenNames.Interaction}
+        component={Interaction}
+        options={{gestureEnabled: false}}
       />
       {/* Modals -> End */}
         </LoggedInStack.Navigator>
