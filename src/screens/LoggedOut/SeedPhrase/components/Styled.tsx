@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   activeArea: {
-    marginTop: BP({ default: 60, small: 40, xsmall: 30 }),
+    marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
     width: '100%',
     flex: 1,
   },
