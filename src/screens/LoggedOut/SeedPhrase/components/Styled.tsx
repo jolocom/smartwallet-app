@@ -77,7 +77,10 @@ const StyledCTA: React.FC = ({ children }) => {
 const StyledErrorText: React.FC = ({ children }) => (
   <JoloText
     color={Colors.error}
-    customStyles={{ marginBottom: BP({ large: 32, medium: 24, default: 12 }) }}
+    customStyles={{
+      marginBottom: BP({ large: 32, medium: 24, default: 12 }),
+      paddingHorizontal: 56,
+    }}
   >
     {children}
   </JoloText>
