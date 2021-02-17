@@ -37,6 +37,7 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const handlePhraseUpdate = (phrase: string[]) => {
     if (!readyToSubmit) setReadyToSubmit(true)
+    setWrongOrder(false)
     setShuffledSeedphrase(phrase)
   }
 
