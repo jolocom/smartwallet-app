@@ -2,7 +2,7 @@ import { FlowType } from '@jolocom/sdk'
 
 import { useAgent } from '~/hooks/sdk'
 import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
-import { getDateSection, interactionTypeToFlowType } from './utils'
+import { getDateSection } from './utils'
 import { RecordAssembler } from '~/middleware/records/recordAssembler'
 import { recordConfig } from '~/config/records'
 
@@ -22,14 +22,19 @@ export const useHistory = () => {
     })
 
     const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>(
-      (mappedIntxs, intx) => {
-        const { nonce, issued, interactionType } = intx.firstMessage
-        const interactionBySection = {
-          id: nonce,
-          section: getDateSection(new Date(issued)),
-          type: interactionTypeToFlowType[interactionType],
-        }
-        return [...mappedIntxs, interactionBySection]
+      (acc, intx) => {
+        const { type } = intx.flow
+        const { issued } = intx.lastMessage
+        const section = getDateSection(new Date(issued))
+
+        return [
+          ...acc,
+          {
+            id: intx.id,
+            section,
+            type,
+          },
+        ]
       },
       [],
     )
@@ -43,14 +48,14 @@ export const useHistory = () => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
     const messageTypes = interaction.getMessages().map((m) => m.interactionType)
     const { expires, issued } = interaction.lastMessage
-    const recordAssembler = new RecordAssembler(
+    const recordAssembler = new RecordAssembler({
       messageTypes,
-      interaction.flow.type,
-      interaction.getSummary(),
-      issued,
-      expires,
-      recordConfig,
-    )
+      flowType: interaction.flow.type,
+      summary: interaction.getSummary(),
+      lastMessageDate: issued,
+      expirationDate: expires,
+      config: recordConfig,
+    })
 
     return recordAssembler.getRecordDetails()
   }

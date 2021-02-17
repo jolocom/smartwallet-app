@@ -51,7 +51,7 @@ export enum ScreenNames {
   ButtonsTest = 'ButtonsTest',
   LoaderTest = 'LoaderTest',
   NotificationsTest = 'NotificationsTest',
-  FormTest = 'FormTest',
   InputTest = 'InputTest',
   PasscodeTest = 'PasscodeTest',
+  BusinessCardTest = 'BusinessCardTest',
 }

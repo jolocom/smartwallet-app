@@ -44,7 +44,11 @@ const RecordItem: React.FC<IRecordItemProps> = ({
   }, [])
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={handlePress}>
+    <TouchableOpacity
+      testID="record-item"
+      activeOpacity={0.8}
+      onPress={handlePress}
+    >
       <RecordItemHeader details={itemDetails} />
       {isFocused && itemDetails && <RecordItemDetails details={itemDetails} />}
     </TouchableOpacity>
