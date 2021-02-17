@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
-import { useCard } from './Card'
-import { SpecialField, TitleField } from './Field'
+import { useCard } from './context'
+import { SpecialField, TitleField, TextLayoutEvent } from './Field'
 
 const DocumentHeader: React.FC = () => {
   const { document, restMandatoryField } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
 
-  const handleHeaderTextLayout = (e) => {
+  const handleHeaderTextLayout = (e: TextLayoutEvent) => {
     if (!isHeaderScalled) {
       setIsHeaderScaled(e.nativeEvent.lines.length > 2)
     }

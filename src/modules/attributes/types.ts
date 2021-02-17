@@ -5,13 +5,14 @@ export interface AttributesState {
   all: AttrsState<AttributeI>
 }
 
-export type AttrsState<T> = {
-  [key in AttributeTypes]?: T[]
-}
+// TODO: fix type issues
+export type AttrsState<T> = Record<AttributeTypes, T[]>
 
 export enum AttrActions {
   initAttrs = 'initAttrs',
   updateAttrs = 'updateAttrs',
+  editAttr = 'editAttr',
+  deleteAttr = 'deleteAttr',
 }
 
 export type ClaimValues = {
@@ -26,4 +27,8 @@ export interface AttributeI {
 export interface AttributePayload {
   type: AttributeTypes
   attribute: AttributeI
+}
+
+export interface AttributePayloadEdit extends AttributePayload {
+  id: string
 }

@@ -1,35 +1,30 @@
-import React, { useRef } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useMemo, useRef } from 'react'
+import { StyleSheet } from 'react-native'
+
 import { useRedirectTo } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import PopupMenu from '../PopupMenu'
-import { useCard } from './Card'
+import { useCard } from './context'
 import { IWithCustomStyle } from './types'
 import CardDetails from '~/screens/LoggedIn/Documents/CardDetails'
+import Dots from '../Dots'
+import { useDeleteCredential } from '~/hooks/credentials'
 
-const deleteDocMock = (id: string | number): Promise<string> => {
-  return new Promise((res, rej) => {
-    res('Success, deleted')
-    // rej('Failure to delete')
-  })
-}
-
-const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
+const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
+  const deleteCredential = useDeleteCredential()
 
   const { id, image, claims, document } = useCard()
-  const popupRef = useRef<{ show: () => void }>(null)
   const infoRef = useRef<{ show: () => void }>(null)
 
   const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${document?.value}?`
   const cancelText = strings.CANCEL
   const handleDelete = async () => {
     try {
-      await deleteDocMock(id)
+      await deleteCredential(id)
     } catch (e) {
       scheduleWarning({
         title: strings.WHOOPS,
@@ -48,34 +43,31 @@ const Dots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
     onComplete: handleDelete,
   })
 
+  const popupOptions = useMemo(
+    () => [
+      {
+        title: strings.INFO,
+        onPress: () => infoRef.current?.show(),
+      },
+      { title: strings.DELETE, onPress: redirectToDelete },
+    ],
+    [],
+  )
+
   return (
-    <TouchableOpacity
-      onPress={() => popupRef.current?.show()}
-      style={[styles.container, customStyles]}
-      testID="card-action-more"
-    >
-      <View style={styles.dots}>
-        {[...Array(3).keys()].map((c) => (
-          <View key={c} style={styles.dot} />
-        ))}
-      </View>
+    <>
+      <Dots
+        customStyles={customStyles}
+        color={Colors.black}
+        options={popupOptions}
+      />
       <CardDetails
         ref={infoRef}
         fields={claims}
         image={image}
-        title={document?.value}
+        title={document?.value as string}
       />
-      <PopupMenu
-        ref={popupRef}
-        options={[
-          {
-            title: strings.INFO,
-            onPress: () => infoRef.current?.show(),
-          },
-          { title: strings.DELETE, onPress: redirectToDelete },
-        ]}
-      />
-    </TouchableOpacity>
+    </>
   )
 }
 
@@ -99,4 +91,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Dots
+export default DocumentDots

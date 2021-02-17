@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useTabs } from './Tabs'
+import { useTabs } from './context'
 
 const Panel: React.FC = ({ children }) => {
   const { activeTab, activeSubtab } = useTabs()

@@ -1,8 +1,8 @@
 import { ActionI } from '~/types/action'
-import { CredentialActions } from './types'
+import { CredentialActions, CredentialsState } from './types'
 
 //TODO: check if additional nesting is required
-const initialState = {
+const initialState: CredentialsState = {
   all: [],
 }
 
@@ -13,6 +13,9 @@ const credentialsReducer = (
   switch (action.type) {
     case CredentialActions.setCredentials:
       return { ...state, all: action.payload }
+    case CredentialActions.deleteCredential:
+      const filtered = state.all.filter((c) => c.id !== action.payload)
+      return { ...state, all: filtered }
     default:
       return state
   }

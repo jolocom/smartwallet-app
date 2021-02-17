@@ -11,7 +11,7 @@ const RecordItemDetails: React.FC<{ details: IRecordDetails }> = ({
   details,
 }) => {
   return (
-    <View>
+    <View testID="record-item-details">
       <View style={styles.dashContainer}>
         <Dash
           dashLength={2}

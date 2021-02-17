@@ -27,7 +27,7 @@ const ShareAttributeWidget = () => {
               key={attrType}
               name={config.label}
               type={attrType}
-              onCreate={() => handleScreenSwitch({type: attrType})}
+              onAdd={() => handleScreenSwitch({type: attrType})}
               onSelect={(attrType, id) =>
                 handleSelectCredential({ [attrType]: id })
               }

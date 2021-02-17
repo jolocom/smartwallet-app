@@ -13,10 +13,11 @@ import {
   UICredential,
   ShareUICredential,
   AttributeTypes,
+  IAttributeClaimFieldWithValue,
+  IAttributeClaimField,
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
-import { IFormState } from '~/screens/LoggedIn/Identity/components/Form'
 import { ClaimValues } from '~/modules/attributes/types'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
@@ -130,9 +131,12 @@ export const uiCredentialToShareCredential = (
   return shareCred
 }
 
-export const mapFormFields = (fields: IFormState[]): ClaimValues => {
-  return fields.reduce<ClaimValues>((acc, v) => {
-    acc[v.key] = v.value
+export const assembleFormInitialValues = (
+  fields: Array<IAttributeClaimField | IAttributeClaimFieldWithValue>,
+) => {
+  return fields.reduce<Record<string, string>>((acc, f) => {
+    // @ts-ignore
+    acc[f.key] = f.value ?? ''
     return acc
   }, {})
 }

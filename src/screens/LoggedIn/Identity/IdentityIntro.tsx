@@ -4,10 +4,11 @@ import Fallin from '~/components/animation/Fallin'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import BusinessCardWizard from '~/components/Wizard/BusinessCardWizard'
-import SingleCredentialWizard from '~/components/Wizard/SingleCredentialWizard'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
+
+import SingleCredentialWizard from './SingleCredentialWizard'
+import BusinessCardWizard from './BusinessCardWizard'
 
 enum IdentityForms {
   SingleCredential = 'SingleCredential',
@@ -83,6 +84,7 @@ const WelcomeSheet: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     backgroundColor: Colors.lightBlack,
     padding: 20,
     borderBottomLeftRadius: 30,

@@ -7,16 +7,22 @@ import { useSelector } from 'react-redux'
 import { getInteractionType } from '~/modules/interaction/selectors'
 import { useNavigation } from '@react-navigation/native'
 import InteractionFlow from '~/screens/Modals/Interaction/InteractionFlow'
-import { Platform } from 'react-native'
 import InteractionAddCredential from './InteractionAddCredential'
+import { AttributeTypes } from '~/types/credentials'
 
-const Stack = createStackNavigator();
+export type InteractionStackParamList = {
+  [ScreenNames.Scanner]: undefined,
+  [ScreenNames.InteractionFlow]: undefined,
+  [ScreenNames.InteractionAddCredential]: { type: AttributeTypes },
+}
+
+const Stack = createStackNavigator<InteractionStackParamList>();
 
 const modalStyleOptions = {
   headerShown: false,
   cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
-  cardStyleInterpolator: Platform.OS === 'ios' ? CardStyleInterpolators.forVerticalIOS : CardStyleInterpolators.forRevealFromBottomAndroid
+  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
 }
 
 const Interactions: React.FC = () => {

@@ -1,0 +1,2006 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Record Item should render a generic Record Item 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+    testID="record-item"
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#000",
+          "borderRadius": 15,
+          "flexDirection": "row",
+          "height": 80,
+          "marginVertical": 5,
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginHorizontal": 12,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={70}
+          bbWidth={70}
+          focusable={false}
+          height={70}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "flex": 0,
+                "height": 70,
+                "width": 70,
+              },
+            ]
+          }
+          vbHeight={70}
+          vbWidth={70}
+          width={70}
+        >
+          <RNSVGGroup>
+            <RNSVGDefs>
+              <RNSVGCircle
+                cx={35}
+                cy={35}
+                name="prefix__a"
+                r={35}
+              />
+            </RNSVGDefs>
+            <RNSVGGroup
+              fill={null}
+              fillRule={0}
+              propList={
+                Array [
+                  "fill",
+                  "fillRule",
+                ]
+              }
+            >
+              <RNSVGMask
+                fill={4294967295}
+                height="100%"
+                maskContentUnits={1}
+                maskTransform={
+                  Array [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                  ]
+                }
+                maskUnits={0}
+                name="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                width="100%"
+                x="0%"
+                y="0%"
+              >
+                <RNSVGUse
+                  height={0}
+                  href="prefix__a"
+                  width={0}
+                  x={0}
+                  y={0}
+                />
+              </RNSVGMask>
+              <RNSVGPath
+                d="M42.98 28.8c2.15 0 3.9-1.75 3.9-3.9s-1.75-3.9-3.9-3.9-3.899 1.75-3.899 3.9 1.75 3.9 3.9 3.9zm3.519 7.42a1.3 1.3 0 00-1.838 0l-4.28 4.28-9.49-11.866a1.3 1.3 0 00-1.935-.107L13 44.4v1.3c0 .728.572 1.3 1.3 1.3h41.764c.364 0 .676-.156.936-.364L46.499 36.219z"
+                fill={4281018665}
+                fillRule={1}
+                mask="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGGroup>
+        </RNSVGSvgView>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "flex-start",
+              "flex": 1,
+              "height": "100%",
+              "justifyContent": "space-between",
+              "paddingVertical": 18,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255,255,255,0.9)",
+                  "fontFamily": "TTCommons-Medium",
+                  "fontSize": 18,
+                  "letterSpacing": 0,
+                  "lineHeight": 24,
+                },
+                undefined,
+              ]
+            }
+          >
+            Authentication
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "alignSelf": "center",
+                  "marginRight": 16,
+                },
+              ]
+            }
+            testID="record-item-time"
+          >
+            00:00
+          </Text>
+        </View>
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": 5,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255, 255, 255, 0.4)",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 16,
+                "letterSpacing": 0,
+                "lineHeight": 16,
+              },
+              undefined,
+            ]
+          }
+        >
+          Unknown
+        </Text>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+    testID="record-item"
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#000",
+          "borderRadius": 15,
+          "flexDirection": "row",
+          "height": 80,
+          "marginVertical": 5,
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginHorizontal": 12,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={70}
+          bbWidth={70}
+          focusable={false}
+          height={70}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "flex": 0,
+                "height": 70,
+                "width": 70,
+              },
+            ]
+          }
+          vbHeight={70}
+          vbWidth={70}
+          width={70}
+        >
+          <RNSVGGroup>
+            <RNSVGDefs>
+              <RNSVGCircle
+                cx={35}
+                cy={35}
+                name="prefix__a"
+                r={35}
+              />
+            </RNSVGDefs>
+            <RNSVGGroup
+              fill={null}
+              fillRule={0}
+              propList={
+                Array [
+                  "fill",
+                  "fillRule",
+                ]
+              }
+            >
+              <RNSVGMask
+                fill={4294967295}
+                height="100%"
+                maskContentUnits={1}
+                maskTransform={
+                  Array [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                  ]
+                }
+                maskUnits={0}
+                name="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                width="100%"
+                x="0%"
+                y="0%"
+              >
+                <RNSVGUse
+                  height={0}
+                  href="prefix__a"
+                  width={0}
+                  x={0}
+                  y={0}
+                />
+              </RNSVGMask>
+              <RNSVGPath
+                d="M42.98 28.8c2.15 0 3.9-1.75 3.9-3.9s-1.75-3.9-3.9-3.9-3.899 1.75-3.899 3.9 1.75 3.9 3.9 3.9zm3.519 7.42a1.3 1.3 0 00-1.838 0l-4.28 4.28-9.49-11.866a1.3 1.3 0 00-1.935-.107L13 44.4v1.3c0 .728.572 1.3 1.3 1.3h41.764c.364 0 .676-.156.936-.364L46.499 36.219z"
+                fill={4281018665}
+                fillRule={1}
+                mask="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGGroup>
+        </RNSVGSvgView>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "flex-start",
+              "flex": 1,
+              "height": "100%",
+              "justifyContent": "space-between",
+              "paddingVertical": 18,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255,255,255,0.9)",
+                  "fontFamily": "TTCommons-Medium",
+                  "fontSize": 18,
+                  "letterSpacing": 0,
+                  "lineHeight": 24,
+                },
+                undefined,
+              ]
+            }
+          >
+            Authentication
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "alignSelf": "center",
+                  "marginRight": 16,
+                },
+              ]
+            }
+            testID="record-item-time"
+          >
+            00:00
+          </Text>
+        </View>
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": 5,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255, 255, 255, 0.4)",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 16,
+                "letterSpacing": 0,
+                "lineHeight": 16,
+              },
+              undefined,
+            ]
+          }
+        >
+          Unknown
+        </Text>
+      </View>
+    </View>
+    <View
+      testID="record-item-details"
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "height": "100%",
+            "left": 0,
+            "paddingBottom": 16,
+            "paddingTop": 8,
+            "position": "absolute",
+            "top": 0,
+            "width": "25%",
+          }
+        }
+      >
+        <View
+          onLayout={[Function]}
+          style={
+            Object {
+              "flexDirection": "column",
+              "height": "100%",
+              "opacity": 0.4,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "paddingVertical": 14,
+            "width": "100%",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 0.25,
+                "justifyContent": "center",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#ffffff",
+                  "borderRadius": 4,
+                  "height": 7,
+                  "width": 7,
+                }
+              }
+            />
+          </View>
+          <View
+            style={
+              Object {
+                "flex": 0.75,
+              }
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "paddingTop": 5,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "color": "rgba(255,255,255,0.9)",
+                    "fontFamily": "TTCommons-Medium",
+                    "fontSize": 18,
+                    "letterSpacing": 0,
+                    "lineHeight": 24,
+                  },
+                  Object {
+                    "textAlign": "left",
+                  },
+                ]
+              }
+            >
+              Test Step 1
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            Object {
+              "marginTop": 1,
+              "paddingLeft": "25%",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255, 255, 255, 0.4)",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            ...
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "paddingVertical": 14,
+              "width": "100%",
+            },
+            Object {
+              "flexDirection": "row",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "flex": 0.25,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#201a21",
+                "borderColor": "#ffffff",
+                "borderRadius": 21,
+                "borderWidth": 1,
+                "height": 42,
+                "justifyContent": "center",
+                "width": 42,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "transform": Array [
+                    Object {
+                      "scale": 0.6,
+                    },
+                  ],
+                }
+              }
+            >
+              <RNSVGSvgView
+                align="xMidYMid"
+                bbHeight={18}
+                bbWidth={18}
+                focusable={false}
+                height={18}
+                meetOrSlice={0}
+                minX={0}
+                minY={0}
+                style={
+                  Array [
+                    Object {
+                      "backgroundColor": "transparent",
+                      "borderWidth": 0,
+                    },
+                    Object {
+                      "flex": 0,
+                      "height": 18,
+                      "width": 18,
+                    },
+                  ]
+                }
+                vbHeight={24}
+                vbWidth={24}
+                width={18}
+              >
+                <RNSVGGroup>
+                  <RNSVGPath
+                    d="M10.852 12.004L.23 22.7a.764.764 0 000 1.076.75.75 0 001.068 0L12 13l10.703 10.778a.75.75 0 001.069 0 .764.764 0 000-1.076L13.148 12.004l10.63-10.706a.764.764 0 000-1.075.752.752 0 00-1.067 0L12 11.008 1.289.223a.752.752 0 00-1.068 0 .764.764 0 000 1.076l10.631 10.705z"
+                    fill={4294967295}
+                    fillRule={1}
+                    propList={
+                      Array [
+                        "fill",
+                        "fillRule",
+                      ]
+                    }
+                  />
+                </RNSVGGroup>
+              </RNSVGSvgView>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            Object {
+              "flex": 0.75,
+              "paddingLeft": 4,
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 20,
+                  "letterSpacing": 0.14,
+                  "lineHeight": 22,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            Test Step 2
+          </Text>
+          <Text
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffcc01",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 14,
+                  "letterSpacing": 0,
+                  "lineHeight": 20,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            ...
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+    testID="record-item"
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#000",
+          "borderRadius": 15,
+          "flexDirection": "row",
+          "height": 80,
+          "marginVertical": 5,
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginHorizontal": 12,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={70}
+          bbWidth={70}
+          focusable={false}
+          height={70}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "flex": 0,
+                "height": 70,
+                "width": 70,
+              },
+            ]
+          }
+          vbHeight={70}
+          vbWidth={70}
+          width={70}
+        >
+          <RNSVGGroup>
+            <RNSVGDefs>
+              <RNSVGCircle
+                cx={35}
+                cy={35}
+                name="prefix__a"
+                r={35}
+              />
+            </RNSVGDefs>
+            <RNSVGGroup
+              fill={null}
+              fillRule={0}
+              propList={
+                Array [
+                  "fill",
+                  "fillRule",
+                ]
+              }
+            >
+              <RNSVGMask
+                fill={4294967295}
+                height="100%"
+                maskContentUnits={1}
+                maskTransform={
+                  Array [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                  ]
+                }
+                maskUnits={0}
+                name="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                width="100%"
+                x="0%"
+                y="0%"
+              >
+                <RNSVGUse
+                  height={0}
+                  href="prefix__a"
+                  width={0}
+                  x={0}
+                  y={0}
+                />
+              </RNSVGMask>
+              <RNSVGPath
+                d="M42.98 28.8c2.15 0 3.9-1.75 3.9-3.9s-1.75-3.9-3.9-3.9-3.899 1.75-3.899 3.9 1.75 3.9 3.9 3.9zm3.519 7.42a1.3 1.3 0 00-1.838 0l-4.28 4.28-9.49-11.866a1.3 1.3 0 00-1.935-.107L13 44.4v1.3c0 .728.572 1.3 1.3 1.3h41.764c.364 0 .676-.156.936-.364L46.499 36.219z"
+                fill={4281018665}
+                fillRule={1}
+                mask="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGGroup>
+        </RNSVGSvgView>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "flex-start",
+              "flex": 1,
+              "height": "100%",
+              "justifyContent": "space-between",
+              "paddingVertical": 18,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255,255,255,0.9)",
+                  "fontFamily": "TTCommons-Medium",
+                  "fontSize": 18,
+                  "letterSpacing": 0,
+                  "lineHeight": 24,
+                },
+                undefined,
+              ]
+            }
+          >
+            Authentication
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "alignSelf": "center",
+                  "marginRight": 16,
+                },
+              ]
+            }
+            testID="record-item-time"
+          >
+            00:00
+          </Text>
+        </View>
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": 5,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255, 255, 255, 0.4)",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 16,
+                "letterSpacing": 0,
+                "lineHeight": 16,
+              },
+              undefined,
+            ]
+          }
+        >
+          Unknown
+        </Text>
+      </View>
+    </View>
+    <View
+      testID="record-item-details"
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "height": "100%",
+            "left": 0,
+            "paddingBottom": 16,
+            "paddingTop": 8,
+            "position": "absolute",
+            "top": 0,
+            "width": "25%",
+          }
+        }
+      >
+        <View
+          onLayout={[Function]}
+          style={
+            Object {
+              "flexDirection": "column",
+              "height": "100%",
+              "opacity": 0.4,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "paddingVertical": 14,
+            "width": "100%",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 0.25,
+                "justifyContent": "center",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#ffffff",
+                  "borderRadius": 4,
+                  "height": 7,
+                  "width": 7,
+                }
+              }
+            />
+          </View>
+          <View
+            style={
+              Object {
+                "flex": 0.75,
+              }
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "paddingTop": 5,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "color": "rgba(255,255,255,0.9)",
+                    "fontFamily": "TTCommons-Medium",
+                    "fontSize": 18,
+                    "letterSpacing": 0,
+                    "lineHeight": 24,
+                  },
+                  Object {
+                    "textAlign": "left",
+                  },
+                ]
+              }
+            >
+              Test Step 1
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            Object {
+              "marginTop": 1,
+              "paddingLeft": "25%",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255, 255, 255, 0.4)",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            ...
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "paddingVertical": 14,
+              "width": "100%",
+            },
+            Object {
+              "flexDirection": "row",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "flex": 0.25,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#201a21",
+                "borderColor": "#ffffff",
+                "borderRadius": 21,
+                "borderWidth": 1,
+                "height": 42,
+                "justifyContent": "center",
+                "width": 42,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "transform": Array [
+                    Object {
+                      "scale": 0.6,
+                    },
+                  ],
+                }
+              }
+            >
+              <RNSVGSvgView
+                align="xMidYMid"
+                bbHeight={20}
+                bbWidth={26}
+                focusable={false}
+                height={20}
+                meetOrSlice={0}
+                minX={0}
+                minY={0}
+                style={
+                  Array [
+                    Object {
+                      "backgroundColor": "transparent",
+                      "borderWidth": 0,
+                    },
+                    Object {
+                      "flex": 0,
+                      "height": 20,
+                      "width": 26,
+                    },
+                  ]
+                }
+                vbHeight={24}
+                vbWidth={32}
+                width={26}
+              >
+                <RNSVGGroup>
+                  <RNSVGPath
+                    d="M31.333.357a1.219 1.219 0 00-1.724 0L9.852 20.114 2.08 12.343a1.219 1.219 0 10-1.724 1.724L8.99 22.7a1.22 1.22 0 001.724 0L31.333 2.08a1.219 1.219 0 000-1.723z"
+                    fill={4294967295}
+                    fillRule={1}
+                    propList={
+                      Array [
+                        "fill",
+                        "fillRule",
+                      ]
+                    }
+                  />
+                </RNSVGGroup>
+              </RNSVGSvgView>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            Object {
+              "flex": 0.75,
+              "paddingLeft": 4,
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 20,
+                  "letterSpacing": 0.14,
+                  "lineHeight": 22,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            Test Step 2
+          </Text>
+          <Text
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255, 255, 255, 0.60)",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 14,
+                  "letterSpacing": 0,
+                  "lineHeight": 20,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            ...
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`Record Item should render the dropdown with the PENDING state 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+    testID="record-item"
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#000",
+          "borderRadius": 15,
+          "flexDirection": "row",
+          "height": 80,
+          "marginVertical": 5,
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginHorizontal": 12,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={70}
+          bbWidth={70}
+          focusable={false}
+          height={70}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "flex": 0,
+                "height": 70,
+                "width": 70,
+              },
+            ]
+          }
+          vbHeight={70}
+          vbWidth={70}
+          width={70}
+        >
+          <RNSVGGroup>
+            <RNSVGDefs>
+              <RNSVGCircle
+                cx={35}
+                cy={35}
+                name="prefix__a"
+                r={35}
+              />
+            </RNSVGDefs>
+            <RNSVGGroup
+              fill={null}
+              fillRule={0}
+              propList={
+                Array [
+                  "fill",
+                  "fillRule",
+                ]
+              }
+            >
+              <RNSVGMask
+                fill={4294967295}
+                height="100%"
+                maskContentUnits={1}
+                maskTransform={
+                  Array [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                  ]
+                }
+                maskUnits={0}
+                name="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                width="100%"
+                x="0%"
+                y="0%"
+              >
+                <RNSVGUse
+                  height={0}
+                  href="prefix__a"
+                  width={0}
+                  x={0}
+                  y={0}
+                />
+              </RNSVGMask>
+              <RNSVGPath
+                d="M42.98 28.8c2.15 0 3.9-1.75 3.9-3.9s-1.75-3.9-3.9-3.9-3.899 1.75-3.899 3.9 1.75 3.9 3.9 3.9zm3.519 7.42a1.3 1.3 0 00-1.838 0l-4.28 4.28-9.49-11.866a1.3 1.3 0 00-1.935-.107L13 44.4v1.3c0 .728.572 1.3 1.3 1.3h41.764c.364 0 .676-.156.936-.364L46.499 36.219z"
+                fill={4281018665}
+                fillRule={1}
+                mask="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGGroup>
+        </RNSVGSvgView>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "flex-start",
+              "flex": 1,
+              "height": "100%",
+              "justifyContent": "space-between",
+              "paddingVertical": 18,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255,255,255,0.9)",
+                  "fontFamily": "TTCommons-Medium",
+                  "fontSize": 18,
+                  "letterSpacing": 0,
+                  "lineHeight": 24,
+                },
+                undefined,
+              ]
+            }
+          >
+            Authentication
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "alignSelf": "center",
+                  "marginRight": 16,
+                },
+              ]
+            }
+            testID="record-item-time"
+          >
+            00:00
+          </Text>
+        </View>
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": 5,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255, 255, 255, 0.4)",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 16,
+                "letterSpacing": 0,
+                "lineHeight": 16,
+              },
+              undefined,
+            ]
+          }
+        >
+          Unknown
+        </Text>
+      </View>
+    </View>
+    <View
+      testID="record-item-details"
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "height": "100%",
+            "left": 0,
+            "paddingBottom": 16,
+            "paddingTop": 8,
+            "position": "absolute",
+            "top": 0,
+            "width": "25%",
+          }
+        }
+      >
+        <View
+          onLayout={[Function]}
+          style={
+            Object {
+              "flexDirection": "column",
+              "height": "100%",
+              "opacity": 0.4,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "paddingVertical": 14,
+            "width": "100%",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 0.25,
+                "justifyContent": "center",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#ffffff",
+                  "borderRadius": 4,
+                  "height": 7,
+                  "width": 7,
+                }
+              }
+            />
+          </View>
+          <View
+            style={
+              Object {
+                "flex": 0.75,
+              }
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "paddingTop": 5,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "color": "rgba(255,255,255,0.9)",
+                    "fontFamily": "TTCommons-Medium",
+                    "fontSize": 18,
+                    "letterSpacing": 0,
+                    "lineHeight": 24,
+                  },
+                  Object {
+                    "textAlign": "left",
+                  },
+                ]
+              }
+            >
+              Test Step 1
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            Object {
+              "marginTop": 1,
+              "paddingLeft": "25%",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255, 255, 255, 0.4)",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            ...
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "paddingVertical": 14,
+              "width": "100%",
+            },
+            Object {
+              "flexDirection": "row",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "flex": 0.25,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#201a21",
+                "borderColor": "#ffffff",
+                "borderRadius": 21,
+                "borderWidth": 1,
+                "height": 42,
+                "justifyContent": "center",
+                "width": 42,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "transform": Array [
+                    Object {
+                      "scale": 0.6,
+                    },
+                  ],
+                }
+              }
+            >
+              <RNSVGSvgView
+                align="xMidYMid"
+                bbHeight={18}
+                bbWidth={18}
+                focusable={false}
+                height={18}
+                meetOrSlice={0}
+                minX={0}
+                minY={0}
+                style={
+                  Array [
+                    Object {
+                      "backgroundColor": "transparent",
+                      "borderWidth": 0,
+                    },
+                    Object {
+                      "flex": 0,
+                      "height": 18,
+                      "width": 18,
+                    },
+                  ]
+                }
+                vbHeight={24}
+                vbWidth={24}
+                width={18}
+              >
+                <RNSVGGroup>
+                  <RNSVGPath
+                    d="M10.852 12.004L.23 22.7a.764.764 0 000 1.076.75.75 0 001.068 0L12 13l10.703 10.778a.75.75 0 001.069 0 .764.764 0 000-1.076L13.148 12.004l10.63-10.706a.764.764 0 000-1.075.752.752 0 00-1.067 0L12 11.008 1.289.223a.752.752 0 00-1.068 0 .764.764 0 000 1.076l10.631 10.705z"
+                    fill={4294967295}
+                    fillRule={1}
+                    propList={
+                      Array [
+                        "fill",
+                        "fillRule",
+                      ]
+                    }
+                  />
+                </RNSVGGroup>
+              </RNSVGSvgView>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            Object {
+              "flex": 0.75,
+              "paddingLeft": 4,
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 20,
+                  "letterSpacing": 0.14,
+                  "lineHeight": 22,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            Test Step 2
+          </Text>
+          <Text
+            numberOfLines={1}
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffcc01",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 14,
+                  "letterSpacing": 0,
+                  "lineHeight": 20,
+                },
+                Object {
+                  "textAlign": "left",
+                },
+              ]
+            }
+          >
+            ...
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`Record Item should render the placeholder when the details are unavailable 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+    testID="record-item"
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#000",
+          "borderRadius": 15,
+          "flexDirection": "row",
+          "height": 80,
+          "marginVertical": 5,
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginHorizontal": 12,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={70}
+          bbWidth={70}
+          focusable={false}
+          height={70}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "flex": 0,
+                "height": 70,
+                "width": 70,
+              },
+            ]
+          }
+          vbHeight={70}
+          vbWidth={70}
+          width={70}
+        >
+          <RNSVGGroup>
+            <RNSVGDefs>
+              <RNSVGCircle
+                cx={35}
+                cy={35}
+                name="prefix__a"
+                r={35}
+              />
+            </RNSVGDefs>
+            <RNSVGGroup
+              fill={null}
+              fillRule={0}
+              propList={
+                Array [
+                  "fill",
+                  "fillRule",
+                ]
+              }
+            >
+              <RNSVGMask
+                fill={4294967295}
+                height="100%"
+                maskContentUnits={1}
+                maskTransform={
+                  Array [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                  ]
+                }
+                maskUnits={0}
+                name="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                width="100%"
+                x="0%"
+                y="0%"
+              >
+                <RNSVGUse
+                  height={0}
+                  href="prefix__a"
+                  width={0}
+                  x={0}
+                  y={0}
+                />
+              </RNSVGMask>
+              <RNSVGPath
+                d="M42.98 28.8c2.15 0 3.9-1.75 3.9-3.9s-1.75-3.9-3.9-3.9-3.899 1.75-3.899 3.9 1.75 3.9 3.9 3.9zm3.519 7.42a1.3 1.3 0 00-1.838 0l-4.28 4.28-9.49-11.866a1.3 1.3 0 00-1.935-.107L13 44.4v1.3c0 .728.572 1.3 1.3 1.3h41.764c.364 0 .676-.156.936-.364L46.499 36.219z"
+                fill={4281018665}
+                fillRule={1}
+                mask="prefix__b"
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGGroup>
+        </RNSVGSvgView>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "flex-start",
+              "flex": 1,
+              "height": "100%",
+              "justifyContent": "space-between",
+              "paddingVertical": 18,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "flex-end",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "width": "100%",
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255,255,255,0.9)",
+                  "fontFamily": "TTCommons-Medium",
+                  "fontSize": 18,
+                  "letterSpacing": 0,
+                  "lineHeight": 24,
+                },
+                undefined,
+              ]
+            }
+          >
+            ███████
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 16,
+                },
+                Object {
+                  "alignSelf": "center",
+                  "marginRight": 16,
+                },
+              ]
+            }
+            testID="record-item-time"
+          >
+            ██
+          </Text>
+        </View>
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": 5,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255, 255, 255, 0.4)",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 16,
+                "letterSpacing": 0,
+                "lineHeight": 16,
+              },
+              undefined,
+            ]
+          }
+        >
+          █████
+        </Text>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;

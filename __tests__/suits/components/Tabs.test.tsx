@@ -72,6 +72,10 @@ jest.mock('../../../src/hooks/toasts', () => ({
   })),
 }))
 
+jest.mock('../../../src/hooks/credentials', () => ({
+  useDeleteCredential: () => jest.fn(),
+}))
+
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn().mockImplementation(() => mockedDocuments),

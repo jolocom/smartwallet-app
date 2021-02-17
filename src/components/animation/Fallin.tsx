@@ -21,11 +21,9 @@ const Fallin: React.FC<IFallinProps> = ({ children, isFallingIn, from }) => {
       if (from === 'bottom') {
         // setting sheet position below the screen height, to fall in from the bottom
         positionRef.setValue(SCREEN_HEIGHT + heightRef.current)
-      } else if (from === 'top') {
+      } else {
         // setting sheet position above the screen height, to fall in from the top
         positionRef.setValue(-heightRef.current)
-      } else {
-        throw new Error('No Fallin from prop set')
       }
       setLayoutDone(true)
     }

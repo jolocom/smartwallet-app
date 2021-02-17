@@ -1,6 +1,7 @@
 export enum Colors {
   transparent = 'transparent',
   activity = '#fa3384',
+  electricViolet = '#6027ef',
   ceriseRed = '#d22d69',
   disco = '#911942',
   error = '#ffcc01',
@@ -31,11 +32,13 @@ export enum Colors {
   success = '#5251c1',
   serenade = '#fff1e3',
   white = '#ffffff',
+  white06 = 'rgba(255, 255, 255, 0.06)',
   white21 = 'rgba(255, 255, 255, 0.21)',
   white30 = 'rgba(255, 255, 255, 0.3)',
   white35 = 'rgba(255, 255, 255, 0.35)',
   white40 = 'rgba(255, 255, 255, 0.4)',
   white45 = 'rgba(255, 255, 255, 0.45)',
+  white50 = 'rgba(255, 255, 255, 0.50)',
   white60 = 'rgba(255, 255, 255, 0.60)',
   white70 = 'rgba(255, 255, 255, 0.7)',
   white80 = 'rgba(255, 255, 255, 0.8)',
@@ -53,4 +56,5 @@ export enum Colors {
   hyacinthPink = 'rgb(210, 45, 105)',
   slateGray = '#6c7b8a',
   inputBorder = 'rgb(45, 39, 46)',
+  portGore = '#171739',
 }

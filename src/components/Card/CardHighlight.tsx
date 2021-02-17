@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { useCard } from './Card'
+import { useCard } from './context'
 import { CARD_HORIZONTAL_PADDING } from './CardStyledComponents'
 import { Highlight } from './Field'
 

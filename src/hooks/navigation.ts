@@ -2,7 +2,6 @@ import { useNavigation, StackActions } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
-import { AttributeTypes } from '~/types/credentials'
 
 interface NestedSceenI {
   screen?: ScreenNames

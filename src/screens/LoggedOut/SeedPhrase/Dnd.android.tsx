@@ -2,7 +2,7 @@ import React from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 
-import { IDndProps } from './SeedPhraseRepeat'
+import { IDndProps } from './types'
 import WordPill from './components/WordPill'
 
 const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {

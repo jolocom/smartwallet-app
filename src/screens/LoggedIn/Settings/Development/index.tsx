@@ -15,10 +15,10 @@ const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
-  const redirectToForms = useRedirectTo(ScreenNames.FormTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
   const redirectToInteractionCards = useRedirectTo(ScreenNames.InteractionCardsTest)
+  const redirectToBusinessCard = useRedirectTo(ScreenNames.BusinessCardTest)
   const redirect = useRedirect()
 
   const popupRef = useRef<{ show: () => void }>(null)
@@ -65,9 +65,6 @@ const DevelopmentSection = () => {
         <Option onPress={redirectToNotifications}>
           <Option.Title title="Notifications" />
         </Option>
-        <Option onPress={redirectToForms}>
-          <Option.Title title="Forms" />
-        </Option>
         <Option onPress={redirectToInputs}>
           <Option.Title title="Inputs" />
         </Option>
@@ -76,6 +73,9 @@ const DevelopmentSection = () => {
         </Option>
         <Option onPress={redirectToInteractionCards}>
           <Option.Title title="Interaction Cards" />
+        </Option>
+        <Option onPress={redirectToBusinessCard}>
+          <Option.Title title="Business Card" />
         </Option>
       </Section.Block>
     </Section>
