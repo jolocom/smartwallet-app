@@ -1,7 +1,8 @@
 import React from 'react'
 import JoloText from '~/components/JoloText'
 
-import { ITab, useTabs } from './Tabs'
+import { ITab } from './types'
+import { useTabs } from './context'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { TouchableOpacity, View } from 'react-native'

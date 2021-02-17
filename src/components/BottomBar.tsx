@@ -9,6 +9,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { useSafeArea } from 'react-native-safe-area-context'
+import Hide from 'react-native-hide-with-keyboard'
 
 import {
   DocumentsTabIcon,
@@ -80,7 +81,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
 }
 
 const ScannerButton = () => {
-  const redirectToScanner = useRedirectTo(ScreenNames.Interactions)
+  const redirectToScanner = useRedirectTo(ScreenNames.Interaction)
   const insets = useSafeArea()
   return (
     <TouchableOpacity
@@ -118,7 +119,7 @@ const BottomBar = (props: BottomTabBarProps) => {
   const insets = useSafeArea()
 
   return (
-    <>
+    <Hide>
       <View
         style={{
           paddingBottom: insets.bottom,
@@ -170,7 +171,7 @@ const BottomBar = (props: BottomTabBarProps) => {
             ))}
         </View>
       </View>
-    </>
+    </Hide>
   )
 }
 

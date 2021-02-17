@@ -1,16 +1,14 @@
 import { useDispatch } from 'react-redux'
 
-import {
-  resetInteraction,
-  updateOfferValidation,
-} from '~/modules/interaction/actions'
+import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { useToasts } from '../toasts'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
-import { useOutsideRedirect } from '~/NavigationProvider'
+import { useRedirect } from '../navigation'
+import { useFinishInteraction } from '.'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -28,7 +26,8 @@ const useCredentialOfferSubmit = () => {
     scheduleSuccessInteraction,
   } = useInteractionToasts()
   const { scheduleInfo } = useToasts()
-  const redirect = useOutsideRedirect()
+  const redirect = useRedirect()
+  const finishInteraction = useFinishInteraction()
 
   const scheduleSuccess = () =>
     scheduleSuccessInteraction({
@@ -44,7 +43,7 @@ const useCredentialOfferSubmit = () => {
         await storeSelectedCredentials()
         await syncCredentials()
         scheduleSuccess()
-        return dispatch(resetInteraction())
+        return finishInteraction()
       }
 
       await assembleOfferResponseToken()
@@ -66,15 +65,14 @@ const useCredentialOfferSubmit = () => {
         await storeSelectedCredentials()
         await syncCredentials()
         scheduleSuccess()
-        dispatch(resetInteraction())
+        finishInteraction()
       } else if (allInvalid) {
         //TODO: add translation interpolation to the toast message
         scheduleErrorInteraction({
           title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
           message: strings.OFFER_ALL_INVALID_TOAST_MSG,
         })
-
-        dispatch(resetInteraction())
+        finishInteraction()
       } else {
         dispatch(updateOfferValidation(validatedCredentials))
         scheduleInfo({
@@ -85,7 +83,7 @@ const useCredentialOfferSubmit = () => {
     } catch (err) {
       scheduleErrorInteraction()
       console.log({ err })
-      dispatch(resetInteraction())
+      finishInteraction()
       throw new Error(err)
     }
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 import Permissions from 'react-native-permissions'
 
-import ScannerIntro from '~/screens/Modals/Interactions/Scanner'
+import ScannerIntro from '~/screens/Modals/Interaction/Scanner'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { strings } from '~/translations/strings'
 import { fireEvent, waitFor } from '@testing-library/react-native'

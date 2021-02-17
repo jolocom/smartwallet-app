@@ -1,30 +1,13 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import CardHighlight from './CardHighlight'
 import CardPhoto from './CardPhoto'
 import DocumentHeader from './DocumentHeader'
 import DocumentDots from './DocumentDots'
 import OptionalFields from './OptionalFields'
 import OtherHeader from './OtherHeader'
-import { IField, IWithCustomStyle, ICardProps } from './types'
+import { IWithCustomStyle, ICardProps } from './types'
 import { DocumentFields } from '~/types/credentials'
-
-interface ICardContext {
-  id: number | string
-  document: IField | undefined | null
-  restMandatoryField: IField | undefined | null
-  optionalFields: IField[]
-  image?: string | undefined
-  highlight?: string | undefined
-  claims: IField[]
-}
-
-const CardContext = createContext<ICardContext | undefined>(undefined)
-
-export const useCard = () => {
-  const context = useContext(CardContext)
-  if (!context) throw new Error('Cannot be used outside CardContext')
-  return context
-}
+import { CardContext } from './context'
 
 interface ICardComposition {
   OptionalFields: React.FC<IWithCustomStyle>

@@ -11,7 +11,7 @@ export interface IField {
 }
 
 export interface ICardProps {
-  id: string | number
+  id: string
   optionalFields: IField[]
   mandatoryFields: Array<IField | null>
   image?: string | undefined

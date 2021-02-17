@@ -48,22 +48,20 @@ const BasWrapper: React.FC<Props> = ({
         { opacity: animatedOpacity },
       ]}
     >
-      {showIcon && (
-        <IconWrapper customStyle={{ marginBottom: -35 }}>
-          <View style={styles.basIcon}>
-            <InteractionIcon />
-          </View>
-        </IconWrapper>
-      )}
-      <View style={[styles.childrenWrapper, customStyles]}>{children}</View>
+        {showIcon && (
+          <IconWrapper customStyle={{ marginBottom: -35 }}>
+            <View style={styles.basIcon}>
+              <InteractionIcon />
+            </View>
+          </IconWrapper>
+        )}
+        <View style={[styles.childrenWrapper, customStyles]}>{children}</View>
     </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: 'absolute',
-    alignSelf: 'center',
     width: '98%',
   },
   basIcon: {

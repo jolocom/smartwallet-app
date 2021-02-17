@@ -12,7 +12,7 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
-import { InteractionDetails, IntermediarySheetState } from './types'
+import { InteractionDetails } from './types'
 import {
   isAuthDetails,
   isAuthzDetails,
@@ -21,29 +21,17 @@ import {
   isNotActiveInteraction,
   isResolutionDetails,
 } from './guards'
-import { createInteractionSelector } from './utils'
 import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
 
-/**
- * Gets the @IntermediaryState of the @IntermediarySheet
- */
-export const getIntermediaryState = (state: RootReducerI) =>
-  state.interaction.intermediary
+const createInteractionSelector = <T extends InteractionDetails>(
+  guard: (details: InteractionDetails) => details is T,
+) =>
+  createSelector([getActiveInteraction], (details) => {
+    if (!guard(details)) throw new Error('Wrong interaction details')
 
-/**
- * Gets the Attribute Type that has to be created on the @IntermediarySheet. Can only
- * be used while there is an active (@showing) @IntermediarySheet
- */
-export const getAttributeInputType = createSelector(
-  [getIntermediaryState],
-  (state) => {
-    if (state.sheetState !== IntermediarySheetState.showing)
-      throw new Error("Can't get inputType without an intermediarySheet")
-
-    return state.attributeInputType
-  },
-)
+    return details
+  })
 
 /**
  * Gets the @FlowType if there is an active interaction or null otherwise.

@@ -1,7 +1,5 @@
 import moment from 'moment'
 import { IPreLoadedInteraction, IHistorySection } from '~/types/records'
-import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
-import { FlowType } from '@jolocom/sdk'
 
 export const getDateSection = (date: Date) =>
   moment(date).calendar(null, {
@@ -23,15 +21,4 @@ export const groupBySection = (
     title,
     data: groupedObj[title],
   }))
-}
-
-export const interactionTypeToFlowType: { [x: string]: FlowType } = {
-  [InteractionType.CredentialOfferRequest]: FlowType.CredentialOffer,
-  [InteractionType.CredentialOfferResponse]: FlowType.CredentialOffer,
-  [InteractionType.CredentialsReceive]: FlowType.CredentialOffer,
-  [InteractionType.CredentialRequest]: FlowType.CredentialShare,
-  [InteractionType.CredentialResponse]: FlowType.CredentialShare,
-  [InteractionType.Authentication]: FlowType.Authentication,
-  AuthorizationRequest: FlowType.Authorization,
-  AuthorizationResponse: FlowType.Authorization,
 }

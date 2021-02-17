@@ -23,36 +23,10 @@ export type InteractionDetails =
  * UI related state.
  *
  * @details - mapped flow state. If no active interaction, defaults to { flowType: null }
- * @intermediaryState - status of the Intermediary ActionSheet
- * @attributeInputType - the attribute type that should be created on the @IntermediaryActionSheet
  * @selectedShareCredentials - mapping of selected {[type]: id} credentials within the interaction
  */
 export interface InteractionState {
   details: InteractionDetails
-  intermediary: IntermediaryState
-}
-
-type IntermediaryState =
-  | {
-      sheetState: IntermediarySheetState.showing
-      attributeInputType: AttributeTypes
-    }
-  | {
-      sheetState:
-        | IntermediarySheetState.hiding
-        | IntermediarySheetState.switching
-      attributeInputType: null
-    }
-
-/**
- * @showing - Shows the Intermediary ActionSheet
- * @hiding - Hides the Intermediary ActionSheet entirely
- * @switching - Hides the Intermediary ActionSheet before showing another ActionSheet
- */
-export enum IntermediarySheetState {
-  showing = 'showing',
-  hiding = 'hiding',
-  switching = 'switching',
 }
 
 /**

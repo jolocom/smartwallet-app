@@ -4,8 +4,8 @@ import IdentityTab from './IdentityTab'
 import { useCustomContext } from '~/hooks/context'
 import IdentityTabsHeader from './IdentityTabsHeader'
 import IdentityTabsPage from './IdentityTabsPage'
+import IdentityTabsPlaceholder from './IdentityTabPlaceholder'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
-import { ScrollView } from 'react-native'
 
 interface ITabsContext {
   activeTab: string | undefined
@@ -24,6 +24,7 @@ interface ITabsComposition {
   Page: React.FC<{ id: string }>
   Styled: {
     Header: React.FC
+    Placeholder: React.FC<{ show: boolean }>
   }
 }
 
@@ -42,20 +43,21 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
   )
 
   return (
-    <ScrollView
+    <JoloKeyboardAwareScroll
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps={'handled'}
       overScrollMode="never"
       style={{ width: '100%' }}
-      contentContainerStyle={{ paddingBottom: '40%' }}
+      contentContainerStyle={{ paddingBottom: '40%', paddingTop: 26 }}
     >
       <TabsContext.Provider value={contextValue} children={children} />
-    </ScrollView>
+    </JoloKeyboardAwareScroll>
   )
 }
 
 IdentityTabs.Styled = {
   Header: IdentityTabsHeader,
+  Placeholder: IdentityTabsPlaceholder,
 }
 IdentityTabs.Tab = IdentityTab
 IdentityTabs.Page = IdentityTabsPage

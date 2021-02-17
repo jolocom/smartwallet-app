@@ -105,7 +105,7 @@ export const useSICActions = () => {
       const attribute = formAttribute(signedCredential)
       dispatch(updateAttrs({ type, attribute }))
     } catch (err) {
-      console.log({ err })
+      console.warn(err)
       throw new Error(
         `Error creating a self issued credential of type', ${type}`,
       )
@@ -170,6 +170,7 @@ export const useCreateAttributes = () => {
       }
       dispatch(updateAttrs({ type, attribute }))
     } catch (e) {
+      console.warn(e)
       throw new Error('Failed to create attribute!')
     }
   }

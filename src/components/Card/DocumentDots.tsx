@@ -1,25 +1,21 @@
 import React, { useMemo, useRef } from 'react'
 import { StyleSheet } from 'react-native'
+
 import { useRedirectTo } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import { useCard } from './Card'
+import { useCard } from './context'
 import { IWithCustomStyle } from './types'
 import CardDetails from '~/screens/LoggedIn/Documents/CardDetails'
 import Dots from '../Dots'
-
-const deleteDocMock = (id: string | number): Promise<string> => {
-  return new Promise((res, rej) => {
-    res('Success, deleted')
-    // rej('Failure to delete')
-  })
-}
+import { useDeleteCredential } from '~/hooks/credentials'
 
 const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
+  const deleteCredential = useDeleteCredential()
 
   const { id, image, claims, document } = useCard()
   const infoRef = useRef<{ show: () => void }>(null)
@@ -28,7 +24,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const cancelText = strings.CANCEL
   const handleDelete = async () => {
     try {
-      await deleteDocMock(id)
+      await deleteCredential(id)
     } catch (e) {
       scheduleWarning({
         title: strings.WHOOPS,
@@ -47,22 +43,29 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
     onComplete: handleDelete,
   })
 
-  const popupOptions = useMemo(() => ([
-    {
-      title: strings.INFO,
-      onPress: () => infoRef.current?.show(),
-    },
-    { title: strings.DELETE, onPress: redirectToDelete },
-  ]), [])
+  const popupOptions = useMemo(
+    () => [
+      {
+        title: strings.INFO,
+        onPress: () => infoRef.current?.show(),
+      },
+      { title: strings.DELETE, onPress: redirectToDelete },
+    ],
+    [],
+  )
 
   return (
     <>
-      <Dots customStyles={customStyles} color={Colors.black} options={popupOptions} />
+      <Dots
+        customStyles={customStyles}
+        color={Colors.black}
+        options={popupOptions}
+      />
       <CardDetails
         ref={infoRef}
         fields={claims}
         image={image}
-        title={document?.value}
+        title={document?.value as string}
       />
     </>
   )
