@@ -23,7 +23,7 @@ const modalStyleOptions = {
   headerShown: false,
   cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
-  cardStyleInterpolator: Platform.OS === 'ios' ? CardStyleInterpolators.forVerticalIOS : CardStyleInterpolators.forRevealFromBottomAndroid
+  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
 }
 
 const Interactions: React.FC = () => {
