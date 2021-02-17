@@ -18,9 +18,6 @@ const Pills: React.FC<PropsI> = ({
   const [keys, setKeys] = useState<TagObject[]>(() =>
     tags.map((title: string) => ({ title })),
   )
-  const reorderedKeys = useMemo(() => keys.map((k) => k.title), [
-    JSON.stringify(keys),
-  ])
 
   const [dndEnabled, setDndEnabled] = useState(true)
   const [tagBeingDragged, setTagBeingDragged] = useState<TagObject | undefined>(
@@ -40,10 +37,6 @@ const Pills: React.FC<PropsI> = ({
   useEffect(() => {
     enableDndAfterAnimating()
   }, [JSON.stringify(keys)])
-
-  useEffect(() => {
-    updateTags(reorderedKeys)
-  }, [JSON.stringify(reorderedKeys)])
 
   useEffect(() => {
     LayoutAnimation.configureNext({
@@ -138,7 +131,13 @@ const Pills: React.FC<PropsI> = ({
         const anotherTagIndex = prevState.findIndex(
           ({ title }) => title === anotherTag.title,
         )
-        return moveArrayElement(prevState, draggedTagIndex, anotherTagIndex)
+        const newKeys = moveArrayElement(
+          prevState,
+          draggedTagIndex,
+          anotherTagIndex,
+        )
+        updateTags(newKeys.map((k) => k.title))
+        return newKeys
       })
       setDndEnabled(false)
     },
