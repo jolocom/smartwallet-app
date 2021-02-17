@@ -15,7 +15,6 @@ import { ScreenNames } from '~/types/screens'
 import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
 import BeforeLoggedIn from './screens/BeforeLoggedIn'
-import { AttributeTypes } from './types/credentials'
 
 export type RootStackParamList = {
   [ScreenNames.Recovery]: {
@@ -29,7 +28,6 @@ export type RootStackParamList = {
   [ScreenNames.BeforeLoggedIn]: undefined,
   [ScreenNames.LoggedOut]: undefined,
   [ScreenNames.LostSeedPhraseInfo]: undefined,
-  [ScreenNames.InteractionAddCredential]: { type: AttributeTypes },
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
