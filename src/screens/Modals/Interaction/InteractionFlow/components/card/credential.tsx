@@ -4,6 +4,7 @@ import { StyleSheet, View, Image } from "react-native";
 import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
 import BP from '~/utils/breakpoints';
+import { debugView } from '~/utils/dev';
 
 export const CardImage: React.FC = ({children}) => <View style={styles.cardImage} children={children} />
 
@@ -19,10 +20,15 @@ export const BodyContainer: React.FC = ({ children }) => {
   )
 }
 
-
 export const BodyFieldsContainer: React.FC = ({ children, isStretched }) => {
   return (
     <View style={[styles.bodyFieldsContainer, {flex: isStretched ? 1 : 0.68, paddingRight: isStretched ? 20 : 0}]} children={children} />
+  )
+}
+
+export const BodyFieldsGroup: React.FC = ({ children }) => {
+  return (
+    <View style={styles.fieldGroup} children={children} />
   )
 }
 
@@ -31,7 +37,6 @@ export const BodyImageContainer: React.FC = () => {
     <View style={styles.bodyImageContainer} />
   )
 }
-
 
 export const CredentialHolderName: React.FC = ({ children }) => {
   return (
@@ -45,7 +50,6 @@ export const CredentialHolderName: React.FC = ({ children }) => {
     </JoloText>
   )
 }
-
 
 export const CredentialImage: React.FC = ({ imageUrl }) => {
   return (
@@ -118,5 +122,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 13,
     borderBottomRightRadius: 13,
     zIndex: 0
-  } 
+  },
+  fieldGroup: {
+    textAlign: 'left',
+    alignItems: 'flex-start'
+  }
 })
