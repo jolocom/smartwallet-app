@@ -1,44 +1,54 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextProps, TextStyle } from 'react-native';
 import { TextLayoutEvent } from '~/components/Card/Field';
 import { IWithCustomStyle } from '~/components/Card/types';
 import JoloText, { JoloTextWeight } from '~/components/JoloText';
 import { Colors } from '~/utils/colors';
 import { useFieldCalculator } from './context';
 
-export const CredentialName: React.FC<IWithCustomStyle> = ({ children, customStyles, ...props }) => {
+interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle>  {}
+export const CredentialName: React.FC<ICredentialNameProps> = ({ children, customStyles, ...props }) => {
   return (
     <JoloText
       weight={JoloTextWeight.regular}
       customStyles={[styles.credentialName, customStyles]}
-      numberOfLines={1}
       {...props}
     >{children}</JoloText>
   )
 }
 
-export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles, ...props }) => {
+export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
   return (
     <JoloText
       weight={JoloTextWeight.regular}
       customStyles={[styles.label, customStyles]}
       numberOfLines={1}
-      {...props}
     >
       {children}
     </JoloText>
   )
 }
 
-export const FieldValue: React.FC<IWithCustomStyle> = ({ children, customStyles, idx, ...props }) => {
+interface IFieldValueProps extends IWithCustomStyle {
+  idx: number,
+  onNumberOfFieldLinesToDisplay: (idx: number, lines: Record<number, number>) => number
+}
+
+export const FieldValue: React.FC<IFieldValueProps> = ({
+  children,
+  customStyles,
+  idx,
+  onNumberOfFieldLinesToDisplay
+}) => {
   const { lines, onTextLayout } = useFieldCalculator();
   return (
     <JoloText
       weight={JoloTextWeight.regular}
       customStyles={[styles.value, customStyles]}
+      // @ts-ignore: TextProps does not seem to have onTextLayout in type def. 
       onTextLayout={(e: TextLayoutEvent) => onTextLayout(e, idx)}
-      numberOfLines={idx !== 0 ? lines[0] > 1 ? 1 : 2 : 2}
-      >
+      numberOfLines={onNumberOfFieldLinesToDisplay(idx, lines)}
+    >
       {children}
     </JoloText>
   )

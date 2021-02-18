@@ -13,30 +13,29 @@ FieldsCalculatorContext.displayName = 'FieldsCalculatorContext';
 export const useFieldCalculator = useCustomContext(FieldsCalculatorContext);
 
 interface IBodyFieldsCalculatorProps {
-  maxFields: number
+  cbChildVisibility: (child: React.ReactNode, idx: number, lines: Record<number, number>) => React.ReactNode
 }
-export const BodyFieldsCalculator: React.FC<IBodyFieldsCalculatorProps> = ({ maxFields, children, hasHighlight, cbChildVisibility }) => {
+export const BodyFieldsCalculator: React.FC<IBodyFieldsCalculatorProps> & IBodyFieldsCalculatorComposition = ({ children, cbChildVisibility }) => {
   const [lines, setLines] = useState<Record<number, number>>({});
 
+  /* This will be invoked on FieldValue to calculate
+    number of value lines
+  */
   const handleTextLayout = useCallback((e: TextLayoutEvent, idx: number) => {
     const lines = e.nativeEvent.lines.length;
     setLines(prevState => ({ ...prevState, [idx]: prevState[idx] ?? lines }))
   }, [setLines])
   
-  /* We can't display all the fields that service provides */
+  /* We can't display all the fields that a service provides,
+     therefore running a callback which decides what child to
+     display and which one to cut off
+  */
   const childrenToDisplay = Children.map(children, (child, idx) => {
-    /* 1. Do not display anything that is more than max
-      2. Do not display all the fields besides first if number of lines of the first field is more than 1 and there is a highlight
-    */
-    if (idx + 1 > maxFields || (lines[0] > 1 && hasHighlight && idx > 0)) {
-      return null
-    }
-    return child;
+    return cbChildVisibility(child, idx, lines);
   })
 
   const contextValue = useMemo(() => ({
     onTextLayout: handleTextLayout,
-    // TODO: slice based on max fields
     lines,
   }), [JSON.stringify(lines), handleTextLayout]);
 

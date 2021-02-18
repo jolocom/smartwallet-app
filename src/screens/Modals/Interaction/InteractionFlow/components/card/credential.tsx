@@ -5,22 +5,26 @@ import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
 import BP from '~/utils/breakpoints';
 import { debugView } from '~/utils/dev';
+import { IWithCustomStyle } from '~/components/Card/types';
 
 export const CardImage: React.FC = ({children}) => <View style={styles.cardImage} children={children} />
 
-export const HeaderContainer: React.FC = ({children, customStyles = {flex: 0.5}}) => {
+export const HeaderContainer: React.FC<IWithCustomStyle> = ({children, customStyles = {flex: 0.5}}) => {
   return (
     <View style={[styles.headerContainer, customStyles]} children={children} />
   )
 }
 
-export const BodyContainer: React.FC = ({ children, customStyles = { flex: 0.5 }}) => {
+export const BodyContainer: React.FC<IWithCustomStyle> = ({ children, customStyles = { flex: 0.5 }}) => {
   return (
     <View style={[styles.bodyContainer, customStyles]} children={children} />
   )
 }
 
-export const BodyFieldsContainer: React.FC = ({ children, isStretched }) => {
+interface IBodyFieldsContainerProps {
+  isStretched: boolean
+}
+export const BodyFieldsContainer: React.FC<IBodyFieldsContainerProps> = ({ children, isStretched }) => {
   return (
     <View style={[styles.bodyFieldsContainer, {flex: isStretched ? 1 : 0.68, paddingRight: isStretched ? 20 : 0}]} children={children} />
   )
@@ -38,20 +42,26 @@ export const BodyImageContainer: React.FC = () => {
   )
 }
 
-export const CredentialHolderName: React.FC = ({ children, hasHighlight }) => {
+interface ICredentialHolderNameProps {
+  isTruncated: boolean
+}
+export const CredentialHolderName: React.FC<ICredentialHolderNameProps> = ({ children, isTruncated }) => {
   return (
     <JoloText
       kind={JoloTextKind.title}
       color={Colors.black90}
       customStyles={{textAlign: 'left', lineHeight: BP({default: 28, xsmall: 24})}}
-      numberOfLines={hasHighlight ? 1 : 2}
+      numberOfLines={isTruncated ? 1 : 2}
     >
       {children}
     </JoloText>
   )
 }
 
-export const CredentialImage: React.FC = ({ imageUrl }) => {
+interface ICredentialImageProps {
+  imageUrl: string
+}
+export const CredentialImage: React.FC<ICredentialImageProps> = ({ imageUrl }) => {
   return (
     <Image style={styles.image} source={{uri: imageUrl}} />
   )
