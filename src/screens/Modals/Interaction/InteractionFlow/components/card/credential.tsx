@@ -1,11 +1,9 @@
-import React, { Children, useRef } from 'react';
+import React from 'react';
 import { StyleSheet, View, Image } from "react-native";
 
 import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
-import { debugView } from "~/utils/dev";
 import BP from '~/utils/breakpoints';
-import { TextLayoutEvent } from '~/components/Card/Field';
 
 export const CardImage: React.FC = ({children}) => <View style={styles.cardImage} children={children} />
 
@@ -21,46 +19,10 @@ export const BodyContainer: React.FC = ({ children }) => {
   )
 }
 
-const handleChildren = (hasHighlight = false) => {
-  let numberLinesFirstValue = 0;
-  let calculatedLines = false;
-  return (child, idx) => {
-    switch (idx) {
-      case 0: {
-        return child;
-      }
-      case 1: {
-        return React.cloneElement(child, {
-          onTextLayout: (e: TextLayoutEvent) => {
-            if (!calculatedLines) {
-              numberLinesFirstValue += e.nativeEvent.lines.length;
-              calculatedLines = true;
-            }
-          },
-          numberOfLines: 2
-        })
-      }
-      case 2: {
-        if (hasHighlight) return null
-        else return child
-      }
-      case 3: {
-        if (hasHighlight) return null
-        else return React.cloneElement(child, {
-          // numberOfLines: calculatedLines && numberLinesFirstValue > 1 ? 1 : 2,
-          numberOfLines: 1,
-        })
-      }
-      default: return null
-    }
-  }
-}
 
-export const BodyFieldsContainer: React.FC = ({ children, isStretched, hasHighlight }) => {
-  const childrenToDisplay = Children.map(children, handleChildren(hasHighlight))
-  
+export const BodyFieldsContainer: React.FC = ({ children, isStretched }) => {
   return (
-    <View style={[styles.bodyFieldsContainer, {flex: isStretched ? 1 : 0.68, paddingRight: isStretched ? 20 : 0}]} children={childrenToDisplay} />
+    <View style={[styles.bodyFieldsContainer, {flex: isStretched ? 1 : 0.68, paddingRight: isStretched ? 20 : 0}]} children={children} />
   )
 }
 
@@ -69,7 +31,6 @@ export const BodyImageContainer: React.FC = () => {
     <View style={styles.bodyImageContainer} />
   )
 }
-
 
 
 export const CredentialHolderName: React.FC = ({ children }) => {
@@ -112,7 +73,6 @@ const styles = StyleSheet.create({
     height: 232,
     backgroundColor: Colors.white,
     borderRadius: 14,
-    // justifyContent: 'space-between'
   },
   headerContainer: {
     // ...debugView(),
@@ -158,5 +118,5 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 13,
     borderBottomRightRadius: 13,
     zIndex: 0
-}
+  } 
 })

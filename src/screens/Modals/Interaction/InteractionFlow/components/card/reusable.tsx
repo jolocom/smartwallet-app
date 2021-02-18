@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { TextLayoutEvent } from '~/components/Card/Field';
 import { IWithCustomStyle } from '~/components/Card/types';
 import JoloText, { JoloTextWeight } from '~/components/JoloText';
 import { Colors } from '~/utils/colors';
+import { useFieldCalculator } from './context';
 
 export const CredentialName: React.FC<IWithCustomStyle> = ({ children, customStyles, ...props }) => {
   return (
@@ -28,13 +30,15 @@ export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles,
   )
 }
 
-export const FieldValue: React.FC<IWithCustomStyle> = ({ children, customStyles, ...props }) => {
+export const FieldValue: React.FC<IWithCustomStyle> = ({ children, customStyles, idx, ...props }) => {
+  const { lines, onTextLayout } = useFieldCalculator();
   return (
     <JoloText
       weight={JoloTextWeight.regular}
       customStyles={[styles.value, customStyles]}
-      {...props}
-    >
+      onTextLayout={(e: TextLayoutEvent) => onTextLayout(e, idx)}
+      numberOfLines={idx !== 0 ? lines[0] > 1 ? 1 : 2 : 2}
+      >
       {children}
     </JoloText>
   )
