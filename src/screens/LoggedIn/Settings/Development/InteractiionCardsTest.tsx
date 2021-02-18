@@ -2,11 +2,11 @@ import React from 'react';
 import { ScrollView, View } from 'react-native';
 import ScreenContainer from '~/components/ScreenContainer';
 import { BodyFieldsCalculator } from '~/screens/Modals/Interaction/InteractionFlow/components/card/context';
-import { BodyContainer, BodyFieldsContainer, BodyFieldsGroup, BodyImageContainer, CardImage, CredentialHighlight, CredentialHolderName, CredentialImage, HeaderContainer } from '~/screens/Modals/Interaction/InteractionFlow/components/card/credential';
+import { BodyContainer, BodyFieldsContainer, BodyFieldsGroup, BodyImageContainer, CardImage, CredentialHighlight, CredentialHolderName, CredentialImage, HeaderContainer, OtherContainer } from '~/screens/Modals/Interaction/InteractionFlow/components/card/credential';
 import { FieldLabel, FieldValue, CredentialName } from '~/screens/Modals/Interaction/InteractionFlow/components/card/reusable';
 import Section from '../components/Section';
 
-const CARDS = [
+const REQUEST_DOCS = [
   {
     id: 0,
     holderName: 'Jane Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
@@ -110,10 +110,88 @@ const CARDS = [
     hightlight: 'SPECI2014',
 
   }
-
 ]
 
-const InteractionCardsTest = () => {
+const REQUEST_OTHER = [
+  {
+    id: 0,
+    name: 'Tame Impala 2023',
+    title: 'Tame Impala 2023',
+    properties: [
+      {
+        key: 'a',
+        label: 'Place',
+        value: 'Berlin Arena'
+      },
+      {
+        key: 'b',
+        label: 'Date',
+        value: '04.07.2023'
+      },
+      {
+        key: 'c',
+        label: 'Seat',
+        value: '15a, sector D'
+      },
+      {
+        key: 'c',
+        label: 'Seat',
+        value: '15a, sector D'
+      },
+
+    ],
+  },
+  {
+    id: 1,
+    name: 'Tame Impala 2023 Wolrd tour',
+    title: 'Tame Impala 2023 Wolrd tour',
+    properties: [
+      {
+        key: 'a',
+        label: 'Description of the input',
+        value: 'Information that should be previewed here'
+      },
+      {
+        key: 'b',
+        label: 'Description of the input',
+        value: 'Information'
+      },
+      {
+        key: 'b',
+        label: 'Description of the input',
+        value: 'Information'
+      },
+
+    ],
+  },
+  {
+    id: 2,
+    name: 'Tame Impala 2023 Wolrd tour',
+    title: 'Tame Impala 2023 Wolrd tour',
+    properties: [
+      {
+        key: 'a',
+        label: 'Description of the input',
+        value: 'Information that should be previewed here'
+      },
+      {
+        key: 'b',
+        label: 'Description of the input',
+        value: 'Information that should be previewed here'
+      },
+      {
+        key: 'b',
+        label: 'Description of the input',
+        value: 'Information that should be previewed here'
+      },
+
+    ],
+  },
+]
+
+
+
+const InteractionREQUEST_DOCSTest = () => {
   return (
     <ScreenContainer
       hasHeaderBack
@@ -125,13 +203,13 @@ const InteractionCardsTest = () => {
         contentContainerStyle={{paddingBottom: 100}}
       >
 
-        <Section.Title>Incoming request</Section.Title>
-        {CARDS.map(c => (
-          <>
+        <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - documents</Section.Title>
+        {REQUEST_DOCS.map(c => (
+          <View key={c.id}>
             <CardImage>
               <HeaderContainer>
                 <CredentialName>{c.title ?? c.name}</CredentialName>
-                <CredentialHolderName>{c.holderName}</CredentialHolderName>
+                <CredentialHolderName hasHighlight={Boolean(c.hightlight)}>{c.holderName}</CredentialHolderName>
               </HeaderContainer>
               <BodyContainer>
                 <BodyFieldsContainer isStretched={!c.image}>
@@ -157,6 +235,31 @@ const InteractionCardsTest = () => {
               )}
             </CardImage>
             <View style={{height: 20}} />
+          </View>
+        ))}
+        <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - documents</Section.Title>
+        {REQUEST_OTHER.map(c => (
+          <>
+            <CardImage>
+              <OtherContainer>
+                <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
+                  <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{c.title ?? c.name}</CredentialName>
+                </HeaderContainer>
+                <BodyContainer customStyles={{flex: 0}}>
+                  <BodyFieldsContainer isStretched>
+                    <BodyFieldsCalculator maxFields={3} hasHighlight={Boolean(c.hightlight)}>
+                      {c.properties.map((p, idx) => (
+                        <BodyFieldsGroup>
+                          <FieldLabel>{p.label}</FieldLabel>
+                          <FieldValue idx={idx}>{p.value}</FieldValue>
+                        </BodyFieldsGroup>
+                      ))}
+                    </BodyFieldsCalculator>
+                  </BodyFieldsContainer>
+                </BodyContainer>
+              </OtherContainer>
+            </CardImage>
+            <View style={{height: 20}} />
           </>
         ))}
       </ScrollView>
@@ -165,4 +268,4 @@ const InteractionCardsTest = () => {
   )
 }
 
-export default InteractionCardsTest;
+export default InteractionREQUEST_DOCSTest;

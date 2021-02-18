@@ -8,15 +8,15 @@ import { debugView } from '~/utils/dev';
 
 export const CardImage: React.FC = ({children}) => <View style={styles.cardImage} children={children} />
 
-export const HeaderContainer: React.FC = ({children}) => {
+export const HeaderContainer: React.FC = ({children, customStyles = {flex: 0.5}}) => {
   return (
-    <View style={styles.headerContainer} children={children} />
+    <View style={[styles.headerContainer, customStyles]} children={children} />
   )
 }
 
-export const BodyContainer: React.FC = ({ children }) => {
+export const BodyContainer: React.FC = ({ children, customStyles = { flex: 0.5 }}) => {
   return (
-    <View style={styles.bodyContainer} children={children} />
+    <View style={[styles.bodyContainer, customStyles]} children={children} />
   )
 }
 
@@ -38,13 +38,13 @@ export const BodyImageContainer: React.FC = () => {
   )
 }
 
-export const CredentialHolderName: React.FC = ({ children }) => {
+export const CredentialHolderName: React.FC = ({ children, hasHighlight }) => {
   return (
     <JoloText
       kind={JoloTextKind.title}
       color={Colors.black90}
       customStyles={{textAlign: 'left', lineHeight: BP({default: 28, xsmall: 24})}}
-      numberOfLines={2}
+      numberOfLines={hasHighlight ? 1 : 2}
     >
       {children}
     </JoloText>
@@ -71,6 +71,10 @@ export const CredentialHighlight: React.FC = ({ children }) => {
   )
 }
 
+export const OtherContainer: React.FC = ({children}) => {
+  return <View style={styles.otherContainer} children={children} />
+}
+
 const styles = StyleSheet.create({
   cardImage: {
     width: 368,
@@ -80,14 +84,12 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     // ...debugView(),
-    flex: 0.5,
     alignItems: 'flex-start',
     paddingHorizontal: 20,
     paddingTop: 20
   },
   bodyContainer: {
     // ...debugView(),
-    flex: 0.5,
     flexDirection: 'row',
     paddingBottom: 20,
   },
@@ -126,5 +128,10 @@ const styles = StyleSheet.create({
   fieldGroup: {
     textAlign: 'left',
     alignItems: 'flex-start'
+  },
+  otherContainer: {
+    width: '73%',
+    height: '100%',
+    ...debugView()
   }
 })
