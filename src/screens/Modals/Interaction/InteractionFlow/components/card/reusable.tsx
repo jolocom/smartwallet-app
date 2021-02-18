@@ -4,7 +4,7 @@ import { TextLayoutEvent } from '~/components/Card/Field';
 import { IWithCustomStyle } from '~/components/Card/types';
 import JoloText, { JoloTextWeight } from '~/components/JoloText';
 import { Colors } from '~/utils/colors';
-import { useFieldCalculator } from './context';
+import { IBodyFieldsCalculatorComposition, useFieldCalculator } from './context';
 
 interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle>  {}
 export const CredentialName: React.FC<ICredentialNameProps> = ({ children, customStyles, ...props }) => {
@@ -29,12 +29,7 @@ export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles 
   )
 }
 
-interface IFieldValueProps extends IWithCustomStyle {
-  idx: number,
-  onNumberOfFieldLinesToDisplay: (idx: number, lines: Record<number, number>) => number
-}
-
-export const FieldValue: React.FC<IFieldValueProps> = ({
+export const FieldValue: IBodyFieldsCalculatorComposition['FieldValue']  = ({
   children,
   customStyles,
   idx,

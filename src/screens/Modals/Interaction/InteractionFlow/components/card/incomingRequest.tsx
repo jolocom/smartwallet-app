@@ -38,7 +38,12 @@ export const IncomingRequestDoc = ({ title, name, holderName, properties, hightl
             {properties.map((p, idx) => (
               <BodyFieldsGroup>
                 <FieldLabel>{p.label}</FieldLabel>
-                <FieldValue idx={idx} onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}>{p.value}</FieldValue>
+                <BodyFieldsCalculator.FieldValue
+                  idx={idx}
+                  onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
+                >
+                  {p.value}
+                </BodyFieldsCalculator.FieldValue>
               </BodyFieldsGroup>
             ))}
           </BodyFieldsCalculator>
@@ -87,7 +92,12 @@ export const IncomingRequestOther = ({ title, name, properties }) => {
               {properties.map((p, idx) => (
                 <BodyFieldsGroup>
                   <FieldLabel>{p.label}</FieldLabel>
-                  <FieldValue idx={idx} onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}>{p.value}</FieldValue>
+                  <BodyFieldsCalculator.FieldValue
+                    idx={idx}
+                    onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
+                  >
+                    {p.value}
+                  </BodyFieldsCalculator.FieldValue>
                 </BodyFieldsGroup>
               ))}
             </BodyFieldsCalculator>

@@ -1,6 +1,8 @@
 import React, { Children, createContext, useCallback, useMemo, useState } from 'react';
 import { TextLayoutEvent } from '~/components/Card/Field';
+import { IWithCustomStyle } from '~/components/Card/types';
 import { useCustomContext } from '~/hooks/context';
+import { FieldValue } from './reusable';
 
 interface IFieldsCalculatorContext {
   lines: Record<number, number>
@@ -12,8 +14,15 @@ FieldsCalculatorContext.displayName = 'FieldsCalculatorContext';
 
 export const useFieldCalculator = useCustomContext(FieldsCalculatorContext);
 
+interface IFieldValueProps extends IWithCustomStyle {
+  idx: number,
+  onNumberOfFieldLinesToDisplay: (idx: number, lines: Record<number, number>) => number
+}
 interface IBodyFieldsCalculatorProps {
   cbChildVisibility: (child: React.ReactNode, idx: number, lines: Record<number, number>) => React.ReactNode
+}
+export interface IBodyFieldsCalculatorComposition {
+  FieldValue: React.FC<IFieldValueProps>
 }
 export const BodyFieldsCalculator: React.FC<IBodyFieldsCalculatorProps> & IBodyFieldsCalculatorComposition = ({ children, cbChildVisibility }) => {
   const [lines, setLines] = useState<Record<number, number>>({});
@@ -45,3 +54,5 @@ export const BodyFieldsCalculator: React.FC<IBodyFieldsCalculatorProps> & IBodyF
       children={childrenToDisplay}
     />)
 }
+
+BodyFieldsCalculator.FieldValue = FieldValue;
