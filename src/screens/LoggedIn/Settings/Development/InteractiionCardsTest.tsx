@@ -1,9 +1,7 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import ScreenContainer from '~/components/ScreenContainer';
-import { BodyFieldsCalculator } from '~/screens/Modals/Interaction/InteractionFlow/components/card/context';
-import { BodyContainer, BodyFieldsContainer, BodyFieldsGroup, BodyImageContainer, CardImage, CredentialHighlight, CredentialHolderName, CredentialImage, HeaderContainer, OtherContainer } from '~/screens/Modals/Interaction/InteractionFlow/components/card/credential';
-import { FieldLabel, FieldValue, CredentialName } from '~/screens/Modals/Interaction/InteractionFlow/components/card/reusable';
+import { IncomingRequestDoc, IncomingRequestOther } from '~/screens/Modals/Interaction/InteractionFlow/components/card/incomingRequest';
 import Section from '../components/Section';
 
 const REQUEST_DOCS = [
@@ -206,61 +204,21 @@ const InteractionREQUEST_DOCSTest = () => {
         <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - documents</Section.Title>
         {REQUEST_DOCS.map(c => (
           <View key={c.id}>
-            <CardImage>
-              <HeaderContainer>
-                <CredentialName>{c.title ?? c.name}</CredentialName>
-                <CredentialHolderName hasHighlight={Boolean(c.hightlight)}>{c.holderName}</CredentialHolderName>
-              </HeaderContainer>
-              <BodyContainer>
-                <BodyFieldsContainer isStretched={!c.image}>
-                  <BodyFieldsCalculator maxFields={2} hasHighlight={Boolean(c.hightlight)}>
-                    {c.properties.map((p, idx) => (
-                      <BodyFieldsGroup>
-                        <FieldLabel>{p.label}</FieldLabel>
-                        <FieldValue idx={idx}>{p.value}</FieldValue>
-                      </BodyFieldsGroup>
-                    ))}
-                  </BodyFieldsCalculator>
-                </BodyFieldsContainer>
-                {c.image && (
-                  <BodyImageContainer />
-                )}
-              </BodyContainer>
-              {/* NOTE: absolute values go outside of containers */}
-              {c.image && (
-                <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
-              )}
-              {c.hightlight && (
-                <CredentialHighlight>{c.hightlight}</CredentialHighlight>
-              )}
-            </CardImage>
+            <IncomingRequestDoc
+              {...c}
+            />
+            
             <View style={{height: 20}} />
           </View>
         ))}
         <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - documents</Section.Title>
         {REQUEST_OTHER.map(c => (
-          <>
-            <CardImage>
-              <OtherContainer>
-                <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
-                  <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{c.title ?? c.name}</CredentialName>
-                </HeaderContainer>
-                <BodyContainer customStyles={{flex: 0}}>
-                  <BodyFieldsContainer isStretched>
-                    <BodyFieldsCalculator maxFields={3} hasHighlight={Boolean(c.hightlight)}>
-                      {c.properties.map((p, idx) => (
-                        <BodyFieldsGroup>
-                          <FieldLabel>{p.label}</FieldLabel>
-                          <FieldValue idx={idx}>{p.value}</FieldValue>
-                        </BodyFieldsGroup>
-                      ))}
-                    </BodyFieldsCalculator>
-                  </BodyFieldsContainer>
-                </BodyContainer>
-              </OtherContainer>
-            </CardImage>
+          <View key={c.id}>
+            <IncomingRequestOther
+              {...c}
+            />
             <View style={{height: 20}} />
-          </>
+          </View>
         ))}
       </ScrollView>
       

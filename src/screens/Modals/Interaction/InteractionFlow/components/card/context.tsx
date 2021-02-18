@@ -15,7 +15,7 @@ export const useFieldCalculator = useCustomContext(FieldsCalculatorContext);
 interface IBodyFieldsCalculatorProps {
   maxFields: number
 }
-export const BodyFieldsCalculator: React.FC<IBodyFieldsCalculatorProps> = ({ maxFields, children, hasHighlight }) => {
+export const BodyFieldsCalculator: React.FC<IBodyFieldsCalculatorProps> = ({ maxFields, children, hasHighlight, cbChildVisibility }) => {
   const [lines, setLines] = useState<Record<number, number>>({});
 
   const handleTextLayout = useCallback((e: TextLayoutEvent, idx: number) => {
