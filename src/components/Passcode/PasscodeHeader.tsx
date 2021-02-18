@@ -1,6 +1,7 @@
 import React from 'react'
 import { Colors } from '~/utils/colors'
-import { IPasscodeHeaderProps, usePasscode } from '.'
+import { IPasscodeHeaderProps } from './types'
+import { usePasscode } from './context'
 import JoloText, { JoloTextKind } from '../JoloText'
 
 const PasscodeHeader: React.FC<IPasscodeHeaderProps> = ({
