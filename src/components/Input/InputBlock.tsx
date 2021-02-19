@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, View, TextInput } from 'react-native'
 import { Colors } from '~/utils/colors'
-import { CoreInput, IInput } from '.'
+import { CoreInput } from './CoreInput'
+import { IInput } from './types'
 
 const InputBlock = React.forwardRef<TextInput, IInput>(
   ({ updateInput, value, containerStyle = {}, ...inputProps }, ref) => {

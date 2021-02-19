@@ -5,14 +5,16 @@ import {
   withNextInputAutoFocusInput,
   withNextInputAutoFocusForm,
 } from 'react-native-formik'
+
 import { Colors } from '~/utils/colors'
-import Wizard from '.'
 import { IWizardFormProps } from './types'
 import { useWizard } from './context'
 import Input from '../Input'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
 import JoloText from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import WizardBody from './WizardBody'
+import WizardFooter from './WizardFooter'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
@@ -28,7 +30,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
   }
 
   return (
-    <Wizard.Body step={step}>
+    <WizardBody step={step}>
       <Formik
         initialValues={initialValues}
         onSubmit={handleFormSubmit}
@@ -69,14 +71,14 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                 </View>
               ))}
             </AutofocusContainer>
-            <Wizard.Footer
+            <WizardFooter
               onSubmit={() => handleFormSubmit(values)}
               isDisabled={!dirty || (dirty && !isValid)}
             />
           </>
         )}
       </Formik>
-    </Wizard.Body>
+    </WizardBody>
   )
 }
 
