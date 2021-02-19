@@ -1,4 +1,5 @@
 import React from 'react';
+import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
 import { strings } from '~/translations';
 import { BodyFieldsCalculator } from './context';
 import {
@@ -14,7 +15,8 @@ import {
   EmptyFieldsTitle,
   EmptyFieldsDescription,
   HeaderContainer,
-  OtherContainer
+  OtherContainer,
+  Container
 } from './credential';
 import { CredentialName, FieldLabel } from './reusable';
 
@@ -106,36 +108,39 @@ export const IncomingRequestOther = ({ title, name, properties }) => {
   */
   const handleNumberOfValueLinesToDisplay = () => 2;
   return (
-    <CardImage>
-      <OtherContainer>
-        <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
-          <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{title ?? name}</CredentialName>
-        </HeaderContainer>
-        {properties.length ? (
-          <BodyContainer customStyles={{flex: 0}}>
-            <BodyFieldsContainer isStretched>
-              <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
-                {properties.map((p, idx) => (
-                  <BodyFieldsGroup>
-                    <FieldLabel>{p.label}</FieldLabel>
-                    <BodyFieldsCalculator.FieldValue
-                      idx={idx}
-                      onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
-                    >
-                      {p.value}
-                    </BodyFieldsCalculator.FieldValue>
-                  </BodyFieldsGroup>
-                ))}
-              </BodyFieldsCalculator>
-            </BodyFieldsContainer>
-          </BodyContainer>
-        ) : (
-          <EmptyContainer>
-            <EmptyFieldsTitle>{strings.INCLUDED_INFO}</EmptyFieldsTitle>
-            <EmptyFieldsDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</EmptyFieldsDescription>
-          </EmptyContainer>
-        )}
-      </OtherContainer>
-    </CardImage>
+    <Container>
+      <InteractionCardDoc>
+        <OtherContainer>
+          <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
+            <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{title ?? name}</CredentialName>
+          </HeaderContainer>
+          {properties.length ? (
+            <BodyContainer customStyles={{flex: 0}}>
+              <BodyFieldsContainer isStretched>
+                <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
+                  {properties.map((p, idx) => (
+                    <BodyFieldsGroup>
+                      <FieldLabel>{p.label}</FieldLabel>
+                      <BodyFieldsCalculator.FieldValue
+                        idx={idx}
+                        onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
+                      >
+                        {p.value}
+                      </BodyFieldsCalculator.FieldValue>
+                    </BodyFieldsGroup>
+                  ))}
+                </BodyFieldsCalculator>
+              </BodyFieldsContainer>
+            </BodyContainer>
+          ) : (
+            <EmptyContainer>
+              <EmptyFieldsTitle>{strings.INCLUDED_INFO}</EmptyFieldsTitle>
+              <EmptyFieldsDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</EmptyFieldsDescription>
+            </EmptyContainer>
+          )}
+        </OtherContainer>
+      </InteractionCardDoc>
+    </Container>
+      
   )
 }

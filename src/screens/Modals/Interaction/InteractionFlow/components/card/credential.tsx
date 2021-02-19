@@ -115,7 +115,16 @@ export const EmptyFieldsDescription: React.FC = ({children}) => {
   )
 }
 
+export const Container: React.FC = ({ children }) => {
+  return (
+    <View style={styles.container} children={children} />
+  )
+}
+
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
   cardImage: {
     width: 368,
     height: 232,
@@ -126,7 +135,7 @@ const styles = StyleSheet.create({
     // ...debugView(),
     alignItems: 'flex-start',
     paddingHorizontal: 20,
-    paddingTop: 20
+    paddingTop: 20,
   },
   bodyContainer: {
     // ...debugView(),
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
   otherContainer: {
     width: '73%',
     height: '100%',
-    ...debugView()
+    // ...debugView()
   },
   emptyContainer: {
     // ...debugView(),
