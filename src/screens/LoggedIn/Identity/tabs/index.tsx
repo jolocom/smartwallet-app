@@ -1,32 +1,12 @@
 import React, { useMemo, useState } from 'react'
 
 import IdentityTab from './IdentityTab'
-import { useCustomContext } from '~/hooks/context'
 import IdentityTabsHeader from './IdentityTabsHeader'
 import IdentityTabsPage from './IdentityTabsPage'
 import IdentityTabsPlaceholder from './IdentityTabPlaceholder'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
-
-interface ITabsContext {
-  activeTab: string | undefined
-  setActiveTab: (value: string) => void
-}
-
-const TabsContext = React.createContext<ITabsContext | undefined>(undefined)
-TabsContext.displayName = 'IdentityTabsContext'
-
-interface IIdentityTabs {
-  initialTab?: string
-}
-
-interface ITabsComposition {
-  Tab: React.FC<{ id: string; title: string }>
-  Page: React.FC<{ id: string }>
-  Styled: {
-    Header: React.FC
-    Placeholder: React.FC<{ show: boolean }>
-  }
-}
+import { IIdentityTabs, ITabsComposition } from './types'
+import { IdentityTabsContext } from './context'
 
 const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
   initialTab,
@@ -50,7 +30,7 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: '40%', paddingTop: 26 }}
     >
-      <TabsContext.Provider value={contextValue} children={children} />
+      <IdentityTabsContext.Provider value={contextValue} children={children} />
     </JoloKeyboardAwareScroll>
   )
 }
@@ -61,7 +41,5 @@ IdentityTabs.Styled = {
 }
 IdentityTabs.Tab = IdentityTab
 IdentityTabs.Page = IdentityTabsPage
-
-export const useIdentityTabs = useCustomContext(TabsContext)
 
 export default IdentityTabs
