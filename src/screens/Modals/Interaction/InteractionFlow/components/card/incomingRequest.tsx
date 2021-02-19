@@ -17,7 +17,8 @@ import {
   HeaderContainer,
   OtherContainer,
   Container,
-  CardImage
+  OtherTitleContainer,
+  OtherTitle
 } from './credential';
 import { CredentialName, FieldLabel } from './reusable';
 
@@ -105,6 +106,7 @@ export const IncomingRequestDoc = ({
 
 export const IncomingRequestOther = ({
   title,
+  subtitle,
   name,
   properties
 }) => {
@@ -128,7 +130,7 @@ export const IncomingRequestOther = ({
       <InteractionCardOther>
         <OtherContainer>
           <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
-            <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{title ?? name}</CredentialName>
+            <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{subtitle ?? title ?? name}</CredentialName>
           </HeaderContainer>
           {properties.length ? (
             <BodyContainer customStyles={{flex: 0, alignSelf: 'flex-end'}}>
@@ -155,6 +157,9 @@ export const IncomingRequestOther = ({
             </EmptyContainer>
           )}
         </OtherContainer>
+        <OtherTitleContainer>
+          <OtherTitle>{title}</OtherTitle>
+        </OtherTitleContainer>
       </InteractionCardOther>
     </Container>
       

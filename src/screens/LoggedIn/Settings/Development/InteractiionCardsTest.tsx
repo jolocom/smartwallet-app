@@ -126,8 +126,9 @@ const REQUEST_DOCS = [
 const REQUEST_OTHER = [
   {
     id: 0,
-    name: 'Tame Impala 2023',
-    title: 'Tame Impala 2023',
+    name: 'Concert ticket',
+    title: 'Concert ticket',
+    subtitle: 'Tame Impala 2023',
     properties: [
       {
         key: 'a',
@@ -154,8 +155,9 @@ const REQUEST_OTHER = [
   },
   {
     id: 1,
-    name: 'Tame Impala 2023 Wolrd tour',
-    title: 'Tame Impala 2023 Wolrd tour',
+    name: 'Concert ticket',
+    title: 'Concert ticket',
+    subtitle: 'Tame Impala 2023 Wolrd tour',
     properties: [
       {
         key: 'a',
@@ -177,8 +179,9 @@ const REQUEST_OTHER = [
   },
   {
     id: 2,
-    name: 'Tame Impala 2023 Wolrd tour',
-    title: 'Tame Impala 2023 Wolrd tour',
+    name: 'Concert ticket',
+    title: 'Concert ticket',
+    subtitle: 'Tame Impala 2023 Wolrd tour',
     properties: [
       {
         key: 'a',
@@ -200,15 +203,16 @@ const REQUEST_OTHER = [
   },
   {
     id: 3,
-    name: 'Tame Impala 2023 Wolrd tour',
-    title: 'Tame Impala 2023 Wolrd tour',
+    name: 'Concert ticket',
+    title: 'Concert ticket',
+    subtitle: 'Tame Impala 2023 Wolrd tour',
     properties: [],
   },
 ]
 
 
 
-const InteractionREQUEST_DOCSTest = () => {
+const InteractionTest = () => {
   return (
     <ScreenContainer
       hasHeaderBack
@@ -245,4 +249,4 @@ const InteractionREQUEST_DOCSTest = () => {
   )
 }
 
-export default InteractionREQUEST_DOCSTest;
+export default InteractionTest;
