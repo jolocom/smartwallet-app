@@ -1,5 +1,5 @@
 import React from 'react'
-import { useJoloAwareScroll } from '.'
+import { useJoloAwareScroll } from './context'
 
 const InputContainer: React.FC = ({ children }) => {
   const { onFocusInput } = useJoloAwareScroll()
