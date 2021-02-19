@@ -7,8 +7,6 @@ import BP from '~/utils/breakpoints';
 import { debugView } from '~/utils/dev';
 import { IWithCustomStyle } from '~/components/Card/types';
 
-export const CardImage: React.FC = ({children}) => <View style={styles.cardImage} children={children} />
-
 export const HeaderContainer: React.FC<IWithCustomStyle> = ({children, customStyles = {flex: 0.5}}) => {
   return (
     <View style={[styles.headerContainer, customStyles]} children={children} />
@@ -124,12 +122,7 @@ export const Container: React.FC = ({ children }) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-  },
-  cardImage: {
-    width: 368,
-    height: 232,
-    backgroundColor: Colors.white,
-    borderRadius: 14,
+    // ...debugView()
   },
   headerContainer: {
     // ...debugView(),

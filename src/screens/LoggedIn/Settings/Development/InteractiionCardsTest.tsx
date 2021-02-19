@@ -230,7 +230,7 @@ const InteractionREQUEST_DOCSTest = () => {
             <View style={{height: 20}} />
           </View>
         ))}
-        <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - documents</Section.Title>
+        <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - others</Section.Title>
         {REQUEST_OTHER.map(c => (
           <View key={c.id}>
             <IncomingRequestOther
