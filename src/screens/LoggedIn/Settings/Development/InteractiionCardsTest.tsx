@@ -106,8 +106,21 @@ const REQUEST_DOCS = [
     ],
     image: 'https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg',
     hightlight: 'SPECI2014',
-
+  },
+  {
+    id: 5,
+    holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
+    name: 'Digital Passport',
+    title: 'Digital Passport',
+    properties: [],
+  },
+  {
+    id: 6,
+    name: 'Digital Passport',
+    title: 'Digital Passport',
+    properties: [],
   }
+
 ]
 
 const REQUEST_OTHER = [
@@ -184,6 +197,12 @@ const REQUEST_OTHER = [
       },
 
     ],
+  },
+  {
+    id: 3,
+    name: 'Tame Impala 2023 Wolrd tour',
+    title: 'Tame Impala 2023 Wolrd tour',
+    properties: [],
   },
 ]
 

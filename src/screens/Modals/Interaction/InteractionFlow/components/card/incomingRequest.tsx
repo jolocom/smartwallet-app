@@ -1,7 +1,22 @@
 import React from 'react';
+import { strings } from '~/translations';
 import { BodyFieldsCalculator } from './context';
-import { BodyContainer, BodyFieldsContainer, BodyFieldsGroup, BodyImageContainer, CardImage, CredentialHighlight, CredentialHolderName, CredentialImage, HeaderContainer, OtherContainer } from './credential';
-import { CredentialName, FieldLabel, FieldValue } from './reusable';
+import {
+  BodyContainer,
+  BodyFieldsContainer,
+  BodyFieldsGroup,
+  BodyImageContainer,
+  CardImage,
+  CredentialHighlight,
+  CredentialHolderName,
+  CredentialImage,
+  EmptyContainer,
+  EmptyFieldsTitle,
+  EmptyFieldsDescription,
+  HeaderContainer,
+  OtherContainer
+} from './credential';
+import { CredentialName, FieldLabel } from './reusable';
 
 const MAX_FIELD_DOC = 2;
 const MAX_FIELD_OTHER = 3;
@@ -24,35 +39,45 @@ export const IncomingRequestDoc = ({ title, name, holderName, properties, hightl
 
   return (
     <CardImage>
-      <HeaderContainer>
-        <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
-        {/* NOTE: when there is a highlight there
-          is no enough space for the whole holder name
-          without breaking further configurations  
-        */}
-        <CredentialHolderName isTruncated={Boolean(hightlight)}>{holderName}</CredentialHolderName>
-      </HeaderContainer>
-      <BodyContainer>
-        <BodyFieldsContainer isStretched={!image}>
-          <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
-            {properties.map((p, idx) => (
-              <BodyFieldsGroup>
-                <FieldLabel>{p.label}</FieldLabel>
-                <BodyFieldsCalculator.FieldValue
-                  idx={idx}
-                  onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
-                >
-                  {p.value}
-                </BodyFieldsCalculator.FieldValue>
-              </BodyFieldsGroup>
-            ))}
-          </BodyFieldsCalculator>
-        </BodyFieldsContainer>
-        {/* NOTE: this is to enable sort of a wrapper effect around an image */}
-        {image && (
-          <BodyImageContainer />
-        )}
-      </BodyContainer>
+      <HeaderContainer customStyles={{ flex: properties.length ? 0.5 : 0}}>
+          <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
+          {/* NOTE: when there is a highlight there
+            is no enough space for the whole holder name
+            without breaking further configurations  
+          */}
+          {holderName && (
+            <CredentialHolderName isTruncated={Boolean(hightlight)}>{holderName}</CredentialHolderName>
+          )}
+        </HeaderContainer>
+      {properties.length ? (
+        <BodyContainer>
+          <BodyFieldsContainer isStretched={!image}>
+            <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
+              {properties.map((p, idx) => (
+                <BodyFieldsGroup>
+                  <FieldLabel>{p.label}</FieldLabel>
+                  <BodyFieldsCalculator.FieldValue
+                    idx={idx}
+                    onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
+                  >
+                    {p.value}
+                  </BodyFieldsCalculator.FieldValue>
+                </BodyFieldsGroup>
+              ))}
+            </BodyFieldsCalculator>
+          </BodyFieldsContainer>
+          {/* NOTE: this is to enable sort of a wrapper effect around an image */}
+          {image && (
+            <BodyImageContainer />
+          )}
+        </BodyContainer>
+      ) : (
+          <EmptyContainer>
+            <EmptyFieldsTitle>{strings.INCLUDED_INFO}</EmptyFieldsTitle>
+            <EmptyFieldsDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</EmptyFieldsDescription>
+          </EmptyContainer>
+      )}
+
       {/* NOTE: absolute values go outside of containers */}
       {image && (
         <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
@@ -86,23 +111,30 @@ export const IncomingRequestOther = ({ title, name, properties }) => {
         <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
           <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{title ?? name}</CredentialName>
         </HeaderContainer>
-        <BodyContainer customStyles={{flex: 0}}>
-          <BodyFieldsContainer isStretched>
-            <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
-              {properties.map((p, idx) => (
-                <BodyFieldsGroup>
-                  <FieldLabel>{p.label}</FieldLabel>
-                  <BodyFieldsCalculator.FieldValue
-                    idx={idx}
-                    onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
-                  >
-                    {p.value}
-                  </BodyFieldsCalculator.FieldValue>
-                </BodyFieldsGroup>
-              ))}
-            </BodyFieldsCalculator>
-          </BodyFieldsContainer>
-        </BodyContainer>
+        {properties.length ? (
+          <BodyContainer customStyles={{flex: 0}}>
+            <BodyFieldsContainer isStretched>
+              <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
+                {properties.map((p, idx) => (
+                  <BodyFieldsGroup>
+                    <FieldLabel>{p.label}</FieldLabel>
+                    <BodyFieldsCalculator.FieldValue
+                      idx={idx}
+                      onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
+                    >
+                      {p.value}
+                    </BodyFieldsCalculator.FieldValue>
+                  </BodyFieldsGroup>
+                ))}
+              </BodyFieldsCalculator>
+            </BodyFieldsContainer>
+          </BodyContainer>
+        ) : (
+          <EmptyContainer>
+            <EmptyFieldsTitle>{strings.INCLUDED_INFO}</EmptyFieldsTitle>
+            <EmptyFieldsDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</EmptyFieldsDescription>
+          </EmptyContainer>
+        )}
       </OtherContainer>
     </CardImage>
   )

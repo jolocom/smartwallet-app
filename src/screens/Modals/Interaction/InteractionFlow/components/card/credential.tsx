@@ -85,6 +85,36 @@ export const OtherContainer: React.FC = ({children}) => {
   return <View style={styles.otherContainer} children={children} />
 }
 
+export const EmptyContainer: React.FC = ({children}) => {
+  return (
+    <View style={styles.emptyContainer} children={children} />
+  )
+}
+
+export const EmptyFieldsTitle: React.FC = ({children}) => {
+  return (
+    <JoloText
+      weight={JoloTextWeight.regular}
+      style={{ fontSize: 16, alignSelf: 'flex-start' }}
+      color={Colors.bastille}
+    >
+      {children}:
+    </JoloText>
+  )
+}
+
+export const EmptyFieldsDescription: React.FC = ({children}) => {
+  return (
+    <JoloText
+      weight={JoloTextWeight.regular}
+      style={{ fontSize: 14, alignSelf: 'flex-start' }}
+      color={Colors.black50}
+    >
+      {children}
+    </JoloText>
+  )
+}
+
 const styles = StyleSheet.create({
   cardImage: {
     width: 368,
@@ -143,5 +173,10 @@ const styles = StyleSheet.create({
     width: '73%',
     height: '100%',
     ...debugView()
+  },
+  emptyContainer: {
+    // ...debugView(),
+    paddingHorizontal: 20,
+    alignItems: 'flex-start'
   }
 })
