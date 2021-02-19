@@ -1,23 +1,11 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import Field, { TField } from './Field'
-import Header, { THeader } from './Header'
-import { useCustomContext } from '~/hooks/context'
+import Field from './Field'
+import Header from './Header'
+import { IWidgetComposition, IWidgetProps } from './types'
+import { WidgetContext } from './context'
 
-interface IWidgetComposition {
-  Field: TField
-  Header: THeader
-}
-
-interface IProps {
-  onAdd?: () => void
-}
-
-const WidgetContext = createContext<IProps | undefined>(undefined)
-
-export const useWidget = useCustomContext(WidgetContext)
-
-const Widget: React.FC<IProps> & IWidgetComposition = ({
+const Widget: React.FC<IWidgetProps> & IWidgetComposition = ({
   children,
   onAdd,
 }) => {
