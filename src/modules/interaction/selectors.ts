@@ -23,6 +23,7 @@ import {
 } from './guards'
 import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
+import { capitalizeWord, truncateFirstWord } from '~/utils/stringUtils'
 
 const createInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -350,5 +351,30 @@ export const getServiceImage = createSelector(
   [getInteractionCounterparty],
   (counterparty) => {
     return counterparty.publicProfile?.image
+  }
+);
+
+export const getInteractionSubmitLabel = createSelector(
+  [getInteractionDetails, getAttributes],
+  (details, attributes, ) => {
+    if (isAuthDetails(details)) {
+      return strings.AUTHENTICATE
+    } else if (isAuthzDetails(details)) {
+      const cta = details.action ? truncateFirstWord(details.action) : strings.AUTHORIZE
+      const label = capitalizeWord(cta)
+      return label
+    } else if (isCredOfferDetails(details)) {
+      return strings.RECEIVE
+    } else if (isCredShareDetails(details)) {
+      const { requestedAttributes, requestedCredentials } = details;
+      if (requestedAttributes.length === 1
+        && requestedCredentials.length === 0
+        && !attributes[requestedAttributes[0]]) {
+          return strings.ADD_INFO
+      }
+      return strings.SHARE
+    } else {
+    return strings.UNKNOWN
+    }
   }
 )

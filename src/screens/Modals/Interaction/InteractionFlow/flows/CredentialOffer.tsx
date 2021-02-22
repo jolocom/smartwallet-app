@@ -32,7 +32,7 @@ const CredentialOfferBAS = () => {
       <InteractionDescription />
       <Space />
       {/* TODO: body of the interaction */}
-      <InteractionFooter submitLabel="Receive" />
+      <InteractionFooter />
     </ContainerBAS>
   )
 }

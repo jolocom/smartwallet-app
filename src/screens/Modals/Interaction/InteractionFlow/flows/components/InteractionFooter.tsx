@@ -7,20 +7,21 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions'
+import { useSelector } from 'react-redux'
+import { getInteractionSubmitLabel } from '~/modules/interaction/selectors'
 
 interface Props {
   onSubmit: () => Promise<any> | any
-  submitLabel: string
   disabled?: boolean
 }
 
 const InteractionFooter: React.FC<Props> = ({
   onSubmit,
-  submitLabel,
   disabled = false,
 }) => {
   const loader = useLoader()
-  const finishInteraction = useFinishInteraction()
+  const finishInteraction = useFinishInteraction();
+  const submitLabel = useSelector(getInteractionSubmitLabel);
 
   const handleSubmit = async () => {
     await loader(

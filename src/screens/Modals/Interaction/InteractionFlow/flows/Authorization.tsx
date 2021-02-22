@@ -32,7 +32,7 @@ const Authorization = () => {
       <Space />
       <InteractionImage />
       <Space />
-      <InteractionFooter submitLabel="Unlock" />
+      <InteractionFooter />
     </ContainerBAS>
   )
 }

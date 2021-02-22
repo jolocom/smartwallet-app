@@ -33,7 +33,7 @@ export const CredentialShareBAS = () => {
       <InteractionDescription />
       <Space />
       {/* TODO: body of the interaction */}
-      <InteractionFooter submitLabel="Receive" />
+      <InteractionFooter />
     </ContainerBAS>
   )
 }

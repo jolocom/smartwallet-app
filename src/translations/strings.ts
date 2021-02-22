@@ -167,6 +167,7 @@ const interactions = {
   WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}?`,
   UNKNOWN_TITLE: 'Unknown title',
   UNKNOWN_DESCRIPTION: 'Unknown description',
+  UNKNOWN: 'Unknown'
 }
 
 const lock = {

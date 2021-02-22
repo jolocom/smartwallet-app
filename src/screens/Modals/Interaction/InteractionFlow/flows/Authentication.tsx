@@ -26,7 +26,7 @@ const Authentication = () => {
       <InteractionTitle />
       <InteractionDescription />
       <Space />
-      <InteractionFooter submitLabel="Accept" />
+      <InteractionFooter />
     </ContainerBAS>
   )
 }
