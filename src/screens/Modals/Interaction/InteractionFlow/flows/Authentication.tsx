@@ -21,9 +21,7 @@ const Authentication = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <InteractionLogo
-          source="https://i.pinimg.com/originals/f8/23/73/f8237350ca8f6f0936afcd095767589f.jpg"
-        />
+        <InteractionLogo/>
       </LogoContainerBAS>
       <InteractionTitle />
       <InteractionDescription />

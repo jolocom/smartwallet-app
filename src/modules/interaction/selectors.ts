@@ -345,3 +345,10 @@ export const getInteractionImage = createSelector(
     return undefined;
   }
 )
+
+export const getServiceImage = createSelector(
+  [getInteractionCounterparty],
+  (counterparty) => {
+    return counterparty.publicProfile?.image
+  }
+)

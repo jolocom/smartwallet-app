@@ -1,11 +1,11 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { InitiatorPlaceholderIcon } from '~/assets/svg';
+import { getServiceImage } from '~/modules/interaction/selectors';
 
-interface ILogoProps {
-  source: string;
-}
-const InteractionLogo: React.FC<ILogoProps> = ({ source }) => {
+const InteractionLogo: React.FC = () => {
+  const source = useSelector(getServiceImage);
   if (source) {
     return (
       <Image style={styles.image} source={{ uri: source }} />
