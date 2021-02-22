@@ -19,7 +19,7 @@ import {
   Container,
   OtherTitleContainer,
   OtherTitle
-} from './credential';
+} from './styled';
 import { CredentialName, FieldLabel } from './reusable';
 
 const MAX_FIELD_DOC = 2;
