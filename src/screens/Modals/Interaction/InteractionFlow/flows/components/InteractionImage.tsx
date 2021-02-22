@@ -1,12 +1,11 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { getInteractionImage } from '~/modules/interaction/selectors';
 import { SCREEN_WIDTH } from '~/utils/dimenstions';
 
-interface IInteractionImageProps {
-  source: string
-}
-
-const InteractionImage: React.FC<IInteractionImageProps> = ({ source }) => {
+const InteractionImage: React.FC = () => {
+  const source = useSelector(getInteractionImage);
   if (!source) return null
   return (
     <View style={styles.imageContainer}>

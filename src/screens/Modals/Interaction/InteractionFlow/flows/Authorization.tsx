@@ -32,7 +32,7 @@ const Authorization = () => {
       <InteractionTitle />
       <InteractionDescription />
       <Space />
-      <InteractionImage source="http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png" />
+      <InteractionImage />
       <Space />
       <InteractionFooter submitLabel="Unlock" />
     </ContainerBAS>

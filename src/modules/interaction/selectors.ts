@@ -335,3 +335,13 @@ export const getInteractionDescription = createSelector(
     }
   }
 )
+
+export const getInteractionImage = createSelector(
+  [getInteractionDetails],
+  (details) => {
+    if (isAuthzDetails(details)) {
+      return details.imageURL
+    }
+    return undefined;
+  }
+)
