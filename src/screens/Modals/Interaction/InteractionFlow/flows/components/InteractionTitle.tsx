@@ -18,6 +18,7 @@ const InteractionTitle: React.FC<IInteractionTitleProps> = ({ label }) => {
       color={Colors.white90}
       customStyles={{
         lineHeight: BP({ xsmall: 24, default: 28 }),
+        marginTop: BP({ default: 8, medium: 12, large: 12 }),
         marginBottom: BP({ default: 4, medium: 8, large: 8 }),
       }}
     >

@@ -3,12 +3,12 @@ import { Image, StyleSheet, View } from 'react-native';
 import { InitiatorPlaceholderIcon } from '~/assets/svg';
 
 interface ILogoProps {
-  initiatorIcon: string;
+  source: string;
 }
-const InteractionLogo: React.FC<ILogoProps> = ({ initiatorIcon }) => {
-  if (initiatorIcon) {
+const InteractionLogo: React.FC<ILogoProps> = ({ source }) => {
+  if (source) {
     return (
-      <Image style={styles.image} source={{ uri: initiatorIcon }} />
+      <Image style={styles.image} source={{ uri: source }} />
     )    
   }
   return (
