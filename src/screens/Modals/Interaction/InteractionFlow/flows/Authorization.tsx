@@ -30,10 +30,7 @@ const Authorization = () => {
         />
       </LogoContainerBAS>
       <InteractionTitle />
-      <InteractionDescription
-        label="%{service-name} is now ready to grant you access"
-        hasWarning={false}
-      />
+      <InteractionDescription />
       <Space />
       <InteractionImage source="http://www.pngmart.com/files/10/Vespa-Scooter-PNG-Pic.png" />
       <Space />

@@ -273,7 +273,10 @@ export const getOfferCredentialsBySection = createSelector(
   },
 )
 
-/* Supportive selectors for components */
+/*
+  Supportive selectors for components 
+*/
+
 export const getInteractionTitle = createSelector(
   [getInteractionDetails],
   (details) => {
@@ -287,6 +290,48 @@ export const getInteractionTitle = createSelector(
       return strings.INCOMING_REQUEST
     } else {
       return strings.UNKNOWN_TITLE
+    }
+  }
+)
+
+export const getInteractionDescription = createSelector(
+  [getInteractionDetails, getInteractionCounterparty],
+  (details, counterparty) => {
+    const { did, publicProfile } = counterparty;
+    const counterpartyName = publicProfile?.name ?? ''
+    const res = { isAnonymous: !Boolean(publicProfile?.name) }
+    if (!Boolean(publicProfile?.name)) {
+      return {
+        ...res,
+        description: strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(did)
+      }
+    } else {
+      if (isAuthDetails(details)) {
+        return {
+          ...res,
+          description: strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY(counterpartyName),
+        }
+      } else if (isAuthzDetails(details)) {
+        return {
+          ...res,
+          description: strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS(counterpartyName)
+        }
+      } else if (isCredOfferDetails(details)) {
+        return {
+          ...res,
+          description: strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS(counterpartyName)
+        }
+      } else if (isCredShareDetails(details)) {
+        return {
+          ...res,
+          description: strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(counterpartyName)
+        }
+      } else {
+        return {
+          ...res,
+          description: strings.UNKNOWN_DESCRIPTION
+        }
+      }
     }
   }
 )

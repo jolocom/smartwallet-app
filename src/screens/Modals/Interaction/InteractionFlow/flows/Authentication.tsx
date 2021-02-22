@@ -26,10 +26,7 @@ const Authentication = () => {
         />
       </LogoContainerBAS>
       <InteractionTitle />
-      <InteractionDescription
-        label="It seems like your wallet is missing something important for this request"
-        hasWarning
-      />
+      <InteractionDescription />
       <Space />
       <InteractionFooter submitLabel="Accept" />
     </ContainerBAS>
