@@ -6,8 +6,8 @@ import { FlowType } from 'react-native-jolocom'
 
 import Authentication from './flows/Authentication'
 import Authorization from './flows/Authorization'
-import CredentialShare from './CredentialShare'
-import CredentialOffer from './CredentialOffer'
+import CredentialShare from './flows/CredentialShare'
+import CredentialOffer from './flows/CredentialOffer'
 
 import {
   getInteractionType,

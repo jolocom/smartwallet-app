@@ -1,4 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { getIsFullscreenCredOffer } from '~/modules/interaction/selectors';
+import InteractionDescription from './components/InteractionDescription';
+import InteractionFooter from './components/InteractionFooter';
+import InteractionLogo from './components/InteractionLogo';
+import InteractionTitle from './components/InteractionTitle';
+import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
 
 /* --- CredentialOffer BAS API ---
   <Interaction.BAS>
@@ -15,8 +22,19 @@ import React from 'react';
   </Interaction.BAS>
 */
 
-export const CredentialOfferBAS = () => {
-  return null
+const CredentialOfferBAS = () => {
+  return (
+    <ContainerBAS>
+      <LogoContainerBAS>
+        <InteractionLogo />
+      </LogoContainerBAS>
+      <InteractionTitle />
+      <InteractionDescription />
+      <Space />
+      {/* TODO: body of the interaction */}
+      <InteractionFooter submitLabel="Receive" />
+    </ContainerBAS>
+  )
 }
 
 /* --- CredentialOffer FAS API - WIP ---
@@ -40,6 +58,13 @@ export const CredentialOfferBAS = () => {
   </Interaction.BAS>
 */
 
-export const CredentialOfferFAS = () => {
+const CredentialOfferFAS = () => {
   return null
 }
+
+const CredentialOffer = () => {
+  const isFAS = useSelector(getIsFullscreenCredOffer)
+  return isFAS ? <CredentialOfferFAS /> : <CredentialOfferBAS />
+}
+
+export default CredentialOffer

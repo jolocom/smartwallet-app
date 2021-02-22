@@ -1,4 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { getIsFullscreenCredShare } from '~/modules/interaction/selectors';
+import InteractionDescription from './components/InteractionDescription';
+import InteractionFooter from './components/InteractionFooter';
+import InteractionLogo from './components/InteractionLogo';
+import InteractionTitle from './components/InteractionTitle';
+import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
 
 /* --- CredentialShare BAS API ---
   <Interaction.BAS>
@@ -17,7 +24,18 @@ import React from 'react';
 */
 
 export const CredentialShareBAS = () => {
-  return null
+  return (
+    <ContainerBAS>
+      <LogoContainerBAS>
+        <InteractionLogo />
+      </LogoContainerBAS>
+      <InteractionTitle />
+      <InteractionDescription />
+      <Space />
+      {/* TODO: body of the interaction */}
+      <InteractionFooter submitLabel="Receive" />
+    </ContainerBAS>
+  )
 }
 
 /* --- CredentialShare FAS API - WIP ---
@@ -42,6 +60,13 @@ export const CredentialShareBAS = () => {
   </Interaction.BAS>
 */
 
-export const CredentialShareFAS = () => {
+const CredentialShareFAS = () => {
   return null
 }
+
+const CredentialShare = () => {
+  const isFAS = useSelector(getIsFullscreenCredShare);
+  return isFAS ? <CredentialShareFAS /> : <CredentialShareBAS />
+}
+
+export default CredentialShare;
