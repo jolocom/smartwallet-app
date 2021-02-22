@@ -1,15 +1,13 @@
 import React from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useSelector } from 'react-redux';
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
+import { getInteractionTitle } from '~/modules/interaction/selectors';
 import BP from '~/utils/breakpoints';
 import { JoloTextSizes } from '~/utils/fonts';
 
-// TODO: create common type for title and description
-interface IInteractionTitleProps {
-  label: string
-}
-
-const InteractionTitle: React.FC<IInteractionTitleProps> = ({ label }) => {
+const InteractionTitle = () => {
+  const title = useSelector(getInteractionTitle);
   return (
     <JoloText
       kind={JoloTextKind.title}
@@ -22,7 +20,7 @@ const InteractionTitle: React.FC<IInteractionTitleProps> = ({ label }) => {
         marginBottom: BP({ default: 4, medium: 8, large: 8 }),
       }}
     >
-      {label}
+      {title}
     </JoloText>
   )
 }

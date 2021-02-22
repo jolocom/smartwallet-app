@@ -272,3 +272,21 @@ export const getOfferCredentialsBySection = createSelector(
     }, defaultSections)
   },
 )
+
+/* Supportive selectors for components */
+export const getInteractionTitle = createSelector(
+  [getInteractionDetails],
+  (details) => {
+    if (isAuthDetails(details)) {
+      return strings.IS_IT_REALLY_YOU
+    } else if (isAuthzDetails(details)) {
+      return strings.WOULD_YOU_LIKE_TO_ACTION(details.action);
+    } else if (isCredOfferDetails(details)) {
+      return strings.INCOMING_OFFER
+    } else if (isCredShareDetails(details)) {
+      return strings.INCOMING_REQUEST
+    } else {
+      return strings.UNKNOWN_TITLE
+    }
+  }
+)

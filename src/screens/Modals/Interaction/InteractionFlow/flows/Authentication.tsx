@@ -25,9 +25,7 @@ const Authentication = () => {
           source="https://i.pinimg.com/originals/f8/23/73/f8237350ca8f6f0936afcd095767589f.jpg"
         />
       </LogoContainerBAS>
-      <InteractionTitle
-        label="%{service-name} requests email"
-      />
+      <InteractionTitle />
       <InteractionDescription
         label="It seems like your wallet is missing something important for this request"
         hasWarning

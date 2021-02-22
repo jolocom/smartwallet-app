@@ -29,9 +29,7 @@ const Authorization = () => {
           source="https://i.pinimg.com/originals/f8/23/73/f8237350ca8f6f0936afcd095767589f.jpg"
         />
       </LogoContainerBAS>
-      <InteractionTitle
-        label="Would you like to unlock the scooter?"
-      />
+      <InteractionTitle />
       <InteractionDescription
         label="%{service-name} is now ready to grant you access"
         hasWarning={false}
