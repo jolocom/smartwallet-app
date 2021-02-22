@@ -5,13 +5,11 @@ import {
   getAvailableAttributesToShare,
   getShareCredentialsBySection,
   getShareCredentialTypes,
-  getCounterpartyName,
 } from '~/modules/interaction/selectors'
 import { AttributeTypes } from '~/types/credentials'
 import { selectShareCredential } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
 import { useInteraction } from '.'
-import { attributeConfig } from '~/config/claims'
 import { useAgent } from '../sdk'
 
 /**
@@ -27,7 +25,6 @@ export const useCredentialShareFlow = () => {
     getShareCredentialTypes,
   )
   const { documents, other } = useSelector(getShareCredentialsBySection)
-  const serviceName = useSelector(getCounterpartyName)
 
   /**
    * Assembles a @CredentialRequestResponse token with the selected
@@ -117,21 +114,6 @@ export const useCredentialShareFlow = () => {
     return isMissing ? attrType : null
   }
 
-  const getHeaderText = () => {
-    const missingAttr = getSingleMissingAttribute()
-    const title = missingAttr
-      ? strings.SERVICE_REQUESTS_ATTRIBUTE(
-          serviceName,
-          attributeConfig[missingAttr].label.toLowerCase(),
-        )
-      : strings.INCOMING_REQUEST
-    const description = strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(
-      serviceName,
-    )
-
-    return { title, description }
-  }
-
   const getCtaText = () => {
     return getSingleMissingAttribute() ? strings.ADD_INFO : strings.SHARE
   }
@@ -143,7 +125,6 @@ export const useCredentialShareFlow = () => {
     isFirstCredential,
     handleSelectCredential,
     getSingleMissingAttribute,
-    getHeaderText,
     getCtaText,
   }
 }

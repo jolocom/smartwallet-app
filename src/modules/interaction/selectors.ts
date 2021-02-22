@@ -79,20 +79,10 @@ export const getInteractionCounterparty = createSelector(
 )
 
 /**
- * Gets the @name of the counterparty (from the public profile) if available. Otherwise, will
- * return a fallback string.
- */
-export const getCounterpartyName = createSelector(
-  [getActiveInteraction],
-  ({ counterparty }) => counterparty.publicProfile?.name ?? strings.SERVICE,
-)
-
-/**
  * Gets the @interactionDetails for each type of interaction. Can only be used within the specific interaction
  * components, otherwise will throw (e.g. using @getAuthenticationDetails inside @BasWrapper will throw).
  */
 export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
-export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
 export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
 export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
 export const getResolutionDetails = createInteractionSelector(
