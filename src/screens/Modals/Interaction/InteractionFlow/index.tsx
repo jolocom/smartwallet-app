@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { FlowType } from 'react-native-jolocom'
 
-import Authentication from './Authentication'
+import Authentication from './flows/Authentication'
 import Authorization from './Authorization'
 import CredentialShare from './CredentialShare'
 import CredentialOffer from './CredentialOffer'
