@@ -1,12 +1,18 @@
 import React, { useCallback } from 'react';
+import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 import CollapsedScrollView from '~/components/CollapsedScrollView';
-import JoloText from '~/components/JoloText';
+import JoloText, { JoloTextKind } from '~/components/JoloText';
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit';
-import { getInteractionTitle, getIsFullscreenCredOffer } from '~/modules/interaction/selectors';
+import { getInteractionTitle, getIsFullscreenCredOffer, getOfferCredentialsBySection } from '~/modules/interaction/selectors';
+import { strings } from '~/translations';
+import { OfferUICredential } from '~/types/credentials';
+import { Colors } from '~/utils/colors';
+import { JoloTextSizes } from '~/utils/fonts';
 import InteractionDescription from './components/InteractionDescription';
 import InteractionFooter from './components/InteractionFooter';
 import InteractionLogo from './components/InteractionLogo';
+import InteractionSection from './components/InteractionSection';
 import InteractionTitle from './components/InteractionTitle';
 import { ContainerBAS, ContainerFAS, FooterContainerFAS, LogoContainerBAS, LogoContainerFAS, Space } from './components/styled';
 
@@ -34,29 +40,9 @@ const CredentialOfferBAS = () => {
   )
 }
 
-/* --- CredentialOffer FAS API - WIP ---
-  <Interaction.BAS>
-    <Interaction.BAS.Logo />
-    <Interaction.BAS.Title />
-    <Interaction.BAS.Description />
-    <Interaction.BAS.Body>
-      {sections.map(s => (
-        <Interaction.BAS.Section label={s.label}>
-          {s.offers.map(o => (
-            <Interaction.BAS.Card {...o} type="offer" />
-          ))}
-        </Interaction.BAS.Section>      
-      ))}
-    </Interaction.BAS.Body>
-    <Interaction.BAS.Footer>
-      <Interaction.BAS.Submit label="Accept" />
-      <Interaction.BAS.Ignore />
-    </Interaction.BAS.Footer>
-  </Interaction.BAS>
-*/
-
 const CredentialOfferFAS = () => {
   const interactionTitle = useSelector(getInteractionTitle);
+  const { documents, other } = useSelector(getOfferCredentialsBySection)
   const handleSubmit = useCredentialOfferSubmit()
 
   const handleRenderCollapsingComponent = useCallback(() => (
@@ -64,6 +50,23 @@ const CredentialOfferFAS = () => {
       <InteractionLogo />
     </LogoContainerFAS>
   ), [])
+
+  const handleRenderCredentails = (credentials: OfferUICredential[]) => 
+    credentials.map(({ type, invalid }, idx) => (
+      <View
+        style={{
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
+        }}
+      >
+        <JoloText
+          kind={JoloTextKind.title}
+          size={JoloTextSizes.middle}
+          color={Colors.black}
+        >
+          incoming offer card: {type}
+        </JoloText>
+      </View>
+    ))
 
   return (
     <ContainerFAS>
@@ -74,6 +77,12 @@ const CredentialOfferFAS = () => {
         <InteractionTitle />
         <InteractionDescription />
         <Space />
+        <InteractionSection title={strings.DOCUMENTS}>
+          {handleRenderCredentails(documents)}
+        </InteractionSection>
+        <InteractionSection title={strings.OTHER}>
+          {handleRenderCredentails(other)}
+        </InteractionSection>
       </CollapsedScrollView>
       <FooterContainerFAS>
         <InteractionFooter onSubmit={handleSubmit} />
