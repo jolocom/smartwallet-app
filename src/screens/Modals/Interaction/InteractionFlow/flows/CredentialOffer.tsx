@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import CollapsedScrollView from '~/components/CollapsedScrollView';
+import JoloText from '~/components/JoloText';
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit';
 import { getInteractionTitle, getIsFullscreenCredOffer } from '~/modules/interaction/selectors';
 import InteractionDescription from './components/InteractionDescription';
@@ -11,6 +12,14 @@ import { ContainerBAS, ContainerFAS, FooterContainerFAS, LogoContainerBAS, LogoC
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
+
+  const renderBody = () => (
+    <>
+      <JoloText>Incoming Offer Card</JoloText>
+      <Space />
+    </>
+  )
+
   return (
     <ContainerBAS>
       <LogoContainerBAS>
@@ -19,7 +28,7 @@ const CredentialOfferBAS = () => {
       <InteractionTitle />
       <InteractionDescription />
       <Space />
-      {/* TODO: body of the interaction */}
+      {renderBody()}
       <InteractionFooter onSubmit={handleSubmit} />
     </ContainerBAS>
   )
