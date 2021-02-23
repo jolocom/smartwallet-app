@@ -345,28 +345,32 @@ export const getServiceImage = createSelector(
 );
 
 export const getSingleMissingAttribute = createSelector(
-  [getCredShareDetails, getAttributes],
+  [getInteractionDetails, getAttributes],
   (details, attributes) => {
-    const { requestedAttributes, requestedCredentials } = details;
-    if (requestedAttributes.length === 1
-      && requestedCredentials.length === 0
-      && !attributes[requestedAttributes[0]]) {
-      return requestedAttributes[0];
+    if (isCredShareDetails(details)) { 
+      const { requestedAttributes, requestedCredentials } = details;
+      if (requestedAttributes.length === 1
+        && requestedCredentials.length === 0
+        && !attributes[requestedAttributes[0]]) {
+          return requestedAttributes[0];
+      }
     }
     return undefined;
   }
 )
 
 export const getSingleCredentialToShare = createSelector(
-  [getCredShareDetails, getAllCredentials],
+  [getInteractionDetails, getAllCredentials],
   (details, credentials) => {
-    const { requestedAttributes, requestedCredentials } = details;
-    if (requestedAttributes.length === 0
-      && requestedCredentials.length === 1
-    ) {
-      const availableCreds = credentials.filter(c => c.type === requestedCredentials[0]);
-      if (availableCreds.length === 1) {
-        return availableCreds[0]
+    if (isCredShareDetails(details)) {
+      const { requestedAttributes, requestedCredentials } = details;
+      if (requestedAttributes.length === 0
+        && requestedCredentials.length === 1
+        ) {
+          const availableCreds = credentials.filter(c => c.type === requestedCredentials[0]);
+          if (availableCreds.length === 1) {
+            return availableCreds[0]
+          }
       }
     }
     return undefined;

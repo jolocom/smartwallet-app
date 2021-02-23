@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import CollapsedScrollView from '~/components/CollapsedScrollView';
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit';
-import { getIsFullscreenCredOffer } from '~/modules/interaction/selectors';
+import { getInteractionTitle, getIsFullscreenCredOffer } from '~/modules/interaction/selectors';
 import InteractionDescription from './components/InteractionDescription';
 import InteractionFooter from './components/InteractionFooter';
 import InteractionLogo from './components/InteractionLogo';
 import InteractionTitle from './components/InteractionTitle';
-import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
+import { ContainerBAS, ContainerFAS, FooterContainerFAS, LogoContainerBAS, LogoContainerFAS, Space } from './components/styled';
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -46,7 +47,30 @@ const CredentialOfferBAS = () => {
 */
 
 const CredentialOfferFAS = () => {
-  return null
+  const interactionTitle = useSelector(getInteractionTitle);
+  const handleSubmit = useCredentialOfferSubmit()
+
+  const handleRenderCollapsingComponent = useCallback(() => (
+    <LogoContainerFAS>
+      <InteractionLogo />
+    </LogoContainerFAS>
+  ), [])
+
+  return (
+    <ContainerFAS>
+      <CollapsedScrollView
+        collapsedTitle={interactionTitle}
+        renderCollapsingComponent={handleRenderCollapsingComponent}
+      >
+        <InteractionTitle />
+        <InteractionDescription />
+        <Space />
+      </CollapsedScrollView>
+      <FooterContainerFAS>
+        <InteractionFooter onSubmit={handleSubmit} />
+      </FooterContainerFAS>
+    </ContainerFAS>
+  )
 }
 
 const CredentialOffer = () => {
