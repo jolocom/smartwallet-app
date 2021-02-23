@@ -1,1 +1,0 @@
-export const INTERACTION_SHEET_PADDING = 20

@@ -19,7 +19,6 @@ import {
   isCredOfferDetails,
   isCredShareDetails,
   isNotActiveInteraction,
-  isResolutionDetails,
 } from './guards'
 import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
@@ -82,12 +81,8 @@ export const getInteractionCounterparty = createSelector(
  * Gets the @interactionDetails for each type of interaction. Can only be used within the specific interaction
  * components, otherwise will throw (e.g. using @getAuthenticationDetails inside @BasWrapper will throw).
  */
-export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
 export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
 export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
-export const getResolutionDetails = createInteractionSelector(
-  isResolutionDetails,
-)
 
 /** CredentialShare selectors **/
 

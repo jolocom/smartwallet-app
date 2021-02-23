@@ -15,7 +15,6 @@ export type InteractionDetails =
   | AuthorizationDetailsI
   | CredShareI
   | CredOfferI
-  | ResolutionDetailsI
   | NotActiveInteractionDetailsI
 
 /*
@@ -46,12 +45,6 @@ interface InteractionCommonI {
 export interface NotActiveInteractionDetailsI {
   flowType: null
   id: null
-}
-
-export interface ResolutionDetailsI extends InteractionCommonI {
-  flowType: FlowType.Resolution
-  uri?: string
-  description?: string
 }
 
 export interface AuthenticationDetailsI extends InteractionCommonI {
