@@ -275,7 +275,7 @@ export const getInteractionTitle = createSelector(
     } else if (isCredShareDetails(details)) {
       return strings.INCOMING_REQUEST
     } else {
-      return strings.UNKNOWN_TITLE
+      return undefined  
     }
   }
 )
@@ -315,7 +315,7 @@ export const getInteractionDescription = createSelector(
       } else {
         return {
           ...res,
-          description: strings.UNKNOWN_DESCRIPTION
+          description: undefined
         }
       }
     }

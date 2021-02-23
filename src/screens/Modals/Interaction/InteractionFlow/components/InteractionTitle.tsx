@@ -3,10 +3,15 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useSelector } from 'react-redux';
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import { getInteractionTitle } from '~/modules/interaction/selectors';
+import { strings } from '~/translations';
 import BP from '~/utils/breakpoints';
 import { JoloTextSizes } from '~/utils/fonts';
 
-const InteractionTitle = () => {
+export interface IInteractionText {
+  label?: string
+}
+
+const InteractionTitle: React.FC<IInteractionText> = ({ label }) => {
   const title = useSelector(getInteractionTitle);
   return (
     <JoloText
@@ -20,7 +25,7 @@ const InteractionTitle = () => {
         marginBottom: BP({ default: 4, medium: 8, large: 8 }),
       }}
     >
-      {title}
+      {title ?? label ?? strings.UNKNOWN_TITLE} 
     </JoloText>
   )
 }

@@ -96,7 +96,7 @@ const CredentialShareFAS = () => {
   return (
     <ContainerFAS>
       <CollapsedScrollView
-        collapsedTitle={interactionTitle}
+        collapsedTitle={interactionTitle ?? strings.UNKNOWN_TITLE}
         renderCollapsingComponent={handleRenderCollapsingComponent}
       >
         <InteractionTitle />
