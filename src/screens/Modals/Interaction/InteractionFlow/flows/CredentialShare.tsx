@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import CollapsedScrollView from '~/components/CollapsedScrollView';
 import JoloText from '~/components/JoloText';
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget';
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit';
 import { useSwitchScreens } from '~/hooks/navigation';
-import { getIsFullscreenCredShare, getSingleCredentialToShare, getSingleMissingAttribute } from '~/modules/interaction/selectors';
+import { getInteractionTitle, getIsFullscreenCredShare, getSingleCredentialToShare, getSingleMissingAttribute } from '~/modules/interaction/selectors';
 import { ScreenNames } from '~/types/screens';
 import InteractionDescription from './components/InteractionDescription';
 import InteractionFooter from './components/InteractionFooter';
 import InteractionLogo from './components/InteractionLogo';
 import InteractionTitle from './components/InteractionTitle';
-import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
+import { ContainerBAS, ContainerFAS, FooterContainerFAS, LogoContainerBAS, LogoContainerFAS, Space } from './components/styled';
 
 export const CredentialShareBAS = () => {
   const singleCredentialToShare = useSelector(getSingleCredentialToShare)
@@ -76,7 +77,31 @@ export const CredentialShareBAS = () => {
 */
 
 const CredentialShareFAS = () => {
-  return null
+  const interactionTitle = useSelector(getInteractionTitle);
+  const handleSubmit = useCredentialShareSubmit();
+
+  const handleRenderCollapsingComponent = useCallback(() => (
+    <LogoContainerFAS>
+      <InteractionLogo />
+    </LogoContainerFAS>
+  ), [])
+
+  return (
+    <ContainerFAS>
+      <CollapsedScrollView
+        collapsedTitle={interactionTitle}
+        renderCollapsingComponent={handleRenderCollapsingComponent}
+      >
+        <InteractionTitle />
+        <InteractionDescription />
+        <Space />
+      </CollapsedScrollView>
+      <FooterContainerFAS>
+        <InteractionFooter onSubmit={handleSubmit} />
+      </FooterContainerFAS>
+    </ContainerFAS>
+  )
+
 }
 
 const CredentialShare = () => {
