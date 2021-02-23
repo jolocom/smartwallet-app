@@ -158,22 +158,6 @@ export const getIsFullscreenCredShare = createSelector(
 )
 
 /**
- * Gets the first requested @ShareUIDocument, if available in the @credentials module.
- * Otherwise, returns @null.
- */
-export const getFirstShareDocument = createSelector(
-  [getCredShareDetails, getAllCredentials],
-  ({ requestedCredentials }, credentials) => {
-    const firstType = requestedCredentials[0]
-    const firstCredential = credentials.find((c) => c.type === firstType)
-
-    return firstCredential
-      ? uiCredentialToShareCredential(firstCredential)
-      : null
-  },
-)
-
-/**
  * Gets the requested credential types for CredentialShare.
  */
 export const getShareCredentialTypes = createSelector(

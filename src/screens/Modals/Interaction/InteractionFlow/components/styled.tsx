@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   attributeWidgetContainerFAS: {
     paddingHorizontal: 20,
     paddingVertical: 30,
-    backgroundColor: Colors.lightBlack,
+    backgroundColor: Colors.codGrey,
     borderRadius: 20,
     // Shadows
     shadowColor: Colors.black50,

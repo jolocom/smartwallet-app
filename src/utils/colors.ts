@@ -10,6 +10,7 @@ export enum Colors {
   black = '#000',
   elevatedElement = '#29232b',
   dark = 'rgb(32, 26, 33)',
+  balticSea = '#2D272E',
   darkGray = 'rgb(108, 123, 138)',
   osloGray = 'rgb(138, 138, 145)',
   genevaGray = 'rgb(151, 151, 151)',
