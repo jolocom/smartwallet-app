@@ -8,7 +8,7 @@ import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
 import { useRedirect } from '../navigation'
-import { useFinishInteraction } from '.'
+import { useFinishInteraction } from './handlers'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()

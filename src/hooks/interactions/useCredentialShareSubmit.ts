@@ -1,6 +1,6 @@
 import { useCredentialShareFlow } from './useCredentialShareFlow'
 import useInteractionToasts from './useInteractionToasts'
-import { useFinishInteraction } from '.'
+import { useFinishInteraction } from './handlers'
 
 const useCredentialShareSubmit = () => {
   const { assembleShareResponseToken } = useCredentialShareFlow()

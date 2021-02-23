@@ -8,7 +8,7 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { useLoader } from '~/hooks/loader'
-import { useFinishInteraction } from '~/hooks/interactions'
+import { useFinishInteraction } from '~/hooks/interactions/handlers'
 
 export const FooterContainer: React.FC = ({ children }) => {
   const insets = useSafeArea()

@@ -1,5 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux'
+/**
+ * NOTE @clauxx
+ *
+ * This file was renamed from `index.ts` to `handlers.ts` due to (probably) an issue
+ * with module caching, that appeared after upgrading to RN63.
+ */
 
+import { useDispatch, useSelector } from 'react-redux'
 import {
   FlowType,
   SDKError,

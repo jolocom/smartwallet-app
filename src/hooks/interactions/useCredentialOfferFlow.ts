@@ -10,7 +10,7 @@ import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { OfferUICredential } from '~/types/credentials'
 import { strings } from '~/translations/strings'
 import { getCounterpartyName } from '~/modules/interaction/selectors'
-import { useInteraction } from '.'
+import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 
 /**

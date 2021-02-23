@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 
 import { resetInteraction } from '~/modules/interaction/actions'
-import { useInteraction } from '.'
+import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 
 const useResolutionSubmit = () => {
