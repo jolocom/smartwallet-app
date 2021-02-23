@@ -1,14 +1,12 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
+
 import CollapsedScrollView from '~/components/CollapsedScrollView';
-import JoloText, { JoloTextKind } from '~/components/JoloText';
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit';
 import { getInteractionTitle, getIsFullscreenCredOffer, getOfferCredentialsBySection } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
 import { OfferUICredential } from '~/types/credentials';
-import { Colors } from '~/utils/colors';
-import { JoloTextSizes } from '~/utils/fonts';
 import InteractionDescription from './components/InteractionDescription';
 import InteractionFooter from './components/InteractionFooter';
 import InteractionLogo from './components/InteractionLogo';
@@ -21,7 +19,7 @@ const CredentialOfferBAS = () => {
 
   const renderBody = () => (
     <>
-      <JoloText>Incoming Offer Card</JoloText>
+      <Text>Incoming Offer Card</Text>
       <Space />
     </>
   )
@@ -58,13 +56,9 @@ const CredentialOfferFAS = () => {
           marginBottom: idx === credentials.length - 1 ? 0 : 30,
         }}
       >
-        <JoloText
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.middle}
-          color={Colors.black}
-        >
+        <Text>
           incoming offer card: {type}
-        </JoloText>
+        </Text>
       </View>
     ))
 

@@ -9,7 +9,10 @@ import { useSwitchScreens } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 
 const ShareAttributeWidget = () => {
-  const attributes = useSelector(getAvailableAttributesToShare)
+  const attributes = useSelector(getAvailableAttributesToShare);
+  
+  if (!Object.keys(attributes).length) return null;
+
   const {
     handleSelectCredential,
   } = useCredentialShareFlow()
