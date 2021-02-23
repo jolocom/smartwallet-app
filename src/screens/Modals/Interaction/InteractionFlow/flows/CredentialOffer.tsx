@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit';
 import { getIsFullscreenCredOffer } from '~/modules/interaction/selectors';
 import InteractionDescription from './components/InteractionDescription';
 import InteractionFooter from './components/InteractionFooter';
@@ -7,22 +8,8 @@ import InteractionLogo from './components/InteractionLogo';
 import InteractionTitle from './components/InteractionTitle';
 import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
 
-/* --- CredentialOffer BAS API ---
-  <Interaction.BAS>
-    <Interaction.BAS.Logo />
-    <Interaction.BAS.Title />
-    <Interaction.BAS.Description />
-    <Interaction.BAS.Body>
-      <Interaction.BAS.Card type="offer" />
-    </Interaction.BAS.Body>
-    <Interaction.BAS.Footer>
-      <Interaction.BAS.Submit label="Accept" />
-      <Interaction.BAS.Ignore />
-    </Interaction.BAS.Footer>
-  </Interaction.BAS>
-*/
-
 const CredentialOfferBAS = () => {
+  const handleSubmit = useCredentialOfferSubmit()
   return (
     <ContainerBAS>
       <LogoContainerBAS>
@@ -32,7 +19,7 @@ const CredentialOfferBAS = () => {
       <InteractionDescription />
       <Space />
       {/* TODO: body of the interaction */}
-      <InteractionFooter />
+      <InteractionFooter onSubmit={handleSubmit} />
     </ContainerBAS>
   )
 }
