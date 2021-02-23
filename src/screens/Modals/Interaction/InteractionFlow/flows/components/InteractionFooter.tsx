@@ -15,6 +15,7 @@ interface Props {
   disabled?: boolean
 }
 
+// TODO: add logic for disabling buttons
 const InteractionFooter: React.FC<Props> = ({
   onSubmit,
   disabled = false,

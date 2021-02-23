@@ -1,29 +1,44 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getIsFullscreenCredShare } from '~/modules/interaction/selectors';
+import JoloText from '~/components/JoloText';
+import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget';
+import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit';
+import { useSwitchScreens } from '~/hooks/navigation';
+import { getIsFullscreenCredShare, getSingleCredentialToShare, getSingleMissingAttribute } from '~/modules/interaction/selectors';
+import { ScreenNames } from '~/types/screens';
 import InteractionDescription from './components/InteractionDescription';
 import InteractionFooter from './components/InteractionFooter';
 import InteractionLogo from './components/InteractionLogo';
 import InteractionTitle from './components/InteractionTitle';
 import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
 
-/* --- CredentialShare BAS API ---
-  <Interaction.BAS>
-    <Interaction.BAS.Logo />
-    <Interaction.BAS.Title />
-    <Interaction.BAS.Description />
-    <Interaction.BAS.Body>
-      <Interaction.BAS.Card type="offer" />
-      <Interaction.BAS.AddCredential />
-    </Interaction.BAS.Body>
-    <Interaction.BAS.Footer>
-      <Interaction.BAS.Submit label="Accept" />
-      <Interaction.BAS.Ignore />
-    </Interaction.BAS.Footer>
-  </Interaction.BAS>
-*/
-
 export const CredentialShareBAS = () => {
+  const singleCredentialToShare = useSelector(getSingleCredentialToShare)
+  const singleMissingAttribute = useSelector(getSingleMissingAttribute);
+
+  const handleShare = useCredentialShareSubmit();
+  const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionAddCredential)
+  
+  const handleSubmit = () => singleMissingAttribute !== undefined
+    ? handleSwitchScreens({ type: singleMissingAttribute })
+    : handleShare()
+
+  const renderBody = () => {
+    if (singleMissingAttribute) return null
+    else if (singleCredentialToShare !== undefined) return (
+      <>
+        <JoloText>Incoming Request Card</JoloText>
+        <Space />
+      </>
+    )
+    else return (
+      <>
+        <ShareAttributeWidget />
+        <Space />
+      </>
+    )
+  }
+
   return (
     <ContainerBAS>
       <LogoContainerBAS>
@@ -32,8 +47,8 @@ export const CredentialShareBAS = () => {
       <InteractionTitle />
       <InteractionDescription />
       <Space />
-      {/* TODO: body of the interaction */}
-      <InteractionFooter />
+      {renderBody()}
+      <InteractionFooter onSubmit={handleSubmit} />
     </ContainerBAS>
   )
 }
