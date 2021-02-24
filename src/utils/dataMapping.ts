@@ -98,7 +98,6 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
   }
 }
 
-
 export const getMappedInteraction = (interaction: Interaction) => {
   const summary = interaction.getSummary()
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { getInteractionImage } from '~/modules/interaction/selectors';
-import { SCREEN_WIDTH } from '~/utils/dimenstions';
+import { SCREEN_WIDTH } from '~/utils/dimensions';
 import { Space } from './styled';
 
 const InteractionImage: React.FC = () => {

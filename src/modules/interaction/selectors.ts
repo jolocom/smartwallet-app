@@ -81,6 +81,8 @@ export const getInteractionCounterparty = createSelector(
  * Gets the @interactionDetails for each type of interaction. Can only be used within the specific interaction
  * components, otherwise will throw (e.g. using @getAuthenticationDetails inside @BasWrapper will throw).
  */
+export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
+export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
 export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
 export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
 
@@ -253,107 +255,112 @@ export const getInteractionTitle = createSelector(
     if (isAuthDetails(details)) {
       return strings.IS_IT_REALLY_YOU
     } else if (isAuthzDetails(details)) {
-      return strings.WOULD_YOU_LIKE_TO_ACTION(details.action);
+      return strings.WOULD_YOU_LIKE_TO_ACTION(details.action)
     } else if (isCredOfferDetails(details)) {
       return strings.INCOMING_OFFER
     } else if (isCredShareDetails(details)) {
       return strings.INCOMING_REQUEST
     } else {
-      return undefined  
+      return undefined
     }
-  }
+  },
 )
 
 export const getInteractionDescription = createSelector(
   [getInteractionDetails, getInteractionCounterparty],
   (details, counterparty) => {
-    const { did, publicProfile } = counterparty;
+    const { did, publicProfile } = counterparty
     const counterpartyName = publicProfile?.name ?? ''
     const res = { isAnonymous: !Boolean(publicProfile?.name) }
     if (!Boolean(publicProfile?.name)) {
       return {
         ...res,
-        description: strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(did)
+        description: strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(did),
       }
     } else {
       if (isAuthDetails(details)) {
         return {
           ...res,
-          description: strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY(counterpartyName),
+          description: strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY(
+            counterpartyName,
+          ),
         }
       } else if (isAuthzDetails(details)) {
         return {
           ...res,
-          description: strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS(counterpartyName)
+          description: strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS(
+            counterpartyName,
+          ),
         }
       } else if (isCredOfferDetails(details)) {
         return {
           ...res,
-          description: strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS(counterpartyName)
+          description: strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS(
+            counterpartyName,
+          ),
         }
       } else if (isCredShareDetails(details)) {
         return {
           ...res,
-          description: strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(counterpartyName)
+          description: strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED(
+            counterpartyName,
+          ),
         }
       } else {
         return {
           ...res,
-          description: undefined
+          description: undefined,
         }
       }
     }
-  }
+  },
 )
 
 export const getInteractionImage = createSelector(
-  [getInteractionDetails],
+  [getAuthorizationDetails],
   (details) => {
-    if (isAuthzDetails(details)) {
-      return details.imageURL
-    }
-    return undefined;
-  }
+    return details.imageURL
+  },
 )
 
 export const getServiceImage = createSelector(
   [getInteractionCounterparty],
   (counterparty) => {
     return counterparty.publicProfile?.image
-  }
-);
+  },
+)
 
 export const getSingleMissingAttribute = createSelector(
   [getInteractionDetails, getAttributes],
   (details, attributes) => {
-    if (isCredShareDetails(details)) { 
-      const { requestedAttributes, requestedCredentials } = details;
-      if (requestedAttributes.length === 1
-        && requestedCredentials.length === 0
-        && !attributes[requestedAttributes[0]]) {
-          return requestedAttributes[0];
+    if (isCredShareDetails(details)) {
+      const { requestedAttributes, requestedCredentials } = details
+      if (
+        requestedAttributes.length === 1 &&
+        requestedCredentials.length === 0 &&
+        !attributes[requestedAttributes[0]]
+      ) {
+        return requestedAttributes[0]
       }
     }
-    return undefined;
-  }
+    return undefined
+  },
 )
 
 export const getSingleCredentialToShare = createSelector(
-  [getInteractionDetails, getAllCredentials],
+  [getCredShareDetails, getAllCredentials],
   (details, credentials) => {
-    if (isCredShareDetails(details)) {
-      const { requestedAttributes, requestedCredentials } = details;
-      if (requestedAttributes.length === 0
-        && requestedCredentials.length === 1
-        ) {
-          const availableCreds = credentials.filter(c => c.type === requestedCredentials[0]);
-          if (availableCreds.length === 1) {
-            return availableCreds[0]
-          }
+    const { requestedAttributes, requestedCredentials } = details
+    if (requestedAttributes.length === 0 && requestedCredentials.length === 1) {
+      const availableCreds = credentials.filter(
+        (c) => c.type === requestedCredentials[0],
+      )
+      if (availableCreds.length === 1) {
+        return availableCreds[0]
       }
     }
-    return undefined;
-  }
+    return undefined
+  },
 )
 
 export const getInteractionSubmitLabel = createSelector(
@@ -362,7 +369,9 @@ export const getInteractionSubmitLabel = createSelector(
     if (isAuthDetails(details)) {
       return strings.AUTHENTICATE
     } else if (isAuthzDetails(details)) {
-      const cta = details.action ? truncateFirstWord(details.action) : strings.AUTHORIZE
+      const cta = details.action
+        ? truncateFirstWord(details.action)
+        : strings.AUTHORIZE
       const label = capitalizeWord(cta)
       return label
     } else if (isCredOfferDetails(details)) {
@@ -370,7 +379,7 @@ export const getInteractionSubmitLabel = createSelector(
     } else if (isCredShareDetails(details)) {
       return missingAttributes !== undefined ? strings.ADD_INFO : strings.SHARE
     } else {
-    return strings.UNKNOWN
+      return strings.UNKNOWN
     }
-  }
+  },
 )
