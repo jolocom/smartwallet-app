@@ -16,6 +16,34 @@ import InteractionSection from './components/InteractionSection';
 import InteractionTitle from './components/InteractionTitle';
 import { AttributeWidgetContainerFAS, ContainerBAS, ContainerFAS, FooterContainerFAS, LogoContainerBAS, LogoContainerFAS, Space } from './components/styled';
 
+// Generic selector for every interaction => InteractionDescription
+/*
+    counterpartyDetails: {
+      isAnonymous: boolean,
+      counterparty: {}
+    },
+*/
+
+// Generic selector for every interaction => InteractionIcon
+/*
+    counterparty: {},
+*/
+
+/*
+  BAS
+  {
+    singleMissingAttribute: AttributeType,
+    singleCredential: credential,
+  }
+  FAS
+  {
+    sections: {
+      other: credential[],
+      documents: credential[]
+    },
+  }
+*/
+
 export const CredentialShareBAS = () => {
   const singleCredentialToShare = useSelector(getSingleCredentialToShare)
   const singleMissingAttribute = useSelector(getSingleMissingAttribute);

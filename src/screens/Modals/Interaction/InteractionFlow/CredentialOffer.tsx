@@ -14,6 +14,21 @@ import InteractionSection from './components/InteractionSection';
 import InteractionTitle from './components/InteractionTitle';
 import { ContainerBAS, ContainerFAS, FooterContainerFAS, LogoContainerBAS, LogoContainerFAS, Space } from './components/styled';
 
+/*
+  BAS
+  {
+    singleCredential: credential,
+  }
+  FAS
+  {
+    sections: {
+      other: credential[],
+      documents: credential[]
+    },
+  }
+*/
+
+
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
 

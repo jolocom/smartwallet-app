@@ -7,8 +7,16 @@ import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
 import InteractionImage from './components/InteractionImage';
 import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit';
 
+/*
+  {
+    action: string,
+    description: string
+    image: string
+  }
+*/
+
 const Authorization = () => {
-  const handleSubmit = useAuthzSubmit()
+  const handleSubmit = useAuthzSubmit();
   return (
     <ContainerBAS>
       <LogoContainerBAS>
