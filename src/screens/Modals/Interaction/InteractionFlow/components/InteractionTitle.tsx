@@ -4,7 +4,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import BP from '~/utils/breakpoints';
 import { JoloTextSizes } from '~/utils/fonts';
 
-interface IInteractionText {
+export interface IInteractionText {
   label: string
 }
 

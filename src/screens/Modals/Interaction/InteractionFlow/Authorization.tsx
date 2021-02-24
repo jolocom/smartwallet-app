@@ -10,19 +10,11 @@ import { useSelector } from 'react-redux';
 import { getAuthzUIDetails } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
 
-/*
-  {
-    action: string,
-    description: string
-    image: string
-  }
-*/
-
 const Authorization = () => {
   const {
     action,
     imageURL: image,
-    description
+    description // NOTE: it isn't used 
   } = useSelector(getAuthzUIDetails);
 
   const handleSubmit = useAuthzSubmit();
@@ -32,8 +24,12 @@ const Authorization = () => {
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={strings.WOULD_YOU_LIKE_TO_ACTION(action)} />
-      <InteractionDescription />
+      <InteractionTitle
+        label={strings.WOULD_YOU_LIKE_TO_ACTION(action)}
+      />
+      <InteractionDescription
+        labelGenerator={strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS}
+      />
       <Space />
       <InteractionImage />
       <InteractionFooter onSubmit={handleSubmit} />

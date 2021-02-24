@@ -147,7 +147,7 @@ const interactions = {
   THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: (did: string) =>
     `This public profile ${did} chose to remain anonymous. Pay attention before sharing data.`,
   SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: (service: string) =>
-    `${service} would like to confirm your digital identity before proceeding`,
+    `${service} is now ready to grant you access`,
   SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY: (service: string) =>
     `${service} would like to confirm your digital identity before proceeding`,
   SERVICE: 'Service',

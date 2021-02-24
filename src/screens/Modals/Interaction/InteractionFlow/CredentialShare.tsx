@@ -77,7 +77,9 @@ export const CredentialShareBAS = () => {
         <InteractionLogo />
       </LogoContainerBAS>
       <InteractionTitle label={strings.INCOMING_REQUEST} />
-      <InteractionDescription />
+      <InteractionDescription
+        labelGenerator={strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED}
+      />
       <Space />
       {renderBody()}
       <InteractionFooter onSubmit={handleSubmit} />
@@ -127,7 +129,9 @@ const CredentialShareFAS = () => {
         renderCollapsingComponent={handleRenderCollapsingComponent}
       >
         <InteractionTitle label={strings.INCOMING_REQUEST} />
-        <InteractionDescription />
+        <InteractionDescription
+          labelGenerator={strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED}
+        />
         <Space />
         <AttributeWidgetContainerFAS>
           <ShareAttributeWidget />

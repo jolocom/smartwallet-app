@@ -1,14 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import JoloText, { JoloTextKind } from '~/components/JoloText';
-import { getInteractionDescription } from '~/modules/interaction/selectors';
+import { getServiceDescription } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
 import { Colors } from '~/utils/colors';
 import { JoloTextSizes } from '~/utils/fonts';
-import { IInteractionText } from './InteractionTitle';
 
-const InteractionDescription: React.FC<IInteractionText> = ({ label }) => {
-  const { description, isAnonymous } = useSelector(getInteractionDescription);
+interface IInteractionDescriptionProps {
+  labelGenerator: (name: string) => string
+}
+
+const InteractionDescription: React.FC<IInteractionDescriptionProps> = ({ labelGenerator }) => {
+  const { did, name, isAnonymous } = useSelector(getServiceDescription);
   return (
     <JoloText
       kind={JoloTextKind.subtitle}
@@ -16,7 +19,10 @@ const InteractionDescription: React.FC<IInteractionText> = ({ label }) => {
       color={isAnonymous ? Colors.error : Colors.white70}
       customStyles={{ paddingHorizontal: 10 }}
     >
-      {description ?? label ?? strings.UNKNOWN_DESCRIPTION}
+      {isAnonymous
+        ? strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS(did)
+        : labelGenerator(name ?? '')
+      }
     </JoloText>
 
   )

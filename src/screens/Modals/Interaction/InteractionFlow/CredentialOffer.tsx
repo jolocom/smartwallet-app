@@ -45,7 +45,9 @@ const CredentialOfferBAS = () => {
         <InteractionLogo />
       </LogoContainerBAS>
       <InteractionTitle label={strings.INCOMING_OFFER} />
-      <InteractionDescription />
+      <InteractionDescription
+        labelGenerator={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+      />
       <Space />
       {renderBody()}
       <InteractionFooter onSubmit={handleSubmit} />
@@ -83,7 +85,9 @@ const CredentialOfferFAS = () => {
         renderCollapsingComponent={handleRenderCollapsingComponent}
       >
         <InteractionTitle label={strings.INCOMING_OFFER} />
-        <InteractionDescription />
+        <InteractionDescription
+          labelGenerator={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+        />
         <Space />
         <InteractionSection title={strings.DOCUMENTS}>
           {handleRenderCredentails(documents)}

@@ -8,14 +8,16 @@ import useAuthSubmit from '~/hooks/interactions/useAuthSubmit';
 import { strings } from '~/translations';
 
 const Authentication = () => {
-  const handleSubmit = useAuthSubmit()
+  const handleSubmit = useAuthSubmit();
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <InteractionLogo/>
+        <InteractionLogo />
       </LogoContainerBAS>
       <InteractionTitle label={strings.IS_IT_REALLY_YOU} />
-      <InteractionDescription />
+      <InteractionDescription
+        labelGenerator={strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY}
+      />
       <Space />
       <InteractionFooter onSubmit={handleSubmit} />
     </ContainerBAS>
