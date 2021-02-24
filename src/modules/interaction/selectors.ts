@@ -245,27 +245,6 @@ export const getOfferCredentialsBySection = createSelector(
   },
 )
 
-/*
-  Supportive selectors for components 
-*/
-
-export const getInteractionTitle = createSelector(
-  [getInteractionDetails],
-  (details) => {
-    if (isAuthDetails(details)) {
-      return strings.IS_IT_REALLY_YOU
-    } else if (isAuthzDetails(details)) {
-      return strings.WOULD_YOU_LIKE_TO_ACTION(details.action)
-    } else if (isCredOfferDetails(details)) {
-      return strings.INCOMING_OFFER
-    } else if (isCredShareDetails(details)) {
-      return strings.INCOMING_REQUEST
-    } else {
-      return undefined
-    }
-  },
-)
-
 export const getInteractionDescription = createSelector(
   [getInteractionDetails, getInteractionCounterparty],
   (details, counterparty) => {
@@ -382,4 +361,14 @@ export const getInteractionSubmitLabel = createSelector(
       return strings.UNKNOWN
     }
   },
+)
+
+export const getAuthzUIDetails = createSelector(
+  [getAuthorizationDetails],
+  (details) => {
+    const { flowType, ...rest } = details;
+    return {
+      ...rest
+    }
+  }
 )

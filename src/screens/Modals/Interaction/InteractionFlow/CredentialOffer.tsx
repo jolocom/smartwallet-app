@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import CollapsedScrollView from '~/components/CollapsedScrollView';
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit';
-import { getInteractionTitle, getIsFullscreenCredOffer, getOfferCredentialsBySection } from '~/modules/interaction/selectors';
+import { getIsFullscreenCredOffer, getOfferCredentialsBySection } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
 import { OfferUICredential } from '~/types/credentials';
 import InteractionDescription from './components/InteractionDescription';
@@ -44,7 +44,7 @@ const CredentialOfferBAS = () => {
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle />
+      <InteractionTitle label={strings.INCOMING_OFFER} />
       <InteractionDescription />
       <Space />
       {renderBody()}
@@ -54,7 +54,6 @@ const CredentialOfferBAS = () => {
 }
 
 const CredentialOfferFAS = () => {
-  const interactionTitle = useSelector(getInteractionTitle);
   const { documents, other } = useSelector(getOfferCredentialsBySection)
   const handleSubmit = useCredentialOfferSubmit()
 
@@ -80,10 +79,10 @@ const CredentialOfferFAS = () => {
   return (
     <ContainerFAS>
       <CollapsedScrollView
-        collapsedTitle={interactionTitle}
+        collapsedTitle={strings.INCOMING_OFFER}
         renderCollapsingComponent={handleRenderCollapsingComponent}
       >
-        <InteractionTitle />
+        <InteractionTitle label={strings.INCOMING_OFFER} />
         <InteractionDescription />
         <Space />
         <InteractionSection title={strings.DOCUMENTS}>

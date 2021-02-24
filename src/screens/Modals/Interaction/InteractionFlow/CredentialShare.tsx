@@ -5,7 +5,7 @@ import CollapsedScrollView from '~/components/CollapsedScrollView';
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget';
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit';
 import { useSwitchScreens } from '~/hooks/navigation';
-import { getInteractionTitle, getIsFullscreenCredShare, getShareCredentialsBySection, getSingleCredentialToShare, getSingleMissingAttribute } from '~/modules/interaction/selectors';
+import { getIsFullscreenCredShare, getShareCredentialsBySection, getSingleCredentialToShare, getSingleMissingAttribute } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
 import { MultipleShareUICredential } from '~/types/credentials';
 import { ScreenNames } from '~/types/screens';
@@ -76,7 +76,7 @@ export const CredentialShareBAS = () => {
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle />
+      <InteractionTitle label={strings.INCOMING_REQUEST} />
       <InteractionDescription />
       <Space />
       {renderBody()}
@@ -86,7 +86,6 @@ export const CredentialShareBAS = () => {
 }
 
 const CredentialShareFAS = () => {
-  const interactionTitle = useSelector(getInteractionTitle);
   const { documents, other } = useSelector(getShareCredentialsBySection)
 
   const handleSubmit = useCredentialShareSubmit();
@@ -124,10 +123,10 @@ const CredentialShareFAS = () => {
   return (
     <ContainerFAS>
       <CollapsedScrollView
-        collapsedTitle={interactionTitle ?? strings.UNKNOWN_TITLE}
+        collapsedTitle={strings.INCOMING_REQUEST}
         renderCollapsingComponent={handleRenderCollapsingComponent}
       >
-        <InteractionTitle />
+        <InteractionTitle label={strings.INCOMING_REQUEST} />
         <InteractionDescription />
         <Space />
         <AttributeWidgetContainerFAS>
