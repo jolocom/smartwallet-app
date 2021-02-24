@@ -1,7 +1,8 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import ScreenContainer from '~/components/ScreenContainer';
-import { IncomingRequestDoc, IncomingRequestOther } from '~/screens/Modals/Interaction/InteractionFlow/components/card/incomingRequest';
+import { IncomingRequestDoc } from '~/screens/Modals/Interaction/InteractionFlow/components/card/request/document';
+import { IncomingRequestOther } from '~/screens/Modals/Interaction/InteractionFlow/components/card/request/other';
 import Section from '../components/Section';
 
 const REQUEST_DOCS = [

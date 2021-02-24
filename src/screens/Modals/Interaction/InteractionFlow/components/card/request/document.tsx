@@ -1,43 +1,38 @@
 import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
-import InteractionCardOther from '~/assets/svg/InteractionCardOther';
 import { strings } from '~/translations';
-import { BodyFieldsCalculator } from './context';
+import { BodyFieldsCalculator } from '../context';
+import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyContainer,
   BodyFieldsContainer,
   BodyFieldsGroup,
   BodyImageContainer,
+  Container,
   CredentialHighlight,
   CredentialHolderName,
   CredentialImage,
   EmptyContainer,
-  EmptyFieldsTitle,
   EmptyFieldsDescription,
-  HeaderContainer,
-  OtherContainer,
-  Container,
-  OtherTitleContainer,
-  OtherTitle
-} from './styled';
-import { CredentialName, FieldLabel } from './reusable';
+  EmptyFieldsTitle,
+  HeaderContainer
+} from '../styled';
 
 const MAX_FIELD_DOC = 2;
-const MAX_FIELD_OTHER = 3;
 
 export const IncomingRequestDoc = ({
   title,
   name,
   holderName,
   properties,
-  hightlight,
+  highlight,
   image
 }) => {
   const handleChildVisibility = (child: React.ReactNode, idx: number, lines: Record<number, number>) => {
     if (idx + 1 > MAX_FIELD_DOC) {
      /* 1. Do not display anything that is more than max */
      return null
-    } else if (lines[0] > 1 && !!hightlight && idx > 0) {
+    } else if (lines[0] > 1 && !!highlight && idx > 0) {
       /* 2. Do not display all the fields besides first if number of lines of the first field is more than 1 and there is a highlight */
       return null
     }
@@ -58,7 +53,7 @@ export const IncomingRequestDoc = ({
             without breaking further configurations  
           */}
           {holderName && (
-            <CredentialHolderName isTruncated={Boolean(hightlight)}>{holderName}</CredentialHolderName>
+            <CredentialHolderName isTruncated={Boolean(highlight)}>{holderName}</CredentialHolderName>
           )}
         </HeaderContainer>
         {properties.length ? (
@@ -94,74 +89,12 @@ export const IncomingRequestDoc = ({
         {image && (
           <CredentialImage imageUrl="https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg" />
         )}
-        {hightlight && (
-          <CredentialHighlight>{hightlight}</CredentialHighlight>
+        {highlight && (
+          <CredentialHighlight>{highlight}</CredentialHighlight>
       )}
       
     </InteractionCardDoc>
     </Container>
 
-  )
-}
-
-export const IncomingRequestOther = ({
-  title,
-  subtitle,
-  name,
-  properties
-}) => {
-  const handleChildVisibility = (child: React.ReactNode, idx: number, lines: Record<number, number>) => {
-    if (idx + 1 > MAX_FIELD_OTHER) {
-      /* 1. Do not display anything that is more than max */
-      return null
-    } else if (lines[0] && lines[1] && lines[0] + lines[1] > 2 && idx > 1) {
-      /* 2. If the sum of first and second field values is greater than 2 do not display anything later*/
-      return null
-    }
-    return child;
-  }
-
-  /* NOTE: in other cards we can allow to display 2 lines
-    constantly no matter how many lines are in the first value
-  */
-  const handleNumberOfValueLinesToDisplay = () => 2;
-  return (
-    <Container>
-      <InteractionCardOther>
-        <OtherContainer>
-          <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
-            <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{subtitle ?? title ?? name}</CredentialName>
-          </HeaderContainer>
-          {properties.length ? (
-            <BodyContainer customStyles={{flex: 0, alignSelf: 'flex-end'}}>
-              <BodyFieldsContainer isStretched>
-                <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
-                  {properties.map((p, idx) => (
-                    <BodyFieldsGroup>
-                      <FieldLabel>{p.label}</FieldLabel>
-                      <BodyFieldsCalculator.FieldValue
-                        idx={idx}
-                        onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
-                      >
-                        {p.value}
-                      </BodyFieldsCalculator.FieldValue>
-                    </BodyFieldsGroup>
-                  ))}
-                </BodyFieldsCalculator>
-              </BodyFieldsContainer>
-            </BodyContainer>
-          ) : (
-            <EmptyContainer>
-              <EmptyFieldsTitle>{strings.INCLUDED_INFO}</EmptyFieldsTitle>
-              <EmptyFieldsDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</EmptyFieldsDescription>
-            </EmptyContainer>
-          )}
-        </OtherContainer>
-        <OtherTitleContainer>
-          <OtherTitle>{title}</OtherTitle>
-        </OtherTitleContainer>
-      </InteractionCardOther>
-    </Container>
-      
   )
 }
