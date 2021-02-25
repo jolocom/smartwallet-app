@@ -46,7 +46,7 @@ export const IncomingRequestDoc = ({
   const handleNumberOfValueLinesToDisplay = (idx: number, lines: Record<number, number>) => {
     return idx !== 0
       ? lines[0] > 1 ? 1 : BP({ default: 2, xsmall: 1 })
-      : BP({ default: 2, xsmall: 1 });
+      : BP({ default: 2, xsmall: highlight ? 2 : 1 });
     };
 
   return (
