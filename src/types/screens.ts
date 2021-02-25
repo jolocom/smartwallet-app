@@ -8,6 +8,7 @@ export enum ScreenNames {
   SeedPhraseWrite = 'SeedPhraseWrite',
   SeedPhraseInfo = 'SeedPhraseInfo',
   SeedPhraseRepeat = 'SeedPhraseRepeat',
+  LoggedOutTermsConsent = 'LoggedOutTermsConsent',
 
   // After identity
   BeforeLoggedIn = 'BeforeLoggedIn',
@@ -30,7 +31,7 @@ export enum ScreenNames {
   InteractionAddCredential = 'InteractionAddCredential',
   // Modals
   Loader = 'Loader',
-
+  LoggedInTermsConsent = 'LoggedInTermsConsent',
   Lock = 'Lock',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',

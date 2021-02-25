@@ -8,16 +8,13 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack'
 import { Platform } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { ScreenNames } from '~/types/screens'
-
 import Interaction from '~/screens/Modals/Interaction'
-
 import History from './History'
 import Documents from './Documents'
-
 import BottomBar from '~/components/BottomBar'
-
 import Settings from './Settings'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
@@ -36,6 +33,8 @@ import Identity from './Identity'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
 import BusinessCardTest from './Settings/Development/BusinessCardTest'
+import { shouldShowTermsConsent } from '~/modules/account/selectors'
+import TermsConsent from '../Modals/TermsConsent'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -65,110 +64,121 @@ const settingsScreenTransitionOptions = {
 }
 
 const LoggedInTabs: React.FC = () => {
-    return (
+  const shouldShowConsent = useSelector(shouldShowTermsConsent)
+  return (
     <LoggedInStack.Navigator
       headerMode="none"
       mode="modal"
       initialRouteName={ScreenNames.Tabs}
     >
-      <LoggedInStack.Screen name={ScreenNames.Tabs} component={Tabs} />
-
-      {/* Settings Screens -> Start   */}
-      <LoggedInStack.Screen
-        name={ScreenNames.Language}
-        component={Language}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.ChangePin}
-        component={ChangePin}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.BackupIdentity}
-        component={BackupIdentity}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.FAQ}
-        component={FAQ}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.ContactUs}
-        component={ContactUs}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.About}
-        component={About}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.Imprint}
-        component={Imprint}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.PrivacyPolicy}
-        component={PrivacyPolicy}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.TermsOfService}
-        component={TermsOfService}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.DragToConfirm}
-        component={DragToConfirm}
-      />
-
-      {__DEV__ && (
+      {shouldShowConsent ? (
+        <LoggedInStack.Screen
+          name={ScreenNames.LoggedInTermsConsent}
+          component={TermsConsent}
+          options={settingsScreenTransitionOptions}
+        />
+      ) : (
         <>
+          <LoggedInStack.Screen name={ScreenNames.Tabs} component={Tabs} />
+
+          {/* Settings Screens -> Start   */}
           <LoggedInStack.Screen
-            name={ScreenNames.ButtonsTest}
-            component={ButtonsTest}
+            name={ScreenNames.Language}
+            component={Language}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.ChangePin}
+            component={ChangePin}
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.LoaderTest}
-            component={LoaderTest}
-          />
-          <LoggedInStack.Screen
-            name={ScreenNames.NotificationsTest}
-            component={NotificationsTest}
+            name={ScreenNames.BackupIdentity}
+            component={BackupIdentity}
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.InputTest}
-            component={InputTest}
+            name={ScreenNames.FAQ}
+            component={FAQ}
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.PasscodeTest}
-            component={PasscodeTest}
+            name={ScreenNames.ContactUs}
+            component={ContactUs}
             options={settingsScreenTransitionOptions}
           />
           <LoggedInStack.Screen
-            name={ScreenNames.BusinessCardTest}
-            component={BusinessCardTest}
+            name={ScreenNames.About}
+            component={About}
             options={settingsScreenTransitionOptions}
           />
+          <LoggedInStack.Screen
+            name={ScreenNames.Imprint}
+            component={Imprint}
+            options={settingsScreenTransitionOptions}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.PrivacyPolicy}
+            component={PrivacyPolicy}
+            options={settingsScreenTransitionOptions}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.TermsOfService}
+            component={TermsOfService}
+            options={settingsScreenTransitionOptions}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.DragToConfirm}
+            component={DragToConfirm}
+          />
+
+          {__DEV__ && (
+            <>
+              <LoggedInStack.Screen
+                name={ScreenNames.ButtonsTest}
+                component={ButtonsTest}
+                options={settingsScreenTransitionOptions}
+              />
+              <LoggedInStack.Screen
+                name={ScreenNames.LoaderTest}
+                component={LoaderTest}
+              />
+              <LoggedInStack.Screen
+                name={ScreenNames.NotificationsTest}
+                component={NotificationsTest}
+                options={settingsScreenTransitionOptions}
+              />
+              <LoggedInStack.Screen
+                name={ScreenNames.InputTest}
+                component={InputTest}
+                options={settingsScreenTransitionOptions}
+              />
+              <LoggedInStack.Screen
+                name={ScreenNames.PasscodeTest}
+                component={PasscodeTest}
+                options={settingsScreenTransitionOptions}
+              />
+              <LoggedInStack.Screen
+                name={ScreenNames.BusinessCardTest}
+                component={BusinessCardTest}
+                options={settingsScreenTransitionOptions}
+              />
+            </>
+          )}
+          {/* Settings Screens -> End   */}
+
+          {/* Modals -> Start */}
+          <LoggedInStack.Screen
+            name={ScreenNames.Interaction}
+            component={Interaction}
+            options={{ gestureEnabled: false }}
+          />
+          {/* Modals -> End */}
         </>
       )}
-      {/* Settings Screens -> End   */}
-
-      {/* Modals -> Start */}
-      <LoggedInStack.Screen
-        name={ScreenNames.Interaction}
-        component={Interaction}
-        options={{gestureEnabled: false}}
-      />
-      {/* Modals -> End */}
-        </LoggedInStack.Navigator>
+    </LoggedInStack.Navigator>
   )
 }
 
