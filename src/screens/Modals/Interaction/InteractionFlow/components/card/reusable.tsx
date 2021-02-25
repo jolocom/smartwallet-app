@@ -4,7 +4,8 @@ import { TextLayoutEvent } from '~/components/Card/Field';
 import { IWithCustomStyle } from '~/components/Card/types';
 import JoloText, { JoloTextWeight } from '~/components/JoloText';
 import { Colors } from '~/utils/colors';
-import { IBodyFieldsCalculatorComposition, useFieldCalculator } from './context';
+import { useFieldCalculator } from '../FieldsCalculator/context';
+import { IBodyFieldsCalculatorComposition } from '../FieldsCalculator/types';
 
 interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle>  {}
 export const CredentialName: React.FC<ICredentialNameProps> = ({ children, customStyles, ...props }) => {

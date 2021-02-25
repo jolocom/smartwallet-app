@@ -2,7 +2,7 @@ import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
 import { strings } from '~/translations';
 import BP from '~/utils/breakpoints';
-import { BodyFieldsCalculator } from '../context';
+import { BodyFieldsCalculator } from '../../FieldsCalculator';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyContainer,
@@ -40,10 +40,10 @@ export const IncomingRequestOther = ({
   /* NOTE: in other cards we can allow to display 2 lines
     constantly no matter how many lines are in the first value
   */
-  const handleNumberOfValueLinesToDisplay = (idx: number, lines: Record<number, number>) => {
+  const handleNumberOfValueLinesToDisplay = (idx: number) => {
     return BP({
       default: 2,
-      xsmall: idx !== 0 && 1 
+      xsmall: idx !== 0 ? 1 : 2
     })
   };
 

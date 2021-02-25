@@ -2,7 +2,7 @@ import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
 import { strings } from '~/translations';
 import BP from '~/utils/breakpoints';
-import { BodyFieldsCalculator } from '../context';
+import { BodyFieldsCalculator } from '../../FieldsCalculator';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyContainer,
