@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { useBackHandler } from '@react-native-community/hooks'
 
 import { strings } from '~/translations/strings'
 
@@ -56,9 +55,6 @@ const Lock = () => {
       dispatch(setPopup(false))
     }
   }
-
-  /* disable hardwareback button default functionality */
-  useBackHandler(() => true)
 
   const handlePINSubmit = (pin: string) => {
     if (keychainPin.toString() === pin) {

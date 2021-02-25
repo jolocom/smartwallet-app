@@ -1,5 +1,4 @@
 import React from 'react'
-import { useBackHandler } from '@react-native-community/hooks'
 import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -45,8 +44,6 @@ const RegisterBiometry: React.FC = () => {
       })
     }
   }
-
-  useBackHandler(() => true)
 
   return (
     <ScreenContainer

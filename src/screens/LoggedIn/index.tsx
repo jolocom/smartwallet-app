@@ -82,12 +82,12 @@ const LoggedIn = () => {
   useEffect(() => {
     if (!isLoaderVisible) {
       if (showLock) {
-        navigation.dispatch(StackActions.push(ScreenNames.Lock))
+        navigation.dispatch(StackActions.replace(ScreenNames.Lock))
       } else if (showRegisterPin) {
         // Show passcode registration screen
-        navigation.navigate(ScreenNames.DeviceAuth)
+        navigation.dispatch(StackActions.replace(ScreenNames.DeviceAuth))
       } else if (showTabs) {
-        navigation.navigate(ScreenNames.Main)
+        navigation.dispatch(StackActions.replace(ScreenNames.Main))
       }
     }
   }, [isAppLocked, isAuthSet, isLoaderVisible])
