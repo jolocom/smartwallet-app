@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 
 import { RootReducerI } from '~/types/reducer'
 import {
+  AttributeTypes,
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
@@ -317,6 +318,22 @@ export const getIsReadyToSubmitRequest = createSelector(
     }
 
     return false
+  }
+)
+
+export const getAttributesToSelect = createSelector(
+  [getAvailableAttributesToShare],
+  (attributes) => {
+    return Object.keys(attributes).reduce<Record<string, string>>((acc, value) => {		
+       const attrType = value as AttributeTypes		
+       if (!acc[attrType]) {		
+         const attr = attributes[attrType] || []		
+         if (attr.length) {		
+           acc[attrType] = attr[0].id		
+         }		
+       }		
+       return acc		
+     }, {})
   }
 )
 

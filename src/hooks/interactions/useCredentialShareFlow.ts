@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
-  getAvailableAttributesToShare,
   getSelectedShareCredentials,
 } from '~/modules/interaction/selectors'
 import { selectShareCredential } from '~/modules/interaction/actions'
@@ -16,7 +15,6 @@ export const useCredentialShareFlow = () => {
   const getInteraction = useInteraction()
   const agent = useAgent()
   const selectedShareCredentials = useSelector(getSelectedShareCredentials)
-  const attributes = useSelector(getAvailableAttributesToShare)
 
   /**
    * Assembles a @CredentialRequestResponse token with the selected

@@ -3,12 +3,14 @@ import { Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import CollapsedScrollView from '~/components/CollapsedScrollView';
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget';
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow';
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit';
 import { useSwitchScreens } from '~/hooks/navigation';
 import {
   getCredShareUIDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
+  getAttributesToSelect,
   getShareCredentialsBySection
 } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
@@ -29,13 +31,23 @@ import {
   Space
 } from './components/styled';
 
+const useSelectAttributes = () => {
+  const attributesToBeSelected = useSelector(getAttributesToSelect);
+  const { handleSelectCredential } = useCredentialShareFlow();
+  useEffect(() => {
+    handleSelectCredential(attributesToBeSelected)
+  }, [JSON.stringify(attributesToBeSelected)])
+}
+
 export const CredentialShareBAS = () => {
   const { singleMissingAttribute, singleCredential } = useSelector(getCredShareUIDetailsBAS);
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest);
 
   const handleShare = useCredentialShareSubmit();
   const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionAddCredential)
-  
+
+  useSelectAttributes();
+
   const handleSubmit = () => singleMissingAttribute !== undefined
     ? handleSwitchScreens({ type: singleMissingAttribute })
     : handleShare()
@@ -85,6 +97,8 @@ const CredentialShareFAS = () => {
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest);
 
   const handleSubmit = useCredentialShareSubmit();
+
+  useSelectAttributes()
 
   const handleRenderCollapsingComponent = useCallback(() => (
     <LogoContainerFAS>
