@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, View } from 'react-native';
 import ScreenContainer from '~/components/ScreenContainer';
 import IncomingOfferDoc from '~/screens/Modals/Interaction/InteractionFlow/components/card/offer/document';
+import IncomingOfferOther from '~/screens/Modals/Interaction/InteractionFlow/components/card/offer/other';
 import { IncomingRequestDoc } from '~/screens/Modals/Interaction/InteractionFlow/components/card/request/document';
 import { IncomingRequestOther } from '~/screens/Modals/Interaction/InteractionFlow/components/card/request/other';
 import Section from '../components/Section';
@@ -270,6 +271,66 @@ const OFFER_DOCS = [
     title: 'Friendly document name',
     properties: [],
   },
+]
+
+const OFFER_OTHER = [
+  {
+    id: 0,
+    name: 'Concert ticket',
+    title: 'Concert ticket',
+    properties: [
+      {
+        key: 'a',
+        label: 'Name',
+        value: '04.06.1984'
+      },
+      {
+        key: 'b',
+        label: 'Date of birth',
+        value: '04.06.1984'
+      },
+      {
+        key: 'c',
+        label: 'Expiry date',
+        value: '04.06.1984'
+      },
+      {
+        key: 'd',
+        label: 'Something else',
+        value: '04.06.1984'
+      },
+
+    ],
+  },
+  {
+    id: 1,
+    name: 'Concert ticket',
+    title: 'Concert ticket',
+    properties: [
+      {
+        key: 'a',
+        label: 'Name',
+        value: '04.06.1984'
+      },
+      {
+        key: 'b',
+        label: 'Date of birth',
+        value: '04.06.1984'
+      },
+      {
+        key: 'c',
+        label: 'Expiry date',
+        value: '04.06.1984'
+      },
+
+    ],
+  },
+  {
+    id: 2,
+    name: 'Concert ticket',
+    title: 'Concert ticket',
+    properties: [],
+  },
 
 ]
 
@@ -316,7 +377,17 @@ const InteractionTest = () => {
             <View style={{height: 20}} />
           </View>
         ))}
-
+        <Section.Title customStyle={{ alignSelf: 'center' }}>
+          Incoming offer - other
+        </Section.Title>
+        {OFFER_OTHER.map(c => (
+          <View key={c.id}>
+            <IncomingOfferOther
+              {...c}
+            />
+            <View style={{height: 20}} />
+          </View>
+        ))}
       </ScrollView>
       
     </ScreenContainer>

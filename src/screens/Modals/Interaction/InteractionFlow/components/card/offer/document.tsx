@@ -22,7 +22,7 @@ const IncomingOfferDoc = ({
     <Container>
       <InteractionCardDoc>
           <HeaderContainer customStyles={{flex: 0}}>
-            <CredentialName>{title ?? name}</CredentialName>
+            <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
         </HeaderContainer>
         <BodyFieldsContainer isStretched>
           <EmptyFieldsTitle>Included info</EmptyFieldsTitle>
