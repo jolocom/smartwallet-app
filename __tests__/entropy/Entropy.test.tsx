@@ -1,4 +1,4 @@
-import { useEntropyProgress } from '~/screens/LoggedOut/Entropy'
+import { useEntropyProgress } from '~/screens/LoggedOut/Onboarding/Registration/Entropy'
 import { renderHook, act } from '@testing-library/react-hooks'
 
 describe('Entropy', () => {
