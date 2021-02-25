@@ -21,8 +21,6 @@ import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import useTermsConsent from '~/hooks/consent'
-import { RegistrationStackScreen } from './types'
 
 const walkthroughData = [
   {
@@ -55,7 +53,6 @@ const Dot: React.FC<{ active: boolean }> = ({ active }) => {
   )
 }
 const Walkthrough: React.FC = () => {
-  const { checkConsent } = useTermsConsent()
   const redirect = useRedirect()
 
   const renderPagination = (index: number, total: number) => {
@@ -69,11 +66,6 @@ const Walkthrough: React.FC = () => {
   }
 
   const insets = useSafeArea()
-
-  const redirectOnboarding = async (initialRoute: RegistrationStackScreen) => {
-    await checkConsent()
-    redirect(ScreenNames.Onboarding, { initialRoute })
-  }
 
   return (
     <ScreenContainer
@@ -124,14 +116,22 @@ const Walkthrough: React.FC = () => {
         <BtnGroup>
           <Btn
             size={BtnSize.large}
-            onPress={() => redirectOnboarding(ScreenNames.Registration)}
+            onPress={() =>
+              redirect(ScreenNames.Onboarding, {
+                initialRoute: ScreenNames.Registration,
+              })
+            }
           >
             {strings.GET_STARTED}
           </Btn>
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={() => redirectOnboarding(ScreenNames.IdentityRecovery)}
+            onPress={() =>
+              redirect(ScreenNames.Onboarding, {
+                initialRoute: ScreenNames.IdentityRecovery,
+              })
+            }
           >
             {strings.NEED_RESTORE}
           </Btn>

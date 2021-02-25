@@ -1,12 +1,12 @@
 import { ScreenNames } from '~/types/screens'
 
-export type RegistrationStackScreen =
+export type OnboardingStackScreens =
   | ScreenNames.Registration
   | ScreenNames.IdentityRecovery
 
 export type LoggedOutParamList = {
   [ScreenNames.Walkthrough]: undefined
   [ScreenNames.Onboarding]: {
-    initialRoute: RegistrationStackScreen
+    initialRoute: OnboardingStackScreens
   }
 }

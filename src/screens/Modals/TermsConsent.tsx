@@ -19,6 +19,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { CheckmarkIconSmall } from '~/assets/svg'
 import useTermsConsent from '~/hooks/consent'
+import { useAgent } from '~/hooks/sdk'
 
 enum TextType {
   None,
@@ -29,6 +30,7 @@ enum TextType {
 }
 
 const TermsConsent: React.FC = () => {
+  const agent = useAgent()
   const { acceptConsent } = useTermsConsent()
 
   const [accepted, setAccepted] = useState(false)
@@ -139,7 +141,7 @@ const TermsConsent: React.FC = () => {
         </TouchableOpacity>
         <Btn
           customContainerStyles={{ width: '100%' }}
-          onPress={acceptConsent}
+          onPress={() => acceptConsent(agent)}
           disabled={!accepted}
         >
           {strings.ACCEPT_NEW_TERMS}
