@@ -63,7 +63,7 @@ export const CredentialShareBAS = () => {
       </LogoContainerBAS>
       <InteractionTitle label={strings.INCOMING_REQUEST} />
       <InteractionDescription
-        labelGenerator={strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED}
+        label={strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED}
       />
       <Space />
       {renderBody()}
@@ -124,7 +124,7 @@ const CredentialShareFAS = () => {
       >
         <InteractionTitle label={strings.INCOMING_REQUEST} />
         <InteractionDescription
-          labelGenerator={strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED}
+          label={strings.CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED}
         />
         <Space />
         <AttributeWidgetContainerFAS>

@@ -16,7 +16,7 @@ const Authentication = () => {
       </LogoContainerBAS>
       <InteractionTitle label={strings.IS_IT_REALLY_YOU} />
       <InteractionDescription
-        labelGenerator={strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY}
+        label={strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY}
       />
       <Space />
       <InteractionFooter

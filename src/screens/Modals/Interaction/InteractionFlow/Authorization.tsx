@@ -4,12 +4,13 @@ import InteractionDescription from './components/InteractionDescription';
 import InteractionLogo from './components/InteractionLogo';
 import InteractionTitle from './components/InteractionTitle';
 import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
-import InteractionImage from './components/InteractionImage';
+import InteractionImage from './components/InteractionAuthzImage';
 import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit';
 import { useSelector } from 'react-redux';
 import { getAuthzUIDetails } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils';
+import useTranslation from '~/hooks/useTranslation';
 
 const Authorization = () => {
   const {
@@ -17,6 +18,8 @@ const Authorization = () => {
     imageURL: image,
     description // NOTE: it isn't used 
   } = useSelector(getAuthzUIDetails);
+
+  const { t } = useTranslation();
 
   const cta = action
     ? capitalizeWord(truncateFirstWord(action))
@@ -30,10 +33,10 @@ const Authorization = () => {
         <InteractionLogo />
       </LogoContainerBAS>
       <InteractionTitle
-        label={strings.WOULD_YOU_LIKE_TO_ACTION(action)}
+        label={t(strings.WOULD_YOU_LIKE_TO_ACTION, {action})}
       />
       <InteractionDescription
-        labelGenerator={strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS}
+        label={strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS}
       />
       <Space />
       <InteractionImage source={image} />

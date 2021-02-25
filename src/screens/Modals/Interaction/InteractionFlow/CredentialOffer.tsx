@@ -31,7 +31,7 @@ const CredentialOfferBAS = () => {
       </LogoContainerBAS>
       <InteractionTitle label={strings.INCOMING_OFFER} />
       <InteractionDescription
-        labelGenerator={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+        label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
       />
       <Space />
       {renderBody()}
@@ -74,7 +74,7 @@ const CredentialOfferFAS = () => {
       >
         <InteractionTitle label={strings.INCOMING_OFFER} />
         <InteractionDescription
-          labelGenerator={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+          label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
         />
         <Space />
         <InteractionSection title={strings.DOCUMENTS}>

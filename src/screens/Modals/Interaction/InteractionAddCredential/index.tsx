@@ -26,6 +26,7 @@ import { assembleFormInitialValues } from '~/utils/dataMapping'
 import InteractionTitle from '../InteractionFlow/components/InteractionTitle'
 import InteractionDescription from '../InteractionFlow/components/InteractionDescription'
 import { Space } from '../InteractionFlow/components/styled'
+import useTranslation from '~/hooks/useTranslation'
 
 type InteractionAddCredentialRouteProps = RouteProp<
   InteractionStackParamList,
@@ -54,6 +55,8 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
   const { keyboardHeight, keyboardShown } = useKeyboard()
   const [pushUpTo, setPushUpTo] = useState(0)
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.linear,
@@ -74,7 +77,7 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
   }, [keyboardShown, keyboardHeight])
 
   const formConfig = attributeConfig[inputType]
-  const title = strings.ADD_YOUR_ATTRIBUTE(formConfig.label.toLowerCase())
+  const title = t(strings.ADD_YOUR_ATTRIBUTE, {attribute: formConfig.label.toLowerCase()})
   const description =
     strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
 
@@ -131,7 +134,7 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
         >
           <InteractionTitle label={title} />
           <InteractionDescription
-            labelGenerator={() => description}
+            label={description}
           />
           <Space />
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
