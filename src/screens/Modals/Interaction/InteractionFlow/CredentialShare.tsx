@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import CollapsedScrollView from '~/components/CollapsedScrollView';
@@ -8,6 +8,7 @@ import { useSwitchScreens } from '~/hooks/navigation';
 import {
   getCredShareUIDetailsBAS,
   getIsFullscreenCredShare,
+  getIsReadyToSubmitRequest,
   getShareCredentialsBySection
 } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
@@ -28,18 +29,9 @@ import {
   Space
 } from './components/styled';
 
-/*
-  FAS
-  {
-    sections: {
-      other: credential[],
-      documents: credential[]
-    },
-  }
-*/
-
 export const CredentialShareBAS = () => {
   const { singleMissingAttribute, singleCredential } = useSelector(getCredShareUIDetailsBAS);
+  const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest);
 
   const handleShare = useCredentialShareSubmit();
   const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionAddCredential)
@@ -76,6 +68,7 @@ export const CredentialShareBAS = () => {
       <Space />
       {renderBody()}
       <InteractionFooter
+        disabled={!isReadyToSubmit}
         onSubmit={handleSubmit}
         submitLabel={
           singleMissingAttribute !== undefined
@@ -89,6 +82,7 @@ export const CredentialShareBAS = () => {
 
 const CredentialShareFAS = () => {
   const { documents, other } = useSelector(getShareCredentialsBySection)
+  const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest);
 
   const handleSubmit = useCredentialShareSubmit();
 
@@ -146,6 +140,7 @@ const CredentialShareFAS = () => {
       </CollapsedScrollView>
       <FooterContainerFAS>
         <InteractionFooter
+          disabled={!isReadyToSubmit}
           onSubmit={handleSubmit}
           submitLabel={strings.SHARE}
         />

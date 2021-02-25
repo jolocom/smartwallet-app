@@ -302,6 +302,32 @@ export const getSingleCredentialToShare = createSelector(
   },
 )
 
+export const getIsReadyToSubmitRequest = createSelector(
+  [
+    getCredShareDetails,
+    getAvailableAttributesToShare,
+    getSelectedShareCredentials,
+    getSingleMissingAttribute
+  ],
+  (details, attributes, selectedShareCredentials, singleMissingAttribute) => {
+    if (singleMissingAttribute !== undefined) return true;
+    if (Object.keys(selectedShareCredentials).length) {
+      const { requestedCredentials } = details;
+      const allAttributes = Object.keys(attributes).every((t) =>
+        Object.keys(selectedShareCredentials).includes(t),
+      )
+
+      const allCredentials = requestedCredentials.every((t) =>
+        Object.keys(selectedShareCredentials).includes(t),
+      )
+
+      return allAttributes && allCredentials
+    }
+
+    return false
+  }
+)
+
 export const getAuthzUIDetails = createSelector(
   [getAuthorizationDetails],
   (details) => {
@@ -313,9 +339,9 @@ export const getAuthzUIDetails = createSelector(
 )
 
 export const getCredShareUIDetailsBAS = createSelector(
-  [getSingleMissingAttribute, getSingleCredentialToShare],
+  [getSingleMissingAttribute, getSingleCredentialToShare, getIsReadyToSubmitRequest],
   (singleMissingAttribute, singleCredential) => ({
     singleMissingAttribute,
-    singleCredential
+    singleCredential,
   })
 )
