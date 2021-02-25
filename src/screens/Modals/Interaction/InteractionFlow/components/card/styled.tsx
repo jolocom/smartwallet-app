@@ -146,6 +146,12 @@ export const Container: React.FC = ({ children }) => {
   )
 }
 
+export const FieldPlaceholder = () => {
+  return (
+    <View style={styles.fieldPlaceholder} />
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -215,5 +221,11 @@ const styles = StyleSheet.create({
     // ...debugView(),
     paddingHorizontal: 20,
     alignItems: 'flex-start'
+  },
+  fieldPlaceholder: {
+    width: 100, // TODO: update to value from the designs
+    height: 20,
+    borderRadius: 5,
+    backgroundColor: Colors.carnationPink
   }
 })

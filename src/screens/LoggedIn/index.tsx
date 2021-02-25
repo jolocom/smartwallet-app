@@ -35,7 +35,7 @@ import LoaderTest from './Settings/Development/DevLoaders'
 import Identity from './Identity'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
-import InteractionCardsTest from './Settings/Development/InteractiionCardsTest'
+import InteractionCardsTest from './Settings/Development/InteractionCardsTest'
 import BusinessCardTest from './Settings/Development/BusinessCardTest'
 
 const MainTabs = createBottomTabNavigator()

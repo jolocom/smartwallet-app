@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import ScreenContainer from '~/components/ScreenContainer';
+import IncomingOfferDoc from '~/screens/Modals/Interaction/InteractionFlow/components/card/offer/document';
 import { IncomingRequestDoc } from '~/screens/Modals/Interaction/InteractionFlow/components/card/request/document';
 import { IncomingRequestOther } from '~/screens/Modals/Interaction/InteractionFlow/components/card/request/other';
 import Section from '../components/Section';
@@ -211,6 +212,66 @@ const REQUEST_OTHER = [
   },
 ]
 
+const OFFER_DOCS = [
+  {
+    id: 0,
+    name: 'Digital Passport',
+    title: 'Digital Passport',
+    properties: [
+      {
+        key: 'a',
+        label: 'Name',
+        value: '04.06.1984'
+      },
+      {
+        key: 'b',
+        label: 'Date of birth',
+        value: '04.06.1984'
+      },
+      {
+        key: 'c',
+        label: 'Expiry date',
+        value: '04.06.1984'
+      },
+      {
+        key: 'd',
+        label: 'Something else',
+        value: '04.06.1984'
+      },
+
+    ],
+  },
+  {
+    id: 1,
+    name: 'Friendly document name',
+    title: 'Friendly document name',
+    properties: [
+      {
+        key: 'a',
+        label: 'Name',
+        value: '04.06.1984'
+      },
+      {
+        key: 'b',
+        label: 'Date of birth',
+        value: '04.06.1984'
+      },
+      {
+        key: 'c',
+        label: 'Expiry date',
+        value: '04.06.1984'
+      },
+
+    ],
+  },
+  {
+    id: 2,
+    name: 'Friendly document name',
+    title: 'Friendly document name',
+    properties: [],
+  },
+
+]
 
 
 const InteractionTest = () => {
@@ -244,6 +305,18 @@ const InteractionTest = () => {
             <View style={{height: 20}} />
           </View>
         ))}
+        <Section.Title customStyle={{ alignSelf: 'center' }}>
+          Incoming offer - documents
+        </Section.Title>
+        {OFFER_DOCS.map(c => (
+          <View key={c.id}>
+            <IncomingOfferDoc
+              {...c}
+            />
+            <View style={{height: 20}} />
+          </View>
+        ))}
+
       </ScrollView>
       
     </ScreenContainer>
