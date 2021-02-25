@@ -11,7 +11,7 @@ import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
-import BeforeLoggedIn from './screens/BeforeLoggedIn'
+import LoggedIn from './screens/LoggedIn'
 
 export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
@@ -19,7 +19,7 @@ export type RootStackParamList = {
     cancelText: string
     onComplete: () => void
   }
-  [ScreenNames.BeforeLoggedIn]: undefined
+  [ScreenNames.LoggedIn]: undefined
   [ScreenNames.LoggedOut]: undefined
   [ScreenNames.LostSeedPhraseInfo]: undefined
 }
@@ -34,8 +34,8 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
       <RootStack.Navigator headerMode="none" mode="modal">
         {isLoggedIn ? (
           <RootStack.Screen
-            name={ScreenNames.BeforeLoggedIn}
-            component={BeforeLoggedIn}
+            name={ScreenNames.LoggedIn}
+            component={LoggedIn}
             options={{ gestureEnabled: false }}
           />
         ) : (

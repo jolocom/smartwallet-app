@@ -134,7 +134,7 @@ export const useFinishInteraction = () => {
       if (navigation.canGoBack()) {
         navigation.goBack()
       } else {
-        navigation.navigate(ScreenNames.LoggedIn)
+        navigation.navigate(ScreenNames.Main)
       }
     }
     setTimeout(() => {

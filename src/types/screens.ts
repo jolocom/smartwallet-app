@@ -12,19 +12,22 @@ export enum ScreenNames {
   SeedPhraseRepeat = 'SeedPhraseRepeat',
   LoggedOutTermsConsent = 'LoggedOutTermsConsent',
 
-  // After identity
-  BeforeLoggedIn = 'BeforeLoggedIn',
   PasscodeRecovery = 'PasscodeRecovery',
 
-  // Logged In Tabs
+  // Logged In
   LoggedIn = 'LoggedIn',
-  Tabs = 'Tabs',
+  LoggedInTermsConsent = 'LoggedInTermsConsent',
+  Lock = 'Lock',
+  DeviceAuth = 'DeviceAuth',
+
+  // Main
+  Main = 'Main',
+  MainTabs = 'MainTabs',
   Identity = 'Identity',
   Documents = 'Documents',
   History = 'History',
   Settings = 'Settings',
   // Device Authentication
-  DeviceAuth = 'DeviceAuth',
   RegisterPin = 'RegisterPin',
   RegisterBiometry = 'RegisterBiometry',
   // Interactions
@@ -34,8 +37,6 @@ export enum ScreenNames {
   InteractionAddCredential = 'InteractionAddCredential',
   // Modals
   Loader = 'Loader',
-  LoggedInTermsConsent = 'LoggedInTermsConsent',
-  Lock = 'Lock',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
   //Settings

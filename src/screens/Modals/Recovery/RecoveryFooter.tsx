@@ -28,6 +28,7 @@ import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
 import { RootStackParamList } from '~/RootNavigation'
+import { LoggedInStackParamList } from '~/screens/LoggedIn'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -44,7 +45,9 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
   const resetPin = useResetKeychainValues(PIN_SERVICE)
 
-  const route = useRoute<RouteProp<RootStackParamList, 'Recovery'>>()
+  const route = useRoute<
+    RouteProp<LoggedInStackParamList, ScreenNames.PasscodeRecovery>
+  >()
   const navigation = useNavigation()
 
   const isAccessRestore = route?.params?.isAccessRestore ?? false
@@ -55,7 +58,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     })
     if (success) {
       dispatch(setLogged(true))
-      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
+      const replaceAction = StackActions.replace(ScreenNames.Main)
       navigation.dispatch(replaceAction)
     } else recoveryDispatch(resetPhrase())
   }, [phrase])
