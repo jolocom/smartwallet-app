@@ -22,8 +22,21 @@ import { Colors } from '~/utils/colors'
 import LoggedInTabs from '../LoggedIn'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'
 import Lock from '../Modals/Lock'
+import Recovery from '../Modals/Recovery'
+import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 
-const BeforeLoggedInStack = createStackNavigator()
+export type LoggedInStackParamList = {
+  Idle: undefined
+  [ScreenNames.PasscodeRecovery]: {
+    isAccessRestore: boolean
+  }
+  [ScreenNames.LoggedIn]: undefined
+  [ScreenNames.Lock]: undefined
+  [ScreenNames.PinRecoveryInstructions]: undefined
+  [ScreenNames.DeviceAuth]: undefined
+}
+
+const BeforeLoggedInStack = createStackNavigator<LoggedInStackParamList>()
 
 const settingsScreenTransitionOptions = {
   ...Platform.select({
@@ -93,16 +106,20 @@ const BeforeLoggedIn = () => {
     isPopupRef.current = isPopup
   }, [isPopup])
 
-  const { currentAppState, prevAppState } = useGetAppStates();
+  const { currentAppState, prevAppState } = useGetAppStates()
 
   useEffect(() => {
-    if (prevAppState && prevAppState.match(/active/) && currentAppState.match(/inactive|background/)) {
+    if (
+      prevAppState &&
+      prevAppState.match(/active/) &&
+      currentAppState.match(/inactive|background/)
+    ) {
       if (isAuthSet) {
         if (!isPopupRef.current) {
           dispatch(setAppLocked(true))
           dismissOverlays()
         } else dispatch(setPopup(false))
-      }      
+      }
     }
   }, [currentAppState])
   /* All about when lock screen comes up - END */
@@ -132,6 +149,16 @@ const BeforeLoggedIn = () => {
       <BeforeLoggedInStack.Screen
         name={ScreenNames.DeviceAuth}
         component={DeviceAuthentication}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+      />
+      <BeforeLoggedInStack.Screen
+        name={ScreenNames.PinRecoveryInstructions}
+        component={PinRecoveryInstructions}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+      />
+      <BeforeLoggedInStack.Screen
+        name={ScreenNames.PasscodeRecovery}
+        component={Recovery}
         options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
     </BeforeLoggedInStack.Navigator>

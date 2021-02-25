@@ -6,8 +6,6 @@ export enum ScreenNames {
   Registration = 'Registration',
   Walkthrough = 'Walkthrough',
   Entropy = 'Entropy',
-  //TODO: remove!!!!!
-  Recovery = 'Recovery',
   LostSeedPhraseInfo = 'LostSeedPhraseInfo',
   SeedPhraseWrite = 'SeedPhraseWrite',
   SeedPhraseInfo = 'SeedPhraseInfo',
@@ -16,6 +14,7 @@ export enum ScreenNames {
 
   // After identity
   BeforeLoggedIn = 'BeforeLoggedIn',
+  PasscodeRecovery = 'PasscodeRecovery',
 
   // Logged In Tabs
   LoggedIn = 'LoggedIn',

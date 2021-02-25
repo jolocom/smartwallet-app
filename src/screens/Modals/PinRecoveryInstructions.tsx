@@ -19,7 +19,7 @@ interface PropsI {
 
 const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
   const redirectToRecovery = () => {
-    const pushAction = StackActions.push(ScreenNames.Recovery, {
+    const pushAction = StackActions.push(ScreenNames.PasscodeRecovery, {
       isAccessRestore: true,
     })
     navigation.dispatch(pushAction)
