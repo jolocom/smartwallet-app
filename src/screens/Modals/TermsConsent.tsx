@@ -52,7 +52,7 @@ const TermsConsent: React.FC = () => {
   }
 
   return (
-    <ScreenContainer customStyles={{ paddingHorizontal: 0 }}>
+    <ScreenContainer customStyles={{ paddingHorizontal: 0, paddingTop: 20 }}>
       <View style={styles.header}>
         <JoloText
           kind={JoloTextKind.title}
