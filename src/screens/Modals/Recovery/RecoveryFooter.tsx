@@ -47,7 +47,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const route = useRoute<RouteProp<RootStackParamList, 'Recovery'>>()
   const navigation = useNavigation()
 
-  const { isAccessRestore } = route.params
+  const isAccessRestore = route?.params?.isAccessRestore ?? false
 
   const handlePhraseSubmit = useCallback(async () => {
     const success = await loader(async () => await submitCb(), {
