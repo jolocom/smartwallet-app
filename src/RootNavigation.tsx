@@ -25,9 +25,9 @@ export type RootStackParamList = {
     cancelText: string
     onComplete: () => void
   }
-  [ScreenNames.BeforeLoggedIn]: undefined,
-  [ScreenNames.LoggedOut]: undefined,
-  [ScreenNames.LostSeedPhraseInfo]: undefined,
+  [ScreenNames.BeforeLoggedIn]: undefined
+  [ScreenNames.LoggedOut]: undefined
+  [ScreenNames.LostSeedPhraseInfo]: undefined
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -42,7 +42,7 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
           <RootStack.Screen
             name={ScreenNames.BeforeLoggedIn}
             component={BeforeLoggedIn}
-            options={{gestureEnabled: false}}
+            options={{ gestureEnabled: false }}
           />
         ) : (
           <RootStack.Screen

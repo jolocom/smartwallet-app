@@ -1,8 +1,12 @@
 export enum ScreenNames {
   // Logged Out Screens
   LoggedOut = 'LoggedOut',
+  Onboarding = 'Onboarding',
+  IdentityRecovery = 'IdentityRecovery',
+  Registration = 'Registration',
   Walkthrough = 'Walkthrough',
   Entropy = 'Entropy',
+  //TODO: remove!!!!!
   Recovery = 'Recovery',
   LostSeedPhraseInfo = 'LostSeedPhraseInfo',
   SeedPhraseWrite = 'SeedPhraseWrite',
