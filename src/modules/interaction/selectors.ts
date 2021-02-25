@@ -243,13 +243,6 @@ export const getOfferCredentialsBySection = createSelector(
   },
 )
 
-export const getInteractionImage = createSelector(
-  [getAuthorizationDetails],
-  (details) => {
-    return details.imageURL
-  },
-)
-
 export const getServiceImage = createSelector(
   [getInteractionCounterparty],
   (counterparty) => {
@@ -266,7 +259,6 @@ export const getServiceDescription = createSelector(
       isAnonymous: counterparty.publicProfile === undefined
     }
   },
-  
 )
 
 export const getSingleMissingAttribute = createSelector(

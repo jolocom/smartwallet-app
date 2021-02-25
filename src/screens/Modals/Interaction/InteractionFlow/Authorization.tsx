@@ -36,7 +36,7 @@ const Authorization = () => {
         labelGenerator={strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS}
       />
       <Space />
-      <InteractionImage />
+      <InteractionImage source={image} />
       <InteractionFooter
         onSubmit={handleSubmit}
         submitLabel={cta}
