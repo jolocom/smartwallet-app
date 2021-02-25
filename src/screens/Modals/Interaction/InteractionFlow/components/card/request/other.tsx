@@ -1,9 +1,22 @@
 import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
 import { strings } from '~/translations';
+import BP from '~/utils/breakpoints';
 import { BodyFieldsCalculator } from '../context';
 import { CredentialName, FieldLabel } from '../reusable';
-import { BodyContainer, BodyFieldsContainer, BodyFieldsGroup, Container, EmptyContainer, EmptyFieldsDescription, EmptyFieldsTitle, HeaderContainer, OtherContainer, OtherTitle, OtherTitleContainer } from '../styled';
+import {
+  BodyContainer,
+  BodyFieldsContainer,
+  BodyFieldsGroup,
+  Container,
+  EmptyContainer,
+  EmptyFieldsDescription,
+  EmptyFieldsTitle,
+  HeaderContainer,
+  OtherContainer,
+  OtherTitle,
+  OtherTitleContainer
+} from '../styled';
 
 const MAX_FIELD_OTHER = 3;
 
@@ -27,7 +40,13 @@ export const IncomingRequestOther = ({
   /* NOTE: in other cards we can allow to display 2 lines
     constantly no matter how many lines are in the first value
   */
-  const handleNumberOfValueLinesToDisplay = () => 2;
+  const handleNumberOfValueLinesToDisplay = (idx: number, lines: Record<number, number>) => {
+    return BP({
+      default: 2,
+      xsmall: idx !== 0 && 1 
+    })
+  };
+
   return (
     <Container>
       <InteractionCardOther>

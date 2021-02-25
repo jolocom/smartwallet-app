@@ -49,7 +49,7 @@ const REQUEST_DOCS = [
 
     ],
     image: 'https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg', 
-    hightlight: 'SPECI2014' // TODO: we won't receive it in the same format from sdk, this field should be added
+    highlight: 'SPECI2014' // TODO: we won't receive it in the same format from sdk, this field should be added
   },
   {
     id: 2,
@@ -106,7 +106,7 @@ const REQUEST_DOCS = [
       },
     ],
     image: 'https://i.pinimg.com/564x/63/9d/5b/639d5b86c73addfaeeb103ef0eb61041.jpg',
-    hightlight: 'SPECI2014',
+    highlight: 'SPECI2014',
   },
   {
     id: 5,

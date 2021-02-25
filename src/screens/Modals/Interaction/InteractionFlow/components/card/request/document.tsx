@@ -1,6 +1,7 @@
 import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
 import { strings } from '~/translations';
+import BP from '~/utils/breakpoints';
 import { BodyFieldsCalculator } from '../context';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
@@ -32,7 +33,10 @@ export const IncomingRequestDoc = ({
     if (idx + 1 > MAX_FIELD_DOC) {
      /* 1. Do not display anything that is more than max */
      return null
-    } else if (lines[0] > 1 && !!highlight && idx > 0) {
+    } else if (BP({
+      default: !!highlight && idx > 0 && lines[0] > 1,
+      xsmall: !!highlight && idx > 0
+    })) {
       /* 2. Do not display all the fields besides first if number of lines of the first field is more than 1 and there is a highlight */
       return null
     }
@@ -40,7 +44,9 @@ export const IncomingRequestDoc = ({
   }
 
   const handleNumberOfValueLinesToDisplay = (idx: number, lines: Record<number, number>) => {
-    return idx !== 0 ? lines[0] > 1 ? 1 : 2 : 2;
+    return idx !== 0
+      ? lines[0] > 1 ? 1 : BP({ default: 2, xsmall: 1 })
+      : BP({ default: 2, xsmall: 1 });
     };
 
   return (

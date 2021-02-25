@@ -178,9 +178,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 18,
     right: 18,
-    width: 105,
-    height: 105,
-    borderRadius: 105/2,
+    width: BP({default: 1, xsmall: 0.8}) * 105,
+    height: BP({default: 1, xsmall: 0.8}) * 105,
+    borderRadius: BP({default: 1, xsmall: 0.8}) * 105/2,
     zIndex: 100
   },
   highlight: {
@@ -190,9 +190,10 @@ const styles = StyleSheet.create({
     height: 50,
     width: '100%',
     paddingHorizontal: 20,
-    borderBottomLeftRadius: 13,
-    borderBottomRightRadius: 13,
-    zIndex: 0
+    borderBottomLeftRadius: BP({default: 13, xsmall: 11}),
+    borderBottomRightRadius: BP({default: 13, xsmall: 11}),
+    zIndex: 0,
+    marginBottom: BP({default: 0, xsmall: -1})
   },
   fieldGroup: {
     textAlign: 'left',
