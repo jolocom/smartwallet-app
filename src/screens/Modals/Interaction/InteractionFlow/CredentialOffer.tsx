@@ -50,7 +50,10 @@ const CredentialOfferBAS = () => {
       />
       <Space />
       {renderBody()}
-      <InteractionFooter onSubmit={handleSubmit} />
+      <InteractionFooter
+        onSubmit={handleSubmit}
+        submitLabel={strings.RECEIVE}
+      />
     </ContainerBAS>
   )
 }
@@ -97,7 +100,10 @@ const CredentialOfferFAS = () => {
         </InteractionSection>
       </CollapsedScrollView>
       <FooterContainerFAS>
-        <InteractionFooter onSubmit={handleSubmit} />
+        <InteractionFooter
+          onSubmit={handleSubmit}
+          submitLabel={strings.RECEIVE}
+        />
       </FooterContainerFAS>
     </ContainerFAS>
   )

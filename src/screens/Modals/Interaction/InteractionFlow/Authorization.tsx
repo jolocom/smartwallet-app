@@ -9,6 +9,7 @@ import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit';
 import { useSelector } from 'react-redux';
 import { getAuthzUIDetails } from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
+import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils';
 
 const Authorization = () => {
   const {
@@ -16,6 +17,10 @@ const Authorization = () => {
     imageURL: image,
     description // NOTE: it isn't used 
   } = useSelector(getAuthzUIDetails);
+
+  const cta = action
+    ? capitalizeWord(truncateFirstWord(action))
+    : strings.AUTHORIZE
 
   const handleSubmit = useAuthzSubmit();
   
@@ -32,7 +37,10 @@ const Authorization = () => {
       />
       <Space />
       <InteractionImage />
-      <InteractionFooter onSubmit={handleSubmit} />
+      <InteractionFooter
+        onSubmit={handleSubmit}
+        submitLabel={cta}
+      />
     </ContainerBAS>
   )
 }

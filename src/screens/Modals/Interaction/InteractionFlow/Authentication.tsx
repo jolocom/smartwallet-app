@@ -19,7 +19,10 @@ const Authentication = () => {
         labelGenerator={strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY}
       />
       <Space />
-      <InteractionFooter onSubmit={handleSubmit} />
+      <InteractionFooter
+        onSubmit={handleSubmit}
+        submitLabel={strings.AUTHENTICATE}
+      />
     </ContainerBAS>
   )
 }

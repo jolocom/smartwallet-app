@@ -5,7 +5,11 @@ import CollapsedScrollView from '~/components/CollapsedScrollView';
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget';
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit';
 import { useSwitchScreens } from '~/hooks/navigation';
-import { getIsFullscreenCredShare, getShareCredentialsBySection, getSingleCredentialToShare, getSingleMissingAttribute } from '~/modules/interaction/selectors';
+import {
+  getCredShareUIDetailsBAS,
+  getIsFullscreenCredShare,
+  getShareCredentialsBySection
+} from '~/modules/interaction/selectors';
 import { strings } from '~/translations';
 import { MultipleShareUICredential } from '~/types/credentials';
 import { ScreenNames } from '~/types/screens';
@@ -14,27 +18,17 @@ import InteractionFooter from './components/InteractionFooter';
 import InteractionLogo from './components/InteractionLogo';
 import InteractionSection from './components/InteractionSection';
 import InteractionTitle from './components/InteractionTitle';
-import { AttributeWidgetContainerFAS, ContainerBAS, ContainerFAS, FooterContainerFAS, LogoContainerBAS, LogoContainerFAS, Space } from './components/styled';
-
-// Generic selector for every interaction => InteractionDescription
-/*
-    counterpartyDetails: {
-      isAnonymous: boolean,
-      counterparty: {}
-    },
-*/
-
-// Generic selector for every interaction => InteractionIcon
-/*
-    counterparty: {},
-*/
+import {
+  AttributeWidgetContainerFAS,
+  ContainerBAS,
+  ContainerFAS,
+  FooterContainerFAS,
+  LogoContainerBAS,
+  LogoContainerFAS,
+  Space
+} from './components/styled';
 
 /*
-  BAS
-  {
-    singleMissingAttribute: AttributeType,
-    singleCredential: credential,
-  }
   FAS
   {
     sections: {
@@ -45,8 +39,7 @@ import { AttributeWidgetContainerFAS, ContainerBAS, ContainerFAS, FooterContaine
 */
 
 export const CredentialShareBAS = () => {
-  const singleCredentialToShare = useSelector(getSingleCredentialToShare)
-  const singleMissingAttribute = useSelector(getSingleMissingAttribute);
+  const { singleMissingAttribute, singleCredential } = useSelector(getCredShareUIDetailsBAS);
 
   const handleShare = useCredentialShareSubmit();
   const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionAddCredential)
@@ -57,7 +50,7 @@ export const CredentialShareBAS = () => {
 
   const renderBody = () => {
     if (singleMissingAttribute) return null
-    else if (singleCredentialToShare !== undefined) return (
+    else if (singleCredential !== undefined) return (
       <>
         <Text>Incoming Request Card</Text>
         <Space />
@@ -82,7 +75,14 @@ export const CredentialShareBAS = () => {
       />
       <Space />
       {renderBody()}
-      <InteractionFooter onSubmit={handleSubmit} />
+      <InteractionFooter
+        onSubmit={handleSubmit}
+        submitLabel={
+          singleMissingAttribute !== undefined
+            ? strings.ADD_INFO
+            : strings.SHARE
+        }
+      />
     </ContainerBAS>
   )
 }
@@ -145,7 +145,10 @@ const CredentialShareFAS = () => {
 
       </CollapsedScrollView>
       <FooterContainerFAS>
-        <InteractionFooter onSubmit={handleSubmit} />
+        <InteractionFooter
+          onSubmit={handleSubmit}
+          submitLabel={strings.SHARE}
+        />
       </FooterContainerFAS>
     </ContainerFAS>
   )

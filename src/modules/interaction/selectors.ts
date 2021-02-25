@@ -20,9 +20,7 @@ import {
   isCredShareDetails,
   isNotActiveInteraction,
 } from './guards'
-import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
-import { capitalizeWord, truncateFirstWord } from '~/utils/stringUtils'
 
 const createInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -304,27 +302,6 @@ export const getSingleCredentialToShare = createSelector(
   },
 )
 
-export const getInteractionSubmitLabel = createSelector(
-  [getInteractionDetails, getSingleMissingAttribute],
-  (details, missingAttributes) => {
-    if (isAuthDetails(details)) {
-      return strings.AUTHENTICATE
-    } else if (isAuthzDetails(details)) {
-      const cta = details.action
-        ? truncateFirstWord(details.action)
-        : strings.AUTHORIZE
-      const label = capitalizeWord(cta)
-      return label
-    } else if (isCredOfferDetails(details)) {
-      return strings.RECEIVE
-    } else if (isCredShareDetails(details)) {
-      return missingAttributes !== undefined ? strings.ADD_INFO : strings.SHARE
-    } else {
-      return strings.UNKNOWN
-    }
-  },
-)
-
 export const getAuthzUIDetails = createSelector(
   [getAuthorizationDetails],
   (details) => {
@@ -333,4 +310,12 @@ export const getAuthzUIDetails = createSelector(
       ...rest
     }
   }
+)
+
+export const getCredShareUIDetailsBAS = createSelector(
+  [getSingleMissingAttribute, getSingleCredentialToShare],
+  (singleMissingAttribute, singleCredential) => ({
+    singleMissingAttribute,
+    singleCredential
+  })
 )

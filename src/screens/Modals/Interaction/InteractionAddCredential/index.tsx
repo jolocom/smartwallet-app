@@ -130,7 +130,9 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
           }}
         >
           <InteractionTitle label={title} />
-          <InteractionDescription label={description} />
+          <InteractionDescription
+            labelGenerator={() => description}
+          />
           <Space />
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {({ handleChange, values }) => (

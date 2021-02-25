@@ -7,22 +7,21 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions'
-import { useSelector } from 'react-redux'
-import { getInteractionSubmitLabel } from '~/modules/interaction/selectors'
 
 interface Props {
   onSubmit: () => Promise<any> | any
   disabled?: boolean
+  submitLabel: string
 }
 
 // TODO: add logic for disabling buttons
 const InteractionFooter: React.FC<Props> = ({
   onSubmit,
   disabled = false,
+  submitLabel
 }) => {
   const loader = useLoader()
   const finishInteraction = useFinishInteraction();
-  const submitLabel = useSelector(getInteractionSubmitLabel);
 
   const handleSubmit = async () => {
     await loader(
