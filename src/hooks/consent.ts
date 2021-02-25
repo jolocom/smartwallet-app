@@ -16,11 +16,11 @@ const useTermsConsent = () => {
       StorageKeys.termsConsent,
     )) as { hash: string }
 
-    if (!storedConsent) dispatch(showTermsConsent(true))
+    if (!storedConsent) return dispatch(showTermsConsent(true))
 
     const storedHash = storedConsent.hash
     const currentHash = hashString(termsOfServiceDE)
-    if (currentHash !== storedHash) dispatch(showTermsConsent(true))
+    if (currentHash !== storedHash) return dispatch(showTermsConsent(true))
   }
 
   const acceptConsent = async () => {
