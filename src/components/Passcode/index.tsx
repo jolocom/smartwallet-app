@@ -1,40 +1,9 @@
-import React, { SetStateAction, useEffect, useMemo, useState } from 'react'
-import { useCustomContext } from '~/hooks/context'
+import React, { useEffect, useMemo, useState } from 'react'
 import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
-
-export interface IPasscodeProps {
-  onSubmit: (passcode: string) => void | Promise<void>
-}
-
-export interface IPasscodeHeaderProps {
-  title: string
-  errorTitle: string
-}
-
-interface IPasscodeComposition {
-  Input: React.FC
-  Header: React.FC<IPasscodeHeaderProps>
-  Forgot: React.FC
-}
-
-interface IPasscodeContext {
-  pin: string
-  setPin: React.Dispatch<SetStateAction<string>>
-  pinError: boolean
-  pinSuccess: boolean
-}
-
-const PasscodeContext = React.createContext<IPasscodeContext>({
-  pin: '',
-  setPin: () => {},
-  pinError: false,
-  pinSuccess: false,
-})
-PasscodeContext.displayName = 'PasscodeContext'
-
-export const usePasscode = useCustomContext(PasscodeContext)
+import { IPasscodeProps, IPasscodeComposition } from './types'
+import { PasscodeContext } from './context'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,

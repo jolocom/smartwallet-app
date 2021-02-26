@@ -1,8 +1,12 @@
 import React from 'react'
-import { IWizardFooterProps, useWizard } from '.'
+import { useWizard } from './context'
+import { IWizardFooterProps } from './types'
 import Btn, { BtnTypes } from '../Btn'
 
-const WizardFooter: React.FC<IWizardFooterProps> = ({ onSubmit, isDisabled }) => {
+const WizardFooter: React.FC<IWizardFooterProps> = ({
+  onSubmit,
+  isDisabled,
+}) => {
   const { activeStep, config } = useWizard()
   return (
     <Btn type={BtnTypes.senary} onPress={onSubmit} disabled={isDisabled}>

@@ -1,14 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import HeaderAction, { THeaderAction } from './HeaderAction'
-import HeaderName, { IHeaderNameProps } from './HeaderName'
-
-export type THeader = IHeaderComposition & React.FC
-
-interface IHeaderComposition {
-  Name: React.FC<IHeaderNameProps>
-  Action: THeaderAction
-}
+import HeaderAction from './HeaderAction'
+import HeaderName from './HeaderName'
+import { IHeaderComposition } from './types'
 
 const Header: React.FC & IHeaderComposition = ({ children }) => {
   return <View style={styles.container}>{children}</View>

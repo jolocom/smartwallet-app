@@ -5,24 +5,9 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useWidget } from '.'
-import JoloText, { JoloTextKind } from '../JoloText'
-
-export type TField = IFieldComposition & React.FC
-
-interface IFieldComposition {
-  Static: React.FC<Pick<IWidgetField, 'value'>>
-  Selectable: React.FC<Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>>
-  Empty: React.FC
-}
-
-export interface IWidgetField {
-  id: string
-  value: string
-  isSelected?: boolean
-  color?: Colors
-  onSelect?: () => void
-}
+import { useWidget } from './context'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { IWidgetField, IFieldComposition } from './types'
 
 const FieldText: React.FC<
   Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
@@ -60,8 +45,8 @@ const SelectableField: React.FC<
             <PurpleTickSuccess />
           </View>
         ) : (
-            <View style={[styles.radio, styles.notSelected]} />
-          )}
+          <View style={[styles.radio, styles.notSelected]} />
+        )}
       </FieldContainer>
     </TouchableOpacity>
   )
@@ -78,8 +63,8 @@ const EmptyField: React.FC = ({ children }) => {
         {children ? (
           children
         ) : (
-            <FieldText value={strings.MISSING_INFO} color={Colors.error} />
-          )}
+          <FieldText value={strings.MISSING_INFO} color={Colors.error} />
+        )}
       </FieldContainer>
     </TouchableOpacity>
   )
