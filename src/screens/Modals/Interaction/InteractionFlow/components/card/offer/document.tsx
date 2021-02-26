@@ -6,10 +6,10 @@ import {
   BodyFieldsContainer,
   BodyFieldsGroup,
   Container,
-  EmptyFieldsDescription,
-  EmptyFieldsTitle,
+  HelperDescription,
   FieldPlaceholder,
-  HeaderContainer
+  HeaderContainer,
+  HelperTitle
 } from '../styled';
 
 const IncomingOfferDoc = ({
@@ -25,20 +25,26 @@ const IncomingOfferDoc = ({
             <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
         </HeaderContainer>
         <BodyFieldsContainer isStretched>
-          <EmptyFieldsTitle>Included info</EmptyFieldsTitle>
+          <HelperTitle
+            customStyles={{
+              marginVertical: BP({ default: 6, small: 3, xsmall: 3 })
+            }}
+          >
+            Included info
+          </HelperTitle>
           {displayedProps.length ? (
             <>
               {displayedProps.map(p => (
                 <BodyFieldsGroup>
-                  <EmptyFieldsDescription>{p.label}</EmptyFieldsDescription>
+                  <HelperDescription>{p.label}</HelperDescription>
                   <FieldPlaceholder />
                 </BodyFieldsGroup>
               ))}
             </>
           ) : (
-            <EmptyFieldsDescription>
+            <HelperDescription>
               No info that can be previewed
-            </EmptyFieldsDescription>
+            </HelperDescription>
           )}
         </BodyFieldsContainer>
       </InteractionCardDoc>

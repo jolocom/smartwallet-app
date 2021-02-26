@@ -2,7 +2,16 @@ import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
 import BP from '~/utils/breakpoints';
 import { CredentialName } from '../reusable';
-import { BodyFieldsContainer, BodyFieldsGroup, Container, EmptyFieldsDescription, EmptyFieldsTitle, FieldPlaceholder, HeaderContainer, OtherContainer } from '../styled';
+import {
+  BodyFieldsContainer,
+  BodyFieldsGroup,
+  Container,
+  HelperDescription,
+  HelperTitle,
+  FieldPlaceholder,
+  HeaderContainer,
+  OtherContainer
+} from '../styled';
 
 const IncomingOfferOther = ({
   title,
@@ -18,20 +27,26 @@ const IncomingOfferOther = ({
             <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
           </HeaderContainer>
           <BodyFieldsContainer isStretched>
-            <EmptyFieldsTitle>Included info</EmptyFieldsTitle>
+            <HelperTitle
+              customStyles={{
+                marginVertical: BP({ default: 6, small: 3, xsmall: 3 })
+              }}
+            >
+              Included info
+            </HelperTitle>
             {displayedProps.length ? (
               <>
                 {displayedProps.map(p => (
                   <BodyFieldsGroup>
-                    <EmptyFieldsDescription>{p.label}</EmptyFieldsDescription>
+                    <HelperDescription>{p.label}</HelperDescription>
                     <FieldPlaceholder />
                   </BodyFieldsGroup>
                 ))}
               </>
             ) : (
-              <EmptyFieldsDescription>
+              <HelperDescription>
                 No info that can be previewed
-              </EmptyFieldsDescription>
+              </HelperDescription>
             )}
           </BodyFieldsContainer>
         </OtherContainer>

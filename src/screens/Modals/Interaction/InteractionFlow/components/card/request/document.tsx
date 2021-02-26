@@ -14,8 +14,8 @@ import {
   CredentialHolderName,
   CredentialImage,
   EmptyContainer,
-  EmptyFieldsDescription,
-  EmptyFieldsTitle,
+  HelperDescription,
+  HelperTitle,
   HeaderContainer
 } from '../styled';
 
@@ -86,8 +86,8 @@ export const IncomingRequestDoc = ({
           </BodyContainer>
         ) : (
             <EmptyContainer>
-              <EmptyFieldsTitle>{strings.INCLUDED_INFO}</EmptyFieldsTitle>
-              <EmptyFieldsDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</EmptyFieldsDescription>
+              <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
+              <HelperDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</HelperDescription>
             </EmptyContainer>
         )}
 

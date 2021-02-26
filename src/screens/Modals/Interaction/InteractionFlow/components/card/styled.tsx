@@ -4,7 +4,6 @@ import { StyleSheet, View, Image } from "react-native";
 import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
 import BP from '~/utils/breakpoints';
-import { debugView } from '~/utils/dev';
 import { IWithCustomStyle } from '~/components/Card/types';
 
 export const HeaderContainer: React.FC<IWithCustomStyle> = ({children, customStyles = {flex: 0.5}}) => {
@@ -116,19 +115,19 @@ export const EmptyContainer: React.FC = ({children}) => {
   )
 }
 
-export const EmptyFieldsTitle: React.FC = ({children}) => {
+export const HelperTitle: React.FC<IWithCustomStyle> = ({children, customStyles}) => {
   return (
     <JoloText
       weight={JoloTextWeight.regular}
-      style={{ fontSize: 16, alignSelf: 'flex-start' }}
+      customStyles={[{ fontSize: 16, alignSelf: 'flex-start'}, customStyles]}
       color={Colors.bastille}
-    >
+      >
       {children}:
     </JoloText>
   )
 }
 
-export const EmptyFieldsDescription: React.FC = ({children}) => {
+export const HelperDescription: React.FC = ({children}) => {
   return (
     <JoloText
       weight={JoloTextWeight.regular}
@@ -223,9 +222,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start'
   },
   fieldPlaceholder: {
-    width: 100, // TODO: update to value from the designs
+    width: 156, // TODO: update to value from the designs
     height: 20,
     borderRadius: 5,
-    backgroundColor: Colors.carnationPink
+    backgroundColor: Colors.alto
   }
 })
