@@ -23,7 +23,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
 import { useDelay } from '~/hooks/generic'
-import { useInteractionStart } from '~/hooks/interactions'
+import { useInteractionStart } from '~/hooks/interactions/handlers'
 
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 

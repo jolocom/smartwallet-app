@@ -10,7 +10,7 @@ import {
 import { AttributeTypes } from '~/types/credentials'
 import { selectShareCredential } from '~/modules/interaction/actions'
 import { strings } from '~/translations/strings'
-import { useInteraction } from '.'
+import { useInteraction } from './handlers'
 import { attributeConfig } from '~/config/claims'
 import { useAgent } from '../sdk'
 
