@@ -3,7 +3,9 @@ import { StyleSheet, TextProps, TextStyle } from 'react-native';
 import { TextLayoutEvent } from '~/components/Card/Field';
 import { IWithCustomStyle } from '~/components/Card/types';
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
+import BP from '~/utils/breakpoints';
 import { Colors } from '~/utils/colors';
+import { debugView } from '~/utils/dev';
 import { JoloTextSizes } from '~/utils/fonts';
 import { useFieldCalculator } from '../FieldsCalculator/context';
 import { IBodyFieldsCalculatorComposition } from '../FieldsCalculator/types';
@@ -58,16 +60,17 @@ export const FieldValue: IBodyFieldsCalculatorComposition['FieldValue']  = ({
 const styles = StyleSheet.create({
   credentialName: {
     color: Colors.black85,
-    marginTop: -5,
+    lineHeight: BP({ xsmall: 20, small: 22, default: 24 }),
   },
   label: {
-    fontSize: 14,
-    lineHeight: 14,
+    lineHeight: BP({ default: 14, xsmall: 12 }),
     color: Colors.black50,
+    // ...debugView()
   },
   value: {
     color: Colors.black,
     textAlign: 'left',
-    marginTop: -3
+    lineHeight: BP({ xsmall: 14, default: 18 }),
+    // ...debugView()
   }
 })

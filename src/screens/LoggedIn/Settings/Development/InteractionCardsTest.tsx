@@ -351,7 +351,7 @@ const InteractionTest = () => {
           </View>
         ))}
         <Section.Title>Incoming request - others</Section.Title>
-        {REQUEST_OTHER.map(c => (
+        {/* {REQUEST_OTHER.map(c => (
           <View key={c.id}>
             <IncomingRequestOther
               {...c}
@@ -380,7 +380,7 @@ const InteractionTest = () => {
             />
             <View style={{height: 20}} />
           </View>
-        ))}
+        ))} */}
       </ScrollView>
       
     </ScreenContainer>

@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
 import BP from '~/utils/breakpoints';
 import { IWithCustomStyle } from '~/components/Card/types';
 import { JoloTextSizes } from '~/utils/fonts';
+import { debugView } from '~/utils/dev';
 
 export const HeaderContainer: React.FC<IWithCustomStyle> = ({children, customStyles = {flex: 0.5}}) => {
   return (
@@ -48,34 +49,11 @@ export const CredentialHolderName: React.FC<ICredentialHolderNameProps> = ({ chi
     <JoloText
       kind={JoloTextKind.title}
       color={Colors.black90}
-      customStyles={{textAlign: 'left'}}
+      customStyles={styles.holderName}
       numberOfLines={isTruncated ? 1 : 2}
     >
       {children}
     </JoloText>
-  )
-}
-
-interface ICredentialImageProps {
-  imageUrl: string
-}
-export const CredentialImage: React.FC<ICredentialImageProps> = ({ imageUrl }) => {
-  return (
-    <Image style={styles.image} source={{uri: imageUrl}} />
-  )
-}
-
-export const CredentialHighlight: React.FC = ({ children }) => {
-  return (
-    <View style={styles.highlight}>
-      <JoloText
-        weight={JoloTextWeight.regular}
-        customStyles={{ fontSize: 24, marginTop: 6 }}
-        color={Colors.white}
-        >
-        {children}
-      </JoloText>
-    </View>
   )
 }
 
@@ -128,7 +106,7 @@ export const HelperTitle: React.FC<IWithCustomStyle> = ({children, customStyles}
   )
 }
 
-export const HelperDescription: React.FC = ({children}) => {
+export const HelperDescription: React.FC = ({ children }) => {
   return (
     <JoloText
       weight={JoloTextWeight.regular}
@@ -141,12 +119,6 @@ export const HelperDescription: React.FC = ({children}) => {
   )
 }
 
-export const Container: React.FC = ({ children }) => {
-  return (
-    <View style={styles.container} children={children} />
-  )
-}
-
 export const FieldPlaceholder = () => {
   return (
     <View style={styles.fieldPlaceholder} />
@@ -154,18 +126,14 @@ export const FieldPlaceholder = () => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    // ...debugView()
-  },
   headerContainer: {
-    // ...debugView(),
+    ...debugView(),
     alignItems: 'flex-start',
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   bodyContainer: {
-    // ...debugView(),
+    ...debugView(),
     flexDirection: 'row',
     paddingBottom: 20,
   },
@@ -180,27 +148,6 @@ const styles = StyleSheet.create({
     // ...debugView(),
     alignItems: 'flex-start',
     paddingRight: 20,
-  },
-  image: {
-    position: 'absolute',
-    bottom: 18,
-    right: 18,
-    width: BP({default: 1, xsmall: 0.8}) * 105,
-    height: BP({default: 1, xsmall: 0.8}) * 105,
-    borderRadius: BP({default: 1, xsmall: 0.8}) * 105/2,
-    zIndex: 100
-  },
-  highlight: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    backgroundColor: Colors.black,
-    height: 50,
-    width: '100%',
-    paddingHorizontal: 20,
-    borderBottomLeftRadius: BP({default: 13, xsmall: 11}),
-    borderBottomRightRadius: BP({default: 13, xsmall: 11}),
-    zIndex: 0,
-    marginBottom: BP({default: 0, xsmall: -1})
   },
   fieldGroup: {
     textAlign: 'left',
@@ -228,5 +175,9 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 5,
     backgroundColor: Colors.alto
+  },
+  holderName: {
+    textAlign: 'left',
+    lineHeight: BP({ xsmall: 20, default: 24 }),
   }
 })
