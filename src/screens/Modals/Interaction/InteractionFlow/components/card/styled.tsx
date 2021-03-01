@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TextProps, TextStyle, View } from "react-native";
 
 import JoloText, { JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
@@ -106,6 +106,31 @@ export const HelperDescription: React.FC = ({ children }) => {
   )
 }
 
+interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle>  {}
+export const CredentialName: React.FC<ICredentialNameProps> = ({ children, customStyles, ...props }) => {
+  return (
+    <JoloText
+      size={JoloTextSizes.big}
+      weight={JoloTextWeight.regular}
+      customStyles={[styles.credentialName, customStyles]}
+      {...props}
+    >{children}</JoloText>
+  )
+}
+
+export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
+  return (
+    <JoloText
+      size={JoloTextSizes.tiniest}
+      weight={JoloTextWeight.regular}
+      customStyles={[styles.label, customStyles]}
+      numberOfLines={1}
+    >
+      {children}
+    </JoloText>
+  )
+}
+
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -151,5 +176,14 @@ const styles = StyleSheet.create({
     // ...debugView(),
     paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
     alignItems: 'flex-start'
+  },
+  credentialName: {
+    color: Colors.black85,
+    lineHeight: BP({ xsmall: 20, small: 22, default: 24 }),
+  },
+  label: {
+    lineHeight: BP({ default: 14, xsmall: 12 }),
+    color: Colors.black50,
+    // ...debugView()
   },
 })

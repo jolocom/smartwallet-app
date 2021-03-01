@@ -1,14 +1,15 @@
 import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
 import ResponsiveCard from '../../ResponsiveCard';
-import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyFieldsContainer,
   BodyFieldsGroup,
   HelperDescription,
   HelperTitle,
   HeaderContainer,
-  OtherContainer
+  OtherContainer,
+  CredentialName,
+  FieldLabel
 } from '../styled';
 import { IIncomingOfferOtherProps } from '../types';
 

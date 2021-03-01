@@ -2,7 +2,6 @@ import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
 import { strings } from '~/translations';
 import ResponsiveCard from '../../ResponsiveCard';
-import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyContainer,
   BodyFieldsContainer,
@@ -11,7 +10,9 @@ import {
   EmptyContainer,
   HelperDescription,
   HelperTitle,
-  HeaderContainer
+  HeaderContainer,
+  CredentialName,
+  FieldLabel
 } from '../styled';
 import { IIncomingRequestDocCardProps } from '../types';
 

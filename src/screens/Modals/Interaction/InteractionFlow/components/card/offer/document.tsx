@@ -2,13 +2,14 @@ import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
 import { strings } from '~/translations';
 import ResponsiveCard from '../../ResponsiveCard';
-import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyFieldsContainer,
   BodyFieldsGroup,
   HelperDescription,
   HeaderContainer,
-  HelperTitle
+  HelperTitle,
+  CredentialName,
+  FieldLabel
 } from '../styled';
 import { IIncomingOfferDocProps } from '../types';
 
