@@ -56,6 +56,7 @@ export const CredentialHighlight: IResponsiveCardComposition['Highlight'] = ({ c
         weight={JoloTextWeight.regular}
         customStyles={{
           fontSize: BP({ default: 24, xsmall: 20 }),
+          marginTop: Platform.OS === 'ios' ? 4 : 0
         }}
         color={Colors.white}
         >
