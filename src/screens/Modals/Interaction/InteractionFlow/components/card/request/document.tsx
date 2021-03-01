@@ -2,7 +2,6 @@ import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
 import { strings } from '~/translations';
 import BP from '~/utils/breakpoints';
-import { BodyFieldsCalculator } from '../../FieldsCalculator';
 import ResponsiveCard from '../../ResponsiveCard';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
@@ -10,7 +9,6 @@ import {
   BodyFieldsContainer,
   BodyFieldsGroup,
   BodyImageContainer,
-  CredentialHolderName,
   EmptyContainer,
   HelperDescription,
   HelperTitle,
@@ -18,7 +16,6 @@ import {
 } from '../styled';
 
 const MAX_FIELD_DOC = 2;
-
 
 export const IncomingRequestDoc = ({
   name,
@@ -66,19 +63,19 @@ export const IncomingRequestDoc = ({
             {properties.length ? (
               <BodyContainer>
                 <BodyFieldsContainer isStretched={!image}>
-                  <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
+                  <ResponsiveCard.FieldsCalculator cbChildVisibility={handleChildVisibility}>
                     {properties.map((p, idx) => (
                       <BodyFieldsGroup>
                         <FieldLabel>{p.label}</FieldLabel>
-                        <BodyFieldsCalculator.FieldValue
+                        <ResponsiveCard.FieldValue
                           idx={idx}
                           onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
                         >
                           {p.value}
-                        </BodyFieldsCalculator.FieldValue>
+                        </ResponsiveCard.FieldValue>
                       </BodyFieldsGroup>
                     ))}
-                  </BodyFieldsCalculator>
+                  </ResponsiveCard.FieldsCalculator>
                 </BodyFieldsContainer>
                 {/* NOTE: this is to enable sort of a wrapper effect around an image */}
                 {image && (

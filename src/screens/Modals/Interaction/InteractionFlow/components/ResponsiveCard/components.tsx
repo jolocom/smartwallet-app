@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
-import { Image, LayoutChangeEvent, StyleSheet, View } from 'react-native';
+import React, { Children, useRef } from 'react';
+import { Image, LayoutChangeEvent, Platform, StyleSheet, View } from 'react-native';
 import { TextLayoutEvent } from '~/components/Card/Field';
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import BP from '~/utils/breakpoints';
 import { Colors } from '~/utils/colors';
 import { debugView } from '~/utils/dev';
+import { JoloTextSizes } from '~/utils/fonts';
 import { useResponsiveCard } from './context';
 import { IResponsiveCardComposition } from './types';
 
@@ -83,6 +84,45 @@ export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({
   )
 }
 
+export const FieldsCalculator: IResponsiveCardComposition['FieldsCalculator'] = ({
+  children,
+  cbChildVisibility
+}) => {
+  const { fieldLines } = useResponsiveCard()
+
+  /* We can't display all the fields that a service provides,
+     therefore running a callback which decides what child to
+     display and which one to cut off
+  */
+  const childrenToDisplay = Children.map(children, (child, idx) => {
+    return cbChildVisibility(child, idx, fieldLines);
+  })
+
+  return childrenToDisplay;
+}
+
+export const FieldValue: IResponsiveCardComposition['FieldValue']  = ({
+  children,
+  customStyles,
+  idx,
+  onNumberOfFieldLinesToDisplay
+}) => {
+  const { fieldLines, onFieldValueLayout } = useResponsiveCard();
+  return (
+    <JoloText
+      weight={JoloTextWeight.regular}
+      size={JoloTextSizes.mini}
+      kind={JoloTextKind.title}
+      customStyles={[styles.value, customStyles]}
+      // @ts-ignore: TextProps does not seem to have onTextLayout in type def. 
+      onTextLayout={(e: TextLayoutEvent) => onFieldValueLayout(e, idx)}
+      numberOfLines={onNumberOfFieldLinesToDisplay(idx, fieldLines)}
+    >
+      {children}
+    </JoloText>
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -110,5 +150,14 @@ const styles = StyleSheet.create({
   holderName: {
     textAlign: 'left',
     lineHeight: BP({ xsmall: 20, default: 24 }),
+  },
+  value: {
+    color: Colors.black,
+    textAlign: 'left',
+    lineHeight: Platform.OS === 'ios' 
+      ? BP({ xsmall: 12, default: 16 })
+      : BP({ xsmall: 14, default: 18 }),
+    marginTop: -3
+    // ...debugView()
   }
 })

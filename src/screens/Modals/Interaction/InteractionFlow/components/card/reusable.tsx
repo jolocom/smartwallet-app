@@ -1,14 +1,11 @@
 import React from 'react';
-import { Platform, StyleSheet, TextProps, TextStyle } from 'react-native';
-import { TextLayoutEvent } from '~/components/Card/Field';
+import { StyleSheet, TextProps, TextStyle } from 'react-native';
 import { IWithCustomStyle } from '~/components/Card/types';
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
+import JoloText, { JoloTextWeight } from '~/components/JoloText';
 import BP from '~/utils/breakpoints';
 import { Colors } from '~/utils/colors';
 import { debugView } from '~/utils/dev';
 import { JoloTextSizes } from '~/utils/fonts';
-import { useFieldCalculator } from '../FieldsCalculator/context';
-import { IBodyFieldsCalculatorComposition } from '../FieldsCalculator/types';
 
 interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle>  {}
 export const CredentialName: React.FC<ICredentialNameProps> = ({ children, customStyles, ...props }) => {
@@ -35,28 +32,6 @@ export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles 
   )
 }
 
-export const FieldValue: IBodyFieldsCalculatorComposition['FieldValue']  = ({
-  children,
-  customStyles,
-  idx,
-  onNumberOfFieldLinesToDisplay
-}) => {
-  const { lines, onTextLayout } = useFieldCalculator();
-  return (
-    <JoloText
-      weight={JoloTextWeight.regular}
-      size={JoloTextSizes.mini}
-      kind={JoloTextKind.title}
-      customStyles={[styles.value, customStyles]}
-      // @ts-ignore: TextProps does not seem to have onTextLayout in type def. 
-      onTextLayout={(e: TextLayoutEvent) => onTextLayout(e, idx)}
-      numberOfLines={onNumberOfFieldLinesToDisplay(idx, lines)}
-    >
-      {children}
-    </JoloText>
-  )
-}
-
 const styles = StyleSheet.create({
   credentialName: {
     color: Colors.black85,
@@ -67,13 +42,4 @@ const styles = StyleSheet.create({
     color: Colors.black50,
     // ...debugView()
   },
-  value: {
-    color: Colors.black,
-    textAlign: 'left',
-    lineHeight: Platform.OS === 'ios' 
-      ? BP({ xsmall: 12, default: 16 })
-      : BP({ xsmall: 14, default: 18 }),
-    marginTop: -3
-    // ...debugView()
-  }
 })
