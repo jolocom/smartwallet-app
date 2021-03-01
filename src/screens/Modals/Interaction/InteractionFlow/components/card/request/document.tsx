@@ -23,7 +23,7 @@ interface IProperty {
 }
 interface IIncomingRequestDocCardProps {
   name: string,
-  holderName: string,
+  holderName?: string,
   properties: IProperty[],
   highlight: string,
   image: string
@@ -61,7 +61,9 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
         <InteractionCardDoc>
             <HeaderContainer customStyles={{ flex: highlight || !properties.length ? 0 : 0.5}}>
               <CredentialName numberOfLines={1}>{name}</CredentialName>
+              {holderName && (
               <ResponsiveCard.HolderName>{holderName}</ResponsiveCard.HolderName>
+            )}
             </HeaderContainer>
             {properties.length ? (
               <BodyContainer>

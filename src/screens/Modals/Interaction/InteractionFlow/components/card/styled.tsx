@@ -1,12 +1,15 @@
 import React from 'react';
 import { StyleSheet, View } from "react-native";
 
-import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
+import JoloText, { JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
 import BP from '~/utils/breakpoints';
 import { IWithCustomStyle } from '~/components/Card/types';
 import { JoloTextSizes } from '~/utils/fonts';
 import { debugView } from '~/utils/dev';
+
+const PADDING_BASE = 20;
+const PADDING_SMALL = 15;
 
 export const HeaderContainer: React.FC<IWithCustomStyle> = ({children, customStyles = {flex: 0.5}}) => {
   return (
@@ -113,25 +116,25 @@ const styles = StyleSheet.create({
   headerContainer: {
     // ...debugView(),
     alignItems: 'flex-start',
-    paddingHorizontal: BP({default: 20, xsmall: 15}),
+    paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
     paddingTop: 10,
   },
   bodyContainer: {
     // ...debugView(),
     flexDirection: 'row',
-    paddingBottom: 20,
+    paddingBottom: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
   },
   bodyFieldsContainer: {
     flex: 0.68,
     // ...debugView(),
     alignItems: 'flex-start',
-    paddingLeft: BP({default: 20, xsmall: 15}),
+    paddingLeft: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
   },
   bodyImageContainer: {
     flex: 0.32,
     // ...debugView(),
     alignItems: 'flex-start',
-    paddingRight: BP({default: 20, xsmall: 15}),
+    paddingRight: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
   },
   fieldGroup: {
     textAlign: 'left',
@@ -151,7 +154,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     // ...debugView(),
-    paddingHorizontal: 20,
+    paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
     alignItems: 'flex-start'
   },
   fieldPlaceholder: {
