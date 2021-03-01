@@ -1,37 +1,33 @@
 import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
-import BP from '~/utils/breakpoints';
+import ResponsiveCard from '../../ResponsiveCard';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyFieldsContainer,
   BodyFieldsGroup,
-  Container,
   HelperDescription,
   HelperTitle,
-  FieldPlaceholder,
   HeaderContainer,
   OtherContainer
 } from '../styled';
+import { IIncomingOfferOtherProps } from '../types';
 
-const IncomingOfferOther = ({
-  title,
+const IncomingOfferOther: React.FC<IIncomingOfferOtherProps> = ({
   name,
   properties
 }) => {
-  const displayedProps = properties.slice(0, BP({ default: 3, xsmall: 2 }));
+  const displayedProps = properties.slice(0, 3);
   return (
-    <Container>
+    <ResponsiveCard>
+
+    <ResponsiveCard.Container>
       <InteractionCardOther>
         <OtherContainer>
           <HeaderContainer customStyles={{flex: 0}}>
-            <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
+            <CredentialName numberOfLines={1}>{name}</CredentialName>
           </HeaderContainer>
           <BodyFieldsContainer isStretched>
-            <HelperTitle
-              customStyles={{
-                marginVertical: BP({ default: 6, small: 3, xsmall: 3 })
-              }}
-            >
+            <HelperTitle>
               Included info
             </HelperTitle>
             {displayedProps.length ? (
@@ -39,7 +35,7 @@ const IncomingOfferOther = ({
                 {displayedProps.map(p => (
                   <BodyFieldsGroup>
                     <FieldLabel>{p.label}</FieldLabel>
-                    <FieldPlaceholder />
+                    <ResponsiveCard.FieldPlaceholder width={116} />
                   </BodyFieldsGroup>
                 ))}
               </>
@@ -51,7 +47,9 @@ const IncomingOfferOther = ({
           </BodyFieldsContainer>
         </OtherContainer>
       </InteractionCardOther>
-    </Container>
+      </ResponsiveCard.Container>
+    </ResponsiveCard>
+      
   )
 }
 

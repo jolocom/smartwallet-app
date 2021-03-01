@@ -16,5 +16,5 @@ export interface IIncomingRequestDocCardProps extends IIncomingCard {
 }
 
 export interface IIncomingRequestOtherProps extends IIncomingCard { }
-
 export interface IIncomingOfferDocProps extends IIncomingCard { }
+export interface IIncomingOfferOtherProps extends IIncomingCard { }

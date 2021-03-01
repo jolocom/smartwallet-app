@@ -380,14 +380,14 @@ const InteractionTest = () => {
         <Section.Title>
           Incoming offer - other
         </Section.Title>
-        {/* {OFFER_OTHER.map(c => (
+        {OFFER_OTHER.map(c => (
           <View key={c.id}>
             <IncomingOfferOther
               {...c}
             />
             <View style={{height: 20}} />
           </View>
-        ))} */}
+        ))}
       </ScrollView>
       
     </ScreenContainer>

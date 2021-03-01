@@ -51,7 +51,7 @@ export const OtherContainer: React.FC = ({children}) => {
 export const OtherTitleContainer: React.FC = ({children}) => {
   return <View style={{
     position: 'absolute',
-    right: 25,
+    right: '5%',
     top: 0,
     bottom: 0,
     alignItems: 'center',
