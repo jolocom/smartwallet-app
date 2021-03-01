@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 
 import { RootReducerI } from '~/types/reducer'
 import {
+  AttributeTypes,
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
@@ -19,9 +20,7 @@ import {
   isCredOfferDetails,
   isCredShareDetails,
   isNotActiveInteraction,
-  isResolutionDetails,
 } from './guards'
-import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
 
 const createInteractionSelector = <T extends InteractionDetails>(
@@ -78,15 +77,6 @@ export const getInteractionCounterparty = createSelector(
 )
 
 /**
- * Gets the @name of the counterparty (from the public profile) if available. Otherwise, will
- * return a fallback string.
- */
-export const getCounterpartyName = createSelector(
-  [getActiveInteraction],
-  ({ counterparty }) => counterparty.publicProfile?.name ?? strings.SERVICE,
-)
-
-/**
  * Gets the @interactionDetails for each type of interaction. Can only be used within the specific interaction
  * components, otherwise will throw (e.g. using @getAuthenticationDetails inside @BasWrapper will throw).
  */
@@ -94,9 +84,6 @@ export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
 export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
 export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
 export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
-export const getResolutionDetails = createInteractionSelector(
-  isResolutionDetails,
-)
 
 /** CredentialShare selectors **/
 
@@ -115,7 +102,7 @@ export const getSelectedShareCredentials = createSelector(
 export const getAvailableAttributesToShare = createSelector(
   [getCredShareDetails, getAttributes],
   ({ requestedAttributes }, attributes) =>
-    requestedAttributes.reduce<AttrsState<AttributeI>>((acc, v) => {
+    requestedAttributes.reduce<Partial<AttrsState<AttributeI>>>((acc, v) => {
       acc[v] = attributes[v] || []
       return acc
     }, {}),
@@ -168,22 +155,6 @@ export const getIsFullscreenCredShare = createSelector(
       : isOnlyOneCredential
       ? false
       : true
-  },
-)
-
-/**
- * Gets the first requested @ShareUIDocument, if available in the @credentials module.
- * Otherwise, returns @null.
- */
-export const getFirstShareDocument = createSelector(
-  [getCredShareDetails, getAllCredentials],
-  ({ requestedCredentials }, credentials) => {
-    const firstType = requestedCredentials[0]
-    const firstCredential = credentials.find((c) => c.type === firstType)
-
-    return firstCredential
-      ? uiCredentialToShareCredential(firstCredential)
-      : null
   },
 )
 
@@ -271,4 +242,115 @@ export const getOfferCredentialsBySection = createSelector(
       return acc
     }, defaultSections)
   },
+)
+
+export const getServiceImage = createSelector(
+  [getInteractionCounterparty],
+  (counterparty) => {
+    return counterparty.publicProfile?.image
+  },
+)
+
+export const getServiceDescription = createSelector(
+  [getInteractionCounterparty],
+  (counterparty) => {
+    return {
+      did: counterparty.did,
+      name: counterparty.publicProfile?.name,
+      isAnonymous: counterparty.publicProfile === undefined
+    }
+  },
+)
+
+export const getSingleMissingAttribute = createSelector(
+  [getInteractionDetails, getAttributes],
+  (details, attributes) => {
+    if (isCredShareDetails(details)) {
+      const { requestedAttributes, requestedCredentials } = details
+      if (
+        requestedAttributes.length === 1 &&
+        requestedCredentials.length === 0 &&
+        !attributes[requestedAttributes[0]]
+      ) {
+        return requestedAttributes[0]
+      }
+    }
+    return undefined
+  },
+)
+
+export const getSingleCredentialToShare = createSelector(
+  [getCredShareDetails, getAllCredentials],
+  (details, credentials) => {
+    const { requestedAttributes, requestedCredentials } = details
+    if (requestedAttributes.length === 0 && requestedCredentials.length === 1) {
+      const availableCreds = credentials.filter(
+        (c) => c.type === requestedCredentials[0],
+      )
+      if (availableCreds.length === 1) {
+        return availableCreds[0]
+      }
+    }
+    return undefined
+  },
+)
+
+export const getIsReadyToSubmitRequest = createSelector(
+  [
+    getCredShareDetails,
+    getAvailableAttributesToShare,
+    getSelectedShareCredentials,
+    getSingleMissingAttribute
+  ],
+  (details, attributes, selectedShareCredentials, singleMissingAttribute) => {
+    if (singleMissingAttribute !== undefined) return true;
+    if (Object.keys(selectedShareCredentials).length) {
+      const { requestedCredentials } = details;
+      const allAttributes = Object.keys(attributes).every((t) =>
+        Object.keys(selectedShareCredentials).includes(t),
+      )
+
+      const allCredentials = requestedCredentials.every((t) =>
+        Object.keys(selectedShareCredentials).includes(t),
+      )
+
+      return allAttributes && allCredentials
+    }
+
+    return false
+  }
+)
+
+export const getAttributesToSelect = createSelector(
+  [getAvailableAttributesToShare],
+  (attributes) => {
+    return Object.keys(attributes).reduce<Record<string, string>>((acc, value) => {		
+       const attrType = value as AttributeTypes		
+       if (!acc[attrType]) {		
+         const attr = attributes[attrType] || []		
+         if (attr.length) {		
+           acc[attrType] = attr[0].id		
+         }		
+       }		
+       return acc		
+     }, {})
+  }
+)
+
+export const getAuthzUIDetails = createSelector(
+  [getAuthorizationDetails],
+  (details) => {
+    const { flowType, ...rest } = details;
+    return {
+      ...rest
+    }
+  }
+)
+
+export const getCredShareUIDetailsBAS = createSelector(
+  [getSingleMissingAttribute, getSingleCredentialToShare, getIsReadyToSubmitRequest],
+  (singleMissingAttribute, singleCredential) => ({
+    singleMissingAttribute,
+    singleCredential,
+  })
 )
