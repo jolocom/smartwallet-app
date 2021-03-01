@@ -1,32 +1,31 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react';
+import InteractionFooter from './components/InteractionFooter';
+import InteractionDescription from './components/InteractionDescription';
+import InteractionLogo from './components/InteractionLogo';
+import InteractionTitle from './components/InteractionTitle';
+import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
+import useAuthSubmit from '~/hooks/interactions/useAuthSubmit';
+import { strings } from '~/translations';
 
-import BasWrapper from '~/components/ActionSheet/BasWrapper'
-import InteractionHeader from './components/InteractionHeader'
-import { strings } from '~/translations/strings'
-import { getCounterpartyName } from '~/modules/interaction/selectors'
-import useAuthSubmit from '~/hooks/interactions/useAuthSubmit'
-import InteractionFooter from './components/InteractionFooter'
-
-const Authentication: React.FC = () => {
-  const serviceName = useSelector(getCounterpartyName)
-  const title = strings.IS_IT_REALLY_YOU
-  const description = strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY(
-    serviceName,
-  )
-  const cta = strings.AUTHENTICATE
-  const handleSubmit = useAuthSubmit()
-
+const Authentication = () => {
+  const handleSubmit = useAuthSubmit();
   return (
-    <BasWrapper
-      customStyles={{
-        marginTop: 5,
-      }}
-    >
-      <InteractionHeader {...{ title, description }} />
-      <InteractionFooter cta={cta} onSubmit={handleSubmit} />
-    </BasWrapper>
+    <ContainerBAS>
+      <LogoContainerBAS>
+        <InteractionLogo />
+      </LogoContainerBAS>
+      <InteractionTitle label={strings.IS_IT_REALLY_YOU} />
+      <InteractionDescription
+        label={strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY}
+      />
+      <Space />
+      <InteractionFooter
+        onSubmit={handleSubmit}
+        submitLabel={strings.AUTHENTICATE}
+      />
+    </ContainerBAS>
   )
 }
 
-export default Authentication
+
+export default Authentication;
