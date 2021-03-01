@@ -111,10 +111,10 @@ export const FieldPlaceholder = () => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    ...debugView(),
+    // ...debugView(),
     alignItems: 'flex-start',
-    paddingHorizontal: 20,
-    paddingTop: BP({default: 10, xsmall: 5}),
+    paddingHorizontal: BP({default: 20, xsmall: 15}),
+    paddingTop: 10,
   },
   bodyContainer: {
     // ...debugView(),
@@ -125,13 +125,13 @@ const styles = StyleSheet.create({
     flex: 0.68,
     // ...debugView(),
     alignItems: 'flex-start',
-    paddingLeft: 20,
+    paddingLeft: BP({default: 20, xsmall: 15}),
   },
   bodyImageContainer: {
     flex: 0.32,
     // ...debugView(),
     alignItems: 'flex-start',
-    paddingRight: 20,
+    paddingRight: BP({default: 20, xsmall: 15}),
   },
   fieldGroup: {
     textAlign: 'left',

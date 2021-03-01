@@ -1,7 +1,6 @@
 import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
 import { strings } from '~/translations';
-import BP from '~/utils/breakpoints';
 import ResponsiveCard from '../../ResponsiveCard';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
@@ -17,53 +16,57 @@ import {
 
 const MAX_FIELD_DOC = 2;
 
-export const IncomingRequestDoc = ({
+interface IProperty {
+  key: string,
+  label: string,
+  value: string,
+}
+interface IIncomingRequestDocCardProps {
+  name: string,
+  holderName: string,
+  properties: IProperty[],
+  highlight: string,
+  image: string
+}
+
+export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
   name,
   holderName,
   properties,
   highlight,
   image
 }) => {
-  const handleChildVisibility = (child: React.ReactNode, idx: number, lines: Record<number, number>) => {
+  const handleFieldValuesVisibility = (child: React.ReactNode, idx: number, fieldLines: Record<number, number>, holderNameLines: number) => {
     if (idx + 1 > MAX_FIELD_DOC) {
      /* 1. Do not display anything that is more than max */
      return null
-    } else if (BP({
-      default: !!highlight && idx > 0 && lines[0] > 1,
-      xsmall: !!highlight && idx > 0
-    })) {
+    } else if (
+      (!!highlight && idx > 0 && fieldLines[0] > 1) ||
+      (!!highlight && idx > 0 && holderNameLines > 1)) {
       /* 2. Do not display all the fields besides first if number of lines of the first field is more than 1 and there is a highlight */
       return null
     }
     return child;
   }
 
-  const handleNumberOfValueLinesToDisplay = (idx: number, lines: Record<number, number>) => {
+  const handleNumberOfValueLinesToDisplay = (idx: number, fieldLines: Record<number, number>) => {
     return idx !== 0
-      ? lines[0] > 1 ? 1 : BP({ default: 2, xsmall: 1 })
-      : BP({ default: 2, xsmall: highlight ? 2 : 1 });
+      ? fieldLines[0] > 1 ? 1 : 2
+      : 2
     };
 
   return (
     <ResponsiveCard>
       <ResponsiveCard.Container>
         <InteractionCardDoc>
-            {/* <HeaderContainer customStyles={{ flex: properties.length ? 0.5 : 0}}> */}
-            <HeaderContainer customStyles={{ flex: highlight ? 0 : 0.5}}>
+            <HeaderContainer customStyles={{ flex: highlight || !properties.length ? 0 : 0.5}}>
               <CredentialName numberOfLines={1}>{name}</CredentialName>
-              {/* NOTE: when there is a highlight there
-                is no enough space for the whole holder name
-                without breaking further configurations  
-              */}
-              {holderName && (
-                // <CredentialHolderName isTruncated={Boolean(highlight)}>{holderName}</CredentialHolderName>
-                <ResponsiveCard.HolderName isTruncated={false}>{holderName}</ResponsiveCard.HolderName>
-              )}
+              <ResponsiveCard.HolderName>{holderName}</ResponsiveCard.HolderName>
             </HeaderContainer>
             {properties.length ? (
               <BodyContainer>
                 <BodyFieldsContainer isStretched={!image}>
-                  <ResponsiveCard.FieldsCalculator cbChildVisibility={handleChildVisibility}>
+                  <ResponsiveCard.FieldsCalculator cbChildVisibility={handleFieldValuesVisibility}>
                     {properties.map((p, idx) => (
                       <BodyFieldsGroup>
                         <FieldLabel>{p.label}</FieldLabel>

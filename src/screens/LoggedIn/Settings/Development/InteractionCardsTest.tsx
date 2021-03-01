@@ -108,7 +108,8 @@ const REQUEST_DOCS = [
   },
   {
     id: 5,
-    holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
+    // holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
+    holderName: 'Jane Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
     name: 'Digital Passport',
     properties: [],
   },

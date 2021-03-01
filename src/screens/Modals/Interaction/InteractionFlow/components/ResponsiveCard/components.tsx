@@ -46,7 +46,9 @@ export const CredentialImage: IResponsiveCardComposition['Image'] = ({ imageUrl 
 export const CredentialHighlight: IResponsiveCardComposition['Highlight'] = ({ children }) => {
   const { scaleRatio } = useResponsiveCard();
   const calculatedStyles = {
-    height: BASE_HIGHLIGHT_HEIGHT * scaleRatio
+    height: BASE_HIGHLIGHT_HEIGHT * scaleRatio,
+    borderBottomLeftRadius: scaleRatio * 9.5,
+    borderBottomRightRadius: scaleRatio * 9.5,
   }
   return (
     <View style={[styles.highlight, calculatedStyles]}>
@@ -63,7 +65,7 @@ export const CredentialHighlight: IResponsiveCardComposition['Highlight'] = ({ c
   )
 }
 
-export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({ children, isTruncated }) => {
+export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({ children }) => {
   const { setHolderNameLines } = useResponsiveCard();
 
   const handleTextLayout = (e: TextLayoutEvent) => {
@@ -75,7 +77,7 @@ export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({
       kind={JoloTextKind.title}
       color={Colors.black90}
       customStyles={styles.holderName}
-      numberOfLines={isTruncated ? 1 : 2}
+      numberOfLines={2}
       // @ts-ignore
       onTextLayout={(e: TextLayoutEvent) => handleTextLayout(e)}
     >
@@ -88,14 +90,14 @@ export const FieldsCalculator: IResponsiveCardComposition['FieldsCalculator'] = 
   children,
   cbChildVisibility
 }) => {
-  const { fieldLines } = useResponsiveCard()
+  const { fieldLines, holderNameLines } = useResponsiveCard()
 
   /* We can't display all the fields that a service provides,
      therefore running a callback which decides what child to
      display and which one to cut off
   */
   const childrenToDisplay = Children.map(children, (child, idx) => {
-    return cbChildVisibility(child, idx, fieldLines);
+    return cbChildVisibility(child, idx, fieldLines, holderNameLines);
   })
 
   return childrenToDisplay;
@@ -142,10 +144,12 @@ const styles = StyleSheet.create({
     height: 50,
     width: '100%',
     paddingHorizontal: 20,
-    borderBottomLeftRadius: BP({default: 13, xsmall: 11}),
-    borderBottomRightRadius: BP({default: 13, xsmall: 11}),
     zIndex: 0,
-    marginBottom: BP({default: 0, xsmall: -1})
+    ...Platform.select({
+      ios: {
+        marginBottom: -1,
+      }
+    })
   },
   holderName: {
     textAlign: 'left',
