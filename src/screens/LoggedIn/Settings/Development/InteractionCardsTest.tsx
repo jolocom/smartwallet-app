@@ -43,7 +43,7 @@ const REQUEST_DOCS = [
         value: '04.06.1984'
       },
             {
-        key: 'b',
+        key: 'c',
         label: 'Issue date',
         value: '04.06.1984'
       }
@@ -334,7 +334,6 @@ const InteractionTest = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      // isFullscreen
       customStyles={{ justifyContent: 'flex-start' }}
     >
       <ScrollView
@@ -346,7 +345,11 @@ const InteractionTest = () => {
         {REQUEST_DOCS.map(c => (
           <View key={c.id}>
             <IncomingRequestDoc
-              {...c}
+              name={c.name}
+              holderName={c.holderName}
+              properties={c.properties}
+              highlight={c.highlight}
+              image={c.image}
             />
             
             <View style={{height: 20}} />
@@ -356,7 +359,8 @@ const InteractionTest = () => {
         {REQUEST_OTHER.map(c => (
           <View key={c.id}>
             <IncomingRequestOther
-              {...c}
+              name={c.name}
+              properties={c.properties}
             />
             <View style={{height: 20}} />
           </View>
@@ -364,10 +368,11 @@ const InteractionTest = () => {
         <Section.Title>
           Incoming offer - documents
         </Section.Title>
-        {/* {OFFER_DOCS.map(c => (
+        {OFFER_DOCS.map(c => (
           <View key={c.id}>
             <IncomingOfferDoc
-              {...c}
+              name={c.name}
+              properties={c.properties}
             />
             <View style={{height: 20}} />
           </View>
@@ -375,7 +380,7 @@ const InteractionTest = () => {
         <Section.Title>
           Incoming offer - other
         </Section.Title>
-        {OFFER_OTHER.map(c => (
+        {/* {OFFER_OTHER.map(c => (
           <View key={c.id}>
             <IncomingOfferOther
               {...c}

@@ -18,6 +18,7 @@ export interface IResponsiveCardComposition {
   HolderName: React.FC
   FieldsCalculator: React.FC<IFieldsCalculatorProps>
   FieldValue: React.FC<IFieldValueProps>
+  FieldPlaceholder: React.FC<IFieldPlaceholderProps>
 }
 
 interface ICredentialImageProps {
@@ -31,4 +32,8 @@ export interface IFieldValueProps extends IWithCustomStyle {
 
 interface IFieldsCalculatorProps {
   cbFieldsVisibility: (child: React.ReactNode, idx: number, lines: Record<number, number>, holderNameLines: number) => React.ReactNode
+}
+
+interface IFieldPlaceholderProps {
+  width: number
 }

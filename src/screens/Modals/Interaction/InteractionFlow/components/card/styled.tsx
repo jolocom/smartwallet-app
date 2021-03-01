@@ -106,11 +106,6 @@ export const HelperDescription: React.FC = ({ children }) => {
   )
 }
 
-export const FieldPlaceholder = () => {
-  return (
-    <View style={styles.fieldPlaceholder} />
-  )
-}
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -156,11 +151,5 @@ const styles = StyleSheet.create({
     // ...debugView(),
     paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
     alignItems: 'flex-start'
-  },
-  fieldPlaceholder: {
-    width: 156, // TODO: update to value from the designs
-    height: 20,
-    borderRadius: 5,
-    backgroundColor: Colors.alto
   },
 })

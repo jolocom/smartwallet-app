@@ -126,6 +126,19 @@ export const FieldValue: IResponsiveCardComposition['FieldValue']  = ({
   )
 }
 
+export const FieldPlaceholder: IResponsiveCardComposition['FieldPlaceholder'] = ({ width }) => {
+  const { scaleRatio } = useResponsiveCard(); 
+  const calculatedStyles = {
+    width: scaleRatio * width,
+    height: scaleRatio * 20,
+    borderRadius: scaleRatio * 5
+  }
+  return (
+    <View style={[styles.fieldPlaceholder, calculatedStyles]} />
+  )
+}
+
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -164,5 +177,8 @@ const styles = StyleSheet.create({
       : BP({ xsmall: 14, default: 18 }),
     marginTop: -3
     // ...debugView()
-  }
+  },
+    fieldPlaceholder: {
+    backgroundColor: Colors.alto
+  },
 })

@@ -1,54 +1,52 @@
 import React from 'react';
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc';
-import BP from '~/utils/breakpoints';
+import { strings } from '~/translations';
+import ResponsiveCard from '../../ResponsiveCard';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyFieldsContainer,
   BodyFieldsGroup,
-  Container,
   HelperDescription,
-  FieldPlaceholder,
   HeaderContainer,
   HelperTitle
 } from '../styled';
+import { IIncomingOfferDocProps } from '../types';
 
-const IncomingOfferDoc = ({
-  title,
+const IncomingOfferDoc: React.FC<IIncomingOfferDocProps> = ({
   name,
   properties,
 }) => {
-  const displayedProps = properties.slice(0, BP({ default: 3, xsmall: 2 }));
+  const displayedProps = properties.slice(0, 3);
   return (
-    <Container>
-      <InteractionCardDoc>
-          <HeaderContainer customStyles={{flex: 0}}>
-            <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
-        </HeaderContainer>
-        <BodyFieldsContainer isStretched>
-          <HelperTitle
-            customStyles={{
-              marginVertical: BP({ default: 6, small: 3, xsmall: 3 })
-            }}
-          >
-            Included info
-          </HelperTitle>
-          {displayedProps.length ? (
-            <>
-              {displayedProps.map(p => (
-                <BodyFieldsGroup>
-                  <FieldLabel>{p.label}</FieldLabel>
-                  <FieldPlaceholder />
-                </BodyFieldsGroup>
-              ))}
-            </>
-          ) : (
-            <HelperDescription>
-              No info that can be previewed
-            </HelperDescription>
-          )}
-        </BodyFieldsContainer>
-      </InteractionCardDoc>
-    </Container>
+    <ResponsiveCard>
+      <ResponsiveCard.Container>
+        <InteractionCardDoc>
+            <HeaderContainer customStyles={{flex: 0}}>
+              <CredentialName numberOfLines={1}>{name}</CredentialName>
+            </HeaderContainer>
+            <BodyFieldsContainer isStretched>
+              <HelperTitle>
+                {strings.INCLUDED_INFO}
+              </HelperTitle>
+              {displayedProps.length ? (
+                <>
+                  {displayedProps.map(p => (
+                    <BodyFieldsGroup>
+                      <FieldLabel>{p.label}</FieldLabel>
+                      <ResponsiveCard.FieldPlaceholder width={156} />
+                    </BodyFieldsGroup>
+                  ))}
+                </>
+              ) : (
+                <HelperDescription>
+                  {strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}
+                </HelperDescription>
+              )}
+            </BodyFieldsContainer>
+        </InteractionCardDoc>
+      </ResponsiveCard.Container>
+    </ResponsiveCard>
+      
   )
 }
 

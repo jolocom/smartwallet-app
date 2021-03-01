@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ResponsiveCardContext } from './context';
 import { IResponsiveCardComposition } from './types';
-import { Container, CredentialHighlight, CredentialHolderName, CredentialImage, FieldsCalculator, FieldValue } from './components';
+import { Container, CredentialHighlight, CredentialHolderName, CredentialImage, FieldPlaceholder, FieldsCalculator, FieldValue } from './components';
 import { TextLayoutEvent } from '~/components/Card/Field';
 
 const ResponsiveCard: React.FC & IResponsiveCardComposition = ({ children }) => {
@@ -38,5 +38,6 @@ ResponsiveCard.Highlight = CredentialHighlight
 ResponsiveCard.HolderName = CredentialHolderName
 ResponsiveCard.FieldsCalculator = FieldsCalculator
 ResponsiveCard.FieldValue = FieldValue
+ResponsiveCard.FieldPlaceholder = FieldPlaceholder
 
 export default ResponsiveCard;
