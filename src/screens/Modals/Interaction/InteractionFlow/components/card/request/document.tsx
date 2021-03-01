@@ -13,21 +13,10 @@ import {
   HelperTitle,
   HeaderContainer
 } from '../styled';
+import { IIncomingRequestDocCardProps } from '../types';
 
 const MAX_FIELD_DOC = 2;
 
-interface IProperty {
-  key: string,
-  label: string,
-  value: string,
-}
-interface IIncomingRequestDocCardProps {
-  name: string,
-  holderName?: string,
-  properties: IProperty[],
-  highlight: string,
-  image: string
-}
 
 export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
   name,
@@ -68,7 +57,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
             {properties.length ? (
               <BodyContainer>
                 <BodyFieldsContainer isStretched={!image}>
-                  <ResponsiveCard.FieldsCalculator cbChildVisibility={handleFieldValuesVisibility}>
+                  <ResponsiveCard.FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
                     {properties.map((p, idx) => (
                       <BodyFieldsGroup>
                         <FieldLabel>{p.label}</FieldLabel>

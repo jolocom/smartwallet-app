@@ -34,7 +34,7 @@ const REQUEST_DOCS = [
     properties: [
       {
         key: 'a',
-        label: 'Date of birth',
+        label: 'Date of birth lorem impsum Date of birth lorem impsum Date of birth lorem impsum ',
         value: '04.06.1984'
       },
       {
@@ -353,7 +353,7 @@ const InteractionTest = () => {
           </View>
         ))}
         <Section.Title>Incoming request - others</Section.Title>
-        {/* {REQUEST_OTHER.map(c => (
+        {REQUEST_OTHER.map(c => (
           <View key={c.id}>
             <IncomingRequestOther
               {...c}
@@ -364,7 +364,7 @@ const InteractionTest = () => {
         <Section.Title>
           Incoming offer - documents
         </Section.Title>
-        {OFFER_DOCS.map(c => (
+        {/* {OFFER_DOCS.map(c => (
           <View key={c.id}>
             <IncomingOfferDoc
               {...c}

@@ -1,14 +1,12 @@
 import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
 import { strings } from '~/translations';
-import BP from '~/utils/breakpoints';
-import { BodyFieldsCalculator } from '../../FieldsCalculator';
+import ResponsiveCard from '../../ResponsiveCard';
 import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyContainer,
   BodyFieldsContainer,
   BodyFieldsGroup,
-  Container,
   EmptyContainer,
   HelperDescription,
   HelperTitle,
@@ -17,10 +15,11 @@ import {
   OtherTitle,
   OtherTitleContainer
 } from '../styled';
+import { IIncomingRequestDocCardProps } from '../types';
 
 const MAX_FIELD_OTHER = 3;
 
-export const IncomingRequestOther = ({
+export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
   name,
   properties
 }) => {
@@ -39,49 +38,48 @@ export const IncomingRequestOther = ({
     constantly no matter how many lines are in the first value
   */
   const handleNumberOfValueLinesToDisplay = (idx: number) => {
-    return BP({
-      default: 2,
-      xsmall: idx !== 0 ? 1 : 2
-    })
+    return 2
   };
 
   return (
-    <Container>
-      <InteractionCardOther>
-        <OtherContainer>
-          <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
-            <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{name}</CredentialName>
-          </HeaderContainer>
-          {properties.length ? (
-            <BodyContainer customStyles={{flex: 0, alignSelf: 'flex-end'}}>
-              <BodyFieldsContainer isStretched>
-                <BodyFieldsCalculator cbChildVisibility={handleChildVisibility}>
-                  {properties.map((p, idx) => (
-                    <BodyFieldsGroup>
-                      <FieldLabel>{p.label}</FieldLabel>
-                      <BodyFieldsCalculator.FieldValue
-                        idx={idx}
-                        onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
-                      >
-                        {p.value}
-                      </BodyFieldsCalculator.FieldValue>
-                    </BodyFieldsGroup>
-                  ))}
-                </BodyFieldsCalculator>
-              </BodyFieldsContainer>
-            </BodyContainer>
-          ) : (
-            <EmptyContainer>
-              <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
-              <HelperDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</HelperDescription>
-            </EmptyContainer>
-          )}
-        </OtherContainer>
-        <OtherTitleContainer>
-          <OtherTitle>{name}</OtherTitle>
-        </OtherTitleContainer>
-      </InteractionCardOther>
-    </Container>
-      
+    <ResponsiveCard>
+      <ResponsiveCard.Container>
+        <InteractionCardOther>
+          <OtherContainer>
+            <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
+              <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{name}</CredentialName>
+            </HeaderContainer>
+            {properties.length ? (
+              <BodyContainer customStyles={{flex: 0, alignSelf: 'flex-end'}}>
+                <BodyFieldsContainer isStretched>
+                  <ResponsiveCard.FieldsCalculator cbFieldsVisibility={handleChildVisibility}>
+                    {properties.map((p, idx) => (
+                      <BodyFieldsGroup>
+                        <FieldLabel>{p.label}</FieldLabel>
+                        <ResponsiveCard.FieldValue
+                          idx={idx}
+                          onNumberOfFieldLinesToDisplay={handleNumberOfValueLinesToDisplay}
+                        >
+                          {p.value}
+                        </ResponsiveCard.FieldValue>
+                      </BodyFieldsGroup>
+                    ))}
+                  </ResponsiveCard.FieldsCalculator>
+                </BodyFieldsContainer>
+              </BodyContainer>
+            ) : (
+              <EmptyContainer>
+                <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
+                <HelperDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</HelperDescription>
+              </EmptyContainer>
+            )}
+          </OtherContainer>
+          <OtherTitleContainer>
+            <OtherTitle>{name}</OtherTitle>
+          </OtherTitleContainer>
+        </InteractionCardOther>
+      </ResponsiveCard.Container>
+    </ResponsiveCard>
+    
   )
 }

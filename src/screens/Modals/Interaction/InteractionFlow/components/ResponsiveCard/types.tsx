@@ -30,5 +30,5 @@ export interface IFieldValueProps extends IWithCustomStyle {
 }
 
 interface IFieldsCalculatorProps {
-  cbChildVisibility: (child: React.ReactNode, idx: number, lines: Record<number, number>, holderNameLines: number) => React.ReactNode
+  cbFieldsVisibility: (child: React.ReactNode, idx: number, lines: Record<number, number>, holderNameLines: number) => React.ReactNode
 }

@@ -88,7 +88,7 @@ export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({
 
 export const FieldsCalculator: IResponsiveCardComposition['FieldsCalculator'] = ({
   children,
-  cbChildVisibility
+  cbFieldsVisibility
 }) => {
   const { fieldLines, holderNameLines } = useResponsiveCard()
 
@@ -97,7 +97,7 @@ export const FieldsCalculator: IResponsiveCardComposition['FieldsCalculator'] = 
      display and which one to cut off
   */
   const childrenToDisplay = Children.map(children, (child, idx) => {
-    return cbChildVisibility(child, idx, fieldLines, holderNameLines);
+    return cbFieldsVisibility(child, idx, fieldLines, holderNameLines);
   })
 
   return childrenToDisplay;
