@@ -21,8 +21,6 @@ import {
 const MAX_FIELD_OTHER = 3;
 
 export const IncomingRequestOther = ({
-  title,
-  subtitle,
   name,
   properties
 }) => {
@@ -52,7 +50,7 @@ export const IncomingRequestOther = ({
       <InteractionCardOther>
         <OtherContainer>
           <HeaderContainer customStyles={{flex: 0, marginBottom: 10}}>
-            <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{subtitle ?? title ?? name}</CredentialName>
+            <CredentialName numberOfLines={2} customStyles={{textAlign: 'left'}}>{name}</CredentialName>
           </HeaderContainer>
           {properties.length ? (
             <BodyContainer customStyles={{flex: 0, alignSelf: 'flex-end'}}>
@@ -80,7 +78,7 @@ export const IncomingRequestOther = ({
           )}
         </OtherContainer>
         <OtherTitleContainer>
-          <OtherTitle>{title}</OtherTitle>
+          <OtherTitle>{name}</OtherTitle>
         </OtherTitleContainer>
       </InteractionCardOther>
     </Container>

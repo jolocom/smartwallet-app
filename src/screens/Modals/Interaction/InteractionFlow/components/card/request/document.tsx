@@ -22,7 +22,6 @@ import {
 const MAX_FIELD_DOC = 2;
 
 export const IncomingRequestDoc = ({
-  title,
   name,
   holderName,
   properties,
@@ -53,7 +52,7 @@ export const IncomingRequestDoc = ({
     <Container>
     <InteractionCardDoc>
         <HeaderContainer customStyles={{ flex: properties.length ? 0.5 : 0}}>
-          <CredentialName numberOfLines={1}>{title ?? name}</CredentialName>
+          <CredentialName numberOfLines={1}>{name}</CredentialName>
           {/* NOTE: when there is a highlight there
             is no enough space for the whole holder name
             without breaking further configurations  

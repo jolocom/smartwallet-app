@@ -5,6 +5,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from "~/components/JoloText"
 import { Colors } from "~/utils/colors";
 import BP from '~/utils/breakpoints';
 import { IWithCustomStyle } from '~/components/Card/types';
+import { JoloTextSizes } from '~/utils/fonts';
 
 export const HeaderContainer: React.FC<IWithCustomStyle> = ({children, customStyles = {flex: 0.5}}) => {
   return (
@@ -47,7 +48,7 @@ export const CredentialHolderName: React.FC<ICredentialHolderNameProps> = ({ chi
     <JoloText
       kind={JoloTextKind.title}
       color={Colors.black90}
-      customStyles={{textAlign: 'left', lineHeight: BP({default: 28, xsmall: 24})}}
+      customStyles={{textAlign: 'left'}}
       numberOfLines={isTruncated ? 1 : 2}
     >
       {children}
@@ -131,6 +132,7 @@ export const HelperDescription: React.FC = ({children}) => {
   return (
     <JoloText
       weight={JoloTextWeight.regular}
+      size={JoloTextSizes.tiniest}
       style={{ fontSize: 14, alignSelf: 'flex-start' }}
       color={Colors.black50}
     >

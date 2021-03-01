@@ -1,7 +1,7 @@
 import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
 import BP from '~/utils/breakpoints';
-import { CredentialName } from '../reusable';
+import { CredentialName, FieldLabel } from '../reusable';
 import {
   BodyFieldsContainer,
   BodyFieldsGroup,
@@ -38,7 +38,7 @@ const IncomingOfferOther = ({
               <>
                 {displayedProps.map(p => (
                   <BodyFieldsGroup>
-                    <HelperDescription>{p.label}</HelperDescription>
+                    <FieldLabel>{p.label}</FieldLabel>
                     <FieldPlaceholder />
                   </BodyFieldsGroup>
                 ))}

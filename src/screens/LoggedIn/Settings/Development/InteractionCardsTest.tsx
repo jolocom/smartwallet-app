@@ -12,7 +12,6 @@ const REQUEST_DOCS = [
     id: 0,
     holderName: 'Jane Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
     name: 'Digital Passport',
-    title: 'Digital Passport',
     properties: [
       {
         key: 'a',
@@ -31,7 +30,6 @@ const REQUEST_DOCS = [
     id: 1,
     holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
     name: 'Digital Passport',
-    title: 'Digital Passport',
     properties: [
       {
         key: 'a',
@@ -57,7 +55,6 @@ const REQUEST_DOCS = [
     id: 2,
     holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
     name: 'Friendly document name',
-    title: 'Friendly document name',
     properties: [
       {
         key: 'a',
@@ -76,7 +73,6 @@ const REQUEST_DOCS = [
     id: 3,
     holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
     name: 'Friendly document name',
-    title: 'Friendly document name',
     properties: [
       {
         key: 'a',
@@ -94,7 +90,6 @@ const REQUEST_DOCS = [
     id: 4,
     holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
     name: 'Digital Passport',
-    title: 'Digital Passport',
     properties: [
       {
         key: 'a',
@@ -114,13 +109,11 @@ const REQUEST_DOCS = [
     id: 5,
     holderName: 'Jane Fransis Scott Adelina Fitzgerald', // TODO: we won't receive it in the same format from sdk, this field should be added
     name: 'Digital Passport',
-    title: 'Digital Passport',
     properties: [],
   },
   {
     id: 6,
     name: 'Digital Passport',
-    title: 'Digital Passport',
     properties: [],
   }
 
@@ -339,7 +332,7 @@ const InteractionTest = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      isFullscreen
+      // isFullscreen
       customStyles={{ justifyContent: 'flex-start' }}
     >
       <ScrollView
@@ -347,7 +340,7 @@ const InteractionTest = () => {
         contentContainerStyle={{paddingBottom: 100}}
       >
 
-        <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - documents</Section.Title>
+        <Section.Title>Incoming request - documents</Section.Title>
         {REQUEST_DOCS.map(c => (
           <View key={c.id}>
             <IncomingRequestDoc
@@ -357,7 +350,7 @@ const InteractionTest = () => {
             <View style={{height: 20}} />
           </View>
         ))}
-        <Section.Title customStyle={{alignSelf: 'center'}}>Incoming request - others</Section.Title>
+        <Section.Title>Incoming request - others</Section.Title>
         {REQUEST_OTHER.map(c => (
           <View key={c.id}>
             <IncomingRequestOther
@@ -366,7 +359,7 @@ const InteractionTest = () => {
             <View style={{height: 20}} />
           </View>
         ))}
-        <Section.Title customStyle={{ alignSelf: 'center' }}>
+        <Section.Title>
           Incoming offer - documents
         </Section.Title>
         {OFFER_DOCS.map(c => (
@@ -377,7 +370,7 @@ const InteractionTest = () => {
             <View style={{height: 20}} />
           </View>
         ))}
-        <Section.Title customStyle={{ alignSelf: 'center' }}>
+        <Section.Title>
           Incoming offer - other
         </Section.Title>
         {OFFER_OTHER.map(c => (

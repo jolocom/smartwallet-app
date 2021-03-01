@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, TextProps, TextStyle } from 'react-native';
 import { TextLayoutEvent } from '~/components/Card/Field';
 import { IWithCustomStyle } from '~/components/Card/types';
-import JoloText, { JoloTextWeight } from '~/components/JoloText';
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import { Colors } from '~/utils/colors';
+import { JoloTextSizes } from '~/utils/fonts';
 import { useFieldCalculator } from '../FieldsCalculator/context';
 import { IBodyFieldsCalculatorComposition } from '../FieldsCalculator/types';
 
@@ -11,6 +12,7 @@ interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle>  {
 export const CredentialName: React.FC<ICredentialNameProps> = ({ children, customStyles, ...props }) => {
   return (
     <JoloText
+      size={JoloTextSizes.big}
       weight={JoloTextWeight.regular}
       customStyles={[styles.credentialName, customStyles]}
       {...props}
@@ -21,6 +23,7 @@ export const CredentialName: React.FC<ICredentialNameProps> = ({ children, custo
 export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
   return (
     <JoloText
+      size={JoloTextSizes.tiniest}
       weight={JoloTextWeight.regular}
       customStyles={[styles.label, customStyles]}
       numberOfLines={1}
@@ -40,6 +43,8 @@ export const FieldValue: IBodyFieldsCalculatorComposition['FieldValue']  = ({
   return (
     <JoloText
       weight={JoloTextWeight.regular}
+      size={JoloTextSizes.mini}
+      kind={JoloTextKind.title}
       customStyles={[styles.value, customStyles]}
       // @ts-ignore: TextProps does not seem to have onTextLayout in type def. 
       onTextLayout={(e: TextLayoutEvent) => onTextLayout(e, idx)}
@@ -52,8 +57,6 @@ export const FieldValue: IBodyFieldsCalculatorComposition['FieldValue']  = ({
 
 const styles = StyleSheet.create({
   credentialName: {
-    fontSize: 22,
-    lineHeight: 24,
     color: Colors.black85,
     marginTop: -5,
   },
@@ -63,8 +66,6 @@ const styles = StyleSheet.create({
     color: Colors.black50,
   },
   value: {
-    fontSize: 18,
-    lineHeight: 18,
     color: Colors.black,
     textAlign: 'left',
     marginTop: -3

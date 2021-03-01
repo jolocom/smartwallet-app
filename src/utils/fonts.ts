@@ -106,6 +106,12 @@ export const subtitleFontStyles = {
     ),
   },
   tiniest: {
-    ...arrangeFontStyle(14, 20, 0, Colors.white70, Fonts.Regular),
+    ...arrangeFontStyle(
+      BP({ default: 14, xsmall: 12 }),
+      BP({ default: 20, xsmall: 18 }),
+      0,
+      Colors.white70,
+      Fonts.Regular
+    ),
   },
 }
