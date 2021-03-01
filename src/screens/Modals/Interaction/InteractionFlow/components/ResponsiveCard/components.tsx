@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import { Image, LayoutChangeEvent, StyleSheet, View } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import JoloText, { JoloTextWeight } from '~/components/JoloText';
+import { TextLayoutEvent } from '~/components/Card/Field';
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import BP from '~/utils/breakpoints';
+import { Colors } from '~/utils/colors';
+import { debugView } from '~/utils/dev';
 import { useResponsiveCard } from './context';
 import { IResponsiveCardComposition } from './types';
 
@@ -60,6 +62,27 @@ export const CredentialHighlight: IResponsiveCardComposition['Highlight'] = ({ c
   )
 }
 
+export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({ children, isTruncated }) => {
+  const { setHolderNameLines } = useResponsiveCard();
+
+  const handleTextLayout = (e: TextLayoutEvent) => {
+    const lines = e.nativeEvent.lines.length;
+    setHolderNameLines(lines);
+  }
+  return (
+    <JoloText
+      kind={JoloTextKind.title}
+      color={Colors.black90}
+      customStyles={styles.holderName}
+      numberOfLines={isTruncated ? 1 : 2}
+      // @ts-ignore
+      onTextLayout={(e: TextLayoutEvent) => handleTextLayout(e)}
+    >
+      {children}
+    </JoloText>
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -71,6 +94,8 @@ const styles = StyleSheet.create({
     zIndex: 100
   },
   highlight: {
+    position: 'absolute',
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: Colors.black,
@@ -82,4 +107,8 @@ const styles = StyleSheet.create({
     zIndex: 0,
     marginBottom: BP({default: 0, xsmall: -1})
   },
+  holderName: {
+    textAlign: 'left',
+    lineHeight: BP({ xsmall: 20, default: 24 }),
+  }
 })

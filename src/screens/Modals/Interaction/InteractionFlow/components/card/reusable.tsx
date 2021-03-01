@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextProps, TextStyle } from 'react-native';
+import { Platform, StyleSheet, TextProps, TextStyle } from 'react-native';
 import { TextLayoutEvent } from '~/components/Card/Field';
 import { IWithCustomStyle } from '~/components/Card/types';
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
@@ -70,7 +70,10 @@ const styles = StyleSheet.create({
   value: {
     color: Colors.black,
     textAlign: 'left',
-    lineHeight: BP({ xsmall: 14, default: 18 }),
+    lineHeight: Platform.OS === 'ios' 
+      ? BP({ xsmall: 12, default: 16 })
+      : BP({ xsmall: 14, default: 18 }),
+    marginTop: -3
     // ...debugView()
   }
 })

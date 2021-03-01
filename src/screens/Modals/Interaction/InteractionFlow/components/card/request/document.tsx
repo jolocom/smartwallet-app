@@ -60,7 +60,7 @@ export const IncomingRequestDoc = ({
               */}
               {holderName && (
                 // <CredentialHolderName isTruncated={Boolean(highlight)}>{holderName}</CredentialHolderName>
-                <CredentialHolderName isTruncated={false}>{holderName}</CredentialHolderName>
+                <ResponsiveCard.HolderName isTruncated={false}>{holderName}</ResponsiveCard.HolderName>
               )}
             </HeaderContainer>
             {properties.length ? (

@@ -41,22 +41,6 @@ export const BodyImageContainer: React.FC = () => {
   )
 }
 
-interface ICredentialHolderNameProps {
-  isTruncated: boolean
-}
-export const CredentialHolderName: React.FC<ICredentialHolderNameProps> = ({ children, isTruncated }) => {
-  return (
-    <JoloText
-      kind={JoloTextKind.title}
-      color={Colors.black90}
-      customStyles={styles.holderName}
-      numberOfLines={isTruncated ? 1 : 2}
-    >
-      {children}
-    </JoloText>
-  )
-}
-
 export const OtherContainer: React.FC = ({children}) => {
   return <View style={styles.otherContainer} children={children} />
 }
@@ -130,10 +114,10 @@ const styles = StyleSheet.create({
     ...debugView(),
     alignItems: 'flex-start',
     paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingTop: BP({default: 10, xsmall: 5}),
   },
   bodyContainer: {
-    ...debugView(),
+    // ...debugView(),
     flexDirection: 'row',
     paddingBottom: 20,
   },
@@ -176,8 +160,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: Colors.alto
   },
-  holderName: {
-    textAlign: 'left',
-    lineHeight: BP({ xsmall: 20, default: 24 }),
-  }
 })
