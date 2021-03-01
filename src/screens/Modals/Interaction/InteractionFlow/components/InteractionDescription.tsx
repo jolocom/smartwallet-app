@@ -9,10 +9,9 @@ import { JoloTextSizes } from '~/utils/fonts';
 
 interface IInteractionDescriptionProps {
   label: string,
-  withServiceName?: boolean
 }
 
-const InteractionDescription: React.FC<IInteractionDescriptionProps> = ({ label, withServiceName = true }) => {
+const InteractionDescription: React.FC<IInteractionDescriptionProps> = ({ label }) => {
   const { did, name, isAnonymous } = useSelector(getServiceDescription);
   const { t } = useTranslation()
 
