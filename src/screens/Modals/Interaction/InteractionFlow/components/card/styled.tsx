@@ -1,22 +1,28 @@
-import React from 'react';
-import { StyleSheet, TextProps, TextStyle, View } from "react-native";
+import React from 'react'
+import { StyleSheet, TextProps, TextStyle, View } from 'react-native'
 
-import JoloText, { JoloTextWeight } from "~/components/JoloText"
-import { Colors } from "~/utils/colors";
-import BP from '~/utils/breakpoints';
-import { IWithCustomStyle } from '~/components/Card/types';
-import { JoloTextSizes } from '~/utils/fonts';
+import JoloText, { JoloTextWeight } from '~/components/JoloText'
+import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
+import { IWithCustomStyle } from '~/components/Card/types'
+import { JoloTextSizes } from '~/utils/fonts'
 
-const PADDING_BASE = 20;
-const PADDING_SMALL = 15;
+const PADDING_BASE = 20
+const PADDING_SMALL = 15
 
-export const HeaderContainer: React.FC<IWithCustomStyle> = ({children, customStyles = {flex: 0.5}}) => {
+export const HeaderContainer: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles = { flex: 0.5 },
+}) => {
   return (
     <View style={[styles.headerContainer, customStyles]} children={children} />
   )
 }
 
-export const BodyContainer: React.FC<IWithCustomStyle> = ({ children, customStyles = { flex: 0.5 }}) => {
+export const BodyContainer: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles = { flex: 0.5 },
+}) => {
   return (
     <View style={[styles.bodyContainer, customStyles]} children={children} />
   )
@@ -25,39 +31,48 @@ export const BodyContainer: React.FC<IWithCustomStyle> = ({ children, customStyl
 interface IBodyFieldsContainerProps {
   isStretched: boolean
 }
-export const BodyFieldsContainer: React.FC<IBodyFieldsContainerProps> = ({ children, isStretched }) => {
+export const BodyFieldsContainer: React.FC<IBodyFieldsContainerProps> = ({
+  children,
+  isStretched,
+}) => {
   return (
-    <View style={[styles.bodyFieldsContainer, {flex: isStretched ? 1 : 0.68, paddingRight: isStretched ? 20 : 0}]} children={children} />
+    <View
+      style={[
+        styles.bodyFieldsContainer,
+        { flex: isStretched ? 1 : 0.68, paddingRight: isStretched ? 20 : 0 },
+      ]}
+      children={children}
+    />
   )
 }
 
 export const BodyFieldsGroup: React.FC = ({ children }) => {
-  return (
-    <View style={styles.fieldGroup} children={children} />
-  )
+  return <View style={styles.fieldGroup} children={children} />
 }
 
 export const BodyImageContainer: React.FC = () => {
-  return (
-    <View style={styles.bodyImageContainer} />
-  )
+  return <View style={styles.bodyImageContainer} />
 }
 
-export const OtherContainer: React.FC = ({children}) => {
+export const OtherContainer: React.FC = ({ children }) => {
   return <View style={styles.otherContainer} children={children} />
 }
 
-export const OtherTitleContainer: React.FC = ({children}) => {
-  return <View style={{
-    position: 'absolute',
-    right: '5%',
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }} children={children} />
+export const OtherTitleContainer: React.FC = ({ children }) => {
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        right: '5%',
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      children={children}
+    />
+  )
 }
-
 
 export const OtherTitle: React.FC = ({ children }) => {
   return (
@@ -74,19 +89,20 @@ export const OtherTitle: React.FC = ({ children }) => {
   )
 }
 
-export const EmptyContainer: React.FC = ({children}) => {
-  return (
-    <View style={styles.emptyContainer} children={children} />
-  )
+export const EmptyContainer: React.FC = ({ children }) => {
+  return <View style={styles.emptyContainer} children={children} />
 }
 
-export const HelperTitle: React.FC<IWithCustomStyle> = ({children, customStyles}) => {
+export const HelperTitle: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles,
+}) => {
   return (
     <JoloText
       weight={JoloTextWeight.regular}
-      customStyles={[{ fontSize: 16, alignSelf: 'flex-start'}, customStyles]}
+      customStyles={[{ fontSize: 16, alignSelf: 'flex-start' }, customStyles]}
       color={Colors.bastille}
-      >
+    >
       {children}:
     </JoloText>
   )
@@ -105,19 +121,28 @@ export const HelperDescription: React.FC = ({ children }) => {
   )
 }
 
-interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle>  {}
-export const CredentialName: React.FC<ICredentialNameProps> = ({ children, customStyles, ...props }) => {
+interface ICredentialNameProps extends TextProps, IWithCustomStyle<TextStyle> {}
+export const CredentialName: React.FC<ICredentialNameProps> = ({
+  children,
+  customStyles,
+  ...props
+}) => {
   return (
     <JoloText
       size={JoloTextSizes.big}
       weight={JoloTextWeight.regular}
       customStyles={[styles.credentialName, customStyles]}
       {...props}
-    >{children}</JoloText>
+    >
+      {children}
+    </JoloText>
   )
 }
 
-export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
+export const FieldLabel: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles,
+}) => {
   return (
     <JoloText
       size={JoloTextSizes.tiniest}
@@ -130,30 +155,29 @@ export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles 
   )
 }
 
-
 const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'flex-start',
-    paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
+    paddingHorizontal: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
     paddingTop: 10,
   },
   bodyContainer: {
     flexDirection: 'row',
-    paddingBottom: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
+    paddingBottom: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
   },
   bodyFieldsContainer: {
     flex: 0.68,
     alignItems: 'flex-start',
-    paddingLeft: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
+    paddingLeft: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
   },
   bodyImageContainer: {
     flex: 0.32,
     alignItems: 'flex-start',
-    paddingRight: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
+    paddingRight: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
   },
   fieldGroup: {
     textAlign: 'left',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   otherContainer: {
     width: '73%',
@@ -166,8 +190,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emptyContainer: {
-    paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
-    alignItems: 'flex-start'
+    paddingHorizontal: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
+    alignItems: 'flex-start',
   },
   credentialName: {
     color: Colors.black85,
