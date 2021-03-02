@@ -12,6 +12,7 @@ import { ScreenNames } from '~/types/screens'
 import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
 import LoggedIn from './screens/LoggedIn'
+import { Colors } from './utils/colors'
 
 export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
@@ -36,7 +37,10 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
           <RootStack.Screen
             name={ScreenNames.LoggedIn}
             component={LoggedIn}
-            options={{ gestureEnabled: false }}
+            options={{
+              gestureEnabled: false,
+              cardStyle: { backgroundColor: Colors.mainBlack },
+            }}
           />
         ) : (
           <RootStack.Screen
