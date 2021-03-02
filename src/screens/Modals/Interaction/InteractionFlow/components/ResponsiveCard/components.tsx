@@ -166,7 +166,9 @@ const styles = StyleSheet.create({
   },
   holderName: {
     textAlign: 'left',
-    lineHeight: BP({ xsmall: 20, default: 24 }),
+    lineHeight: Platform.OS === 'ios'
+      ? BP({ xsmall: 20, default: 24 })
+      : BP({ xsmall: 24, default: 28 }),
   },
   value: {
     color: Colors.black,
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
     lineHeight: Platform.OS === 'ios' 
       ? BP({ xsmall: 12, default: 16 })
       : BP({ xsmall: 14, default: 18 }),
-    marginTop: -3
+    marginTop: Platform.OS === 'ios' ? -3 : 4
   },
     fieldPlaceholder: {
     backgroundColor: Colors.alto
