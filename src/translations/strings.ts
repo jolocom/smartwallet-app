@@ -150,6 +150,8 @@ const interactions = {
   INCOMING_REQUEST: 'Incoming request',
   INCOMING_OFFER: 'Incoming offer',
   ADD_INFO: 'Add info',
+  INCLUDED_INFO: 'Included info',
+  NO_INFO_THAT_CAN_BE_PREVIEWED: 'No info that can be previewed',
   WOULD_YOU_LIKE_TO_ACTION: "Would you like to {{action}}?",
 }
 

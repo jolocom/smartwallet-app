@@ -17,6 +17,7 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
+  const redirectToInteractionCards = useRedirectTo(ScreenNames.InteractionCardsTest)
   const redirectToBusinessCard = useRedirectTo(ScreenNames.BusinessCardTest)
   const redirect = useRedirect()
 
@@ -69,6 +70,9 @@ const DevelopmentSection = () => {
         </Option>
         <Option onPress={redirectToPasscode}>
           <Option.Title title="Passcode" />
+        </Option>
+        <Option onPress={redirectToInteractionCards}>
+          <Option.Title title="Interaction Cards" />
         </Option>
         <Option onPress={redirectToBusinessCard}>
           <Option.Title title="Business Card" />
