@@ -56,6 +56,7 @@ const JoloText: React.FC<IJoloTextProps> = (props) => {
     : scaledFontStyles
 
   const propStyles = {
+    ...finalFontStyle,
     ...(color && { color }),
     ...(weight && {
       fontFamily:
@@ -67,7 +68,7 @@ const JoloText: React.FC<IJoloTextProps> = (props) => {
     <TextComponent
       {...(rest as typeof Text)}
       testID={testID}
-      style={[styles.title, finalFontStyle, propStyles, customStyles]}
+      style={[styles.title, propStyles, customStyles]}
     >
       {children}
     </TextComponent>

@@ -173,10 +173,10 @@ exports[`Record Item should render a generic Record Item 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "rgba(255,255,255,0.9)",
+                  "color": "#ffffff",
                   "fontFamily": "TTCommons-Medium",
                   "fontSize": 18,
-                  "letterSpacing": 0,
+                  "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
                 undefined,
@@ -197,7 +197,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "alignSelf": "center",
@@ -222,7 +222,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
                 "fontFamily": "TTCommons-Regular",
                 "fontSize": 16,
                 "letterSpacing": 0,
-                "lineHeight": 16,
+                "lineHeight": 18,
               },
               undefined,
             ]
@@ -409,10 +409,10 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "rgba(255,255,255,0.9)",
+                  "color": "#ffffff",
                   "fontFamily": "TTCommons-Medium",
                   "fontSize": 18,
-                  "letterSpacing": 0,
+                  "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
                 undefined,
@@ -433,7 +433,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "alignSelf": "center",
@@ -458,7 +458,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                 "fontFamily": "TTCommons-Regular",
                 "fontSize": 16,
                 "letterSpacing": 0,
-                "lineHeight": 16,
+                "lineHeight": 18,
               },
               undefined,
             ]
@@ -547,10 +547,10 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                     "textAlign": "center",
                   },
                   Object {
-                    "color": "rgba(255,255,255,0.9)",
+                    "color": "#ffffff",
                     "fontFamily": "TTCommons-Medium",
                     "fontSize": 18,
-                    "letterSpacing": 0,
+                    "letterSpacing": 0.09,
                     "lineHeight": 24,
                   },
                   Object {
@@ -585,7 +585,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "textAlign": "left",
@@ -730,7 +730,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 14,
                   "letterSpacing": 0,
-                  "lineHeight": 20,
+                  "lineHeight": 14,
                 },
                 Object {
                   "textAlign": "left",
@@ -920,10 +920,10 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "rgba(255,255,255,0.9)",
+                  "color": "#ffffff",
                   "fontFamily": "TTCommons-Medium",
                   "fontSize": 18,
-                  "letterSpacing": 0,
+                  "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
                 undefined,
@@ -944,7 +944,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "alignSelf": "center",
@@ -969,7 +969,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                 "fontFamily": "TTCommons-Regular",
                 "fontSize": 16,
                 "letterSpacing": 0,
-                "lineHeight": 16,
+                "lineHeight": 18,
               },
               undefined,
             ]
@@ -1058,10 +1058,10 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                     "textAlign": "center",
                   },
                   Object {
-                    "color": "rgba(255,255,255,0.9)",
+                    "color": "#ffffff",
                     "fontFamily": "TTCommons-Medium",
                     "fontSize": 18,
-                    "letterSpacing": 0,
+                    "letterSpacing": 0.09,
                     "lineHeight": 24,
                   },
                   Object {
@@ -1096,7 +1096,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "textAlign": "left",
@@ -1241,7 +1241,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 14,
                   "letterSpacing": 0,
-                  "lineHeight": 20,
+                  "lineHeight": 14,
                 },
                 Object {
                   "textAlign": "left",
@@ -1431,10 +1431,10 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "rgba(255,255,255,0.9)",
+                  "color": "#ffffff",
                   "fontFamily": "TTCommons-Medium",
                   "fontSize": 18,
-                  "letterSpacing": 0,
+                  "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
                 undefined,
@@ -1455,7 +1455,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "alignSelf": "center",
@@ -1480,7 +1480,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                 "fontFamily": "TTCommons-Regular",
                 "fontSize": 16,
                 "letterSpacing": 0,
-                "lineHeight": 16,
+                "lineHeight": 18,
               },
               undefined,
             ]
@@ -1569,10 +1569,10 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                     "textAlign": "center",
                   },
                   Object {
-                    "color": "rgba(255,255,255,0.9)",
+                    "color": "#ffffff",
                     "fontFamily": "TTCommons-Medium",
                     "fontSize": 18,
-                    "letterSpacing": 0,
+                    "letterSpacing": 0.09,
                     "lineHeight": 24,
                   },
                   Object {
@@ -1607,7 +1607,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "textAlign": "left",
@@ -1752,7 +1752,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 14,
                   "letterSpacing": 0,
-                  "lineHeight": 20,
+                  "lineHeight": 14,
                 },
                 Object {
                   "textAlign": "left",
@@ -1942,10 +1942,10 @@ exports[`Record Item should render the placeholder when the details are unavaila
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "rgba(255,255,255,0.9)",
+                  "color": "#ffffff",
                   "fontFamily": "TTCommons-Medium",
                   "fontSize": 18,
-                  "letterSpacing": 0,
+                  "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
                 undefined,
@@ -1966,7 +1966,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 16,
                   "letterSpacing": 0,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 },
                 Object {
                   "alignSelf": "center",
@@ -1991,7 +1991,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
                 "fontFamily": "TTCommons-Regular",
                 "fontSize": 16,
                 "letterSpacing": 0,
-                "lineHeight": 16,
+                "lineHeight": 18,
               },
               undefined,
             ]

@@ -1,6 +1,5 @@
 import { Colors } from '~/utils/colors'
 import { ScreenSize, getScreenSize } from '~/utils/breakpoints'
-import { JoloTextKind } from '~/components/JoloText'
 
 export enum Fonts {
   Regular = 'TTCommons-Regular',
@@ -26,7 +25,7 @@ export enum JoloTextSizes {
 type UnscaledFontStyles = Partial<Record<ScreenSize, FontSetI>>
 
 type FontsConfig = Record<
-  JoloTextKind,
+  'title' | 'subtitle',
   Record<JoloTextSizes, UnscaledFontStyles>
 >
 
@@ -35,7 +34,7 @@ export const scaleFont = (font: UnscaledFontStyles) => {
 }
 
 export const fonts: FontsConfig = {
-  [JoloTextKind.title]: {
+  title: {
     [JoloTextSizes.tiniest]: {
       [ScreenSize.large]: {
         fontSize: 14,
@@ -49,15 +48,15 @@ export const fonts: FontsConfig = {
       [ScreenSize.large]: {
         fontSize: 18,
         lineHeight: 24,
-        letterSpacing: 0,
-        color: Colors.white90,
+        letterSpacing: 0.09,
+        color: Colors.white,
         fontFamily: Fonts.Medium,
       },
       [ScreenSize.xsmall]: {
         fontSize: 14,
-        lineHeight: 18,
-        letterSpacing: 0,
-        color: Colors.white90,
+        lineHeight: 20,
+        letterSpacing: 0.07,
+        color: Colors.white,
         fontFamily: Fonts.Medium,
       },
     },
@@ -66,7 +65,7 @@ export const fonts: FontsConfig = {
         fontSize: 28,
         lineHeight: 32,
         letterSpacing: 0,
-        color: Colors.white90,
+        color: Colors.white85,
         fontFamily: Fonts.Medium,
       },
       [ScreenSize.xsmall]: {
@@ -101,7 +100,7 @@ export const fonts: FontsConfig = {
       },
     },
   },
-  [JoloTextKind.subtitle]: {
+  subtitle: {
     [JoloTextSizes.tiniest]: {
       [ScreenSize.large]: {
         fontSize: 14,
