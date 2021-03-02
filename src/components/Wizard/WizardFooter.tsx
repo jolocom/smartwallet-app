@@ -2,16 +2,10 @@ import React from 'react'
 import { IWizardFooterProps, useWizard } from '.'
 import Btn, { BtnTypes } from '../Btn'
 
-const WizardFooter: React.FC<IWizardFooterProps> = ({ onSubmit }) => {
-  const { activeStep, setActiveStep, config, isLastStep } = useWizard()
-  const handleSubmit = () => {
-    if (!isLastStep) {
-      setActiveStep((prevState) => prevState + 1)
-    }
-    onSubmit()
-  }
+const WizardFooter: React.FC<IWizardFooterProps> = ({ onSubmit, isDisabled }) => {
+  const { activeStep, config } = useWizard()
   return (
-    <Btn type={BtnTypes.senary} onPress={handleSubmit}>
+    <Btn type={BtnTypes.senary} onPress={onSubmit} disabled={isDisabled}>
       {config[activeStep].submitLabel}
     </Btn>
   )

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { setLogged } from '~/modules/account/actions'
@@ -23,14 +23,32 @@ const SeedPhraseRepeat: React.FC = () => {
   const seedphrase = useGetSeedPhrase()
   const showFailedLoader = useFailed()
 
+  const [wrongOrder, setWrongOrder] = useState(false)
+  const [readyToSubmit, setReadyToSubmit] = useState(false)
   const [shuffledSeedphrase, setShuffledSeedphrase] = useState<string[] | null>(
     null,
   )
 
+  const isFirstFragment = useRef(Boolean(Math.round(Math.random())))
+
+  const phraseArr = seedphrase.split(' ')
+  const phraseFragmentFirst = phraseArr.slice(0, 6)
+  const phraseFragmentLast = phraseArr.slice(6, 12)
+
+  const usedFragment = isFirstFragment.current
+    ? phraseFragmentFirst
+    : phraseFragmentLast
+
   useEffect(() => {
-    const shuffled = shuffleArray(seedphrase.split(' ').slice(0, 6))
+    const shuffled = shuffleArray(usedFragment)
     setShuffledSeedphrase(shuffled)
   }, [seedphrase])
+
+  const handlePhraseUpdate = (phrase: string[]) => {
+    if (!readyToSubmit) setReadyToSubmit(true)
+    setWrongOrder(false)
+    setShuffledSeedphrase(phrase)
+  }
 
   const onSubmit = async () => {
     if (isPhraseValid) {
@@ -38,16 +56,16 @@ const SeedPhraseRepeat: React.FC = () => {
       if (success) dispatch(setLogged(true))
     } else {
       showFailedLoader()
+      setTimeout(() => {
+        setWrongOrder(true)
+      }, 400)
     }
   }
 
   const isPhraseValid = useMemo(() => {
     if (!shuffledSeedphrase) return false
-    else
-      return (
-        seedphrase.split(' ').splice(0, 6).join(' ') ===
-        shuffledSeedphrase.join(' ')
-      )
+
+    return shuffledSeedphrase.join(' ') === usedFragment.join(' ')
   }, [JSON.stringify(shuffledSeedphrase), seedphrase])
 
   return (
@@ -58,15 +76,24 @@ const SeedPhraseRepeat: React.FC = () => {
         </SeedPhrase.Styled.Header.Left>
       </SeedPhrase.Styled.Header>
       <SeedPhrase.Styled.HelperText>
-        {strings.DRAG_AND_DROP_THE_WORDS}
+        {strings.DRAG_AND_DROP_THE_WORDS(isFirstFragment.current)}
       </SeedPhrase.Styled.HelperText>
       <SeedPhrase.Styled.ActiveArea>
         {shuffledSeedphrase && shuffledSeedphrase.length > 1 ? (
-          <Dnd tags={shuffledSeedphrase} updateTags={setShuffledSeedphrase} />
+          <Dnd tags={shuffledSeedphrase} updateTags={handlePhraseUpdate} />
         ) : null}
       </SeedPhrase.Styled.ActiveArea>
       <SeedPhrase.Styled.CTA>
-        <Btn onPress={onSubmit} type={BtnTypes.primary}>
+        {wrongOrder && (
+          <SeedPhrase.Styled.ErrorText>
+            {strings.CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN}
+          </SeedPhrase.Styled.ErrorText>
+        )}
+        <Btn
+          disabled={!readyToSubmit}
+          onPress={onSubmit}
+          type={BtnTypes.primary}
+        >
           {strings.DONE}
         </Btn>
       </SeedPhrase.Styled.CTA>

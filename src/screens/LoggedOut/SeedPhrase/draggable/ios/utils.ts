@@ -1,3 +1,5 @@
+import { TagObject } from './types'
+
 // Calculates whether a given point is within a given area
 export const isPointWithinArea = (
   pointX: number, // x coordinate
@@ -17,11 +19,10 @@ export const isPointWithinArea = (
 
 // Moves an object within a given array from one position to another
 export const moveArrayElement = (
-  array: {}[], // array of objects
+  array: TagObject[], // array of objects
   from: number, // element to move index
   to: number, // index where to move
-  mergeProps?: {} = {}, // merge additional props into the object
-): {}[] => {
+): TagObject[] => {
   if (to > array.length) return array
 
   // Remove the element we need to move
@@ -32,7 +33,6 @@ export const moveArrayElement = (
     ...arr.slice(0, to),
     {
       ...array[from],
-      ...mergeProps, // merge passed props if any or nothing (empty object) by default
     },
     ...arr.slice(to),
   ]

@@ -65,9 +65,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     height: '100%',
-    paddingVertical: 18,
     flex: 1,
   },
   topContainer: {
@@ -75,6 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     width: '100%',
+    marginBottom: 8,
   },
 })
 

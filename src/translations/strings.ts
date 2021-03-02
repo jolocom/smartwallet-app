@@ -90,8 +90,12 @@ const seedphrase = {
   SEEDPHRASE_INFO_HIGHLIGHT_4:
     'We strongly recommend storing your set of words in a safe place. Writing it down or using an encrypted password manager are the best options.',
   SEEDPHRASE_INFO_5: 'Do not share your secret phrase with anyone.',
-  DRAG_AND_DROP_THE_WORDS:
-    'Drag and drop the words until they are in the correct order',
+  DRAG_AND_DROP_THE_WORDS: (isFirst: boolean) =>
+    `Drag and drop ${
+      isFirst ? 'first' : 'last'
+    } 6 words until they are in the correct order`,
+  CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN:
+    'Check carefully for mistakes and try again',
 }
 
 const deviceAuthentication = {
@@ -130,39 +134,25 @@ const scanner = {
 const interactions = {
   AUTHENTICATE: 'Authenticate',
   AUTHORIZE: 'Authorize',
-  PULL_TO_CHOOSE: 'Pull to choose',
   SHARE: 'Share',
   RECEIVE: 'Receive',
   IGNORE: 'Ignore',
-  CHOOSE_ONE_OR_MORE_DOCUMENTS:
-    'Choose one or more documents provided by this service and we will generate them for you',
   DOCUMENTS: 'Documents',
   OTHER: 'Other',
   ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION: `Once you click done, it will be displayed in the personal info section.`,
-  //FIXME: when we add i18t for translations, we can interpolate values with %{VALUE}
-  THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: (did: string) =>
-    `This public profile ${did} chose to remain anonymous. Pay attention before sharing data.`,
-  SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: (service: string) =>
-    `${service} would like to confirm your digital identity before proceeding`,
-  SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY: (service: string) =>
-    `${service} would like to confirm your digital identity before proceeding`,
-  SERVICE: 'Service',
-  CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED: (
-    service: string,
-  ) => `Choose one or more documents requested by ${service} to proceed `,
-  SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS: (service: string) =>
-    `${service} sent your wallet the following document(s):`,
-  ADD_YOUR_ATTRIBUTE: (attr: string) => `Add your ${attr}`,
+  THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: "This public profile {{did}} chose to remain anonymous. Pay attention before sharing data.",
+  SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: "{{service}} is now ready to grant you access",
+  SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY: "{{service}} would like to confirm your digital identity before proceeding",
+  CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED: "Choose one or more documents requested by {{service}} to proceed",
+  SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS: "{{service}} sent your wallet the following document(s)",
+  ADD_YOUR_ATTRIBUTE: "Add your {{attribute}}",
   IS_IT_REALLY_YOU: 'Is it really you?',
-  INCOMING_INTERACTION: `Incoming interaction`,
-  SERVICE_REQUESTS_ATTRIBUTE: (service: string, attribute: string) =>
-    `${service} requests ${attribute}`,
   INCOMING_REQUEST: 'Incoming request',
   INCOMING_OFFER: 'Incoming offer',
   ADD_INFO: 'Add info',
-  WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}?`,
   INCLUDED_INFO: 'Included info',
   NO_INFO_THAT_CAN_BE_PREVIEWED: 'No info that can be previewed',
+  WOULD_YOU_LIKE_TO_ACTION: "Would you like to {{action}}?",
 }
 
 const lock = {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { Colors } from '~/utils/colors'
@@ -8,11 +8,11 @@ import BP from '~/utils/breakpoints'
 
 interface Props {
   title: string
-  visible: boolean
 }
 
-const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
-  return visible ? (
+const InteractionSection: React.FC<Props> = ({ title, children }) => {
+  if(!Children.count(children)) return null
+  return (
     <View style={styles.sectionContainer}>
       <JoloText
         kind={JoloTextKind.title}
@@ -28,7 +28,7 @@ const InteractionSection: React.FC<Props> = ({ title, visible, children }) => {
       </JoloText>
       {children}
     </View>
-  ) : null
+  )
 }
 
 const styles = StyleSheet.create({

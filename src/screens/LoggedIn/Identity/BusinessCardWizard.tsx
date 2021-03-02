@@ -9,6 +9,7 @@ import {
   IAttributeClaimField,
 } from '~/types/credentials'
 import Wizard from '~/components/Wizard'
+import { companyValidation, contactValidation, nameValidation } from '~/config/validation'
 
 const getFormSlice = (...claimskeys: ClaimKeys[]) => {
   const config = attributeConfig[AttributeTypes.businessCard]
@@ -30,21 +31,25 @@ const emailTelephoneFormConfig = getFormSlice(
   ClaimKeys.telephone,
 )
 const companyFormConfig = getFormSlice(ClaimKeys.legalCompanyName)
+
 const WIZARD_CONFIG = {
   0: {
     label: strings.INTRODUCE_YOURSELF,
     form: nameFormConfig,
     submitLabel: strings.NEXT,
+    validationSchema: nameValidation
   },
   1: {
     label: strings.BEST_WAY_TO_CONTACT_YOU,
     form: emailTelephoneFormConfig,
     submitLabel: strings.NEXT,
+    validationSchema: contactValidation
   },
   2: {
     label: strings.WHAT_COMPANY_DO_YOU_REPRESENT,
     form: companyFormConfig,
     submitLabel: strings.DONE,
+    validationSchema: companyValidation
   },
 }
 
@@ -75,6 +80,7 @@ const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
 
   return (
     <View testID="business-card-wizard">
+      {/* TODO: fix types */}
       <Wizard config={WIZARD_CONFIG}>
         <Wizard.Header />
         <Wizard.Form onSubmit={addFieldValues} step={0} />
