@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, PropsWithChildren, SetStateAction } from "react";
 import { TextLayoutEvent } from "~/components/Card/Field";
 import { IWithCustomStyle } from "~/components/Card/types";
 
@@ -16,7 +16,7 @@ export interface IResponsiveCardComposition {
   Image: React.FC<ICredentialImageProps>
   Highlight: React.FC
   HolderName: React.FC
-  FieldsCalculator: React.FC<IFieldsCalculatorProps>
+  FieldsCalculator: (props: PropsWithChildren<IFieldsCalculatorProps>) => React.ReactNode
   FieldValue: React.FC<IFieldValueProps>
   FieldPlaceholder: React.FC<IFieldPlaceholderProps>
 }
