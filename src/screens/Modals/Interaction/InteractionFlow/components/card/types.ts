@@ -18,3 +18,7 @@ export interface IIncomingRequestDocCardProps extends IIncomingCard {
 export interface IIncomingRequestOtherProps extends IIncomingCard { }
 export interface IIncomingOfferDocProps extends IIncomingCard { }
 export interface IIncomingOfferOtherProps extends IIncomingCard { }
+
+export function isIncomingOfferCard(details: any): details is IIncomingOfferDocProps[] | IIncomingOfferOtherProps[] {
+  return typeof details.name && details.properties
+}
