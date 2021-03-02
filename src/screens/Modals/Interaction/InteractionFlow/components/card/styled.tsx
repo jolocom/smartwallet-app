@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TextProps, TextStyle, View } from 'react-native'
+import { StyleSheet, TextProps, TextStyle, View, Platform } from 'react-native'
 
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
     lineHeight: BP({ xsmall: 20, small: 22, default: 24 }),
   },
   label: {
+    marginTop: Platform.select({ ios: 0, android: 4 }),
     lineHeight: BP({ default: 14, xsmall: 12 }),
     color: Colors.black50,
   },
