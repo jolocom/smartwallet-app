@@ -1,11 +1,6 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import {
-  StackActions,
-  useNavigation,
-  useRoute,
-  RouteProp,
-} from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
@@ -27,8 +22,8 @@ import { useKeyboard } from './useKeyboard'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
-import { RootStackParamList } from '~/RootNavigation'
 import { LoggedInStackParamList } from '~/screens/LoggedIn'
+import { useReplaceWith } from '~/hooks/navigation'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -39,6 +34,7 @@ interface RecoveryFooterI {
 const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
+  const replaceWith = useReplaceWith()
   const dispatch = useDispatch()
 
   const agent = useAgent()
@@ -48,7 +44,6 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const route = useRoute<
     RouteProp<LoggedInStackParamList, ScreenNames.PasscodeRecovery>
   >()
-  const navigation = useNavigation()
 
   const isAccessRestore = route?.params?.isAccessRestore ?? false
 
@@ -58,8 +53,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     })
     if (success) {
       dispatch(setLogged(true))
-      const replaceAction = StackActions.replace(ScreenNames.Main)
-      navigation.dispatch(replaceAction)
+      replaceWith(ScreenNames.LoggedIn)
     } else recoveryDispatch(resetPhrase())
   }, [phrase])
 

@@ -20,8 +20,7 @@ import { useLoader } from '~/hooks/loader'
 const ENOUGH_ENTROPY_PROGRESS = 0.3
 
 const Entropy: React.FC = () => {
-  const redirectToSeedPhraseWrite = useReplaceWith(ScreenNames.SeedPhraseWrite)
-  const refreshEntropy = useReplaceWith(ScreenNames.Entropy)
+  const replaceWith = useReplaceWith()
   const generateSeed = useGenerateSeed()
   const loader = useLoader()
 
@@ -30,9 +29,9 @@ const Entropy: React.FC = () => {
     const success = await loader(generateSeed, { showSuccess: false })
 
     if (success) {
-      return redirectToSeedPhraseWrite()
+      return replaceWith(ScreenNames.SeedPhraseWrite)
     }
-    return refreshEntropy()
+    return replaceWith(ScreenNames.Entropy)
   }
 
   const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)
@@ -48,8 +47,8 @@ const Entropy: React.FC = () => {
           >{`${Math.trunc(entropyProgress * 100)} %`}</JoloText>
         </View>
       ) : (
-          <EntropyIntro />
-        )}
+        <EntropyIntro />
+      )}
       <EntropyCanvas disabled={entropyProgress === 1} addPoint={addPoint} />
     </ScreenContainer>
   )
@@ -62,7 +61,7 @@ export const useEntropyProgress = (submit: (entropy: string) => void) => {
 
   useEffect(() => {
     if (entropyProgress === 1) {
-      ; (async () => {
+      ;(async () => {
         await supplementEntropyProgress()
         submit(entropyGenerator.current.generateRandomString(4))
       })()
