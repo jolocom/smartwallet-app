@@ -47,7 +47,11 @@ const Main: React.FC = () => {
     <MainStack.Navigator
       headerMode="none"
       mode="modal"
-      initialRouteName={ScreenNames.MainTabs}
+      initialRouteName={
+        shouldShowConsent
+          ? ScreenNames.LoggedInTermsConsent
+          : ScreenNames.MainTabs
+      }
     >
       {shouldShowConsent ? (
         <MainStack.Screen
