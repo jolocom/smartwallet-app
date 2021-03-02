@@ -5,8 +5,7 @@ export interface AttributesState {
   all: AttrsState<AttributeI>
 }
 
-// TODO: fix type issues
-export type AttrsState<T> = Record<AttributeTypes, T[]>
+export type AttrsState<T> = Partial<Record<AttributeTypes, T[]>>
 
 export enum AttrActions {
   initAttrs = 'initAttrs',

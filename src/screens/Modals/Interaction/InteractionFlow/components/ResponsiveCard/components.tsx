@@ -4,7 +4,6 @@ import { TextLayoutEvent } from '~/components/Card/Field';
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText';
 import BP from '~/utils/breakpoints';
 import { Colors } from '~/utils/colors';
-import { debugView } from '~/utils/dev';
 import { JoloTextSizes } from '~/utils/fonts';
 import { useResponsiveCard } from './context';
 import { IResponsiveCardComposition } from './types';
@@ -176,7 +175,6 @@ const styles = StyleSheet.create({
       ? BP({ xsmall: 12, default: 16 })
       : BP({ xsmall: 14, default: 18 }),
     marginTop: -3
-    // ...debugView()
   },
     fieldPlaceholder: {
     backgroundColor: Colors.alto

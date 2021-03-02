@@ -6,7 +6,6 @@ import { Colors } from "~/utils/colors";
 import BP from '~/utils/breakpoints';
 import { IWithCustomStyle } from '~/components/Card/types';
 import { JoloTextSizes } from '~/utils/fonts';
-import { debugView } from '~/utils/dev';
 
 const PADDING_BASE = 20;
 const PADDING_SMALL = 15;
@@ -134,25 +133,21 @@ export const FieldLabel: React.FC<IWithCustomStyle> = ({ children, customStyles 
 
 const styles = StyleSheet.create({
   headerContainer: {
-    // ...debugView(),
     alignItems: 'flex-start',
     paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
     paddingTop: 10,
   },
   bodyContainer: {
-    // ...debugView(),
     flexDirection: 'row',
     paddingBottom: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
   },
   bodyFieldsContainer: {
     flex: 0.68,
-    // ...debugView(),
     alignItems: 'flex-start',
     paddingLeft: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
   },
   bodyImageContainer: {
     flex: 0.32,
-    // ...debugView(),
     alignItems: 'flex-start',
     paddingRight: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
   },
@@ -163,17 +158,14 @@ const styles = StyleSheet.create({
   otherContainer: {
     width: '73%',
     height: '100%',
-    // ...debugView()
   },
   otherTitleContainer: {
     width: '37%',
     height: '100%',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    // ...debugView()
   },
   emptyContainer: {
-    // ...debugView(),
     paddingHorizontal: BP({default: PADDING_BASE, xsmall: PADDING_SMALL}),
     alignItems: 'flex-start'
   },
@@ -184,6 +176,5 @@ const styles = StyleSheet.create({
   label: {
     lineHeight: BP({ default: 14, xsmall: 12 }),
     color: Colors.black50,
-    // ...debugView()
   },
 })
