@@ -8,12 +8,8 @@ import {
   TextProps,
 } from 'react-native'
 import { Colors } from '~/utils/colors'
-import {
-  titleFontStyles,
-  subtitleFontStyles,
-  JoloTextSizes,
-  Fonts,
-} from '~/utils/fonts'
+import { JoloTextSizes, Fonts, fonts, scaleFont } from '~/utils/fonts'
+import { getScreenSize } from '~/utils/breakpoints'
 
 export enum JoloTextKind {
   title = 'title',
@@ -33,6 +29,7 @@ export interface IJoloTextProps extends TextProps {
   customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>
   animated?: boolean
   testID?: string
+  ignoreScaling?: boolean
 }
 
 const JoloText: React.FC<IJoloTextProps> = (props) => {
@@ -45,14 +42,20 @@ const JoloText: React.FC<IJoloTextProps> = (props) => {
     customStyles,
     animated,
     testID,
+    ignoreScaling = false,
     ...rest
   } = props
 
   const TextComponent = animated ? Animated.Text : Text
-  const fontStylesAllSizes =
-    kind === JoloTextKind.title ? titleFontStyles : subtitleFontStyles
-  const sizeStyles = {
-    ...fontStylesAllSizes[size],
+
+  const unscaledFontStyles = fonts[kind][size]
+  const scaledFontStyles = scaleFont(unscaledFontStyles)
+
+  const finalFontStyle = ignoreScaling
+    ? unscaledFontStyles.large
+    : scaledFontStyles
+
+  const propStyles = {
     ...(color && { color }),
     ...(weight && {
       fontFamily:
@@ -64,7 +67,7 @@ const JoloText: React.FC<IJoloTextProps> = (props) => {
     <TextComponent
       {...(rest as typeof Text)}
       testID={testID}
-      style={[styles.title, sizeStyles, customStyles]}
+      style={[styles.title, finalFontStyle, propStyles, customStyles]}
     >
       {children}
     </TextComponent>
