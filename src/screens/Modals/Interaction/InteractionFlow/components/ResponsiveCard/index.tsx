@@ -13,7 +13,7 @@ const ResponsiveCard: React.FC & IResponsiveCardComposition = ({ children }) => 
   /* This will be invoked inside FieldValue component
     to calculate number of value lines
   */
-  const handleFieldValutLayout = (e: TextLayoutEvent, idx: number) => {
+  const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
     const lines = e.nativeEvent.lines.length;
     setFieldLines(prevState => ({ ...prevState, [idx]: prevState[idx] ?? lines }))
   }
@@ -24,7 +24,7 @@ const ResponsiveCard: React.FC & IResponsiveCardComposition = ({ children }) => 
     holderNameLines,
     setHolderNameLines,
     fieldLines,
-    onFieldValueLayout: handleFieldValutLayout
+    onFieldValueLayout: handleFieldValueLayout
   }), [scaleRatio, holderNameLines, fieldLines])
 
   return (

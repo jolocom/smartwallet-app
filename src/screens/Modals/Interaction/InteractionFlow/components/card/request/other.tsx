@@ -71,7 +71,7 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
             ) : (
               <EmptyContainer>
                 <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
-                <HelperDescription>{strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}</HelperDescription>
+                <HelperDescription>{strings.NO_INFO_THAT_CAN_BE_PREVIEWED}</HelperDescription>
               </EmptyContainer>
             )}
           </OtherContainer>

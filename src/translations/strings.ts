@@ -162,7 +162,7 @@ const interactions = {
   ADD_INFO: 'Add info',
   WOULD_YOU_LIKE_TO_ACTION: (action: string) => `Would you like to ${action}?`,
   INCLUDED_INFO: 'Included info',
-  NO_INPUT_THAT_CAN_BE_PREVIEWED: 'No info that can be previewed',
+  NO_INFO_THAT_CAN_BE_PREVIEWED: 'No info that can be previewed',
 }
 
 const lock = {

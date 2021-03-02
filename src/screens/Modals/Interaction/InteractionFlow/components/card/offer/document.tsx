@@ -40,7 +40,7 @@ const IncomingOfferDoc: React.FC<IIncomingOfferDocProps> = ({
                 </>
               ) : (
                 <HelperDescription>
-                  {strings.NO_INPUT_THAT_CAN_BE_PREVIEWED}
+                  {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
                 </HelperDescription>
               )}
             </BodyFieldsContainer>

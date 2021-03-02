@@ -1,5 +1,6 @@
 import React from 'react';
 import InteractionCardOther from '~/assets/svg/InteractionCardOther';
+import { strings } from '~/translations';
 import ResponsiveCard from '../../ResponsiveCard';
 import {
   BodyFieldsContainer,
@@ -42,7 +43,7 @@ const IncomingOfferOther: React.FC<IIncomingOfferOtherProps> = ({
               </>
             ) : (
               <HelperDescription>
-                No info that can be previewed
+                {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
               </HelperDescription>
             )}
           </BodyFieldsContainer>
