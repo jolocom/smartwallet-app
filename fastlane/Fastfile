@@ -4,6 +4,27 @@ before_all do |lane, options|
   ensure_bundle_exec
 end
 
+desc 'Load the App Store Connect API token'
+lane :get_appstoreconnect_api_key do
+  begin
+    sh("git clone dev@hetz1.jolocom.io:app-store-connect-auth ")
+  rescue
+    # handle error
+    puts "app-store-connect-auth"
+  end
+
+    key_id = File.read("app-store-connect-auth/key_id.txt")
+    issuer_id = File.read("app-store-connect-auth/issuer_id.txt")
+
+    app_store_connect_api_key(
+      key_id: key_id,
+      issuer_id: issuer_id,
+      key_filepath: "./fastlane/app-store-connect-auth/" + key_id + ".p8",
+      duration: 1200,
+      in_house: false
+    )
+end
+
 desc 'Get API token for MS AppCenter'
 lane :get_appcenter_token do
   begin
@@ -28,7 +49,7 @@ end
 
 
 # lanes for ios building, signing and deployment
-platform :ios do
+platform :ios do 
 
   desc 'Fetch certificates and provisioning profiles'
   lane :certificates do
@@ -48,6 +69,7 @@ platform :ios do
   desc 'Build iOS application and upload to Appcenter'
   lane :alpha do
     sentry_auth
+    get_appstoreconnect_api_key
     build
     api_token = get_appcenter_token.strip
     appcenter_upload(
