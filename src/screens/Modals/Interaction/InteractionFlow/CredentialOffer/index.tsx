@@ -1,27 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
+import React, { useCallback } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import CollapsedScrollView from '~/components/CollapsedScrollView'
-import { useInteraction } from '~/hooks/interactions'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import {
+  getCredByType,
   getIsFullscreenCredOffer,
   getOfferCredentialsBySection,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
 import { OfferUICredential } from '~/types/credentials'
-import IncomingOfferDoc from './components/card/offer/document'
-import {
-  IIncomingOfferDocProps,
-  IIncomingOfferOtherProps,
-  isIncomingOfferCard,
-} from './components/card/types'
-import InteractionDescription from './components/InteractionDescription'
-import InteractionFooter from './components/InteractionFooter'
-import InteractionLogo from './components/InteractionLogo'
-import InteractionSection from './components/InteractionSection'
-import InteractionTitle from './components/InteractionTitle'
+import IncomingOfferDoc from '../components/card/offer/document'
+import IncomingOfferOther from '../components/card/offer/other'
+import { IIncomingOfferDocProps } from '../components/card/types'
+import InteractionDescription from '../components/InteractionDescription'
+import InteractionFooter from '../components/InteractionFooter'
+import InteractionLogo from '../components/InteractionLogo'
+import InteractionSection from '../components/InteractionSection'
+import InteractionTitle from '../components/InteractionTitle'
 import {
   ContainerBAS,
   ContainerFAS,
@@ -29,63 +27,14 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
   Space,
-} from './components/styled'
-
-// NOTE: this complexity is not necessary
-function* makeDetailsIterator(details: any) {
-  yield details.every((d: any) => isIncomingOfferCard(d))
-}
-
-interface IOfferCardProps {
-  details: IIncomingOfferDocProps[] | IIncomingOfferOtherProps[] | null
-}
-const OfferCard: React.FC<IOfferCardProps> = ({ details }) => {
-  if (details === null) return null
-  return (
-    <>
-      {details.map((d) => (
-        <IncomingOfferDoc name={d.name} properties={d.properties} />
-      ))}
-      <Space />
-    </>
-  )
-}
-
-const useGetOfferDetails = () => {
-  const getInteraction = useInteraction()
-
-  return async () => {
-    const interaction = await getInteraction()
-    const offerDetails = await interaction.flow.getOfferDisplay()
-
-    const detailsIterator = makeDetailsIterator(offerDetails)
-    if (detailsIterator.next().value) {
-      return offerDetails
-    }
-    return null
-  }
-}
-
-const useOfferDetails = () => {
-  const [offerDetails, setOfferDetails] = useState<
-    IIncomingOfferDocProps[] | IIncomingOfferOtherProps[] | null
-  >(null)
-  const getOfferDetails = useGetOfferDetails()
-
-  const handleGettingOfferDetails = async () => {
-    const details = await getOfferDetails()
-    setOfferDetails(details)
-  }
-  useEffect(() => {
-    handleGettingOfferDetails()
-  }, [])
-
-  return offerDetails
-}
+} from '../components/styled'
+import { useOfferDetails } from './useOfferDetails'
+import { separateIntoSections } from './utils'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offerDetails = useOfferDetails()
+  const types = useSelector(getCredByType)
 
   return (
     <ContainerBAS>
@@ -97,30 +46,34 @@ const CredentialOfferBAS = () => {
         label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
       />
       <Space />
-      <OfferCard details={offerDetails} />
+      {offerDetails === null
+        ? null
+        : offerDetails.map((d) => {
+            if (types[d.name] === CredentialRenderTypes.document) {
+              return (
+                <IncomingOfferDoc
+                  key={d.name}
+                  name={d.name}
+                  properties={d.properties}
+                />
+              )
+            }
+            return (
+              <IncomingOfferOther
+                key={d.name}
+                name={d.name}
+                properties={d.properties}
+              />
+            )
+          })}
+      <Space />
+
       <InteractionFooter
         onSubmit={handleSubmit}
         submitLabel={strings.RECEIVE}
       />
     </ContainerBAS>
   )
-}
-
-const separateIntoSections = (sections, details) => {
-  if (!details) return { documents: [], other: [] }
-  return details.reduce(
-    (acc, v) => {
-      // TODO: generalize fn
-      if (sections.documents.find((d) => d.type === v.name)) {
-        acc.documents = [...acc.documents, v]
-        // TODO: generalize fn
-      } else if (sections.documents.find((o) => o.type === v.name)) {
-        acc.other = [...acc.other, v]
-      }
-      return acc
-    },
-    { documents: [], other: [] },
-  ) // TODO: add keys dynamically
 }
 
 const CredentialOfferFAS = () => {
@@ -142,17 +95,32 @@ const CredentialOfferFAS = () => {
     [],
   )
 
-  const handleRenderCredentails = (
+  const handleRenderCredentials = (
     credentials: OfferUICredential[],
     details: IIncomingOfferDocProps[] | IIncomingOfferDocProps[],
+    renderType: CredentialRenderTypes.document | 'other',
   ) => {
-    return credentials.map(({ type, invalid }, idx) => (
+    return credentials.map(({ invalid }, idx) => (
       <View
         style={{
           marginBottom: idx === credentials.length - 1 ? 0 : 30,
         }}
       >
-        <OfferCard details={details} />
+        {renderType === CredentialRenderTypes.document
+          ? details.map((d) => (
+              <IncomingOfferDoc
+                key={d.name}
+                name={d.name}
+                properties={d.properties}
+              />
+            ))
+          : details.map((d) => (
+              <IncomingOfferOther
+                key={d.name}
+                name={d.name}
+                properties={d.properties}
+              />
+            ))}
       </View>
     ))
   }
@@ -169,10 +137,14 @@ const CredentialOfferFAS = () => {
         />
         <Space />
         <InteractionSection title={strings.DOCUMENTS}>
-          {handleRenderCredentails(documents, offerDocDetails)}
+          {handleRenderCredentials(
+            documents,
+            offerDocDetails,
+            CredentialRenderTypes.document,
+          )}
         </InteractionSection>
         <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentails(other, offerOtherDetails)}
+          {handleRenderCredentials(other, offerOtherDetails, 'other')}
         </InteractionSection>
       </CollapsedScrollView>
       <FooterContainerFAS>
