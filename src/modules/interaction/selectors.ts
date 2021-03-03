@@ -357,17 +357,14 @@ export const getCredShareUIDetailsBAS = createSelector(
 )
 
 export const getCredByType = createSelector(
-  [getInteractionDetails],
+  [getCredOfferDetails],
   (details) => {
-    if(isCredOfferDetails(details)) {
-      const {credentials: {service_issued}} = details;
-      return service_issued.reduce<Record<string, CredentialRenderTypes.document | 'other'>>((credByType, c) => {
-        credByType[c.type] = c.renderInfo?.renderAs === CredentialRenderTypes.document
-          ? c.renderInfo?.renderAs
-          : 'other';
-        return credByType
-      }, {})
-    }
-    return {};
+    const {credentials: {service_issued}} = details;
+    return service_issued.reduce<Record<string, CredentialRenderTypes.document | 'other'>>((credByType, c) => {
+      credByType[c.type] = c.renderInfo?.renderAs === CredentialRenderTypes.document
+        ? c.renderInfo?.renderAs
+        : 'other';
+      return credByType
+    }, {})
   }
 )
