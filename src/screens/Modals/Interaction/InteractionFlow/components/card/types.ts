@@ -4,7 +4,7 @@ interface IProperty {
   value: string,
 }
 
-interface IIncomingCard {
+export interface IIncomingCard {
   name: string,
   properties: IProperty[],
 }

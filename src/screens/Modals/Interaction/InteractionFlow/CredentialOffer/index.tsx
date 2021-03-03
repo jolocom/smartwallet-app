@@ -14,7 +14,10 @@ import { strings } from '~/translations'
 import { OfferUICredential } from '~/types/credentials'
 import IncomingOfferDoc from '../components/card/offer/document'
 import IncomingOfferOther from '../components/card/offer/other'
-import { IIncomingOfferDocProps } from '../components/card/types'
+import {
+  IIncomingOfferDocProps,
+  IIncomingOfferOtherProps,
+} from '../components/card/types'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -82,9 +85,12 @@ const CredentialOfferFAS = () => {
   const offerDetails = useOfferDetails()
 
   const {
-    documents: offerDocDetails,
+    document: offerDocDetails,
     other: offerOtherDetails,
-  } = separateIntoSections({ documents, other }, offerDetails)
+  } = separateIntoSections<IIncomingOfferDocProps | IIncomingOfferOtherProps>(
+    { document: documents, other },
+    offerDetails,
+  )
 
   const handleRenderCollapsingComponent = useCallback(
     () => (
