@@ -115,23 +115,15 @@ export const useGenerateSeed = () => {
  */
 export const useIdentityCreate = () => {
   const agent = useAgent()
-  const loader = useLoader()
   const dispatch = useDispatch()
   const seedphrase = useGetSeedPhrase()
 
   return async () => {
-    return loader(
-      async () => {
-        const identity = await agent.loadFromMnemonic(seedphrase)
-        await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
-          finished: true,
-        })
-        dispatch(setDid(identity.did))
-      },
-      {
-        loading: strings.CREATING,
-      },
-    )
+    const identity = await agent.loadFromMnemonic(seedphrase)
+    await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
+      finished: true,
+    })
+    dispatch(setDid(identity.did))
   }
 }
 
@@ -143,11 +135,21 @@ export const useIdentityCreate = () => {
  */
 export const useSubmitIdentity = () => {
   const agent = useAgent()
+  const dispatch = useDispatch()
   const createIdentity = useIdentityCreate()
+  const loader = useLoader()
 
   return async () => {
-    await createIdentity()
-    await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
+    await loader(
+      async () => {
+        await createIdentity()
+        await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
+      },
+      {
+        loading: strings.CREATING,
+      },
+    )
+    dispatch(setLogged(true))
   }
 }
 

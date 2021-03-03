@@ -133,7 +133,6 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
         useNativeDriver: true,
       }),
     ]).start()
-    await useDelay(() => dispatch(dismissLoader()), 3000)
   }
 
   const showTick = async () => {
@@ -149,7 +148,6 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
         animateValueTo(tickBlockerPosition, 25, 700),
       ]),
     ]).start()
-    await useDelay(() => dispatch(dismissLoader()), 3000)
   }
 
   const looping = () => {

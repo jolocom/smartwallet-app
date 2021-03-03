@@ -1,6 +1,6 @@
 export enum DeviceAuthActions {
-  setBiometryType,
-  showBiometry,
+  setBiometryType = 'setBiometryType',
+  showBiometry = 'showBiometry',
 }
 
 export enum BiometryTypes {

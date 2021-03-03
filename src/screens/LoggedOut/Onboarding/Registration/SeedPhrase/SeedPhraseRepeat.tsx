@@ -52,8 +52,7 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const onSubmit = async () => {
     if (isPhraseValid) {
-      const success = await loader(submitIdentity)
-      if (success) dispatch(setLogged(true))
+      await submitIdentity()
     } else {
       showFailedLoader()
       setTimeout(() => {
