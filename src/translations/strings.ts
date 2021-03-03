@@ -143,7 +143,7 @@ const interactions = {
   THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: "This public profile {{did}} chose to remain anonymous. Pay attention before sharing data.",
   SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: "{{service}} is now ready to grant you access",
   SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY: "{{service}} would like to confirm your digital identity before proceeding",
-  CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED: "Choose one or more documents requested by {{service}} to proceed",
+  CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED: "Choose one or more documents requested by {{service}} to proceed",
   SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS: "{{service}} sent your wallet the following document(s)",
   ADD_YOUR_ATTRIBUTE: "Add your {{attribute}}",
   IS_IT_REALLY_YOU: 'Is it really you?',
