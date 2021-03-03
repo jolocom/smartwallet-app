@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts, fonts, scaleFont } from '~/utils/fonts'
-import { getScreenSize } from '~/utils/breakpoints'
 
 export enum JoloTextKind {
   title = 'title',
@@ -48,12 +47,10 @@ const JoloText: React.FC<IJoloTextProps> = (props) => {
 
   const TextComponent = animated ? Animated.Text : Text
 
-  const unscaledFontStyles = fonts[kind][size]
-  const scaledFontStyles = scaleFont(unscaledFontStyles)
+  const fontSets = fonts[kind][size]
+  const targetFontStyle = scaleFont(fontSets)
 
-  const finalFontStyle = ignoreScaling
-    ? unscaledFontStyles.large
-    : scaledFontStyles
+  const finalFontStyle = ignoreScaling ? fontSets.large : targetFontStyle
 
   const propStyles = {
     ...finalFontStyle,
