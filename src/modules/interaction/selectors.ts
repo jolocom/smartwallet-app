@@ -22,6 +22,7 @@ import {
   isNotActiveInteraction,
 } from './guards'
 import BP from '~/utils/breakpoints'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 
 const createInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -353,4 +354,20 @@ export const getCredShareUIDetailsBAS = createSelector(
     singleMissingAttribute,
     singleCredential,
   })
+)
+
+export const getCredByType = createSelector(
+  [getInteractionDetails],
+  (details) => {
+    if(isCredOfferDetails(details)) {
+      const {credentials: {service_issued}} = details;
+      return service_issued.reduce<Record<string, CredentialRenderTypes.document | 'other'>>((credByType, c) => {
+        credByType[c.type] = c.renderInfo?.renderAs === CredentialRenderTypes.document
+          ? c.renderInfo?.renderAs
+          : 'other';
+        return credByType
+      }, {})
+    }
+    return {};
+  }
 )
