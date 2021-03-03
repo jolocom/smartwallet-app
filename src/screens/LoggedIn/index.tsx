@@ -57,7 +57,6 @@ const Idle = () => {
 }
 
 const LoggedIn = () => {
-  const navigation = useNavigation()
   const dispatch = useDispatch()
   const isAuthSet = useSelector(isLocalAuthSet)
   const isAppLocked = useSelector(getIsAppLocked)
@@ -78,18 +77,19 @@ const LoggedIn = () => {
   }, [])
 
   // decide wether to show Lock or Register Pin or App
-  useEffect(() => {
-    if (!isLoaderVisible) {
-      if (showLock) {
-        navigation.dispatch(StackActions.replace(ScreenNames.Lock))
-      } else if (showRegisterPin) {
-        // Show passcode registration screen
-        navigation.dispatch(StackActions.replace(ScreenNames.DeviceAuth))
-      } else if (showTabs) {
-        navigation.dispatch(StackActions.replace(ScreenNames.Main))
-      }
-    }
-  }, [isAppLocked, isAuthSet, isLoaderVisible])
+  /* useEffect(() => {
+   *   if (!isLoaderVisible) {
+   *     if (showLock) {
+   *       navigation.dispatch(StackActions.replace(ScreenNames.Lock))
+   *     } else if (showRegisterPin) {
+   *       // Show passcode registration screen
+   *       //navigation.dispatch(StackActions.push(ScreenNames.DeviceAuth))
+   *       redirect(ScreenNames.DeviceAuth)
+   *     } else if (showTabs) {
+   *       navigation.dispatch(StackActions.replace(ScreenNames.Main))
+   *     }
+   *   }
+   * }, [isAppLocked, isAuthSet, isLoaderVisible]) */
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
@@ -131,26 +131,31 @@ const LoggedIn = () => {
       we don't want to see noticeable screen switching
       (from Lock to Register Passcode, because Lock served as a initialRouteName),
       but rather displaying just a background screen */}
-      <LoggedInStack.Screen
-        name="Idle"
-        component={Idle}
-        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.Lock}
-        component={Lock}
-        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.Main}
-        component={Main}
-        options={{ gestureEnabled: false }}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.DeviceAuth}
-        component={DeviceAuthentication}
-        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
-      />
+      {showLock ? (
+        <LoggedInStack.Screen
+          name={ScreenNames.Lock}
+          component={Lock}
+          options={{
+            ...settingsScreenTransitionOptions,
+            gestureEnabled: false,
+          }}
+        />
+      ) : showRegisterPin ? (
+        <LoggedInStack.Screen
+          name={ScreenNames.DeviceAuth}
+          component={DeviceAuthentication}
+          options={{
+            ...settingsScreenTransitionOptions,
+            gestureEnabled: false,
+          }}
+        />
+      ) : showTabs ? (
+        <LoggedInStack.Screen
+          name={ScreenNames.Main}
+          component={Main}
+          options={{ gestureEnabled: false }}
+        />
+      ) : null}
       <LoggedInStack.Screen
         name={ScreenNames.PinRecoveryInstructions}
         component={PinRecoveryInstructions}
