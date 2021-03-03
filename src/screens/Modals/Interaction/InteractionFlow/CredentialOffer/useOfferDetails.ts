@@ -2,11 +2,6 @@ import { useEffect, useState } from "react"
 import { useInteraction } from "~/hooks/interactions"
 import { IIncomingOfferDocProps, IIncomingOfferOtherProps, isIncomingOfferCard } from "../components/card/types"
 
-// NOTE: this complexity is not necessary
-function* makeDetailsIterator(details: any) {
-  yield details.every((d: any) => isIncomingOfferCard(d))
-}
-
 const useGetOfferDetails = () => {
   const getInteraction = useInteraction()
 
@@ -14,8 +9,8 @@ const useGetOfferDetails = () => {
     const interaction = await getInteraction()
     const offerDetails = await interaction.flow.getOfferDisplay()
 
-    const detailsIterator = makeDetailsIterator(offerDetails)
-    if (detailsIterator.next().value) {
+    const isOfferDetails = offerDetails.every((d: any) => isIncomingOfferCard(d))
+    if(isOfferDetails) {
       return offerDetails
     }
     return null
