@@ -5,9 +5,25 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useWidget } from './context'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { IWidgetField, IFieldComposition } from './types'
+import { useWidget } from '.'
+import { IWithCustomStyle } from '../Card/types'
+import JoloText, { JoloTextKind } from '../JoloText'
+
+export type TField = IFieldComposition & React.FC
+
+interface IFieldComposition {
+  Static: React.FC<Pick<IWidgetField, 'value'>>
+  Selectable: React.FC<Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>>
+  Empty: React.FC
+}
+
+export interface IWidgetField {
+  id: string
+  value: string
+  isSelected?: boolean
+  color?: Colors
+  onSelect?: () => void
+}
 
 const FieldText: React.FC<
   Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
@@ -38,7 +54,9 @@ const SelectableField: React.FC<
 > = ({ value, isSelected, onSelect }) => {
   return (
     <TouchableOpacity activeOpacity={1} onPress={onSelect}>
-      <FieldContainer>
+      <FieldContainer
+        customStyles={{ borderWidth: 1, borderColor: Colors.balticSea }}
+      >
         <FieldText value={value} customStyles={{ width: '85%' }} />
         {isSelected ? (
           <View style={styles.radio}>
@@ -70,8 +88,11 @@ const EmptyField: React.FC = ({ children }) => {
   )
 }
 
-const FieldContainer: React.FC = ({ children }) => {
-  return <View style={styles.field}>{children}</View>
+const FieldContainer: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles,
+}) => {
+  return <View style={[styles.field, customStyles]}>{children}</View>
 }
 
 const Field: React.FC & IFieldComposition = ({ children }) => {

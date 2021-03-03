@@ -11,7 +11,6 @@ import CredentialOffer from './CredentialOffer'
 
 import { getInteractionType } from '~/modules/interaction/selectors'
 
-import Resolution from '~/screens/Modals/Interaction/InteractionFlow/Resolution'
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 
@@ -30,8 +29,6 @@ const InteractionFlow: React.FC = () => {
         return <CredentialShare />
       case FlowType.CredentialOffer:
         return <CredentialOffer />
-      case FlowType.Resolution:
-        return <Resolution />
       default:
         return null
     }
