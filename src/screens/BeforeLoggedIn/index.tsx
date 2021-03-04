@@ -24,6 +24,7 @@ import { Colors } from '~/utils/colors'
 import LoggedInTabs from '../LoggedIn'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'
 import Lock from '../Modals/Lock'
+import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 
 const BeforeLoggedInStack = createStackNavigator()
 
@@ -138,6 +139,11 @@ const BeforeLoggedIn = () => {
       <BeforeLoggedInStack.Screen
         name={ScreenNames.DeviceAuth}
         component={DeviceAuthentication}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+      />
+      <BeforeLoggedInStack.Screen
+        name={ScreenNames.PinRecoveryInstructions}
+        component={PinRecoveryInstructions}
         options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
     </BeforeLoggedInStack.Navigator>
