@@ -110,7 +110,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
                   "textAlign": "center",
                 },
                 Object {
-                  "color": "rgba(255,255,255,0.9)",
+                  "color": "rgba(255,255,255,0.85)",
                   "fontFamily": "TTCommons-Regular",
                   "fontSize": 28,
                   "letterSpacing": 0,

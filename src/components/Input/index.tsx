@@ -1,10 +1,9 @@
 import React, { forwardRef } from 'react'
 import { StyleSheet, TextInputProps, ViewStyle, TextInput } from 'react-native'
 import { Colors } from '~/utils/colors'
-import { subtitleFontStyles } from '~/utils/fonts'
+import { fonts, scaleFont } from '~/utils/fonts'
 import InputBlock from './InputBlock'
 import InputTextArea from './InputTextArea'
-
 import InputUnderline from './InputUnderline'
 
 export interface IInput extends TextInputProps {
@@ -38,7 +37,7 @@ Input.Underline = InputUnderline
 
 const styles = StyleSheet.create({
   coreInput: {
-    ...subtitleFontStyles.middle,
+    ...scaleFont(fonts.subtitle.middle),
     color: Colors.white,
     width: '100%',
   },
