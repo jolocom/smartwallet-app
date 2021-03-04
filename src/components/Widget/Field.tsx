@@ -5,7 +5,7 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useWidget } from '.'
+import { useWidget } from './context'
 import { IWithCustomStyle } from '../Card/types'
 import JoloText, { JoloTextKind } from '../JoloText'
 
