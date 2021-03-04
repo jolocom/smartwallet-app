@@ -55,7 +55,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     })
     if (success) {
       dispatch(setLogged(true))
-      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
+      const replaceAction = StackActions.replace(ScreenNames.BeforeLoggedIn)
       navigation.dispatch(replaceAction)
     } else recoveryDispatch(resetPhrase())
   }, [phrase])
