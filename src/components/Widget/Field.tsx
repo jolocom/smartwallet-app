@@ -63,8 +63,8 @@ const SelectableField: React.FC<
             <PurpleTickSuccess />
           </View>
         ) : (
-            <View style={[styles.radio, styles.notSelected]} />
-          )}
+          <View style={[styles.radio, styles.notSelected]} />
+        )}
       </FieldContainer>
     </TouchableOpacity>
   )
@@ -81,14 +81,17 @@ const EmptyField: React.FC = ({ children }) => {
         {children ? (
           children
         ) : (
-            <FieldText value={strings.MISSING_INFO} color={Colors.error} />
-          )}
+          <FieldText value={strings.MISSING_INFO} color={Colors.error} />
+        )}
       </FieldContainer>
     </TouchableOpacity>
   )
 }
 
-const FieldContainer: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
+const FieldContainer: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles,
+}) => {
   return <View style={[styles.field, customStyles]}>{children}</View>
 }
 

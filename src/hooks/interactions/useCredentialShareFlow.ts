@@ -4,7 +4,7 @@ import {
   getSelectedShareCredentials,
 } from '~/modules/interaction/selectors'
 import { selectShareCredential } from '~/modules/interaction/actions'
-import { useInteraction } from '.'
+import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 
 /**

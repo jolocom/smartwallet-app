@@ -4,13 +4,8 @@ import { PlusIcon } from '~/assets/svg'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useWidget } from '.'
+import { useWidget } from './context'
 import JoloText, { JoloTextKind } from '../JoloText'
-
-export type THeaderAction = IHeaderActionComposition & React.FC
-interface IHeaderActionComposition {
-  CreateNew: React.FC
-}
 
 const CreateNew: React.FC = () => {
   const widgetContext = useWidget()
@@ -19,10 +14,7 @@ const CreateNew: React.FC = () => {
   }
 
   return (
-    <TouchableOpacity
-      style={styles.createNewBtn}
-      onPress={widgetContext.onAdd}
-    >
+    <TouchableOpacity style={styles.createNewBtn} onPress={widgetContext.onAdd}>
       <View style={styles.plus}>
         <PlusIcon />
       </View>

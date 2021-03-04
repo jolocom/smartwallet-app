@@ -6,7 +6,7 @@ import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/loader'
-import { useFinishInteraction } from '~/hooks/interactions'
+import { useFinishInteraction } from '~/hooks/interactions/handlers'
 
 interface Props {
   onSubmit: () => Promise<any> | any

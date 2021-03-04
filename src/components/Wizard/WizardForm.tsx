@@ -1,20 +1,27 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Formik } from 'formik'
-import { withNextInputAutoFocusInput, withNextInputAutoFocusForm } from 'react-native-formik'
+import {
+  withNextInputAutoFocusInput,
+  withNextInputAutoFocusForm,
+} from 'react-native-formik'
+
 import { Colors } from '~/utils/colors'
-import Wizard, { IWizardFormProps, useWizard } from '.'
+import { IWizardFormProps } from './types'
+import { useWizard } from './context'
 import Input from '../Input'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
-import JoloText from '../JoloText';
-import { JoloTextSizes } from '~/utils/fonts';
+import JoloText from '../JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
+import WizardBody from './WizardBody'
+import WizardFooter from './WizardFooter'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
 
 const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
   const { config, setActiveStep, isLastStep } = useWizard()
-  const {form: formConfig, validationSchema} = config[step]
+  const { form: formConfig, validationSchema } = config[step]
   const initialValues = assembleFormInitialValues(formConfig.fields)
 
   const handleFormSubmit = (fields: Record<string, string>) => {
@@ -23,7 +30,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
   }
 
   return (
-    <Wizard.Body step={step}>
+    <WizardBody step={step}>
       <Formik
         initialValues={initialValues}
         onSubmit={handleFormSubmit}
@@ -49,9 +56,11 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                     placeholder={field.label}
                     autoFocus={idx === 0}
                     placeholderTextColor={Colors.white30}
-                    // TODO: remove if not used here 
+                    // TODO: remove if not used here
                     // onBlur={() => setFieldTouched(field.key, true, false)}
-                    containerStyle={errors[field.key] ? { borderColor: Colors.error } : {}}
+                    containerStyle={
+                      errors[field.key] ? { borderColor: Colors.error } : {}
+                    }
                     {...field.keyboardOptions}
                   />
                   {errors[field.key] && (
@@ -62,11 +71,14 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                 </View>
               ))}
             </AutofocusContainer>
-              <Wizard.Footer onSubmit={() => handleFormSubmit(values)} isDisabled={!dirty || (dirty && !isValid) } />
+            <WizardFooter
+              onSubmit={() => handleFormSubmit(values)}
+              isDisabled={!dirty || (dirty && !isValid)}
+            />
           </>
         )}
       </Formik>
-    </Wizard.Body>
+    </WizardBody>
   )
 }
 

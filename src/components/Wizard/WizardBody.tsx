@@ -1,7 +1,8 @@
 import React from 'react'
 import { View } from 'react-native'
 
-import { IWizardBodyProps, useWizard } from '.'
+import { IWizardBodyProps } from './types'
+import { useWizard } from './context'
 
 const WizardBody: React.FC<IWizardBodyProps> = ({ step, children }) => {
   const { activeStep } = useWizard()

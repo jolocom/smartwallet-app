@@ -3,10 +3,7 @@ import React from 'react'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from '../JoloText'
-
-export interface IHeaderNameProps {
-  value: string
-}
+import { IHeaderNameProps } from './types'
 
 const HeaderName: React.FC<IHeaderNameProps> = ({ value }) => {
   return (

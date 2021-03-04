@@ -3,18 +3,8 @@ import { Platform, StyleSheet, TextInput } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
-import { CoreInput, IInput } from '.'
-
-export enum InputValidityState {
-  none = 'none',
-  error = 'error',
-  valid = 'valid',
-}
-
-interface IInputUnderline extends IInput {
-  validation?: RegExp
-  onValidation?: (state: InputValidityState) => void
-}
+import { IInputUnderline, InputValidityState } from './types'
+import { CoreInput } from './CoreInput'
 
 const InputUnderline: React.FC<IInputUnderline> = React.forwardRef<
   TextInput,
