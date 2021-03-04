@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import { TextInputProps, TextInput, StyleSheet } from 'react-native'
 import { Colors } from '~/utils/colors'
-import { subtitleFontStyles } from '~/utils/fonts'
+import { scaleFont, fonts } from '~/utils/fonts'
 
 export const CoreInput = forwardRef<TextInput, TextInputProps>((props, ref) => {
   const { style, ...inputProps } = props
@@ -19,7 +19,7 @@ export const CoreInput = forwardRef<TextInput, TextInputProps>((props, ref) => {
 
 const styles = StyleSheet.create({
   coreInput: {
-    ...subtitleFontStyles.middle,
+    ...scaleFont(fonts.subtitle.middle),
     color: Colors.white,
     width: '100%',
   },

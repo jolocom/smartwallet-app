@@ -8,6 +8,9 @@ report.xml
 .bundle/
 vendor/
 
+# App connect keys
+app-store-connect-auth
+
 #== DEFAULT IGNORES ==
 # OSX
 #
@@ -78,3 +81,4 @@ buck-out/
 
 # other
 coverage/
+
