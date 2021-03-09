@@ -85,7 +85,9 @@ const CredentialOfferFAS = () => {
               <InteractionLogo />
             </LogoContainerFAS>
           </Collapsible.HidingScale>
-          <InteractionTitle label={strings.INCOMING_OFFER} />
+          <Collapsible.HidingTextContainer>
+            <InteractionTitle label={strings.INCOMING_OFFER} />
+          </Collapsible.HidingTextContainer>
           <InteractionDescription
             label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
           />

@@ -1,14 +1,9 @@
 import React from 'react'
-import { Animated, LayoutChangeEvent } from 'react-native'
+import { Animated } from 'react-native'
 import { useCollapsible } from '../context'
 
 export const HidingScale: React.FC = ({ children }) => {
-  const { setDistanceToText, interpolateYValue } = useCollapsible()
-
-  // TODO @clauxx: should be moved to @HidingText
-  const handleLayout = (e: LayoutChangeEvent) => {
-    setDistanceToText(e.nativeEvent.layout.height)
-  }
+  const { interpolateYValue } = useCollapsible()
 
   const componentOpacityValue = interpolateYValue([0, 60], [1, 0])
   const componentScaleValue = interpolateYValue([0, 120], [1, 0.6])
@@ -16,7 +11,6 @@ export const HidingScale: React.FC = ({ children }) => {
 
   return (
     <Animated.View
-      onLayout={handleLayout}
       style={[
         {
           transform: [

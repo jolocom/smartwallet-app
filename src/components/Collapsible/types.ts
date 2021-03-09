@@ -6,6 +6,7 @@ export interface ICollapsibleComposite {
   AnimatedHeader: React.FC<IWithCustomStyle>
   ScrollView: React.FC<IWithCustomStyle>
   HeaderText: React.FC
+  HidingTextContainer: React.FC
   HidingScale: React.FC
 }
 
