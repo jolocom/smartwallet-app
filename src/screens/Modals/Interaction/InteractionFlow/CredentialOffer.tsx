@@ -23,6 +23,7 @@ import {
   LogoContainerFAS,
   Space,
 } from './components/styled'
+import Collapsible from '~/components/Collapsible'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -57,19 +58,12 @@ const CredentialOfferFAS = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
   const handleSubmit = useCredentialOfferSubmit()
 
-  const handleRenderCollapsingComponent = useCallback(
-    () => (
-      <LogoContainerFAS>
-        <InteractionLogo />
-      </LogoContainerFAS>
-    ),
-    [],
-  )
-
   const handleRenderCredentails = (credentials: OfferUICredential[]) =>
     credentials.map(({ type, invalid }, idx) => (
       <View
         style={{
+          height: 330,
+          width: '100%',
           marginBottom: idx === credentials.length - 1 ? 0 : 30,
         }}
       >
@@ -79,22 +73,31 @@ const CredentialOfferFAS = () => {
 
   return (
     <ContainerFAS>
-      <CollapsedScrollView
-        collapsedTitle={strings.INCOMING_OFFER}
-        renderCollapsingComponent={handleRenderCollapsingComponent}
-      >
-        <InteractionTitle label={strings.INCOMING_OFFER} />
-        <InteractionDescription
-          label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
-        />
-        <Space />
-        <InteractionSection title={strings.DOCUMENTS}>
-          {handleRenderCredentails(documents)}
-        </InteractionSection>
-        <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentails(other)}
-        </InteractionSection>
-      </CollapsedScrollView>
+      <Collapsible>
+        <Collapsible.AnimatedHeader>
+          <Collapsible.HeaderText>
+            {strings.INCOMING_OFFER}
+          </Collapsible.HeaderText>
+        </Collapsible.AnimatedHeader>
+        <Collapsible.ScrollView>
+          <Collapsible.HidingScale>
+            <LogoContainerFAS>
+              <InteractionLogo />
+            </LogoContainerFAS>
+          </Collapsible.HidingScale>
+          <InteractionTitle label={strings.INCOMING_OFFER} />
+          <InteractionDescription
+            label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+          />
+          <Space />
+          <InteractionSection title={strings.DOCUMENTS}>
+            {handleRenderCredentails(documents)}
+          </InteractionSection>
+          <InteractionSection title={strings.OTHER}>
+            {handleRenderCredentails(other)}
+          </InteractionSection>
+        </Collapsible.ScrollView>
+      </Collapsible>
       <FooterContainerFAS>
         <InteractionFooter
           onSubmit={handleSubmit}
