@@ -31,12 +31,12 @@ import {
   LogoContainerFAS,
   Space,
 } from '../components/styled'
-import { useOfferDetails } from './useOfferDetails'
+import { useMappedOfferDetails } from './useOfferDetails'
 import { separateIntoSections } from './utils'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
-  const offerDetails = useOfferDetails()
+  const offerDetails = useMappedOfferDetails()
   const types = useSelector(getCredByType)
 
   return (
@@ -82,7 +82,7 @@ const CredentialOfferBAS = () => {
 const CredentialOfferFAS = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
   const handleSubmit = useCredentialOfferSubmit()
-  const offerDetails = useOfferDetails()
+  const offerDetails = useMappedOfferDetails()
 
   const {
     document: offerDocDetails,
