@@ -8,11 +8,13 @@ export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
   children,
   customStyles,
   animatedHeader = false,
+  ...scrollProps
 }) => {
   const { handleScroll } = useCollapsible()
 
   return (
     <Animated.ScrollView
+      {...scrollProps}
       overScrollMode="never"
       style={{ flex: 1 }}
       showsVerticalScrollIndicator={false}

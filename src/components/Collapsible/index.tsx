@@ -8,6 +8,7 @@ import { HidingScale } from './components/HidingScale'
 import { HidingTextContainer } from './components/HidingTextContainer'
 import { HeaderText } from './components/HeaderText'
 import { ICollapsibleComposite } from './types'
+import { CollapsibleFlatList } from './components/FlatList'
 
 const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
   const yValue = useRef(new Animated.Value(0)).current
@@ -50,6 +51,7 @@ Collapsible.Header = Header
 Collapsible.HeaderText = HeaderText
 Collapsible.AnimatedHeader = AnimatedHeader
 Collapsible.ScrollView = CollapsibleScrollView
+Collapsible.FlatList = CollapsibleFlatList
 Collapsible.HidingScale = HidingScale
 Collapsible.HidingTextContainer = HidingTextContainer
 

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { FlatList, FlatListProps, Animated } from 'react-native'
+import { FlatList } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import BlockExpanded from '~/components/BlockExpanded'
@@ -42,7 +42,6 @@ const FAQ = () => {
           renderHidingText={() => (
             <Section.Title>{strings.POPULAR_QUESTIONS}</Section.Title>
           )}
-          ref={flatlistRef}
           data={faqArray}
           overScrollMode={'never'}
           showsVerticalScrollIndicator={false}
@@ -50,6 +49,8 @@ const FAQ = () => {
             paddingBottom: 40,
           }}
           style={{ width: '100%' }}
+          // @ts-ignore
+          ref={flatlistRef}
           // @ts-ignore
           renderItem={({ item, index }) => (
             <BlockExpanded
