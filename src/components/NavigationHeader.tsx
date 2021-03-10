@@ -17,7 +17,12 @@ interface Props extends IWithCustomStyle {
   onPress?: () => void
 }
 
-const NavigationHeader: React.FC<Props> = ({ type, onPress, customStyles }) => {
+const NavigationHeader: React.FC<Props> = ({
+  type,
+  onPress,
+  customStyles,
+  children,
+}) => {
   const navigateBack = onPress ?? useGoBack()
 
   return (
@@ -26,14 +31,21 @@ const NavigationHeader: React.FC<Props> = ({ type, onPress, customStyles }) => {
         styles.navContainer,
         customStyles,
         {
-          justifyContent:
-            type === NavHeaderType.Close ? 'flex-end' : 'flex-start',
+          justifyContent: 'space-between',
         },
       ]}
     >
-      <IconBtn onPress={navigateBack} style={styles.button}>
-        {type === NavHeaderType.Back ? <BackArrowIcon /> : <CloseIcon />}
-      </IconBtn>
+      <View style={{ opacity: type === NavHeaderType.Back ? 1 : 0 }}>
+        <IconBtn onPress={navigateBack} style={styles.button}>
+          <BackArrowIcon />
+        </IconBtn>
+      </View>
+      <View>{children}</View>
+      <View style={{ opacity: type === NavHeaderType.Close ? 1 : 0 }}>
+        <IconBtn onPress={navigateBack} style={styles.button}>
+          <CloseIcon />
+        </IconBtn>
+      </View>
     </View>
   )
 }
