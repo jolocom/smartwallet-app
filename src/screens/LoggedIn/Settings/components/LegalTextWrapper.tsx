@@ -11,6 +11,8 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import Section from './Section'
+import Collapsible from '~/components/Collapsible'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 interface Props {
   locale: string
@@ -45,34 +47,42 @@ const LegalTextWrapper: React.FC<Props> = ({
   }
 
   return (
-    <ScreenContainer
-      hasHeaderBack
-      customStyles={{
-        paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
-      }}
-    >
-      <View style={styles.wrapper}>
-        <Section.Title>{title}</Section.Title>
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: '20%',
-          }}
-          showsVerticalScrollIndicator={false}
-          overScrollMode="never"
-        >
-          <JoloText
-            color={Colors.white80}
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            customStyles={{ textAlign: 'left', opacity: 0.8 }}
+    <Collapsible>
+      <Collapsible.Header>
+        <NavigationHeader type={NavHeaderType.Back}>
+          <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
+        </NavigationHeader>
+      </Collapsible.Header>
+      <ScreenContainer
+        customStyles={{
+          paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
+        }}
+      >
+        <View style={styles.wrapper}>
+          <Collapsible.ScrollView
+            contentContainerStyle={{
+              paddingBottom: '20%',
+            }}
+            showsVerticalScrollIndicator={false}
+            overScrollMode="never"
           >
-            {legalText}
-          </JoloText>
-          {renderGermanToggle()}
-          {children}
-        </ScrollView>
-      </View>
-    </ScreenContainer>
+            <Collapsible.HidingTextContainer>
+              <Section.Title>{title}</Section.Title>
+            </Collapsible.HidingTextContainer>
+            <JoloText
+              color={Colors.white80}
+              kind={JoloTextKind.subtitle}
+              size={JoloTextSizes.middle}
+              customStyles={{ textAlign: 'left', opacity: 0.8 }}
+            >
+              {legalText}
+            </JoloText>
+            {renderGermanToggle()}
+            {children}
+          </Collapsible.ScrollView>
+        </View>
+      </ScreenContainer>
+    </Collapsible>
   )
 }
 
