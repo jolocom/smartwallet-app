@@ -14,17 +14,22 @@ export const Header: ICollapsibleComposite['Header'] = ({
   height = COLLAPSIBLE_HEADER_HEIGHT,
 }) => {
   const { top } = useSafeArea()
+  const { interpolateYValue } = useCollapsible()
+
+  const shadowOpacityValue = interpolateYValue([0, 10], [0, 1])
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.container,
+        styles.containerShadows,
+        { shadowOpacity: shadowOpacityValue, elevation: shadowOpacityValue },
         { height: top + height, paddingTop: top },
         customStyles,
       ]}
     >
       {children}
-    </View>
+    </Animated.View>
   )
 }
 
