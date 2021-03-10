@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import CollapsedScrollView from '~/components/CollapsedScrollView'
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
