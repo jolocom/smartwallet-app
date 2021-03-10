@@ -4,24 +4,34 @@ import { useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
 import { useCollapsible } from '../context'
-import { IWithCustomStyle } from '~/components/Card/types'
+import { ICollapsibleComposite } from '../types'
 
-export const Header: React.FC<IWithCustomStyle> = ({
+export const COLLAPSIBLE_HEADER_HEIGHT = 50
+
+export const Header: ICollapsibleComposite['Header'] = ({
   children,
   customStyles,
+  height = COLLAPSIBLE_HEADER_HEIGHT,
 }) => {
   const { top } = useSafeArea()
 
   return (
-    <View style={[styles.container, { height: top + 62 }, customStyles]}>
+    <View
+      style={[
+        styles.container,
+        { height: top + height, paddingTop: top },
+        customStyles,
+      ]}
+    >
       {children}
     </View>
   )
 }
 
-export const AnimatedHeader: React.FC<IWithCustomStyle> = ({
+export const AnimatedHeader: ICollapsibleComposite['AnimatedHeader'] = ({
   children,
   customStyles,
+  height = COLLAPSIBLE_HEADER_HEIGHT,
 }) => {
   const { distanceToText, interpolateYValue } = useCollapsible()
   const { top } = useSafeArea()
@@ -36,10 +46,10 @@ export const AnimatedHeader: React.FC<IWithCustomStyle> = ({
       pointerEvents="none"
       style={[
         styles.container,
-        styles.absoluteContainer,
+        styles.containerShadows,
         {
           opacity: headerOpacityValue,
-          height: 62 + top,
+          height: top + height,
           paddingTop: top,
         },
         customStyles,
@@ -55,7 +65,12 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.mainBlack,
+    position: 'absolute',
+    top: 0,
     zIndex: 3,
+  },
+  containerShadows: {
     elevation: 20,
     shadowColor: Colors.black65,
     shadowOffset: {
@@ -67,10 +82,5 @@ const styles = StyleSheet.create({
     // HACK: @elevation won't work without @borderBottomWidth
     // https://github.com/timomeh/react-native-material-bottom-navigation/issues/8
     borderBottomWidth: 0,
-    backgroundColor: Colors.mainBlack,
-  },
-  absoluteContainer: {
-    position: 'absolute',
-    top: 0,
   },
 })

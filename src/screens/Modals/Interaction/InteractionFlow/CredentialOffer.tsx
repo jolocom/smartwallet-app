@@ -74,12 +74,15 @@ const CredentialOfferFAS = () => {
   return (
     <ContainerFAS>
       <Collapsible>
-        <Collapsible.AnimatedHeader>
+        <Collapsible.AnimatedHeader height={62}>
           <Collapsible.HeaderText>
             {strings.INCOMING_OFFER}
           </Collapsible.HeaderText>
         </Collapsible.AnimatedHeader>
-        <Collapsible.ScrollView>
+        <Collapsible.ScrollView
+          animatedHeader
+          customStyles={{ paddingHorizontal: 20 }}
+        >
           <Collapsible.HidingScale>
             <LogoContainerFAS>
               <InteractionLogo />

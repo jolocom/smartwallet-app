@@ -1,11 +1,13 @@
 import React from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useCollapsible } from '../context'
-import { IWithCustomStyle } from '~/components/Card/types'
+import { ICollapsibleComposite } from '../types'
+import { COLLAPSIBLE_HEADER_HEIGHT } from './CollapsibleHeader'
 
-export const CollapsibleScrollView: React.FC<IWithCustomStyle> = ({
+export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
   children,
   customStyles,
+  animatedHeader = false,
 }) => {
   const { handleScroll } = useCollapsible()
 
@@ -13,7 +15,12 @@ export const CollapsibleScrollView: React.FC<IWithCustomStyle> = ({
     <Animated.ScrollView
       overScrollMode="never"
       style={{ flex: 1 }}
-      contentContainerStyle={[styles.container, customStyles]}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={[
+        styles.container,
+        { paddingTop: animatedHeader ? 0 : COLLAPSIBLE_HEADER_HEIGHT },
+        customStyles,
+      ]}
       scrollEventThrottle={1}
       onScroll={handleScroll}
     >
@@ -25,6 +32,5 @@ export const CollapsibleScrollView: React.FC<IWithCustomStyle> = ({
 const styles = StyleSheet.create({
   container: {
     paddingBottom: '30%',
-    paddingHorizontal: 20,
   },
 })
