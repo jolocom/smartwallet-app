@@ -37,6 +37,7 @@ export const HeaderText: React.FC = ({ children }) => {
         size={JoloTextSizes.big}
         weight={JoloTextWeight.regular}
         color={Colors.white}
+        numberOfLines={1}
       >
         {children}
       </JoloText>

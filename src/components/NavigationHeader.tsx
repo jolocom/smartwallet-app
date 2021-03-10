@@ -6,6 +6,7 @@ import { useGoBack } from '~/hooks/navigation'
 import IconBtn from './IconBtn'
 import { BackArrowIcon } from '~/assets/svg'
 import { IWithCustomStyle } from './Card/types'
+import BP from '~/utils/breakpoints'
 
 export enum NavHeaderType {
   Back = 'back',
@@ -40,7 +41,7 @@ const NavigationHeader: React.FC<Props> = ({
           <BackArrowIcon />
         </IconBtn>
       </View>
-      <View>{children}</View>
+      <View style={styles.centerComponent}>{children}</View>
       <View style={{ opacity: type === NavHeaderType.Close ? 1 : 0 }}>
         <IconBtn onPress={navigateBack} style={styles.button}>
           <CloseIcon />
@@ -61,6 +62,10 @@ const styles = StyleSheet.create({
   button: {
     width: 40,
     height: 40,
+  },
+  centerComponent: {
+    flex: 1,
+    paddingHorizontal: 30,
   },
 })
 
