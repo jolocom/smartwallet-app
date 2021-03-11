@@ -148,8 +148,8 @@ export const useSubmitIdentity = () => {
       {
         loading: strings.CREATING,
       },
+      (success) => dispatch(setLogged(success)) 
     )
-    dispatch(setLogged(true))
   }
 }
 

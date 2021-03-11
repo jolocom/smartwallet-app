@@ -26,12 +26,13 @@ const Entropy: React.FC = () => {
 
   //NOTE: not using the user generated entropy
   const submitEntropy = async (entropy: string) => {
-    const success = await loader(generateSeed, { showSuccess: false })
-
-    if (success) {
-      return replaceWith(ScreenNames.SeedPhraseWrite)
+    const handleDone = (success: boolean) => {
+      if (success) {
+        return replaceWith(ScreenNames.SeedPhraseWrite)
+      }
+      return replaceWith(ScreenNames.Entropy)
     }
-    return replaceWith(ScreenNames.Entropy)
+    await loader(generateSeed, { showSuccess: false }, handleDone)
   }
 
   const { entropyProgress, addPoint } = useEntropyProgress(submitEntropy)

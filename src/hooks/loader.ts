@@ -27,6 +27,7 @@ export const useLoader = () => {
   return async (
     callback: () => Promise<any>,
     config: LoaderConfig = defaultConfig,
+    onDone: (success: boolean) => void = () => {},
   ) => {
     const {
       showSuccess = defaultConfig.showSuccess,
@@ -43,10 +44,9 @@ export const useLoader = () => {
       }),
     )
 
-    let result
     try {
       await callback()
-      result = true
+
       if (showSuccess) {
         dispatch(
           setLoader({
@@ -54,10 +54,15 @@ export const useLoader = () => {
             msg: success,
           }),
         )
-        await useDelay(() => dispatch(dismissLoader()), 3000)
+        setTimeout(() => {
+          dispatch(dismissLoader())
+          onDone(true)
+        }, 3000)
       } else {
         dispatch(dismissLoader())
+        onDone(true)
       }
+      
     } catch (err) {
       console.warn(err)
       if (showFailed) {
@@ -66,15 +71,17 @@ export const useLoader = () => {
             type: LoaderTypes.error,
             msg: failed,
           }),
-        )
-        await useDelay(() => dispatch(dismissLoader()), 3000)
+          )
+          setTimeout(() => {
+          dispatch(dismissLoader());
+          onDone(false)
+        }, 3000)
+        
       } else {
         dispatch(dismissLoader())
+        onDone(false)
       }
-      result = false
     }
-
-    return result
   }
 }
 

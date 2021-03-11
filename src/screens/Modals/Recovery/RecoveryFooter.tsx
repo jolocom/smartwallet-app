@@ -48,13 +48,15 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const isAccessRestore = route?.params?.isAccessRestore ?? false
 
   const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(async () => await submitCb(), {
+    const handleDone = (success: boolean) => {
+      if (success) {
+        dispatch(setLogged(true))
+        replaceWith(ScreenNames.LoggedIn)
+      } else recoveryDispatch(resetPhrase())
+    }
+    await loader(async () => await submitCb(), {
       loading: strings.MATCHING,
     })
-    if (success) {
-      dispatch(setLogged(true))
-      replaceWith(ScreenNames.LoggedIn)
-    } else recoveryDispatch(resetPhrase())
   }, [phrase])
 
   const restoreEntropy = async () => {
