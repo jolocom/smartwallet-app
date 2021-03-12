@@ -22,8 +22,10 @@ import { Colors } from '~/utils/colors'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
+import { useNavigation } from '@react-navigation/native'
 
 const BusinessCardForm = () => {
+  const navigation = useNavigation()
   const businessCardId = useSelector(getBusinessCardId)
   const businessCards = useSelector(getBusinessCardAttributes)
 
@@ -65,7 +67,7 @@ const BusinessCardForm = () => {
         message: 'There was an error editing your business card',
       })
     } finally {
-      // TODO navigate back
+      navigation.goBack()
     }
   }
 
@@ -76,14 +78,14 @@ const BusinessCardForm = () => {
         size={JoloTextSizes.mini}
         color={Colors.white50}
         weight={JoloTextWeight.regular}
-        customStyles={{ marginBottom: 5 }}
+        customStyles={{ marginBottom: 24 }}
       >
         {sectionLabel}
       </JoloText>
     )
   }
 
-  const renderSectionFooter = () => <View style={{ marginBottom: 15 }} />
+  const renderSectionFooter = () => <View style={{ marginBottom: 32 }} />
 
   return (
     <FormContainer
@@ -123,6 +125,7 @@ const BusinessCardForm = () => {
                                 updateInput={handleChange(f.key)}
                                 placeholder={f.label}
                                 onFocus={focusInput}
+                                containerStyle={{ marginBottom: 12 }}
                                 {...f.keyboardOptions}
                               />
                             </MoveToNext.InputsCollector>

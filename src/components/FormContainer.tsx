@@ -1,10 +1,13 @@
 import React from 'react'
 import Collapsible from './Collapsible'
 import ScreenContainer from './ScreenContainer'
-import JoloText from './JoloText'
+import JoloText, { JoloTextKind } from './JoloText'
 import { useNavigation } from '@react-navigation/native'
 import Btn, { BtnTypes } from './Btn'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
+import { Colors } from '~/utils/colors'
+import { debugView } from '~/utils/dev'
+import { JoloTextSizes, Fonts } from '~/utils/fonts'
 
 interface Props {
   title: string
@@ -31,21 +34,53 @@ const FormContainer: React.FC<Props> = ({
 
   return (
     <Collapsible>
-      <Collapsible.Header customStyles={{ flexDirection: 'row' }}>
+      <Collapsible.Header
+        customStyles={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          backgroundColor: Colors.lightBlack,
+          paddingHorizontal: 24,
+        }}
+      >
         <TouchableOpacity onPress={dismissScreen}>
-          <JoloText>Cancel</JoloText>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.mini}
+            color={Colors.white90}
+            customStyles={{ fontFamily: Fonts.Medium }}
+          >
+            Cancel
+          </JoloText>
         </TouchableOpacity>
-        <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
+        <View style={{ paddingHorizontal: 8 }}>
+          <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
+        </View>
         <TouchableOpacity onPress={handleSubmit}>
-          <JoloText>Done</JoloText>
+          <JoloText
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.mini}
+            color={Colors.activity}
+            customStyles={{ fontFamily: Fonts.Medium }}
+          >
+            Done
+          </JoloText>
         </TouchableOpacity>
       </Collapsible.Header>
-      <ScreenContainer>
-        <Collapsible.ScrollView>
+      <ScreenContainer backgroundColor={Colors.lightBlack}>
+        <Collapsible.ScrollView customStyles={{ paddingBottom: 100 }}>
           <Collapsible.HidingTextContainer>
-            <JoloText>{title}</JoloText>
+            <JoloText kind={JoloTextKind.title}>{title}</JoloText>
           </Collapsible.HidingTextContainer>
-          <JoloText>{description}</JoloText>
+          <JoloText
+            size={JoloTextSizes.mini}
+            customStyles={{
+              marginTop: 8,
+              marginBottom: 36,
+              paddingHorizontal: 32,
+            }}
+          >
+            {description}
+          </JoloText>
           {children}
         </Collapsible.ScrollView>
       </ScreenContainer>
