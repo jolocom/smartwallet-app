@@ -1,4 +1,4 @@
-export const delay = async <T>(timeout: number, callback?: () => T) => {
+export const sleep = <T>(timeout: number, callback?: () => T) => {
   return new Promise((res) => {
     setTimeout(() => {
       const result = callback && callback()

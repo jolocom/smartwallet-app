@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { strings } from '~/translations/strings'
-import { delay } from '~/utils/generic'
+import { sleep } from '~/utils/generic'
 
 export interface LoaderConfig {
   showFailed?: boolean
@@ -46,7 +46,7 @@ export const useLoader = () => {
 
     try {
       await callback()
-      await delay(1000)
+      await sleep(1000)
 
       if (showSuccess) {
         dispatch(
