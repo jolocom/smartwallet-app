@@ -1,25 +1,13 @@
-import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
 import { IdentitySummary } from '@jolocom/sdk'
 
 import { ClaimKeys } from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
+import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
-export const formatClaims = (claims: IClaimSection) =>
-  Object.keys(claims).map((key) => ({
-    name: prepareLabel(key),
-    value: claims[key],
+export const formatClaims = (properties: Pick<DisplayCredential, 'properties'>) => properties.map(p => ({
+    name: prepareLabel(p.key),
+    value: p.value,
   }))
-
-export const getSubjectName = (claim: IClaimSection) => {
-  if (!!claim['givenName'] || !!claim['familyName']) {
-    return {
-      name: 'Subject name',
-      value: `${claim['givenName']} ${claim['familyName']}`,
-    }
-  }
-
-  return null
-}
 
 export const filteredOptionalFields = [
   ClaimKeys.familyName,
@@ -28,14 +16,14 @@ export const filteredOptionalFields = [
   ClaimKeys.photo,
 ]
 
-export const getOptionalFields = (claim: IClaimSection) =>
-  Object.keys(claim)
-    .filter((k) => !filteredOptionalFields.includes(k as ClaimKeys))
-    .map((key) => ({
-      name: prepareLabel(key),
-      value: claim[key],
-    }))
-    .slice(0, 3)
+export const getOptionalFields = (properties: Pick<DisplayCredential, 'properties'>) => {
+  return properties.filter(p => !filteredOptionalFields.includes(p.key as ClaimKeys))
+  .map(p => ({
+    name: prepareLabel(p.label),
+    value: p.value,
+  }))
+  .slice(0, 3)
+}
 
 export const getIssuerFields = (issuer: IdentitySummary) => {
   const fields = [{ name: 'Issuer Id', value: issuer.did }]

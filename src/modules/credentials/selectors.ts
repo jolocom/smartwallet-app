@@ -2,13 +2,14 @@ import { RootReducerI } from '~/types/reducer'
 import { createSelector } from 'reselect'
 import { CredentialsBySection, UICredential } from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 export const getAllCredentials = (state: RootReducerI) => state.credentials.all
 
 export const getCredentialsBySection = createSelector(
   getAllCredentials,
-  (creds): CredentialsBySection<UICredential> =>
-    creds.reduce<CredentialsBySection<UICredential>>(
+  (creds): CredentialsBySection<DisplayCredential> =>
+    creds.reduce<CredentialsBySection<DisplayCredential>>(
       (acc, cred) => {
         if (
           cred.renderInfo &&

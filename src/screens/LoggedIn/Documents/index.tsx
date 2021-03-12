@@ -15,16 +15,12 @@ import {
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
-import {
-  getSubjectName,
-  getOptionalFields,
-  formatClaims,
-  getIssuerFields,
-} from './utils'
+import { getOptionalFields, formatClaims, getIssuerFields } from './utils'
+import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 const CardList: React.FC<{
-  cards: UICredential[]
-  renderCard: (card: UICredential) => ReactNode
+  cards: DisplayCredential[]
+  renderCard: (card: DisplayCredential) => ReactNode
 }> = memo(
   ({ cards, renderCard }) => {
     return (
@@ -73,17 +69,20 @@ const DocumentList = () => {
                 mandatoryFields={[
                   {
                     name: DocumentFields.DocumentName,
-                    value: document.metadata.name,
+                    value: document.name ?? document.type,
                   },
-                  getSubjectName(document.claim),
+                  {
+                    name: 'Subject name',
+                    value: document.holderName,
+                  },
                 ]}
-                optionalFields={[...getOptionalFields(document.claim)]}
+                optionalFields={getOptionalFields(document.properties)}
                 highlight={document.id.slice(0, 14)}
-                image={document.claim['photo'] as string}
                 claims={[
-                  ...formatClaims(document.claim),
+                  ...formatClaims(document.properties),
                   ...getIssuerFields(document.issuer),
                 ]}
+                image={document.photo}
               />
             )}
           />
@@ -111,7 +110,7 @@ const DocumentList = () => {
                 mandatoryFields={[
                   {
                     name: DocumentFields.DocumentName,
-                    value: otherDoc.metadata.name,
+                    value: otherDoc.name,
                   },
                 ]}
                 optionalFields={[...getOptionalFields(otherDoc.claim)]}
@@ -130,7 +129,6 @@ const DocumentList = () => {
 }
 
 const Documents: React.FC = () => {
-  return null
   return (
     <ScreenContainer
       customStyles={{

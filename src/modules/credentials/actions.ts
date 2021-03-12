@@ -1,8 +1,8 @@
 import createAction from '~/utils/createAction'
 import { CredentialActions } from './types'
-import { UICredential } from '~/types/credentials'
+import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
-export const setCredentials = createAction<UICredential[]>(
+export const setCredentials = createAction<DisplayCredential[]>(
   CredentialActions.setCredentials,
 )
 
