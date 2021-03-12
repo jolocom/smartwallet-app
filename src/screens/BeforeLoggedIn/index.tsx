@@ -10,6 +10,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import useTermsConsent from '~/hooks/consent'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
+import { useAllCredentials } from '~/hooks/signedCredentials'
 
 import { useGetAppStates } from '~/hooks/useAppState'
 import { setAppLocked } from '~/modules/account/actions'
@@ -59,6 +60,7 @@ const BeforeLoggedIn = () => {
 
   const syncAttributes = useSyncStorageAttributes()
   const syncCredentials = useSyncStorageCredentials()
+  const initializeAllCredentials = useAllCredentials()
   const { checkConsent } = useTermsConsent()
 
   useEffect(() => {
@@ -67,7 +69,8 @@ const BeforeLoggedIn = () => {
 
     /* Loading attributes and credentials into the store */
     syncAttributes()
-    syncCredentials()
+    // syncCredentials()
+    initializeAllCredentials()
   }, [])
 
   // decide wether to show Lock or Register Pin or App
@@ -99,16 +102,20 @@ const BeforeLoggedIn = () => {
     isPopupRef.current = isPopup
   }, [isPopup])
 
-  const { currentAppState, prevAppState } = useGetAppStates();
+  const { currentAppState, prevAppState } = useGetAppStates()
 
   useEffect(() => {
-    if (prevAppState && prevAppState.match(/active/) && currentAppState.match(/inactive|background/)) {
+    if (
+      prevAppState &&
+      prevAppState.match(/active/) &&
+      currentAppState.match(/inactive|background/)
+    ) {
       if (isAuthSet) {
         if (!isPopupRef.current) {
           dispatch(setAppLocked(true))
           dismissOverlays()
         } else dispatch(setPopup(false))
-      }      
+      }
     }
   }, [currentAppState])
   /* All about when lock screen comes up - END */
