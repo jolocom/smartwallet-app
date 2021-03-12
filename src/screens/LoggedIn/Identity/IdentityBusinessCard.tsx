@@ -8,10 +8,11 @@ import { getBusinessCardId } from '~/modules/attributes/selectors'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import BusinessCardCredential from './components/businessCard/BusinessCardCredential'
-import BusinessCardEdit from './components/businessCard/BusinessCardEdit'
 import BusinessCardPlaceholder from './components/businessCard/BusinessCardPlaceholder'
 import BusinessCardStyled from './components/BusinessCardStyled'
 import IdentityTabs from './tabs'
+import { useRedirect } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 enum Modes {
   display = 'display',
@@ -19,6 +20,7 @@ enum Modes {
 }
 
 const BusinessCard: React.FC = () => {
+  const redirect = useRedirect()
   const [mode, setMode] = useState(Modes.display)
   const { handleDeleteCredentialSI } = useSICActions()
 
@@ -56,7 +58,7 @@ const BusinessCard: React.FC = () => {
     () => [
       {
         title: strings.EDIT,
-        onPress: () => transitionMode(Modes.edit),
+        onPress: () => redirect(ScreenNames.BusinessCardForm),
       },
       ...(!isPlaceholder
         ? [
@@ -69,17 +71,6 @@ const BusinessCard: React.FC = () => {
     ],
     [businessCardId],
   )
-
-  if (mode === Modes.edit) {
-    return (
-      <View>
-        <IdentityTabs.Styled.Placeholder show={true}>
-          {strings.PLEASE_INTRODUCE_YOURSELF}
-        </IdentityTabs.Styled.Placeholder>
-        <BusinessCardEdit onCancel={() => transitionMode(Modes.display)} />
-      </View>
-    )
-  }
 
   return (
     <View style={{ marginTop: !isPlaceholder ? 30 : 0 }}>

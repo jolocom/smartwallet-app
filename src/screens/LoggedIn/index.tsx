@@ -21,6 +21,7 @@ import Lock from '../Modals/Lock'
 import Recovery from '../Modals/Recovery'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Main from './Main'
+import BusinessCardForm from '../Modals/Forms/BusinessCardForm'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -31,6 +32,7 @@ export type LoggedInStackParamList = {
   [ScreenNames.Lock]: undefined
   [ScreenNames.PinRecoveryInstructions]: undefined
   [ScreenNames.DeviceAuth]: undefined
+  [ScreenNames.BusinessCardForm]: undefined
 }
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
@@ -139,6 +141,12 @@ const LoggedIn = () => {
         component={Recovery}
         options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
+      <LoggedInStack.Screen
+        name={ScreenNames.BusinessCardForm}
+        component={BusinessCardForm}
+        options={{ gestureEnabled: false }}
+      />
+      {/* Modals -> End */}
     </LoggedInStack.Navigator>
   )
 }
