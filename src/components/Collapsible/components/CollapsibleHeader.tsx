@@ -49,7 +49,6 @@ export const AnimatedHeader: ICollapsibleComposite['AnimatedHeader'] = ({
 
   return (
     <Animated.View
-      pointerEvents="none"
       style={[
         styles.container,
         styles.containerShadows,
