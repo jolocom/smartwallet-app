@@ -130,6 +130,7 @@ const DocumentList = () => {
 }
 
 const Documents: React.FC = () => {
+  return null
   return (
     <ScreenContainer
       customStyles={{

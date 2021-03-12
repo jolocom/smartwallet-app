@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDid } from "~/modules/account/selectors";
 import { setCredentials } from "~/modules/credentials/actions";
 import { useAgent } from "../sdk";
-import { isCredentials } from "./types";
 import { mapCredentialsToUI, separateCredentialsAndAttributes } from "./utils";
 
 function* credentialsMaker (allCredentials: SignedCredential[], did: string, agent: Agent) {
@@ -35,14 +34,12 @@ export const useAllCredentials = () => {
   useEffect(() => {
     // TODO: add generator types
     const {value: credentials} = credentialsIter.next();
-    if(isCredentials(credentials)) {
-      const {value: uiCredentialsPromise} = credentialsIter.next(credentials); 
-      Promise.all(uiCredentialsPromise).then(uiCredentials => {
-        // TODO: setCredentials
-        // console.log('* final', {uiCredentials});
-        dispatch(setCredentials(uiCredentials));
-      });
-    }
+    const {value: uiCredentialsPromise} = credentialsIter.next(credentials); 
+    Promise.all(uiCredentialsPromise).then(uiCredentials => {
+      // TODO: setCredentials
+      // console.log('* final', {uiCredentials});
+      dispatch(setCredentials(uiCredentials));
+    });
   }, [allCredentials.length])
 
 
