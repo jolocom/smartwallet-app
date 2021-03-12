@@ -4,11 +4,6 @@ import { ClaimKeys } from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
 import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
-export const formatClaims = (properties: DisplayCredential['properties']) => properties.map(p => ({
-    name: prepareLabel(p.key),
-    value: p.value,
-  }))
-
 export const filteredOptionalFields = [
   ClaimKeys.familyName,
   ClaimKeys.givenName,
@@ -16,9 +11,16 @@ export const filteredOptionalFields = [
   ClaimKeys.photo,
 ]
 
+// TODO: do we need this
+export const formatClaims = (properties: DisplayCredential['properties']) => properties.map(p => ({
+  label: prepareLabel(p.key),
+  value: p.value,
+}))
+
+// TODO: do we need this
 export const getOptionalFields = (properties: DisplayCredential['properties']) => properties.filter(p => !filteredOptionalFields.includes(p.key as ClaimKeys))
   .map(p => ({
-    name: prepareLabel(p.label),
+    label: prepareLabel(p.label),
     value: p.value,
   }))
   .slice(0, 3)
@@ -26,16 +28,16 @@ export const getOptionalFields = (properties: DisplayCredential['properties']) =
 
 // TODO: use translation strings
 export const getIssuerFields = (issuer: IdentitySummary) => {
-  const fields = [{ name: 'Issuer Id', value: issuer.did }]
+  const fields = [{ label: 'Issuer Id', value: issuer.did }]
   const issuerProfile = issuer.publicProfile
   if (issuerProfile) {
-    fields.push({ name: 'Issuer name', value: issuerProfile.name })
+    fields.push({ label: 'Issuer name', value: issuerProfile.name })
     fields.push({
-      name: 'Issuer description',
+      label: 'Issuer description',
       value: issuerProfile.description,
     })
     issuerProfile.url &&
-      fields.push({ name: 'Issuer URL', value: issuerProfile.url })
+      fields.push({ label: 'Issuer URL', value: issuerProfile.url })
   }
 
   return fields

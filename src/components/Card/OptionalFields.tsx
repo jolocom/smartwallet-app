@@ -9,7 +9,7 @@ import { DocumentTypes } from '~/types/credentials'
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
 }) => {
-  const { optionalFields, highlight, image } = useCard()
+  const { optionalFields, highlight, photo } = useCard()
   const [displayedOptionalFields, setDisplayedOptionalFields] = useState(
     optionalFields.slice(0, 3),
   )
@@ -30,7 +30,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
           /* check wether to show last optional field */
           if (
             lines.current > 7 &&
-            (highlight || (image && DocumentTypes.document))
+            (highlight || (photo && DocumentTypes.document))
           ) {
             setDisplayedOptionalFields((prevState) =>
               prevState.slice(
@@ -89,10 +89,10 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
   return (
     <View style={[styles.container, customContainerStyles]}>
       {displayedOptionalFields.map((pField, idx) => (
-        <View style={{ width: '100%' }} key={pField.name + idx}>
-          {renderFieldName(pField.name)}
+        <View style={{ width: '100%' }} key={pField.label + idx}>
+          {renderFieldName(pField.label)}
           {/* in case thers is a photo we should display last field differently */}
-          {idx === displayedOptionalFields.length - 1 && image
+          {idx === displayedOptionalFields.length - 1 && photo
             ? renderFieldValue(pField.value, '30%')
             : renderFieldValue(pField.value)}
         </View>

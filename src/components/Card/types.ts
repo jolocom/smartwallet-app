@@ -6,7 +6,7 @@ export interface IWithCustomStyle<T = ViewStyle> {
 }
 
 export interface IField {
-  name: string
+  label: string
   value: ClaimEntry
 }
 

@@ -17,7 +17,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
   const deleteCredential = useDeleteCredential()
 
-  const { id, image, claims, document } = useCard()
+  const { id, photo, claims, document } = useCard()
   const infoRef = useRef<{ show: () => void }>(null)
 
   const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${document?.value}?`
@@ -64,7 +64,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
       <CardDetails
         ref={infoRef}
         fields={claims}
-        image={image}
+        photo={photo}
         title={document?.value as string}
       />
     </>

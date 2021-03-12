@@ -64,7 +64,7 @@ const DocumentList = () => {
                 id={document.id}
                 mandatoryFields={[
                   {
-                    name: DocumentFields.DocumentName,
+                    label: DocumentFields.DocumentName,
                     value: document.name ?? document.type,
                   },
                   {
@@ -105,7 +105,7 @@ const DocumentList = () => {
                 key={otherDoc.id}
                 mandatoryFields={[
                   {
-                    name: DocumentFields.DocumentName,
+                    label: DocumentFields.DocumentName,
                     value: otherDoc.name ?? otherDoc.type,
                   },
                 ]}

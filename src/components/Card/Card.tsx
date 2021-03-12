@@ -28,11 +28,11 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
   claims,
 }) => {
   const getFieldInfo = (fieldName: string) =>
-    mandatoryFields.find((el) => el?.name === fieldName)
+    mandatoryFields.find((el) => el?.label === fieldName)
 
   const document = getFieldInfo(DocumentFields.DocumentName)
   const [restMandatoryField] = mandatoryFields.filter(
-    (f) => f?.name !== DocumentFields.DocumentName,
+    (f) => f?.label !== DocumentFields.DocumentName,
   )
 
   const contextValue = useMemo(
