@@ -10,6 +10,24 @@ import { HeaderText } from './components/HeaderText'
 import { ICollapsibleComposite } from './types'
 import { CollapsibleFlatList } from './components/FlatList'
 
+/***
+ * NOTE:
+ * A basic structure of a Collapsible screen would look like this:
+ * <Collapsible>
+ *    <Collapsible.Header>
+ *      <Collapsible.HeaderText>{...}</Collapsible.HeaderText>
+ *    </Collapsible.Header>
+ *    <ScreenContainer>
+ *      <Collapsible.ScrollView>
+ *        <Collapsible.HidingTextContainer>
+ *          {...}
+ *        </Collapsible.HidingTextContainer>
+ *        {...}
+ *      </Collapsible.ScrollView>
+ *    </ScreenContainer>
+ * </Collapsible>
+ ***/
+
 const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
   const yValue = useRef(new Animated.Value(0)).current
   const [distanceToText, setDistanceToText] = useState(0)
