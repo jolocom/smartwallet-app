@@ -10,6 +10,8 @@ import Block from '~/components/Block'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
+import Collapsible from '~/components/Collapsible'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 const BackupBlock: React.FC<{
   title: string
@@ -46,41 +48,49 @@ const BackupBlock: React.FC<{
 )
 
 const BackupIdentity = () => {
+  // FIXME: add proper values
   const lastBackup = '18.07.2020'
 
   return (
-    <ScreenContainer
-      hasHeaderBack
-      customStyles={{ justifyContent: 'space-between', paddingTop: 0 }}
-    >
-      <ScrollView
-        style={{ width: '100%' }}
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        overScrollMode="never"
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}
-      >
-        <View>
-          <Section.Title>{strings.BACKUP_OPTIONS}</Section.Title>
-          <BackupBlock
-            title={strings.BACKUP_YOUR_DATA}
-            description={strings.DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA}
-            btnText={strings.EXPORT_BACKUP_FILE}
-            onPress={() => {}}
-          />
-          <BackupBlock
-            title={strings.RESTORE_YOUR_DATA}
-            description={strings.IN_CASE_YOU_DELETED_SOMETHING_IMPORTANT}
-            btnText={strings.IMPORT_FILE}
-            onPress={() => {}}
-          />
-        </View>
-        <View style={{ width: '100%', paddingBottom: 32, paddingTop: 20 }}>
-          <JoloText color={Colors.white30}>{strings.LAST_BACKUP}</JoloText>
-          <JoloText color={Colors.white30}>{lastBackup}</JoloText>
-        </View>
-      </ScrollView>
-    </ScreenContainer>
+    <Collapsible>
+      <Collapsible.Header>
+        <NavigationHeader type={NavHeaderType.Back}>
+          <Collapsible.HeaderText>
+            {strings.BACKUP_OPTIONS}
+          </Collapsible.HeaderText>
+        </NavigationHeader>
+      </Collapsible.Header>
+      <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
+        <Collapsible.ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'space-between',
+          }}
+        >
+          <Collapsible.HidingTextContainer>
+            <Section.Title>{strings.BACKUP_OPTIONS}</Section.Title>
+          </Collapsible.HidingTextContainer>
+          <View>
+            <BackupBlock
+              title={strings.BACKUP_YOUR_DATA}
+              description={strings.DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA}
+              btnText={strings.EXPORT_BACKUP_FILE}
+              onPress={() => {}}
+            />
+            <BackupBlock
+              title={strings.RESTORE_YOUR_DATA}
+              description={strings.IN_CASE_YOU_DELETED_SOMETHING_IMPORTANT}
+              btnText={strings.IMPORT_FILE}
+              onPress={() => {}}
+            />
+          </View>
+          <View style={{ width: '100%', paddingBottom: 32, paddingTop: 20 }}>
+            <JoloText color={Colors.white30}>{strings.LAST_BACKUP}</JoloText>
+            <JoloText color={Colors.white30}>{lastBackup}</JoloText>
+          </View>
+        </Collapsible.ScrollView>
+      </ScreenContainer>
+    </Collapsible>
   )
 }
 
