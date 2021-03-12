@@ -19,7 +19,7 @@ const CollapsibleTest = () => {
 
   return (
     <Collapsible>
-      <Header height={62}>
+      <Header>
         <NavigationHeader type={NavHeaderType.Back}>
           <Collapsible.HeaderText>@HeaderText</Collapsible.HeaderText>
         </NavigationHeader>
@@ -28,8 +28,8 @@ const CollapsibleTest = () => {
         <Collapsible.ScrollView>
           <Collapsible.HidingScale>
             <JoloText customStyles={{ marginTop: 50 }}>
-              This is the @HidingScale component, which hides together with
-              scrolling
+              This is the optional @HidingScale component, which hides together
+              with scrolling
             </JoloText>
           </Collapsible.HidingScale>
           <Collapsible.HidingTextContainer>

@@ -36,8 +36,11 @@ export interface ICollapsibleComposite {
 
 export interface ICollapsibleContext {
   yValue: Animated.AnimatedValue
-  distanceToText: number
+  setHeaderHeight: (height: number) => void
+  setHidingTextHeight: (height: number) => void
   setDistanceToText: (distance: number) => void
+  distanceToTop: number
+  distanceToHeader: number
   interpolateYValue: (inputRange: number[], outputRange: number[]) => void
   handleScroll: (...args: any[]) => void
 }

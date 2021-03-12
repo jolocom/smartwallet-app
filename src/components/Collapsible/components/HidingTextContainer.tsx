@@ -9,10 +9,11 @@ export const HidingTextContainer: ICollapsibleComposite['HidingTextContainer'] =
   children,
   customStyles = {},
 }) => {
-  const { setDistanceToText } = useCollapsible()
+  const { setDistanceToText, setHidingTextHeight } = useCollapsible()
 
   const handleLayout = (e: LayoutChangeEvent) => {
     setDistanceToText(e.nativeEvent.layout.y)
+    setHidingTextHeight(e.nativeEvent.layout.height)
   }
   return (
     <View style={[customStyles]} onLayout={handleLayout}>

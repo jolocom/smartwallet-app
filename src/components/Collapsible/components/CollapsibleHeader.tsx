@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Animated } from 'react-native'
+import { View, StyleSheet, Animated, LayoutChangeEvent } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
@@ -14,13 +14,18 @@ export const Header: ICollapsibleComposite['Header'] = ({
   height = COLLAPSIBLE_HEADER_HEIGHT,
 }) => {
   const { top } = useSafeArea()
-  const { interpolateYValue } = useCollapsible()
+  const { interpolateYValue, setHeaderHeight } = useCollapsible()
 
   const shadowOpacityValue = interpolateYValue([0, 10], [0, 1])
   const elevationValue = interpolateYValue([0, 10], [0, 20])
 
+  const handleLayout = (e: LayoutChangeEvent) => {
+    setHeaderHeight(e.nativeEvent.layout.height)
+  }
+
   return (
     <Animated.View
+      onLayout={handleLayout}
       style={[
         styles.container,
         styles.containerShadows,
@@ -33,22 +38,30 @@ export const Header: ICollapsibleComposite['Header'] = ({
     </Animated.View>
   )
 }
-
 export const AnimatedHeader: ICollapsibleComposite['AnimatedHeader'] = ({
   children,
   customStyles,
   height = COLLAPSIBLE_HEADER_HEIGHT,
 }) => {
-  const { distanceToText, interpolateYValue } = useCollapsible()
+  const {
+    interpolateYValue,
+    setHeaderHeight,
+    distanceToHeader,
+  } = useCollapsible()
   const { top } = useSafeArea()
 
   const headerOpacityValue = interpolateYValue(
-    [distanceToText * 0.2, distanceToText * 0.3],
+    [distanceToHeader * 0.2, distanceToHeader * 0.3],
     [0, 1],
   )
 
+  const handleLayout = (e: LayoutChangeEvent) => {
+    setHeaderHeight(e.nativeEvent.layout.height)
+  }
+
   return (
     <Animated.View
+      onLayout={handleLayout}
       style={[
         styles.container,
         styles.containerShadows,

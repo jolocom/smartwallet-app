@@ -6,16 +6,22 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { useCollapsible } from '../context'
 
+const ADDITIONAL_DISTANCE = 30
+
 export const HeaderText: React.FC = ({ children }) => {
-  const { interpolateYValue, distanceToText } = useCollapsible()
+  const {
+    interpolateYValue,
+    distanceToTop,
+    distanceToHeader,
+  } = useCollapsible()
 
   const headerTextPositionValue = interpolateYValue(
-    [distanceToText * 0.6, distanceToText * 0.8],
-    [50, 0],
+    [distanceToHeader - ADDITIONAL_DISTANCE, distanceToTop],
+    [30, 0],
   )
 
   const headerTextOpacityValue = interpolateYValue(
-    [distanceToText * 0.7, distanceToText * 0.8],
+    [distanceToHeader - ADDITIONAL_DISTANCE, distanceToTop],
     [0, 1],
   )
 
