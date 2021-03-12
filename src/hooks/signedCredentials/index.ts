@@ -7,9 +7,9 @@ import { useAgent } from "../sdk";
 import { mapCredentialsToUI, separateCredentialsAndAttributes } from "./utils";
 
 async function* credentialsMaker (did: string, agent: Agent) {
-  const allCredentials = await agent.storage.get.verifiableCredential();
-  const credentials: SignedCredential[] = yield separateCredentialsAndAttributes(allCredentials, did);
-  yield Promise.all(credentials.map((c) => mapCredentialsToUI(agent, c)));
+  const allCredentials: SignedCredential[] = await agent.storage.get.verifiableCredential();
+  const serviceIssuedCredentials: SignedCredential[] = yield separateCredentialsAndAttributes(allCredentials, did);
+  return yield Promise.all(serviceIssuedCredentials.map((c) => mapCredentialsToUI(agent, c)));
 }
 
 export const useAllCredentials = () => {
@@ -19,8 +19,13 @@ export const useAllCredentials = () => {
   const credentialsIter = credentialsMaker(did, agent);
     
   return async () => {    
-    const {value: credentials} = await credentialsIter.next();
-    const {value: uiCredentials} = await credentialsIter.next(credentials);
-    dispatch(setCredentials(uiCredentials));
+    let isComplete = false;
+    let value = undefined;
+    while(!isComplete) {
+      const {value: iterReturn, done} = await credentialsIter.next(value);
+      isComplete = !!done;
+      value = iterReturn
+    }
+    dispatch(setCredentials(value));
   }
 }
