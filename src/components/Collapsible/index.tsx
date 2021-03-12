@@ -30,9 +30,9 @@ import { CollapsibleFlatList } from './components/FlatList'
 
 const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
   const yValue = useRef(new Animated.Value(0)).current
-  const [distanceToText, setDistanceToText] = useState(0)
-  const [headerHeight, setHeaderHeight] = useState(0)
-  const [hidingTextHeight, setHidingTextHeight] = useState(0)
+  const [distanceToText, setDistanceToText] = useState(50)
+  const [headerHeight, setHeaderHeight] = useState(75)
+  const [hidingTextHeight, setHidingTextHeight] = useState(80)
 
   const handleDistanceToText = (distance: number) => setDistanceToText(distance)
   const handleHeaderHeight = (height: number) => setHeaderHeight(height)
