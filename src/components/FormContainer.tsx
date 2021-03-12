@@ -29,7 +29,6 @@ const FormContainer: React.FC<Props> = ({
 
   const handleSubmit = () => {
     onSubmit()
-    dismissScreen()
   }
 
   return (
