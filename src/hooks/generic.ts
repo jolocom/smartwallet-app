@@ -1,13 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { StatusBar } from 'react-native'
 
-export const useDelay = (callback: () => void, timeout = 2500) => {
-  return new Promise((res) => {
-    callback();
-    res('');
-  })
-}
-
 export const useForceUpdate = () => {
   const [, setTick] = useState(0)
 
