@@ -54,9 +54,13 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
         replaceWith(ScreenNames.LoggedIn)
       } else recoveryDispatch(resetPhrase())
     }
-    await loader(async () => await submitCb(), {
-      loading: strings.MATCHING,
-    })
+    await loader(
+      async () => await submitCb(),
+      {
+        loading: strings.MATCHING,
+      },
+      handleDone,
+    )
   }, [phrase])
 
   const restoreEntropy = async () => {
