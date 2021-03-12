@@ -36,6 +36,7 @@ import Identity from './Identity'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
 import BusinessCardTest from './Settings/Development/BusinessCardTest'
+import CollapsibleTest from './Settings/Development/CollapsibleText'
 
 const MainTabs = createBottomTabNavigator()
 const LoggedInStack = createStackNavigator()
@@ -65,7 +66,7 @@ const settingsScreenTransitionOptions = {
 }
 
 const LoggedInTabs: React.FC = () => {
-    return (
+  return (
     <LoggedInStack.Navigator
       headerMode="none"
       mode="modal"
@@ -157,6 +158,11 @@ const LoggedInTabs: React.FC = () => {
             component={BusinessCardTest}
             options={settingsScreenTransitionOptions}
           />
+          <LoggedInStack.Screen
+            name={ScreenNames.CollapsibleTest}
+            component={CollapsibleTest}
+            options={settingsScreenTransitionOptions}
+          />
         </>
       )}
       {/* Settings Screens -> End   */}
@@ -165,10 +171,10 @@ const LoggedInTabs: React.FC = () => {
       <LoggedInStack.Screen
         name={ScreenNames.Interaction}
         component={Interaction}
-        options={{gestureEnabled: false}}
+        options={{ gestureEnabled: false }}
       />
       {/* Modals -> End */}
-        </LoggedInStack.Navigator>
+    </LoggedInStack.Navigator>
   )
 }
 
