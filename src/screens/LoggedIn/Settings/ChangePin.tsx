@@ -11,7 +11,6 @@ import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import { useDelay } from '~/hooks/generic'
 import { ScreenNames } from '~/types/screens'
 import { useRedirectTo } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
@@ -66,13 +65,15 @@ const ChangePin: React.FC<PropsI> = ({
           msg: strings.PASSWORD_SUCCESSFULLY_CHANGED,
         }),
       )
-      await useDelay(() => dispatch(dismissLoader()))
-      if (onSuccessRedirectToScreen) {
-        const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
-        redirectToScreen()
-      } else {
-        navigation.goBack()
-      }
+      setTimeout(() => {
+        dispatch(dismissLoader())
+        if (onSuccessRedirectToScreen) {
+          const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
+          redirectToScreen()
+        } else {
+          navigation.goBack()
+        }
+      }, 2500)
     } catch (e) {
       console.warn('Error occured setting new pin', { e })
     }

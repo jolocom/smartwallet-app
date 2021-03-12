@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
 
-import { setLogged } from '~/modules/account/actions'
-import { useFailed, useLoader } from '~/hooks/loader'
+import { useFailed } from '~/hooks/loader'
 import { useSubmitIdentity } from '~/hooks/sdk'
 import { BackArrowIcon } from '~/assets/svg'
 import { useGoBack } from '~/hooks/navigation'
@@ -17,9 +15,7 @@ import Dnd from './Dnd'
 
 const SeedPhraseRepeat: React.FC = () => {
   const goBack = useGoBack()
-  const dispatch = useDispatch()
   const submitIdentity = useSubmitIdentity()
-  const loader = useLoader()
   const seedphrase = useGetSeedPhrase()
   const showFailedLoader = useFailed()
 

@@ -36,8 +36,7 @@ const RegisterBiometry: React.FC = () => {
       const result = await authenticate(biometryType)
       if (result.success) {
         setBiometry(biometryType)
-        await displaySuccessLoader()
-        handleRedirectToLogin()
+        displaySuccessLoader(handleRedirectToLogin)
       }
     } catch (err) {
       console.log('Error authenticating with Biometrics in RegisterBiometry', {
