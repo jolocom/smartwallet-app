@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
+import { View } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import Collapsible from '~/components/Collapsible'
 import JoloText from '~/components/JoloText'
 import Section from '../components/Section'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import SingleSelectBlock from '~/components/SingleSelectBlock'
-import { View } from 'react-native'
-import { debugView } from '~/utils/dev'
 
 enum HeaderType {
   default = 'default',

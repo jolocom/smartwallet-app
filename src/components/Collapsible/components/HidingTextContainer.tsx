@@ -4,8 +4,16 @@ import { View, LayoutChangeEvent } from 'react-native'
 import { useCollapsible } from '../context'
 import { ICollapsibleComposite } from '../types'
 
-// TODO: add docs saying that this has to be a child of the scrollview
-export const HidingTextContainer: ICollapsibleComposite['HidingTextContainer'] = ({
+/* NOTE:
+ * The @HidingTextContainer must be a direct child of the @Collapsible.ScrollView
+ * (or any other @Collapsible list component that accepts it as a child).
+ * This is done to assure the calculations of the distances are right. Does not
+ * apply to @Collapsible.FlatList, since the @HidingTextContainer is passes as a
+ * child, but rather as a prop.
+ *
+ */
+
+const HidingTextContainer: ICollapsibleComposite['HidingTextContainer'] = ({
   children,
   customStyles = {},
 }) => {
@@ -21,3 +29,7 @@ export const HidingTextContainer: ICollapsibleComposite['HidingTextContainer'] =
     </View>
   )
 }
+
+HidingTextContainer.displayName = 'HidingTextContainer'
+
+export { HidingTextContainer }

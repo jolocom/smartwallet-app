@@ -43,4 +43,5 @@ export interface ICollapsibleContext {
   distanceToHeader: number
   interpolateYValue: (inputRange: number[], outputRange: number[]) => void
   handleScroll: (...args: any[]) => void
+  checkListHidingTextContainer: (children: React.ReactNode) => void
 }
