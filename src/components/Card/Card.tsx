@@ -23,7 +23,7 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
   id,
   optionalFields,
   mandatoryFields,
-  image,
+  photo,
   highlight,
   claims,
 }) => {
@@ -41,7 +41,7 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
       document,
       restMandatoryField,
       optionalFields,
-      image,
+      photo,
       highlight,
       claims,
     }),

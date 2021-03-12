@@ -8,11 +8,7 @@ import { useTabs } from '~/components/Tabs/context'
 import { getCredentialsBySection } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
-import {
-  DocumentTypes,
-  DocumentFields,
-  UICredential,
-} from '~/types/credentials'
+import { DocumentTypes, DocumentFields } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields, formatClaims, getIssuerFields } from './utils'
@@ -43,7 +39,7 @@ const CardList: React.FC<{
 
 const DocumentList = () => {
   const { documents, other } = useSelector(getCredentialsBySection)
-  const { activeTab, activeSubtab } = useTabs()
+  const { activeTab } = useTabs()
 
   return (
     <>
@@ -82,7 +78,7 @@ const DocumentList = () => {
                   ...formatClaims(document.properties),
                   ...getIssuerFields(document.issuer),
                 ]}
-                image={document.photo}
+                photo={document.photo}
               />
             )}
           />
@@ -110,13 +106,13 @@ const DocumentList = () => {
                 mandatoryFields={[
                   {
                     name: DocumentFields.DocumentName,
-                    value: otherDoc.name,
+                    value: otherDoc.name ?? otherDoc.type,
                   },
                 ]}
-                optionalFields={[...getOptionalFields(otherDoc.claim)]}
-                image={otherDoc.renderInfo?.logo?.url}
+                optionalFields={[...getOptionalFields(otherDoc.properties)]}
+                photo={otherDoc.photo}
                 claims={[
-                  ...formatClaims(otherDoc.claim),
+                  ...formatClaims(otherDoc.properties),
                   ...getIssuerFields(otherDoc.issuer),
                 ]}
               />

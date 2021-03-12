@@ -4,7 +4,7 @@ import { ClaimKeys } from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
 import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
-export const formatClaims = (properties: Pick<DisplayCredential, 'properties'>) => properties.map(p => ({
+export const formatClaims = (properties: DisplayCredential['properties']) => properties.map(p => ({
     name: prepareLabel(p.key),
     value: p.value,
   }))
@@ -16,15 +16,15 @@ export const filteredOptionalFields = [
   ClaimKeys.photo,
 ]
 
-export const getOptionalFields = (properties: Pick<DisplayCredential, 'properties'>) => {
-  return properties.filter(p => !filteredOptionalFields.includes(p.key as ClaimKeys))
+export const getOptionalFields = (properties: DisplayCredential['properties']) => properties.filter(p => !filteredOptionalFields.includes(p.key as ClaimKeys))
   .map(p => ({
     name: prepareLabel(p.label),
     value: p.value,
   }))
   .slice(0, 3)
-}
 
+
+// TODO: use translation strings
 export const getIssuerFields = (issuer: IdentitySummary) => {
   const fields = [{ name: 'Issuer Id', value: issuer.did }]
   const issuerProfile = issuer.publicProfile
