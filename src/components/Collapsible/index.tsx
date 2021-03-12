@@ -10,6 +10,7 @@ import { HeaderText } from './components/HeaderText'
 import { ICollapsibleComposite } from './types'
 import { CollapsibleFlatList } from './components/FlatList'
 import { withListError } from './utils'
+import { CollapsibleKeyboardAwareScrollView } from './components/KeyboardAwareScrollView'
 
 /***
  * NOTE:
@@ -79,6 +80,9 @@ Collapsible.Header = Header
 Collapsible.HeaderText = HeaderText
 Collapsible.AnimatedHeader = AnimatedHeader
 Collapsible.FlatList = CollapsibleFlatList
+Collapsible.KeyboardAwareScrollView = withListError(
+  CollapsibleKeyboardAwareScrollView,
+)
 Collapsible.ScrollView = withListError(CollapsibleScrollView)
 Collapsible.HidingScale = HidingScale
 Collapsible.HidingTextContainer = HidingTextContainer

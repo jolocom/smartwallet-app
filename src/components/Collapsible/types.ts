@@ -28,6 +28,7 @@ export interface ICollapsibleComposite {
   Header: React.FC<IHeaderProps>
   AnimatedHeader: React.FC<IHeaderProps>
   ScrollView: React.FC<IScrollViewProps>
+  KeyboardAwareScrollView: React.FC<IScrollViewProps>
   FlatList: React.FC<IFlatListProps>
   HeaderText: React.FC
   HidingTextContainer: React.FC<IWithCustomStyle>

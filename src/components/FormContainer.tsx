@@ -66,7 +66,9 @@ const FormContainer: React.FC<Props> = ({
         </TouchableOpacity>
       </Collapsible.Header>
       <ScreenContainer backgroundColor={Colors.lightBlack}>
-        <Collapsible.ScrollView customStyles={{ paddingBottom: 100 }}>
+        <Collapsible.KeyboardAwareScrollView
+          customStyles={{ paddingBottom: 100 }}
+        >
           <Collapsible.HidingTextContainer>
             <JoloText kind={JoloTextKind.title}>{title}</JoloText>
           </Collapsible.HidingTextContainer>
@@ -81,7 +83,7 @@ const FormContainer: React.FC<Props> = ({
             {description}
           </JoloText>
           {children}
-        </Collapsible.ScrollView>
+        </Collapsible.KeyboardAwareScrollView>
       </ScreenContainer>
     </Collapsible>
   )
