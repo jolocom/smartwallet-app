@@ -1,5 +1,5 @@
 import React, { useEffect, ComponentType } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StyleSheet, Platform } from 'react-native'
 import { useCollapsible } from '../context'
 import { ICollapsibleComposite } from '../types'
 import { COLLAPSIBLE_HEADER_HEIGHT } from './CollapsibleHeader'
@@ -33,6 +33,12 @@ export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['Keyboard
       ]}
       scrollEventThrottle={1}
       onScroll={handleScroll}
+      // FIXME: Currently android uses the `adjustPan` setting for adjusting the views
+      // around the keyboard, which moves the header outside the screeen. Can be
+      // changed to the default behavior as soon as the
+      // usage of the keyboard on the Passcode screen is removed, allowing to control
+      // the keyboard using the KeyboardAwareScrollView
+      // enableOnAndroid={true}
     >
       {children}
     </AnimatedKeyboardAwareScrollView>
@@ -41,6 +47,7 @@ export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['Keyboard
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     paddingBottom: '30%',
   },
 })
