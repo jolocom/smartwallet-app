@@ -1,4 +1,4 @@
-import { UICredential } from '~/types/credentials'
+import { DisplayCredential } from '~/hooks/signedCredentials/types';
 
 export enum CredentialActions {
   setCredentials = 'setCredentials',
@@ -6,5 +6,5 @@ export enum CredentialActions {
 }
 
 export interface CredentialsState {
-  all: UICredential[]
+  all: DisplayCredential[]
 }

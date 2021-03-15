@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 
 import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-import { useSyncStorageCredentials } from '~/hooks/credentials'
+// import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { useToasts } from '../toasts'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
@@ -20,7 +20,7 @@ const useCredentialOfferSubmit = () => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
-  const syncCredentials = useSyncStorageCredentials()
+  // const syncCredentials = useSyncStorageCredentials()
   const {
     scheduleErrorInteraction,
     scheduleSuccessInteraction,
@@ -41,7 +41,7 @@ const useCredentialOfferSubmit = () => {
     try {
       if (await credentialsAlreadyIssued()) {
         await storeSelectedCredentials()
-        await syncCredentials()
+        // await syncCredentials()
         scheduleSuccess()
         return finishInteraction()
       }
@@ -63,7 +63,7 @@ const useCredentialOfferSubmit = () => {
 
       if (allValid) {
         await storeSelectedCredentials()
-        await syncCredentials()
+        // await syncCredentials()
         scheduleSuccess()
         finishInteraction()
       } else if (allInvalid) {

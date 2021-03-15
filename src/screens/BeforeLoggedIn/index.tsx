@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import useTermsConsent from '~/hooks/consent'
-import { useSyncStorageCredentials } from '~/hooks/credentials'
+// import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { useAllCredentials } from '~/hooks/signedCredentials'
 
 import { useGetAppStates } from '~/hooks/useAppState'
@@ -59,7 +59,7 @@ const BeforeLoggedIn = () => {
   const showTabs = !isAppLocked && isAuthSet
 
   const syncAttributes = useSyncStorageAttributes()
-  const syncCredentials = useSyncStorageCredentials()
+  // const syncCredentials = useSyncStorageCredentials()
   const initializeAllCredentials = useAllCredentials()
   const { checkConsent } = useTermsConsent()
 
