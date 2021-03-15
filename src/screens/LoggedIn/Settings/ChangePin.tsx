@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Keychain from 'react-native-keychain'
 import { NavigationProp } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
@@ -9,11 +8,10 @@ import { strings } from '~/translations/strings'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
-import { setLoader, dismissLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
 import { ScreenNames } from '~/types/screens'
 import { useRedirectTo } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
+import { useLoader } from '~/hooks/loader'
 
 interface PropsI {
   onSuccessRedirectToScreen?: ScreenNames
@@ -29,7 +27,7 @@ const ChangePin: React.FC<PropsI> = ({
   const [pinMatch, setPinMatch] = useState(false)
 
   const { keychainPin } = useGetStoredAuthValues()
-  const dispatch = useDispatch()
+  const loader = useLoader()
 
   const verifyPin = async (pin: string) => {
     if (pin === keychainPin) {
@@ -55,25 +53,23 @@ const ChangePin: React.FC<PropsI> = ({
 
   const updatePin = async (pin: string) => {
     try {
-      await Keychain.setGenericPassword(PIN_USERNAME, pin, {
-        service: PIN_SERVICE,
-        storage: Keychain.STORAGE_TYPE.AES,
-      })
-      dispatch(
-        setLoader({
-          type: LoaderTypes.success,
-          msg: strings.PASSWORD_SUCCESSFULLY_CHANGED,
-        }),
+      loader(
+        async () => {
+          await Keychain.setGenericPassword(PIN_USERNAME, pin, {
+            service: PIN_SERVICE,
+            storage: Keychain.STORAGE_TYPE.AES,
+          })
+        },
+        { success: strings.PASSWORD_SUCCESSFULLY_CHANGED },
+        () => {
+          if (onSuccessRedirectToScreen) {
+            const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
+            redirectToScreen()
+          } else {
+            navigation.goBack()
+          }
+        },
       )
-      setTimeout(() => {
-        dispatch(dismissLoader())
-        if (onSuccessRedirectToScreen) {
-          const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
-          redirectToScreen()
-        } else {
-          navigation.goBack()
-        }
-      }, 2500)
     } catch (e) {
       console.warn('Error occured setting new pin', { e })
     }
