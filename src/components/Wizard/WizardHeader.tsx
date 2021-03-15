@@ -1,7 +1,7 @@
 import React from 'react'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
-import { useWizard } from '.'
+import { useWizard } from './context'
 
 const WizardHeader: React.FC = () => {
   const { activeStep, config } = useWizard()

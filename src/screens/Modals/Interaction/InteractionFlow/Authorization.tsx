@@ -1,64 +1,52 @@
-import { useSelector } from 'react-redux'
-import React from 'react'
-import { Image, View, StyleSheet, Dimensions } from 'react-native'
-
-import BasWrapper, {
-  BasInteractionBody,
-} from '~/components/ActionSheet/BasWrapper'
-import {
-  getAuthorizationDetails,
-  getCounterpartyName,
-} from '~/modules/interaction/selectors'
-import InteractionHeader from './components/InteractionHeader'
-import { strings } from '~/translations/strings'
-import InteractionFooter from './components/InteractionFooter'
-import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit'
-import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
-
-const SCREEN_WIDTH = Dimensions.get('window').width
+import React from 'react';
+import InteractionFooter from './components/InteractionFooter';
+import InteractionDescription from './components/InteractionDescription';
+import InteractionLogo from './components/InteractionLogo';
+import InteractionTitle from './components/InteractionTitle';
+import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
+import InteractionImage from './components/InteractionAuthzImage';
+import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit';
+import { useSelector } from 'react-redux';
+import { getAuthzUIDetails } from '~/modules/interaction/selectors';
+import { strings } from '~/translations';
+import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils';
+import useTranslation from '~/hooks/useTranslation';
 
 const Authorization = () => {
-  const { imageURL, action } = useSelector(getAuthorizationDetails)
-  const serviceName = useSelector(getCounterpartyName)
-  const description = strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS(
-    serviceName,
-  )
-  const title = strings.WOULD_YOU_LIKE_TO_ACTION(action)
-  const ctaWord = action ? truncateFirstWord(action) : strings.AUTHORIZE
-  const cta = capitalizeWord(ctaWord)
+  const {
+    action,
+    imageURL: image,
+    description // NOTE: it isn't used 
+  } = useSelector(getAuthzUIDetails);
 
-  const handleSubmit = useAuthzSubmit()
+  const { t } = useTranslation();
 
+  const cta = action
+    ? capitalizeWord(truncateFirstWord(action))
+    : strings.AUTHORIZE
+
+  const handleSubmit = useAuthzSubmit();
+  
   return (
-    <BasWrapper>
-      <InteractionHeader {...{ title, description }} />
-      {imageURL && (
-        <BasInteractionBody>
-          <View style={styles.imageWrapper}>
-            <Image
-              source={{ uri: imageURL }}
-              style={styles.image}
-              // NOTE: it will take max Dimension size (260 - width) and make height
-              // based on the aspect ration of actual image size
-              resizeMode="cover"
-            />
-          </View>
-        </BasInteractionBody>
-      )}
-      <InteractionFooter cta={cta} onSubmit={handleSubmit} />
-    </BasWrapper>
+    <ContainerBAS>
+      <LogoContainerBAS>
+        <InteractionLogo />
+      </LogoContainerBAS>
+      <InteractionTitle
+        label={t(strings.WOULD_YOU_LIKE_TO_ACTION, {action})}
+      />
+      <InteractionDescription
+        label={strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS}
+      />
+      <Space />
+      <InteractionImage source={image} />
+      <InteractionFooter
+        onSubmit={handleSubmit}
+        submitLabel={cta}
+      />
+    </ContainerBAS>
   )
 }
 
-const styles = StyleSheet.create({
-  imageWrapper: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  image: {
-    width: SCREEN_WIDTH * 0.6,
-    height: SCREEN_WIDTH * 0.6 * 0.88,
-  },
-})
 
-export default Authorization
+export default Authorization;

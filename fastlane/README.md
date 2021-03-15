@@ -15,6 +15,11 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
+### get_appstoreconnect_api_key
+```
+fastlane get_appstoreconnect_api_key
+```
+Load the App Store Connect API token
 ### get_appcenter_token
 ```
 fastlane get_appcenter_token

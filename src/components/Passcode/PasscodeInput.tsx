@@ -9,7 +9,7 @@ import {
   TextInput,
 } from 'react-native'
 import { Colors } from '~/utils/colors'
-import { usePasscode } from '.'
+import { usePasscode } from './context'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65

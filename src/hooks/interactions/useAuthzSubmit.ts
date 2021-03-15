@@ -1,4 +1,4 @@
-import { useFinishInteraction, useInteraction } from '.'
+import { useFinishInteraction, useInteraction } from './handlers'
 import useInteractionToasts from './useInteractionToasts'
 import { useAgent } from '../sdk'
 

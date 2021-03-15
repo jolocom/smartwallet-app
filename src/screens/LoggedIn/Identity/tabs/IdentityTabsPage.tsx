@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { useIdentityTabs } from '.'
+import { View } from 'react-native'
+import { useIdentityTabs } from './context'
 
 interface Props {
   id: string

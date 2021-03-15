@@ -2,7 +2,7 @@ import { Dimensions } from 'react-native'
 
 const SCREEN_SIZE = Dimensions.get('window')
 
-enum ScreenSize {
+export enum ScreenSize {
   xsmall = 'xsmall',
   small = 'small',
   medium = 'medium',
@@ -54,7 +54,7 @@ const isBreakpoint = (breakpointSize: ScreenSize) => {
 // NOTE: Maps through the breakpoints (biggest to smallest) and returns the @ScreenSize of the device if it's
 // bigger than the breakpoint. In case the map didn't find anything, means the screen is smaller than all the
 // breakpoints, returning the smallest @ScreenSize.
-const getScreenSize = (): ScreenSize => {
+export const getScreenSize = (): ScreenSize => {
   const size = (Object.keys(breakpoints) as ScreenSize[]).find(isBreakpoint)
   return size ? size : ScreenSize.xsmall
 }

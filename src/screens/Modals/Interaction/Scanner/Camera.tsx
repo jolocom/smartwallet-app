@@ -22,7 +22,7 @@ import { getInteractionType } from '~/modules/interaction/selectors'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
-import { useInteractionStart } from '~/hooks/interactions'
+import { useInteractionStart } from '~/hooks/interactions/handlers'
 
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 

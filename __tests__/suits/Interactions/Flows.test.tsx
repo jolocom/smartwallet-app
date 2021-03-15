@@ -2,7 +2,7 @@ import * as react from 'react'
 import * as redux from 'react-redux'
 import { act, renderHook } from '@testing-library/react-hooks'
 
-import * as interactionsHooks from '~/hooks/interactions'
+import * as interactionsHooks from '~/hooks/interactions/handlers'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { strings } from '~/translations/strings'

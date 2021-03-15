@@ -9,18 +9,15 @@ import Authorization from './Authorization'
 import CredentialShare from './CredentialShare'
 import CredentialOffer from './CredentialOffer'
 
-import {
-  getInteractionType,
-} from '~/modules/interaction/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
-import Resolution from '~/screens/Modals/Interaction/InteractionFlow/Resolution'
-import { useFinishInteraction } from '~/hooks/interactions'
+import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 
 const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
 
-  const finishInteraction = useFinishInteraction();
+  const finishInteraction = useFinishInteraction()
 
   const renderInteractionBody = () => {
     switch (interactionType) {
@@ -32,24 +29,20 @@ const InteractionFlow: React.FC = () => {
         return <CredentialShare />
       case FlowType.CredentialOffer:
         return <CredentialOffer />
-      case FlowType.Resolution:
-        return <Resolution />
       default:
         return null
     }
   }
 
-  const handleDismissInteraction = () => {    
-      finishInteraction()
+  const handleDismissInteraction = () => {
+    finishInteraction()
   }
 
   return (
     <View style={styles.fullScreen}>
       <ScreenDismissArea onDismiss={handleDismissInteraction} />
-      <View style={styles.interactionBody}>
-        {renderInteractionBody()}
-      </View>
-    </View>      
+      <View style={styles.interactionBody}>{renderInteractionBody()}</View>
+    </View>
   )
 }
 
@@ -59,12 +52,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   tapArea: {
-    flex: 1,  
+    flex: 1,
   },
   interactionBody: {
     flex: 0,
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 })
 
 export default InteractionFlow
