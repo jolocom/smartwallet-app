@@ -1,46 +1,48 @@
-import React, { Children } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { useSafeArea } from 'react-native-safe-area-context';
-import BP from '~/utils/breakpoints';
-import { Colors } from '~/utils/colors';
+import React, { Children } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { useSafeArea } from 'react-native-safe-area-context'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
 
 export const ContainerBAS: React.FC = ({ children }) => {
-  const { bottom } = useSafeArea();
+  const { bottom } = useSafeArea()
   return (
-    <View style={[styles.containerBAS, {marginBottom: 10 + bottom}]}>
+    <View style={[styles.containerBAS, { marginBottom: 10 + bottom }]}>
       {children}
     </View>
   )
 }
 
 export const LogoContainerBAS: React.FC = ({ children }) => (
-  <View style={styles.logoContainerBAS}>
-    {children}
-  </View>
+  <View style={styles.logoContainerBAS}>{children}</View>
 )
 
-export const ContainerFAS: React.FC = ({ children }) =>
+export const ContainerFAS: React.FC = ({ children }) => (
   <View style={styles.containerFAS} children={children} />
+)
 
 export const LogoContainerFAS: React.FC = ({ children }) => {
-  const { top } = useSafeArea();
+  const { top } = useSafeArea()
   return (
-    <View style={[
+    <View
+      style={[
         styles.logoContainerFAS,
-      {
-        marginTop: BP({ large: 35, medium: 35, default: 20 }) + top,
-        marginBottom: 5,
-      }]}>
+        {
+          marginTop: BP({ large: 35, medium: 35, default: 20 }) + top,
+          marginBottom: 5,
+        },
+      ]}
+    >
       {children}
     </View>
   )
 }
 
-export const FooterContainerFAS: React.FC = ({children}) => {
-  const { bottom } = useSafeArea();
+export const FooterContainerFAS: React.FC = ({ children }) => {
+  const { bottom } = useSafeArea()
   return (
     <View
-      style={[styles.footerContainerFAS, {paddingBottom: bottom}]}
+      style={[styles.footerContainerFAS, { paddingBottom: bottom }]}
       children={children}
     />
   )
@@ -49,19 +51,16 @@ export const FooterContainerFAS: React.FC = ({children}) => {
 export const Space = () => <View style={{ height: 48 }} />
 
 export const AttributeWidgetContainerFAS: React.FC = ({ children }) => {
-  if (!Children.count(children)) return null;
+  if (!Children.count(children)) return null
   return (
     <>
-      <View
-        children={children}
-        style={styles.attributeWidgetContainerFAS}
-      />
+      <View children={children} style={styles.attributeWidgetContainerFAS} />
       <Space />
     </>
   )
 }
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
   containerBAS: {
     width: '96%',
     backgroundColor: Colors.codGrey,
@@ -82,12 +81,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   logoContainerFAS: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   footerContainerFAS: {
     width: '100%',
     position: 'absolute',
-    alignItems: 'center', 
+    alignItems: 'center',
     justifyContent: 'center',
     bottom: 0,
     height: 106,
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
   },
   attributeWidgetContainerFAS: {
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingVertical: 15,
     backgroundColor: Colors.codGrey,
     borderRadius: 20,
     // Shadows
@@ -118,5 +117,5 @@ const styles = StyleSheet.create({
     shadowRadius: 14,
     shadowOpacity: 1,
     elevation: 10,
-  }
+  },
 })

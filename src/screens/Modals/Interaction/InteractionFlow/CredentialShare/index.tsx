@@ -64,7 +64,7 @@ export const CredentialShareBAS = () => {
       return (
         <>
           {/* TODO: use enum */}
-          {renderInfo.renderAs === 'document' ? (
+          {renderInfo?.renderAs === 'document' ? (
             <IncomingRequestDoc
               name={name ?? type}
               holderName={holderName}
@@ -141,8 +141,6 @@ const CredentialShareFAS = () => {
     credCollections: MultipleShareUICredential[],
   ) =>
     credCollections.map(({ type, credentials }) => {
-      console.log({ credentials })
-
       const isCarousel = credentials.length > 1
       // TODO: implement carousel
       const Wrapper = isCarousel ? React.Fragment : React.Fragment
@@ -195,7 +193,7 @@ const CredentialShareFAS = () => {
           }
         />
         <Space />
-        <ShareAttributeWidget />
+        <ShareAttributeWidget withContainer />
         <InteractionSection title={strings.DOCUMENTS}>
           {handleRenderCredentials(documents)}
         </InteractionSection>
