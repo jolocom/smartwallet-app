@@ -2,7 +2,7 @@ import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { BaseMetadata, ClaimInterface } from '@jolocom/protocol-ts'
+import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
@@ -85,15 +85,10 @@ export enum CredentialSection {
   Other = 'other',
 }
 
-export interface CredentialsBySection<T> {
-  [CredentialSection.Documents]: T[]
-  [CredentialSection.Other]: T[]
-}
+export type CredentialsBySection<T> = Record<CredentialSection, T[]>
 
-export type ShareUICredential = Omit<UICredential, 'claim'>
-
-export interface MultipleShareUICredential
-  extends Pick<ShareUICredential, 'type'> {
+export interface MultipleShareUICredential {
+  type: string
   credentials: DisplayCredential[]
 }
 

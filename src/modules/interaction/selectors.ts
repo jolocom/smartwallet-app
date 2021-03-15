@@ -6,12 +6,10 @@ import {
   CredentialsBySection,
   OfferUICredential,
   ShareCredentialsBySection,
-  ShareUICredential,
 } from '~/types/credentials'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
-import { uiCredentialToShareCredential } from '~/utils/dataMapping'
 import { getCredentialSection } from '~/utils/credentialsBySection'
 import { InteractionDetails } from './types'
 import {
@@ -23,6 +21,7 @@ import {
 } from './guards'
 import BP from '~/utils/breakpoints'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
+import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 const createInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -110,15 +109,15 @@ export const getAvailableAttributesToShare = createSelector(
 )
 
 /**
- * Gets all the available credentials for sharing. Returns an array of @ShareUICredential
+ * Gets all the available credentials for sharing. Returns an array of @DisplayCredential
  */
 const getAvailableCredentialsToShare = createSelector(
   [getCredShareDetails, getAllCredentials],
   ({ requestedCredentials }, credentials) =>
-    requestedCredentials.reduce<ShareUICredential[]>((acc, type) => {
+    requestedCredentials.reduce<DisplayCredential[]>((acc, type) => {
       const creds = credentials.filter((cred) => cred.type === type)
       if (!creds.length) return acc
-      acc = [...acc, ...creds.map(uiCredentialToShareCredential)]
+      acc = [...acc, ...creds]
       return acc
     }, []),
 )
@@ -171,14 +170,13 @@ export const getShareCredentialTypes = createSelector(
 )
 
 /**
- * Gets the categorized @ShareUICredentials from the @credentials module
+ * Gets the categorized @DisplayCredential from the @credentials module
  * based on the @interactionDetails.
  */
 export const getShareCredentialsBySection = createSelector(
   [getAvailableCredentialsToShare, getShareCredentialTypes],
   (shareCredentials, requestedCredTypes) => {
     const defaultSections = { documents: [], other: [] }
-
     return requestedCredTypes.requestedCredentials.reduce<ShareCredentialsBySection>(
       (acc, type) => {
         const credentials = shareCredentials.filter(
