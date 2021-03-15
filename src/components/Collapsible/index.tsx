@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, Children } from 'react'
+import React, { useRef, useState, useMemo } from 'react'
 import { Animated } from 'react-native'
 
 import { CollapsibleContext } from './context'
@@ -9,6 +9,7 @@ import { HidingTextContainer } from './components/HidingTextContainer'
 import { HeaderText } from './components/HeaderText'
 import { ICollapsibleComposite } from './types'
 import { CollapsibleFlatList } from './components/FlatList'
+import { withListError } from './utils'
 
 /***
  * NOTE:
@@ -58,23 +59,6 @@ const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
     })
   }
 
-  // NOTE: must be added to any @Collapsible list component that accepts the @HidingTextContainer
-  // as a child i.e. @Collapsible.ScrollView.
-  const checkListHidingTextContainer = (listChildren: React.ReactNode) => {
-    const isHidingTextContainer = Children.toArray(listChildren).some(
-      (child) => {
-        // @ts-ignore
-        return child.type.displayName === HidingTextContainer.displayName
-      },
-    )
-
-    if (!isHidingTextContainer) {
-      throw new Error(
-        `${HidingTextContainer.displayName} must be a direct child of a Collapsible scroll/list component`,
-      )
-    }
-  }
-
   const context = useMemo(
     () => ({
       yValue,
@@ -85,7 +69,6 @@ const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
       distanceToHeader,
       interpolateYValue,
       handleScroll,
-      checkListHidingTextContainer,
     }),
     [distanceToText],
   )
@@ -96,8 +79,8 @@ const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
 Collapsible.Header = Header
 Collapsible.HeaderText = HeaderText
 Collapsible.AnimatedHeader = AnimatedHeader
-Collapsible.ScrollView = CollapsibleScrollView
 Collapsible.FlatList = CollapsibleFlatList
+Collapsible.ScrollView = withListError(CollapsibleScrollView)
 Collapsible.HidingScale = HidingScale
 Collapsible.HidingTextContainer = HidingTextContainer
 

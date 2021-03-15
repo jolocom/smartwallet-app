@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useCollapsible } from '../context'
 import { ICollapsibleComposite } from '../types'
@@ -10,11 +10,10 @@ export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
   animatedHeader = false,
   ...scrollProps
 }) => {
-  const { handleScroll, checkListHidingTextContainer } = useCollapsible()
-
-  useEffect(() => checkListHidingTextContainer(children), [])
+  const { handleScroll } = useCollapsible()
 
   return (
+    // @ts-ignore
     <Animated.ScrollView
       {...scrollProps}
       overScrollMode="never"
