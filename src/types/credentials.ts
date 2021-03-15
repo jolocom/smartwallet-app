@@ -4,6 +4,7 @@ import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/inte
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata, ClaimInterface } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
+import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -93,7 +94,7 @@ export type ShareUICredential = Omit<UICredential, 'claim'>
 
 export interface MultipleShareUICredential
   extends Pick<ShareUICredential, 'type'> {
-  credentials: ShareUICredential[]
+  credentials: DisplayCredential[]
 }
 
 export type ShareCredentialsBySection = CredentialsBySection<MultipleShareUICredential>

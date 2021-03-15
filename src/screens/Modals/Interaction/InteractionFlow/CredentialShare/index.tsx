@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
@@ -14,6 +14,8 @@ import {
 import { strings } from '~/translations'
 import { MultipleShareUICredential } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
+import { IncomingRequestDoc } from '../components/card/request/document'
+import { IncomingRequestOther } from '../components/card/request/other'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -28,7 +30,7 @@ import {
   LogoContainerFAS,
   Space,
 } from '../components/styled'
-import { useSelectAttributes, useShareDetails } from './useShare'
+import { useSelectAttributes } from './useShare'
 
 export const CredentialShareBAS = () => {
   const { singleMissingAttribute, singleCredential } = useSelector(
@@ -41,8 +43,6 @@ export const CredentialShareBAS = () => {
     ScreenNames.InteractionAddCredential,
   )
 
-  const shareDetails = useShareDetails([singleCredential])
-
   useSelectAttributes()
 
   const handleSubmit = () =>
@@ -52,14 +52,34 @@ export const CredentialShareBAS = () => {
 
   const renderBody = () => {
     if (singleMissingAttribute) return null
-    else if (singleCredential !== undefined)
-      return (
-        <>
-          <Text>Incoming Request Card</Text>
-          <Space />
-        </>
-      )
-    else
+    else if (singleCredential !== undefined) {
+      // TODO: is there enum for documents? others? permissions?
+      const {
+        renderInfo,
+        type,
+        name,
+        properties,
+        holderName,
+        photo,
+      } = singleCredential
+      if (renderInfo.renderAs === 'document') {
+        return (
+          <>
+            <IncomingRequestDoc
+              name={name ?? type}
+              holderName={holderName}
+              // @ts-expect-error until types in sdk are fixed
+              properties={properties}
+              // TODO: extract highlight
+              // highlight={id}
+              // TODO: change name to photo
+              image={photo}
+            />
+            <Space />
+          </>
+        )
+      }
+    } else
       return (
         <>
           <ShareAttributeWidget />
@@ -98,6 +118,9 @@ const CredentialShareFAS = () => {
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
+  console.log({ documents })
+  console.log({ other })
+
   const handleSubmit = useCredentialShareSubmit()
 
   useSelectAttributes()
@@ -115,22 +138,43 @@ const CredentialShareFAS = () => {
     credCollections: MultipleShareUICredential[],
   ) =>
     credCollections.map(({ type, credentials }) => {
+      console.log({ credentials })
+
       const isCarousel = credentials.length > 1
       // TODO: implement carousel
       const Wrapper = isCarousel ? React.Fragment : React.Fragment
-
       return (
-        <Wrapper>
-          {credentials.map((cred) => (
-            <View
-              style={{
-                marginRight: 20,
-                marginVertical: 14,
-              }}
-            >
-              <Text>{type}</Text>
-            </View>
-          ))}
+        <Wrapper key={type}>
+          {credentials.map((cred) => {
+            const { name, type, properties, photo } = cred
+            return (
+              <View
+                key={cred.id}
+                style={{
+                  marginRight: 20,
+                  marginVertical: 14,
+                }}
+              >
+                {/* TODO: check if enum is available for documents, others, permissions */}
+                {cred.renderInfo?.renderAs === 'document' ? (
+                  <IncomingRequestDoc
+                    name={name ?? type}
+                    // @ts-expect-error until types are fixed in sdk
+                    properties={properties}
+                    holderName={cred.holderName}
+                    highlight={cred.id}
+                    image={cred.photo}
+                  />
+                ) : (
+                  <IncomingRequestOther
+                    name={name ?? type}
+                    // @ts-expect-error until types are fixed in sdk
+                    properties={properties}
+                  />
+                )}
+              </View>
+            )
+          })}
         </Wrapper>
       )
     })
@@ -148,9 +192,7 @@ const CredentialShareFAS = () => {
           }
         />
         <Space />
-        <AttributeWidgetContainerFAS>
-          <ShareAttributeWidget />
-        </AttributeWidgetContainerFAS>
+        <ShareAttributeWidget />
         <InteractionSection title={strings.DOCUMENTS}>
           {handleRenderCredentials(documents)}
         </InteractionSection>

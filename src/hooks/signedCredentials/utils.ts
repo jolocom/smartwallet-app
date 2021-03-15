@@ -18,8 +18,9 @@ export const separateCredentialsAndAttributes = (allCredentials: SignedCredentia
 }
 
 export async function mapCredentialsToUI (agent: Agent, c: SignedCredential): Promise<DisplayCredential[]> { 
+  const metadata = await agent.storage.get.credentialMetadata(c)
   // @ts-expect-error - until types are corrected in sdk
-  const {type, renderInfo, issuer, credential} = await agent.storage.get.credentialMetadata(c)
+  const {type, renderInfo, issuer, credential} = metadata;
   let updatedCredentials = {
     id: c.id,
     type,
@@ -28,21 +29,30 @@ export async function mapCredentialsToUI (agent: Agent, c: SignedCredential): Pr
     name: '',
     properties: [],
   };
+  
   if (credential) {
     const credType = new CredentialType(type, credential);
     
     const {name, display: {properties}} = credType.display(c.claim);
+    
     // @ts-expect-error - until types are corrected in sdk
+    let formattedProperties = properties.map(p => ({...p, key: p.key?.split('.')[1] ?? 'notSpecified'}));
 
-    // TODO: key and value are undefined for properties other than givenName familyName and photo
-    const formattedProperties = properties.map(p => ({...p, key: p.key?.split('.')[1] ?? 'notSpecified'}));
-
+    // @ts-expect-error - until types are corrected in sdk
     const holderProperties = formattedProperties.filter(p => p.key === ClaimKeys.givenName || p.key === ClaimKeys.familyName)
-    const holderName = holderProperties.length ? holderProperties.reduce((acc, v) => `${acc} ${v.value}`, '') : undefined;
-
+    // @ts-expect-error - until types are corrected in sdk
+    const holderName = holderProperties.length ? holderProperties.reduce((acc, v) => `${v.value} ${acc}`, '') : undefined; // TODO: fix spaces issue
+    // @ts-expect-error - until types are corrected in sdk
+    formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.givenName && p.key !== ClaimKeys.familyName);
+    
+    
+    // @ts-expect-error - until types are corrected in sdk
     const photo = formattedProperties.find(p => p.key === ClaimKeys.photo)?.value;
-
-    updatedCredentials = {...updatedCredentials, name, properties: formattedProperties, holderName, photo}
+    // @ts-expect-error - until types are corrected in sdk
+    formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.photo);
+    
+    // @ts-expect-error - until types are corrected in sdk
+    updatedCredentials = {...updatedCredentials, name, properties: formattedProperties, holderName, photo};
   }
   // @ts-expect-error - until types are corrected in sdk
   return updatedCredentials
