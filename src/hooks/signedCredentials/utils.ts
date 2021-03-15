@@ -1,8 +1,7 @@
 import { Agent } from "@jolocom/sdk";
 import { CredentialType } from "@jolocom/sdk/js/credentials";
 import { SignedCredential } from "jolocom-lib/js/credentials/signedCredential/signedCredential";
-import { ClaimKeys } from "~/types/credentials";
-import { DisplayCredential } from "./types";
+import { ClaimKeys, DisplayCredential } from "~/types/credentials";
 
 export const separateCredentialsAndAttributes = (allCredentials: SignedCredential[], did: string): SignedCredential[] => {
   let selfIssuedCredentials: SignedCredential[] = [];

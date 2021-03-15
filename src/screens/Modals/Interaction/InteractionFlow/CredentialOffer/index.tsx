@@ -81,6 +81,7 @@ const CredentialOfferBAS = () => {
 
 const CredentialOfferFAS = () => {
   const { documents, other } = useSelector(getOfferCredentialsBySection)
+
   const handleSubmit = useCredentialOfferSubmit()
   const offerDetails = useOfferDetails()
 

@@ -124,9 +124,6 @@ const CredentialShareFAS = () => {
   const { documents, other } = useSelector(getShareCredentialsBySection)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
-  console.log({ documents })
-  console.log({ other })
-
   const handleSubmit = useCredentialShareSubmit()
 
   useSelectAttributes()

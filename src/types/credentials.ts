@@ -1,10 +1,8 @@
 import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
-import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -68,17 +66,6 @@ export interface BaseUICredential {
   renderInfo: CredentialOfferRenderInfo | undefined
 }
 
-export type UICredentialMetadata = Pick<
-  SignedCredential,
-  'name' | 'expires' | 'issued'
->
-
-export interface UICredential
-  extends BaseUICredential,
-    Pick<SignedCredential, 'id' | 'claim'> {
-  metadata: UICredentialMetadata
-}
-
 // TODO: remove for consistency and use DocumentTypes instead
 export enum CredentialSection {
   Documents = 'documents',
@@ -106,3 +93,15 @@ export enum DocumentTypes {
 export enum DocumentFields {
   DocumentName = 'Document Name',
 }
+
+
+// TODO: remove when types on sdk are fixed
+export interface  DisplayVal {
+  key: string,
+  label: string,
+  value: string | number
+}
+export type DisplayCredential = 
+  & {id: string, holderName?: string, photo?: string, properties: DisplayVal[]}
+  & BaseUICredential
+  & Pick<BaseMetadata, 'name'> 

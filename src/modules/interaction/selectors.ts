@@ -4,6 +4,7 @@ import { RootReducerI } from '~/types/reducer'
 import {
   AttributeTypes,
   CredentialsBySection,
+  DisplayCredential,
   OfferUICredential,
   ShareCredentialsBySection,
 } from '~/types/credentials'
@@ -21,7 +22,6 @@ import {
 } from './guards'
 import BP from '~/utils/breakpoints'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
-import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 const createInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,

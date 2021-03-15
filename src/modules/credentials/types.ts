@@ -1,4 +1,4 @@
-import { DisplayCredential } from '~/hooks/signedCredentials/types';
+import { DisplayCredential } from "~/types/credentials";
 
 export enum CredentialActions {
   setCredentials = 'setCredentials',

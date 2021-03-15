@@ -1,8 +1,7 @@
 import { IdentitySummary } from '@jolocom/sdk'
 
-import { ClaimKeys } from '~/types/credentials'
+import { ClaimKeys, DisplayCredential } from '~/types/credentials'
 import { prepareLabel } from '~/utils/stringUtils'
-import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 export const filteredOptionalFields = [
   ClaimKeys.familyName,

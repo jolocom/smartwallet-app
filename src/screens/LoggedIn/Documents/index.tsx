@@ -8,11 +8,14 @@ import { useTabs } from '~/components/Tabs/context'
 import { getCredentialsBySection } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
-import { DocumentTypes, DocumentFields } from '~/types/credentials'
+import {
+  DocumentTypes,
+  DocumentFields,
+  DisplayCredential,
+} from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields, formatClaims, getIssuerFields } from './utils'
-import { DisplayCredential } from '~/hooks/signedCredentials/types'
 
 const CardList: React.FC<{
   cards: DisplayCredential[]
