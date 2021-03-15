@@ -7,27 +7,22 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'
-
-import Recovery from '~/screens/Modals/Recovery'
-
 import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
-import BeforeLoggedIn from './screens/BeforeLoggedIn'
+import LoggedIn from './screens/LoggedIn'
+import { Colors } from './utils/colors'
 
 export type RootStackParamList = {
-  [ScreenNames.Recovery]: {
-    isAccessRestore: boolean
-  }
   [ScreenNames.DragToConfirm]: {
     title: string
     cancelText: string
     onComplete: () => void
   }
-  [ScreenNames.BeforeLoggedIn]: undefined,
-  [ScreenNames.LoggedOut]: undefined,
-  [ScreenNames.LostSeedPhraseInfo]: undefined,
+  [ScreenNames.LoggedIn]: undefined
+  [ScreenNames.LoggedOut]: undefined
+  [ScreenNames.LostSeedPhraseInfo]: undefined
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -40,9 +35,12 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
       <RootStack.Navigator headerMode="none" mode="modal">
         {isLoggedIn ? (
           <RootStack.Screen
-            name={ScreenNames.BeforeLoggedIn}
-            component={BeforeLoggedIn}
-            options={{gestureEnabled: false}}
+            name={ScreenNames.LoggedIn}
+            component={LoggedIn}
+            options={{
+              gestureEnabled: false,
+              cardStyle: { backgroundColor: Colors.mainBlack },
+            }}
           />
         ) : (
           <RootStack.Screen
@@ -51,13 +49,12 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
           />
         )}
 
-        {/* Modals -> Start */}
-        <RootStack.Screen name={ScreenNames.Recovery} component={Recovery} />
+        {/* Global -> Start */}
         <RootStack.Screen
           name={ScreenNames.LostSeedPhraseInfo}
           component={LostSeedPhraseInfo}
         />
-        {/* Modals -> End */}
+        {/* Global -> End */}
       </RootStack.Navigator>
     </NavigationContainer>
   )

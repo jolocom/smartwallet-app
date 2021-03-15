@@ -11,6 +11,7 @@ import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
+import useTermsConsent from './consent'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -43,8 +44,12 @@ export const useAgent = () => {
  */
 export const useWalletInit = () => {
   const dispatch = useDispatch()
+  const { checkConsent } = useTermsConsent()
 
   return async (agent: Agent) => {
+    // NOTE: Checking whether the user accepted the newest Terms of Service conditions
+    await checkConsent(agent)
+
     const pin = await Keychain.getGenericPassword({
       service: PIN_SERVICE,
     })
@@ -53,22 +58,21 @@ export const useWalletInit = () => {
     )
     if (!onboardingSetting?.finished) return
 
-    return agent
-      .loadIdentity()
-      .then((idw) => {
-        dispatch(setDid(idw.did))
-        dispatch(setLogged(true))
+    try {
+      const idw = await agent.loadIdentity()
 
-        if (pin) {
-          dispatch(setLocalAuth(true))
-        }
-      })
-      .catch((err) => {
-        if (err.code !== SDKError.codes.NoWallet) {
-          console.warn(err)
-          throw new Error('Failed loading identity')
-        }
-      })
+      dispatch(setDid(idw.did))
+      dispatch(setLogged(true))
+
+      if (pin) {
+        dispatch(setLocalAuth(true))
+      }
+    } catch (err) {
+      if (err.code !== SDKError.codes.NoWallet) {
+        console.warn(err)
+        throw new Error('Failed loading identity')
+      }
+    }
   }
 }
 
@@ -111,23 +115,15 @@ export const useGenerateSeed = () => {
  */
 export const useIdentityCreate = () => {
   const agent = useAgent()
-  const loader = useLoader()
   const dispatch = useDispatch()
   const seedphrase = useGetSeedPhrase()
 
   return async () => {
-    return loader(
-      async () => {
-        const identity = await agent.loadFromMnemonic(seedphrase)
-        await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
-          finished: true,
-        })
-        dispatch(setDid(identity.did))
-      },
-      {
-        loading: strings.CREATING,
-      },
-    )
+    const identity = await agent.loadFromMnemonic(seedphrase)
+    await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
+      finished: true,
+    })
+    dispatch(setDid(identity.did))
   }
 }
 
@@ -139,11 +135,21 @@ export const useIdentityCreate = () => {
  */
 export const useSubmitIdentity = () => {
   const agent = useAgent()
+  const dispatch = useDispatch()
   const createIdentity = useIdentityCreate()
+  const loader = useLoader()
 
   return async () => {
-    await createIdentity()
-    await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
+    await loader(
+      async () => {
+        await createIdentity()
+        await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
+      },
+      {
+        loading: strings.CREATING,
+      },
+      (success) => dispatch(setLogged(success)) 
+    )
   }
 }
 

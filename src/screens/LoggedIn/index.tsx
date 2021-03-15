@@ -1,175 +1,149 @@
-import React from 'react'
-import {
-  createBottomTabNavigator,
-  BottomTabBarProps,
-} from '@react-navigation/bottom-tabs'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useSyncStorageAttributes } from '~/hooks/attributes'
+import { useSyncStorageCredentials } from '~/hooks/credentials'
 
+import { useGetAppStates } from '~/hooks/useAppState'
+import { setAppLocked } from '~/modules/account/actions'
+import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
+import { setPopup } from '~/modules/appState/actions'
+import { getIsPopup } from '~/modules/appState/selectors'
+import { dismissLoader } from '~/modules/loader/actions'
+import { getLoaderState } from '~/modules/loader/selectors'
 import { ScreenNames } from '~/types/screens'
+import { Colors } from '~/utils/colors'
+import DeviceAuthentication from '../Modals/DeviceAuthentication'
+import Lock from '../Modals/Lock'
+import Recovery from '../Modals/Recovery'
+import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
+import Main from './Main'
 
-import Interaction from '~/screens/Modals/Interaction'
+export type LoggedInStackParamList = {
+  Idle: undefined
+  [ScreenNames.PasscodeRecovery]: {
+    isAccessRestore: boolean
+  }
+  [ScreenNames.Main]: undefined
+  [ScreenNames.Lock]: undefined
+  [ScreenNames.PinRecoveryInstructions]: undefined
+  [ScreenNames.DeviceAuth]: undefined
+}
 
-import History from './History'
-import Documents from './Documents'
-
-import BottomBar from '~/components/BottomBar'
-
-import Settings from './Settings'
-import Language from './Settings/Language'
-import ChangePin from './Settings/ChangePin'
-import FAQ from './Settings/FAQ'
-import ContactUs from './Settings/ContactUs'
-import About from './Settings/About'
-import Imprint from './Settings/Imprint'
-import PrivacyPolicy from './Settings/PrivacyPolicy'
-import TermsOfService from './Settings/TermsOfService'
-import BackupIdentity from './Settings/BackupIdentity'
-import ButtonsTest from './Settings/Development/ButtonsTest'
-import NotificationsTest from './Settings/Development/NotificationsTest'
-import DragToConfirm from '~/screens/Modals/DragToConfirm'
-import LoaderTest from './Settings/Development/DevLoaders'
-import Identity from './Identity'
-import InputTest from './Settings/Development/InputTest'
-import PasscodeTest from './Settings/Development/PasscodeTest'
-import BusinessCardTest from './Settings/Development/BusinessCardTest'
-
-const MainTabs = createBottomTabNavigator()
-const LoggedInStack = createStackNavigator()
-
-const Tabs = () => (
-  <MainTabs.Navigator
-    tabBar={(props: BottomTabBarProps) => {
-      return <BottomBar {...props} />
-    }}
-  >
-    <MainTabs.Screen name={ScreenNames.Identity} component={Identity} />
-    <MainTabs.Screen name={ScreenNames.Documents} component={Documents} />
-    <MainTabs.Screen name={ScreenNames.History} component={History} />
-    <MainTabs.Screen name={ScreenNames.Settings} component={Settings} />
-  </MainTabs.Navigator>
-)
+const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
 
 const settingsScreenTransitionOptions = {
   ...Platform.select({
     ios: {
-      ...TransitionPresets.SlideFromRightIOS,
+      ...TransitionPresets.ModalSlideFromBottomIOS,
     },
     android: {
       ...TransitionPresets.DefaultTransition,
     },
   }),
+  cardStyle: {
+    backgroundColor: Colors.mainBlack,
+  },
 }
 
-const LoggedInTabs: React.FC = () => {
-    return (
-    <LoggedInStack.Navigator
-      headerMode="none"
-      mode="modal"
-      initialRouteName={ScreenNames.Tabs}
-    >
-      <LoggedInStack.Screen name={ScreenNames.Tabs} component={Tabs} />
+const LoggedIn = () => {
+  const dispatch = useDispatch()
+  const isAuthSet = useSelector(isLocalAuthSet)
+  const isAppLocked = useSelector(getIsAppLocked)
 
-      {/* Settings Screens -> Start   */}
-      <LoggedInStack.Screen
-        name={ScreenNames.Language}
-        component={Language}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.ChangePin}
-        component={ChangePin}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.BackupIdentity}
-        component={BackupIdentity}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.FAQ}
-        component={FAQ}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.ContactUs}
-        component={ContactUs}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.About}
-        component={About}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.Imprint}
-        component={Imprint}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.PrivacyPolicy}
-        component={PrivacyPolicy}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.TermsOfService}
-        component={TermsOfService}
-        options={settingsScreenTransitionOptions}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.DragToConfirm}
-        component={DragToConfirm}
-      />
+  const showLock = isAppLocked && isAuthSet
+  const showRegisterPin = !isAuthSet
+  const showTabs = !isAppLocked && isAuthSet
 
-      {__DEV__ && (
-        <>
-          <LoggedInStack.Screen
-            name={ScreenNames.ButtonsTest}
-            component={ButtonsTest}
-            options={settingsScreenTransitionOptions}
-          />
-          <LoggedInStack.Screen
-            name={ScreenNames.LoaderTest}
-            component={LoaderTest}
-          />
-          <LoggedInStack.Screen
-            name={ScreenNames.NotificationsTest}
-            component={NotificationsTest}
-            options={settingsScreenTransitionOptions}
-          />
-          <LoggedInStack.Screen
-            name={ScreenNames.InputTest}
-            component={InputTest}
-            options={settingsScreenTransitionOptions}
-          />
-          <LoggedInStack.Screen
-            name={ScreenNames.PasscodeTest}
-            component={PasscodeTest}
-            options={settingsScreenTransitionOptions}
-          />
-          <LoggedInStack.Screen
-            name={ScreenNames.BusinessCardTest}
-            component={BusinessCardTest}
-            options={settingsScreenTransitionOptions}
-          />
-        </>
-      )}
-      {/* Settings Screens -> End   */}
+  const syncAttributes = useSyncStorageAttributes()
+  const syncCredentials = useSyncStorageCredentials()
 
-      {/* Modals -> Start */}
+  useEffect(() => {
+    /* Loading attributes and credentials into the store */
+    syncAttributes()
+    syncCredentials()
+  }, [])
+
+  const dismissOverlays = useCallback(() => {
+    dispatch(dismissLoader())
+  }, [])
+
+  /* All about when lock screen comes up - START */
+  const isPopup = useSelector(
+    getIsPopup,
+  ) /* isPopup is used as a workaround for Android app state change */
+
+  const isPopupRef = useRef<boolean>(isPopup)
+
+  useEffect(() => {
+    isPopupRef.current = isPopup
+  }, [isPopup])
+
+  const { currentAppState, prevAppState } = useGetAppStates()
+
+  useEffect(() => {
+    if (
+      prevAppState &&
+      prevAppState.match(/active/) &&
+      currentAppState.match(/inactive|background/)
+    ) {
+      if (isAuthSet) {
+        if (!isPopupRef.current) {
+          dispatch(setAppLocked(true))
+          dismissOverlays()
+        } else dispatch(setPopup(false))
+      }
+    }
+  }, [currentAppState])
+  /* All about when lock screen comes up - END */
+
+  return (
+    <LoggedInStack.Navigator headerMode="none">
+      {showLock ? (
+        <LoggedInStack.Screen
+          name={ScreenNames.Lock}
+          component={Lock}
+          options={{
+            ...settingsScreenTransitionOptions,
+            gestureEnabled: false,
+            cardStyle: { backgroundColor: Colors.mainBlack },
+          }}
+        />
+      ) : showRegisterPin ? (
+        <LoggedInStack.Screen
+          name={ScreenNames.DeviceAuth}
+          component={DeviceAuthentication}
+          options={{
+            ...settingsScreenTransitionOptions,
+            gestureEnabled: false,
+            cardStyle: { backgroundColor: Colors.mainBlack },
+          }}
+        />
+      ) : showTabs ? (
+        <LoggedInStack.Screen
+          name={ScreenNames.Main}
+          component={Main}
+          options={{ gestureEnabled: false }}
+        />
+      ) : null}
       <LoggedInStack.Screen
-        name={ScreenNames.Interaction}
-        component={Interaction}
-        options={{gestureEnabled: false}}
+        name={ScreenNames.PinRecoveryInstructions}
+        component={PinRecoveryInstructions}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
-      {/* Modals -> End */}
-        </LoggedInStack.Navigator>
+      <LoggedInStack.Screen
+        name={ScreenNames.PasscodeRecovery}
+        component={Recovery}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+      />
+    </LoggedInStack.Navigator>
   )
 }
 
-export default LoggedInTabs
+export default LoggedIn

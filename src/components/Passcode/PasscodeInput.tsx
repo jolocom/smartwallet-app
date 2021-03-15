@@ -8,7 +8,6 @@ import {
   View,
   TextInput,
 } from 'react-native'
-import { useDelay } from '~/hooks/generic'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 
@@ -28,7 +27,7 @@ const PasscodeInput: React.FC = () => {
     let isCurrent = true
     const updateSelectedIndex = async () => {
       // it is implemented with delay to be able to preview digits and not seeing asterics straight away
-      await useDelay(() => {
+      setTimeout(() => {
         isCurrent &&
           setSelectedIndex(() => {
             if (digits.length < PASSCODE_LENGTH.length) {

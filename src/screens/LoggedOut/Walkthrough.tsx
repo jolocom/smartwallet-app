@@ -9,7 +9,7 @@ import BtnGroup from '~/components/BtnGroup'
 
 import { ScreenNames } from '~/types/screens'
 
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import {
   Walkthrough1,
   Walkthrough2,
@@ -21,7 +21,6 @@ import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import useTermsConsent from '~/hooks/consent'
 
 const walkthroughData = [
   {
@@ -54,9 +53,7 @@ const Dot: React.FC<{ active: boolean }> = ({ active }) => {
   )
 }
 const Walkthrough: React.FC = () => {
-  const { checkConsent } = useTermsConsent()
-  const redirectToEntropy = useRedirectTo(ScreenNames.Entropy)
-  const redirectToRecovery = useRedirectTo(ScreenNames.Recovery)
+  const redirect = useRedirect()
 
   const renderPagination = (index: number, total: number) => {
     return (
@@ -69,11 +66,6 @@ const Walkthrough: React.FC = () => {
   }
 
   const insets = useSafeArea()
-
-  const onPress = (redirect: () => void) => {
-    checkConsent()
-    setTimeout(redirect, 100)
-  }
 
   return (
     <ScreenContainer
@@ -122,13 +114,24 @@ const Walkthrough: React.FC = () => {
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn size={BtnSize.large} onPress={() => onPress(redirectToEntropy)}>
+          <Btn
+            size={BtnSize.large}
+            onPress={() =>
+              redirect(ScreenNames.Onboarding, {
+                initialRoute: ScreenNames.Registration,
+              })
+            }
+          >
             {strings.GET_STARTED}
           </Btn>
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={() => onPress(redirectToRecovery)}
+            onPress={() =>
+              redirect(ScreenNames.Onboarding, {
+                initialRoute: ScreenNames.IdentityRecovery,
+              })
+            }
           >
             {strings.NEED_RESTORE}
           </Btn>
