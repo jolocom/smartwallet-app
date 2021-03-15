@@ -89,7 +89,7 @@ const openLoader = (type: LoaderTypes, msg: string) => (
 ) => {
   const dispatch = useDispatch()
 
-  return async (onComplete?: () => void) => {
+  return (onComplete?: () => void) => {
     dispatch(
       setLoader({
         type,

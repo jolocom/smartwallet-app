@@ -55,7 +55,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
       } else recoveryDispatch(resetPhrase())
     }
     await loader(
-      async () => await submitCb(),
+      () => submitCb(),
       {
         loading: strings.MATCHING,
       },
