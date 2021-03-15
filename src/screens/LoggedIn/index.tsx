@@ -52,16 +52,10 @@ const settingsScreenTransitionOptions = {
   },
 }
 
-const Idle = () => {
-  return <ScreenContainer />
-}
-
 const LoggedIn = () => {
   const dispatch = useDispatch()
   const isAuthSet = useSelector(isLocalAuthSet)
   const isAppLocked = useSelector(getIsAppLocked)
-
-  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
@@ -75,21 +69,6 @@ const LoggedIn = () => {
     syncAttributes()
     syncCredentials()
   }, [])
-
-  // decide wether to show Lock or Register Pin or App
-  /* useEffect(() => {
-   *   if (!isLoaderVisible) {
-   *     if (showLock) {
-   *       navigation.dispatch(StackActions.replace(ScreenNames.Lock))
-   *     } else if (showRegisterPin) {
-   *       // Show passcode registration screen
-   *       //navigation.dispatch(StackActions.push(ScreenNames.DeviceAuth))
-   *       redirect(ScreenNames.DeviceAuth)
-   *     } else if (showTabs) {
-   *       navigation.dispatch(StackActions.replace(ScreenNames.Main))
-   *     }
-   *   }
-   * }, [isAppLocked, isAuthSet, isLoaderVisible]) */
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
@@ -126,11 +105,6 @@ const LoggedIn = () => {
 
   return (
     <LoggedInStack.Navigator headerMode="none">
-      {/* NOTE: idle screen functions as a background:
-      when a user is redirected from LoggedOut to LoggedIn
-      we don't want to see noticeable screen switching
-      (from Lock to Register Passcode, because Lock served as a initialRouteName),
-      but rather displaying just a background screen */}
       {showLock ? (
         <LoggedInStack.Screen
           name={ScreenNames.Lock}
@@ -138,6 +112,7 @@ const LoggedIn = () => {
           options={{
             ...settingsScreenTransitionOptions,
             gestureEnabled: false,
+            cardStyle: { backgroundColor: Colors.mainBlack },
           }}
         />
       ) : showRegisterPin ? (
@@ -147,6 +122,7 @@ const LoggedIn = () => {
           options={{
             ...settingsScreenTransitionOptions,
             gestureEnabled: false,
+            cardStyle: { backgroundColor: Colors.mainBlack },
           }}
         />
       ) : showTabs ? (
