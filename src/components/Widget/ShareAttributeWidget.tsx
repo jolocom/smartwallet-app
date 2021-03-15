@@ -10,19 +10,27 @@ import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareF
 import { useSwitchScreens } from '~/hooks/navigation'
 
 import InteractionAttributesWidget from './InteractionAttributesWidget'
+import { AttributeWidgetContainerFAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 
-const ShareAttributeWidget = () => {
-  const attributes = useSelector(getAvailableAttributesToShare);
-  
-  if (!Object.keys(attributes).length) return null;
+interface IShareAttributeWidgetProps {
+  withContainer?: boolean
+}
 
-  const {
-    handleSelectCredential,
-  } = useCredentialShareFlow()
-  const handleScreenSwitch = useSwitchScreens(ScreenNames.InteractionAddCredential);
+const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
+  withContainer = false,
+}) => {
+  const attributes = useSelector(getAvailableAttributesToShare)
+
+  if (!Object.keys(attributes).length) return null
+
+  const { handleSelectCredential } = useCredentialShareFlow()
+  const handleScreenSwitch = useSwitchScreens(
+    ScreenNames.InteractionAddCredential,
+  )
+  const Container = withContainer ? AttributeWidgetContainerFAS : React.Fragment
 
   return (
-    <>
+    <Container>
       {Object.keys(attributes).map((credType, idx, arr) => {
         const attrType = credType as AttributeTypes
         const config = attributeConfig[attrType]
@@ -34,7 +42,7 @@ const ShareAttributeWidget = () => {
                 key={attrType}
                 name={config.label}
                 type={attrType}
-                onAdd={() => handleScreenSwitch({type: attrType})}
+                onAdd={() => handleScreenSwitch({ type: attrType })}
                 onSelect={(attrType, id) =>
                   handleSelectCredential({ [attrType]: id })
                 }
@@ -50,7 +58,7 @@ const ShareAttributeWidget = () => {
           )
         }
       })}
-    </>
+    </Container>
   )
 }
 
