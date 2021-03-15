@@ -22,7 +22,6 @@ import InteractionLogo from '../components/InteractionLogo'
 import InteractionSection from '../components/InteractionSection'
 import InteractionTitle from '../components/InteractionTitle'
 import {
-  AttributeWidgetContainerFAS,
   ContainerBAS,
   ContainerFAS,
   FooterContainerFAS,
@@ -62,9 +61,10 @@ export const CredentialShareBAS = () => {
         holderName,
         photo,
       } = singleCredential
-      if (renderInfo.renderAs === 'document') {
-        return (
-          <>
+      return (
+        <>
+          {/* TODO: use enum */}
+          {renderInfo.renderAs === 'document' ? (
             <IncomingRequestDoc
               name={name ?? type}
               holderName={holderName}
@@ -75,10 +75,16 @@ export const CredentialShareBAS = () => {
               // TODO: change name to photo
               image={photo}
             />
-            <Space />
-          </>
-        )
-      }
+          ) : (
+            <IncomingRequestOther
+              name={name ?? type}
+              // @ts-expect-error until types in sdk are fixed
+              properties={properties}
+            />
+          )}
+          <Space />
+        </>
+      )
     } else
       return (
         <>
