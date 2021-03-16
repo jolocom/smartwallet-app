@@ -1,4 +1,4 @@
-import { DisplayCredential } from "~/types/credentials";
+import { DisplayCredentialCustom } from "~/types/credentials";
 
 export enum CredentialActions {
   setCredentials = 'setCredentials',
@@ -6,5 +6,5 @@ export enum CredentialActions {
 }
 
 export interface CredentialsState {
-  all: DisplayCredential[]
+  all: DisplayCredentialCustom[]
 }

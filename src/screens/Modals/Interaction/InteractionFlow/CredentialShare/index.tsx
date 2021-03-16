@@ -68,19 +68,13 @@ export const CredentialShareBAS = () => {
             <IncomingRequestDoc
               name={name ?? type}
               holderName={holderName}
-              // @ts-expect-error until types in sdk are fixed
               properties={properties}
               // TODO: extract highlight
-              // highlight={id}
               // TODO: change name to photo
               image={photo}
             />
           ) : (
-            <IncomingRequestOther
-              name={name ?? type}
-              // @ts-expect-error until types in sdk are fixed
-              properties={properties}
-            />
+            <IncomingRequestOther name={name ?? type} properties={properties} />
           )}
           <Space />
         </>
@@ -147,7 +141,7 @@ const CredentialShareFAS = () => {
       return (
         <Wrapper key={type}>
           {credentials.map((cred) => {
-            const { name, type, properties, photo } = cred
+            const { name, type, properties } = cred
             return (
               <View
                 key={cred.id}
@@ -160,7 +154,6 @@ const CredentialShareFAS = () => {
                 {cred.renderInfo?.renderAs === 'document' ? (
                   <IncomingRequestDoc
                     name={name ?? type}
-                    // @ts-expect-error until types are fixed in sdk
                     properties={properties}
                     holderName={cred.holderName}
                     highlight={cred.id}
@@ -169,7 +162,6 @@ const CredentialShareFAS = () => {
                 ) : (
                   <IncomingRequestOther
                     name={name ?? type}
-                    // @ts-expect-error until types are fixed in sdk
                     properties={properties}
                   />
                 )}

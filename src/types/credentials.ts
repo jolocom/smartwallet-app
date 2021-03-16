@@ -77,7 +77,7 @@ export type CredentialsBySection<T> = Record<CredentialSection, T[]>
 
 export interface MultipleShareUICredential {
   type: string
-  credentials: DisplayCredential[]
+  credentials: DisplayCredentialCustom[]
 }
 
 export type ShareCredentialsBySection = CredentialsBySection<MultipleShareUICredential>
