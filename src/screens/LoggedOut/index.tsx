@@ -2,14 +2,11 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { ScreenNames } from '~/types/screens'
-
 import Walkthrough from './Walkthrough'
-import Entropy from './Entropy'
-import SeedPhraseRepeat from './SeedPhrase/SeedPhraseRepeat'
-import SeedPhraseInfo from './SeedPhrase/SeedPhraseInfo'
-import SeedPhraseWrite from './SeedPhrase/SeedPhraseWrite'
+import Onboarding from './Onboarding'
+import { LoggedOutParamList } from './types'
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<LoggedOutParamList>()
 
 const LoggedOut: React.FC = () => {
   return (
@@ -18,16 +15,7 @@ const LoggedOut: React.FC = () => {
       initialRouteName={ScreenNames.Walkthrough}
     >
       <Stack.Screen name={ScreenNames.Walkthrough} component={Walkthrough} />
-      <Stack.Screen name={ScreenNames.Entropy} component={Entropy} />
-      <Stack.Screen name={ScreenNames.SeedPhraseWrite} component={SeedPhraseWrite} />
-      <Stack.Screen
-        name={ScreenNames.SeedPhraseInfo}
-        component={SeedPhraseInfo}
-      />
-      <Stack.Screen
-        name={ScreenNames.SeedPhraseRepeat}
-        component={SeedPhraseRepeat}
-      />
+      <Stack.Screen name={ScreenNames.Onboarding} component={Onboarding} />
     </Stack.Navigator>
   )
 }
