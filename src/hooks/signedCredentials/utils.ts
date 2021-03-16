@@ -1,9 +1,13 @@
 import { Agent } from "@jolocom/sdk";
 import { CredentialType } from "@jolocom/sdk/js/credentials";
 import { SignedCredential } from "jolocom-lib/js/credentials/signedCredential/signedCredential";
-import { ClaimKeys, DisplayCredential, DisplayCredentialCustom, isDocument } from "~/types/credentials";
+import { AttributeI, AttrsState } from "~/modules/attributes/types";
+import { AttributeTypes, ClaimKeys, DisplayCredential, DisplayCredentialCustom, isDocument } from "~/types/credentials";
+import { extractClaims, extractCredentialType } from "~/utils/dataMapping";
 
-export const separateCredentialsAndAttributes = (allCredentials: SignedCredential[], did: string): SignedCredential[] => {
+type CredentialKeys = 'credentials' | 'selfIssuedCredentials';
+
+export const separateCredentialsAndAttributes = (allCredentials: SignedCredential[], did: string): Record<CredentialKeys, SignedCredential[]> => {
   let selfIssuedCredentials: SignedCredential[] = [];
   let credentials: SignedCredential[] = [];
   allCredentials.map(c => {
@@ -13,10 +17,10 @@ export const separateCredentialsAndAttributes = (allCredentials: SignedCredentia
       credentials = [...credentials, c];
     }
   })
-  return credentials;
+  return {credentials, selfIssuedCredentials};
 }
 
-export async function mapCredentialsToDisplay (agent: Agent, c: SignedCredential): Promise<DisplayCredential[]> { 
+export async function mapCredentialsToDisplay (agent: Agent, c: SignedCredential): Promise<DisplayCredential> { 
   const metadata = await agent.storage.get.credentialMetadata(c)
   // @ts-expect-error - until types are corrected in sdk
   const {type, renderInfo, issuer, credential} = metadata;
@@ -34,10 +38,8 @@ export async function mapCredentialsToDisplay (agent: Agent, c: SignedCredential
     
     const {name, display: {properties}} = credType.display(c.claim);
   
-    // @ts-expect-error - until types are corrected in sdk
     updatedCredentials = {...updatedCredentials, name, properties};
   }
-  // @ts-expect-error - until types are corrected in sdk
   return updatedCredentials
 }
 
@@ -56,6 +58,16 @@ export function mapDisplayToCustomDisplay (credential: DisplayCredential): Displ
     return {...credential, properties: formattedProperties, holderName, photo};
   }
   return {...credential, properties: formattedProperties, photo}
-  
+}
+
+export function mapAttributesToDisplay (credentials: SignedCredential[]): AttrsState<AttributeI> {
+  return credentials.reduce((acc, cred) => {
+      const type = extractCredentialType(cred) as AttributeTypes
+      const entry = { id: cred.id, value: extractClaims(cred.claim) }
+      const prevEntries = acc[type]
+
+      acc[type] = prevEntries ? [...prevEntries, entry] : [entry]
+      return acc
+  }, {} as AttrsState<AttributeI>)
 }
 
