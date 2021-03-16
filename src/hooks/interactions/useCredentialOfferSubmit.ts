@@ -9,6 +9,8 @@ import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
 import { useRedirect } from '../navigation'
 import { useFinishInteraction } from '.'
+import { addCredential } from '~/modules/credentials/actions'
+import { useInitializeCredentials } from '../signedCredentials'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -28,6 +30,7 @@ const useCredentialOfferSubmit = () => {
   const { scheduleInfo } = useToasts()
   const redirect = useRedirect()
   const finishInteraction = useFinishInteraction()
+  const {getCredentialCustomDisplay} = useInitializeCredentials()
 
   const scheduleSuccess = () =>
     scheduleSuccessInteraction({
@@ -37,10 +40,16 @@ const useCredentialOfferSubmit = () => {
       },
     })
 
+  const handleStoreIssuedCredentials = async () => {
+    const issuedCredentials = await storeSelectedCredentials();
+    const customDisplayCredentials = await getCredentialCustomDisplay(issuedCredentials)
+    dispatch(addCredential(customDisplayCredentials))
+  }
+
   return async () => {
     try {
       if (await credentialsAlreadyIssued()) {
-        await storeSelectedCredentials()
+        await handleStoreIssuedCredentials()
         // await syncCredentials()
         scheduleSuccess()
         return finishInteraction()
@@ -62,8 +71,7 @@ const useCredentialOfferSubmit = () => {
       const allInvalid = validatedCredentials.every((cred) => cred.invalid)
 
       if (allValid) {
-        await storeSelectedCredentials()
-        // await syncCredentials()
+        await handleStoreIssuedCredentials()
         scheduleSuccess()
         finishInteraction()
       } else if (allInvalid) {

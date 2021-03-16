@@ -57,7 +57,7 @@ const BeforeLoggedIn = () => {
 
   const { checkConsent } = useTermsConsent()
 
-  const initializeCredentials = useInitializeCredentials()
+  const { initializeCredentials } = useInitializeCredentials()
 
   useEffect(() => {
     /* Checking if the Terms of Service have changed */

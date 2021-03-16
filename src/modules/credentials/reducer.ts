@@ -13,6 +13,8 @@ const credentialsReducer = (
   switch (action.type) {
     case CredentialActions.setCredentials:
       return { ...state, all: action.payload }
+    case CredentialActions.addCredential:
+      return {...state, all: [...state.all, ...action.payload]}
     case CredentialActions.deleteCredential:
       const filtered = state.all.filter((c) => c.id !== action.payload)
       return { ...state, all: filtered }

@@ -8,6 +8,7 @@ import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import { OfferUICredential } from '~/types/credentials'
 import { useInteraction } from '.'
 import { useAgent } from '../sdk'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 /**
  * Custom hook that exposes a collection of utils for the Credential Offer interaction
@@ -91,9 +92,11 @@ const useCredentialOfferFlow = () => {
    */
   const storeSelectedCredentials = async () => {
     const interaction = await getInteraction()
-    await interaction.storeSelectedCredentials()
+    // @ts-expect-error until signed credentials are returned
+    const signedCredentials: SignedCredential[] = await interaction.storeSelectedCredentials();
     await interaction.storeCredentialMetadata()
     await interaction.storeIssuerProfile()
+    return signedCredentials;
   }
 
   /**
