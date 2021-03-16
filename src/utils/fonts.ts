@@ -111,7 +111,7 @@ export const subtitleFontStyles = {
       BP({ default: 20, xsmall: 18 }),
       0,
       Colors.white70,
-      Fonts.Regular
+      Fonts.Regular,
     ),
   },
 }

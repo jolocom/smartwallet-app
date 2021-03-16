@@ -1,23 +1,29 @@
-import { useEffect, useState } from "react"
-import { useInteraction } from "~/hooks/interactions"
-import { IIncomingOfferDocProps, IIncomingOfferOtherProps, isIncomingOfferCard } from "../components/card/types"
+import { useEffect, useState } from 'react'
+import { FlowType } from '@jolocom/sdk'
+import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
+
+import { useInteraction } from '~/hooks/interactions'
+import {
+  IIncomingOfferDocProps,
+  IIncomingOfferOtherProps,
+} from '../components/card/types'
 
 const useGetOfferDetails = () => {
   const getInteraction = useInteraction()
 
   return async () => {
     const interaction = await getInteraction()
-    const offerDetails = await interaction.flow.getOfferDisplay()
 
-    const isOfferDetails = offerDetails.every((d: any) => isIncomingOfferCard(d))
-    if(isOfferDetails) {
-      return offerDetails
-    }
-    return null
+    if (interaction.flow.type !== FlowType.CredentialOffer)
+      throw new Error(
+        'Error: useGetOfferDetails should be used only within a Credential Offer flow!',
+      )
+
+    return (interaction.flow as CredentialOfferFlow).getOfferDisplay()
   }
 }
 
-export const useOfferDetails = () => {
+export const useMappedOfferDetails = () => {
   const [offerDetails, setOfferDetails] = useState<
     IIncomingOfferDocProps[] | IIncomingOfferOtherProps[] | null
   >(null)
@@ -25,7 +31,13 @@ export const useOfferDetails = () => {
 
   const handleGettingOfferDetails = async () => {
     const details = await getOfferDetails()
-    setOfferDetails(details)
+
+    setOfferDetails(
+      details.map((c) => ({
+        name: c.name,
+        properties: c.display.properties,
+      })),
+    )
   }
   useEffect(() => {
     handleGettingOfferDetails()
