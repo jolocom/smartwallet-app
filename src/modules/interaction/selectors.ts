@@ -22,6 +22,7 @@ import {
   isNotActiveInteraction,
 } from './guards'
 import BP from '~/utils/breakpoints'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 
 const createInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -257,7 +258,7 @@ export const getServiceDescription = createSelector(
     return {
       did: counterparty.did,
       name: counterparty.publicProfile?.name,
-      isAnonymous: counterparty.publicProfile === undefined
+      isAnonymous: counterparty.publicProfile === undefined,
     }
   },
 )
@@ -300,12 +301,12 @@ export const getIsReadyToSubmitRequest = createSelector(
     getCredShareDetails,
     getAvailableAttributesToShare,
     getSelectedShareCredentials,
-    getSingleMissingAttribute
+    getSingleMissingAttribute,
   ],
   (details, attributes, selectedShareCredentials, singleMissingAttribute) => {
-    if (singleMissingAttribute !== undefined) return true;
+    if (singleMissingAttribute !== undefined) return true
     if (Object.keys(selectedShareCredentials).length) {
-      const { requestedCredentials } = details;
+      const { requestedCredentials } = details
       const allAttributes = Object.keys(attributes).every((t) =>
         Object.keys(selectedShareCredentials).includes(t),
       )
@@ -318,39 +319,64 @@ export const getIsReadyToSubmitRequest = createSelector(
     }
 
     return false
-  }
+  },
 )
 
 export const getAttributesToSelect = createSelector(
   [getAvailableAttributesToShare],
   (attributes) => {
-    return Object.keys(attributes).reduce<Record<string, string>>((acc, value) => {		
-       const attrType = value as AttributeTypes		
-       if (!acc[attrType]) {		
-         const attr = attributes[attrType] || []		
-         if (attr.length) {		
-           acc[attrType] = attr[0].id		
-         }		
-       }		
-       return acc		
-     }, {})
-  }
+    return Object.keys(attributes).reduce<Record<string, string>>(
+      (acc, value) => {
+        const attrType = value as AttributeTypes
+        if (!acc[attrType]) {
+          const attr = attributes[attrType] || []
+          if (attr.length) {
+            acc[attrType] = attr[0].id
+          }
+        }
+        return acc
+      },
+      {},
+    )
+  },
 )
 
 export const getAuthzUIDetails = createSelector(
   [getAuthorizationDetails],
   (details) => {
-    const { flowType, ...rest } = details;
+    const { flowType, ...rest } = details
     return {
-      ...rest
+      ...rest,
     }
-  }
+  },
 )
 
 export const getCredShareUIDetailsBAS = createSelector(
-  [getSingleMissingAttribute, getSingleCredentialToShare, getIsReadyToSubmitRequest],
+  [
+    getSingleMissingAttribute,
+    getSingleCredentialToShare,
+    getIsReadyToSubmitRequest,
+  ],
   (singleMissingAttribute, singleCredential) => ({
     singleMissingAttribute,
     singleCredential,
-  })
+  }),
+)
+
+export const getCredByType = createSelector(
+  [getCredOfferDetails],
+  (details) => {
+    const {
+      credentials: { service_issued },
+    } = details
+    return service_issued.reduce<
+      Record<string, CredentialRenderTypes.document | 'other'>
+    >((credByType, c) => {
+      credByType[c.type] =
+        c.renderInfo?.renderAs === CredentialRenderTypes.document
+          ? c.renderInfo?.renderAs
+          : 'other'
+      return credByType
+    }, {})
+  },
 )

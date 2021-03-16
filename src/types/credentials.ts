@@ -78,6 +78,7 @@ export interface UICredential
   metadata: UICredentialMetadata
 }
 
+// TODO: remove for consistency and use DocumentTypes instead
 export enum CredentialSection {
   Documents = 'documents',
   Other = 'other',
