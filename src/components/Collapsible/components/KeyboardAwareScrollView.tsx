@@ -1,5 +1,5 @@
-import React, { useEffect, ComponentType } from 'react'
-import { Animated, StyleSheet, Platform } from 'react-native'
+import React from 'react'
+import { Animated, StyleSheet } from 'react-native'
 import { useCollapsible } from '../context'
 import { ICollapsibleComposite } from '../types'
 import { COLLAPSIBLE_HEADER_HEIGHT } from './CollapsibleHeader'
@@ -8,7 +8,7 @@ import { withClassComponent } from '~/utils/withClassComponent'
 
 const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(
   withClassComponent(JoloKeyboardAwareScroll),
-)
+) as typeof JoloKeyboardAwareScroll
 
 export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['KeyboardAwareScrollView'] = ({
   children,
@@ -16,9 +16,7 @@ export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['Keyboard
   animatedHeader = false,
   ...scrollProps
 }) => {
-  const { handleScroll, checkListHidingTextContainer } = useCollapsible()
-
-  useEffect(() => checkListHidingTextContainer(children), [])
+  const { handleScroll } = useCollapsible()
 
   return (
     <AnimatedKeyboardAwareScrollView
