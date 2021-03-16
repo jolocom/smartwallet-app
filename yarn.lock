@@ -1378,7 +1378,7 @@
   dependencies:
     cred-types-jolocom-core "^0.0.11"
 
-"@jolocom/protocol-ts@^0.5.3":
+"@jolocom/protocol-ts@^0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@jolocom/protocol-ts/-/protocol-ts-0.5.4.tgz#a59052d97b45ad157e877b1ed8ed2cd8235ad45e"
   integrity sha512-t6gzeLZPgKQUksjAVgMint/htYIEy6LwVfqhm7kZx4+bkAxa0LHIynqEXFPA7bbx1+mrd2hxsvWmSswXiBtlkw==
@@ -1400,12 +1400,12 @@
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.1.0-rc4":
-  version "1.1.0-rc4"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.1.0-rc4.tgz#9fa1746931f57d29ce818a7f9c6944fa8d55b85d"
-  integrity sha512-ieSJdYLbZatW1Nf+/5CPK1QNlRlveSDEwcfxpiZvgTKQ7bqzz+Q0PREfm8Pvy7AoRQ92VQ89N18LcwgdaN7ATA==
+"@jolocom/sdk@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.1.0.tgz#aa2c170a410a321d96b8dc4b9cd3e31b22365e4a"
+  integrity sha512-MLOkJFyDZai3gvVXrAjOtfjTMiLw9QYI1s1+axGskfJ22wqXiVuRsiZxqjnYWSCRCpHh2tDMz5neYdjS2NWYhQ==
   dependencies:
-    "@jolocom/protocol-ts" "^0.5.3"
+    "@jolocom/protocol-ts" "^0.5.4"
     form-data "^3.0.0"
     ramda "^0.26.1"
 
