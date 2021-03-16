@@ -169,6 +169,8 @@ export const useCreateAttributes = () => {
         value: extractClaims(credential.claim),
       }
       dispatch(updateAttrs({ type, attribute }))
+
+      return {[type]: attribute.id};
     } catch (e) {
       console.warn(e)
       throw new Error('Failed to create attribute!')

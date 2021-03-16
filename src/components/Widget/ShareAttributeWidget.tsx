@@ -2,7 +2,10 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { View } from 'react-native'
 
-import { getAvailableAttributesToShare } from '~/modules/interaction/selectors'
+import {
+  getAvailableAttributesToShare,
+  getSelectedShareCredentials,
+} from '~/modules/interaction/selectors'
 import { AttributeTypes } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { attributeConfig } from '~/config/claims'
@@ -20,6 +23,7 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   withContainer = false,
 }) => {
   const attributes = useSelector(getAvailableAttributesToShare)
+  const selectedCredentials = useSelector(getSelectedShareCredentials)
 
   if (!Object.keys(attributes).length) return null
 
@@ -33,9 +37,8 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   useEffect(() => {
     Object.keys(attributes).forEach((type) => {
       const t = type as AttributeTypes
-      console.log({ attributes })
-
-      if (attributes[t]?.length) {
+      /* checking for selected credentials too as otherwise the first one is always selected */
+      if (attributes[t]?.length && !selectedCredentials[t]) {
         handleSelectCredential({ [t]: attributes[t][0].id })
       }
     })

@@ -27,6 +27,7 @@ import InteractionTitle from '../InteractionFlow/components/InteractionTitle'
 import InteractionDescription from '../InteractionFlow/components/InteractionDescription'
 import { Space } from '../InteractionFlow/components/styled'
 import useTranslation from '~/hooks/useTranslation'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 
 type InteractionAddCredentialRouteProps = RouteProp<
   InteractionStackParamList,
@@ -47,6 +48,7 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
   const { scheduleInfo } = useToasts()
   const { scheduleErrorInteraction } = useInteractionToasts()
   const handleSwitchScreens = useSwitchScreens(ScreenNames.InteractionFlow)
+  const { handleSelectCredential } = useCredentialShareFlow()
 
   const createAttribute = useCreateAttributes()
 
@@ -55,7 +57,7 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
   const { keyboardHeight, keyboardShown } = useKeyboard()
   const [pushUpTo, setPushUpTo] = useState(0)
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   useEffect(() => {
     LayoutAnimation.configureNext({
@@ -77,7 +79,9 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
   }, [keyboardShown, keyboardHeight])
 
   const formConfig = attributeConfig[inputType]
-  const title = t(strings.ADD_YOUR_ATTRIBUTE, {attribute: formConfig.label.toLowerCase()})
+  const title = t(strings.ADD_YOUR_ATTRIBUTE, {
+    attribute: formConfig.label.toLowerCase(),
+  })
   const description =
     strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
 
@@ -89,7 +93,8 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
       if (claimsValid) {
         const success = await loader(
           async () => {
-            await createAttribute(inputType, claims)
+            const createdAttribute = await createAttribute(inputType, claims)
+            handleSelectCredential(createdAttribute)
             handleSwitchScreens()
           },
           { showSuccess: false },
@@ -133,9 +138,7 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
           }}
         >
           <InteractionTitle label={title} />
-          <InteractionDescription
-            label={description}
-          />
+          <InteractionDescription label={description} />
           <Space />
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {({ handleChange, values }) => (
