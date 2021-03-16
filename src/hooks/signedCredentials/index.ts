@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDid } from "~/modules/account/selectors";
 import { setCredentials } from "~/modules/credentials/actions";
 import { useAgent } from "../sdk";
-import { mapCredentialsToUI, separateCredentialsAndAttributes } from "./utils";
+import { mapCredentialsToDisplay, mapDisplayToCustomDisplay, separateCredentialsAndAttributes } from "./utils";
 
 async function* credentialsMaker (did: string, agent: Agent) {
   const allCredentials: SignedCredential[] = await agent.storage.get.verifiableCredential();
   const serviceIssuedCredentials: SignedCredential[] = yield separateCredentialsAndAttributes(allCredentials, did);
-  return yield Promise.all(serviceIssuedCredentials.map((c) => mapCredentialsToUI(agent, c)));
+  const displayCredentials =  yield Promise.all(serviceIssuedCredentials.map((c) => mapCredentialsToDisplay(agent, c)));
+  return yield displayCredentials.map(mapDisplayToCustomDisplay);
 }
 
 export const useAllCredentials = () => {

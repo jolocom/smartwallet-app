@@ -1,8 +1,9 @@
 import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
-import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { CredentialOfferRenderInfo, CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
+import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -95,13 +96,16 @@ export enum DocumentFields {
 }
 
 
-// TODO: remove when types on sdk are fixed
-export interface  DisplayVal {
-  key: string,
-  label: string,
-  value: string | number
-}
-export type DisplayCredential = 
-  & {id: string, holderName?: string, photo?: string, properties: DisplayVal[]}
+// TODO: use types as in cred offer
+export type DisplayCredential =
+  & {id: string}
+  & Pick<CredentialDisplay, 'name'>
+  & Pick<CredentialDisplay['display'], 'properties'>
   & BaseUICredential
-  & Pick<BaseMetadata, 'name'> 
+
+// TODO: what to do with highlight ?
+export type DisplayCredentialCustom = DisplayCredential & {holderName?: string, photo?: string}
+
+export function isDocument(renderAs: CredentialRenderTypes | undefined): renderAs is CredentialRenderTypes.document {
+  return renderAs === CredentialRenderTypes.document;
+}

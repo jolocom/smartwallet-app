@@ -1,7 +1,7 @@
 import { Agent } from "@jolocom/sdk";
 import { CredentialType } from "@jolocom/sdk/js/credentials";
 import { SignedCredential } from "jolocom-lib/js/credentials/signedCredential/signedCredential";
-import { ClaimKeys, DisplayCredential } from "~/types/credentials";
+import { ClaimKeys, DisplayCredential, DisplayCredentialCustom, isDocument } from "~/types/credentials";
 
 export const separateCredentialsAndAttributes = (allCredentials: SignedCredential[], did: string): SignedCredential[] => {
   let selfIssuedCredentials: SignedCredential[] = [];
@@ -16,7 +16,7 @@ export const separateCredentialsAndAttributes = (allCredentials: SignedCredentia
   return credentials;
 }
 
-export async function mapCredentialsToUI (agent: Agent, c: SignedCredential): Promise<DisplayCredential[]> { 
+export async function mapCredentialsToDisplay (agent: Agent, c: SignedCredential): Promise<DisplayCredential[]> { 
   const metadata = await agent.storage.get.credentialMetadata(c)
   // @ts-expect-error - until types are corrected in sdk
   const {type, renderInfo, issuer, credential} = metadata;
@@ -33,26 +33,29 @@ export async function mapCredentialsToUI (agent: Agent, c: SignedCredential): Pr
     const credType = new CredentialType(type, credential);
     
     const {name, display: {properties}} = credType.display(c.claim);
-    
+  
     // @ts-expect-error - until types are corrected in sdk
-    let formattedProperties = properties.map(p => ({...p, key: p.key?.split('.')[1] ?? 'notSpecified'}));
-
-    // @ts-expect-error - until types are corrected in sdk
-    const holderProperties = formattedProperties.filter(p => p.key === ClaimKeys.givenName || p.key === ClaimKeys.familyName)
-    // @ts-expect-error - until types are corrected in sdk
-    const holderName = holderProperties.length ? holderProperties.reduce((acc, v) => `${v.value} ${acc}`, '') : undefined; // TODO: fix spaces issue
-    // @ts-expect-error - until types are corrected in sdk
-    formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.givenName && p.key !== ClaimKeys.familyName);
-    
-    
-    // @ts-expect-error - until types are corrected in sdk
-    const photo = formattedProperties.find(p => p.key === ClaimKeys.photo)?.value;
-    // @ts-expect-error - until types are corrected in sdk
-    formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.photo);
-    
-    // @ts-expect-error - until types are corrected in sdk
-    updatedCredentials = {...updatedCredentials, name, properties: formattedProperties, holderName, photo};
+    updatedCredentials = {...updatedCredentials, name, properties};
   }
   // @ts-expect-error - until types are corrected in sdk
   return updatedCredentials
 }
+
+export function mapDisplayToCustomDisplay (credential: DisplayCredential): DisplayCredentialCustom {
+  const {properties} = credential;
+  let formattedProperties = properties.map(p => ({...p, key: p.key?.split('.')[1] ?? 'notSpecified'}));
+  
+  const photo = formattedProperties.find(p => p.key === ClaimKeys.photo)?.value;
+  formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.photo);
+
+  if(isDocument(credential.renderInfo?.renderAs)) {
+    const holderProperties = formattedProperties.filter(p => p.key === ClaimKeys.givenName || p.key === ClaimKeys.familyName)
+    // TODO: fix spaces issue
+    const holderName = holderProperties.length ? holderProperties.reduce((acc, v) => `${v.value} ${acc}`, '') : undefined; 
+    formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.givenName && p.key !== ClaimKeys.familyName);
+    return {...credential, properties: formattedProperties, holderName, photo};
+  }
+  return {...credential, properties: formattedProperties, photo}
+  
+}
+
