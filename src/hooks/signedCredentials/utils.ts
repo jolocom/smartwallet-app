@@ -55,7 +55,9 @@ export function mapDisplayToCustomDisplay (credential: DisplayCredential): Displ
     // TODO: fix spaces issue
     const holderName = holderProperties.length ? holderProperties.reduce((acc, v) => `${v.value} ${acc}`, '') : undefined; 
     formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.givenName && p.key !== ClaimKeys.familyName);
-    return {...credential, properties: formattedProperties, holderName, photo};
+    return {...credential, properties: formattedProperties, holderName, photo, highlight: credential.id};
+
+
   }
   return {...credential, properties: formattedProperties, photo}
 }

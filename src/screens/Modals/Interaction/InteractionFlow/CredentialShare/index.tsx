@@ -13,7 +13,7 @@ import {
   getShareCredentialsBySection,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
-import { MultipleShareUICredential } from '~/types/credentials'
+import { isDocument, MultipleShareUICredential } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { IncomingRequestDoc } from '../components/card/request/document'
 import { IncomingRequestOther } from '../components/card/request/other'
@@ -67,16 +67,16 @@ export const CredentialShareBAS = () => {
         properties,
         holderName,
         photo,
+        highlight,
       } = singleCredential
       return (
         <>
-          {/* TODO: use enum */}
-          {renderInfo?.renderAs === 'document' ? (
+          {isDocument(renderInfo?.renderAs) ? (
             <IncomingRequestDoc
               name={name ?? type}
               holderName={holderName}
               properties={properties}
-              // TODO: extract highlight
+              highlight={highlight}
               // TODO: change name to photo
               image={photo}
             />
@@ -155,13 +155,12 @@ const CredentialShareFAS = () => {
                   marginVertical: 14,
                 }}
               >
-                {/* TODO: check if enum is available for documents, others, permissions */}
-                {cred.renderInfo?.renderAs === 'document' ? (
+                {isDocument(cred.renderInfo?.renderAs) ? (
                   <IncomingRequestDoc
                     name={name ?? type}
                     properties={properties}
                     holderName={cred.holderName}
-                    highlight={cred.id}
+                    highlight={cred.highlight}
                     image={cred.photo}
                   />
                 ) : (

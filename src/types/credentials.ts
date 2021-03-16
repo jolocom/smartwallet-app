@@ -103,8 +103,7 @@ export type DisplayCredential =
   & Pick<CredentialDisplay['display'], 'properties'>
   & BaseUICredential
 
-// TODO: what to do with highlight ?
-export type DisplayCredentialCustom = DisplayCredential & {holderName?: string, photo?: string}
+export type DisplayCredentialCustom = DisplayCredential & {holderName?: string, photo?: string, highlight?: string}
 
 export function isDocument(renderAs: CredentialRenderTypes | undefined): renderAs is CredentialRenderTypes.document {
   return renderAs === CredentialRenderTypes.document;
