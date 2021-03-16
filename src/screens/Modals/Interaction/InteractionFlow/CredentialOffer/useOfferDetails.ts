@@ -6,7 +6,6 @@ import { useInteraction } from '~/hooks/interactions'
 import {
   IIncomingOfferDocProps,
   IIncomingOfferOtherProps,
-  IProperty,
 } from '../components/card/types'
 
 const useGetOfferDetails = () => {
@@ -32,10 +31,11 @@ export const useMappedOfferDetails = () => {
 
   const handleGettingOfferDetails = async () => {
     const details = await getOfferDetails()
+    
     setOfferDetails(
       details.map((c) => ({
-        name: c.name as string,
-        properties: c.properties as IProperty[],
+        name: c.name,
+        properties: c.display.properties,
       })),
     )
   }

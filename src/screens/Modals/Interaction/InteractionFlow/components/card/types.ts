@@ -1,13 +1,6 @@
-export interface IProperty {
-  key: string
-  label: string
-  value: string
-}
+import { CredentialDisplay } from "@jolocom/sdk/js/credentials";
 
-export interface IIncomingCard {
-  name: string
-  properties: IProperty[]
-}
+export type IIncomingCard = Pick<CredentialDisplay, 'name'> & Pick<CredentialDisplay['display'], 'properties'>
 
 export interface IIncomingRequestDocCardProps extends IIncomingCard {
   holderName?: string
