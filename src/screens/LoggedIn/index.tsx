@@ -22,6 +22,8 @@ import Recovery from '../Modals/Recovery'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Main from './Main'
 import BusinessCardForm from '../Modals/Forms/BusinessCardForm'
+import CredentialForm from '../Modals/Forms/CredentialForm'
+import { PrimitiveAttributeTypes } from '~/types/credentials'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -33,6 +35,7 @@ export type LoggedInStackParamList = {
   [ScreenNames.PinRecoveryInstructions]: undefined
   [ScreenNames.DeviceAuth]: undefined
   [ScreenNames.BusinessCardForm]: undefined
+  [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
 }
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
@@ -144,6 +147,11 @@ const LoggedIn = () => {
       <LoggedInStack.Screen
         name={ScreenNames.BusinessCardForm}
         component={BusinessCardForm}
+        options={{ gestureEnabled: false }}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.CredentialForm}
+        component={CredentialForm}
         options={{ gestureEnabled: false }}
       />
       {/* Modals -> End */}

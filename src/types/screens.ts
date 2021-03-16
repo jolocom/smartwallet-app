@@ -38,6 +38,7 @@ export enum ScreenNames {
   // Modals
   Loader = 'Loader',
   BusinessCardForm = 'BusinessCardForm',
+  CredentialForm = 'CredentialForm',
 
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
