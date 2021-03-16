@@ -31,7 +31,7 @@ export const useMappedOfferDetails = () => {
 
   const handleGettingOfferDetails = async () => {
     const details = await getOfferDetails()
-    
+
     setOfferDetails(
       details.map((c) => ({
         name: c.name,

@@ -1,6 +1,7 @@
-import { CredentialDisplay } from "@jolocom/sdk/js/credentials";
+import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
-export type IIncomingCard = Pick<CredentialDisplay, 'name'> & Pick<CredentialDisplay['display'], 'properties'>
+export type IIncomingCard = Pick<CredentialDisplay, 'name'> &
+  Pick<CredentialDisplay['display'], 'properties'>
 
 export interface IIncomingRequestDocCardProps extends IIncomingCard {
   holderName?: string
