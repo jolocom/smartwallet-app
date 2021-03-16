@@ -59,4 +59,5 @@ export enum ScreenNames {
   InputTest = 'InputTest',
   PasscodeTest = 'PasscodeTest',
   BusinessCardTest = 'BusinessCardTest',
+  CollapsibleTest = 'CollapsibleTest',
 }

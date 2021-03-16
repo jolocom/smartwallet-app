@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
   navigationContainer: {
     position: 'absolute',
     zIndex: 10,
+    width: '100%',
   },
   scannerContainer: {
     width: '100%',

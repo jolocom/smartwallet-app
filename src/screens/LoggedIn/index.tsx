@@ -1,4 +1,3 @@
-import { StackActions, useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
   TransitionPresets,
@@ -6,7 +5,6 @@ import {
 import React, { useCallback, useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import ScreenContainer from '~/components/ScreenContainer'
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
 
@@ -16,7 +14,6 @@ import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { setPopup } from '~/modules/appState/actions'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
-import { getLoaderState } from '~/modules/loader/selectors'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'

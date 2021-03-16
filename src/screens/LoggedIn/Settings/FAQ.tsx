@@ -7,6 +7,8 @@ import Section from './components/Section'
 // @ts-ignore
 import faqJson from '~/translations/faq.json'
 import { strings } from '~/translations/strings'
+import Collapsible from '~/components/Collapsible'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 type FAQArray = Array<{ question: string; answer: string }>
 
@@ -24,29 +26,43 @@ const FAQ = () => {
   }
 
   return (
-    <ScreenContainer
-      hasHeaderBack
-      customStyles={{ justifyContent: 'flex-start', paddingTop: 0 }}
-    >
-      <FlatList
-        ref={flatlistRef}
-        data={faqArray}
-        overScrollMode={'never'}
-        contentContainerStyle={{ paddingBottom: 40 }}
-        style={{ width: '100%' }}
-        renderItem={({ item, index }) => (
-          <BlockExpanded
-            key={index}
-            title={item.question}
-            expandedText={item.answer}
-            onExpand={() => handleExpand(index)}
-          />
-        )}
-        ListHeaderComponent={() => (
-          <Section.Title>{strings.POPULAR_QUESTIONS}</Section.Title>
-        )}
-      />
-    </ScreenContainer>
+    <Collapsible>
+      <Collapsible.Header>
+        <NavigationHeader type={NavHeaderType.Back}>
+          <Collapsible.HeaderText>
+            {strings.POPULAR_QUESTIONS}
+          </Collapsible.HeaderText>
+        </NavigationHeader>
+      </Collapsible.Header>
+      <ScreenContainer
+        //hasHeaderBack
+        customStyles={{ justifyContent: 'flex-start', paddingTop: 0 }}
+      >
+        <Collapsible.FlatList
+          renderHidingText={() => (
+            <Section.Title>{strings.POPULAR_QUESTIONS}</Section.Title>
+          )}
+          data={faqArray}
+          overScrollMode={'never'}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 40,
+          }}
+          style={{ width: '100%' }}
+          // @ts-ignore
+          ref={flatlistRef}
+          // @ts-ignore
+          renderItem={({ item, index }) => (
+            <BlockExpanded
+              key={index}
+              title={item.question}
+              expandedText={item.answer}
+              onExpand={() => handleExpand(index)}
+            />
+          )}
+        />
+      </ScreenContainer>
+    </Collapsible>
   )
 }
 
