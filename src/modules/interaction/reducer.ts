@@ -36,7 +36,7 @@ const reducer = (
             ...state.details,
             selectedCredentials: {
               ...state.details.selectedCredentials,
-              ...action.payload,
+              ...action.payload
             },
           },
         }

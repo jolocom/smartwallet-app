@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { View } from 'react-native'
 
@@ -29,6 +29,18 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   )
   const Container = withContainer ? AttributeWidgetContainerFAS : React.Fragment
 
+  /* Preselecting first requested attribute */
+  useEffect(() => {
+    Object.keys(attributes).forEach((type) => {
+      const t = type as AttributeTypes
+      console.log({ attributes })
+
+      if (attributes[t]?.length) {
+        handleSelectCredential({ [t]: attributes[t][0].id })
+      }
+    })
+  }, [])
+
   return (
     <Container>
       {Object.keys(attributes).map((credType, idx, arr) => {
@@ -37,7 +49,7 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
         const attribute = attributes[attrType]
         if (attribute) {
           return (
-            <>
+            <View key={credType}>
               <InteractionAttributesWidget
                 key={attrType}
                 name={config.label}
@@ -54,7 +66,7 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
                 }))}
               />
               {idx !== arr.length - 1 ? <View style={{ height: 20 }} /> : null}
-            </>
+            </View>
           )
         }
       })}

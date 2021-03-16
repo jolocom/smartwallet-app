@@ -30,19 +30,19 @@ const InteractionAttributesWidget: React.FC<IProps> = ({
       {!fields.length ? (
         <Field.Empty />
       ) : (
-          fields.map((field) => (
-            <Field.Selectable
-              key={field.id}
-              value={field.value}
-              onSelect={() => onSelect(type, field.id)}
-              isSelected={
-                selectedCredentials
-                  ? selectedCredentials[type] === field.id
-                  : false
-              }
-            />
-          ))
-        )}
+        fields.map((field) => (
+          <Field.Selectable
+            key={field.id}
+            value={field.value}
+            onSelect={() => onSelect(type, field.id)}
+            isSelected={
+              selectedCredentials
+                ? selectedCredentials[type] === field.id
+                : false
+            }
+          />
+        ))
+      )}
     </Widget>
   )
 }

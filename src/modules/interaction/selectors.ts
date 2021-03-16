@@ -102,7 +102,7 @@ export const getSelectedShareCredentials = createSelector(
 export const getAvailableAttributesToShare = createSelector(
   [getCredShareDetails, getAttributes],
   ({ requestedAttributes }, attributes) =>
-    requestedAttributes.reduce<Partial<AttrsState<AttributeI>>>((acc, v) => {
+    requestedAttributes.reduce<AttrsState<AttributeI>>((acc, v) => {
       acc[v] = attributes[v] || []
       return acc
     }, {}),

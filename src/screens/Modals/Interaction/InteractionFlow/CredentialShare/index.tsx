@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
+import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useSwitchScreens } from '~/hooks/navigation'
 import {
@@ -29,7 +30,6 @@ import {
   LogoContainerFAS,
   Space,
 } from '../components/styled'
-import { useSelectAttributes } from './useShare'
 
 export const CredentialShareBAS = () => {
   const { singleMissingAttribute, singleCredential } = useSelector(
@@ -42,7 +42,14 @@ export const CredentialShareBAS = () => {
     ScreenNames.InteractionAddCredential,
   )
 
-  useSelectAttributes()
+  const { handleSelectCredential } = useCredentialShareFlow()
+
+  /* We are preselecting a credential that is requested */
+  useEffect(() => {
+    if (singleCredential) {
+      handleSelectCredential({ [singleCredential.type]: singleCredential?.id })
+    }
+  }, [JSON.stringify(singleCredential)])
 
   const handleSubmit = () =>
     singleMissingAttribute !== undefined
@@ -119,8 +126,6 @@ const CredentialShareFAS = () => {
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
   const handleSubmit = useCredentialShareSubmit()
-
-  useSelectAttributes()
 
   const handleRenderCollapsingComponent = useCallback(
     () => (
