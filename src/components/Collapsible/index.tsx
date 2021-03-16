@@ -61,7 +61,6 @@ const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
 
   const context = useMemo(
     () => ({
-      yValue,
       setDistanceToText: handleDistanceToText,
       setHeaderHeight: handleHeaderHeight,
       setHidingTextHeight: handleHidingTextHeight,

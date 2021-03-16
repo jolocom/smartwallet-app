@@ -35,7 +35,6 @@ export interface ICollapsibleComposite {
 }
 
 export interface ICollapsibleContext {
-  yValue: Animated.AnimatedValue
   setHeaderHeight: (height: number) => void
   setHidingTextHeight: (height: number) => void
   setDistanceToText: (distance: number) => void
