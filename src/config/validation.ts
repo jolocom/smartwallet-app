@@ -27,14 +27,14 @@ export const emailValidation = yup.object().shape({
 })
 
 export const postalAddressValidation = yup.object().shape({
-  [ClaimKeys.addressLine]: yup.string(),
-  [ClaimKeys.postalCode]: yup.string(),
-  [ClaimKeys.city]: yup.string(),
-  [ClaimKeys.country]: yup.string()
+  [ClaimKeys.addressLine]: yup.string().required(strings.VALUE_MISSING),
+  [ClaimKeys.postalCode]: yup.string().required(strings.VALUE_MISSING),
+  [ClaimKeys.city]: yup.string().required(strings.VALUE_MISSING),
+  [ClaimKeys.country]: yup.string().required(strings.VALUE_MISSING)
 })
 
 export const mobileNumberValidation = yup.object().shape({
-  [ClaimKeys.email]: yup.string().email(strings.EMAIL_FORMAT_ERROR).required(strings.VALUE_MISSING)
+  [ClaimKeys.telephone]: yup.string().required(strings.VALUE_MISSING)
 })
 
 export const contactValidation = yup
