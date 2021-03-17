@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, TextInput } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+} from 'react-native'
 import { Colors } from '~/utils/colors'
 import { CoreInput } from './CoreInput'
 import { IInput } from './types'
@@ -17,6 +23,16 @@ const InputBlock = React.forwardRef<TextInput, IInput>(
   ) => {
     const [isFocused, setIsFocused] = useState(false)
 
+    const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      inputProps.onFocus && inputProps.onFocus(e)
+      setIsFocused(true)
+    }
+
+    const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      inputProps.onBlur && inputProps.onBlur(e)
+      setIsFocused(false)
+    }
+
     return (
       <View
         style={[
@@ -30,8 +46,8 @@ const InputBlock = React.forwardRef<TextInput, IInput>(
           ref={ref}
           onChangeText={updateInput}
           value={value}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </View>
     )
