@@ -11,6 +11,7 @@ interface Props {
   title: string
   description: string
   onSubmit: () => Promise<void>
+  isSubmitDisabled?: boolean
 }
 
 const FormContainer: React.FC<Props> = ({
@@ -18,6 +19,7 @@ const FormContainer: React.FC<Props> = ({
   description,
   onSubmit,
   children,
+  isSubmitDisabled = false,
 }) => {
   const navigation = useNavigation()
 
@@ -52,12 +54,15 @@ const FormContainer: React.FC<Props> = ({
         <View style={{ paddingHorizontal: 8 }}>
           <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
         </View>
-        <TouchableOpacity onPress={handleSubmit}>
+        <TouchableOpacity onPress={handleSubmit} disabled={isSubmitDisabled}>
           <JoloText
             kind={JoloTextKind.title}
             size={JoloTextSizes.mini}
             color={Colors.activity}
-            customStyles={{ fontFamily: Fonts.Medium }}
+            customStyles={{
+              fontFamily: Fonts.Medium,
+              ...(isSubmitDisabled && { opacity: 0.5 }),
+            }}
           >
             Done
           </JoloText>

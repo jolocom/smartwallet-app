@@ -106,32 +106,34 @@ const CredentialForm = () => {
   }
 
   return (
-    <FormContainer
-      title={
-        attributeId
-          ? strings.EDIT_YOUR(formConfig.label)
-          : strings.ADD_YOUR(formConfig.label)
-      }
-      description={
-        strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
-      }
-      onSubmit={() => handleCredentialSubmit(values)}
+    <Formik
+      onSubmit={handleCredentialSubmit}
+      initialValues={formInitial}
+      validationSchema={formConfig.validationSchema}
     >
-      <Formik
-        onSubmit={handleCredentialSubmit}
-        initialValues={formInitial}
-        validationSchema={formConfig.validationSchema}
-      >
-        {(formProps) => {
-          const {
-            handleChange,
-            values,
-            errors,
-            setFieldTouched,
-            touched,
-          } = formProps
-          setValues(values)
-          return (
+      {(formProps) => {
+        const {
+          handleChange,
+          values,
+          errors,
+          setFieldTouched,
+          touched,
+          isValid,
+          dirty,
+        } = formProps
+        return (
+          <FormContainer
+            title={
+              attributeId
+                ? strings.EDIT_YOUR(formConfig.label)
+                : strings.ADD_YOUR(formConfig.label)
+            }
+            description={
+              strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
+            }
+            onSubmit={() => handleCredentialSubmit(values)}
+            isSubmitDisabled={!isValid || !dirty}
+          >
             <AutofocusContainer>
               {formConfig.fields.map((field, i) => {
                 return (
@@ -175,10 +177,10 @@ const CredentialForm = () => {
                 )
               })}
             </AutofocusContainer>
-          )
-        }}
-      </Formik>
-    </FormContainer>
+          </FormContainer>
+        )
+      }}
+    </Formik>
   )
 }
 
