@@ -42,7 +42,7 @@ const IdentityCredentials = () => {
   ).map(([type, config]) => {
     return {
       type: type as TPrimitiveAttributeTypes,
-      config,
+      label: config.label,
       values: attributes[type as TPrimitiveAttributeTypes] ?? [],
     }
   })
@@ -66,14 +66,14 @@ const IdentityCredentials = () => {
       <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
-      {sortedPrimitiveAttributes.map(({ type, config, values }) => {
+      {sortedPrimitiveAttributes.map(({ type, label, values }) => {
         return (
           <View style={styles.group} key={type}>
             <Widget
               onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
             >
               <Widget.Header>
-                <Widget.Header.Name value={config.label} />
+                <Widget.Header.Name value={label} />
                 <Widget.Header.Action.CreateNew />
               </Widget.Header>
               {values.length ? (

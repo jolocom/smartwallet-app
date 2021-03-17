@@ -3,16 +3,14 @@ import Collapsible from './Collapsible'
 import ScreenContainer from './ScreenContainer'
 import JoloText, { JoloTextKind } from './JoloText'
 import { useNavigation } from '@react-navigation/native'
-import Btn, { BtnTypes } from './Btn'
 import { TouchableOpacity, View } from 'react-native'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
 
 interface Props {
   title: string
   description: string
-  onSubmit: () => void
+  onSubmit: () => Promise<void>
 }
 
 const FormContainer: React.FC<Props> = ({

@@ -250,8 +250,8 @@ const attributes = {
   COMPANY_NAME_FIELD: 'Company name',
   MISSING_INFO: 'Missing info',
   SAVE_YOUR_ATTRIBUTE: (name: string) => `Save your attribute ${name}`,
-  ADD_YOUR: (attribute: string) => `Add your ${attribute}`,
-  EDIT_YOUR: (attribute: string) => `Edit your ${attribute}`,
+  ADD_YOUR_ATTRIBUTE: 'Add your {{attribute}}',
+  EDIT_YOUR_ATTRIBUTE: 'Edit your {{attribute}}',
 }
 
 const recoverPin = {

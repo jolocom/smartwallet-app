@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
+import { View } from 'react-native'
+import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 import FormContainer from '~/components/FormContainer'
 import { Formik } from 'formik'
-import { View } from 'react-native'
-import FormHeader from '~/components/FormHeader'
 import {
   withNextInputAutoFocusInput,
   withNextInputAutoFocusForm,
 } from 'react-native-formik'
+
 import Input from '~/components/Input'
 import { attributeConfig } from '~/config/claims'
 import {
@@ -16,15 +18,14 @@ import {
   IAttributeClaimFieldWithValue,
 } from '~/types/credentials'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
-import { useSelector } from 'react-redux'
 import { getPrimitiveAttributeById } from '~/modules/attributes/selectors'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
-import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
 import { LoggedInStackParamList } from '~/screens/LoggedIn'
 import { ScreenNames } from '~/types/screens'
 import { strings } from '~/translations'
 import { AttributeI } from '~/modules/attributes/types'
+import useTranslation from '~/hooks/useTranslation'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
@@ -62,6 +63,7 @@ const CredentialForm = () => {
   >()
   const attributeId = route.params.id
   const attributeType = route.params.type
+  const { t } = useTranslation()
 
   const editAttribute = useSelector(
     getPrimitiveAttributeById(attributeId ?? ''),
@@ -107,11 +109,10 @@ const CredentialForm = () => {
 
   return (
     <FormContainer
-      title={
-        attributeId
-          ? strings.EDIT_YOUR(formConfig.label)
-          : strings.ADD_YOUR(formConfig.label)
-      }
+      title={t(
+        attributeId ? strings.EDIT_YOUR_ATTRIBUTE : strings.ADD_YOUR_ATTRIBUTE,
+        { attribute: formConfig.label },
+      )}
       description={
         strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
       }

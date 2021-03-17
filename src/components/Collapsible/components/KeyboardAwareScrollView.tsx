@@ -4,7 +4,7 @@ import { useCollapsible } from '../context'
 import { ICollapsibleComposite } from '../types'
 import { COLLAPSIBLE_HEADER_HEIGHT } from './CollapsibleHeader'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
-import { withClassComponent } from '~/utils/withClassComponent'
+import { withClassComponent } from '~/hocs/withClassComponent'
 
 const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(
   withClassComponent(JoloKeyboardAwareScroll),
