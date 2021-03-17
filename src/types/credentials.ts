@@ -4,6 +4,7 @@ import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/inte
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata, ClaimInterface } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
+import { ObjectSchema } from 'yup'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -55,7 +56,9 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   key: AttributeKeys
   label: string
   metadata: BaseMetadata
-  fields: T[]
+  fields: T[],
+  // TODO: pass correct TShape instead of any
+  validationSchema: ObjectSchema<any>
 }
 
 // NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties

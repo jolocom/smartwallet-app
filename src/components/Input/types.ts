@@ -5,6 +5,7 @@ export interface IInput extends TextInputProps {
   updateInput: (val: string) => void
   containerStyle?: ViewStyle
   isValid?: boolean
+  withHighlight?: boolean
 }
 
 export enum InputValidityState {

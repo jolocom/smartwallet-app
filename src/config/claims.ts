@@ -7,6 +7,8 @@ import {
   ClaimKeys,
 } from '~/types/credentials'
 import { strings } from '~/translations'
+import { emailValidation, nameValidation, postalAddressValidation, mobileNumberValidation, businessCardValidation
+ } from './validation'
 
 // TODO: add input validation for each field
 const emailConfig: IAttributeConfig = {
@@ -23,6 +25,7 @@ const emailConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: emailValidation
 }
 
 const postalAddressConfig: IAttributeConfig = {
@@ -63,6 +66,7 @@ const postalAddressConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: postalAddressValidation
 }
 
 const mobileNumberConfig: IAttributeConfig = {
@@ -79,6 +83,7 @@ const mobileNumberConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: mobileNumberValidation
 }
 
 const nameConfig: IAttributeConfig = {
@@ -103,8 +108,10 @@ const nameConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: nameValidation
 }
 
+// @ts-expect-error TODO: add validation schema when working with BusinessCard Validation
 const businessCardConfig: IAttributeConfig = {
   key: AttributeKeys.businessCard,
   label: strings.BUSINESS_CARD,
