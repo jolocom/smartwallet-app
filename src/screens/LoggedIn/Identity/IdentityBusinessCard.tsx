@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import Dots from '~/components/Dots'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
-import { getBusinessCardId } from '~/modules/attributes/selectors'
+import { getBusinessCardAttribute } from '~/modules/attributes/selectors'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import BusinessCardCredential from './components/businessCard/BusinessCardCredential'
@@ -19,7 +19,7 @@ const BusinessCard: React.FC = () => {
   const redirect = useRedirect()
   const { handleDeleteCredentialSI } = useSICActions()
 
-  const businessCardId = useSelector(getBusinessCardId)
+  const businessCardId = useSelector(getBusinessCardAttribute)?.id
   const { scheduleWarning } = useToasts()
 
   const isPlaceholder = !Boolean(businessCardId)

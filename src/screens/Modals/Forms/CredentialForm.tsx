@@ -61,8 +61,7 @@ const CredentialForm = () => {
   const route = useRoute<
     RouteProp<LoggedInStackParamList, ScreenNames.CredentialForm>
   >()
-  const attributeId = route.params.id
-  const attributeType = route.params.type
+  const { id: attributeId, type: attributeType } = route.params
   const { t } = useTranslation()
 
   const editAttribute = useSelector(

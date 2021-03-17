@@ -1,10 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import FormContainer from '~/components/FormContainer'
 import { useSelector } from 'react-redux'
-import {
-  getBusinessCardId,
-  getBusinessCardAttributes,
-} from '~/modules/attributes/selectors'
+import { getBusinessCardAttribute } from '~/modules/attributes/selectors'
 import { AttributeTypes } from '~/types/credentials'
 import { attributeConfig } from '~/config/claims'
 import {
@@ -27,17 +24,14 @@ import { strings } from '~/translations'
 
 const BusinessCardForm = () => {
   const navigation = useNavigation()
-  const businessCardId = useSelector(getBusinessCardId)
-  const businessCards = useSelector(getBusinessCardAttributes)
+  const businessCard = useSelector(getBusinessCardAttribute)
 
   const businessCardWithValues = getAttributeConfigWithValues(
     AttributeTypes.businessCard,
-    businessCardId ? businessCards[0].value : undefined,
+    businessCard?.value,
   )
 
   const groupedBC = getGroupedClaimsBusinessCard(businessCardWithValues)
-
-  const isEditMode = !!businessCardId
 
   const formInitial = assembleFormInitialValues(businessCardWithValues.fields)
 
@@ -47,12 +41,12 @@ const BusinessCardForm = () => {
   const handleFormSubmit = async (claims: Record<string, string>) => {
     // TODO: check if id values are the same or dismiss
     try {
-      if (isEditMode && businessCardId) {
+      if (businessCard) {
         await handleEditCredentialSI(
           AttributeTypes.businessCard,
           claims,
           attributeConfig[AttributeTypes.businessCard].metadata,
-          businessCardId,
+          businessCard.id,
         )
       } else {
         await handleCreateCredentialSI(
@@ -92,7 +86,7 @@ const BusinessCardForm = () => {
       {({ handleChange, values }) => (
         <FormContainer
           title={
-            isEditMode
+            businessCard
               ? strings.EDIT_BUSINESS_CARD
               : strings.CREATE_BUSINESS_CARD
           }

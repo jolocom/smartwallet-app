@@ -4,6 +4,7 @@ import { RootReducerI } from '~/types/reducer'
 import { getAttributeConfigWithValues } from '~/utils/mappings/groupBusinessCard'
 import { AttrsState, AttributeI } from './types'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
+import { getDid } from '../account/selectors'
 
 export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
   state.attrs.all
@@ -26,32 +27,24 @@ export const getPrimitiveAttributeById = (id: string) =>
     return attributes[type].find((a) => a.id === id)
   })
 
-export const getBusinessCardId = createSelector(
+export const getBusinessCardAttribute = createSelector(
   [getAttributes],
   (attributes) => {
     const { ProofOfBusinessCardCredential } = attributes
-    if (ProofOfBusinessCardCredential) {
-      return ProofOfBusinessCardCredential[0].id
-    }
-    return undefined
-  },
-)
-
-export const getBusinessCardAttributes = createSelector(
-  [getAttributes],
-  (attributes) => {
-    const { ProofOfBusinessCardCredential } = attributes
-    return ProofOfBusinessCardCredential
+    // NOTE: we assume we can only have one business card.
+    return !!ProofOfBusinessCardCredential.length
+      ? ProofOfBusinessCardCredential[0]
+      : undefined
   },
 )
 
 export const getBusinessCardConfigWithValues = createSelector(
-  [getBusinessCardAttributes],
-  (attributes) => {
-    if (attributes) {
+  [getBusinessCardAttribute],
+  (attribute) => {
+    if (attribute) {
       return getAttributeConfigWithValues(
         AttributeTypes.businessCard,
-        attributes[0].value,
+        attribute.value,
       )
     }
     return null
