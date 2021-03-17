@@ -13,7 +13,7 @@ import {
 } from 'react-native-formik'
 
 import Input from '~/components/Input'
-import Widget from '~/components/Widget'
+import Widget from '~/components/Widget/Widget'
 import Field from '~/components/Widget/Field'
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
