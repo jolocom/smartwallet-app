@@ -23,6 +23,7 @@ import { assembleFormInitialValues } from '~/utils/dataMapping'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
 import { useNavigation } from '@react-navigation/native'
+import { strings } from '~/translations'
 
 const BusinessCardForm = () => {
   const navigation = useNavigation()
@@ -39,7 +40,6 @@ const BusinessCardForm = () => {
   const isEditMode = !!businessCardId
 
   const formInitial = assembleFormInitialValues(businessCardWithValues.fields)
-  const [values, setValues] = useState(formInitial)
 
   const { handleEditCredentialSI, handleCreateCredentialSI } = useSICActions()
   const { scheduleWarning } = useToasts()
@@ -88,60 +88,59 @@ const BusinessCardForm = () => {
   const renderSectionFooter = () => <View style={{ marginBottom: 32 }} />
 
   return (
-    <FormContainer
-      title={isEditMode ? 'Edit Business Card' : 'Create Business Card'}
-      description={
-        'Once you click done, it will be displayed in the personal info section.'
-      }
-      onSubmit={() => handleFormSubmit(values)}
-    >
-      <Formik initialValues={formInitial} onSubmit={handleFormSubmit}>
-        {({ handleChange, values }) => {
-          setValues(values)
-          return (
-            <>
-              {/* NOTE: we are not using Formik HOCs for focusing next input,
+    <Formik initialValues={formInitial} onSubmit={handleFormSubmit}>
+      {({ handleChange, values }) => (
+        <FormContainer
+          title={
+            isEditMode
+              ? strings.EDIT_BUSINESS_CARD
+              : strings.CREATE_BUSINESS_CARD
+          }
+          description={
+            strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
+          }
+          onSubmit={() => handleFormSubmit(values)}
+        >
+          {/* NOTE: we are not using Formik HOCs for focusing next input,
             as it doesn't support non-direct children as Inputs,
             but we need to support it to enable section names */}
-              <MoveToNext>
-                {Object.keys(groupedBC).map((groupKey: string, groupIdx) => {
-                  return (
-                    <View key={groupKey}>
-                      {renderSectionHeader(groupKey)}
-                      {groupedBC[groupKey].map((f, idx) => (
-                        <JoloKeyboardAwareScroll.InputContainer>
-                          {({ focusInput }) => (
-                            <MoveToNext.InputsCollector
-                              key={f.key}
-                              onSubmit={() => handleFormSubmit(values)}
-                            >
-                              <Input.Block
-                                {...(groupIdx === 0 && idx === 0
-                                  ? { autoFocus: true }
-                                  : { autoFocus: false })}
-                                // @ts-ignore name prop isn't supported by TextInput component
-                                name={f.key}
-                                value={values[f.key]}
-                                updateInput={handleChange(f.key)}
-                                placeholder={f.label}
-                                onFocus={focusInput}
-                                containerStyle={{ marginBottom: 12 }}
-                                {...f.keyboardOptions}
-                              />
-                            </MoveToNext.InputsCollector>
-                          )}
-                        </JoloKeyboardAwareScroll.InputContainer>
-                      ))}
-                      {renderSectionFooter()}
-                    </View>
-                  )
-                })}
-              </MoveToNext>
-            </>
-          )
-        }}
-      </Formik>
-    </FormContainer>
+          <MoveToNext>
+            {Object.keys(groupedBC).map((groupKey: string, groupIdx) => {
+              return (
+                <View key={groupKey}>
+                  {renderSectionHeader(groupKey)}
+                  {groupedBC[groupKey].map((f, idx) => (
+                    <JoloKeyboardAwareScroll.InputContainer>
+                      {({ focusInput }) => (
+                        <MoveToNext.InputsCollector
+                          key={f.key}
+                          onSubmit={() => handleFormSubmit(values)}
+                        >
+                          <Input.Block
+                            {...(groupIdx === 0 && idx === 0
+                              ? { autoFocus: true }
+                              : { autoFocus: false })}
+                            // @ts-ignore name prop isn't supported by TextInput component
+                            name={f.key}
+                            value={values[f.key]}
+                            updateInput={handleChange(f.key)}
+                            placeholder={f.label}
+                            onFocus={focusInput}
+                            containerStyle={{ marginBottom: 12 }}
+                            {...f.keyboardOptions}
+                          />
+                        </MoveToNext.InputsCollector>
+                      )}
+                    </JoloKeyboardAwareScroll.InputContainer>
+                  ))}
+                  {renderSectionFooter()}
+                </View>
+              )
+            })}
+          </MoveToNext>
+        </FormContainer>
+      )}
+    </Formik>
   )
 }
 

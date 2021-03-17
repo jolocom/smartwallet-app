@@ -351,6 +351,8 @@ const identity = {
   PLEASE_INTRODUCE_YOURSELF: 'Please introduce yourself',
   YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
     'You dont have any completed interactions yet. Make one today!',
+  EDIT_BUSINESS_CARD: 'Edit Business Card',
+  CREATE_BUSINESS_CARD: 'Create Business Card',
 }
 
 const bottomBar = {

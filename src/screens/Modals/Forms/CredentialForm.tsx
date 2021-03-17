@@ -82,8 +82,6 @@ const CredentialForm = () => {
     ? assembleFormInitialValues(formConfig.fields)
     : {}
 
-  const [values, setValues] = useState(formInitial)
-
   const handleCredentialSubmit = async (claims: Record<string, string>) => {
     try {
       if (attributeId) {
@@ -108,41 +106,40 @@ const CredentialForm = () => {
   }
 
   return (
-    <FormContainer
-      title={t(
-        attributeId ? strings.EDIT_YOUR_ATTRIBUTE : strings.ADD_YOUR_ATTRIBUTE,
-        { attribute: formConfig.label },
+    <Formik onSubmit={handleCredentialSubmit} initialValues={formInitial}>
+      {({ handleChange, values }) => (
+        <FormContainer
+          title={t(
+            attributeId
+              ? strings.EDIT_YOUR_ATTRIBUTE
+              : strings.ADD_YOUR_ATTRIBUTE,
+            { attribute: formConfig.label },
+          )}
+          description={
+            strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
+          }
+          onSubmit={() => handleCredentialSubmit(values)}
+        >
+          <AutofocusContainer>
+            {formConfig.fields.map((field, i) => {
+              return (
+                <AutofocusInput
+                  // @ts-ignore no idea why it's complaining
+                  name={field.key as string}
+                  key={field.key}
+                  updateInput={handleChange(field.key)}
+                  value={values[field.key]}
+                  placeholder={field.label}
+                  autoFocus={i === 0}
+                  containerStyle={{ marginBottom: 12 }}
+                  {...field.keyboardOptions}
+                />
+              )
+            })}
+          </AutofocusContainer>
+        </FormContainer>
       )}
-      description={
-        strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
-      }
-      onSubmit={() => handleCredentialSubmit(values)}
-    >
-      <Formik onSubmit={handleCredentialSubmit} initialValues={formInitial}>
-        {({ handleChange, values }) => {
-          setValues(values)
-          return (
-            <AutofocusContainer>
-              {formConfig.fields.map((field, i) => {
-                return (
-                  <AutofocusInput
-                    // @ts-ignore no idea why it's complaining
-                    name={field.key as string}
-                    key={field.key}
-                    updateInput={handleChange(field.key)}
-                    value={values[field.key]}
-                    placeholder={field.label}
-                    autoFocus={i === 0}
-                    containerStyle={{ marginBottom: 12 }}
-                    {...field.keyboardOptions}
-                  />
-                )
-              })}
-            </AutofocusContainer>
-          )
-        }}
-      </Formik>
-    </FormContainer>
+    </Formik>
   )
 }
 
