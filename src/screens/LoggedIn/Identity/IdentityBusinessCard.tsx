@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react'
-import { LayoutAnimation, View } from 'react-native'
+import React, { useMemo } from 'react'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
+
 import Dots from '~/components/Dots'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
@@ -14,28 +15,14 @@ import IdentityTabs from './tabs'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 
-enum Modes {
-  display = 'display',
-  edit = 'edit',
-}
-
 const BusinessCard: React.FC = () => {
   const redirect = useRedirect()
-  const [mode, setMode] = useState(Modes.display)
   const { handleDeleteCredentialSI } = useSICActions()
 
   const businessCardId = useSelector(getBusinessCardId)
   const { scheduleWarning } = useToasts()
 
   const isPlaceholder = !Boolean(businessCardId)
-
-  const transitionMode = (mode: Modes) => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: 200,
-    })
-    setMode(mode)
-  }
 
   const handleDeleteBC = async () => {
     if (businessCardId) {
@@ -46,8 +33,6 @@ const BusinessCard: React.FC = () => {
           title: 'Could not delete',
           message: 'Failed to delete business card',
         })
-      } finally {
-        transitionMode(Modes.display)
       }
     } else {
       throw new Error('Cannot perform delete on non existent business card')
