@@ -41,14 +41,7 @@ export type LoggedInStackParamList = {
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
 
 const settingsScreenTransitionOptions = {
-  ...Platform.select({
-    ios: {
-      ...TransitionPresets.ModalSlideFromBottomIOS,
-    },
-    android: {
-      ...TransitionPresets.DefaultTransition,
-    },
-  }),
+  ...TransitionPresets.ModalSlideFromBottomIOS,
   cardStyle: {
     backgroundColor: Colors.mainBlack,
   },
@@ -147,12 +140,12 @@ const LoggedIn = () => {
       <LoggedInStack.Screen
         name={ScreenNames.BusinessCardForm}
         component={BusinessCardForm}
-        options={{ gestureEnabled: false }}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
       <LoggedInStack.Screen
         name={ScreenNames.CredentialForm}
         component={CredentialForm}
-        options={{ gestureEnabled: false }}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
       {/* Modals -> End */}
     </LoggedInStack.Navigator>
