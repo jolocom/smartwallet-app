@@ -111,7 +111,6 @@ const nameConfig: IAttributeConfig = {
   validationSchema: nameValidation
 }
 
-// @ts-expect-error TODO: add validation schema when working with BusinessCard Validation
 const businessCardConfig: IAttributeConfig = {
   key: AttributeKeys.businessCard,
   label: strings.BUSINESS_CARD,
@@ -174,6 +173,7 @@ const businessCardConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: businessCardValidation
 }
 
 export const attributeConfig: Record<AttributeTypes, IAttributeConfig> = {

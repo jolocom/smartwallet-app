@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
@@ -27,6 +27,7 @@ import { strings } from '~/translations'
 import { AttributeI } from '~/modules/attributes/types'
 import { Colors } from '~/utils/colors'
 import { FormFieldContainer, FormError } from '~/components/Form/components'
+import useTranslation from '~/hooks/useTranslation'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
