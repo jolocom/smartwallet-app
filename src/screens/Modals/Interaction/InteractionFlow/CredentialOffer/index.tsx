@@ -52,6 +52,7 @@ const CredentialOfferBAS = () => {
       {offerDetails === null
         ? null
         : offerDetails.map((d) => {
+            // TODO: fix this: This wouldn't work because type are mapped to a credential type not credential name
             if (types[d.name] === CredentialRenderTypes.document) {
               return (
                 <IncomingOfferDoc
