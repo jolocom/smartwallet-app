@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { getSelectedShareCredentials } from '~/modules/interaction/selectors'
-import Widget from '.'
+import Widget from './Widget'
 import Field from './Field'
 import { AttributeTypes } from '~/types/credentials'
 import { IWidgetField } from './types'

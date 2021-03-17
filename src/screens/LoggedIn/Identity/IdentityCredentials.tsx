@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import Widget from '~/components/Widget'
+import Widget from '~/components/Widget/Widget'
 import Field from '~/components/Widget/Field'
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
