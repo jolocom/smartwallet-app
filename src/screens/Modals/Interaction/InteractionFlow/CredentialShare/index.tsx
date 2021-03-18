@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import CollapsedScrollView from '~/components/CollapsedScrollView'
-import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useSwitchScreens } from '~/hooks/navigation'
@@ -30,6 +29,7 @@ import {
   LogoContainerFAS,
   Space,
 } from '../components/styled'
+import ShareAttributeWidget from './ShareAttributeWidget'
 
 export const CredentialShareBAS = () => {
   const { singleMissingAttribute, singleCredential } = useSelector(

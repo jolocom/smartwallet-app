@@ -1,4 +1,4 @@
-import React, { Children } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import BP from '~/utils/breakpoints'
@@ -50,16 +50,6 @@ export const FooterContainerFAS: React.FC = ({ children }) => {
 
 export const Space = () => <View style={{ height: 48 }} />
 
-export const AttributeWidgetContainerFAS: React.FC = ({ children }) => {
-  if (!Children.count(children)) return null
-  return (
-    <>
-      <View children={children} style={styles.attributeWidgetContainerFAS} />
-      <Space />
-    </>
-  )
-}
-
 const styles = StyleSheet.create({
   containerBAS: {
     width: '96%',
@@ -100,21 +90,6 @@ const styles = StyleSheet.create({
       height: -3,
     },
     shadowRadius: 7,
-    shadowOpacity: 1,
-    elevation: 10,
-  },
-  attributeWidgetContainerFAS: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: Colors.codGrey,
-    borderRadius: 20,
-    // Shadows
-    shadowColor: Colors.black50,
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowRadius: 14,
     shadowOpacity: 1,
     elevation: 10,
   },

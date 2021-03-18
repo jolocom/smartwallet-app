@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { Children, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import {
   getAvailableAttributesToShare,
@@ -12,11 +12,65 @@ import { attributeConfig } from '~/config/claims'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { useSwitchScreens } from '~/hooks/navigation'
 
-import InteractionAttributesWidget from './InteractionAttributesWidget'
-import { AttributeWidgetContainerFAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
+import { Space } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
+import { Colors } from '~/utils/colors'
+import Field, { IWidgetField } from '~/components/Widget/Field'
+import Widget from '~/components/Widget'
 
 interface IShareAttributeWidgetProps {
   withContainer?: boolean
+}
+
+const AttributeWidgetContainerFAS: React.FC = ({ children }) => {
+  if (!Children.count(children)) return null
+  return (
+    <>
+      <View children={children} style={styles.attributeWidgetContainerFAS} />
+      <Space />
+    </>
+  )
+}
+
+interface IInteractionWidgetProps {
+  onAdd: () => void
+  onSelect: (attrType: AttributeTypes, id: string) => void
+  fields: IWidgetField[]
+  name: string
+  type: AttributeTypes
+}
+
+const InteractionAttributesWidget: React.FC<IInteractionWidgetProps> = ({
+  onAdd,
+  onSelect,
+  fields,
+  name,
+  type,
+}) => {
+  const selectedCredentials = useSelector(getSelectedShareCredentials)
+  return (
+    <Widget onAdd={onAdd}>
+      <Widget.Header>
+        <Widget.Header.Name value={name} />
+        <Widget.Header.Action.CreateNew />
+      </Widget.Header>
+      {!fields.length ? (
+        <Field.Empty />
+      ) : (
+        fields.map((field) => (
+          <Field.Selectable
+            key={field.id}
+            value={field.value}
+            onSelect={() => onSelect(type, field.id)}
+            isSelected={
+              selectedCredentials
+                ? selectedCredentials[type] === field.id
+                : false
+            }
+          />
+        ))
+      )}
+    </Widget>
+  )
 }
 
 const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
@@ -76,5 +130,23 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
     </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  attributeWidgetContainerFAS: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: Colors.codGrey,
+    borderRadius: 20,
+    // Shadows
+    shadowColor: Colors.black50,
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowRadius: 14,
+    shadowOpacity: 1,
+    elevation: 10,
+  },
+})
 
 export default ShareAttributeWidget
