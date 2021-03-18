@@ -2,7 +2,7 @@ import { KeyboardTypeOptions } from 'react-native'
 import { IdentitySummary } from 'react-native-jolocom'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { BaseMetadata, ClaimInterface } from '@jolocom/protocol-ts'
+import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 import { ObjectSchema } from 'yup'
 
@@ -58,7 +58,7 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   metadata: BaseMetadata
   fields: T[],
   // TODO: pass correct TShape instead of any
-  validationSchema: ObjectSchema<any>
+  validationSchema: ObjectSchema<Record<string, any>>
 }
 
 // NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties

@@ -90,8 +90,6 @@ const BusinessCardForm = () => {
     >
       {(formProps) => {
         const { handleChange, values, isValid, dirty, errors } = formProps
-        console.log(formProps)
-
         return (
           <FormContainer
             title={
