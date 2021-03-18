@@ -98,7 +98,7 @@ const BusinessCardForm = () => {
                 : strings.CREATE_BUSINESS_CARD
             }
             description={
-              'Once you click done, it will be displayed in the personal info section.'
+              strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
             }
             onSubmit={() => handleFormSubmit(values)}
             isSubmitDisabled={!isValid || !dirty}
