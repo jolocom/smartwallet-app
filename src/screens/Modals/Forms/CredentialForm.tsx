@@ -124,14 +124,15 @@ const CredentialForm = () => {
         } = formProps
         return (
           <FormContainer
-            title={
+            title={t(
               attributeId
-                ? strings.EDIT_YOUR(formConfig.label)
-                : strings.ADD_YOUR(formConfig.label)
-            }
-            description={
-              strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION
-            }
+                ? strings.EDIT_YOUR_ATTRIBUTE
+                : strings.ADD_YOUR_ATTRIBUTE,
+              { attribute: formConfig.label.toLowerCase() },
+            )}
+            description={t(
+              strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
+            )}
             onSubmit={() => handleCredentialSubmit(values)}
             isSubmitDisabled={!isValid || !dirty}
           >
