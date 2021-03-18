@@ -140,40 +140,35 @@ const CredentialForm = () => {
                 return (
                   <FormFieldContainer>
                     <AutofocusInput
-                      // @ts-ignore no idea why it's complaining
+                      // @ts-expect-error
                       name={field.key as string}
                       key={field.key}
-                      // NOTE: uncomment line below if values are not being updated inside a form
-                      // onChangeText={handleChange(field.key)}
                       updateInput={handleChange(field.key)}
                       value={values[field.key]}
                       placeholder={field.label}
                       autoFocus={i === 0}
-                      // onBlur={() => setFieldTouched(field.key, true, false)}
-                      onFocus={() => setFieldTouched(field.key, true, false)}
+                      onBlur={() => setFieldTouched(field.key, true, false)}
                       /* we want to show highlighted focused input only if
                         - there are no errors
                         - value is truthy
                       */
                       withHighlight={
-                        !Object.keys(errors).length &&
+                        !Boolean(errors[field.key]) &&
                         Boolean(values[field.key])
                       }
-                      /* NOTE: below is specifically for address credentials */
-                      // containerStyle={{
-                      //   ...(errors[field.key] &&
-                      //     touched[field.key] && { borderColor: Colors.error }),
-                      // }}
                       containerStyle={{
-                        ...(errors[field.key] && { borderColor: Colors.error }),
+                        ...(((attributeType === AttributeTypes.postalAddress &&
+                          touched[field.key]) ||
+                          attributeType !== AttributeTypes.postalAddress) &&
+                          errors[field.key] && { borderColor: Colors.error }),
                       }}
                       {...field.keyboardOptions}
                     />
-                    {/* NOTE: below is specifically for address credentials */}
-                    {/* {touched[field.key] && (
+                    {(attributeType === AttributeTypes.postalAddress &&
+                      touched[field.key]) ||
+                    attributeType !== AttributeTypes.postalAddress ? (
                       <FormError message={errors[field.key]} />
-                      )} */}
-                    <FormError message={errors[field.key]} />
+                    ) : null}
                   </FormFieldContainer>
                 )
               })}
