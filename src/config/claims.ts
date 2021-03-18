@@ -14,6 +14,13 @@ import {
   mobileNumberValidation,
   businessCardValidation,
 } from './validation'
+import { Platform, KeyboardTypeOptions } from 'react-native'
+
+// NOTE: the default `number-pad` type doesn't have the submit button on ios
+const numberPadKeyboardType: KeyboardTypeOptions = Platform.select({
+  ios: 'numbers-and-punctuation',
+  default: 'number-pad',
+})
 
 // TODO: add input validation for each field
 const emailConfig: IAttributeConfig = {
@@ -50,7 +57,7 @@ const postalAddressConfig: IAttributeConfig = {
       key: ClaimKeys.postalCode,
       label: strings.POSTAL_CODE_FIELD,
       keyboardOptions: {
-        keyboardType: 'number-pad',
+        keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
       },
     },
@@ -83,7 +90,7 @@ const mobileNumberConfig: IAttributeConfig = {
       key: ClaimKeys.telephone,
       label: strings.NUMBER,
       keyboardOptions: {
-        keyboardType: 'phone-pad',
+        keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
       },
     },
@@ -165,7 +172,7 @@ const businessCardConfig: IAttributeConfig = {
       key: ClaimKeys.telephone,
       label: strings.NUMBER,
       keyboardOptions: {
-        keyboardType: 'number-pad',
+        keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
       },
     },
