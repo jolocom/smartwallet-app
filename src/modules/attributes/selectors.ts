@@ -32,7 +32,7 @@ export const getBusinessCardAttribute = createSelector(
   (attributes) => {
     const { ProofOfBusinessCardCredential } = attributes
     // NOTE: we assume we can only have one business card.
-    return !!ProofOfBusinessCardCredential.length
+    return !!ProofOfBusinessCardCredential
       ? ProofOfBusinessCardCredential[0]
       : undefined
   },
