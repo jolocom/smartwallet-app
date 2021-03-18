@@ -56,8 +56,7 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   key: AttributeKeys
   label: string
   metadata: BaseMetadata
-  fields: T[],
-  // TODO: pass correct TShape instead of any
+  fields: T[]
   validationSchema: ObjectSchema<Record<string, any>>
 }
 

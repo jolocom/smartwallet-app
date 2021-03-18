@@ -7,8 +7,13 @@ import {
   ClaimKeys,
 } from '~/types/credentials'
 import { strings } from '~/translations'
-import { emailValidation, nameValidation, postalAddressValidation, mobileNumberValidation, businessCardValidation
- } from './validation'
+import {
+  emailValidation,
+  nameValidation,
+  postalAddressValidation,
+  mobileNumberValidation,
+  businessCardValidation,
+} from './validation'
 
 // TODO: add input validation for each field
 const emailConfig: IAttributeConfig = {
@@ -25,7 +30,7 @@ const emailConfig: IAttributeConfig = {
       },
     },
   ],
-  validationSchema: emailValidation
+  validationSchema: emailValidation,
 }
 
 const postalAddressConfig: IAttributeConfig = {
@@ -66,7 +71,7 @@ const postalAddressConfig: IAttributeConfig = {
       },
     },
   ],
-  validationSchema: postalAddressValidation
+  validationSchema: postalAddressValidation,
 }
 
 const mobileNumberConfig: IAttributeConfig = {
@@ -83,7 +88,7 @@ const mobileNumberConfig: IAttributeConfig = {
       },
     },
   ],
-  validationSchema: mobileNumberValidation
+  validationSchema: mobileNumberValidation,
 }
 
 const nameConfig: IAttributeConfig = {
@@ -108,7 +113,7 @@ const nameConfig: IAttributeConfig = {
       },
     },
   ],
-  validationSchema: nameValidation
+  validationSchema: nameValidation,
 }
 
 const businessCardConfig: IAttributeConfig = {
@@ -173,7 +178,7 @@ const businessCardConfig: IAttributeConfig = {
       },
     },
   ],
-  validationSchema: businessCardValidation
+  validationSchema: businessCardValidation,
 }
 
 export const attributeConfig: Record<AttributeTypes, IAttributeConfig> = {

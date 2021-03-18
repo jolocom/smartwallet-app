@@ -156,7 +156,7 @@ const CredentialForm = () => {
                         !Boolean(errors[field.key]) &&
                         Boolean(values[field.key])
                       }
-                      /* NOTE: all these conditionals is an ugly workaround when errors are displayed in postal address.
+                      /* NOTE: all these conditions is an ugly workaround when errors are displayed in postal address.
                          We need to check if a field was touched and only then show an error,
                          otherwise all the errors appear at once if one field is incorrect
                       */
