@@ -2,14 +2,13 @@ import { useDispatch } from 'react-redux'
 
 import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-// import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { useToasts } from '../toasts'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
 import { useRedirect } from '../navigation'
 import { useFinishInteraction } from '.'
-import { addCredential } from '~/modules/credentials/actions'
+import { addCredentials } from '~/modules/credentials/actions'
 import { useInitializeCredentials } from '../signedCredentials'
 
 const useCredentialOfferSubmit = () => {
@@ -43,14 +42,13 @@ const useCredentialOfferSubmit = () => {
   const handleStoreIssuedCredentials = async () => {
     const issuedCredentials = await storeSelectedCredentials();
     const customDisplayCredentials = await getCredentialCustomDisplay(issuedCredentials)
-    dispatch(addCredential(customDisplayCredentials))
+    dispatch(addCredentials(customDisplayCredentials))
   }
 
   return async () => {
     try {
       if (await credentialsAlreadyIssued()) {
         await handleStoreIssuedCredentials()
-        // await syncCredentials()
         scheduleSuccess()
         return finishInteraction()
       }

@@ -6,8 +6,8 @@ export const setCredentials = createAction<DisplayCredentialCustom[]>(
   CredentialActions.setCredentials,
 )
 
-export const addCredential = createAction<DisplayCredentialCustom[]>(
-  CredentialActions.addCredential,
+export const addCredentials = createAction<DisplayCredentialCustom[]>(
+  CredentialActions.addCredentials,
 )
 
 export const deleteCredential = createAction<string>(
