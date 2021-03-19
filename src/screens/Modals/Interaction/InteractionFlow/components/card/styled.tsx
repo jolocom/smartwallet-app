@@ -58,37 +58,6 @@ export const OtherContainer: React.FC = ({ children }) => {
   return <View style={styles.otherContainer} children={children} />
 }
 
-export const OtherTitleContainer: React.FC = ({ children }) => {
-  return (
-    <View
-      style={{
-        position: 'absolute',
-        right: '5%',
-        top: 0,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-      children={children}
-    />
-  )
-}
-
-export const OtherTitle: React.FC = ({ children }) => {
-  return (
-    <JoloText
-      weight={JoloTextWeight.regular}
-      color={Colors.black50}
-      customStyles={{
-        fontSize: 18,
-        transform: [{ rotate: '90deg' }],
-      }}
-    >
-      {children}
-    </JoloText>
-  )
-}
-
 export const EmptyContainer: React.FC = ({ children }) => {
   return <View style={styles.emptyContainer} children={children} />
 }
@@ -182,12 +151,6 @@ const styles = StyleSheet.create({
   otherContainer: {
     width: '73%',
     height: '100%',
-  },
-  otherTitleContainer: {
-    width: '37%',
-    height: '100%',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
   },
   emptyContainer: {
     paddingHorizontal: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),

@@ -8,10 +8,10 @@ import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSub
 import {
   getCredByType,
   getIsFullscreenCredOffer,
-  getOfferCredentialsBySection,
+  getOfferedCredentialsByCategories,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
-import { OfferUICredential } from '~/types/credentials'
+import { OfferedCredential, OtherCategory } from '~/types/credentials'
 import IncomingOfferDoc from '../components/card/offer/document'
 import IncomingOfferOther from '../components/card/offer/other'
 import {
@@ -81,7 +81,7 @@ const CredentialOfferBAS = () => {
 }
 
 const CredentialOfferFAS = () => {
-  const { documents, other } = useSelector(getOfferCredentialsBySection)
+  const categories = useSelector(getOfferedCredentialsByCategories)
 
   const handleSubmit = useCredentialOfferSubmit()
   const offerDetails = useMappedOfferDetails()
@@ -90,7 +90,10 @@ const CredentialOfferFAS = () => {
     document: offerDocDetails,
     other: offerOtherDetails,
   } = separateIntoSections<IIncomingOfferDocProps | IIncomingOfferOtherProps>(
-    { document: documents, other },
+    {
+      document: categories[CredentialRenderTypes.document],
+      other: categories[OtherCategory.other],
+    },
     offerDetails,
   )
 
@@ -104,7 +107,7 @@ const CredentialOfferFAS = () => {
   )
 
   const handleRenderCredentials = (
-    credentials: OfferUICredential[],
+    credentials: OfferedCredential[],
     details: IIncomingOfferDocProps[] | IIncomingOfferDocProps[],
     renderType: CredentialRenderTypes.document | 'other',
   ) => {
@@ -146,13 +149,17 @@ const CredentialOfferFAS = () => {
         <Space />
         <InteractionSection title={strings.DOCUMENTS}>
           {handleRenderCredentials(
-            documents,
+            categories[CredentialRenderTypes.document],
             offerDocDetails,
             CredentialRenderTypes.document,
           )}
         </InteractionSection>
         <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentials(other, offerOtherDetails, 'other')}
+          {handleRenderCredentials(
+            categories[OtherCategory.other],
+            offerOtherDetails,
+            'other',
+          )}
         </InteractionSection>
       </CollapsedScrollView>
       <FooterContainerFAS>

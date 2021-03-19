@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { StyleSheet, View } from 'react-native'
 
 import {
-  getAvailableAttributesToShare,
+  getAvailableRequestedAttributes,
   getSelectedShareCredentials,
 } from '~/modules/interaction/selectors'
 import { AttributeTypes } from '~/types/credentials'
@@ -76,7 +76,7 @@ const InteractionAttributesWidget: React.FC<IInteractionWidgetProps> = ({
 const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   withContainer = false,
 }) => {
-  const attributes = useSelector(getAvailableAttributesToShare)
+  const attributes = useSelector(getAvailableRequestedAttributes)
   const selectedCredentials = useSelector(getSelectedShareCredentials)
 
   if (!Object.keys(attributes).length) return null

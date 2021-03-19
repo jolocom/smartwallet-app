@@ -60,17 +60,9 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
 
 export type BaseUICredential = Pick<SignedCredential, 'id' |  'issuer' | 'issued' | 'type' | 'expires' | 'subject' | 'name'>
 
-// TODO: remove for consistency and use DocumentTypes instead
-export enum CredentialSection {
-  Documents = 'documents',
-  Other = 'other',
-}
-
-export type CredentialsBySection<T> = Record<CredentialSection, T[]>
-
-export interface OfferUICredential extends BaseUICredential {
-  invalid: boolean
-}
+export type OfferedCredential =
+  & Pick<BaseUICredential, 'type'>
+  & {category:CredentialCategory, invalid: boolean}
 
 export enum DocumentTypes {
   document = 'document',
@@ -84,7 +76,7 @@ export enum DocumentFields {
 export enum OtherCategory {
   other = 'other'
 }
-type CredentialCategory = CredentialRenderTypes |  OtherCategory
+export type CredentialCategory = CredentialRenderTypes |  OtherCategory
 
 export type DisplayCredential =
 & BaseUICredential
@@ -96,9 +88,11 @@ export type DisplayCredentialDocument =
   & { holderName: string, photo?: string, highlight?: string}
 export type DisplayCredentialOther = DisplayCredential & {photo?: string}
 
-export type CredentialsByCategory = Record<OtherCategory.other | CredentialRenderTypes.document, DisplayCredential[]>
-export type RequestedCredentialsByType = {type: string, credentials: DisplayCredential[]}
-export type RequestedCredentialsByCategory = Record<OtherCategory.other | CredentialRenderTypes.document, RequestedCredentialsByType[]>
+export type RequestedCredentialsByType<T> = {type: string, credentials: T[]}
+
+export type CredentialsByCategory<T> = Record<OtherCategory.other | CredentialRenderTypes.document, T[]>
+
+export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<RequestedCredentialsByType<T>>
 
 export function isDocument(credential: DisplayCredentialDocument |  DisplayCredentialOther): credential is DisplayCredentialDocument {
   return credential.category === CredentialRenderTypes.document;

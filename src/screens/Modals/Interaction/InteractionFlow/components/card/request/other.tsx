@@ -11,8 +11,6 @@ import {
   HelperTitle,
   HeaderContainer,
   OtherContainer,
-  OtherTitle,
-  OtherTitleContainer,
   CredentialName,
   FieldLabel,
 } from '../styled'
@@ -90,9 +88,6 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
               </EmptyContainer>
             )}
           </OtherContainer>
-          <OtherTitleContainer>
-            <OtherTitle>{name}</OtherTitle>
-          </OtherTitleContainer>
         </InteractionCardOther>
       </ResponsiveCard.Container>
     </ResponsiveCard>

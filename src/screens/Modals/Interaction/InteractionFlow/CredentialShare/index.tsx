@@ -8,16 +8,17 @@ import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSub
 import { useSwitchScreens } from '~/hooks/navigation'
 import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 import {
-  getCredShareUIDetailsBAS,
+  getRequestedCredentialDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
-  getShareCredentialsByCategory,
+  getRequestedCredentialsByCategoryByType,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
 import {
   isDocument,
   RequestedCredentialsByType,
   OtherCategory,
+  DisplayCredential,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { IncomingRequestDoc } from '../components/card/request/document'
@@ -38,8 +39,8 @@ import {
 import ShareAttributeWidget from './ShareAttributeWidget'
 
 export const CredentialShareBAS = () => {
-  const { singleMissingAttribute, singleCredential } = useSelector(
-    getCredShareUIDetailsBAS,
+  const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
+    getRequestedCredentialDetailsBAS,
   )
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
@@ -52,23 +53,23 @@ export const CredentialShareBAS = () => {
 
   /* We are preselecting a credential that is requested */
   useEffect(() => {
-    if (singleCredential) {
+    if (singleRequestedCredential) {
       handleSelectCredential({
-        [singleCredential.type[1]]: singleCredential?.id,
+        [singleRequestedCredential.type[1]]: singleRequestedCredential?.id,
       })
     }
-  }, [JSON.stringify(singleCredential)])
+  }, [JSON.stringify(singleRequestedCredential)])
 
   const handleSubmit = () =>
-    singleMissingAttribute !== undefined
-      ? handleSwitchScreens({ type: singleMissingAttribute })
+    singleRequestedAttribute !== undefined
+      ? handleSwitchScreens({ type: singleRequestedAttribute })
       : handleShare()
 
   const renderBody = () => {
-    if (singleMissingAttribute) return null
-    else if (singleCredential !== undefined) {
+    if (singleRequestedAttribute) return null
+    else if (singleRequestedCredential !== undefined) {
       const displaySingleCredentials = mapDisplayToCustomDisplay(
-        singleCredential,
+        singleRequestedCredential,
       )
       const { type, name, properties } = displaySingleCredentials
       return (
@@ -114,7 +115,7 @@ export const CredentialShareBAS = () => {
         disabled={!isReadyToSubmit}
         onSubmit={handleSubmit}
         submitLabel={
-          singleMissingAttribute !== undefined
+          singleRequestedAttribute !== undefined
             ? strings.ADD_INFO
             : strings.SHARE
         }
@@ -124,7 +125,7 @@ export const CredentialShareBAS = () => {
 }
 
 const CredentialShareFAS = () => {
-  const categories = useSelector(getShareCredentialsByCategory)
+  const categories = useSelector(getRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
   const handleSubmit = useCredentialShareSubmit()
@@ -151,7 +152,7 @@ const CredentialShareFAS = () => {
   }))
 
   const handleRenderCredentials = (
-    credCollections: RequestedCredentialsByType[],
+    credCollections: RequestedCredentialsByType<DisplayCredential>[],
   ) =>
     credCollections.map(({ type, credentials }) => {
       const isCarousel = credentials.length > 1

@@ -12,6 +12,7 @@ import {
   AttributeTypes,
   IAttributeClaimFieldWithValue,
   IAttributeClaimField,
+  OtherCategory,
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
@@ -85,9 +86,8 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
     credentials: {
       service_issued: summary.state.offerSummary.map(
         ({ renderInfo, type }) => ({
-          type,
-          renderInfo,
-          issuer: summary.initiator,
+          type: ['', type],
+          category: renderInfo?.renderAs ?? OtherCategory.other,
           invalid: false,
         }),
       ),

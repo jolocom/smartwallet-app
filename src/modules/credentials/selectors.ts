@@ -1,6 +1,6 @@
 import { RootReducerI } from '~/types/reducer'
 import { createSelector } from 'reselect'
-import { CredentialsByCategory, OtherCategory } from '~/types/credentials'
+import { CredentialsByCategory, DisplayCredential, OtherCategory } from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 
 export const getAllCredentials = (state: RootReducerI) => state.credentials.all
@@ -8,7 +8,7 @@ export const getAllCredentials = (state: RootReducerI) => state.credentials.all
 export const getCredentialsByCategories = createSelector(
   getAllCredentials,
   (credentials) =>
-  credentials.reduce<CredentialsByCategory>(
+  credentials.reduce<CredentialsByCategory<DisplayCredential>>(
       (sections, credential) => {
         if (
           credential.category === CredentialRenderTypes.document
