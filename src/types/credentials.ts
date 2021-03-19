@@ -68,14 +68,6 @@ export enum CredentialSection {
 
 export type CredentialsBySection<T> = Record<CredentialSection, T[]>
 
-// TODO: confusing name
-export interface MultipleShareUICredential {
-  type: string
-  credentials: DisplayCredential[]
-}
-
-export type ShareCredentialsBySection = CredentialsBySection<MultipleShareUICredential>
-
 export interface OfferUICredential extends BaseUICredential {
   invalid: boolean
 }
@@ -92,11 +84,11 @@ export enum DocumentFields {
 export enum OtherCategory {
   other = 'other'
 }
-type CredentialCategories = CredentialRenderTypes |  OtherCategory
+type CredentialCategory = CredentialRenderTypes |  OtherCategory
 
 export type DisplayCredential =
 & BaseUICredential
-& {category: CredentialCategories}
+& {category: CredentialCategory}
 & Pick<CredentialDisplay['display'], 'properties'>
 
 export type DisplayCredentialDocument = 
@@ -105,6 +97,8 @@ export type DisplayCredentialDocument =
 export type DisplayCredentialOther = DisplayCredential & {photo?: string}
 
 export type CredentialsByCategory = Record<OtherCategory.other | CredentialRenderTypes.document, DisplayCredential[]>
+export type RequestedCredentialsByType = {type: string, credentials: DisplayCredential[]}
+export type RequestedCredentialsByCategory = Record<OtherCategory.other | CredentialRenderTypes.document, RequestedCredentialsByType[]>
 
 export function isDocument(credential: DisplayCredentialDocument |  DisplayCredentialOther): credential is DisplayCredentialDocument {
   return credential.category === CredentialRenderTypes.document;

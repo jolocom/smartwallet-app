@@ -6,12 +6,13 @@ import {
   CredentialsBySection,
   DisplayCredential,
   OfferUICredential,
-  ShareCredentialsBySection,
+  OtherCategory,
+  RequestedCredentialsByCategory,
 } from '~/types/credentials'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
-import { getCredentialSection } from '~/utils/credentialsBySection'
+import { getCredentialCategory } from '~/utils/credentialsBySection'
 import { InteractionDetails } from './types'
 import {
   isAuthDetails,
@@ -115,9 +116,9 @@ const getAvailableCredentialsToShare = createSelector(
   [getCredShareDetails, getAllCredentials],
   ({ requestedCredentials }, credentials) =>
     requestedCredentials.reduce<DisplayCredential[]>((acc, type) => {
-      const creds = credentials.filter((cred) => cred.type === type)
-      if (!creds.length) return acc
-      acc = [...acc, ...creds]
+      const credentialsOfType = credentials.filter((cred) => cred.type[1] === type)
+      if (!credentialsOfType.length) return acc
+      acc = [...acc, ...credentialsOfType]
       return acc
     }, []),
 )
@@ -170,22 +171,20 @@ export const getShareCredentialTypes = createSelector(
 )
 
 /**
- * Gets the categorized @DisplayCredential from the @credentials module
- * based on the @interactionDetails.
+  * @return RequestedCredentialsByCategory
  */
-export const getShareCredentialsBySection = createSelector(
+export const getShareCredentialsByCategory = createSelector(
   [getAvailableCredentialsToShare, getShareCredentialTypes],
   (shareCredentials, requestedCredTypes) => {
-    const defaultSections = { documents: [], other: [] }
-    return requestedCredTypes.requestedCredentials.reduce<ShareCredentialsBySection>(
+    return requestedCredTypes.requestedCredentials.reduce<RequestedCredentialsByCategory>(
       (acc, type) => {
         const credentials = shareCredentials.filter(
-          (cred) => cred.type === type,
+          (cred) => cred.type[1] === type,
         )
 
         // NOTE: we assume the @renderAs property is the same for all credentials
         // of the same type
-        const section = getCredentialSection(credentials[0])
+        const section = getCredentialCategory(credentials[0])
 
         acc[section] = [
           ...acc[section],
@@ -197,7 +196,7 @@ export const getShareCredentialsBySection = createSelector(
 
         return acc
       },
-      defaultSections,
+      {[CredentialRenderTypes.document]: [], [OtherCategory.other]: []},
     )
   },
 )
@@ -221,6 +220,7 @@ export const getIsFullscreenCredOffer = createSelector(
   },
 )
 
+// TODO: fix this 
 /**
  * Gets the categorized @OfferUICredentials from the @interactionDetails.
  */
@@ -235,7 +235,7 @@ export const getOfferCredentialsBySection = createSelector(
     return details.credentials.service_issued.reduce<
       CredentialsBySection<OfferUICredential>
     >((acc, cred) => {
-      const section = getCredentialSection(cred)
+      const section = getCredentialCategory(cred)
       acc[section] = [...acc[section], cred]
 
       return acc

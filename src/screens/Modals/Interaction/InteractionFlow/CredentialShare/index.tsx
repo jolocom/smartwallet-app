@@ -1,3 +1,4 @@
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useCallback, useEffect } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -10,10 +11,14 @@ import {
   getCredShareUIDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
-  getShareCredentialsBySection,
+  getShareCredentialsByCategory,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
-import { isDocument, MultipleShareUICredential } from '~/types/credentials'
+import {
+  isDocument,
+  RequestedCredentialsByType,
+  OtherCategory,
+} from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { IncomingRequestDoc } from '../components/card/request/document'
 import { IncomingRequestOther } from '../components/card/request/other'
@@ -119,7 +124,7 @@ export const CredentialShareBAS = () => {
 }
 
 const CredentialShareFAS = () => {
-  const { documents, other } = useSelector(getShareCredentialsBySection)
+  const categories = useSelector(getShareCredentialsByCategory)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
   const handleSubmit = useCredentialShareSubmit()
@@ -133,8 +138,20 @@ const CredentialShareFAS = () => {
     [],
   )
 
+  const documents = categories[CredentialRenderTypes.document]
+  const other = categories[OtherCategory.other]
+
+  const displayDocuments = documents.map((d) => ({
+    ...d,
+    credentials: d.credentials.map(mapDisplayToCustomDisplay),
+  }))
+  const displayOther = other.map((o) => ({
+    ...o,
+    credentials: o.credentials.map(mapDisplayToCustomDisplay),
+  }))
+
   const handleRenderCredentials = (
-    credCollections: MultipleShareUICredential[],
+    credCollections: RequestedCredentialsByType[],
   ) =>
     credCollections.map(({ type, credentials }) => {
       const isCarousel = credentials.length > 1
@@ -142,7 +159,7 @@ const CredentialShareFAS = () => {
       const Wrapper = isCarousel ? React.Fragment : React.Fragment
       return (
         <Wrapper key={type}>
-          {credentials.map(mapDisplayToCustomDisplay).map((cred) => {
+          {credentials.map((cred) => {
             const { name, type, properties } = cred
             return (
               <View
@@ -188,10 +205,10 @@ const CredentialShareFAS = () => {
         <Space />
         <ShareAttributeWidget withContainer />
         <InteractionSection title={strings.DOCUMENTS}>
-          {handleRenderCredentials(documents)}
+          {handleRenderCredentials(displayDocuments)}
         </InteractionSection>
         <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentials(other)}
+          {handleRenderCredentials(displayOther)}
         </InteractionSection>
       </CollapsedScrollView>
       <FooterContainerFAS>
