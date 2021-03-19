@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import CollapsedScrollView from '~/components/CollapsedScrollView'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import {
-  getCredByType,
+  getOfferedCredentialCategories,
   getIsFullscreenCredOffer,
   getOfferedCredentialsByCategories,
 } from '~/modules/interaction/selectors'
@@ -37,7 +37,7 @@ import { separateIntoSections } from './utils'
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offerDetails = useMappedOfferDetails()
-  const types = useSelector(getCredByType)
+  const types = useSelector(getOfferedCredentialCategories)
 
   return (
     <ContainerBAS>
@@ -52,8 +52,7 @@ const CredentialOfferBAS = () => {
       {offerDetails === null
         ? null
         : offerDetails.map((d) => {
-            // TODO: fix this: This wouldn't work because type are mapped to a credential type not credential name
-            if (types[d.name] === CredentialRenderTypes.document) {
+            if (types[d.type] === CredentialRenderTypes.document) {
               return (
                 <IncomingOfferDoc
                   key={d.name}

@@ -362,19 +362,16 @@ export const getRequestedCredentialDetailsBAS = createSelector(
   }),
 )
 
-export const getCredByType = createSelector(
+export const getOfferedCredentialCategories = createSelector(
   [getCredOfferDetails],
   (details) => {
     const {
       credentials: { service_issued },
     } = details
     return service_issued.reduce<
-      Record<string, CredentialRenderTypes.document | 'other'>
+      Record<string, CredentialRenderTypes.document | OtherCategory.other>
     >((credByType, c) => {
-      credByType[c.type] =
-        c.renderInfo?.renderAs === CredentialRenderTypes.document
-          ? c.renderInfo?.renderAs
-          : 'other'
+      credByType[c.type[1]] = getCredentialCategory(c);        
       return credByType
     }, {})
   },

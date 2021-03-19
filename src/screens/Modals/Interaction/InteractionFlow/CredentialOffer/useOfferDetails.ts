@@ -23,10 +23,10 @@ const useGetOfferDetails = () => {
   }
 }
 
+type IWithType = { type: string }
+
 export const useMappedOfferDetails = () => {
-  const [offerDetails, setOfferDetails] = useState<
-    IIncomingOfferDocProps[] | IIncomingOfferOtherProps[] | null
-  >(null)
+  const [offerDetails, setOfferDetails] = useState<( (IWithType & IIncomingOfferDocProps)[] | (IWithType & IIncomingOfferOtherProps)[]) | null>(null)
   const getOfferDetails = useGetOfferDetails()
 
   const handleGettingOfferDetails = async () => {
@@ -34,6 +34,7 @@ export const useMappedOfferDetails = () => {
 
     setOfferDetails(
       details.map((c) => ({
+        type: c.type,
         name: c.name,
         properties: c.display.properties,
       })),
