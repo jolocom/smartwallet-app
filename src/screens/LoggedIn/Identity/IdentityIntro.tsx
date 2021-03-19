@@ -45,8 +45,17 @@ const WelcomeSheet: React.FC = () => {
     }
   }
 
+  const handleWidgetReset = () => {
+    animateSheet()
+    setActiveForm(null)
+  }
+
   return (
-    <Fallin isFallingIn={isTopSheetVisible} from="top">
+    <Fallin
+      isFallingIn={isTopSheetVisible}
+      from="top"
+      onDismiss={handleWidgetReset}
+    >
       <View style={styles.container}>
         {activeForm === IdentityForms.SingleCredential ? (
           <SingleCredentialWizard onFormSubmit={() => changeActiveForm(null)} />

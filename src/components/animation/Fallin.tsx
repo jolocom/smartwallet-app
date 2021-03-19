@@ -5,17 +5,24 @@ import {
   LayoutChangeEvent,
   StyleSheet,
 } from 'react-native'
+import ScreenDismissArea from '../ScreenDismissArea'
 
 type FallinFrom = 'top' | 'bottom'
 
 interface IFallinProps {
   isFallingIn: boolean
   from: FallinFrom
+  onDismiss: () => void
 }
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const Fallin: React.FC<IFallinProps> = ({ children, isFallingIn, from }) => {
+const Fallin: React.FC<IFallinProps> = ({
+  children,
+  isFallingIn,
+  from,
+  onDismiss,
+}) => {
   const heightRef = useRef((from === 'top' ? -1 : 1) * 2.5 * SCREEN_HEIGHT)
   const positionRef = useRef(new Animated.Value(0)).current
   const [layoutDone, setLayoutDone] = useState(false)
@@ -62,13 +69,14 @@ const Fallin: React.FC<IFallinProps> = ({ children, isFallingIn, from }) => {
       style={[styles.container, { transform: [{ translateY: positionRef }] }]}
     >
       {isFallingIn && children}
+      <ScreenDismissArea onDismiss={onDismiss} />
     </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    flex: 1,
   },
 })
 
