@@ -5,6 +5,7 @@ import CollapsedScrollView from '~/components/CollapsedScrollView'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useSwitchScreens } from '~/hooks/navigation'
+import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 import {
   getCredShareUIDetailsBAS,
   getIsFullscreenCredShare,
@@ -47,7 +48,9 @@ export const CredentialShareBAS = () => {
   /* We are preselecting a credential that is requested */
   useEffect(() => {
     if (singleCredential) {
-      handleSelectCredential({ [singleCredential.type]: singleCredential?.id })
+      handleSelectCredential({
+        [singleCredential.type[1]]: singleCredential?.id,
+      })
     }
   }, [JSON.stringify(singleCredential)])
 
@@ -59,26 +62,20 @@ export const CredentialShareBAS = () => {
   const renderBody = () => {
     if (singleMissingAttribute) return null
     else if (singleCredential !== undefined) {
-      // TODO: is there enum for documents? others? permissions?
-      const {
-        renderInfo,
-        type,
-        name,
-        properties,
-        holderName,
-        photo,
-        highlight,
-      } = singleCredential
+      const displaySingleCredentials = mapDisplayToCustomDisplay(
+        singleCredential,
+      )
+      const { type, name, properties } = displaySingleCredentials
       return (
         <>
-          {isDocument(renderInfo?.renderAs) ? (
+          {isDocument(displaySingleCredentials) ? (
             <IncomingRequestDoc
               name={name ?? type}
-              holderName={holderName}
+              holderName={displaySingleCredentials.holderName}
               properties={properties}
-              highlight={highlight}
+              highlight={displaySingleCredentials.highlight}
               // TODO: change name to photo
-              image={photo}
+              image={displaySingleCredentials.photo}
             />
           ) : (
             <IncomingRequestOther name={name ?? type} properties={properties} />
@@ -145,7 +142,7 @@ const CredentialShareFAS = () => {
       const Wrapper = isCarousel ? React.Fragment : React.Fragment
       return (
         <Wrapper key={type}>
-          {credentials.map((cred) => {
+          {credentials.map(mapDisplayToCustomDisplay).map((cred) => {
             const { name, type, properties } = cred
             return (
               <View
@@ -155,7 +152,7 @@ const CredentialShareFAS = () => {
                   marginVertical: 14,
                 }}
               >
-                {isDocument(cred.renderInfo?.renderAs) ? (
+                {isDocument(cred) ? (
                   <IncomingRequestDoc
                     name={name ?? type}
                     properties={properties}

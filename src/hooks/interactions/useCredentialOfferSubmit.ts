@@ -21,7 +21,6 @@ const useCredentialOfferSubmit = () => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
-  // const syncCredentials = useSyncStorageCredentials()
   const {
     scheduleErrorInteraction,
     scheduleSuccessInteraction,
@@ -29,7 +28,7 @@ const useCredentialOfferSubmit = () => {
   const { scheduleInfo } = useToasts()
   const redirect = useRedirect()
   const finishInteraction = useFinishInteraction()
-  const {getCredentialCustomDisplay} = useInitializeCredentials()
+  const {getCredentialDisplay} = useInitializeCredentials()
 
   const scheduleSuccess = () =>
     scheduleSuccessInteraction({
@@ -41,8 +40,8 @@ const useCredentialOfferSubmit = () => {
 
   const handleStoreIssuedCredentials = async () => {
     const issuedCredentials = await storeSelectedCredentials();
-    const customDisplayCredentials = await getCredentialCustomDisplay(issuedCredentials)
-    dispatch(addCredentials(customDisplayCredentials))
+    const displayCredentials = await getCredentialDisplay(issuedCredentials)
+    dispatch(addCredentials(displayCredentials))
   }
 
   return async () => {

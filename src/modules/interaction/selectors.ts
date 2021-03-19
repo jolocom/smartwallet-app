@@ -23,7 +23,7 @@ import {
 import BP from '~/utils/breakpoints'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 
-const createInteractionSelector = <T extends InteractionDetails>(
+const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
 ) =>
   createSelector([getActiveInteraction], (details) => {
@@ -80,10 +80,10 @@ export const getInteractionCounterparty = createSelector(
  * Gets the @interactionDetails for each type of interaction. Can only be used within the specific interaction
  * components, otherwise will throw (e.g. using @getAuthenticationDetails inside @BasWrapper will throw).
  */
-export const getAuthenticationDetails = createInteractionSelector(isAuthDetails)
-export const getAuthorizationDetails = createInteractionSelector(isAuthzDetails)
-export const getCredShareDetails = createInteractionSelector(isCredShareDetails)
-export const getCredOfferDetails = createInteractionSelector(isCredOfferDetails)
+export const getAuthenticationDetails = makeInteractionSelector(isAuthDetails)
+export const getAuthorizationDetails = makeInteractionSelector(isAuthzDetails)
+export const getCredShareDetails = makeInteractionSelector(isCredShareDetails)
+export const getCredOfferDetails = makeInteractionSelector(isCredOfferDetails)
 
 /** CredentialShare selectors **/
 

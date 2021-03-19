@@ -1,12 +1,12 @@
-import { DisplayCredentialCustom } from '~/types/credentials'
+import { DisplayCredential } from '~/types/credentials'
 import createAction from '~/utils/createAction'
 import { CredentialActions } from './types'
 
-export const setCredentials = createAction<DisplayCredentialCustom[]>(
+export const setCredentials = createAction<DisplayCredential[]>(
   CredentialActions.setCredentials,
 )
 
-export const addCredentials = createAction<DisplayCredentialCustom[]>(
+export const addCredentials = createAction<DisplayCredential[]>(
   CredentialActions.addCredentials,
 )
 
