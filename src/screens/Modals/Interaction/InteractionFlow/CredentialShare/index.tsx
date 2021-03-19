@@ -11,7 +11,7 @@ import {
   getRequestedCredentialDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
-  getRequestedCredentialsByCategoryByType,
+  getCustomRequestedCredentialsByCategoryByType,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
 import {
@@ -125,7 +125,7 @@ export const CredentialShareBAS = () => {
 }
 
 const CredentialShareFAS = () => {
-  const categories = useSelector(getRequestedCredentialsByCategoryByType)
+  const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
   const handleSubmit = useCredentialShareSubmit()
@@ -141,15 +141,6 @@ const CredentialShareFAS = () => {
 
   const documents = categories[CredentialRenderTypes.document]
   const other = categories[OtherCategory.other]
-
-  const displayDocuments = documents.map((d) => ({
-    ...d,
-    credentials: d.credentials.map(mapDisplayToCustomDisplay),
-  }))
-  const displayOther = other.map((o) => ({
-    ...o,
-    credentials: o.credentials.map(mapDisplayToCustomDisplay),
-  }))
 
   const handleRenderCredentials = (
     credCollections: RequestedCredentialsByType<DisplayCredential>[],
@@ -206,10 +197,10 @@ const CredentialShareFAS = () => {
         <Space />
         <ShareAttributeWidget withContainer />
         <InteractionSection title={strings.DOCUMENTS}>
-          {handleRenderCredentials(displayDocuments)}
+          {handleRenderCredentials(documents)}
         </InteractionSection>
         <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentials(displayOther)}
+          {handleRenderCredentials(other)}
         </InteractionSection>
       </CollapsedScrollView>
       <FooterContainerFAS>

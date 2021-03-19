@@ -5,6 +5,8 @@ import {
   AttributeTypes,
   CredentialsByCategory,
   DisplayCredential,
+  DisplayCredentialDocument,
+  DisplayCredentialOther,
   OfferedCredential,
   OtherCategory,
   RequestedCredentialsByCategoryByType,
@@ -24,6 +26,7 @@ import {
 } from './guards'
 import BP from '~/utils/breakpoints'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
+import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -165,7 +168,7 @@ export const getIsFullscreenCredShare = createSelector(
   * @category used to separate into Documents and Other
   * @type used to group credentials by type and present them in a carousel
 */
-export const getRequestedCredentialsByCategoryByType = createSelector(
+const getRequestedCredentialsByCategoryByType = createSelector(
   [getAvailableRequestedCredentials, getCredShareDetails],
   (availableRequestedCredentials, {requestedCredentials}) => {
     return requestedCredentials.reduce<RequestedCredentialsByCategoryByType<DisplayCredential>>(
@@ -191,6 +194,20 @@ export const getRequestedCredentialsByCategoryByType = createSelector(
       {[CredentialRenderTypes.document]: [], [OtherCategory.other]: []},
     )
   },
+)
+
+export const getCustomRequestedCredentialsByCategoryByType = createSelector(
+  [getRequestedCredentialsByCategoryByType],
+  (requestedCategories) => {
+    return Object.keys(requestedCategories).reduce<RequestedCredentialsByCategoryByType<DisplayCredentialDocument | DisplayCredentialOther>>((categories, catName) => {
+      const categoryName = catName as CredentialRenderTypes.document | OtherCategory.other 
+      categories[categoryName] = requestedCategories[categoryName].map(d => ({
+        ...d,
+        credentials: d.credentials.map(mapDisplayToCustomDisplay),
+      }))
+      return categories;
+    }, { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] })
+  }
 )
 
 const getSingleRequestedAttribute = createSelector(
