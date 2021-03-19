@@ -5,7 +5,7 @@ import { ScrollView, View } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
-import { getCredentialsByCategories } from '~/modules/credentials/selectors'
+import { getCustomCredentialsByCategories } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
 import {
@@ -19,7 +19,6 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields, formatClaims } from './utils'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
-import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -38,18 +37,13 @@ const CardList: React.FC = ({ children }) => {
 }
 
 const DocumentList = () => {
-  const categories = useSelector(getCredentialsByCategories)
+  const categories = useSelector(getCustomCredentialsByCategories)
   const { activeTab } = useTabs()
 
-  const documents = categories[CredentialRenderTypes.document]
-  const other = categories[OtherCategory.other]
-
-  const displayDocuments = documents.map(
-    mapDisplayToCustomDisplay,
-  ) as DisplayCredentialDocument[]
-  const displayOther = other.map(
-    mapDisplayToCustomDisplay,
-  ) as DisplayCredentialOther[]
+  const documents = categories[
+    CredentialRenderTypes.document
+  ] as DisplayCredentialDocument[]
+  const other = categories[OtherCategory.other] as DisplayCredentialOther[]
 
   return (
     <>
@@ -67,30 +61,30 @@ const DocumentList = () => {
           />
         ) : (
           <CardList>
-            {displayDocuments.map((document) => (
+            {documents.map((d) => (
               <DocumentCard
-                key={document.id}
-                id={document.id}
+                key={d.id}
+                id={d.id}
                 mandatoryFields={[
                   {
                     label: DocumentFields.DocumentName,
-                    value: document.name ?? document.type,
+                    value: d.name ?? d.type,
                   },
                   {
                     label: 'Subject name',
-                    value: document.holderName,
+                    value: d.holderName,
                   },
                 ]}
                 // @ts-expect-error
                 optionalFields={getOptionalFields(document.properties)}
-                highlight={document.id.slice(0, 14)}
+                highlight={d.id.slice(0, 14)}
                 // @ts-expect-error
                 claims={[
-                  ...formatClaims(document.properties),
+                  ...formatClaims(d.properties),
                   // TODO: fetch issuer information earlier
                   // ...getIssuerFields(document.issuer),
                 ]}
-                photo={document.photo}
+                photo={d.photo}
               />
             ))}
           </CardList>
@@ -110,22 +104,22 @@ const DocumentList = () => {
           />
         ) : (
           <CardList>
-            {displayOther.map((other) => (
+            {other.map((o) => (
               <OtherCard
-                id={other.id}
-                key={other.id}
+                id={o.id}
+                key={o.id}
                 mandatoryFields={[
                   {
                     label: DocumentFields.DocumentName,
-                    value: other.name ?? other.type,
+                    value: o.name ?? o.type,
                   },
                 ]}
                 // @ts-expect-error
                 optionalFields={[...getOptionalFields(other.properties)]}
-                photo={other.photo}
+                photo={o.photo}
                 // @ts-expect-error
                 claims={[
-                  ...formatClaims(other.properties),
+                  ...formatClaims(o.properties),
                   // TODO: fetch issuer information earlier
                   // ...getIssuerFields(other.issuer),
                 ]}
