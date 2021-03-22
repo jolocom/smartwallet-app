@@ -10,19 +10,20 @@ export const filteredOptionalFields = [
   ClaimKeys.photo,
 ]
 
-// TODO: do we need this
 export const formatClaims = (properties: DisplayCredential['properties']) => properties.map(p => ({
   label: prepareLabel(p.key),
   value: p.value,
 }))
 
-// TODO: do we need this
-export const getOptionalFields = (properties: DisplayCredential['properties']) => properties.filter(p => !filteredOptionalFields.includes(p.key as ClaimKeys))
+export const getOptionalFields = (properties: DisplayCredential['properties']) => {
+  if(!properties.length) return []
+  return properties.filter(p => !filteredOptionalFields.includes(p.key as ClaimKeys))
   .map(p => ({
     label: prepareLabel(p.label),
     value: p.value,
   }))
   .slice(0, 3)
+}
 
 
 // TODO: use translation strings

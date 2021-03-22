@@ -68,7 +68,7 @@ const DocumentList = () => {
                 mandatoryFields={[
                   {
                     label: DocumentFields.DocumentName,
-                    value: d.name ?? d.type,
+                    value: d.name ?? d.type[1],
                   },
                   {
                     label: 'Subject name',
@@ -76,7 +76,7 @@ const DocumentList = () => {
                   },
                 ]}
                 // @ts-expect-error
-                optionalFields={getOptionalFields(document.properties)}
+                optionalFields={getOptionalFields(d.properties)}
                 highlight={d.id.slice(0, 14)}
                 // @ts-expect-error
                 claims={[
@@ -115,7 +115,7 @@ const DocumentList = () => {
                   },
                 ]}
                 // @ts-expect-error
-                optionalFields={[...getOptionalFields(other.properties)]}
+                optionalFields={getOptionalFields(o.properties)}
                 photo={o.photo}
                 // @ts-expect-error
                 claims={[
