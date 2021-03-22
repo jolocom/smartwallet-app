@@ -89,7 +89,7 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
           type: ['', type],
           category: renderInfo?.renderAs ?? OtherCategory.other,
           invalid: false,
-          name: credential?.name ?? ''
+          name: credential?.name ?? '',
         }),
       ),
     },

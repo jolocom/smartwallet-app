@@ -1,16 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  deleteAttr,
-  editAttr,
-  updateAttrs,
-} from '~/modules/attributes/actions'
+import { deleteAttr, editAttr, updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes } from '~/types/credentials'
 import { useAgent } from './sdk'
 import { ClaimValues } from '~/modules/attributes/types'
-import {
-  extractClaims,
-} from '~/utils/dataMapping'
+import { extractClaims } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
 import { attributeConfig } from '~/config/claims'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -141,7 +135,7 @@ export const useCreateAttributes = () => {
       }
       dispatch(updateAttrs({ type, attribute }))
 
-      return {[type]: attribute.id};
+      return { [type]: attribute.id }
     } catch (e) {
       console.warn(e)
       throw new Error('Failed to create attribute!')

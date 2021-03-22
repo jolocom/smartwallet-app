@@ -28,7 +28,7 @@ const useCredentialOfferSubmit = () => {
   const { scheduleInfo } = useToasts()
   const redirect = useRedirect()
   const finishInteraction = useFinishInteraction()
-  const {getCredentialDisplay} = useInitializeCredentials()
+  const { getCredentialDisplay } = useInitializeCredentials()
 
   const scheduleSuccess = () =>
     scheduleSuccessInteraction({
@@ -39,7 +39,7 @@ const useCredentialOfferSubmit = () => {
     })
 
   const handleStoreIssuedCredentials = async () => {
-    const issuedCredentials = await storeSelectedCredentials();
+    const issuedCredentials = await storeSelectedCredentials()
     const displayCredentials = await getCredentialDisplay(issuedCredentials)
     dispatch(addCredentials(displayCredentials))
   }

@@ -305,7 +305,8 @@ const documents = {
   YOU_HAVENT_SAVED_ANYTHING_YET: "You haven't saved anything yet",
   ISSUED: 'Issued',
   EXPIRES: 'Expires',
-  SUBJECT_NAME: 'Subject name'
+  SUBJECT_NAME: 'Subject name',
+  ANONYMOUS: 'Anonymous'
 }
 
 const history = {

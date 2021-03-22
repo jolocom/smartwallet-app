@@ -1,4 +1,4 @@
-import { DisplayCredential } from "~/types/credentials";
+import { DisplayCredential } from '~/types/credentials'
 
 export enum CredentialActions {
   setCredentials = 'setCredentials',

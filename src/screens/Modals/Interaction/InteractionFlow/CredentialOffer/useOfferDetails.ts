@@ -21,7 +21,9 @@ const useGetOfferDetails = () => {
 }
 
 export const useMappedOfferDetails = () => {
-  const [offerDetails, setOfferDetails] = useState<CredentialDisplay[] | null>(null)
+  const [offerDetails, setOfferDetails] = useState<CredentialDisplay[] | null>(
+    null,
+  )
   const getOfferDetails = useGetOfferDetails()
 
   const handleGettingOfferDetails = async () => {

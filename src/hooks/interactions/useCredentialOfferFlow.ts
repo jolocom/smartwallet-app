@@ -65,8 +65,8 @@ const useCredentialOfferFlow = () => {
       issued,
       credentialsValidity,
     } = state as CredentialOfferFlowState
-    const issuanceResult = (interaction.flow as CredentialOfferFlow).getIssuanceResult();
-    
+    const issuanceResult = (interaction.flow as CredentialOfferFlow).getIssuanceResult()
+
     return issued.map((cred, i) => {
       const offer = offerSummary.find(({ type }) => type === cred.type[1])
       if (!offer)
@@ -80,10 +80,10 @@ const useCredentialOfferFlow = () => {
       return {
         // NOTE: making type as array of strings for consistency
         // offerSummary type is different from SignedCredential type of type property
-        type: ['', offer.type], 
+        type: ['', offer.type],
         category: offer.renderInfo?.renderAs ?? OtherCategory.other,
         invalid: isInvalid,
-        name: offer.credential?.name ?? ''
+        name: offer.credential?.name ?? '',
       }
     })
   }
@@ -94,10 +94,10 @@ const useCredentialOfferFlow = () => {
    */
   const storeSelectedCredentials = async () => {
     const interaction = await getInteraction()
-    const signedCredentials: SignedCredential[] = await interaction.storeSelectedCredentials();
+    const signedCredentials: SignedCredential[] = await interaction.storeSelectedCredentials()
     await interaction.storeCredentialMetadata()
     await interaction.storeIssuerProfile()
-    return signedCredentials;
+    return signedCredentials
   }
 
   /**

@@ -114,13 +114,15 @@ export const getAvailableRequestedAttributes = createSelector(
 )
 
 /**
- * Gets all available requested credentials. 
+ * Gets all available requested credentials.
  */
 const getAvailableRequestedCredentials = createSelector(
   [getCredShareDetails, getAllCredentials],
   ({ requestedCredentials }, credentials) =>
     requestedCredentials.reduce<DisplayCredential[]>((acc, type) => {
-      const credentialsOfType = credentials.filter((cred) => cred.type[1] === type)
+      const credentialsOfType = credentials.filter(
+        (cred) => cred.type[1] === type,
+      )
       if (!credentialsOfType.length) return acc
       acc = [...acc, ...credentialsOfType]
       return acc
@@ -141,7 +143,8 @@ export const getIsFullscreenCredShare = createSelector(
     const onlyAttributes =
       details.requestedAttributes.length && !details.requestedCredentials.length
     const isOnlyOneCredential =
-      !details.requestedAttributes.length && availableRequestedCredentials.length === 1
+      !details.requestedAttributes.length &&
+      availableRequestedCredentials.length === 1
 
     const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
       (acc, v) => {
@@ -164,14 +167,16 @@ export const getIsFullscreenCredShare = createSelector(
 )
 
 /**
-  * Getting requested credentials by type and category  
-  * @category used to separate into Documents and Other
-  * @type used to group credentials by type and present them in a carousel
-*/
+ * Getting requested credentials by type and category
+ * @category used to separate into Documents and Other
+ * @type used to group credentials by type and present them in a carousel
+ */
 const getRequestedCredentialsByCategoryByType = createSelector(
   [getAvailableRequestedCredentials, getCredShareDetails],
-  (availableRequestedCredentials, {requestedCredentials}) => {
-    return requestedCredentials.reduce<RequestedCredentialsByCategoryByType<DisplayCredential>>(
+  (availableRequestedCredentials, { requestedCredentials }) => {
+    return requestedCredentials.reduce<
+      RequestedCredentialsByCategoryByType<DisplayCredential>
+    >(
       (acc, type) => {
         const credentials = availableRequestedCredentials.filter(
           (cred) => cred.type[1] === type,
@@ -191,7 +196,7 @@ const getRequestedCredentialsByCategoryByType = createSelector(
 
         return acc
       },
-      {[CredentialRenderTypes.document]: [], [OtherCategory.other]: []},
+      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
     )
   },
 )
@@ -199,15 +204,26 @@ const getRequestedCredentialsByCategoryByType = createSelector(
 export const getCustomRequestedCredentialsByCategoryByType = createSelector(
   [getRequestedCredentialsByCategoryByType],
   (requestedCategories) => {
-    return Object.keys(requestedCategories).reduce<RequestedCredentialsByCategoryByType<DisplayCredentialDocument | DisplayCredentialOther>>((categories, catName) => {
-      const categoryName = catName as CredentialRenderTypes.document | OtherCategory.other 
-      categories[categoryName] = requestedCategories[categoryName].map(d => ({
-        ...d,
-        credentials: d.credentials.map(mapDisplayToCustomDisplay),
-      }))
-      return categories;
-    }, { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] })
-  }
+    return Object.keys(requestedCategories).reduce<
+      RequestedCredentialsByCategoryByType<
+        DisplayCredentialDocument | DisplayCredentialOther
+      >
+    >(
+      (categories, catName) => {
+        const categoryName = catName as
+          | CredentialRenderTypes.document
+          | OtherCategory.other
+        categories[categoryName] = requestedCategories[categoryName].map(
+          (d) => ({
+            ...d,
+            credentials: d.credentials.map(mapDisplayToCustomDisplay),
+          }),
+        )
+        return categories
+      },
+      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+    )
+  },
 )
 
 const getSingleRequestedAttribute = createSelector(
@@ -313,12 +329,17 @@ export const getOfferedCredentialsByCategories = createSelector(
     // TODO: will be moving away from the `credentials.service_issued` structure in favor of
     // just credentials, since during this flow we only receive "service issued" credentials
     // anyways
-    return details.credentials.service_issued.reduce<CredentialsByCategory<OfferedCredential>>((acc, cred) => {
-      const section = getCredentialCategory(cred)
-      acc[section] = [...acc[section], cred]
+    return details.credentials.service_issued.reduce<
+      CredentialsByCategory<OfferedCredential>
+    >(
+      (acc, cred) => {
+        const section = getCredentialCategory(cred)
+        acc[section] = [...acc[section], cred]
 
-      return acc
-    }, {[CredentialRenderTypes.document]: [], [OtherCategory.other]: []})
+        return acc
+      },
+      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+    )
   },
 )
 
@@ -371,7 +392,7 @@ export const getOfferedCredentialCategories = createSelector(
     return service_issued.reduce<
       Record<string, CredentialRenderTypes.document | OtherCategory.other>
     >((credByType, c) => {
-      credByType[c.type[1]] = getCredentialCategory(c);        
+      credByType[c.type[1]] = getCredentialCategory(c)
       return credByType
     }, {})
   },

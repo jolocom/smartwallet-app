@@ -12,5 +12,3 @@ export const useDeleteCredential = () => {
     dispatch(deleteCredential(id))
   }
 }
-
-
