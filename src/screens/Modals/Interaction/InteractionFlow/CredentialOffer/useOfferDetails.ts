@@ -25,6 +25,7 @@ const useGetOfferDetails = () => {
 
 type IWithType = { type: string }
 
+// TODO: change types to use non-card specific types
 export const useMappedOfferDetails = () => {
   const [offerDetails, setOfferDetails] = useState<( (IWithType & IIncomingOfferDocProps)[] | (IWithType & IIncomingOfferOtherProps)[]) | null>(null)
   const getOfferDetails = useGetOfferDetails()

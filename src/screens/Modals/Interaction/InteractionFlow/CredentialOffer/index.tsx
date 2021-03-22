@@ -11,13 +11,10 @@ import {
   getOfferedCredentialsByCategories,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
-import { OfferedCredential, OtherCategory } from '~/types/credentials'
+import { OfferedCredentialDisplay, OtherCategory } from '~/types/credentials'
 import IncomingOfferDoc from '../components/card/offer/document'
 import IncomingOfferOther from '../components/card/offer/other'
-import {
-  IIncomingOfferDocProps,
-  IIncomingOfferOtherProps,
-} from '../components/card/types'
+import { IIncomingOfferDocProps } from '../components/card/types'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -85,16 +82,10 @@ const CredentialOfferFAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offerDetails = useMappedOfferDetails()
 
-  const {
-    document: offerDocDetails,
-    other: offerOtherDetails,
-  } = separateIntoSections<IIncomingOfferDocProps | IIncomingOfferOtherProps>(
-    {
-      document: categories[CredentialRenderTypes.document],
-      other: categories[OtherCategory.other],
-    },
-    offerDetails,
-  )
+  const updatedCategories = separateIntoSections(categories, offerDetails)
+
+  const documents = updatedCategories[CredentialRenderTypes.document]
+  const other = updatedCategories[OtherCategory.other]
 
   const handleRenderCollapsingComponent = useCallback(
     () => (
@@ -105,34 +96,30 @@ const CredentialOfferFAS = () => {
     [],
   )
 
-  const handleRenderCredentials = (
-    credentials: OfferedCredential[],
-    details: IIncomingOfferDocProps[] | IIncomingOfferDocProps[],
-    renderType: CredentialRenderTypes.document | 'other',
-  ) => {
-    return credentials.map(({ invalid }, idx) => (
-      <View
-        style={{
-          marginBottom: idx === credentials.length - 1 ? 0 : 30,
-        }}
-      >
-        {renderType === CredentialRenderTypes.document
-          ? details.map((d) => (
-              <IncomingOfferDoc
-                key={d.name}
-                name={d.name}
-                properties={d.properties}
-              />
-            ))
-          : details.map((d) => (
-              <IncomingOfferOther
-                key={d.name}
-                name={d.name}
-                properties={d.properties}
-              />
-            ))}
-      </View>
-    ))
+  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
+    return credentials.map(
+      ({ invalid, category, properties, name, type }, idx) => (
+        <View
+          style={{
+            marginBottom: idx === credentials.length - 1 ? 0 : 30,
+          }}
+        >
+          {category === CredentialRenderTypes.document ? (
+            <IncomingOfferDoc
+              key={name + type[1]}
+              name={name}
+              properties={properties}
+            />
+          ) : (
+            <IncomingOfferOther
+              key={name + type[1]}
+              name={name}
+              properties={properties}
+            />
+          )}
+        </View>
+      ),
+    )
   }
 
   return (
@@ -147,18 +134,10 @@ const CredentialOfferFAS = () => {
         />
         <Space />
         <InteractionSection title={strings.DOCUMENTS}>
-          {handleRenderCredentials(
-            categories[CredentialRenderTypes.document],
-            offerDocDetails,
-            CredentialRenderTypes.document,
-          )}
+          {handleRenderCredentials(documents)}
         </InteractionSection>
         <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentials(
-            categories[OtherCategory.other],
-            offerOtherDetails,
-            'other',
-          )}
+          {handleRenderCredentials(other)}
         </InteractionSection>
       </CollapsedScrollView>
       <FooterContainerFAS>

@@ -1,27 +1,32 @@
-import { DocumentTypes, OfferedCredential } from '~/types/credentials'
+import { OfferedCredential, OfferedCredentialDisplay, OtherCategory } from '~/types/credentials'
 import { IIncomingCard } from '~/screens/Modals/Interaction/InteractionFlow/components/card/types'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types';
 
 export const separateIntoSections = <T extends IIncomingCard>(
-  sections: Record<DocumentTypes, OfferedCredential[]>,
+  categories: Record<CredentialRenderTypes.document | OtherCategory.other, OfferedCredential[]>,
   details: T[] | null,
 ) => {
-  const initial = Object.keys(sections).reduce<Record<string, T[]>>(
-    (acc, k) => {
-      const key = k as DocumentTypes
-      acc[key] = []
-      return acc
-    },
-    {},
-  )
-  if (details === null) return initial
-  if (!details) return { documents: [], other: [] }
-  return details.reduce((acc, v) => {
-    // NOTE: this is not adopted to dynamic section keys
-    if (sections.document.find((d) => d.type[1] === v.name)) {
-      acc.document = [...acc.document, v]
-    } else if (sections.other.find((o) => o.type[1] === v.name)) {
-      acc.other = [...acc.other, v]
-    }
-    return acc
-  }, initial)
-}
+  console.log({details});
+  if(details === null) {
+    return Object.keys(categories).reduce<Record<CredentialRenderTypes.document | OtherCategory.other, OfferedCredentialDisplay[]>>((categoriesCustom, cName) => {
+      const categoryName = cName as CredentialRenderTypes.document | OtherCategory.other;
+      categoriesCustom[categoryName] = categories[categoryName].map(c => ({...c, properties: []}))
+      return categoriesCustom;
+    }, {[CredentialRenderTypes.document]: [], [OtherCategory.other]: []})
+  }
+  
+  return Object.keys(categories).reduce<Record<CredentialRenderTypes.document | OtherCategory.other, OfferedCredentialDisplay[]>>((categoriesCustom, cName) => {
+    const categoryName = cName as CredentialRenderTypes.document | OtherCategory.other;
+    const updatedCategory = categories[categoryName].map(offeredC => {
+      const displayDetails = details?.find(d => d.type === offeredC.type[1] && d.name === offeredC.name);
+      
+      return {
+        ...offeredC,
+        properties: displayDetails?.properties
+      }
+    })
+    // TODO: fix types
+    categoriesCustom[categoryName] = updatedCategory;
+    return categoriesCustom;
+  }, {[CredentialRenderTypes.document]: [], [OtherCategory.other]: []});
+  }

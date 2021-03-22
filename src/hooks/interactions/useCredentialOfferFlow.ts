@@ -83,6 +83,7 @@ const useCredentialOfferFlow = () => {
         type: ['', offer.type], 
         category: offer.renderInfo?.renderAs ?? OtherCategory.other,
         invalid: isInvalid,
+        name: offer.credential?.name ?? ''
       }
     })
   }

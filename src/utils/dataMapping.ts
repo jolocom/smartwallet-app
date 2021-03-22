@@ -85,10 +85,11 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
     counterparty: summary.initiator,
     credentials: {
       service_issued: summary.state.offerSummary.map(
-        ({ renderInfo, type }) => ({
+        ({ renderInfo, type, credential }) => ({
           type: ['', type],
           category: renderInfo?.renderAs ?? OtherCategory.other,
           invalid: false,
+          name: credential?.name ?? ''
         }),
       ),
     },

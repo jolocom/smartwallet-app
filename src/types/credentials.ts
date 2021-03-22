@@ -61,8 +61,12 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
 export type BaseUICredential = Pick<SignedCredential, 'id' |  'issuer' | 'issued' | 'type' | 'expires' | 'subject' | 'name'>
 
 export type OfferedCredential =
-  & Pick<BaseUICredential, 'type'>
+  & Pick<BaseUICredential, 'type' | 'name'>
   & {category:CredentialCategory, invalid: boolean}
+
+export type OfferedCredentialDisplay =
+  & OfferedCredential
+  & Pick<CredentialDisplay['display'], 'properties'>
 
 export enum DocumentTypes {
   document = 'document',
