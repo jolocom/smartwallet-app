@@ -76,7 +76,7 @@ const DocumentList = () => {
                   },
                 ]}
                 // @ts-expect-error
-                optionalFields={getOptionalFields(d.properties)}
+                optionalFields={getOptionalFields(d)}
                 highlight={d.id.slice(0, 14)}
                 // @ts-expect-error
                 claims={[
@@ -115,7 +115,7 @@ const DocumentList = () => {
                   },
                 ]}
                 // @ts-expect-error
-                optionalFields={getOptionalFields(o.properties)}
+                optionalFields={getOptionalFields(o)}
                 photo={o.photo}
                 // @ts-expect-error
                 claims={[

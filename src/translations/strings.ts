@@ -303,6 +303,8 @@ const documents = {
     "You haven't saved any documents yet. Get one today!",
   NOTHING_HERE_YET: 'Nothing here yet',
   YOU_HAVENT_SAVED_ANYTHING_YET: "You haven't saved anything yet",
+  ISSUED: 'Issued',
+  EXPIRES: 'Expires'
 }
 
 const history = {

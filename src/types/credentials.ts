@@ -4,6 +4,7 @@ import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { IdentitySummary } from '@jolocom/sdk'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -83,7 +84,8 @@ export enum OtherCategory {
 export type CredentialCategory = CredentialRenderTypes |  OtherCategory
 
 export type DisplayCredential =
-& BaseUICredential
+& Omit<BaseUICredential, 'issuer'>
+& {issuer: IdentitySummary}
 & {category: CredentialCategory}
 & Pick<CredentialDisplay['display'], 'properties'>
 

@@ -36,11 +36,14 @@ function mapToBaseUICredential(c: SignedCredential): BaseUICredential {
 
 export async function mapCredentialsToDisplay (agent: Agent, c: SignedCredential): Promise<DisplayCredential> { 
   const metadata = await agent.storage.get.credentialMetadata(c)
+  const resolvedIssuer = await agent.storage.get.publicProfile(c.issuer);
+  
   // @ts-expect-error - until types are corrected in sdk
   const {type, renderInfo, credential} = metadata;
   const baseUICredentials = mapToBaseUICredential(c);
   let updatedCredentials: DisplayCredential = {
     ...baseUICredentials,
+    issuer: resolvedIssuer,
     category: renderInfo?.renderAs ?? OtherCategory.other,
     properties: [],
   };
