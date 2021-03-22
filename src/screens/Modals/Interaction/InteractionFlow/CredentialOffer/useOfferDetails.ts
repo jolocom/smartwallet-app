@@ -3,10 +3,7 @@ import { FlowType } from '@jolocom/sdk'
 import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 
 import { useInteraction } from '~/hooks/interactions'
-import {
-  IIncomingOfferDocProps,
-  IIncomingOfferOtherProps,
-} from '../components/card/types'
+import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
 const useGetOfferDetails = () => {
   const getInteraction = useInteraction()
@@ -23,23 +20,13 @@ const useGetOfferDetails = () => {
   }
 }
 
-type IWithType = { type: string }
-
-// TODO: change types to use non-card specific types
 export const useMappedOfferDetails = () => {
-  const [offerDetails, setOfferDetails] = useState<( (IWithType & IIncomingOfferDocProps)[] | (IWithType & IIncomingOfferOtherProps)[]) | null>(null)
+  const [offerDetails, setOfferDetails] = useState<CredentialDisplay[] | null>(null)
   const getOfferDetails = useGetOfferDetails()
 
   const handleGettingOfferDetails = async () => {
     const details = await getOfferDetails()
-
-    setOfferDetails(
-      details.map((c) => ({
-        type: c.type,
-        name: c.name,
-        properties: c.display.properties,
-      })),
-    )
+    setOfferDetails(details)
   }
   useEffect(() => {
     handleGettingOfferDetails()

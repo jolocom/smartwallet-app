@@ -1,10 +1,10 @@
 import { OfferedCredential, OfferedCredentialDisplay, OtherCategory } from '~/types/credentials'
-import { IIncomingCard } from '~/screens/Modals/Interaction/InteractionFlow/components/card/types'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types';
+import { CredentialDisplay } from '@jolocom/sdk/js/credentials';
 
-export const separateIntoSections = <T extends IIncomingCard>(
+export const getOfferSections = (
   categories: Record<CredentialRenderTypes.document | OtherCategory.other, OfferedCredential[]>,
-  details: T[] | null,
+  details: CredentialDisplay[] | null,
 ) => {
   console.log({details});
   if(details === null) {
@@ -22,10 +22,9 @@ export const separateIntoSections = <T extends IIncomingCard>(
       
       return {
         ...offeredC,
-        properties: displayDetails?.properties
+        properties: displayDetails?.display.properties ?? []
       }
     })
-    // TODO: fix types
     categoriesCustom[categoryName] = updatedCategory;
     return categoriesCustom;
   }, {[CredentialRenderTypes.document]: [], [OtherCategory.other]: []});

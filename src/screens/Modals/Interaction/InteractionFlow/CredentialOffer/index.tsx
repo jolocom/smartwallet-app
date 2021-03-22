@@ -14,7 +14,6 @@ import { strings } from '~/translations'
 import { OfferedCredentialDisplay, OtherCategory } from '~/types/credentials'
 import IncomingOfferDoc from '../components/card/offer/document'
 import IncomingOfferOther from '../components/card/offer/other'
-import { IIncomingOfferDocProps } from '../components/card/types'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -29,7 +28,7 @@ import {
   Space,
 } from '../components/styled'
 import { useMappedOfferDetails } from './useOfferDetails'
-import { separateIntoSections } from './utils'
+import { getOfferSections } from './utils'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -54,7 +53,7 @@ const CredentialOfferBAS = () => {
                 <IncomingOfferDoc
                   key={d.name}
                   name={d.name}
-                  properties={d.properties}
+                  properties={d.display.properties}
                 />
               )
             }
@@ -62,7 +61,7 @@ const CredentialOfferBAS = () => {
               <IncomingOfferOther
                 key={d.name}
                 name={d.name}
-                properties={d.properties}
+                properties={d.display.properties}
               />
             )
           })}
@@ -82,7 +81,7 @@ const CredentialOfferFAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offerDetails = useMappedOfferDetails()
 
-  const updatedCategories = separateIntoSections(categories, offerDetails)
+  const updatedCategories = getOfferSections(categories, offerDetails)
 
   const documents = updatedCategories[CredentialRenderTypes.document]
   const other = updatedCategories[OtherCategory.other]
