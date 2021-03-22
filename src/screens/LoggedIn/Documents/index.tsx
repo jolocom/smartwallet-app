@@ -75,7 +75,6 @@ const DocumentList = () => {
                     value: d.holderName,
                   },
                 ]}
-                // @ts-expect-error
                 optionalFields={getOptionalFields(d)}
                 highlight={d.id.slice(0, 14)}
                 photo={d.photo}
@@ -108,7 +107,6 @@ const DocumentList = () => {
                     value: o.name ?? o.type,
                   },
                 ]}
-                // @ts-expect-error
                 optionalFields={getOptionalFields(o)}
                 photo={o.photo}
               />

@@ -51,7 +51,11 @@ export async function mapCredentialsToDisplay (agent: Agent, c: SignedCredential
   if (credential) {
     const credType = new CredentialType(type, credential);
     const {name, display: {properties}} = credType.display(c.claim);
-    updatedCredentials = {...updatedCredentials, name, properties};
+    updatedCredentials = {...updatedCredentials, name, properties: properties.map((p, idx) => ({
+      key: p.key ?? `${Date.now()}${idx}}`,
+      label: p.label ?? 'No Label',
+      value: p.value ?? ''
+    }))};
   }
   return updatedCredentials
 }

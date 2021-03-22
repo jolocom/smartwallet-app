@@ -2,7 +2,7 @@ import { KeyboardTypeOptions } from 'react-native'
 import {  CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
-import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
+import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '@jolocom/sdk'
 
@@ -87,7 +87,7 @@ export type DisplayCredential =
 & Omit<BaseUICredential, 'issuer'>
 & {issuer: IdentitySummary}
 & {category: CredentialCategory}
-& Pick<CredentialDisplay['display'], 'properties'>
+& {properties: Array<Required<DisplayVal>>}
 
 export type DisplayCredentialDocument = 
   & DisplayCredential
