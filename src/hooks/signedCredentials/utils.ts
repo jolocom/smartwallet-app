@@ -61,17 +61,17 @@ export function mapDisplayToCustomDisplay (credential: DisplayCredential): Displ
   const {properties} = credential;
   let formattedProperties = properties.map(p => ({...p, key: p.key?.split('.')[1] ?? 'notSpecified'}));
   
-  const photo = formattedProperties.find(p => p.key === ClaimKeys.photo)?.value;
-  formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.photo);
-
+  
   if(isDocument(credential)) {
+    const photo = formattedProperties.find(p => p.key === ClaimKeys.photo)?.value;
+    formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.photo);
     const holderProperties = formattedProperties.filter(p => p.key === ClaimKeys.givenName || p.key === ClaimKeys.familyName)
     // TODO: fix spaces issue
     const holderName = holderProperties.length ? holderProperties.reduce((acc, v) => `${v.value} ${acc}`, '') : 'Anonymous'; 
     formattedProperties = formattedProperties.filter(p => p.key !== ClaimKeys.givenName && p.key !== ClaimKeys.familyName);
     return {...credential, properties: formattedProperties, holderName, photo, highlight: credential.id};
   }
-  return {...credential, properties: formattedProperties, photo}
+  return {...credential, properties: formattedProperties, photo: credential.issuer.publicProfile?.image}
 }
 
 export function mapAttributesToDisplay (credentials: SignedCredential[]): AttrsState<AttributeI> {

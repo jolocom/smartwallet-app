@@ -16,5 +16,4 @@ export interface ICardProps {
   mandatoryFields: Array<IField | null>
   photo?: string | undefined
   highlight?: string | undefined
-  claims: IField[]
 }

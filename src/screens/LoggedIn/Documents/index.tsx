@@ -17,7 +17,7 @@ import {
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
-import { getOptionalFields, formatClaims } from './utils'
+import { getOptionalFields } from './utils'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 
 const CardList: React.FC = ({ children }) => {
@@ -71,19 +71,13 @@ const DocumentList = () => {
                     value: d.name ?? d.type[1],
                   },
                   {
-                    label: 'Subject name',
+                    label: strings.SUBJECT_NAME,
                     value: d.holderName,
                   },
                 ]}
                 // @ts-expect-error
                 optionalFields={getOptionalFields(d)}
                 highlight={d.id.slice(0, 14)}
-                // @ts-expect-error
-                claims={[
-                  ...formatClaims(d.properties),
-                  // TODO: fetch issuer information earlier
-                  // ...getIssuerFields(document.issuer),
-                ]}
                 photo={d.photo}
               />
             ))}
@@ -117,12 +111,6 @@ const DocumentList = () => {
                 // @ts-expect-error
                 optionalFields={getOptionalFields(o)}
                 photo={o.photo}
-                // @ts-expect-error
-                claims={[
-                  ...formatClaims(o.properties),
-                  // TODO: fetch issuer information earlier
-                  // ...getIssuerFields(other.issuer),
-                ]}
               />
             ))}
           </CardList>
