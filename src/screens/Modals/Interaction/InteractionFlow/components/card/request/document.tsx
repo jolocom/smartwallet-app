@@ -23,7 +23,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
   holderName,
   properties,
   highlight,
-  image,
+  photo,
 }) => {
   const handleFieldValuesVisibility = (
     child: React.ReactNode,
@@ -67,7 +67,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
           </HeaderContainer>
           {properties.length ? (
             <BodyContainer>
-              <BodyFieldsContainer isStretched={!image}>
+              <BodyFieldsContainer isStretched={!photo}>
                 <ResponsiveCard.FieldsCalculator
                   cbFieldsVisibility={handleFieldValuesVisibility}
                 >
@@ -87,7 +87,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
                 </ResponsiveCard.FieldsCalculator>
               </BodyFieldsContainer>
               {/* NOTE: this is to enable sort of a wrapper effect around an image */}
-              {image && <BodyImageContainer />}
+              {photo && <BodyImageContainer />}
             </BodyContainer>
           ) : (
             <EmptyContainer>
@@ -99,7 +99,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
           )}
 
           {/* NOTE: absolute values go outside of containers */}
-          {image && <ResponsiveCard.Image imageUrl={image} />}
+          {photo && <ResponsiveCard.Image imageUrl={photo} />}
           {highlight && (
             <ResponsiveCard.Highlight>{highlight}</ResponsiveCard.Highlight>
           )}

@@ -79,9 +79,11 @@ export const CredentialShareBAS = () => {
               name={name ?? type}
               holderName={displaySingleCredentials.holderName}
               properties={properties}
-              highlight={displaySingleCredentials.highlight}
-              // TODO: change name to photo
-              image={displaySingleCredentials.photo}
+              highlight={`${displaySingleCredentials.highlight?.slice(
+                0,
+                18,
+              )}...`}
+              photo={displaySingleCredentials.photo}
             />
           ) : (
             <IncomingRequestOther name={name ?? type} properties={properties} />
@@ -166,8 +168,8 @@ const CredentialShareFAS = () => {
                     name={name ?? type}
                     properties={properties}
                     holderName={cred.holderName}
-                    highlight={cred.highlight}
-                    image={cred.photo}
+                    highlight={`${cred.highlight?.slice(0, 18)}...`}
+                    photo={cred.photo}
                   />
                 ) : (
                   <IncomingRequestOther

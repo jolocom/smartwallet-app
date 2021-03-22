@@ -6,7 +6,7 @@ export type IIncomingCard = Pick<CredentialDisplay, 'name'> &
 export interface IIncomingRequestDocCardProps extends IIncomingCard {
   holderName?: string
   highlight?: string
-  image?: string
+  photo?: string
 }
 
 export interface IIncomingRequestOtherProps extends IIncomingCard {}
