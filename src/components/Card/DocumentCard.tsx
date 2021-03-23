@@ -15,7 +15,6 @@ const DocumentCard: React.FC<ICardProps> = ({
   optionalFields,
   photo,
   highlight,
-  claims,
 }) => {
   return (
     <CardContainer testID="document-card">
@@ -25,7 +24,6 @@ const DocumentCard: React.FC<ICardProps> = ({
         optionalFields={optionalFields}
         photo={photo}
         highlight={highlight}
-        claims={claims}
       >
         <Card.Dots
           customStyles={{

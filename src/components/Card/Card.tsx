@@ -25,7 +25,6 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
   mandatoryFields,
   photo,
   highlight,
-  claims,
 }) => {
   const getFieldInfo = (fieldName: string) =>
     mandatoryFields.find((el) => el?.label === fieldName)
@@ -43,7 +42,6 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
       optionalFields,
       photo,
       highlight,
-      claims,
     }),
     [],
   )
