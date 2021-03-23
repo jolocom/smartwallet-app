@@ -1,8 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 
-import {
-  getSelectedShareCredentials,
-} from '~/modules/interaction/selectors'
+import { getSelectedShareCredentials } from '~/modules/interaction/selectors'
 import { selectShareCredential } from '~/modules/interaction/actions'
 import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'

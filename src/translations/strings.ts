@@ -361,6 +361,12 @@ const bottomBar = {
   SETTINGS: 'Settings',
 }
 
+const validation = {
+  AT_LEAST_ONE_ERROR: 'Please provide at least one of the values',
+  EMAIL_FORMAT_ERROR: 'Seems like this is not a valid email',
+  VALUE_MISSING: 'Please provide value',
+}
+
 export const strings = {
   ...loaderMsgs,
   ...errors,
@@ -383,4 +389,5 @@ export const strings = {
   ...history,
   ...identity,
   ...bottomBar,
+  ...validation,
 }
