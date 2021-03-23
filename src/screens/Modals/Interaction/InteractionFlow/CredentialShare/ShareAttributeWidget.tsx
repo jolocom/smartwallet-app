@@ -15,7 +15,7 @@ import { useSwitchScreens } from '~/hooks/navigation'
 import { Space } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
 import Field, { IWidgetField } from '~/components/Widget/Field'
-import Widget from '~/components/Widget'
+import Widget from '~/components/Widget/Widget'
 
 interface IShareAttributeWidgetProps {
   withContainer?: boolean

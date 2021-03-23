@@ -162,7 +162,6 @@ const CredentialShareFAS = () => {
         <Wrapper key={type}>
           {credentials.map((cred) => {
             const claimFields = getOptionalFields(cred)
-            console.log({ claimFields })
             const { name, type } = cred
             return (
               <View

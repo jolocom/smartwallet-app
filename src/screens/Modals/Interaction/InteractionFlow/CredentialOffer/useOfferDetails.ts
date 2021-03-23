@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { FlowType } from '@jolocom/sdk'
 import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 
-import { useInteraction } from '~/hooks/interactions'
+import { useInteraction } from '~/hooks/interactions/handlers'
 import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
 const useGetOfferDetails = () => {
