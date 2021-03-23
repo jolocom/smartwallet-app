@@ -38,6 +38,7 @@ import {
 } from '../components/styled'
 import ShareAttributeWidget from './ShareAttributeWidget'
 import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
+import Collapsible from '~/components/Collapsible'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -139,15 +140,6 @@ const CredentialShareFAS = () => {
 
   const handleSubmit = useCredentialShareSubmit()
 
-  const handleRenderCollapsingComponent = useCallback(
-    () => (
-      <LogoContainerFAS>
-        <InteractionLogo />
-      </LogoContainerFAS>
-    ),
-    [],
-  )
-
   const documents = categories[CredentialRenderTypes.document]
   const other = categories[OtherCategory.other]
 
@@ -193,34 +185,45 @@ const CredentialShareFAS = () => {
     })
 
   return (
-    <ContainerFAS>
-      <CollapsedScrollView
-        collapsedTitle={strings.INCOMING_REQUEST}
-        renderCollapsingComponent={handleRenderCollapsingComponent}
-      >
-        <InteractionTitle label={strings.INCOMING_REQUEST} />
-        <InteractionDescription
-          label={
-            strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
-          }
-        />
-        <Space />
-        <ShareAttributeWidget withContainer />
-        <InteractionSection title={strings.DOCUMENTS}>
-          {handleRenderCredentials(documents)}
-        </InteractionSection>
-        <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentials(other)}
-        </InteractionSection>
-      </CollapsedScrollView>
-      <FooterContainerFAS>
-        <InteractionFooter
-          disabled={!isReadyToSubmit}
-          onSubmit={handleSubmit}
-          submitLabel={strings.SHARE}
-        />
-      </FooterContainerFAS>
-    </ContainerFAS>
+    <Collapsible>
+      <Collapsible.AnimatedHeader height={62}>
+        <Collapsible.HeaderText>
+          {strings.INCOMING_REQUEST}
+        </Collapsible.HeaderText>
+      </Collapsible.AnimatedHeader>
+      <ContainerFAS>
+        <Collapsible.ScrollView customStyles={{ paddingHorizontal: '5%' }}>
+          <Collapsible.HidingScale>
+            <LogoContainerFAS>
+              <InteractionLogo />
+            </LogoContainerFAS>
+          </Collapsible.HidingScale>
+          <Collapsible.HidingTextContainer>
+            <InteractionTitle label={strings.INCOMING_REQUEST} />
+          </Collapsible.HidingTextContainer>
+          <InteractionDescription
+            label={
+              strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
+            }
+          />
+          <Space />
+          <ShareAttributeWidget withContainer />
+          <InteractionSection title={strings.DOCUMENTS}>
+            {handleRenderCredentials(documents)}
+          </InteractionSection>
+          <InteractionSection title={strings.OTHER}>
+            {handleRenderCredentials(other)}
+          </InteractionSection>
+        </Collapsible.ScrollView>
+        <FooterContainerFAS>
+          <InteractionFooter
+            disabled={!isReadyToSubmit}
+            onSubmit={handleSubmit}
+            submitLabel={strings.SHARE}
+          />
+        </FooterContainerFAS>
+      </ContainerFAS>
+    </Collapsible>
   )
 }
 
