@@ -1,15 +1,10 @@
 import { createContext } from 'react'
-import { IField } from './types'
+import { ICardProps, IField } from './types'
 import { useCustomContext } from '~/hooks/context'
 
-interface ICardContext {
-  id: string
+interface ICardContext extends Omit<ICardProps, 'mandatoryFields'> {
   document: IField | undefined | null
   restMandatoryField: IField | undefined | null
-  optionalFields: IField[]
-  image?: string | undefined
-  highlight?: string | undefined
-  claims: IField[]
 }
 
 export const CardContext = createContext<ICardContext | undefined>(undefined)

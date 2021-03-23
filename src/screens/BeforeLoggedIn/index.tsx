@@ -7,16 +7,14 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import ScreenContainer from '~/components/ScreenContainer'
-import { useSyncStorageAttributes } from '~/hooks/attributes'
 import useTermsConsent from '~/hooks/consent'
-import { useSyncStorageCredentials } from '~/hooks/credentials'
+import { useInitializeCredentials } from '~/hooks/signedCredentials'
 
 import { useGetAppStates } from '~/hooks/useAppState'
 import { setAppLocked } from '~/modules/account/actions'
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { setPopup } from '~/modules/appState/actions'
 import { getIsPopup } from '~/modules/appState/selectors'
-import { resetInteraction } from '~/modules/interaction/actions'
 import { dismissLoader } from '~/modules/loader/actions'
 import { getLoaderState } from '~/modules/loader/selectors'
 import { ScreenNames } from '~/types/screens'
@@ -57,17 +55,16 @@ const BeforeLoggedIn = () => {
   const showRegisterPin = !isAuthSet
   const showTabs = !isAppLocked && isAuthSet
 
-  const syncAttributes = useSyncStorageAttributes()
-  const syncCredentials = useSyncStorageCredentials()
   const { checkConsent } = useTermsConsent()
+
+  const { initializeCredentials } = useInitializeCredentials()
 
   useEffect(() => {
     /* Checking if the Terms of Service have changed */
     checkConsent()
 
     /* Loading attributes and credentials into the store */
-    syncAttributes()
-    syncCredentials()
+    initializeCredentials()
   }, [])
 
   // decide wether to show Lock or Register Pin or App
@@ -99,16 +96,20 @@ const BeforeLoggedIn = () => {
     isPopupRef.current = isPopup
   }, [isPopup])
 
-  const { currentAppState, prevAppState } = useGetAppStates();
+  const { currentAppState, prevAppState } = useGetAppStates()
 
   useEffect(() => {
-    if (prevAppState && prevAppState.match(/active/) && currentAppState.match(/inactive|background/)) {
+    if (
+      prevAppState &&
+      prevAppState.match(/active/) &&
+      currentAppState.match(/inactive|background/)
+    ) {
       if (isAuthSet) {
         if (!isPopupRef.current) {
           dispatch(setAppLocked(true))
           dismissOverlays()
         } else dispatch(setPopup(false))
-      }      
+      }
     }
   }, [currentAppState])
   /* All about when lock screen comes up - END */

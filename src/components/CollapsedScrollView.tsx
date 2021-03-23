@@ -7,7 +7,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
 
-const INTERACTION_SHEET_PADDING = 20;
+const INTERACTION_SHEET_PADDING = 20
 
 interface Props {
   collapsedTitle: string
@@ -100,6 +100,7 @@ const CollapsedScrollView: React.FC<Props> = ({
         contentContainerStyle={styles.scrollWrapper}
         scrollEventThrottle={1}
         onScroll={handleScroll}
+        showsVerticalScrollIndicator={false}
       >
         <Animated.View onLayout={handleLayout} style={animatedScaleStyle}>
           {renderCollapsingComponent()}

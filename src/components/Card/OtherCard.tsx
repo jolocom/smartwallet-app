@@ -14,7 +14,7 @@ const OtherCard: React.FC<ICardProps> = ({
   id,
   mandatoryFields,
   optionalFields,
-  image,
+  photo,
   claims,
 }) => {
   return (
@@ -23,7 +23,7 @@ const OtherCard: React.FC<ICardProps> = ({
         id={id}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
-        image={image}
+        photo={photo}
         claims={claims}
       >
         <OtherCardMedium>

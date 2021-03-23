@@ -6,7 +6,7 @@ import { useCard } from './context'
 const PHOTO_SIZE = BP({ default: 82, xsmall: 60 })
 
 const CardPhoto: React.FC = () => {
-  const { image: photo } = useCard()
+  const { photo } = useCard()
   if (!photo) return null
   return (
     <View style={styles.container} testID="card-photo">

@@ -1,53 +1,49 @@
-import React, { memo, ReactNode } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
-import { getCredentialsBySection } from '~/modules/credentials/selectors'
+import { getCustomCredentialsByCategories } from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
 import {
   DocumentTypes,
   DocumentFields,
-  UICredential,
+  OtherCategory,
+  DisplayCredentialDocument,
+  DisplayCredentialOther,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
-import {
-  getSubjectName,
-  getOptionalFields,
-  formatClaims,
-  getIssuerFields,
-} from './utils'
+import { getOptionalFields } from './utils'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 
-const CardList: React.FC<{
-  cards: UICredential[]
-  renderCard: (card: UICredential) => ReactNode
-}> = memo(
-  ({ cards, renderCard }) => {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        overScrollMode={'never'}
-        contentContainerStyle={{
-          paddingBottom: '40%',
-          paddingHorizontal: 8,
-          paddingTop: 32,
-        }}
-      >
-        {cards.map(renderCard)}
-      </ScrollView>
-    )
-  },
-  (prevProps, nextProps) =>
-    JSON.stringify(prevProps.cards) === JSON.stringify(nextProps.cards),
-)
+const CardList: React.FC = ({ children }) => {
+  return (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      overScrollMode={'never'}
+      contentContainerStyle={{
+        paddingBottom: '40%',
+        paddingHorizontal: 8,
+        paddingTop: 32,
+      }}
+    >
+      {children}
+    </ScrollView>
+  )
+}
 
 const DocumentList = () => {
-  const { documents, other } = useSelector(getCredentialsBySection)
-  const { activeTab, activeSubtab } = useTabs()
+  const categories = useSelector(getCustomCredentialsByCategories)
+  const { activeTab } = useTabs()
+
+  const documents = categories[
+    CredentialRenderTypes.document
+  ] as DisplayCredentialDocument[]
+  const other = categories[OtherCategory.other] as DisplayCredentialOther[]
 
   return (
     <>
@@ -64,29 +60,27 @@ const DocumentList = () => {
             description={strings.YOU_HAVENT_SAVED_ANY_DOCUMENTS_YET}
           />
         ) : (
-          <CardList
-            cards={documents}
-            renderCard={(document) => (
+          <CardList>
+            {documents.map((d) => (
               <DocumentCard
-                key={document.id}
-                id={document.id}
+                key={d.id}
+                id={d.id}
                 mandatoryFields={[
                   {
-                    name: DocumentFields.DocumentName,
-                    value: document.metadata.name,
+                    label: DocumentFields.DocumentName,
+                    value: d.name ?? d.type[1],
                   },
-                  getSubjectName(document.claim),
+                  {
+                    label: strings.SUBJECT_NAME,
+                    value: d.holderName,
+                  },
                 ]}
-                optionalFields={[...getOptionalFields(document.claim)]}
-                highlight={document.id.slice(0, 14)}
-                image={document.claim['photo'] as string}
-                claims={[
-                  ...formatClaims(document.claim),
-                  ...getIssuerFields(document.issuer),
-                ]}
+                optionalFields={getOptionalFields(d)}
+                highlight={d.id.slice(0, 14)}
+                photo={d.photo}
               />
-            )}
-          />
+            ))}
+          </CardList>
         )}
       </View>
       <View
@@ -102,27 +96,22 @@ const DocumentList = () => {
             description={strings.YOU_HAVENT_SAVED_ANYTHING_YET}
           />
         ) : (
-          <CardList
-            cards={other}
-            renderCard={(otherDoc) => (
+          <CardList>
+            {other.map((o) => (
               <OtherCard
-                id={otherDoc.id}
-                key={otherDoc.id}
+                id={o.id}
+                key={o.id}
                 mandatoryFields={[
                   {
-                    name: DocumentFields.DocumentName,
-                    value: otherDoc.metadata.name,
+                    label: DocumentFields.DocumentName,
+                    value: o.name ?? o.type,
                   },
                 ]}
-                optionalFields={[...getOptionalFields(otherDoc.claim)]}
-                image={otherDoc.renderInfo?.logo?.url}
-                claims={[
-                  ...formatClaims(otherDoc.claim),
-                  ...getIssuerFields(otherDoc.issuer),
-                ]}
+                optionalFields={getOptionalFields(o)}
+                photo={o.photo}
               />
-            )}
-          />
+            ))}
+          </CardList>
         )}
       </View>
     </>

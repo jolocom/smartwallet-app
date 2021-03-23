@@ -15,13 +15,13 @@ import { useSafeArea } from 'react-native-safe-area-context'
 interface Props {
   fields: IField[]
   title?: string
-  image?: string
+  photo?: string
 }
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CardDetails = React.forwardRef<{ show: () => void }, Props>(
-  ({ fields, title, image }, ref) => {
+  ({ fields, title, photo }, ref) => {
     const { top } = useSafeArea()
     const [modalVisible, setModalVisible] = useState(false)
 
@@ -58,7 +58,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               style={[
                 styles.titleContainer,
                 {
-                  paddingRight: image ? '40%' : 0,
+                  paddingRight: photo ? '40%' : 0,
                 },
               ]}
             >
@@ -76,7 +76,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
               </JoloText>
             </View>
             <Block customStyle={{ backgroundColor: Colors.white }}>
-              {image && <Image source={{ uri: image }} style={styles.image} />}
+              {photo && <Image source={{ uri: photo }} style={styles.image} />}
               {fields.map((field, i) => (
                 <React.Fragment key={i}>
                   <View style={styles.fieldContainer}>
@@ -85,7 +85,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                       size={JoloTextSizes.mini}
                       color={Colors.osloGray}
                     >
-                      {field.name}
+                      {field.label}
                     </JoloText>
                     <JoloText
                       color={Colors.black95}

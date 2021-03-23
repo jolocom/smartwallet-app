@@ -9,15 +9,13 @@ import {
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 import {
-  UICredential,
-  ShareUICredential,
   AttributeTypes,
   IAttributeClaimFieldWithValue,
   IAttributeClaimField,
+  OtherCategory,
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
-import { ClaimValues } from '~/modules/attributes/types'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
 
@@ -87,11 +85,11 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
     counterparty: summary.initiator,
     credentials: {
       service_issued: summary.state.offerSummary.map(
-        ({ renderInfo, type }) => ({
-          type,
-          renderInfo,
-          issuer: summary.initiator,
+        ({ renderInfo, type, credential }) => ({
+          type: ['', type],
+          category: renderInfo?.renderAs ?? OtherCategory.other,
           invalid: false,
+          name: credential?.name ?? '',
         }),
       ),
     },
@@ -111,13 +109,6 @@ export const getMappedInteraction = (interaction: Interaction) => {
     case FlowType.CredentialOffer:
       return mapCredOfferData(summary as SummaryI<CredentialOfferFlowState>)
   }
-}
-
-export const uiCredentialToShareCredential = (
-  cred: UICredential,
-): ShareUICredential => {
-  const { claim, ...shareCred } = cred
-  return shareCred
 }
 
 export const assembleFormInitialValues = (

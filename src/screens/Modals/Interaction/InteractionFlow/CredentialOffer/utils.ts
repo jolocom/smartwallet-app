@@ -1,27 +1,62 @@
-import { DocumentTypes, OfferUICredential } from '~/types/credentials'
-import { IIncomingCard } from '~/screens/Modals/Interaction/InteractionFlow/components/card/types'
+import {
+  OfferedCredential,
+  OfferedCredentialDisplay,
+  OtherCategory,
+} from '~/types/credentials'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
+import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
-export const separateIntoSections = <T extends IIncomingCard>(
-  sections: Record<DocumentTypes, OfferUICredential[]>,
-  details: T[] | null,
+const updateCategory = (
+  prevCategories: Record<
+    CredentialRenderTypes.document | OtherCategory.other,
+    OfferedCredential[]
+  >,
+  cb: (c: OfferedCredential) => OfferedCredentialDisplay,
 ) => {
-  const initial = Object.keys(sections).reduce<Record<string, T[]>>(
-    (acc, k) => {
-      const key = k as DocumentTypes
-      acc[key] = []
-      return acc
-    },
-    {},
-  )
-  if (details === null) return initial
-  if (!details) return { documents: [], other: [] }
-  return details.reduce((acc, v) => {
-    // NOTE: this is not adopted to dynamic section keys
-    if (sections.document.find((d) => d.type === v.name)) {
-      acc.document = [...acc.document, v]
-    } else if (sections.other.find((o) => o.type === v.name)) {
-      acc.other = [...acc.other, v]
-    }
+  return (
+    acc: Record<
+      CredentialRenderTypes.document | OtherCategory.other,
+      OfferedCredentialDisplay[]
+    >,
+    cName: string,
+  ) => {
+    const categoryName = cName as
+      | CredentialRenderTypes.document
+      | OtherCategory.other
+    acc[categoryName] = prevCategories[categoryName].map(cb)
     return acc
-  }, initial)
+  }
+}
+
+export const getOfferSections = (
+  categories: Record<
+    CredentialRenderTypes.document | OtherCategory.other,
+    OfferedCredential[]
+  >,
+  details: CredentialDisplay[] | null,
+) => {
+  const getUpdatedCategoriesNoDetails = updateCategory(categories, (c) => ({
+    ...c,
+    properties: [],
+  }))
+  const getUpdatedCategoriesWDetails = updateCategory(categories, (c) => {
+    const displayDetails = details?.find(
+      (d) => d.type === c.type[1] && d.name === c.name,
+    )
+    return {
+      ...c,
+      properties: displayDetails?.display.properties ?? [],
+    }
+  })
+  if (details === null) {
+    return Object.keys(categories).reduce(getUpdatedCategoriesNoDetails, {
+      [CredentialRenderTypes.document]: [],
+      [OtherCategory.other]: [],
+    })
+  }
+
+  return Object.keys(categories).reduce(getUpdatedCategoriesWDetails, {
+    [CredentialRenderTypes.document]: [],
+    [OtherCategory.other]: [],
+  })
 }

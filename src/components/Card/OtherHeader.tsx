@@ -9,7 +9,7 @@ const LARGE_LOGO_SIZE = BP({ default: 78, xsmall: 60 })
 const SMALL_LOGO_SIZE = 37
 
 const OtherHeader: React.FC = () => {
-  const { document, image: logo } = useCard()
+  const { document, photo: logo } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
 
   const handleHeaderTextLayout = (e: TextLayoutEvent) => {

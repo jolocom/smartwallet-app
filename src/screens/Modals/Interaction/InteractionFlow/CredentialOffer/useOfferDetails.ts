@@ -3,10 +3,7 @@ import { FlowType } from '@jolocom/sdk'
 import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 
 import { useInteraction } from '~/hooks/interactions'
-import {
-  IIncomingOfferDocProps,
-  IIncomingOfferOtherProps,
-} from '../components/card/types'
+import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
 const useGetOfferDetails = () => {
   const getInteraction = useInteraction()
@@ -24,20 +21,14 @@ const useGetOfferDetails = () => {
 }
 
 export const useMappedOfferDetails = () => {
-  const [offerDetails, setOfferDetails] = useState<
-    IIncomingOfferDocProps[] | IIncomingOfferOtherProps[] | null
-  >(null)
+  const [offerDetails, setOfferDetails] = useState<CredentialDisplay[] | null>(
+    null,
+  )
   const getOfferDetails = useGetOfferDetails()
 
   const handleGettingOfferDetails = async () => {
     const details = await getOfferDetails()
-
-    setOfferDetails(
-      details.map((c) => ({
-        name: c.name,
-        properties: c.display.properties,
-      })),
-    )
+    setOfferDetails(details)
   }
   useEffect(() => {
     handleGettingOfferDetails()

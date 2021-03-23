@@ -1,18 +1,17 @@
-import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import { useSelector } from 'react-redux';
-import { InitiatorPlaceholderIcon } from '~/assets/svg';
-import { getServiceImage } from '~/modules/interaction/selectors';
+import React from 'react'
+import { Image, StyleSheet, View } from 'react-native'
+import { useSelector } from 'react-redux'
+import { InitiatorPlaceholderIcon } from '~/assets/svg'
+import { getServiceImage } from '~/modules/interaction/selectors'
+import { Colors } from '~/utils/colors'
 
 const InteractionLogo: React.FC = () => {
-  const source = useSelector(getServiceImage);
+  const source = useSelector(getServiceImage)
   if (source) {
-    return (
-      <Image style={styles.image} source={{ uri: source }} />
-    )    
+    return <Image style={styles.image} source={{ uri: source }} />
   }
   return (
-    <View>
+    <View style={[styles.image, { backgroundColor: Colors.white }]}>
       <InitiatorPlaceholderIcon />
     </View>
   )
@@ -26,4 +25,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default InteractionLogo;
+export default InteractionLogo

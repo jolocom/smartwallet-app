@@ -6,7 +6,7 @@ export interface IWithCustomStyle<T = ViewStyle> {
 }
 
 export interface IField {
-  name: string
+  label: string
   value: ClaimEntry
 }
 
@@ -14,7 +14,6 @@ export interface ICardProps {
   id: string
   optionalFields: IField[]
   mandatoryFields: Array<IField | null>
-  image?: string | undefined
+  photo?: string | undefined
   highlight?: string | undefined
-  claims: IField[]
 }
