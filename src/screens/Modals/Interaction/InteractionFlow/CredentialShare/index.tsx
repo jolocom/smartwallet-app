@@ -1,11 +1,10 @@
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
-import CollapsedScrollView from '~/components/CollapsedScrollView'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
-import { useSwitchScreens } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 import {
   getRequestedCredentialDetailsBAS,
@@ -47,10 +46,7 @@ export const CredentialShareBAS = () => {
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
   const handleShare = useCredentialShareSubmit()
-  const handleSwitchScreens = useSwitchScreens(
-    ScreenNames.InteractionAddCredential,
-  )
-
+  const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
 
   /* We are preselecting a credential that is requested */
@@ -64,7 +60,9 @@ export const CredentialShareBAS = () => {
 
   const handleSubmit = () =>
     singleRequestedAttribute !== undefined
-      ? handleSwitchScreens({ type: singleRequestedAttribute })
+      ? redirect(ScreenNames.CredentialForm, {
+          type: singleRequestedAttribute,
+        })
       : handleShare()
 
   const renderBody = () => {

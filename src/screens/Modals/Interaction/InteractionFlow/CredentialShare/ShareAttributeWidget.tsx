@@ -10,7 +10,7 @@ import { AttributeTypes } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { attributeConfig } from '~/config/claims'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
-import { useSwitchScreens } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 
 import { Space } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
@@ -81,10 +81,8 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
 
   if (!Object.keys(attributes).length) return null
 
+  const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
-  const handleScreenSwitch = useSwitchScreens(
-    ScreenNames.InteractionAddCredential,
-  )
   const Container = withContainer ? AttributeWidgetContainerFAS : React.Fragment
 
   /* Preselecting first requested attribute */
@@ -111,7 +109,9 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
                 key={attrType}
                 name={config.label}
                 type={attrType}
-                onAdd={() => handleScreenSwitch({ type: attrType })}
+                onAdd={() =>
+                  redirect(ScreenNames.CredentialForm, { type: attrType })
+                }
                 onSelect={(attrType, id) =>
                   handleSelectCredential({ [attrType]: id })
                 }

@@ -34,7 +34,6 @@ export enum ScreenNames {
   Interaction = 'Interaction', // root screen
   Scanner = 'Scanner',
   InteractionFlow = 'InteractionFlow',
-  InteractionAddCredential = 'InteractionAddCredential',
   // Modals
   Loader = 'Loader',
   BusinessCardForm = 'BusinessCardForm',
