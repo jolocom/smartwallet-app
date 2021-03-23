@@ -48,7 +48,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
     idx: number,
     fieldLines: Record<number, number>,
   ) => {
-    return idx !== 0 ? (fieldLines[0] > 1 ? 1 : 2) : 2
+    return idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2
   }
 
   return (
