@@ -6,6 +6,7 @@ import { getServiceDescription } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import truncateDid from '~/utils/truncateDid'
 
 interface IInteractionDescriptionProps {
   label: string
@@ -18,7 +19,9 @@ const InteractionDescription: React.FC<IInteractionDescriptionProps> = ({
   const { t } = useTranslation()
 
   const desc = isAnonymous
-    ? t(strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS, { did })
+    ? t(strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS, {
+        did: truncateDid(did),
+      })
     : t(label, { service: name })
 
   return (
