@@ -29,6 +29,7 @@ import {
 } from '../components/styled'
 import { useMappedOfferDetails } from './useOfferDetails'
 import { getOfferSections } from './utils'
+import Collapsible from '~/components/Collapsible'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -86,21 +87,13 @@ const CredentialOfferFAS = () => {
   const documents = updatedCategories[CredentialRenderTypes.document]
   const other = updatedCategories[OtherCategory.other]
 
-  const handleRenderCollapsingComponent = useCallback(
-    () => (
-      <LogoContainerFAS>
-        <InteractionLogo />
-      </LogoContainerFAS>
-    ),
-    [],
-  )
-
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
     return credentials.map(
       ({ invalid, category, properties, name, type }, idx) => (
         <View
           style={{
             marginBottom: idx === credentials.length - 1 ? 0 : 30,
+            opacity: invalid ? 0.5 : 1,
           }}
         >
           {category === CredentialRenderTypes.document ? (
@@ -123,28 +116,39 @@ const CredentialOfferFAS = () => {
 
   return (
     <ContainerFAS>
-      <CollapsedScrollView
-        collapsedTitle={strings.INCOMING_OFFER}
-        renderCollapsingComponent={handleRenderCollapsingComponent}
-      >
-        <InteractionTitle label={strings.INCOMING_OFFER} />
-        <InteractionDescription
-          label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
-        />
-        <Space />
-        <InteractionSection title={strings.DOCUMENTS}>
-          {handleRenderCredentials(documents)}
-        </InteractionSection>
-        <InteractionSection title={strings.OTHER}>
-          {handleRenderCredentials(other)}
-        </InteractionSection>
-      </CollapsedScrollView>
-      <FooterContainerFAS>
-        <InteractionFooter
-          onSubmit={handleSubmit}
-          submitLabel={strings.RECEIVE}
-        />
-      </FooterContainerFAS>
+      <Collapsible>
+        <Collapsible.AnimatedHeader height={62}>
+          <Collapsible.HeaderText>
+            {strings.INCOMING_OFFER}
+          </Collapsible.HeaderText>
+        </Collapsible.AnimatedHeader>
+        <Collapsible.ScrollView customStyles={{ paddingHorizontal: '5%' }}>
+          <Collapsible.HidingScale>
+            <LogoContainerFAS>
+              <InteractionLogo />
+            </LogoContainerFAS>
+          </Collapsible.HidingScale>
+          <Collapsible.HidingTextContainer>
+            <InteractionTitle label={strings.INCOMING_OFFER} />
+          </Collapsible.HidingTextContainer>
+          <InteractionDescription
+            label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+          />
+          <Space />
+          <InteractionSection title={strings.DOCUMENTS}>
+            {handleRenderCredentials(documents)}
+          </InteractionSection>
+          <InteractionSection title={strings.OTHER}>
+            {handleRenderCredentials(other)}
+          </InteractionSection>
+        </Collapsible.ScrollView>
+        <FooterContainerFAS>
+          <InteractionFooter
+            onSubmit={handleSubmit}
+            submitLabel={strings.RECEIVE}
+          />
+        </FooterContainerFAS>
+      </Collapsible>
     </ContainerFAS>
   )
 }
