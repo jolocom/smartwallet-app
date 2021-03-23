@@ -361,6 +361,22 @@ export const getServiceDescription = createSelector(
   },
 )
 
+export const getSingleMissingAttribute = createSelector(
+  [getInteractionDetails, getAttributes],
+  (details, attributes) => {
+    if (isCredShareDetails(details)) {
+      const { requestedAttributes, requestedCredentials } = details
+      if (
+        requestedAttributes.length === 1 &&
+        requestedCredentials.length === 0 &&
+        !attributes[requestedAttributes[0]]
+      ) {
+        return requestedAttributes[0]
+      }
+    }
+  },
+)
+
 export const getAuthzUIDetails = createSelector(
   [getAuthorizationDetails],
   (details) => {

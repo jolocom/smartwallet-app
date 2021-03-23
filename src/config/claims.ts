@@ -7,6 +7,20 @@ import {
   ClaimKeys,
 } from '~/types/credentials'
 import { strings } from '~/translations'
+import {
+  emailValidation,
+  nameValidation,
+  postalAddressValidation,
+  mobileNumberValidation,
+  businessCardValidation,
+} from './validation'
+import { Platform, KeyboardTypeOptions } from 'react-native'
+
+// NOTE: the default `number-pad` type doesn't have the submit button on ios
+const numberPadKeyboardType: KeyboardTypeOptions = Platform.select({
+  ios: 'numbers-and-punctuation',
+  default: 'number-pad',
+})
 
 // TODO: add input validation for each field
 const emailConfig: IAttributeConfig = {
@@ -23,6 +37,7 @@ const emailConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: emailValidation,
 }
 
 const postalAddressConfig: IAttributeConfig = {
@@ -42,7 +57,7 @@ const postalAddressConfig: IAttributeConfig = {
       key: ClaimKeys.postalCode,
       label: strings.POSTAL_CODE_FIELD,
       keyboardOptions: {
-        keyboardType: 'number-pad',
+        keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
       },
     },
@@ -63,6 +78,7 @@ const postalAddressConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: postalAddressValidation,
 }
 
 const mobileNumberConfig: IAttributeConfig = {
@@ -74,11 +90,12 @@ const mobileNumberConfig: IAttributeConfig = {
       key: ClaimKeys.telephone,
       label: strings.NUMBER,
       keyboardOptions: {
-        keyboardType: 'phone-pad',
+        keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
       },
     },
   ],
+  validationSchema: mobileNumberValidation,
 }
 
 const nameConfig: IAttributeConfig = {
@@ -103,6 +120,7 @@ const nameConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: nameValidation,
 }
 
 const businessCardConfig: IAttributeConfig = {
@@ -154,7 +172,7 @@ const businessCardConfig: IAttributeConfig = {
       key: ClaimKeys.telephone,
       label: strings.NUMBER,
       keyboardOptions: {
-        keyboardType: 'number-pad',
+        keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
       },
     },
@@ -167,6 +185,7 @@ const businessCardConfig: IAttributeConfig = {
       },
     },
   ],
+  validationSchema: businessCardValidation,
 }
 
 export const attributeConfig: Record<AttributeTypes, IAttributeConfig> = {

@@ -252,6 +252,8 @@ const attributes = {
   COMPANY_NAME_FIELD: 'Company name',
   MISSING_INFO: 'Missing info',
   SAVE_YOUR_ATTRIBUTE: (name: string) => `Save your attribute ${name}`,
+  ADD_YOUR_ATTRIBUTE: 'Add your {{attribute}}',
+  EDIT_YOUR_ATTRIBUTE: 'Edit your {{attribute}}',
 }
 
 const recoverPin = {
@@ -306,7 +308,7 @@ const documents = {
   ISSUED: 'Issued',
   EXPIRES: 'Expires',
   SUBJECT_NAME: 'Subject name',
-  ANONYMOUS: 'Anonymous'
+  ANONYMOUS: 'Anonymous',
 }
 
 const history = {
@@ -355,6 +357,8 @@ const identity = {
   PLEASE_INTRODUCE_YOURSELF: 'Please introduce yourself',
   YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
     'You dont have any completed interactions yet. Make one today!',
+  EDIT_BUSINESS_CARD: 'Edit Business Card',
+  CREATE_BUSINESS_CARD: 'Create Business Card',
 }
 
 const bottomBar = {
@@ -362,6 +366,12 @@ const bottomBar = {
   HISTORY: 'History',
   DOCUMENTS: 'Documents',
   SETTINGS: 'Settings',
+}
+
+const validation = {
+  AT_LEAST_ONE_ERROR: 'Please provide at least one of the values',
+  EMAIL_FORMAT_ERROR: 'Seems like this is not a valid email',
+  VALUE_MISSING: 'Please provide value',
 }
 
 export const strings = {
@@ -386,4 +396,5 @@ export const strings = {
   ...history,
   ...identity,
   ...bottomBar,
+  ...validation,
 }

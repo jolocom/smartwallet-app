@@ -3,6 +3,8 @@ import { AttributeTypes } from '~/types/credentials'
 import { RootReducerI } from '~/types/reducer'
 import { getAttributeConfigWithValues } from '~/utils/mappings/groupBusinessCard'
 import { AttrsState, AttributeI } from './types'
+import { PrimitiveAttributeTypes } from '~/types/credentials'
+import { getDid } from '../account/selectors'
 
 export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
   state.attrs.all
@@ -15,32 +17,34 @@ export const getPrimitiveAttributes = createSelector(
   },
 )
 
-export const getBusinessCardId = createSelector(
-  [getAttributes],
-  (attributes) => {
-    const { ProofOfBusinessCardCredential } = attributes
-    if (ProofOfBusinessCardCredential) {
-      return ProofOfBusinessCardCredential[0].id
-    }
-    return undefined
-  },
-)
+export const getPrimitiveAttributeById = (id: string) =>
+  createSelector([getAttributes], (attributes) => {
+    const type = Object.keys(attributes).find((t) => {
+      return attributes[t as PrimitiveAttributeTypes].find((a) => a.id === id)
+    }) as PrimitiveAttributeTypes
 
-export const getBusinessCardAttributes = createSelector(
+    if (!type) return undefined
+    return attributes[type].find((a) => a.id === id)
+  })
+
+export const getBusinessCardAttribute = createSelector(
   [getAttributes],
   (attributes) => {
     const { ProofOfBusinessCardCredential } = attributes
-    return ProofOfBusinessCardCredential
+    // NOTE: we assume we can only have one business card.
+    return !!ProofOfBusinessCardCredential
+      ? ProofOfBusinessCardCredential[0]
+      : undefined
   },
 )
 
 export const getBusinessCardConfigWithValues = createSelector(
-  [getBusinessCardAttributes],
-  (attributes) => {
-    if (attributes) {
+  [getBusinessCardAttribute],
+  (attribute) => {
+    if (attribute) {
       return getAttributeConfigWithValues(
         AttributeTypes.businessCard,
-        attributes[0].value,
+        attribute.value,
       )
     }
     return null

@@ -11,6 +11,7 @@ import { useFinishInteraction } from '~/hooks/interactions/handlers'
 interface Props {
   onSubmit: () => Promise<any> | any
   disabled?: boolean
+  disableLoader?: boolean
   submitLabel: string
 }
 
@@ -18,12 +19,14 @@ interface Props {
 const InteractionFooter: React.FC<Props> = ({
   onSubmit,
   disabled = false,
-  submitLabel
+  disableLoader = false,
+  submitLabel,
 }) => {
   const loader = useLoader()
-  const finishInteraction = useFinishInteraction();
+  const finishInteraction = useFinishInteraction()
 
   const handleSubmit = async () => {
+    if (disableLoader) return onSubmit()
     await loader(
       async () => {
         await onSubmit()

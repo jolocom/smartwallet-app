@@ -5,6 +5,7 @@ import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '@jolocom/sdk'
+import { ObjectSchema } from 'yup'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -48,7 +49,7 @@ export interface IAttributeClaimField {
 }
 
 export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
-  value: ClaimEntry
+  value?: ClaimEntry
 }
 
 export interface IAttributeConfig<T = IAttributeClaimField> {
@@ -57,6 +58,7 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   label: string
   metadata: BaseMetadata
   fields: T[]
+  validationSchema: ObjectSchema<Record<string, any>>
 }
 
 export type BaseUICredential = Pick<
@@ -115,3 +117,13 @@ export function isDocument(
 ): credential is DisplayCredentialDocument {
   return credential.category === CredentialRenderTypes.document
 }
+
+export type TPrimitiveAttributesConfig = Omit<
+  Record<AttributeTypes, IAttributeConfig>,
+  AttributeTypes.businessCard
+>
+
+export type PrimitiveAttributeTypes = Exclude<
+  AttributeTypes,
+  AttributeTypes.businessCard
+>

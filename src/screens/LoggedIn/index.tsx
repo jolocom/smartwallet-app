@@ -3,7 +3,6 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useGetAppStates } from '~/hooks/useAppState'
@@ -20,6 +19,9 @@ import Recovery from '../Modals/Recovery'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Main from './Main'
 import { useInitializeCredentials } from '~/hooks/signedCredentials'
+import BusinessCardForm from '../Modals/Forms/BusinessCardForm'
+import CredentialForm from '../Modals/Forms/CredentialForm'
+import { PrimitiveAttributeTypes } from '~/types/credentials'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -30,19 +32,14 @@ export type LoggedInStackParamList = {
   [ScreenNames.Lock]: undefined
   [ScreenNames.PinRecoveryInstructions]: undefined
   [ScreenNames.DeviceAuth]: undefined
+  [ScreenNames.BusinessCardForm]: undefined
+  [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
 }
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
 
 const settingsScreenTransitionOptions = {
-  ...Platform.select({
-    ios: {
-      ...TransitionPresets.ModalSlideFromBottomIOS,
-    },
-    android: {
-      ...TransitionPresets.DefaultTransition,
-    },
-  }),
+  ...TransitionPresets.ModalSlideFromBottomIOS,
   cardStyle: {
     backgroundColor: Colors.mainBlack,
   },
@@ -134,6 +131,17 @@ const LoggedIn = () => {
         component={Recovery}
         options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
       />
+      <LoggedInStack.Screen
+        name={ScreenNames.BusinessCardForm}
+        component={BusinessCardForm}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+      />
+      <LoggedInStack.Screen
+        name={ScreenNames.CredentialForm}
+        component={CredentialForm}
+        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+      />
+      {/* Modals -> End */}
     </LoggedInStack.Navigator>
   )
 }
