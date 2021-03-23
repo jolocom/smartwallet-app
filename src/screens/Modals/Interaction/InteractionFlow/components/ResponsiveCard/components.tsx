@@ -72,7 +72,6 @@ export const CredentialHighlight: IResponsiveCardComposition['Highlight'] = ({
       <JoloText
         weight={JoloTextWeight.regular}
         customStyles={{
-          fontSize: BP({ default: 24, xsmall: 20 }),
           marginTop: Platform.OS === 'ios' ? 4 : 0,
         }}
         color={Colors.white}
@@ -177,11 +176,7 @@ const styles = StyleSheet.create({
     width: Platform.OS === 'ios' ? '101%' : '100%',
     paddingHorizontal: 20,
     zIndex: 0,
-    ...Platform.select({
-      ios: {
-        marginBottom: -1,
-      },
-    }),
+    marginBottom: -1,
   },
   holderName: {
     textAlign: 'left',
