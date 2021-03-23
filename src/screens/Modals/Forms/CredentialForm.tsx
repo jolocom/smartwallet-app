@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
 import { useSelector } from 'react-redux'

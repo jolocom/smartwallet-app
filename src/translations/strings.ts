@@ -150,7 +150,6 @@ const interactions = {
     'Choose one or more documents requested by {{service}} to proceed',
   SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS:
     '{{service}} sent your wallet the following document(s)',
-  ADD_YOUR_ATTRIBUTE: 'Add your {{attribute}}',
   IS_IT_REALLY_YOU: 'Is it really you?',
   INCOMING_REQUEST: 'Incoming request',
   INCOMING_OFFER: 'Incoming offer',

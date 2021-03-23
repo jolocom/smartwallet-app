@@ -3,7 +3,6 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSyncStorageAttributes } from '~/hooks/attributes'
 import { useSyncStorageCredentials } from '~/hooks/credentials'
