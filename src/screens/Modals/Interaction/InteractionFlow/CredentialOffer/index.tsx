@@ -115,13 +115,13 @@ const CredentialOfferFAS = () => {
   }
 
   return (
-    <ContainerFAS>
-      <Collapsible>
-        <Collapsible.AnimatedHeader height={62}>
-          <Collapsible.HeaderText>
-            {strings.INCOMING_OFFER}
-          </Collapsible.HeaderText>
-        </Collapsible.AnimatedHeader>
+    <Collapsible>
+      <Collapsible.AnimatedHeader height={62}>
+        <Collapsible.HeaderText>
+          {strings.INCOMING_OFFER}
+        </Collapsible.HeaderText>
+      </Collapsible.AnimatedHeader>
+      <ContainerFAS>
         <Collapsible.ScrollView customStyles={{ paddingHorizontal: '5%' }}>
           <Collapsible.HidingScale>
             <LogoContainerFAS>
@@ -148,8 +148,8 @@ const CredentialOfferFAS = () => {
             submitLabel={strings.RECEIVE}
           />
         </FooterContainerFAS>
-      </Collapsible>
-    </ContainerFAS>
+      </ContainerFAS>
+    </Collapsible>
   )
 }
 

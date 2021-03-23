@@ -2,7 +2,6 @@ import React from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useCollapsible } from '../context'
 import { ICollapsibleComposite } from '../types'
-import { COLLAPSIBLE_HEADER_HEIGHT } from './CollapsibleHeader'
 
 export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
   children,
@@ -10,7 +9,7 @@ export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
   animatedHeader = false,
   ...scrollProps
 }) => {
-  const { handleScroll } = useCollapsible()
+  const { handleScroll, headerHeight } = useCollapsible()
 
   return (
     // @ts-ignore
@@ -21,7 +20,7 @@ export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[
         styles.container,
-        { paddingTop: animatedHeader ? 0 : COLLAPSIBLE_HEADER_HEIGHT },
+        { paddingTop: animatedHeader ? 0 : headerHeight },
         customStyles,
       ]}
       scrollEventThrottle={1}
