@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import ShareAttributeWidget from '~/components/Widget/ShareAttributeWidget'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
-import { useSwitchScreens } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import {
   getCredShareUIDetailsBAS,
   getIsFullscreenCredShare,
@@ -45,16 +45,14 @@ export const CredentialShareBAS = () => {
   )
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
+  const redirect = useRedirect()
   const handleShare = useCredentialShareSubmit()
-  const handleSwitchScreens = useSwitchScreens(
-    ScreenNames.InteractionAddCredential,
-  )
 
   useSelectAttributes()
 
   const handleSubmit = () =>
     singleMissingAttribute !== undefined
-      ? handleSwitchScreens({ type: singleMissingAttribute })
+      ? redirect(ScreenNames.CredentialForm, { type: singleMissingAttribute })
       : handleShare()
 
   const renderBody = () => {
@@ -91,6 +89,7 @@ export const CredentialShareBAS = () => {
       <InteractionFooter
         disabled={!isReadyToSubmit}
         onSubmit={handleSubmit}
+        disableLoader={!!singleMissingAttribute}
         submitLabel={
           singleMissingAttribute !== undefined
             ? strings.ADD_INFO

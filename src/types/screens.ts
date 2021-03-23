@@ -37,6 +37,9 @@ export enum ScreenNames {
   InteractionAddCredential = 'InteractionAddCredential',
   // Modals
   Loader = 'Loader',
+  BusinessCardForm = 'BusinessCardForm',
+  CredentialForm = 'CredentialForm',
+
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
   //Settings

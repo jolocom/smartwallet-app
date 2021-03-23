@@ -140,17 +140,21 @@ const interactions = {
   DOCUMENTS: 'Documents',
   OTHER: 'Other',
   ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION: `Once you click done, it will be displayed in the personal info section.`,
-  THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS: "This public profile {{did}} chose to remain anonymous. Pay attention before sharing data.",
-  SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS: "{{service}} is now ready to grant you access",
-  SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY: "{{service}} would like to confirm your digital identity before proceeding",
-  CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED: "Choose one or more documents requested by {{service}} to proceed",
-  SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS: "{{service}} sent your wallet the following document(s)",
-  ADD_YOUR_ATTRIBUTE: "Add your {{attribute}}",
+  THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS:
+    'This public profile {{did}} chose to remain anonymous. Pay attention before sharing data.',
+  SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS:
+    '{{service}} is now ready to grant you access',
+  SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY:
+    '{{service}} would like to confirm your digital identity before proceeding',
+  CHOOSE_ONE_OR_MORE_DOCUMETS_REQUESTED_BY_SERVICE_TO_PROCEED:
+    'Choose one or more documents requested by {{service}} to proceed',
+  SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS:
+    '{{service}} sent your wallet the following document(s)',
   IS_IT_REALLY_YOU: 'Is it really you?',
   INCOMING_REQUEST: 'Incoming request',
   INCOMING_OFFER: 'Incoming offer',
   ADD_INFO: 'Add info',
-  WOULD_YOU_LIKE_TO_ACTION: "Would you like to {{action}}?",
+  WOULD_YOU_LIKE_TO_ACTION: 'Would you like to {{action}}?',
 }
 
 const lock = {
@@ -245,6 +249,8 @@ const attributes = {
   COMPANY_NAME_FIELD: 'Company name',
   MISSING_INFO: 'Missing info',
   SAVE_YOUR_ATTRIBUTE: (name: string) => `Save your attribute ${name}`,
+  ADD_YOUR_ATTRIBUTE: 'Add your {{attribute}}',
+  EDIT_YOUR_ATTRIBUTE: 'Edit your {{attribute}}',
 }
 
 const recoverPin = {
@@ -344,6 +350,8 @@ const identity = {
   PLEASE_INTRODUCE_YOURSELF: 'Please introduce yourself',
   YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
     'You dont have any completed interactions yet. Make one today!',
+  EDIT_BUSINESS_CARD: 'Edit Business Card',
+  CREATE_BUSINESS_CARD: 'Create Business Card',
 }
 
 const bottomBar = {

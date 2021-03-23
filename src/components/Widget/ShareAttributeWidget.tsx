@@ -7,7 +7,8 @@ import { AttributeTypes } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { attributeConfig } from '~/config/claims'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
-import { useSwitchScreens } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
+
 import InteractionAttributesWidget from './InteractionAttributesWidget'
 
 const ShareAttributeWidget = () => {
@@ -16,9 +17,7 @@ const ShareAttributeWidget = () => {
   if (!Object.keys(attributes).length) return null
 
   const { handleSelectCredential } = useCredentialShareFlow()
-  const handleScreenSwitch = useSwitchScreens(
-    ScreenNames.InteractionAddCredential,
-  )
+  const redirect = useRedirect()
 
   return Object.keys(attributes).map((credType, idx, arr) => {
     const attrType = credType as AttributeTypes
@@ -31,7 +30,9 @@ const ShareAttributeWidget = () => {
             key={idx}
             name={config.label}
             type={attrType}
-            onAdd={() => handleScreenSwitch({ type: attrType })}
+            onAdd={() =>
+              redirect(ScreenNames.CredentialForm, { type: attrType })
+            }
             onSelect={(attrType, id) =>
               handleSelectCredential({ [attrType]: id })
             }

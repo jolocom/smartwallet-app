@@ -1,39 +1,28 @@
-import React, { useMemo, useState } from 'react'
-import { LayoutAnimation, View } from 'react-native'
+import React, { useMemo } from 'react'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
+
 import Dots from '~/components/Dots'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
-import { getBusinessCardId } from '~/modules/attributes/selectors'
+import { getBusinessCardAttribute } from '~/modules/attributes/selectors'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import BusinessCardCredential from './components/businessCard/BusinessCardCredential'
-import BusinessCardEdit from './components/businessCard/BusinessCardEdit'
 import BusinessCardPlaceholder from './components/businessCard/BusinessCardPlaceholder'
 import BusinessCardStyled from './components/BusinessCardStyled'
 import IdentityTabs from './tabs'
-
-enum Modes {
-  display = 'display',
-  edit = 'edit',
-}
+import { useRedirect } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 const BusinessCard: React.FC = () => {
-  const [mode, setMode] = useState(Modes.display)
+  const redirect = useRedirect()
   const { handleDeleteCredentialSI } = useSICActions()
 
-  const businessCardId = useSelector(getBusinessCardId)
+  const businessCardId = useSelector(getBusinessCardAttribute)?.id
   const { scheduleWarning } = useToasts()
 
   const isPlaceholder = !Boolean(businessCardId)
-
-  const transitionMode = (mode: Modes) => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: 200,
-    })
-    setMode(mode)
-  }
 
   const handleDeleteBC = async () => {
     if (businessCardId) {
@@ -44,8 +33,6 @@ const BusinessCard: React.FC = () => {
           title: 'Could not delete',
           message: 'Failed to delete business card',
         })
-      } finally {
-        transitionMode(Modes.display)
       }
     } else {
       throw new Error('Cannot perform delete on non existent business card')
@@ -56,7 +43,7 @@ const BusinessCard: React.FC = () => {
     () => [
       {
         title: strings.EDIT,
-        onPress: () => transitionMode(Modes.edit),
+        onPress: () => redirect(ScreenNames.BusinessCardForm),
       },
       ...(!isPlaceholder
         ? [
@@ -69,17 +56,6 @@ const BusinessCard: React.FC = () => {
     ],
     [businessCardId],
   )
-
-  if (mode === Modes.edit) {
-    return (
-      <View>
-        <IdentityTabs.Styled.Placeholder show={true}>
-          {strings.PLEASE_INTRODUCE_YOURSELF}
-        </IdentityTabs.Styled.Placeholder>
-        <BusinessCardEdit onCancel={() => transitionMode(Modes.display)} />
-      </View>
-    )
-  }
 
   return (
     <View style={{ marginTop: !isPlaceholder ? 30 : 0 }}>

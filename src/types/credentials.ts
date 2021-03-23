@@ -47,7 +47,7 @@ export interface IAttributeClaimField {
 }
 
 export interface IAttributeClaimFieldWithValue extends IAttributeClaimField {
-  value: ClaimEntry
+  value?: ClaimEntry
 }
 
 export interface IAttributeConfig<T = IAttributeClaimField> {
@@ -109,3 +109,13 @@ export enum DocumentTypes {
 export enum DocumentFields {
   DocumentName = 'Document Name',
 }
+
+export type TPrimitiveAttributesConfig = Omit<
+  Record<AttributeTypes, IAttributeConfig>,
+  AttributeTypes.businessCard
+>
+
+export type PrimitiveAttributeTypes = Exclude<
+  AttributeTypes,
+  AttributeTypes.businessCard
+>
