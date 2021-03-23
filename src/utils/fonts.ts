@@ -1,5 +1,5 @@
-import { Colors } from './colors'
-import BP from './breakpoints'
+import { Colors } from '~/utils/colors'
+import { ScreenSize, getScreenSize } from '~/utils/breakpoints'
 
 export enum Fonts {
   Regular = 'TTCommons-Regular',
@@ -22,96 +22,155 @@ export enum JoloTextSizes {
   tiniest = 'tiniest',
 }
 
-const arrangeFontStyle = (
-  fontSize: number,
-  lineHeight: number,
-  letterSpacing: number,
-  color: Colors,
-  fontFamily: Fonts,
-): FontSetI => ({
-  fontSize,
-  lineHeight,
-  letterSpacing,
-  color,
-  fontFamily,
-})
+type UnscaledFontStyles = Partial<Record<ScreenSize, FontSetI>>
 
-export const titleFontStyles: Record<JoloTextSizes, FontSetI> = {
-  big: {
-    ...arrangeFontStyle(
-      BP({ xsmall: 26, small: 30, default: 34 }),
-      BP({ xsmall: 32, small: 36, default: 40 }),
-      0,
-      Colors.white90,
-      Fonts.Medium,
-    ),
-  },
-  middle: {
-    ...arrangeFontStyle(
-      BP({ xsmall: 24, default: 28 }),
-      BP({ xsmall: 28, default: 32 }),
-      0,
-      Colors.white90,
-      Fonts.Medium,
-    ),
-  },
-  mini: {
-    ...arrangeFontStyle(
-      BP({ xsmall: 14, default: 18 }),
-      BP({ xsmall: 20, default: 24 }),
-      0,
-      Colors.white90,
-      Fonts.Medium,
-    ),
-  },
-  tiniest: {
-    ...arrangeFontStyle(14, 20, 0, Colors.white70, Fonts.Medium),
-  },
+type FontsConfig = Record<
+  'title' | 'subtitle',
+  Record<JoloTextSizes, UnscaledFontStyles>
+>
+
+export const scaleFont = (font: UnscaledFontStyles) => {
+  return font[getScreenSize()] ?? font.large
 }
 
-export const subtitleFontStyles = {
-  big: {
-    ...arrangeFontStyle(
-      BP({ xsmall: 18, small: 20, default: 22 }),
-      BP({ xsmall: 22, small: 24, default: 26 }),
-      BP({ xsmall: 0.12, small: 0.14, default: 0.15 }),
-      BP({
-        default: Colors.white90,
-        medium: Colors.white80,
-        large: Colors.white80,
-      }),
-      Fonts.Regular,
-    ),
+export const fonts: FontsConfig = {
+  title: {
+    [JoloTextSizes.tiniest]: {
+      [ScreenSize.large]: {
+        fontSize: 14,
+        lineHeight: 20,
+        letterSpacing: 0,
+        color: Colors.white70,
+        fontFamily: Fonts.Medium,
+      },
+    },
+    [JoloTextSizes.mini]: {
+      [ScreenSize.large]: {
+        fontSize: 18,
+        lineHeight: 24,
+        letterSpacing: 0.09,
+        color: Colors.white,
+        fontFamily: Fonts.Medium,
+      },
+      [ScreenSize.xsmall]: {
+        fontSize: 14,
+        lineHeight: 20,
+        letterSpacing: 0.07,
+        color: Colors.white,
+        fontFamily: Fonts.Medium,
+      },
+    },
+    [JoloTextSizes.middle]: {
+      [ScreenSize.large]: {
+        fontSize: 28,
+        lineHeight: 32,
+        letterSpacing: 0,
+        color: Colors.white85,
+        fontFamily: Fonts.Medium,
+      },
+      [ScreenSize.xsmall]: {
+        fontSize: 24,
+        lineHeight: 28,
+        letterSpacing: 0,
+        color: Colors.white90,
+        fontFamily: Fonts.Medium,
+      },
+    },
+    [JoloTextSizes.big]: {
+      [ScreenSize.large]: {
+        fontSize: 34,
+        lineHeight: 40,
+        letterSpacing: 0,
+        color: Colors.white90,
+        fontFamily: Fonts.Medium,
+      },
+      [ScreenSize.small]: {
+        fontSize: 30,
+        lineHeight: 36,
+        letterSpacing: 0,
+        color: Colors.white90,
+        fontFamily: Fonts.Medium,
+      },
+      [ScreenSize.xsmall]: {
+        fontSize: 26,
+        lineHeight: 32,
+        letterSpacing: 0,
+        color: Colors.white90,
+        fontFamily: Fonts.Medium,
+      },
+    },
   },
-  middle: {
-    ...arrangeFontStyle(
-      BP({ default: 16, medium: 20, large: 20 }),
-      BP({ default: 18, medium: 22, large: 22 }),
-      BP({ default: 0.11, medium: 0.14, large: 0.14 }),
-      BP({
-        default: Colors.white90,
-        medium: Colors.white70,
-        large: Colors.white70,
-      }),
-      Fonts.Regular,
-    ),
-  },
-  mini: {
-    ...arrangeFontStyle(
-      BP({ xsmall: 14, default: 16 }),
-      BP({ xsmall: 14, default: 16 }),
-      0,
-      Colors.white40,
-      Fonts.Regular,
-    ),
-  },
-  tiniest: {
-    ...arrangeFontStyle(
-      BP({ default: 14, xsmall: 12 }),
-      BP({ default: 20, xsmall: 18 }),
-      0,
-      Colors.white70,
-      Fonts.Regular,
-    ),
+  subtitle: {
+    [JoloTextSizes.tiniest]: {
+      [ScreenSize.large]: {
+        fontSize: 14,
+        lineHeight: 14,
+        letterSpacing: 0,
+        color: Colors.white40,
+        fontFamily: Fonts.Regular,
+      },
+    },
+    [JoloTextSizes.mini]: {
+      [ScreenSize.large]: {
+        fontSize: 16,
+        lineHeight: 18,
+        letterSpacing: 0,
+        color: Colors.white40,
+        fontFamily: Fonts.Regular,
+      },
+      [ScreenSize.xsmall]: {
+        fontSize: 14,
+        lineHeight: 16,
+        letterSpacing: 0,
+        color: Colors.white40,
+        fontFamily: Fonts.Regular,
+      },
+    },
+    [JoloTextSizes.middle]: {
+      [ScreenSize.large]: {
+        fontSize: 20,
+        lineHeight: 22,
+        letterSpacing: 0.14,
+        color: Colors.white70,
+        fontFamily: Fonts.Regular,
+      },
+      [ScreenSize.small]: {
+        fontSize: 16,
+        lineHeight: 18,
+        letterSpacing: 0.11,
+        color: Colors.white90,
+        fontFamily: Fonts.Regular,
+      },
+      [ScreenSize.xsmall]: {
+        fontSize: 16,
+        lineHeight: 18,
+        letterSpacing: 0.11,
+        color: Colors.white90,
+        fontFamily: Fonts.Regular,
+      },
+    },
+    [JoloTextSizes.big]: {
+      [ScreenSize.large]: {
+        fontSize: 22,
+        lineHeight: 26,
+        letterSpacing: 0.15,
+        color: Colors.white80,
+        fontFamily: Fonts.Regular,
+      },
+      [ScreenSize.small]: {
+        fontSize: 20,
+        lineHeight: 24,
+        letterSpacing: 0.14,
+        color: Colors.white90,
+        fontFamily: Fonts.Regular,
+      },
+      [ScreenSize.xsmall]: {
+        fontSize: 18,
+        lineHeight: 22,
+        letterSpacing: 0.12,
+        color: Colors.white90,
+        fontFamily: Fonts.Regular,
+      },
+    },
   },
 }

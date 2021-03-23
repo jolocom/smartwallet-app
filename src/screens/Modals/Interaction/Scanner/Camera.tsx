@@ -22,8 +22,7 @@ import { getInteractionType } from '~/modules/interaction/selectors'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
-import { useDelay } from '~/hooks/generic'
-import { useInteractionStart } from '~/hooks/interactions'
+import { useInteractionStart } from '~/hooks/interactions/handlers'
 
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 
@@ -87,7 +86,9 @@ const Camera = () => {
   useEffect(() => {
     //TODO: While the camera renders, the Modal transition freezes for a moment.
     //      Delaying as a temporary fix.
-    useDelay(() => setRenderCamera(true), 300)
+    setTimeout(() => {
+      setRenderCamera(true)
+    }, 300)
   }, [])
 
   const handleScan = async (e: { data: string }) => {
@@ -206,6 +207,7 @@ const styles = StyleSheet.create({
   navigationContainer: {
     position: 'absolute',
     zIndex: 10,
+    width: '100%',
   },
   scannerContainer: {
     width: '100%',

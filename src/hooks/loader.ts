@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { strings } from '~/translations/strings'
+import { sleep } from '~/utils/generic'
 
 export interface LoaderConfig {
   showFailed?: boolean
@@ -26,6 +27,7 @@ export const useLoader = () => {
   return async (
     callback: () => Promise<any>,
     config: LoaderConfig = defaultConfig,
+    onDone: (success: boolean) => void = () => {},
   ) => {
     const {
       showSuccess = defaultConfig.showSuccess,
@@ -42,10 +44,10 @@ export const useLoader = () => {
       }),
     )
 
-    let result
     try {
       await callback()
-      result = true
+      await sleep(1000)
+
       if (showSuccess) {
         dispatch(
           setLoader({
@@ -53,8 +55,13 @@ export const useLoader = () => {
             msg: success,
           }),
         )
+        setTimeout(() => {
+          dispatch(dismissLoader())
+          onDone(true)
+        }, 3000)
       } else {
         dispatch(dismissLoader())
+        onDone(true)
       }
     } catch (err) {
       console.warn(err)
@@ -65,18 +72,20 @@ export const useLoader = () => {
             msg: failed,
           }),
         )
+        setTimeout(() => {
+          dispatch(dismissLoader())
+          onDone(false)
+        }, 3000)
       } else {
         dispatch(dismissLoader())
+        onDone(false)
       }
-      result = false
     }
-
-    return result
   }
 }
 
 const openLoader = (type: LoaderTypes, msg: string) => (
-  delay: number = 4000,
+  delay: number = 2500,
 ) => {
   const dispatch = useDispatch()
 
@@ -87,12 +96,8 @@ const openLoader = (type: LoaderTypes, msg: string) => (
         msg,
       }),
     )
-    if (onComplete) {
-      setTimeout(() => {
-        onComplete()
-      }, 100)
-    }
     setTimeout(() => {
+      onComplete && onComplete()
       dispatch(dismissLoader())
     }, delay)
   }

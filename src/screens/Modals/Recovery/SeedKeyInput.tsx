@@ -13,9 +13,7 @@ import { useRecoveryDispatch, useRecoveryState } from './module/recoveryContext'
 import LeftArrow from '~/components/LeftArrow'
 import RightArrow from '~/components/RightArrow'
 
-import { useDelay } from '~/hooks/generic'
-
-import { titleFontStyles } from '~/utils/fonts'
+import { fonts, scaleFont } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { getSuggestedSeedKeys, isKeyValid } from '~/utils/mnemonic'
@@ -106,9 +104,11 @@ const SeedKeyInput: React.FC = () => {
     const updateInput = async () => {
       if (currentWordIdx !== 0) {
         setIsSuccessBorder(true)
-        await useDelay(() => setIsSuccessBorder(false), 100)
+        setTimeout(() => {
+          setIsSuccessBorder(false)
+        }, 100)
       }
-      await useDelay(() => {
+      setTimeout(() => {
         dispatch(setSeedKey(phrase[currentWordIdx]))
       }, 200)
     }
@@ -163,7 +163,7 @@ const SeedKeyInput: React.FC = () => {
           onSubmitEditing={handleSubmitEditing}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          style={[titleFontStyles.big, styles.input]}
+          style={[scaleFont(fonts.title.big), styles.input]}
           testID="seedphrase-input"
           keyboardAppearance="dark"
           underlineColorAndroid="transparent"

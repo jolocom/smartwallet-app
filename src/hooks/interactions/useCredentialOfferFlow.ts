@@ -6,7 +6,7 @@ import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credenti
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
 import { OfferedCredential, OtherCategory } from '~/types/credentials'
-import { useInteraction } from '.'
+import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 

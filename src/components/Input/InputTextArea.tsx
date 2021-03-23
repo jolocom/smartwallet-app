@@ -2,7 +2,8 @@ import React from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
-import { CoreInput, IInput } from '.'
+import { IInput } from './types'
+import { CoreInput } from './CoreInput'
 import Block from '../Block'
 
 const InputTextArea = React.forwardRef<TextInput, IInput>(

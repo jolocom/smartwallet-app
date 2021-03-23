@@ -91,18 +91,18 @@ const InteractionAddCredential: React.FC<IInteractionAddCredential> = ({
       const claimsValid = Object.values(claims).every((c) => c && !!c.length)
 
       if (claimsValid) {
-        const success = await loader(
+        const handleDone = (success: boolean) => {
+          if (!success) scheduleErrorInteraction()
+        }
+        await loader(
           async () => {
             const createdAttribute = await createAttribute(inputType, claims)
             handleSelectCredential(createdAttribute)
             handleSwitchScreens()
           },
           { showSuccess: false },
+          handleDone,
         )
-
-        if (!success) {
-          scheduleErrorInteraction()
-        }
       } else {
         scheduleInfo({
           title: 'Oops',

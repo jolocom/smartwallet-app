@@ -35,9 +35,10 @@ export const useRedirectTo = (
   return redirectTo
 }
 
-export const useReplaceWith = (screenName: ScreenNames) => {
+export const useReplaceWith = () => {
   const navigation = useNavigation()
-  return () => navigation.dispatch(StackActions.replace(screenName))
+  return (screenName: ScreenNames) =>
+    navigation.dispatch(StackActions.replace(screenName))
 }
 
 export const useRedirectToLoggedIn = () => {

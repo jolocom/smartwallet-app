@@ -8,9 +8,8 @@ import {
   View,
   TextInput,
 } from 'react-native'
-import { useDelay } from '~/hooks/generic'
 import { Colors } from '~/utils/colors'
-import { usePasscode } from '.'
+import { usePasscode } from './context'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = 65
@@ -19,7 +18,7 @@ const DIGIT_MARGIN_RIGHT = 7
 const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const { pin, setPin, pinError, pinSuccess } = usePasscode()
-  const digits = pin.split('');
+  const digits = pin.split('')
 
   const inputRef = useRef<TextInput>(null)
 
@@ -28,7 +27,7 @@ const PasscodeInput: React.FC = () => {
     let isCurrent = true
     const updateSelectedIndex = async () => {
       // it is implemented with delay to be able to preview digits and not seeing asterics straight away
-      await useDelay(() => {
+      setTimeout(() => {
         isCurrent &&
           setSelectedIndex(() => {
             if (digits.length < PASSCODE_LENGTH.length) {
@@ -105,8 +104,8 @@ const PasscodeInput: React.FC = () => {
                   {index === selectedIndex
                     ? digits[index]
                     : index < digits.length
-                      ? '*'
-                      : ''}
+                    ? '*'
+                    : ''}
                 </Text>
               </View>
             )

@@ -1,6 +1,6 @@
 import React from 'react'
 import { TouchableOpacity, StyleSheet, View, Platform } from 'react-native'
-import { useIdentityTabs } from '.'
+import { useIdentityTabs } from './context'
 import { Colors } from '~/utils/colors'
 import JoloText from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'

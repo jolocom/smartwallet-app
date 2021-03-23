@@ -19,7 +19,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { CheckmarkIconSmall } from '~/assets/svg'
 import useTermsConsent from '~/hooks/consent'
-import ModalScreen from '~/modals/Modal'
+import { useAgent } from '~/hooks/sdk'
 
 enum TextType {
   None,
@@ -30,7 +30,8 @@ enum TextType {
 }
 
 const TermsConsent: React.FC = () => {
-  const { acceptConsent, shouldShowConsent } = useTermsConsent()
+  const agent = useAgent()
+  const { acceptConsent } = useTermsConsent()
 
   const [accepted, setAccepted] = useState(false)
   const [textType, setTextType] = useState(TextType.None)
@@ -51,104 +52,102 @@ const TermsConsent: React.FC = () => {
   }
 
   return (
-    <ModalScreen isVisible={shouldShowConsent}>
-      <ScreenContainer customStyles={{ paddingHorizontal: 0 }}>
-        <View style={styles.header}>
+    <ScreenContainer customStyles={{ paddingHorizontal: 0, paddingTop: 20 }}>
+      <View style={styles.header}>
+        <JoloText
+          kind={JoloTextKind.title}
+          size={JoloTextSizes.middle}
+          color={Colors.white85}
+          customStyles={{ textAlign: 'left' }}
+        >
+          {
+            strings.SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY
+          }
+        </JoloText>
+      </View>
+      <View style={styles.termsWrapper}>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 200 }}
+          showsVerticalScrollIndicator={false}
+          overScrollMode={'never'}
+        >
           <JoloText
-            kind={JoloTextKind.title}
+            kind={JoloTextKind.subtitle}
             size={JoloTextSizes.middle}
-            color={Colors.white85}
-            customStyles={{ textAlign: 'left' }}
+            color={Colors.white80}
+            customStyles={{
+              textAlign: 'left',
+              marginBottom: BP({ default: 32, medium: 54, large: 54 }),
+            }}
           >
             {
-              strings.SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY
+              strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW
             }
           </JoloText>
-        </View>
-        <View style={styles.termsWrapper}>
-          <ScrollView
-            contentContainerStyle={{ paddingBottom: 200 }}
-            showsVerticalScrollIndicator={false}
-            overScrollMode={'never'}
-          >
+          {textType === TextType.None ? (
+            <>
+              <ConsentButton
+                text={'Terms of Service'}
+                onPress={() => setTextType(TextType.TermsEN)}
+              />
+              <ConsentButton
+                text={'Privacy Policy'}
+                onPress={() => setTextType(TextType.PrivacyEN)}
+              />
+              <ConsentButton
+                text={'Nutzungsbedingungen'}
+                onPress={() => setTextType(TextType.TermsDE)}
+              />
+              <ConsentButton
+                text={'Datenschutzerklärung'}
+                onPress={() => setTextType(TextType.PrivacyDE)}
+              />
+            </>
+          ) : (
+            <ConsentText
+              text={getLegalText()}
+              onPress={() => setTextType(TextType.None)}
+            />
+          )}
+        </ScrollView>
+      </View>
+      <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
+        <TouchableOpacity
+          onPress={() => setAccepted(!accepted)}
+          style={styles.acceptWrapper}
+        >
+          <View style={{ flex: 0.1 }}>
+            <View
+              style={[
+                styles.checkboxBase,
+                accepted ? styles.checkboxActive : styles.checkboxInactive,
+              ]}
+            >
+              {accepted && <CheckmarkIconSmall />}
+            </View>
+          </View>
+          <View style={{ paddingLeft: 20, flex: 0.9 }}>
             <JoloText
               kind={JoloTextKind.subtitle}
-              size={JoloTextSizes.middle}
-              color={Colors.white80}
-              customStyles={{
-                textAlign: 'left',
-                marginBottom: BP({ default: 32, medium: 54, large: 54 }),
-              }}
+              size={JoloTextSizes.mini}
+              color={Colors.white90}
+              customStyles={{ textAlign: 'left' }}
             >
               {
-                strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW
+                strings.I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY
               }
             </JoloText>
-            {textType === TextType.None ? (
-              <>
-                <ConsentButton
-                  text={'Terms of Service'}
-                  onPress={() => setTextType(TextType.TermsEN)}
-                />
-                <ConsentButton
-                  text={'Privacy Policy'}
-                  onPress={() => setTextType(TextType.PrivacyEN)}
-                />
-                <ConsentButton
-                  text={'Nutzungsbedingungen'}
-                  onPress={() => setTextType(TextType.TermsDE)}
-                />
-                <ConsentButton
-                  text={'Datenschutzerklärung'}
-                  onPress={() => setTextType(TextType.PrivacyDE)}
-                />
-              </>
-            ) : (
-              <ConsentText
-                text={getLegalText()}
-                onPress={() => setTextType(TextType.None)}
-              />
-            )}
-          </ScrollView>
-        </View>
-        <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
-          <TouchableOpacity
-            onPress={() => setAccepted(!accepted)}
-            style={styles.acceptWrapper}
-          >
-            <View style={{ flex: 0.1 }}>
-              <View
-                style={[
-                  styles.checkboxBase,
-                  accepted ? styles.checkboxActive : styles.checkboxInactive,
-                ]}
-              >
-                {accepted && <CheckmarkIconSmall />}
-              </View>
-            </View>
-            <View style={{ paddingLeft: 20, flex: 0.9 }}>
-              <JoloText
-                kind={JoloTextKind.subtitle}
-                size={JoloTextSizes.mini}
-                color={Colors.white90}
-                customStyles={{ textAlign: 'left' }}
-              >
-                {
-                  strings.I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY
-                }
-              </JoloText>
-            </View>
-          </TouchableOpacity>
-          <Btn
-            customContainerStyles={{ width: '100%' }}
-            onPress={acceptConsent}
-            disabled={!accepted}
-          >
-            {strings.ACCEPT_NEW_TERMS}
-          </Btn>
-        </BottomSheet>
-      </ScreenContainer>
-    </ModalScreen>
+          </View>
+        </TouchableOpacity>
+        <Btn
+          customContainerStyles={{ width: '100%' }}
+          onPress={() => acceptConsent(agent)}
+          disabled={!accepted}
+        >
+          {strings.ACCEPT_NEW_TERMS}
+        </Btn>
+      </BottomSheet>
+    </ScreenContainer>
   )
 }
 

@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
-import { useBackHandler } from '@react-native-community/hooks'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
@@ -78,8 +77,6 @@ const RegisterPin = () => {
     setIsCreating(true)
     setSelectedPasscode('')
   }
-
-  useBackHandler(() => true)
 
   const { keyboardHeight } = useKeyboardHeight(0)
 

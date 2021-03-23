@@ -1,11 +1,6 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import {
-  StackActions,
-  useNavigation,
-  useRoute,
-  RouteProp,
-} from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
@@ -27,7 +22,8 @@ import { useKeyboard } from './useKeyboard'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
-import { RootStackParamList } from '~/RootNavigation'
+import { LoggedInStackParamList } from '~/screens/LoggedIn'
+import { useReplaceWith } from '~/hooks/navigation'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -38,26 +34,33 @@ interface RecoveryFooterI {
 const useRecoveryPhraseUtils = (phrase: string[]) => {
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
+  const replaceWith = useReplaceWith()
   const dispatch = useDispatch()
 
   const agent = useAgent()
   const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
   const resetPin = useResetKeychainValues(PIN_SERVICE)
 
-  const route = useRoute<RouteProp<RootStackParamList, 'Recovery'>>()
-  const navigation = useNavigation()
+  const route = useRoute<
+    RouteProp<LoggedInStackParamList, ScreenNames.PasscodeRecovery>
+  >()
 
-  const { isAccessRestore } = route.params
+  const isAccessRestore = route?.params?.isAccessRestore ?? false
 
   const handlePhraseSubmit = useCallback(async () => {
-    const success = await loader(async () => await submitCb(), {
-      loading: strings.MATCHING,
-    })
-    if (success) {
-      dispatch(setLogged(true))
-      const replaceAction = StackActions.replace(ScreenNames.LoggedIn)
-      navigation.dispatch(replaceAction)
-    } else recoveryDispatch(resetPhrase())
+    const handleDone = (success: boolean) => {
+      if (success) {
+        dispatch(setLogged(true))
+        replaceWith(ScreenNames.LoggedIn)
+      } else recoveryDispatch(resetPhrase())
+    }
+    await loader(
+      () => submitCb(),
+      {
+        loading: strings.MATCHING,
+      },
+      handleDone,
+    )
   }, [phrase])
 
   const restoreEntropy = async () => {

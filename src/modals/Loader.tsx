@@ -8,7 +8,7 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import Circle from '~/components/Circle'
 
@@ -16,8 +16,6 @@ import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
-import { dismissLoader } from '~/modules/loader/actions'
-import { useDelay } from '~/hooks/generic'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { isLocalAuthSet } from '~/modules/account/selectors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -36,17 +34,13 @@ const SCALE_MAX = 5
 const CIRCLE_DIAMETER = 18
 
 const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
-  const { msg, type }: { msg: string; type: LoaderTypes } = useSelector(
-    getLoaderState,
-  )
-  const isAnimating = useRef(true)
-  const dispatch = useDispatch()
+  const { msg, type } = useSelector(getLoaderState)
 
-  const loaderType = useRef(type)
-  const loaderMsg = useRef(msg)
-  const loaderColor = useRef(colors[loaderType.current])
+  const [animating, setAnimating] = useState(true)
 
-  const [status, setStatus] = useState(msg)
+  useEffect(() => {
+    return () => setAnimating(false)
+  }, [])
 
   const animatedWidth1 = useRef(new Animated.Value(0)).current
   const animatedOpacity1 = animatedWidth1.interpolate({
@@ -119,7 +113,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     reset,
   ])
 
-  const bounceError = async () => {
+  const bounceError = () => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
@@ -133,10 +127,9 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
         useNativeDriver: true,
       }),
     ]).start()
-    await useDelay(() => dispatch(dismissLoader()), 3000)
   }
 
-  const showTick = async () => {
+  const showTick = () => {
     Animated.parallel([
       Animated.timing(animatedOpacity4, {
         toValue: 1,
@@ -149,38 +142,23 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
         animateValueTo(tickBlockerPosition, 25, 700),
       ]),
     ]).start()
-    await useDelay(() => dispatch(dismissLoader()), 3000)
   }
 
   const looping = () => {
-    if (loaderType.current === LoaderTypes.default) {
-      Animated.loop(ripple, { iterations: 1 }).start(() => {
-        if (loaderType.current === LoaderTypes.default) {
-          looping()
-        } else if (loaderType.current === LoaderTypes.error) {
-          setStatus(loaderMsg.current)
-          bounceError()
-        } else if (loaderType.current === LoaderTypes.success) {
-          setStatus(loaderMsg.current)
-          showTick()
-        }
-      })
-    } else if (loaderType.current === LoaderTypes.error) {
+    if (type === LoaderTypes.default) {
+      ripple.start()
+    } else if (type === LoaderTypes.error) {
+      reset.start(ripple.stop)
       bounceError()
-    } else if (loaderType.current === LoaderTypes.success) {
+    } else if (type === LoaderTypes.success) {
+      reset.start(ripple.stop)
       showTick()
     }
   }
 
   useEffect(() => {
-    loaderType.current = type
-    loaderMsg.current = msg
-    loaderColor.current = colors[type]
-    isAnimating.current && looping()
-    return () => {
-      isAnimating.current = false
-    }
-  })
+    animating && looping()
+  }, [type])
 
   // NOTE: @StatusBar component is here (aside from the one in @Overlays) b/c there is an issue
   // with translucent status bars and the @Modal component
@@ -226,7 +204,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
                 opacity: animatedOpacity3,
               }}
             />
-            {loaderType.current !== LoaderTypes.default && (
+            {type !== LoaderTypes.default && (
               <Circle
                 diameter={CIRCLE_DIAMETER - 4}
                 thickness={StyleSheet.hairlineWidth / 2}
@@ -237,7 +215,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
                 }}
               />
             )}
-            {loaderType.current === LoaderTypes.error && (
+            {type === LoaderTypes.error && (
               <Animated.View
                 style={{
                   position: 'absolute',
@@ -248,7 +226,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
                 <ErrorIcon color={colors.default} />
               </Animated.View>
             )}
-            {loaderType.current === LoaderTypes.success && (
+            {type === LoaderTypes.success && (
               <View style={styles.tickContainer}>
                 <View style={{ position: 'absolute' }}>
                   <SuccessTick color={colors.default} />
@@ -275,7 +253,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             color={Colors.white80}
             customStyles={{ marginTop: 10 }}
           >
-            {status}
+            {msg}
           </JoloText>
         </View>
       </View>

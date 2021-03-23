@@ -77,6 +77,9 @@ const DevelopmentSection = () => {
         <Option onPress={redirectToBusinessCard}>
           <Option.Title title="Business Card" />
         </Option>
+        <Option onPress={() => redirect(ScreenNames.CollapsibleTest)}>
+          <Option.Title title="Collapsible" />
+        </Option>
       </Section.Block>
     </Section>
   )
