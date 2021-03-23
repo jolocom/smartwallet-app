@@ -37,6 +37,7 @@ import {
   Space,
 } from '../components/styled'
 import ShareAttributeWidget from './ShareAttributeWidget'
+import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -68,25 +69,31 @@ export const CredentialShareBAS = () => {
   const renderBody = () => {
     if (singleRequestedAttribute) return null
     else if (singleRequestedCredential !== undefined) {
-      const displaySingleCredentials = mapDisplayToCustomDisplay(
+      const displaySingleCredential = mapDisplayToCustomDisplay(
         singleRequestedCredential,
       )
-      const { type, name, properties } = displaySingleCredentials
+
+      const { type, name } = displaySingleCredential
+      const claimFields = getOptionalFields(displaySingleCredential)
+
       return (
         <>
-          {isDocument(displaySingleCredentials) ? (
+          {isDocument(displaySingleCredential) ? (
             <IncomingRequestDoc
               name={name ?? type}
-              holderName={displaySingleCredentials.holderName}
-              properties={properties}
-              highlight={`${displaySingleCredentials.highlight?.slice(
+              holderName={displaySingleCredential.holderName}
+              properties={claimFields}
+              highlight={`${displaySingleCredential.highlight?.slice(
                 0,
                 18,
               )}...`}
-              photo={displaySingleCredentials.photo}
+              photo={displaySingleCredential.photo}
             />
           ) : (
-            <IncomingRequestOther name={name ?? type} properties={properties} />
+            <IncomingRequestOther
+              name={name ?? type}
+              properties={claimFields}
+            />
           )}
           <Space />
         </>
@@ -154,7 +161,9 @@ const CredentialShareFAS = () => {
       return (
         <Wrapper key={type}>
           {credentials.map((cred) => {
-            const { name, type, properties } = cred
+            const claimFields = getOptionalFields(cred)
+            console.log({ claimFields })
+            const { name, type } = cred
             return (
               <View
                 key={cred.id}
@@ -166,7 +175,7 @@ const CredentialShareFAS = () => {
                 {isDocument(cred) ? (
                   <IncomingRequestDoc
                     name={name ?? type}
-                    properties={properties}
+                    properties={claimFields}
                     holderName={cred.holderName}
                     highlight={`${cred.highlight?.slice(0, 18)}...`}
                     photo={cred.photo}
@@ -174,7 +183,7 @@ const CredentialShareFAS = () => {
                 ) : (
                   <IncomingRequestOther
                     name={name ?? type}
-                    properties={properties}
+                    properties={claimFields}
                   />
                 )}
               </View>
