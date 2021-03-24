@@ -20,7 +20,7 @@ export const Header: ICollapsibleComposite['Header'] = ({
   const elevationValue = interpolateYValue([0, 10], [0, 20])
 
   const handleLayout = (e: LayoutChangeEvent) => {
-    setHeaderHeight(e.nativeEvent.layout.height)
+    setHeaderHeight(e.nativeEvent.layout.height - top)
   }
 
   return (
@@ -56,7 +56,7 @@ export const AnimatedHeader: ICollapsibleComposite['AnimatedHeader'] = ({
   )
 
   const handleLayout = (e: LayoutChangeEvent) => {
-    setHeaderHeight(e.nativeEvent.layout.height)
+    setHeaderHeight(e.nativeEvent.layout.height - top)
   }
 
   return (

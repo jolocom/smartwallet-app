@@ -11,15 +11,18 @@ export const HeaderText: React.FC = ({ children }) => {
     interpolateYValue,
     distanceToTop,
     distanceToHeader,
+    hidingTextHeight,
   } = useCollapsible()
 
+  const hidingTextFraction = hidingTextHeight * 0.7
+
   const headerTextPositionValue = interpolateYValue(
-    [distanceToHeader - 30, distanceToTop - 70],
+    [distanceToHeader - hidingTextFraction, distanceToTop - 70],
     [30, 0],
   )
 
   const headerTextOpacityValue = interpolateYValue(
-    [distanceToHeader - 30, distanceToTop - 70],
+    [distanceToHeader - hidingTextFraction, distanceToTop - 70],
     [0, 1],
   )
 

@@ -2,7 +2,6 @@ import React from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useCollapsible } from '../context'
 import { ICollapsibleComposite } from '../types'
-import { COLLAPSIBLE_HEADER_HEIGHT } from './CollapsibleHeader'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 import { withClassComponent } from '~/hocs/withClassComponent'
 
@@ -13,10 +12,10 @@ const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(
 export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['KeyboardAwareScrollView'] = ({
   children,
   customStyles,
-  animatedHeader = false,
+  withoutHeaderPadding = false,
   ...scrollProps
 }) => {
-  const { handleScroll } = useCollapsible()
+  const { handleScroll, headerHeight } = useCollapsible()
 
   return (
     <AnimatedKeyboardAwareScrollView
@@ -26,7 +25,7 @@ export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['Keyboard
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[
         styles.container,
-        { paddingTop: animatedHeader ? 0 : COLLAPSIBLE_HEADER_HEIGHT },
+        { paddingTop: withoutHeaderPadding ? 0 : headerHeight },
         customStyles,
       ]}
       scrollEventThrottle={1}

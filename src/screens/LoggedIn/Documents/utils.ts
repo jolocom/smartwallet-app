@@ -35,5 +35,4 @@ export const getOptionalFields = <T extends DisplayCredential>(
       value,
     }))
     .concat(additionalFields)
-    .slice(0, 3)
 }

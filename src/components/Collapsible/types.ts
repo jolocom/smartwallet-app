@@ -12,7 +12,7 @@ interface IHeaderProps extends IWithCustomStyle {
 }
 
 interface IListProps {
-  animatedHeader?: boolean
+  withoutHeaderPadding?: boolean
 }
 
 type IScrollViewProps = IWithCustomStyle & ScrollViewProps & IListProps
@@ -41,6 +41,8 @@ export interface ICollapsibleContext {
   setDistanceToText: (distance: number) => void
   distanceToTop: number
   distanceToHeader: number
+  headerHeight: number
+  hidingTextHeight: number
   interpolateYValue: (inputRange: number[], outputRange: number[]) => void
   handleScroll: (...args: any[]) => void
 }
