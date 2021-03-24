@@ -1,17 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, LayoutChangeEvent, StyleSheet } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react'
+import {
+  Animated,
+  Dimensions,
+  LayoutChangeEvent,
+  StyleSheet,
+} from 'react-native'
+import ScreenDismissArea from '../ScreenDismissArea'
 
 type FallinFrom = 'top' | 'bottom'
 
 interface IFallinProps {
-  isFallingIn: boolean,
+  isFallingIn: boolean
   from: FallinFrom
+  onDismiss: () => void
 }
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const Fallin: React.FC<IFallinProps> = ({ children, isFallingIn, from }) => {
-  const heightRef = useRef((from === 'top' ? -1 : 1) * 2.5 * SCREEN_HEIGHT);
+const Fallin: React.FC<IFallinProps> = ({
+  children,
+  isFallingIn,
+  from,
+  onDismiss,
+}) => {
+  const heightRef = useRef((from === 'top' ? -1 : 1) * 2.5 * SCREEN_HEIGHT)
   const positionRef = useRef(new Animated.Value(0)).current
   const [layoutDone, setLayoutDone] = useState(false)
 
@@ -36,36 +48,37 @@ const Fallin: React.FC<IFallinProps> = ({ children, isFallingIn, from }) => {
       useNativeDriver: true,
     })
 
-  
   useEffect(() => {
     if (isFallingIn) {
       setTimeout(() => {
         animateSheet(0).start()
       }, 200)
     } else {
-      animateSheet(from === 'bottom' ? SCREEN_HEIGHT + heightRef.current : -heightRef.current).start()
+      animateSheet(
+        from === 'bottom'
+          ? SCREEN_HEIGHT + heightRef.current
+          : -heightRef.current,
+      ).start()
     }
   }, [isFallingIn])
-
 
   return (
     <Animated.View
       testID="top-sheet"
       onLayout={handleLayout}
-      style={[
-        styles.container,
-        { transform: [{ translateY: positionRef }] },
-      ]}
+      style={[styles.container, { transform: [{ translateY: positionRef }] }]}
     >
       {isFallingIn && children}
+      <ScreenDismissArea onDismiss={onDismiss} />
     </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: '100%',
-  }
+  },
 })
 
-export default Fallin;
+export default Fallin
