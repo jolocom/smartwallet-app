@@ -67,6 +67,8 @@ const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
       setHidingTextHeight: handleHidingTextHeight,
       distanceToTop,
       distanceToHeader,
+      headerHeight,
+      hidingTextHeight,
       interpolateYValue,
       handleScroll,
     }),
