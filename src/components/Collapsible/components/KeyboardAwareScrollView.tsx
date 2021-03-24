@@ -12,7 +12,7 @@ const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(
 export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['KeyboardAwareScrollView'] = ({
   children,
   customStyles,
-  animatedHeader = false,
+  withoutHeaderPadding = false,
   ...scrollProps
 }) => {
   const { handleScroll, headerHeight } = useCollapsible()
@@ -25,7 +25,7 @@ export const CollapsibleKeyboardAwareScrollView: ICollapsibleComposite['Keyboard
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[
         styles.container,
-        { paddingTop: animatedHeader ? 0 : headerHeight },
+        { paddingTop: withoutHeaderPadding ? 0 : headerHeight },
         customStyles,
       ]}
       scrollEventThrottle={1}

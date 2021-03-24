@@ -12,7 +12,7 @@ interface IHeaderProps extends IWithCustomStyle {
 }
 
 interface IListProps {
-  animatedHeader?: boolean
+  withoutHeaderPadding?: boolean
 }
 
 type IScrollViewProps = IWithCustomStyle & ScrollViewProps & IListProps

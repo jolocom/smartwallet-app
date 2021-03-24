@@ -6,7 +6,7 @@ import { ICollapsibleComposite } from '../types'
 export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
   children,
   customStyles,
-  animatedHeader = false,
+  withoutHeaderPadding = false,
   ...scrollProps
 }) => {
   const { handleScroll, headerHeight } = useCollapsible()
@@ -20,7 +20,7 @@ export const CollapsibleScrollView: ICollapsibleComposite['ScrollView'] = ({
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[
         styles.container,
-        { paddingTop: animatedHeader ? 0 : headerHeight },
+        { paddingTop: withoutHeaderPadding ? 0 : headerHeight },
         customStyles,
       ]}
       scrollEventThrottle={1}
