@@ -38,6 +38,7 @@ export enum ScreenNames {
   Loader = 'Loader',
   BusinessCardForm = 'BusinessCardForm',
   CredentialForm = 'CredentialForm',
+  CardDetails = 'CardDetails',
 
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
