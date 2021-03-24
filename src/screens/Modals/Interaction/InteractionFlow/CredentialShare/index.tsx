@@ -1,6 +1,6 @@
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useEffect } from 'react'
-import { TouchableWithoutFeedback, View } from 'react-native'
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
@@ -41,6 +41,7 @@ import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
 import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
+import { Colors } from '~/utils/colors'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -170,7 +171,6 @@ const CredentialShareFAS = () => {
               >
                 <View
                   style={{
-                    opacity: selectedCredentials[type[1]] === id ? 1 : 0.6,
                     marginBottom: BP({ default: 24, xsmall: 16 }),
                   }}
                 >
@@ -188,17 +188,13 @@ const CredentialShareFAS = () => {
                       properties={claimFields}
                     />
                   )}
-                  {selectedCredentials[type[1]] === id && (
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 10,
-                      }}
-                    >
+                  <View style={styles.selectIndicator}>
+                    {selectedCredentials[type[1]] === id ? (
                       <PurpleTickSuccess />
-                    </View>
-                  )}
+                    ) : (
+                      <View style={styles.notSelected} />
+                    )}
+                  </View>
                 </View>
               </TouchableWithoutFeedback>
             )
@@ -254,5 +250,21 @@ const CredentialShare = () => {
   const isFAS = useSelector(getIsFullscreenCredShare)
   return isFAS ? <CredentialShareFAS /> : <CredentialShareBAS />
 }
+
+const styles = StyleSheet.create({
+  notSelected: {
+    width: 20,
+    height: 20,
+    borderColor: Colors.black,
+    opacity: 0.3,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  selectIndicator: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+  },
+})
 
 export default CredentialShare
