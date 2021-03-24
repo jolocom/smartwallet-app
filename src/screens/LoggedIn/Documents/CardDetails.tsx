@@ -72,7 +72,7 @@ const CardDetails = () => {
                     size={JoloTextSizes.mini}
                     color={Colors.osloGray}
                   >
-                    {field.name}
+                    {field.label}
                   </JoloText>
                   <JoloText
                     color={Colors.black95}
