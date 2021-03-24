@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import { useState } from 'react'
@@ -60,7 +60,7 @@ const LegalTextWrapper: React.FC<Props> = ({
       >
         <View style={styles.wrapper}>
           <Collapsible.ScrollView
-            contentContainerStyle={{
+            customStyles={{
               paddingBottom: '20%',
             }}
             showsVerticalScrollIndicator={false}
