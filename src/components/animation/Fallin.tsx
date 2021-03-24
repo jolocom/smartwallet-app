@@ -77,6 +77,7 @@ const Fallin: React.FC<IFallinProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
   },
 })
 
