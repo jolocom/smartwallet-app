@@ -40,6 +40,7 @@ import ShareAttributeWidget from './ShareAttributeWidget'
 import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
 import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
+import { PurpleTickSuccess } from '~/assets/svg'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -169,7 +170,7 @@ const CredentialShareFAS = () => {
               >
                 <View
                   style={{
-                    opacity: selectedCredentials[type[1]] === id ? 1 : 0.2,
+                    opacity: selectedCredentials[type[1]] === id ? 1 : 0.6,
                     marginBottom: BP({ default: 24, xsmall: 16 }),
                   }}
                 >
@@ -186,6 +187,17 @@ const CredentialShareFAS = () => {
                       name={name ?? type}
                       properties={claimFields}
                     />
+                  )}
+                  {selectedCredentials[type[1]] === id && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 10,
+                        right: 10,
+                      }}
+                    >
+                      <PurpleTickSuccess />
+                    </View>
                   )}
                 </View>
               </TouchableWithoutFeedback>
