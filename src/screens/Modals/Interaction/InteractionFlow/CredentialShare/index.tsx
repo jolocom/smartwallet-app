@@ -1,6 +1,6 @@
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useEffect } from 'react'
-import { View } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
@@ -11,6 +11,7 @@ import {
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
   getCustomRequestedCredentialsByCategoryByType,
+  getSelectedShareCredentials,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
 import {
@@ -38,6 +39,7 @@ import {
 import ShareAttributeWidget from './ShareAttributeWidget'
 import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
 import Collapsible from '~/components/Collapsible'
+import BP from '~/utils/breakpoints'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -136,6 +138,9 @@ const CredentialShareFAS = () => {
   const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
+  const { handleSelectCredential } = useCredentialShareFlow()
+  const selectedCredentials = useSelector(getSelectedShareCredentials)
+
   const handleSubmit = useCredentialShareSubmit()
 
   const documents = categories[CredentialRenderTypes.document]
@@ -152,30 +157,38 @@ const CredentialShareFAS = () => {
         <Wrapper key={type}>
           {credentials.map((cred) => {
             const claimFields = getOptionalFields(cred)
-            const { name, type } = cred
+            const { name, type, id } = cred
             return (
-              <View
-                key={cred.id}
+              <TouchableWithoutFeedback
+                key={id}
                 style={{
                   marginRight: 20,
                   marginVertical: 14,
                 }}
+                onPress={() => handleSelectCredential({ [type[1]]: id })}
               >
-                {isDocument(cred) ? (
-                  <IncomingRequestDoc
-                    name={name ?? type}
-                    properties={claimFields}
-                    holderName={cred.holderName}
-                    highlight={`${cred.highlight?.slice(0, 18)}...`}
-                    photo={cred.photo}
-                  />
-                ) : (
-                  <IncomingRequestOther
-                    name={name ?? type}
-                    properties={claimFields}
-                  />
-                )}
-              </View>
+                <View
+                  style={{
+                    opacity: selectedCredentials[type[1]] === id ? 1 : 0.2,
+                    marginBottom: BP({ default: 24, xsmall: 16 }),
+                  }}
+                >
+                  {isDocument(cred) ? (
+                    <IncomingRequestDoc
+                      name={name ?? type}
+                      properties={claimFields}
+                      holderName={cred.holderName}
+                      highlight={`${cred.highlight?.slice(0, 18)}...`}
+                      photo={cred.photo}
+                    />
+                  ) : (
+                    <IncomingRequestOther
+                      name={name ?? type}
+                      properties={claimFields}
+                    />
+                  )}
+                </View>
+              </TouchableWithoutFeedback>
             )
           })}
         </Wrapper>
