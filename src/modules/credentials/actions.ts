@@ -1,9 +1,13 @@
+import { DisplayCredential } from '~/types/credentials'
 import createAction from '~/utils/createAction'
 import { CredentialActions } from './types'
-import { UICredential } from '~/types/credentials'
 
-export const setCredentials = createAction<UICredential[]>(
+export const setCredentials = createAction<DisplayCredential[]>(
   CredentialActions.setCredentials,
+)
+
+export const addCredentials = createAction<DisplayCredential[]>(
+  CredentialActions.addCredentials,
 )
 
 export const deleteCredential = createAction<string>(

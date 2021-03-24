@@ -1,25 +1,7 @@
-import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
-import { IdentitySummary } from '@jolocom/sdk'
+import { strings } from '~/translations'
+import moment from 'moment'
 
-import { ClaimKeys } from '~/types/credentials'
-import { prepareLabel } from '~/utils/stringUtils'
-
-export const formatClaims = (claims: IClaimSection) =>
-  Object.keys(claims).map((key) => ({
-    name: prepareLabel(key),
-    value: claims[key],
-  }))
-
-export const getSubjectName = (claim: IClaimSection) => {
-  if (!!claim['givenName'] || !!claim['familyName']) {
-    return {
-      name: 'Subject name',
-      value: `${claim['givenName']} ${claim['familyName']}`,
-    }
-  }
-
-  return null
-}
+import { ClaimKeys, DisplayCredential } from '~/types/credentials'
 
 export const filteredOptionalFields = [
   ClaimKeys.familyName,
@@ -28,27 +10,30 @@ export const filteredOptionalFields = [
   ClaimKeys.photo,
 ]
 
-export const getOptionalFields = (claim: IClaimSection) =>
-  Object.keys(claim)
-    .filter((k) => !filteredOptionalFields.includes(k as ClaimKeys))
-    .map((key) => ({
-      name: prepareLabel(key),
-      value: claim[key],
+export const getOptionalFields = <T extends DisplayCredential>(
+  credential: T,
+) => {
+  const additionalFields = [
+    {
+      label: strings.ISSUED,
+      value: moment(credential.issued).format('DD.MM.YYYY'),
+    },
+    {
+      label: strings.ISSUER,
+      value: credential.issuer.publicProfile?.name ?? credential.issuer.did,
+    },
+    {
+      label: strings.EXPIRES,
+      value: moment(credential.expires).format('DD.MM.YYYY'),
+    },
+  ]
+  if (!credential.properties.length) return additionalFields
+  return credential.properties
+    .filter((p) => !filteredOptionalFields.includes(p.key as ClaimKeys))
+    .map(({ label, value }) => ({
+      label,
+      value,
     }))
+    .concat(additionalFields)
     .slice(0, 3)
-
-export const getIssuerFields = (issuer: IdentitySummary) => {
-  const fields = [{ name: 'Issuer Id', value: issuer.did }]
-  const issuerProfile = issuer.publicProfile
-  if (issuerProfile) {
-    fields.push({ name: 'Issuer name', value: issuerProfile.name })
-    fields.push({
-      name: 'Issuer description',
-      value: issuerProfile.description,
-    })
-    issuerProfile.url &&
-      fields.push({ name: 'Issuer URL', value: issuerProfile.url })
-  }
-
-  return fields
 }

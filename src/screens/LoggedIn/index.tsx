@@ -4,8 +4,6 @@ import {
 } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSyncStorageAttributes } from '~/hooks/attributes'
-import { useSyncStorageCredentials } from '~/hooks/credentials'
 
 import { useGetAppStates } from '~/hooks/useAppState'
 import { setAppLocked } from '~/modules/account/actions'
@@ -20,6 +18,7 @@ import Lock from '../Modals/Lock'
 import Recovery from '../Modals/Recovery'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Main from './Main'
+import { useInitializeCredentials } from '~/hooks/signedCredentials'
 import BusinessCardForm from '../Modals/Forms/BusinessCardForm'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
@@ -54,14 +53,10 @@ const LoggedIn = () => {
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
   const showTabs = !isAppLocked && isAuthSet
-
-  const syncAttributes = useSyncStorageAttributes()
-  const syncCredentials = useSyncStorageCredentials()
+  const { initializeCredentials } = useInitializeCredentials()
 
   useEffect(() => {
-    /* Loading attributes and credentials into the store */
-    syncAttributes()
-    syncCredentials()
+    initializeCredentials()
   }, [])
 
   const dismissOverlays = useCallback(() => {

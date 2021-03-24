@@ -1,26 +1,56 @@
 import { RootReducerI } from '~/types/reducer'
 import { createSelector } from 'reselect'
-import { CredentialsBySection, UICredential } from '~/types/credentials'
+import {
+  CredentialsByCategory,
+  DisplayCredential,
+  DisplayCredentialDocument,
+  DisplayCredentialOther,
+  OtherCategory,
+} from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
+import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 
 export const getAllCredentials = (state: RootReducerI) => state.credentials.all
 
-export const getCredentialsBySection = createSelector(
+const getCredentialsByCategories = createSelector(
   getAllCredentials,
-  (creds): CredentialsBySection<UICredential> =>
-    creds.reduce<CredentialsBySection<UICredential>>(
-      (acc, cred) => {
-        if (
-          cred.renderInfo &&
-          cred.renderInfo.renderAs === CredentialRenderTypes.document
-        ) {
-          acc.documents = [...acc.documents, cred]
+  (credentials) =>
+    credentials.reduce<CredentialsByCategory<DisplayCredential>>(
+      (sections, credential) => {
+        if (credential.category === CredentialRenderTypes.document) {
+          sections[CredentialRenderTypes.document] = [
+            ...sections[CredentialRenderTypes.document],
+            credential,
+          ]
         } else {
-          acc.other = [...acc.other, cred]
+          sections[OtherCategory.other] = [
+            ...sections[OtherCategory.other],
+            credential,
+          ]
         }
 
-        return acc
+        return sections
       },
-      { documents: [], other: [] },
+      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
     ),
+)
+
+export const getCustomCredentialsByCategories = createSelector(
+  [getCredentialsByCategories],
+  (cats) => {
+    return Object.keys(cats).reduce<
+      CredentialsByCategory<DisplayCredentialDocument | DisplayCredentialOther>
+    >(
+      (categories, catName) => {
+        const categoryName = catName as
+          | CredentialRenderTypes.document
+          | OtherCategory.other
+        categories[categoryName] = cats[categoryName].map(
+          mapDisplayToCustomDisplay,
+        )
+        return categories
+      },
+      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+    )
+  },
 )

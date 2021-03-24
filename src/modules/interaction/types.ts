@@ -1,5 +1,5 @@
 import { FlowType, IdentitySummary } from 'react-native-jolocom'
-import { OfferUICredential, AttributeTypes } from '~/types/credentials'
+import { AttributeTypes, OfferedCredential } from '~/types/credentials'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
@@ -67,9 +67,10 @@ export interface CredShareI extends InteractionCommonI {
   selectedCredentials: Record<string, string>
 }
 
+// TODO: get rid of nested service_issued
 export interface CredOfferI extends InteractionCommonI {
   flowType: FlowType.CredentialOffer
   credentials: {
-    service_issued: OfferUICredential[]
+    service_issued: OfferedCredential[]
   }
 }

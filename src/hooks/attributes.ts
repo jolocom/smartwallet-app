@@ -1,49 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  deleteAttr,
-  editAttr,
-  initAttrs,
-  updateAttrs,
-} from '~/modules/attributes/actions'
+import { deleteAttr, editAttr, updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes } from '~/types/credentials'
 import { useAgent } from './sdk'
-import { AttrsState, AttributeI, ClaimValues } from '~/modules/attributes/types'
-import {
-  isCredentialAttribute,
-  extractCredentialType,
-  extractClaims,
-} from '~/utils/dataMapping'
+import { ClaimValues } from '~/modules/attributes/types'
+import { extractClaims } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
 import { attributeConfig } from '~/config/claims'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata } from '@jolocom/protocol-ts'
-
-export const useSyncStorageAttributes = () => {
-  const dispatch = useDispatch()
-  const agent = useAgent()
-
-  return async () => {
-    try {
-      const verifiableCredentials = await agent.storage.get.verifiableCredential()
-
-      const attributes = verifiableCredentials.reduce((acc, cred) => {
-        if (isCredentialAttribute(cred, agent.idw.did)) {
-          const type = extractCredentialType(cred) as AttributeTypes
-          const entry = { id: cred.id, value: extractClaims(cred.claim) }
-          const prevEntries = acc[type]
-
-          acc[type] = prevEntries ? [...prevEntries, entry] : [entry]
-        }
-        return acc
-      }, {} as AttrsState<AttributeI>)
-
-      dispatch(initAttrs(attributes))
-    } catch (err) {
-      console.warn('Failed getting verifiable credentials', err)
-    }
-  }
-}
 
 const formAttribute = (signedCredential: SignedCredential) => {
   const attribute = {
@@ -169,6 +134,8 @@ export const useCreateAttributes = () => {
         value: extractClaims(credential.claim),
       }
       dispatch(updateAttrs({ type, attribute }))
+
+      return { [type]: attribute.id }
     } catch (e) {
       console.warn(e)
       throw new Error('Failed to create attribute!')

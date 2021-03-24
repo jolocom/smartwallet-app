@@ -2,12 +2,13 @@ import { useDispatch } from 'react-redux'
 
 import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
-import { useSyncStorageCredentials } from '~/hooks/credentials'
 import { useToasts } from '../toasts'
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
 import { useRedirect } from '../navigation'
+import { addCredentials } from '~/modules/credentials/actions'
+import { useInitializeCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
 
 const useCredentialOfferSubmit = () => {
@@ -20,7 +21,6 @@ const useCredentialOfferSubmit = () => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
-  const syncCredentials = useSyncStorageCredentials()
   const {
     scheduleErrorInteraction,
     scheduleSuccessInteraction,
@@ -28,6 +28,7 @@ const useCredentialOfferSubmit = () => {
   const { scheduleInfo } = useToasts()
   const redirect = useRedirect()
   const finishInteraction = useFinishInteraction()
+  const { getCredentialDisplay } = useInitializeCredentials()
 
   const scheduleSuccess = () =>
     scheduleSuccessInteraction({
@@ -37,11 +38,16 @@ const useCredentialOfferSubmit = () => {
       },
     })
 
+  const handleStoreIssuedCredentials = async () => {
+    const issuedCredentials = await storeSelectedCredentials()
+    const displayCredentials = await getCredentialDisplay(issuedCredentials)
+    dispatch(addCredentials(displayCredentials))
+  }
+
   return async () => {
     try {
       if (await credentialsAlreadyIssued()) {
-        await storeSelectedCredentials()
-        await syncCredentials()
+        await handleStoreIssuedCredentials()
         scheduleSuccess()
         return finishInteraction()
       }
@@ -62,8 +68,7 @@ const useCredentialOfferSubmit = () => {
       const allInvalid = validatedCredentials.every((cred) => cred.invalid)
 
       if (allValid) {
-        await storeSelectedCredentials()
-        await syncCredentials()
+        await handleStoreIssuedCredentials()
         scheduleSuccess()
         finishInteraction()
       } else if (allInvalid) {

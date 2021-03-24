@@ -14,7 +14,7 @@ export const HeaderText: React.FC = ({ children }) => {
   } = useCollapsible()
 
   const headerTextPositionValue = interpolateYValue(
-    [distanceToHeader - 30, distanceToTop - 90],
+    [distanceToHeader - 30, distanceToTop - 70],
     [30, 0],
   )
 

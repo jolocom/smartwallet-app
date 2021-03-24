@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle } from 'react'
-import { View, Image, StyleSheet, ScrollView, Platform } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 
 import ActionSheet from '~/components/ActionSheet/ActionSheet'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -15,13 +15,13 @@ import Collapsible from '~/components/Collapsible'
 interface Props {
   fields: IField[]
   title?: string
-  image?: string
+  photo?: string
 }
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CardDetails = React.forwardRef<{ show: () => void }, Props>(
-  ({ fields, title, image }, ref) => {
+  ({ fields, title, photo }, ref) => {
     const [modalVisible, setModalVisible] = useState(false)
 
     const handleClose = () => setModalVisible(false)
@@ -48,7 +48,7 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                 customStyles={[
                   styles.titleContainer,
                   {
-                    paddingRight: image ? '40%' : 0,
+                    paddingRight: photo ? '40%' : 0,
                     marginTop: 30,
                   },
                 ]}
@@ -67,8 +67,8 @@ const CardDetails = React.forwardRef<{ show: () => void }, Props>(
                 </JoloText>
               </Collapsible.HidingTextContainer>
               <Block customStyle={{ backgroundColor: Colors.white }}>
-                {image && (
-                  <Image source={{ uri: image }} style={styles.image} />
+                {photo && (
+                  <Image source={{ uri: photo }} style={styles.photo} />
                 )}
                 {fields.map((field, i) => (
                   <React.Fragment key={i}>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingBottom: BP({ default: 12, xsmall: 8 }),
   },
-  image: {
+  photo: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
     borderRadius: IMAGE_SIZE / 2,

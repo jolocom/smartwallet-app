@@ -5,9 +5,10 @@ import {
 import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
-import { OfferUICredential } from '~/types/credentials'
+import { OfferedCredential, OtherCategory } from '~/types/credentials'
 import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 /**
  * Custom hook that exposes a collection of utils for the Credential Offer interaction
@@ -56,9 +57,9 @@ const useCredentialOfferFlow = () => {
   /**
    * Gets the credential validation results from the @InteractionManager.
    */
-  const getValidatedCredentials = async (): Promise<OfferUICredential[]> => {
+  const getValidatedCredentials = async (): Promise<OfferedCredential[]> => {
     const interaction = await getInteraction()
-    const { initiator, state } = interaction.getSummary()
+    const { state } = interaction.getSummary()
     const {
       offerSummary,
       issued,
@@ -77,10 +78,12 @@ const useCredentialOfferFlow = () => {
         !!issuanceResult[i].validationErrors.invalidSubject
 
       return {
-        type: offer.type,
-        renderInfo: offer.renderInfo,
-        issuer: initiator,
+        // NOTE: making type as array of strings for consistency
+        // offerSummary type is different from SignedCredential type of type property
+        type: ['', offer.type],
+        category: offer.renderInfo?.renderAs ?? OtherCategory.other,
         invalid: isInvalid,
+        name: offer.credential?.name ?? '',
       }
     })
   }
@@ -91,9 +94,10 @@ const useCredentialOfferFlow = () => {
    */
   const storeSelectedCredentials = async () => {
     const interaction = await getInteraction()
-    await interaction.storeSelectedCredentials()
+    const signedCredentials: SignedCredential[] = await interaction.storeSelectedCredentials()
     await interaction.storeCredentialMetadata()
     await interaction.storeIssuerProfile()
+    return signedCredentials
   }
 
   /**

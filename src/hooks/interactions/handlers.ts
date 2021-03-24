@@ -80,7 +80,7 @@ export const useInteractionStart = () => {
           if (isTypeAttribute(requestedType)) return acc
 
           const creds = credentials.filter(
-            (cred) => cred.type === requestedType,
+            (cred) => cred.type[1] === requestedType,
           )
           if (!creds.length) acc.push(requestedType)
           return acc

@@ -1,9 +1,10 @@
 import { KeyboardTypeOptions } from 'react-native'
-import { IdentitySummary } from 'react-native-jolocom'
-import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
+import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { IdentitySummary } from '@jolocom/sdk'
 import { ObjectSchema } from 'yup'
 
 export enum AttributeKeys {
@@ -60,48 +61,18 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   validationSchema: ObjectSchema<Record<string, any>>
 }
 
-// NOTE: @renderInfo is not part of the @metadata property b/c the metadata properties
-// are only available for @SignedCredentials, while for Credential Offer @renderInfo would still
-// be needed. Hence, it should be available at the base of the @UICredential.
-export interface BaseUICredential {
-  type: string
-  issuer: IdentitySummary
-  renderInfo: CredentialOfferRenderInfo | undefined
-}
-
-export type UICredentialMetadata = Pick<
+export type BaseUICredential = Pick<
   SignedCredential,
-  'name' | 'expires' | 'issued'
+  'id' | 'issuer' | 'issued' | 'type' | 'expires' | 'subject' | 'name'
 >
 
-export interface UICredential
-  extends BaseUICredential,
-    Pick<SignedCredential, 'id' | 'claim'> {
-  metadata: UICredentialMetadata
-}
-
-export enum CredentialSection {
-  Documents = 'documents',
-  Other = 'other',
-}
-
-export interface CredentialsBySection<T> {
-  [CredentialSection.Documents]: T[]
-  [CredentialSection.Other]: T[]
-}
-
-export type ShareUICredential = Omit<UICredential, 'claim'>
-
-export interface MultipleShareUICredential
-  extends Pick<ShareUICredential, 'type'> {
-  credentials: ShareUICredential[]
-}
-
-export type ShareCredentialsBySection = CredentialsBySection<MultipleShareUICredential>
-
-export interface OfferUICredential extends BaseUICredential {
+export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
+  category: CredentialCategory
   invalid: boolean
 }
+
+export type OfferedCredentialDisplay = OfferedCredential &
+  Pick<CredentialDisplay['display'], 'properties'>
 
 export enum DocumentTypes {
   document = 'document',
@@ -110,6 +81,41 @@ export enum DocumentTypes {
 
 export enum DocumentFields {
   DocumentName = 'Document Name',
+}
+
+export enum OtherCategory {
+  other = 'other',
+}
+export type CredentialCategory = CredentialRenderTypes | OtherCategory
+
+export type DisplayCredential = Omit<BaseUICredential, 'issuer'> & {
+  issuer: IdentitySummary
+} & { category: CredentialCategory } & {
+  properties: Array<Required<DisplayVal>>
+}
+
+export type DisplayCredentialDocument = DisplayCredential & {
+  holderName: string
+  photo?: string
+  highlight?: string
+}
+export type DisplayCredentialOther = DisplayCredential & { photo?: string }
+
+export type RequestedCredentialsByType<T> = { type: string; credentials: T[] }
+
+export type CredentialsByCategory<T> = Record<
+  OtherCategory.other | CredentialRenderTypes.document,
+  T[]
+>
+
+export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
+  RequestedCredentialsByType<T>
+>
+
+export function isDocument(
+  credential: DisplayCredentialDocument | DisplayCredentialOther,
+): credential is DisplayCredentialDocument {
+  return credential.category === CredentialRenderTypes.document
 }
 
 export type TPrimitiveAttributesConfig = Omit<
