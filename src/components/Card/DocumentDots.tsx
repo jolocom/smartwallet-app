@@ -1,28 +1,28 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirectTo, useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { useCard } from './context'
 import { IWithCustomStyle } from './types'
-import CardDetails from '~/screens/LoggedIn/Documents/CardDetails'
 import Dots from '../Dots'
 import { useDeleteCredential } from '~/hooks/credentials'
 
 const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
+  const redirect = useRedirect()
   const deleteCredential = useDeleteCredential()
 
   const { id, photo, document, restMandatoryField, optionalFields } = useCard()
-  const infoRef = useRef<{ show: () => void }>(null)
 
   const mandatoryFields = restMandatoryField ? [restMandatoryField] : []
   const claimsDisplay = [...mandatoryFields, ...optionalFields]
+  const title = document?.value as string
 
-  const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${document?.value}?`
+  const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${title}?`
   const cancelText = strings.CANCEL
   const handleDelete = async () => {
     try {
@@ -49,7 +49,12 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
     () => [
       {
         title: strings.INFO,
-        onPress: () => infoRef.current?.show(),
+        onPress: () =>
+          redirect(ScreenNames.CardDetails, {
+            fields: claimsDisplay,
+            photo,
+            title,
+          }),
       },
       { title: strings.DELETE, onPress: redirectToDelete },
     ],
@@ -57,19 +62,11 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   )
 
   return (
-    <>
-      <Dots
-        customStyles={customStyles}
-        color={Colors.black}
-        options={popupOptions}
-      />
-      <CardDetails
-        ref={infoRef}
-        fields={claimsDisplay}
-        photo={photo}
-        title={document?.value as string}
-      />
-    </>
+    <Dots
+      customStyles={customStyles}
+      color={Colors.black}
+      options={popupOptions}
+    />
   )
 }
 

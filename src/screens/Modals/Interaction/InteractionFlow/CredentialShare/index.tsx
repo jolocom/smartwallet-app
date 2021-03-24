@@ -190,7 +190,10 @@ const CredentialShareFAS = () => {
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
-        <Collapsible.ScrollView customStyles={{ paddingHorizontal: '5%' }}>
+        <Collapsible.ScrollView
+          withoutHeaderPadding
+          customStyles={{ paddingHorizontal: '5%' }}
+        >
           <Collapsible.HidingScale>
             <LogoContainerFAS>
               <InteractionLogo />

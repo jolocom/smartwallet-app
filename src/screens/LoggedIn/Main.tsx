@@ -27,8 +27,44 @@ import BusinessCardTest from './Settings/Development/BusinessCardTest'
 import { shouldShowTermsConsent } from '~/modules/account/selectors'
 import TermsConsent from '~/screens/Modals/TermsConsent'
 import MainTabs from './MainTabs'
+import BusinessCardForm from '../Modals/Forms/BusinessCardForm'
+import CredentialForm from '../Modals/Forms/CredentialForm'
+import { PrimitiveAttributeTypes } from '~/types/credentials'
+import { IField } from '~/components/Card/types'
+import CardDetails from './Documents/CardDetails'
 
-const MainStack = createStackNavigator()
+export type MainStackParamList = {
+  [ScreenNames.Interaction]: undefined
+  [ScreenNames.LoggedInTermsConsent]: undefined
+  [ScreenNames.LoggedInTermsConsent]: undefined
+  [ScreenNames.MainTabs]: undefined
+  [ScreenNames.Language]: undefined
+  [ScreenNames.ChangePin]: undefined
+  [ScreenNames.BackupIdentity]: undefined
+  [ScreenNames.FAQ]: undefined
+  [ScreenNames.ContactUs]: undefined
+  [ScreenNames.About]: undefined
+  [ScreenNames.Imprint]: undefined
+  [ScreenNames.PrivacyPolicy]: undefined
+  [ScreenNames.TermsOfService]: undefined
+  [ScreenNames.DragToConfirm]: undefined
+  [ScreenNames.BusinessCardForm]: undefined
+  [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
+  [ScreenNames.CardDetails]: {
+    fields: IField[]
+    title?: string
+    photo?: string
+  }
+  // DEV
+  [ScreenNames.ButtonsTest]: undefined
+  [ScreenNames.LoaderTest]: undefined
+  [ScreenNames.NotificationsTest]: undefined
+  [ScreenNames.InputTest]: undefined
+  [ScreenNames.PasscodeTest]: undefined
+  [ScreenNames.BusinessCardTest]: undefined
+}
+
+const MainStack = createStackNavigator<MainStackParamList>()
 
 const settingsScreenTransitionOptions = {
   ...Platform.select({
@@ -39,6 +75,10 @@ const settingsScreenTransitionOptions = {
       ...TransitionPresets.DefaultTransition,
     },
   }),
+}
+
+const modalScreenTransitionOptions = {
+  ...TransitionPresets.ModalSlideFromBottomIOS,
 }
 
 const Main: React.FC = () => {
@@ -155,7 +195,22 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Interaction}
             component={Interaction}
-            options={{ gestureEnabled: false }}
+            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+          />
+          <MainStack.Screen
+            name={ScreenNames.CardDetails}
+            component={CardDetails}
+            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+          />
+          <MainStack.Screen
+            name={ScreenNames.BusinessCardForm}
+            component={BusinessCardForm}
+            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+          />
+          <MainStack.Screen
+            name={ScreenNames.CredentialForm}
+            component={CredentialForm}
+            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
           />
           {/* Modals -> End */}
         </>

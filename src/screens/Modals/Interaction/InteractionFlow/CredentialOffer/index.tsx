@@ -1,9 +1,8 @@
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import CollapsedScrollView from '~/components/CollapsedScrollView'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import {
   getOfferedCredentialCategories,
@@ -122,7 +121,10 @@ const CredentialOfferFAS = () => {
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
-        <Collapsible.ScrollView customStyles={{ paddingHorizontal: '5%' }}>
+        <Collapsible.ScrollView
+          withoutHeaderPadding
+          customStyles={{ paddingHorizontal: '5%' }}
+        >
           <Collapsible.HidingScale>
             <LogoContainerFAS>
               <InteractionLogo />
