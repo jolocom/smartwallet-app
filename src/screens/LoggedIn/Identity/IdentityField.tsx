@@ -22,12 +22,13 @@ interface Props {
   type: AttributeTypes
   id: string
   value: string
+  onDelete: () => void
 }
 
 const PADDING_DISTANCE = Dimensions.get('window').width * 0.05
 const DELETE_BUTTON_WIDTH = 50
 
-const IdentityField: React.FC<Props> = ({ type, id, value }) => {
+const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
   const redirect = useRedirect()
   const x = useSharedValue(0)
   const isSelected = useSharedValue(false)
@@ -116,6 +117,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value }) => {
               onPress={() => {
                 isSelected.value = false
                 x.value = withTiming(400)
+                onDelete()
               }}
             />
           </View>

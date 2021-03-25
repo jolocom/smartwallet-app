@@ -44,10 +44,12 @@ export const useSICActions = () => {
     return id
   }
 
-  const handleDeleteCredentialSI = async (id: string) => {
+  // TODO: fix the structure of the store to remove the need to pass the type. We
+  // can still search by id only, but it becomes messier
+  const handleDeleteCredentialSI = async (id: string, type: AttributeTypes) => {
     try {
       await deleteStoredCredential(id)
-      dispatch(deleteAttr({ type: AttributeTypes.businessCard }))
+      dispatch(deleteAttr({ type, id }))
     } catch (err) {
       console.log({ err })
       throw new Error(`Error deleting a self issued credential with', ${id}`)

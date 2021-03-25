@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useEffect, useLayoutEffect } from 'react'
+import { StyleSheet, View, LayoutAnimation } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import Widget from '~/components/Widget/Widget'
@@ -14,6 +14,7 @@ import { strings } from '~/translations'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
+import { useSICActions } from '~/hooks/attributes'
 
 type TPrimitiveAttributeTypes = Exclude<
   AttributeTypes,
@@ -37,6 +38,14 @@ const primitiveAttributesConfig = getAttributeConfigPrimitive()
 const IdentityCredentials = () => {
   const redirect = useRedirect()
   const attributes = useSelector(getPrimitiveAttributes)
+  const { handleDeleteCredentialSI } = useSICActions()
+
+  useLayoutEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+  }, [attributes])
 
   const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
     primitiveAttributesConfig,
@@ -84,6 +93,7 @@ const IdentityCredentials = () => {
                     id={field.id}
                     type={type}
                     value={Object.values(field.value).join(' ')}
+                    onDelete={() => handleDeleteCredentialSI(field.id, type)}
                   />
                 ))
               ) : (

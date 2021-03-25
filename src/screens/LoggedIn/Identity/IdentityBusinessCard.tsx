@@ -14,6 +14,7 @@ import BusinessCardStyled from './components/BusinessCardStyled'
 import IdentityTabs from './tabs'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import { AttributeTypes } from '~/types/credentials'
 
 const BusinessCard: React.FC = () => {
   const redirect = useRedirect()
@@ -27,7 +28,10 @@ const BusinessCard: React.FC = () => {
   const handleDeleteBC = async () => {
     if (businessCardId) {
       try {
-        await handleDeleteCredentialSI(businessCardId)
+        await handleDeleteCredentialSI(
+          businessCardId,
+          AttributeTypes.businessCard,
+        )
       } catch (e) {
         scheduleWarning({
           title: 'Could not delete',
