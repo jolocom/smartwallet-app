@@ -35,7 +35,7 @@ const Identity = () => {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer testID="home-self-issued-credentials">
       <ScreenContainer.Header>{strings.YOUR_INFO}</ScreenContainer.Header>
       <IdentityTabs initialTab={IdentityTabIds.credentials}>
         <IdentityTabs.Styled.Header>

@@ -1,11 +1,21 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import Identity from '~/screens/LoggedIn/Identity'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
+import { mockSelectorReturn } from '../../utils/selector'
 
 const mockedNoAttributes = {
   attrs: {
     all: {},
+  },
+}
+
+const mockedAttributes = {
+  attrs: {
+    all: {
+      ProofOfEmailCredential: [
+        { id: 'claimId', value: { givenName: 'Karl', familyName: 'Muller' } },
+      ],
+    },
   },
 }
 
@@ -32,16 +42,18 @@ jest.mock(
   or self issued credentials on home id tab
 */
 describe('Home id tab displays', () => {
-  test('intro component when no credentials found in a store', () => {
-    // @ts-expect-error
-    useSelector.mockImplementationOnce((callback: (state: any) => void) => {
-      return callback(mockedNoAttributes)
-    })
+  test('intro component', () => {
+    mockSelectorReturn(mockedNoAttributes)
 
     const { getByTestId } = renderWithSafeArea(<Identity />)
 
     expect(getByTestId('home-identity-intro')).toBeDefined()
   })
 
-  xdescribe('self issued credentials', () => {})
+  test('self issued credentials', () => {
+    mockSelectorReturn(mockedAttributes)
+
+    const { getByTestId } = renderWithSafeArea(<Identity />)
+    expect(getByTestId('home-self-issued-credentials')).toBeDefined()
+  })
 })
