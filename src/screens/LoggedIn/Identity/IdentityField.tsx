@@ -1,7 +1,8 @@
 import React from 'react'
+import { TouchableOpacity } from 'react-native'
+
 import { AttributeTypes } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
-import { TouchableOpacity } from 'react-native'
 import { ScreenNames } from '~/types/screens'
 import Field from '~/components/Widget/Field'
 
