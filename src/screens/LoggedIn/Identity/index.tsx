@@ -24,15 +24,20 @@ const Identity = () => {
 
   if (showIdentityIntro) {
     return (
-      <ScreenContainer isFullscreen customStyles={{justifyContent: 'flex-start'}}>
+      <ScreenContainer
+        isFullscreen
+        customStyles={{ justifyContent: 'flex-start' }}
+      >
         <IdentityIntro />
       </ScreenContainer>
     )
   }
 
   return (
-    <ScreenContainer>
-      <ScreenContainer.Header>{strings.YOUR_INFO}</ScreenContainer.Header>
+    <ScreenContainer customStyles={{ paddingHorizontal: 0 }}>
+      <ScreenContainer.Header customStyles={{ paddingLeft: '5%' }}>
+        {strings.YOUR_INFO}
+      </ScreenContainer.Header>
       <IdentityTabs initialTab={IdentityTabIds.credentials}>
         <IdentityTabs.Styled.Header>
           <IdentityTabs.Tab

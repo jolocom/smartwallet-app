@@ -1,3 +1,5 @@
+import { IWithCustomStyle } from '~/components/Card/types'
+
 export interface ITabsContext {
   activeTab: string | undefined
   setActiveTab: React.Dispatch<React.SetStateAction<string | undefined>>
@@ -9,7 +11,7 @@ export interface IIdentityTabs {
 
 export interface ITabsComposition {
   Tab: React.FC<{ id: string; title: string }>
-  Page: React.FC<{ id: string }>
+  Page: React.FC<{ id: string } & IWithCustomStyle>
   Styled: {
     Header: React.FC
     Placeholder: React.FC<{ show: boolean }>
