@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
-import { useCreateAttributes } from '~/hooks/attributes'
+import { useSICActions } from '~/hooks/attributes'
 import { strings } from '~/translations'
 import {
   AttributeTypes,
@@ -9,7 +9,11 @@ import {
   IAttributeClaimField,
 } from '~/types/credentials'
 import Wizard from '~/components/Wizard'
-import { companyValidation, contactValidation, nameValidation } from '~/config/validation'
+import {
+  companyValidation,
+  contactValidation,
+  nameValidation,
+} from '~/config/validation'
 
 const getFormSlice = (...claimskeys: ClaimKeys[]) => {
   const config = attributeConfig[AttributeTypes.businessCard]
@@ -37,19 +41,19 @@ const WIZARD_CONFIG = {
     label: strings.INTRODUCE_YOURSELF,
     form: nameFormConfig,
     submitLabel: strings.NEXT,
-    validationSchema: nameValidation
+    validationSchema: nameValidation,
   },
   1: {
     label: strings.BEST_WAY_TO_CONTACT_YOU,
     form: emailTelephoneFormConfig,
     submitLabel: strings.NEXT,
-    validationSchema: contactValidation
+    validationSchema: contactValidation,
   },
   2: {
     label: strings.WHAT_COMPANY_DO_YOU_REPRESENT,
     form: companyFormConfig,
     submitLabel: strings.DONE,
-    validationSchema: companyValidation
+    validationSchema: companyValidation,
   },
 }
 
@@ -58,14 +62,18 @@ const BusinessCardWizard: React.FC<{ onFormSubmit: () => void }> = ({
 }) => {
   const [fields, setFields] = useState<Record<string, string>>({})
 
-  const createAttribute = useCreateAttributes()
+  const { handleCreateCredentialSI } = useSICActions()
 
   const addFieldValues = (fields: Record<string, string>) => {
     setFields((prevState) => ({ ...prevState, ...fields }))
   }
 
   const createNewAttribute = useCallback(async () => {
-    await createAttribute(AttributeTypes.businessCard, fields)
+    await handleCreateCredentialSI(
+      AttributeTypes.businessCard,
+      fields,
+      attributeConfig[AttributeTypes.businessCard].metadata,
+    )
     onFormSubmit()
   }, [JSON.stringify(fields)])
 

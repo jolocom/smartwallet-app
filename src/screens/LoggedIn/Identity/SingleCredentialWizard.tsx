@@ -1,7 +1,7 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
-import { useCreateAttributes } from '~/hooks/attributes'
+import { useSICActions } from '~/hooks/attributes'
 import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
 import Wizard from '~/components/Wizard'
@@ -12,18 +12,21 @@ const WIZARD_CONFIG = {
     label: strings.WHAT_IS_YOUR_NAME,
     form: attributeConfig[AttributeTypes.name],
     submitLabel: strings.CREATE,
-    validationSchema: nameValidation
+    validationSchema: nameValidation,
   },
-};
+}
 
 const SingleCredentialWizard: React.FC<{ onFormSubmit: () => void }> = ({
   onFormSubmit,
 }) => {
-  const createAttribute = useCreateAttributes()
-
+  const { handleCreateCredentialSI } = useSICActions()
 
   const handleSubmit = async (fields: Record<string, string>) => {
-    await createAttribute(AttributeTypes.name, fields)
+    await handleCreateCredentialSI(
+      AttributeTypes.name,
+      fields,
+      attributeConfig[AttributeTypes.name].metadata,
+    )
     onFormSubmit()
   }
 
