@@ -76,7 +76,7 @@ const EmptyField: React.FC = ({ children }) => {
     throw new Error('No method provided for creating new attribute')
 
   return (
-    <TouchableOpacity onPress={widgetContext.onAdd}>
+    <TouchableOpacity onPress={widgetContext.onAdd} testID="widget-field-empty">
       <FieldContainer>
         {children ? (
           children
