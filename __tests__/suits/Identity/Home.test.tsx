@@ -38,7 +38,7 @@ jest.mock(
   () => () => null,
 )
 
-/* This test is concerned with testing wether we show intro component
+/* This test is concerned about testing wether we show intro component
   or self issued credentials on home id tab
 */
 describe('Home id tab displays', () => {
