@@ -24,7 +24,11 @@ const Identity = () => {
 
   if (showIdentityIntro) {
     return (
-      <ScreenContainer isFullscreen customStyles={{justifyContent: 'flex-start'}}>
+      <ScreenContainer
+        testID="home-identity-intro"
+        isFullscreen
+        customStyles={{ justifyContent: 'flex-start' }}
+      >
         <IdentityIntro />
       </ScreenContainer>
     )
