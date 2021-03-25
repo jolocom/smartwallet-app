@@ -17,7 +17,7 @@ const Widget: React.FC<IWidgetProps> & IWidgetComposition = ({
   )
   return (
     <WidgetContext.Provider value={contextValue}>
-      <View style={styles.container} children={children} />
+      <View style={styles.container} children={children} testID="widget" />
     </WidgetContext.Provider>
   )
 }

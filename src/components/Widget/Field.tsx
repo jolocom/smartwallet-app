@@ -43,9 +43,11 @@ const FieldText: React.FC<
 
 const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => {
   return (
-    <FieldContainer>
-      <FieldText value={value} />
-    </FieldContainer>
+    <View testID="widget-field-static">
+      <FieldContainer>
+        <FieldText value={value} />
+      </FieldContainer>
+    </View>
   )
 }
 
