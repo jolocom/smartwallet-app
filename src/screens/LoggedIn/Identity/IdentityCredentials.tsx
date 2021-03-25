@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import Widget from '~/components/Widget/Widget'
@@ -13,6 +13,7 @@ import IdentityTabs from './tabs'
 import { strings } from '~/translations'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import IdentityField from './IdentityField'
 
 type TPrimitiveAttributeTypes = Exclude<
   AttributeTypes,
@@ -77,24 +78,13 @@ const IdentityCredentials = () => {
                 <Widget.Header.Action.CreateNew />
               </Widget.Header>
               {values.length ? (
-                values.map((field) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={() =>
-                        redirect(ScreenNames.CredentialForm, {
-                          type,
-                          id: field.id,
-                        })
-                      }
-                      key={field.id}
-                    >
-                      <Field.Static
-                        key={field.id}
-                        value={Object.values(field.value).join(' ')}
-                      />
-                    </TouchableOpacity>
-                  )
-                })
+                values.map((field) => (
+                  <IdentityField
+                    id={field.id}
+                    type={type}
+                    value={Object.values(field.value).join(' ')}
+                  />
+                ))
               ) : (
                 <Field.Empty>
                   <PencilIcon />
