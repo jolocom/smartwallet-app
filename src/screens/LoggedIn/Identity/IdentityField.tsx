@@ -8,6 +8,7 @@ import Animated, {
   withSpring,
   withTiming,
   runOnJS,
+  useAnimatedProps,
 } from 'react-native-reanimated'
 import {
   PanGestureHandlerGestureEvent,
@@ -18,6 +19,10 @@ import { AttributeTypes } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import Field from '~/components/Widget/Field'
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(
+  TouchableOpacity,
+)
 
 interface Props {
   type: AttributeTypes
@@ -43,19 +48,23 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
       ctx.stopX = DELETE_BUTTON_WIDTH + PADDING_DISTANCE
     },
     onActive: (event, ctx) => {
+      console.log('start ', event.translationX)
       if (event.translationX < 0 && !isSelected.value) {
+        x.value = ctx.startX + event.translationX
+      } else if (event.translationX > 0 && isSelected.value) {
         x.value = ctx.startX + event.translationX
       }
     },
     onEnd: (event, ctx) => {
+      console.log('end ', event.translationX)
       if (event.translationX < -ctx.stopX) {
         isSelected.value = true
         x.value = withSpring(-ctx.stopX)
-      } else if (!isSelected.value) {
-        x.value = withSpring(ctx.startX)
-      } else if (isSelected.value && event.translationX > 0) {
-        x.value = withSpring(ctx.startX)
+      } else if (isSelected.value && event.translationX > -ctx.stopX) {
+        x.value = withTiming(0, { duration: 100 })
         isSelected.value = false
+      } else {
+        x.value = withTiming(ctx.startX)
       }
     },
   })
@@ -64,32 +73,28 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
     transform: [{ translateX: x.value }],
   }))
 
+  const buttonAnimatedProps = useAnimatedProps(() => ({
+    onPress: () => {
+      console.log('prop ', isSelected.value)
+      if (!isSelected.value) {
+        redirect(ScreenNames.CredentialForm, {
+          type,
+          id,
+        })
+      }
+    },
+  }))
+
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
-      <Animated.View
-        style={[animatedStyle]}
-        onTouchStart={() => {
-          if (isSelected.value) {
-            x.value = withTiming(0, {}, () => {
-              isSelected.value = false
-            })
-          }
-        }}
-      >
-        <TouchableOpacity
+      <Animated.View style={[animatedStyle]}>
+        <AnimatedTouchableOpacity
+          animatedProps={buttonAnimatedProps}
           activeOpacity={1}
-          onPress={() => {
-            if (!isSelected.value) {
-              redirect(ScreenNames.CredentialForm, {
-                type,
-                id,
-              })
-            }
-          }}
           key={id}
         >
           <Field.Static key={id} value={value} />
-        </TouchableOpacity>
+        </AnimatedTouchableOpacity>
         <View
           style={{
             width: 400,

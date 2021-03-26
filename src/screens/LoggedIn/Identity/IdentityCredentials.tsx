@@ -87,7 +87,7 @@ const IdentityCredentials = () => {
                 <Widget.Header.Action.CreateNew />
               </Widget.Header>
               {values.length ? (
-                values.map((field, i) => (
+                values.map((field) => (
                   <IdentityField
                     key={field.id}
                     id={field.id}
