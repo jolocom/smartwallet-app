@@ -70,7 +70,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
   }))
 
   return (
-    <PanGestureHandler onGestureEvent={gestureHandler}>
+    <PanGestureHandler onGestureEvent={gestureHandler} minDeltaX={2}>
       <Animated.View style={[animatedStyle]}>
         <TouchableOpacity
           onPress={() => {
