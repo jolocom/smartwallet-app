@@ -10,6 +10,7 @@ import { strings } from '~/translations'
 import { getMockedDispatch } from '../../utils/dispatch'
 import { updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes, ClaimKeys } from '~/types/credentials'
+import { ReactTestInstance } from 'react-test-renderer'
 
 const ATTRIBUTE_ID = 'claim:id-1'
 const GIVEN_NAME = 'Karl'
@@ -39,6 +40,22 @@ jest.mock('../../../src/hooks/sdk', () => ({
   }),
 }))
 
+const renderGetWizardButtons = () => {
+  const queries = renderWithSafeArea(<IdentityIntro />)
+
+  const wizardButtons = queries.getAllByTestId('button')
+  expect(wizardButtons.length).toBe(2)
+  return {
+    ...queries,
+    wizardButtons,
+  }
+}
+
+const populateInputs = (inputs: ReactTestInstance[], values: string[]) => {
+  if (inputs.length !== values.length) return
+  values.forEach((v, idx) => fireEvent.changeText(inputs[idx], v))
+}
+
 describe('Intro displays', () => {
   let mockDispatchFn: jest.Mock
   beforeAll(() => {
@@ -46,10 +63,7 @@ describe('Intro displays', () => {
   })
 
   test('correct ui components initially', () => {
-    const { getAllByTestId, getByText } = renderWithSafeArea(<IdentityIntro />)
-
-    const wizardButtons = getAllByTestId('button')
-    expect(wizardButtons.length).toBe(2)
+    const { wizardButtons, getByText } = renderGetWizardButtons()
 
     const { getByText: getSingleCredText } = getQueriesForElement(
       wizardButtons[0],
@@ -79,11 +93,13 @@ describe('Intro displays', () => {
       },
     })
 
-    const { getAllByTestId, getByTestId, getByText } = renderWithSafeArea(
-      <IdentityIntro />,
-    )
+    const {
+      wizardButtons,
+      getByText,
+      getAllByTestId,
+      getByTestId,
+    } = renderGetWizardButtons()
 
-    const wizardButtons = getAllByTestId('button')
     fireEvent.press(wizardButtons[0])
 
     expect(getByText(strings.WHAT_IS_YOUR_NAME)).toBeDefined()
@@ -94,8 +110,7 @@ describe('Intro displays', () => {
     expect(mockedCreateSignedCredentialFn).toBeCalledTimes(0)
 
     const inputs = getAllByTestId('wizard-input')
-    fireEvent.changeText(inputs[0], GIVEN_NAME)
-    fireEvent.changeText(inputs[1], FAMILY_NAME)
+    populateInputs(inputs, [GIVEN_NAME, FAMILY_NAME])
 
     fireEvent.press(submitBtnStep1)
 
@@ -128,22 +143,20 @@ describe('Intro displays', () => {
     })
 
     const {
+      wizardButtons,
+      getByText,
       getAllByTestId,
       getByTestId,
-      getByText,
-      debug,
-    } = renderWithSafeArea(<IdentityIntro />)
+    } = renderGetWizardButtons()
 
-    // TODO: this so not DRY
-    const wizardButtons = getAllByTestId('button')
     fireEvent.press(wizardButtons[1])
 
     expect(getByText(strings.INTRODUCE_YOURSELF)).toBeDefined()
 
     const submitBtnStep1 = getByTestId('button')
     const inputsName = getAllByTestId('wizard-input')
-    fireEvent.changeText(inputsName[0], GIVEN_NAME)
-    fireEvent.changeText(inputsName[1], FAMILY_NAME)
+
+    populateInputs(inputsName, [GIVEN_NAME, FAMILY_NAME])
 
     fireEvent.press(submitBtnStep1)
 
@@ -153,8 +166,8 @@ describe('Intro displays', () => {
 
     const submitBtnStep2 = getByTestId('button')
     const inputsContact = getAllByTestId('wizard-input')
-    fireEvent.changeText(inputsContact[0], EMAIL)
-    fireEvent.changeText(inputsContact[1], TELEPHONE)
+
+    populateInputs(inputsContact, [EMAIL, TELEPHONE])
 
     fireEvent.press(submitBtnStep2)
 
@@ -164,7 +177,8 @@ describe('Intro displays', () => {
 
     const submitBtnStep3 = getByTestId('button')
     const inputsCompany = getAllByTestId('wizard-input')
-    fireEvent.changeText(inputsCompany[0], COMPANY_NAME)
+
+    populateInputs(inputsCompany, [COMPANY_NAME])
 
     fireEvent.press(submitBtnStep3)
 
