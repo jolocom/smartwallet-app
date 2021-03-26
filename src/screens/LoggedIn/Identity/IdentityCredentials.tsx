@@ -76,9 +76,9 @@ const IdentityCredentials = () => {
       <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
-      {sortedPrimitiveAttributes.map(({ type, label, values }) => {
+      {sortedPrimitiveAttributes.map(({ type, label, values }, i) => {
         return (
-          <View style={styles.group} key={type}>
+          <View style={styles.group} key={i}>
             <Widget
               onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
             >
@@ -89,7 +89,7 @@ const IdentityCredentials = () => {
               {values.length ? (
                 values.map((field, i) => (
                   <IdentityField
-                    key={i}
+                    key={field.id}
                     id={field.id}
                     type={type}
                     value={Object.values(field.value).join(' ')}

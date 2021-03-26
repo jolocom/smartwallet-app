@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedGestureHandler,
   withSpring,
   withTiming,
+  runOnJS,
 } from 'react-native-reanimated'
 import {
   PanGestureHandlerGestureEvent,
@@ -69,7 +70,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
         style={[animatedStyle]}
         onTouchStart={() => {
           if (isSelected.value) {
-            x.value = withSpring(0, {}, () => {
+            x.value = withTiming(0, {}, () => {
               isSelected.value = false
             })
           }
@@ -116,8 +117,9 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
               }}
               onPress={() => {
                 isSelected.value = false
-                x.value = withTiming(400)
-                onDelete()
+                x.value = withTiming(400, { duration: 100 }, () => {
+                  runOnJS(onDelete)()
+                })
               }}
             />
           </View>
