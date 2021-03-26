@@ -19,6 +19,7 @@ import { AttributeTypes } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import Field from '~/components/Widget/Field'
+import { CloseIcon } from '~/assets/svg'
 
 interface Props {
   type: AttributeTypes
@@ -28,7 +29,7 @@ interface Props {
 }
 
 const PADDING_DISTANCE = Dimensions.get('window').width * 0.05
-const DELETE_BUTTON_WIDTH = 50
+const DELETE_BUTTON_WIDTH = 60
 
 const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
   const redirect = useRedirect()
@@ -41,7 +42,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
   >({
     onStart: (_, ctx) => {
       ctx.startX = x.value
-      ctx.stopX = DELETE_BUTTON_WIDTH + PADDING_DISTANCE
+      ctx.stopX = DELETE_BUTTON_WIDTH
     },
     onActive: (event, ctx) => {
       console.log('start ', event.translationX)
@@ -111,6 +112,8 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
               style={{
                 height: '100%',
                 width: DELETE_BUTTON_WIDTH,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
               onPress={() => {
                 isSelected.value = false
@@ -118,7 +121,10 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
                   runOnJS(onDelete)()
                 })
               }}
-            />
+            >
+              {/* TODO: Replace with real icon */}
+              <CloseIcon />
+            </TouchableOpacity>
           </View>
         </View>
       </Animated.View>
