@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Dimensions } from 'react-native'
+import { View, Dimensions, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Animated, {
   useSharedValue,
@@ -28,38 +28,44 @@ interface Props {
   onDelete: () => void
 }
 
-const PADDING_DISTANCE = Dimensions.get('window').width * 0.05
+const DELETE_BUTTON_WRAPPER = 400
+const DELETE_BUTTON_POSITION =
+  Dimensions.get('window').width * -0.05 - DELETE_BUTTON_WRAPPER
 const DELETE_BUTTON_WIDTH = 60
 
 const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
   const redirect = useRedirect()
   const x = useSharedValue(0)
-  const isSelected = useSharedValue(false)
+  const selected = useSharedValue(false)
 
   const gestureHandler = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
-    { startX: number; stopX: number }
+    { startX: number; selectThreshold: number }
   >({
     onStart: (_, ctx) => {
       ctx.startX = x.value
-      ctx.stopX = DELETE_BUTTON_WIDTH
+      ctx.selectThreshold = DELETE_BUTTON_WIDTH
     },
     onActive: (event, ctx) => {
-      console.log('start ', event.translationX)
-      if (event.translationX < 0 && !isSelected.value) {
-        x.value = ctx.startX + event.translationX
-      } else if (event.translationX > 0 && isSelected.value) {
+      const hasPassedSelectThreshold = event.translationX < 0 && !selected.value
+      const hasPassedUnselectThreshold =
+        event.translationX > 0 && selected.value
+
+      if (hasPassedSelectThreshold || hasPassedUnselectThreshold) {
         x.value = ctx.startX + event.translationX
       }
     },
     onEnd: (event, ctx) => {
-      console.log('end ', event.translationX)
-      if (event.translationX < -ctx.stopX) {
-        isSelected.value = true
-        x.value = withSpring(-ctx.stopX)
-      } else if (isSelected.value && event.translationX > -ctx.stopX) {
+      const shouldSelect = event.translationX < -ctx.selectThreshold
+      const shouldUnselect =
+        selected.value && event.translationX > -ctx.selectThreshold
+
+      if (shouldSelect) {
+        selected.value = true
+        x.value = withSpring(-ctx.selectThreshold)
+      } else if (shouldUnselect) {
+        selected.value = false
         x.value = withTiming(0, { duration: 100 })
-        isSelected.value = false
       } else {
         x.value = withTiming(ctx.startX)
       }
@@ -75,8 +81,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
       <Animated.View style={[animatedStyle]}>
         <TouchableOpacity
           onPress={() => {
-            console.log('prop ', isSelected.value)
-            if (!isSelected.value) {
+            if (!selected.value) {
               redirect(ScreenNames.CredentialForm, {
                 type,
                 id,
@@ -86,37 +91,16 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
           activeOpacity={1}
           key={id}
         >
+          {/* {children} */}
           <Field.Static key={id} value={value} />
         </TouchableOpacity>
-        <View
-          style={{
-            width: 400,
-            height: '100%',
-            paddingVertical: 2,
-            top: 2,
-            position: 'absolute',
-            right: -PADDING_DISTANCE - 400,
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: 'red',
-              flex: 1,
-              borderRadius: 10,
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-            }}
-          >
+        <View style={styles.swipeContainer}>
+          <View style={styles.buttonContainer}>
             <TouchableOpacity
               activeOpacity={1}
-              style={{
-                height: '100%',
-                width: DELETE_BUTTON_WIDTH,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              style={styles.button}
               onPress={() => {
-                isSelected.value = false
+                selected.value = false
                 x.value = withTiming(400, { duration: 100 }, () => {
                   runOnJS(onDelete)()
                 })
@@ -131,5 +115,29 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
     </PanGestureHandler>
   )
 }
+
+const styles = StyleSheet.create({
+  swipeContainer: {
+    width: DELETE_BUTTON_WRAPPER,
+    height: '100%',
+    paddingVertical: 2,
+    top: 2,
+    position: 'absolute',
+    right: DELETE_BUTTON_POSITION,
+  },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: 'red',
+    borderRadius: 10,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  button: {
+    height: '100%',
+    width: DELETE_BUTTON_WIDTH,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 export default IdentityField
