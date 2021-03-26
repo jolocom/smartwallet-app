@@ -6,7 +6,7 @@ import { AttributeTypes } from '~/types/credentials'
 import { mockSelectorReturn } from '../../utils/selector'
 import useTranslation from '~/hooks/useTranslation'
 import { fireEvent, waitFor } from '@testing-library/react-native'
-import { editAttr } from '~/modules/attributes/actions'
+import { editAttr, updateAttrs } from '~/modules/attributes/actions'
 import { getMockedDispatch } from '../../utils/dispatch'
 
 const ATTRIBUTE_ID = 'claim:email:id'
@@ -27,6 +27,11 @@ const mockedStore = {
         },
       ],
     },
+  },
+}
+const mockedStoreNoAttributes = {
+  attrs: {
+    all: {},
   },
 }
 
@@ -58,16 +63,48 @@ jest.mock('../../../src/hooks/sdk', () => ({
   }),
 }))
 
+const renderCredentialForm = () => {
+  const { getByTestId } = renderWithSafeArea(<CredentialForm />)
+
+  const emailInput = getByTestId('credential-form-input')
+  expect(emailInput).toBeDefined()
+
+  // update input field
+  fireEvent.changeText(emailInput, EMAIL_VALUE_UPDATED)
+
+  expect(emailInput.props.value).toBe(EMAIL_VALUE_UPDATED)
+
+  const doneBtn = getByTestId('form-container-submit')
+
+  // submit credential
+  fireEvent.press(doneBtn)
+}
+
 describe('Form in mode', () => {
+  let mockDispatchFn: jest.Mock
+
   beforeAll(() => {
     // @ts-expect-error
     useTranslation.mockReturnValue({
       t: jest.fn().mockReturnValue('Something'), // TODO: This will return something for title and description
     })
+    mockDispatchFn = getMockedDispatch()
   })
+
+  beforeEach(() => {
+    mockDispatchFn.mockClear()
+    mockedCreateSignedCredentialFn.mockClear()
+    mockedCreateSignedCredentialFn.mockResolvedValue({
+      id: ATTRIBUTE_ID_UPDATED,
+      claim: {
+        id: ATTRIBUTE_ID_UPDATED,
+        email: EMAIL_VALUE_UPDATED,
+      },
+    })
+  })
+
   test('edit', async () => {
     // ASSEMBLE
-
     // @ts-expect-error
     useRoute.mockReturnValue({
       params: {
@@ -76,29 +113,9 @@ describe('Form in mode', () => {
       },
     })
     mockSelectorReturn(mockedStore)
-    mockedCreateSignedCredentialFn.mockResolvedValue({
-      id: ATTRIBUTE_ID_UPDATED,
-      claim: {
-        id: ATTRIBUTE_ID_UPDATED,
-        email: EMAIL_VALUE_UPDATED,
-      },
-    })
-
-    const mockDispatchFn = getMockedDispatch()
 
     // RENDER
-    const { getByTestId } = renderWithSafeArea(<CredentialForm />)
-
-    const emailInput = getByTestId('credential-form-input')
-    expect(emailInput).toBeDefined()
-
-    fireEvent.changeText(emailInput, EMAIL_VALUE_UPDATED)
-
-    expect(emailInput.props.value).toBe(EMAIL_VALUE_UPDATED)
-
-    const doneBtn = getByTestId('form-container-submit')
-
-    fireEvent.press(doneBtn)
+    renderCredentialForm()
 
     // ASSERT ASYNC SUBMIT HANDLING
     await waitFor(() => {
@@ -110,6 +127,35 @@ describe('Form in mode', () => {
       expect(mockDispatchFn).toBeCalledWith(
         editAttr({
           id: ATTRIBUTE_ID,
+          type: ATTRIBUTE_TYPE,
+          attribute: {
+            id: ATTRIBUTE_ID_UPDATED,
+            value: { email: EMAIL_VALUE_UPDATED },
+          },
+        }),
+      )
+    })
+  })
+
+  test('create', async () => {
+    // ASSEMBLE
+    // @ts-expect-error
+    useRoute.mockReturnValue({
+      params: {
+        type: ATTRIBUTE_TYPE,
+      },
+    })
+    mockSelectorReturn(mockedStoreNoAttributes)
+
+    // RENDER
+    renderCredentialForm()
+
+    // ASSERT ASYNC SUBMIT HANDLING
+    await waitFor(() => {
+      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockDispatchFn).toBeCalledTimes(1)
+      expect(mockDispatchFn).toBeCalledWith(
+        updateAttrs({
           type: ATTRIBUTE_TYPE,
           attribute: {
             id: ATTRIBUTE_ID_UPDATED,
