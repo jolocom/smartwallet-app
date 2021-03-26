@@ -7,14 +7,8 @@ jest.mock('react-native-keychain', () => ({
   resetGenericPassword: jest.fn().mockResolvedValue(true),
 }))
 
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({
-    navigate: jest.fn(),
-    canGoBack: jest.fn().mockReturnValue(true),
-  }),
-}))
-
 jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
   useDispatch: jest.fn(),
 }))
 
