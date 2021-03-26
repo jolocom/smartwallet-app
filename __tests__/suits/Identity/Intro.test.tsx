@@ -9,16 +9,18 @@ import {
 import { strings } from '~/translations'
 import { getMockedDispatch } from '../../utils/dispatch'
 import { updateAttrs } from '~/modules/attributes/actions'
-import { AttributeTypes } from '~/types/credentials'
+import { AttributeTypes, ClaimKeys } from '~/types/credentials'
 
 const ATTRIBUTE_ID = 'claim:id-1'
 const GIVEN_NAME = 'Karl'
 const FAMILY_NAME = 'Muller'
+const EMAIL = 'dev@jolocom.com'
+const TELEPHONE = '000000000'
+const COMPANY_NAME = 'SmartWallet'
 
 const mockedCreateSignedCredentialFn = jest.fn()
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
-// TODO: this is the same mock as in Credential Form
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
     idw: {
@@ -38,7 +40,12 @@ jest.mock('../../../src/hooks/sdk', () => ({
 }))
 
 describe('Intro displays', () => {
-  xtest('correct ui components initially', () => {
+  let mockDispatchFn: jest.Mock
+  beforeAll(() => {
+    mockDispatchFn = getMockedDispatch()
+  })
+
+  test('correct ui components initially', () => {
     const { getAllByTestId, getByText } = renderWithSafeArea(<IdentityIntro />)
 
     const wizardButtons = getAllByTestId('button')
@@ -57,8 +64,12 @@ describe('Intro displays', () => {
     expect(getByText(strings.IT_IS_TIME_TO_CREATE)).toBeDefined()
   })
 
+  beforeEach(() => {
+    mockDispatchFn.mockClear()
+    mockedCreateSignedCredentialFn.mockClear()
+  })
+
   test('single credential wizard', async () => {
-    const mockDispatchFn = getMockedDispatch()
     mockedCreateSignedCredentialFn.mockResolvedValue({
       id: ATTRIBUTE_ID,
       claim: {
@@ -68,26 +79,25 @@ describe('Intro displays', () => {
       },
     })
 
-    const {
-      getAllByTestId,
-      getByTestId,
-      getByText,
-      debug,
-    } = renderWithSafeArea(<IdentityIntro />)
+    const { getAllByTestId, getByTestId, getByText } = renderWithSafeArea(
+      <IdentityIntro />,
+    )
 
     const wizardButtons = getAllByTestId('button')
     fireEvent.press(wizardButtons[0])
 
     expect(getByText(strings.WHAT_IS_YOUR_NAME)).toBeDefined()
 
-    // expect(submitBtn.props.disabled).toBe(true)
-    const submitBtn = getByTestId('button')
+    const submitBtnStep1 = getByTestId('button')
+    fireEvent.press(submitBtnStep1)
+
+    expect(mockedCreateSignedCredentialFn).toBeCalledTimes(0)
 
     const inputs = getAllByTestId('wizard-input')
     fireEvent.changeText(inputs[0], GIVEN_NAME)
     fireEvent.changeText(inputs[1], FAMILY_NAME)
 
-    fireEvent.press(submitBtn)
+    fireEvent.press(submitBtnStep1)
 
     await waitFor(() => {
       expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
@@ -98,6 +108,81 @@ describe('Intro displays', () => {
           attribute: {
             id: ATTRIBUTE_ID,
             value: { givenName: GIVEN_NAME, familyName: FAMILY_NAME },
+          },
+        }),
+      )
+    })
+  })
+
+  test('business credential wizard', async () => {
+    mockedCreateSignedCredentialFn.mockResolvedValue({
+      id: ATTRIBUTE_ID,
+      claim: {
+        id: ATTRIBUTE_ID,
+        givenName: GIVEN_NAME,
+        familyName: FAMILY_NAME,
+        email: EMAIL,
+        telephone: TELEPHONE,
+        legalCompanyName: COMPANY_NAME,
+      },
+    })
+
+    const {
+      getAllByTestId,
+      getByTestId,
+      getByText,
+      debug,
+    } = renderWithSafeArea(<IdentityIntro />)
+
+    // TODO: this so not DRY
+    const wizardButtons = getAllByTestId('button')
+    fireEvent.press(wizardButtons[1])
+
+    expect(getByText(strings.INTRODUCE_YOURSELF)).toBeDefined()
+
+    const submitBtnStep1 = getByTestId('button')
+    const inputsName = getAllByTestId('wizard-input')
+    fireEvent.changeText(inputsName[0], GIVEN_NAME)
+    fireEvent.changeText(inputsName[1], FAMILY_NAME)
+
+    fireEvent.press(submitBtnStep1)
+
+    await waitFor(() => {
+      expect(getByText(strings.BEST_WAY_TO_CONTACT_YOU)).toBeDefined()
+    })
+
+    const submitBtnStep2 = getByTestId('button')
+    const inputsContact = getAllByTestId('wizard-input')
+    fireEvent.changeText(inputsContact[0], EMAIL)
+    fireEvent.changeText(inputsContact[1], TELEPHONE)
+
+    fireEvent.press(submitBtnStep2)
+
+    await waitFor(() => {
+      expect(getByText(strings.WHAT_COMPANY_DO_YOU_REPRESENT)).toBeDefined()
+    })
+
+    const submitBtnStep3 = getByTestId('button')
+    const inputsCompany = getAllByTestId('wizard-input')
+    fireEvent.changeText(inputsCompany[0], COMPANY_NAME)
+
+    fireEvent.press(submitBtnStep3)
+
+    await waitFor(() => {
+      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockDispatchFn).toBeCalledTimes(1)
+      expect(mockDispatchFn).toBeCalledWith(
+        updateAttrs({
+          type: AttributeTypes.businessCard,
+          attribute: {
+            id: ATTRIBUTE_ID,
+            value: {
+              [ClaimKeys.givenName]: GIVEN_NAME,
+              [ClaimKeys.familyName]: FAMILY_NAME,
+              [ClaimKeys.telephone]: TELEPHONE,
+              [ClaimKeys.email]: EMAIL,
+              [ClaimKeys.legalCompanyName]: COMPANY_NAME,
+            },
           },
         }),
       )
