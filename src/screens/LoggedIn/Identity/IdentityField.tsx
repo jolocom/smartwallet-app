@@ -20,10 +20,6 @@ import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import Field from '~/components/Widget/Field'
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(
-  TouchableOpacity,
-)
-
 interface Props {
   type: AttributeTypes
   id: string
@@ -73,28 +69,24 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
     transform: [{ translateX: x.value }],
   }))
 
-  const buttonAnimatedProps = useAnimatedProps(() => ({
-    onPress: () => {
-      console.log('prop ', isSelected.value)
-      if (!isSelected.value) {
-        redirect(ScreenNames.CredentialForm, {
-          type,
-          id,
-        })
-      }
-    },
-  }))
-
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View style={[animatedStyle]}>
-        <AnimatedTouchableOpacity
-          animatedProps={buttonAnimatedProps}
+        <TouchableOpacity
+          onPress={() => {
+            console.log('prop ', isSelected.value)
+            if (!isSelected.value) {
+              redirect(ScreenNames.CredentialForm, {
+                type,
+                id,
+              })
+            }
+          }}
           activeOpacity={1}
           key={id}
         >
           <Field.Static key={id} value={value} />
-        </AnimatedTouchableOpacity>
+        </TouchableOpacity>
         <View
           style={{
             width: 400,
