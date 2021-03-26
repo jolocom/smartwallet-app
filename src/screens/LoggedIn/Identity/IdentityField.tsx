@@ -118,15 +118,15 @@ const styles = StyleSheet.create({
   swipeContainer: {
     width: DELETE_BUTTON_WRAPPER,
     height: '100%',
-    paddingVertical: 2,
-    top: 2,
+    paddingVertical: 3,
+    top: 0,
     position: 'absolute',
     right: DELETE_BUTTON_POSITION,
   },
   buttonContainer: {
     flex: 1,
     backgroundColor: 'red',
-    borderRadius: 10,
+    borderRadius: 8,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
