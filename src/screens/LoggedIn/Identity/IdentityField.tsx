@@ -8,7 +8,6 @@ import Animated, {
   withSpring,
   withTiming,
   runOnJS,
-  useAnimatedProps,
 } from 'react-native-reanimated'
 import {
   PanGestureHandlerGestureEvent,
@@ -91,7 +90,6 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
           activeOpacity={1}
           key={id}
         >
-          {/* {children} */}
           <Field.Static key={id} value={value} />
         </TouchableOpacity>
         <View style={styles.swipeContainer}>
