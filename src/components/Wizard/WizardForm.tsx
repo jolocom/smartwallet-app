@@ -24,8 +24,8 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
   const { form: formConfig, validationSchema } = config[step]
   const initialValues = assembleFormInitialValues(formConfig.fields)
 
-  const handleFormSubmit = (fields: Record<string, string>) => {
-    onSubmit(fields)
+  const handleFormSubmit = async (fields: Record<string, string>) => {
+    await onSubmit(fields)
     if (!isLastStep) setActiveStep((prevState) => prevState + 1)
   }
 
@@ -45,8 +45,9 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
               }}
             >
               {formConfig.fields.map((field, idx) => (
-                <View style={{ marginBottom: 10 }}>
+                <View style={{ marginBottom: 10 }} key={field.key}>
                   <AutofocusInput
+                    testID="wizard-input"
                     // @ts-ignore
                     name={field.key}
                     key={field.key}
