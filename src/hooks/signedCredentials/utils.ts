@@ -86,8 +86,11 @@ export async function mapCredentialsToDisplay(
 export function mapDisplayToCustomDisplay(
   credential: DisplayCredential,
 ): DisplayCredentialDocument | DisplayCredentialOther {
-  const { properties } = credential;
-  let updatedProperties  = properties.map(p => ({...p, key: p.key?.split('.')[1]}));;
+  const { properties } = credential
+  let updatedProperties = properties.map((p) => ({
+    ...p,
+    key: p.key?.split('.')[1],
+  }))
 
   if (isDocument(credential)) {
     const photo = updatedProperties.find((p) => p.key === ClaimKeys.photo)
@@ -96,13 +99,20 @@ export function mapDisplayToCustomDisplay(
       (p) => p.key === ClaimKeys.givenName || p.key === ClaimKeys.familyName,
     )
     const holderName = holderProperties.length
-      ? holderProperties.reduce((acc, v) => `${acc} ${v.value}`, '').split(' ').filter(e => Boolean(e)).join(' ')
+      ? holderProperties
+          .reduce((acc, v) => `${acc} ${v.value}`, '')
+          .split(' ')
+          .filter((e) => Boolean(e))
+          .join(' ')
       : strings.ANONYMOUS
 
     updatedProperties = updatedProperties.filter(
-      (p) => p.key !== ClaimKeys.givenName && p.key !== ClaimKeys.familyName && p.key !== ClaimKeys.photo,
+      (p) =>
+        p.key !== ClaimKeys.givenName &&
+        p.key !== ClaimKeys.familyName &&
+        p.key !== ClaimKeys.photo,
     )
-    
+
     return {
       ...credential,
       properties: updatedProperties,
