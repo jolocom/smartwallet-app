@@ -72,7 +72,6 @@ const Lock = () => {
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
-        paddingHorizontal: 0,
       }}
     >
       <Passcode onSubmit={handlePINSubmit}>
