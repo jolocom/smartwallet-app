@@ -30,6 +30,20 @@ const mockedStoreEmailAttribute = {
   },
 }
 
+const mockedNavigate = jest.fn()
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+}))
+
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({
+    navigate: mockedNavigate,
+  }),
+}))
+
 const pressFieldAndAssertNavigation = (
   mockedNavigate: jest.Mock,
   fields: ReactTestInstance[],
@@ -44,20 +58,6 @@ const pressFieldAndAssertNavigation = (
     })
   }
 }
-
-const mockedNavigate = jest.fn()
-
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn(),
-}))
-
-jest.mock('@react-navigation/native', () => ({
-  ...jest.requireActual('@react-navigation/native'),
-  useNavigation: () => ({
-    navigate: mockedNavigate,
-  }),
-}))
 
 describe('Primitive credentials component displays', () => {
   beforeEach(() => {

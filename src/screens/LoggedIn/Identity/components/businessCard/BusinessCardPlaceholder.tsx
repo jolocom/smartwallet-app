@@ -7,7 +7,7 @@ import BusinessCardStyled from '../BusinessCardStyled'
 const BusinessCardPlaceholder = () => {
   return (
     <>
-      <View>
+      <View testID="business-card-placeholder">
         <BusinessCardStyled.Title color={Colors.white45}>
           {strings.YOUR_NAME}
         </BusinessCardStyled.Title>
