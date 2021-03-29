@@ -56,7 +56,7 @@ const PasscodeInput: React.FC = () => {
                 ]}
                 key={index}
               >
-                {selectedIndex === index && !digits[index] ? (
+                {isSelected && !digits[index] ? (
                   <View style={styles.caret} />
                 ) : (
                   <Text style={styles.text} testID="passcode-cell">
