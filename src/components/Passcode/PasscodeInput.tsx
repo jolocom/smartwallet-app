@@ -20,8 +20,6 @@ const PasscodeInput: React.FC = () => {
   const { pin, setPin, pinError, pinSuccess } = usePasscode()
   const digits = pin.split('')
 
-  const inputRef = useRef<TextInput>(null)
-
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
     let isCurrent = true
@@ -46,48 +44,14 @@ const PasscodeInput: React.FC = () => {
     }
   }, [pin])
 
-  const handlePinChange = (val: string) => {
-    setPin((prevState: string) => prevState + val)
-  }
-
-  const handleRemove = (
-    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
-  ) => {
-    if (e.nativeEvent?.key === 'Backspace') {
-      setPin((prevState: string) => prevState.slice(0, prevState.length - 1))
-    }
-  }
-
-  const focusInput = () => {
-    // NOTE: Workaround for the case when the Keyboard is dismissed with Back-button, and it can't @focus() again
-    // https://github.com/facebook/react-native/issues/19366#issuecomment-400603928
-    inputRef.current?.blur()
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 100)
-  }
-
   return (
-    <TouchableWithoutFeedback onPress={focusInput}>
+    <TouchableWithoutFeedback>
       <View style={styles.inputContainer}>
-        <TextInput
-          value=""
-          ref={inputRef}
-          onKeyPress={handleRemove}
-          onChangeText={handlePinChange}
-          autoFocus
-          testID="passcode-digit-input"
-          style={[
-            styles.input,
-            {
-              left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
-            },
-          ]}
-          keyboardType="numeric"
-          keyboardAppearance="dark"
-          selectionColor="transparent"
-        />
-        <View style={{ flexDirection: 'row' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
           {PASSCODE_LENGTH.map((v, index) => {
             const isSelected = digits.length === index
             return (
@@ -120,16 +84,15 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'relative',
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
     textAlign: 'center',
-    position: 'absolute',
     fontSize: 43,
     backgroundColor: 'transparent',
     width: DIGIT_CELL_WIDTH,
     borderRadius: 11,
-    top: 0,
-    bottom: 0,
   },
   display: {
     alignItems: 'center',
