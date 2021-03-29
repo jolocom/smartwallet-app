@@ -13,6 +13,8 @@ export interface IPasscodeComposition {
   Input: React.FC
   Header: React.FC<IPasscodeHeaderProps>
   Forgot: React.FC
+  Keyboard: React.FC
+  Container: React.FC
 }
 
 export interface IPasscodeContext {

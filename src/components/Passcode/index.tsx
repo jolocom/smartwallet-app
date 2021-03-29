@@ -4,6 +4,8 @@ import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 import { IPasscodeProps, IPasscodeComposition } from './types'
 import { PasscodeContext } from './context'
+import PasscodeKeyboard from './PasscodeKeyboard'
+import PasscodeContainer from './PasscodeContainer'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -70,5 +72,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 Passcode.Input = PasscodeInput
 Passcode.Header = PasscodeHeader
 Passcode.Forgot = PasscodeForgot
+Passcode.Keyboard = PasscodeKeyboard
+Passcode.Container = PasscodeContainer
 
 export default Passcode
