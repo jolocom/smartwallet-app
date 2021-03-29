@@ -1,13 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {
-  NativeSyntheticEvent,
-  StyleSheet,
-  Text,
-  TextInputKeyPressEventData,
-  TouchableWithoutFeedback,
-  View,
-  TextInput,
-} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 
@@ -17,7 +9,7 @@ const DIGIT_MARGIN_RIGHT = 7
 
 const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
-  const { pin, setPin, pinError, pinSuccess } = usePasscode()
+  const { pin, pinError, pinSuccess } = usePasscode()
   const digits = pin.split('')
 
   // this will make a delay so it will be possible to see digits and not only asterics
@@ -64,13 +56,17 @@ const PasscodeInput: React.FC = () => {
                 ]}
                 key={index}
               >
-                <Text style={styles.text} testID="passcode-cell">
-                  {index === selectedIndex
-                    ? digits[index]
-                    : index < digits.length
-                    ? '*'
-                    : ''}
-                </Text>
+                {selectedIndex === index && !digits[index] ? (
+                  <View style={styles.caret} />
+                ) : (
+                  <Text style={styles.text} testID="passcode-cell">
+                    {index === selectedIndex
+                      ? digits[index]
+                      : index < digits.length
+                      ? '*'
+                      : ''}
+                  </Text>
+                )}
               </View>
             )
           })}
@@ -105,6 +101,7 @@ const styles = StyleSheet.create({
     overflow: 'visible',
     borderWidth: 3,
     borderColor: 'transparent',
+    paddingVertical: 14,
   },
   active: {
     borderColor: Colors.activity,
@@ -118,6 +115,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 43,
     color: Colors.white,
+  },
+  caret: {
+    width: 1,
+    height: '100%',
+    backgroundColor: Colors.success,
   },
 })
 

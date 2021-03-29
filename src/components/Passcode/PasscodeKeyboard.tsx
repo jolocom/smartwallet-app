@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
+
 import { usePasscode } from './context'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '../JoloText'
