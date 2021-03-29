@@ -13,6 +13,7 @@ const PasscodeContainer: React.FC<IWithCustomStyle> = ({
           flex: 1,
           justifyContent: 'center',
           width: '100%',
+          paddingBottom: 40,
         },
         customStyles,
       ]}

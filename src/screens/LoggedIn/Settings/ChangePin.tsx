@@ -78,19 +78,22 @@ const ChangePin: React.FC<PropsI> = ({
   return (
     <ScreenContainer
       customStyles={{
-        marginTop: '15%',
         justifyContent: 'flex-start',
-        paddingTop: 0,
       }}
       hasHeaderBack
     >
       <Passcode onSubmit={isCreateNew ? updatePin : verifyPin}>
-        <Passcode.Header
-          title={headerTitle}
-          errorTitle={isCreateNew ? strings.WHOOPS : strings.WRONG_PASSCODE}
-        />
-        <Passcode.Input />
-        <Passcode.Forgot />
+        <Passcode.Container>
+          <Passcode.Header
+            title={headerTitle}
+            errorTitle={isCreateNew ? strings.WHOOPS : strings.WRONG_PASSCODE}
+          />
+          <Passcode.Input />
+        </Passcode.Container>
+        <Passcode.Container>
+          <Passcode.Forgot />
+          <Passcode.Keyboard />
+        </Passcode.Container>
       </Passcode>
     </ScreenContainer>
   )
