@@ -5,7 +5,11 @@ import { ScrollView, View } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
-import { getCustomCredentialsByCategories } from '~/modules/credentials/selectors'
+import {
+  getCustomCredentialsByCategories,
+  getCustomCredentialsByCategoriesByType,
+  getCustomCredentialsByCategoriesByIssuer,
+} from '~/modules/credentials/selectors'
 import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
 import {
@@ -38,7 +42,12 @@ const CardList: React.FC = ({ children }) => {
 
 const DocumentList = () => {
   const categories = useSelector(getCustomCredentialsByCategories)
-  const { activeTab } = useTabs()
+  const { activeTab, activeSubtab } = useTabs()
+
+  const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
+  const categoriesByIssuer = useSelector(
+    getCustomCredentialsByCategoriesByIssuer,
+  )
 
   const documents = categories[
     CredentialRenderTypes.document

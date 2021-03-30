@@ -16,7 +16,7 @@ import {
 import { strings } from '~/translations'
 import {
   isDocument,
-  RequestedCredentialsByType,
+  CredentialsByType,
   OtherCategory,
   DisplayCredential,
 } from '~/types/credentials'
@@ -149,7 +149,7 @@ const CredentialShareFAS = () => {
   const other = categories[OtherCategory.other]
 
   const handleRenderCredentials = (
-    credCollections: RequestedCredentialsByType<DisplayCredential>[],
+    credCollections: CredentialsByType<DisplayCredential>[],
   ) =>
     credCollections.map(({ type, credentials }) => {
       const isCarousel = credentials.length > 1

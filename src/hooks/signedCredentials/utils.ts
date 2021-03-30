@@ -1,4 +1,4 @@
-import { Agent } from '@jolocom/sdk'
+import { Agent, IdentitySummary } from '@jolocom/sdk'
 import { CredentialType } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
@@ -7,6 +7,8 @@ import {
   AttributeTypes,
   BaseUICredential,
   ClaimKeys,
+  CredentialsByType,
+  CredentialsByIssuer,
   DisplayCredential,
   DisplayCredentialDocument,
   DisplayCredentialOther,
@@ -127,6 +129,36 @@ export function mapDisplayToCustomDisplay(
     photo: credential.issuer.publicProfile?.image,
   }
 }
+
+export const reduceCustomDisplayCredentialsByType = <T extends {type: string[]}>(credentials: Array<CredentialsByType<T>>, cred: T) => {
+  if(credentials.find(c => c.type === cred.type[1])) {
+    credentials = credentials.map(c => {
+      if(c.type === cred.type[1]) {
+        return {...c, credentials: [...c.credentials, cred]}
+      }
+      return c;
+    })
+  } else {
+    credentials = [...credentials, {type: cred.type[1], credentials: [cred]}]
+  }
+  return credentials;
+}
+
+export const reduceCustomDisplayCredentialsByIssuer = <T extends {issuer: IdentitySummary}>(credentials: Array<CredentialsByIssuer<T>>, cred: T) => {
+  const issuer = cred.issuer.publicProfile?.name ?? cred.issuer.did;
+  if(credentials.find(c => c.issuer === issuer)) {
+    credentials = credentials.map(c => {
+      if(c.issuer === issuer) {
+        return {...c, credentials: [...c.credentials, cred]}
+      }
+      return c;
+    })
+  } else {
+    credentials = [...credentials, {issuer, credentials: [cred]}]
+  }
+  return credentials;
+}
+
 
 export function mapAttributesToDisplay(
   credentials: SignedCredential[],

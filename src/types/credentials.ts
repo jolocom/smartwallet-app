@@ -101,7 +101,8 @@ export type DisplayCredentialDocument = DisplayCredential & {
 }
 export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
-export type RequestedCredentialsByType<T> = { type: string; credentials: T[] }
+export type CredentialsByType<T> = { type: string; credentials: T[] }
+export type CredentialsByIssuer<T> = { issuer: string; credentials: T[] }
 
 export type CredentialsByCategory<T> = Record<
   OtherCategory.other | CredentialRenderTypes.document,
@@ -109,7 +110,7 @@ export type CredentialsByCategory<T> = Record<
 >
 
 export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
-  RequestedCredentialsByType<T>
+  CredentialsByType<T>
 >
 
 export function isDocument(

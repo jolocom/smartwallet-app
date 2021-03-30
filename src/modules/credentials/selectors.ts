@@ -3,12 +3,47 @@ import { createSelector } from 'reselect'
 import {
   CredentialsByCategory,
   DisplayCredential,
-  DisplayCredentialDocument,
-  DisplayCredentialOther,
   OtherCategory,
 } from '~/types/credentials'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
+import { mapDisplayToCustomDisplay, reduceCustomDisplayCredentialsByType, reduceCustomDisplayCredentialsByIssuer } from '~/hooks/signedCredentials/utils'
+
+/**
+ * Maps categorized credentials to custom types `NT`
+ * * `PT` - previous type
+ * * `NT` - next type
+ */
+const mapCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
+  return <NT>(mapFn: (el: PT) => NT) => {
+    return Object.keys(cats).reduce<CredentialsByCategory<NT>>((categories, catName) => {
+      const categoryName = catName as
+      | CredentialRenderTypes.document
+      | OtherCategory.other
+      categories[categoryName] = cats[categoryName].map(mapFn)
+      return categories;
+    }, { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] })
+  }
+}
+
+
+/**
+ * Reduce categorized credentials to custom types `NT`
+ * * `PT` - previous type
+ * * `NT` - next type
+ */
+// TODO: fix types
+const reduceCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
+  return <NT>(reduceFn: (acc, v) => NT, initialValue) => {
+    return Object.keys(cats).reduce<CredentialsByCategory<NT>>((categories, catName) => {
+      const categoryName = catName as
+      | CredentialRenderTypes.document
+      | OtherCategory.other
+      categories[categoryName] = cats[categoryName].reduce(reduceFn, initialValue)
+      return categories;
+    }, { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] })
+  }
+}
+
 
 export const getAllCredentials = (state: RootReducerI) => state.credentials.all
 
@@ -38,19 +73,20 @@ const getCredentialsByCategories = createSelector(
 export const getCustomCredentialsByCategories = createSelector(
   [getCredentialsByCategories],
   (cats) => {
-    return Object.keys(cats).reduce<
-      CredentialsByCategory<DisplayCredentialDocument | DisplayCredentialOther>
-    >(
-      (categories, catName) => {
-        const categoryName = catName as
-          | CredentialRenderTypes.document
-          | OtherCategory.other
-        categories[categoryName] = cats[categoryName].map(
-          mapDisplayToCustomDisplay,
-        )
-        return categories
-      },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
-    )
+    return mapCategoriesTo(cats)(mapDisplayToCustomDisplay);
   },
+)
+
+export const getCustomCredentialsByCategoriesByType = createSelector(
+  [getCustomCredentialsByCategories],
+  (cats) => {
+    return reduceCategoriesTo(cats)(reduceCustomDisplayCredentialsByType, [])
+  }
+)
+
+export const getCustomCredentialsByCategoriesByIssuer = createSelector(
+  [getCustomCredentialsByCategories],
+  (cats) => {
+    return reduceCategoriesTo(cats)(reduceCustomDisplayCredentialsByIssuer, [])
+  }
 )
