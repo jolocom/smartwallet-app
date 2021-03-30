@@ -4,7 +4,7 @@ type MockedStore = Record<string, string> | MockedStore
 
 export function mockSelectorReturn(mockedStore: MockedStore) {
   // @ts-expect-error
-  useSelector.mockImplementationOnce((callback: (state: any) => void) => {
+  useSelector.mockImplementation((callback: (state: any) => void) => {
     return callback(mockedStore)
   })
 }

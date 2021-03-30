@@ -6,8 +6,11 @@ import BusinessCardStyled from '../BusinessCardStyled'
 
 const BusinessCardPlaceholder = () => {
   return (
-    <>
-      <View testID="business-card-placeholder">
+    <View
+      style={{ flex: 1, justifyContent: 'space-between' }}
+      testID="business-card-placeholder"
+    >
+      <View>
         <BusinessCardStyled.Title color={Colors.white45}>
           {strings.YOUR_NAME}
         </BusinessCardStyled.Title>
@@ -28,7 +31,7 @@ const BusinessCardPlaceholder = () => {
           {strings.NOT_SPECIFIED}
         </BusinessCardStyled.FieldValue>
       </BusinessCardStyled.FieldGroup>
-    </>
+    </View>
   )
 }
 

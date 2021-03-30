@@ -16,6 +16,8 @@ const EMAIL_VALUE = 'dev@example.com'
 const EMAIL_VALUE_UPDATED = 'dev@jolocom.com'
 
 const mockedStore = {
+  account: { did: 'did-1' },
+  toasts: { active: null },
   attrs: {
     all: {
       [ATTRIBUTE_TYPE]: [
@@ -30,6 +32,8 @@ const mockedStore = {
   },
 }
 const mockedStoreNoAttributes = {
+  account: { did: 'did-1' },
+  toasts: { active: null },
   attrs: {
     all: {},
   },
