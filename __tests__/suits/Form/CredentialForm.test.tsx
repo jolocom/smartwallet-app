@@ -2,7 +2,7 @@ import React from 'react'
 import CredentialForm from '~/screens/Modals/Forms/CredentialForm'
 import { useRoute } from '@react-navigation/native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { AttributeTypes } from '~/types/credentials'
+import { AttributeTypes, ClaimKeys } from '~/types/credentials'
 import { mockSelectorReturn } from '../../utils/selector'
 import useTranslation from '~/hooks/useTranslation'
 import { fireEvent, waitFor } from '@testing-library/react-native'
@@ -102,7 +102,7 @@ describe('Form in mode', () => {
       id: ATTRIBUTE_ID_UPDATED,
       claim: {
         id: ATTRIBUTE_ID_UPDATED,
-        email: EMAIL_VALUE_UPDATED,
+        [ClaimKeys.email]: EMAIL_VALUE_UPDATED,
       },
     })
   })

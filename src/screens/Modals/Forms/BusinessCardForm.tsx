@@ -112,7 +112,7 @@ const BusinessCardForm = () => {
                   <View key={groupKey}>
                     {renderSectionHeader(groupKey)}
                     {groupedBC[groupKey].map((f, idx) => (
-                      <JoloKeyboardAwareScroll.InputContainer>
+                      <JoloKeyboardAwareScroll.InputContainer key={f.key}>
                         {({ focusInput }) => (
                           <FormFieldContainer>
                             <MoveToNext.InputsCollector
@@ -134,6 +134,7 @@ const BusinessCardForm = () => {
                                     borderColor: Colors.error,
                                   }),
                                 }}
+                                testID="business-card-input"
                                 {...f.keyboardOptions}
                               />
                               <FormError message={errors[f.key]} />
