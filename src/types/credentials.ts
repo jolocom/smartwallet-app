@@ -101,8 +101,7 @@ export type DisplayCredentialDocument = DisplayCredential & {
 }
 export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
-type GroupByKey = 'type' | 'issuer'
-export type CredentialsBy<BT, CT> = {key: GroupByKey, value: string, credentials: CT[]}
+export type CredentialsBy<BT, CT> = {key: BT, value: string, credentials: CT[]}
 export type CredentialsByType<T> = CredentialsBy<'type', T>
 export type CredentialsByIssuer<T> = CredentialsBy<'issuer', T>
 

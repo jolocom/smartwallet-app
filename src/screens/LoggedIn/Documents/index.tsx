@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
 
@@ -6,7 +6,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
 import {
-  getCustomCredentialsByCategories,
   getCustomCredentialsByCategoriesByType,
   getCustomCredentialsByCategoriesByIssuer,
 } from '~/modules/credentials/selectors'
@@ -18,6 +17,8 @@ import {
   OtherCategory,
   DisplayCredentialDocument,
   DisplayCredentialOther,
+  CredentialsByType,
+  CredentialsByIssuer,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
@@ -41,7 +42,11 @@ const CardList: React.FC = ({ children }) => {
 }
 
 const DocumentList = () => {
-  const categories = useSelector(getCustomCredentialsByCategories)
+  const [cats, setCategories] = useState<
+    | CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
+    | CredentialsByIssuer<DisplayCredentialDocument | DisplayCredentialOther>
+    | null
+  >(null)
   const { activeTab, activeSubtab } = useTabs()
 
   const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
@@ -49,11 +54,26 @@ const DocumentList = () => {
     getCustomCredentialsByCategoriesByIssuer,
   )
 
-  const documents = categories[
-    CredentialRenderTypes.document
-  ] as DisplayCredentialDocument[]
-  const other = categories[OtherCategory.other] as DisplayCredentialOther[]
+  useEffect(() => {
+    if (activeSubtab?.id === 'type') {
+      setCategories(categoriesByType)
+    } else if (activeSubtab?.id === 'issuer') {
+      setCategories(categoriesByIssuer)
+    }
+  }, [activeSubtab?.id])
 
+  console.log({ cats })
+
+  const documents = useMemo(
+    () => (cats !== null ? cats[CredentialRenderTypes.document] : []),
+    [JSON.stringify(cats)],
+  )
+  const other = useMemo(
+    () => (cats !== null ? cats[OtherCategory.other] : []),
+    [JSON.stringify(cats)],
+  )
+
+  if (cats === null) return null
   return (
     <>
       <View
@@ -70,25 +90,28 @@ const DocumentList = () => {
           />
         ) : (
           <CardList>
-            {documents.map((d) => (
-              <DocumentCard
-                key={d.id}
-                id={d.id}
-                mandatoryFields={[
-                  {
-                    label: DocumentFields.DocumentName,
-                    value: d.name ?? d.type,
-                  },
-                  {
-                    label: strings.SUBJECT_NAME,
-                    value: d.holderName,
-                  },
-                ]}
-                optionalFields={getOptionalFields(d)}
-                highlight={d.id.slice(0, 14)}
-                photo={d.photo}
-              />
-            ))}
+            {documents.map((d) => {
+              const { credentials } = d
+              return credentials.map((c) => (
+                <DocumentCard
+                  key={c.id}
+                  id={c.id}
+                  mandatoryFields={[
+                    {
+                      label: DocumentFields.DocumentName,
+                      value: c.name ?? c.type,
+                    },
+                    {
+                      label: strings.SUBJECT_NAME,
+                      value: c.holderName,
+                    },
+                  ]}
+                  optionalFields={getOptionalFields(c)}
+                  highlight={c.id.slice(0, 14)}
+                  photo={c.photo}
+                />
+              ))
+            })}
           </CardList>
         )}
       </View>
@@ -106,20 +129,23 @@ const DocumentList = () => {
           />
         ) : (
           <CardList>
-            {other.map((o) => (
-              <OtherCard
-                id={o.id}
-                key={o.id}
-                mandatoryFields={[
-                  {
-                    label: DocumentFields.DocumentName,
-                    value: o.name ?? o.type,
-                  },
-                ]}
-                optionalFields={getOptionalFields(o)}
-                photo={o.photo}
-              />
-            ))}
+            {other.map((o) => {
+              const { credentials } = o
+              return credentials.map((c) => (
+                <OtherCard
+                  id={c.id}
+                  key={c.id}
+                  mandatoryFields={[
+                    {
+                      label: DocumentFields.DocumentName,
+                      value: c.name ?? c.type,
+                    },
+                  ]}
+                  optionalFields={getOptionalFields(c)}
+                  photo={c.photo}
+                />
+              ))
+            })}
           </CardList>
         )}
       </View>

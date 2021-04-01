@@ -70,7 +70,7 @@ const getCredentialsByCategories = createSelector(
     ),
 )
 
-export const getCustomCredentialsByCategories = createSelector(
+const getCustomCredentialsByCategories = createSelector(
   [getCredentialsByCategories],
   (cats) => {
     return mapCategoriesTo(cats)(mapDisplayToCustomDisplay);
