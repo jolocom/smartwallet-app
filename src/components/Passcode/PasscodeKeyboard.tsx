@@ -6,6 +6,7 @@ import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { BackArrowIcon } from '~/assets/svg'
+import BP from '~/utils/breakpoints'
 
 interface NumberButtonProps {
   value: number
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    height: 56,
+    height: BP({ default: 56, xsmall: 40, small: 40 }),
     backgroundColor: Colors.black50,
     borderRadius: 5,
     flex: 1,
