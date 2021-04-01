@@ -10,7 +10,7 @@ import {
   getOfferedCredentialsByCategories,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
-import { OfferedCredentialDisplay, OtherCategory } from '~/types/credentials'
+import { OfferedCredentialDisplay, DocumentTypes } from '~/types/credentials'
 import IncomingOfferDoc from '../components/card/offer/document'
 import IncomingOfferOther from '../components/card/offer/other'
 import InteractionDescription from '../components/InteractionDescription'
@@ -48,7 +48,7 @@ const CredentialOfferBAS = () => {
       {offerDetails === null
         ? null
         : offerDetails.map((d) => {
-            if (types[d.type] === CredentialRenderTypes.document) {
+            if (types[d.type] === DocumentTypes.document) {
               return (
                 <IncomingOfferDoc
                   key={d.name}
@@ -83,8 +83,8 @@ const CredentialOfferFAS = () => {
 
   const updatedCategories = getOfferSections(categories, offerDetails)
 
-  const documents = updatedCategories[CredentialRenderTypes.document]
-  const other = updatedCategories[OtherCategory.other]
+  const documents = updatedCategories[DocumentTypes.document]
+  const other = updatedCategories[DocumentTypes.other]
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
     return credentials.map(

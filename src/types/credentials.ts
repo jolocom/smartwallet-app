@@ -67,7 +67,7 @@ export type BaseUICredential = Pick<
 >
 
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
-  category: CredentialCategory
+  category: DocumentTypes
   invalid: boolean
 }
 
@@ -83,14 +83,9 @@ export enum DocumentFields {
   DocumentName = 'Document Name',
 }
 
-export enum OtherCategory {
-  other = 'other',
-}
-export type CredentialCategory = CredentialRenderTypes | OtherCategory
-
 export type DisplayCredential = Omit<BaseUICredential, 'issuer'> & {
   issuer: IdentitySummary
-} & { category: CredentialCategory } & {
+} & { category: DocumentTypes } & {
   properties: Array<Required<DisplayVal>>
 }
 
@@ -103,10 +98,7 @@ export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
 export type RequestedCredentialsByType<T> = { type: string; credentials: T[] }
 
-export type CredentialsByCategory<T> = Record<
-  OtherCategory.other | CredentialRenderTypes.document,
-  T[]
->
+export type CredentialsByCategory<T> = Record<DocumentTypes, T[]>
 
 export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
   RequestedCredentialsByType<T>
@@ -115,7 +107,7 @@ export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
 export function isDocument(
   credential: DisplayCredentialDocument | DisplayCredentialOther,
 ): credential is DisplayCredentialDocument {
-  return credential.category === CredentialRenderTypes.document
+  return credential.category === DocumentTypes.document
 }
 
 export type TPrimitiveAttributesConfig = Omit<

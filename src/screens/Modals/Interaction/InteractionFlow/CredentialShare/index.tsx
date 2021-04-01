@@ -17,8 +17,8 @@ import { strings } from '~/translations'
 import {
   isDocument,
   RequestedCredentialsByType,
-  OtherCategory,
   DisplayCredential,
+  DocumentTypes,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { IncomingRequestDoc } from '../components/card/request/document'
@@ -145,8 +145,8 @@ const CredentialShareFAS = () => {
 
   const handleSubmit = useCredentialShareSubmit()
 
-  const documents = categories[CredentialRenderTypes.document]
-  const other = categories[OtherCategory.other]
+  const documents = categories[DocumentTypes.document]
+  const other = categories[DocumentTypes.other]
 
   const handleRenderCredentials = (
     credCollections: RequestedCredentialsByType<DisplayCredential>[],

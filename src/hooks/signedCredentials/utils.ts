@@ -11,11 +11,17 @@ import {
   DisplayCredentialDocument,
   DisplayCredentialOther,
   isDocument,
-  OtherCategory,
+  DocumentTypes,
 } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
+import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/types'
 
 type CredentialKeys = 'credentials' | 'selfIssuedCredentials'
+
+export const getCredentialCategory = (renderInfo?: CredentialOfferRenderInfo) =>
+  renderInfo?.renderAs === 'document'
+    ? DocumentTypes.document
+    : DocumentTypes.other
 
 export const separateCredentialsAndAttributes = (
   allCredentials: SignedCredential[],
@@ -59,7 +65,7 @@ export async function mapCredentialsToDisplay(
   let updatedCredentials: DisplayCredential = {
     ...baseUICredentials,
     issuer: resolvedIssuer,
-    category: renderInfo?.renderAs ?? OtherCategory.other,
+    category: getCredentialCategory(renderInfo),
     properties: [],
   }
 

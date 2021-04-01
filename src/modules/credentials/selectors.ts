@@ -5,9 +5,8 @@ import {
   DisplayCredential,
   DisplayCredentialDocument,
   DisplayCredentialOther,
-  OtherCategory,
+  DocumentTypes,
 } from '~/types/credentials'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 
 export const getAllCredentials = (state: RootReducerI) => state.credentials.all
@@ -17,21 +16,21 @@ const getCredentialsByCategories = createSelector(
   (credentials) =>
     credentials.reduce<CredentialsByCategory<DisplayCredential>>(
       (sections, credential) => {
-        if (credential.category === CredentialRenderTypes.document) {
-          sections[CredentialRenderTypes.document] = [
-            ...sections[CredentialRenderTypes.document],
+        if (credential.category === DocumentTypes.document) {
+          sections[DocumentTypes.document] = [
+            ...sections[DocumentTypes.document],
             credential,
           ]
         } else {
-          sections[OtherCategory.other] = [
-            ...sections[OtherCategory.other],
+          sections[DocumentTypes.other] = [
+            ...sections[DocumentTypes.other],
             credential,
           ]
         }
 
         return sections
       },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+      { [DocumentTypes.document]: [], [DocumentTypes.other]: [] },
     ),
 )
 
@@ -42,15 +41,13 @@ export const getCustomCredentialsByCategories = createSelector(
       CredentialsByCategory<DisplayCredentialDocument | DisplayCredentialOther>
     >(
       (categories, catName) => {
-        const categoryName = catName as
-          | CredentialRenderTypes.document
-          | OtherCategory.other
+        const categoryName = catName as DocumentTypes
         categories[categoryName] = cats[categoryName].map(
           mapDisplayToCustomDisplay,
         )
         return categories
       },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+      { [DocumentTypes.document]: [], [DocumentTypes.other]: [] },
     )
   },
 )

@@ -10,6 +10,7 @@ import { useRedirect } from '../navigation'
 import { addCredentials } from '~/modules/credentials/actions'
 import { useInitializeCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
+import { DocumentTypes } from '~/types/credentials'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -30,11 +31,11 @@ const useCredentialOfferSubmit = () => {
   const finishInteraction = useFinishInteraction()
   const { getCredentialDisplay } = useInitializeCredentials()
 
-  const scheduleSuccess = () =>
+  const scheduleSuccess = (initialTab: DocumentTypes) =>
     scheduleSuccessInteraction({
       interact: {
         label: strings.REVIEW,
-        onInteract: () => redirect(ScreenNames.Documents),
+        onInteract: () => redirect(ScreenNames.Documents, { initialTab }),
       },
     })
 
@@ -44,11 +45,20 @@ const useCredentialOfferSubmit = () => {
     dispatch(addCredentials(displayCredentials))
   }
 
+  const getInitialDocumentsTab = async () => {
+    const validatedCredentials = await getValidatedCredentials()
+    const allOther = validatedCredentials.every(
+      (cred) => cred.category === DocumentTypes.other,
+    )
+    return allOther ? DocumentTypes.other : DocumentTypes.document
+  }
+
   return async () => {
     try {
       if (await credentialsAlreadyIssued()) {
         await handleStoreIssuedCredentials()
-        scheduleSuccess()
+        const initialTab = await getInitialDocumentsTab()
+        scheduleSuccess(initialTab)
         return finishInteraction()
       }
 
@@ -69,7 +79,8 @@ const useCredentialOfferSubmit = () => {
 
       if (allValid) {
         await handleStoreIssuedCredentials()
-        scheduleSuccess()
+        const initialTab = await getInitialDocumentsTab()
+        scheduleSuccess(initialTab)
         finishInteraction()
       } else if (allInvalid) {
         //TODO: add translation interpolation to the toast message

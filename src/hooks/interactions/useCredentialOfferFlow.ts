@@ -5,7 +5,7 @@ import {
 import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
-import { OfferedCredential, OtherCategory } from '~/types/credentials'
+import { OfferedCredential, DocumentTypes } from '~/types/credentials'
 import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -81,7 +81,10 @@ const useCredentialOfferFlow = () => {
         // NOTE: making type as array of strings for consistency
         // offerSummary type is different from SignedCredential type of type property
         type: ['', offer.type],
-        category: offer.renderInfo?.renderAs ?? OtherCategory.other,
+        category:
+          offer.renderInfo?.renderAs === 'document'
+            ? DocumentTypes.document
+            : DocumentTypes.other,
         invalid: isInvalid,
         name: offer.credential?.name ?? '',
       }
