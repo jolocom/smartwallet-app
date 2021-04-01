@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
+import Carousel from 'react-native-snap-carousel'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
@@ -24,6 +25,7 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields } from './utils'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
+import { SCREEN_WIDTH } from '~/utils/dimensions'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -92,25 +94,35 @@ const DocumentList = () => {
           <CardList>
             {documents.map((d) => {
               const { credentials } = d
-              return credentials.map((c) => (
-                <DocumentCard
-                  key={c.id}
-                  id={c.id}
-                  mandatoryFields={[
-                    {
-                      label: DocumentFields.DocumentName,
-                      value: c.name ?? c.type,
-                    },
-                    {
-                      label: strings.SUBJECT_NAME,
-                      value: c.holderName,
-                    },
-                  ]}
-                  optionalFields={getOptionalFields(c)}
-                  highlight={c.id.slice(0, 14)}
-                  photo={c.photo}
+              return (
+                <Carousel
+                  activeSlideAlignment="center"
+                  data={credentials}
+                  layout="default"
+                  sliderWidth={SCREEN_WIDTH}
+                  itemWidth={SCREEN_WIDTH * 0.8}
+                  inactiveSlideOpacity={0.24}
+                  renderItem={({ item: c }) => (
+                    <DocumentCard
+                      key={c.id}
+                      id={c.id}
+                      mandatoryFields={[
+                        {
+                          label: DocumentFields.DocumentName,
+                          value: c.name ?? c.type,
+                        },
+                        {
+                          label: strings.SUBJECT_NAME,
+                          value: c.holderName,
+                        },
+                      ]}
+                      optionalFields={getOptionalFields(c)}
+                      highlight={c.id.slice(0, 14)}
+                      photo={c.photo}
+                    />
+                  )}
                 />
-              ))
+              )
             })}
           </CardList>
         )}
@@ -158,6 +170,7 @@ const Documents: React.FC = () => {
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
+        paddingHorizontal: 0,
       }}
     >
       <DocumentTabs>
