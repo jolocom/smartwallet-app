@@ -78,9 +78,7 @@ const useCredentialOfferFlow = () => {
         !!issuanceResult[i].validationErrors.invalidSubject
 
       return {
-        // NOTE: making type as array of strings for consistency
-        // offerSummary type is different from SignedCredential type of type property
-        type: ['', offer.type],
+        type: offer.type,
         category: offer.renderInfo?.renderAs ?? OtherCategory.other,
         invalid: isInvalid,
         name: offer.credential?.name ?? '',

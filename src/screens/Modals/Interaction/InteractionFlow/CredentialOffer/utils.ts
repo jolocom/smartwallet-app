@@ -41,7 +41,7 @@ export const getOfferSections = (
   }))
   const getUpdatedCategoriesWDetails = updateCategory(categories, (c) => {
     const displayDetails = details?.find(
-      (d) => d.type === c.type[1] && (d.name === c.name || d.name === d.type),
+      (d) => d.type === c.type && (d.name === c.name || d.name === d.type),
     )
     return {
       ...c,

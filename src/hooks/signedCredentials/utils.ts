@@ -41,7 +41,8 @@ function mapToBaseUICredential(c: SignedCredential): BaseUICredential {
     id,
     issuer,
     issued,
-    type,
+    // NOTE: beware we are only taking the second type, this might change in the future
+    type: type[1],
     expires,
     subject,
     name,
@@ -130,16 +131,19 @@ export function mapDisplayToCustomDisplay(
   }
 }
 
-export const reduceCustomDisplayCredentialsByType = <T extends {type: string[]}>(credentials: Array<CredentialsByType<T>>, cred: T) => {
-  if(credentials.find(c => c.type === cred.type[1])) {
+export const reduceCustomDisplayCredentialsByType = <T extends {type: string}>(credentials: Array<CredentialsByType<T>>, cred: T) => {
+  // if(credentials.find(c => c.type === cred.type[1])) {
+  if(credentials.find(c => c.type === cred.type)) {
     credentials = credentials.map(c => {
-      if(c.type === cred.type[1]) {
+      // if(c.type === cred.type[1]) {
+      if(c.type === cred.type) {
         return {...c, credentials: [...c.credentials, cred]}
       }
       return c;
     })
   } else {
-    credentials = [...credentials, {type: cred.type[1], credentials: [cred]}]
+    // credentials = [...credentials, {type: cred.type[1], credentials: [cred]}]
+    credentials = [...credentials, {type: cred.type, credentials: [cred]}]
   }
   return credentials;
 }

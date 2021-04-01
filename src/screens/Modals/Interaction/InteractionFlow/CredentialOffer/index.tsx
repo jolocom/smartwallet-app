@@ -97,14 +97,14 @@ const CredentialOfferFAS = () => {
         >
           {category === CredentialRenderTypes.document ? (
             <IncomingOfferDoc
-              key={name + type[1]}
-              name={name || type[1]}
+              key={name + type}
+              name={name || type}
               properties={properties}
             />
           ) : (
             <IncomingOfferOther
-              key={name + type[1]}
-              name={name || type[1]}
+              key={name + type}
+              name={name || type}
               properties={properties}
             />
           )}

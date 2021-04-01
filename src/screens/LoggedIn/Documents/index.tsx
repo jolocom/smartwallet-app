@@ -77,7 +77,7 @@ const DocumentList = () => {
                 mandatoryFields={[
                   {
                     label: DocumentFields.DocumentName,
-                    value: d.name ?? d.type[1],
+                    value: d.name ?? d.type,
                   },
                   {
                     label: strings.SUBJECT_NAME,

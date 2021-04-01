@@ -57,7 +57,7 @@ export const CredentialShareBAS = () => {
   useEffect(() => {
     if (singleRequestedCredential) {
       handleSelectCredential({
-        [singleRequestedCredential.type[1]]: singleRequestedCredential?.id,
+        [singleRequestedCredential.type]: singleRequestedCredential?.id,
       })
     }
   }, [JSON.stringify(singleRequestedCredential)])
@@ -167,7 +167,7 @@ const CredentialShareFAS = () => {
                   marginRight: 20,
                   marginVertical: 14,
                 }}
-                onPress={() => handleSelectCredential({ [type[1]]: id })}
+                onPress={() => handleSelectCredential({ [type]: id })}
               >
                 <View
                   style={{
@@ -189,7 +189,7 @@ const CredentialShareFAS = () => {
                     />
                   )}
                   <View style={styles.selectIndicator}>
-                    {selectedCredentials[type[1]] === id ? (
+                    {selectedCredentials[type] === id ? (
                       <PurpleTickSuccess />
                     ) : (
                       <View style={styles.notSelected} />

@@ -121,7 +121,7 @@ const getAvailableRequestedCredentials = createSelector(
   ({ requestedCredentials }, credentials) =>
     requestedCredentials.reduce<DisplayCredential[]>((acc, type) => {
       const credentialsOfType = credentials.filter(
-        (cred) => cred.type[1] === type,
+        (cred) => cred.type === type,
       )
       if (!credentialsOfType.length) return acc
       acc = [...acc, ...credentialsOfType]
@@ -179,7 +179,8 @@ const getRequestedCredentialsByCategoryByType = createSelector(
     >(
       (acc, type) => {
         const credentials = availableRequestedCredentials.filter(
-          (cred) => cred.type[1] === type,
+          // (cred) => cred.type[1] === type,
+          (cred) => cred.type === type,
         )
 
         // NOTE: we assume the category property is the same for all credentials
@@ -246,7 +247,8 @@ const getSingleRequestedCredential = createSelector(
     const { requestedAttributes, requestedCredentials } = details
     if (requestedAttributes.length === 0 && requestedCredentials.length === 1) {
       const availableCreds = credentials.filter(
-        (c) => c.type[1] === requestedCredentials[0],
+        // (c) => c.type[1] === requestedCredentials[0],
+        (c) => c.type === requestedCredentials[0],
       )
       if (availableCreds.length === 1) {
         return availableCreds[0]
@@ -408,7 +410,8 @@ export const getOfferedCredentialCategories = createSelector(
     return service_issued.reduce<
       Record<string, CredentialRenderTypes.document | OtherCategory.other>
     >((credByType, c) => {
-      credByType[c.type[1]] = getCredentialCategory(c)
+      // credByType[c.type[1]] = getCredentialCategory(c)
+      credByType[c.type] = getCredentialCategory(c)
       return credByType
     }, {})
   },

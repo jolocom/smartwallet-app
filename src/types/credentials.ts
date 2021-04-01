@@ -63,8 +63,8 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
 
 export type BaseUICredential = Pick<
   SignedCredential,
-  'id' | 'issuer' | 'issued' | 'type' | 'expires' | 'subject' | 'name'
->
+  'id' | 'issuer' | 'issued' | 'expires' | 'subject' | 'name'
+> & {type: string}
 
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
   category: CredentialCategory
@@ -101,6 +101,10 @@ export type DisplayCredentialDocument = DisplayCredential & {
 }
 export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
+export type CredentialsBy<BT, CT> = {key: BT, label: string, credentials: CT[]}
+// TODO: use commented out types instead
+// export type CredentialsByType<T> = CredentialsBy<'type', T>
+// export type CredentialsByIssuer<T> = CredentialsBy<'issuer', T>
 export type CredentialsByType<T> = { type: string; credentials: T[] }
 export type CredentialsByIssuer<T> = { issuer: string; credentials: T[] }
 
