@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    height: BP({ default: 56, xsmall: 40, small: 40 }),
+    height: BP({ default: 56, xsmall: 48 }),
     backgroundColor: Colors.black50,
     borderRadius: 5,
     flex: 1,
