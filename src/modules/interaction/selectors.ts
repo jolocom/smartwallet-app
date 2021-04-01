@@ -179,7 +179,6 @@ const getRequestedCredentialsByCategoryByType = createSelector(
     >(
       (acc, type) => {
         const credentials = availableRequestedCredentials.filter(
-          // (cred) => cred.type[1] === type,
           (cred) => cred.type === type,
         )
 
@@ -190,7 +189,8 @@ const getRequestedCredentialsByCategoryByType = createSelector(
         acc[section] = [
           ...acc[section],
           {
-            type,
+            key: 'type',
+            value: type,
             credentials,
           },
         ]

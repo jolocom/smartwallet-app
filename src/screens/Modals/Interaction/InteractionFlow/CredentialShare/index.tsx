@@ -151,12 +151,12 @@ const CredentialShareFAS = () => {
   const handleRenderCredentials = (
     credCollections: CredentialsByType<DisplayCredential>[],
   ) =>
-    credCollections.map(({ type, credentials }) => {
+    credCollections.map(({ value, credentials }) => {
       const isCarousel = credentials.length > 1
       // TODO: implement carousel
       const Wrapper = isCarousel ? React.Fragment : React.Fragment
       return (
-        <Wrapper key={type}>
+        <Wrapper key={value}>
           {credentials.map((cred) => {
             const claimFields = getOptionalFields(cred)
             const { name, type, id } = cred

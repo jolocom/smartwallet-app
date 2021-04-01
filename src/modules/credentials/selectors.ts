@@ -31,8 +31,8 @@ const mapCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
  * * `PT` - previous type
  * * `NT` - next type
  */
-// TODO: fix types
 const reduceCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
+  // TODO: fix types
   return <NT>(reduceFn: (acc, v) => NT, initialValue) => {
     return Object.keys(cats).reduce<CredentialsByCategory<NT>>((categories, catName) => {
       const categoryName = catName as

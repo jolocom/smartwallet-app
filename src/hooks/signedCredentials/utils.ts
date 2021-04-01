@@ -132,15 +132,15 @@ export function mapDisplayToCustomDisplay(
 }
 
 export const reduceCustomDisplayCredentialsByType = <T extends {type: string}>(credentials: Array<CredentialsByType<T>>, cred: T) => {
-  if(credentials.find(c => c.type === cred.type)) {
+  if(credentials.find(c => c.value === cred.type)) {
     credentials = credentials.map(c => {
-      if(c.type === cred.type) {
+      if(c.value === cred.type) {
         return {...c, credentials: [...c.credentials, cred]}
       }
       return c;
     })
   } else {
-    credentials = [...credentials, {type: cred.type, credentials: [cred]}]
+    credentials = [...credentials, {key: 'type', value: cred.type, credentials: [cred]}]
   }
   return credentials;
 }
