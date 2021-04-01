@@ -45,7 +45,7 @@ const IdentityCredentials = () => {
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 300,
     })
-  }, [attributes])
+  }, [JSON.stringify(attributes)])
 
   const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
     primitiveAttributesConfig,
@@ -76,9 +76,9 @@ const IdentityCredentials = () => {
       <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
-      {sortedPrimitiveAttributes.map(({ type, label, values }, i) => {
+      {sortedPrimitiveAttributes.map(({ type, label, values }) => {
         return (
-          <View style={styles.group} key={i}>
+          <View style={styles.group} key={type}>
             <Widget
               onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
             >
