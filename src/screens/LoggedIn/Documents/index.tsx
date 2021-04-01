@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
-import Carousel from 'react-native-snap-carousel'
+import Carousel, { CarouselProps } from 'react-native-snap-carousel'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
@@ -46,6 +46,29 @@ const CardList: React.FC = ({ children }) => {
     </ScrollView>
   )
 }
+
+interface IAdoptedCarousel<T> {
+  data: CarouselProps<T>['data']
+  renderItem: CarouselProps<T>['renderItem']
+}
+const AdoptedCarousel = <T extends unknown>({
+  data,
+  renderItem,
+}: IAdoptedCarousel<T>) => (
+  <Carousel
+    layoutCardOffset={0}
+    contentContainerCustomStyle={{
+      marginLeft: -4,
+    }}
+    activeSlideAlignment="center"
+    data={data}
+    layout="default"
+    sliderWidth={SCREEN_WIDTH}
+    itemWidth={SCREEN_WIDTH * 0.85}
+    inactiveSlideOpacity={0.24}
+    renderItem={renderItem}
+  />
+)
 
 const DocumentList = () => {
   const [categories, setCategories] = useState<
@@ -104,7 +127,9 @@ const DocumentList = () => {
         ) : (
           <CardList>
             {documents.map((d) => {
-              const { credentials, value } = d
+              const { credentials, value } = d as
+                | CredentialsByType<DisplayCredentialDocument>
+                | CredentialsByIssuer<DisplayCredentialDocument>
               return (
                 <>
                   <ScreenContainer.Padding>
@@ -120,17 +145,8 @@ const DocumentList = () => {
                       {`${value}  • ${credentials.length}`}
                     </JoloText> */}
                   </ScreenContainer.Padding>
-                  <Carousel
-                    layoutCardOffset={0}
-                    contentContainerCustomStyle={{
-                      marginLeft: -4,
-                    }}
-                    activeSlideAlignment="center"
+                  <AdoptedCarousel
                     data={credentials}
-                    layout="default"
-                    sliderWidth={SCREEN_WIDTH}
-                    itemWidth={SCREEN_WIDTH * 0.85}
-                    inactiveSlideOpacity={0.24}
                     renderItem={({ item: c }) => (
                       <DocumentCard
                         key={c.id}
@@ -172,21 +188,28 @@ const DocumentList = () => {
         ) : (
           <CardList>
             {other.map((o) => {
-              const { credentials } = o
-              return credentials.map((c) => (
-                <OtherCard
-                  id={c.id}
-                  key={c.id}
-                  mandatoryFields={[
-                    {
-                      label: DocumentFields.DocumentName,
-                      value: c.name ?? c.type,
-                    },
-                  ]}
-                  optionalFields={getOptionalFields(c)}
-                  photo={c.photo}
+              const { credentials } = o as
+                | CredentialsByType<DisplayCredentialOther>
+                | CredentialsByIssuer<DisplayCredentialOther>
+              return (
+                <AdoptedCarousel
+                  data={credentials}
+                  renderItem={({ item: c }) => (
+                    <OtherCard
+                      id={c.id}
+                      key={c.id}
+                      mandatoryFields={[
+                        {
+                          label: DocumentFields.DocumentName,
+                          value: c.name ?? c.type,
+                        },
+                      ]}
+                      optionalFields={getOptionalFields(c)}
+                      photo={c.photo}
+                    />
+                  )}
                 />
-              ))
+              )
             })}
           </CardList>
         )}
