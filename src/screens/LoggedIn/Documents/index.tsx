@@ -20,6 +20,7 @@ import {
   DisplayCredentialOther,
   CredentialsByType,
   CredentialsByIssuer,
+  CredentialsByCategory,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
@@ -48,8 +49,12 @@ const CardList: React.FC = ({ children }) => {
 
 const DocumentList = () => {
   const [categories, setCategories] = useState<
-    | CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
-    | CredentialsByIssuer<DisplayCredentialDocument | DisplayCredentialOther>
+    | CredentialsByCategory<
+        CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
+      >
+    | CredentialsByCategory<
+        CredentialsByIssuer<DisplayCredentialDocument | DisplayCredentialOther>
+      >
     | null
   >(null)
   const { activeTab, activeSubtab } = useTabs()
