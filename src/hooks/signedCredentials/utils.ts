@@ -132,17 +132,14 @@ export function mapDisplayToCustomDisplay(
 }
 
 export const reduceCustomDisplayCredentialsByType = <T extends {type: string}>(credentials: Array<CredentialsByType<T>>, cred: T) => {
-  // if(credentials.find(c => c.type === cred.type[1])) {
   if(credentials.find(c => c.type === cred.type)) {
     credentials = credentials.map(c => {
-      // if(c.type === cred.type[1]) {
       if(c.type === cred.type) {
         return {...c, credentials: [...c.credentials, cred]}
       }
       return c;
     })
   } else {
-    // credentials = [...credentials, {type: cred.type[1], credentials: [cred]}]
     credentials = [...credentials, {type: cred.type, credentials: [cred]}]
   }
   return credentials;
@@ -150,15 +147,15 @@ export const reduceCustomDisplayCredentialsByType = <T extends {type: string}>(c
 
 export const reduceCustomDisplayCredentialsByIssuer = <T extends {issuer: IdentitySummary}>(credentials: Array<CredentialsByIssuer<T>>, cred: T) => {
   const issuer = cred.issuer.publicProfile?.name ?? cred.issuer.did;
-  if(credentials.find(c => c.issuer === issuer)) {
+  if(credentials.find(c => c.value === issuer)) {
     credentials = credentials.map(c => {
-      if(c.issuer === issuer) {
+      if(c.value === issuer) {
         return {...c, credentials: [...c.credentials, cred]}
       }
       return c;
     })
   } else {
-    credentials = [...credentials, {issuer, credentials: [cred]}]
+    credentials = [...credentials, {key: 'issuer', value: issuer, credentials: [cred]}]
   }
   return credentials;
 }

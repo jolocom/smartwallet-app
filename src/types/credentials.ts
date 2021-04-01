@@ -101,12 +101,12 @@ export type DisplayCredentialDocument = DisplayCredential & {
 }
 export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
-export type CredentialsBy<BT, CT> = {key: BT, label: string, credentials: CT[]}
+export type CredentialsBy<BT, CT> = {key: BT, value: string, credentials: CT[]}
 // TODO: use commented out types instead
 // export type CredentialsByType<T> = CredentialsBy<'type', T>
-// export type CredentialsByIssuer<T> = CredentialsBy<'issuer', T>
+export type CredentialsByIssuer<T> = CredentialsBy<'issuer', T>
 export type CredentialsByType<T> = { type: string; credentials: T[] }
-export type CredentialsByIssuer<T> = { issuer: string; credentials: T[] }
+// export type CredentialsByIssuer<T> = { issuer: string; credentials: T[] }
 
 export type CredentialsByCategory<T> = Record<
   OtherCategory.other | CredentialRenderTypes.document,
