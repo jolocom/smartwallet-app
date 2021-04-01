@@ -5,6 +5,8 @@ import ChangePin from '~/screens/LoggedIn/Settings/ChangePin'
 import { strings } from '~/translations'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
+import { ReactTestInstance } from 'react-test-renderer'
+import { inputPasscode } from '../../utils/inputPasscode'
 
 const mockNavigation = jest.fn()
 const mockNavigationBack = jest.fn()
@@ -63,8 +65,7 @@ test('User is able to change a pin', async () => {
 
   expect(getByText(strings.CURRENT_PASSCODE)).toBeDefined()
 
-  const input = getByTestId('passcode-digit-input')
-  fireEvent.changeText(input, 3333)
+  inputPasscode(getByTestId, [3, 3, 3, 3])
 
   await waitFor(() => {
     expect(getByText(strings.WRONG_PASSCODE)).toBeDefined()
@@ -74,13 +75,13 @@ test('User is able to change a pin', async () => {
     expect(queryByText('*')).toBe(null)
   })
 
-  fireEvent.changeText(input, 5555)
+  inputPasscode(getByTestId, [5, 5, 5, 5])
 
   await waitFor(() => {
     expect(getByText(strings.CREATE_NEW_PASSCODE)).toBeDefined()
   })
 
-  fireEvent.changeText(input, 3333)
+  inputPasscode(getByTestId, [3, 3, 3, 3])
 
   expect(setGenericPassword).toHaveBeenCalledTimes(1)
   expect(setGenericPassword).toHaveBeenCalledWith(PIN_USERNAME, '3333', {

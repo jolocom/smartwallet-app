@@ -15,7 +15,11 @@ interface NumberButtonProps {
 
 const NumberButton: React.FC<NumberButtonProps> = ({ value, onPress }) => {
   return (
-    <TouchableOpacity onPress={() => onPress(value)} style={styles.button}>
+    <TouchableOpacity
+      testID={`keyboard-button-${value}`}
+      onPress={() => onPress(value)}
+      style={styles.button}
+    >
       <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
         {value}
       </JoloText>
@@ -57,7 +61,7 @@ const PasscodeKeyboard = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View testID="passcode-keyboard" style={styles.container}>
       <KeyboardRow>
         <NumberButton value={1} onPress={handleNumberPress} />
         <NumberButton value={2} onPress={handleNumberPress} />
