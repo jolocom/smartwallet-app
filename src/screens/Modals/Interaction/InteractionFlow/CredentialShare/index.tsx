@@ -2,6 +2,7 @@ import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useEffect } from 'react'
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
+
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useRedirect } from '~/hooks/navigation'
@@ -42,6 +43,7 @@ import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
+import AdoptedCarousel from '~/components/AdoptedCarousel'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -151,13 +153,13 @@ const CredentialShareFAS = () => {
   const handleRenderCredentials = (
     credCollections: CredentialsByType<DisplayCredential>[],
   ) =>
-    credCollections.map(({ value, credentials }) => {
-      const isCarousel = credentials.length > 1
-      // TODO: implement carousel
-      const Wrapper = isCarousel ? React.Fragment : React.Fragment
+    credCollections.map(({ key, value, credentials }) => {
       return (
-        <Wrapper key={value}>
-          {credentials.map((cred) => {
+        <AdoptedCarousel
+          key={key}
+          alignment="start"
+          data={credentials}
+          renderItem={({ item: cred }) => {
             const claimFields = getOptionalFields(cred)
             const { name, type, id } = cred
             return (
@@ -198,8 +200,8 @@ const CredentialShareFAS = () => {
                 </View>
               </TouchableWithoutFeedback>
             )
-          })}
-        </Wrapper>
+          }}
+        />
       )
     })
 

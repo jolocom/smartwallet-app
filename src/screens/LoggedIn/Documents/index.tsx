@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
-import Carousel, { CarouselProps } from 'react-native-snap-carousel'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
@@ -26,11 +25,7 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields } from './utils'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
-import { SCREEN_WIDTH } from '~/utils/dimensions'
-import JoloText from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
-import { Colors } from '~/utils/colors'
-import BP from '~/utils/breakpoints'
+import AdoptedCarousel from '~/components/AdoptedCarousel'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -46,29 +41,6 @@ const CardList: React.FC = ({ children }) => {
     </ScrollView>
   )
 }
-
-interface IAdoptedCarousel<T> {
-  data: CarouselProps<T>['data']
-  renderItem: CarouselProps<T>['renderItem']
-}
-const AdoptedCarousel = <T extends unknown>({
-  data,
-  renderItem,
-}: IAdoptedCarousel<T>) => (
-  <Carousel
-    layoutCardOffset={0}
-    contentContainerCustomStyle={{
-      marginLeft: -4,
-    }}
-    activeSlideAlignment="center"
-    data={data}
-    layout="default"
-    sliderWidth={SCREEN_WIDTH}
-    itemWidth={SCREEN_WIDTH * 0.85}
-    inactiveSlideOpacity={0.24}
-    renderItem={renderItem}
-  />
-)
 
 const DocumentList = () => {
   const [categories, setCategories] = useState<
@@ -146,6 +118,7 @@ const DocumentList = () => {
                     </JoloText> */}
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
+                    customStyles={{ marginLeft: -4 }}
                     data={credentials}
                     renderItem={({ item: c }) => (
                       <DocumentCard
