@@ -120,9 +120,7 @@ const getAvailableRequestedCredentials = createSelector(
   [getCredShareDetails, getAllCredentials],
   ({ requestedCredentials }, credentials) =>
     requestedCredentials.reduce<DisplayCredential[]>((acc, type) => {
-      const credentialsOfType = credentials.filter(
-        (cred) => cred.type === type,
-      )
+      const credentialsOfType = credentials.filter((cred) => cred.type === type)
       if (!credentialsOfType.length) return acc
       acc = [...acc, ...credentialsOfType]
       return acc

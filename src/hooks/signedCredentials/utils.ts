@@ -134,59 +134,79 @@ export function mapDisplayToCustomDisplay(
 /**
  * Maps credentials of type `DisplayCredential`
  * and transform into credentials of type `DisplayCredentialDocument | DisplayCredentialOther`
- * 
- * Used to get custom display credentials: 
+ *
+ * Used to get custom display credentials:
  * * documents
  */
-export const mapCredentialsToCustomDisplay = (credentials: DisplayCredential[]): Array<DisplayCredentialDocument | DisplayCredentialOther> => credentials.map(mapDisplayToCustomDisplay)
+export const mapCredentialsToCustomDisplay = (
+  credentials: DisplayCredential[],
+): Array<DisplayCredentialDocument | DisplayCredentialOther> =>
+  credentials.map(mapDisplayToCustomDisplay)
 
 /**
  * Groups credentials by type
- * 
- * Used in: 
+ *
+ * Used in:
  * * documents
  */
-export const reduceCustomDisplayCredentialsByType = <T extends {type: string}>(credentials: T[]): Array<CredentialsByType<T>> => {
-  return credentials.reduce((groupedCredentials: Array<CredentialsByType<T>>, cred: T) => {
-      if(groupedCredentials.find(c => c.value === cred.type)) {
-        groupedCredentials = groupedCredentials.map(c => {
-          if(c.value === cred.type) {
-            return {...c, credentials: [...c.credentials, cred]}
+export const reduceCustomDisplayCredentialsByType = <
+  T extends { type: string }
+>(
+  credentials: T[],
+): Array<CredentialsByType<T>> => {
+  return credentials.reduce(
+    (groupedCredentials: Array<CredentialsByType<T>>, cred: T) => {
+      if (groupedCredentials.find((c) => c.value === cred.type)) {
+        groupedCredentials = groupedCredentials.map((c) => {
+          if (c.value === cred.type) {
+            return { ...c, credentials: [...c.credentials, cred] }
           }
-          return c;
+          return c
         })
       } else {
-        groupedCredentials = [...groupedCredentials, {key: 'type', value: cred.type, credentials: [cred]}]
+        groupedCredentials = [
+          ...groupedCredentials,
+          { key: 'type', value: cred.type, credentials: [cred] },
+        ]
       }
-      return groupedCredentials;
-    }, []
+      return groupedCredentials
+    },
+    [],
   )
 }
 
 /**
  * Groups credentials by issuer
- * 
- * Used in: 
+ *
+ * Used in:
  * * documents
  */
-export const reduceCustomDisplayCredentialsByIssuer = <T extends {issuer: IdentitySummary}>(credentials: T[]): Array<CredentialsByIssuer<T>>  => {
-  return credentials.reduce((groupedCredentials: Array<CredentialsByIssuer<T>>, cred: T) => {
-      const issuer = cred.issuer.publicProfile?.name ?? cred.issuer.did;
-      if(groupedCredentials.find(c => c.value === issuer)) {
-        groupedCredentials = groupedCredentials.map(c => {
-          if(c.value === issuer) {
-            return {...c, credentials: [...c.credentials, cred]}
+export const reduceCustomDisplayCredentialsByIssuer = <
+  T extends { issuer: IdentitySummary }
+>(
+  credentials: T[],
+): Array<CredentialsByIssuer<T>> => {
+  return credentials.reduce(
+    (groupedCredentials: Array<CredentialsByIssuer<T>>, cred: T) => {
+      const issuer = cred.issuer.publicProfile?.name ?? cred.issuer.did
+      if (groupedCredentials.find((c) => c.value === issuer)) {
+        groupedCredentials = groupedCredentials.map((c) => {
+          if (c.value === issuer) {
+            return { ...c, credentials: [...c.credentials, cred] }
           }
-          return c;
+          return c
         })
       } else {
-        groupedCredentials = [...groupedCredentials, {key: 'issuer', value: issuer, credentials: [cred]}]
+        groupedCredentials = [
+          ...groupedCredentials,
+          { key: 'issuer', value: issuer, credentials: [cred] },
+        ]
       }
-      return groupedCredentials;
-    }, []
+      return groupedCredentials
+    },
+    [],
   )
 }
-
 
 export function mapAttributesToDisplay(
   credentials: SignedCredential[],
