@@ -1,11 +1,10 @@
-import { fireEvent, waitFor } from '@testing-library/react-native'
+import { waitFor } from '@testing-library/react-native'
 import React from 'react'
 import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
 import ChangePin from '~/screens/LoggedIn/Settings/ChangePin'
 import { strings } from '~/translations'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { ReactTestInstance } from 'react-test-renderer'
 import { inputPasscode } from '../../utils/inputPasscode'
 
 const mockNavigation = jest.fn()

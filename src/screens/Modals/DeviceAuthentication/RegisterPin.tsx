@@ -3,7 +3,6 @@ import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
 import { strings } from '~/translations/strings'
@@ -77,8 +76,6 @@ const RegisterPin = () => {
     setIsCreating(true)
     setSelectedPasscode('')
   }
-
-  const { keyboardHeight } = useKeyboardHeight(0)
 
   return (
     <ScreenContainer

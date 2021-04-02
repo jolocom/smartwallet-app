@@ -15,17 +15,6 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
 
-  // this will remove the error after 1000 ms
-  useEffect(() => {
-    if (pinError) {
-      setTimeout(() => {
-        setPinError(false)
-        setPin('')
-        // pinInputRef.current?.focus()
-      }, 1000)
-    }
-  }, [pinError])
-
   const handleSubmit = async () => {
     try {
       await onSubmit(pin)

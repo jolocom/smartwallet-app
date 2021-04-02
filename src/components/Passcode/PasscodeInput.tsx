@@ -83,13 +83,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  input: {
-    textAlign: 'center',
-    fontSize: 43,
-    backgroundColor: 'transparent',
-    width: DIGIT_CELL_WIDTH,
-    borderRadius: 11,
-  },
   display: {
     alignItems: 'center',
     justifyContent: 'center',

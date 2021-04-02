@@ -39,7 +39,7 @@ const ChangePin: React.FC<PropsI> = ({
 
   // this effect is for letting user see success status of the input
   useEffect(() => {
-    let id: NodeJS.Timeout
+    let id: number
     if (pinMatch) {
       id = setTimeout(() => {
         setIsCreateNew(true)
