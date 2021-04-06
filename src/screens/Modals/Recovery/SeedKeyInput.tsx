@@ -181,7 +181,7 @@ const SeedKeyInput: React.FC = () => {
           }
           inputAccessoryViewID="suggestions"
         />
-        {currentWordIdx !== phrase.length && currentWordIdx < 12 && (
+        {currentWordIdx !== phrase.length && currentWordIdx < 11 && (
           <RightArrow handlePress={selectNextWord} />
         )}
       </View>
