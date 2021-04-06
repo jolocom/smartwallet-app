@@ -89,7 +89,15 @@ const BusinessCardForm = () => {
       validationSchema={businessCardWithValues.validationSchema}
     >
       {(formProps) => {
-        const { handleChange, values, isValid, dirty, errors } = formProps
+        const {
+          handleChange,
+          values,
+          isValid,
+          dirty,
+          errors,
+          validateForm,
+        } = formProps
+
         return (
           <FormContainer
             title={
@@ -117,7 +125,13 @@ const BusinessCardForm = () => {
                           <FormFieldContainer>
                             <MoveToNext.InputsCollector
                               key={f.key}
-                              onSubmit={() => handleFormSubmit(values)}
+                              onSubmit={async () => {
+                                const validationErrors = await validateForm(
+                                  values,
+                                )
+                                if (Object.keys(validationErrors).length) return
+                                else handleFormSubmit(values)
+                              }}
                             >
                               <Input.Block
                                 {...(groupIdx === 0 && idx === 0
