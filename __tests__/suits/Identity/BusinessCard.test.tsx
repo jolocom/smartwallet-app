@@ -94,6 +94,11 @@ const getPopupOptions = (
   return popupQueries.getAllByTestId('popup-menu-button')
 }
 
+const findOption = (popupOptions: ReactTestInstance[], text: string) => {
+  return popupOptions.find((o) => {
+    return o.props.children.find((c) => c.props.children === text)
+  })
+}
 describe('Business card is in state', () => {
   beforeEach(mockedNavigate.mockClear)
 
@@ -115,10 +120,14 @@ describe('Business card is in state', () => {
     const popupOptions = getPopupOptions(getByTestId)
     expect(popupOptions.length).toBe(2)
 
-    fireEvent.press(popupOptions[0])
+    const editButton = findOption(popupOptions, strings.EDIT)
 
-    expect(mockedNavigate).toBeCalledTimes(1)
-    expect(mockedNavigate).toBeCalledWith(ScreenNames.BusinessCardForm, {})
+    if (editButton) {
+      fireEvent.press(editButton)
+
+      expect(mockedNavigate).toBeCalledTimes(1)
+      expect(mockedNavigate).toBeCalledWith(ScreenNames.BusinessCardForm, {})
+    }
   })
 
   test('credential', async () => {
@@ -147,20 +156,25 @@ describe('Business card is in state', () => {
     expect(popupOptions.length).toBe(3)
 
     // press edit
-    fireEvent.press(popupOptions[0])
+    const editButton = findOption(popupOptions, strings.EDIT)
+    if (editButton) {
+      fireEvent.press(popupOptions[0])
 
-    expect(mockedNavigate).toBeCalledTimes(1)
-    expect(mockedNavigate).toBeCalledWith(ScreenNames.BusinessCardForm, {})
-
+      expect(mockedNavigate).toBeCalledTimes(1)
+      expect(mockedNavigate).toBeCalledWith(ScreenNames.BusinessCardForm, {})
+    }
     // press delete
-    fireEvent.press(popupOptions[1])
+    const deleteButton = findOption(popupOptions, strings.DELETE)
+    if (deleteButton) {
+      fireEvent.press(popupOptions[1])
 
-    await waitFor(() => {
-      expect(mockedDeleteSignedCredentialFn).toBeCalledTimes(1)
-      expect(mockDispatchFn).toBeCalledTimes(1)
-      expect(mockDispatchFn).toBeCalledWith(
-        deleteAttr({ type: ATTRIBUTE_TYPE }),
-      )
-    })
+      await waitFor(() => {
+        expect(mockedDeleteSignedCredentialFn).toBeCalledTimes(1)
+        expect(mockDispatchFn).toBeCalledTimes(1)
+        expect(mockDispatchFn).toBeCalledWith(
+          deleteAttr({ type: ATTRIBUTE_TYPE }),
+        )
+      })
+    }
   })
 })
