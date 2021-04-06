@@ -8,6 +8,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 import { editAttr, updateAttrs } from '~/modules/attributes/actions'
 import { getMockedDispatch } from '../../utils/dispatch'
+import { strings } from '~/translations'
 
 const ATTRIBUTE_ID = 'claim:email:id'
 const ATTRIBUTE_ID_UPDATED = 'claim:email:id-1'
@@ -68,9 +69,9 @@ jest.mock('../../../src/hooks/sdk', () => ({
 }))
 
 const renderCredentialForm = () => {
-  const { getByTestId } = renderWithSafeArea(<CredentialForm />)
+  const queries = renderWithSafeArea(<CredentialForm />)
 
-  const emailInput = getByTestId('credential-form-input')
+  const emailInput = queries.getByTestId('credential-form-input')
   expect(emailInput).toBeDefined()
 
   // update input field
@@ -78,10 +79,12 @@ const renderCredentialForm = () => {
 
   expect(emailInput.props.value).toBe(EMAIL_VALUE_UPDATED)
 
-  const doneBtn = getByTestId('form-container-submit')
+  const doneBtn = queries.getByTestId('form-container-submit')
 
   // submit credential
   fireEvent.press(doneBtn)
+
+  return queries
 }
 
 describe('Form in mode', () => {
@@ -92,6 +95,12 @@ describe('Form in mode', () => {
     useTranslation.mockReturnValue({
       t: jest.fn().mockReturnValue('Something'), // TODO: This will return something for title and description
     })
+    // @ts-expect-error
+    useTranslation.mockImplementation(() => ({
+      t: (text: string) => {
+        return text
+      },
+    }))
     mockDispatchFn = getMockedDispatch()
   })
 
@@ -119,7 +128,16 @@ describe('Form in mode', () => {
     mockSelectorReturn(mockedStore)
 
     // RENDER
-    renderCredentialForm()
+    const queries = renderCredentialForm()
+
+    expect(
+      queries.getAllByText(strings.EDIT_YOUR_ATTRIBUTE).length,
+    ).toBeDefined()
+    expect(
+      queries.getByText(
+        strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
+      ),
+    ).toBeDefined()
 
     // ASSERT ASYNC SUBMIT HANDLING
     await waitFor(() => {
@@ -152,7 +170,16 @@ describe('Form in mode', () => {
     mockSelectorReturn(mockedStoreNoAttributes)
 
     // RENDER
-    renderCredentialForm()
+    const queries = renderCredentialForm()
+
+    expect(
+      queries.getAllByText(strings.ADD_YOUR_ATTRIBUTE).length,
+    ).toBeDefined()
+    expect(
+      queries.getByText(
+        strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
+      ),
+    ).toBeDefined()
 
     // ASSERT ASYNC SUBMIT HANDLING
     await waitFor(() => {
