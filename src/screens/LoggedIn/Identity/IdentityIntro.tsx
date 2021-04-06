@@ -75,12 +75,14 @@ const WelcomeSheet: React.FC = () => {
             <Btn
               onPress={() => changeActiveForm(IdentityForms.SingleCredential)}
               type={BtnTypes.senary}
+              testID="single-credential-button"
             >
               {strings.SINGLE_CREDENTIAL}
             </Btn>
             <Btn
               onPress={() => changeActiveForm(IdentityForms.BusinessCard)}
               type={BtnTypes.senary}
+              testID="business-card-button"
             >
               {strings.BUSINESS_CARD}
             </Btn>

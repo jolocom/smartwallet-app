@@ -54,7 +54,11 @@ const FormContainer: React.FC<Props> = ({
         <View style={{ paddingHorizontal: 8 }}>
           <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
         </View>
-        <TouchableOpacity onPress={handleSubmit} disabled={isSubmitDisabled}>
+        <TouchableOpacity
+          onPress={handleSubmit}
+          disabled={isSubmitDisabled}
+          testID="form-container-submit"
+        >
           <JoloText
             kind={JoloTextKind.title}
             size={JoloTextSizes.mini}

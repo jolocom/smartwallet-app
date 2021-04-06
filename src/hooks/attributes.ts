@@ -6,7 +6,6 @@ import { useAgent } from './sdk'
 import { ClaimValues } from '~/modules/attributes/types'
 import { extractClaims } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
-import { attributeConfig } from '~/config/claims'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata } from '@jolocom/protocol-ts'
 
@@ -105,42 +104,4 @@ export const useSICActions = () => {
     handleEditCredentialSI,
     handleDeleteCredentialSI,
   }
-}
-
-// TODO: remove this one and use useSICActions instead
-export const useCreateAttributes = () => {
-  const agent = useAgent()
-  const did = useSelector(getDid)
-  const dispatch = useDispatch()
-
-  const createSelfIssuedCredential = async (
-    type: AttributeTypes,
-    claims: ClaimValues,
-  ) => {
-    try {
-      const credential = await agent.idw.create.signedCredential(
-        {
-          metadata: attributeConfig[type].metadata,
-          claim: claims,
-          subject: did,
-        },
-        await agent.passwordStore.getPassword(),
-      )
-
-      await agent.storage.store.verifiableCredential(credential)
-
-      const attribute = {
-        id: credential.id,
-        value: extractClaims(credential.claim),
-      }
-      dispatch(updateAttrs({ type, attribute }))
-
-      return { [type]: attribute.id }
-    } catch (e) {
-      console.warn(e)
-      throw new Error('Failed to create attribute!')
-    }
-  }
-
-  return createSelfIssuedCredential
 }

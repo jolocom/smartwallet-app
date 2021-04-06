@@ -4,14 +4,8 @@ jest.mock('react-native-keychain', () => ({
   SECURITY_LEVEL_SECURE_HARDWARE: 'MOCK_SECURITY_LEVEL_SECURE_HARDWARE',
 }))
 
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({
-    navigate: jest.fn(),
-    canGoBack: jest.fn().mockReturnValue(true),
-  }),
-}))
-
 jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
   useDispatch: jest.fn(),
 }))
 

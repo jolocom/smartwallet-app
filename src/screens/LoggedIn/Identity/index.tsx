@@ -24,14 +24,18 @@ const Identity = () => {
 
   if (showIdentityIntro) {
     return (
-      <ScreenContainer isFullscreen customStyles={{justifyContent: 'flex-start'}}>
+      <ScreenContainer
+        testID="home-identity-intro"
+        isFullscreen
+        customStyles={{ justifyContent: 'flex-start' }}
+      >
         <IdentityIntro />
       </ScreenContainer>
     )
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer testID="home-self-issued-credentials">
       <ScreenContainer.Header>{strings.YOUR_INFO}</ScreenContainer.Header>
       <IdentityTabs initialTab={IdentityTabIds.credentials}>
         <IdentityTabs.Styled.Header>
