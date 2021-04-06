@@ -3,7 +3,6 @@ import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
 import { strings } from '~/translations/strings'
@@ -36,7 +35,7 @@ const RegisterPin = () => {
   const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
-  const {scheduleWarning} = useToasts()
+  const { scheduleWarning } = useToasts()
 
   const handlePasscodeSubmit = useCallback((pin) => {
     setSelectedPasscode(pin)
@@ -64,10 +63,10 @@ const RegisterPin = () => {
         // an error with storing PIN to the keychain -> redirect back to create passcode
         scheduleWarning({
           title: 'Try again',
-          message: 'We could not store your passcode. Please try again'
+          message: 'We could not store your passcode. Please try again',
         })
-        resetPasscode();
-      } 
+        resetPasscode()
+      }
     } else {
       throw new Error("Pins don't match")
     }
@@ -78,50 +77,56 @@ const RegisterPin = () => {
     setSelectedPasscode('')
   }
 
-  const { keyboardHeight } = useKeyboardHeight(0)
-
   return (
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
-        paddingTop: BP({ default: 36, small: 28, xsmall: 20 }),
+        paddingTop: BP({ default: 36, small: 28, xsmall: 24 }),
       }}
     >
-      <ScreenHeader
-        title={isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE}
-        subtitle={
-          isCreating
-            ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
-            : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
+      <Passcode
+        onSubmit={
+          isCreating ? handlePasscodeSubmit : handleVerifiedPasscodeSubmit
         }
-      />
-      <View style={styles.passcodeContainer}>
-        <Passcode
-          onSubmit={
-            isCreating ? handlePasscodeSubmit : handleVerifiedPasscodeSubmit
-          }
+      >
+        <Passcode.Container>
+          <ScreenHeader
+            title={
+              isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE
+            }
+            subtitle={
+              isCreating
+                ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
+                : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
+            }
+          />
+          <View style={styles.passcodeContainer}>
+            <Passcode.Input />
+          </View>
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.middle}
+            color={Colors.success}
+            customStyles={{
+              marginTop: 20,
+              opacity: isCreating ? 1 : 0,
+            }}
+          >
+            {' '}
+            {strings.YOU_CAN_CHANGE_THE_PASSCODE}
+          </JoloText>
+        </Passcode.Container>
+        <Passcode.Container
+          customStyles={{ justifyContent: 'flex-end', paddingBottom: 20 }}
         >
-          <Passcode.Input />
-        </Passcode>
-      </View>
-      {isCreating && (
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.middle}
-          color={Colors.success}
-          customStyles={{ marginTop: 20 }}
-        >
-          {' '}
-          {strings.YOU_CAN_CHANGE_THE_PASSCODE}
-        </JoloText>
-      )}
-      {!isCreating && (
-        <AbsoluteBottom customStyles={{ bottom: keyboardHeight }}>
-          <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-            {strings.RESET}
-          </Btn>
-        </AbsoluteBottom>
-      )}
+          {!isCreating && (
+            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+              {strings.RESET}
+            </Btn>
+          )}
+          <Passcode.Keyboard />
+        </Passcode.Container>
+      </Passcode>
     </ScreenContainer>
   )
 }

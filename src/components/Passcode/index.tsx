@@ -4,6 +4,8 @@ import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 import { IPasscodeProps, IPasscodeComposition } from './types'
 import { PasscodeContext } from './context'
+import PasscodeKeyboard from './PasscodeKeyboard'
+import PasscodeContainer from './PasscodeContainer'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -12,17 +14,6 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
-
-  // this will remove the error after 1000 ms
-  useEffect(() => {
-    if (pinError) {
-      setTimeout(() => {
-        setPinError(false)
-        setPin('')
-        // pinInputRef.current?.focus()
-      }, 1000)
-    }
-  }, [pinError])
 
   const handleSubmit = async () => {
     try {
@@ -70,5 +61,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 Passcode.Input = PasscodeInput
 Passcode.Header = PasscodeHeader
 Passcode.Forgot = PasscodeForgot
+Passcode.Keyboard = PasscodeKeyboard
+Passcode.Container = PasscodeContainer
 
 export default Passcode
