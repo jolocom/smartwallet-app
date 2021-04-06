@@ -9,7 +9,7 @@ import {
   DisplayCredentialOther,
   OfferedCredential,
   RequestedCredentialsByCategoryByType,
-  DocumentTypes,
+  CredentialCategories,
 } from '~/types/credentials'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { getAttributes } from '~/modules/attributes/selectors'
@@ -194,7 +194,7 @@ export const getRequestedCredentialsByCategoryByType = createSelector(
 
         return acc
       },
-      { [DocumentTypes.document]: [], [DocumentTypes.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   },
 )
@@ -208,7 +208,7 @@ export const getCustomRequestedCredentialsByCategoryByType = createSelector(
       >
     >(
       (categories, catName) => {
-        const categoryName = catName as DocumentTypes
+        const categoryName = catName as CredentialCategories
         categories[categoryName] = requestedCategories[categoryName].map(
           (d) => ({
             ...d,
@@ -217,7 +217,7 @@ export const getCustomRequestedCredentialsByCategoryByType = createSelector(
         )
         return categories
       },
-      { [DocumentTypes.document]: [], [DocumentTypes.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   },
 )
@@ -333,7 +333,7 @@ export const getOfferedCredentialsByCategories = createSelector(
 
         return acc
       },
-      { [DocumentTypes.document]: [], [DocumentTypes.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   },
 )
@@ -400,7 +400,7 @@ export const getOfferedCredentialCategories = createSelector(
     const {
       credentials: { service_issued },
     } = details
-    return service_issued.reduce<Record<string, DocumentTypes>>(
+    return service_issued.reduce<Record<string, CredentialCategories>>(
       (credByType, c) => {
         credByType[c.type[1]] = c.category
         return credByType

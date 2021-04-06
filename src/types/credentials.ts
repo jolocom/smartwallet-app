@@ -1,5 +1,4 @@
 import { KeyboardTypeOptions } from 'react-native'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { BaseMetadata } from '@jolocom/protocol-ts'
 import { ClaimEntry } from '@jolocom/protocol-ts/dist/lib/credential'
 import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
@@ -67,14 +66,14 @@ export type BaseUICredential = Pick<
 >
 
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
-  category: DocumentTypes
+  category: CredentialCategories
   invalid: boolean
 }
 
 export type OfferedCredentialDisplay = OfferedCredential &
   Pick<CredentialDisplay['display'], 'properties'>
 
-export enum DocumentTypes {
+export enum CredentialCategories {
   document = 'document',
   other = 'other',
 }
@@ -85,7 +84,7 @@ export enum DocumentFields {
 
 export type DisplayCredential = Omit<BaseUICredential, 'issuer'> & {
   issuer: IdentitySummary
-} & { category: DocumentTypes } & {
+} & { category: CredentialCategories } & {
   properties: Array<Required<DisplayVal>>
 }
 
@@ -98,7 +97,7 @@ export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
 export type RequestedCredentialsByType<T> = { type: string; credentials: T[] }
 
-export type CredentialsByCategory<T> = Record<DocumentTypes, T[]>
+export type CredentialsByCategory<T> = Record<CredentialCategories, T[]>
 
 export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
   RequestedCredentialsByType<T>
@@ -107,7 +106,7 @@ export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
 export function isDocument(
   credential: DisplayCredentialDocument | DisplayCredentialOther,
 ): credential is DisplayCredentialDocument {
-  return credential.category === DocumentTypes.document
+  return credential.category === CredentialCategories.document
 }
 
 export type TPrimitiveAttributesConfig = Omit<

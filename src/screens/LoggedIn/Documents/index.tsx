@@ -12,7 +12,7 @@ import DocumentTabs, {
 } from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
 import {
-  DocumentTypes,
+  CredentialCategories,
   DocumentFields,
   DisplayCredentialDocument,
   DisplayCredentialOther,
@@ -42,7 +42,7 @@ const CardList: React.FC = ({ children }) => {
 
 const DocumentList: React.FC = () => {
   const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
-  const initialTabId = route.params.initialTab ?? DocumentTypes.document
+  const initialTabId = route.params.initialTab ?? CredentialCategories.document
 
   const categories = useSelector(getCustomCredentialsByCategories)
   const { activeTab, setActiveTab } = useTabs()
@@ -54,13 +54,16 @@ const DocumentList: React.FC = () => {
   const documents = categories[
     CredentialRenderTypes.document
   ] as DisplayCredentialDocument[]
-  const other = categories[DocumentTypes.other] as DisplayCredentialOther[]
+  const other = categories[
+    CredentialCategories.other
+  ] as DisplayCredentialOther[]
 
   return (
     <>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'flex' : 'none',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'flex' : 'none',
           flex: 1,
         }}
         testID="document-cards-container"
@@ -96,7 +99,8 @@ const DocumentList: React.FC = () => {
       </View>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'none' : 'flex',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'none' : 'flex',
           flex: 1,
         }}
         testID="other-cards-container"

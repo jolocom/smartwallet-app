@@ -10,11 +10,11 @@ import Documents from './Documents'
 import BottomBar from '~/components/BottomBar'
 import Settings from './Settings'
 import Identity from './Identity'
-import { DocumentTypes } from '~/types/credentials'
+import { CredentialCategories } from '~/types/credentials'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
-  [ScreenNames.Documents]: { initialTab?: DocumentTypes }
+  [ScreenNames.Documents]: { initialTab?: CredentialCategories }
   [ScreenNames.History]: undefined
   [ScreenNames.Settings]: undefined
 }

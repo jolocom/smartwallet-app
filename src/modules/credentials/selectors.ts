@@ -5,7 +5,7 @@ import {
   DisplayCredential,
   DisplayCredentialDocument,
   DisplayCredentialOther,
-  DocumentTypes,
+  CredentialCategories,
 } from '~/types/credentials'
 import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 
@@ -16,21 +16,21 @@ const getCredentialsByCategories = createSelector(
   (credentials) =>
     credentials.reduce<CredentialsByCategory<DisplayCredential>>(
       (sections, credential) => {
-        if (credential.category === DocumentTypes.document) {
-          sections[DocumentTypes.document] = [
-            ...sections[DocumentTypes.document],
+        if (credential.category === CredentialCategories.document) {
+          sections[CredentialCategories.document] = [
+            ...sections[CredentialCategories.document],
             credential,
           ]
         } else {
-          sections[DocumentTypes.other] = [
-            ...sections[DocumentTypes.other],
+          sections[CredentialCategories.other] = [
+            ...sections[CredentialCategories.other],
             credential,
           ]
         }
 
         return sections
       },
-      { [DocumentTypes.document]: [], [DocumentTypes.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     ),
 )
 
@@ -41,13 +41,13 @@ export const getCustomCredentialsByCategories = createSelector(
       CredentialsByCategory<DisplayCredentialDocument | DisplayCredentialOther>
     >(
       (categories, catName) => {
-        const categoryName = catName as DocumentTypes
+        const categoryName = catName as CredentialCategories
         categories[categoryName] = cats[categoryName].map(
           mapDisplayToCustomDisplay,
         )
         return categories
       },
-      { [DocumentTypes.document]: [], [DocumentTypes.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   },
 )

@@ -3,11 +3,11 @@ import React from 'react'
 import { strings } from '~/translations'
 import TabsContainer from '~/components/Tabs/Container'
 import { Tabs } from '~/components/Tabs/Tabs'
-import { DocumentTypes } from '~/types/credentials'
+import { CredentialCategories } from '~/types/credentials'
 
 export const documentTabs = [
-  { id: DocumentTypes.document, value: strings.DOCUMENTS },
-  { id: DocumentTypes.other, value: strings.OTHER },
+  { id: CredentialCategories.document, value: strings.DOCUMENTS },
+  { id: CredentialCategories.other, value: strings.OTHER },
 ]
 
 export const documentSubtabs = [

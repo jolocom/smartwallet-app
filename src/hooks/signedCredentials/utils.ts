@@ -11,7 +11,7 @@ import {
   DisplayCredentialDocument,
   DisplayCredentialOther,
   isDocument,
-  DocumentTypes,
+  CredentialCategories,
 } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/types'
@@ -20,8 +20,8 @@ type CredentialKeys = 'credentials' | 'selfIssuedCredentials'
 
 export const getCredentialCategory = (renderInfo?: CredentialOfferRenderInfo) =>
   renderInfo?.renderAs === 'document'
-    ? DocumentTypes.document
-    : DocumentTypes.other
+    ? CredentialCategories.document
+    : CredentialCategories.other
 
 export const separateCredentialsAndAttributes = (
   allCredentials: SignedCredential[],

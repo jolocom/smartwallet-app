@@ -1,26 +1,26 @@
 import {
   OfferedCredential,
   OfferedCredentialDisplay,
-  DocumentTypes,
+  CredentialCategories,
 } from '~/types/credentials'
 import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
 const updateCategory = (
-  prevCategories: Record<DocumentTypes, OfferedCredential[]>,
+  prevCategories: Record<CredentialCategories, OfferedCredential[]>,
   cb: (c: OfferedCredential) => OfferedCredentialDisplay,
 ) => {
   return (
-    acc: Record<DocumentTypes, OfferedCredentialDisplay[]>,
+    acc: Record<CredentialCategories, OfferedCredentialDisplay[]>,
     cName: string,
   ) => {
-    const categoryName = cName as DocumentTypes
+    const categoryName = cName as CredentialCategories
     acc[categoryName] = prevCategories[categoryName].map(cb)
     return acc
   }
 }
 
 export const getOfferSections = (
-  categories: Record<DocumentTypes, OfferedCredential[]>,
+  categories: Record<CredentialCategories, OfferedCredential[]>,
   details: CredentialDisplay[] | null,
 ) => {
   const getUpdatedCategoriesNoDetails = updateCategory(categories, (c) => ({
@@ -38,13 +38,13 @@ export const getOfferSections = (
   })
   if (details === null) {
     return Object.keys(categories).reduce(getUpdatedCategoriesNoDetails, {
-      [DocumentTypes.document]: [],
-      [DocumentTypes.other]: [],
+      [CredentialCategories.document]: [],
+      [CredentialCategories.other]: [],
     })
   }
 
   return Object.keys(categories).reduce(getUpdatedCategoriesWDetails, {
-    [DocumentTypes.document]: [],
-    [DocumentTypes.other]: [],
+    [CredentialCategories.document]: [],
+    [CredentialCategories.other]: [],
   })
 }

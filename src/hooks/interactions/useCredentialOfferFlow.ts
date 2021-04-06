@@ -5,7 +5,7 @@ import {
 import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
-import { OfferedCredential, DocumentTypes } from '~/types/credentials'
+import { OfferedCredential, CredentialCategories } from '~/types/credentials'
 import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -83,8 +83,8 @@ const useCredentialOfferFlow = () => {
         type: ['', offer.type],
         category:
           offer.renderInfo?.renderAs === 'document'
-            ? DocumentTypes.document
-            : DocumentTypes.other,
+            ? CredentialCategories.document
+            : CredentialCategories.other,
         invalid: isInvalid,
         name: offer.credential?.name ?? '',
       }

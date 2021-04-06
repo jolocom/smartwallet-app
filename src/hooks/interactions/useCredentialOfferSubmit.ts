@@ -10,7 +10,7 @@ import { useRedirect } from '../navigation'
 import { addCredentials } from '~/modules/credentials/actions'
 import { useInitializeCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
-import { DocumentTypes } from '~/types/credentials'
+import { CredentialCategories } from '~/types/credentials'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -31,7 +31,7 @@ const useCredentialOfferSubmit = () => {
   const finishInteraction = useFinishInteraction()
   const { getCredentialDisplay } = useInitializeCredentials()
 
-  const scheduleSuccess = (initialTab: DocumentTypes) =>
+  const scheduleSuccess = (initialTab: CredentialCategories) =>
     scheduleSuccessInteraction({
       interact: {
         label: strings.REVIEW,
@@ -48,9 +48,9 @@ const useCredentialOfferSubmit = () => {
   const getInitialDocumentsTab = async () => {
     const validatedCredentials = await getValidatedCredentials()
     const allOther = validatedCredentials.every(
-      (cred) => cred.category === DocumentTypes.other,
+      (cred) => cred.category === CredentialCategories.other,
     )
-    return allOther ? DocumentTypes.other : DocumentTypes.document
+    return allOther ? CredentialCategories.other : CredentialCategories.document
   }
 
   return async () => {
