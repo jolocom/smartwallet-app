@@ -289,6 +289,9 @@ const toasts = {
   WHOOPS: 'Whoops',
   COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
   COULDNOT_ACTIVATE: 'We could not activate biometrics',
+  NOT_CONNECTED: "Uh...oh you're not connected",
+  WE_CANT_REACH_YOU:
+    "We can't reach you if you don't have internet. Please check your connection and try again",
 }
 
 const documents = {
