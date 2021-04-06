@@ -129,6 +129,10 @@ const BusinessCardForm = () => {
                                 updateInput={handleChange(f.key)}
                                 placeholder={f.label}
                                 onFocus={focusInput}
+                                withHighlight={
+                                  !Boolean(errors[f.key]) &&
+                                  Boolean(values[f.key])
+                                }
                                 containerStyle={{
                                   ...(errors[f.key] && {
                                     borderColor: Colors.error,

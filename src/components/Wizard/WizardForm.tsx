@@ -55,6 +55,9 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                     updateInput={handleChange(field.key)}
                     placeholder={field.label}
                     autoFocus={idx === 0}
+                    withHighlight={
+                      !Boolean(errors[field.key]) && Boolean(values[field.key])
+                    }
                     placeholderTextColor={Colors.white30}
                     // TODO: remove if not used here
                     // onBlur={() => setFieldTouched(field.key, true, false)}
