@@ -39,6 +39,7 @@ interface PropsI extends BtnPropsI {
   disabled?: boolean
   withoutMargins?: boolean
   customContainerStyles?: ViewStyle
+  testID?: string
 }
 
 const GRADIENT_START = { x: 0, y: 0 }
@@ -138,7 +139,7 @@ const Btn: React.FC<PropsI> = (props) => {
       style={containerStyles}
       onPress={props.onPress}
       disabled={props.disabled}
-      testID="button"
+      testID={props.testID || 'button'}
     >
       {renderButton()}
     </TouchableOpacity>

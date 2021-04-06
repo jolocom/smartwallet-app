@@ -40,17 +40,6 @@ jest.mock('../../../src/hooks/sdk', () => ({
   }),
 }))
 
-const renderGetWizardButtons = () => {
-  const queries = renderWithSafeArea(<IdentityIntro />)
-
-  const wizardButtons = queries.getAllByTestId('button')
-  expect(wizardButtons.length).toBe(2)
-  return {
-    ...queries,
-    wizardButtons,
-  }
-}
-
 const populateInputs = (inputs: ReactTestInstance[], values: string[]) => {
   if (inputs.length !== values.length) return
   values.forEach((v, idx) => fireEvent.changeText(inputs[idx], v))
@@ -63,15 +52,18 @@ describe('Intro displays', () => {
   })
 
   test('correct ui components initially', () => {
-    const { wizardButtons, getByText } = renderGetWizardButtons()
+    const { getByTestId, getByText } = renderWithSafeArea(<IdentityIntro />)
 
+    const singleCredentialButton = getByTestId('single-credential-button')
+    const businessCardButton = getByTestId('business-card-button')
     const { getByText: getSingleCredText } = getQueriesForElement(
-      wizardButtons[0],
+      singleCredentialButton,
     )
+
     expect(getSingleCredText(strings.SINGLE_CREDENTIAL)).toBeDefined()
 
     const { getByText: getBusinessCredText } = getQueriesForElement(
-      wizardButtons[1],
+      businessCardButton,
     )
     expect(getBusinessCredText(strings.BUSINESS_CARD)).toBeDefined()
 
@@ -93,14 +85,12 @@ describe('Intro displays', () => {
       },
     })
 
-    const {
-      wizardButtons,
-      getByText,
-      getAllByTestId,
-      getByTestId,
-    } = renderGetWizardButtons()
+    const { getByText, getAllByTestId, getByTestId } = renderWithSafeArea(
+      <IdentityIntro />,
+    )
 
-    fireEvent.press(wizardButtons[0])
+    const singleCredentialButton = getByTestId('single-credential-button')
+    fireEvent.press(singleCredentialButton)
 
     expect(getByText(strings.WHAT_IS_YOUR_NAME)).toBeDefined()
 
@@ -142,14 +132,12 @@ describe('Intro displays', () => {
       },
     })
 
-    const {
-      wizardButtons,
-      getByText,
-      getAllByTestId,
-      getByTestId,
-    } = renderGetWizardButtons()
+    const { getByText, getAllByTestId, getByTestId } = renderWithSafeArea(
+      <IdentityIntro />,
+    )
 
-    fireEvent.press(wizardButtons[1])
+    const businessCardButton = getByTestId('business-card-button')
+    fireEvent.press(businessCardButton)
 
     expect(getByText(strings.INTRODUCE_YOURSELF)).toBeDefined()
 
