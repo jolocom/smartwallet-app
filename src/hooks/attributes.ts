@@ -6,7 +6,6 @@ import { useAgent } from './sdk'
 import { ClaimValues } from '~/modules/attributes/types'
 import { extractClaims } from '~/utils/dataMapping'
 import { getDid } from '~/modules/account/selectors'
-import { attributeConfig } from '~/config/claims'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { BaseMetadata } from '@jolocom/protocol-ts'
 
