@@ -8,7 +8,7 @@ import { NavigationContainerRef } from '@react-navigation/native'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { useToasts } from './hooks/toasts'
 import { strings } from './translations'
-import { ToastType } from './types/toasts'
+import { usePrevious } from './hooks/generic'
 
 interface Props {
   navRef: RefObject<NavigationContainerRef>
@@ -19,27 +19,26 @@ const NO_CONNECTION_TOAST = {
   message: strings.WE_CANT_REACH_YOU,
 }
 
+const CONNECTION_TOAST = {
+  title: strings.YOU_ARE_BACK_ONLINE,
+  message: strings.ALL_WALLET_FUNCTIONALITIES,
+}
+
 const Overlays: React.FC<Props> = ({ navRef }) => {
   const netInfo = useNetInfo()
-  const { activeToast, scheduleSticky, removeToast } = useToasts()
+  const { scheduleWarning, scheduleInfo } = useToasts()
+  const prevConnection = usePrevious(netInfo)
 
   useEffect(() => {
-    if (!netInfo.isConnected) {
-      scheduleSticky({
+    if (netInfo.isConnected === false) {
+      scheduleWarning({
         ...NO_CONNECTION_TOAST,
-        interact: {
-          label: '',
-          onInteract: () => true,
-        },
       })
-    } else {
-      if (activeToast?.title === strings.NOT_CONNECTED) {
-        removeToast({
-          id: activeToast.id,
-          type: ToastType.warning,
-          ...NO_CONNECTION_TOAST,
-        })
-      }
+    }
+    if (prevConnection?.isConnected === false && netInfo.isConnected === true) {
+      scheduleInfo({
+        ...CONNECTION_TOAST,
+      })
     }
   }, [netInfo.isConnected])
 

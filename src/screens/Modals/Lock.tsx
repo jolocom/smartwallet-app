@@ -12,7 +12,6 @@ import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
 import { setPopup } from '~/modules/appState/actions'
-import { View } from 'react-native'
 
 const Lock = () => {
   const dispatch = useDispatch()
