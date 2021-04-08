@@ -9,6 +9,7 @@ import { OfferedCredential, CredentialCategories } from '~/types/credentials'
 import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { getCredentialCategory } from '../signedCredentials/utils'
 
 /**
  * Custom hook that exposes a collection of utils for the Credential Offer interaction
@@ -81,10 +82,7 @@ const useCredentialOfferFlow = () => {
         // NOTE: making type as array of strings for consistency
         // offerSummary type is different from SignedCredential type of type property
         type: ['', offer.type],
-        category:
-          offer.renderInfo?.renderAs === 'document'
-            ? CredentialCategories.document
-            : CredentialCategories.other,
+        category: getCredentialCategory(offer.renderInfo),
         invalid: isInvalid,
         name: offer.credential?.name ?? '',
       }

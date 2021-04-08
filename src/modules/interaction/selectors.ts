@@ -169,7 +169,7 @@ export const getIsFullscreenCredShare = createSelector(
  * @category used to separate into Documents and Other
  * @type used to group credentials by type and present them in a carousel
  */
-export const getRequestedCredentialsByCategoryByType = createSelector(
+const getRequestedCredentialsByCategoryByType = createSelector(
   [getAvailableRequestedCredentials, getCredShareDetails],
   (availableRequestedCredentials, { requestedCredentials }) => {
     return requestedCredentials.reduce<
