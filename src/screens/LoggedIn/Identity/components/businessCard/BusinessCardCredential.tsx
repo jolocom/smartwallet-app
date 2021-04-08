@@ -25,7 +25,10 @@ const BusinessCardCredential: React.FC = () => {
   const telephone = getClaimValue(ClaimKeys.telephone)
 
   return (
-    <>
+    <View
+      style={{ flex: 1, justifyContent: 'space-between' }}
+      testID="business-card-credential"
+    >
       <View>
         <BusinessCardStyled.Title color={Colors.white}>
           {displayedName}
@@ -54,7 +57,7 @@ const BusinessCardCredential: React.FC = () => {
           </BusinessCardStyled.FieldValue>
         )}
       </BusinessCardStyled.FieldGroup>
-    </>
+    </View>
   )
 }
 

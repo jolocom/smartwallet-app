@@ -19,7 +19,7 @@ export interface IWizardFooterProps {
 }
 
 export interface IWizardFormProps extends IWizardBodyProps {
-  onSubmit: (fields: Record<string, string>) => void
+  onSubmit: (fields: Record<string, string>) => Promise<void> | void
 }
 
 export interface IWizardContext {

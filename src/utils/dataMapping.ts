@@ -12,10 +12,10 @@ import {
   AttributeTypes,
   IAttributeClaimFieldWithValue,
   IAttributeClaimField,
-  OtherCategory,
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
+import { getCredentialCategory } from '~/hooks/signedCredentials/utils'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
 
@@ -87,7 +87,7 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
       service_issued: summary.state.offerSummary.map(
         ({ renderInfo, type, credential }) => ({
           type: ['', type],
-          category: renderInfo?.renderAs ?? OtherCategory.other,
+          category: getCredentialCategory(renderInfo),
           invalid: false,
           name: credential?.name ?? '',
         }),

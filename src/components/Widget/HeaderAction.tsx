@@ -14,7 +14,11 @@ const CreateNew: React.FC = () => {
   }
 
   return (
-    <TouchableOpacity style={styles.createNewBtn} onPress={widgetContext.onAdd}>
+    <TouchableOpacity
+      style={styles.createNewBtn}
+      onPress={widgetContext.onAdd}
+      testID="widget-add-new"
+    >
       <View style={styles.plus}>
         <PlusIcon />
       </View>

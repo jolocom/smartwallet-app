@@ -1,30 +1,34 @@
 import React from 'react'
+
 import { strings } from '~/translations'
 import TabsContainer from '~/components/Tabs/Container'
 import { Tabs } from '~/components/Tabs/Tabs'
-import { DocumentTypes } from '~/types/credentials'
+import { CredentialCategories } from '~/types/credentials'
 
-const TABS = [
-  { id: DocumentTypes.document, value: strings.DOCUMENTS },
-  { id: DocumentTypes.other, value: strings.OTHER },
+export const documentTabs = [
+  { id: CredentialCategories.document, value: strings.DOCUMENTS },
+  { id: CredentialCategories.other, value: strings.OTHER },
 ]
 
-const SUBTABS = [
+export const documentSubtabs = [
   { id: 'type', value: strings.TYPE },
   { id: 'issuer', value: strings.ISSUER },
 ]
 
 const DocumentTabs: React.FC = ({ children }) => {
   return (
-    <Tabs initialActiveTab={TABS[0]} initialActiveSubtab={SUBTABS[0]}>
+    <Tabs
+      initialActiveTab={documentTabs[0]}
+      initialActiveSubtab={documentSubtabs[0]}
+    >
       <TabsContainer customStyles={{ marginBottom: 10 }}>
-        {TABS.map((t) => (
+        {documentTabs.map((t) => (
           <Tabs.Tab key={t.id} tab={t} />
         ))}
       </TabsContainer>
 
       <TabsContainer>
-        {SUBTABS.map((st) => (
+        {documentSubtabs.map((st) => (
           <Tabs.Subtab key={st.id} tab={st} />
         ))}
       </TabsContainer>

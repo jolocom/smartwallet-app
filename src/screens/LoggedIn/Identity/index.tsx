@@ -25,6 +25,7 @@ const Identity = () => {
   if (showIdentityIntro) {
     return (
       <ScreenContainer
+        testID="home-identity-intro"
         isFullscreen
         customStyles={{ justifyContent: 'flex-start' }}
       >
@@ -34,7 +35,10 @@ const Identity = () => {
   }
 
   return (
-    <ScreenContainer customStyles={{ paddingHorizontal: 0 }}>
+    <ScreenContainer
+      testID="home-self-issued-credentials"
+      customStyles={{ paddingHorizontal: 0 }}
+    >
       <ScreenContainer.Header customStyles={{ paddingLeft: '5%' }}>
         {strings.YOUR_INFO}
       </ScreenContainer.Header>

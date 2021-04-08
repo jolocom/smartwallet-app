@@ -69,13 +69,7 @@ export const CredentialHighlight: IResponsiveCardComposition['Highlight'] = ({
   }
   return (
     <View style={[styles.highlight, calculatedStyles]}>
-      <JoloText
-        weight={JoloTextWeight.regular}
-        customStyles={{
-          marginTop: Platform.OS === 'ios' ? 4 : 0,
-        }}
-        color={Colors.white}
-      >
+      <JoloText weight={JoloTextWeight.regular} color={Colors.white}>
         {children}
       </JoloText>
     </View>
