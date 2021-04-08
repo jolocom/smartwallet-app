@@ -9,13 +9,17 @@ import { Colors } from '~/utils/colors'
 
 import SingleCredentialWizard from './SingleCredentialWizard'
 import BusinessCardWizard from './BusinessCardWizard'
+import { IdentityTabIds } from './types'
 
 enum IdentityForms {
   SingleCredential = 'SingleCredential',
   BusinessCard = 'BusinessCard',
 }
 
-const WelcomeSheet: React.FC = () => {
+interface Props {
+  onSubmit: (id: IdentityTabIds) => void
+}
+const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
   const [isTopSheetVisible, setTopSheetVisibility] = useState(true)
   const [activeForm, setActiveForm] = useState<IdentityForms | null>(null)
 
@@ -45,6 +49,11 @@ const WelcomeSheet: React.FC = () => {
     }
   }
 
+  const handleSubmit = (id: IdentityTabIds) => {
+    onSubmit(id)
+    changeActiveForm(null)
+  }
+
   const handleWidgetReset = () => {
     animateSheet()
     setActiveForm(null)
@@ -58,9 +67,13 @@ const WelcomeSheet: React.FC = () => {
     >
       <View style={styles.container}>
         {activeForm === IdentityForms.SingleCredential ? (
-          <SingleCredentialWizard onFormSubmit={() => changeActiveForm(null)} />
+          <SingleCredentialWizard
+            onFormSubmit={() => handleSubmit(IdentityTabIds.credentials)}
+          />
         ) : activeForm === IdentityForms.BusinessCard ? (
-          <BusinessCardWizard onFormSubmit={() => changeActiveForm(null)} />
+          <BusinessCardWizard
+            onFormSubmit={() => handleSubmit(IdentityTabIds.businessCard)}
+          />
         ) : (
           <>
             <Image source={require('~/assets/images/identityIntro.png')} />
