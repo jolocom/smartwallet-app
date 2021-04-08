@@ -17,7 +17,7 @@ import { useSuccess } from '~/hooks/loader'
 
 import Section from './components/Section'
 import Input from '~/components/Input'
-import { InputValidityState } from '~/components/Input/InputUnderline'
+import { InputValidityState } from '~/components/Input/types'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,

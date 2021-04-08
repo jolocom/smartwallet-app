@@ -9,7 +9,8 @@ import { strings } from '~/translations'
 const ErrorDisplay = () => {
   const { errorScreen, resetError, error, showErrorReporting } = useErrors()
   const { title, message } =
-    UIErrors[error?.message as SWErrorCodes] ?? UIErrors[SWErrorCodes.SWUnknown]
+    UIErrors[error?.message as SWErrorCodes] ??
+    UIErrors[SWErrorCodes.SWUnknown]!
 
   return (
     <ModalScreen
