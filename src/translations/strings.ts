@@ -61,6 +61,10 @@ const errors = {
   SYSTEM_CRASH: 'System crash',
   BUT_DONT_WORRY_YOUR_DATA_IS_SAFE:
     'But don’t worry - your data is safe and nothing will be lost',
+  INCLUDE_LOGS: 'Include logs',
+  ERROR_REPORTING_LOGS_WARNING:
+    'This includes certain private metadata info (like file sizes - but not personal information) and will help developers fix bugs even quicker',
+  ERROR_REPORTING_RATE: 'Rate the issue',
 }
 
 const passcode = {
