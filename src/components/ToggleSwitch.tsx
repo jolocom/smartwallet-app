@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { StyleSheet, Animated } from 'react-native'
+import { StyleSheet, Animated, TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Colors } from '~/utils/colors'
 import { isPropControlled } from '~/utils/props'
@@ -49,9 +48,10 @@ const ToggleSwitch: React.FC<Props> = (props) => {
   }, [onState])
 
   return (
-    <TouchableWithoutFeedback
+    <TouchableOpacity
       testID="toggleSwitch"
       style={styles.track}
+      activeOpacity={1}
       onPressIn={toggle}
     >
       <Animated.View
@@ -67,7 +67,7 @@ const ToggleSwitch: React.FC<Props> = (props) => {
           colors={onState ? onGradientColors : offGradientColors}
         />
       </Animated.View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   )
 }
 
