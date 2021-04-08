@@ -1,161 +1,143 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ToggleSwitch should render the switch with disabled initial state 1`] = `
-<RNGestureHandlerButton
-  collapsable={false}
-  onGestureEvent={[Function]}
-  onGestureHandlerEvent={[Function]}
-  onGestureHandlerStateChange={[Function]}
-  onHandlerStateChange={[Function]}
-  rippleColor={0}
+<View
+  onPressIn={[Function]}
+  style={
+    Object {
+      "backgroundColor": "rgb(35, 36, 38)",
+      "borderRadius": 45,
+      "height": 30,
+      "justifyContent": "center",
+      "width": 45,
+    }
+  }
   testID="toggleSwitch"
 >
   <View
-    accessible={true}
     style={
       Object {
-        "backgroundColor": "rgb(35, 36, 38)",
-        "borderRadius": 45,
-        "height": 30,
+        "alignItems": "center",
+        "borderRadius": 13,
+        "elevation": 10,
+        "height": 26,
         "justifyContent": "center",
-        "width": 45,
+        "position": "absolute",
+        "shadowColor": "rgba(0, 0, 0, 0.06)",
+        "shadowOffset": Object {
+          "height": 3,
+          "width": 0,
+        },
+        "shadowOpacity": 1,
+        "shadowRadius": 1,
+        "transform": Array [
+          Object {
+            "translateX": 2,
+          },
+        ],
+        "width": 26,
       }
     }
   >
-    <View
-      style={
+    <BVLinearGradient
+      colors={
+        Array [
+          4278911757,
+          4278911757,
+        ]
+      }
+      endPoint={
         Object {
-          "alignItems": "center",
-          "borderRadius": 13,
-          "elevation": 10,
-          "height": 26,
-          "justifyContent": "center",
-          "position": "absolute",
-          "shadowColor": "rgba(0, 0, 0, 0.06)",
-          "shadowOffset": Object {
-            "height": 3,
-            "width": 0,
-          },
-          "shadowOpacity": 1,
-          "shadowRadius": 1,
-          "transform": Array [
-            Object {
-              "translateX": 2,
-            },
-          ],
-          "width": 26,
+          "x": 1,
+          "y": 0,
         }
       }
-    >
-      <BVLinearGradient
-        colors={
-          Array [
-            4278911757,
-            4278911757,
-          ]
+      locations={null}
+      startPoint={
+        Object {
+          "x": 0,
+          "y": 0,
         }
-        endPoint={
-          Object {
-            "x": 1,
-            "y": 0,
-          }
+      }
+      style={
+        Object {
+          "borderRadius": 13,
+          "height": "100%",
+          "width": "100%",
         }
-        locations={null}
-        startPoint={
-          Object {
-            "x": 0,
-            "y": 0,
-          }
-        }
-        style={
-          Object {
-            "borderRadius": 13,
-            "height": "100%",
-            "width": "100%",
-          }
-        }
-      />
-    </View>
+      }
+    />
   </View>
-</RNGestureHandlerButton>
+</View>
 `;
 
 exports[`ToggleSwitch should render the switch with enabled initial state 1`] = `
-<RNGestureHandlerButton
-  collapsable={false}
-  onGestureEvent={[Function]}
-  onGestureHandlerEvent={[Function]}
-  onGestureHandlerStateChange={[Function]}
-  onHandlerStateChange={[Function]}
-  rippleColor={0}
+<View
+  onPressIn={[Function]}
+  style={
+    Object {
+      "backgroundColor": "rgb(35, 36, 38)",
+      "borderRadius": 45,
+      "height": 30,
+      "justifyContent": "center",
+      "width": 45,
+    }
+  }
   testID="toggleSwitch"
 >
   <View
-    accessible={true}
     style={
       Object {
-        "backgroundColor": "rgb(35, 36, 38)",
-        "borderRadius": 45,
-        "height": 30,
+        "alignItems": "center",
+        "borderRadius": 13,
+        "elevation": 10,
+        "height": 26,
         "justifyContent": "center",
-        "width": 45,
+        "position": "absolute",
+        "shadowColor": "rgba(0, 0, 0, 0.06)",
+        "shadowOffset": Object {
+          "height": 3,
+          "width": 0,
+        },
+        "shadowOpacity": 1,
+        "shadowRadius": 1,
+        "transform": Array [
+          Object {
+            "translateX": 17,
+          },
+        ],
+        "width": 26,
       }
     }
   >
-    <View
-      style={
+    <BVLinearGradient
+      colors={
+        Array [
+          4287699266,
+          4291964265,
+        ]
+      }
+      endPoint={
         Object {
-          "alignItems": "center",
-          "borderRadius": 13,
-          "elevation": 10,
-          "height": 26,
-          "justifyContent": "center",
-          "position": "absolute",
-          "shadowColor": "rgba(0, 0, 0, 0.06)",
-          "shadowOffset": Object {
-            "height": 3,
-            "width": 0,
-          },
-          "shadowOpacity": 1,
-          "shadowRadius": 1,
-          "transform": Array [
-            Object {
-              "translateX": 17,
-            },
-          ],
-          "width": 26,
+          "x": 1,
+          "y": 0,
         }
       }
-    >
-      <BVLinearGradient
-        colors={
-          Array [
-            4287699266,
-            4291964265,
-          ]
+      locations={null}
+      startPoint={
+        Object {
+          "x": 0,
+          "y": 0,
         }
-        endPoint={
-          Object {
-            "x": 1,
-            "y": 0,
-          }
+      }
+      style={
+        Object {
+          "borderRadius": 13,
+          "height": "100%",
+          "width": "100%",
         }
-        locations={null}
-        startPoint={
-          Object {
-            "x": 0,
-            "y": 0,
-          }
-        }
-        style={
-          Object {
-            "borderRadius": 13,
-            "height": "100%",
-            "width": "100%",
-          }
-        }
-      />
-    </View>
+      }
+    />
   </View>
-</RNGestureHandlerButton>
+</View>
 `;

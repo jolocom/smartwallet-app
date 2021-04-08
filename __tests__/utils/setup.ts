@@ -68,6 +68,7 @@ jest.mock('react-native-gesture-handler', () => {
   return {
     ...gestureHandlerMocks,
     TouchableOpacity: gestureHandlerMocks.PanGestureHandler,
+    TouchableWithoutFeedback: gestureHandlerMocks.PanGestureHandler,
   }
 })
 
