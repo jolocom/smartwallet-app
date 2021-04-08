@@ -172,7 +172,7 @@ describe('Business card is in state', () => {
         expect(mockedDeleteSignedCredentialFn).toBeCalledTimes(1)
         expect(mockDispatchFn).toBeCalledTimes(1)
         expect(mockDispatchFn).toBeCalledWith(
-          deleteAttr({ type: ATTRIBUTE_TYPE }),
+          deleteAttr({ type: ATTRIBUTE_TYPE, id: ATTRIBUTE_ID }),
         )
       })
     }
