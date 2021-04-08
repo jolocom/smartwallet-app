@@ -1,14 +1,14 @@
-import { fireEvent, waitFor } from '@testing-library/react-native'
+import { waitFor } from '@testing-library/react-native'
 import React from 'react'
-import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
+import * as keychain from 'react-native-keychain'
 import ChangePin from '~/screens/LoggedIn/Settings/ChangePin'
 import { strings } from '~/translations'
 import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
+import { inputPasscode } from '../../utils/inputPasscode'
 
 const mockNavigation = jest.fn()
 const mockNavigationBack = jest.fn()
-const mockedDispatch = jest.fn()
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -19,36 +19,43 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn(),
-  useDispatch: jest.fn().mockReturnValue(mockedDispatch),
+jest.mock('react-native-keychain', () => ({
+  STORAGE_TYPE: {
+    AES: 'aes',
+  },
+  setGenericPassword: jest.fn(),
+  getGenericPassword: jest.fn().mockResolvedValue({ password: '5555' }),
 }))
 
-jest.mock('react-native-keychain', () => {
-  return {
-    STORAGE_TYPE: {
-      AES: 'aes',
+jest.mock('../../../src/hooks/sdk', () => ({
+  StorageKeys: {
+    biometry: 'biometry',
+  },
+  useAgent: () => ({
+    storage: {
+      get: {
+        setting: jest.fn().mockResolvedValue(true),
+      },
+      store: {
+        setting: jest.fn().mockResolvedValue(true),
+      },
     },
-    setGenericPassword: jest.fn(() => Promise.resolve(true)),
-  }
-})
+  }),
+}))
 
 jest.mock('../../../src/hooks/loader', () => ({
-  useLoader: () => async (
-    cb: () => Promise<void>,
-    _: object,
-    onSuccess: () => void,
-  ) => {
-    await cb()
-    onSuccess()
-  },
-}))
-
-jest.mock('../../../src/hooks/deviceAuth', () => ({
-  useGetStoredAuthValues: jest.fn().mockImplementation(() => ({
-    keychainPin: '5555',
-  })),
+  useLoader: jest
+    .fn()
+    .mockImplementation(
+      () => async (
+        cb: () => Promise<void>,
+        _: object,
+        onSuccess: () => void,
+      ) => {
+        await cb()
+        onSuccess()
+      },
+    ),
 }))
 
 jest.mock('../../../src/hooks/navigation', () => ({
@@ -57,34 +64,37 @@ jest.mock('../../../src/hooks/navigation', () => ({
 }))
 
 test('User is able to change a pin', async () => {
-  const { debug, getByText, getByTestId, queryByText } = renderWithSafeArea(
+  const setGenericPasswordSpy = jest.spyOn(keychain, 'setGenericPassword')
+  setGenericPasswordSpy.mockResolvedValueOnce({
+    service: 'adasd',
+    storage: '3333',
+  })
+
+  const { getByText, getByTestId, queryByText } = renderWithSafeArea(
     <ChangePin />,
   )
 
   expect(getByText(strings.CURRENT_PASSCODE)).toBeDefined()
 
-  const input = getByTestId('passcode-digit-input')
-  fireEvent.changeText(input, 3333)
-
-  await waitFor(() => {
-    expect(getByText(strings.WRONG_PASSCODE)).toBeDefined()
-  })
+  inputPasscode(getByTestId, [3, 3, 3, 3])
 
   await waitFor(() => {
     expect(queryByText('*')).toBe(null)
   })
 
-  fireEvent.changeText(input, 5555)
+  inputPasscode(getByTestId, [5, 5, 5, 5])
 
   await waitFor(() => {
     expect(getByText(strings.CREATE_NEW_PASSCODE)).toBeDefined()
   })
 
-  fireEvent.changeText(input, 3333)
+  inputPasscode(getByTestId, [3, 3, 3, 3])
 
-  expect(setGenericPassword).toHaveBeenCalledTimes(1)
-  expect(setGenericPassword).toHaveBeenCalledWith(PIN_USERNAME, '3333', {
-    service: PIN_SERVICE,
-    storage: STORAGE_TYPE.AES,
+  await waitFor(() => {
+    expect(setGenericPasswordSpy).toHaveBeenCalledTimes(1)
+    expect(setGenericPasswordSpy).toHaveBeenCalledWith(PIN_USERNAME, '3333', {
+      service: PIN_SERVICE,
+      storage: keychain.STORAGE_TYPE.AES,
+    })
   })
 })

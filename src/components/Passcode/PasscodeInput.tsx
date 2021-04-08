@@ -1,13 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {
-  NativeSyntheticEvent,
-  StyleSheet,
-  Text,
-  TextInputKeyPressEventData,
-  TouchableWithoutFeedback,
-  View,
-  TextInput,
-} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 
@@ -17,10 +9,8 @@ const DIGIT_MARGIN_RIGHT = 7
 
 const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
-  const { pin, setPin, pinError, pinSuccess } = usePasscode()
+  const { pin, pinError, pinSuccess } = usePasscode()
   const digits = pin.split('')
-
-  const inputRef = useRef<TextInput>(null)
 
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
@@ -46,48 +36,14 @@ const PasscodeInput: React.FC = () => {
     }
   }, [pin])
 
-  const handlePinChange = (val: string) => {
-    setPin((prevState: string) => prevState + val)
-  }
-
-  const handleRemove = (
-    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
-  ) => {
-    if (e.nativeEvent?.key === 'Backspace') {
-      setPin((prevState: string) => prevState.slice(0, prevState.length - 1))
-    }
-  }
-
-  const focusInput = () => {
-    // NOTE: Workaround for the case when the Keyboard is dismissed with Back-button, and it can't @focus() again
-    // https://github.com/facebook/react-native/issues/19366#issuecomment-400603928
-    inputRef.current?.blur()
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 100)
-  }
-
   return (
-    <TouchableWithoutFeedback onPress={focusInput}>
+    <TouchableWithoutFeedback>
       <View style={styles.inputContainer}>
-        <TextInput
-          value=""
-          ref={inputRef}
-          onKeyPress={handleRemove}
-          onChangeText={handlePinChange}
-          autoFocus
-          testID="passcode-digit-input"
-          style={[
-            styles.input,
-            {
-              left: selectedIndex * (DIGIT_CELL_WIDTH + DIGIT_MARGIN_RIGHT),
-            },
-          ]}
-          keyboardType="numeric"
-          keyboardAppearance="dark"
-          selectionColor="transparent"
-        />
-        <View style={{ flexDirection: 'row' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
           {PASSCODE_LENGTH.map((v, index) => {
             const isSelected = digits.length === index
             return (
@@ -100,13 +56,17 @@ const PasscodeInput: React.FC = () => {
                 ]}
                 key={index}
               >
-                <Text style={styles.text} testID="passcode-cell">
-                  {index === selectedIndex
-                    ? digits[index]
-                    : index < digits.length
-                    ? '*'
-                    : ''}
-                </Text>
+                {isSelected && !digits[index] ? (
+                  <View style={styles.caret} />
+                ) : (
+                  <Text style={styles.text} testID="passcode-cell">
+                    {index === selectedIndex
+                      ? digits[index]
+                      : index < digits.length
+                      ? '*'
+                      : ''}
+                  </Text>
+                )}
               </View>
             )
           })}
@@ -120,16 +80,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'relative',
     flexDirection: 'row',
-  },
-  input: {
-    textAlign: 'center',
-    position: 'absolute',
-    fontSize: 43,
-    backgroundColor: 'transparent',
-    width: DIGIT_CELL_WIDTH,
-    borderRadius: 11,
-    top: 0,
-    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   display: {
     alignItems: 'center',
@@ -142,6 +94,7 @@ const styles = StyleSheet.create({
     overflow: 'visible',
     borderWidth: 3,
     borderColor: 'transparent',
+    paddingVertical: 14,
   },
   active: {
     borderColor: Colors.activity,
@@ -155,6 +108,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 43,
     color: Colors.white,
+  },
+  caret: {
+    width: 1,
+    height: '100%',
+    backgroundColor: Colors.success,
   },
 })
 

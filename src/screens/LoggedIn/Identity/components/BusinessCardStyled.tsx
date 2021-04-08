@@ -42,6 +42,7 @@ const CardFieldName: React.FC = ({ children }) => {
 const CardFieldValue: React.FC<IWithColor> = ({ children, color }) => {
   return (
     <JoloText
+      testID="card-field-value"
       kind={JoloTextKind.title}
       size={JoloTextSizes.mini}
       color={color}

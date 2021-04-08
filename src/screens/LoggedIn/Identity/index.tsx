@@ -25,13 +25,14 @@ const Identity = () => {
 
   return showIdentityIntro ? (
     <ScreenContainer
+      testID="home-identity-intro"
       isFullscreen
       customStyles={{ justifyContent: 'flex-start' }}
     >
       <IdentityIntro onSubmit={handleIntroSubmit} />
     </ScreenContainer>
   ) : (
-    <ScreenContainer>
+    <ScreenContainer testID="home-self-issued-credentials">
       <ScreenContainer.Header>{strings.YOUR_INFO}</ScreenContainer.Header>
       <IdentityTabs initialTab={initialTab}>
         <IdentityTabs.Styled.Header>

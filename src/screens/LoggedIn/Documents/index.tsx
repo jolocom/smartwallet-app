@@ -1,17 +1,19 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
+import { useRoute, RouteProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
 import { getCustomCredentialsByCategories } from '~/modules/credentials/selectors'
-import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
+import DocumentTabs, {
+  documentTabs,
+} from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
 import {
-  DocumentTypes,
+  CredentialCategories,
   DocumentFields,
-  OtherCategory,
   DisplayCredentialDocument,
   DisplayCredentialOther,
 } from '~/types/credentials'
@@ -19,6 +21,8 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields } from './utils'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
+import { MainTabsParamList } from '../MainTabs'
+import { ScreenNames } from '~/types/screens'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -36,20 +40,30 @@ const CardList: React.FC = ({ children }) => {
   )
 }
 
-const DocumentList = () => {
+const DocumentList: React.FC = () => {
+  const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
+  const initialTabId = route.params.initialTab ?? CredentialCategories.document
+
   const categories = useSelector(getCustomCredentialsByCategories)
-  const { activeTab } = useTabs()
+  const { activeTab, setActiveTab } = useTabs()
+
+  useLayoutEffect(() => {
+    setActiveTab(documentTabs.find((t) => t.id === initialTabId)!)
+  }, [initialTabId])
 
   const documents = categories[
     CredentialRenderTypes.document
   ] as DisplayCredentialDocument[]
-  const other = categories[OtherCategory.other] as DisplayCredentialOther[]
+  const other = categories[
+    CredentialCategories.other
+  ] as DisplayCredentialOther[]
 
   return (
     <>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'flex' : 'none',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'flex' : 'none',
           flex: 1,
         }}
         testID="document-cards-container"
@@ -85,7 +99,8 @@ const DocumentList = () => {
       </View>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'none' : 'flex',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'none' : 'flex',
           flex: 1,
         }}
         testID="other-cards-container"
