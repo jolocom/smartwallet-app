@@ -3,22 +3,18 @@ import Carousel, { CarouselProps } from 'react-native-snap-carousel'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import { IWithCustomStyle } from './Card/types'
 
-interface IAdoptedCarousel<T> extends IWithCustomStyle {
-  data: CarouselProps<T>['data']
-  renderItem: CarouselProps<T>['renderItem']
-  alignment?: CarouselProps<T>['activeSlideAlignment']
-}
+interface IAdoptedCarousel<T> extends CarouselProps<T>, IWithCustomStyle {}
 
 const AdoptedCarousel = <T extends unknown>({
   data,
   renderItem,
-  alignment,
+  activeSlideAlignment,
   customStyles,
 }: IAdoptedCarousel<T>) => (
   <Carousel
     contentContainerCustomStyle={customStyles}
     removeClippedSubviews={false}
-    activeSlideAlignment={alignment ?? 'center'}
+    activeSlideAlignment={activeSlideAlignment}
     data={data}
     layout="default"
     sliderWidth={SCREEN_WIDTH}

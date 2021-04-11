@@ -118,6 +118,7 @@ const DocumentList = () => {
                     </JoloText> */}
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
+                    activeSlideAlignment="center"
                     customStyles={{ marginLeft: -4 }}
                     data={credentials}
                     renderItem={({ item: c }) => (

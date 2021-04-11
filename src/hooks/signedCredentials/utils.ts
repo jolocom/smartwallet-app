@@ -1,6 +1,7 @@
 import { Agent, IdentitySummary } from '@jolocom/sdk'
 import { CredentialType } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { strings } from '~/translations'
 import {
@@ -14,6 +15,7 @@ import {
   DisplayCredentialOther,
   isDocument,
   OtherCategory,
+  CredentialsByCategory,
 } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
 
@@ -143,6 +145,28 @@ export const mapCredentialsToCustomDisplay = (
 ): Array<DisplayCredentialDocument | DisplayCredentialOther> =>
   credentials.map(mapDisplayToCustomDisplay)
 
+
+  /**
+ * Reduce categorized credentials to custom types `NT`
+ * * `PT` - previous type
+ * * `NT` - next type
+ */
+export const transformCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
+  return <NT>(processFn: (categories: PT[]) => NT[]) => {
+    return Object.keys(cats).reduce<CredentialsByCategory<NT>>(
+      (categories, catName) => {
+        const categoryName = catName as
+          | CredentialRenderTypes.document
+          | OtherCategory.other
+        categories[categoryName] = processFn(cats[categoryName])
+        return categories
+      },
+      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+    )
+  }
+}
+
+
 /**
  * Groups credentials by type
  *
@@ -207,6 +231,27 @@ export const reduceCustomDisplayCredentialsByIssuer = <
     [],
   )
 }
+
+export const sortCredentialsByRecentIssueDate = <T extends {issued: Date}>(credentials: T[]): T[] => {
+  return credentials.sort((a: T, b: T) => {
+    const aMs = new Date(a.issued).getTime();
+    const bMs = new Date(b.issued).getTime();
+    if(aMs > bMs) {
+      return -1
+    } else {
+      return 1;
+    }
+  })
+}
+
+export const reduceCustomDisplayCredentialsBySortedType = <T extends {type: string, issued: Date}>(credentials: T[]): Array<CredentialsByType<T>> => {
+  return reduceCustomDisplayCredentialsByType(sortCredentialsByRecentIssueDate(credentials));
+}
+
+export const reduceCustomDisplayCredentialsBySortedIssuer = <T extends {issuer: IdentitySummary, issued: Date}>(credentials: T[]): Array<CredentialsByIssuer<T>> => {
+  return reduceCustomDisplayCredentialsByIssuer(sortCredentialsByRecentIssueDate(credentials));
+}
+
 
 export function mapAttributesToDisplay(
   credentials: SignedCredential[],

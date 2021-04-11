@@ -157,7 +157,7 @@ const CredentialShareFAS = () => {
       return (
         <AdoptedCarousel
           key={key}
-          alignment="start"
+          activeSlideAlignment="start"
           data={credentials}
           renderItem={({ item: cred }) => {
             const claimFields = getOptionalFields(cred)
