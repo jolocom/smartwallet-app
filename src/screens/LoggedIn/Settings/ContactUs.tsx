@@ -73,6 +73,7 @@ const ContactUs: React.FC = () => {
     >
       <JoloKeyboardAwareScroll
         style={{ width: '100%', flexGrow: 1 }}
+        contentContainerStyle={{ paddingBottom: 36 }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
         enableOnAndroid
