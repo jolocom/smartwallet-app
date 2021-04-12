@@ -29,7 +29,7 @@ const INQUIRIES_LIST = [
 const ContactUs: React.FC = () => {
   const navigateBack = useGoBack()
   const showSuccess = useSuccess()
-  const { sendReport } = useSentry()
+  const { sendContactReport } = useSentry()
 
   const [contactValue, setContactValue] = useState('')
   const [contactValid, setContactValid] = useState(true)
@@ -56,7 +56,7 @@ const ContactUs: React.FC = () => {
   }
 
   const handleSubmit = () => {
-    sendReport(assembledData)
+    sendContactReport(assembledData)
     showSuccess(navigateBack)
   }
 

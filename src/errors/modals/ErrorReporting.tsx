@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
+import Btn, { BtnTypes } from '~/components/Btn'
 
 import EmojiSelectable from '~/components/EmojiSelectable'
 import Input from '~/components/Input'
@@ -10,6 +11,7 @@ import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import { IOption } from '~/components/Selectable'
 import ToggleSwitch from '~/components/ToggleSwitch'
+import { useSuccess } from '~/hooks/loader'
 import useSentry from '~/hooks/sentry'
 import useErrors from '~/hooks/useErrors'
 import ModalScreen from '~/modals/Modal'
@@ -35,8 +37,9 @@ const DROPDOWN_OPTIONS = INQUIRIES_LIST.map((el) => ({
 }))
 
 const ErrorReporting = () => {
-  const { errorScreen, resetError, error, showErrorDisplay } = useErrors()
-  const { sendReport } = useSentry()
+  const { errorScreen, resetError } = useErrors()
+  const { sendErrorReport } = useSentry()
+  const showSuccess = useSuccess()
 
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null)
   const [shouldIncludeLogs, setIncludeLogs] = useState(false)
@@ -44,6 +47,23 @@ const ErrorReporting = () => {
 
   const [contactValue, setContactValue] = useState('')
   const [contactValid, setContactValid] = useState(true)
+
+  const assembledData = {
+    issue: selectedIssue,
+    details: detailsInput,
+    email: contactValue,
+  }
+
+  const isSubmitEnabled = () => {
+    const fieldValues = Object.values(assembledData).filter(Boolean)
+
+    return fieldValues.length > 1
+  }
+
+  const handleSubmit = () => {
+    sendErrorReport(assembledData, shouldIncludeLogs)
+    showSuccess(resetError)
+  }
 
   const handleDropdownSelect = (option: IOption<string>) => {
     setSelectedIssue(option.value)
@@ -170,6 +190,14 @@ const ErrorReporting = () => {
             </Section.Title>
             <EmojiSelectable />
           </Section>
+
+          <Btn
+            type={BtnTypes.primary}
+            onPress={handleSubmit}
+            disabled={!contactValid || !isSubmitEnabled()}
+          >
+            {strings.SEND}
+          </Btn>
         </JoloKeyboardAwareScroll>
       </ScreenContainer>
     </ModalScreen>
