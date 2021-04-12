@@ -1,25 +1,25 @@
 import React, { useState } from 'react'
-import ModalScreen from '~/modals/Modal'
-import { ErrorScreens } from '../errorContext'
-import ScreenContainer from '~/components/ScreenContainer'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import Btn from '~/components/Btn'
-import useErrors from '~/hooks/useErrors'
-import useSentry from '~/hooks/sentry'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
-import { debugView } from '~/utils/dev'
+import { View } from 'react-native'
+
+import EmojiSelectable from '~/components/EmojiSelectable'
+import Input from '~/components/Input'
+import { InputValidityState } from '~/components/Input/types'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import ScreenContainer from '~/components/ScreenContainer'
+import { IOption } from '~/components/Selectable'
+import ToggleSwitch from '~/components/ToggleSwitch'
+import useSentry from '~/hooks/sentry'
+import useErrors from '~/hooks/useErrors'
+import ModalScreen from '~/modals/Modal'
+import Dropdown from '~/screens/LoggedIn/Settings/components/Dropdown'
 import Section from '~/screens/LoggedIn/Settings/components/Section'
 import { strings } from '~/translations'
-import Dropdown from '~/screens/LoggedIn/Settings/components/Dropdown'
-import { IOption } from '~/components/Selectable'
-import { JoloTextSizes } from '~/utils/fonts'
-import Input from '~/components/Input'
-import { View } from 'react-native'
-import ToggleSwitch from '~/components/ToggleSwitch'
-import { regexValidations, InputValidation } from '~/utils/stringUtils'
-import { InputValidityState } from '~/components/Input/types'
 import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
+import { InputValidation, regexValidations } from '~/utils/stringUtils'
+import { ErrorScreens } from '../errorContext'
 
 //FIXME: add the real strings
 const INQUIRIES_LIST = [
@@ -164,9 +164,11 @@ const ErrorReporting = () => {
                 : strings.PLEASE_ENTER_A_VALID_EMAIL}
             </JoloText>
           </Section>
-
           <Section>
-            <Section.Title>{strings.ERROR_REPORTING_RATE}</Section.Title>
+            <Section.Title customStyle={{ marginBottom: 24 }}>
+              {strings.ERROR_REPORTING_RATE}
+            </Section.Title>
+            <EmojiSelectable />
           </Section>
         </JoloKeyboardAwareScroll>
       </ScreenContainer>

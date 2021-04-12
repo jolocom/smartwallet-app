@@ -58,4 +58,6 @@ export enum Colors {
   slateGray = '#6c7b8a',
   inputBorder = 'rgb(45, 39, 46)',
   portGore = '#171739',
+  zincDust = 'rgb(62,62,62)',
+  mainPink = '#c52969',
 }
