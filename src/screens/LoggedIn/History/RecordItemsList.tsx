@@ -110,9 +110,10 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
       onViewableItemsChanged={handleSectionChange}
       onEndReached={handleEndReached}
       contentContainerStyle={{ marginTop: 32, paddingBottom: '100%' }}
-      renderSectionHeader={({ section }) => (
-        <RecordHeader title={section.title} />
-      )}
+      renderSectionHeader={({ section }) => {
+        if (section.title === activeSection) return null
+        return <RecordHeader title={section.title} />
+      }}
       renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
       renderItem={({ item, index, section }) => (
         <RecordItem
