@@ -89,7 +89,15 @@ const BusinessCardForm = () => {
       validationSchema={businessCardWithValues.validationSchema}
     >
       {(formProps) => {
-        const { handleChange, values, isValid, dirty, errors } = formProps
+        const {
+          handleChange,
+          values,
+          isValid,
+          dirty,
+          errors,
+          validateForm,
+        } = formProps
+
         return (
           <FormContainer
             title={
@@ -112,12 +120,18 @@ const BusinessCardForm = () => {
                   <View key={groupKey}>
                     {renderSectionHeader(groupKey)}
                     {groupedBC[groupKey].map((f, idx) => (
-                      <JoloKeyboardAwareScroll.InputContainer>
+                      <JoloKeyboardAwareScroll.InputContainer key={f.key}>
                         {({ focusInput }) => (
                           <FormFieldContainer>
                             <MoveToNext.InputsCollector
                               key={f.key}
-                              onSubmit={() => handleFormSubmit(values)}
+                              onSubmit={async () => {
+                                const validationErrors = await validateForm(
+                                  values,
+                                )
+                                if (Object.keys(validationErrors).length) return
+                                else handleFormSubmit(values)
+                              }}
                             >
                               <Input.Block
                                 {...(groupIdx === 0 && idx === 0
@@ -129,11 +143,16 @@ const BusinessCardForm = () => {
                                 updateInput={handleChange(f.key)}
                                 placeholder={f.label}
                                 onFocus={focusInput}
+                                withHighlight={
+                                  !Boolean(errors[f.key]) &&
+                                  Boolean(values[f.key])
+                                }
                                 containerStyle={{
                                   ...(errors[f.key] && {
                                     borderColor: Colors.error,
                                   }),
                                 }}
+                                testID="business-card-input"
                                 {...f.keyboardOptions}
                               />
                               <FormError message={errors[f.key]} />

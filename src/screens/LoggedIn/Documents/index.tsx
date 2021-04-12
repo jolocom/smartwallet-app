@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
+import { useRoute, RouteProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
@@ -9,12 +10,13 @@ import {
   getCustomCredentialsByCategoriesByType,
   getCustomCredentialsByCategoriesByIssuer,
 } from '~/modules/credentials/selectors'
-import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
+import DocumentTabs, {
+  documentTabs,
+} from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
 import {
-  DocumentTypes,
+  CredentialCategories,
   DocumentFields,
-  OtherCategory,
   DisplayCredentialDocument,
   DisplayCredentialOther,
   CredentialsByType,
@@ -26,6 +28,8 @@ import { strings } from '~/translations'
 import { getOptionalFields } from './utils'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
+import { MainTabsParamList } from '../MainTabs'
+import { ScreenNames } from '~/types/screens'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -52,12 +56,18 @@ const DocumentList = () => {
       >
     | null
   >(null)
-  const { activeTab, activeSubtab } = useTabs()
+  const { activeTab, activeSubtab, setActiveTab } = useTabs()
+  const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
+  const initialTabId = route.params.initialTab ?? CredentialCategories.document
 
   const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
   const categoriesByIssuer = useSelector(
     getCustomCredentialsByCategoriesByIssuer,
   )
+
+  useLayoutEffect(() => {
+    setActiveTab(documentTabs.find((t) => t.id === initialTabId)!)
+  }, [initialTabId])
 
   useEffect(() => {
     if (activeSubtab?.id === 'type') {
@@ -77,7 +87,7 @@ const DocumentList = () => {
     [JSON.stringify(categories)],
   )
   const other = useMemo(
-    () => (categories !== null ? categories[OtherCategory.other] : []),
+    () => (categories !== null ? categories[CredentialCategories.other] : []),
     [JSON.stringify(categories)],
   )
 
@@ -86,7 +96,8 @@ const DocumentList = () => {
     <>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'flex' : 'none',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'flex' : 'none',
           flex: 1,
         }}
         testID="document-cards-container"
@@ -149,7 +160,8 @@ const DocumentList = () => {
       </View>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'none' : 'flex',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'none' : 'flex',
           flex: 1,
         }}
         testID="other-cards-container"

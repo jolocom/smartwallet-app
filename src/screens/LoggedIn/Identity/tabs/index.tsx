@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 
 import IdentityTab from './IdentityTab'
 import IdentityTabsHeader from './IdentityTabsHeader'
@@ -13,6 +13,12 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
   children,
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab)
+
+  useEffect(() => {
+    if (activeTab !== initialTab) {
+      setActiveTab(initialTab)
+    }
+  }, [initialTab])
 
   const contextValue = useMemo(
     () => ({

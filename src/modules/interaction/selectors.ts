@@ -8,14 +8,13 @@ import {
   DisplayCredentialDocument,
   DisplayCredentialOther,
   OfferedCredential,
-  OtherCategory,
   RequestedCredentialsByCategoryByType,
+  CredentialCategories,
 } from '~/types/credentials'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { getAttributes } from '~/modules/attributes/selectors'
 import { getAllCredentials } from '~/modules/credentials/selectors'
 // TODO: rename the file
-import { getCredentialCategory } from '~/utils/credentialsBySection'
 import { InteractionDetails } from './types'
 import {
   isAuthDetails,
@@ -25,7 +24,6 @@ import {
   isNotActiveInteraction,
 } from './guards'
 import BP from '~/utils/breakpoints'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
@@ -182,7 +180,7 @@ const getRequestedCredentialsByCategoryByType = createSelector(
 
         // NOTE: we assume the category property is the same for all credentials
         // of the same type
-        const section = getCredentialCategory(credentials[0])
+        const section = credentials[0].category
 
         acc[section] = [
           ...acc[section],
@@ -195,7 +193,7 @@ const getRequestedCredentialsByCategoryByType = createSelector(
 
         return acc
       },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   },
 )
@@ -209,9 +207,7 @@ export const getCustomRequestedCredentialsByCategoryByType = createSelector(
       >
     >(
       (categories, catName) => {
-        const categoryName = catName as
-          | CredentialRenderTypes.document
-          | OtherCategory.other
+        const categoryName = catName as CredentialCategories
         categories[categoryName] = requestedCategories[categoryName].map(
           (d) => ({
             ...d,
@@ -220,7 +216,7 @@ export const getCustomRequestedCredentialsByCategoryByType = createSelector(
         )
         return categories
       },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   },
 )
@@ -333,12 +329,11 @@ export const getOfferedCredentialsByCategories = createSelector(
       CredentialsByCategory<OfferedCredential>
     >(
       (acc, cred) => {
-        const section = getCredentialCategory(cred)
-        acc[section] = [...acc[section], cred]
+        acc[cred.category] = [...acc[cred.category], cred]
 
         return acc
       },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   },
 )
@@ -405,12 +400,12 @@ export const getOfferedCredentialCategories = createSelector(
     const {
       credentials: { service_issued },
     } = details
-    return service_issued.reduce<
-      Record<string, CredentialRenderTypes.document | OtherCategory.other>
-    >((credByType, c) => {
-      // credByType[c.type[1]] = getCredentialCategory(c)
-      credByType[c.type] = getCredentialCategory(c)
-      return credByType
-    }, {})
+    return service_issued.reduce<Record<string, CredentialCategories>>(
+      (credByType, c) => {
+        credByType[c.type[1]] = c.category
+        return credByType
+      },
+      {},
+    )
   },
 )

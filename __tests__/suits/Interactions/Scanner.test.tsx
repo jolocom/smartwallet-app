@@ -19,6 +19,13 @@ jest.mock('react-native-permissions', () => ({
   openSettings: jest.fn(),
 }))
 
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    canGoBack: jest.fn().mockReturnValue(true),
+  }),
+}))
+
 test('it displays permission request, denies it and opens settings ', async () => {
   const request = jest.spyOn(Permissions, 'request')
   request.mockResolvedValueOnce('denied')

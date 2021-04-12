@@ -1,11 +1,10 @@
 import { RootReducerI } from '~/types/reducer'
 import { createSelector } from 'reselect'
 import {
+  CredentialCategories,
   CredentialsByCategory,
   DisplayCredential,
-  OtherCategory,
 } from '~/types/credentials'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import {
   mapCredentialsToCustomDisplay,
   reduceCustomDisplayCredentialsBySortedIssuer,
@@ -20,21 +19,21 @@ const getCredentialsByCategories = createSelector(
   (credentials) =>
     credentials.reduce<CredentialsByCategory<DisplayCredential>>(
       (sections, credential) => {
-        if (credential.category === CredentialRenderTypes.document) {
-          sections[CredentialRenderTypes.document] = [
-            ...sections[CredentialRenderTypes.document],
+        if (credential.category === CredentialCategories.document) {
+          sections[CredentialCategories.document] = [
+            ...sections[CredentialCategories.document],
             credential,
           ]
         } else {
-          sections[OtherCategory.other] = [
-            ...sections[OtherCategory.other],
+          sections[CredentialCategories.other] = [
+            ...sections[CredentialCategories.other],
             credential,
           ]
         }
 
         return sections
       },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     ),
 )
 

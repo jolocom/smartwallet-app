@@ -4,7 +4,7 @@ import BP from '~/utils/breakpoints'
 import { useCard } from './context'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
 import { IWithCustomStyle } from './types'
-import { DocumentTypes } from '~/types/credentials'
+import { CredentialCategories } from '~/types/credentials'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
@@ -30,7 +30,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
           /* check wether to show last optional field */
           if (
             lines.current > 7 &&
-            (highlight || (photo && DocumentTypes.document))
+            (highlight || (photo && CredentialCategories.document))
           ) {
             setDisplayedOptionalFields((prevState) =>
               prevState.slice(

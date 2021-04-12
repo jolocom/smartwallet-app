@@ -1,4 +1,3 @@
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useEffect } from 'react'
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -18,8 +17,8 @@ import { strings } from '~/translations'
 import {
   isDocument,
   CredentialsByType,
-  OtherCategory,
   DisplayCredential,
+  CredentialCategories,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { IncomingRequestDoc } from '../components/card/request/document'
@@ -147,8 +146,8 @@ const CredentialShareFAS = () => {
 
   const handleSubmit = useCredentialShareSubmit()
 
-  const documents = categories[CredentialRenderTypes.document]
-  const other = categories[OtherCategory.other]
+  const documents = categories[CredentialCategories.document]
+  const other = categories[CredentialCategories.other]
 
   const handleRenderCredentials = (
     credCollections: CredentialsByType<DisplayCredential>[],

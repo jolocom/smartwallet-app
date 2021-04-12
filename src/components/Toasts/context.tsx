@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useCustomContext } from '~/hooks/context'
 import { Toast } from '~/types/toasts'
 import { Colors } from '~/utils/colors'
 
@@ -11,7 +12,9 @@ interface IToastContext {
   isSticky: boolean
 }
 
-export const ToastToShowContext = React.createContext<IToastContext>({
+export const ToastToShowContext = React.createContext<
+  IToastContext | undefined
+>({
   toastToShow: null,
   toastColor: Colors.white,
   invokeInteract: () => {},
@@ -19,12 +22,6 @@ export const ToastToShowContext = React.createContext<IToastContext>({
   isInteractive: false,
   isSticky: false,
 })
+ToastToShowContext.displayName = 'ToastToShowContext'
 
-export const useToastToShow = () => {
-  const context = useContext(ToastToShowContext)
-  if (!context)
-    throw new Error(
-      'This component should be used withing ActiveToast context provider',
-    )
-  return context
-}
+export const useToastToShow = useCustomContext(ToastToShowContext)

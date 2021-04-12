@@ -1,7 +1,6 @@
 import { Agent, IdentitySummary } from '@jolocom/sdk'
 import { CredentialType } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { strings } from '~/translations'
 import {
@@ -14,12 +13,18 @@ import {
   DisplayCredentialDocument,
   DisplayCredentialOther,
   isDocument,
-  OtherCategory,
+  CredentialCategories,
   CredentialsByCategory,
 } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
+import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/types'
 
 type CredentialKeys = 'credentials' | 'selfIssuedCredentials'
+
+export const getCredentialCategory = (renderInfo?: CredentialOfferRenderInfo) =>
+  renderInfo?.renderAs === 'document'
+    ? CredentialCategories.document
+    : CredentialCategories.other
 
 export const separateCredentialsAndAttributes = (
   allCredentials: SignedCredential[],
@@ -64,7 +69,7 @@ export async function mapCredentialsToDisplay(
   let updatedCredentials: DisplayCredential = {
     ...baseUICredentials,
     issuer: resolvedIssuer,
-    category: renderInfo?.renderAs ?? OtherCategory.other,
+    category: getCredentialCategory(renderInfo),
     properties: [],
   }
 
@@ -155,13 +160,11 @@ export const transformCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
   return <NT>(processFn: (categories: PT[]) => NT[]) => {
     return Object.keys(cats).reduce<CredentialsByCategory<NT>>(
       (categories, catName) => {
-        const categoryName = catName as
-          | CredentialRenderTypes.document
-          | OtherCategory.other
+        const categoryName = catName as CredentialCategories
         categories[categoryName] = processFn(cats[categoryName])
         return categories
       },
-      { [CredentialRenderTypes.document]: [], [OtherCategory.other]: [] },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
     )
   }
 }

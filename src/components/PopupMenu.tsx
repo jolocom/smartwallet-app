@@ -20,7 +20,11 @@ const PopupButton: React.FC<{ onPress: () => void }> = ({
   onPress,
   children,
 }) => (
-  <TouchableOpacity style={styles.button} onPress={onPress}>
+  <TouchableOpacity
+    style={styles.button}
+    onPress={onPress}
+    testID="popup-menu-button"
+  >
     <JoloText>{children}</JoloText>
   </TouchableOpacity>
 )

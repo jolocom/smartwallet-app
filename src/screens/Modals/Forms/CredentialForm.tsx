@@ -139,8 +139,9 @@ const CredentialForm = () => {
             <AutofocusContainer>
               {formConfig.fields.map((field, i) => {
                 return (
-                  <FormFieldContainer>
+                  <FormFieldContainer key={field.key}>
                     <AutofocusInput
+                      testID="credential-form-input"
                       // @ts-expect-error
                       name={field.key as string}
                       key={field.key}

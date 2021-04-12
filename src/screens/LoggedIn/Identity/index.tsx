@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import IdentityIntro from './IdentityIntro'
@@ -12,28 +12,29 @@ import {
 } from '~/assets/svg'
 import { strings } from '~/translations'
 import IdentityBusinessCard from './IdentityBusinessCard'
-
-enum IdentityTabIds {
-  credentials = 'credentials',
-  businessCard = 'businessCard',
-}
+import { IdentityTabIds } from './types'
 
 const Identity = () => {
   const attributes = useSelector(getAttributes)
   const showIdentityIntro = !Boolean(Object.keys(attributes).length)
+  const [initialTab, setInitialTab] = useState(IdentityTabIds.credentials)
 
-  if (showIdentityIntro) {
-    return (
-      <ScreenContainer isFullscreen customStyles={{justifyContent: 'flex-start'}}>
-        <IdentityIntro />
-      </ScreenContainer>
-    )
+  const handleIntroSubmit = (id: IdentityTabIds) => {
+    setInitialTab(id)
   }
 
-  return (
-    <ScreenContainer>
+  return showIdentityIntro ? (
+    <ScreenContainer
+      testID="home-identity-intro"
+      isFullscreen
+      customStyles={{ justifyContent: 'flex-start' }}
+    >
+      <IdentityIntro onSubmit={handleIntroSubmit} />
+    </ScreenContainer>
+  ) : (
+    <ScreenContainer testID="home-self-issued-credentials">
       <ScreenContainer.Header>{strings.YOUR_INFO}</ScreenContainer.Header>
-      <IdentityTabs initialTab={IdentityTabIds.credentials}>
+      <IdentityTabs initialTab={initialTab}>
         <IdentityTabs.Styled.Header>
           <IdentityTabs.Tab
             id={IdentityTabIds.credentials}

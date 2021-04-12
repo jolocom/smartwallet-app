@@ -16,33 +16,36 @@ import { setPopup } from '~/modules/appState/actions'
 const Lock = () => {
   const dispatch = useDispatch()
   const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
-  const { authenticate, getEnrolledBiometry } = useBiometry();
+  const { authenticate, getEnrolledBiometry } = useBiometry()
 
-  const { currentAppState, prevAppState } = useGetAppStates();
+  const { currentAppState, prevAppState } = useGetAppStates()
 
   const promptedTimes = useRef(0)
 
   useEffect(() => {
-    if (isBiometrySelected) { 
-      if ((currentAppState === 'active' && prevAppState === 'active') || currentAppState === 'active' && prevAppState === 'background') {
-        promptedTimes.current += 1;
+    if (isBiometrySelected) {
+      if (
+        (currentAppState === 'active' && prevAppState === 'active') ||
+        (currentAppState === 'active' && prevAppState === 'background')
+      ) {
+        promptedTimes.current += 1
         if (promptedTimes.current === 1) {
           handleBiometryAuthentication()
         }
       }
     }
   }, [currentAppState, prevAppState, isBiometrySelected])
-  
+
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
   }, [])
-    
+
   const handleBiometryAuthentication = async () => {
     try {
-      dispatch(setPopup(true));
+      dispatch(setPopup(true))
       /* in case user disabled biometrics we don't want to run authenticate */
       const { available, biometryType } = await getEnrolledBiometry()
-      
+
       if (available) {
         const { success } = await authenticate(biometryType)
         if (success) {
@@ -67,17 +70,21 @@ const Lock = () => {
   return (
     <ScreenContainer
       customStyles={{
-        marginTop: '20%',
         justifyContent: 'flex-start',
       }}
     >
       <Passcode onSubmit={handlePINSubmit}>
-        <Passcode.Header
-          title={strings.ENTER_YOUR_PASSCODE}
-          errorTitle={strings.WRONG_PASSCODE}
-        />
-        <Passcode.Input />
-        <Passcode.Forgot />
+        <Passcode.Container>
+          <Passcode.Header
+            title={strings.ENTER_YOUR_PASSCODE}
+            errorTitle={strings.WRONG_PASSCODE}
+          />
+          <Passcode.Input />
+        </Passcode.Container>
+        <Passcode.Container>
+          <Passcode.Forgot />
+          <Passcode.Keyboard />
+        </Passcode.Container>
       </Passcode>
     </ScreenContainer>
   )

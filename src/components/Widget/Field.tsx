@@ -43,9 +43,11 @@ const FieldText: React.FC<
 
 const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => {
   return (
-    <FieldContainer>
-      <FieldText value={value} />
-    </FieldContainer>
+    <View testID="widget-field-static">
+      <FieldContainer>
+        <FieldText value={value} />
+      </FieldContainer>
+    </View>
   )
 }
 
@@ -76,7 +78,7 @@ const EmptyField: React.FC = ({ children }) => {
     throw new Error('No method provided for creating new attribute')
 
   return (
-    <TouchableOpacity onPress={widgetContext.onAdd}>
+    <TouchableOpacity onPress={widgetContext.onAdd} testID="widget-field-empty">
       <FieldContainer>
         {children ? (
           children
