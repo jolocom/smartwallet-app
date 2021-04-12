@@ -24,6 +24,7 @@ import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
 import { useRedirectTo } from '~/hooks/navigation'
 import BP from '~/utils/breakpoints'
+import { SCREEN_WIDTH } from '~/utils/dimensions'
 
 interface IconPropsI {
   label: string
@@ -31,13 +32,17 @@ interface IconPropsI {
   isActive: boolean
 }
 
+const SCALE_BY = SCREEN_WIDTH / 414
+console.log({ SCALE_BY })
+
 /* picture has invisble horizontal margins, therefore adding 4 point to hide it */
-const SCREEN_WIDTH = Dimensions.get('window').width + 4
-const TAB_IMAGE_WIDTH = SCREEN_WIDTH
+const SCREEN_WIDTH_ADJUSTED = SCREEN_WIDTH + 4
+const TAB_IMAGE_WIDTH = SCREEN_WIDTH_ADJUSTED
 const TAB_IMAGE_HEIGHT = 0.192 * TAB_IMAGE_WIDTH
 const SCANNER_BUTTON_BOTTOM = 0.345 * TAB_IMAGE_HEIGHT
 const SCANNER_BTN_MARGIN = 16
-const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
+const SCANNER_BUTTON_DIMENSIONS =
+  0.22 * SCREEN_WIDTH_ADJUSTED - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
 const TABS_POSITION_BOTTOM = BP({
   default: 0.2 * TAB_IMAGE_HEIGHT,
@@ -50,19 +55,32 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
   const renderIcon = () => {
     const color = isActive ? Colors.white : Colors.white40
+    let icon: JSX.Element | null
     switch (label) {
-      case ScreenNames.Identity:
-        return <IdentityTabIcon color={color} />
-      case ScreenNames.Documents:
-        return <DocumentsTabIcon color={color} />
-      case ScreenNames.History:
-        return <HistoryTabIcon color={color} />
-      case ScreenNames.Settings:
-        return <SettingsTabIcon color={color} />
-      default:
-        return null
+      case ScreenNames.Identity: {
+        icon = <IdentityTabIcon color={color} />
+        break
+      }
+      case ScreenNames.Documents: {
+        icon = <DocumentsTabIcon color={color} />
+        break
+      }
+      case ScreenNames.History: {
+        icon = <HistoryTabIcon color={color} />
+        break
+      }
+      case ScreenNames.Settings: {
+        icon = <SettingsTabIcon color={color} />
+        break
+      }
+      default: {
+        icon = null
+        break
+      }
     }
+    return <View style={{ transform: [{ scale: SCALE_BY }] }}>{icon}</View>
   }
+
   return (
     <TouchableOpacity onPress={redirectToTab}>
       <View style={styles.iconContainer}>
