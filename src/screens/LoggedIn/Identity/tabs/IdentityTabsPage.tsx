@@ -1,16 +1,26 @@
 import React from 'react'
 import { View } from 'react-native'
 import { useIdentityTabs } from './context'
+import { ITabsComposition } from './types'
 
-interface Props {
-  id: string
-}
-
-const IdentityTabsPage: React.FC<Props> = ({ id, children }) => {
+const IdentityTabsPage: ITabsComposition['Page'] = ({
+  id,
+  children,
+  customStyles = {},
+}) => {
   const { activeTab } = useIdentityTabs()
   const isActive = id === activeTab
 
-  return <View style={{ display: isActive ? 'flex' : 'none' }}>{children}</View>
+  return (
+    <View
+      style={[
+        { display: isActive ? 'flex' : 'none', paddingHorizontal: '5%' },
+        customStyles,
+      ]}
+    >
+      {children}
+    </View>
+  )
 }
 
 export default IdentityTabsPage

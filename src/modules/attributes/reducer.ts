@@ -38,14 +38,19 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
       }
     }
     case AttrActions.deleteAttr: {
-      const { type } = action.payload
-      if (type === AttributeTypes.businessCard) {
-        const { ProofOfBusinessCardCredential, ...rest } = state.all
-        return { all: rest }
-      } else {
-        // TODO: handle when working on SIC that are not BC
-        return state
+      const { type, id }: { type: AttributeTypes; id: string } = action.payload
+      const typeAttrs = state.all[type]
+
+      if (typeAttrs) {
+        return {
+          all: {
+            ...state.all,
+            [type]: typeAttrs.filter((attr) => attr.id !== id),
+          },
+        }
       }
+
+      return state
     }
     default:
       return state

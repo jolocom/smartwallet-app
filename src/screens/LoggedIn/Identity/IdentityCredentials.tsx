@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useLayoutEffect } from 'react'
+import { StyleSheet, View, LayoutAnimation } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import Widget from '~/components/Widget/Widget'
@@ -13,6 +13,8 @@ import IdentityTabs from './tabs'
 import { strings } from '~/translations'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import IdentityField from './IdentityField'
+import { useSICActions } from '~/hooks/attributes'
 
 type TPrimitiveAttributeTypes = Exclude<
   AttributeTypes,
@@ -36,6 +38,14 @@ const primitiveAttributesConfig = getAttributeConfigPrimitive()
 const IdentityCredentials = () => {
   const redirect = useRedirect()
   const attributes = useSelector(getPrimitiveAttributes)
+  const { handleDeleteCredentialSI } = useSICActions()
+
+  useLayoutEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+  }, [JSON.stringify(attributes)])
 
   const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
     primitiveAttributesConfig,
@@ -77,24 +87,15 @@ const IdentityCredentials = () => {
                 <Widget.Header.Action.CreateNew />
               </Widget.Header>
               {values.length ? (
-                values.map((field) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={() =>
-                        redirect(ScreenNames.CredentialForm, {
-                          type,
-                          id: field.id,
-                        })
-                      }
-                      key={field.id}
-                    >
-                      <Field.Static
-                        key={field.id}
-                        value={Object.values(field.value).join(' ')}
-                      />
-                    </TouchableOpacity>
-                  )
-                })
+                values.map((field) => (
+                  <IdentityField
+                    key={field.id}
+                    id={field.id}
+                    type={type}
+                    value={Object.values(field.value).join(' ')}
+                    onDelete={() => handleDeleteCredentialSI(field.id, type)}
+                  />
+                ))
               ) : (
                 <Field.Empty>
                   <PencilIcon />

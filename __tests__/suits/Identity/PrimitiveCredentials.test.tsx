@@ -44,6 +44,12 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/attributes', () => ({
+  useSICActions: () => ({
+    handleDeleteCredentialsSI: jest.fn(),
+  }),
+}))
+
 const pressFieldAndAssertNavigation = (
   mockedNavigate: jest.Mock,
   fields: ReactTestInstance[],

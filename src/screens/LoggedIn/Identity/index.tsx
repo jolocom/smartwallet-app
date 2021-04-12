@@ -27,13 +27,15 @@ const Identity = () => {
     <ScreenContainer
       testID="home-identity-intro"
       isFullscreen
-      customStyles={{ justifyContent: 'flex-start' }}
+      customStyles={{ justifyContent: 'flex-start', paddingHorizontal: 0 }}
     >
       <IdentityIntro onSubmit={handleIntroSubmit} />
     </ScreenContainer>
   ) : (
     <ScreenContainer testID="home-self-issued-credentials">
-      <ScreenContainer.Header>{strings.YOUR_INFO}</ScreenContainer.Header>
+      <ScreenContainer.Header customStyles={{ paddingLeft: '5%' }}>
+        {strings.YOUR_INFO}
+      </ScreenContainer.Header>
       <IdentityTabs initialTab={initialTab}>
         <IdentityTabs.Styled.Header>
           <IdentityTabs.Tab
