@@ -118,9 +118,7 @@ const getAvailableRequestedCredentials = createSelector(
   [getCredShareDetails, getAllCredentials],
   ({ requestedCredentials }, credentials) =>
     requestedCredentials.reduce<DisplayCredential[]>((acc, type) => {
-      const credentialsOfType = credentials.filter(
-        (cred) => cred.type[1] === type,
-      )
+      const credentialsOfType = credentials.filter((cred) => cred.type === type)
       if (!credentialsOfType.length) return acc
       acc = [...acc, ...credentialsOfType]
       return acc
@@ -177,7 +175,7 @@ const getRequestedCredentialsByCategoryByType = createSelector(
     >(
       (acc, type) => {
         const credentials = availableRequestedCredentials.filter(
-          (cred) => cred.type[1] === type,
+          (cred) => cred.type === type,
         )
 
         // NOTE: we assume the category property is the same for all credentials
@@ -187,7 +185,8 @@ const getRequestedCredentialsByCategoryByType = createSelector(
         acc[section] = [
           ...acc[section],
           {
-            type,
+            key: 'type',
+            value: type,
             credentials,
           },
         ]
@@ -242,7 +241,8 @@ const getSingleRequestedCredential = createSelector(
     const { requestedAttributes, requestedCredentials } = details
     if (requestedAttributes.length === 0 && requestedCredentials.length === 1) {
       const availableCreds = credentials.filter(
-        (c) => c.type[1] === requestedCredentials[0],
+        // (c) => c.type[1] === requestedCredentials[0],
+        (c) => c.type === requestedCredentials[0],
       )
       if (availableCreds.length === 1) {
         return availableCreds[0]

@@ -1,13 +1,16 @@
 import { RootReducerI } from '~/types/reducer'
 import { createSelector } from 'reselect'
 import {
+  CredentialCategories,
   CredentialsByCategory,
   DisplayCredential,
-  DisplayCredentialDocument,
-  DisplayCredentialOther,
-  CredentialCategories,
 } from '~/types/credentials'
-import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
+import {
+  mapCredentialsToCustomDisplay,
+  reduceCustomDisplayCredentialsBySortedIssuer,
+  reduceCustomDisplayCredentialsBySortedType,
+  transformCategoriesTo,
+} from '~/hooks/signedCredentials/utils'
 
 export const getAllCredentials = (state: RootReducerI) => state.credentials.all
 
@@ -34,20 +37,25 @@ const getCredentialsByCategories = createSelector(
     ),
 )
 
-export const getCustomCredentialsByCategories = createSelector(
+const getCustomCredentialsByCategories = createSelector(
   [getCredentialsByCategories],
   (cats) => {
-    return Object.keys(cats).reduce<
-      CredentialsByCategory<DisplayCredentialDocument | DisplayCredentialOther>
-    >(
-      (categories, catName) => {
-        const categoryName = catName as CredentialCategories
-        categories[categoryName] = cats[categoryName].map(
-          mapDisplayToCustomDisplay,
-        )
-        return categories
-      },
-      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
-    )
+    return transformCategoriesTo(cats)(mapCredentialsToCustomDisplay)
+  },
+)
+
+export const getCustomCredentialsByCategoriesByType = createSelector(
+  [getCustomCredentialsByCategories],
+  (cats) => {
+    const groupCategoriesByType = transformCategoriesTo(cats); 
+    return groupCategoriesByType(reduceCustomDisplayCredentialsBySortedType)
+  },
+)
+
+export const getCustomCredentialsByCategoriesByIssuer = createSelector(
+  [getCustomCredentialsByCategories],
+  (cats) => {
+    const groupCategoriesByIssuer = transformCategoriesTo(cats)
+    return groupCategoriesByIssuer(reduceCustomDisplayCredentialsBySortedIssuer)
   },
 )

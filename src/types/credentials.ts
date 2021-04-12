@@ -62,8 +62,8 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
 
 export type BaseUICredential = Pick<
   SignedCredential,
-  'id' | 'issuer' | 'issued' | 'type' | 'expires' | 'subject' | 'name'
->
+  'id' | 'issuer' | 'issued' | 'expires' | 'subject' | 'name'
+> & { type: string }
 
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
   category: CredentialCategories
@@ -95,12 +95,18 @@ export type DisplayCredentialDocument = DisplayCredential & {
 }
 export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
-export type RequestedCredentialsByType<T> = { type: string; credentials: T[] }
+export type CredentialsBy<BT, CT> = {
+  key: BT
+  value: string
+  credentials: CT[]
+}
+export type CredentialsByType<T> = CredentialsBy<'type', T>
+export type CredentialsByIssuer<T> = CredentialsBy<'issuer', T>
 
 export type CredentialsByCategory<T> = Record<CredentialCategories, T[]>
 
 export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
-  RequestedCredentialsByType<T>
+  CredentialsByType<T>
 >
 
 export function isDocument(
