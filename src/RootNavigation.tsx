@@ -2,6 +2,7 @@ import React from 'react'
 import {
   NavigationContainer,
   NavigationContainerRef,
+  Theme,
 } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
@@ -26,12 +27,24 @@ export type RootStackParamList = {
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
+const navigationTheme: Theme = {
+  dark: true,
+  colors: {
+    primary: Colors.mainBlack,
+    background: Colors.mainBlack,
+    card: Colors.mainBlack,
+    // NOTE: the values below are not used, but are required due to TS
+    text: Colors.white,
+    border: Colors.mainBlack,
+    notification: Colors.mainBlack,
+  },
+}
 
 const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
   const isLoggedIn = useSelector(isLogged)
 
   return (
-    <NavigationContainer ref={ref}>
+    <NavigationContainer theme={navigationTheme} ref={ref}>
       <RootStack.Navigator headerMode="none" mode="modal">
         {isLoggedIn ? (
           <RootStack.Screen
@@ -39,7 +52,6 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
             component={LoggedIn}
             options={{
               gestureEnabled: false,
-              cardStyle: { backgroundColor: Colors.mainBlack },
             }}
           />
         ) : (
