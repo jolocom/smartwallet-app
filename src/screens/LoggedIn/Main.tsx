@@ -32,6 +32,7 @@ import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
 import { IField } from '~/components/Card/types'
 import CardDetails from './Documents/CardDetails'
+import InteractionTest from './Settings/Development/InteractionCardsTest'
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
@@ -62,6 +63,7 @@ export type MainStackParamList = {
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
   [ScreenNames.BusinessCardTest]: undefined
+  [ScreenNames.InteractionCardsTest]: undefined
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -176,6 +178,11 @@ const Main: React.FC = () => {
               <MainStack.Screen
                 name={ScreenNames.BusinessCardTest}
                 component={BusinessCardTest}
+                options={settingsScreenTransitionOptions}
+              />
+              <MainStack.Screen
+                name={ScreenNames.InteractionCardsTest}
+                component={InteractionTest}
                 options={settingsScreenTransitionOptions}
               />
             </>
