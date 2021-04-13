@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 
@@ -60,6 +60,13 @@ const ErrorReporting = () => {
     return fieldValues.length > 1
   }
 
+  const handleResetState = () => {
+    setSelectedIssue(null)
+    setIncludeLogs(false)
+    setDetailsInput('')
+    setContactValue('')
+  }
+
   const handleSubmit = () => {
     sendErrorReport(assembledData, shouldIncludeLogs)
     showSuccess(resetError)
@@ -72,6 +79,11 @@ const ErrorReporting = () => {
   const handleContactValidation = (state: InputValidityState) =>
     setContactValid(state !== InputValidityState.error)
 
+  useEffect(() => {
+    if (errorScreen !== ErrorScreens.errorReporting) {
+      handleResetState()
+    }
+  }, [errorScreen])
   return (
     <ModalScreen
       isVisible={errorScreen === ErrorScreens.errorReporting}
