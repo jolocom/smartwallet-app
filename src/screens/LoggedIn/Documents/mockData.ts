@@ -1,9 +1,9 @@
-import { DocumentTypes, DocumentFields } from '~/types/credentials'
+import { CredentialCategories, DocumentFields } from '~/types/credentials'
 
 export const DOCUMENTS = [
   {
     id: 1,
-    type: DocumentTypes.document,
+    type: CredentialCategories.document,
     details: {
       mandatoryFields: [
         {
@@ -30,7 +30,7 @@ export const DOCUMENTS = [
   },
   {
     id: 2,
-    type: DocumentTypes.document,
+    type: CredentialCategories.document,
     details: {
       mandatoryFields: [
         {
@@ -69,7 +69,7 @@ export const DOCUMENTS = [
   },
   {
     id: 3,
-    type: DocumentTypes.document,
+    type: CredentialCategories.document,
     details: {
       mandatoryFields: [
         {
@@ -106,7 +106,7 @@ export const DOCUMENTS = [
 export const OTHER = [
   {
     id: 4,
-    type: DocumentTypes.other,
+    type: CredentialCategories.other,
     details: {
       mandatoryFields: [
         { name: DocumentFields.DocumentName, value: 'Name of the event' },
@@ -132,7 +132,7 @@ export const OTHER = [
   },
   {
     id: 5,
-    type: DocumentTypes.other,
+    type: CredentialCategories.other,
     details: {
       mandatoryFields: [{ name: DocumentFields.DocumentName, value: 'Name' }],
       optionalFields: [
@@ -149,7 +149,7 @@ export const OTHER = [
   },
   {
     id: 6,
-    type: DocumentTypes.other,
+    type: CredentialCategories.other,
     details: {
       mandatoryFields: [
         {

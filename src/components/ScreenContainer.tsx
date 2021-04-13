@@ -26,6 +26,7 @@ interface ScreenContainerI {
 
 interface IScreenContainerCompound {
   Header: React.FC<IJoloTextProps>
+  Padding: React.FC
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> &
@@ -85,7 +86,7 @@ const ScreenContainer: React.FC<ScreenContainerI> &
   )
 }
 
-const ScreenContainerHeader: React.FC<IJoloTextProps> = ({
+const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
   children,
   customStyles,
   ...props
@@ -112,7 +113,12 @@ const ScreenContainerHeader: React.FC<IJoloTextProps> = ({
   )
 }
 
+const ScreenPadding: IScreenContainerCompound['Padding'] = ({ children }) => (
+  <View style={styles.padding} children={children} />
+)
+
 ScreenContainer.Header = ScreenContainerHeader
+ScreenContainer.Padding = ScreenPadding
 
 const styles = StyleSheet.create({
   navContainer: {
@@ -133,6 +139,10 @@ const styles = StyleSheet.create({
   fullscreen: {
     paddingHorizontal: 0,
     paddingTop: 0,
+  },
+  padding: {
+    width: '100%',
+    paddingHorizontal: '5%',
   },
 })
 

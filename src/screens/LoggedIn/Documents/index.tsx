@@ -1,24 +1,35 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
+import { useRoute, RouteProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
-import { getCustomCredentialsByCategories } from '~/modules/credentials/selectors'
-import DocumentTabs from '~/screens/LoggedIn/Documents/DocumentTabs'
+import {
+  getCustomCredentialsByCategoriesByType,
+  getCustomCredentialsByCategoriesByIssuer,
+} from '~/modules/credentials/selectors'
+import DocumentTabs, {
+  documentTabs,
+} from '~/screens/LoggedIn/Documents/DocumentTabs'
 import OtherCard from '~/components/Card/OtherCard'
 import {
-  DocumentTypes,
+  CredentialCategories,
   DocumentFields,
-  OtherCategory,
   DisplayCredentialDocument,
   DisplayCredentialOther,
+  CredentialsByType,
+  CredentialsByIssuer,
+  CredentialsByCategory,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields } from './utils'
 import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
+import AdoptedCarousel from '~/components/AdoptedCarousel'
+import { MainTabsParamList } from '../MainTabs'
+import { ScreenNames } from '~/types/screens'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -27,7 +38,6 @@ const CardList: React.FC = ({ children }) => {
       overScrollMode={'never'}
       contentContainerStyle={{
         paddingBottom: '40%',
-        paddingHorizontal: 8,
         paddingTop: 32,
       }}
     >
@@ -37,19 +47,57 @@ const CardList: React.FC = ({ children }) => {
 }
 
 const DocumentList = () => {
-  const categories = useSelector(getCustomCredentialsByCategories)
-  const { activeTab } = useTabs()
+  const [categories, setCategories] = useState<
+    | CredentialsByCategory<
+        CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
+      >
+    | CredentialsByCategory<
+        CredentialsByIssuer<DisplayCredentialDocument | DisplayCredentialOther>
+      >
+    | null
+  >(null)
+  const { activeTab, activeSubtab, setActiveTab } = useTabs()
+  const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
+  const initialTabId = route.params.initialTab ?? CredentialCategories.document
 
-  const documents = categories[
-    CredentialRenderTypes.document
-  ] as DisplayCredentialDocument[]
-  const other = categories[OtherCategory.other] as DisplayCredentialOther[]
+  const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
+  const categoriesByIssuer = useSelector(
+    getCustomCredentialsByCategoriesByIssuer,
+  )
 
+  useLayoutEffect(() => {
+    setActiveTab(documentTabs.find((t) => t.id === initialTabId)!)
+  }, [initialTabId])
+
+  useEffect(() => {
+    if (activeSubtab?.id === 'type') {
+      setCategories(categoriesByType)
+    } else if (activeSubtab?.id === 'issuer') {
+      setCategories(categoriesByIssuer)
+    }
+  }, [
+    activeSubtab?.id,
+    JSON.stringify(categoriesByType),
+    JSON.stringify(categoriesByIssuer),
+  ])
+
+  const documents = useMemo(
+    () =>
+      categories !== null ? categories[CredentialRenderTypes.document] : [],
+    [JSON.stringify(categories)],
+  )
+  const other = useMemo(
+    () => (categories !== null ? categories[CredentialCategories.other] : []),
+    [JSON.stringify(categories)],
+  )
+
+  if (categories === null) return null
   return (
     <>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'flex' : 'none',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'flex' : 'none',
           flex: 1,
         }}
         testID="document-cards-container"
@@ -61,31 +109,59 @@ const DocumentList = () => {
           />
         ) : (
           <CardList>
-            {documents.map((d) => (
-              <DocumentCard
-                key={d.id}
-                id={d.id}
-                mandatoryFields={[
-                  {
-                    label: DocumentFields.DocumentName,
-                    value: d.name ?? d.type[1],
-                  },
-                  {
-                    label: strings.SUBJECT_NAME,
-                    value: d.holderName,
-                  },
-                ]}
-                optionalFields={getOptionalFields(d)}
-                highlight={d.id.slice(0, 14)}
-                photo={d.photo}
-              />
-            ))}
+            {documents.map((d) => {
+              const { credentials, value } = d as
+                | CredentialsByType<DisplayCredentialDocument>
+                | CredentialsByIssuer<DisplayCredentialDocument>
+              return (
+                <>
+                  <ScreenContainer.Padding>
+                    {/* TODO: decide what we do with it, it does not look good */}
+                    {/* <JoloText
+                      size={JoloTextSizes.mini}
+                      color={Colors.white90}
+                      customStyles={{
+                        textAlign: 'left',
+                        marginBottom: BP({ default: 30, xsmall: 16 }),
+                      }}
+                    >
+                      {`${value}  • ${credentials.length}`}
+                    </JoloText> */}
+                  </ScreenContainer.Padding>
+                  <AdoptedCarousel
+                    activeSlideAlignment="center"
+                    customStyles={{ marginLeft: -4 }}
+                    data={credentials}
+                    renderItem={({ item: c }) => (
+                      <DocumentCard
+                        key={c.id}
+                        id={c.id}
+                        mandatoryFields={[
+                          {
+                            label: DocumentFields.DocumentName,
+                            value: c.name ?? c.type,
+                          },
+                          {
+                            label: strings.SUBJECT_NAME,
+                            value: c.holderName,
+                          },
+                        ]}
+                        optionalFields={getOptionalFields(c)}
+                        highlight={c.id.slice(0, 14)}
+                        photo={c.photo}
+                      />
+                    )}
+                  />
+                </>
+              )
+            })}
           </CardList>
         )}
       </View>
       <View
         style={{
-          display: activeTab?.id === DocumentTypes.document ? 'none' : 'flex',
+          display:
+            activeTab?.id === CredentialCategories.document ? 'none' : 'flex',
           flex: 1,
         }}
         testID="other-cards-container"
@@ -97,20 +173,30 @@ const DocumentList = () => {
           />
         ) : (
           <CardList>
-            {other.map((o) => (
-              <OtherCard
-                id={o.id}
-                key={o.id}
-                mandatoryFields={[
-                  {
-                    label: DocumentFields.DocumentName,
-                    value: o.name ?? o.type,
-                  },
-                ]}
-                optionalFields={getOptionalFields(o)}
-                photo={o.photo}
-              />
-            ))}
+            {other.map((o) => {
+              const { credentials } = o as
+                | CredentialsByType<DisplayCredentialOther>
+                | CredentialsByIssuer<DisplayCredentialOther>
+              return (
+                <AdoptedCarousel
+                  data={credentials}
+                  renderItem={({ item: c }) => (
+                    <OtherCard
+                      id={c.id}
+                      key={c.id}
+                      mandatoryFields={[
+                        {
+                          label: DocumentFields.DocumentName,
+                          value: c.name ?? c.type,
+                        },
+                      ]}
+                      optionalFields={getOptionalFields(c)}
+                      photo={c.photo}
+                    />
+                  )}
+                />
+              )
+            })}
           </CardList>
         )}
       </View>
@@ -123,6 +209,7 @@ const Documents: React.FC = () => {
     <ScreenContainer
       customStyles={{
         justifyContent: 'flex-start',
+        paddingHorizontal: 0,
       }}
     >
       <DocumentTabs>

@@ -1,38 +1,26 @@
 import {
   OfferedCredential,
   OfferedCredentialDisplay,
-  OtherCategory,
+  CredentialCategories,
 } from '~/types/credentials'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import { CredentialDisplay } from '@jolocom/sdk/js/credentials'
 
 const updateCategory = (
-  prevCategories: Record<
-    CredentialRenderTypes.document | OtherCategory.other,
-    OfferedCredential[]
-  >,
+  prevCategories: Record<CredentialCategories, OfferedCredential[]>,
   cb: (c: OfferedCredential) => OfferedCredentialDisplay,
 ) => {
   return (
-    acc: Record<
-      CredentialRenderTypes.document | OtherCategory.other,
-      OfferedCredentialDisplay[]
-    >,
+    acc: Record<CredentialCategories, OfferedCredentialDisplay[]>,
     cName: string,
   ) => {
-    const categoryName = cName as
-      | CredentialRenderTypes.document
-      | OtherCategory.other
+    const categoryName = cName as CredentialCategories
     acc[categoryName] = prevCategories[categoryName].map(cb)
     return acc
   }
 }
 
 export const getOfferSections = (
-  categories: Record<
-    CredentialRenderTypes.document | OtherCategory.other,
-    OfferedCredential[]
-  >,
+  categories: Record<CredentialCategories, OfferedCredential[]>,
   details: CredentialDisplay[] | null,
 ) => {
   const getUpdatedCategoriesNoDetails = updateCategory(categories, (c) => ({
@@ -41,7 +29,7 @@ export const getOfferSections = (
   }))
   const getUpdatedCategoriesWDetails = updateCategory(categories, (c) => {
     const displayDetails = details?.find(
-      (d) => d.type === c.type[1] && (d.name === c.name || d.name === d.type),
+      (d) => d.type === c.type && (d.name === c.name || d.name === d.type),
     )
     return {
       ...c,
@@ -50,13 +38,13 @@ export const getOfferSections = (
   })
   if (details === null) {
     return Object.keys(categories).reduce(getUpdatedCategoriesNoDetails, {
-      [CredentialRenderTypes.document]: [],
-      [OtherCategory.other]: [],
+      [CredentialCategories.document]: [],
+      [CredentialCategories.other]: [],
     })
   }
 
   return Object.keys(categories).reduce(getUpdatedCategoriesWDetails, {
-    [CredentialRenderTypes.document]: [],
-    [OtherCategory.other]: [],
+    [CredentialCategories.document]: [],
+    [CredentialCategories.other]: [],
   })
 }
