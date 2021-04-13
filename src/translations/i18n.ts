@@ -31,6 +31,7 @@ i18n.use(initReactI18next).init({
   debug: __DEV__,
   lng: getSystemLng(),
   resources,
+  keySeparator: false,
 })
 
 export default i18n

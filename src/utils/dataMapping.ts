@@ -86,7 +86,7 @@ const mapCredOfferData = (summary: SummaryI<CredentialOfferFlowState>) => {
     credentials: {
       service_issued: summary.state.offerSummary.map(
         ({ renderInfo, type, credential }) => ({
-          type: ['', type],
+          type: type,
           category: getCredentialCategory(renderInfo),
           invalid: false,
           name: credential?.name ?? '',

@@ -81,7 +81,7 @@ const useCredentialOfferFlow = () => {
       return {
         // NOTE: making type as array of strings for consistency
         // offerSummary type is different from SignedCredential type of type property
-        type: ['', offer.type],
+        type: offer.type,
         category: getCredentialCategory(offer.renderInfo),
         invalid: isInvalid,
         name: offer.credential?.name ?? '',

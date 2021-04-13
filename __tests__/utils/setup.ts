@@ -52,3 +52,25 @@ jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation', () => ({
   ),
   configureNext: jest.fn(),
 }))
+
+jest.mock(
+  'react-native-reanimated',
+  () =>
+    jest.requireActual('../../node_modules/react-native-reanimated/mock')
+      .default,
+)
+
+jest.mock('react-native-gesture-handler', () => {
+  const gestureHandlerMocks = jest.requireActual(
+    '../../node_modules/react-native-gesture-handler/__mocks__/RNGestureHandlerModule.js',
+  ).default
+
+  return {
+    ...gestureHandlerMocks,
+    TouchableOpacity: gestureHandlerMocks.PanGestureHandler,
+    TouchableWithoutFeedback: gestureHandlerMocks.PanGestureHandler,
+  }
+})
+
+// @ts-ignore
+global.__reanimatedWorkletInit = jest.fn()

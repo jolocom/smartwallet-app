@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "0.0.1.006",
+  "version": "0.0.1.005",
   "private": true,
   "scripts": {
     "run:ios": "react-native run-ios",
@@ -67,10 +67,11 @@
     "react-native-radial-gradient": "^1.0.7",
     "react-native-randombytes": "^3.5.3",
     "react-native-rate": "^1.2.4",
-    "react-native-reanimated": "^1.8.0",
+    "react-native-reanimated": "^2.0.1",
     "react-native-restart": "^0.0.17",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.17.1",
+    "react-native-snap-carousel": "^3.9.1",
     "react-native-sqlite-storage": "^5.0.0",
     "react-native-svg": "^12.1.0",
     "react-native-swiper": "^1.6.0",
@@ -96,6 +97,7 @@
     "@testing-library/react-native": "^7.0.2",
     "@types/jest": "^24.0.24",
     "@types/react-native": "^0.62.0",
+    "@types/react-native-snap-carousel": "^3.8.2",
     "@types/react-redux": "^7.1.7",
     "@types/react-test-renderer": "16.9.2",
     "@types/redux-mock-store": "^1.0.2",
