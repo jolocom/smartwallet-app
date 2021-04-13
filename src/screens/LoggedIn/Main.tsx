@@ -67,14 +67,7 @@ export type MainStackParamList = {
 const MainStack = createStackNavigator<MainStackParamList>()
 
 const settingsScreenTransitionOptions = {
-  ...Platform.select({
-    ios: {
-      ...TransitionPresets.SlideFromRightIOS,
-    },
-    android: {
-      ...TransitionPresets.DefaultTransition,
-    },
-  }),
+  ...TransitionPresets.SlideFromRightIOS,
 }
 
 const modalScreenTransitionOptions = {
@@ -107,9 +100,7 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Language}
             component={Language}
-            options={{
-              ...TransitionPresets.SlideFromRightIOS,
-            }}
+            options={settingsScreenTransitionOptions}
           />
           <MainStack.Screen
             name={ScreenNames.ChangePin}
