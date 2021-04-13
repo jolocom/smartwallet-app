@@ -10,20 +10,26 @@ interface UserReport {
 const useSentry = () => {
   const { error } = useErrors()
 
-  const sendReport = (report: UserReport, sendPrivateData: boolean = false) => {
+  const sendContactReport = (report: UserReport) => {
     Sentry.withScope((scope) => {
-      scope.setExtras({ ...report, sendPrivateData })
-      if (!sendPrivateData) scope.setUser(null)
+      scope.setExtras({ ...report })
+      scope.setUser(null)
 
-      if (error) {
-        Sentry.captureException(error)
-      } else {
-        Sentry.captureMessage('CONTACT_US', scope)
-      }
+      Sentry.captureMessage('CONTACT_US', scope)
     })
   }
 
-  return { sendReport }
+  const sendErrorReport = (report: UserReport, sendPrivateData: boolean) => {
+    Sentry.withScope((scope) => {
+      scope.setExtras({ ...report })
+      scope.setUser(null)
+
+      if(!sendPrivateData) scope.clearBreadcrumbs()
+      Sentry.captureException(error)
+    })
+  }
+
+  return { sendContactReport, sendErrorReport }
 }
 
 export default useSentry

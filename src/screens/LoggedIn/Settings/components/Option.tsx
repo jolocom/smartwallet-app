@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Platform } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { StyleSheet, View, Platform, TouchableOpacity } from 'react-native'
 import { CaretRight } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'

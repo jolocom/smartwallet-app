@@ -7,7 +7,7 @@ import { CoreInput } from './CoreInput'
 import Block from '../Block'
 
 const InputTextArea = React.forwardRef<TextInput, IInput>(
-  ({ value, updateInput, ...inputProps }, ref) => {
+  ({ value, updateInput, customStyles = {}, ...inputProps }, ref) => {
     return (
       <Block customStyle={{ padding: 13 }}>
         <CoreInput
@@ -16,7 +16,7 @@ const InputTextArea = React.forwardRef<TextInput, IInput>(
           value={value}
           onChangeText={updateInput}
           multiline
-          style={styles.inputStyle}
+          style={[styles.inputStyle, customStyles]}
           {...inputProps}
         />
       </Block>

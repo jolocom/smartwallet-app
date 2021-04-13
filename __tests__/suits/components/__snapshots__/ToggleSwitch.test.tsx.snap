@@ -2,13 +2,22 @@
 
 exports[`ToggleSwitch should render the switch with disabled initial state 1`] = `
 <View
-  onPressIn={[Function]}
+  accessible={true}
+  focusable={false}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
   style={
     Object {
       "backgroundColor": "rgb(35, 36, 38)",
       "borderRadius": 45,
       "height": 30,
       "justifyContent": "center",
+      "opacity": 1,
       "width": 45,
     }
   }
@@ -73,13 +82,22 @@ exports[`ToggleSwitch should render the switch with disabled initial state 1`] =
 
 exports[`ToggleSwitch should render the switch with enabled initial state 1`] = `
 <View
-  onPressIn={[Function]}
+  accessible={true}
+  focusable={false}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
   style={
     Object {
       "backgroundColor": "rgb(35, 36, 38)",
       "borderRadius": 45,
       "height": 30,
       "justifyContent": "center",
+      "opacity": 1,
       "width": 45,
     }
   }

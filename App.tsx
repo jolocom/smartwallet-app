@@ -29,16 +29,16 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <I18nextProvider i18n={i18n}>
-        <ErrorContextProvider>
-          <ErrorBoundary>
-            <Provider store={store}>
+        <Provider store={store}>
+          <ErrorContextProvider>
+            <ErrorBoundary>
               <AgentContextProvider>
                 <Overlays navRef={navRef} />
                 <RootNavigation ref={navRef} />
               </AgentContextProvider>
-            </Provider>
-          </ErrorBoundary>
-        </ErrorContextProvider>
+            </ErrorBoundary>
+          </ErrorContextProvider>
+        </Provider>
       </I18nextProvider>
     </SafeAreaProvider>
   )

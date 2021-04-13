@@ -17,7 +17,7 @@ import { useSuccess } from '~/hooks/loader'
 
 import Section from './components/Section'
 import Input from '~/components/Input'
-import { InputValidityState } from '~/components/Input/InputUnderline'
+import { InputValidityState } from '~/components/Input/types'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -29,7 +29,7 @@ const INQUIRIES_LIST = [
 const ContactUs: React.FC = () => {
   const navigateBack = useGoBack()
   const showSuccess = useSuccess()
-  const { sendReport } = useSentry()
+  const { sendContactReport } = useSentry()
 
   const [contactValue, setContactValue] = useState('')
   const [contactValid, setContactValid] = useState(true)
@@ -56,7 +56,7 @@ const ContactUs: React.FC = () => {
   }
 
   const handleSubmit = () => {
-    sendReport(assembledData)
+    sendContactReport(assembledData)
     showSuccess(navigateBack)
   }
 
@@ -73,6 +73,7 @@ const ContactUs: React.FC = () => {
     >
       <JoloKeyboardAwareScroll
         style={{ width: '100%', flexGrow: 1 }}
+        contentContainerStyle={{ paddingBottom: 36 }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
         enableOnAndroid

@@ -3,7 +3,7 @@ import { useErrorContext, ErrorScreens } from '~/errors/errorContext'
 const useErrors = () => {
   const { setError, ...state } = useErrorContext()
 
-  const showErrorDisplay = (error: Error) => {
+  const showErrorDisplay = (error?: Error) => {
     setError(ErrorScreens.errorDisplay, error)
   }
 
