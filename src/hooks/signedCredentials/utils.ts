@@ -77,13 +77,18 @@ export async function mapCredentialsToDisplay(
 ): Promise<DisplayCredential> {
   const metadata = await agent.storage.get.credentialMetadata(c)
   const resolvedIssuer = await agent.storage.get.publicProfile(c.issuer)
-
+  
+  // TODO: remove when testing for the issuer is done
+  const issuerOptions = [{did: resolvedIssuer.did}, resolvedIssuer]
+  
   // @ts-expect-error - until types are corrected in sdk
   const { type, renderInfo, credential } = metadata
   const baseUICredentials = mapToBaseUICredential(c)
   let updatedCredentials: DisplayCredential = {
     ...baseUICredentials,
-    issuer: resolvedIssuer,
+    // issuer: resolvedIssuer,
+    // TODO: remove when testing for the issuer is done
+    issuer: issuerOptions[Math.round(Math.random())],
     category: getCredentialCategory(renderInfo),
     properties: [],
   }
@@ -200,8 +205,11 @@ export const reduceCustomDisplayCredentialsByType = <
     (groupedCredentials: Array<CredentialsByType<T>>, cred: T) => {
       const group = groupedCredentials.filter((c) => c.value === getCredentialUIType(cred.type)); 
       if (group.length) {
-        groupedCredentials = group.map((c) => {
-          return { ...c, credentials: [...c.credentials, cred] }
+        groupedCredentials = groupedCredentials.map((g) => {
+          if(g.value === group[0].value) {
+            return { ...g, credentials: [...g.credentials, cred] }
+          }
+          return g;
         })
       } else {
         groupedCredentials = [
@@ -228,11 +236,14 @@ export const reduceCustomDisplayCredentialsByIssuer = <
 ): Array<CredentialsByIssuer<T>> => {
   return credentials.reduce(
     (groupedCredentials: Array<CredentialsByIssuer<T>>, cred: T) => {
-      const issuer = cred.issuer.publicProfile?.name ?? cred.issuer.did
+      const issuer = cred.issuer.publicProfile?.name ?? strings.UNKNOWN
       const group = groupedCredentials.filter((c) => c.value === issuer)
       if (group.length) {
-        groupedCredentials = group.map((c) => {
-            return { ...c, credentials: [...c.credentials, cred] }
+        groupedCredentials = groupedCredentials.map((g) => {
+          if(g.value === group[0].value) {
+            return { ...g, credentials: [...g.credentials, cred] }
+          }
+          return g;
         })
       } else {
         groupedCredentials = [
