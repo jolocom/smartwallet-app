@@ -5,6 +5,7 @@ import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '@jolocom/sdk'
 import { ObjectSchema } from 'yup'
+import { strings } from '~/translations'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -34,6 +35,18 @@ export enum AttributeTypes {
   name = 'ProofOfNameCredential',
   postalAddress = 'ProofOfPostalAddressCredential',
   businessCard = 'ProofOfBusinessCardCredential', // TODO: update to actual value
+}
+
+/**
+ * #### NOTE/FIXME
+ * > every time offered credential types changes we need to update this value
+ */
+export enum IdentificationTypes {
+  ProofOfIdCredentialDemo = 'ProofOfIdCredentialDemo',
+  ProofOfDriverLicenceDemo = 'ProofOfDriverLicenceDemo'
+}
+export enum TicketTypes {
+  ProofOfTicketDemo = 'ProofOfTicketDemo'
 }
 
 interface AttributeKeyboardOptions {
