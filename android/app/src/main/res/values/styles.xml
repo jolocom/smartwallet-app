@@ -8,4 +8,10 @@
         <item name="colorControlActivated">#5251c1</item>
     </style>
 
+    <!-- Add the following lines (BootTheme should inherit from AppTheme) -->
+    <style name="BootTheme" parent="AppTheme">
+        <!-- set the generated bootsplash.xml drawable as activity background -->
+        <item name="android:background">@drawable/bootsplash</item>
+    </style>
+
 </resources>
