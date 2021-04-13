@@ -91,7 +91,7 @@ export default ({
   onSelect?: (val: IOption<string>) => void
 }) => {
   return (
-    <SelectableProvider<string>
+    <SelectableProvider<Emojis>
       options={SELECTABLE_OPTIONS}
       onSelect={onSelect}
     >
