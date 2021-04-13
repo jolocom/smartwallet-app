@@ -30,6 +30,10 @@ import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { MainTabsParamList } from '../MainTabs'
 import { ScreenNames } from '~/types/screens'
+import JoloText from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
+import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -116,8 +120,7 @@ const DocumentList = () => {
               return (
                 <>
                   <ScreenContainer.Padding>
-                    {/* TODO: decide what we do with it, it does not look good */}
-                    {/* <JoloText
+                    <JoloText
                       size={JoloTextSizes.mini}
                       color={Colors.white90}
                       customStyles={{
@@ -126,7 +129,7 @@ const DocumentList = () => {
                       }}
                     >
                       {`${value}  • ${credentials.length}`}
-                    </JoloText> */}
+                    </JoloText>
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
                     activeSlideAlignment="center"
@@ -174,27 +177,42 @@ const DocumentList = () => {
         ) : (
           <CardList>
             {other.map((o) => {
-              const { credentials } = o as
+              const { credentials, value } = o as
                 | CredentialsByType<DisplayCredentialOther>
                 | CredentialsByIssuer<DisplayCredentialOther>
               return (
-                <AdoptedCarousel
-                  data={credentials}
-                  renderItem={({ item: c }) => (
-                    <OtherCard
-                      id={c.id}
-                      key={c.id}
-                      mandatoryFields={[
-                        {
-                          label: DocumentFields.DocumentName,
-                          value: c.name ?? c.type,
-                        },
-                      ]}
-                      optionalFields={getOptionalFields(c)}
-                      photo={c.photo}
-                    />
-                  )}
-                />
+                <>
+                  <ScreenContainer.Padding>
+                    <JoloText
+                      size={JoloTextSizes.mini}
+                      color={Colors.white90}
+                      customStyles={{
+                        textAlign: 'left',
+                        marginBottom: BP({ default: 30, xsmall: 16 }),
+                      }}
+                    >
+                      {`${value}  • ${credentials.length}`}
+                    </JoloText>
+                  </ScreenContainer.Padding>
+
+                  <AdoptedCarousel
+                    data={credentials}
+                    renderItem={({ item: c }) => (
+                      <OtherCard
+                        id={c.id}
+                        key={c.id}
+                        mandatoryFields={[
+                          {
+                            label: DocumentFields.DocumentName,
+                            value: c.name ?? c.type,
+                          },
+                        ]}
+                        optionalFields={getOptionalFields(c)}
+                        photo={c.photo}
+                      />
+                    )}
+                  />
+                </>
               )
             })}
           </CardList>

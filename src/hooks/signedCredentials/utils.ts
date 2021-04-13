@@ -15,6 +15,8 @@ import {
   isDocument,
   CredentialCategories,
   CredentialsByCategory,
+  IdentificationTypes,
+  TicketTypes,
 } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
 import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/types'
@@ -25,6 +27,19 @@ export const getCredentialCategory = (renderInfo?: CredentialOfferRenderInfo) =>
   renderInfo?.renderAs === 'document'
     ? CredentialCategories.document
     : CredentialCategories.other
+
+// TODO: move to a different file
+export const getCredentialUIType = (type: string) => {
+  switch (type) {
+    case IdentificationTypes.ProofOfIdCredentialDemo:
+    case IdentificationTypes.ProofOfDriverLicenceDemo:
+      return strings.IDENTIFICATION
+    case TicketTypes.ProofOfTicketDemo:
+      return strings.TICKET
+    default:
+      return strings.UNKNOWN
+  }
+} 
 
 export const separateCredentialsAndAttributes = (
   allCredentials: SignedCredential[],
@@ -183,17 +198,15 @@ export const reduceCustomDisplayCredentialsByType = <
 ): Array<CredentialsByType<T>> => {
   return credentials.reduce(
     (groupedCredentials: Array<CredentialsByType<T>>, cred: T) => {
-      if (groupedCredentials.find((c) => c.value === cred.type)) {
-        groupedCredentials = groupedCredentials.map((c) => {
-          if (c.value === cred.type) {
-            return { ...c, credentials: [...c.credentials, cred] }
-          }
-          return c
+      const group = groupedCredentials.filter((c) => c.value === getCredentialUIType(cred.type)); 
+      if (group.length) {
+        groupedCredentials = group.map((c) => {
+          return { ...c, credentials: [...c.credentials, cred] }
         })
       } else {
         groupedCredentials = [
           ...groupedCredentials,
-          { key: 'type', value: cred.type, credentials: [cred] },
+          { key: 'type', value: getCredentialUIType(cred.type), credentials: [cred] },
         ]
       }
       return groupedCredentials
@@ -216,12 +229,10 @@ export const reduceCustomDisplayCredentialsByIssuer = <
   return credentials.reduce(
     (groupedCredentials: Array<CredentialsByIssuer<T>>, cred: T) => {
       const issuer = cred.issuer.publicProfile?.name ?? cred.issuer.did
-      if (groupedCredentials.find((c) => c.value === issuer)) {
-        groupedCredentials = groupedCredentials.map((c) => {
-          if (c.value === issuer) {
+      const group = groupedCredentials.filter((c) => c.value === issuer)
+      if (group.length) {
+        groupedCredentials = group.map((c) => {
             return { ...c, credentials: [...c.credentials, cred] }
-          }
-          return c
         })
       } else {
         groupedCredentials = [

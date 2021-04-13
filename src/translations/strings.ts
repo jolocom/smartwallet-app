@@ -314,6 +314,9 @@ const documents = {
   EXPIRES: 'Expires',
   SUBJECT_NAME: 'Subject name',
   ANONYMOUS: 'Anonymous',
+  IDENTIFICATION: 'Identification',
+  TICKET: 'Ticket',
+  UNKNOWN: 'Unknown'
 }
 
 const history = {
