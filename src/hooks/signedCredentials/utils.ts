@@ -39,7 +39,7 @@ export const getCredentialUIType = (type: string) => {
     default:
       return strings.UNKNOWN
   }
-} 
+}
 
 export const separateCredentialsAndAttributes = (
   allCredentials: SignedCredential[],
@@ -77,18 +77,13 @@ export async function mapCredentialsToDisplay(
 ): Promise<DisplayCredential> {
   const metadata = await agent.storage.get.credentialMetadata(c)
   const resolvedIssuer = await agent.storage.get.publicProfile(c.issuer)
-  
-  // TODO: remove when testing for the issuer is done
-  const issuerOptions = [{did: resolvedIssuer.did}, resolvedIssuer]
-  
+
   // @ts-expect-error - until types are corrected in sdk
   const { type, renderInfo, credential } = metadata
   const baseUICredentials = mapToBaseUICredential(c)
   let updatedCredentials: DisplayCredential = {
     ...baseUICredentials,
-    // issuer: resolvedIssuer,
-    // TODO: remove when testing for the issuer is done
-    issuer: issuerOptions[Math.round(Math.random())],
+    issuer: resolvedIssuer,
     category: getCredentialCategory(renderInfo),
     properties: [],
   }
@@ -170,8 +165,7 @@ export const mapCredentialsToCustomDisplay = (
 ): Array<DisplayCredentialDocument | DisplayCredentialOther> =>
   credentials.map(mapDisplayToCustomDisplay)
 
-
-  /**
+/**
  * Reduce categorized credentials to custom types `NT`
  * * `PT` - previous type
  * * `NT` - next type
@@ -189,7 +183,6 @@ export const transformCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
   }
 }
 
-
 /**
  * Groups credentials by type
  *
@@ -203,18 +196,24 @@ export const reduceCustomDisplayCredentialsByType = <
 ): Array<CredentialsByType<T>> => {
   return credentials.reduce(
     (groupedCredentials: Array<CredentialsByType<T>>, cred: T) => {
-      const group = groupedCredentials.filter((c) => c.value === getCredentialUIType(cred.type)); 
+      const group = groupedCredentials.filter(
+        (c) => c.value === getCredentialUIType(cred.type),
+      )
       if (group.length) {
         groupedCredentials = groupedCredentials.map((g) => {
-          if(g.value === group[0].value) {
+          if (g.value === group[0].value) {
             return { ...g, credentials: [...g.credentials, cred] }
           }
-          return g;
+          return g
         })
       } else {
         groupedCredentials = [
           ...groupedCredentials,
-          { key: 'type', value: getCredentialUIType(cred.type), credentials: [cred] },
+          {
+            key: 'type',
+            value: getCredentialUIType(cred.type),
+            credentials: [cred],
+          },
         ]
       }
       return groupedCredentials
@@ -240,10 +239,10 @@ export const reduceCustomDisplayCredentialsByIssuer = <
       const group = groupedCredentials.filter((c) => c.value === issuer)
       if (group.length) {
         groupedCredentials = groupedCredentials.map((g) => {
-          if(g.value === group[0].value) {
+          if (g.value === group[0].value) {
             return { ...g, credentials: [...g.credentials, cred] }
           }
-          return g;
+          return g
         })
       } else {
         groupedCredentials = [
@@ -257,26 +256,39 @@ export const reduceCustomDisplayCredentialsByIssuer = <
   )
 }
 
-export const sortCredentialsByRecentIssueDate = <T extends {issued: Date}>(credentials: T[]): T[] => {
+export const sortCredentialsByRecentIssueDate = <T extends { issued: Date }>(
+  credentials: T[],
+): T[] => {
   return credentials.sort((a: T, b: T) => {
-    const aMs = new Date(a.issued).getTime();
-    const bMs = new Date(b.issued).getTime();
-    if(aMs > bMs) {
+    const aMs = new Date(a.issued).getTime()
+    const bMs = new Date(b.issued).getTime()
+    if (aMs > bMs) {
       return -1
     } else {
-      return 1;
+      return 1
     }
   })
 }
 
-export const reduceCustomDisplayCredentialsBySortedType = <T extends {type: string, issued: Date}>(credentials: T[]): Array<CredentialsByType<T>> => {
-  return reduceCustomDisplayCredentialsByType(sortCredentialsByRecentIssueDate(credentials));
+export const reduceCustomDisplayCredentialsBySortedType = <
+  T extends { type: string; issued: Date }
+>(
+  credentials: T[],
+): Array<CredentialsByType<T>> => {
+  return reduceCustomDisplayCredentialsByType(
+    sortCredentialsByRecentIssueDate(credentials),
+  )
 }
 
-export const reduceCustomDisplayCredentialsBySortedIssuer = <T extends {issuer: IdentitySummary, issued: Date}>(credentials: T[]): Array<CredentialsByIssuer<T>> => {
-  return reduceCustomDisplayCredentialsByIssuer(sortCredentialsByRecentIssueDate(credentials));
+export const reduceCustomDisplayCredentialsBySortedIssuer = <
+  T extends { issuer: IdentitySummary; issued: Date }
+>(
+  credentials: T[],
+): Array<CredentialsByIssuer<T>> => {
+  return reduceCustomDisplayCredentialsByIssuer(
+    sortCredentialsByRecentIssueDate(credentials),
+  )
 }
-
 
 export function mapAttributesToDisplay(
   credentials: SignedCredential[],
