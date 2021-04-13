@@ -13,6 +13,7 @@ const useSentry = () => {
   const sendContactReport = (report: UserReport) => {
     Sentry.withScope((scope) => {
       scope.setExtras({ ...report })
+      scope.setUser(null)
 
       Sentry.captureMessage('CONTACT_US', scope)
     })
@@ -21,8 +22,9 @@ const useSentry = () => {
   const sendErrorReport = (report: UserReport, sendPrivateData: boolean) => {
     Sentry.withScope((scope) => {
       scope.setExtras({ ...report })
-      if (!sendPrivateData) scope.setUser(null)
+      scope.setUser(null)
 
+      if(!sendPrivateData) scope.clearBreadcrumbs()
       Sentry.captureException(error)
     })
   }
