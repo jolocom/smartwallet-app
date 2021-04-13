@@ -4,6 +4,11 @@
     <item android:drawable="@color/bootsplash_background" />
 
     <item>
-        <bitmap android:src="@mipmap/bootsplash_logo" android:gravity="center" />
+        <bitmap android:src="@mipmap/splashicon" android:gravity="center" />
     </item>
+
+    <item>
+        <bitmap android:src="@mipmap/splashgroup" android:gravity="bottom" />
+    </item>
+
 </layer-list>
