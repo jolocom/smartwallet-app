@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -82,7 +76,11 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.tiniest}
           color={isActive ? Colors.white : Colors.white40}
-          customStyles={{ fontSize: 11, letterSpacing: 0.07 }}
+          customStyles={{
+            fontSize: 11,
+            letterSpacing: 0.07,
+            marginTop: 4,
+          }}
         >
           {label}
         </JoloText>
