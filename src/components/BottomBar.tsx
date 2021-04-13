@@ -33,7 +33,6 @@ interface IconPropsI {
 }
 
 const SCALE_BY = SCREEN_WIDTH / 414
-console.log({ SCALE_BY })
 
 /* picture has invisble horizontal margins, therefore adding 4 point to hide it */
 const SCREEN_WIDTH_ADJUSTED = SCREEN_WIDTH + 4
@@ -55,36 +54,30 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
   const renderIcon = () => {
     const color = isActive ? Colors.white : Colors.white40
-    let icon: JSX.Element | null
+
     switch (label) {
       case ScreenNames.Identity: {
-        icon = <IdentityTabIcon color={color} />
-        break
+        return <IdentityTabIcon color={color} />
       }
       case ScreenNames.Documents: {
-        icon = <DocumentsTabIcon color={color} />
-        break
+        return <DocumentsTabIcon color={color} />
       }
       case ScreenNames.History: {
-        icon = <HistoryTabIcon color={color} />
-        break
+        return <HistoryTabIcon color={color} />
       }
       case ScreenNames.Settings: {
-        icon = <SettingsTabIcon color={color} />
-        break
+        return <SettingsTabIcon color={color} />
       }
       default: {
-        icon = null
-        break
+        return null
       }
     }
-    return <View style={{ transform: [{ scale: SCALE_BY }] }}>{icon}</View>
   }
 
   return (
     <TouchableOpacity onPress={redirectToTab}>
       <View style={styles.iconContainer}>
-        {renderIcon()}
+        <View style={{ transform: [{ scale: SCALE_BY }] }}>{renderIcon()}</View>
         <JoloText
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.tiniest}
