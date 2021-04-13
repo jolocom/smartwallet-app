@@ -19,8 +19,8 @@ export const useHideStatusBar = () => {
   }, [])
 }
 
-export const usePrevious = (value: any) => {
-  const ref = useRef()
+export const usePrevious = <T extends unknown>(value: T) => {
+  const ref = useRef<T | undefined>()
   useEffect(() => {
     ref.current = value
   }, [JSON.stringify(value)])

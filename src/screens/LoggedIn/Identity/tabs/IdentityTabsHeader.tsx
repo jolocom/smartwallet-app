@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: BP({ small: 28, medium: 28, default: 36 }),
+    paddingHorizontal: '5%',
   },
 })
 

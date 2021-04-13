@@ -1,4 +1,3 @@
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import React from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -10,7 +9,10 @@ import {
   getOfferedCredentialsByCategories,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
-import { OfferedCredentialDisplay, OtherCategory } from '~/types/credentials'
+import {
+  OfferedCredentialDisplay,
+  CredentialCategories,
+} from '~/types/credentials'
 import IncomingOfferDoc from '../components/card/offer/document'
 import IncomingOfferOther from '../components/card/offer/other'
 import InteractionDescription from '../components/InteractionDescription'
@@ -48,7 +50,7 @@ const CredentialOfferBAS = () => {
       {offerDetails === null
         ? null
         : offerDetails.map((d) => {
-            if (types[d.type] === CredentialRenderTypes.document) {
+            if (types[d.type] === CredentialCategories.document) {
               return (
                 <IncomingOfferDoc
                   key={d.name}
@@ -83,28 +85,29 @@ const CredentialOfferFAS = () => {
 
   const updatedCategories = getOfferSections(categories, offerDetails)
 
-  const documents = updatedCategories[CredentialRenderTypes.document]
-  const other = updatedCategories[OtherCategory.other]
+  const documents = updatedCategories[CredentialCategories.document]
+  const other = updatedCategories[CredentialCategories.other]
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
     return credentials.map(
       ({ invalid, category, properties, name, type }, idx) => (
         <View
+          key={type + idx}
           style={{
             marginBottom: idx === credentials.length - 1 ? 0 : 30,
             opacity: invalid ? 0.5 : 1,
           }}
         >
-          {category === CredentialRenderTypes.document ? (
+          {category === CredentialCategories.document ? (
             <IncomingOfferDoc
-              key={name + type[1]}
-              name={name || type[1]}
+              key={name + type}
+              name={name || type}
               properties={properties}
             />
           ) : (
             <IncomingOfferOther
-              key={name + type[1]}
-              name={name || type[1]}
+              key={name + type}
+              name={name || type}
               properties={properties}
             />
           )}

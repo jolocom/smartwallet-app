@@ -10,8 +10,16 @@ import Documents from './Documents'
 import BottomBar from '~/components/BottomBar'
 import Settings from './Settings'
 import Identity from './Identity'
+import { CredentialCategories } from '~/types/credentials'
 
-const MainTabsNavigator = createBottomTabNavigator()
+export type MainTabsParamList = {
+  [ScreenNames.Identity]: undefined
+  [ScreenNames.Documents]: { initialTab?: CredentialCategories }
+  [ScreenNames.History]: undefined
+  [ScreenNames.Settings]: undefined
+}
+
+const MainTabsNavigator = createBottomTabNavigator<MainTabsParamList>()
 
 const MainTabs = () => (
   <MainTabsNavigator.Navigator

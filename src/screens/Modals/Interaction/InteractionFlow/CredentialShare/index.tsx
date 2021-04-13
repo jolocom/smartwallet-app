@@ -1,7 +1,7 @@
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import React, { useEffect } from 'react'
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
+
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useRedirect } from '~/hooks/navigation'
@@ -16,9 +16,9 @@ import {
 import { strings } from '~/translations'
 import {
   isDocument,
-  RequestedCredentialsByType,
-  OtherCategory,
+  CredentialsByType,
   DisplayCredential,
+  CredentialCategories,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { IncomingRequestDoc } from '../components/card/request/document'
@@ -42,6 +42,7 @@ import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
+import AdoptedCarousel from '~/components/AdoptedCarousel'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -57,7 +58,7 @@ export const CredentialShareBAS = () => {
   useEffect(() => {
     if (singleRequestedCredential) {
       handleSelectCredential({
-        [singleRequestedCredential.type[1]]: singleRequestedCredential?.id,
+        [singleRequestedCredential.type]: singleRequestedCredential?.id,
       })
     }
   }, [JSON.stringify(singleRequestedCredential)])
@@ -145,19 +146,19 @@ const CredentialShareFAS = () => {
 
   const handleSubmit = useCredentialShareSubmit()
 
-  const documents = categories[CredentialRenderTypes.document]
-  const other = categories[OtherCategory.other]
+  const documents = categories[CredentialCategories.document]
+  const other = categories[CredentialCategories.other]
 
   const handleRenderCredentials = (
-    credCollections: RequestedCredentialsByType<DisplayCredential>[],
+    credCollections: CredentialsByType<DisplayCredential>[],
   ) =>
-    credCollections.map(({ type, credentials }) => {
-      const isCarousel = credentials.length > 1
-      // TODO: implement carousel
-      const Wrapper = isCarousel ? React.Fragment : React.Fragment
+    credCollections.map(({ key, value, credentials }) => {
       return (
-        <Wrapper key={type}>
-          {credentials.map((cred) => {
+        <AdoptedCarousel
+          key={key}
+          activeSlideAlignment="start"
+          data={credentials}
+          renderItem={({ item: cred }) => {
             const claimFields = getOptionalFields(cred)
             const { name, type, id } = cred
             return (
@@ -167,7 +168,7 @@ const CredentialShareFAS = () => {
                   marginRight: 20,
                   marginVertical: 14,
                 }}
-                onPress={() => handleSelectCredential({ [type[1]]: id })}
+                onPress={() => handleSelectCredential({ [type]: id })}
               >
                 <View
                   style={{
@@ -189,7 +190,7 @@ const CredentialShareFAS = () => {
                     />
                   )}
                   <View style={styles.selectIndicator}>
-                    {selectedCredentials[type[1]] === id ? (
+                    {selectedCredentials[type] === id ? (
                       <PurpleTickSuccess />
                     ) : (
                       <View style={styles.notSelected} />
@@ -198,8 +199,8 @@ const CredentialShareFAS = () => {
                 </View>
               </TouchableWithoutFeedback>
             )
-          })}
-        </Wrapper>
+          }}
+        />
       )
     })
 

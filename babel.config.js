@@ -8,5 +8,6 @@ module.exports = {
         rootPathSuffix: 'src',
       },
     ],
+    'react-native-reanimated/plugin', //NOTE: this plugin has to be listed last
   ],
 }

@@ -1,4 +1,4 @@
-import { Agent } from '@jolocom/sdk'
+import { Agent, IdentitySummary } from '@jolocom/sdk'
 import { CredentialType } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
@@ -7,15 +7,24 @@ import {
   AttributeTypes,
   BaseUICredential,
   ClaimKeys,
+  CredentialsByType,
+  CredentialsByIssuer,
   DisplayCredential,
   DisplayCredentialDocument,
   DisplayCredentialOther,
   isDocument,
-  OtherCategory,
+  CredentialCategories,
+  CredentialsByCategory,
 } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
+import { CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/types'
 
 type CredentialKeys = 'credentials' | 'selfIssuedCredentials'
+
+export const getCredentialCategory = (renderInfo?: CredentialOfferRenderInfo) =>
+  renderInfo?.renderAs === 'document'
+    ? CredentialCategories.document
+    : CredentialCategories.other
 
 export const separateCredentialsAndAttributes = (
   allCredentials: SignedCredential[],
@@ -39,7 +48,8 @@ function mapToBaseUICredential(c: SignedCredential): BaseUICredential {
     id,
     issuer,
     issued,
-    type,
+    // NOTE: beware we are only taking the second type, this might change in the future
+    type: type[1],
     expires,
     subject,
     name,
@@ -59,7 +69,7 @@ export async function mapCredentialsToDisplay(
   let updatedCredentials: DisplayCredential = {
     ...baseUICredentials,
     issuer: resolvedIssuer,
-    category: renderInfo?.renderAs ?? OtherCategory.other,
+    category: getCredentialCategory(renderInfo),
     properties: [],
   }
 
@@ -127,6 +137,124 @@ export function mapDisplayToCustomDisplay(
     photo: credential.issuer.publicProfile?.image,
   }
 }
+
+/**
+ * Maps credentials of type `DisplayCredential`
+ * and transform into credentials of type `DisplayCredentialDocument | DisplayCredentialOther`
+ *
+ * Used to get custom display credentials:
+ * * documents
+ */
+export const mapCredentialsToCustomDisplay = (
+  credentials: DisplayCredential[],
+): Array<DisplayCredentialDocument | DisplayCredentialOther> =>
+  credentials.map(mapDisplayToCustomDisplay)
+
+
+  /**
+ * Reduce categorized credentials to custom types `NT`
+ * * `PT` - previous type
+ * * `NT` - next type
+ */
+export const transformCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
+  return <NT>(processFn: (categories: PT[]) => NT[]) => {
+    return Object.keys(cats).reduce<CredentialsByCategory<NT>>(
+      (categories, catName) => {
+        const categoryName = catName as CredentialCategories
+        categories[categoryName] = processFn(cats[categoryName])
+        return categories
+      },
+      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
+    )
+  }
+}
+
+
+/**
+ * Groups credentials by type
+ *
+ * Used in:
+ * * documents
+ */
+export const reduceCustomDisplayCredentialsByType = <
+  T extends { type: string }
+>(
+  credentials: T[],
+): Array<CredentialsByType<T>> => {
+  return credentials.reduce(
+    (groupedCredentials: Array<CredentialsByType<T>>, cred: T) => {
+      if (groupedCredentials.find((c) => c.value === cred.type)) {
+        groupedCredentials = groupedCredentials.map((c) => {
+          if (c.value === cred.type) {
+            return { ...c, credentials: [...c.credentials, cred] }
+          }
+          return c
+        })
+      } else {
+        groupedCredentials = [
+          ...groupedCredentials,
+          { key: 'type', value: cred.type, credentials: [cred] },
+        ]
+      }
+      return groupedCredentials
+    },
+    [],
+  )
+}
+
+/**
+ * Groups credentials by issuer
+ *
+ * Used in:
+ * * documents
+ */
+export const reduceCustomDisplayCredentialsByIssuer = <
+  T extends { issuer: IdentitySummary }
+>(
+  credentials: T[],
+): Array<CredentialsByIssuer<T>> => {
+  return credentials.reduce(
+    (groupedCredentials: Array<CredentialsByIssuer<T>>, cred: T) => {
+      const issuer = cred.issuer.publicProfile?.name ?? cred.issuer.did
+      if (groupedCredentials.find((c) => c.value === issuer)) {
+        groupedCredentials = groupedCredentials.map((c) => {
+          if (c.value === issuer) {
+            return { ...c, credentials: [...c.credentials, cred] }
+          }
+          return c
+        })
+      } else {
+        groupedCredentials = [
+          ...groupedCredentials,
+          { key: 'issuer', value: issuer, credentials: [cred] },
+        ]
+      }
+      return groupedCredentials
+    },
+    [],
+  )
+}
+
+export const sortCredentialsByRecentIssueDate = <T extends {issued: Date}>(credentials: T[]): T[] => {
+  return credentials.sort((a: T, b: T) => {
+    const aMs = new Date(a.issued).getTime();
+    const bMs = new Date(b.issued).getTime();
+    if(aMs > bMs) {
+      return -1
+    } else {
+      return 1;
+    }
+  })
+}
+
+export const reduceCustomDisplayCredentialsBySortedType = <T extends {type: string, issued: Date}>(credentials: T[]): Array<CredentialsByType<T>> => {
+  return reduceCustomDisplayCredentialsByType(sortCredentialsByRecentIssueDate(credentials));
+}
+
+export const reduceCustomDisplayCredentialsBySortedIssuer = <T extends {issuer: IdentitySummary, issued: Date}>(credentials: T[]): Array<CredentialsByIssuer<T>> => {
+  return reduceCustomDisplayCredentialsByIssuer(sortCredentialsByRecentIssueDate(credentials));
+}
+
 
 export function mapAttributesToDisplay(
   credentials: SignedCredential[],

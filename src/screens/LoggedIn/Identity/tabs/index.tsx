@@ -1,18 +1,24 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 
 import IdentityTab from './IdentityTab'
 import IdentityTabsHeader from './IdentityTabsHeader'
 import IdentityTabsPage from './IdentityTabsPage'
 import IdentityTabsPlaceholder from './IdentityTabPlaceholder'
-import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 import { IIdentityTabs, ITabsComposition } from './types'
 import { IdentityTabsContext } from './context'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
   initialTab,
   children,
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab)
+
+  useEffect(() => {
+    if (activeTab !== initialTab) {
+      setActiveTab(initialTab)
+    }
+  }, [initialTab])
 
   const contextValue = useMemo(
     () => ({
@@ -23,7 +29,7 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
   )
 
   return (
-    <JoloKeyboardAwareScroll
+    <ScrollView
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps={'handled'}
       overScrollMode="never"
@@ -31,7 +37,7 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
       contentContainerStyle={{ paddingBottom: '40%', paddingTop: 26 }}
     >
       <IdentityTabsContext.Provider value={contextValue} children={children} />
-    </JoloKeyboardAwareScroll>
+    </ScrollView>
   )
 }
 
