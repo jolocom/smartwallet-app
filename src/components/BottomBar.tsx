@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -24,6 +18,7 @@ import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
 import { useRedirectTo } from '~/hooks/navigation'
 import BP from '~/utils/breakpoints'
+import { SCREEN_WIDTH } from '~/utils/dimensions'
 
 interface IconPropsI {
   label: string
@@ -31,13 +26,16 @@ interface IconPropsI {
   isActive: boolean
 }
 
+const SCALE_BY = SCREEN_WIDTH / 414
+
 /* picture has invisble horizontal margins, therefore adding 4 point to hide it */
-const SCREEN_WIDTH = Dimensions.get('window').width + 4
-const TAB_IMAGE_WIDTH = SCREEN_WIDTH
+const SCREEN_WIDTH_ADJUSTED = SCREEN_WIDTH + 4
+const TAB_IMAGE_WIDTH = SCREEN_WIDTH_ADJUSTED
 const TAB_IMAGE_HEIGHT = 0.192 * TAB_IMAGE_WIDTH
 const SCANNER_BUTTON_BOTTOM = 0.345 * TAB_IMAGE_HEIGHT
 const SCANNER_BTN_MARGIN = 16
-const SCANNER_BUTTON_DIMENSIONS = 0.22 * SCREEN_WIDTH - SCANNER_BTN_MARGIN
+const SCANNER_BUTTON_DIMENSIONS =
+  0.22 * SCREEN_WIDTH_ADJUSTED - SCANNER_BTN_MARGIN
 const SCANNER_BUTTON_RADIUS = SCANNER_BUTTON_DIMENSIONS / 2
 const TABS_POSITION_BOTTOM = BP({
   default: 0.2 * TAB_IMAGE_HEIGHT,
@@ -50,28 +48,39 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
   const redirectToTab = useRedirectTo(label as ScreenNames)
   const renderIcon = () => {
     const color = isActive ? Colors.white : Colors.white40
+
     switch (label) {
-      case ScreenNames.Identity:
+      case ScreenNames.Identity: {
         return <IdentityTabIcon color={color} />
-      case ScreenNames.Documents:
+      }
+      case ScreenNames.Documents: {
         return <DocumentsTabIcon color={color} />
-      case ScreenNames.History:
+      }
+      case ScreenNames.History: {
         return <HistoryTabIcon color={color} />
-      case ScreenNames.Settings:
+      }
+      case ScreenNames.Settings: {
         return <SettingsTabIcon color={color} />
-      default:
+      }
+      default: {
         return null
+      }
     }
   }
+
   return (
     <TouchableOpacity onPress={redirectToTab}>
       <View style={styles.iconContainer}>
-        {renderIcon()}
+        <View style={{ transform: [{ scale: SCALE_BY }] }}>{renderIcon()}</View>
         <JoloText
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.tiniest}
           color={isActive ? Colors.white : Colors.white40}
-          customStyles={{ fontSize: 11, letterSpacing: 0.07 }}
+          customStyles={{
+            fontSize: 11,
+            letterSpacing: 0.07,
+            marginTop: 4,
+          }}
         >
           {label}
         </JoloText>
