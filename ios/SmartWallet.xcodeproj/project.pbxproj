@@ -12,6 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2995141A2625DD2A0035F7B9 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 299514192625DD2A0035F7B9 /* BootSplash.storyboard */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -57,6 +58,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SmartWallet/main.m; sourceTree = "<group>"; };
 		1C103B60642EC9B2C610F807 /* libPods-SmartWallet-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartWallet-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		218C3AD4CED551AF018DB3B9 /* Pods-SmartWallet-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SmartWallet-tvOS/Pods-SmartWallet-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		299514192625DD2A0035F7B9 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = SmartWallet/BootSplash.storyboard; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* SmartWallet-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SmartWallet-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* SmartWallet-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SmartWallet-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4699FFB68A98B80928F64DF1 /* Pods-SmartWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartWallet.debug.xcconfig"; path = "Target Support Files/Pods-SmartWallet/Pods-SmartWallet.debug.xcconfig"; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				299514192625DD2A0035F7B9 /* BootSplash.storyboard */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -359,6 +362,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				B0F591400B3E4539A4BFB19C /* TTCommons-Light.otf in Resources */,
 				4A1F2BCAE3FF4142B395B13E /* TTCommons-Medium.otf in Resources */,
+				2995141A2625DD2A0035F7B9 /* BootSplash.storyboard in Resources */,
 				FD9E51B725DEB88C0023D93F /* LaunchScreen.storyboard in Resources */,
 				A7DF8B8760CD4B4FAFF81C91 /* TTCommons-Regular.otf in Resources */,
 			);

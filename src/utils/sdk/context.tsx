@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from 'react'
 import { ActivityIndicator, StatusBar } from 'react-native'
-
+import RNBootSplash from 'react-native-bootsplash'
 import { Agent } from 'react-native-jolocom'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -46,6 +46,13 @@ export const AgentContextProvider: React.FC = ({ children }) => {
       agentRef.current = null
     }
   }, [])
+
+  useEffect(() => {
+    const hideSplash = async () => {
+      await RNBootSplash.hide({ fade: true })
+    }
+    if (!isLoading) hideSplash()
+  }, [isLoading])
 
   if (isLoading) {
     return (
