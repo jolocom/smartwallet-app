@@ -12,7 +12,6 @@ import { setPopup } from '~/modules/appState/actions'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import { ScreenNames } from '~/types/screens'
-import { Colors } from '~/utils/colors'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'
 import Lock from '../Modals/Lock'
 import Recovery from '../Modals/Recovery'
@@ -33,11 +32,8 @@ export type LoggedInStackParamList = {
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
 
-const settingsScreenTransitionOptions = {
+const screenTransitionOptions = {
   ...TransitionPresets.ModalSlideFromBottomIOS,
-  cardStyle: {
-    backgroundColor: Colors.mainBlack,
-  },
 }
 
 const LoggedIn = () => {
@@ -94,9 +90,8 @@ const LoggedIn = () => {
           name={ScreenNames.Lock}
           component={Lock}
           options={{
-            ...settingsScreenTransitionOptions,
+            ...screenTransitionOptions,
             gestureEnabled: false,
-            cardStyle: { backgroundColor: Colors.mainBlack },
           }}
         />
       ) : showRegisterPin ? (
@@ -104,9 +99,8 @@ const LoggedIn = () => {
           name={ScreenNames.DeviceAuth}
           component={DeviceAuthentication}
           options={{
-            ...settingsScreenTransitionOptions,
+            ...screenTransitionOptions,
             gestureEnabled: false,
-            cardStyle: { backgroundColor: Colors.mainBlack },
           }}
         />
       ) : showTabs ? (
@@ -119,12 +113,12 @@ const LoggedIn = () => {
       <LoggedInStack.Screen
         name={ScreenNames.PinRecoveryInstructions}
         component={PinRecoveryInstructions}
-        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+        options={{ ...screenTransitionOptions, gestureEnabled: false }}
       />
       <LoggedInStack.Screen
         name={ScreenNames.PasscodeRecovery}
         component={Recovery}
-        options={{ ...settingsScreenTransitionOptions, gestureEnabled: false }}
+        options={{ ...screenTransitionOptions, gestureEnabled: false }}
       />
       {/* Modals -> End */}
     </LoggedInStack.Navigator>
