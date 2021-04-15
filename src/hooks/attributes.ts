@@ -26,20 +26,15 @@ export const useSICActions = () => {
     metadata: BaseMetadata,
     claims: ClaimValues,
   ) => {
-    const signedCredential = await agent.idw.create.signedCredential(
-      {
-        metadata,
-        claim: claims,
-        subject: did,
-      },
-      await agent.passwordStore.getPassword(),
-    )
-    await agent.storage.store.verifiableCredential(signedCredential)
-    return signedCredential
+    return agent.signedCredential({
+      metadata,
+      claim: claims,
+      subject: did,
+    })
   }
 
   const deleteStoredCredential = async (id: string) => {
-    await agent.storage.delete.verifiableCredential(id)
+    await agent.credentials.delete({ id })
     return id
   }
 
