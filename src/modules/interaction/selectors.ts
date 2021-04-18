@@ -316,6 +316,11 @@ export const getIsFullscreenCredOffer = createSelector(
   },
 )
 
+export const getOfferedCredentials = createSelector(
+  [getCredOfferDetails],
+  (details) => details.credentials.service_issued
+)
+
 /**
  * Gets the categorized @OfferedCredential from the @interactionDetails.
  */

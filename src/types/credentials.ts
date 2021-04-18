@@ -5,7 +5,6 @@ import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { IdentitySummary } from '@jolocom/sdk'
 import { ObjectSchema } from 'yup'
-import { strings } from '~/translations'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -81,6 +80,7 @@ export type BaseUICredential = Pick<
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
   category: CredentialCategories
   invalid: boolean
+  properties: Array<DisplayVal>
 }
 
 export type OfferedCredentialDisplay = OfferedCredential &
