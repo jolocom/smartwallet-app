@@ -11,6 +11,7 @@ const entropy = {
   SET_UP_YOUR_IDENTITY: 'Add uniqueness',
   TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100:
     'Randomly draw untill 100% to secure your identity',
+  ENTROPY_LOADER: 'Awesome!\nIdentity is being secured',
 }
 
 export const recovery = {
@@ -290,8 +291,8 @@ const toasts = {
   NOT_CONNECTED: "Uh...oh you're not connected",
   WE_CANT_REACH_YOU:
     "We can't reach you if you don't have internet. Please check your connection and try again",
-  YOU_ARE_BACK_ONLINE: 'You\'re back online',
-  ALL_WALLET_FUNCTIONALITIES: 'All wallet functionalities are back again'
+  YOU_ARE_BACK_ONLINE: "You're back online",
+  ALL_WALLET_FUNCTIONALITIES: 'All wallet functionalities are back again',
 }
 
 const documents = {
@@ -314,7 +315,7 @@ const documents = {
   ANONYMOUS: 'Anonymous',
   IDENTIFICATION: 'Identification',
   TICKET: 'Ticket',
-  UNKNOWN: 'Unknown'
+  UNKNOWN: 'Unknown',
 }
 
 const history = {
