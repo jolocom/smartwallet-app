@@ -12,7 +12,7 @@ interface Props {
 
 export const ConsentText: React.FC<Props> = ({ onPress, text }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity activeOpacity={1} onPress={onPress}>
       <JoloText
         color={Colors.purple}
         kind={JoloTextKind.subtitle}
