@@ -55,26 +55,17 @@ const mockedStoreNoBusinessCard = {
   },
 }
 
-const mockedCreateSignedCredentialFn = jest.fn()
+const mockedIssueCredentialFn = jest.fn()
 const mockDeleteVCFn = jest.fn()
 
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
-    idw: {
-      create: {
-        signedCredential: mockedCreateSignedCredentialFn,
-      },
-    },
     passwordStore: {
       getPassword: jest.fn().mockResolvedValue(true),
     },
-    storage: {
-      store: {
-        verifiableCredential: jest.fn().mockResolvedValue(true),
-      },
-      delete: {
-        verifiableCredential: mockDeleteVCFn,
-      },
+    credentials: {
+      issue: mockedIssueCredentialFn,
+      delete: mockDeleteVCFn,
     },
   }),
 }))
@@ -86,12 +77,12 @@ describe('Business card mode', () => {
   })
   afterEach(() => {
     mockDispatchFn.mockClear()
-    mockedCreateSignedCredentialFn.mockClear()
+    mockedIssueCredentialFn.mockClear()
   })
   test('edit', async () => {
     mockSelectorReturn(mockedStoreBusinessCard)
     mockDeleteVCFn.mockResolvedValue(true)
-    mockedCreateSignedCredentialFn.mockResolvedValue({
+    mockedIssueCredentialFn.mockResolvedValue({
       id: ATTRIBUTE_ID_UPDATED,
       claim: {
         id: ATTRIBUTE_ID_UPDATED,
@@ -118,7 +109,7 @@ describe('Business card mode', () => {
 
     await waitFor(() => {
       expect(mockDeleteVCFn).toBeCalledTimes(1)
-      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockedIssueCredentialFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledWith(
         editAttr({
@@ -140,7 +131,7 @@ describe('Business card mode', () => {
   })
   test('add', async () => {
     mockSelectorReturn(mockedStoreNoBusinessCard)
-    mockedCreateSignedCredentialFn.mockResolvedValue({
+    mockedIssueCredentialFn.mockResolvedValue({
       id: ATTRIBUTE_ID,
       claim: {
         id: ATTRIBUTE_ID,
@@ -169,7 +160,7 @@ describe('Business card mode', () => {
     fireEvent.press(submitButton)
 
     await waitFor(() => {
-      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockedIssueCredentialFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledWith(
         updateAttrs({
