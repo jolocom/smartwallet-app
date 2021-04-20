@@ -76,7 +76,7 @@ export async function mapCredentialsToDisplay(
 ): Promise<DisplayCredential> {
   const credentialType = await agent.credentials.getCredentialType(c)
   
-  // TODO: sdk - get correctly resolved issuer profile
+  // TODO: sdk - get correctly resolved issuer profile it only returns string (did) not an identity summary
   const {definition, renderAs, issuerProfile} = credentialType;
   
   const baseUICredentials = mapToBaseUICredential(c)
@@ -148,7 +148,7 @@ export function mapDisplayToCustomDisplay(
   return {
     ...credential,
     properties: updatedProperties,
-    photo: credential.issuer.publicProfile?.image,
+    photo: credential.issuer?.publicProfile?.image,
   }
 }
 
