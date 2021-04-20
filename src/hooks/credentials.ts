@@ -7,8 +7,7 @@ export const useDeleteCredential = () => {
   const dispatch = useDispatch()
 
   return async (id: string) => {
-    await agent.storage.delete.verifiableCredential(id)
-
+    await agent.credentials.delete({id})
     dispatch(deleteCredential(id))
   }
 }
