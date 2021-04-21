@@ -108,11 +108,24 @@ const LoggedIn = () => {
           }}
         />
       ) : (
-        <LoggedInStack.Screen
-          name={ScreenNames.Main}
-          component={Main}
-          options={{ gestureEnabled: false }}
-        />
+        <>
+          <LoggedInStack.Screen
+            name={'Idle'}
+            component={Idle}
+            options={{
+              ...screenTransitionOptions,
+              gestureEnabled: false,
+            }}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.Main}
+            component={Main}
+            options={{
+              ...screenTransitionOptions,
+              gestureEnabled: false,
+            }}
+          />
+        </>
       )}
       {!showTabs && (
         <LoggedInStack.Screen
