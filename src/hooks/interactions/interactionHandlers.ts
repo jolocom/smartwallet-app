@@ -83,9 +83,10 @@ export const interactionHandler = async (agent: Agent, interaction: Interaction,
       // TODO: we should use of all constraints, i guess
       const {requestedCredentialTypes} = constraints[0];
       const types = requestedCredentialTypes.map(t => ({type: t}))
-
-      // TODO: sdk doesn't return correct credentials if using CredentialQueryAttrs[] type as param
-      // It might be the issue with cred-storage-sdk version
+      
+      // TODO: this returns not correct number of credentials
+      // because first types of constraint and actual credential
+      // do not match Credentials vs VerifiableCredential
       const requestedCredentials = await agent.credentials.query(types)
 
       // TODO: remove after fixed issue with sdk credential query
@@ -104,6 +105,7 @@ export const interactionHandler = async (agent: Agent, interaction: Interaction,
       // do not match Credentials vs VerifiableCredential
       const validatedCredentials = (interaction.getMessages()[0].interactionToken as CredentialRequest).applyConstraints(correctRequestedCredentials);
 
+      // TODO: there is a hook we can use useCredentials().getDisplayCredentials
       const {
         credentials: validatedServiceIssuedC,
         selfIssuedCredentials: validatedSelfIssuedC,

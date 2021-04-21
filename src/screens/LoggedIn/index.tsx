@@ -17,7 +17,7 @@ import Lock from '../Modals/Lock'
 import Recovery from '../Modals/Recovery'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Main from './Main'
-import { useInitializeCredentials } from '~/hooks/signedCredentials'
+import { useCredentials } from '~/hooks/signedCredentials'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -44,7 +44,7 @@ const LoggedIn = () => {
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
   const showTabs = !isAppLocked && isAuthSet
-  const { initializeCredentials } = useInitializeCredentials()
+  const { initializeCredentials } = useCredentials()
 
   useEffect(() => {
     initializeCredentials()
