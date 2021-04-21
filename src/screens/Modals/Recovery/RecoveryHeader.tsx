@@ -81,6 +81,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                   }),
                 },
               }),
+              marginTop: 12,
             }}
           >
             <ScreenHeader
