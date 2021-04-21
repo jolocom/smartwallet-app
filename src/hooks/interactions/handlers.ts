@@ -22,17 +22,19 @@ import { useAgent } from '../sdk'
 import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { interactionHandler } from './interactionHandlers'
+import { getDid } from '~/modules/account/selectors'
 
 export const useInteraction = () => {
   const agent = useAgent()
   const interactionId = useSelector(getInteractionId)
   if (!interactionId) throw new Error('Interaction not found')
-
+  
   return () => agent.interactionManager.getInteraction(interactionId)
 }
 
 export const useInteractionStart = () => {
   const agent = useAgent()
+  const did = useSelector(getDid);
   const dispatch = useDispatch()
   const loader = useLoader()
 
@@ -59,7 +61,7 @@ export const useInteractionStart = () => {
     return loader(
       async () => {
         const interaction = await agent.processJWT(jwt)
-        const interactionData = interactionHandler(interaction);
+        const interactionData = await interactionHandler(agent, interaction, did);
         dispatch(
           setInteractionDetails({
             id: interaction.id,

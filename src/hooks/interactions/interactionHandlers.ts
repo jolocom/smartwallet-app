@@ -1,10 +1,12 @@
 import { AuthenticationFlowState, AuthorizationFlowState, CredentialOfferFlowState, CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
 
 import {
+  Agent,
   FlowType,
   Interaction,
 } from 'react-native-jolocom'
-import { getCredentialCategory } from '../signedCredentials/utils';
+import { getCredentialCategory, mapAttributesToDisplay, mapCredentialsToDisplay, separateCredentialsAndAttributes } from '../signedCredentials/utils';
+import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest';
 
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({description: state.description})
@@ -25,11 +27,6 @@ const credentialOfferHandler = (state: CredentialOfferFlowState) => {
       ),
     },
   }
-  /**
-   * Part 1:
-   * Data mapping (this is a place to take care of credential offer display)
-   */
-  return;
 }
 
 const credentialShareHandler = (state: CredentialRequestFlowState) => {
@@ -59,7 +56,7 @@ const credentialShareHandler = (state: CredentialRequestFlowState) => {
  * before we dispatch interaction details into redux store
  * 2. Map interaction details to the wallet UI structure
  */
-export const interactionHandler = (interaction: Interaction) => {
+export const interactionHandler = async (agent: Agent, interaction: Interaction, did: string) => {
   const {state, initiator} = interaction.getSummary();
 
   let flowSpecificData;
@@ -77,9 +74,50 @@ export const interactionHandler = (interaction: Interaction) => {
       flowSpecificData = credentialOfferHandler(state as CredentialOfferFlowState);
       break;
     }
-    case FlowType.CredentialShare:
-      // TODO: define handler
-      throw new Error('No handler is written yet for credential request')
+    case FlowType.CredentialShare: {
+
+      const requestState = state as CredentialRequestFlowState;
+      
+      const {constraints} = requestState;
+
+      // TODO: we should use of all constraints, i guess
+      const {requestedCredentialTypes} = constraints[0];
+      const types = requestedCredentialTypes.map(t => ({type: t}))
+
+      // TODO: sdk doesn't return correct credentials if using CredentialQueryAttrs[] type as param
+      // It might be the issue with cred-storage-sdk version
+      const requestedCredentials = await agent.credentials.query(types)
+
+      // TODO: remove after fixed issue with sdk credential query
+      const correctRequestedCredentials = requestedCredentials.filter(c => {
+        if(requestedCredentialTypes.find(rt => rt[1] === c.type[1])) {
+          return true;
+        }
+        return false;
+      })
+
+      // TODO: add logic to verify if all types are present otherwise throw
+      
+
+      // FIX: this returns not correct number of credentials
+      // because first types of constraint and actual credential
+      // do not match Credentials vs VerifiableCredential
+      const validatedCredentials = (interaction.getMessages()[0].interactionToken as CredentialRequest).applyConstraints(correctRequestedCredentials);
+
+      const {
+        credentials: validatedServiceIssuedC,
+        selfIssuedCredentials: validatedSelfIssuedC,
+      } = separateCredentialsAndAttributes(validatedCredentials, did);
+
+      const displayCredentials = await Promise.all(validatedServiceIssuedC.map(c => mapCredentialsToDisplay(agent, c)));
+      flowSpecificData = {
+        credentials: displayCredentials,
+        attributes: mapAttributesToDisplay(validatedSelfIssuedC),
+        selectedCredentials: {}
+      }
+      throw new Error('WIP for credential request')
+    }
+      
     default:
       // TODO: Define error and use translations
       throw new Error('Interaction not supported')
