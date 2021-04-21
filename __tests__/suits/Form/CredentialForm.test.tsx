@@ -40,7 +40,7 @@ const mockedStoreNoAttributes = {
   },
 }
 
-const mockedCreateSignedCredentialFn = jest.fn()
+const mockedIssueCredentialFn = jest.fn()
 const mockDeleteVCFn = jest.fn()
 
 jest.mock('@react-navigation/native')
@@ -49,21 +49,12 @@ jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 jest.mock('../../../src/hooks/useTranslation')
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
-    idw: {
-      create: {
-        signedCredential: mockedCreateSignedCredentialFn,
-      },
-    },
     passwordStore: {
       getPassword: jest.fn().mockResolvedValue(true),
     },
-    storage: {
-      store: {
-        verifiableCredential: jest.fn().mockResolvedValue(true),
-      },
-      delete: {
-        verifiableCredential: mockDeleteVCFn,
-      },
+    credentials: {
+      issue: mockedIssueCredentialFn,
+      delete: mockDeleteVCFn,
     },
   }),
 }))
@@ -106,8 +97,8 @@ describe('Form in mode', () => {
 
   beforeEach(() => {
     mockDispatchFn.mockClear()
-    mockedCreateSignedCredentialFn.mockClear()
-    mockedCreateSignedCredentialFn.mockResolvedValue({
+    mockedIssueCredentialFn.mockClear()
+    mockedIssueCredentialFn.mockResolvedValue({
       id: ATTRIBUTE_ID_UPDATED,
       claim: {
         id: ATTRIBUTE_ID_UPDATED,
@@ -142,9 +133,9 @@ describe('Form in mode', () => {
     // ASSERT ASYNC SUBMIT HANDLING
     await waitFor(() => {
       expect(mockDeleteVCFn).toBeCalledTimes(1)
-      expect(mockDeleteVCFn).toBeCalledWith(ATTRIBUTE_ID)
+      expect(mockDeleteVCFn).toBeCalledWith({ id: ATTRIBUTE_ID })
 
-      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockedIssueCredentialFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledWith(
         editAttr({
@@ -183,7 +174,7 @@ describe('Form in mode', () => {
 
     // ASSERT ASYNC SUBMIT HANDLING
     await waitFor(() => {
-      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockedIssueCredentialFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledWith(
         updateAttrs({

@@ -72,9 +72,10 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   validationSchema: ObjectSchema<Record<string, any>>
 }
 
+// NOTE: removed issuer as we are getting resolved issued from credentialType
 export type BaseUICredential = Pick<
   SignedCredential,
-  'id' | 'issuer' | 'issued' | 'expires' | 'subject' | 'name'
+  'id' | 'issued' | 'expires' | 'subject' | 'name'
 > & { type: string }
 
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
@@ -95,11 +96,10 @@ export enum DocumentFields {
   DocumentName = 'Document Name',
 }
 
-export type DisplayCredential = Omit<BaseUICredential, 'issuer'> & {
-  issuer: IdentitySummary
-} & { category: CredentialCategories } & {
-  properties: Array<Required<DisplayVal>>
-}
+export type DisplayCredential = 
+  & { issuer: IdentitySummary | undefined }
+  & { category: CredentialCategories }
+  & { properties: Array<Required<DisplayVal>> }
 
 export type DisplayCredentialDocument = DisplayCredential & {
   holderName: string

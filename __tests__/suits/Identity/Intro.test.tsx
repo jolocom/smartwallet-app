@@ -19,23 +19,17 @@ const EMAIL = 'dev@jolocom.com'
 const TELEPHONE = '000000000'
 const COMPANY_NAME = 'SmartWallet'
 
-const mockedCreateSignedCredentialFn = jest.fn()
+const mockedIssueCredentialFn = jest.fn()
+const noop = () => {}
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
-    idw: {
-      create: {
-        signedCredential: mockedCreateSignedCredentialFn,
-      },
-    },
     passwordStore: {
       getPassword: jest.fn().mockResolvedValue(true),
     },
-    storage: {
-      store: {
-        verifiableCredential: jest.fn().mockResolvedValue(true),
-      },
+    credentials: {
+      issue: mockedIssueCredentialFn,
     },
   }),
 }))
@@ -52,7 +46,9 @@ describe('Intro displays', () => {
   })
 
   test('correct ui components initially', () => {
-    const { getByTestId, getByText } = renderWithSafeArea(<IdentityIntro />)
+    const { getByTestId, getByText } = renderWithSafeArea(
+      <IdentityIntro onSubmit={noop} />,
+    )
 
     const singleCredentialButton = getByTestId('single-credential-button')
     const businessCardButton = getByTestId('business-card-button')
@@ -72,11 +68,11 @@ describe('Intro displays', () => {
 
   beforeEach(() => {
     mockDispatchFn.mockClear()
-    mockedCreateSignedCredentialFn.mockClear()
+    mockedIssueCredentialFn.mockClear()
   })
 
   test('single credential wizard', async () => {
-    mockedCreateSignedCredentialFn.mockResolvedValue({
+    mockedIssueCredentialFn.mockResolvedValue({
       id: ATTRIBUTE_ID,
       claim: {
         id: ATTRIBUTE_ID,
@@ -86,7 +82,7 @@ describe('Intro displays', () => {
     })
 
     const { getByText, getAllByTestId, getByTestId } = renderWithSafeArea(
-      <IdentityIntro />,
+      <IdentityIntro onSubmit={noop} />,
     )
 
     const singleCredentialButton = getByTestId('single-credential-button')
@@ -97,7 +93,7 @@ describe('Intro displays', () => {
     const submitBtnStep1 = getByTestId('button')
     fireEvent.press(submitBtnStep1)
 
-    expect(mockedCreateSignedCredentialFn).toBeCalledTimes(0)
+    expect(mockedIssueCredentialFn).toBeCalledTimes(0)
 
     const inputs = getAllByTestId('wizard-input')
     populateInputs(inputs, [GIVEN_NAME, FAMILY_NAME])
@@ -105,7 +101,7 @@ describe('Intro displays', () => {
     fireEvent.press(submitBtnStep1)
 
     await waitFor(() => {
-      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockedIssueCredentialFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledWith(
         updateAttrs({
@@ -120,7 +116,7 @@ describe('Intro displays', () => {
   })
 
   test('business credential wizard', async () => {
-    mockedCreateSignedCredentialFn.mockResolvedValue({
+    mockedIssueCredentialFn.mockResolvedValue({
       id: ATTRIBUTE_ID,
       claim: {
         id: ATTRIBUTE_ID,
@@ -133,7 +129,7 @@ describe('Intro displays', () => {
     })
 
     const { getByText, getAllByTestId, getByTestId } = renderWithSafeArea(
-      <IdentityIntro />,
+      <IdentityIntro onSubmit={noop} />,
     )
 
     const businessCardButton = getByTestId('business-card-button')
@@ -171,7 +167,7 @@ describe('Intro displays', () => {
     fireEvent.press(submitBtnStep3)
 
     await waitFor(() => {
-      expect(mockedCreateSignedCredentialFn).toBeCalledTimes(1)
+      expect(mockedIssueCredentialFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledTimes(1)
       expect(mockDispatchFn).toBeCalledWith(
         updateAttrs({

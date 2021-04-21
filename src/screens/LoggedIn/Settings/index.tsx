@@ -23,17 +23,20 @@ import EnableBiometryOption from './EnableBiometryOption'
 import { useBiometry } from '~/hooks/biometry'
 import useBackup from '~/hooks/backup'
 import useMarketRating from '~/hooks/rateus'
+import { useAgent } from '~/hooks/sdk'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
   const { resetBiometry } = useBiometry()
   const { shouldWarnBackup } = useBackup()
   const { rateApp } = useMarketRating()
+  const agent = useAgent()
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
   const handleLogout = useCallback(async () => {
     try {
+      await agent.deleteIdentityData()
       await resetBiometry()
       await resetServiceValuesInKeychain()
       dispatch(resetAccount())

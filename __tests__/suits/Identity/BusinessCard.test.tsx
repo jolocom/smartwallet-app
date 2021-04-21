@@ -59,21 +59,12 @@ jest.mock('@react-navigation/native', () => ({
 
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
-    idw: {
-      create: {
-        signedCredential: mockedCreateSignedCredentialFn,
-      },
-    },
     passwordStore: {
       getPassword: jest.fn().mockResolvedValue(true),
     },
-    storage: {
-      store: {
-        verifiableCredential: jest.fn().mockResolvedValue(true),
-      },
-      delete: {
-        verifiableCredential: mockedDeleteSignedCredentialFn,
-      },
+    credentials: {
+      issue: mockedCreateSignedCredentialFn,
+      delete: mockedDeleteSignedCredentialFn,
     },
   }),
 }))
