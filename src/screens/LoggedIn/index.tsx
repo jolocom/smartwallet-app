@@ -2,7 +2,6 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack'
-import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -14,22 +13,16 @@ import { getIsPopup } from '~/modules/appState/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import { ScreenNames } from '~/types/screens'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'
-import Lock from '../Modals/Lock'
-import Recovery from '../Modals/Recovery'
-import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Main from './Main'
 import { useInitializeCredentials } from '~/hooks/signedCredentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect } from '~/hooks/navigation'
+import LockStack from './LockStack'
 
 export type LoggedInStackParamList = {
   Idle: undefined
-  [ScreenNames.PasscodeRecovery]: {
-    isAccessRestore: boolean
-  }
   [ScreenNames.Main]: undefined
-  [ScreenNames.Lock]: undefined
-  [ScreenNames.PinRecoveryInstructions]: undefined
+  [ScreenNames.LockStack]: undefined
   [ScreenNames.DeviceAuth]: undefined
 }
 
@@ -90,7 +83,7 @@ const LoggedIn = () => {
   /* All about when lock screen comes up - END */
 
   useEffect(() => {
-    if (showLock) redirect(ScreenNames.Lock)
+    if (showLock) redirect(ScreenNames.LockStack)
   }, [showLock])
 
   useEffect(() => {
@@ -131,24 +124,14 @@ const LoggedIn = () => {
       )}
       {!showTabs && (
         <LoggedInStack.Screen
-          name={ScreenNames.Lock}
-          component={Lock}
+          name={ScreenNames.LockStack}
+          component={LockStack}
           options={{
             ...screenTransitionOptions,
             gestureEnabled: false,
           }}
         />
       )}
-      <LoggedInStack.Screen
-        name={ScreenNames.PinRecoveryInstructions}
-        component={PinRecoveryInstructions}
-        options={{ ...screenTransitionOptions, gestureEnabled: false }}
-      />
-      <LoggedInStack.Screen
-        name={ScreenNames.PasscodeRecovery}
-        component={Recovery}
-        options={{ ...screenTransitionOptions, gestureEnabled: false }}
-      />
       {/* Modals -> End */}
     </LoggedInStack.Navigator>
   )

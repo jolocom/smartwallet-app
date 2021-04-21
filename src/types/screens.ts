@@ -17,6 +17,7 @@ export enum ScreenNames {
   // Logged In
   LoggedIn = 'LoggedIn',
   LoggedInTermsConsent = 'LoggedInTermsConsent',
+  LockStack = 'LockStack',
   Lock = 'Lock',
   DeviceAuth = 'DeviceAuth',
 

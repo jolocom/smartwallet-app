@@ -249,8 +249,8 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
 
           <JoloText
             kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.big}
-            color={Colors.white80}
+            size={JoloTextSizes.middle}
+            color={Colors.white70}
             customStyles={{ marginTop: 10 }}
           >
             {msg}
