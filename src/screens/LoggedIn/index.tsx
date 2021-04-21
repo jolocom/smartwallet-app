@@ -91,10 +91,14 @@ const LoggedIn = () => {
   useEffect(() => {
     if (showLock) {
       navigation.navigate(ScreenNames.Lock)
-    } else {
+    } else if (!showRegisterPin) {
       navigation.navigate(ScreenNames.Main)
     }
   }, [showLock])
+
+  useEffect(() => {
+    if (showTabs) navigation.navigate(ScreenNames.Main)
+  }, [showTabs])
 
   return (
     <LoggedInStack.Navigator headerMode="none">
