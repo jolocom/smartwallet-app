@@ -2,7 +2,7 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -20,6 +20,7 @@ import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Main from './Main'
 import { useInitializeCredentials } from '~/hooks/signedCredentials'
 import ScreenContainer from '~/components/ScreenContainer'
+import { useRedirect } from '~/hooks/navigation'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -44,7 +45,7 @@ const LoggedIn = () => {
   const dispatch = useDispatch()
   const isAuthSet = useSelector(isLocalAuthSet)
   const isAppLocked = useSelector(getIsAppLocked)
-  const navigation = useNavigation()
+  const redirect = useRedirect()
 
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
@@ -89,15 +90,12 @@ const LoggedIn = () => {
   /* All about when lock screen comes up - END */
 
   useEffect(() => {
-    if (showLock) {
-      navigation.navigate(ScreenNames.Lock)
-    } else if (!showRegisterPin) {
-      navigation.navigate(ScreenNames.Main)
-    }
+    if (showLock) redirect(ScreenNames.Lock)
   }, [showLock])
 
   useEffect(() => {
-    if (showTabs) navigation.navigate(ScreenNames.Main)
+    //NOTE: navigating imperatively b/c the Idle screen is rendered before Main
+    if (showTabs) redirect(ScreenNames.Main)
   }, [showTabs])
 
   return (
