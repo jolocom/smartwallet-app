@@ -103,12 +103,14 @@ export const interactionHandler = async (agent: Agent, interaction: Interaction,
       // FIX: this returns not correct number of credentials
       // because first types of constraint and actual credential
       // do not match Credentials vs VerifiableCredential
+      // @ts-expect-error: correctRequestedCredentials do not match SignedCredential type
       const validatedCredentials = (interaction.getMessages()[0].interactionToken as CredentialRequest).applyConstraints(correctRequestedCredentials);
 
-      // TODO: there is a hook we can use useCredentials().getDisplayCredentials
+      // TODO: there is a hook we can use useCredentials().separateSignedTransformToUI
       const {
         credentials: validatedServiceIssuedC,
         selfIssuedCredentials: validatedSelfIssuedC,
+      // @ts-expect-error: validatedCredentials do not match SignedCredential type
       } = separateCredentialsAndAttributes(validatedCredentials, did);
 
       const displayCredentials = await Promise.all(validatedServiceIssuedC.map(c => mapCredentialsToDisplay(agent, c)));

@@ -13,7 +13,7 @@ import {
   mapAttributesToDisplay,
 } from './utils'
 
-const mapGetDisplayCredentials = (agent: Agent, did: string) => {
+const makeSeparateSignedTransformToUI = (agent: Agent, did: string) => {
   return async (credentials: SignedCredential[]) => {
     const {
       credentials: serviceIssuedCredentials,
@@ -21,7 +21,7 @@ const mapGetDisplayCredentials = (agent: Agent, did: string) => {
     } = separateCredentialsAndAttributes(credentials, did)
 
     const attributes = mapAttributesToDisplay(selfIssuedCredentials)
-    const displayCredentials = await makeGetCredentialDisplay(agent)(serviceIssuedCredentials)
+    const displayCredentials = await makeTransformSignedCredentialToUI(agent)(serviceIssuedCredentials)
 
     return {
       attributes,
@@ -35,7 +35,7 @@ const makeInitializeCredentials = (agent: Agent, did: string, dispatch: Dispatch
     try {
       const allCredentials: SignedCredential[] = await agent.credentials.query();
       const {attributes,
-        displayCredentials} = await mapGetDisplayCredentials(agent, did)(allCredentials);
+        displayCredentials} = await makeSeparateSignedTransformToUI(agent, did)(allCredentials);
       
       // TODO: namings are inconsistent across modules: initAttrs vs setCredentials
       dispatch(initAttrs(attributes))
@@ -46,7 +46,7 @@ const makeInitializeCredentials = (agent: Agent, did: string, dispatch: Dispatch
   }
 }
 
-const makeGetCredentialDisplay = (agent: Agent) => async (
+const makeTransformSignedCredentialToUI = (agent: Agent) => async (
   credentials: SignedCredential[],
 ): Promise<DisplayCredential[]> => {
   return Promise.all(
@@ -60,10 +60,11 @@ export const useCredentials = () => {
   const did = useSelector(getDid)
   const dispatch = useDispatch()
   
+  // TODO: think together about names
   return {
-    getDisplayCredentials: mapGetDisplayCredentials(agent, did),
+    separateSignedTransformToUI: makeSeparateSignedTransformToUI(agent, did),
     initializeCredentials: makeInitializeCredentials(agent, did, dispatch),
-    getCredentialDisplay: makeGetCredentialDisplay(agent)
+    signedCredentialToUI: makeTransformSignedCredentialToUI(agent)
   }
 }
 
