@@ -1,5 +1,5 @@
-import { Agent, IdentitySummary } from '@jolocom/sdk'
-import { CredentialType } from '@jolocom/sdk/js/credentials'
+import { IdentitySummary } from '@jolocom/sdk'
+import { CredentialIssuer } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { strings } from '~/translations'
@@ -71,10 +71,10 @@ function mapToBaseUICredential(c: SignedCredential): BaseUICredential {
 }
 
 export async function mapCredentialsToDisplay(
-  agent: Agent,
+  credentials: CredentialIssuer,
   c: SignedCredential,
 ): Promise<DisplayCredential> {
-  const credentialType = await agent.credentials.getCredentialType(c)
+  const credentialType = await credentials.getCredentialType(c)
   
   // TODO: sdk - get correctly resolved issuer profile it only returns string (did) not an identity summary
   const {definition, renderAs, issuerProfile} = credentialType;

@@ -50,7 +50,7 @@ const makeTransformSignedCredentialToUI = (agent: Agent) => async (
   credentials: SignedCredential[],
 ): Promise<DisplayCredential[]> => {
   return Promise.all(
-    credentials.map((c) => mapCredentialsToDisplay(agent, c)),
+    credentials.map((c) => mapCredentialsToDisplay(agent.credentials, c)),
   )
 }
 
