@@ -64,7 +64,7 @@ export interface CredShareI extends InteractionCommonI {
   attributes: AttributeTypes[]
   //TODO: should be renamed to smth else (not @credentials)
   credentials: DisplayCredential[]
-  requestedCredentials: string[] 
+  requestedTypes: string[] 
   selectedCredentials: Record<string, string>
 }
 

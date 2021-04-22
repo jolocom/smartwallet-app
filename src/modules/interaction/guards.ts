@@ -36,7 +36,7 @@ export function isCredShareDetails(details: any): details is CredShareI {
     details.flowType === FlowType.CredentialShare &&
     !!details.attributes &&
     !!details.credentials &&
-    !!details.requestedCredentials &&
+    !!details.requestedTypes &&
     !!details.selectedCredentials 
   )
 }

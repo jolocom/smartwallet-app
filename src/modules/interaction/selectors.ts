@@ -100,8 +100,8 @@ export const getSelectedShareCredentials = createSelector(
 export const getRequestedAttributes = createSelector(
   [getCredShareDetails],
   (details) => {
-    const {requestedCredentials, attributes} = details;
-    const updatedAttributes = requestedCredentials.reduce((attrs, t) => {
+    const {requestedTypes, attributes} = details;
+    const updatedAttributes = requestedTypes.reduce((attrs, t) => {
       // add missing attribute
       if(Object.values(AttributeTypes).includes(t)) {
         attrs[t] = Object.keys(attributes).includes(t) ? attributes[t] : []
@@ -222,7 +222,7 @@ export const getIsReadyToSubmitRequest = createSelector(
   ],
   (details, singleAttribute) => {
     if (singleAttribute && !getObjectFirstValue(singleAttribute).length) return true
-    return details.requestedCredentials.every(c => details.selectedCredentials[c])
+    return details.requestedTypes.every(c => details.selectedCredentials[c])
   },
 )
 

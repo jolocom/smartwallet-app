@@ -87,8 +87,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
       return {
         credentials: displayCredentials,
         attributes: mapAttributesToDisplay(validatedSelfIssuedC),
-        //TODO: rename to requested types
-        requestedCredentials: this.requestedTypes,
+        requestedTypes: this.requestedTypes,
         selectedCredentials: {}
       }
       
