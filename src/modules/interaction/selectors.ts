@@ -23,6 +23,7 @@ import BP from '~/utils/breakpoints'
 import { mapDisplayToCustomDisplay, reduceCustomDisplayCredentialsByType, transformCategoriesTo } from '~/hooks/signedCredentials/utils'
 import { categorizedCredentials } from '~/utils/categoriedCredentials'
 import { getObjectFirstValue } from '~/utils/objectUtils'
+import { AttributeI } from '../attributes/types'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -101,10 +102,11 @@ export const getRequestedAttributes = createSelector(
   [getCredShareDetails],
   (details) => {
     const {requestedTypes, attributes} = details;
-    const updatedAttributes = requestedTypes.reduce((attrs, t) => {
+    const updatedAttributes = requestedTypes.reduce<Partial<Record<AttributeTypes, AttributeI[]>>>((attrs, t) => {
       // add missing attribute
       if(Object.values(AttributeTypes).includes(t)) {
-        attrs[t] = Object.keys(attributes).includes(t) ? attributes[t] : []
+        const type = t as AttributeTypes;
+        attrs[type] = Object.keys(attributes).includes(t) ? attributes[type] : []
       }
       return attrs;
     }, {});
