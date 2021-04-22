@@ -66,7 +66,7 @@ export interface AuthorizationDetailsI extends InteractionCommonI {
 
 export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
-  attributes: Partial<Record<AttributeTypes, AttributeI>>
+  attributes: Partial<Record<AttributeTypes, AttributeI[]>>
   //TODO: should be renamed to smth else (not @credentials)
   credentials: DisplayCredential[]
   requestedTypes: string[]

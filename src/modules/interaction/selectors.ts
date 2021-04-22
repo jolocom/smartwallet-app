@@ -101,7 +101,6 @@ export const getSelectedShareCredentials = createSelector(
   ({ selectedCredentials }) => selectedCredentials,
 )
 
-// TODO: correct types
 export const getRequestedAttributes = createSelector(
   [getCredShareDetails],
   (details) => {
