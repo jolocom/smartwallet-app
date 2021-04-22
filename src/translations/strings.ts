@@ -38,12 +38,15 @@ export const recovery = {
 const walkthrough = {
   GET_STARTED: 'Get started',
   NEED_RESTORE: 'Need restore?',
-  WALKTHROUGH_TITLE_STEP_1: 'Control your data', 
-  WALKTHROUGH_DESCRIPTION_STEP_1: 'Manage your digital identity to stay safe online and off', 
-  WALKTHROUGH_TITLE_STEP_2: 'Use your identity', 
-  WALKTHROUGH_DESCRIPTION_STEP_2: 'Get where you need to go with convenient access to apps & services', 
-  WALKTHROUGH_TITLE_STEP_3: 'Easy backup', 
-  WALKTHROUGH_DESCRIPTION_STEP_3: 'Keep all your info backed up and in the right hands - a.k.a. yours', 
+  WALKTHROUGH_TITLE_STEP_1: 'Control your data',
+  WALKTHROUGH_DESCRIPTION_STEP_1:
+    'Manage your digital identity to stay safe online and off',
+  WALKTHROUGH_TITLE_STEP_2: 'Use your identity',
+  WALKTHROUGH_DESCRIPTION_STEP_2:
+    'Get where you need to go with convenient access to apps & services',
+  WALKTHROUGH_TITLE_STEP_3: 'Easy backup',
+  WALKTHROUGH_DESCRIPTION_STEP_3:
+    'Keep all your info backed up and in the right hands - a.k.a. yours',
 }
 
 const errors = {
@@ -183,7 +186,7 @@ const settings = {
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
   WRONG_PASSCODE: 'Wrong passcode',
-  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
+  PASSCODE_CHANGED: 'Passcode changed!',
   LOG_OUT: 'Log out',
   DE_VERSION: 'DE Version',
   PRIVACY_POLICY: 'Privacy Policy',
