@@ -4,16 +4,12 @@ import { RootReducerI } from '~/types/reducer'
 import {
   AttributeTypes,
   CredentialsByCategory,
-  DisplayCredential,
   DisplayCredentialDocument,
   DisplayCredentialOther,
   OfferedCredential,
   RequestedCredentialsByCategoryByType,
   CredentialCategories,
 } from '~/types/credentials'
-import { AttributeI, AttrsState } from '~/modules/attributes/types'
-import { getAttributes } from '~/modules/attributes/selectors'
-import { getAllCredentials } from '~/modules/credentials/selectors'
 // TODO: rename the file
 import { InteractionDetails } from './types'
 import {
@@ -24,7 +20,9 @@ import {
   isNotActiveInteraction,
 } from './guards'
 import BP from '~/utils/breakpoints'
-import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
+import { mapDisplayToCustomDisplay, reduceCustomDisplayCredentialsByType, transformCategoriesTo } from '~/hooks/signedCredentials/utils'
+import { categorizedCredentials } from '~/utils/categoriedCredentials'
+import { getObjectFirstValue } from '~/utils/objectUtils'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -98,31 +96,25 @@ export const getSelectedShareCredentials = createSelector(
   ({ selectedCredentials }) => selectedCredentials,
 )
 
-/**
- * Gets the available requested attributes from the @attributes module. If an attribute
- * of a particular type is not available, the value for the type will be an empty array.
- */
-export const getAvailableRequestedAttributes = createSelector(
-  [getCredShareDetails, getAttributes],
-  ({ requestedAttributes }, attributes) =>
-    requestedAttributes.reduce<AttrsState<AttributeI>>((acc, v) => {
-      acc[v] = attributes[v] || []
-      return acc
-    }, {}),
+// TODO: correct types
+export const getRequestedAttributes = createSelector(
+  [getCredShareDetails],
+  (details) => {
+    const {requestedCredentials, attributes} = details;
+    const updatedAttributes = requestedCredentials.reduce((attrs, t) => {
+      // add missing attribute
+      if(Object.values(AttributeTypes).includes(t)) {
+        attrs[t] = Object.keys(attributes).includes(t) ? attributes[t] : []
+      }
+      return attrs;
+    }, {});
+    return updatedAttributes;
+  }
 )
 
-/**
- * Gets all available requested credentials.
- */
-const getAvailableRequestedCredentials = createSelector(
-  [getCredShareDetails, getAllCredentials],
-  ({ requestedCredentials }, credentials) =>
-    requestedCredentials.reduce<DisplayCredential[]>((acc, type) => {
-      const credentialsOfType = credentials.filter((cred) => cred.type === type)
-      if (!credentialsOfType.length) return acc
-      acc = [...acc, ...credentialsOfType]
-      return acc
-    }, []),
+export const getRequestedCredentials = createSelector(
+  [getCredShareDetails], 
+  (details) => details.credentials
 )
 
 /**
@@ -131,18 +123,17 @@ const getAvailableRequestedCredentials = createSelector(
  */
 export const getIsFullscreenCredShare = createSelector(
   [
-    getCredShareDetails,
-    getAvailableRequestedAttributes,
-    getAvailableRequestedCredentials,
+    getRequestedAttributes,
+    getRequestedCredentials
   ],
-  (details, shareAttributes, availableRequestedCredentials) => {
+  (attributes, credentials) => {
     const onlyAttributes =
-      details.requestedAttributes.length && !details.requestedCredentials.length
+      Object.keys(attributes).length && !credentials.length
     const isOnlyOneCredential =
-      !details.requestedAttributes.length &&
-      availableRequestedCredentials.length === 1
+      !Object.keys(attributes).length && 
+      credentials.length === 1
 
-    const numberOfFieldsDisplayed = Object.values(shareAttributes).reduce(
+    const numberOfFieldsDisplayed = Object.values(attributes).reduce(
       (acc, v) => {
         if (v && !!v.length) {
           acc += v.length
@@ -168,33 +159,10 @@ export const getIsFullscreenCredShare = createSelector(
  * @type used to group credentials by type and present them in a carousel
  */
 const getRequestedCredentialsByCategoryByType = createSelector(
-  [getAvailableRequestedCredentials, getCredShareDetails],
-  (availableRequestedCredentials, { requestedCredentials }) => {
-    return requestedCredentials.reduce<
-      RequestedCredentialsByCategoryByType<DisplayCredential>
-    >(
-      (acc, type) => {
-        const credentials = availableRequestedCredentials.filter(
-          (cred) => cred.type === type,
-        )
-
-        // NOTE: we assume the category property is the same for all credentials
-        // of the same type
-        const section = credentials[0].category
-
-        acc[section] = [
-          ...acc[section],
-          {
-            key: 'type',
-            value: type,
-            credentials,
-          },
-        ]
-
-        return acc
-      },
-      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
-    )
+  [getCredShareDetails],
+  (shareDetails) => {
+    const groupCategoriesByType = transformCategoriesTo(categorizedCredentials(shareDetails.credentials))
+    return groupCategoriesByType(reduceCustomDisplayCredentialsByType)
   },
 )
 
@@ -222,31 +190,26 @@ export const getCustomRequestedCredentialsByCategoryByType = createSelector(
 )
 
 const getSingleRequestedAttribute = createSelector(
-  [getCredShareDetails, getAttributes],
-  (details, attributes) => {
-    const { requestedAttributes, requestedCredentials } = details
+  [getRequestedAttributes, getRequestedCredentials],
+  (attributes, credentials) => {
     if (
-      requestedAttributes.length === 1 &&
-      requestedCredentials.length === 0 &&
-      !attributes[requestedAttributes[0]]
+      Object.keys(attributes).length === 1 &&
+      credentials.length === 0
     ) {
-      return requestedAttributes[0]
+      return attributes;
     }
   },
 )
 
 const getSingleRequestedCredential = createSelector(
-  [getCredShareDetails, getAllCredentials],
-  (details, credentials) => {
-    const { requestedAttributes, requestedCredentials } = details
-    if (requestedAttributes.length === 0 && requestedCredentials.length === 1) {
-      const availableCreds = credentials.filter(
-        // (c) => c.type[1] === requestedCredentials[0],
-        (c) => c.type === requestedCredentials[0],
-      )
-      if (availableCreds.length === 1) {
-        return availableCreds[0]
-      }
+  [getCredShareDetails],
+  (details) => {
+    const { attributes, credentials } = details;
+    if (
+      Object.keys(attributes).length === 0 &&
+      credentials.length === 1
+    ) {
+      return credentials[0]
     }
     return undefined
   },
@@ -255,37 +218,22 @@ const getSingleRequestedCredential = createSelector(
 export const getIsReadyToSubmitRequest = createSelector(
   [
     getCredShareDetails,
-    getAvailableRequestedAttributes,
-    getSelectedShareCredentials,
-    getSingleRequestedAttribute,
+    getSingleRequestedAttribute
   ],
-  (details, attributes, selectedShareCredentials, singleMissingAttribute) => {
-    if (singleMissingAttribute !== undefined) return true
-    if (Object.keys(selectedShareCredentials).length) {
-      const { requestedCredentials } = details
-      const allAttributes = Object.keys(attributes).every((t) =>
-        Object.keys(selectedShareCredentials).includes(t),
-      )
-
-      const allCredentials = requestedCredentials.every((t) =>
-        Object.keys(selectedShareCredentials).includes(t),
-      )
-
-      return allAttributes && allCredentials
-    }
-
-    return false
+  (details, singleAttribute) => {
+    if (singleAttribute && !getObjectFirstValue(singleAttribute).length) return true
+    return details.requestedCredentials.every(c => details.selectedCredentials[c])
   },
 )
 
 export const getAttributesToSelect = createSelector(
-  [getAvailableRequestedAttributes],
-  (attributes) => {
-    return Object.keys(attributes).reduce<Record<string, string>>(
+  [getCredShareDetails],
+  (details) => {
+    return Object.keys(details.attributes).reduce<Record<string, string>>(
       (acc, value) => {
         const attrType = value as AttributeTypes
         if (!acc[attrType]) {
-          const attr = attributes[attrType] || []
+          const attr = details.attributes || []
           if (attr.length) {
             acc[attrType] = attr[0].id
           }
@@ -295,6 +243,17 @@ export const getAttributesToSelect = createSelector(
       {},
     )
   },
+)
+
+export const getRequestedCredentialDetailsBAS = createSelector(
+  [
+    getSingleRequestedAttribute,
+    getSingleRequestedCredential,
+  ],
+  (singleRequestedAttribute, singleRequestedCredential) => ({
+    singleRequestedAttribute,
+    singleRequestedCredential,
+  }),
 )
 
 /** CredentialOffer selectors **/
@@ -361,21 +320,7 @@ export const getServiceDescription = createSelector(
   },
 )
 
-export const getSingleMissingAttribute = createSelector(
-  [getInteractionDetails, getAttributes],
-  (details, attributes) => {
-    if (isCredShareDetails(details)) {
-      const { requestedAttributes, requestedCredentials } = details
-      if (
-        requestedAttributes.length === 1 &&
-        requestedCredentials.length === 0 &&
-        !attributes[requestedAttributes[0]]
-      ) {
-        return requestedAttributes[0]
-      }
-    }
-  },
-)
+
 
 export const getAuthzUIDetails = createSelector(
   [getAuthorizationDetails],
@@ -385,18 +330,6 @@ export const getAuthzUIDetails = createSelector(
       ...rest,
     }
   },
-)
-
-export const getRequestedCredentialDetailsBAS = createSelector(
-  [
-    getSingleRequestedAttribute,
-    getSingleRequestedCredential,
-    getIsReadyToSubmitRequest,
-  ],
-  (singleRequestedAttribute, singleRequestedCredential) => ({
-    singleRequestedAttribute,
-    singleRequestedCredential,
-  }),
 )
 
 export const getOfferedCredentialCategories = createSelector(

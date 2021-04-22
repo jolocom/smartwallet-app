@@ -43,12 +43,19 @@ import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
+import { getObjectFirstValue } from '~/utils/objectUtils'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
     getRequestedCredentialDetailsBAS,
   )
+
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
+  const singleMissingAttribute =
+    singleRequestedAttribute &&
+    !getObjectFirstValue(singleRequestedAttribute).length
+      ? Object.keys(singleRequestedAttribute)[0]
+      : undefined
 
   const handleShare = useCredentialShareSubmit()
   const redirect = useRedirect()
@@ -64,14 +71,14 @@ export const CredentialShareBAS = () => {
   }, [JSON.stringify(singleRequestedCredential)])
 
   const handleSubmit = () =>
-    singleRequestedAttribute !== undefined
+    singleMissingAttribute
       ? redirect(ScreenNames.CredentialForm, {
-          type: singleRequestedAttribute,
+          type: singleMissingAttribute,
         })
       : handleShare()
 
   const renderBody = () => {
-    if (singleRequestedAttribute) return null
+    if (singleMissingAttribute) return null
     else if (singleRequestedCredential !== undefined) {
       const displaySingleCredential = mapDisplayToCustomDisplay(
         singleRequestedCredential,
@@ -127,11 +134,7 @@ export const CredentialShareBAS = () => {
       <InteractionFooter
         disabled={!isReadyToSubmit}
         onSubmit={handleSubmit}
-        submitLabel={
-          singleRequestedAttribute !== undefined
-            ? strings.ADD_INFO
-            : strings.SHARE
-        }
+        submitLabel={singleMissingAttribute ? strings.ADD_INFO : strings.SHARE}
       />
     </ContainerBAS>
   )

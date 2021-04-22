@@ -7,6 +7,7 @@ import {
 } from 'react-native-jolocom'
 import { getCredentialCategory, mapAttributesToDisplay, mapCredentialsToDisplay, separateCredentialsAndAttributes } from '../signedCredentials/utils';
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest';
+import { AttributeTypes } from '~/types/credentials';
 
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({description: state.description})
@@ -75,13 +76,13 @@ export const interactionHandler = async (agent: Agent, interaction: Interaction,
       break;
     }
     case FlowType.CredentialShare: {
-
       const requestState = state as CredentialRequestFlowState;
-      
       const {constraints} = requestState;
 
-      // TODO: we should use of all constraints, i guess
+      // TODO: we should use of all constraints, i guess - constrains -> credentialrequest token
       const {requestedCredentialTypes} = constraints[0];
+      const requestedTypes = requestedCredentialTypes.map(t => t[1]);
+      
       const types = requestedCredentialTypes.map(t => ({type: t}))
       
       // TODO: this returns not correct number of credentials
@@ -97,14 +98,25 @@ export const interactionHandler = async (agent: Agent, interaction: Interaction,
         return false;
       })
 
-      // TODO: add logic to verify if all types are present otherwise throw
-      
+      // TODO: decide how to present missing attribute      
 
       // FIX: this returns not correct number of credentials
       // because first types of constraint and actual credential
       // do not match Credentials vs VerifiableCredential
       // @ts-expect-error: correctRequestedCredentials do not match SignedCredential type
       const validatedCredentials = (interaction.getMessages()[0].interactionToken as CredentialRequest).applyConstraints(correctRequestedCredentials);
+      
+      const hasNoMissingServiceIssuedCredentials = requestedTypes.every(t => {
+        if(Object.values(AttributeTypes).includes(t)) {
+          // credential is a self issued credential
+          return true
+        } else {
+          // credential is a service issued credential
+          return Boolean(validatedCredentials.find(c => c.type[1] === t))
+        }
+      })
+
+      if(!hasNoMissingServiceIssuedCredentials) throw new Error('Requested service issued credentials are missing')
 
       // TODO: there is a hook we can use useCredentials().separateSignedTransformToUI
       const {
@@ -112,14 +124,19 @@ export const interactionHandler = async (agent: Agent, interaction: Interaction,
         selfIssuedCredentials: validatedSelfIssuedC,
       // @ts-expect-error: validatedCredentials do not match SignedCredential type
       } = separateCredentialsAndAttributes(validatedCredentials, did);
+      
+      // TODO: if Self Issued Credentials are missing assign to [] 
 
       const displayCredentials = await Promise.all(validatedServiceIssuedC.map(c => mapCredentialsToDisplay(agent, c)));
       flowSpecificData = {
         credentials: displayCredentials,
         attributes: mapAttributesToDisplay(validatedSelfIssuedC),
+        //TODO: rename to requested types
+        requestedCredentials: requestedCredentialTypes.map(t => t[1]),
         selectedCredentials: {}
       }
-      throw new Error('WIP for credential request')
+      // throw new Error('WIP for credential request')
+      break;
     }
       
     default:
