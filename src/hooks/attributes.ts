@@ -26,8 +26,8 @@ export const useSICActions = () => {
     metadata: BaseMetadata,
     claims: ClaimValues,
   ) => {
-    // NOTE: the same as agent.credentials.create 
-    return agent.credentials.issue({metadata, claim: claims, subject: did});
+    // NOTE: the same as agent.credentials.create
+    return agent.credentials.issue({ metadata, claim: claims, subject: did })
   }
 
   const deleteStoredCredential = async (id: string) => {

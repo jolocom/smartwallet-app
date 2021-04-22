@@ -296,8 +296,8 @@ const toasts = {
   NOT_CONNECTED: "Uh...oh you're not connected",
   WE_CANT_REACH_YOU:
     "We can't reach you if you don't have internet. Please check your connection and try again",
-  YOU_ARE_BACK_ONLINE: 'You\'re back online',
-  ALL_WALLET_FUNCTIONALITIES: 'All wallet functionalities are back again'
+  YOU_ARE_BACK_ONLINE: "You're back online",
+  ALL_WALLET_FUNCTIONALITIES: 'All wallet functionalities are back again',
 }
 
 const documents = {
@@ -320,7 +320,7 @@ const documents = {
   ANONYMOUS: 'Anonymous',
   IDENTIFICATION: 'Identification',
   TICKET: 'Ticket',
-  UNKNOWN: 'Unknown'
+  UNKNOWN: 'Unknown',
 }
 
 const history = {

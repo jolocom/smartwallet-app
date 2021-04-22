@@ -6,11 +6,7 @@
  */
 
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  SDKError,
-  JolocomLib,
-  Interaction,
-} from 'react-native-jolocom'
+import { SDKError, JolocomLib, Interaction } from 'react-native-jolocom'
 
 import { useLoader } from '../loader'
 import {
@@ -28,13 +24,13 @@ export const useInteraction = () => {
   const agent = useAgent()
   const interactionId = useSelector(getInteractionId)
   if (!interactionId) throw new Error('Interaction not found')
-  
+
   return () => agent.interactionManager.getInteraction(interactionId)
 }
 
 export const useInteractionStart = () => {
   const agent = useAgent()
-  const did = useSelector(getDid);
+  const did = useSelector(getDid)
   const dispatch = useDispatch()
   const loader = useLoader()
 
@@ -61,7 +57,11 @@ export const useInteractionStart = () => {
     return loader(
       async () => {
         const interaction = await agent.processJWT(jwt)
-        const interactionData = await interactionHandler(agent, interaction, did);
+        const interactionData = await interactionHandler(
+          agent,
+          interaction,
+          did,
+        )
         dispatch(
           setInteractionDetails({
             id: interaction.id,

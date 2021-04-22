@@ -21,22 +21,30 @@ const makeSeparateSignedTransformToUI = (agent: Agent, did: string) => {
     } = separateCredentialsAndAttributes(credentials, did)
 
     const attributes = mapAttributesToDisplay(selfIssuedCredentials)
-    const displayCredentials = await makeTransformSignedCredentialToUI(agent)(serviceIssuedCredentials)
+    const displayCredentials = await makeTransformSignedCredentialToUI(agent)(
+      serviceIssuedCredentials,
+    )
 
     return {
       attributes,
-      displayCredentials
+      displayCredentials,
     }
   }
 }
 
-const makeInitializeCredentials = (agent: Agent, did: string, dispatch: Dispatch<any>) => {
+const makeInitializeCredentials = (
+  agent: Agent,
+  did: string,
+  dispatch: Dispatch<any>,
+) => {
   return async () => {
     try {
-      const allCredentials: SignedCredential[] = await agent.credentials.query();
-      const {attributes,
-        displayCredentials} = await makeSeparateSignedTransformToUI(agent, did)(allCredentials);
-      
+      const allCredentials: SignedCredential[] = await agent.credentials.query()
+      const {
+        attributes,
+        displayCredentials,
+      } = await makeSeparateSignedTransformToUI(agent, did)(allCredentials)
+
       // TODO: namings are inconsistent across modules: initAttrs vs setCredentials
       dispatch(initAttrs(attributes))
       dispatch(setCredentials(displayCredentials))
@@ -54,17 +62,15 @@ const makeTransformSignedCredentialToUI = (agent: Agent) => async (
   )
 }
 
-
 export const useCredentials = () => {
   const agent = useAgent()
   const did = useSelector(getDid)
   const dispatch = useDispatch()
-  
+
   // TODO: think together about names
   return {
     separateSignedTransformToUI: makeSeparateSignedTransformToUI(agent, did),
     initializeCredentials: makeInitializeCredentials(agent, did, dispatch),
-    signedCredentialToUI: makeTransformSignedCredentialToUI(agent)
+    signedCredentialToUI: makeTransformSignedCredentialToUI(agent),
   }
 }
-

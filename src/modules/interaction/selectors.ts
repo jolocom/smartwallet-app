@@ -20,7 +20,11 @@ import {
   isNotActiveInteraction,
 } from './guards'
 import BP from '~/utils/breakpoints'
-import { mapDisplayToCustomDisplay, reduceCustomDisplayCredentialsByType, transformCategoriesTo } from '~/hooks/signedCredentials/utils'
+import {
+  mapDisplayToCustomDisplay,
+  reduceCustomDisplayCredentialsByType,
+  transformCategoriesTo,
+} from '~/hooks/signedCredentials/utils'
 import { categorizedCredentials } from '~/utils/categoriedCredentials'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import { AttributeI } from '../attributes/types'
@@ -101,22 +105,26 @@ export const getSelectedShareCredentials = createSelector(
 export const getRequestedAttributes = createSelector(
   [getCredShareDetails],
   (details) => {
-    const {requestedTypes, attributes} = details;
-    const updatedAttributes = requestedTypes.reduce<Partial<Record<AttributeTypes, AttributeI[]>>>((attrs, t) => {
+    const { requestedTypes, attributes } = details
+    const updatedAttributes = requestedTypes.reduce<
+      Partial<Record<AttributeTypes, AttributeI[]>>
+    >((attrs, t) => {
       // add missing attribute
-      if(Object.values(AttributeTypes).includes(t)) {
-        const type = t as AttributeTypes;
-        attrs[type] = Object.keys(attributes).includes(t) ? attributes[type] : []
+      if (Object.values(AttributeTypes).includes(t)) {
+        const type = t as AttributeTypes
+        attrs[type] = Object.keys(attributes).includes(t)
+          ? attributes[type]
+          : []
       }
-      return attrs;
-    }, {});
-    return updatedAttributes;
-  }
+      return attrs
+    }, {})
+    return updatedAttributes
+  },
 )
 
 export const getRequestedCredentials = createSelector(
-  [getCredShareDetails], 
-  (details) => details.credentials
+  [getCredShareDetails],
+  (details) => details.credentials,
 )
 
 /**
@@ -124,16 +132,11 @@ export const getRequestedCredentials = createSelector(
  * interaction.
  */
 export const getIsFullscreenCredShare = createSelector(
-  [
-    getRequestedAttributes,
-    getRequestedCredentials
-  ],
+  [getRequestedAttributes, getRequestedCredentials],
   (attributes, credentials) => {
-    const onlyAttributes =
-      Object.keys(attributes).length && !credentials.length
+    const onlyAttributes = Object.keys(attributes).length && !credentials.length
     const isOnlyOneCredential =
-      !Object.keys(attributes).length && 
-      credentials.length === 1
+      !Object.keys(attributes).length && credentials.length === 1
 
     const numberOfFieldsDisplayed = Object.values(attributes).reduce(
       (acc, v) => {
@@ -163,7 +166,9 @@ export const getIsFullscreenCredShare = createSelector(
 const getRequestedCredentialsByCategoryByType = createSelector(
   [getCredShareDetails],
   (shareDetails) => {
-    const groupCategoriesByType = transformCategoriesTo(categorizedCredentials(shareDetails.credentials))
+    const groupCategoriesByType = transformCategoriesTo(
+      categorizedCredentials(shareDetails.credentials),
+    )
     return groupCategoriesByType(reduceCustomDisplayCredentialsByType)
   },
 )
@@ -194,11 +199,8 @@ export const getCustomRequestedCredentialsByCategoryByType = createSelector(
 const getSingleRequestedAttribute = createSelector(
   [getRequestedAttributes, getRequestedCredentials],
   (attributes, credentials) => {
-    if (
-      Object.keys(attributes).length === 1 &&
-      credentials.length === 0
-    ) {
-      return attributes;
+    if (Object.keys(attributes).length === 1 && credentials.length === 0) {
+      return attributes
     }
   },
 )
@@ -206,11 +208,8 @@ const getSingleRequestedAttribute = createSelector(
 const getSingleRequestedCredential = createSelector(
   [getCredShareDetails],
   (details) => {
-    const { attributes, credentials } = details;
-    if (
-      Object.keys(attributes).length === 0 &&
-      credentials.length === 1
-    ) {
+    const { attributes, credentials } = details
+    if (Object.keys(attributes).length === 0 && credentials.length === 1) {
       return credentials[0]
     }
     return undefined
@@ -218,13 +217,11 @@ const getSingleRequestedCredential = createSelector(
 )
 
 export const getIsReadyToSubmitRequest = createSelector(
-  [
-    getCredShareDetails,
-    getSingleRequestedAttribute
-  ],
+  [getCredShareDetails, getSingleRequestedAttribute],
   (details, singleAttribute) => {
-    if (singleAttribute && !getObjectFirstValue(singleAttribute).length) return true
-    return details.requestedTypes.every(c => details.selectedCredentials[c])
+    if (singleAttribute && !getObjectFirstValue(singleAttribute).length)
+      return true
+    return details.requestedTypes.every((c) => details.selectedCredentials[c])
   },
 )
 
@@ -248,10 +245,7 @@ export const getAttributesToSelect = createSelector(
 )
 
 export const getRequestedCredentialDetailsBAS = createSelector(
-  [
-    getSingleRequestedAttribute,
-    getSingleRequestedCredential,
-  ],
+  [getSingleRequestedAttribute, getSingleRequestedCredential],
   (singleRequestedAttribute, singleRequestedCredential) => ({
     singleRequestedAttribute,
     singleRequestedCredential,
@@ -279,7 +273,7 @@ export const getIsFullscreenCredOffer = createSelector(
 
 export const getOfferedCredentials = createSelector(
   [getCredOfferDetails],
-  (details) => details.credentials.service_issued
+  (details) => details.credentials.service_issued,
 )
 
 /**
@@ -321,8 +315,6 @@ export const getServiceDescription = createSelector(
     }
   },
 )
-
-
 
 export const getAuthzUIDetails = createSelector(
   [getAuthorizationDetails],

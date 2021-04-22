@@ -37,7 +37,7 @@ export function isCredShareDetails(details: any): details is CredShareI {
     !!details.attributes &&
     !!details.credentials &&
     !!details.requestedTypes &&
-    !!details.selectedCredentials 
+    !!details.selectedCredentials
   )
 }
 

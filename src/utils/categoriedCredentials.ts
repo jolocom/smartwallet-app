@@ -1,4 +1,8 @@
-import { CredentialCategories, CredentialsByCategory, DisplayCredential } from "~/types/credentials"
+import {
+  CredentialCategories,
+  CredentialsByCategory,
+  DisplayCredential,
+} from '~/types/credentials'
 
 export const categorizedCredentials = (credentials: DisplayCredential[]) => {
   return credentials.reduce<CredentialsByCategory<DisplayCredential>>(

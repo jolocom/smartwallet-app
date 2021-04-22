@@ -7,7 +7,7 @@ export const useDeleteCredential = () => {
   const dispatch = useDispatch()
 
   return async (id: string) => {
-    await agent.credentials.delete({id})
+    await agent.credentials.delete({ id })
     dispatch(deleteCredential(id))
   }
 }

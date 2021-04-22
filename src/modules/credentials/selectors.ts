@@ -12,7 +12,7 @@ export const getAllCredentials = (state: RootReducerI) => state.credentials.all
 
 const getCredentialsByCategories = createSelector(
   getAllCredentials,
-  (credentials) => categorizedCredentials(credentials)
+  (credentials) => categorizedCredentials(credentials),
 )
 
 const getCustomCredentialsByCategories = createSelector(
@@ -25,7 +25,7 @@ const getCustomCredentialsByCategories = createSelector(
 export const getCustomCredentialsByCategoriesByType = createSelector(
   [getCustomCredentialsByCategories],
   (cats) => {
-    const groupCategoriesByType = transformCategoriesTo(cats); 
+    const groupCategoriesByType = transformCategoriesTo(cats)
     return groupCategoriesByType(reduceCustomDisplayCredentialsBySortedType)
   },
 )

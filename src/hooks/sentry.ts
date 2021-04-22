@@ -24,7 +24,7 @@ const useSentry = () => {
       scope.setExtras({ ...report })
       scope.setUser(null)
 
-      if(!sendPrivateData) scope.clearBreadcrumbs()
+      if (!sendPrivateData) scope.clearBreadcrumbs()
       Sentry.captureException(error)
     })
   }
