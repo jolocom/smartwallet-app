@@ -65,27 +65,23 @@ jest.mock('../../../src/hooks/navigation', () => ({
 
 test('User is able to change a pin', async () => {
   const setGenericPasswordSpy = jest.spyOn(keychain, 'setGenericPassword')
-  setGenericPasswordSpy.mockResolvedValueOnce({
-    service: 'adasd',
-    storage: '3333',
-  })
 
-  const { getByText, getByTestId, queryByText } = renderWithSafeArea(
-    <ChangePin />,
+  const { getByText, getByTestId } = await waitFor(() =>
+    renderWithSafeArea(<ChangePin />),
   )
 
   expect(getByText(strings.CURRENT_PASSCODE)).toBeDefined()
-
-  inputPasscode(getByTestId, [3, 3, 3, 3])
-
-  await waitFor(() => {
-    expect(queryByText('*')).toBe(null)
-  })
 
   inputPasscode(getByTestId, [5, 5, 5, 5])
 
   await waitFor(() => {
     expect(getByText(strings.CREATE_NEW_PASSCODE)).toBeDefined()
+  })
+
+  inputPasscode(getByTestId, [3, 3, 3, 3])
+
+  await waitFor(() => {
+    expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
   })
 
   inputPasscode(getByTestId, [3, 3, 3, 3])
