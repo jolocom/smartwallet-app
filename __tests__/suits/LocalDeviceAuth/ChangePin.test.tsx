@@ -63,34 +63,73 @@ jest.mock('../../../src/hooks/navigation', () => ({
   useRedirectTo: jest.fn,
 }))
 
-test('User is able to change a pin', async () => {
-  const setGenericPasswordSpy = jest.spyOn(keychain, 'setGenericPassword')
+describe('Change passcode', () => {
+  it('should successfully change the passcode', async () => {
+    const setGenericPasswordSpy = jest.spyOn(keychain, 'setGenericPassword')
 
-  const { getByText, getByTestId } = await waitFor(() =>
-    renderWithSafeArea(<ChangePin />),
-  )
+    const { getByText, getByTestId } = await waitFor(() =>
+      renderWithSafeArea(<ChangePin />),
+    )
 
-  expect(getByText(strings.CURRENT_PASSCODE)).toBeDefined()
+    expect(getByText(strings.CURRENT_PASSCODE)).toBeDefined()
 
-  inputPasscode(getByTestId, [5, 5, 5, 5])
+    inputPasscode(getByTestId, [5, 5, 5, 5])
 
-  await waitFor(() => {
-    expect(getByText(strings.CREATE_NEW_PASSCODE)).toBeDefined()
+    await waitFor(() => {
+      expect(getByText(strings.CREATE_NEW_PASSCODE)).toBeDefined()
+    })
+
+    inputPasscode(getByTestId, [3, 3, 3, 3])
+
+    await waitFor(() => {
+      expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
+    })
+
+    inputPasscode(getByTestId, [3, 3, 3, 3])
+
+    await waitFor(() => {
+      expect(setGenericPasswordSpy).toHaveBeenCalledTimes(1)
+      expect(setGenericPasswordSpy).toHaveBeenCalledWith(PIN_USERNAME, '3333', {
+        service: PIN_SERVICE,
+        storage: keychain.STORAGE_TYPE.AES,
+      })
+    })
   })
 
-  inputPasscode(getByTestId, [3, 3, 3, 3])
+  it('should fail when verifying the current passcode', async () => {
+    const { getByText, getByTestId } = await waitFor(() =>
+      renderWithSafeArea(<ChangePin />),
+    )
 
-  await waitFor(() => {
-    expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
+    inputPasscode(getByTestId, [0, 0, 0, 0])
+
+    await waitFor(() => {
+      expect(getByText(strings.WRONG_PASSCODE)).toBeDefined()
+    })
   })
 
-  inputPasscode(getByTestId, [3, 3, 3, 3])
+  it('should fail when confirming (repeating) the new passcode', async () => {
+    const { getByText, getByTestId } = await waitFor(() =>
+      renderWithSafeArea(<ChangePin />),
+    )
+    expect(getByText(strings.CURRENT_PASSCODE)).toBeDefined()
 
-  await waitFor(() => {
-    expect(setGenericPasswordSpy).toHaveBeenCalledTimes(1)
-    expect(setGenericPasswordSpy).toHaveBeenCalledWith(PIN_USERNAME, '3333', {
-      service: PIN_SERVICE,
-      storage: keychain.STORAGE_TYPE.AES,
+    inputPasscode(getByTestId, [5, 5, 5, 5])
+
+    await waitFor(() => {
+      expect(getByText(strings.CREATE_NEW_PASSCODE)).toBeDefined()
+    })
+
+    inputPasscode(getByTestId, [3, 3, 3, 3])
+
+    await waitFor(() => {
+      expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
+    })
+
+    inputPasscode(getByTestId, [0, 0, 0, 0])
+
+    await waitFor(() => {
+      expect(getByText(strings.WRONG_PASSCODE)).toBeDefined()
     })
   })
 })
