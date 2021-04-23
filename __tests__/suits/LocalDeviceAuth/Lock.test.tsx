@@ -87,7 +87,7 @@ describe('Without biometry', () => {
 
     expect(getByText(strings.ENTER_YOUR_PASSCODE)).toBeDefined()
     expect(getByTestId('passcode-keyboard')).toBeDefined()
-    expect(getByText(strings.FORGOT_YOUR_PIN)).toBeDefined()
+    expect(getByText(strings.FORGOT_YOUR_PASSCODE)).toBeDefined()
   })
 
   test("The app is locked if pins don't match", async () => {

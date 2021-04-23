@@ -83,7 +83,7 @@ describe('Passcode', () => {
       </Passcode>,
     )
 
-    expect(getByText(strings.FORGOT_YOUR_PIN)).toBeDefined()
+    expect(getByText(strings.FORGOT_YOUR_PASSCODE)).toBeDefined()
 
     const forgotBtn = getByTestId('button')
     fireEvent.press(forgotBtn)
