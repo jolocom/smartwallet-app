@@ -10,14 +10,9 @@ import { sleep } from '~/utils/generic'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 import { ScreenNames } from '~/types/screens'
-import { useRedirectTo } from '~/hooks/navigation'
+import { useGoBack, useRedirect, useRedirectTo } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
 import { useLoader } from '~/hooks/loader'
-
-interface PropsI {
-  onSuccessRedirectToScreen?: ScreenNames
-  navigation: NavigationProp<{}>
-}
 
 enum PasscodeState {
   verify = 'verify',
@@ -25,12 +20,10 @@ enum PasscodeState {
   repeat = 'repeat',
 }
 
-const ChangePin: React.FC<PropsI> = ({
-  onSuccessRedirectToScreen,
-  navigation,
-}) => {
+const ChangePin: React.FC = () => {
   const loader = useLoader()
   const { keychainPin } = useGetStoredAuthValues()
+  const goBack = useGoBack()
 
   const [passcodeState, setPasscodeState] = useState<PasscodeState>(
     PasscodeState.verify,
@@ -59,12 +52,7 @@ const ChangePin: React.FC<PropsI> = ({
       { success: strings.PASSCODE_CHANGED },
       (success) => {
         if (success) {
-          if (onSuccessRedirectToScreen) {
-            const redirectToScreen = useRedirectTo(onSuccessRedirectToScreen)
-            redirectToScreen()
-          } else {
-            navigation.goBack()
-          }
+          goBack()
         } else {
           //TODO: possibility to show toast?
           setPasscodeState(PasscodeState.verify)
@@ -73,8 +61,8 @@ const ChangePin: React.FC<PropsI> = ({
     )
   }
 
-  const handleStateChange = (state: PasscodeState) => {
-    sleep(500, () => {
+  const handleStateChange = async (state: PasscodeState) => {
+    await sleep(500, () => {
       setPasscodeState(state)
     })
   }
