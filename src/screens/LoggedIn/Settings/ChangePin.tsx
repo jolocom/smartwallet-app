@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Keychain from 'react-native-keychain'
-import { NavigationProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
@@ -9,8 +8,7 @@ import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import { sleep } from '~/utils/generic'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
-import { ScreenNames } from '~/types/screens'
-import { useGoBack, useRedirect, useRedirectTo } from '~/hooks/navigation'
+import { useGoBack } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
 import { useLoader } from '~/hooks/loader'
 
