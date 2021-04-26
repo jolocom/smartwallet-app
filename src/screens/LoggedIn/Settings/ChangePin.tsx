@@ -80,7 +80,7 @@ const ChangePin: React.FC = () => {
         break
       case PasscodeState.repeat:
         if (pin === newPin) {
-          submitNewPin()
+          await submitNewPin()
         } else throw new Error("Pins don't match")
         break
     }
