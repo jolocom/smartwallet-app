@@ -77,7 +77,7 @@ export const useInteractionStart = () => {
       (error) => {
         if(isError(error)) {
           // @ts-ignore
-          if(isUIError(error?.message)) scheduleWarning(UIErrors[error.message])
+          if(isUIError(error)) scheduleWarning(UIErrors[error.message])
           else scheduleErrorWarning(error, {
             title: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.title,
             message: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.message

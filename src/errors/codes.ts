@@ -28,9 +28,14 @@ export const UIErrors: Partial<
   }
 }
 
-export function isUIError(errorMsg: string): errorMsg is SWErrorCodes  {
-  return Object.values(SWErrorCodes).includes(errorMsg)
+interface IUIError extends Error {
+  message: SWErrorCodes
+} 
+
+export function isUIError(error: Error): error is IUIError {
+  return Object.values(SWErrorCodes).includes(error.message)
 }
+
 
 export function isError(error: any): error is Error {
   return error instanceof Error;
