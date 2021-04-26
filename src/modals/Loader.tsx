@@ -206,11 +206,10 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             />
             {type !== LoaderTypes.default && (
               <Circle
-                diameter={CIRCLE_DIAMETER - 4}
-                thickness={StyleSheet.hairlineWidth / 2}
+                diameter={(CIRCLE_DIAMETER - 4) * 5}
+                thickness={StyleSheet.hairlineWidth * 5}
                 color={colors.default}
                 animatedStyles={{
-                  transform: [{ scale: 5 }],
                   opacity: animatedOpacity4,
                 }}
               />
