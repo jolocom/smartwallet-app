@@ -15,6 +15,8 @@ import { ScreenNames } from '~/types/screens'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'
 import Main from './Main'
 import { useInitializeCredentials } from '~/hooks/signedCredentials'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useRedirect } from '~/hooks/navigation'
 import LockStack from './LockStack'
 
 export type LoggedInStackParamList = {
@@ -30,10 +32,13 @@ const screenTransitionOptions = {
   ...TransitionPresets.ModalSlideFromBottomIOS,
 }
 
+const Idle = () => <ScreenContainer />
+
 const LoggedIn = () => {
   const dispatch = useDispatch()
   const isAuthSet = useSelector(isLocalAuthSet)
   const isAppLocked = useSelector(getIsAppLocked)
+  const redirect = useRedirect()
 
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
@@ -77,18 +82,18 @@ const LoggedIn = () => {
   }, [currentAppState])
   /* All about when lock screen comes up - END */
 
+  useEffect(() => {
+    if (showLock) redirect(ScreenNames.LockStack)
+  }, [showLock])
+
+  useEffect(() => {
+    //NOTE: navigating imperatively b/c the Idle screen is rendered before Main
+    if (showTabs) redirect(ScreenNames.Main)
+  }, [showTabs])
+
   return (
     <LoggedInStack.Navigator headerMode="none">
-      {showLock ? (
-        <LoggedInStack.Screen
-          name={ScreenNames.LockStack}
-          component={LockStack}
-          options={{
-            ...screenTransitionOptions,
-            gestureEnabled: false,
-          }}
-        />
-      ) : showRegisterPin ? (
+      {showRegisterPin ? (
         <LoggedInStack.Screen
           name={ScreenNames.DeviceAuth}
           component={DeviceAuthentication}
@@ -97,13 +102,36 @@ const LoggedIn = () => {
             gestureEnabled: false,
           }}
         />
-      ) : showTabs ? (
+      ) : (
+        <>
+          <LoggedInStack.Screen
+            name={'Idle'}
+            component={Idle}
+            options={{
+              ...screenTransitionOptions,
+              gestureEnabled: false,
+            }}
+          />
+          <LoggedInStack.Screen
+            name={ScreenNames.Main}
+            component={Main}
+            options={{
+              ...screenTransitionOptions,
+              gestureEnabled: false,
+            }}
+          />
+        </>
+      )}
+      {!showTabs && (
         <LoggedInStack.Screen
-          name={ScreenNames.Main}
-          component={Main}
-          options={{ gestureEnabled: false }}
+          name={ScreenNames.LockStack}
+          component={LockStack}
+          options={{
+            ...screenTransitionOptions,
+            gestureEnabled: false,
+          }}
         />
-      ) : null}
+      )}
       {/* Modals -> End */}
     </LoggedInStack.Navigator>
   )
