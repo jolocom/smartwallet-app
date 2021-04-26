@@ -76,7 +76,6 @@ export async function mapCredentialsToDisplay(
 ): Promise<DisplayCredential> {
   const credentialType = await agent.credentials.getCredentialType(c)
   
-  // TODO: sdk - get correctly resolved issuer profile it only returns string (did) not an identity summary
   const {definition, renderAs, issuerProfile} = credentialType;
   
   const baseUICredentials = mapToBaseUICredential(c)
@@ -87,7 +86,6 @@ export async function mapCredentialsToDisplay(
     properties: [],
   }
 
-  // TODO: removed reassigning name from display, we have it covered in SignedCredential already
   // TODO: CredentialManifestDisplayMapping - correct types
   if (definition.display) {
     const {
