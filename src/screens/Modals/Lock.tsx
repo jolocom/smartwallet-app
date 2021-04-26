@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import { strings } from '~/translations/strings'
 
@@ -12,6 +13,7 @@ import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
 import { setPopup } from '~/modules/appState/actions'
+import { BackHandler } from 'react-native'
 
 const Lock = () => {
   const dispatch = useDispatch()
@@ -21,6 +23,11 @@ const Lock = () => {
   const { currentAppState, prevAppState } = useGetAppStates()
 
   const promptedTimes = useRef(0)
+
+  useBackHandler(() => {
+    BackHandler.exitApp()
+    return true
+  })
 
   useEffect(() => {
     if (isBiometrySelected) {

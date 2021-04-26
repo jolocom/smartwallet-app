@@ -11,6 +11,7 @@ const entropy = {
   SET_UP_YOUR_IDENTITY: 'Add uniqueness',
   TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100:
     'Randomly draw untill 100% to secure your identity',
+  ENTROPY_LOADER: 'Awesome!\nIdentity is being secured',
 }
 
 export const recovery = {
@@ -37,18 +38,12 @@ export const recovery = {
 const walkthrough = {
   GET_STARTED: 'Get started',
   NEED_RESTORE: 'Need restore?',
-  BE_THE_ONLY_ONE: 'Be the only one',
-  CONTROL_YOUR_OWN_PERSONAL_INFORMATION:
-    'Control your own personal information to stay safe online and off. No third party tracking and creepy ads.',
-  GET_WHERE_YOU_NEED_TO_GO: 'Get where you need to go',
-  UNLOCK_DOORS:
-    'Unlock doors, login to websites, and get access by sharing only the info you need to swiftly and securely',
-  NEVER_LOOSE_DATA: 'Never loose data',
-  KEEP_ALL_YOUR_INFO_BACKED_UP:
-    'Keep all your info backed up and in the right hands - aka yours',
-  PROOVE_YOURE_YOU: "Prove you're you",
-  UNIQUE_DIGITAL_IDENTITY_TECHNOLOGY:
-    'Unique digital identity technology with fully encrypted data for the services you use every day',
+  WALKTHROUGH_TITLE_STEP_1: 'Control your data', 
+  WALKTHROUGH_DESCRIPTION_STEP_1: 'Manage your digital identity to stay safe online and off', 
+  WALKTHROUGH_TITLE_STEP_2: 'Use your identity', 
+  WALKTHROUGH_DESCRIPTION_STEP_2: 'Get where you need to go with convenient access to apps & services', 
+  WALKTHROUGH_TITLE_STEP_3: 'Easy backup', 
+  WALKTHROUGH_DESCRIPTION_STEP_3: 'Keep all your info backed up and in the right hands - a.k.a. yours', 
 }
 
 const errors = {

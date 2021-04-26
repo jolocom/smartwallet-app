@@ -206,11 +206,10 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             />
             {type !== LoaderTypes.default && (
               <Circle
-                diameter={CIRCLE_DIAMETER - 4}
-                thickness={StyleSheet.hairlineWidth / 2}
+                diameter={(CIRCLE_DIAMETER - 4) * 5}
+                thickness={StyleSheet.hairlineWidth * 5}
                 color={colors.default}
                 animatedStyles={{
-                  transform: [{ scale: 5 }],
                   opacity: animatedOpacity4,
                 }}
               />
@@ -249,8 +248,8 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
 
           <JoloText
             kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.big}
-            color={Colors.white80}
+            size={JoloTextSizes.middle}
+            color={Colors.white70}
             customStyles={{ marginTop: 10 }}
           >
             {msg}

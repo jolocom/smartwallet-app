@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  LayoutAnimation,
+} from 'react-native'
 
 import {
   termsOfServiceEN,
@@ -21,12 +27,41 @@ import { CheckmarkIconSmall } from '~/assets/svg'
 import useTermsConsent from '~/hooks/consent'
 import { useAgent } from '~/hooks/sdk'
 
-enum TextType {
-  None,
-  PrivacyEN,
-  PrivacyDE,
-  TermsEN,
-  TermsDE,
+const legalTextConfig = [
+  { title: 'Terms of Service', content: termsOfServiceEN },
+  {
+    title: 'Nutzungsbedingungen',
+    content: termsOfServiceDE,
+  },
+  { title: 'Privacy Policy', content: privacyPolicyEN },
+  {
+    title: 'Datenschutzerklärung',
+    content: privacyPolicyDE,
+  },
+]
+
+const ExpandingButton: React.FC<{ title: string; content: string }> = ({
+  title,
+  content,
+}) => {
+  const [expanded, setExpanded] = useState(false)
+
+  const handleExpand = (state: boolean) => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+    setExpanded(state)
+  }
+
+  return (
+    <>
+      <ConsentButton text={title} onPress={() => handleExpand(true)} />
+      {expanded && (
+        <ConsentText text={content} onPress={() => handleExpand(false)} />
+      )}
+    </>
+  )
 }
 
 const TermsConsent: React.FC = () => {
@@ -34,22 +69,6 @@ const TermsConsent: React.FC = () => {
   const { acceptConsent } = useTermsConsent()
 
   const [accepted, setAccepted] = useState(false)
-  const [textType, setTextType] = useState(TextType.None)
-
-  const getLegalText = () => {
-    switch (textType) {
-      case TextType.TermsEN:
-        return termsOfServiceEN
-      case TextType.TermsDE:
-        return termsOfServiceDE
-      case TextType.PrivacyEN:
-        return privacyPolicyEN
-      case TextType.PrivacyDE:
-        return privacyPolicyDE
-      default:
-        return ''
-    }
-  }
 
   return (
     <ScreenContainer customStyles={{ paddingHorizontal: 0, paddingTop: 20 }}>
@@ -84,31 +103,9 @@ const TermsConsent: React.FC = () => {
               strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW
             }
           </JoloText>
-          {textType === TextType.None ? (
-            <>
-              <ConsentButton
-                text={'Terms of Service'}
-                onPress={() => setTextType(TextType.TermsEN)}
-              />
-              <ConsentButton
-                text={'Privacy Policy'}
-                onPress={() => setTextType(TextType.PrivacyEN)}
-              />
-              <ConsentButton
-                text={'Nutzungsbedingungen'}
-                onPress={() => setTextType(TextType.TermsDE)}
-              />
-              <ConsentButton
-                text={'Datenschutzerklärung'}
-                onPress={() => setTextType(TextType.PrivacyDE)}
-              />
-            </>
-          ) : (
-            <ConsentText
-              text={getLegalText()}
-              onPress={() => setTextType(TextType.None)}
-            />
-          )}
+          {legalTextConfig.map(({ title, content }) => {
+            return <ExpandingButton title={title} content={content} />
+          })}
         </ScrollView>
       </View>
       <BottomSheet showSlide={true} customStyles={styles.bottomBar}>

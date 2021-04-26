@@ -10,12 +10,7 @@ import BtnGroup from '~/components/BtnGroup'
 import { ScreenNames } from '~/types/screens'
 
 import { useRedirect } from '~/hooks/navigation'
-import {
-  Walkthrough1,
-  Walkthrough2,
-  Walkthrough3,
-  Walkthrough4,
-} from '~/assets/images'
+import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -25,23 +20,18 @@ import { JoloTextSizes } from '~/utils/fonts'
 const walkthroughData = [
   {
     background: Walkthrough1,
-    header: strings.BE_THE_ONLY_ONE,
-    paragraph: strings.CONTROL_YOUR_OWN_PERSONAL_INFORMATION,
+    header: strings.WALKTHROUGH_TITLE_STEP_1,
+    paragraph: strings.WALKTHROUGH_DESCRIPTION_STEP_1,
   },
   {
     background: Walkthrough2,
-    header: strings.GET_WHERE_YOU_NEED_TO_GO,
-    paragraph: strings.UNLOCK_DOORS,
+    header: strings.WALKTHROUGH_TITLE_STEP_2,
+    paragraph: strings.WALKTHROUGH_DESCRIPTION_STEP_2,
   },
   {
     background: Walkthrough3,
-    header: strings.NEVER_LOOSE_DATA,
-    paragraph: strings.KEEP_ALL_YOUR_INFO_BACKED_UP,
-  },
-  {
-    background: Walkthrough4,
-    header: strings.PROOVE_YOURE_YOU,
-    paragraph: strings.UNIQUE_DIGITAL_IDENTITY_TECHNOLOGY,
+    header: strings.WALKTHROUGH_TITLE_STEP_3,
+    paragraph: strings.WALKTHROUGH_DESCRIPTION_STEP_3,
   },
 ]
 

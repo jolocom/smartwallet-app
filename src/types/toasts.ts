@@ -74,14 +74,14 @@ export enum ToastType {
 export const createInfoToast = createToastFactory({
   type: ToastType.info,
   dismiss: {
-    timeout: 3000,
+    timeout: 6000,
   },
 })
 
 export const createWarningToast = createToastFactory({
   type: ToastType.warning,
   dismiss: {
-    timeout: 3000,
+    timeout: 6000,
   },
 })
 
