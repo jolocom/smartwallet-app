@@ -6,7 +6,6 @@
  */
 
 import { useDispatch, useSelector } from 'react-redux'
-import { SDKError, JolocomLib } from 'react-native-jolocom'
 
 import { useLoader } from '../loader'
 import {
@@ -21,6 +20,7 @@ import { interactionHandler } from './interactionHandlers'
 import { getDid } from '~/modules/account/selectors'
 import { useToasts } from '../toasts'
 import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
+import { parseJWT } from '~/utils/parseJWT'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -36,20 +36,6 @@ export const useInteractionStart = () => {
   const dispatch = useDispatch()
   const loader = useLoader()
   const {scheduleWarning, scheduleErrorWarning} = useToasts();
-
-  const parseJWT = (jwt: string) => {
-    try {
-      return JolocomLib.parse.interactionToken.fromJWT(jwt)
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        throw new Error(SDKError.codes.ParseJWTFailed)
-      } else if (e.message === 'Token expired') {
-        throw new Error(SDKError.codes.TokenExpired)
-      } else {
-        throw new Error(SDKError.codes.Unknown)
-      }
-    }
-  }
 
   return async (jwt: string) => {
     // NOTE: we're parsing the jwt here, even though it will be parsed in `agent.processJWT`
