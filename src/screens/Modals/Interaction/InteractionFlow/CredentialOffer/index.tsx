@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import {
-  getOfferedCredentialCategories,
   getIsFullscreenCredOffer,
   getOfferedCredentialsByCategories,
   getOfferedCredentials,
@@ -34,7 +33,6 @@ import Collapsible from '~/components/Collapsible'
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
-  const types = useSelector(getOfferedCredentialCategories)
 
   return (
     <ContainerBAS>
@@ -47,7 +45,7 @@ const CredentialOfferBAS = () => {
       />
       <Space />
       {offeredCredentials.map((d) => {
-        if (types[d.type] === CredentialCategories.document) {
+        if (d.category === CredentialCategories.document) {
           return (
             <IncomingOfferDoc
               key={d.name}

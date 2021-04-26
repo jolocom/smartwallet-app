@@ -324,19 +324,3 @@ export const getAuthzUIDetails = createSelector(
     }
   },
 )
-
-export const getOfferedCredentialCategories = createSelector(
-  [getCredOfferDetails],
-  (details) => {
-    const {
-      credentials: { service_issued },
-    } = details
-    return service_issued.reduce<Record<string, CredentialCategories>>(
-      (credByType, c) => {
-        credByType[c.type[1]] = c.category
-        return credByType
-      },
-      {},
-    )
-  },
-)
