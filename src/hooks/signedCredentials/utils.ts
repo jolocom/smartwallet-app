@@ -115,7 +115,7 @@ export function mapDisplayToCustomDisplay(
   const { properties } = credential
   let updatedProperties = properties.map((p) => ({
     ...p,
-    key: p.key?.split('.')[1],
+    key: p.key,
   }))
 
   if (isDocument(credential)) {
