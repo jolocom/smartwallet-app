@@ -6,3 +6,8 @@ export default function shuffleArray(array: string[]) {
   }
   return copied
 }
+
+export const last = <T>(array: Array<T>) => {
+  const length = array.length
+  return array[length - 1]
+}
