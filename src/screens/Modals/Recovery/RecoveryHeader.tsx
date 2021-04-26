@@ -33,7 +33,11 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
       <View style={styles.header}>
         {phrase.length ? (
           <>
-            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
+            <JoloText
+              kind={JoloTextKind.title}
+              size={JoloTextSizes.middle}
+              customStyles={{ marginTop: 12 }}
+            >
               {currentWordIdx === phrase.length
                 ? phrase.length
                 : currentWordIdx + 1}
