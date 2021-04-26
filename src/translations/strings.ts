@@ -162,6 +162,8 @@ const interactions = {
   INCLUDED_INFO: 'Included info',
   NO_INFO_THAT_CAN_BE_PREVIEWED: 'No info that can be previewed',
   WOULD_YOU_LIKE_TO_ACTION: 'Would you like to {{action}}?',
+  INTERACTION_ERROR_TITLE: 'Interaction error',
+  INTERACTION_ERROR_MESSAGE: 'Unknown interaction error occurred. Please submit report',
 }
 
 const lock = {

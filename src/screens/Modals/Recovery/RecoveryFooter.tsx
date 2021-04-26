@@ -48,8 +48,8 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const isAccessRestore = route?.params?.isAccessRestore ?? false
 
   const handlePhraseSubmit = useCallback(async () => {
-    const handleDone = (success: boolean) => {
-      if (success) {
+    const handleDone = (error: any) => {
+      if (!error) {
         dispatch(setLogged(true))
         replaceWith(ScreenNames.LoggedIn)
       } else recoveryDispatch(resetPhrase())

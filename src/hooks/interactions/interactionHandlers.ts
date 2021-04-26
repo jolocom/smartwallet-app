@@ -16,6 +16,7 @@ import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRe
 import { AttributeTypes } from '~/types/credentials'
 import { CredentialIssuer } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
+import { SWErrorCodes } from '~/errors/codes'
 
 class CredentialRequestHandler {
   #requestedCredentials: SignedCredential[]
@@ -90,7 +91,7 @@ class CredentialRequestHandler {
     )
 
     if (!hasNoMissingServiceIssuedCredentials)
-      throw new Error('Requested service issued credentials are missing')
+      throw new Error(SWErrorCodes.SWInteractionRequestMissingDocuments)
     return this
   }
 

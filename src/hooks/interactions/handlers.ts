@@ -6,7 +6,7 @@
  */
 
 import { useDispatch, useSelector } from 'react-redux'
-import { SDKError, JolocomLib, Interaction } from 'react-native-jolocom'
+import { SDKError, JolocomLib } from 'react-native-jolocom'
 
 import { useLoader } from '../loader'
 import {
@@ -19,6 +19,8 @@ import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { interactionHandler } from './interactionHandlers'
 import { getDid } from '~/modules/account/selectors'
+import { useToasts } from '../toasts'
+import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -33,6 +35,7 @@ export const useInteractionStart = () => {
   const did = useSelector(getDid)
   const dispatch = useDispatch()
   const loader = useLoader()
+  const {scheduleWarning, scheduleErrorWarning} = useToasts();
 
   const parseJWT = (jwt: string) => {
     try {
@@ -71,6 +74,16 @@ export const useInteractionStart = () => {
         )
       },
       { showSuccess: false },
+      (error) => {
+        if(isError(error)) {
+          // @ts-ignore
+          if(isUIError(error?.message)) scheduleWarning(UIErrors[error.message])
+          else scheduleErrorWarning(error, {
+            title: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.title,
+            message: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.message
+          })
+        }
+      }
     )
   }
 }
