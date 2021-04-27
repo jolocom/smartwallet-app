@@ -63,7 +63,7 @@ jest.mock('../../../src/hooks/navigation', () => ({
   useRedirectTo: jest.fn,
 }))
 
-describe('Change passcode', () => {
+xdescribe('Change passcode', () => {
   it('should successfully change the passcode', async () => {
     const setGenericPasswordSpy = jest.spyOn(keychain, 'setGenericPassword')
 
