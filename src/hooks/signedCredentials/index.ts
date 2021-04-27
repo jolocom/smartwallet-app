@@ -26,7 +26,7 @@ export const useInitializeCredentials = () => {
 
   const initializeCredentials = async () => {
     try {
-      const allCredentials: SignedCredential[] = await agent.storage.get.verifiableCredential()
+      const allCredentials: SignedCredential[] = await agent.credentials.query()
       const {
         credentials,
         selfIssuedCredentials,

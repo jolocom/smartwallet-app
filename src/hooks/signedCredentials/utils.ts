@@ -58,10 +58,9 @@ export const separateCredentialsAndAttributes = (
 }
 
 function mapToBaseUICredential(c: SignedCredential): BaseUICredential {
-  const { id, issuer, issued, type, expires, subject, name } = c
+  const { id, issued, type, expires, subject, name } = c
   return {
     id,
-    issuer,
     issued,
     // NOTE: beware we are only taking the second type, this might change in the future
     type: type[1],
@@ -75,33 +74,31 @@ export async function mapCredentialsToDisplay(
   agent: Agent,
   c: SignedCredential,
 ): Promise<DisplayCredential> {
-  const metadata = await agent.storage.get.credentialMetadata(c)
-  const resolvedIssuer = await agent.storage.get.publicProfile(c.issuer)
-
-  // @ts-expect-error - until types are corrected in sdk
-  const { type, renderInfo, credential } = metadata
+  const credentialType = await agent.credentials.getCredentialType(c)
+  
+  const {definition, renderAs, issuerProfile} = credentialType;
+  
   const baseUICredentials = mapToBaseUICredential(c)
   let updatedCredentials: DisplayCredential = {
     ...baseUICredentials,
-    issuer: resolvedIssuer,
-    category: getCredentialCategory(renderInfo),
+    issuer: issuerProfile, // NOTE: credentialType will returned resolved issuer
+    category: getCredentialCategory({renderAs}),
     properties: [],
   }
 
-  if (credential) {
-    const credType = new CredentialType(type, credential)
+  // TODO: CredentialManifestDisplayMapping - correct types
+  if (definition.display) {
     const {
-      name,
       display: { properties },
-    } = credType.display(c.claim)
+    } = definition;
     updatedCredentials = {
       ...updatedCredentials,
-      name,
-      properties: properties.map((p, idx) => ({
-        key: p.key ?? `${Date.now()}${idx}}`,
+      properties: properties ? properties.map((p, idx) => ({
+        key: p.path ? p.path[0].split('.')[1] : `${Date.now()}${idx}}`,
         label: p.label ?? strings.NOT_SPECIFIED,
+        // @ts-expect-error - properties of CredentialManifestDisplayMapping are optional
         value: p.value || strings.NOT_SPECIFIED,
-      })),
+      })) : [],
     }
   }
   return updatedCredentials
@@ -149,7 +146,7 @@ export function mapDisplayToCustomDisplay(
   return {
     ...credential,
     properties: updatedProperties,
-    photo: credential.issuer.publicProfile?.image,
+    photo: credential.issuer?.publicProfile?.image,
   }
 }
 
