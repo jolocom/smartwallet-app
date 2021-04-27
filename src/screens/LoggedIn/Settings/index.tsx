@@ -83,7 +83,7 @@ const SettingsGeneral: React.FC = () => {
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
             >
-              <Option.Title title={strings.CHANGE_PIN} />
+              <Option.Title title={strings.CHANGE_PASSCODE} />
               <Option.RightIcon />
             </Option>
             <EnableBiometryOption />

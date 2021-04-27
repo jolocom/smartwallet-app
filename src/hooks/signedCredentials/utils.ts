@@ -87,7 +87,6 @@ export async function mapCredentialsToDisplay(
     properties: [],
   }
 
-  // TODO: removed reassigning name from display, we have it covered in SignedCredential already
   // TODO: CredentialManifestDisplayMapping - correct types
   if (definition.display) {
     const {
