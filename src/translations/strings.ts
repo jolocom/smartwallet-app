@@ -38,12 +38,15 @@ export const recovery = {
 const walkthrough = {
   GET_STARTED: 'Get started',
   NEED_RESTORE: 'Need restore?',
-  WALKTHROUGH_TITLE_STEP_1: 'Control your data', 
-  WALKTHROUGH_DESCRIPTION_STEP_1: 'Manage your digital identity to stay safe online and off', 
-  WALKTHROUGH_TITLE_STEP_2: 'Use your identity', 
-  WALKTHROUGH_DESCRIPTION_STEP_2: 'Get where you need to go with convenient access to apps & services', 
-  WALKTHROUGH_TITLE_STEP_3: 'Easy backup', 
-  WALKTHROUGH_DESCRIPTION_STEP_3: 'Keep all your info backed up and in the right hands - a.k.a. yours', 
+  WALKTHROUGH_TITLE_STEP_1: 'Control your data',
+  WALKTHROUGH_DESCRIPTION_STEP_1:
+    'Manage your digital identity to stay safe online and off',
+  WALKTHROUGH_TITLE_STEP_2: 'Use your identity',
+  WALKTHROUGH_DESCRIPTION_STEP_2:
+    'Get where you need to go with convenient access to apps & services',
+  WALKTHROUGH_TITLE_STEP_3: 'Easy backup',
+  WALKTHROUGH_DESCRIPTION_STEP_3:
+    'Keep all your info backed up and in the right hands - a.k.a. yours',
 }
 
 const errors = {
@@ -63,8 +66,8 @@ const errors = {
 }
 
 const passcode = {
-  CREATE_PASSCODE: 'Create PIN',
-  VERIFY_PASSCODE: 'Verify PIN',
+  CREATE_PASSCODE: 'Create passcode',
+  VERIFY_PASSCODE: 'Verify passcode',
   IN_ORDER_TO_PROTECT_YOUR_DATA:
     'In order to protect your data from other users and maintain confidentiality',
   ADDING_AN_EXTRA_LAYER_OF_SECURITY:
@@ -161,7 +164,7 @@ const interactions = {
 
 const lock = {
   ENTER_YOUR_PASSCODE: 'Enter your passcode',
-  FORGOT_YOUR_PIN: 'Forgot your PIN?',
+  FORGOT_YOUR_PASSCODE: 'Forgot your passcode?',
   UNLOCK_WITH_BIOMETRY: 'Unlock the app with biometry',
   I_WILL_USE_PIN_INSTEAD: 'Use PIN instead',
   TAP_TO_ACTIVATE: 'Tap to activate',
@@ -171,7 +174,7 @@ const settings = {
   APP_PREFERENCES: 'App preferences',
   LANGUAGE: 'Language',
   SECURITY: 'Security',
-  CHANGE_PIN: 'Change PIN',
+  CHANGE_PASSCODE: 'Change passcode',
   USE_BIOMETRICS_TO_LOGIN: 'Use Biometrics to log in',
   BACKUP_IDENTITY: 'Backup Identity',
   GENERAL: 'General',
@@ -183,7 +186,7 @@ const settings = {
   CURRENT_PASSCODE: 'Current passcode',
   CREATE_NEW_PASSCODE: 'Create new passcode',
   WRONG_PASSCODE: 'Wrong passcode',
-  PASSWORD_SUCCESSFULLY_CHANGED: 'PIN successfully changed!',
+  PASSCODE_CHANGED: 'Passcode changed!',
   LOG_OUT: 'Log out',
   DE_VERSION: 'DE Version',
   PRIVACY_POLICY: 'Privacy Policy',

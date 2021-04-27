@@ -12,7 +12,7 @@ const PasscodeForgot = () => {
 
   return (
     <Btn type={BtnTypes.secondary} onPress={redirectToPinRecoveryInstruction}>
-      {strings.FORGOT_YOUR_PIN}
+      {strings.FORGOT_YOUR_PASSCODE}
     </Btn>
   )
 }
