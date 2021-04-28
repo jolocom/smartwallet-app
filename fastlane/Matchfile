@@ -1,4 +1,4 @@
-git_url("git@infra.jolocom.io:ios-certificates.git")
+git_url("dev@hetz1.jolocom.io:ios-certificates.git")
 
 storage_mode("git")
 
