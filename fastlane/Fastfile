@@ -39,7 +39,7 @@ end
 desc  'Get Sentry Auth Token'
 lane :sentry_auth do
   begin
-      sh("git clone git@infra.jolocom.io:sentry-auth")
+      sh("git clone dev@hetz1.jolocom.io:sentry-auth")
   rescue
       puts "sentry token already present"
   end
