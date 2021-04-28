@@ -20,9 +20,11 @@ jobs:
         run: ruby --version
       - name: Install Pods
         run: |
+          cd ios
           pod install
       - name: Build
         run: |
+          pwd
           bundle exec fastlane ios alpha
       # - name: Build
       #   uses: maierj/fastlane-action@v2.0.1
