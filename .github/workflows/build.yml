@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Check current directory
+        run: pwd
+      - name: List files
+        run: ls -la
       - name: Check node & npm versions
         run: |
           npm --version
