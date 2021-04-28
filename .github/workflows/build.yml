@@ -11,5 +11,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Setup ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7.2'
+      - name: Check ruby version
+        run: ruby --version
       - name: Build
-        run: yarn alpha:ios
+        uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: alpha
+          subdirectory: ios
