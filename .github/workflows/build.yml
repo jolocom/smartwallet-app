@@ -26,10 +26,16 @@ jobs:
           node --version
       - name: Install modules
         run: yarn install
-      - name: Setup ssh
-        uses: webfactory/ssh-agent@v0.5.2
+      # - name: Setup ssh
+      #   uses: webfactory/ssh-agent@v0.5.2
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          if_key_exists: fail
       - name: List known hosts
         run: |
           cat /Users/runner/.ssh/known_hosts
