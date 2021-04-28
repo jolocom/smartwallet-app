@@ -12,9 +12,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7.2p137'
+          ruby-version: 2.7
+          bundler-cache: true
       - name: Check ruby version
         run: ruby --version
       - name: Build
