@@ -72,9 +72,9 @@ platform :ios do
   desc 'Build iOS application and upload to Appcenter'
   lane :alpha do
     sentry_auth
+    api_token = get_appcenter_token.strip
     get_appstoreconnect_api_key
     build
-    api_token = get_appcenter_token.strip
     appcenter_upload(
       api_token: api_token,
       owner_name: "JolocomGmbH",
