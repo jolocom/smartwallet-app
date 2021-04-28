@@ -6,13 +6,6 @@
  */
 
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  FlowType,
-  SDKError,
-  JolocomLib,
-  Interaction,
-} from 'react-native-jolocom'
-import { CredentialRequestFlowState } from '@jolocom/sdk/js/interactionManager/types'
 
 import { useLoader } from '../loader'
 import {
@@ -20,17 +13,14 @@ import {
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import {
-  getMappedInteraction,
-  isTypeAttribute,
-  getCredentialType,
-} from '~/utils/dataMapping'
-import { getAllCredentials } from '~/modules/credentials/selectors'
 import { useAgent } from '../sdk'
-import { useToasts } from '../toasts'
-import { strings } from '~/translations/strings'
 import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
+import { interactionHandler } from './interactionHandlers'
+import { getDid } from '~/modules/account/selectors'
+import { useToasts } from '../toasts'
+import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
+import { parseJWT } from '~/utils/parseJWT'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -40,66 +30,12 @@ export const useInteraction = () => {
   return () => agent.interactionManager.getInteraction(interactionId)
 }
 
-type PreInteractionHandler = (i: Interaction) => boolean
-
 export const useInteractionStart = () => {
   const agent = useAgent()
+  const did = useSelector(getDid)
   const dispatch = useDispatch()
   const loader = useLoader()
-  const credentials = useSelector(getAllCredentials)
-  const { scheduleInfo } = useToasts()
-
-  const parseJWT = (jwt: string) => {
-    try {
-      return JolocomLib.parse.interactionToken.fromJWT(jwt)
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        throw new Error(SDKError.codes.ParseJWTFailed)
-      } else if (e.message === 'Token expired') {
-        throw new Error(SDKError.codes.TokenExpired)
-      } else {
-        throw new Error(SDKError.codes.Unknown)
-      }
-    }
-  }
-
-  /*
-   * Used for any actions that have to be run before the interaction starts. If
-   * returns false, the Interaction will not be started (still accessible
-   * from the SDK).
-   */
-  const preInteractionHandler: Record<string, PreInteractionHandler> = {
-    [FlowType.CredentialShare]: (interaction) => {
-      const { constraints } = interaction.getSummary()
-        .state as CredentialRequestFlowState
-      const { requestedCredentialTypes } = constraints[0]
-
-      const missingTypes = requestedCredentialTypes.reduce<string[]>(
-        (acc, type) => {
-          const requestedType = getCredentialType(type)
-          if (isTypeAttribute(requestedType)) return acc
-
-          const creds = credentials.filter(
-            (cred) => cred.type === requestedType,
-          )
-          if (!creds.length) acc.push(requestedType)
-          return acc
-        },
-        [],
-      )
-
-      if (missingTypes.length) {
-        //TODO: add translations interpolation with the issuer, missingTypes
-        scheduleInfo({
-          title: strings.SHARE_MISSING_DOCS_TITLE,
-          message: strings.SHARE_MISSING_DOCS_MSG,
-        })
-        return false
-      }
-
-      return true
-    },
-  }
+  const {scheduleWarning, scheduleErrorWarning} = useToasts();
 
   return async (jwt: string) => {
     // NOTE: we're parsing the jwt here, even though it will be parsed in `agent.processJWT`
@@ -110,21 +46,30 @@ export const useInteractionStart = () => {
     return loader(
       async () => {
         const interaction = await agent.processJWT(jwt)
-        const mappedInteraction = getMappedInteraction(interaction)
-        const shouldStart = preInteractionHandler[interaction.flow.type]
-          ? preInteractionHandler[interaction.flow.type](interaction)
-          : true
-
-        shouldStart &&
-          dispatch(
-            setInteractionDetails({
-              id: interaction.id,
-              flowType: interaction.flow.type,
-              ...mappedInteraction,
-            }),
-          )
+        const interactionData = await interactionHandler(
+          agent,
+          interaction,
+          did,
+        )
+        dispatch(
+          setInteractionDetails({
+            id: interaction.id,
+            flowType: interaction.flow.type,
+            ...interactionData,
+          }),
+        )
       },
       { showSuccess: false },
+      (error) => {
+        if(isError(error)) {
+          // @ts-ignore
+          if(isUIError(error)) scheduleWarning(UIErrors[error.message])
+          else scheduleErrorWarning(error, {
+            title: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.title,
+            message: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.message
+          })
+        }
+      }
     )
   }
 }

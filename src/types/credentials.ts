@@ -42,10 +42,10 @@ export enum AttributeTypes {
  */
 export enum IdentificationTypes {
   ProofOfIdCredentialDemo = 'ProofOfIdCredentialDemo',
-  ProofOfDriverLicenceDemo = 'ProofOfDriverLicenceDemo'
+  ProofOfDriverLicenceDemo = 'ProofOfDriverLicenceDemo',
 }
 export enum TicketTypes {
-  ProofOfTicketDemo = 'ProofOfTicketDemo'
+  ProofOfTicketDemo = 'ProofOfTicketDemo',
 }
 
 interface AttributeKeyboardOptions {
@@ -81,6 +81,7 @@ export type BaseUICredential = Pick<
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
   category: CredentialCategories
   invalid: boolean
+  properties: Array<DisplayVal>
 }
 
 export type OfferedCredentialDisplay = OfferedCredential &
@@ -95,10 +96,9 @@ export enum DocumentFields {
   DocumentName = 'Document Name',
 }
 
-export type DisplayCredential = 
-  & { issuer: IdentitySummary | undefined }
-  & { category: CredentialCategories }
-  & { properties: Array<Required<DisplayVal>> }
+export type DisplayCredential = { issuer: IdentitySummary | undefined } & {
+  category: CredentialCategories
+} & { properties: Array<Required<DisplayVal>> }
 
 export type DisplayCredentialDocument = DisplayCredential & {
   holderName: string

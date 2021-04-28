@@ -95,13 +95,15 @@ const useCredentialOfferFlow = () => {
    */
   const storeSelectedCredentials = async () => {
     const interaction = await getInteraction()
-    const signedCredentials: SignedCredential[] = await interaction.storeSelectedCredentials();
-    
+    const signedCredentials: SignedCredential[] = await interaction.storeSelectedCredentials()
+
     // store credential metadata and issuer profile (handled by storeCredentialType);
-    const credentialMetadata = (interaction.flow as CredentialOfferFlow).getOfferedCredentialMetadata();
-    await Promise.all(Object.values(credentialMetadata).map(m => {
-       agent.credentials.storeCredentialType(m)
-    }))
+    const credentialMetadata = (interaction.flow as CredentialOfferFlow).getOfferedCredentialMetadata()
+    await Promise.all(
+      Object.values(credentialMetadata).map((m) => {
+        agent.credentials.storeCredentialType(m)
+      }),
+    )
     return signedCredentials
   }
 

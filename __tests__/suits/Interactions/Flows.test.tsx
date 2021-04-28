@@ -1,58 +1,49 @@
-import * as react from 'react'
-import * as redux from 'react-redux'
 import { act, renderHook } from '@testing-library/react-hooks'
 
 import * as interactionsHooks from '~/hooks/interactions/handlers'
-import { dismissLoader, setLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
-import { strings } from '~/translations/strings'
+import { mockSelectorReturn } from '../../utils/selector'
+import { getMockedDispatch } from '../../utils/dispatch'
+import { FlowType } from 'react-native-jolocom'
 import { setInteractionDetails } from '~/modules/interaction/actions'
-import { getMappedInteraction } from '~/utils/dataMapping'
 
-import {
-  mockedInteractionCredOffer,
-  mockedInteractionCredShare,
-  mockedInteractionAuth,
-  mockedInteractionAuthz,
-  mockedNoCredentials,
-  mockedHasCredentials,
-  mockedAgent,
-} from '../../utils/mockedValues'
-
-const mockedJWT = 'token'
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useContext: jest
-    .fn()
-    .mockImplementationOnce(() => mockedAgent(mockedInteractionCredOffer))
-    .mockImplementationOnce(() => mockedAgent(mockedInteractionCredShare))
-    .mockImplementationOnce(() => mockedAgent(mockedInteractionCredShare))
-    .mockImplementationOnce(() => mockedAgent(mockedInteractionAuth))
-    .mockImplementationOnce(() => mockedAgent(mockedInteractionAuthz)),
-}))
-
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn().mockReturnValueOnce(['0', '1', '2']),
-}))
+const INTERACTION_NONCE = 'interaction-nonce'
+const mockedToken = 'token'
+const CREDENTIAL_TYPE = 'First Credential'
+const COUNTERPARTY_DID = 'did:123'
 
 jest.mock('../../../src/utils/parseJWT', () => ({
-  parseJWT: jest.fn().mockReturnValue(mockedJWT),
+  parseJWT: jest.fn().mockReturnValue(mockedToken),
+}))
+
+const mockProcessJWTRequestOffer = jest.fn()
+
+jest.mock('../../../src/hooks/sdk', () => ({
+  useAgent: () => ({
+    processJWT: mockProcessJWTRequestOffer,
+  }),
 }))
 
 jest.mock('../../../src/hooks/toasts', () => ({
   useToasts: () => ({
-    scheduleInfo: jest.fn(),
     scheduleWarning: jest.fn(),
+    scheduleErrorWarning: jest.fn(),
   }),
 }))
 
-const getMockedDispatch = () => {
-  const mockDispatchFn = jest.fn()
-  const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
-  useDispatchSpy.mockReturnValue(mockDispatchFn)
-  return mockDispatchFn
-}
+jest.mock('../../../src/hooks/loader', () => ({
+  useLoader: jest
+    .fn()
+    .mockImplementation(
+      () => async (
+        cb: () => Promise<void>,
+        _: object,
+        onSuccess: () => void,
+      ) => {
+        await cb()
+        onSuccess()
+      },
+    ),
+}))
 
 const arrangeActHook = async () => {
   // ARRANGE
@@ -62,29 +53,8 @@ const arrangeActHook = async () => {
 
   // ACTION
   await act(async () => {
-    await startInteraction(mockedJWT)
+    await startInteraction(mockedToken)
   })
-}
-
-const assertInteractionDetails = (
-  mockedInteraction: Record<string, any>,
-  dispatchMock: jest.Mock,
-) => {
-  // @ts-ignore
-  const mappedInteraction = getMappedInteraction(mockedInteraction)
-  expect(dispatchMock).toHaveBeenCalledWith(
-    setInteractionDetails({
-      id: mockedInteraction.id,
-      flowType: mockedInteraction.flow.type,
-      ...mappedInteraction,
-    }),
-  )
-}
-
-const assertLoaderVisibility = (dispatchMock: jest.Mock) => {
-  expect(dispatchMock).toHaveBeenCalledWith(
-    setLoader({ type: LoaderTypes.default, msg: strings.LOADING }),
-  )
 }
 
 describe('Correct data was set in the store for ', () => {
@@ -92,73 +62,54 @@ describe('Correct data was set in the store for ', () => {
   beforeEach(() => {
     mockDispatchFn = getMockedDispatch()
   })
-  afterEach(() => {
-    //@ts-ignore
-    react.useContext.mockClear()
-    jest.clearAllMocks()
-  })
 
   it('Credential Offer', async () => {
+    mockSelectorReturn({
+      account: {
+        did: 'did:user:1',
+      },
+    })
+    mockProcessJWTRequestOffer.mockReturnValue({
+      id: INTERACTION_NONCE,
+      flow: {
+        type: FlowType.CredentialOffer,
+      },
+      getSummary: jest.fn().mockReturnValue({
+        initiator: {
+          did: COUNTERPARTY_DID,
+        },
+        state: {
+          offerSummary: [
+            {
+              type: CREDENTIAL_TYPE,
+              renderInfo: {},
+            },
+          ],
+        },
+      }),
+    })
     await arrangeActHook()
 
     // ASSERT
-    assertLoaderVisibility(mockDispatchFn)
-    assertInteractionDetails(mockedInteractionCredOffer, mockDispatchFn)
-  })
-
-  // TODO: fix me
-  xdescribe('Credential Share', () => {
-    beforeAll(() => {
-      redux.useSelector
-        // @ts-ignore
-        .mockImplementationOnce((callback: (state: any) => void) => {
-          return callback(mockedNoCredentials)
-        })
-        .mockImplementationOnce((callback: (state: any) => void) => {
-          return callback(mockedHasCredentials)
-        })
-    })
-    it('do not start interaction', async () => {
-      await arrangeActHook()
-
-      assertLoaderVisibility(mockDispatchFn)
-
-      // @ts-ignore
-      const mappedInteraction = getMappedInteraction(mockedInteractionCredShare)
-
-      expect(mockDispatchFn).not.toHaveBeenCalledWith(
-        setInteractionDetails({
-          id: mockedInteractionCredOffer.id,
-          flowType: mockedInteractionCredOffer.flow.type,
-          ...mappedInteraction,
-        }),
-      )
-
-      expect(mockDispatchFn).toHaveBeenCalledWith(dismissLoader())
-    })
-
-    it('starts interaction', async () => {
-      await arrangeActHook()
-
-      // ASSERT
-      assertLoaderVisibility(mockDispatchFn)
-      assertInteractionDetails(mockedInteractionCredShare, mockDispatchFn)
-    })
-  })
-
-  xit('Authorization', async () => {
-    await arrangeActHook()
-
-    // ASSERT
-    assertLoaderVisibility(mockDispatchFn)
-    assertInteractionDetails(mockedInteractionAuth, mockDispatchFn)
-  })
-
-  xit('Authorization', async () => {
-    await arrangeActHook()
-
-    // ASSERT
-    assertLoaderVisibility(mockDispatchFn)
-    assertInteractionDetails(mockedInteractionAuthz, mockDispatchFn)
+    expect(mockDispatchFn).toHaveBeenCalledWith(
+      setInteractionDetails({
+        id: INTERACTION_NONCE,
+        flowType: FlowType.CredentialOffer,
+        counterparty: {
+          did: COUNTERPARTY_DID,
+        },
+        credentials: {
+          service_issued: [
+            {
+              type: CREDENTIAL_TYPE,
+              category: 'other',
+              invalid: false,
+              name: '',
+              properties: [],
+            },
+          ],
+        },
+      }),
+    )
   })
 })

@@ -27,8 +27,8 @@ const Entropy: React.FC = () => {
 
   //NOTE: not using the user generated entropy
   const submitEntropy = async (entropy: string) => {
-    const handleDone = (success: boolean) => {
-      if (success) {
+    const handleDone = (error: any) => {
+      if (!error) {
         return replaceWith(ScreenNames.SeedPhraseWrite)
       }
       return replaceWith(ScreenNames.Entropy)

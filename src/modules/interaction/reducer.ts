@@ -1,6 +1,8 @@
 import { InteractionActions, InteractionState } from './types'
 import { Action } from '~/types/actions'
 import { isCredShareDetails, isCredOfferDetails } from './guards'
+import { AttrActions, AttributePayload } from '../attributes/types'
+import { AttributeTypes } from '~/types/credentials'
 
 const initialState: InteractionState = {
   details: { flowType: null, id: null },
@@ -8,7 +10,7 @@ const initialState: InteractionState = {
 
 const reducer = (
   state = initialState,
-  action: Action<InteractionActions, any>,
+  action: Action<InteractionActions | AttrActions.updateAttrs, any>,
 ) => {
   switch (action.type) {
     case InteractionActions.setInteractionDetails:
@@ -42,6 +44,27 @@ const reducer = (
         }
       }
       return state
+    case AttrActions.updateAttrs: {
+      const {flowType} = state.details;
+      const {type, attribute} = action.payload as AttributePayload;
+      if(flowType === null || type === AttributeTypes.businessCard) {
+        return state;
+      }
+      if(isCredShareDetails(state.details)) {
+        const interactionAttributes = state.details.attributes[type];
+        return {
+          ...state,
+          details: {
+            ...state.details,
+            attributes: {
+              ...state.details.attributes,
+              [type]: interactionAttributes ? [...interactionAttributes, attribute] : [attribute]
+            }
+          }
+        }
+      }
+      return state;
+    }
     default:
       return state
   }

@@ -1,4 +1,4 @@
-import * as redux from 'react-redux';
+import * as redux from 'react-redux'
 
 export const getMockedDispatch = () => {
   const mockDispatchFn = jest.fn()

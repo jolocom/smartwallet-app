@@ -1,5 +1,10 @@
 import { FlowType, IdentitySummary } from 'react-native-jolocom'
-import { AttributeTypes, OfferedCredential } from '~/types/credentials'
+import {
+  AttributeTypes,
+  DisplayCredential,
+  OfferedCredential,
+} from '~/types/credentials'
+import { AttributeI } from '../attributes/types'
 
 export enum InteractionActions {
   setInteractionDetails = 'setInteractionDetails',
@@ -61,9 +66,10 @@ export interface AuthorizationDetailsI extends InteractionCommonI {
 
 export interface CredShareI extends InteractionCommonI {
   flowType: FlowType.CredentialShare
-  requestedAttributes: AttributeTypes[]
+  attributes: Partial<Record<AttributeTypes, AttributeI[]>>
   //TODO: should be renamed to smth else (not @credentials)
-  requestedCredentials: string[]
+  credentials: DisplayCredential[]
+  requestedTypes: string[]
   selectedCredentials: Record<string, string>
 }
 

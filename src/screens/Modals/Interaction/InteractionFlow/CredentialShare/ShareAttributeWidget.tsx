@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { StyleSheet, View } from 'react-native'
 
 import {
-  getAvailableRequestedAttributes,
+  getRequestedAttributes,
   getSelectedShareCredentials,
 } from '~/modules/interaction/selectors'
 import { AttributeTypes } from '~/types/credentials'
@@ -76,7 +76,7 @@ const InteractionAttributesWidget: React.FC<IInteractionWidgetProps> = ({
 const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   withContainer = false,
 }) => {
-  const attributes = useSelector(getAvailableRequestedAttributes)
+  const attributes = useSelector(getRequestedAttributes)
   const selectedCredentials = useSelector(getSelectedShareCredentials)
 
   if (!Object.keys(attributes).length) return null
@@ -89,7 +89,7 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   useEffect(() => {
     Object.keys(attributes).forEach((type) => {
       const t = type as AttributeTypes
-      /* checking for selected credentials too as otherwise the first one is always selected */
+      /* checking for selected credentials, otherwise, the first one is always selected */
       if (attributes[t]?.length && !selectedCredentials[t]) {
         handleSelectCredential({ [t]: attributes[t][0].id })
       }

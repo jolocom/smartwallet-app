@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux'
 
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import {
-  getOfferedCredentialCategories,
   getIsFullscreenCredOffer,
   getOfferedCredentialsByCategories,
+  getOfferedCredentials,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
 import {
@@ -28,14 +28,11 @@ import {
   LogoContainerFAS,
   Space,
 } from '../components/styled'
-import { useMappedOfferDetails } from './useOfferDetails'
-import { getOfferSections } from './utils'
 import Collapsible from '~/components/Collapsible'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
-  const offerDetails = useMappedOfferDetails()
-  const types = useSelector(getOfferedCredentialCategories)
+  const offeredCredentials = useSelector(getOfferedCredentials)
 
   return (
     <ContainerBAS>
@@ -47,26 +44,24 @@ const CredentialOfferBAS = () => {
         label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
       />
       <Space />
-      {offerDetails === null
-        ? null
-        : offerDetails.map((d) => {
-            if (types[d.type] === CredentialCategories.document) {
-              return (
-                <IncomingOfferDoc
-                  key={d.name}
-                  name={d.name}
-                  properties={d.display.properties}
-                />
-              )
-            }
-            return (
-              <IncomingOfferOther
-                key={d.name}
-                name={d.name}
-                properties={d.display.properties}
-              />
-            )
-          })}
+      {offeredCredentials.map((d) => {
+        if (d.category === CredentialCategories.document) {
+          return (
+            <IncomingOfferDoc
+              key={d.name}
+              name={d.name}
+              properties={d.properties}
+            />
+          )
+        }
+        return (
+          <IncomingOfferOther
+            key={d.name}
+            name={d.name}
+            properties={d.properties}
+          />
+        )
+      })}
       <Space />
 
       <InteractionFooter
@@ -81,12 +76,9 @@ const CredentialOfferFAS = () => {
   const categories = useSelector(getOfferedCredentialsByCategories)
 
   const handleSubmit = useCredentialOfferSubmit()
-  const offerDetails = useMappedOfferDetails()
 
-  const updatedCategories = getOfferSections(categories, offerDetails)
-
-  const documents = updatedCategories[CredentialCategories.document]
-  const other = updatedCategories[CredentialCategories.other]
+  const documents = categories[CredentialCategories.document]
+  const other = categories[CredentialCategories.other]
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
     return credentials.map(

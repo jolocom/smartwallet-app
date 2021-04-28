@@ -8,7 +8,7 @@ import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
 import { useRedirect } from '../navigation'
 import { addCredentials } from '~/modules/credentials/actions'
-import { useInitializeCredentials } from '../signedCredentials'
+import { useCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
 import { CredentialCategories } from '~/types/credentials'
 
@@ -29,7 +29,7 @@ const useCredentialOfferSubmit = () => {
   const { scheduleInfo } = useToasts()
   const redirect = useRedirect()
   const finishInteraction = useFinishInteraction()
-  const { getCredentialDisplay } = useInitializeCredentials()
+  const { signedCredentialToUI } = useCredentials()
 
   const scheduleSuccess = (initialTab: CredentialCategories) =>
     scheduleSuccessInteraction({
@@ -41,7 +41,7 @@ const useCredentialOfferSubmit = () => {
 
   const handleStoreIssuedCredentials = async () => {
     const issuedCredentials = await storeSelectedCredentials()
-    const displayCredentials = await getCredentialDisplay(issuedCredentials)
+    const displayCredentials = await signedCredentialToUI(issuedCredentials)
     dispatch(addCredentials(displayCredentials))
   }
 
