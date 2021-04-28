@@ -28,6 +28,8 @@ jobs:
         run: ruby --version
       - name: Install node modules
         run: npm install
+      - name: List files
+        run: ls -la
       - name: Install Pods
         run: |
           cd ios
