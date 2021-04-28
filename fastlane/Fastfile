@@ -13,8 +13,11 @@ lane :get_appstoreconnect_api_key do
     puts "app-store-connect-auth"
   end
 
-    key_id = File.read("app-store-connect-auth/key_id.txt")
-    issuer_id = File.read("app-store-connect-auth/issuer_id.txt")
+    key_id = File.read("./app-store-connect-auth/key_id.txt")
+    issuer_id = File.read("./app-store-connect-auth/issuer_id.txt")
+
+    puts(key_id)
+    puts(issuer_id)
 
     app_store_connect_api_key(
       key_id: key_id,
@@ -28,7 +31,7 @@ end
 desc 'Get API token for MS AppCenter'
 lane :get_appcenter_token do
   begin
-    sh("git clone git@infra.jolocom.io:appcenter-secrets")
+    sh("git clone dev@hetz1.jolocom.io:appcenter-secrets")
   rescue
     # handle error
     puts "appcenter auth already present"
