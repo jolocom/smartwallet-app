@@ -30,6 +30,9 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.2
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: List known hosts
+        run: |
+          cat /Users/runner/.ssh/known_hosts
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
