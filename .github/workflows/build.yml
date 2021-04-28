@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Check node & npm versions
+        run: |
+          npm --version
+          node --version
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -18,6 +22,8 @@ jobs:
           bundler-cache: true
       - name: Check ruby version
         run: ruby --version
+      - name: Install node modules
+        run: npm install
       - name: Install Pods
         run: |
           cd ios
