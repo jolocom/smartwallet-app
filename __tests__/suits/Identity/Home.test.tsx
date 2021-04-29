@@ -33,10 +33,6 @@ jest.mock(
   '../../../src/screens/LoggedIn/Identity/IdentityCredentials',
   () => () => null,
 )
-jest.mock(
-  '../../../src/screens/LoggedIn/Identity/IdentityBusinessCard',
-  () => () => null,
-)
 
 /* This test is concerned about testing wether we show intro component
   or self issued credentials on home id tab
