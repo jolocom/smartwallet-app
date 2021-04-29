@@ -6,7 +6,6 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import { useSelector } from 'react-redux'
 import IdentityCredentials from './IdentityCredentials'
 import IdentityTabs from './tabs'
-import { IdentityTabCredentialsIcon } from '~/assets/svg'
 import { strings } from '~/translations'
 import { IdentityTabIds } from './types'
 
@@ -36,14 +35,6 @@ const Identity = () => {
         {strings.YOUR_INFO}
       </ScreenContainer.Header>
       <IdentityTabs initialTab={initialTab}>
-        <IdentityTabs.Styled.Header>
-          <IdentityTabs.Tab
-            id={IdentityTabIds.credentials}
-            title={strings.CREDENTIALS}
-          >
-            <IdentityTabCredentialsIcon />
-          </IdentityTabs.Tab>
-        </IdentityTabs.Styled.Header>
         <IdentityTabs.Page id={IdentityTabIds.credentials}>
           <IdentityCredentials />
         </IdentityTabs.Page>
