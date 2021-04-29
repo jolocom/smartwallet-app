@@ -47,7 +47,7 @@ const reducer = (
     case AttrActions.updateAttrs: {
       const {flowType} = state.details;
       const {type, attribute} = action.payload as AttributePayload;
-      if(flowType === null || type === AttributeTypes.businessCard) {
+      if(flowType === null) {
         return state;
       }
       if(isCredShareDetails(state.details)) {

@@ -21,31 +21,16 @@ import { assembleFormInitialValues } from '~/utils/dataMapping'
 import { getPrimitiveAttributeById } from '~/modules/attributes/selectors'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
-import { LoggedInStackParamList } from '~/screens/LoggedIn'
 import { ScreenNames } from '~/types/screens'
 import { strings } from '~/translations'
 import { AttributeI } from '~/modules/attributes/types'
 import { Colors } from '~/utils/colors'
 import { FormFieldContainer, FormError } from '~/components/Form/components'
 import useTranslation from '~/hooks/useTranslation'
+import { MainStackParamList } from '~/screens/LoggedIn/Main'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
-
-type TPrimitiveAttributesConfig = Omit<
-  Record<AttributeTypes, IAttributeConfig>,
-  AttributeTypes.businessCard
->
-
-const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
-  const {
-    ProofOfBusinessCardCredential,
-    ...primitiveAttributesConfig
-  } = attributeConfig
-  return primitiveAttributesConfig
-}
-
-const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
 const mergeAttributeValuesWithConfig = (
   config: IAttributeConfig<IAttributeClaimField>,
@@ -61,7 +46,7 @@ const mergeAttributeValuesWithConfig = (
 
 const CredentialForm = () => {
   const route = useRoute<
-    RouteProp<LoggedInStackParamList, ScreenNames.CredentialForm>
+    RouteProp<MainStackParamList, ScreenNames.CredentialForm>
   >()
   const { id: attributeId, type: attributeType } = route.params
   const { t } = useTranslation()
@@ -71,7 +56,7 @@ const CredentialForm = () => {
   )
 
   const formConfig = mergeAttributeValuesWithConfig(
-    primitiveAttributesConfig[attributeType],
+    attributeConfig[attributeType],
     editAttribute,
   )
 
@@ -89,14 +74,14 @@ const CredentialForm = () => {
         await handleEditCredentialSI(
           attributeType,
           claims,
-          primitiveAttributesConfig[attributeType].metadata,
+          attributeConfig[attributeType].metadata,
           attributeId,
         )
       } else {
         await handleCreateCredentialSI(
           attributeType,
           claims,
-          primitiveAttributesConfig[attributeType].metadata,
+          attributeConfig[attributeType].metadata,
         )
       }
     } catch (e) {

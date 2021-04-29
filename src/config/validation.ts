@@ -61,25 +61,3 @@ export const contactValidation = yup
 export const companyValidation = yup.object().shape({
   [ClaimKeys.legalCompanyName]: yup.string().required(strings.VALUE_MISSING),
 })
-
-export const businessCardValidation = yup
-  .object()
-  .shape({
-    [ClaimKeys.givenName]: yup.string(),
-    [ClaimKeys.familyName]: yup.string(),
-  })
-  .atLeastOneOf(
-    [ClaimKeys.givenName, ClaimKeys.familyName],
-    strings.AT_LEAST_ONE_ERROR,
-  )
-  .shape({
-    [ClaimKeys.email]: yup.string().email(strings.EMAIL_FORMAT_ERROR),
-    [ClaimKeys.telephone]: yup.string(),
-  })
-  .atLeastOneOf(
-    [ClaimKeys.email, ClaimKeys.telephone],
-    strings.AT_LEAST_ONE_ERROR,
-  )
-  .shape({
-    [ClaimKeys.legalCompanyName]: yup.string().required(strings.VALUE_MISSING),
-  })

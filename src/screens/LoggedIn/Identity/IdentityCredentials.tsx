@@ -7,7 +7,11 @@ import Field from '~/components/Widget/Field'
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
 import { getAttributes } from '~/modules/attributes/selectors'
-import { AttributeTypes, IAttributeConfig } from '~/types/credentials'
+import {
+  IAttributeConfig,
+  PrimitiveAttributeTypes,
+  TPrimitiveAttributesConfig,
+} from '~/types/credentials'
 
 import IdentityTabs from './tabs'
 import { strings } from '~/translations'
@@ -16,21 +20,8 @@ import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
 import { useSICActions } from '~/hooks/attributes'
 
-type TPrimitiveAttributeTypes = Exclude<
-  AttributeTypes,
-  AttributeTypes.businessCard
->
-type TPrimitiveAttributesConfig = Omit<
-  Record<AttributeTypes, IAttributeConfig>,
-  AttributeTypes.businessCard
->
-
 const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
-  const {
-    ProofOfBusinessCardCredential,
-    ...primitiveAttributesConfig
-  } = attributeConfig
-  return primitiveAttributesConfig
+  return attributeConfig
 }
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
@@ -51,9 +42,9 @@ const IdentityCredentials = () => {
     primitiveAttributesConfig,
   ).map(([type, config]) => {
     return {
-      type: type as TPrimitiveAttributeTypes,
+      type: type as PrimitiveAttributeTypes,
       label: config.label,
-      values: attributes[type as TPrimitiveAttributeTypes] ?? [],
+      values: attributes[type as PrimitiveAttributeTypes] ?? [],
     }
   })
 
