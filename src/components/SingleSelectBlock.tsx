@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 
 import Block from './Block'
 import Option from '~/screens/LoggedIn/Settings/components/Option'
-import ToggleIcon from './ToggleIcon'
+import { StyleSheet, View } from 'react-native'
+import { Colors } from '~/utils/colors'
+import { SuccessTickToggleIcon } from '~/assets/svg'
 
 export interface BlockSelection {
   value: string
@@ -32,11 +34,26 @@ const SingleSelectBlock: React.FC<Props> = ({
       {selection.map((item) => (
         <Option onPress={() => handleSelect(item)}>
           <Option.Title title={item.value} />
-          <ToggleIcon selected={item.id === selected.id} />
+          {item.id === selected.id ? (
+            <SuccessTickToggleIcon />
+          ) : (
+            <View style={styles.container} />
+          )}
         </Option>
       ))}
     </Block>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: 22,
+    height: 22,
+    borderRadius: 25,
+    borderWidth: 0.6,
+    borderStyle: 'solid',
+    borderColor: Colors.sadGrey,
+  },
+})
 
 export default SingleSelectBlock
