@@ -250,7 +250,6 @@ const attributes = {
   CITY_FIELD: 'City',
   COUNTRY_FIELD: 'Country',
   NUMBER: 'Number',
-  BUSINESS_CARD: 'Business Card',
   GIVEN_NAME_FIELD: 'Given name',
   FAMILY_NAME_FIELD: 'Family name',
   COMPANY_NAME_FIELD: 'Company name',
