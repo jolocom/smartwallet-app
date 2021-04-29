@@ -146,12 +146,12 @@ const Camera = () => {
             <View style={styles.topOverlay}>
               {SHOW_LOCAL_NETWORK_DIALOG && (
                 <Dialog onPress={() => {}}>
-                  <JoloText size={JoloTextSizes.mini} color={Colors.white}>
-                    {strings.LOCAL_PERMISSION_DIALOG}{' '}
+                  <JoloText customStyles={{ textAlign: 'left' }} size={JoloTextSizes.mini} color={Colors.white}>
+                    {strings.LOCAL_PERMISSION_DIALOG}{'     '}
                     <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
                       {BP({
-                        xsmall: strings.MANAGE,
-                        default: strings.TAP_TO_MANAGE,
+                        default: strings.MANAGE,
+                        large: strings.TAP_TO_MANAGE,
                       })}
                     </JoloText>
                   </JoloText>
@@ -246,13 +246,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: BP({
       default: 165,
-      medium: 175,
-      large: 185,
+      medium: 215,
+      large: 225,
     }),
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: BP({ xsmall: 20, default: 28 }),
-    paddingHorizontal: BP({ xsmall: 12, default: 24 }),
+    paddingHorizontal: BP({ default: 12, large: 24 }),
   },
   bottomOverlay: {
     flex: 1,
