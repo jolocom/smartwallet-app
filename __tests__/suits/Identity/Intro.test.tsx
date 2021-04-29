@@ -51,17 +51,11 @@ describe('Intro displays', () => {
     )
 
     const singleCredentialButton = getByTestId('single-credential-button')
-    const businessCardButton = getByTestId('business-card-button')
     const { getByText: getSingleCredText } = getQueriesForElement(
       singleCredentialButton,
     )
 
     expect(getSingleCredText(strings.SINGLE_CREDENTIAL)).toBeDefined()
-
-    const { getByText: getBusinessCredText } = getQueriesForElement(
-      businessCardButton,
-    )
-    expect(getBusinessCredText(strings.BUSINESS_CARD)).toBeDefined()
 
     expect(getByText(strings.IT_IS_TIME_TO_CREATE)).toBeDefined()
   })
