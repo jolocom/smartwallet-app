@@ -84,7 +84,7 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
               type={BtnTypes.senary}
               testID="single-credential-button"
             >
-              {strings.SINGLE_CREDENTIAL}
+              {strings.START_NOW}
             </Btn>
           </>
         )}

@@ -348,7 +348,7 @@ const history = {
 
 const identity = {
   YOUR_INFO: 'Your info',
-  SINGLE_CREDENTIAL: 'Single Credential',
+  START_NOW: 'Start now',
   CREDENTIALS: 'Credentials',
   IT_IS_TIME_TO_CREATE: 'It’s time to create your first Digital Identity',
   INTRODUCE_YOURSELF: 'Please, introduce yourself',

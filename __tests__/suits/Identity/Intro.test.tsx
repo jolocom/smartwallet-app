@@ -52,7 +52,7 @@ describe('Intro displays', () => {
       singleCredentialButton,
     )
 
-    expect(getSingleCredText(strings.SINGLE_CREDENTIAL)).toBeDefined()
+    expect(getSingleCredText(strings.START_NOW)).toBeDefined()
 
     expect(getByText(strings.IT_IS_TIME_TO_CREATE)).toBeDefined()
   })
