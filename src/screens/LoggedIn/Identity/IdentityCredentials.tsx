@@ -77,6 +77,7 @@ const IdentityCredentials = () => {
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
       {sortedPrimitiveAttributes.map(({ type, label, values }) => {
+        const hideCreateNew = type === AttributeTypes.name && values.length > 0
         return (
           <View style={styles.group} key={type}>
             <Widget
@@ -84,7 +85,7 @@ const IdentityCredentials = () => {
             >
               <Widget.Header>
                 <Widget.Header.Name value={label} />
-                <Widget.Header.Action.CreateNew />
+                {!hideCreateNew && <Widget.Header.Action.CreateNew />}
               </Widget.Header>
               {values.length ? (
                 values.map((field) => (
