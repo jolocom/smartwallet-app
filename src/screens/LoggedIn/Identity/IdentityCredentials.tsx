@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { StyleSheet, View, LayoutAnimation } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -6,7 +6,7 @@ import Widget from '~/components/Widget/Widget'
 import Field from '~/components/Widget/Field'
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
-import { getPrimitiveAttributes } from '~/modules/attributes/selectors'
+import { getAttributes } from '~/modules/attributes/selectors'
 import { AttributeTypes, IAttributeConfig } from '~/types/credentials'
 
 import IdentityTabs from './tabs'
@@ -37,7 +37,7 @@ const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
 const IdentityCredentials = () => {
   const redirect = useRedirect()
-  const attributes = useSelector(getPrimitiveAttributes)
+  const attributes = useSelector(getAttributes)
   const { handleDeleteCredentialSI } = useSICActions()
 
   useLayoutEffect(() => {
