@@ -6,6 +6,8 @@ import {
   StyleSheet,
   TouchableHighlight,
   Animated,
+  TouchableOpacity,
+  Platform,
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
@@ -30,6 +32,7 @@ import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
+import Dialog from '~/components/Dialog'
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -138,7 +141,19 @@ const Camera = () => {
         )}
         {overlayVisible ? (
           <>
-            <View style={styles.topOverlay} />
+            <View style={styles.topOverlay}>
+              <Dialog onPress={() => {}}>
+                <JoloText size={JoloTextSizes.mini} color={Colors.white}>
+                  {strings.LOCAL_PERMISSION_DIALOG}{' '}
+                  <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
+                    {BP({
+                      xsmall: strings.MANAGE,
+                      default: strings.TAP_TO_MANAGE,
+                    })}
+                  </JoloText>
+                </JoloText>
+              </Dialog>
+            </View>
             <View
               style={{
                 flexDirection: 'row',
@@ -230,6 +245,10 @@ const styles = StyleSheet.create({
       medium: 175,
       large: 185,
     }),
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: BP({ xsmall: 20, default: 28 }),
+    paddingHorizontal: BP({ xsmall: 12, default: 24 }),
   },
   bottomOverlay: {
     flex: 1,
