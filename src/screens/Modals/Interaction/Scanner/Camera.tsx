@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableHighlight,
   Animated,
-  TouchableOpacity,
   Platform,
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
@@ -33,6 +32,9 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Dialog from '~/components/Dialog'
+
+const majorVersionIOS = parseInt(Platform.Version as string, 10)
+const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -142,17 +144,19 @@ const Camera = () => {
         {overlayVisible ? (
           <>
             <View style={styles.topOverlay}>
-              <Dialog onPress={() => {}}>
-                <JoloText size={JoloTextSizes.mini} color={Colors.white}>
-                  {strings.LOCAL_PERMISSION_DIALOG}{' '}
-                  <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
-                    {BP({
-                      xsmall: strings.MANAGE,
-                      default: strings.TAP_TO_MANAGE,
-                    })}
+              {SHOW_LOCAL_NETWORK_DIALOG && (
+                <Dialog onPress={() => {}}>
+                  <JoloText size={JoloTextSizes.mini} color={Colors.white}>
+                    {strings.LOCAL_PERMISSION_DIALOG}{' '}
+                    <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
+                      {BP({
+                        xsmall: strings.MANAGE,
+                        default: strings.TAP_TO_MANAGE,
+                      })}
+                    </JoloText>
                   </JoloText>
-                </JoloText>
-              </Dialog>
+                </Dialog>
+              )}
             </View>
             <View
               style={{
