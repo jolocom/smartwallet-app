@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
+import Permissions from 'react-native-permissions'
 import { useSelector } from 'react-redux'
 
 import { SDKError } from 'react-native-jolocom'
@@ -116,6 +117,10 @@ const Camera = () => {
 
   const { top } = useSafeArea()
 
+  const handleLocalPermissionPress = () => {
+    Permissions.openSettings()
+  }
+
   return (
     <ScreenContainer hideStatusBar isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
@@ -145,7 +150,7 @@ const Camera = () => {
           <>
             <View style={styles.topOverlay}>
               {SHOW_LOCAL_NETWORK_DIALOG && (
-                <Dialog onPress={() => {}}>
+                <Dialog onPress={handleLocalPermissionPress}>
                   <JoloText customStyles={{ textAlign: 'left' }} size={JoloTextSizes.mini} color={Colors.white}>
                     {strings.LOCAL_PERMISSION_DIALOG}{'     '}
                     <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
