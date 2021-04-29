@@ -54,4 +54,5 @@ jobs:
         env: 
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: |
+          bundle exec fastlane match nuke distribution
           bundle exec fastlane ios alpha

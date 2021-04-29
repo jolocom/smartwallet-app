@@ -15,10 +15,7 @@ lane :get_appstoreconnect_api_key do
 
     key_id = File.read("./app-store-connect-auth/key_id.txt")
     issuer_id = File.read("./app-store-connect-auth/issuer_id.txt")
-
-    puts(key_id)
-    puts(issuer_id)
-
+    
     app_store_connect_api_key(
       key_id: key_id,
       issuer_id: issuer_id,
