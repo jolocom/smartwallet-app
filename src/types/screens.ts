@@ -37,7 +37,6 @@ export enum ScreenNames {
   InteractionFlow = 'InteractionFlow',
   // Modals
   Loader = 'Loader',
-  BusinessCardForm = 'BusinessCardForm',
   CredentialForm = 'CredentialForm',
   CardDetails = 'CardDetails',
 
@@ -63,6 +62,5 @@ export enum ScreenNames {
   InputTest = 'InputTest',
   PasscodeTest = 'PasscodeTest',
   InteractionCardsTest = 'InteractionCardsTest',
-  BusinessCardTest = 'BusinessCardTest',
   CollapsibleTest = 'CollapsibleTest',
 }
