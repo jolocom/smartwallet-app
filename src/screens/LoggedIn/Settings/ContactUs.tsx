@@ -98,6 +98,7 @@ const ContactUs: React.FC = () => {
           <JoloKeyboardAwareScroll.InputContainer>
             {({ focusInput }) => (
               <Input.TextArea
+                limit={500}
                 value={detailsInput}
                 updateInput={setDetailsInput}
                 onFocus={focusInput}
