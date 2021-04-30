@@ -19,6 +19,7 @@ import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
 import { useSICActions } from '~/hooks/attributes'
+import BP from '~/utils/breakpoints'
 
 const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
   return attributeConfig
@@ -67,35 +68,37 @@ const IdentityCredentials = () => {
       <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
-      {sortedPrimitiveAttributes.map(({ type, label, values }) => {
-        return (
-          <View style={styles.group} key={type}>
-            <Widget
-              onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
-            >
-              <Widget.Header>
-                <Widget.Header.Name value={label} />
-                <Widget.Header.Action.CreateNew />
-              </Widget.Header>
-              {values.length ? (
-                values.map((field) => (
-                  <IdentityField
-                    key={field.id}
-                    id={field.id}
-                    type={type}
-                    value={Object.values(field.value).join(' ')}
-                    onDelete={() => handleDeleteCredentialSI(field.id, type)}
-                  />
-                ))
-              ) : (
-                <Field.Empty>
-                  <PencilIcon />
-                </Field.Empty>
-              )}
-            </Widget>
-          </View>
-        )
-      })}
+      <View style={styles.credentialsContainer}>
+        {sortedPrimitiveAttributes.map(({ type, label, values }) => {
+          return (
+            <View style={styles.group} key={type}>
+              <Widget
+                onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
+              >
+                <Widget.Header>
+                  <Widget.Header.Name value={label} />
+                  <Widget.Header.Action.CreateNew />
+                </Widget.Header>
+                {values.length ? (
+                  values.map((field) => (
+                    <IdentityField
+                      key={field.id}
+                      id={field.id}
+                      type={type}
+                      value={Object.values(field.value).join(' ')}
+                      onDelete={() => handleDeleteCredentialSI(field.id, type)}
+                    />
+                  ))
+                ) : (
+                  <Field.Empty>
+                    <PencilIcon />
+                  </Field.Empty>
+                )}
+              </Widget>
+            </View>
+          )
+        })}
+      </View>
     </View>
   )
 }
@@ -103,6 +106,9 @@ const IdentityCredentials = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+  },
+  credentialsContainer: {
+    marginTop: BP({ default: 56, small: 38, xsmall: 38 }),
   },
   group: {
     marginBottom: 20,

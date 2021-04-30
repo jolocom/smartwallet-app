@@ -7,6 +7,7 @@ import IdentityTabsPlaceholder from './IdentityTabPlaceholder'
 import { IIdentityTabs, ITabsComposition } from './types'
 import { IdentityTabsContext } from './context'
 import { ScrollView } from 'react-native-gesture-handler'
+import BP from '~/utils/breakpoints'
 
 const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
   initialTab,
@@ -34,7 +35,10 @@ const IdentityTabs: React.FC<IIdentityTabs> & ITabsComposition = ({
       keyboardShouldPersistTaps={'handled'}
       overScrollMode="never"
       style={{ width: '100%' }}
-      contentContainerStyle={{ paddingBottom: '40%', paddingTop: 26 }}
+      contentContainerStyle={{
+        paddingBottom: '40%',
+        paddingTop: BP({ default: 8, xsmall: 4 }),
+      }}
     >
       <IdentityTabsContext.Provider value={contextValue} children={children} />
     </ScrollView>

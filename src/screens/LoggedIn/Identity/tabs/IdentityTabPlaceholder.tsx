@@ -9,8 +9,12 @@ const IdentityTabsPlaceholder: React.FC<{ show: boolean }> = ({
   children,
 }) =>
   show ? (
-    <View style={{ marginBottom: 24, paddingHorizontal: '10%', }}>
-      <JoloText color={Colors.white50} size={JoloTextSizes.mini}>
+    <View>
+      <JoloText
+        color={Colors.white50}
+        size={JoloTextSizes.mini}
+        customStyles={{ textAlign: 'left' }}
+      >
         {children}
       </JoloText>
     </View>
