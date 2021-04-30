@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import {
+  NativeSyntheticEvent,
+  StyleSheet,
+  TextInput,
+  TextInputFocusEventData,
+  View,
+} from 'react-native'
 // @ts-ignore no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
@@ -14,7 +20,15 @@ import { JoloTextSizes } from '~/utils/fonts'
 
 const InputTextArea = React.forwardRef<TextInput, ITextAreaInputProps>(
   (
-    { value, updateInput, limit, customStyles = {}, onFocus, ...inputProps },
+    {
+      value,
+      updateInput,
+      limit,
+      customStyles = {},
+      onFocus,
+      onBlur,
+      ...inputProps
+    },
     ref,
   ) => {
     const [showLimit, setShowLimit] = useState(false)
@@ -44,9 +58,16 @@ const InputTextArea = React.forwardRef<TextInput, ITextAreaInputProps>(
       }
     }, [limitCount])
 
-    const handleFocus = () => {
+    const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       // NOTE: show the limit when the input is focused
       if (limit && !showLimit) setShowLimit(true)
+      onFocus && onFocus(e)
+    }
+
+    const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      // NOTE: hide the limit if the input is blured and empty
+      if (limit && showLimit && value.length === 0) setShowLimit(false)
+      onBlur && onBlur(e)
     }
 
     return (
@@ -70,6 +91,7 @@ const InputTextArea = React.forwardRef<TextInput, ITextAreaInputProps>(
             onChangeText={updateInput}
             multiline
             onFocus={handleFocus}
+            onBlur={handleBlur}
             style={[styles.inputStyle, customStyles]}
             {...inputProps}
           />
