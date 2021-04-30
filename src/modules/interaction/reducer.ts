@@ -50,15 +50,33 @@ const reducer = (
       if(flowType === null || type === AttributeTypes.businessCard) {
         return state;
       }
+      /**
+       * Upon interaction request,
+       * we should populate with newly created attribute 
+       * attribute property of interaction details,
+       * because we store separate instance of 
+       * service and self issued credentials within
+       * interaction state.
+       */
       if(isCredShareDetails(state.details)) {
         const interactionAttributes = state.details.attributes[type];
         return {
           ...state,
           details: {
             ...state.details,
+            /**
+             * Adding newly create attribute
+             */
             attributes: {
               ...state.details.attributes,
               [type]: interactionAttributes ? [...interactionAttributes, attribute] : [attribute]
+            },
+            /**
+             * Selecting newly create attribute
+             */
+             selectedCredentials: {
+              ...state.details.selectedCredentials,
+              [type]: attribute.id
             }
           }
         }
