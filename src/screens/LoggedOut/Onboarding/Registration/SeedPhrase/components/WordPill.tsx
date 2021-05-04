@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   spacings: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: BP({ default: 10, xsmall: 8 }),
   },
   active: {
     borderWidth: 1.7,

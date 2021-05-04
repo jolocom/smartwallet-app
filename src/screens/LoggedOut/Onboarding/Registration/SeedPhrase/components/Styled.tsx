@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 12,
-    marginBottom: 15,
+    marginBottom: BP({ default: 16, xsmall: 4 }),
     height: 50,
     alignItems: 'center',
   },
