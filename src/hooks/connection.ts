@@ -1,6 +1,8 @@
 import { useNetInfo } from '@react-native-community/netinfo'
+import { useEffect } from 'react'
 
 import { strings } from '~/translations'
+import { usePrevious } from './generic'
 import { useToasts } from './toasts'
 
 const DISCONNECTED_TOAST = {
@@ -16,7 +18,6 @@ const CONNECTED_TOAST = {
 const useConnection = () => {
   const { scheduleWarning, scheduleInfo } = useToasts()
   const netInfo = useNetInfo()
-  const connected = netInfo.isConnected
 
   const showDisconnectedToast = () => {
     scheduleWarning({
@@ -30,16 +31,22 @@ const useConnection = () => {
     })
   }
 
-  const assertConnection = () => {
-    if (!connected) showDisconnectedToast()
-  }
-
   return {
-    connected,
+    connected: netInfo.isConnected,
     showDisconnectedToast,
     showConnectedToast,
-    assertConnection,
   }
+}
+
+export const useAssertConnection = () => {
+  const { connected, showDisconnectedToast } = useConnection()
+  const prevConnected = usePrevious(connected)
+
+  useEffect(() => {
+    if (prevConnected === null && connected === false) {
+      showDisconnectedToast()
+    }
+  }, [connected])
 }
 
 export default useConnection

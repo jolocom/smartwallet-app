@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -18,6 +18,7 @@ import { useSuccess } from '~/hooks/loader'
 import Section from './components/Section'
 import Input from '~/components/Input'
 import { InputValidityState } from '~/components/Input/types'
+import { useAssertConnection } from '~/hooks/connection'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -35,6 +36,8 @@ const ContactUs: React.FC = () => {
   const [contactValid, setContactValid] = useState(true)
   const [detailsInput, setDetailsInput] = useState('')
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null)
+
+  useAssertConnection()
 
   const options = useMemo(
     () =>
@@ -133,13 +136,13 @@ const ContactUs: React.FC = () => {
               : strings.PLEASE_ENTER_A_VALID_EMAIL}
           </JoloText>
         </Section>
-        <Btn
+        <Btn.Online
           type={BtnTypes.primary}
           onPress={handleSubmit}
           disabled={!contactValid || !isBtnEnabled()}
         >
           {strings.SEND}
-        </Btn>
+        </Btn.Online>
       </JoloKeyboardAwareScroll>
     </ScreenContainer>
   )

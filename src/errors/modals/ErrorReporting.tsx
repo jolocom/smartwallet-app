@@ -11,6 +11,7 @@ import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import { IOption } from '~/components/Selectable'
 import ToggleSwitch from '~/components/ToggleSwitch'
+import { useAssertConnection } from '~/hooks/connection'
 import { useSuccess } from '~/hooks/loader'
 import useSentry from '~/hooks/sentry'
 import useErrors from '~/hooks/useErrors'
@@ -40,6 +41,8 @@ const ErrorReporting = () => {
   const { errorScreen, resetError } = useErrors()
   const { sendErrorReport } = useSentry()
   const showSuccess = useSuccess()
+
+  useAssertConnection()
 
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null)
   const [shouldIncludeLogs, setIncludeLogs] = useState(false)

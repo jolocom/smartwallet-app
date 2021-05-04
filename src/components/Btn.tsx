@@ -156,7 +156,7 @@ const OnlineBtn: React.FC<PropsI> = ({ children, ...props }) => {
   const { connected } = useConnection()
 
   return (
-    <Btn {...props} disabled={!connected ?? false}>
+    <Btn {...props} disabled={!connected || props.disabled}>
       {children}
     </Btn>
   )
