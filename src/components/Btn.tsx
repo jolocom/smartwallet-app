@@ -1,3 +1,4 @@
+import { useNetInfo } from '@react-native-community/netinfo'
 import React from 'react'
 import {
   TouchableOpacity,
@@ -9,6 +10,7 @@ import {
   Platform,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import useConnection from '~/hooks/connection'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
@@ -40,6 +42,10 @@ interface PropsI extends BtnPropsI {
   withoutMargins?: boolean
   customContainerStyles?: ViewStyle
   testID?: string
+}
+
+interface IBtnComposition {
+  Online: React.FC<PropsI>
 }
 
 const GRADIENT_START = { x: 0, y: 0 }
@@ -83,7 +89,7 @@ const ButtonText: React.FC<BtnPropsI> = ({
   )
 }
 
-const Btn: React.FC<PropsI> = (props) => {
+const Btn: React.FC<PropsI> & IBtnComposition = (props) => {
   const containerStyles = [
     styles.container,
     props.disabled && styles.disabled,
@@ -145,6 +151,18 @@ const Btn: React.FC<PropsI> = (props) => {
     </TouchableOpacity>
   )
 }
+
+const OnlineBtn: React.FC<PropsI> = ({ children, ...props }) => {
+  const { connected } = useConnection()
+
+  return (
+    <Btn {...props} disabled={!connected ?? false}>
+      {children}
+    </Btn>
+  )
+}
+
+Btn.Online = OnlineBtn
 
 Btn.defaultProps = {
   type: BtnTypes.primary,
