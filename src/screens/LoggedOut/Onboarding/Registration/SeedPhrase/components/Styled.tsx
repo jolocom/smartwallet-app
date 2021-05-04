@@ -79,7 +79,7 @@ const StyledErrorText: React.FC = ({ children }) => (
     color={Colors.error}
     customStyles={{
       marginBottom: BP({ large: 32, medium: 24, default: 12 }),
-      paddingHorizontal: 56,
+      paddingHorizontal: 36,
     }}
   >
     {children}

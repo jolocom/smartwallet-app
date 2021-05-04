@@ -70,20 +70,21 @@ const SeedPhraseRepeat: React.FC = () => {
           <BackArrowIcon />
         </SeedPhrase.Styled.Header.Left>
       </SeedPhrase.Styled.Header>
-      <SeedPhrase.Styled.HelperText>
-        {strings.DRAG_AND_DROP_THE_WORDS(isFirstFragment.current)}
-      </SeedPhrase.Styled.HelperText>
+      {wrongOrder ? (
+        <SeedPhrase.Styled.ErrorText>
+          {strings.CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN}
+        </SeedPhrase.Styled.ErrorText>
+      ) : (
+        <SeedPhrase.Styled.HelperText>
+          {strings.DRAG_AND_DROP_THE_WORDS(isFirstFragment.current)}
+        </SeedPhrase.Styled.HelperText>
+      )}
       <SeedPhrase.Styled.ActiveArea>
         {shuffledSeedphrase && shuffledSeedphrase.length > 1 ? (
           <Dnd tags={shuffledSeedphrase} updateTags={handlePhraseUpdate} />
         ) : null}
       </SeedPhrase.Styled.ActiveArea>
       <SeedPhrase.Styled.CTA>
-        {wrongOrder && (
-          <SeedPhrase.Styled.ErrorText>
-            {strings.CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN}
-          </SeedPhrase.Styled.ErrorText>
-        )}
         <Btn
           disabled={!readyToSubmit}
           onPress={onSubmit}
