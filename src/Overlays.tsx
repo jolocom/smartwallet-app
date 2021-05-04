@@ -5,42 +5,29 @@ import Loader from '~/modals/Loader'
 import Toasts from './components/Toasts'
 import { NavigationContextProvider } from './NavigationProvider'
 import { NavigationContainerRef } from '@react-navigation/native'
-import { useNetInfo } from '@react-native-community/netinfo'
-import { useToasts } from './hooks/toasts'
-import { strings } from './translations'
 import { usePrevious } from './hooks/generic'
+import useConnection from './hooks/connection'
 
 interface Props {
   navRef: RefObject<NavigationContainerRef>
 }
 
-const NO_CONNECTION_TOAST = {
-  title: strings.NOT_CONNECTED,
-  message: strings.WE_CANT_REACH_YOU,
-}
-
-const CONNECTION_TOAST = {
-  title: strings.YOU_ARE_BACK_ONLINE,
-  message: strings.ALL_WALLET_FUNCTIONALITIES,
-}
-
 const Overlays: React.FC<Props> = ({ navRef }) => {
-  const netInfo = useNetInfo()
-  const { scheduleWarning, scheduleInfo } = useToasts()
-  const prevConnection = usePrevious(netInfo)
+  const {
+    connected,
+    showConnectedToast,
+    showDisconnectedToast,
+  } = useConnection()
+  const prevConnected = usePrevious(connected)
 
   useEffect(() => {
-    if (netInfo.isConnected === false) {
-      scheduleWarning({
-        ...NO_CONNECTION_TOAST,
-      })
+    if (connected === false) {
+      showDisconnectedToast()
     }
-    if (prevConnection?.isConnected === false && netInfo.isConnected === true) {
-      scheduleInfo({
-        ...CONNECTION_TOAST,
-      })
+    if (prevConnected === false && connected === true) {
+      showConnectedToast()
     }
-  }, [netInfo.isConnected])
+  }, [connected])
 
   return (
     <NavigationContextProvider navRef={navRef}>
