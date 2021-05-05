@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { View } from 'react-native'
+import { View, Pressable } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
@@ -24,6 +24,7 @@ import { useBiometry } from '~/hooks/biometry'
 import useBackup from '~/hooks/backup'
 import useMarketRating from '~/hooks/rateus'
 import { useAgent } from '~/hooks/sdk'
+import ClearIdentityBtn from './components/ClearIdentityBtn'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
@@ -139,20 +140,7 @@ const SettingsGeneral: React.FC = () => {
         </Section>
         {__DEV__ && <DevelopmentSection />}
 
-        <Btn
-          type={BtnTypes.quinary}
-          onPress={handleLogout}
-          customContainerStyles={{ marginTop: 60 }}
-        >
-          {strings.EMPTY_WALLET}
-        </Btn>
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.tiniest}
-          customStyles={{ marginTop: 20, opacity: 0.2 }}
-        >
-          {strings.YOUR_IDENTITY_WILL_NOT_BE_DELETED}
-        </JoloText>
+        <ClearIdentityBtn />
       </ScrollView>
     </ScreenContainer>
   )

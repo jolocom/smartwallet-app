@@ -161,7 +161,8 @@ const interactions = {
   NO_INFO_THAT_CAN_BE_PREVIEWED: 'No info that can be previewed',
   WOULD_YOU_LIKE_TO_ACTION: 'Would you like to {{action}}?',
   INTERACTION_ERROR_TITLE: 'Interaction error',
-  INTERACTION_ERROR_MESSAGE: 'Unknown interaction error occurred. Please submit report',
+  INTERACTION_ERROR_MESSAGE:
+    'Unknown interaction error occurred. Please submit report',
 }
 
 const lock = {
@@ -228,6 +229,14 @@ const settings = {
   WE_DO_NOT_STORE_DATA: 'We do not store data and do not spam',
   PLEASE_ENTER_A_VALID_EMAIL: 'Please enter a valid email',
   SEND: 'Send',
+  CLEAR_IDENTITY_TITLE: 'Are you sure?',
+  CLEAR_IDENTITY_MESSAGE:
+    'Please pay attention that deleted data cannot be recovered in the future',
+  CLEAR_IDENTITY_CONFIRM: 'I understand',
+  CLEAR_IDENTITY_CANCEL: 'Cancel',
+  CLEAR_IDENTITY_DETAILS:
+    'If you want to start fresh and erase all data related to this wallet’s identity',
+  CLEAR_IDENTITY_BTN: 'click here',
 }
 
 const termsConsent = {
