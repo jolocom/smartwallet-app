@@ -6,9 +6,11 @@ import {
   StyleSheet,
   TouchableHighlight,
   Animated,
+  Platform,
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
+import Permissions from 'react-native-permissions'
 import { useSelector } from 'react-redux'
 
 import { SDKError } from 'react-native-jolocom'
@@ -30,6 +32,10 @@ import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
+import Dialog from '~/components/Dialog'
+
+const majorVersionIOS = parseInt(Platform.Version as string, 10)
+const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 
 const Camera = () => {
   const { height } = useWindowDimensions()
@@ -111,6 +117,10 @@ const Camera = () => {
 
   const { top } = useSafeArea()
 
+  const handleLocalPermissionPress = () => {
+    Permissions.openSettings()
+  }
+
   return (
     <ScreenContainer hideStatusBar isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
@@ -138,7 +148,21 @@ const Camera = () => {
         )}
         {overlayVisible ? (
           <>
-            <View style={styles.topOverlay} />
+            <View style={styles.topOverlay}>
+              {SHOW_LOCAL_NETWORK_DIALOG && (
+                <Dialog onPress={handleLocalPermissionPress}>
+                  <JoloText customStyles={{ textAlign: 'left' }} size={JoloTextSizes.mini} color={Colors.white}>
+                    {strings.LOCAL_PERMISSION_DIALOG}{'     '}
+                    <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
+                      {BP({
+                        default: strings.MANAGE,
+                        large: strings.TAP_TO_MANAGE,
+                      })}
+                    </JoloText>
+                  </JoloText>
+                </Dialog>
+              )}
+            </View>
             <View
               style={{
                 flexDirection: 'row',
@@ -227,9 +251,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: BP({
       default: 165,
-      medium: 175,
-      large: 185,
+      medium: 215,
+      large: 225,
     }),
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: BP({ xsmall: 20, default: 28 }),
+    paddingHorizontal: BP({ default: 12, large: 24 }),
   },
   bottomOverlay: {
     flex: 1,
