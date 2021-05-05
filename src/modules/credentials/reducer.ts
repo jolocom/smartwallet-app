@@ -18,6 +18,8 @@ const credentialsReducer = (
     case CredentialActions.deleteCredential:
       const filtered = state.all.filter((c) => c.id !== action.payload)
       return { ...state, all: filtered }
+    case CredentialActions.reset:
+      return initialState
     default:
       return state
   }
