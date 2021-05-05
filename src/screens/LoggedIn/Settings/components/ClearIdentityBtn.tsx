@@ -69,7 +69,6 @@ const ClearIdentityBtn = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 44,
     paddingHorizontal: 12,
   },
 })
