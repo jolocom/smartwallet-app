@@ -134,6 +134,7 @@ const ErrorReporting = () => {
               {({ focusInput }) => (
                 <Input.TextArea
                   value={detailsInput}
+                  limit={500}
                   updateInput={setDetailsInput}
                   onFocus={focusInput}
                   customStyles={{ height: 80 }}
