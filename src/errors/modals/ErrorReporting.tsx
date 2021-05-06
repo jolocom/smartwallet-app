@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Alert, View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 
 import EmojiSelectable from '~/components/EmojiSelectable'
@@ -10,8 +10,11 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import { IOption } from '~/components/Selectable'
+import Toasts from '~/components/Toasts'
 import ToggleSwitch from '~/components/ToggleSwitch'
+import useConnection from '~/hooks/connection'
 import { useAssertConnection } from '~/hooks/connection'
+import { usePrevious } from '~/hooks/generic'
 import { useSuccess } from '~/hooks/loader'
 import useSentry from '~/hooks/sentry'
 import useErrors from '~/hooks/useErrors'
@@ -42,7 +45,16 @@ const ErrorReporting = () => {
   const { sendErrorReport } = useSentry()
   const showSuccess = useSuccess()
 
-  useAssertConnection()
+  // NOTE: cannot use the @useAssertConnection hook b/c it's adapted for screens,
+  // but not modals. Should replace the effect hook below when the @ErrorReporting modal
+  // becomes a navigation screen
+  const { connected, showDisconnectedToast } = useConnection()
+
+  useEffect(() => {
+    if (connected === false && errorScreen === ErrorScreens.errorReporting) {
+      showDisconnectedToast()
+    }
+  }, [connected, errorScreen])
 
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null)
   const [shouldIncludeLogs, setIncludeLogs] = useState(false)
@@ -92,6 +104,9 @@ const ErrorReporting = () => {
       isVisible={errorScreen === ErrorScreens.errorReporting}
       animationType={'slide'}
     >
+      {/* Since the screen is a modal, need to include the @Toasts component for it
+      to be visible*/}
+      <Toasts />
       <ScreenContainer
         customStyles={{
           justifyContent: 'flex-start',
@@ -207,13 +222,13 @@ const ErrorReporting = () => {
             <EmojiSelectable />
           </Section>
 
-          <Btn
+          <Btn.Online
             type={BtnTypes.primary}
             onPress={handleSubmit}
             disabled={!contactValid || !isSubmitEnabled()}
           >
             {strings.SEND}
-          </Btn>
+          </Btn.Online>
         </JoloKeyboardAwareScroll>
       </ScreenContainer>
     </ModalScreen>
