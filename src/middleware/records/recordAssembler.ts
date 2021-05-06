@@ -129,7 +129,9 @@ export class RecordAssembler {
         case InteractionType.CredentialOfferResponse:
           return {
             title: this.getFinishedStepTitle(i),
-            description: state.offerSummary.map((s) => s.type).join(', '),
+            description: state.offerSummary
+              .map((s) => s.credential?.name ?? s.type)
+              .join(', '),
           }
         case InteractionType.CredentialsReceive:
           return {

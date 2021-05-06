@@ -8,6 +8,7 @@ import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
 import { getAttributes } from '~/modules/attributes/selectors'
 import {
+  AttributeTypes,
   IAttributeConfig,
   PrimitiveAttributeTypes,
   TPrimitiveAttributesConfig,
@@ -70,6 +71,8 @@ const IdentityCredentials = () => {
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
         {sortedPrimitiveAttributes.map(({ type, label, values }) => {
+          const hideCreateNew =
+            type === AttributeTypes.name && values.length > 0
           return (
             <View style={styles.group} key={type}>
               <Widget
@@ -77,7 +80,7 @@ const IdentityCredentials = () => {
               >
                 <Widget.Header>
                   <Widget.Header.Name value={label} />
-                  <Widget.Header.Action.CreateNew />
+                  {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>
                 {values.length ? (
                   values.map((field) => (

@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "0.0.1.007",
+  "version": "0.0.1.008",
   "private": true,
   "scripts": {
     "run:ios": "react-native run-ios",
@@ -142,5 +142,9 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "volta": {
+    "node": "12.14.1",
+    "yarn": "1.22.10"
   }
 }

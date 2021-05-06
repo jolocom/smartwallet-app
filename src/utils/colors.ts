@@ -52,7 +52,7 @@ export enum Colors {
   borderGray20 = 'rgba(143, 146, 161, 0.2)',
   silverChalice = '#adadad',
   purple = '#7372ee',
-  blackRussian = 'rgb(35, 36, 38)',
+  blackRussian = 'rgb(42, 34, 43)',
   carnationPink = 'rgb(145, 25, 66)',
   hyacinthPink = 'rgb(210, 45, 105)',
   slateGray = '#6c7b8a',
@@ -60,4 +60,5 @@ export enum Colors {
   portGore = '#171739',
   zincDust = 'rgb(62,62,62)',
   mainPink = '#c52969',
+  blue = '#0084ff',
 }

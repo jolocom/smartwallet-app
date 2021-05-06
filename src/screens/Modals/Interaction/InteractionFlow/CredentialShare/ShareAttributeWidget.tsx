@@ -47,11 +47,12 @@ const InteractionAttributesWidget: React.FC<IInteractionWidgetProps> = ({
   type,
 }) => {
   const selectedCredentials = useSelector(getSelectedShareCredentials)
+  const hideCreateNew = type === AttributeTypes.name && fields.length > 0
   return (
     <Widget onAdd={onAdd}>
       <Widget.Header>
         <Widget.Header.Name value={name} />
-        <Widget.Header.Action.CreateNew />
+        {!hideCreateNew && <Widget.Header.Action.CreateNew />}
       </Widget.Header>
       {!fields.length ? (
         <Field.Empty />
