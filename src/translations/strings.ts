@@ -131,6 +131,10 @@ const scanner = {
     "Looks like we can't provide this service",
   ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE:
     "It's all automatic, just place your phone above the code",
+  LOCAL_PERMISSION_DIALOG:
+    'To activate devices within the local network please allow access for the SmartWallet.',
+  MANAGE: 'Manage',
+  TAP_TO_MANAGE: 'Tap to manage',
 }
 
 const interactions = {
@@ -161,7 +165,8 @@ const interactions = {
   NO_INFO_THAT_CAN_BE_PREVIEWED: 'No info that can be previewed',
   WOULD_YOU_LIKE_TO_ACTION: 'Would you like to {{action}}?',
   INTERACTION_ERROR_TITLE: 'Interaction error',
-  INTERACTION_ERROR_MESSAGE: 'Unknown interaction error occurred. Please submit report',
+  INTERACTION_ERROR_MESSAGE:
+    'Unknown interaction error occurred. Please submit report',
 }
 
 const lock = {

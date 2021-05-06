@@ -9,6 +9,10 @@ export interface IInput extends TextInputProps, IWithCustomStyle {
   withHighlight?: boolean
 }
 
+export interface ITextAreaInputProps extends IInput {
+  limit?: number
+}
+
 export enum InputValidityState {
   none = 'none',
   error = 'error',
