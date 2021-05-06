@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   credentialsContainer: {
-    marginTop: BP({ default: 56, small: 38, xsmall: 38 }),
+    marginTop: BP({ default: 32 }),
   },
   group: {
     marginBottom: 20,
