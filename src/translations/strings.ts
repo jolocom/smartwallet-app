@@ -255,7 +255,6 @@ const attributes = {
   CITY_FIELD: 'City',
   COUNTRY_FIELD: 'Country',
   NUMBER: 'Number',
-  BUSINESS_CARD: 'Business Card',
   GIVEN_NAME_FIELD: 'Given name',
   FAMILY_NAME_FIELD: 'Family name',
   COMPANY_NAME_FIELD: 'Company name',
@@ -348,13 +347,14 @@ const history = {
   NOT_ISSUED: 'Not issued',
   NOT_SHARED: 'Not shared',
   NO_HISTORY_YET: 'No history yet',
+  YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
+    'You dont have any completed interactions yet. Make one today!',
 }
 
 const identity = {
   YOUR_INFO: 'Your info',
-  SINGLE_CREDENTIAL: 'Single Credential',
+  START_NOW: 'Start now',
   CREDENTIALS: 'Credentials',
-  BUSINESS_CARD: 'Business Card',
   IT_IS_TIME_TO_CREATE: 'It’s time to create your first Digital Identity',
   INTRODUCE_YOURSELF: 'Please, introduce yourself',
   BEST_WAY_TO_CONTACT_YOU: 'Best way to contact you?',
@@ -362,20 +362,13 @@ const identity = {
   NEXT: 'Next',
   WHAT_IS_YOUR_NAME: 'What is your name?',
   CREATE: 'Create',
-  BUSINESS_CARD_CTA_CREATE: "So far it's empty, Just tap to start creation",
   EDIT: 'Edit',
   CONTACT_ME: 'Contact me',
   COMPANY: 'Company',
   YOUR_NAME: 'Your name',
   NOT_SPECIFIED: 'Not specified',
-  SO_FAR_IT_IS_EMPTY: "So far, it's empty. Just tap to start creation",
   YOUR_INFO_IS_QUITE_EMPTY:
     'Your info is quite empty\nFill it in for the future cases',
-  PLEASE_INTRODUCE_YOURSELF: 'Please introduce yourself',
-  YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY:
-    'You dont have any completed interactions yet. Make one today!',
-  EDIT_BUSINESS_CARD: 'Edit Business Card',
-  CREATE_BUSINESS_CARD: 'Create Business Card',
 }
 
 const bottomBar = {

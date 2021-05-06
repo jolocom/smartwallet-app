@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { StyleSheet, View, LayoutAnimation } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -6,8 +6,13 @@ import Widget from '~/components/Widget/Widget'
 import Field from '~/components/Widget/Field'
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { attributeConfig } from '~/config/claims'
-import { getPrimitiveAttributes } from '~/modules/attributes/selectors'
-import { AttributeTypes, IAttributeConfig } from '~/types/credentials'
+import { getAttributes } from '~/modules/attributes/selectors'
+import {
+  AttributeTypes,
+  IAttributeConfig,
+  PrimitiveAttributeTypes,
+  TPrimitiveAttributesConfig,
+} from '~/types/credentials'
 
 import IdentityTabs from './tabs'
 import { strings } from '~/translations'
@@ -15,29 +20,17 @@ import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
 import { useSICActions } from '~/hooks/attributes'
-
-type TPrimitiveAttributeTypes = Exclude<
-  AttributeTypes,
-  AttributeTypes.businessCard
->
-type TPrimitiveAttributesConfig = Omit<
-  Record<AttributeTypes, IAttributeConfig>,
-  AttributeTypes.businessCard
->
+import BP from '~/utils/breakpoints'
 
 const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
-  const {
-    ProofOfBusinessCardCredential,
-    ...primitiveAttributesConfig
-  } = attributeConfig
-  return primitiveAttributesConfig
+  return attributeConfig
 }
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
 const IdentityCredentials = () => {
   const redirect = useRedirect()
-  const attributes = useSelector(getPrimitiveAttributes)
+  const attributes = useSelector(getAttributes)
   const { handleDeleteCredentialSI } = useSICActions()
 
   useLayoutEffect(() => {
@@ -51,9 +44,9 @@ const IdentityCredentials = () => {
     primitiveAttributesConfig,
   ).map(([type, config]) => {
     return {
-      type: type as TPrimitiveAttributeTypes,
+      type: type as PrimitiveAttributeTypes,
       label: config.label,
-      values: attributes[type as TPrimitiveAttributeTypes] ?? [],
+      values: attributes[type as PrimitiveAttributeTypes] ?? [],
     }
   })
 
@@ -76,36 +69,39 @@ const IdentityCredentials = () => {
       <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
-      {sortedPrimitiveAttributes.map(({ type, label, values }) => {
-        const hideCreateNew = type === AttributeTypes.name && values.length > 0
-        return (
-          <View style={styles.group} key={type}>
-            <Widget
-              onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
-            >
-              <Widget.Header>
-                <Widget.Header.Name value={label} />
-                {!hideCreateNew && <Widget.Header.Action.CreateNew />}
-              </Widget.Header>
-              {values.length ? (
-                values.map((field) => (
-                  <IdentityField
-                    key={field.id}
-                    id={field.id}
-                    type={type}
-                    value={Object.values(field.value).join(' ')}
-                    onDelete={() => handleDeleteCredentialSI(field.id, type)}
-                  />
-                ))
-              ) : (
-                <Field.Empty>
-                  <PencilIcon />
-                </Field.Empty>
-              )}
-            </Widget>
-          </View>
-        )
-      })}
+      <View style={styles.credentialsContainer}>
+        {sortedPrimitiveAttributes.map(({ type, label, values }) => {
+          const hideCreateNew =
+            type === AttributeTypes.name && values.length > 0
+          return (
+            <View style={styles.group} key={type}>
+              <Widget
+                onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
+              >
+                <Widget.Header>
+                  <Widget.Header.Name value={label} />
+                  {!hideCreateNew && <Widget.Header.Action.CreateNew />}
+                </Widget.Header>
+                {values.length ? (
+                  values.map((field) => (
+                    <IdentityField
+                      key={field.id}
+                      id={field.id}
+                      type={type}
+                      value={Object.values(field.value).join(' ')}
+                      onDelete={() => handleDeleteCredentialSI(field.id, type)}
+                    />
+                  ))
+                ) : (
+                  <Field.Empty>
+                    <PencilIcon />
+                  </Field.Empty>
+                )}
+              </Widget>
+            </View>
+          )
+        })}
+      </View>
     </View>
   )
 }
@@ -113,6 +109,9 @@ const IdentityCredentials = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+  },
+  credentialsContainer: {
+    marginTop: BP({ default: 32 }),
   },
   group: {
     marginBottom: 20,

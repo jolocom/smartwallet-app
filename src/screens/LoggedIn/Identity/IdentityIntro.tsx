@@ -8,12 +8,10 @@ import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 
 import SingleCredentialWizard from './SingleCredentialWizard'
-import BusinessCardWizard from './BusinessCardWizard'
 import { IdentityTabIds } from './types'
 
 enum IdentityForms {
   SingleCredential = 'SingleCredential',
-  BusinessCard = 'BusinessCard',
 }
 
 interface Props {
@@ -70,10 +68,6 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
           <SingleCredentialWizard
             onFormSubmit={() => handleSubmit(IdentityTabIds.credentials)}
           />
-        ) : activeForm === IdentityForms.BusinessCard ? (
-          <BusinessCardWizard
-            onFormSubmit={() => handleSubmit(IdentityTabIds.businessCard)}
-          />
         ) : (
           <>
             <Image source={require('~/assets/images/identityIntro.png')} />
@@ -90,14 +84,7 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
               type={BtnTypes.senary}
               testID="single-credential-button"
             >
-              {strings.SINGLE_CREDENTIAL}
-            </Btn>
-            <Btn
-              onPress={() => changeActiveForm(IdentityForms.BusinessCard)}
-              type={BtnTypes.senary}
-              testID="business-card-button"
-            >
-              {strings.BUSINESS_CARD}
+              {strings.START_NOW}
             </Btn>
           </>
         )}

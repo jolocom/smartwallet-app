@@ -11,6 +11,7 @@ import JoloText, {
   IJoloTextProps,
 } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import BP from '~/utils/breakpoints'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -103,7 +104,7 @@ const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
           alignSelf: 'flex-start',
           textAlign: 'left',
           marginTop: 16,
-          marginBottom: 8,
+          marginBottom: BP({ default: 8, small: 4, xsmall: 4 }),
         },
         customStyles,
       ]}

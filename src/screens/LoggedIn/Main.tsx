@@ -23,11 +23,9 @@ import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import LoaderTest from './Settings/Development/DevLoaders'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
-import BusinessCardTest from './Settings/Development/BusinessCardTest'
 import { shouldShowTermsConsent } from '~/modules/account/selectors'
 import TermsConsent from '~/screens/Modals/TermsConsent'
 import MainTabs from './MainTabs'
-import BusinessCardForm from '../Modals/Forms/BusinessCardForm'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
 import { IField } from '~/components/Card/types'
@@ -49,7 +47,6 @@ export type MainStackParamList = {
   [ScreenNames.PrivacyPolicy]: undefined
   [ScreenNames.TermsOfService]: undefined
   [ScreenNames.DragToConfirm]: undefined
-  [ScreenNames.BusinessCardForm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
   [ScreenNames.CardDetails]: {
     fields: IField[]
@@ -62,7 +59,6 @@ export type MainStackParamList = {
   [ScreenNames.NotificationsTest]: undefined
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
-  [ScreenNames.BusinessCardTest]: undefined
   [ScreenNames.InteractionCardsTest]: undefined
 }
 
@@ -176,11 +172,6 @@ const Main: React.FC = () => {
                 options={settingsScreenTransitionOptions}
               />
               <MainStack.Screen
-                name={ScreenNames.BusinessCardTest}
-                component={BusinessCardTest}
-                options={settingsScreenTransitionOptions}
-              />
-              <MainStack.Screen
                 name={ScreenNames.InteractionCardsTest}
                 component={InteractionTest}
                 options={settingsScreenTransitionOptions}
@@ -198,11 +189,6 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.CardDetails}
             component={CardDetails}
-            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
-          />
-          <MainStack.Screen
-            name={ScreenNames.BusinessCardForm}
-            component={BusinessCardForm}
             options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
           />
           <MainStack.Screen

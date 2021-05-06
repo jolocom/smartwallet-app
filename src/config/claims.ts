@@ -12,7 +12,6 @@ import {
   nameValidation,
   postalAddressValidation,
   mobileNumberValidation,
-  businessCardValidation,
 } from './validation'
 import { Platform, KeyboardTypeOptions } from 'react-native'
 
@@ -123,75 +122,9 @@ const nameConfig: IAttributeConfig = {
   validationSchema: nameValidation,
 }
 
-const businessCardConfig: IAttributeConfig = {
-  key: AttributeKeys.businessCard,
-  label: strings.BUSINESS_CARD,
-  // TODO: use config from cred-types-jolocom-core once available
-  metadata: {
-    type: ['Credential', 'ProofOfBusinessCardCredential'],
-    name: 'Business Card',
-    context: [
-      {
-        ProofOfBusinessCardCredential:
-          'https://identity.jolocom.com/terms/ProofOfBusinessCardCredential',
-        schema: 'http://schema.org/',
-        familyName: 'schema:familyName',
-        givenName: 'schema:givenName',
-        email: 'schema:email',
-        telephone: 'http://schema.org/telephone',
-        legalCompanyName: 'schema:legalName',
-      },
-    ],
-  },
-  fields: [
-    {
-      key: ClaimKeys.givenName,
-      label: strings.GIVEN_NAME_FIELD,
-      keyboardOptions: {
-        keyboardType: 'default',
-        autoCapitalize: 'words',
-      },
-    },
-    {
-      key: ClaimKeys.familyName,
-      label: strings.FAMILY_NAME_FIELD,
-      keyboardOptions: {
-        keyboardType: 'default',
-        autoCapitalize: 'words',
-      },
-    },
-    {
-      key: ClaimKeys.email,
-      label: strings.EMAIL,
-      keyboardOptions: {
-        keyboardType: 'email-address',
-        autoCapitalize: 'none',
-      },
-    },
-    {
-      key: ClaimKeys.telephone,
-      label: strings.NUMBER,
-      keyboardOptions: {
-        keyboardType: numberPadKeyboardType,
-        autoCapitalize: 'none',
-      },
-    },
-    {
-      key: ClaimKeys.legalCompanyName,
-      label: strings.COMPANY_NAME_FIELD,
-      keyboardOptions: {
-        keyboardType: 'default',
-        autoCapitalize: 'words',
-      },
-    },
-  ],
-  validationSchema: businessCardValidation,
-}
-
 export const attributeConfig: Record<AttributeTypes, IAttributeConfig> = {
   [AttributeTypes.name]: nameConfig,
   [AttributeTypes.emailAddress]: emailConfig,
   [AttributeTypes.mobilePhoneNumber]: mobileNumberConfig,
   [AttributeTypes.postalAddress]: postalAddressConfig,
-  [AttributeTypes.businessCard]: businessCardConfig,
 }
