@@ -48,12 +48,12 @@ const ChangePin: React.FC = () => {
         })
       },
       { success: strings.PASSCODE_CHANGED },
-      (success) => {
-        if (success) {
-          goBack()
-        } else {
+      (error) => {
+        if (error) {
           //TODO: possibility to show toast?
           setPasscodeState(PasscodeState.verify)
+        } else {
+          goBack()
         }
       },
     )
