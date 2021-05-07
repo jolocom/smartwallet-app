@@ -15,7 +15,7 @@ const useCredentialShareSubmit = () => {
       await assembleShareResponseToken()
       scheduleSuccessInteraction()
     } catch (e) {
-      scheduleErrorInteraction()
+      scheduleErrorInteraction(e)
     } finally {
       finishInteraction()
     }

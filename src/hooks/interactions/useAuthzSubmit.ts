@@ -20,7 +20,7 @@ const useAuthzSubmit = () => {
 
       scheduleSuccessInteraction()
     } catch (e) {
-      scheduleErrorInteraction()
+      scheduleErrorInteraction(e)
     } finally {
       finishInteraction()
     }

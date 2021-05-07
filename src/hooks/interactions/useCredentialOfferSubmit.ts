@@ -11,6 +11,7 @@ import { addCredentials } from '~/modules/credentials/actions'
 import { useCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
 import { CredentialCategories } from '~/types/credentials'
+import { SWErrorCodes } from '~/errors/codes'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -84,10 +85,13 @@ const useCredentialOfferSubmit = () => {
         finishInteraction()
       } else if (allInvalid) {
         //TODO: add translation interpolation to the toast message
-        scheduleErrorInteraction({
-          title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
-          message: strings.OFFER_ALL_INVALID_TOAST_MSG,
-        })
+        scheduleErrorInteraction(
+          new Error(SWErrorCodes.SWInteractionOfferAllInvalid),
+          {
+            title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
+            message: strings.OFFER_ALL_INVALID_TOAST_MSG,
+          },
+        )
         finishInteraction()
       } else {
         dispatch(updateOfferValidation(validatedCredentials))
@@ -97,7 +101,7 @@ const useCredentialOfferSubmit = () => {
         })
       }
     } catch (err) {
-      scheduleErrorInteraction()
+      scheduleErrorInteraction(err)
       console.log({ err })
       finishInteraction()
       throw new Error(err)
