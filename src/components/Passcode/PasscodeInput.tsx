@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     height: 87,
     borderRadius: 11,
     marginRight: DIGIT_MARGIN_RIGHT,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.dark,
     overflow: 'visible',
     borderWidth: 3,
     borderColor: 'transparent',
