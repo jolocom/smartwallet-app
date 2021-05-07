@@ -23,12 +23,14 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
 import { ErrorScreens } from '../errorContext'
 
-//FIXME: add the real strings
 const INQUIRIES_LIST = [
-  strings.POSSIBLE_PARTNERSHIP,
-  strings.ISSUES_WITH_THE_APP,
-  strings.I_LOST_MY_WALLET,
-  strings.HOW_TO_BECOME_PART_OF_THE_PROJECT,
+  strings.NO_INTERNET_CONNECTION,
+  strings.THE_APP_KEEPS_CRASHING,
+  strings.CANT_LOGIN,
+  strings.BACKUP_IS_EMPTY,
+  strings.PROBLEMS_WITH_THE_INTERFACE,
+  strings.SOMETHING_DOESNT_SEEM_RIGHT,
+  strings.OTHER,
 ]
 
 const DROPDOWN_OPTIONS = INQUIRIES_LIST.map((el) => ({
