@@ -1,6 +1,6 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import { useRoute, RouteProp } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
 import { setLogged, setDid } from '~/modules/account/actions'
@@ -22,12 +22,13 @@ import { useKeyboard } from './useKeyboard'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
-import { LoggedInStackParamList } from '~/screens/LoggedIn'
-import { useReplaceWith } from '~/hooks/navigation'
+import { useReplaceWith, usePopToTop, useGoBack } from '~/hooks/navigation'
+import { LockStackParamList } from '~/screens/LoggedIn/LockStack'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
   handlePhraseSubmit: () => void
+  handleCancel: () => void
   isPhraseComplete: boolean
 }
 
@@ -36,13 +37,15 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const recoveryDispatch = useRecoveryDispatch()
   const replaceWith = useReplaceWith()
   const dispatch = useDispatch()
+  const popToTop = usePopToTop()
+  const goBack = useGoBack()
 
   const agent = useAgent()
   const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
   const resetPin = useResetKeychainValues(PIN_SERVICE)
 
   const route = useRoute<
-    RouteProp<LoggedInStackParamList, ScreenNames.PasscodeRecovery>
+    RouteProp<LockStackParamList, ScreenNames.PasscodeRecovery>
   >()
 
   const isAccessRestore = route?.params?.isAccessRestore ?? false
@@ -84,13 +87,21 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
 
   const isPhraseComplete = phrase.length === 12
 
-  return { handlePhraseSubmit, isPhraseComplete }
+  const handleCancel = () => {
+    isAccessRestore ? popToTop() : goBack()
+  }
+
+  return { handlePhraseSubmit, isPhraseComplete, handleCancel }
 }
 
 const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
-  ({ areSuggestionsVisible, handlePhraseSubmit, isPhraseComplete }) => {
+  ({
+    areSuggestionsVisible,
+    handlePhraseSubmit,
+    handleCancel,
+    isPhraseComplete,
+  }) => {
     const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
-    const navigation = useNavigation()
 
     const { keyboardHeight } = useKeyboard()
 
@@ -116,7 +127,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
             <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
               {strings.CONFIRM}
             </Btn>
-            <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
+            <Btn type={BtnTypes.secondary} onPress={handleCancel}>
               {strings.BACK}
             </Btn>
           </BtnGroup>
@@ -135,14 +146,17 @@ const styles = StyleSheet.create({
 export default function () {
   const { phrase, areSuggestionsVisible } = useRecoveryState()
 
-  const { handlePhraseSubmit, isPhraseComplete } = useRecoveryPhraseUtils(
-    phrase,
-  )
+  const {
+    handlePhraseSubmit,
+    handleCancel,
+    isPhraseComplete,
+  } = useRecoveryPhraseUtils(phrase)
 
   return (
     <RecoveryFooter
       areSuggestionsVisible={areSuggestionsVisible}
       handlePhraseSubmit={handlePhraseSubmit}
+      handleCancel={handleCancel}
       isPhraseComplete={isPhraseComplete}
     />
   )

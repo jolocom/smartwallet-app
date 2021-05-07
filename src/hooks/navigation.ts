@@ -17,6 +17,14 @@ export const useGoBack = () => {
   }
 }
 
+export const usePopToTop = () => {
+  const navigation = useNavigation()
+
+  return () => {
+    navigation.dispatch(StackActions.popToTop)
+  }
+}
+
 export const useRedirect = () => {
   const navigation = useNavigation()
 
