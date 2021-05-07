@@ -74,7 +74,7 @@ export async function mapCredentialsToDisplay(
   credentials: CredentialIssuer,
   c: SignedCredential,
 ): Promise<DisplayCredential> {
-  const credentialType = await credentials.getCredentialType(c)
+  const credentialType = await credentials.types.forCredential(c)
 
   // TODO: sdk - get correctly resolved issuer profile it only returns string (did) not an identity summary
   const { definition, renderAs, issuerProfile } = credentialType

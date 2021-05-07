@@ -69,7 +69,7 @@ const useCredentialOfferFlow = () => {
     const issuanceResult = (interaction.flow as CredentialOfferFlow).getIssuanceResult()
 
     return issued.map((cred, i) => {
-      const offer = offerSummary.find(({ type }) => type === cred.type[1])
+      const offer = offerSummary.find(({ type }) => type === cred.type[1]);
       if (!offer)
         throw new Error('Could not find the offer for received credential')
 
@@ -85,6 +85,7 @@ const useCredentialOfferFlow = () => {
         category: getCredentialCategory(offer.renderInfo),
         invalid: isInvalid,
         name: offer.credential?.name ?? '',
+        properties: offer.credential?.display?.properties ?? []
       }
     })
   }
@@ -96,14 +97,6 @@ const useCredentialOfferFlow = () => {
   const storeSelectedCredentials = async () => {
     const interaction = await getInteraction()
     const signedCredentials: SignedCredential[] = await interaction.storeSelectedCredentials()
-
-    // store credential metadata and issuer profile (handled by storeCredentialType);
-    const credentialMetadata = (interaction.flow as CredentialOfferFlow).getOfferedCredentialMetadata()
-    await Promise.all(
-      Object.values(credentialMetadata).map((m) => {
-        agent.credentials.storeCredentialType(m)
-      }),
-    )
     return signedCredentials
   }
 

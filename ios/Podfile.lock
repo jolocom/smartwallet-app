@@ -25,8 +25,8 @@ PODS:
     - OpenSSL-Universal (= 1.0.2.20)
   - Flipper-Glog (0.3.6)
   - Flipper-PeerTalk (0.0.4)
-  - Flipper-RSocket (1.1.1):
-    - Flipper-Folly (~> 2.3)
+  - Flipper-RSocket (1.1.0):
+    - Flipper-Folly (~> 2.2)
   - FlipperKit (0.54.0):
     - FlipperKit/Core (= 0.54.0)
   - FlipperKit/Core (0.54.0):
@@ -336,7 +336,7 @@ PODS:
     - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
-  - RNJolocom (2.3.0):
+  - RNJolocom (2.3.1):
     - React
   - RNKeychain (6.2.0):
     - React
@@ -609,7 +609,7 @@ SPEC CHECKSUMS:
   Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
-  Flipper-RSocket: a3acb8812d6adf127deb0a5edae2793b97e6b641
+  Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
   FlipperKit: ab353d41aea8aae2ea6daaf813e67496642f3d7d
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
@@ -650,7 +650,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
-  RNJolocom: 5f3e016676802bad2da12bdd060cf3322d837c54
+  RNJolocom: 0c6964bbc93210bf8941ca3c080510034b4c9b05
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
@@ -667,4 +667,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 16ae00283f96c727f0410127dbf819da288ac66e
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.0

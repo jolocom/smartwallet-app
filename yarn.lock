@@ -2002,18 +2002,18 @@
   dependencies:
     ethers "5.0.5"
 
-"@jolocom/sdk-storage-typeorm@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-4.2.0.tgz#bcb559e2cbbf4246d302efb05778cb6e6d5bd7c1"
-  integrity sha512-LBmxfHBp8+ddOw/+Mbu3OU9mXoWuQhZQynl/eDkQ1VE0C0CJXTPrQ2g9LqzCHiwiAvOXajfnhb0l48+9awjydg==
+"@jolocom/sdk-storage-typeorm@^4.3.0-rc0":
+  version "4.3.0-rc0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk-storage-typeorm/-/sdk-storage-typeorm-4.3.0-rc0.tgz#5a0f686621adb8753e25c944362c9ce3df2e3d9e"
+  integrity sha512-UfJkSVH59Izi13VEczLTkuSj6nXV6kKvxDSpp3GacL6GJ6NPU5X4Jl1H9J50cIyiohZjUwVmdabX8sohzOiJJQ==
   dependencies:
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.2.0.tgz#39d7a026abe76f6aa638829a986c5dbd71f230f9"
-  integrity sha512-5+ISki5gy+zBn2Hi4qc0WMQ/CeHAGskNR+jt+RkB0CHvweI9uhcNS1Fb+uU34woo95bBMHqNv4/wET39mFFzYw==
+"@jolocom/sdk@^1.3.0-rc1":
+  version "1.3.0-rc1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.3.0-rc1.tgz#b51e40dc43e022ad60650324607a111861568874"
+  integrity sha512-m8y39GGxT93RSiVfcq/Mwmk1/vroRLTYxwVoF7ehTG+QVxoWS01g5YT0aIC8c2Z/mEmioSY3E6nTYdExbPhQKw==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.4"
     form-data "^3.0.0"
@@ -9306,12 +9306,11 @@ react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-react-native-jolocom@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.3.0.tgz#52b4027b1ceafebd64d304d6b74a8a0fb0ab0113"
-  integrity sha512-D2rB44iiQKtX0QW/Rv1TX06p/jy6PYvCun3Vml6IPyZ1WaRHjokE/RTZP+UdKTBxOp3qEfkLiaqFOZbx+Xtxhg==
+react-native-jolocom@../react-native-jolocom/react-native-jolocom-v2.3.1.tgz:
+  version "2.3.1"
+  resolved "../react-native-jolocom/react-native-jolocom-v2.3.1.tgz#e0f4596849953809411680ec3930cd1be77a54f9"
   dependencies:
-    "@jolocom/sdk-storage-typeorm" "^4.2.0"
+    "@jolocom/sdk-storage-typeorm" "^4.3.0-rc0"
     crypto-browserify "^3.12.0"
     object.assign "^4.1.0"
     react-native-crypto "^2.2.0"
