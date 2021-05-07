@@ -2010,10 +2010,10 @@
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.2.0.tgz#39d7a026abe76f6aa638829a986c5dbd71f230f9"
-  integrity sha512-5+ISki5gy+zBn2Hi4qc0WMQ/CeHAGskNR+jt+RkB0CHvweI9uhcNS1Fb+uU34woo95bBMHqNv4/wET39mFFzYw==
+"@jolocom/sdk@^1.3.0-rc1":
+  version "1.3.0-rc1"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.3.0-rc1.tgz#b51e40dc43e022ad60650324607a111861568874"
+  integrity sha512-m8y39GGxT93RSiVfcq/Mwmk1/vroRLTYxwVoF7ehTG+QVxoWS01g5YT0aIC8c2Z/mEmioSY3E6nTYdExbPhQKw==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.4"
     form-data "^3.0.0"

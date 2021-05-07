@@ -1,4 +1,3 @@
-import { AttributeTypes } from '~/types/credentials'
 import createAction from '~/utils/createAction'
 import {
   AttrActions,

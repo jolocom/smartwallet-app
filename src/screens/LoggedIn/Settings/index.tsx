@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import Btn, { BtnTypes } from '~/components/Btn'
 
 import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
@@ -24,19 +23,19 @@ import { useBiometry } from '~/hooks/biometry'
 import useBackup from '~/hooks/backup'
 import useMarketRating from '~/hooks/rateus'
 import { useAgent } from '~/hooks/sdk'
+import ClearIdentityBtn from './components/ClearIdentityBtn'
+import Btn, { BtnTypes } from '~/components/Btn'
 
 const SettingsGeneral: React.FC = () => {
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
   const { resetBiometry } = useBiometry()
   const { shouldWarnBackup } = useBackup()
   const { rateApp } = useMarketRating()
-  const agent = useAgent()
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
   const handleLogout = useCallback(async () => {
     try {
-      await agent.deleteIdentityData()
       await resetBiometry()
       await resetServiceValuesInKeychain()
       dispatch(resetAccount())
@@ -139,20 +138,17 @@ const SettingsGeneral: React.FC = () => {
         </Section>
         {__DEV__ && <DevelopmentSection />}
 
-        <Btn
-          type={BtnTypes.quinary}
-          onPress={handleLogout}
-          customContainerStyles={{ marginTop: 60 }}
-        >
-          {strings.EMPTY_WALLET}
-        </Btn>
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.tiniest}
-          customStyles={{ marginTop: 20, opacity: 0.2 }}
-        >
-          {strings.YOUR_IDENTITY_WILL_NOT_BE_DELETED}
-        </JoloText>
+        <ClearIdentityBtn />
+
+        {__DEV__ && (
+          <Btn
+            type={BtnTypes.quinary}
+            customContainerStyles={{ marginTop: 44 }}
+            onPress={handleLogout}
+          >
+            [DEV] Log out
+          </Btn>
+        )}
       </ScrollView>
     </ScreenContainer>
   )
