@@ -21,6 +21,7 @@ import { getDid } from '~/modules/account/selectors'
 import { useToasts } from '../toasts'
 import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
 import { parseJWT } from '~/utils/parseJWT'
+import useConnection from '../connection'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -35,9 +36,13 @@ export const useInteractionStart = () => {
   const did = useSelector(getDid)
   const dispatch = useDispatch()
   const loader = useLoader()
-  const {scheduleWarning, scheduleErrorWarning} = useToasts();
+  const { connected, showDisconnectedToast } = useConnection()
+  const { scheduleWarning, scheduleErrorWarning } = useToasts()
 
   return async (jwt: string) => {
+    // NOTE: not continuing the interaction if there is no network connection
+    if (connected === false) return showDisconnectedToast()
+
     // NOTE: we're parsing the jwt here, even though it will be parsed in `agent.processJWT`
     // below. This is to assure the error is caught before the loading screen, so that it can
     // be handled by the scanner component.

@@ -7,6 +7,7 @@ import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
+import useConnection from '~/hooks/connection'
 
 interface Props {
   onSubmit: () => Promise<any> | any
@@ -24,6 +25,7 @@ const InteractionFooter: React.FC<Props> = ({
 }) => {
   const loader = useLoader()
   const finishInteraction = useFinishInteraction()
+  const { connected } = useConnection()
 
   const handleSubmit = async () => {
     if (disableLoader) return onSubmit()
@@ -44,7 +46,7 @@ const InteractionFooter: React.FC<Props> = ({
       <BtnGroup alignment={BtnsAlignment.horizontal}>
         <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
           <Btn
-            disabled={disabled}
+            disabled={!connected || disabled}
             size={BtnSize.medium}
             onPress={handleSubmit}
             withoutMargins
