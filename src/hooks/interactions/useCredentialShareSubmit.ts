@@ -1,13 +1,12 @@
 import { useCredentialShareFlow } from './useCredentialShareFlow'
 import useInteractionToasts from './useInteractionToasts'
 import { useFinishInteraction } from './handlers'
+import { useToasts } from '../toasts'
 
 const useCredentialShareSubmit = () => {
   const { assembleShareResponseToken } = useCredentialShareFlow()
-  const {
-    scheduleSuccessInteraction,
-    scheduleErrorInteraction,
-  } = useInteractionToasts()
+  const { scheduleSuccessInteraction } = useInteractionToasts()
+  const { scheduleErrorWarning } = useToasts()
   const finishInteraction = useFinishInteraction()
 
   return async () => {
@@ -15,7 +14,7 @@ const useCredentialShareSubmit = () => {
       await assembleShareResponseToken()
       scheduleSuccessInteraction()
     } catch (e) {
-      scheduleErrorInteraction(e)
+      scheduleErrorWarning(e)
     } finally {
       finishInteraction()
     }

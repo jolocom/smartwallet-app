@@ -1,14 +1,13 @@
 import { useFinishInteraction, useInteraction } from './handlers'
 import useInteractionToasts from './useInteractionToasts'
 import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
 
 const useAuthSubmit = () => {
   const getInteraction = useInteraction()
   const agent = useAgent()
-  const {
-    scheduleErrorInteraction,
-    scheduleSuccessInteraction,
-  } = useInteractionToasts()
+  const { scheduleSuccessInteraction } = useInteractionToasts()
+  const { scheduleErrorWarning } = useToasts()
   const finishInteraction = useFinishInteraction()
 
   return async () => {
@@ -20,7 +19,7 @@ const useAuthSubmit = () => {
 
       scheduleSuccessInteraction()
     } catch (e) {
-      scheduleErrorInteraction(e)
+      scheduleErrorWarning(e)
     } finally {
       finishInteraction()
     }

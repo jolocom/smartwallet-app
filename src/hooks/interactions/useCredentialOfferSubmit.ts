@@ -23,11 +23,8 @@ const useCredentialOfferSubmit = () => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
-  const {
-    scheduleErrorInteraction,
-    scheduleSuccessInteraction,
-  } = useInteractionToasts()
-  const { scheduleInfo } = useToasts()
+  const { scheduleSuccessInteraction } = useInteractionToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
   const redirect = useRedirect()
   const finishInteraction = useFinishInteraction()
   const { signedCredentialToUI } = useCredentials()
@@ -85,7 +82,7 @@ const useCredentialOfferSubmit = () => {
         finishInteraction()
       } else if (allInvalid) {
         //TODO: add translation interpolation to the toast message
-        scheduleErrorInteraction(
+        scheduleErrorWarning(
           new Error(SWErrorCodes.SWInteractionOfferAllInvalid),
           {
             title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
@@ -101,7 +98,7 @@ const useCredentialOfferSubmit = () => {
         })
       }
     } catch (err) {
-      scheduleErrorInteraction(err)
+      scheduleErrorWarning(err)
       console.log({ err })
       finishInteraction()
       throw new Error(err)

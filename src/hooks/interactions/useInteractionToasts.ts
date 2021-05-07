@@ -3,7 +3,7 @@ import { ToastBody } from '~/types/toasts'
 import { strings } from '~/translations/strings'
 
 const useInteractionToasts = () => {
-  const { scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { scheduleInfo } = useToasts()
 
   const scheduleSuccessInteraction = (config?: Partial<ToastBody>) =>
     scheduleInfo({
@@ -12,19 +12,7 @@ const useInteractionToasts = () => {
       ...config,
     })
 
-  const scheduleErrorInteraction = (
-    error: Error,
-    config?: Partial<ToastBody>,
-  ) => {
-    scheduleErrorWarning(error, {
-      title: strings.ERROR_TOAST_TITLE,
-      message: strings.ERROR_TOAST_MSG,
-      ...config,
-    })
-  }
-
   return {
-    scheduleErrorInteraction,
     scheduleSuccessInteraction,
   }
 }
