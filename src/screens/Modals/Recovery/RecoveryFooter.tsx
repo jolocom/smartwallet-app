@@ -128,7 +128,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
               {strings.CONFIRM}
             </Btn>
             <Btn type={BtnTypes.secondary} onPress={handleCancel}>
-              {strings.BACK}
+              {strings.EXIT_RECOVERY}
             </Btn>
           </BtnGroup>
         </Animated.View>
