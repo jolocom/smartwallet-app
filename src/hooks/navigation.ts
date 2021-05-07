@@ -17,11 +17,11 @@ export const useGoBack = () => {
   }
 }
 
-export const usePopToTop = () => {
+export const usePop = () => {
   const navigation = useNavigation()
 
-  return () => {
-    navigation.dispatch(StackActions.popToTop)
+  return (n: number) => {
+    navigation.dispatch(StackActions.pop(n))
   }
 }
 

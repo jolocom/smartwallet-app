@@ -22,7 +22,7 @@ import { useKeyboard } from './useKeyboard'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
-import { useReplaceWith, usePopToTop, useGoBack } from '~/hooks/navigation'
+import { useReplaceWith, usePop, useGoBack } from '~/hooks/navigation'
 import { LockStackParamList } from '~/screens/LoggedIn/LockStack'
 
 interface RecoveryFooterI {
@@ -37,7 +37,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const recoveryDispatch = useRecoveryDispatch()
   const replaceWith = useReplaceWith()
   const dispatch = useDispatch()
-  const popToTop = usePopToTop()
+  const pop = usePop()
   const goBack = useGoBack()
 
   const agent = useAgent()
@@ -88,7 +88,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const isPhraseComplete = phrase.length === 12
 
   const handleCancel = () => {
-    isAccessRestore ? popToTop() : goBack()
+    isAccessRestore ? pop(2) : goBack()
   }
 
   return { handlePhraseSubmit, isPhraseComplete, handleCancel }
