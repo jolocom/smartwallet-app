@@ -4,19 +4,17 @@ import { useDispatch } from 'react-redux'
 
 import JoloText from '~/components/JoloText'
 import { useLoader } from '~/hooks/loader'
-import { useResetNavigation } from '~/hooks/navigation'
+import { useReplaceWith } from '~/hooks/navigation'
 import { useAgent } from '~/hooks/sdk'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { resetAttrs } from '~/modules/attributes/actions'
-import { resetCredentials } from '~/modules/credentials/actions'
+import { ScreenNames } from '~/types/screens'
 
 const ClearIdentityBtn = () => {
   const agent = useAgent()
   const loader = useLoader()
-  const resetNavigation = useResetNavigation()
-  const dispatch = useDispatch()
+  const replaceWith = useReplaceWith()
 
   const clearIdentityData = () => {
     loader(
@@ -26,13 +24,9 @@ const ClearIdentityBtn = () => {
       {},
       (err) => {
         if (!err) {
-          // NOTE: resetting navigation to unmount the @History tab, in case it
-          // was previously mounted
-          resetNavigation()
-
-          // NOTE: resetting the credentials and attributes stores
-          dispatch(resetAttrs())
-          dispatch(resetCredentials())
+          // NOTE: re-mounting Loggedin stack so it fetches updated storage and
+          // resets redux store for attributes and credentials
+          replaceWith(ScreenNames.LoggedIn)
         }
       },
     )

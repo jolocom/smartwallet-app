@@ -1,7 +1,6 @@
 import {
   useNavigation,
   StackActions,
-  CommonActions,
 } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
@@ -28,19 +27,6 @@ export const useRedirect = () => {
     screenName: ScreenNames,
     params: Record<string, any> & NestedSceenI = {},
   ) => navigation.navigate(screenName, params)
-}
-
-export const useResetNavigation = () => {
-  const navigation = useNavigation()
-
-  return () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: ScreenNames.Identity }],
-      }),
-    )
-  }
 }
 
 export const useRedirectTo = (

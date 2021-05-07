@@ -12,7 +12,6 @@ export enum AttrActions {
   updateAttrs = 'updateAttrs',
   editAttr = 'editAttr',
   deleteAttr = 'deleteAttr',
-  reset = 'reset',
 }
 
 export type ClaimValues = {

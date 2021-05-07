@@ -13,5 +13,3 @@ export const addCredentials = createAction<DisplayCredential[]>(
 export const deleteCredential = createAction<string>(
   CredentialActions.deleteCredential,
 )
-
-export const resetCredentials = createAction(CredentialActions.reset)

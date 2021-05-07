@@ -52,8 +52,6 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
 
       return state
     }
-    case AttrActions.reset:
-      return initialState
     default:
       return state
   }

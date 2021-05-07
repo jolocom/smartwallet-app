@@ -17,5 +17,3 @@ export const updateAttrs = createAction<AttributePayload>(
 export const editAttr = createAction<AttributePayloadEdit>(AttrActions.editAttr)
 
 export const deleteAttr = createAction(AttrActions.deleteAttr)
-
-export const resetAttrs = createAction(AttrActions.reset)
