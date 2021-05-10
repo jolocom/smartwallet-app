@@ -72,7 +72,7 @@ const ErrorReporting = () => {
   const isSubmitEnabled = () => {
     const fieldValues = Object.values(assembledData).filter(Boolean)
 
-    return fieldValues.length > 1
+    return fieldValues.length > 1 && contactValid
   }
 
   const handleResetState = () => {
@@ -226,7 +226,7 @@ const ErrorReporting = () => {
           <Btn.Online
             type={BtnTypes.primary}
             onPress={handleSubmit}
-            disabled={!contactValid || !isSubmitEnabled()}
+            disabled={!isSubmitEnabled()}
           >
             {strings.SEND}
           </Btn.Online>

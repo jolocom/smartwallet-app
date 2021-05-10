@@ -41,7 +41,7 @@ const InputUnderline: React.FC<IInputUnderline> = React.forwardRef<
 
     const onChange = (text: string) => {
       const newValidity =
-        text.length < 4
+        text.length < 1
           ? InputValidityState.none
           : validation.test(text)
           ? InputValidityState.valid
