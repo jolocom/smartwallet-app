@@ -16,7 +16,7 @@ import DeviceAuthentication from '../Modals/DeviceAuthentication'
 import Main from './Main'
 import { useCredentials } from '~/hooks/signedCredentials'
 import ScreenContainer from '~/components/ScreenContainer'
-import { useRedirect } from '~/hooks/navigation'
+import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
 
 export type LoggedInStackParamList = {
@@ -39,6 +39,7 @@ const LoggedIn = () => {
   const isAuthSet = useSelector(isLocalAuthSet)
   const isAppLocked = useSelector(getIsAppLocked)
   const redirect = useRedirect()
+  const replace = useReplaceWith()
 
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
@@ -88,7 +89,7 @@ const LoggedIn = () => {
 
   useEffect(() => {
     //NOTE: navigating imperatively b/c the Idle screen is rendered before Main
-    if (showTabs) redirect(ScreenNames.Main)
+    if (showTabs) replace(ScreenNames.Main)
   }, [showTabs])
 
   return (
