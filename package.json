@@ -57,7 +57,7 @@
     "react-native-hide-with-keyboard": "^1.2.1",
     "react-native-hyperlink": "^0.0.19",
     "react-native-indicators": "^0.17.0",
-    "react-native-jolocom": "../react-native-jolocom/react-native-jolocom-v2.3.1.tgz",
+    "react-native-jolocom": "^2.4.0-rc0",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-keychain": "^6.0.0",
     "react-native-level-fs": "^3.0.0",
