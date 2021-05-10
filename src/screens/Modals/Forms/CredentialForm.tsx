@@ -69,6 +69,10 @@ const CredentialForm = () => {
     : {}
 
   const handleCredentialSubmit = async (claims: Record<string, string>) => {
+    Object.keys(claims).forEach((claim) => {
+      claims[claim] = claims[claim].trim()
+    })
+
     try {
       if (attributeId) {
         await handleEditCredentialSI(
