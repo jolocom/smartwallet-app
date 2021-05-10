@@ -13,11 +13,17 @@ import { getInteractionType } from '~/modules/interaction/selectors'
 
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
+import { useBackHandler } from '@react-native-community/hooks'
 
 const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
 
   const finishInteraction = useFinishInteraction()
+
+  useBackHandler(() => {
+    finishInteraction()
+    return true
+  })
 
   const renderInteractionBody = () => {
     switch (interactionType) {
