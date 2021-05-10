@@ -26,7 +26,6 @@ import {
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
 import { getOptionalFields } from './utils'
-import { CredentialRenderTypes } from 'jolocom-lib/js/interactionTokens/types'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { MainTabsParamList } from '../MainTabs'
 import { ScreenNames } from '~/types/screens'
@@ -87,7 +86,7 @@ const DocumentList = () => {
 
   const documents = useMemo(
     () =>
-      categories !== null ? categories[CredentialRenderTypes.document] : [],
+      categories !== null ? categories[CredentialCategories.document] : [],
     [JSON.stringify(categories)],
   )
   const other = useMemo(
