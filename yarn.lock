@@ -2016,9 +2016,9 @@
     tslib "^1.9.3"
 
 "@sentry/cli@^1.52.4":
-  version "1.64.1"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.64.1.tgz#632565d8f8b40ada51333ae38b7001ef35457a0b"
-  integrity sha512-G+TzOSG+58fG3f5uYvPXweK65f1sP/8MWSEuRmJE4P0JJTTXQI6WErvrqrhfR5F7UVvGzltEbpc8rvO7N3+88A==
+  version "1.64.2"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.64.2.tgz#38a68d31692675061fdedd27d4006a249bc915a9"
+  integrity sha512-hBF8cswn878W7YqAgeg/vcQ51BgtpeiklGV6Q5MEXqGXtbjaKTBYBcKTkhzpkkcUtTu5bFkVcdGzVtpl4oBe+g==
   dependencies:
     https-proxy-agent "^5.0.0"
     mkdirp "^0.5.5"
@@ -3166,9 +3166,9 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
 boolean@^3.0.1:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.3.tgz#0fee0c9813b66bef25a8a6a904bb46736d05f024"
-  integrity sha512-EqrTKXQX6Z3A2nRmMEIlAIfjQOgFnVO2nqZGpbcsPnYGWBwpFqzlrozU1dy+S2iqfYDLh26ef4KrgTxu9xQrxA==
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.4.tgz#aa1df8749af41d7211b66b4eee584722ff428c27"
+  integrity sha512-5pyOr+w2LNN72F2mAq6J0ckHUfJYSgRKma7e/wlcMMhgOLV9OI0ERhERYXxUqo+dPyVxcbXKy9n+wg13+LpNnA==
 
 boxen@^1.2.1:
   version "1.3.0"
@@ -9050,10 +9050,10 @@ react-native-bootsplash@^3.2.0:
     fs-extra "^9.1.0"
     jimp "^0.16.1"
 
-react-native-camera@^3.30.0:
-  version "3.43.6"
-  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.43.6.tgz#94b99b19ea6e84e1a87c502274db207b0fa3b732"
-  integrity sha512-O6BDl0Rzsmbh4LF/4GqokIA6Q1tyhx0IlZuQ5wVKnKsGgZp/JAxF9W/2dsPjd5KyL8TgXEgpK0mqOjxd9lP5iw==
+react-native-camera@3.30.0:
+  version "3.30.0"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.30.0.tgz#b81ea540b06b40464a43931e86b870ffbeb280e6"
+  integrity sha512-rZorpBHXnc4MT9N6ddV4iC7h9dSUx4umtXvAKMkdYr3ZONlZcEfWxup7YCeAZ5wu4x43SvhSiTfYd8g0q+V0wg==
   dependencies:
     prop-types "^15.6.2"
 
