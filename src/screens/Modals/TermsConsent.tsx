@@ -46,20 +46,18 @@ const ExpandingButton: React.FC<{ title: string; content: string }> = ({
 }) => {
   const [expanded, setExpanded] = useState(false)
 
-  const handleExpand = (state: boolean) => {
+  const handleExpand = () => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 300,
     })
-    setExpanded(state)
+    setExpanded((prev) => !prev)
   }
 
   return (
     <>
-      <ConsentButton text={title} onPress={() => handleExpand(true)} />
-      {expanded && (
-        <ConsentText text={content} onPress={() => handleExpand(false)} />
-      )}
+      <ConsentButton text={title} onPress={handleExpand} />
+      {expanded && <ConsentText text={content} onPress={handleExpand} />}
     </>
   )
 }
