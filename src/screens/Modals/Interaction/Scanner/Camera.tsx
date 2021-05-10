@@ -33,6 +33,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Dialog from '~/components/Dialog'
+import { useIsFocused } from '@react-navigation/core'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -44,7 +45,7 @@ const Camera = () => {
   const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
   const shouldScan = !interactionType && !isLoaderVisible
-  const overlayVisible = !interactionType
+  const overlayVisible = useIsFocused()
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -151,8 +152,13 @@ const Camera = () => {
             <View style={styles.topOverlay}>
               {SHOW_LOCAL_NETWORK_DIALOG && (
                 <Dialog onPress={handleLocalPermissionPress}>
-                  <JoloText customStyles={{ textAlign: 'left' }} size={JoloTextSizes.mini} color={Colors.white}>
-                    {strings.LOCAL_PERMISSION_DIALOG}{'     '}
+                  <JoloText
+                    customStyles={{ textAlign: 'left' }}
+                    size={JoloTextSizes.mini}
+                    color={Colors.white}
+                  >
+                    {strings.LOCAL_PERMISSION_DIALOG}
+                    {'     '}
                     <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
                       {BP({
                         default: strings.MANAGE,
