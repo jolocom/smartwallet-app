@@ -221,7 +221,7 @@ const settings = {
   EXPORT_BACKUP_FILE: 'Export backup file',
   IMPORT_FILE: 'Import file',
   LAST_BACKUP: 'Last backup',
-  CONTACT_US_GET_IN_TOUCH: 'Leave us your email or number...',
+  CONTACT_US_GET_IN_TOUCH: 'Write your email here...',
   EMPTY_WALLET: 'Empty wallet',
   YOUR_IDENTITY_WILL_NOT_BE_DELETED:
     'Your identity will not be deleted, but we will erase all the documents and data from your wallet',
