@@ -25,6 +25,7 @@ const Registration: React.FC = () => {
       <Stack.Screen
         name={ScreenNames.SeedPhraseRepeat}
         component={SeedPhraseRepeat}
+        options={{ gestureEnabled: __DEV__ }}
       />
     </Stack.Navigator>
   )
