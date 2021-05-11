@@ -66,7 +66,7 @@ const ContactUs: React.FC = () => {
   const isBtnEnabled = () => {
     const fieldValues = Object.values(assembledData).filter(Boolean)
 
-    return fieldValues.length > 1
+    return fieldValues.length > 1 && contactValid
   }
 
   return (
@@ -140,7 +140,7 @@ const ContactUs: React.FC = () => {
         <Btn.Online
           type={BtnTypes.primary}
           onPress={handleSubmit}
-          disabled={!contactValid || !isBtnEnabled()}
+          disabled={!isBtnEnabled()}
         >
           {strings.SEND}
         </Btn.Online>
