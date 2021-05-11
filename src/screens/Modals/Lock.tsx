@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { BackHandler, Platform } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { strings } from '~/translations/strings'
@@ -13,12 +14,14 @@ import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
 import { setPopup } from '~/modules/appState/actions'
-import { BackHandler } from 'react-native'
+
 
 const Lock = () => {
   const dispatch = useDispatch()
   const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
   const { authenticate, getEnrolledBiometry } = useBiometry()
+  const [biometryType, setBiometryType] = useState<BiometryType>()
+  const [biometryAvailable, setBiometryAvailable] = useState(false)
 
   const { currentAppState, prevAppState } = useGetAppStates()
 
@@ -28,6 +31,13 @@ const Lock = () => {
     BackHandler.exitApp()
     return true
   })
+
+  useEffect(() => {
+    getEnrolledBiometry().then(({ available, biometryType }) => {
+      setBiometryType(biometryType)
+      setBiometryAvailable(available)
+    })
+  }, [])
 
   useEffect(() => {
     if (isBiometrySelected) {
@@ -51,9 +61,7 @@ const Lock = () => {
     try {
       dispatch(setPopup(true))
       /* in case user disabled biometrics we don't want to run authenticate */
-      const { available, biometryType } = await getEnrolledBiometry()
-
-      if (available) {
+      if (biometryAvailable) {
         const { success } = await authenticate(biometryType)
         if (success) {
           unlockApp()
