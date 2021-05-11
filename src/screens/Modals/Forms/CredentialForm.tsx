@@ -45,9 +45,8 @@ const mergeAttributeValuesWithConfig = (
 }
 
 const CredentialForm = () => {
-  const route = useRoute<
-    RouteProp<MainStackParamList, ScreenNames.CredentialForm>
-  >()
+  const route =
+    useRoute<RouteProp<MainStackParamList, ScreenNames.CredentialForm>>()
   const { id: attributeId, type: attributeType } = route.params
   const { t } = useTranslation()
 
@@ -69,6 +68,10 @@ const CredentialForm = () => {
     : {}
 
   const handleCredentialSubmit = async (claims: Record<string, string>) => {
+    Object.keys(claims).forEach((claim) => {
+      claims[claim] = claims[claim].trim()
+    })
+
     try {
       if (attributeId) {
         await handleEditCredentialSI(
@@ -107,6 +110,10 @@ const CredentialForm = () => {
           isValid,
           dirty,
         } = formProps
+        const isPrevEqual = Object.keys(formInitial).every((k) => {
+          if (formInitial[k] === values[k].trim()) return true
+          return false
+        })
         return (
           <FormContainer
             title={t(
@@ -119,7 +126,7 @@ const CredentialForm = () => {
               strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
             )}
             onSubmit={() => handleCredentialSubmit(values)}
-            isSubmitDisabled={!isValid || !dirty}
+            isSubmitDisabled={!isValid || !dirty || isPrevEqual}
           >
             <AutofocusContainer>
               {formConfig.fields.map((field, i) => {
