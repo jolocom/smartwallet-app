@@ -66,7 +66,7 @@ const Walkthrough: React.FC = () => {
       <Swiper
         loop
         autoplay
-        autoplayTimeout={2}
+        autoplayTimeout={5}
         renderPagination={renderPagination}
       >
         {walkthroughData.map((slide, idx) => (
