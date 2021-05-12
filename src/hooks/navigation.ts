@@ -20,6 +20,14 @@ export const useGoBack = () => {
   }
 }
 
+export const usePop = () => {
+  const navigation = useNavigation()
+
+  return (n: number) => {
+    navigation.dispatch(StackActions.pop(n))
+  }
+}
+
 export const useRedirect = () => {
   const navigation = useNavigation()
 

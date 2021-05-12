@@ -33,6 +33,7 @@ export const recovery = {
     'Are you sure you do not have a copy stored somewhere safe?',
   FORGOT_SEED_INFO_HIGHLIGHT_4:
     'Think back to when you first created your identity…',
+  EXIT_RECOVERY: 'Exit recovery',
 }
 
 const walkthrough = {

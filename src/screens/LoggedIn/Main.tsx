@@ -31,6 +31,8 @@ import { PrimitiveAttributeTypes } from '~/types/credentials'
 import { IField } from '~/components/Card/types'
 import CardDetails from './Documents/CardDetails'
 import InteractionTest from './Settings/Development/InteractionCardsTest'
+import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
+import Recovery from '../Modals/Recovery'
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
@@ -60,6 +62,10 @@ export type MainStackParamList = {
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
   [ScreenNames.InteractionCardsTest]: undefined
+  [ScreenNames.PinRecoveryInstructions]: undefined
+  [ScreenNames.PasscodeRecovery]: {
+    isAccessRestore: boolean
+  }
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -194,6 +200,18 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.CredentialForm}
             component={CredentialForm}
+            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+          />
+
+          {/* NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
+          <MainStack.Screen
+            name={ScreenNames.PinRecoveryInstructions}
+            component={PinRecoveryInstructions}
+            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+          />
+          <MainStack.Screen
+            name={ScreenNames.PasscodeRecovery}
+            component={Recovery}
             options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
           />
           {/* Modals -> End */}
