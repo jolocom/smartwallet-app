@@ -53,6 +53,7 @@ const KeyboardRow: React.FC = ({ children }) => {
 
 const PasscodeKeyboard: React.FC<IPasscodeKeyboardProps> = ({
   biometryType,
+  onBiometryPress,
 }) => {
   const { pin, setPin } = usePasscode()
 
@@ -94,7 +95,7 @@ const PasscodeKeyboard: React.FC<IPasscodeKeyboardProps> = ({
         <NumberButton value={9} onPress={handleNumberPress} />
       </KeyboardRow>
       <KeyboardRow>
-        <CustomButton>
+        <CustomButton onPress={onBiometryPress}>
           <View style={styles.biometryContainer}>{renderBiometryIcon()}</View>
         </CustomButton>
         <NumberButton value={0} onPress={handleNumberPress} />

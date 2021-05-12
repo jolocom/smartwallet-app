@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { BackHandler, Platform } from 'react-native'
+import { BackHandler } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
+import { BiometryType } from 'react-native-biometrics'
 
 import { strings } from '~/translations/strings'
 
@@ -35,6 +36,9 @@ const Lock = () => {
     getEnrolledBiometry().then(({ available, biometryType }) => {
       setBiometryType(biometryType)
       setBiometryAvailable(available)
+      if (available) {
+        handleBiometryAuthentication()
+      }
     })
   }, [])
 
@@ -50,7 +54,7 @@ const Lock = () => {
         }
       }
     }
-  }, [currentAppState, prevAppState, isBiometrySelected])
+  }, [currentAppState, prevAppState, isBiometrySelected, biometryAvailable])
 
   const unlockApp = useCallback(() => {
     dispatch(setAppLocked(false))
@@ -97,7 +101,12 @@ const Lock = () => {
         </Passcode.Container>
         <Passcode.Container>
           <Passcode.Forgot />
-          <Passcode.Keyboard biometryType={biometryType} />
+          <Passcode.Keyboard
+            biometryType={isBiometrySelected ? biometryType : undefined}
+            onBiometryPress={
+              isBiometrySelected ? handleBiometryAuthentication : undefined
+            }
+          />
         </Passcode.Container>
       </Passcode>
     </ScreenContainer>

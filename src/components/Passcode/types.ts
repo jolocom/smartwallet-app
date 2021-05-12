@@ -13,6 +13,7 @@ export interface IPasscodeHeaderProps {
 
 export interface IPasscodeKeyboardProps {
   biometryType?: BiometryType
+  onBiometryPress?: () => void
 }
 
 export interface IPasscodeComposition {
