@@ -1,12 +1,13 @@
 import React from 'react'
 import { TouchableOpacity, View, StyleSheet, ViewStyle } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
-import { TouchIdIcon, FaceIdIcon } from '~/assets/svg'
+import { FingerprintIcon, FaceIdIcon } from '~/assets/svg'
 
 import Ripple from '~/components/Ripple'
 
 import { Colors } from '~/utils/colors'
 import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
+import LinearGradient from 'react-native-linear-gradient'
 
 interface PropsI {
   biometryType: BiometryTypes
@@ -34,12 +35,31 @@ const BiometryAnimation: React.FC<PropsI> = ({
           maxValue2={15}
         />
       </View>
-      {isFaceBiometry ? <FaceIdIcon /> : <TouchIdIcon />}
+      <LinearGradient
+        style={styles.gradient}
+        colors={[Colors.ceriseRed, Colors.disco]}
+      >
+        <View style={styles.button}>
+          {isFaceBiometry ? <FaceIdIcon /> : <FingerprintIcon />}
+        </View>
+      </LinearGradient>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    width: 75,
+    height: 75,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 75 / 2,
+  },
+  button: {
+    width: 40,
+    height: 40,
+    transform: [{ rotate: '30deg' }],
+  },
   animationContainer: {
     marginTop: '40%',
     marginBottom: '30%',
