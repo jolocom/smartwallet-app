@@ -39,6 +39,7 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
         color={Colors.white85}
         customStyles={{
           alignSelf: 'flex-start',
+          marginTop: BP({ default: 40, xsmall: 32 }),
         }}
       >
         {strings.HOW_TO_CHANGE_PIN}
