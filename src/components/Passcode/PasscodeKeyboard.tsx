@@ -5,7 +5,12 @@ import { usePasscode } from './context'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { BackArrowIcon, FaceIdIcon, FingerprintIcon } from '~/assets/svg'
+import {
+  BackArrowIcon,
+  FaceIdIcon,
+  FingerprintIcon,
+  KeyboardEraseIcon,
+} from '~/assets/svg'
 import BP from '~/utils/breakpoints'
 import { IPasscodeKeyboardProps } from './types'
 import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
@@ -100,8 +105,7 @@ const PasscodeKeyboard: React.FC<IPasscodeKeyboardProps> = ({
         </CustomButton>
         <NumberButton value={0} onPress={handleNumberPress} />
         <CustomButton onPress={handleDeleteNumber}>
-          {/* FIXME: add the real icon */}
-          <BackArrowIcon />
+          <KeyboardEraseIcon />
         </CustomButton>
       </KeyboardRow>
     </View>
