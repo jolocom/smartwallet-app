@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
   button: {
     width: 40,
     height: 40,
-    transform: [{ rotate: '30deg' }],
   },
   animationContainer: {
     marginTop: '40%',
