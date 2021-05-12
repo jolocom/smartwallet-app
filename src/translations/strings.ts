@@ -64,6 +64,12 @@ const errors = {
   ERROR_REPORTING_LOGS_WARNING:
     'This includes certain private metadata info (like file sizes - but not personal information) and will help developers fix bugs even quicker',
   ERROR_REPORTING_RATE: 'Rate the issue',
+  NO_INTERNET_CONNECTION: 'No internet connection',
+  THE_APP_KEEPS_CRASHING: 'The app keeps crashing',
+  CANT_LOGIN: "Can't login",
+  BACKUP_IS_EMPTY: 'Backup is empty',
+  PROBLEMS_WITH_THE_INTERFACE: 'Problems with the interface',
+  SOMETHING_DOESNT_SEEM_RIGHT: "Something doesn't seem right",
 }
 
 const passcode = {
