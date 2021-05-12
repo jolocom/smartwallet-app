@@ -1,14 +1,12 @@
 import React from 'react'
 import { TouchableOpacity, View, StyleSheet, ViewStyle } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
-
-import TouchIdIcon from '~/assets/svg/TouchIdIcon'
-import FaceIdIcon from '~/assets/svg/FaceIdIcon'
+import { TouchIdIcon, FaceIdIcon } from '~/assets/svg'
 
 import Ripple from '~/components/Ripple'
 
 import { Colors } from '~/utils/colors'
-import { BiometryTypes } from '~/screens/DeviceAuthentication/module/deviceAuthTypes'
+import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
 
 interface PropsI {
   biometryType: BiometryTypes
