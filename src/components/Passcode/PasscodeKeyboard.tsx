@@ -5,8 +5,10 @@ import { usePasscode } from './context'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { BackArrowIcon } from '~/assets/svg'
+import { BackArrowIcon, FaceIdIcon, FingerprintIcon } from '~/assets/svg'
 import BP from '~/utils/breakpoints'
+import { IPasscodeKeyboardProps } from './types'
+import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
 
 interface NumberButtonProps {
   value: number
@@ -49,7 +51,9 @@ const KeyboardRow: React.FC = ({ children }) => {
   return <View style={styles.row}>{children}</View>
 }
 
-const PasscodeKeyboard = () => {
+const PasscodeKeyboard: React.FC<IPasscodeKeyboardProps> = ({
+  biometryType,
+}) => {
   const { pin, setPin } = usePasscode()
 
   const handleNumberPress = (value: number) => {
@@ -58,6 +62,18 @@ const PasscodeKeyboard = () => {
 
   const handleDeleteNumber = () => {
     setPin(pin.slice(0, -1))
+  }
+
+  const renderBiometryIcon = () => {
+    switch (biometryType) {
+      case BiometryTypes.FaceID:
+        return <FaceIdIcon />
+      case BiometryTypes.Biometrics:
+      case BiometryTypes.TouchID:
+        return <FingerprintIcon />
+      default:
+        return null
+    }
   }
 
   return (
@@ -78,7 +94,9 @@ const PasscodeKeyboard = () => {
         <NumberButton value={9} onPress={handleNumberPress} />
       </KeyboardRow>
       <KeyboardRow>
-        <CustomButton />
+        <CustomButton>
+          <View style={styles.biometryContainer}>{renderBiometryIcon()}</View>
+        </CustomButton>
         <NumberButton value={0} onPress={handleNumberPress} />
         <CustomButton onPress={handleDeleteNumber}>
           {/* FIXME: add the real icon */}
@@ -107,6 +125,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 2,
+  },
+  biometryContainer: {
+    padding: 12,
+    width: '100%',
+    height: '100%',
   },
 })
 

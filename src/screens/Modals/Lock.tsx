@@ -15,7 +15,6 @@ import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
 import { setPopup } from '~/modules/appState/actions'
 
-
 const Lock = () => {
   const dispatch = useDispatch()
   const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
@@ -98,7 +97,7 @@ const Lock = () => {
         </Passcode.Container>
         <Passcode.Container>
           <Passcode.Forgot />
-          <Passcode.Keyboard />
+          <Passcode.Keyboard biometryType={biometryType} />
         </Passcode.Container>
       </Passcode>
     </ScreenContainer>
