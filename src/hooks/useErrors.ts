@@ -4,7 +4,7 @@ const useErrors = () => {
   const { setError, ...state } = useErrorContext()
 
   const showErrorDisplay = (error?: Error) => {
-    setError(ErrorScreens.errorDisplay, error)
+    setError(ErrorScreens.errorDisplay, error ?? null)
   }
 
   const showErrorReporting = (error?: Error) => {

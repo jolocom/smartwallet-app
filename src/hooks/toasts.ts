@@ -29,6 +29,7 @@ export const useToasts = () => {
     dispatch(scheduleToast(createStickyToast(toast)))
   }
 
+  //TODO: don't pass title and message, but rather get them based on the SW error code
   const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) =>
     scheduleWarning({
       title: strings.ERROR_TOAST_TITLE,

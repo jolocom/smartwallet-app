@@ -7,7 +7,8 @@ export enum SWErrorCodes {
   SWSeedNotFound = 'SWSeedNotFound',
   SWInteractioNotFound = 'InteractionNotFound',
   SWInteractionRequestMissingDocuments = 'SWInteractionRequestMissingDocuments',
-  SWInteractionUnknownError = 'SWInteractionUnknownError'
+  SWInteractionUnknownError = 'SWInteractionUnknownError',
+  SWInteractionOfferAllInvalid = 'SWInteractionOfferAllInvalid',
 }
 
 export const UIErrors: Partial<
@@ -25,18 +26,21 @@ export const UIErrors: Partial<
   [SWErrorCodes.SWInteractionUnknownError]: {
     title: strings.INTERACTION_ERROR_TITLE,
     message: strings.INTERACTION_ERROR_MESSAGE,
-  }
+  },
+  [SWErrorCodes.SWInteractionOfferAllInvalid]: {
+    title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
+    message: strings.OFFER_ALL_INVALID_TOAST_MSG,
+  },
 }
 
 interface IUIError extends Error {
   message: SWErrorCodes
-} 
-
-export function isUIError(error: Error): error is IUIError {
-  return Object.values(SWErrorCodes).includes(error.message)
 }
 
+export function isUIError(error: Error): error is IUIError {
+  return Object.values(SWErrorCodes).includes(error.message as SWErrorCodes)
+}
 
 export function isError(error: any): error is Error {
-  return error instanceof Error;
+  return error instanceof Error
 }

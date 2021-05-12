@@ -13,7 +13,7 @@ exports[`ToggleSwitch should render the switch with disabled initial state 1`] =
   onStartShouldSetResponder={[Function]}
   style={
     Object {
-      "backgroundColor": "rgb(35, 36, 38)",
+      "backgroundColor": "rgb(42, 34, 43)",
       "borderRadius": 45,
       "height": 30,
       "justifyContent": "center",
@@ -93,7 +93,7 @@ exports[`ToggleSwitch should render the switch with enabled initial state 1`] = 
   onStartShouldSetResponder={[Function]}
   style={
     Object {
-      "backgroundColor": "rgb(35, 36, 38)",
+      "backgroundColor": "rgb(42, 34, 43)",
       "borderRadius": 45,
       "height": 30,
       "justifyContent": "center",

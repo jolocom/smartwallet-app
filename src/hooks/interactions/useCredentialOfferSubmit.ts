@@ -11,6 +11,7 @@ import { addCredentials } from '~/modules/credentials/actions'
 import { useCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
 import { CredentialCategories } from '~/types/credentials'
+import { SWErrorCodes } from '~/errors/codes'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
@@ -22,11 +23,8 @@ const useCredentialOfferSubmit = () => {
     credentialsAlreadyIssued,
     checkDuplicates,
   } = useCredentialOfferFlow()
-  const {
-    scheduleErrorInteraction,
-    scheduleSuccessInteraction,
-  } = useInteractionToasts()
-  const { scheduleInfo } = useToasts()
+  const { scheduleSuccessInteraction } = useInteractionToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
   const redirect = useRedirect()
   const finishInteraction = useFinishInteraction()
   const { signedCredentialToUI } = useCredentials()
@@ -84,10 +82,13 @@ const useCredentialOfferSubmit = () => {
         finishInteraction()
       } else if (allInvalid) {
         //TODO: add translation interpolation to the toast message
-        scheduleErrorInteraction({
-          title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
-          message: strings.OFFER_ALL_INVALID_TOAST_MSG,
-        })
+        scheduleErrorWarning(
+          new Error(SWErrorCodes.SWInteractionOfferAllInvalid),
+          {
+            title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
+            message: strings.OFFER_ALL_INVALID_TOAST_MSG,
+          },
+        )
         finishInteraction()
       } else {
         dispatch(updateOfferValidation(validatedCredentials))
@@ -97,7 +98,7 @@ const useCredentialOfferSubmit = () => {
         })
       }
     } catch (err) {
-      scheduleErrorInteraction()
+      scheduleErrorWarning(err)
       console.log({ err })
       finishInteraction()
       throw new Error(err)
