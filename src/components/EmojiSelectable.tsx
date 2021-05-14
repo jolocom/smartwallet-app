@@ -26,6 +26,11 @@ const SELECTABLE_OPTIONS = Object.entries(Emojis).map(([key, value]) => ({
 const EmojiSelectable = () => {
   const { selectedValue, onSelect, setSelectedValue } = useSelectableState()
 
+  const handleSelect = (option: IOption<string | number>) => {
+    setSelectedValue(option)
+    onSelect(option)
+  }
+
   return (
     <View style={styles.container}>
       {SELECTABLE_OPTIONS.map((option) => {
@@ -37,10 +42,7 @@ const EmojiSelectable = () => {
         return (
           <TouchableHighlight
             key={option.id}
-            onPress={() => {
-              setSelectedValue(option)
-              onSelect(option)
-            }}
+            onPress={() => handleSelect(option)}
             style={[styles.emojiContainer, selectionStyle]}
           >
             <Text style={styles.emoji}>{option.value}</Text>
