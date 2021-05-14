@@ -18,7 +18,10 @@ import {
   IAttributeClaimFieldWithValue,
 } from '~/types/credentials'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
-import { getPrimitiveAttributeById } from '~/modules/attributes/selectors'
+import {
+  getAllValuesForType,
+  getPrimitiveAttributeById,
+} from '~/modules/attributes/selectors'
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
@@ -53,6 +56,8 @@ const CredentialForm = () => {
   const editAttribute = useSelector(
     getPrimitiveAttributeById(attributeId ?? ''),
   )
+
+  const attributeValues = useSelector(getAllValuesForType(attributeType))
 
   const formConfig = mergeAttributeValuesWithConfig(
     attributeConfig[attributeType],
@@ -106,6 +111,7 @@ const CredentialForm = () => {
           values,
           errors,
           setFieldTouched,
+          setFieldError,
           touched,
           isValid,
           dirty,
@@ -114,6 +120,19 @@ const CredentialForm = () => {
           if (formInitial[k] === values[k].trim()) return true
           return false
         })
+        const concatValue = Object.keys(values).reduce<string>((acc, v) => {
+          return acc + values[v]
+        }, '')
+
+        if (attributeValues?.indexOf(concatValue) !== -1) {
+          if (!errors[Object.keys(values)[0]]) {
+            setFieldError(
+              Object.keys(values)[0],
+              strings.ERROR_ATTRIBUTE_ALREADY_EXISTS,
+            )
+          }
+        }
+
         return (
           <FormContainer
             title={t(
