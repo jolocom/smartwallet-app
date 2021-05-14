@@ -126,7 +126,9 @@ export const CredentialShareBAS = () => {
       <InteractionTitle label={strings.INCOMING_REQUEST} />
       <InteractionDescription
         label={
-          strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
+          singleMissingAttribute
+            ? strings.INTERACTION_DESC_MISSING_SINGLE
+            : strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
         }
       />
       <Space />
