@@ -46,6 +46,8 @@ const LoggedIn = () => {
   const showTabs = !isAppLocked && isAuthSet
   const { initializeCredentials } = useCredentials()
 
+  const renderedMainTimes = useRef(0)
+
   useEffect(() => {
     initializeCredentials()
   }, [])
@@ -55,9 +57,10 @@ const LoggedIn = () => {
   }, [])
 
   /* All about when lock screen comes up - START */
-  const isPopup = useSelector(
-    getIsPopup,
-  ) /* isPopup is used as a workaround for Android app state change */
+  const isPopup =
+    useSelector(
+      getIsPopup,
+    ) /* isPopup is used as a workaround for Android app state change */
 
   const isPopupRef = useRef<boolean>(isPopup)
 
@@ -89,7 +92,10 @@ const LoggedIn = () => {
 
   useEffect(() => {
     //NOTE: navigating imperatively b/c the Idle screen is rendered before Main
-    if (showTabs) replace(ScreenNames.Main)
+    if (showTabs && !renderedMainTimes.current) {
+      renderedMainTimes.current++
+      replace(ScreenNames.Main)
+    }
   }, [showTabs])
 
   return (
