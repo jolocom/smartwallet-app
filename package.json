@@ -84,7 +84,7 @@
     "rn-fetch-blob": "^0.12.0",
     "sjcl": "^1.0.7",
     "stream-browserify": "^3.0.0",
-    "typeorm": "0.2.25",
+    "typeorm": "0.2.24",
     "unorm": "^1.6.0",
     "vm-browserify": "^1.1.2",
     "ws": "^7.3.1",

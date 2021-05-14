@@ -262,8 +262,6 @@ PODS:
     - React
   - react-native-safe-area-context (0.7.3):
     - React
-  - react-native-sfsymbols (1.0.3):
-    - React
   - react-native-sqlite-storage (5.0.0):
     - React
   - react-native-version-number (0.3.6):
@@ -442,7 +440,6 @@ DEPENDENCIES:
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-sfsymbols (from `../node_modules/react-native-sfsymbols`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-number (from `../node_modules/react-native-version-number`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -540,8 +537,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-sfsymbols:
-    :path: "../node_modules/react-native-sfsymbols"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
   react-native-version-number:
@@ -638,7 +633,6 @@ SPEC CHECKSUMS:
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-restart: d19a0f8d053d065fe64cd2baebb6487111c77149
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
-  react-native-sfsymbols: 110c5f505bf8d32890491d923f81a1d672288b08
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
@@ -673,4 +667,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 16ae00283f96c727f0410127dbf819da288ac66e
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.0
