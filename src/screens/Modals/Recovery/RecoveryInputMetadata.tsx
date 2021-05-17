@@ -9,6 +9,8 @@ import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import Btn, { BtnTypes } from '~/components/Btn'
+import { debugView } from '~/utils/dev'
 
 interface RecoveryInputMetadataI {
   keyHasError: boolean
@@ -21,22 +23,25 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
     return (
       <View style={styles.inputMeta}>
         {keyHasError ? (
-          <JoloText
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            color={Colors.error}
+          <Btn
+            type={BtnTypes.secondary}
+            withoutMargins
+            customContainerStyles={{ height: 'auto' }}
+            onPress={() => {}}
+            customTextStyles={{ color: Colors.error }}
+            activeOpacity={1}
           >
             {strings.CANT_MATCH_WORD}
-          </JoloText>
+          </Btn>
         ) : (
-          <JoloText
+          <Btn
             onPress={() => redirect(ScreenNames.LostSeedPhraseInfo)}
-            kind={JoloTextKind.subtitle}
-            size={JoloTextSizes.middle}
-            color={Colors.white}
+            type={BtnTypes.secondary}
+            withoutMargins
+            customContainerStyles={{ height: 'auto' }}
           >
             {strings.WHAT_IF_I_FORGOT}
-          </JoloText>
+          </Btn>
         )}
       </View>
     )
