@@ -166,7 +166,11 @@ const SeedPhraseWrite: React.FC = () => {
               <BackArrowIcon />
             </SeedPhrase.Styled.Header.Left>
             <SeedPhrase.Styled.Header.Right
-              onPress={() => redirect(ScreenNames.SeedPhraseInfo)}
+              onPress={() =>
+                redirect(ScreenNames.GlobalModals, {
+                  screen: ScreenNames.SeedPhraseInfo,
+                })
+              }
             >
               <InfoIcon />
             </SeedPhrase.Styled.Header.Right>

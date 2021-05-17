@@ -7,7 +7,7 @@ import { Colors } from '~/utils/colors'
 
 const LostSeedPhraseInfo = () => {
   return (
-    <ScreenContainer backgroundColor={Colors.black}>
+    <ScreenContainer backgroundColor={Colors.black65}>
       <Info.Content>
         <Info.Title>
           {strings.WHAT_TO_DO_IF_YOU_FORGOT_YOUR_SECRET_PHRASE}

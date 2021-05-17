@@ -7,7 +7,7 @@ import { strings } from '~/translations'
 
 const SeedPhraseInfo = () => {
   return (
-    <ScreenContainer backgroundColor={Colors.black}>
+    <ScreenContainer backgroundColor={Colors.black65}>
       <Info.Content>
         <Info.Title>{strings.WHY_THESE_WORDS_ARE_IMPORTANT_TO_YOU}</Info.Title>
         <Info.Description>

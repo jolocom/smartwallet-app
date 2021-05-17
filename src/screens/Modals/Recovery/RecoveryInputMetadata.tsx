@@ -30,7 +30,11 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
           </JoloText>
         ) : (
           <JoloText
-            onPress={() => redirect(ScreenNames.LostSeedPhraseInfo)}
+            onPress={() =>
+              redirect(ScreenNames.GlobalModals, {
+                screen: ScreenNames.LostSeedPhraseInfo,
+              })
+            }
             kind={JoloTextKind.subtitle}
             size={JoloTextSizes.middle}
             color={Colors.white}

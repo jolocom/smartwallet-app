@@ -14,6 +14,8 @@ import { isLogged } from './modules/account/selectors'
 import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
 import LoggedIn from './screens/LoggedIn'
 import { Colors } from './utils/colors'
+import SeedPhraseInfo from './screens/LoggedOut/Onboarding/Registration/SeedPhrase/SeedPhraseInfo'
+import { transparentModalOptions } from './utils/screenSettings'
 
 export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
@@ -24,6 +26,7 @@ export type RootStackParamList = {
   [ScreenNames.LoggedIn]: undefined
   [ScreenNames.LoggedOut]: undefined
   [ScreenNames.LostSeedPhraseInfo]: undefined
+  [ScreenNames.GlobalModals]: undefined
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -38,6 +41,27 @@ const navigationTheme: Theme = {
     border: Colors.mainBlack,
     notification: Colors.mainBlack,
   },
+}
+
+const ModalStack = createStackNavigator()
+
+const GlobalModals = () => {
+  return (
+    <ModalStack.Navigator
+      headerMode="none"
+      mode="modal"
+      screenOptions={transparentModalOptions}
+    >
+      <ModalStack.Screen
+        name={ScreenNames.LostSeedPhraseInfo}
+        component={LostSeedPhraseInfo}
+      />
+      <ModalStack.Screen
+        name={ScreenNames.SeedPhraseInfo}
+        component={SeedPhraseInfo}
+      />
+    </ModalStack.Navigator>
+  )
 }
 
 const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
@@ -63,8 +87,9 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
 
         {/* Global -> Start */}
         <RootStack.Screen
-          name={ScreenNames.LostSeedPhraseInfo}
-          component={LostSeedPhraseInfo}
+          name={ScreenNames.GlobalModals}
+          component={GlobalModals}
+          options={{ cardStyle: { backgroundColor: 'transparent' } }}
         />
         {/* Global -> End */}
       </RootStack.Navigator>
