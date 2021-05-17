@@ -46,27 +46,23 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
       ctx.selectThreshold = DELETE_BUTTON_WIDTH
     },
     onActive: (event, ctx) => {
-      const hasPassedSelectThreshold = event.translationX < 0 && !selected.value
-      const hasPassedUnselectThreshold =
-        event.translationX > 0 && selected.value
-
-      if (hasPassedSelectThreshold || hasPassedUnselectThreshold) {
-        x.value = ctx.startX + event.translationX
-      }
-    },
-    onEnd: (event, ctx) => {
       const shouldSelect = event.translationX < -ctx.selectThreshold
-      const shouldUnselect =
-        selected.value && event.translationX > -ctx.selectThreshold
+      const shouldUnselect = event.translationX > -ctx.selectThreshold
 
       if (shouldSelect) {
-        selected.value = true
-        x.value = withSpring(-ctx.selectThreshold)
+        if (!selected.value) {
+          selected.value = true
+          x.value = withSpring(-ctx.selectThreshold, {
+            damping: 8,
+            velocity: 30,
+          })
+        } else {
+        }
       } else if (shouldUnselect) {
+        x.value = withTiming(0)
         selected.value = false
-        x.value = withTiming(0, { duration: 100 })
       } else {
-        x.value = withTiming(ctx.startX)
+        x.value = ctx.startX + event.translationX
       }
     },
   })
@@ -80,11 +76,13 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
       <Animated.View style={[animatedStyle]}>
         <TouchableOpacity
           onPress={() => {
-            if (!selected.value) {
-              redirect(ScreenNames.CredentialForm, {
-                type,
-                id,
-              })
+            {
+              if (!selected.value) {
+                redirect(ScreenNames.CredentialForm, {
+                  type,
+                  id,
+                })
+              }
             }
           }}
           activeOpacity={1}
@@ -98,7 +96,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
               activeOpacity={1}
               style={styles.button}
               onPress={() => {
-                selected.value = false
+                //selected.value = false
                 x.value = withTiming(400, { duration: 100 }, () => {
                   runOnJS(onDelete)()
                 })
