@@ -4,7 +4,10 @@ import {
   NavigationContainerRef,
   Theme,
 } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'
@@ -65,6 +68,7 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
         <RootStack.Screen
           name={ScreenNames.LostSeedPhraseInfo}
           component={LostSeedPhraseInfo}
+          options={{ ...TransitionPresets.SlideFromRightIOS }}
         />
         {/* Global -> End */}
       </RootStack.Navigator>
