@@ -73,7 +73,7 @@ const SeedKeySuggestions: React.FC<SeedKeySuggestionsI> = memo(
 
 const styles = StyleSheet.create({
   pill: {
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.stoneGrey75,
     borderRadius: 4,
     paddingTop: Platform.select({
       ios: 0,
