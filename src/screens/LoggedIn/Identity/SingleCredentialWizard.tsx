@@ -6,6 +6,7 @@ import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
 import Wizard from '~/components/Wizard'
 import { nameValidation } from '~/config/validation'
+import { trimObjectValues } from '~/utils/stringUtils'
 
 const WIZARD_CONFIG = {
   0: {
@@ -22,6 +23,7 @@ const SingleCredentialWizard: React.FC<{ onFormSubmit: () => void }> = ({
   const { handleCreateCredentialSI } = useSICActions()
 
   const handleSubmit = async (fields: Record<string, string>) => {
+    fields = trimObjectValues(fields)
     await handleCreateCredentialSI(
       AttributeTypes.name,
       fields,
