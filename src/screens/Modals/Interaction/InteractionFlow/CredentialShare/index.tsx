@@ -44,6 +44,7 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { getObjectFirstValue } from '~/utils/objectUtils'
+import ScreenContainer from '~/components/ScreenContainer'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -161,8 +162,9 @@ const CredentialShareFAS = () => {
       return (
         <AdoptedCarousel
           key={key}
-          activeSlideAlignment="start"
+          activeSlideAlignment="center"
           data={credentials}
+          customStyles={{ marginLeft: -5 }}
           renderItem={({ item: cred }) => {
             const claimFields = getOptionalFields(cred)
             const { name, type, id } = cred
@@ -217,29 +219,32 @@ const CredentialShareFAS = () => {
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
-        <Collapsible.ScrollView
-          withoutHeaderPadding
-          customStyles={{ paddingHorizontal: '5%' }}
-        >
+        <Collapsible.ScrollView withoutHeaderPadding>
           <Collapsible.HidingScale>
             <LogoContainerFAS>
               <InteractionLogo />
             </LogoContainerFAS>
           </Collapsible.HidingScale>
           <Collapsible.HidingTextContainer>
-            <InteractionTitle label={strings.INCOMING_REQUEST} />
+            <ScreenContainer.Padding>
+              <InteractionTitle label={strings.INCOMING_REQUEST} />
+            </ScreenContainer.Padding>
           </Collapsible.HidingTextContainer>
-          <InteractionDescription
-            label={
-              strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
-            }
-          />
+          <ScreenContainer.Padding>
+            <InteractionDescription
+              label={
+                strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
+              }
+            />
+          </ScreenContainer.Padding>
           <Space />
-          <ShareAttributeWidget withContainer />
-          <InteractionSection title={strings.DOCUMENTS}>
+          <ScreenContainer.Padding>
+            <ShareAttributeWidget withContainer />
+          </ScreenContainer.Padding>
+          <InteractionSection title={strings.DOCUMENTS} isPaddedTitle={true}>
             {handleRenderCredentials(documents)}
           </InteractionSection>
-          <InteractionSection title={strings.OTHER}>
+          <InteractionSection title={strings.OTHER} isPaddedTitle={true}>
             {handleRenderCredentials(other)}
           </InteractionSection>
         </Collapsible.ScrollView>
