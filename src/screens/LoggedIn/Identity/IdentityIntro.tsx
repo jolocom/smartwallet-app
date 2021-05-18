@@ -81,7 +81,15 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
             <JoloText
               kind={JoloTextKind.title}
               color={Colors.white90}
-              customStyles={{ marginTop: 20, marginBottom: 48 }}
+              customStyles={{
+                marginTop: 20,
+                marginBottom: BP({
+                  large: 48,
+                  medium: 48,
+                  small: 24,
+                  xsmall: 12,
+                }),
+              }}
             >
               {strings.IT_IS_TIME_TO_CREATE}
             </JoloText>
