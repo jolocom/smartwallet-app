@@ -82,6 +82,7 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
             <Btn
               onPress={() => changeActiveForm(IdentityForms.SingleCredential)}
               type={BtnTypes.senary}
+              customContainerStyles={{ backgroundColor: Colors.mainBlack }}
               testID="single-credential-button"
             >
               {strings.START_NOW}
