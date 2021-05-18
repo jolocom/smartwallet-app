@@ -105,6 +105,7 @@ const seedphrase = {
     } 6 words until they are in the correct order`,
   CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN:
     'Check carefully for mistakes and try again',
+  SEEDPHRASE_GO_BACK: 'Back to walkthrough',
 }
 
 const deviceAuthentication = {
