@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   container: {
     height: 80,
     width: '100%',
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.tileBlack55,
     borderRadius: 15,
     marginVertical: 5,
     flexDirection: 'row',
