@@ -25,7 +25,7 @@ const RecordFinalStep: React.FC<IRecordSteps & { status: IRecordStatus }> = ({
           </View>
         </View>
       </View>
-      <View style={{ flex: 0.75, paddingLeft: 4 }}>
+      <View style={styles.textContainer}>
         <JoloText color={Colors.white} customStyles={{ textAlign: 'left' }}>
           {title}
         </JoloText>
@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     transform: [{ scale: 0.6 }],
+  },
+  textContainer: {
+    flex: 0.75,
+    paddingLeft: 4,
+    justifyContent: 'center',
   },
 })
 
