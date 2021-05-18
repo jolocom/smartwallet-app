@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -25,6 +25,7 @@ const INQUIRIES_LIST = [
   strings.ISSUES_WITH_THE_APP,
   strings.I_LOST_MY_WALLET,
   strings.HOW_TO_BECOME_PART_OF_THE_PROJECT,
+  strings.OTHER,
 ]
 
 const ContactUs: React.FC = () => {

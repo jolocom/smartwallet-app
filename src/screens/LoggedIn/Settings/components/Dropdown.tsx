@@ -24,12 +24,8 @@ const animateLayout = () => {
 const Dropdown = () => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const {
-    selectedValue,
-    setSelectedValue,
-    options,
-    onSelect,
-  } = useSelectableState()
+  const { selectedValue, setSelectedValue, options, onSelect } =
+    useSelectableState()
   const selectedValueTruncated = selectedValue
     ? selectedValue.value.toString().length > 30
       ? selectedValue.value.toString().split('').splice(0, 30).join('') + '...'
@@ -119,6 +115,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.white21,
     borderWidth: 1,
     marginTop: 15,
+    paddingVertical: 8,
     // position: 'absolute', // TODO: display it on top of other elements
   },
 })
