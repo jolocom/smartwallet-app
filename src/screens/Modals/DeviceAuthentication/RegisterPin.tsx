@@ -108,7 +108,6 @@ const RegisterPin = () => {
               opacity: isCreating ? 1 : 0,
             }}
           >
-            {' '}
             {strings.YOU_CAN_CHANGE_THE_PASSCODE}
           </JoloText>
         </Passcode.Container>
