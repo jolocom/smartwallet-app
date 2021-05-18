@@ -1,4 +1,4 @@
-import { SetStateAction } from 'react'
+import React, { SetStateAction } from 'react'
 import { BiometryType } from 'react-native-biometrics'
 import { IWithCustomStyle } from '../Card/types'
 

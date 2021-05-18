@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
+import BP from '~/utils/breakpoints'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
-const DIGIT_CELL_WIDTH = 65
-const DIGIT_MARGIN_RIGHT = 7
+const DIGIT_CELL_WIDTH = BP({ default: 65, xsmall: 56 })
+const DIGIT_CELL_HEIGHT = BP({ default: 87, xsmall: 74 })
+const DIGIT_MARGIN_RIGHT = Platform.select({
+  ios: BP({ default: 7, xsmall: 6 }),
+  android: 2,
+})
 
 const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
@@ -87,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: DIGIT_CELL_WIDTH,
-    height: 87,
+    height: DIGIT_CELL_HEIGHT,
     borderRadius: 11,
     marginRight: DIGIT_MARGIN_RIGHT,
     backgroundColor: Colors.black30,
