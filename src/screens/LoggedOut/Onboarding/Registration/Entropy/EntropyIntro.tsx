@@ -29,16 +29,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  handContainer: {
-    margin: 60,
-    width: 78,
-    height: 84,
-  },
   textContainer: {
     alignItems: 'center',
-  },
-  paragraph: {
-    opacity: 0.8,
-    paddingHorizontal: 20,
+    marginBottom: '30%',
   },
 })
