@@ -40,7 +40,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
           <>
             <AutofocusContainer
               style={{
-                marginTop: 35,
+                marginTop: 36,
                 marginBottom: 8,
               }}
             >
