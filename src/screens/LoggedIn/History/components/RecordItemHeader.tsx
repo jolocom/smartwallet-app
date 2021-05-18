@@ -32,6 +32,7 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
           </JoloText>
 
           <JoloText
+            ignoreScaling
             testID="record-item-time"
             size={JoloTextSizes.mini}
             color={Colors.white}
@@ -82,7 +83,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 12,
   },
 })
 
