@@ -6,6 +6,7 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
 
 import SingleCredentialWizard from './SingleCredentialWizard'
 import { IdentityTabIds } from './types'
@@ -69,12 +70,18 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
             onFormSubmit={() => handleSubmit(IdentityTabIds.credentials)}
           />
         ) : (
-          <>
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              paddingTop: 32,
+            }}
+          >
             <Image source={require('~/assets/images/identityIntro.png')} />
             <JoloText
               kind={JoloTextKind.title}
               color={Colors.white90}
-              customStyles={{ marginVertical: 10 }}
+              customStyles={{ marginTop: 20, marginBottom: 48 }}
             >
               {strings.IT_IS_TIME_TO_CREATE}
             </JoloText>
@@ -87,7 +94,7 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
             >
               {strings.START_NOW}
             </Btn>
-          </>
+          </View>
         )}
       </View>
     </Fallin>
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     backgroundColor: Colors.lightBlack,
-    padding: 20,
+    padding: BP({ large: 28, default: 24 }),
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     zIndex: 1,
