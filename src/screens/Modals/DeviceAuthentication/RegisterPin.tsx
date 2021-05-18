@@ -94,11 +94,7 @@ const RegisterPin = () => {
             title={
               isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE
             }
-            subtitle={
-              isCreating
-                ? strings.IN_ORDER_TO_PROTECT_YOUR_DATA
-                : strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY
-            }
+            subtitle={strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY}
           />
           <View style={styles.passcodeContainer}>
             <Passcode.Input />
