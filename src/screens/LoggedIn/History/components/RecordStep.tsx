@@ -15,6 +15,7 @@ const RecordStep: React.FC<IRecordSteps> = ({ title, description }) => {
         </View>
         <View style={{ flex: 0.75 }}>
           <JoloText
+            ignoreScaling
             kind={JoloTextKind.title}
             size={JoloTextSizes.mini}
             customStyles={{ textAlign: 'left' }}
@@ -25,6 +26,7 @@ const RecordStep: React.FC<IRecordSteps> = ({ title, description }) => {
       </View>
       <View style={styles.descriptionContainer}>
         <JoloText
+          ignoreScaling
           size={JoloTextSizes.mini}
           customStyles={{ textAlign: 'left' }}
           numberOfLines={1}

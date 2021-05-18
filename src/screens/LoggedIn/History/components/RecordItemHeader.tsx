@@ -23,7 +23,11 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
       </View>
       <View style={[styles.textContainer]}>
         <View style={styles.topContainer}>
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+          <JoloText
+            ignoreScaling
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.mini}
+          >
             {details ? details.title : '███████'}
           </JoloText>
 
@@ -36,7 +40,11 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
             {details ? details.time : '██'}
           </JoloText>
         </View>
-        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
+        <JoloText
+          ignoreScaling
+          size={JoloTextSizes.mini}
+          color={Colors.white40}
+        >
           {details ? details.issuer?.publicProfile?.name ?? 'Unknown' : '█████'}
         </JoloText>
       </View>
@@ -74,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 8,
+    marginBottom: 12,
   },
 })
 

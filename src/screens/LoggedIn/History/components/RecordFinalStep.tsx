@@ -26,13 +26,18 @@ const RecordFinalStep: React.FC<IRecordSteps & { status: IRecordStatus }> = ({
         </View>
       </View>
       <View style={styles.textContainer}>
-        <JoloText color={Colors.white} customStyles={{ textAlign: 'left' }}>
+        <JoloText
+          ignoreScaling
+          color={Colors.white}
+          customStyles={{ textAlign: 'left' }}
+        >
           {title}
         </JoloText>
         <JoloText
           color={
             status === IRecordStatus.finished ? Colors.white60 : Colors.error
           }
+          ignoreScaling
           size={JoloTextSizes.tiniest}
           customStyles={{ textAlign: 'left' }}
           numberOfLines={1}
