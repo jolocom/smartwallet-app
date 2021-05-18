@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Image } from 'react-native'
+import { StyleSheet, View, Image, Platform } from 'react-native'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     width: '100%',
+    marginBottom: Platform.select({ ios: 0, android: 4 }),
   },
 })
 
