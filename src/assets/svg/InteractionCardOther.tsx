@@ -1,28 +1,12 @@
 import * as React from 'react'
 import { View } from 'react-native'
-import Svg, {
-  SvgProps,
-  Defs,
-  Path,
-  G,
-  Use,
-  Line,
-  Rect,
-  Polygon,
-} from 'react-native-svg'
+import Svg, { Defs, Path, G, Use, Line, Rect, Polygon } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: title, filter */
 
-function SvgComponent(props: SvgProps) {
+const SvgComponent: React.FC = ({ children }) => {
   return (
     <View style={{ aspectRatio: 369 / 232 }}>
-      <Svg
-        width={'100%'}
-        height={'100%'}
-        viewBox="0 0 369 232"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        {...props}
-      >
+      <Svg width={'100%'} height={'100%'} viewBox="0 0 369 232">
         <Defs>
           <Path
             id="path-1"
@@ -491,7 +475,7 @@ function SvgComponent(props: SvgProps) {
             </G>
           </G>
         </G>
-        {props.children}
+        {children}
       </Svg>
     </View>
   )
