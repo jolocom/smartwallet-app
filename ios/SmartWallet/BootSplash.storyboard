@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
@@ -13,19 +13,25 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="BootSplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="3lX-Ut-9ad">
-                                <rect key="frame" x="145" y="144" width="84" height="91"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="BootSplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="3lX-Ut-9ad">
+                                <rect key="frame" x="175" y="170" width="64" height="123"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                                 </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="64" id="3yt-FA-iq1"/>
+                                    <constraint firstAttribute="width" secondItem="3lX-Ut-9ad" secondAttribute="height" multiplier="12:23" id="uzJ-cP-beA"/>
+                                </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="BootSplashText" translatesAutoresizingMaskIntoConstraints="NO" id="ngm-in-1xY">
-                                <rect key="frame" x="138" y="564" width="99" height="46"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="BootSplashText" translatesAutoresizingMaskIntoConstraints="NO" id="ngm-in-1xY">
+                                <rect key="frame" x="162" y="572" width="90" height="52"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="90" id="717-SP-ihr"/>
+                                    <constraint firstAttribute="width" secondItem="ngm-in-1xY" secondAttribute="height" multiplier="40:23" id="CFo-04-H3Y"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
@@ -33,6 +39,12 @@
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" notEnabled="YES"/>
                         </accessibility>
+                        <constraints>
+                            <constraint firstItem="3lX-Ut-9ad" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="170" id="J0C-fz-o8j"/>
+                            <constraint firstItem="ngm-in-1xY" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="230" id="Odo-ml-P35"/>
+                            <constraint firstItem="ngm-in-1xY" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Pp2-8R-qqH"/>
+                            <constraint firstItem="3lX-Ut-9ad" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="QO3-ed-mnG"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
