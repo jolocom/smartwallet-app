@@ -153,6 +153,9 @@ const SeedPhraseWrite: React.FC = () => {
       >
         {strings.DONE}
       </Btn>
+      <Btn type={BtnTypes.secondary} onPress={goBack}>
+        {strings.SEEDPHRASE_GO_BACK}
+      </Btn>
     </Animated.View>
   )
 
@@ -162,9 +165,6 @@ const SeedPhraseWrite: React.FC = () => {
       <SeedPhrase.Styled.ScreenContainer>
         <Animated.View style={{ opacity: buttonOpacity }}>
           <SeedPhrase.Styled.Header>
-            <SeedPhrase.Styled.Header.Left onPress={goBack}>
-              <BackArrowIcon />
-            </SeedPhrase.Styled.Header.Left>
             <SeedPhrase.Styled.Header.Right
               onPress={() =>
                 redirect(ScreenNames.GlobalModals, {
