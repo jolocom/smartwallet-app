@@ -17,3 +17,16 @@ export interface ICardProps {
   photo?: string | undefined
   highlight?: string | undefined
 }
+
+interface IOptionalFields extends IWithCustomStyle {
+  lastFieldPadding?: string
+}
+
+export interface ICardComposition {
+  OptionalFields: React.FC<IOptionalFields>
+  DocumentHeader: React.FC
+  OtherHeader: React.FC
+  Highlight: React.FC
+  Photo: React.FC
+  Dots: React.FC<IWithCustomStyle>
+}

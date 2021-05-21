@@ -3,12 +3,13 @@ import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
 import { useCard } from './context'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
-import { IWithCustomStyle } from './types'
+import { ICardComposition } from './types'
 import { CredentialCategories } from '~/types/credentials'
 import Space from '~/components/Space'
 
-const OptionalFields: React.FC<IWithCustomStyle> = ({
+const OptionalFields: ICardComposition['OptionalFields'] = ({
   customStyles: customContainerStyles,
+  lastFieldPadding = '30%',
 }) => {
   const { optionalFields, highlight, photo } = useCard()
   const [displayedOptionalFields, setDisplayedOptionalFields] = useState(
@@ -94,7 +95,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
           {renderFieldName(pField.label)}
           {/* in case thers is a photo we should display last field differently */}
           {idx === displayedOptionalFields.length - 1 && photo
-            ? renderFieldValue(pField.value, '30%')
+            ? renderFieldValue(pField.value, lastFieldPadding)
             : renderFieldValue(pField.value)}
           <Space height={BP({ default: 4, xsmall: 4 })} />
         </View>
