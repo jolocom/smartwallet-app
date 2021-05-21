@@ -1,11 +1,14 @@
 import { StackNavigationOptions, TransitionPresets } from "@react-navigation/stack";
 
-export const screenTransitionOptions = {
+export const screenTransitionSlideFromRight = {
   ...TransitionPresets.SlideFromRightIOS,
 }
 
-const modalScreenTransitionOptions = TransitionPresets.ModalSlideFromBottomIOS;
-export const screenTransitionDisableGesture = {...modalScreenTransitionOptions, gestureEnabled: false}
+export const screenTransitionSlideFromBottom = TransitionPresets.ModalSlideFromBottomIOS;
+
+export const screeDisableGestures = {gestureEnabled: false}
+
+export const screenTransitionFromBottomDisabledGestures = {...screenTransitionSlideFromBottom, ...screeDisableGestures}
 
 export const transparentModalOptions: StackNavigationOptions = {
   headerShown: false,

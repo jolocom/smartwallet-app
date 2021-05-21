@@ -4,7 +4,7 @@ import { ScreenNames } from '~/types/screens'
 import Lock from '../Modals/Lock'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
-import { screenTransitionDisableGesture } from '~/utils/screenSettings'
+import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
 
 export type LockStackParamList = {
   [ScreenNames.PasscodeRecovery]: {
@@ -25,18 +25,18 @@ const LockStack = () => {
       <LockStackNavigator.Screen
         name={ScreenNames.Lock}
         component={Lock}
-        options={screenTransitionDisableGesture}
+        options={screenTransitionFromBottomDisabledGestures}
       />
 
       <LockStackNavigator.Screen
         name={ScreenNames.PinRecoveryInstructions}
         component={PinRecoveryInstructions}
-        options={screenTransitionDisableGesture}
+        options={screenTransitionFromBottomDisabledGestures}
       />
       <LockStackNavigator.Screen
         name={ScreenNames.PasscodeRecovery}
         component={Recovery}
-        options={screenTransitionDisableGesture}
+        options={screenTransitionFromBottomDisabledGestures}
       />
     </LockStackNavigator.Navigator>
   )

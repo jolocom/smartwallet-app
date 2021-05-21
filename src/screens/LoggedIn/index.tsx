@@ -15,7 +15,7 @@ import { useCredentials } from '~/hooks/signedCredentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
-import { screenTransitionDisableGesture } from '~/utils/screenSettings'
+import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -98,19 +98,19 @@ const LoggedIn = () => {
         <LoggedInStack.Screen
           name={ScreenNames.DeviceAuth}
           component={DeviceAuthentication}
-          options={screenTransitionDisableGesture}
+          options={screenTransitionFromBottomDisabledGestures}
         />
       ) : (
         <>
           <LoggedInStack.Screen
             name={'Idle'}
             component={Idle}
-            options={screenTransitionDisableGesture}
+            options={screenTransitionFromBottomDisabledGestures}
           />
           <LoggedInStack.Screen
             name={ScreenNames.Main}
             component={Main}
-            options={screenTransitionDisableGesture}
+            options={screenTransitionFromBottomDisabledGestures}
           />
         </>
       )}
@@ -118,7 +118,7 @@ const LoggedIn = () => {
         <LoggedInStack.Screen
           name={ScreenNames.LockStack}
           component={LockStack}
-          options={screenTransitionDisableGesture}
+          options={screenTransitionFromBottomDisabledGestures}
         />
       )}
       {/* Modals -> End */}
