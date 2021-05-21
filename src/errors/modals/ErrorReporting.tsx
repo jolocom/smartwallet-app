@@ -126,6 +126,7 @@ const ErrorReporting = () => {
           showsVerticalScrollIndicator={false}
           overScrollMode="never"
           enableOnAndroid
+          keyboardShouldPersistTaps="handled"
         >
           <Section>
             <Section.Title>

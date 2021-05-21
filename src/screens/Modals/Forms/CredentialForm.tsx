@@ -31,6 +31,7 @@ import { Colors } from '~/utils/colors'
 import { FormFieldContainer, FormError } from '~/components/Form/components'
 import useTranslation from '~/hooks/useTranslation'
 import { MainStackParamList } from '~/screens/LoggedIn/Main'
+import { trimObjectValues } from '~/utils/stringUtils'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
@@ -73,9 +74,7 @@ const CredentialForm = () => {
     : {}
 
   const handleCredentialSubmit = async (claims: Record<string, string>) => {
-    Object.keys(claims).forEach((claim) => {
-      claims[claim] = claims[claim].trim()
-    })
+    claims = trimObjectValues(claims)
 
     try {
       if (attributeId) {
