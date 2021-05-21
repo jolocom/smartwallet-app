@@ -109,7 +109,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
       onEndReachedThreshold={0.9}
       onViewableItemsChanged={handleSectionChange}
       onEndReached={handleEndReached}
-      contentContainerStyle={{ marginTop: 32, paddingBottom: '100%' }}
+      contentContainerStyle={{ marginTop: 32, paddingBottom: 100 }}
       renderSectionHeader={({ section }) => {
         if (section.title === sections[0].title) return null
         return <RecordHeader title={section.title} />
