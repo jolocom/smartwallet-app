@@ -7,8 +7,8 @@ import BP from '~/utils/breakpoints'
 import { IWithCustomStyle } from '~/components/Card/types'
 import { JoloTextSizes } from '~/utils/fonts'
 
-const PADDING_BASE = 20
-const PADDING_SMALL = 15
+const PADDING_BASE = 16
+const PADDING_SMALL = 11
 
 export const HeaderContainer: React.FC<IWithCustomStyle> = ({
   children,
@@ -69,7 +69,14 @@ export const HelperTitle: React.FC<IWithCustomStyle> = ({
   return (
     <JoloText
       weight={JoloTextWeight.regular}
-      customStyles={[{ fontSize: 16, alignSelf: 'flex-start' }, customStyles]}
+      customStyles={[
+        {
+          fontSize: 16,
+          lineHeight: 16,
+          alignSelf: 'flex-start',
+        },
+        customStyles,
+      ]}
       color={Colors.bastille}
     >
       {children}:
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
   },
   credentialName: {
     color: Colors.black85,
-    lineHeight: BP({ xsmall: 20, small: 22, default: 24 }),
+    lineHeight: BP({ xsmall: 18, small: 20, default: 22 }),
   },
   label: {
     marginTop: Platform.select({ ios: 0, android: 4 }),
