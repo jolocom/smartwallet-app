@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import { RootReducerI } from '~/types/reducer'
 import { AttrsState, AttributeI } from './types'
-import { PrimitiveAttributeTypes } from '~/types/credentials'
+import { AttributeTypes, ClaimKeys, PrimitiveAttributeTypes } from '~/types/credentials'
 
 export const getAttributes = (state: RootReducerI): AttrsState<AttributeI> =>
   state.attrs.all
@@ -15,3 +15,15 @@ export const getPrimitiveAttributeById = (id: string) =>
     if (!type) return undefined
     return attributes[type].find((a) => a.id === id)
   })
+
+export const getAllValuesForType = (type: AttributeTypes) =>
+  createSelector(
+    [getAttributes],
+    (attributes) => {
+      return attributes[type] ? attributes[type]?.reduce<string[]>((acc, v) => {
+        const value = Object.keys(v.value).reduce((concatValue, e) => concatValue + v.value[e as ClaimKeys], '')
+        acc = [...acc, value];
+        return acc;
+      }, []) : []
+    }
+  )

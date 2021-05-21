@@ -174,6 +174,7 @@ const interactions = {
   INTERACTION_ERROR_TITLE: 'Interaction error',
   INTERACTION_ERROR_MESSAGE:
     'Unknown interaction error occurred. Please submit report',
+  ERROR_ATTRIBUTE_ALREADY_EXISTS: 'Attribute of the same value already exists',
   INTERACTION_DESC_MISSING_SINGLE: 'It seems like your wallet is missing something important for this request'
 }
 
