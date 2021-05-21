@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   inputField: {
     width: '100%',
     backgroundColor: Colors.black36,
-    borderColor: Colors.black36,
+    borderColor: 'transparent',
     height: BP({
       default: 87,
       xsmall: 50,
