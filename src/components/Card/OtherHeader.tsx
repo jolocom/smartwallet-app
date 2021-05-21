@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
+import Space from '../Space'
 import { useCard } from './context'
 import { FieldName, TitleField, TextLayoutEvent } from './Field'
 
@@ -31,6 +32,7 @@ const OtherHeader: React.FC = () => {
         >
           {strings.TYPE_OF_DOCUMENT}
         </FieldName>
+        <Space height={BP({ default: 10, xsmall: 4 })} />
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           <TitleField
             onTextLayout={handleHeaderTextLayout}
