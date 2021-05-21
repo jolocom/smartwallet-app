@@ -35,7 +35,11 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
           </Btn>
         ) : (
           <Btn
-            onPress={() => redirect(ScreenNames.LostSeedPhraseInfo)}
+            onPress={() =>
+              redirect(ScreenNames.GlobalModals, {
+                screen: ScreenNames.LostSeedPhraseInfo,
+              })
+            }
             type={BtnTypes.secondary}
             withoutMargins
             customContainerStyles={{ height: 'auto' }}

@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack'
-import { Platform } from 'react-native'
+import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import { ScreenNames } from '~/types/screens'
@@ -33,6 +29,10 @@ import CardDetails from './Documents/CardDetails'
 import InteractionTest from './Settings/Development/InteractionCardsTest'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
+import {
+  screenTransitionFromBottomDisabledGestures,
+  screenTransitionSlideFromRight,
+} from '~/utils/screenSettings'
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
@@ -70,14 +70,6 @@ export type MainStackParamList = {
 
 const MainStack = createStackNavigator<MainStackParamList>()
 
-const settingsScreenTransitionOptions = {
-  ...TransitionPresets.SlideFromRightIOS,
-}
-
-const modalScreenTransitionOptions = {
-  ...TransitionPresets.ModalSlideFromBottomIOS,
-}
-
 const Main: React.FC = () => {
   const shouldShowConsent = useSelector(shouldShowTermsConsent)
   return (
@@ -94,7 +86,7 @@ const Main: React.FC = () => {
         <MainStack.Screen
           name={ScreenNames.LoggedInTermsConsent}
           component={TermsConsent}
-          options={settingsScreenTransitionOptions}
+          options={screenTransitionSlideFromRight}
         />
       ) : (
         <>
@@ -104,47 +96,47 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Language}
             component={Language}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.ChangePin}
             component={ChangePin}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.BackupIdentity}
             component={BackupIdentity}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.FAQ}
             component={FAQ}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.ContactUs}
             component={ContactUs}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.About}
             component={About}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.Imprint}
             component={Imprint}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.PrivacyPolicy}
             component={PrivacyPolicy}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.TermsOfService}
             component={TermsOfService}
-            options={settingsScreenTransitionOptions}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.DragToConfirm}
@@ -156,7 +148,7 @@ const Main: React.FC = () => {
               <MainStack.Screen
                 name={ScreenNames.ButtonsTest}
                 component={ButtonsTest}
-                options={settingsScreenTransitionOptions}
+                options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
                 name={ScreenNames.LoaderTest}
@@ -165,22 +157,22 @@ const Main: React.FC = () => {
               <MainStack.Screen
                 name={ScreenNames.NotificationsTest}
                 component={NotificationsTest}
-                options={settingsScreenTransitionOptions}
+                options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
                 name={ScreenNames.InputTest}
                 component={InputTest}
-                options={settingsScreenTransitionOptions}
+                options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
                 name={ScreenNames.PasscodeTest}
                 component={PasscodeTest}
-                options={settingsScreenTransitionOptions}
+                options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
                 name={ScreenNames.InteractionCardsTest}
                 component={InteractionTest}
-                options={settingsScreenTransitionOptions}
+                options={screenTransitionSlideFromRight}
               />
             </>
           )}
@@ -190,29 +182,29 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Interaction}
             component={Interaction}
-            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+            options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen
             name={ScreenNames.CardDetails}
             component={CardDetails}
-            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+            options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen
             name={ScreenNames.CredentialForm}
             component={CredentialForm}
-            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+            options={screenTransitionFromBottomDisabledGestures}
           />
 
           {/* NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
           <MainStack.Screen
             name={ScreenNames.PinRecoveryInstructions}
             component={PinRecoveryInstructions}
-            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+            options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen
             name={ScreenNames.PasscodeRecovery}
             component={Recovery}
-            options={{ ...modalScreenTransitionOptions, gestureEnabled: false }}
+            options={screenTransitionFromBottomDisabledGestures}
           />
           {/* Modals -> End */}
         </>

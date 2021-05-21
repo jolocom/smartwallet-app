@@ -1,7 +1,4 @@
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,6 +15,7 @@ import { useCredentials } from '~/hooks/signedCredentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
+import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -27,10 +25,6 @@ export type LoggedInStackParamList = {
 }
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
-
-const screenTransitionOptions = {
-  ...TransitionPresets.ModalSlideFromBottomIOS,
-}
 
 const Idle = () => <ScreenContainer />
 
@@ -104,28 +98,19 @@ const LoggedIn = () => {
         <LoggedInStack.Screen
           name={ScreenNames.DeviceAuth}
           component={DeviceAuthentication}
-          options={{
-            ...screenTransitionOptions,
-            gestureEnabled: false,
-          }}
+          options={screenTransitionFromBottomDisabledGestures}
         />
       ) : (
         <>
           <LoggedInStack.Screen
             name={'Idle'}
             component={Idle}
-            options={{
-              ...screenTransitionOptions,
-              gestureEnabled: false,
-            }}
+            options={screenTransitionFromBottomDisabledGestures}
           />
           <LoggedInStack.Screen
             name={ScreenNames.Main}
             component={Main}
-            options={{
-              ...screenTransitionOptions,
-              gestureEnabled: false,
-            }}
+            options={screenTransitionFromBottomDisabledGestures}
           />
         </>
       )}
@@ -133,10 +118,7 @@ const LoggedIn = () => {
         <LoggedInStack.Screen
           name={ScreenNames.LockStack}
           component={LockStack}
-          options={{
-            ...screenTransitionOptions,
-            gestureEnabled: false,
-          }}
+          options={screenTransitionFromBottomDisabledGestures}
         />
       )}
       {/* Modals -> End */}

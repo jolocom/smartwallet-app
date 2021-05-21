@@ -1,12 +1,10 @@
 import React from 'react'
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import { ScreenNames } from '~/types/screens'
 import Lock from '../Modals/Lock'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
+import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
 
 export type LockStackParamList = {
   [ScreenNames.PasscodeRecovery]: {
@@ -18,10 +16,6 @@ export type LockStackParamList = {
 
 const LockStackNavigator = createStackNavigator<LockStackParamList>()
 
-const screenTransitionOptions = {
-  ...TransitionPresets.ModalSlideFromBottomIOS,
-}
-
 const LockStack = () => {
   return (
     <LockStackNavigator.Navigator
@@ -31,21 +25,18 @@ const LockStack = () => {
       <LockStackNavigator.Screen
         name={ScreenNames.Lock}
         component={Lock}
-        options={{
-          ...screenTransitionOptions,
-          gestureEnabled: false,
-        }}
+        options={screenTransitionFromBottomDisabledGestures}
       />
 
       <LockStackNavigator.Screen
         name={ScreenNames.PinRecoveryInstructions}
         component={PinRecoveryInstructions}
-        options={{ ...screenTransitionOptions, gestureEnabled: false }}
+        options={screenTransitionFromBottomDisabledGestures}
       />
       <LockStackNavigator.Screen
         name={ScreenNames.PasscodeRecovery}
         component={Recovery}
-        options={{ ...screenTransitionOptions, gestureEnabled: false }}
+        options={screenTransitionFromBottomDisabledGestures}
       />
     </LockStackNavigator.Navigator>
   )
