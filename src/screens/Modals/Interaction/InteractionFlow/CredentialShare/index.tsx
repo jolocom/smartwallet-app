@@ -271,8 +271,8 @@ const styles = StyleSheet.create({
   },
   selectIndicator: {
     position: 'absolute',
-    top: 15,
-    right: 15,
+    top: 8,
+    right: 8,
   },
 })
 

@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: '5%',
+    paddingHorizontal: 16,
   },
   transparent: {
     backgroundColor: 'transparent',
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   padding: {
     width: '100%',
-    paddingHorizontal: '5%',
+    paddingHorizontal: 16,
   },
 })
 

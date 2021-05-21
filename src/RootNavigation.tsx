@@ -4,7 +4,10 @@ import {
   NavigationContainerRef,
   Theme,
 } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'

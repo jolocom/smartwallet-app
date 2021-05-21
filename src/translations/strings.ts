@@ -75,8 +75,6 @@ const errors = {
 const passcode = {
   CREATE_PASSCODE: 'Create passcode',
   VERIFY_PASSCODE: 'Verify passcode',
-  IN_ORDER_TO_PROTECT_YOUR_DATA:
-    'In order to protect your data from other users and maintain confidentiality',
   ADDING_AN_EXTRA_LAYER_OF_SECURITY:
     'Adding an extra layer of security helps prevent unwanted access to your wallet',
   PINS_DONT_MATCH: "PINs don't match",

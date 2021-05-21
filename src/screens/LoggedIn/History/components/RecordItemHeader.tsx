@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Image } from 'react-native'
+import { StyleSheet, View, Image, Platform } from 'react-native'
 
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -23,11 +23,16 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
       </View>
       <View style={[styles.textContainer]}>
         <View style={styles.topContainer}>
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+          <JoloText
+            ignoreScaling
+            kind={JoloTextKind.title}
+            size={JoloTextSizes.mini}
+          >
             {details ? details.title : '███████'}
           </JoloText>
 
           <JoloText
+            ignoreScaling
             testID="record-item-time"
             size={JoloTextSizes.mini}
             color={Colors.white}
@@ -36,7 +41,11 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
             {details ? details.time : '██'}
           </JoloText>
         </View>
-        <JoloText size={JoloTextSizes.mini} color={Colors.white40}>
+        <JoloText
+          ignoreScaling
+          size={JoloTextSizes.mini}
+          color={Colors.white40}
+        >
           {details ? details.issuer?.publicProfile?.name ?? 'Unknown' : '█████'}
         </JoloText>
       </View>
@@ -47,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     height: 80,
     width: '100%',
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.tileBlack55,
     borderRadius: 15,
     marginVertical: 5,
     flexDirection: 'row',
@@ -74,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 8,
+    marginBottom: Platform.select({ ios: 0, android: 4 }),
   },
 })
 
