@@ -23,6 +23,7 @@ export enum Colors {
   black50 = 'rgba(0,0,0,0.5)',
   black30 = 'rgba(0,0,0,0.30)',
   black06 = 'rgba(0, 0, 0, 0.06)',
+  tileBlack55 = 'rgba(6,1,7, 0.55)',
   lightBlack = 'rgb(9,9,9)',
   codGrey = '#101010',
   sadGrey = 'rgba(84, 84, 88, 0.65)',
