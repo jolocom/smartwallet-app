@@ -50,7 +50,7 @@ export const HandAnimation: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 60,
+    margin: 36,
     width: 78,
     height: 84,
   },
