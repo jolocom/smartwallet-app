@@ -29,7 +29,7 @@ interface IconPropsI {
 const SCALE_BY = SCREEN_WIDTH / 414
 
 /* picture has invisble horizontal margins, therefore adding 4 point to hide it */
-const SCREEN_WIDTH_ADJUSTED = SCREEN_WIDTH + 4
+const SCREEN_WIDTH_ADJUSTED = SCREEN_WIDTH + 12
 const TAB_IMAGE_WIDTH = SCREEN_WIDTH_ADJUSTED
 const TAB_IMAGE_HEIGHT = 0.192 * TAB_IMAGE_WIDTH
 const SCANNER_BUTTON_BOTTOM = 0.345 * TAB_IMAGE_HEIGHT
