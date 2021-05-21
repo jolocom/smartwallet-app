@@ -30,62 +30,63 @@ interface IScreenContainerCompound {
   Padding: React.FC
 }
 
-const ScreenContainer: React.FC<ScreenContainerI> &
-  IScreenContainerCompound = ({
-  children,
-  isTransparent = false,
-  isFullscreen = false,
-  customStyles = {},
-  backgroundColor = Colors.mainBlack,
-  hasHeaderBack = false,
-  hasHeaderClose = false,
-  hideStatusBar = false,
-  onClose,
-  testID,
-}) => {
-  hideStatusBar && useHideStatusBar()
+const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
+  ({
+    children,
+    isTransparent = false,
+    isFullscreen = false,
+    customStyles = {},
+    backgroundColor = Colors.mainBlack,
+    hasHeaderBack = false,
+    hasHeaderClose = false,
+    hideStatusBar = false,
+    onClose,
+    testID,
+  }) => {
+    hideStatusBar && useHideStatusBar()
 
-  const { top, bottom } = useSafeArea()
+    const { top, bottom } = useSafeArea()
 
-  return (
-    <SafeAreaView
-      testID={testID}
-      style={{
-        flex: 1,
-        backgroundColor,
-        paddingBottom: isFullscreen ? 0 : bottom,
-        paddingTop:
-          hideStatusBar || isFullscreen
-            ? 0
-            : Platform.select({
-                android: StatusBar.currentHeight,
-                ios: top,
-              }),
-      }}
-      mode="padding"
-    >
-      <View style={[styles.navContainer, isTransparent && styles.transparent]}>
-        {(hasHeaderClose || hasHeaderBack) && (
-          <NavigationHeader
-            onPress={onClose}
-            type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
-          />
-        )}
+    return (
+      <SafeAreaView
+        testID={testID}
+        style={{
+          flex: 1,
+        }}
+      >
         <View
-          style={[
-            styles.container,
-            { ...customStyles },
-            { backgroundColor },
-            isFullscreen && styles.fullscreen,
-            customStyles,
-          ]}
+          style={[styles.navContainer, isTransparent && styles.transparent]}
         >
-          {children}
+          {(hasHeaderClose || hasHeaderBack) && (
+            <NavigationHeader
+              onPress={onClose}
+              type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
+            />
+          )}
+          <View
+            style={[
+              styles.container,
+              {
+                backgroundColor,
+                paddingBottom: isFullscreen ? 0 : bottom,
+                paddingTop:
+                  hideStatusBar || isFullscreen
+                    ? 0
+                    : Platform.select({
+                        android: StatusBar.currentHeight,
+                        ios: top,
+                      }),
+              },
+              isFullscreen && styles.fullscreen,
+              customStyles,
+            ]}
+          >
+            {children}
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
-  )
-}
+      </SafeAreaView>
+    )
+  }
 
 const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
   children,
