@@ -7,6 +7,7 @@ import {
   TextStyle,
   ViewStyle,
   Platform,
+  TouchableOpacityProps,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import useConnection from '~/hooks/connection'
@@ -28,7 +29,7 @@ export enum BtnSize {
   medium,
 }
 
-interface BtnPropsI {
+interface BtnPropsI extends TouchableOpacityProps {
   type?: BtnTypes
   customTextStyles?: TextStyle
   size?: BtnSize
@@ -36,7 +37,6 @@ interface BtnPropsI {
 
 interface PropsI extends BtnPropsI {
   size?: BtnSize
-  onPress: (val: any) => void
   disabled?: boolean
   withoutMargins?: boolean
   customContainerStyles?: ViewStyle
@@ -88,17 +88,27 @@ const ButtonText: React.FC<BtnPropsI> = ({
   )
 }
 
-const Btn: React.FC<PropsI> & IBtnComposition = (props) => {
+const Btn: React.FC<PropsI> & IBtnComposition = ({
+  disabled,
+  withoutMargins,
+  size,
+  type,
+  customTextStyles,
+  customContainerStyles,
+  testID,
+  children,
+  ...btnProps
+}) => {
   const containerStyles = [
     styles.container,
-    props.disabled && styles.disabled,
-    { marginVertical: props.withoutMargins ? 0 : 5 },
+    disabled && styles.disabled,
+    { marginVertical: withoutMargins ? 0 : 5 },
   ]
-  const btnStyle =
-    props.size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
+  const btnStyle = size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
 
   const renderButton = () => {
-    switch (props.type) {
+    const btnTextProps = { size, type, customTextStyles, children }
+    switch (type) {
       case BtnTypes.primary:
         return (
           <LinearGradient
@@ -108,17 +118,17 @@ const Btn: React.FC<PropsI> & IBtnComposition = (props) => {
             style={[styles.container, btnStyle]}
             colors={[Colors.disco, Colors.ceriseRed]}
           >
-            <ButtonText {...props} />
+            <ButtonText {...btnTextProps} />
           </LinearGradient>
         )
       case BtnTypes.secondary:
       case BtnTypes.tertiary:
         return (
           <View
-            style={[containerStyles, props.customContainerStyles, btnStyle]}
+            style={[containerStyles, btnStyle, customContainerStyles]}
             testID="non-gradient"
           >
-            <ButtonText {...props} />
+            <ButtonText {...btnTextProps} />
           </View>
         )
       case BtnTypes.quaternary:
@@ -129,11 +139,11 @@ const Btn: React.FC<PropsI> & IBtnComposition = (props) => {
             style={[
               containerStyles,
               { backgroundColor: Colors.matterhorn18 },
-              props.customContainerStyles,
+              customContainerStyles,
               btnStyle,
             ]}
           >
-            <ButtonText {...props} />
+            <ButtonText {...btnTextProps} />
           </View>
         )
     }
@@ -142,9 +152,9 @@ const Btn: React.FC<PropsI> & IBtnComposition = (props) => {
   return (
     <TouchableOpacity
       style={containerStyles}
-      onPress={props.onPress}
-      disabled={props.disabled}
-      testID={props.testID || 'button'}
+      disabled={disabled}
+      testID={testID || 'button'}
+      {...btnProps}
     >
       {renderButton()}
     </TouchableOpacity>
