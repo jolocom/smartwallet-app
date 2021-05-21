@@ -12,10 +12,10 @@ import { attributeConfig } from '~/config/claims'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import { useRedirect } from '~/hooks/navigation'
 
-import { Space } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
 import Field, { IWidgetField } from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
+import Space from '~/components/Space'
 
 interface IShareAttributeWidgetProps {
   withContainer?: boolean

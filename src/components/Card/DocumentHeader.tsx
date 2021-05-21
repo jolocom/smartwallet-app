@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
 import { useCard } from './context'
 import { SpecialField, TitleField, TextLayoutEvent } from './Field'
+import Space from '~/components/Space'
 
 const DocumentHeader: React.FC = () => {
   const { document, restMandatoryField } = useCard()
@@ -30,9 +31,13 @@ const DocumentHeader: React.FC = () => {
         <View style={{ flex: 0.15 }} />
       </View>
       {restMandatoryField && (
-        <SpecialField numberOfLines={2}>
-          {restMandatoryField?.value}
-        </SpecialField>
+        <>
+          <Space height={BP({ default: 5, xsmall: 3 })} />
+          <SpecialField numberOfLines={2}>
+            {restMandatoryField?.value}
+          </SpecialField>
+          <Space height={BP({ default: 5, xsmall: 3 })} />
+        </>
       )}
     </>
   )

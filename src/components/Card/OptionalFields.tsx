@@ -5,6 +5,7 @@ import { useCard } from './context'
 import { FieldName, FieldValue, TextLayoutEvent } from './Field'
 import { IWithCustomStyle } from './types'
 import { CredentialCategories } from '~/types/credentials'
+import Space from '~/components/Space'
 
 const OptionalFields: React.FC<IWithCustomStyle> = ({
   customStyles: customContainerStyles,
@@ -75,8 +76,8 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
         numberOfLines={1}
         customStyles={{
           marginBottom: BP({
-            default: 8,
-            xsmall: 0,
+            default: 6,
+            xsmall: 1,
           }),
         }}
         onTextLayout={onTextLayoutChange}
@@ -95,6 +96,7 @@ const OptionalFields: React.FC<IWithCustomStyle> = ({
           {idx === displayedOptionalFields.length - 1 && photo
             ? renderFieldValue(pField.value, '30%')
             : renderFieldValue(pField.value)}
+          <Space height={BP({ default: 4, xsmall: 4 })} />
         </View>
       ))}
     </View>
