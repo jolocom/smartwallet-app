@@ -52,7 +52,7 @@ const WordPillWrite: React.FC = ({ children }) => {
   return (
     <WordPill
       customContainerStyles={{ shadowColor: Colors.bastille1 }}
-      customTextStyles={{ color: Colors.activity }}
+      customTextStyles={{ color: Colors.activity, opacity: 0.8 }}
     >
       {children}
     </WordPill>
