@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ITabPersistChildren } from './types'
-import { debugView } from '~/utils/dev'
 
 const PersistChildren: React.FC<ITabPersistChildren> = ({
   children,
