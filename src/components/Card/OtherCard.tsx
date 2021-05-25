@@ -55,7 +55,7 @@ const OtherCard: React.FC<ICardProps> = ({
         </OtherCardMedium>
         <Card.Dots
           customStyles={{
-            bottom: CARD_HORIZONTAL_PADDING + 3,
+            bottom: CARD_HORIZONTAL_PADDING / 3,
             right: CARD_HORIZONTAL_PADDING / 2,
           }}
         />
