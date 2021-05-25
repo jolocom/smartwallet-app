@@ -52,6 +52,13 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
         testID={testID}
         style={{
           flex: 1,
+          paddingTop:
+            hideStatusBar || isFullscreen
+              ? 0
+              : Platform.select({
+                  android: StatusBar.currentHeight,
+                  ios: top,
+                }),
         }}
       >
         <View
@@ -69,13 +76,6 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
               {
                 backgroundColor,
                 paddingBottom: isFullscreen ? 0 : bottom,
-                paddingTop:
-                  hideStatusBar || isFullscreen
-                    ? 0
-                    : Platform.select({
-                        android: StatusBar.currentHeight,
-                        ios: top,
-                      }),
               },
               isFullscreen && styles.fullscreen,
               customStyles,
