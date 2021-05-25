@@ -5,18 +5,9 @@ import DocumentHeader from './DocumentHeader'
 import DocumentDots from './DocumentDots'
 import OptionalFields from './OptionalFields'
 import OtherHeader from './OtherHeader'
-import { IWithCustomStyle, ICardProps } from './types'
+import { ICardProps, ICardComposition } from './types'
 import { DocumentFields } from '~/types/credentials'
 import { CardContext } from './context'
-
-interface ICardComposition {
-  OptionalFields: React.FC<IWithCustomStyle>
-  DocumentHeader: React.FC
-  OtherHeader: React.FC
-  Highlight: React.FC
-  Photo: React.FC
-  Dots: React.FC<IWithCustomStyle>
-}
 
 const Card: React.FC<ICardProps> & ICardComposition = ({
   children,

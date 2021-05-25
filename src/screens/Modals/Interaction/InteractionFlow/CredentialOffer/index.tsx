@@ -26,9 +26,9 @@ import {
   FooterContainerFAS,
   LogoContainerBAS,
   LogoContainerFAS,
-  Space,
 } from '../components/styled'
 import Collapsible from '~/components/Collapsible'
+import Space from '~/components/Space'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()

@@ -34,7 +34,6 @@ import {
   FooterContainerFAS,
   LogoContainerBAS,
   LogoContainerFAS,
-  Space,
 } from '../components/styled'
 import ShareAttributeWidget from './ShareAttributeWidget'
 import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
@@ -44,6 +43,7 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { getObjectFirstValue } from '~/utils/objectUtils'
+import Space from '~/components/Space'
 import ScreenContainer from '~/components/ScreenContainer'
 
 export const CredentialShareBAS = () => {

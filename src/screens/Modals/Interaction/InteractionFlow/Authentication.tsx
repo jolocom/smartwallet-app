@@ -1,14 +1,16 @@
-import React from 'react';
-import InteractionFooter from './components/InteractionFooter';
-import InteractionDescription from './components/InteractionDescription';
-import InteractionLogo from './components/InteractionLogo';
-import InteractionTitle from './components/InteractionTitle';
-import { ContainerBAS, LogoContainerBAS, Space } from './components/styled';
-import useAuthSubmit from '~/hooks/interactions/useAuthSubmit';
-import { strings } from '~/translations';
+import React from 'react'
+
+import Space from '~/components/Space'
+import InteractionFooter from './components/InteractionFooter'
+import InteractionDescription from './components/InteractionDescription'
+import InteractionLogo from './components/InteractionLogo'
+import InteractionTitle from './components/InteractionTitle'
+import { ContainerBAS, LogoContainerBAS } from './components/styled'
+import useAuthSubmit from '~/hooks/interactions/useAuthSubmit'
+import { strings } from '~/translations'
 
 const Authentication = () => {
-  const handleSubmit = useAuthSubmit();
+  const handleSubmit = useAuthSubmit()
   return (
     <ContainerBAS>
       <LogoContainerBAS>
@@ -27,5 +29,4 @@ const Authentication = () => {
   )
 }
 
-
-export default Authentication;
+export default Authentication

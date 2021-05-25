@@ -47,6 +47,7 @@ const OtherCard: React.FC<ICardProps> = ({
                   customStyles={{
                     paddingHorizontal: BP({ default: 8, xsmall: 0 }),
                   }}
+                  lastFieldPadding={BP({ default: '10%', xsmall: '15%' })}
                 />
               </View>
             </CardBody>
