@@ -1,5 +1,4 @@
-export const termsOfServiceEN = `
-SmartWallet App - Terms of Use
+export const termsOfServiceEN = `SmartWallet App - Terms of Use
 Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin, Germany (“Jolocom”)
 
 

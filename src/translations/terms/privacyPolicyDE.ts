@@ -1,5 +1,4 @@
-export const privacyPolicyDE = `
-Datenschutzerklärung SmartWallet App
+export const privacyPolicyDE = `Datenschutzerklärung SmartWallet App
 Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin (“Jolocom”)
 
 Jolocom stellt Ihnen die mobile App SmartWallet („SmartWallet App“) zur Verfügung, die Sie auf Ihr mobiles Endgerät herunterladen können.

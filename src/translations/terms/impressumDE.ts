@@ -1,5 +1,4 @@
-export const impressumDE = `
-Impressum Jolocom
+export const impressumDE = `Impressum Jolocom
 
 Angaben gem. § 5 Telemediengesetz
 
