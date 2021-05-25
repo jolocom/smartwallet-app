@@ -1,5 +1,4 @@
-export const privacyPolicyEN = `
-SmartWallet App - Privacy Policy
+export const privacyPolicyEN = `SmartWallet App - Privacy Policy
 Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin, Germany (“Jolocom”)
 
 

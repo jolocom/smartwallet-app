@@ -1,5 +1,4 @@
-export const impressumEN = `
-Imprint Jolocom
+export const impressumEN = `Imprint Jolocom
 
 Information according to § 5 of the German Telemedia Act
 

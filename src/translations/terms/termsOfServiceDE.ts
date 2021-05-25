@@ -1,5 +1,4 @@
-export const termsOfServiceDE = `
-Nutzungsbedingungen SmartWallet App
+export const termsOfServiceDE = `Nutzungsbedingungen SmartWallet App
 Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin (“Jolocom”)
 
 
