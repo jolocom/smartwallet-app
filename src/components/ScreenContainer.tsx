@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { View, StyleSheet, ViewStyle, Platform, StatusBar } from 'react-native'
 import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
@@ -46,24 +46,27 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
     hideStatusBar && useHideStatusBar()
 
     const { top, bottom } = useSafeArea()
+    const statusHeight = useRef(top)
 
     return (
       <SafeAreaView
         testID={testID}
         style={{
           flex: 1,
-          paddingTop:
-            hideStatusBar || isFullscreen
-              ? 0
-              : Platform.select({
-                  android: StatusBar.currentHeight,
-                  ios: top,
-                }),
+          paddingTop: 0,
         }}
       >
         <View
           style={[styles.navContainer, isTransparent && styles.transparent]}
         >
+          {!isFullscreen && !hideStatusBar && (
+            <View
+              style={{
+                height: statusHeight.current,
+                width: '100%',
+              }}
+            />
+          )}
           {(hasHeaderClose || hasHeaderBack) && (
             <NavigationHeader
               onPress={onClose}
