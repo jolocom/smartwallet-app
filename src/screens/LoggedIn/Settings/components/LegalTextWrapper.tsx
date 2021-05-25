@@ -54,6 +54,7 @@ const LegalTextWrapper: React.FC<Props> = ({
         </NavigationHeader>
       </Collapsible.Header>
       <ScreenContainer
+        isFullscreen
         customStyles={{
           paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
         }}
@@ -67,7 +68,9 @@ const LegalTextWrapper: React.FC<Props> = ({
             overScrollMode="never"
           >
             <Collapsible.HidingTextContainer>
-              <Section.Title>{title}</Section.Title>
+              <Section.Title customStyle={{ marginBottom: 16, marginTop: 16 }}>
+                {title}
+              </Section.Title>
             </Collapsible.HidingTextContainer>
             <JoloText
               color={Colors.white80}
