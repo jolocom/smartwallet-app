@@ -18,7 +18,10 @@ import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
 import LoggedIn from './screens/LoggedIn'
 import { Colors } from './utils/colors'
 import SeedPhraseInfo from './screens/LoggedOut/Onboarding/Registration/SeedPhrase/SeedPhraseInfo'
-import { transparentModalOptions } from './utils/screenSettings'
+import {
+  screenTransitionSlideFromBottom,
+  transparentModalOptions,
+} from './utils/screenSettings'
 
 export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
@@ -92,7 +95,12 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
         <RootStack.Screen
           name={ScreenNames.GlobalModals}
           component={GlobalModals}
-          options={{ cardStyle: { backgroundColor: 'transparent' } }}
+          options={{
+            cardStyle: {
+              backgroundColor: 'transparent',
+            },
+            ...screenTransitionSlideFromBottom,
+          }}
         />
         {/* Global -> End */}
       </RootStack.Navigator>

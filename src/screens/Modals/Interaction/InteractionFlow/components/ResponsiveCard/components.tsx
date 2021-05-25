@@ -99,22 +99,20 @@ export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({
   )
 }
 
-export const FieldsCalculator: IResponsiveCardComposition['FieldsCalculator'] = ({
-  children,
-  cbFieldsVisibility,
-}) => {
-  const { fieldLines, holderNameLines } = useResponsiveCard()
+export const FieldsCalculator: IResponsiveCardComposition['FieldsCalculator'] =
+  ({ children, cbFieldsVisibility }) => {
+    const { fieldLines, holderNameLines } = useResponsiveCard()
 
-  /* We can't display all the fields that a service provides,
+    /* We can't display all the fields that a service provides,
      therefore running a callback which decides what child to
      display and which one to cut off
   */
-  const childrenToDisplay = Children.map(children, (child, idx) => {
-    return cbFieldsVisibility(child, idx, fieldLines, holderNameLines)
-  })
+    const childrenToDisplay = Children.map(children, (child, idx) => {
+      return cbFieldsVisibility(child, idx, fieldLines, holderNameLines)
+    })
 
-  return childrenToDisplay
-}
+    return childrenToDisplay
+  }
 
 export const FieldValue: IResponsiveCardComposition['FieldValue'] = ({
   children,
@@ -138,17 +136,16 @@ export const FieldValue: IResponsiveCardComposition['FieldValue'] = ({
   )
 }
 
-export const FieldPlaceholder: IResponsiveCardComposition['FieldPlaceholder'] = ({
-  width,
-}) => {
-  const { scaleRatio } = useResponsiveCard()
-  const calculatedStyles = {
-    width: scaleRatio * width,
-    height: scaleRatio * 20,
-    borderRadius: scaleRatio * 5,
+export const FieldPlaceholder: IResponsiveCardComposition['FieldPlaceholder'] =
+  ({ width }) => {
+    const { scaleRatio } = useResponsiveCard()
+    const calculatedStyles = {
+      width: scaleRatio * width,
+      height: scaleRatio * 20,
+      borderRadius: scaleRatio * 5,
+    }
+    return <View style={[styles.fieldPlaceholder, calculatedStyles]} />
   }
-  return <View style={[styles.fieldPlaceholder, calculatedStyles]} />
-}
 
 const styles = StyleSheet.create({
   container: {

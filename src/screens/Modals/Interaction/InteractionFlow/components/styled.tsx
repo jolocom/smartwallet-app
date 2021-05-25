@@ -48,6 +48,8 @@ export const FooterContainerFAS: React.FC = ({ children }) => {
   )
 }
 
+export const Space = ({ height = 48 }) => <View style={{ height }} />
+
 const styles = StyleSheet.create({
   containerBAS: {
     width: '96%',
