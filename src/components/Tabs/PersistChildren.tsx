@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { ITabPersistChildren } from './types'
 import { debugView } from '~/utils/dev'
 
@@ -7,11 +7,14 @@ const PersistChildren: React.FC<ITabPersistChildren> = ({
   children,
   isContentVisible,
 }) => {
+  // NOTE: not using `display: none` for hiding the content, b/c it causes
+  // the re-render of the `SectionList` component
   return (
     <View
       style={{
-        display: isContentVisible ? 'flex' : 'none',
-        flex: 1,
+        zIndex: isContentVisible ? 10 : -10,
+        opacity: isContentVisible ? 1 : 0,
+        ...StyleSheet.absoluteFillObject,
       }}
     >
       {children}
