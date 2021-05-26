@@ -64,6 +64,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
               style={{
                 height: statusHeight.current,
                 width: '100%',
+                backgroundColor,
               }}
             />
           )}
