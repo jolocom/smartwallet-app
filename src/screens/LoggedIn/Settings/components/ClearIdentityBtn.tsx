@@ -35,12 +35,12 @@ const ClearIdentityBtn = () => {
   const handlePress = async () => {
     Alert.alert(strings.CLEAR_IDENTITY_TITLE, strings.CLEAR_IDENTITY_MESSAGE, [
       {
-        text: strings.CLEAR_IDENTITY_CONFIRM,
-        onPress: clearIdentityData,
-      },
-      {
         text: strings.CLEAR_IDENTITY_CANCEL,
         style: 'cancel',
+      },
+      {
+        text: strings.CLEAR_IDENTITY_CONFIRM,
+        onPress: clearIdentityData,
       },
     ])
   }
