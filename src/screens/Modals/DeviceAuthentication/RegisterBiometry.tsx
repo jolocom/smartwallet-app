@@ -20,6 +20,8 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useBiometry } from '~/hooks/biometry'
+import BtnGroup from '~/components/BtnGroup'
+import { View } from 'react-native'
 
 const RegisterBiometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
@@ -68,11 +70,12 @@ const RegisterBiometry: React.FC = () => {
       >
         {strings.TAP_TO_ACTIVATE}
       </JoloText>
-      <AbsoluteBottom>
+      <View style={{ flex: 1 }} />
+      <BtnGroup>
         <Btn type={BtnTypes.secondary} onPress={handleRedirectToLogin}>
           {strings.SKIP}
         </Btn>
-      </AbsoluteBottom>
+      </BtnGroup>
     </ScreenContainer>
   )
 }
