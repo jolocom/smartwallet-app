@@ -112,7 +112,7 @@ const deviceAuthentication = {
   USE_BIOMETRICS_TO_AUTHORIZE: 'Use Biometrics to authorise wallet',
 
   SO_YOU_DONT_NEED_TO_CONFIRM:
-    'So you don’t need to confirm your PIN every time you need to use it',
+    'So you don’t need to confirm your passcode every time you need to use it',
 
   SKIP: 'Skip',
   YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
