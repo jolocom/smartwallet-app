@@ -21,9 +21,8 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const [wrongOrder, setWrongOrder] = useState(false)
   const [readyToSubmit, setReadyToSubmit] = useState(false)
-  const [shuffledSeedphrase, setShuffledSeedphrase] = useState<string[] | null>(
-    null,
-  )
+  const [shuffledSeedphrase, setShuffledSeedphrase] =
+    useState<string[] | null>(null)
 
   const isFirstFragment = useRef(Boolean(Math.round(Math.random())))
 
@@ -86,7 +85,7 @@ const SeedPhraseRepeat: React.FC = () => {
       </SeedPhrase.Styled.ActiveArea>
       <SeedPhrase.Styled.CTA>
         <Btn
-          disabled={!readyToSubmit}
+          disabled={!readyToSubmit || wrongOrder}
           onPress={onSubmit}
           type={BtnTypes.primary}
         >
