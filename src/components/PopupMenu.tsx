@@ -8,14 +8,18 @@ import JoloText from './JoloText'
 import { RouteProp, useRoute } from '@react-navigation/core'
 import { ScreenNames } from '~/types/screens'
 import ScreenContainer from './ScreenContainer'
-import { useGoBack } from '~/hooks/navigation'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { IWithCustomStyle } from './Card/types'
 import ScreenDismissArea from './ScreenDismissArea'
 import { TransparentModalsParamsList } from '~/screens/LoggedIn/Main'
 
 export interface IPopupOption {
   title: string
-  onPress: () => void
+  navigation?: {
+    screen: ScreenNames
+    params?: Record<string, any>
+  }
+  onPress?: () => void
 }
 
 export interface PopupMenuProps {
@@ -50,6 +54,7 @@ const PopupButton: React.FC<{ onPress: () => void }> = ({
 
 const PopupMenu = () => {
   const goBack = useGoBack()
+  const redirect = useRedirect()
   const { bottom } = useSafeArea()
   const { options } =
     useRoute<RouteProp<TransparentModalsParamsList, ScreenNames.PopupMenu>>()
@@ -60,11 +65,16 @@ const PopupMenu = () => {
       <ScreenDismissArea onDismiss={goBack} />
       <View style={[styles.container, { paddingBottom: bottom + 24 }]}>
         <SolidBlock>
-          {options.map(({ title, onPress }, i) => (
+          {options.map(({ title, navigation, onPress }, i) => (
             <React.Fragment key={i}>
               <PopupButton
                 onPress={() => {
-                  onPress()
+                  onPress && onPress()
+                  navigation &&
+                    redirect(ScreenNames.Main, {
+                      screen: navigation.screen,
+                      params: navigation.params,
+                    })
                   goBack()
                 }}
               >
