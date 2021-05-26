@@ -1,19 +1,37 @@
-import React, { useImperativeHandle, useState } from 'react'
+import React from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import Block from './Block'
 import { Colors } from '~/utils/colors'
 import JoloText from './JoloText'
-import ActionSheet from './ActionSheet/ActionSheet'
-import { useSafeArea } from 'react-native-safe-area-context'
+import { RouteProp, useRoute } from '@react-navigation/core'
+import { ScreenNames } from '~/types/screens'
+import ScreenContainer from './ScreenContainer'
+import { useGoBack } from '~/hooks/navigation'
+import { IWithCustomStyle } from './Card/types'
+import ScreenDismissArea from './ScreenDismissArea'
+import { TransparentModalsParamsList } from '~/screens/LoggedIn/Main'
 
 export interface IPopupOption {
   title: string
   onPress: () => void
 }
 
-interface Props {
+export interface PopupMenuProps {
   options: IPopupOption[]
+}
+
+// FIXME: ugly hack. Due to the Navigation Stack's transparency, the blocks appear to be transparent, together
+// with the screen. Stacking them up seems to decrease the opacity, but it's still not a solid color.
+const SolidBlock: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
+  return (
+    <Block customStyle={[styles.block, customStyles]}>
+      <Block customStyle={styles.block}>
+        <Block customStyle={styles.block}>{children}</Block>
+      </Block>
+    </Block>
+  )
 }
 
 const PopupButton: React.FC<{ onPress: () => void }> = ({
@@ -22,6 +40,7 @@ const PopupButton: React.FC<{ onPress: () => void }> = ({
 }) => (
   <TouchableOpacity
     style={styles.button}
+    activeOpacity={0.8}
     onPress={onPress}
     testID="popup-menu-button"
   >
@@ -29,67 +48,52 @@ const PopupButton: React.FC<{ onPress: () => void }> = ({
   </TouchableOpacity>
 )
 
-const PopupMenu = React.forwardRef<{ show: () => void }, Props>(
-  ({ options }, ref) => {
-    const [isVisible, setVisible] = useState(false)
-    const { bottom } = useSafeArea()
+const PopupMenu = () => {
+  const goBack = useGoBack()
+  const { bottom } = useSafeArea()
+  const { options } =
+    useRoute<RouteProp<TransparentModalsParamsList, ScreenNames.PopupMenu>>()
+      .params
 
-    useImperativeHandle(ref, () => ({
-      show: () => setVisible(true),
-    }))
-
-    const handleHide = () => setVisible(false)
-
-    return (
-      <ActionSheet
-        isVisible={isVisible}
-        onClose={handleHide}
-        overlayColor={Colors.black85}
-        animationType={'fade'}
-        testID="popup-menu"
-      >
-        <View style={[styles.container, { paddingBottom: bottom + 24 }]}>
-          <Block customStyle={styles.block}>
-            {options.map(({ title, onPress }, i) => (
-              <React.Fragment key={i}>
-                <PopupButton
-                  onPress={() => {
-                    onPress()
-                    handleHide()
-                  }}
-                >
-                  {title}
-                </PopupButton>
-                {i !== options.length - 1 && <View style={styles.divider} />}
-              </React.Fragment>
-            ))}
-          </Block>
-          <Block
-            customStyle={{
-              ...styles.block,
-              marginTop: 16,
-            }}
-          >
-            <PopupButton onPress={handleHide}>Close</PopupButton>
-          </Block>
-        </View>
-      </ActionSheet>
-    )
-  },
-)
+  return (
+    <ScreenContainer isFullscreen backgroundColor={Colors.black65}>
+      <ScreenDismissArea onDismiss={goBack} />
+      <View style={[styles.container, { paddingBottom: bottom + 24 }]}>
+        <SolidBlock>
+          {options.map(({ title, onPress }, i) => (
+            <React.Fragment key={i}>
+              <PopupButton
+                onPress={() => {
+                  onPress()
+                  goBack()
+                }}
+              >
+                {title}
+              </PopupButton>
+              {i !== options.length - 1 && <View style={styles.divider} />}
+            </React.Fragment>
+          ))}
+        </SolidBlock>
+        <SolidBlock
+          customStyles={{
+            marginTop: 16,
+          }}
+        >
+          <PopupButton onPress={goBack}>Close</PopupButton>
+        </SolidBlock>
+      </View>
+    </ScreenContainer>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
-    position: 'absolute',
     width: '100%',
-    bottom: 0,
-    left: 0,
-    right: 0,
   },
   block: {
-    backgroundColor: Colors.dark,
     borderRadius: 10,
+    backgroundColor: Colors.mainBlack,
   },
   divider: {
     height: 1,

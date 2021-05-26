@@ -39,22 +39,29 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
     }
   }
 
-  const redirectToDelete = useRedirectTo(ScreenNames.DragToConfirm, {
-    title: deleteTitle,
-    cancelText,
-    onComplete: handleDelete,
+  const redirectToDelete = useRedirectTo(ScreenNames.Main, {
+    screen: ScreenNames.DragToConfirm,
+    params: {
+      title: deleteTitle,
+      cancelText,
+      onComplete: handleDelete,
+    },
   })
 
   const popupOptions = useMemo(
     () => [
       {
         title: strings.INFO,
-        onPress: () =>
-          redirect(ScreenNames.CardDetails, {
-            fields: claimsDisplay,
-            photo,
-            title,
-          }),
+        onPress: () => {
+          redirect(ScreenNames.Main, {
+            screen: ScreenNames.CardDetails,
+            params: {
+              fields: claimsDisplay,
+              photo,
+              title,
+            },
+          })
+        },
       },
       { title: strings.DELETE, onPress: redirectToDelete },
     ],

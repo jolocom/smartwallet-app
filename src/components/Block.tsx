@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 
 interface Props {
-  customStyle?: ViewStyle
+  customStyle?: StyleProp<ViewStyle>
 }
 
 const Block: React.FC<Props> = ({ children, customStyle = {} }) => (
