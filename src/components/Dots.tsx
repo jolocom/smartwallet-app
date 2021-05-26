@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { useRedirect } from '~/hooks/navigation'
-import { ScreenNames } from '~/types/screens'
+import { usePopupMenu } from '~/hooks/popupMenu'
 import { Colors } from '~/utils/colors'
 import { IWithCustomStyle } from './Card/types'
 import { IPopupOption } from './PopupMenu'
@@ -12,17 +11,11 @@ interface IDots extends IWithCustomStyle {
 }
 
 const Dots: React.FC<IDots> = ({ customStyles, color, options }) => {
-  const redirect = useRedirect()
+  const { showPopup } = usePopupMenu()
 
-  const handlePress = () => {
-    redirect(ScreenNames.TransparentModals, {
-      screen: ScreenNames.PopupMenu,
-      params: { options },
-    })
-  }
   return (
     <TouchableOpacity
-      onPress={handlePress}
+      onPress={() => showPopup(options)}
       style={[styles.container, customStyles]}
       testID="card-action-more"
     >
