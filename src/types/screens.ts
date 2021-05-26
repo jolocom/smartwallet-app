@@ -39,6 +39,8 @@ export enum ScreenNames {
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',
   CardDetails = 'CardDetails',
+  PopupMenu = 'PopupMenu',
+  TransparentModals = 'TransparentModals',
 
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
@@ -65,5 +67,5 @@ export enum ScreenNames {
   CollapsibleTest = 'CollapsibleTest',
 
   //Modals
-  GlobalModals = "GlobalModals"
+  GlobalModals = 'GlobalModals',
 }
