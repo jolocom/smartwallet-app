@@ -29,6 +29,7 @@ const BtnGroup: React.FC<PropsI> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    marginBottom: 16,
   },
   horizontal: {
     flexDirection: 'row',
