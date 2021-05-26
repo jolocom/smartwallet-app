@@ -21,7 +21,7 @@ const ClearIdentityBtn = () => {
       async () => {
         await agent.delete({ identity: false, encryptedWallet: false })
       },
-      {},
+      { loading: strings.CLEAR_IDENTITY_LOADER },
       (err) => {
         if (!err) {
           // NOTE: re-mounting Loggedin stack so it fetches updated storage and

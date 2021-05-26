@@ -174,7 +174,8 @@ const interactions = {
   INTERACTION_ERROR_MESSAGE:
     'Unknown interaction error occurred. Please submit report',
   ERROR_ATTRIBUTE_ALREADY_EXISTS: 'Attribute of the same value already exists',
-  INTERACTION_DESC_MISSING_SINGLE: 'It seems like your wallet is missing something important for this request'
+  INTERACTION_DESC_MISSING_SINGLE:
+    'It seems like your wallet is missing something important for this request',
 }
 
 const lock = {
@@ -249,6 +250,7 @@ const settings = {
   CLEAR_IDENTITY_DETAILS:
     'If you want to start fresh and erase all data related to this wallet’s identity',
   CLEAR_IDENTITY_BTN: 'click here',
+  CLEAR_IDENTITY_LOADER: 'Processing data removal',
 }
 
 const termsConsent = {
