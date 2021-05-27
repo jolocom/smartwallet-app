@@ -5,11 +5,18 @@ import {
   KeyboardAwareScrollViewProps,
 } from 'react-native-keyboard-aware-scroll-view'
 import InputContainer from './InputContainer'
-import { IJoloKeyboardAwareScrollComposition } from './types'
+import {
+  IJoloKeyboardAwareScrollComposition,
+  IJoloKeyboardAwareScrollProps,
+} from './types'
 import { JoloKeyboardAwareScrollContext } from './context'
 
-const JoloKeyboardAwareScroll: React.FC<KeyboardAwareScrollViewProps> &
-  IJoloKeyboardAwareScrollComposition = ({ children, ...rest }) => {
+const JoloKeyboardAwareScroll: React.FC<IJoloKeyboardAwareScrollProps> &
+  IJoloKeyboardAwareScrollComposition = ({
+  children,
+  disableInsets = false,
+  ...rest
+}) => {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null)
 
   const handleFocusInput = (event: NativeSyntheticEvent<TargetedEvent>) => {
@@ -30,9 +37,9 @@ const JoloKeyboardAwareScroll: React.FC<KeyboardAwareScrollViewProps> &
         {...rest}
         ref={scrollViewRef}
         extraScrollHeight={50}
-        contentInset={undefined}
         keyboardOpeningTime={0}
         children={children}
+        {...(disableInsets && { contentInset: undefined })}
       />
     </JoloKeyboardAwareScrollContext.Provider>
   )
