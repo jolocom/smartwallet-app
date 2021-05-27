@@ -50,27 +50,31 @@ const CardList: React.FC = ({ children }) => {
 }
 
 const DocumentList = () => {
-  const [categories, setCategories] = useState<
-    | CredentialsByCategory<
-        CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
-      >
-    | CredentialsByCategory<
-        CredentialsByIssuer<DisplayCredentialDocument | DisplayCredentialOther>
-      >
-    | null
-  >(null)
+  const [categories, setCategories] =
+    useState<
+      | CredentialsByCategory<
+          CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
+        >
+      | CredentialsByCategory<
+          CredentialsByIssuer<
+            DisplayCredentialDocument | DisplayCredentialOther
+          >
+        >
+      | null
+    >(null)
   const { activeTab, activeSubtab, setActiveTab } = useTabs()
   const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
-  const initialTabId = route.params.initialTab ?? CredentialCategories.document
 
   const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
   const categoriesByIssuer = useSelector(
     getCustomCredentialsByCategoriesByIssuer,
   )
 
+  // NOTE: changing the active tab when the navigation params changed
   useLayoutEffect(() => {
-    setActiveTab(documentTabs.find((t) => t.id === initialTabId)!)
-  }, [initialTabId])
+    const newTabId = route.params.initialTab ?? CredentialCategories.document
+    setActiveTab(documentTabs.find((t) => t.id === newTabId)!)
+  }, [route])
 
   useEffect(() => {
     if (activeSubtab?.id === 'type') {
