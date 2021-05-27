@@ -146,7 +146,12 @@ const CredentialForm = () => {
             onSubmit={() => handleCredentialSubmit(values)}
             isSubmitDisabled={!isValid || !dirty || isPrevEqual}
           >
-            <AutofocusContainer>
+            <AutofocusContainer
+              style={{
+                // NOTE: allow scrolling if there are too many fields
+                paddingBottom: formConfig.fields.length > 3 ? 200 : 0,
+              }}
+            >
               {formConfig.fields.map((field, i) => {
                 return (
                   <FormFieldContainer key={field.key}>
