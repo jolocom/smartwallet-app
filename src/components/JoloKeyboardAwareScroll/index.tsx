@@ -30,6 +30,7 @@ const JoloKeyboardAwareScroll: React.FC<KeyboardAwareScrollViewProps> &
         {...rest}
         ref={scrollViewRef}
         extraScrollHeight={50}
+        contentInset={undefined}
         keyboardOpeningTime={0}
         children={children}
       />
