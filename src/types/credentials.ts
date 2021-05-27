@@ -95,7 +95,7 @@ export enum DocumentFields {
 
 export type DisplayCredential = { issuer: IdentitySummary | undefined } & {
   category: CredentialCategories
-} & { properties: Array<Required<DisplayVal>> }
+} & { properties: Array<Required<DisplayVal>> } & BaseUICredential
 
 export type DisplayCredentialDocument = DisplayCredential & {
   holderName: string
@@ -124,6 +124,9 @@ export function isDocument(
   return credential.category === CredentialCategories.document
 }
 
-export type TPrimitiveAttributesConfig = Record<AttributeTypes, IAttributeConfig>
+export type TPrimitiveAttributesConfig = Record<
+  AttributeTypes,
+  IAttributeConfig
+>
 
 export type PrimitiveAttributeTypes = AttributeTypes
