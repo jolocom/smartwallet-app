@@ -1,7 +1,4 @@
-import {
-  useNavigation,
-  StackActions,
-} from '@react-navigation/native'
+import { useNavigation, StackActions } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
@@ -48,8 +45,10 @@ export const useRedirectTo = (
 
 export const useReplaceWith = () => {
   const navigation = useNavigation()
-  return (screenName: ScreenNames) =>
-    navigation.dispatch(StackActions.replace(screenName))
+  return (
+    screenName: ScreenNames,
+    params: Record<string, any> & NestedSceenI = {},
+  ) => navigation.dispatch(StackActions.replace(screenName, params))
 }
 
 export const useRedirectToLoggedIn = () => {

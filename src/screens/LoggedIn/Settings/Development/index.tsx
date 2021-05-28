@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 
 import Section from '../components/Section'
@@ -9,7 +9,7 @@ import { useRedirect, useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
-import PopupMenu from '~/components/PopupMenu'
+import { usePopupMenu } from '~/hooks/popupMenu'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
@@ -21,8 +21,7 @@ const DevelopmentSection = () => {
     ScreenNames.InteractionCardsTest,
   )
   const redirect = useRedirect()
-
-  const popupRef = useRef<{ show: () => void }>(null)
+  const { showPopup } = usePopupMenu()
 
   const handleToggle = (toggled: boolean) => {
     scheduleInfo({
@@ -52,16 +51,16 @@ const DevelopmentSection = () => {
         >
           <Option.Title title="Throw error" />
         </Option>
-        <Option onPress={() => popupRef.current?.show()}>
-          <Option.Title title="Popup menu" />
-          <PopupMenu
-            ref={popupRef}
-            options={[
+        <Option
+          onPress={() =>
+            showPopup([
               { title: 'Help', onPress: () => {} },
               { title: 'Me', onPress: () => {} },
               { title: 'Please', onPress: () => {} },
-            ]}
-          />
+            ])
+          }
+        >
+          <Option.Title title="Popup menu" />
         </Option>
         <Option onPress={redirectToNotifications}>
           <Option.Title title="Notifications" />

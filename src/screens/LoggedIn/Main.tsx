@@ -31,8 +31,31 @@ import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import {
   screenTransitionFromBottomDisabledGestures,
+  screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
+  transparentModalOptions,
 } from '~/utils/screenSettings'
+import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
+
+export type TransparentModalsParamsList = {
+  [ScreenNames.PopupMenu]: PopupMenuProps
+}
+const TransparentModalsStack = createStackNavigator()
+
+const TransparentModals = () => {
+  return (
+    <TransparentModalsStack.Navigator
+      headerMode="none"
+      mode="modal"
+      screenOptions={transparentModalOptions}
+    >
+      <TransparentModalsStack.Screen
+        name={ScreenNames.PopupMenu}
+        component={PopupMenu}
+      />
+    </TransparentModalsStack.Navigator>
+  )
+}
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
@@ -66,6 +89,7 @@ export type MainStackParamList = {
   [ScreenNames.PasscodeRecovery]: {
     isAccessRestore: boolean
   }
+  [ScreenNames.TransparentModals]: undefined
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -205,6 +229,17 @@ const Main: React.FC = () => {
             name={ScreenNames.PasscodeRecovery}
             component={Recovery}
             options={screenTransitionFromBottomDisabledGestures}
+          />
+
+          <MainStack.Screen
+            name={ScreenNames.TransparentModals}
+            component={TransparentModals}
+            options={{
+              cardStyle: {
+                backgroundColor: 'transparent',
+              },
+              ...screenTransitionSlideFromBottom,
+            }}
           />
           {/* Modals -> End */}
         </>

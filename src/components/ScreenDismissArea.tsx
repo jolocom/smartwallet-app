@@ -1,12 +1,12 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import React from 'react'
+import { StyleSheet } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 
 interface IScreenDismissArea {
   onDismiss: () => void
 }
 
-const ScreenDismissArea: React.FC<IScreenDismissArea> = ({onDismiss}) => {
+const ScreenDismissArea: React.FC<IScreenDismissArea> = ({ onDismiss }) => {
   return (
     <TouchableWithoutFeedback onPress={onDismiss}>
       <View style={styles.tapArea} />
@@ -16,7 +16,8 @@ const ScreenDismissArea: React.FC<IScreenDismissArea> = ({onDismiss}) => {
 
 const styles = StyleSheet.create({
   tapArea: {
-    flex: 1,  
+    flex: 1,
+    width: '100%',
   },
 })
 
