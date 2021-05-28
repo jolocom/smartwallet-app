@@ -5,6 +5,7 @@ import AbsoluteBottom from './AbsoluteBottom'
 import Btn, { BtnTypes } from './Btn'
 import JoloText, { JoloTextKind } from './JoloText'
 import { useGoBack } from '~/hooks/navigation'
+import BtnGroup from './BtnGroup'
 
 interface IInfoComposition {
   Content: React.FC
@@ -24,7 +25,11 @@ const InfoTitle: React.FC = ({ children }) => {
     <JoloText
       kind={JoloTextKind.title}
       color={Colors.white85}
-      customStyles={{ textAlign: 'left', marginBottom: -19, ...(Platform.OS === 'ios' && { alignSelf: 'flex-start' }) }}
+      customStyles={{
+        textAlign: 'left',
+        marginBottom: -19,
+        ...(Platform.OS === 'ios' && { alignSelf: 'flex-start' }),
+      }}
     >
       {children}
     </JoloText>
@@ -46,17 +51,24 @@ const InfoDescription: React.FC = ({ children }) => {
 }
 
 const InfoHighlight: React.FC = ({ children }) => {
-  return <JoloText color={Colors.white60} customStyles={{ ...(Platform.OS === 'ios' && { textAlign: 'left' }) }}>{children}</JoloText>
+  return (
+    <JoloText
+      color={Colors.white60}
+      customStyles={{ ...(Platform.OS === 'ios' && { textAlign: 'left' }) }}
+    >
+      {children}
+    </JoloText>
+  )
 }
 
 const InfoButton: React.FC = ({ children }) => {
   const goBack = useGoBack()
   return (
-    <AbsoluteBottom>
+    <BtnGroup>
       <Btn type={BtnTypes.secondary} onPress={goBack}>
         {children}
       </Btn>
-    </AbsoluteBottom>
+    </BtnGroup>
   )
 }
 

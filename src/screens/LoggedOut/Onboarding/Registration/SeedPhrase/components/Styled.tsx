@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
+import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import BP from '~/utils/breakpoints'
@@ -71,7 +72,7 @@ const StyledActiveArea: React.FC = ({ children }) => {
 }
 
 const StyledCTA: React.FC = ({ children }) => {
-  return <AbsoluteBottom>{children}</AbsoluteBottom>
+  return <BtnGroup>{children}</BtnGroup>
 }
 
 const StyledErrorText: React.FC = ({ children }) => (

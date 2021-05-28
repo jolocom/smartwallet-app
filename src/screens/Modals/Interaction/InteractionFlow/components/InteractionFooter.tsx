@@ -43,7 +43,7 @@ const InteractionFooter: React.FC<Props> = ({
 
   return (
     <>
-      <BtnGroup alignment={BtnsAlignment.horizontal}>
+      <View style={styles.container}>
         <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
           <Btn
             disabled={!connected || disabled}
@@ -65,17 +65,20 @@ const InteractionFooter: React.FC<Props> = ({
             {strings.IGNORE}
           </Btn>
         </View>
-      </BtnGroup>
+      </View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+  },
   btnContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   cancelBtn: {
     borderWidth: 2,
     borderColor: Colors.borderGray20,
