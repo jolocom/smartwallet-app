@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import FormContainer from '~/components/FormContainer'
@@ -146,7 +146,15 @@ const CredentialForm = () => {
             onSubmit={() => handleCredentialSubmit(values)}
             isSubmitDisabled={!isValid || !dirty || isPrevEqual}
           >
-            <AutofocusContainer>
+            <AutofocusContainer
+              style={{
+                // NOTE: allow scrolling if there are too many fields
+                paddingBottom:
+                  formConfig.fields.length > 3
+                    ? Platform.select({ ios: 200, android: 300 })
+                    : 0,
+              }}
+            >
               {formConfig.fields.map((field, i) => {
                 return (
                   <FormFieldContainer key={field.key}>

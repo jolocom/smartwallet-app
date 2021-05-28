@@ -74,6 +74,7 @@ const FormContainer: React.FC<Props> = ({
       </Collapsible.Header>
       <ScreenContainer backgroundColor={Colors.lightBlack}>
         <Collapsible.KeyboardAwareScrollView
+          disableInsets
           customStyles={{ paddingBottom: 100 }}
         >
           <Collapsible.HidingTextContainer>

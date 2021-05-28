@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { IWithCustomStyle } from '../Card/types'
 import { ForwardRefExoticComponent, RefAttributes, ReactElement } from 'react'
+import { IJoloKeyboardAwareScrollProps } from '../JoloKeyboardAwareScroll/types'
 
 interface IHeaderProps extends IWithCustomStyle {
   height?: number
@@ -28,7 +29,9 @@ export interface ICollapsibleComposite {
   Header: React.FC<IHeaderProps>
   AnimatedHeader: React.FC<IHeaderProps>
   ScrollView: React.FC<IScrollViewProps>
-  KeyboardAwareScrollView: React.FC<IScrollViewProps>
+  KeyboardAwareScrollView: React.FC<
+    IJoloKeyboardAwareScrollProps & IScrollViewProps
+  >
   FlatList: React.FC<IFlatListProps>
   HeaderText: React.FC
   HidingTextContainer: React.FC<IWithCustomStyle>
