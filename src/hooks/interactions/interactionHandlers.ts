@@ -11,6 +11,7 @@ import {
   mapAttributesToDisplay,
   mapCredentialsToDisplay,
   separateCredentialsAndAttributes,
+  sortCredentialsByRecentIssueDate,
 } from '../signedCredentials/utils'
 import { CredentialRequest } from 'jolocom-lib/js/interactionTokens/credentialRequest'
 import { AttributeTypes } from '~/types/credentials'
@@ -57,7 +58,9 @@ class CredentialRequestHandler {
       return false
     })
 
-    this.#requestedCredentials = correctRequestedCredentials
+    this.#requestedCredentials = sortCredentialsByRecentIssueDate(
+      correctRequestedCredentials,
+    )
     return this
   }
 
@@ -66,8 +69,9 @@ class CredentialRequestHandler {
     // because first types of constraint and actual credential
     // do not match Credentials vs VerifiableCredential
     // @ts-expect-error: correctRequestedCredentials do not match SignedCredential type
-    this.#validatedCredentials = (this.interaction.getMessages()[0]
-    .interactionToken as CredentialRequest).applyConstraints(
+    this.#validatedCredentials = (
+      this.interaction.getMessages()[0].interactionToken as CredentialRequest
+    ).applyConstraints(
       // @ts-expect-error: correctRequestedCredentials do not match SignedCredential type
       this.#requestedCredentials,
     )
@@ -175,7 +179,9 @@ export const interactionHandler = async (
         agent.credentials,
       )
 
-      flowSpecificData = await (await handler.getStoredRequestedCredentials())
+      flowSpecificData = await (
+        await handler.getStoredRequestedCredentials()
+      )
         .validateAgainstConstrains()
         .checkForMissingServiceIssuedCredentials() // this will throw
         .prepareCredentialsForUI(did)
