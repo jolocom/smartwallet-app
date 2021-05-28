@@ -14,8 +14,8 @@ const Language = () => {
   const agent = useAgent()
 
   const languages = [
-    { id: Locales.en, value: t(strings.ENGLISH) },
-    { id: Locales.de, value: t(strings.GERMAN) },
+    { id: Locales.en, value: t(strings.ENGLISH), disabled: true },
+    { id: Locales.de, value: t(strings.GERMAN), disabled: true },
   ]
 
   const storedLanguage = languages.find((l) => l.id === currentLanguage)

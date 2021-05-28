@@ -32,19 +32,21 @@ const RightIcon: React.FC = () => (
 interface PropsI {
   onPress?: () => void
   hasBorder?: boolean
+  disabled?: boolean
 }
 
 const Option: React.FC<PropsI> & {
   Title: React.FC<TitlePropsI>
   RightIcon: React.FC
   IconContainer: React.FC
-} = ({ onPress, hasBorder = true, children }) => {
+} = ({ onPress, hasBorder = true, disabled = false, children }) => {
   return (
-    <View style={[styles.container, { ...(hasBorder && styles.border) }]}>
+    <View style={[styles.container, hasBorder && styles.border]}>
       <TouchableOpacity
         activeOpacity={onPress ? 0.2 : 1}
         onPress={onPress}
-        style={styles.sectionOption}
+        style={[styles.sectionOption, disabled && styles.disabled]}
+        disabled={disabled}
       >
         {children}
       </TouchableOpacity>
@@ -78,6 +80,9 @@ const styles = StyleSheet.create({
   rightIcon: {
     position: 'absolute',
     right: 16,
+  },
+  disabled: {
+    opacity: 0.1,
   },
 })
 
