@@ -19,7 +19,14 @@ const ClearIdentityBtn = () => {
   const clearIdentityData = () => {
     loader(
       async () => {
-        await agent.delete({ identity: false, encryptedWallet: false })
+        // NOTE: should delete interactions separately until multitenancy is there, due to
+        // unfinished interactions not being deleted.
+        await agent.storage.delete.interactions()
+        await agent.delete({
+          identity: false,
+          encryptedWallet: false,
+          interactions: false,
+        })
       },
       {},
       (err) => {
