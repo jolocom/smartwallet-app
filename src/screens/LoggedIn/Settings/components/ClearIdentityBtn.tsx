@@ -64,29 +64,34 @@ const ClearIdentityBtn = () => {
     <Dialog.Container
       visible={shouldShowAndroidDialog}
       onBackdropPress={hideAndroidDialog}
+      contentStyle={{
+        backgroundColor: '#353535',
+        marginHorizontal: 40,
+        borderRadius: 8,
+      }}
     >
       <Dialog.Title
         // @ts-ignore for some reason they gave a @Text component @ViewStyle props.
-        style={{ ...fonts.title.middle.medium, color: Colors.black }}
+        style={{ ...fonts.title.middle.medium }}
       >
         {strings.CLEAR_IDENTITY_TITLE}
       </Dialog.Title>
       <Dialog.Description
         // @ts-ignore for some reason they gave a @Text component @ViewStyle props
-        style={{ ...fonts.subtitle.middle.medium, color: Colors.black65 }}
+        style={{ ...fonts.subtitle.middle.medium }}
       >
         {strings.CLEAR_IDENTITY_MESSAGE}
       </Dialog.Description>
       <Dialog.Button
         label={strings.CLEAR_IDENTITY_CANCEL}
         onPress={hideAndroidDialog}
-        color={Colors.success}
+        color={Colors.white}
         style={{ opacity: 0.8 }}
       />
       <Dialog.Button
         label={strings.CLEAR_IDENTITY_CONFIRM}
         onPress={clearIdentityData}
-        color={Colors.success}
+        color={Colors.white}
         style={{ opacity: 0.8 }}
       />
     </Dialog.Container>
