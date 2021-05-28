@@ -1,7 +1,7 @@
 import React from 'react'
-import { Modal } from 'react-native'
+import { Modal, ModalProps } from 'react-native'
 
-interface PropsI {
+interface PropsI extends ModalProps {
   isVisible: boolean
   onShow?: () => void
   animationType?: 'none' | 'slide' | 'fade'
@@ -12,6 +12,7 @@ const ModalScreen: React.FC<PropsI> = ({
   isVisible,
   animationType = 'fade',
   onShow = () => {},
+  ...props
 }) => {
   return (
     <Modal
@@ -22,6 +23,7 @@ const ModalScreen: React.FC<PropsI> = ({
       //@ts-ignore
       statusBarTranslucent={true}
       onShow={onShow}
+      {...props}
     >
       {children}
     </Modal>

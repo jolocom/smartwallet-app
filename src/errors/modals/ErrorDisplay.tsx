@@ -15,6 +15,7 @@ const ErrorDisplay = () => {
   return (
     <ModalScreen
       isVisible={errorScreen === ErrorScreens.errorDisplay}
+      onRequestClose={resetError}
       animationType={'slide'}
     >
       <ErrorFallback

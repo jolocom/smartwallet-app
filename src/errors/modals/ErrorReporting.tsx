@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, View } from 'react-native'
+import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 
 import EmojiSelectable from '~/components/EmojiSelectable'
@@ -13,8 +13,6 @@ import { IOption } from '~/components/Selectable'
 import Toasts from '~/components/Toasts'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import useConnection from '~/hooks/connection'
-import { useAssertConnection } from '~/hooks/connection'
-import { usePrevious } from '~/hooks/generic'
 import { useSuccess } from '~/hooks/loader'
 import useSentry from '~/hooks/sentry'
 import useErrors from '~/hooks/useErrors'
@@ -43,7 +41,7 @@ const DROPDOWN_OPTIONS = INQUIRIES_LIST.map((el) => ({
 }))
 
 const ErrorReporting = () => {
-  const { errorScreen, resetError } = useErrors()
+  const { errorScreen, resetError, showErrorDisplay } = useErrors()
   const { sendErrorReport } = useSentry()
   const showSuccess = useSuccess()
 
@@ -101,9 +99,11 @@ const ErrorReporting = () => {
       handleResetState()
     }
   }, [errorScreen])
+
   return (
     <ModalScreen
       isVisible={errorScreen === ErrorScreens.errorReporting}
+      onRequestClose={showErrorDisplay}
       animationType={'slide'}
     >
       {/* Since the screen is a modal, need to include the @Toasts component for it
