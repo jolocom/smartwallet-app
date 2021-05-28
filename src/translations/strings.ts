@@ -250,6 +250,7 @@ const settings = {
   CLEAR_IDENTITY_DETAILS:
     'If you want to start fresh and erase all data related to this wallet’s identity',
   CLEAR_IDENTITY_BTN: 'click here',
+  CLEAR_IDENTITY_LOADER: 'Processing data removal',
 }
 
 const termsConsent = {
