@@ -32,7 +32,7 @@ const makeSeparateSignedTransformToUI = (agent: Agent, did: string) => {
   }
 }
 
-const makeInitializeCredentials = (
+export const makeInitializeCredentials = (
   agent: Agent,
   did: string,
   dispatch: Dispatch<any>,
