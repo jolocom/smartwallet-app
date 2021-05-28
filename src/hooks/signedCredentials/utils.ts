@@ -75,36 +75,27 @@ export async function mapCredentialsToDisplay(
   c: SignedCredential,
 ): Promise<DisplayCredential> {
   const credentialType = await credentials.types.forCredential(c)
+  const { display } = await credentials.display(c)
 
-  // TODO: sdk - get correctly resolved issuer profile it only returns string (did) not an identity summary
-  const { definition, renderAs, issuerProfile } = credentialType
+  // NOTE: using the properties from @CredentialType causes the values to be overwritten
+  // by the last credential of the same @type & @issuer.
+  const { renderAs, issuerProfile } = credentialType
+  const { properties } = display
 
-  const baseUICredentials = mapToBaseUICredential(c)
-  let updatedCredentials: DisplayCredential = {
-    ...baseUICredentials,
+  const uiCredential: DisplayCredential = {
+    ...mapToBaseUICredential(c),
     issuer: issuerProfile, // NOTE: credentialType will returned resolved issuer
     category: getCredentialCategory({ renderAs }),
-    properties: [],
+    properties: properties
+      ? properties.map((p, idx) => ({
+          key: p.key ? p.key[0].split('.')[1] : `${Date.now()}${idx}}`,
+          label: p.label ?? strings.NOT_SPECIFIED,
+          value: p.value || strings.NOT_SPECIFIED,
+        }))
+      : [],
   }
 
-  // TODO: CredentialManifestDisplayMapping - correct types
-  if (definition.display) {
-    const {
-      display: { properties },
-    } = definition
-    updatedCredentials = {
-      ...updatedCredentials,
-      properties: properties
-        ? properties.map((p, idx) => ({
-            key: p.path ? p.path[0].split('.')[1] : `${Date.now()}${idx}}`,
-            label: p.label ?? strings.NOT_SPECIFIED,
-            // @ts-expect-error - properties of CredentialManifestDisplayMapping are optional
-            value: p.value || strings.NOT_SPECIFIED,
-          }))
-        : [],
-    }
-  }
-  return updatedCredentials
+  return uiCredential
 }
 
 // TODO: this is so imperative
@@ -118,8 +109,9 @@ export function mapDisplayToCustomDisplay(
   }))
 
   if (isDocument(credential)) {
-    const photo = updatedProperties.find((p) => p.key === ClaimKeys.photo)
-      ?.value
+    const photo = updatedProperties.find(
+      (p) => p.key === ClaimKeys.photo,
+    )?.value
     const holderProperties = updatedProperties.filter(
       (p) => p.key === ClaimKeys.givenName || p.key === ClaimKeys.familyName,
     )
@@ -190,7 +182,7 @@ export const transformCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
  * * documents
  */
 export const reduceCustomDisplayCredentialsByType = <
-  T extends { type: string }
+  T extends { type: string },
 >(
   credentials: T[],
 ): Array<CredentialsByType<T>> => {
@@ -229,7 +221,7 @@ export const reduceCustomDisplayCredentialsByType = <
  * * documents
  */
 export const reduceCustomDisplayCredentialsByIssuer = <
-  T extends { issuer: IdentitySummary }
+  T extends { issuer: IdentitySummary },
 >(
   credentials: T[],
 ): Array<CredentialsByIssuer<T>> => {
@@ -271,7 +263,7 @@ export const sortCredentialsByRecentIssueDate = <T extends { issued: Date }>(
 }
 
 export const reduceCustomDisplayCredentialsBySortedType = <
-  T extends { type: string; issued: Date }
+  T extends { type: string; issued: Date },
 >(
   credentials: T[],
 ): Array<CredentialsByType<T>> => {
@@ -281,7 +273,7 @@ export const reduceCustomDisplayCredentialsBySortedType = <
 }
 
 export const reduceCustomDisplayCredentialsBySortedIssuer = <
-  T extends { issuer: IdentitySummary; issued: Date }
+  T extends { issuer: IdentitySummary; issued: Date },
 >(
   credentials: T[],
 ): Array<CredentialsByIssuer<T>> => {
