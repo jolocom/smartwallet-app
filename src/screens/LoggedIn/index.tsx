@@ -38,13 +38,8 @@ const LoggedIn = () => {
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
   const showTabs = !isAppLocked && isAuthSet
-  const { initializeCredentials } = useCredentials()
 
   const renderedMainTimes = useRef(0)
-
-  useEffect(() => {
-    initializeCredentials()
-  }, [])
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())

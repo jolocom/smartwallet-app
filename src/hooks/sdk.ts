@@ -12,6 +12,7 @@ import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import useTermsConsent from './consent'
+import { makeInitializeCredentials, useCredentials } from './signedCredentials'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -61,6 +62,7 @@ export const useWalletInit = () => {
     try {
       const idw = await agent.loadIdentity()
 
+      await makeInitializeCredentials(agent, idw.did, dispatch)()
       dispatch(setDid(idw.did))
       dispatch(setLogged(true))
 
@@ -73,6 +75,24 @@ export const useWalletInit = () => {
         throw new Error('Failed loading identity')
       }
     }
+  }
+}
+
+/**
+ * Returns a function that resets and re-initializes the redux values
+ *
+ * @returns () => Promise<void>
+ */
+export const useWalletReset = () => {
+  const { checkConsent } = useTermsConsent()
+  const dispatch = useDispatch()
+  const agent = useAgent()
+  const { initializeCredentials } = useCredentials()
+
+  return async () => {
+    await checkConsent(agent)
+    dispatch(setDid(agent.idw.did))
+    await initializeCredentials()
   }
 }
 
