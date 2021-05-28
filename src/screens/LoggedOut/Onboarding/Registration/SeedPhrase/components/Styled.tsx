@@ -61,7 +61,10 @@ const StyledHeaderRight: React.FC<IHeaderBtn> = ({ children, onPress }) => {
 
 const StyledHelperText: React.FC = ({ children }) => {
   return (
-    <JoloText weight={JoloTextWeight.medium} customStyles={{ marginTop: 8 }}>
+    <JoloText
+      weight={JoloTextWeight.medium}
+      customStyles={{ marginTop: 8, paddingHorizontal: 36 }}
+    >
       {children}
     </JoloText>
   )
@@ -79,7 +82,7 @@ const StyledErrorText: React.FC = ({ children }) => (
   <JoloText
     color={Colors.error}
     customStyles={{
-      marginBottom: BP({ large: 32, medium: 24, default: 12 }),
+      marginTop: 8,
       paddingHorizontal: 36,
     }}
   >
