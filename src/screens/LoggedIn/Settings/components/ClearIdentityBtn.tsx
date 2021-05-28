@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/core'
 import JoloText from '~/components/JoloText'
 import { useLoader } from '~/hooks/loader'
 import { useReplaceWith } from '~/hooks/navigation'
-import { useAgent } from '~/hooks/sdk'
+import { useAgent, useWalletReset } from '~/hooks/sdk'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { fonts, JoloTextSizes } from '~/utils/fonts'
@@ -16,6 +16,7 @@ const ClearIdentityBtn = () => {
   const agent = useAgent()
   const loader = useLoader()
   const replaceWith = useReplaceWith()
+  const resetWallet = useWalletReset()
   const [shouldShowAndroidDialog, setShowAndroidDialog] = useState(false)
   const isFocused = useIsFocused()
 
@@ -42,15 +43,10 @@ const ClearIdentityBtn = () => {
           encryptedWallet: false,
           interactions: false,
         })
+        await resetWallet()
+        replaceWith(ScreenNames.Main)
       },
       { loading: strings.CLEAR_IDENTITY_LOADER },
-      (err) => {
-        if (!err) {
-          // NOTE: re-mounting Loggedin stack so it fetches updated storage and
-          // resets redux store for attributes and credentials
-          replaceWith(ScreenNames.LoggedIn)
-        }
-      },
     )
   }
 
