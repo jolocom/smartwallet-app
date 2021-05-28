@@ -33,7 +33,7 @@ export const recovery = {
     'Are you sure you do not have a copy stored somewhere safe?',
   FORGOT_SEED_INFO_HIGHLIGHT_4:
     'Think back to when you first created your identity…',
-  EXIT_RECOVERY: 'Exit recovery',
+  EXIT_RECOVERY: 'Exit Recovery',
 }
 
 const walkthrough = {
@@ -112,7 +112,7 @@ const deviceAuthentication = {
   USE_BIOMETRICS_TO_AUTHORIZE: 'Use Biometrics to authorise wallet',
 
   SO_YOU_DONT_NEED_TO_CONFIRM:
-    'So you don’t need to confirm your PIN every time you need to use it',
+    'So you don’t need to confirm your passcode every time you need to use it',
 
   SKIP: 'Skip',
   YOUR_PIN_WAS_SET_UP: 'Your PIN was set up',
@@ -174,7 +174,8 @@ const interactions = {
   INTERACTION_ERROR_MESSAGE:
     'Unknown interaction error occurred. Please submit report',
   ERROR_ATTRIBUTE_ALREADY_EXISTS: 'Attribute of the same value already exists',
-  INTERACTION_DESC_MISSING_SINGLE: 'It seems like your wallet is missing something important for this request'
+  INTERACTION_DESC_MISSING_SINGLE:
+    'It seems like your wallet is missing something important for this request',
 }
 
 const lock = {
