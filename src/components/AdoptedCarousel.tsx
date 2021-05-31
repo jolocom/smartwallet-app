@@ -10,6 +10,7 @@ const AdoptedCarousel = <T extends unknown>({
   renderItem,
   activeSlideAlignment,
   customStyles,
+  ...rest
 }: IAdoptedCarousel<T>) => (
   <Carousel
     contentContainerCustomStyle={customStyles}
@@ -21,6 +22,7 @@ const AdoptedCarousel = <T extends unknown>({
     itemWidth={SCREEN_WIDTH * 0.85}
     inactiveSlideOpacity={0.24}
     renderItem={renderItem}
+    {...rest}
   />
 )
 
