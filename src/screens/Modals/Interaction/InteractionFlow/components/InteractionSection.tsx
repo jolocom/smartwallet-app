@@ -5,8 +5,6 @@ import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
-import ScreenContainer from '~/components/ScreenContainer'
-import { debugView } from '~/utils/dev'
 
 interface Props {
   title: string
