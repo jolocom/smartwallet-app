@@ -54,7 +54,6 @@ const LegalTextWrapper: React.FC<Props> = ({
         </NavigationHeader>
       </Collapsible.Header>
       <ScreenContainer
-        isFullscreen
         customStyles={{
           paddingHorizontal: BP({ default: 16, medium: 20, large: 28 }),
         }}
