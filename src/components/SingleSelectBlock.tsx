@@ -9,6 +9,7 @@ import { SuccessTickToggleIcon } from '~/assets/svg'
 export interface BlockSelection {
   value: string
   id: string
+  disabled?: boolean
 }
 
 interface Props {
@@ -32,12 +33,14 @@ const SingleSelectBlock: React.FC<Props> = ({
   return (
     <Block>
       {selection.map((item) => (
-        <Option onPress={() => handleSelect(item)}>
+        <Option disabled={item.disabled} onPress={() => handleSelect(item)}>
           <Option.Title title={item.value} />
-          {item.id === selected.id ? (
+          {item.id === selected.id && !item.disabled ? (
             <SuccessTickToggleIcon />
           ) : (
-            <View style={styles.container} />
+            <View
+              style={[styles.container, item.disabled && styles.disabled]}
+            />
           )}
         </Option>
       ))}
@@ -53,6 +56,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.6,
     borderStyle: 'solid',
     borderColor: Colors.sadGrey,
+  },
+  disabled: {
+    backgroundColor: Colors.sadGrey,
   },
 })
 
