@@ -9,8 +9,18 @@ declare module 'yup' {
     TIn extends Maybe<TypeOfShape<TShape>> = TypeOfShape<TShape>,
     TOut extends Maybe<AssertsShape<TShape>> =
       | AssertsShape<TShape>
-      | Optionals<TIn>
+      | Optionals<TIn>,
   > extends BaseSchema<TIn, TContext, TOut> {
     atLeastOneOf(list: string[], message: string): ObjectSchema<TShape>
+  }
+}
+
+declare module 'yup' {
+  interface StringSchema<
+    TType extends Maybe<string> = string | undefined,
+    TContext extends AnyObject = AnyObject,
+    TOut extends TType = TType,
+  > {
+    phone(): StringSchema<TType, TContext, TOut>
   }
 }
