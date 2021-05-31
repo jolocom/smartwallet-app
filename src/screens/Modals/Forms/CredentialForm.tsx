@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Platform, View } from 'react-native'
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
@@ -73,11 +73,12 @@ const CredentialForm = () => {
     ? assembleFormInitialValues(formConfig.fields)
     : {}
 
+  const [allowSubmit, setAllowSubmit] = useState(false)
+
   const handleCredentialSubmit = async (claims: Record<string, string>) => {
     claims = trimObjectValues(claims)
 
-    // NOTE: in order to avoid values which are just spaces
-    if (Object.values(claims).join('').length === 0) return
+    if (!allowSubmit) return
 
     try {
       if (attributeId) {
@@ -135,6 +136,9 @@ const CredentialForm = () => {
           }
         }
 
+        const shouldDisableSubmit = !isValid || !dirty || isPrevEqual
+        setAllowSubmit(!shouldDisableSubmit)
+
         return (
           <FormContainer
             title={t(
@@ -147,7 +151,7 @@ const CredentialForm = () => {
               strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
             )}
             onSubmit={() => handleCredentialSubmit(values)}
-            isSubmitDisabled={!isValid || !dirty || isPrevEqual}
+            isSubmitDisabled={shouldDisableSubmit}
           >
             <AutofocusContainer
               style={{
