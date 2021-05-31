@@ -104,14 +104,16 @@ export const CredentialName: React.FC<ICredentialNameProps> = ({
   ...props
 }) => {
   return (
-    <JoloText
-      size={JoloTextSizes.big}
-      weight={JoloTextWeight.regular}
-      customStyles={[styles.credentialName, customStyles]}
-      {...props}
-    >
-      {children}
-    </JoloText>
+    <View style={{ paddingRight: 24 }}>
+      <JoloText
+        size={JoloTextSizes.big}
+        weight={JoloTextWeight.regular}
+        customStyles={[styles.credentialName, customStyles]}
+        {...props}
+      >
+        {children}
+      </JoloText>
+    </View>
   )
 }
 
