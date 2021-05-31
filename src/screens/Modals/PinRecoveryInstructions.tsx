@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
   },
   btnsContainer: {
     alignSelf: 'center',
-    bottom: 0,
   },
   descriptionText: {
     alignSelf: 'flex-start',
