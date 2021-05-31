@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     position: 'absolute',
-    bottom: 20,
+    bottom: 16,
     justifyContent: 'flex-end',
   },
 })
