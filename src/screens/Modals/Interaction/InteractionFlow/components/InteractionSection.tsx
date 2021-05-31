@@ -6,6 +6,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
+import { debugView } from '~/utils/dev'
 
 interface Props {
   title: string
@@ -17,14 +18,10 @@ const InteractionSection: React.FC<Props> = ({
   children,
   isPaddedTitle = false,
 }) => {
-  const TitleContainer = isPaddedTitle
-    ? ScreenContainer.Padding
-    : React.Fragment
-
   if (!Children.count(children)) return null
   return (
     <View style={styles.sectionContainer}>
-      <TitleContainer>
+      <View style={{ paddingHorizontal: isPaddedTitle ? 24 : 0 }}>
         <JoloText
           kind={JoloTextKind.title}
           size={JoloTextSizes.middle}
@@ -37,7 +34,7 @@ const InteractionSection: React.FC<Props> = ({
         >
           {title}
         </JoloText>
-      </TitleContainer>
+      </View>
       {children}
     </View>
   )

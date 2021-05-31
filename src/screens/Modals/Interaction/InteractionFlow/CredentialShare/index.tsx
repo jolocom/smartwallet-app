@@ -45,6 +45,7 @@ import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import Space from '~/components/Space'
 import ScreenContainer from '~/components/ScreenContainer'
+import { SCREEN_WIDTH } from '~/utils/dimensions'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -164,17 +165,14 @@ const CredentialShareFAS = () => {
           key={key}
           activeSlideAlignment="center"
           data={credentials}
-          customStyles={{ marginLeft: -5 }}
+          itemWidth={SCREEN_WIDTH - 48}
+          customStyles={{ marginLeft: 0 }}
           renderItem={({ item: cred }) => {
             const claimFields = getOptionalFields(cred)
             const { name, type, id } = cred
             return (
               <TouchableWithoutFeedback
                 key={id}
-                style={{
-                  marginRight: 20,
-                  marginVertical: 14,
-                }}
                 onPress={() => handleSelectCredential({ [type]: id })}
               >
                 <View
