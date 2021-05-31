@@ -123,7 +123,10 @@ const CredentialForm = () => {
           return acc + values[v]
         }, '')
 
-        if (attributeValues?.indexOf(concatValue) !== -1) {
+        const storedAttribute = attributeValues?.find(
+          (a) => a.value === concatValue && a.id !== attributeId,
+        )
+        if (storedAttribute) {
           if (!errors[Object.keys(values)[0]]) {
             setFieldError(
               Object.keys(values)[0],
