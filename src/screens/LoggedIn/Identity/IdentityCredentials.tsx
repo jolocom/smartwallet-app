@@ -50,16 +50,6 @@ const IdentityCredentials = () => {
     }
   })
 
-  const sortedPrimitiveAttributes = primitiveAttributesWithValues.sort(
-    (a, b) => {
-      const aValues = !!a.values.length
-      const bValues = !!b.values.length
-      if ((!aValues && !bValues) || (aValues && bValues)) return 0
-      else if (aValues && !bValues) return -1
-      else return 1
-    },
-  )
-
   const isPrimitiveAttributesEmpty = primitiveAttributesWithValues.every(
     (a) => !a.values.length,
   )
@@ -70,7 +60,7 @@ const IdentityCredentials = () => {
         {strings.YOUR_INFO_IS_QUITE_EMPTY}
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
-        {sortedPrimitiveAttributes.map(({ type, label, values }) => {
+        {primitiveAttributesWithValues.map(({ type, label, values }) => {
           const hideCreateNew =
             type === AttributeTypes.name && values.length > 0
           return (
