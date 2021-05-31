@@ -18,6 +18,13 @@ yup.addMethod<ObjectSchema<any>>(
   },
 )
 
+yup.addMethod(yup.string, 'phone', function () {
+  return this.matches(
+    /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
+    strings.PHONE_FORMAT_ERROR,
+  )
+})
+
 export const nameValidation = yup
   .object()
   .shape({
@@ -44,14 +51,14 @@ export const postalAddressValidation = yup.object().shape({
 })
 
 export const mobileNumberValidation = yup.object().shape({
-  [ClaimKeys.telephone]: yup.string().required(strings.VALUE_MISSING),
+  [ClaimKeys.telephone]: yup.string().phone().required(strings.VALUE_MISSING),
 })
 
 export const contactValidation = yup
   .object()
   .shape({
     [ClaimKeys.email]: yup.string().email(strings.EMAIL_FORMAT_ERROR),
-    [ClaimKeys.telephone]: yup.string(),
+    [ClaimKeys.telephone]: yup.string().phone(),
   })
   .atLeastOneOf(
     [ClaimKeys.email, ClaimKeys.telephone],
