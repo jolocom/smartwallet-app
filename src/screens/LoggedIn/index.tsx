@@ -11,7 +11,6 @@ import { dismissLoader } from '~/modules/loader/actions'
 import { ScreenNames } from '~/types/screens'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'
 import Main from './Main'
-import { useCredentials } from '~/hooks/signedCredentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
@@ -38,13 +37,8 @@ const LoggedIn = () => {
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
   const showTabs = !isAppLocked && isAuthSet
-  const { initializeCredentials } = useCredentials()
 
   const renderedMainTimes = useRef(0)
-
-  useEffect(() => {
-    initializeCredentials()
-  }, [])
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
