@@ -88,7 +88,7 @@ export async function mapCredentialsToDisplay(
     category: getCredentialCategory({ renderAs }),
     properties: properties
       ? properties.map((p, idx) => ({
-          key: p.key ? p.key[0].split('.')[1] : `${Date.now()}${idx}}`,
+          key: p.key ? p.key.split('.')[1] : `${Date.now()}${idx}}`,
           label: p.label ?? strings.NOT_SPECIFIED,
           value: p.value || strings.NOT_SPECIFIED,
         }))
