@@ -103,7 +103,7 @@ const ErrorReporting = () => {
   return (
     <ModalScreen
       isVisible={errorScreen === ErrorScreens.errorReporting}
-      onRequestClose={showErrorDisplay}
+      onRequestClose={resetError}
       animationType={'slide'}
     >
       {/* Since the screen is a modal, need to include the @Toasts component for it
