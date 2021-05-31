@@ -29,7 +29,10 @@ const InteractionSection: React.FC<Props> = ({
           weight={JoloTextWeight.regular}
           customStyles={{
             textAlign: 'left',
-            marginBottom: 12,
+            marginBottom: BP({
+              default: 28,
+              large: 32,
+            }),
           }}
         >
           {title}
