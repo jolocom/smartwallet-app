@@ -76,6 +76,9 @@ const CredentialForm = () => {
   const handleCredentialSubmit = async (claims: Record<string, string>) => {
     claims = trimObjectValues(claims)
 
+    // NOTE: in order to avoid values which are just spaces
+    if (Object.values(claims).join('').length === 0) return
+
     try {
       if (attributeId) {
         await handleEditCredentialSI(
