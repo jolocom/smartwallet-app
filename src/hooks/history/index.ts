@@ -1,10 +1,11 @@
-import { FlowType } from '@jolocom/sdk'
+import { FlowType, Interaction } from '@jolocom/sdk'
 
 import { useAgent } from '~/hooks/sdk'
 import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
 import { getDateSection } from './utils'
 import { RecordAssembler } from '~/middleware/records/recordAssembler'
 import { recordConfig } from '~/config/records'
+import { useEffect } from 'react'
 
 export const useHistory = () => {
   const agent = useAgent()
@@ -33,6 +34,7 @@ export const useHistory = () => {
             id: intx.id,
             section,
             type,
+            lastUpdate: issued.toString(),
           },
         ]
       },
@@ -40,6 +42,36 @@ export const useHistory = () => {
     )
 
     return groupedInteractions
+  }
+
+  const updateInteractionRecord = (
+    interaction: Interaction,
+    records: IPreLoadedInteraction[],
+  ) => {
+    const { type } = interaction.flow
+    const { issued } = interaction.lastMessage
+    const section = getDateSection(new Date(issued))
+
+    records = records.filter((section) => section.id !== interaction.id)
+
+    return [
+      { id: interaction.id, section, type, lastUpdate: issued.toString() },
+      ...records,
+    ]
+  }
+
+  const createInteractionRecord = (
+    interaction: Interaction,
+    records: IPreLoadedInteraction[],
+  ) => {
+    const { type } = interaction.flow
+    const { issued } = interaction.lastMessage
+    const section = getDateSection(new Date(issued))
+
+    return [
+      { id: interaction.id, section, type, lastUpdate: issued.toString() },
+      ...records,
+    ]
   }
 
   const getInteractionDetails = async (
@@ -63,5 +95,28 @@ export const useHistory = () => {
   return {
     getInteractions,
     getInteractionDetails,
+    updateInteractionRecord,
+    createInteractionRecord,
   }
 }
+
+enum HistoryEvents {
+  updated = 'updated',
+  created = 'created',
+}
+
+const historyHookFactory =
+  (event: HistoryEvents) => (cb: (id: Interaction) => void) => {
+    const agent = useAgent()
+
+    useEffect(() => {
+      const unsubscribe = agent.interactionManager.on(event, (interaction) => {
+        cb(interaction)
+      })
+
+      return unsubscribe
+    }, [])
+  }
+
+export const useHistoryUpdate = historyHookFactory(HistoryEvents.updated)
+export const useHistoryCreate = historyHookFactory(HistoryEvents.created)
