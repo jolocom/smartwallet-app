@@ -10,6 +10,14 @@ import { useEffect } from 'react'
 export const useHistory = () => {
   const agent = useAgent()
 
+  const getSectionDetails = (interaction: Interaction) => {
+    const { type } = interaction.flow
+    const { issued } = interaction.lastMessage
+    const section = getDateSection(new Date(issued))
+
+    return { type, section, lastUpdate: issued.toString(), id: interaction.id }
+  }
+
   const getInteractions = async (
     take: number,
     skip: number,
@@ -24,19 +32,7 @@ export const useHistory = () => {
 
     const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>(
       (acc, intx) => {
-        const { type } = intx.flow
-        const { issued } = intx.lastMessage
-        const section = getDateSection(new Date(issued))
-
-        return [
-          ...acc,
-          {
-            id: intx.id,
-            section,
-            type,
-            lastUpdate: issued.toString(),
-          },
-        ]
+        return [...acc, getSectionDetails(intx)]
       },
       [],
     )
@@ -47,32 +43,15 @@ export const useHistory = () => {
   const updateInteractionRecord = (
     interaction: Interaction,
     records: IPreLoadedInteraction[],
-  ) => {
-    const { type } = interaction.flow
-    const { issued } = interaction.lastMessage
-    const section = getDateSection(new Date(issued))
-
-    records = records.filter((section) => section.id !== interaction.id)
-
-    return [
-      { id: interaction.id, section, type, lastUpdate: issued.toString() },
-      ...records,
-    ]
-  }
+  ) => [
+    getSectionDetails(interaction),
+    ...records.filter((section) => section.id !== interaction.id),
+  ]
 
   const createInteractionRecord = (
     interaction: Interaction,
     records: IPreLoadedInteraction[],
-  ) => {
-    const { type } = interaction.flow
-    const { issued } = interaction.lastMessage
-    const section = getDateSection(new Date(issued))
-
-    return [
-      { id: interaction.id, section, type, lastUpdate: issued.toString() },
-      ...records,
-    ]
-  }
+  ) => [getSectionDetails(interaction), ...records]
 
   const getInteractionDetails = async (
     nonce: string,
@@ -110,9 +89,7 @@ const historyHookFactory =
     const agent = useAgent()
 
     useEffect(() => {
-      const unsubscribe = agent.interactionManager.on(event, (interaction) => {
-        cb(interaction)
-      })
+      const unsubscribe = agent.interactionManager.on(event, cb)
 
       return unsubscribe
     }, [])
