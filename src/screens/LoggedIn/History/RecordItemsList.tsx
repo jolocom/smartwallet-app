@@ -99,24 +99,27 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
     }
   }, [page, JSON.stringify(interactions)])
 
-  const handleFocusItem = (id: string, index: number, section: string) => {
-    const isFocused = focusedItem === id
-    setFocusedItem(isFocused ? null : id)
+  const handleFocusItem = useCallback(
+    (id: string, index: number, section: string) => {
+      const isFocused = focusedItem === id
+      setFocusedItem(isFocused ? null : id)
 
-    if (!isFocused) {
-      const sectionIndex = sections.findIndex((s) => s.title === section)
-      setTimeout(
-        () =>
-          sectionListRef.current?.scrollToLocation({
-            sectionIndex,
-            itemIndex: index,
-            viewPosition: 0,
-            animated: true,
-          }),
-        100,
-      )
-    }
-  }
+      if (!isFocused) {
+        const sectionIndex = sections.findIndex((s) => s.title === section)
+        setTimeout(
+          () =>
+            sectionListRef.current?.scrollToLocation({
+              sectionIndex,
+              itemIndex: index,
+              viewPosition: 0,
+              animated: true,
+            }),
+          100,
+        )
+      }
+    },
+    [focusedItem, sections, JSON.stringify(setFocusedItem)],
+  )
 
   return sections.length ? (
     <SectionList<IHistorySectionData>
@@ -141,6 +144,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
           isFocused={focusedItem === item.id}
           id={item.id}
           onDropdown={() => handleFocusItem(item.id, index, section.title)}
+          lastUpdated={item.lastUpdate}
         />
       )}
       stickySectionHeadersEnabled={false}
