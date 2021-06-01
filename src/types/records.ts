@@ -19,9 +19,16 @@ export interface IRecordDetails {
   time: string
 }
 
+export interface IHistorySectionData {
+  id: string
+  // NOTE: lastUpdate is needed to make sure the item in the list
+  // is re-rendered after it's updated with a new interaction token
+  lastUpdate: string
+}
+
 export interface IHistorySection {
   title: string
-  data: string[]
+  data: IHistorySectionData[]
 }
 
 /* TODO: think about a better name */
@@ -29,4 +36,5 @@ export interface IPreLoadedInteraction {
   id: string
   section: string
   type: FlowType
+  lastUpdate: string
 }
