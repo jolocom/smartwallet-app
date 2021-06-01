@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
 
 import { useTabs } from '~/components/Tabs/context'
-import { useHistory } from '~/hooks/history'
+import { useHistory, useHistoryCreate, useHistoryUpdate } from '~/hooks/history'
 import { IPreLoadedInteraction } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
 import { IRecordItemsListProps } from './types'
+import { IHistorySectionData } from '~/types/records'
 import { useRecord } from './context'
 import RecordItem from './components/RecordItem'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
@@ -24,10 +25,22 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   const [page, setPage] = useState(0)
   const [focusedItem, setFocusedItem] = useState<string | null>(null)
 
-  const { getInteractions: getInteractionTokens } = useHistory()
+  const {
+    getInteractions: getInteractionTokens,
+    updateInteractionRecord,
+    createInteractionRecord,
+  } = useHistory()
   const { scheduleErrorWarning } = useToasts()
 
   const { activeSubtab } = useTabs()
+
+  useHistoryCreate((interaction) => {
+    setInteractions((prev) => createInteractionRecord(interaction, prev))
+  })
+
+  useHistoryUpdate((interaction) => {
+    setInteractions((prev) => updateInteractionRecord(interaction, prev))
+  })
 
   useEffect(() => {
     if (activeSection && activeSubtab && activeSubtab.id === id) {
@@ -99,12 +112,12 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   }
 
   return sections.length ? (
-    <SectionList<string>
+    <SectionList<IHistorySectionData>
       testID={`record-list-${id}`}
       ref={sectionListRef}
       sections={sections}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(item, i) => 'id:' + item + i}
+      keyExtractor={(item, i) => 'id:' + item.lastUpdate + i}
       overScrollMode={'never'}
       onEndReachedThreshold={0.9}
       onViewableItemsChanged={handleSectionChange}
@@ -117,10 +130,10 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
       renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
       renderItem={({ item, index, section }) => (
         <RecordItem
-          key={index}
-          isFocused={focusedItem === item}
-          id={item}
-          onDropdown={() => handleFocusItem(item, index, section.title)}
+          key={`${index}-${section}-${item.lastUpdate}`}
+          isFocused={focusedItem === item.id}
+          id={item.id}
+          onDropdown={() => handleFocusItem(item.id, index, section.title)}
         />
       )}
       stickySectionHeadersEnabled={false}
