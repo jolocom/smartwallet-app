@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
 
 import { useTabs } from '~/components/Tabs/context'
-import { useHistory, useHistoryCreate, useHistoryUpdate } from '~/hooks/history'
+import { useHistory } from '~/hooks/history'
+import { useHistoryCreate, useHistoryUpdate } from '~/hooks/history/listeners'
 import { IPreLoadedInteraction } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
@@ -56,6 +57,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
     if (page) {
       getInteractionTokens(ITEMS_PER_PAGE, interactions.length, flows)
         .then((tokens) => {
+          //TODO: filter the existing tokens
           setInteractions((prevState) => [...prevState, ...tokens])
         })
         .catch((e) => {
