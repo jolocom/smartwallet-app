@@ -5,7 +5,6 @@ import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
 import { getDateSection } from './utils'
 import { RecordAssembler } from '~/middleware/records/recordAssembler'
 import { recordConfig } from '~/config/records'
-import { useEffect } from 'react'
 
 export const useHistory = () => {
   const agent = useAgent()

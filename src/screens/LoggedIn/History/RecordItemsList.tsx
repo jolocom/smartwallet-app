@@ -57,8 +57,13 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
     if (page) {
       getInteractionTokens(ITEMS_PER_PAGE, interactions.length, flows)
         .then((tokens) => {
-          //TODO: filter the existing tokens
-          setInteractions((prevState) => [...prevState, ...tokens])
+          setInteractions((prevState) => {
+            // NOTE: filter interactions that are already present in state due to update events
+            const filtered = tokens.filter(
+              (t) => !prevState.map((i) => i.id).includes(t.id),
+            )
+            return [...prevState, ...filtered]
+          })
         })
         .catch((e) => {
           console.log('An error occured while fetching Record list items', e)
