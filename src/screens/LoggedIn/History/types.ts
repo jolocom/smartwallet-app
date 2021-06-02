@@ -9,6 +9,7 @@ export interface IRecordItemProps {
   id: string
   isFocused: boolean
   onDropdown: () => void
+  lastUpdated: string
 }
 
 export interface IRecordItemsListProps {

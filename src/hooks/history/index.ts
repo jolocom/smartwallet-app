@@ -1,4 +1,4 @@
-import { FlowType } from '@jolocom/sdk'
+import { FlowType, Interaction } from '@jolocom/sdk'
 
 import { useAgent } from '~/hooks/sdk'
 import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
@@ -8,6 +8,14 @@ import { recordConfig } from '~/config/records'
 
 export const useHistory = () => {
   const agent = useAgent()
+
+  const getSectionDetails = (interaction: Interaction) => {
+    const { type } = interaction.flow
+    const { issued } = interaction.lastMessage
+    const section = getDateSection(new Date(issued))
+
+    return { type, section, lastUpdate: issued.toString(), id: interaction.id }
+  }
 
   const getInteractions = async (
     take: number,
@@ -23,24 +31,26 @@ export const useHistory = () => {
 
     const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>(
       (acc, intx) => {
-        const { type } = intx.flow
-        const { issued } = intx.lastMessage
-        const section = getDateSection(new Date(issued))
-
-        return [
-          ...acc,
-          {
-            id: intx.id,
-            section,
-            type,
-          },
-        ]
+        return [...acc, getSectionDetails(intx)]
       },
       [],
     )
 
     return groupedInteractions
   }
+
+  const updateInteractionRecord = (
+    interaction: Interaction,
+    records: IPreLoadedInteraction[],
+  ) => [
+    getSectionDetails(interaction),
+    ...records.filter((section) => section.id !== interaction.id),
+  ]
+
+  const createInteractionRecord = (
+    interaction: Interaction,
+    records: IPreLoadedInteraction[],
+  ) => [getSectionDetails(interaction), ...records]
 
   const getInteractionDetails = async (
     nonce: string,
@@ -63,5 +73,7 @@ export const useHistory = () => {
   return {
     getInteractions,
     getInteractionDetails,
+    updateInteractionRecord,
+    createInteractionRecord,
   }
 }

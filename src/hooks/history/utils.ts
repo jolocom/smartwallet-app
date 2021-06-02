@@ -1,5 +1,9 @@
 import moment from 'moment'
-import { IPreLoadedInteraction, IHistorySection } from '~/types/records'
+import {
+  IPreLoadedInteraction,
+  IHistorySection,
+  IHistorySectionData,
+} from '~/types/records'
 
 export const getDateSection = (date: Date) =>
   moment(date).calendar(null, {
@@ -12,10 +16,15 @@ export const getDateSection = (date: Date) =>
 export const groupBySection = (
   array: IPreLoadedInteraction[],
 ): IHistorySection[] => {
-  const groupedObj = array.reduce<Record<string, string[]>>((acc, v) => {
-    acc[v.section] = acc[v.section] ? [...acc[v.section], v.id] : [v.id]
-    return acc
-  }, {})
+  const groupedObj = array.reduce<Record<string, IHistorySectionData[]>>(
+    (acc, v) => {
+      acc[v.section] = acc[v.section]
+        ? [...acc[v.section], { id: v.id, lastUpdate: v.lastUpdate }]
+        : [{ id: v.id, lastUpdate: v.lastUpdate }]
+      return acc
+    },
+    {},
+  )
 
   return Object.keys(groupedObj).map((title) => ({
     title,
