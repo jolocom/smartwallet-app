@@ -37,7 +37,7 @@ const FormContainer: React.FC<Props> = ({
         customStyles={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          backgroundColor: Colors.lightBlack,
+          backgroundColor: Colors.codGrey,
           paddingHorizontal: 24,
         }}
       >
@@ -72,7 +72,7 @@ const FormContainer: React.FC<Props> = ({
           </JoloText>
         </TouchableOpacity>
       </Collapsible.Header>
-      <ScreenContainer backgroundColor={Colors.lightBlack}>
+      <ScreenContainer backgroundColor={Colors.codGrey}>
         <Collapsible.KeyboardAwareScrollView
           disableInsets
           customStyles={{ paddingBottom: 100 }}
