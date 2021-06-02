@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import SoftInputMode from 'react-native-set-soft-input-mode'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -37,6 +38,13 @@ const ContactUs: React.FC = () => {
   const [contactValid, setContactValid] = useState(true)
   const [detailsInput, setDetailsInput] = useState('')
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null)
+
+  useEffect(() => {
+    SoftInputMode.set(SoftInputMode.ADJUST_RESIZE)
+    return () => {
+      SoftInputMode.set(SoftInputMode.ADJUST_PAN)
+    }
+  }, [])
 
   useAssertConnection()
 
@@ -80,7 +88,7 @@ const ContactUs: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 36 }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        enableOnAndroid
+        enableOnAndroid={false}
       >
         <Section>
           <Section.Title>
