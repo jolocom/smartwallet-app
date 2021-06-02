@@ -80,6 +80,7 @@ const ContactUs: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 36 }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
+        keyboardShouldPersistTaps="handled"
         enableOnAndroid
       >
         <Section>
