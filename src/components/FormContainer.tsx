@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import SoftInputMode from 'react-native-set-soft-input-mode'
+
 import Collapsible from './Collapsible'
 import ScreenContainer from './ScreenContainer'
 import JoloText, { JoloTextKind } from './JoloText'
@@ -22,6 +24,13 @@ const FormContainer: React.FC<Props> = ({
   isSubmitDisabled = false,
 }) => {
   const navigation = useNavigation()
+
+  useEffect(() => {
+    SoftInputMode.set(SoftInputMode.ADJUST_RESIZE)
+    return () => {
+      SoftInputMode.set(SoftInputMode.ADJUST_PAN)
+    }
+  }, [])
 
   const dismissScreen = () => {
     navigation.goBack()
@@ -76,6 +85,7 @@ const FormContainer: React.FC<Props> = ({
         <Collapsible.KeyboardAwareScrollView
           disableInsets
           customStyles={{ paddingBottom: 100 }}
+          enableOnAndroid={false}
         >
           <Collapsible.HidingTextContainer>
             <JoloText kind={JoloTextKind.title}>{title}</JoloText>
