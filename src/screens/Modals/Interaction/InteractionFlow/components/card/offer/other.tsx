@@ -30,7 +30,7 @@ const IncomingOfferOther: React.FC<IIncomingOfferOtherProps> = ({
               <CredentialName numberOfLines={1}>{name}</CredentialName>
             </HeaderContainer>
             <BodyFieldsContainer isStretched>
-              <HelperTitle>Included info</HelperTitle>
+              <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
               {displayedProps.length ? (
                 <>
                   <Space height={BP({ default: 8, small: 4, xsmall: 4 })} />
