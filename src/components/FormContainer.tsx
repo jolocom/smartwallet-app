@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import SoftInputMode from 'react-native-set-soft-input-mode'
+import React from 'react'
 
 import Collapsible from './Collapsible'
 import ScreenContainer from './ScreenContainer'
@@ -8,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { TouchableOpacity, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
+import { useAdjustResizeInputMode } from '~/hooks/generic'
 
 interface Props {
   title: string
@@ -25,12 +25,7 @@ const FormContainer: React.FC<Props> = ({
 }) => {
   const navigation = useNavigation()
 
-  useEffect(() => {
-    SoftInputMode.set(SoftInputMode.ADJUST_RESIZE)
-    return () => {
-      SoftInputMode.set(SoftInputMode.ADJUST_PAN)
-    }
-  }, [])
+  useAdjustResizeInputMode()
 
   const dismissScreen = () => {
     navigation.goBack()

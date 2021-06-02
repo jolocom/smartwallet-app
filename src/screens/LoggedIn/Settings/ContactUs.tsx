@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import SoftInputMode from 'react-native-set-soft-input-mode'
+import React, { useMemo, useState } from 'react'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -20,6 +19,7 @@ import Section from './components/Section'
 import Input from '~/components/Input'
 import { InputValidityState } from '~/components/Input/types'
 import { useAssertConnection } from '~/hooks/connection'
+import { useAdjustResizeInputMode } from '~/hooks/generic'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -39,13 +39,7 @@ const ContactUs: React.FC = () => {
   const [detailsInput, setDetailsInput] = useState('')
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null)
 
-  useEffect(() => {
-    SoftInputMode.set(SoftInputMode.ADJUST_RESIZE)
-    return () => {
-      SoftInputMode.set(SoftInputMode.ADJUST_PAN)
-    }
-  }, [])
-
+  useAdjustResizeInputMode()
   useAssertConnection()
 
   const options = useMemo(
