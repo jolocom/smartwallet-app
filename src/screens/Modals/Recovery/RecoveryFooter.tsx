@@ -24,7 +24,6 @@ import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
 import { useReplaceWith, usePop, useGoBack } from '~/hooks/navigation'
 import { LockStackParamList } from '~/screens/LoggedIn/LockStack'
-import { useSafeArea } from 'react-native-safe-area-context'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -102,7 +101,6 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
     isPhraseComplete,
   }) => {
     const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
-    const { top } = useSafeArea()
     const { keyboardHeight } = useKeyboard()
 
     return (
@@ -110,7 +108,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
         {Platform.OS === 'android' && areSuggestionsVisible && (
           <AbsoluteBottom
             customStyles={{
-              bottom: keyboardHeight + 10 + top,
+              bottom: keyboardHeight + 10,
             }}
           >
             <Animated.View
