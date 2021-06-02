@@ -29,7 +29,6 @@ const Onboarding: React.FC<LoggedOutParamList[ScreenNames.Onboarding]> = () => {
         <Stack.Screen
           name={ScreenNames.Registration}
           component={Registration}
-          options={{ gestureEnabled: __DEV__ }}
         />
       ) : (
         <Stack.Screen

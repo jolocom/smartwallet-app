@@ -14,12 +14,14 @@ const LoggedOut: React.FC = () => {
       headerMode="none"
       initialRouteName={ScreenNames.Walkthrough}
     >
+      <Stack.Screen name={ScreenNames.Walkthrough} component={Walkthrough} />
       <Stack.Screen
-        name={ScreenNames.Walkthrough}
-        component={Walkthrough}
-        options={{ gestureEnabled: __DEV__ }}
+        name={ScreenNames.Onboarding}
+        component={Onboarding}
+        options={{
+          gestureEnabled: __DEV__,
+        }}
       />
-      <Stack.Screen name={ScreenNames.Onboarding} component={Onboarding} />
     </Stack.Navigator>
   )
 }
