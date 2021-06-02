@@ -15,5 +15,5 @@ const historyHookFactory =
     }, [])
   }
 
-export const useHistoryUpdate = historyHookFactory('updated')
-export const useHistoryCreate = historyHookFactory('created')
+export const useHistoryUpdate = historyHookFactory('interactionUpdated')
+export const useHistoryCreate = historyHookFactory('interactionCreated')
