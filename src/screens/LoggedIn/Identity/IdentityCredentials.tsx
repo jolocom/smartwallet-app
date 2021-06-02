@@ -21,12 +21,22 @@ import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
 import { useSICActions } from '~/hooks/attributes'
 import BP from '~/utils/breakpoints'
+import { ClaimValues } from '~/modules/attributes/types'
 
 const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
   return attributeConfig
 }
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
+
+const getDisplayedValue = (value: ClaimValues, type: AttributeTypes) => {
+  /**
+   * NOTE: this is to allocate 4 lines for address attribute type
+   */
+  return Object.values(value).join(
+    type === AttributeTypes.postalAddress ? '\n' : ' ',
+  )
+}
 
 const IdentityCredentials = () => {
   const redirect = useRedirect()
@@ -78,7 +88,7 @@ const IdentityCredentials = () => {
                       key={field.id}
                       id={field.id}
                       type={type}
-                      value={Object.values(field.value).join(' ')}
+                      value={getDisplayedValue(field.value, type)}
                       onDelete={() => handleDeleteCredentialSI(field.id, type)}
                     />
                   ))
