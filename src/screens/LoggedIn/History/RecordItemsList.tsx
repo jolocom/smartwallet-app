@@ -3,7 +3,10 @@ import { SectionList, View, ViewToken } from 'react-native'
 
 import { useTabs } from '~/components/Tabs/context'
 import { useHistory } from '~/hooks/history'
-import { useHistoryCreate, useHistoryUpdate } from '~/hooks/history/listeners'
+import {
+  useInteractionCreate,
+  useInteractionUpdate,
+} from '~/hooks/interactions/listeners'
 import { IPreLoadedInteraction } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
@@ -35,11 +38,11 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
 
   const { activeSubtab } = useTabs()
 
-  useHistoryCreate((interaction) => {
+  useInteractionCreate((interaction) => {
     setInteractions((prev) => createInteractionRecord(interaction, prev))
   })
 
-  useHistoryUpdate((interaction) => {
+  useInteractionUpdate((interaction) => {
     setInteractions((prev) => updateInteractionRecord(interaction, prev))
   })
 

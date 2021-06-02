@@ -9,7 +9,6 @@ import RecordItemDetails from './RecordItemDetails'
 
 const RecordItem: React.FC<IRecordItemProps> = React.memo(
   ({ id, onDropdown, isFocused }) => {
-    console.log('rendering', id)
     const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
 
     const { getInteractionDetails } = useHistory()
@@ -54,10 +53,6 @@ const RecordItem: React.FC<IRecordItemProps> = React.memo(
     )
   },
   (prevProps, nextProps) => {
-    console.log(
-      prevProps.isFocused === nextProps.isFocused ||
-        prevProps.lastUpdated === nextProps.lastUpdated,
-    )
     return (
       prevProps.isFocused === nextProps.isFocused &&
       prevProps.lastUpdated === nextProps.lastUpdated &&
