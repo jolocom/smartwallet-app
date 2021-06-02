@@ -1,14 +1,11 @@
 import { useEffect } from 'react'
 import { Interaction } from 'react-native-jolocom'
+import { InteractionEvents } from '@jolocom/sdk/js/interactionManager/interactionManager'
 import { useAgent } from '../sdk'
 
-enum HistoryEvents {
-  updated = 'updated',
-  created = 'created',
-}
-
 const historyHookFactory =
-  (event: HistoryEvents) => (cb: (id: Interaction) => void) => {
+  (event: keyof InteractionEvents) =>
+  (cb: (interaction: Interaction) => void) => {
     const agent = useAgent()
 
     useEffect(() => {
@@ -18,5 +15,5 @@ const historyHookFactory =
     }, [])
   }
 
-export const useHistoryUpdate = historyHookFactory(HistoryEvents.updated)
-export const useHistoryCreate = historyHookFactory(HistoryEvents.created)
+export const useHistoryUpdate = historyHookFactory('updated')
+export const useHistoryCreate = historyHookFactory('created')
