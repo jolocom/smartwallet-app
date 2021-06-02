@@ -28,18 +28,16 @@ const IncomingOfferOther: React.FC<IIncomingOfferOtherProps> = ({
           <OtherContainer>
             <HeaderContainer customStyles={{ flex: 0 }}>
               <CredentialName numberOfLines={1}>{name}</CredentialName>
-              <Space height={BP({ default: 5, xsmall: 2 })} />
             </HeaderContainer>
             <BodyFieldsContainer isStretched>
               <HelperTitle>Included info</HelperTitle>
-              <Space height={BP({ default: 5, xsmall: 2 })} />
               {displayedProps.length ? (
                 <>
+                  <Space height={BP({ default: 8, small: 4, xsmall: 4 })} />
                   {displayedProps.map((p) => (
                     <BodyFieldsGroup key={p.key}>
                       <FieldLabel>{p.label}</FieldLabel>
                       <ResponsiveCard.FieldPlaceholder width={116} />
-                      <Space height={BP({ default: 3, xsmall: 1 })} />
                     </BodyFieldsGroup>
                   ))}
                 </>
