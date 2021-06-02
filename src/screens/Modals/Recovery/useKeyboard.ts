@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Keyboard, KeyboardEventListener } from 'react-native'
 import { useRecoveryDispatch } from './module/recoveryContext'
 import { hideSuggestions, showSuggestions } from './module/recoveryActions'
@@ -7,14 +7,17 @@ import { getScreenHeight } from '~/modules/account/selectors'
 
 export const useKeyboard = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0)
-  const screenHeight = useSelector(getScreenHeight);
-  
+  const screenHeight = useSelector(getScreenHeight)
+
   const recoveryDispatch = useRecoveryDispatch()
-  
-  const handleKeyboardShow: KeyboardEventListener = (e) => {
-    setKeyboardHeight(screenHeight - e.endCoordinates.screenY)
-    recoveryDispatch(showSuggestions())
-  }
+
+  const handleKeyboardShow: KeyboardEventListener = useCallback(
+    (e) => {
+      setKeyboardHeight(screenHeight - e.endCoordinates.screenY)
+      recoveryDispatch(showSuggestions())
+    },
+    [screenHeight],
+  )
 
   const handleKeyboardHide = () => {
     setKeyboardHeight(0)
@@ -28,7 +31,7 @@ export const useKeyboard = () => {
       Keyboard.removeListener('keyboardDidShow', handleKeyboardShow)
       Keyboard.removeListener('keyboardDidHide', handleKeyboardHide)
     }
-  }, [])
+  }, [handleKeyboardShow])
 
   return { keyboardHeight }
 }
