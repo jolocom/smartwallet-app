@@ -3,7 +3,7 @@ module.exports = {
   setupFiles: [
     './__tests__/utils/setup.ts',
     './node_modules/react-native-gesture-handler/jestSetup.js',
-    './node_modules/react-native-reanimated/src/reanimated2/jestUtils.js',
+    // './node_modules/react-native-reanimated/src/reanimated2/jestUtils.js',
   ],
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   testPathIgnorePatterns: [
