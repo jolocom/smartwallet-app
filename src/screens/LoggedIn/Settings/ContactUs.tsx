@@ -83,6 +83,7 @@ const ContactUs: React.FC = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
         enableOnAndroid={false}
+        keyboardShouldPersistTaps="handled"
       >
         <Section>
           <Section.Title>

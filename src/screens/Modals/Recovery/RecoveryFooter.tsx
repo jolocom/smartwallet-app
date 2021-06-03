@@ -44,9 +44,8 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
   const resetPin = useResetKeychainValues(PIN_SERVICE)
 
-  const route = useRoute<
-    RouteProp<LockStackParamList, ScreenNames.PasscodeRecovery>
-  >()
+  const route =
+    useRoute<RouteProp<LockStackParamList, ScreenNames.PasscodeRecovery>>()
 
   const isAccessRestore = route?.params?.isAccessRestore ?? false
 
@@ -102,7 +101,6 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
     isPhraseComplete,
   }) => {
     const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
-
     const { keyboardHeight } = useKeyboard()
 
     return (
@@ -146,11 +144,8 @@ const styles = StyleSheet.create({
 export default function () {
   const { phrase, areSuggestionsVisible } = useRecoveryState()
 
-  const {
-    handlePhraseSubmit,
-    handleCancel,
-    isPhraseComplete,
-  } = useRecoveryPhraseUtils(phrase)
+  const { handlePhraseSubmit, handleCancel, isPhraseComplete } =
+    useRecoveryPhraseUtils(phrase)
 
   return (
     <RecoveryFooter

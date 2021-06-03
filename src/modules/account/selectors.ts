@@ -7,3 +7,4 @@ export const isLocalAuthSet = (state: RootReducerI): boolean =>
 export const shouldShowTermsConsent = (state: RootReducerI) =>
   state.account.showTermsConsent
 export const getIsAppLocked = (state: RootReducerI) => state.account.isAppLocked
+export const getScreenHeight = (state: RootReducerI) => state.account.screenHeight

@@ -7,6 +7,7 @@ const initialState: AccountState = {
   isLocalAuthSet: false, // this value indicates where user went through local auth registration
   showTermsConsent: false,
   isAppLocked: true,
+  screenHeight: 0
 }
 
 const reducer = (
@@ -26,6 +27,8 @@ const reducer = (
       return { ...state, showTermsConsent: action.payload }
     case AccountActions.setAppLocked:
       return { ...state, isAppLocked: action.payload }
+    case AccountActions.setScreenHeight:
+      return { ...state, screenHeight: action.payload }
     default:
       return state
   }

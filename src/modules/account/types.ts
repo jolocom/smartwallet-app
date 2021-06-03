@@ -5,6 +5,7 @@ export enum AccountActions {
   resetAccount = 'resetAccount',
   showTermsConsent = 'showTermsConsent',
   setAppLocked = 'setAppLocked',
+  setScreenHeight = 'setScreenHeight',
 }
 
 export interface AccountState {
@@ -13,4 +14,5 @@ export interface AccountState {
   isLocalAuthSet: boolean
   isAppLocked: boolean
   showTermsConsent: boolean
+  screenHeight: number
 }

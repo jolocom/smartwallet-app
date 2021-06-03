@@ -9,3 +9,6 @@ export const showTermsConsent = createAction<boolean>(
   AccountActions.showTermsConsent,
 )
 export const setAppLocked = createAction<boolean>(AccountActions.setAppLocked)
+
+// UI
+export const setScreenHeight = createAction<number>(AccountActions.setScreenHeight)
