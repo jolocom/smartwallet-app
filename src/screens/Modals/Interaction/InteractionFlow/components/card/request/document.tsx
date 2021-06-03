@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import { strings } from '~/translations'
 import ResponsiveCard from '../../ResponsiveCard'
@@ -65,38 +66,40 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
               </ResponsiveCard.HolderName>
             )}
           </HeaderContainer>
-          {properties.length ? (
-            <BodyContainer>
-              <BodyFieldsContainer isStretched={!photo}>
-                <ResponsiveCard.FieldsCalculator
-                  cbFieldsVisibility={handleFieldValuesVisibility}
-                >
-                  {properties.map((p, idx) => (
-                    <BodyFieldsGroup>
-                      <FieldLabel>{p.label}</FieldLabel>
-                      <ResponsiveCard.FieldValue
-                        idx={idx}
-                        onNumberOfFieldLinesToDisplay={
-                          handleNumberOfValueLinesToDisplay
-                        }
-                      >
-                        {p.value}
-                      </ResponsiveCard.FieldValue>
-                    </BodyFieldsGroup>
-                  ))}
-                </ResponsiveCard.FieldsCalculator>
-              </BodyFieldsContainer>
-              {/* NOTE: this is to enable sort of a wrapper effect around an image */}
-              {photo && <BodyImageContainer />}
-            </BodyContainer>
-          ) : (
-            <EmptyContainer>
-              <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
-              <HelperDescription>
-                {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
-              </HelperDescription>
-            </EmptyContainer>
-          )}
+          <View style={{ flex: 1 }}>
+            {properties.length ? (
+              <BodyContainer>
+                <BodyFieldsContainer isStretched={!photo}>
+                  <ResponsiveCard.FieldsCalculator
+                    cbFieldsVisibility={handleFieldValuesVisibility}
+                  >
+                    {properties.map((p, idx) => (
+                      <BodyFieldsGroup>
+                        <FieldLabel>{p.label}</FieldLabel>
+                        <ResponsiveCard.FieldValue
+                          idx={idx}
+                          onNumberOfFieldLinesToDisplay={
+                            handleNumberOfValueLinesToDisplay
+                          }
+                        >
+                          {p.value}
+                        </ResponsiveCard.FieldValue>
+                      </BodyFieldsGroup>
+                    ))}
+                  </ResponsiveCard.FieldsCalculator>
+                </BodyFieldsContainer>
+                {/* NOTE: this is to enable sort of a wrapper effect around an image */}
+                {photo && <BodyImageContainer />}
+              </BodyContainer>
+            ) : (
+              <EmptyContainer>
+                <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
+                <HelperDescription>
+                  {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
+                </HelperDescription>
+              </EmptyContainer>
+            )}
+          </View>
 
           {/* NOTE: absolute values go outside of containers */}
           {photo && <ResponsiveCard.Image imageUrl={photo} />}

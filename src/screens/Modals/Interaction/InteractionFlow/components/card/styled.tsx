@@ -6,6 +6,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { IWithCustomStyle } from '~/components/Card/types'
 import { JoloTextSizes } from '~/utils/fonts'
+import { debugView } from '~/utils/dev'
 
 const PADDING_BASE = 16
 const PADDING_SMALL = 11
@@ -142,6 +143,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flexDirection: 'row',
     paddingBottom: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
+    flex: 1,
   },
   bodyFieldsContainer: {
     flex: 0.68,
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
       default: PADDING_BASE + 1.5,
       xsmall: PADDING_SMALL + 1.5,
     }),
-    marginTop: BP({ default: 8, large: 16 }),
+    marginTop: BP({ default: 4, large: 16 }),
   },
   bodyImageContainer: {
     flex: 0.32,
@@ -175,8 +177,8 @@ const styles = StyleSheet.create({
     lineHeight: BP({ xsmall: 18, small: 20, default: 22 }),
   },
   label: {
-    marginTop: Platform.select({ ios: 0, android: 4 }),
-    lineHeight: BP({ default: 14, xsmall: 12 }),
+    //marginTop: Platform.select({ ios: 0, android: 4 }),
+    //lineHeight: BP({ default: 14, xsmall: 12 }),
     color: Colors.black50,
   },
 })

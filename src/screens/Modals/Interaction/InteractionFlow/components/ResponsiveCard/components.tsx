@@ -90,6 +90,7 @@ export const CredentialHolderName: IResponsiveCardComposition['HolderName'] = ({
       kind={JoloTextKind.title}
       color={Colors.black90}
       customStyles={styles.holderName}
+      ignoreScaling
       numberOfLines={2}
       // @ts-ignore
       onTextLayout={(e: TextLayoutEvent) => handleTextLayout(e)}
@@ -158,8 +159,6 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   highlight: {
-    position: 'absolute',
-    bottom: 0,
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: Colors.black,
