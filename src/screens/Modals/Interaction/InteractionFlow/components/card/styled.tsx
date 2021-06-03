@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'flex-start',
     paddingHorizontal: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
-    paddingTop: 10,
+    paddingTop: BP({ default: 8, medium: 16, large: 16 }),
   },
   bodyContainer: {
     flexDirection: 'row',
@@ -146,7 +146,11 @@ const styles = StyleSheet.create({
   bodyFieldsContainer: {
     flex: 0.68,
     alignItems: 'flex-start',
-    paddingLeft: BP({ default: PADDING_BASE, xsmall: PADDING_SMALL }),
+    paddingLeft: BP({
+      default: PADDING_BASE + 1.5,
+      xsmall: PADDING_SMALL + 1.5,
+    }),
+    marginTop: BP({ default: 8, large: 16 }),
   },
   bodyImageContainer: {
     flex: 0.32,
@@ -156,6 +160,7 @@ const styles = StyleSheet.create({
   fieldGroup: {
     textAlign: 'left',
     alignItems: 'flex-start',
+    marginBottom: 4,
   },
   otherContainer: {
     width: '73%',

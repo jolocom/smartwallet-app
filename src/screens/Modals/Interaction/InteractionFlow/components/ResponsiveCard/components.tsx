@@ -187,5 +187,6 @@ const styles = StyleSheet.create({
   },
   fieldPlaceholder: {
     backgroundColor: Colors.alto,
+    opacity: 0.58,
   },
 })
