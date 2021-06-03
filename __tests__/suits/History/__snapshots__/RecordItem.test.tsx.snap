@@ -30,7 +30,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -160,7 +160,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
@@ -266,7 +266,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -396,7 +396,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
@@ -691,6 +691,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
           style={
             Object {
               "flex": 0.75,
+              "justifyContent": "center",
               "paddingLeft": 4,
             }
           }
@@ -777,7 +778,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -907,7 +908,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
@@ -1202,6 +1203,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
           style={
             Object {
               "flex": 0.75,
+              "justifyContent": "center",
               "paddingLeft": 4,
             }
           }
@@ -1288,7 +1290,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -1418,7 +1420,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
@@ -1713,6 +1715,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
           style={
             Object {
               "flex": 0.75,
+              "justifyContent": "center",
               "paddingLeft": 4,
             }
           }
@@ -1799,7 +1802,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -1929,7 +1932,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
