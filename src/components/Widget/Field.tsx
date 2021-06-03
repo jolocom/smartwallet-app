@@ -8,6 +8,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from './context'
 import { IWithCustomStyle } from '../Card/types'
 import JoloText, { JoloTextKind } from '../JoloText'
+import BP from '~/utils/breakpoints'
 
 export type TField = IFieldComposition & React.FC
 
@@ -28,13 +29,28 @@ export interface IWidgetField {
 const FieldText: React.FC<
   Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
 > = ({ value, color = Colors.white90, customStyles = {} }) => {
+  /**
+   * NOTE: this is to allocate 4 lines for address attribute type
+   */
+  const numberOfValueLines = value.split('\n').length
+
   return (
     <JoloText
-      numberOfLines={1}
+      numberOfLines={numberOfValueLines}
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.middle}
       color={color}
-      customStyles={[{ textAlign: 'left' }, customStyles]}
+      customStyles={[
+        {
+          textAlign: 'left',
+          ...(numberOfValueLines > 1 && {
+            lineHeight: BP({ default: 22, large: 26 }),
+            paddingVertical: BP({ default: 20, xsmall: 16 }),
+            paddingTop: BP({ default: 14, xsmall: 10 }),
+          }),
+        },
+        customStyles,
+      ]}
     >
       {value}
     </JoloText>
@@ -122,7 +138,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 23,
     backgroundColor: Colors.black,
     borderRadius: 8,
-    height: 50,
+    minHeight: 50,
     marginVertical: 2,
   },
 })
