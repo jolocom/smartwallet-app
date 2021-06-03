@@ -29,7 +29,7 @@ const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
-const getDisplayedValue = (value: ClaimValues, type: AttributeTypes) => {
+const getFormattedValue = (value: ClaimValues, type: AttributeTypes) => {
   /**
    * NOTE: this is to allocate 4 lines for address attribute type
    */
@@ -88,7 +88,7 @@ const IdentityCredentials = () => {
                       key={field.id}
                       id={field.id}
                       type={type}
-                      value={getDisplayedValue(field.value, type)}
+                      value={getFormattedValue(field.value, type)}
                       onDelete={() => handleDeleteCredentialSI(field.id, type)}
                     />
                   ))
