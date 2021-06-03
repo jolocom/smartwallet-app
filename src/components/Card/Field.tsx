@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'left',
     fontFamily: Fonts.Regular,
+    color: Colors.black90,
   },
   fieldName: {
     fontSize: 16,
