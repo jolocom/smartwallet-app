@@ -117,7 +117,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
               viewPosition: 0,
               animated: true,
             }),
-          100,
+          200,
         )
       }
     },
@@ -135,7 +135,11 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
       onEndReachedThreshold={0.9}
       onViewableItemsChanged={handleSectionChange}
       onEndReached={handleEndReached}
-      contentContainerStyle={{ marginTop: 32, paddingBottom: 100 }}
+      contentContainerStyle={{
+        marginTop: 32,
+        // NOTE: focused padding to allow the last item to be centered when toggled
+        paddingBottom: focusedItem ? 300 : 100,
+      }}
       renderSectionHeader={({ section }) => {
         if (section.title === sections[0].title) return null
         return <RecordHeader title={section.title} />
