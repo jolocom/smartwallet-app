@@ -34,12 +34,12 @@ const JoloKeyboardAwareScroll: React.FC<IJoloKeyboardAwareScrollProps> &
   return (
     <JoloKeyboardAwareScrollContext.Provider value={contextValue}>
       <KeyboardAwareScrollView
-        {...rest}
         ref={scrollViewRef}
         extraScrollHeight={50}
         keyboardOpeningTime={0}
         children={children}
         {...(disableInsets && { contentInset: undefined })}
+        {...rest}
       />
     </JoloKeyboardAwareScrollContext.Provider>
   )

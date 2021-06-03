@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Collapsible from './Collapsible'
 import ScreenContainer from './ScreenContainer'
 import JoloText, { JoloTextKind } from './JoloText'
@@ -6,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { TouchableOpacity, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
+import { useAdjustResizeInputMode } from '~/hooks/generic'
 
 interface Props {
   title: string
@@ -22,6 +24,8 @@ const FormContainer: React.FC<Props> = ({
   isSubmitDisabled = false,
 }) => {
   const navigation = useNavigation()
+
+  useAdjustResizeInputMode()
 
   const dismissScreen = () => {
     navigation.goBack()
@@ -76,6 +80,7 @@ const FormContainer: React.FC<Props> = ({
         <Collapsible.KeyboardAwareScrollView
           disableInsets
           customStyles={{ paddingBottom: 100 }}
+          enableOnAndroid={false}
         >
           <Collapsible.HidingTextContainer>
             <JoloText kind={JoloTextKind.title}>{title}</JoloText>

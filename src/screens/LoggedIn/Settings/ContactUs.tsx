@@ -19,6 +19,7 @@ import Section from './components/Section'
 import Input from '~/components/Input'
 import { InputValidityState } from '~/components/Input/types'
 import { useAssertConnection } from '~/hooks/connection'
+import { useAdjustResizeInputMode } from '~/hooks/generic'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -38,6 +39,7 @@ const ContactUs: React.FC = () => {
   const [detailsInput, setDetailsInput] = useState('')
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null)
 
+  useAdjustResizeInputMode()
   useAssertConnection()
 
   const options = useMemo(
@@ -80,8 +82,8 @@ const ContactUs: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 36 }}
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
+        enableOnAndroid={false}
         keyboardShouldPersistTaps="handled"
-        enableOnAndroid
       >
         <Section>
           <Section.Title>
