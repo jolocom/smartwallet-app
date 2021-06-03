@@ -191,10 +191,14 @@ const CredentialForm = () => {
                          otherwise all the errors appear at once if one field is incorrect
                       */
                       containerStyle={{
+                        borderColor: Colors.gravel,
+                        backgroundColor: Colors.bastille,
                         ...(((attributeType === AttributeTypes.postalAddress &&
                           touched[field.key]) ||
                           attributeType !== AttributeTypes.postalAddress) &&
-                          errors[field.key] && { borderColor: Colors.error }),
+                          errors[field.key] && {
+                            borderColor: Colors.error,
+                          }),
                       }}
                       {...field.keyboardOptions}
                     />
