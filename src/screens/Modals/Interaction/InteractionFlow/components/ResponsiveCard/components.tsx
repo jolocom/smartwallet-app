@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
       Platform.OS === 'ios'
         ? BP({ xsmall: 12, default: 16 })
         : BP({ xsmall: 14, default: 18 }),
-    marginTop: Platform.OS === 'ios' ? -3 : 4,
+    marginTop: Platform.OS === 'ios' ? 0 : 4,
   },
   fieldPlaceholder: {
     backgroundColor: Colors.alto,
