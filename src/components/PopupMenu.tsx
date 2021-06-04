@@ -26,16 +26,8 @@ export interface PopupMenuProps {
   options: IPopupOption[]
 }
 
-// FIXME: ugly hack. Due to the Navigation Stack's transparency, the blocks appear to be transparent, together
-// with the screen. Stacking them up seems to decrease the opacity, but it's still not a solid color.
 const SolidBlock: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
-  return (
-    <Block customStyle={[styles.block, customStyles]}>
-      <Block customStyle={styles.block}>
-        <Block customStyle={styles.block}>{children}</Block>
-      </Block>
-    </Block>
-  )
+  return <Block customStyle={[styles.block, customStyles]}>{children}</Block>
 }
 
 const PopupButton: React.FC<{ onPress: () => void }> = ({
