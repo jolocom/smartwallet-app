@@ -175,13 +175,16 @@ export const transformCategoriesTo = <PT>(cats: CredentialsByCategory<PT>) => {
   }
 }
 
+// TODO: @reduceCustomDisplayCredentialsByUIType and @reduceCustomDisplayCredentialsByType
+// should be abstracted
+
 /**
  * Groups credentials by type
  *
  * Used in:
  * * documents
  */
-export const reduceCustomDisplayCredentialsByType = <
+export const reduceCustomDisplayCredentialsByUIType = <
   T extends { type: string },
 >(
   credentials: T[],
@@ -214,6 +217,42 @@ export const reduceCustomDisplayCredentialsByType = <
   )
 }
 
+/**
+ * Groups credentials by type
+ *
+ * Used in:
+ * * documents
+ */
+export const reduceCustomDisplayCredentialsByType = <
+  T extends { type: string },
+>(
+  credentials: T[],
+): Array<CredentialsByType<T>> => {
+  return credentials.reduce(
+    (groupedCredentials: Array<CredentialsByType<T>>, cred: T) => {
+      const group = groupedCredentials.filter((c) => c.value === cred.type)
+      if (group.length) {
+        groupedCredentials = groupedCredentials.map((g) => {
+          if (g.value === group[0].value) {
+            return { ...g, credentials: [...g.credentials, cred] }
+          }
+          return g
+        })
+      } else {
+        groupedCredentials = [
+          ...groupedCredentials,
+          {
+            key: 'type',
+            value: cred.type,
+            credentials: [cred],
+          },
+        ]
+      }
+      return groupedCredentials
+    },
+    [],
+  )
+}
 /**
  * Groups credentials by issuer
  *
@@ -267,7 +306,7 @@ export const reduceCustomDisplayCredentialsBySortedType = <
 >(
   credentials: T[],
 ): Array<CredentialsByType<T>> => {
-  return reduceCustomDisplayCredentialsByType(
+  return reduceCustomDisplayCredentialsByUIType(
     sortCredentialsByRecentIssueDate(credentials),
   )
 }
