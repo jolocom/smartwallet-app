@@ -2,6 +2,7 @@ import { useNavigation, StackActions } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
+import { useLayoutEffect } from 'react'
 
 interface NestedSceenI {
   screen?: ScreenNames
@@ -70,4 +71,15 @@ export const useSwitchScreens = (screenToSwitchTo: ScreenNames) => {
       navigation.navigate(screenToSwitchTo, params)
     }, 500)
   }
+}
+
+/*
+ * Should be used to dynamically disable gestures for nested stack screens
+ */
+export const useDangerouslyDisableGestures = () => {
+  const navigation = useNavigation()
+
+  useLayoutEffect(() => {
+    navigation.setParams({ gestureEnabled: false })
+  }, [])
 }
