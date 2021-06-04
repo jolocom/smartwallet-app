@@ -1,5 +1,6 @@
 import React from 'react'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
+import Space from '~/components/Space'
 import { strings } from '~/translations'
 import ResponsiveCard from '../../ResponsiveCard'
 import {
@@ -65,6 +66,8 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
                   >
                     {properties.map((p, idx) => (
                       <BodyFieldsGroup>
+                        {/* NOTE: Compared to Credential Request Document, these need additional spacing */}
+                        <Space height={4} />
                         <FieldLabel>{p.label}</FieldLabel>
                         <ResponsiveCard.FieldValue
                           idx={idx}

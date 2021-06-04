@@ -185,7 +185,13 @@ const CredentialShareFAS = () => {
                       name={name ?? type}
                       properties={claimFields}
                       holderName={cred.holderName}
-                      highlight={`${cred.highlight?.slice(0, 18)}...`}
+                      highlight={`${
+                        cred.photo && cred.highlight
+                          ? cred.highlight?.length > 18
+                            ? cred.highlight?.slice(0, 18) + '...'
+                            : cred.highlight
+                          : cred.highlight
+                      }`}
                       photo={cred.photo}
                     />
                   ) : (

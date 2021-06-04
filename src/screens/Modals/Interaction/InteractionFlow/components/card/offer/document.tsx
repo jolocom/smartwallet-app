@@ -34,6 +34,8 @@ const IncomingOfferDoc: React.FC<IIncomingOfferDocProps> = ({
                 <Space height={BP({ default: 8, small: 4, xsmall: 4 })} />
                 {displayedProps.map((p) => (
                   <BodyFieldsGroup key={p.key}>
+                    {/* NOTE: Compared to Credential Request cards, these need additional spacing */}
+                    <Space height={4} />
                     <FieldLabel>{p.label}</FieldLabel>
                     <ResponsiveCard.FieldPlaceholder width={156} />
                   </BodyFieldsGroup>
