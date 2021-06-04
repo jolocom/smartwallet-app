@@ -9081,11 +9081,6 @@ react-native-dash@^0.0.11:
     prop-types "^15.5.10"
     react-native-measureme "0.0.2"
 
-react-native-dialog@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-dialog/-/react-native-dialog-8.0.1.tgz#8e554c4d7ee755c9e20d43bb0c5bb1a158060e57"
-  integrity sha512-shm0NE7nZJj5ubvMT/6Snt3fazzRPgDj/m9eIcYjo6JAQbxvg6Ym9o5GGahDn1d96LyAruPoP+N/IBzAI8Worg==
-
 react-native-draggable-flatlist@^2.5.2:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.6.1.tgz#e48ffef4eec36884a807e70662006506492ef737"

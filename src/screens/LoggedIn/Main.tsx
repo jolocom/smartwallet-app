@@ -219,7 +219,7 @@ const Main: React.FC = () => {
             options={screenTransitionFromBottomDisabledGestures}
           />
 
-          {/* NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
+          {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
           <MainStack.Screen
             name={ScreenNames.PinRecoveryInstructions}
             component={PinRecoveryInstructions}
@@ -230,6 +230,7 @@ const Main: React.FC = () => {
             component={Recovery}
             options={screenTransitionFromBottomDisabledGestures}
           />
+          {/* END NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
 
           <MainStack.Screen
             name={ScreenNames.TransparentModals}
