@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, Dispatch, SetStateAction } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { StatusBar } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
 
