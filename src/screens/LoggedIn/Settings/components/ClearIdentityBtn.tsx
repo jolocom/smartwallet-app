@@ -18,8 +18,8 @@ const ClearIdentityBtn = () => {
   const resetWallet = useWalletReset()
   const navigation = useNavigation()
 
-  const clearIdentityData = () => {
-    loader(
+  const clearIdentityData = async () => {
+    await loader(
       async () => {
         // NOTE: should delete interactions separately until multitenancy is there, due to
         // unfinished interactions not being deleted.

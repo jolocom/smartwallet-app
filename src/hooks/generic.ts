@@ -38,21 +38,3 @@ export const useAdjustResizeInputMode = () => {
   }, [])
 }
 
-/**
- * This hook is responsible for toggling a
- * state back to its initial state after 100ms
- * @param state 
- * @param updateState 
- */
- export const useRevertToInitialState = (
-  state: boolean,
-  updateState: Dispatch<SetStateAction<boolean>>,
-) => {
-  useEffect(() => {
-    if (state) {
-      setTimeout(() => {
-        updateState(prevValue => !prevValue)
-      }, 100)
-    }
-  }, [state])
-}

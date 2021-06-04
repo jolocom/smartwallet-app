@@ -32,6 +32,7 @@ import JoloText, {
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
+import { useToasts } from '~/hooks/toasts'
 
 const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
@@ -44,6 +45,8 @@ interface IProps {
 const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const { title, cancelText, onComplete } = route?.params
   const goBack = useGoBack()
+
+  const { scheduleErrorWarning } = useToasts()
 
   const holeRef = useRef<View>(null)
 
@@ -129,8 +132,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       easing: Easing.elastic(1),
       useNativeDriver: true,
     }).start(() => {
-      onComplete()
-      goBack()
+      onComplete().catch(scheduleErrorWarning).finally(goBack)
     })
   }
 
