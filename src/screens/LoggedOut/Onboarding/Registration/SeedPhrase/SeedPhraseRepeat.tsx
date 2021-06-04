@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useFailed } from '~/hooks/loader'
 import { useSubmitIdentity } from '~/hooks/sdk'
 import { BackArrowIcon } from '~/assets/svg'
-import { useGoBack } from '~/hooks/navigation'
+import { useDangerouslyDisableGestures, useGoBack } from '~/hooks/navigation'
 import { strings } from '~/translations/strings'
 
 import SeedPhrase from './components/Styled'
@@ -18,6 +18,8 @@ const SeedPhraseRepeat: React.FC = () => {
   const submitIdentity = useSubmitIdentity()
   const seedphrase = useGetSeedPhrase()
   const showFailedLoader = useFailed()
+
+  useDangerouslyDisableGestures()
 
   const [wrongOrder, setWrongOrder] = useState(false)
   const [readyToSubmit, setReadyToSubmit] = useState(false)

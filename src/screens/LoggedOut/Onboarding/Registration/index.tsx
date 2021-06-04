@@ -16,11 +16,12 @@ const Registration: React.FC = () => {
       <Stack.Screen
         name={ScreenNames.SeedPhraseWrite}
         component={SeedPhraseWrite}
+        options={{ gestureEnabled: false }}
       />
       <Stack.Screen
         name={ScreenNames.SeedPhraseRepeat}
         component={SeedPhraseRepeat}
-        options={{ gestureEnabled: __DEV__ }}
+        options={{ gestureEnabled: false }}
       />
     </Stack.Navigator>
   )

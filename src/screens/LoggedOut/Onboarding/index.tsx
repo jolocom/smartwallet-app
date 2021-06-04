@@ -14,9 +14,8 @@ const Stack = createStackNavigator()
 
 const Onboarding: React.FC<LoggedOutParamList[ScreenNames.Onboarding]> = () => {
   const shouldShowTerms = useSelector(shouldShowTermsConsent)
-  const route = useRoute<
-    RouteProp<LoggedOutParamList, ScreenNames.Onboarding>
-  >()
+  const route =
+    useRoute<RouteProp<LoggedOutParamList, ScreenNames.Onboarding>>()
   const { initialRoute } = route.params
 
   return (
