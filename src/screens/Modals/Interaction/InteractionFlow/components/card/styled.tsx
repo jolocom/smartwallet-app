@@ -6,7 +6,6 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { IWithCustomStyle } from '~/components/Card/types'
 import { JoloTextSizes } from '~/utils/fonts'
-import { debugView } from '~/utils/dev'
 
 const PADDING_BASE = 16
 const PADDING_SMALL = 11
