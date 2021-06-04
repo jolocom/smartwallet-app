@@ -3,10 +3,14 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/main_black</item>
+        <item name="android:windowBackground">@color/main_black</item>
         <!-- sets cursor color -->
         <item name="colorControlActivated">#5251c1</item>
-        <item name="android:windowBackground">@color/main_black</item>
-        <item name="android:statusBarColor">@color/main_black</item>
+        <!-- removes jump on splash screen -->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <!-- removes transition when we close camera screen -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
 
     </style>
 
