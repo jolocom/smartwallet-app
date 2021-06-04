@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
-import { useRedirectTo, useRedirect } from '~/hooks/navigation'
+import { useRedirectTo } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
@@ -9,12 +9,15 @@ import { useCard } from './context'
 import { IWithCustomStyle } from './types'
 import Dots from '../Dots'
 import { useDeleteCredential } from '~/hooks/credentials'
+import { useRevertToInitialState } from '~/hooks/generic'
 
 const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
-  const redirect = useRedirect()
   const deleteCredential = useDeleteCredential()
+  const [shouldStartDelete, setShouldStartDelete] = useState(false)
+
+  useRevertToInitialState(shouldStartDelete, setShouldStartDelete)
 
   const { id, photo, document, restMandatoryField, optionalFields } = useCard()
 
@@ -39,6 +42,18 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
     }
   }
 
+  const handleStartDelete = () => {
+    setShouldStartDelete(true)
+  }
+
+  useEffect(() => {
+    if (shouldStartDelete) {
+      ;(async () => {
+        await handleDelete()
+      })()
+    }
+  }, [shouldStartDelete])
+
   const popupOptions = useMemo(
     () => [
       {
@@ -59,7 +74,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
           params: {
             title: deleteTitle,
             cancelText,
-            onComplete: handleDelete,
+            onComplete: handleStartDelete,
           },
         },
       },
