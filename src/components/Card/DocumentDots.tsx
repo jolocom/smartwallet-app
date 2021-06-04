@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { useRedirectTo, useRedirect } from '~/hooks/navigation'
+import { useRedirectTo } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
@@ -13,7 +13,6 @@ import { useDeleteCredential } from '~/hooks/credentials'
 const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
-  const redirect = useRedirect()
   const deleteCredential = useDeleteCredential()
 
   const { id, photo, document, restMandatoryField, optionalFields } = useCard()

@@ -24,7 +24,7 @@ export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
     title: string
     cancelText: string
-    onComplete: () => void
+    onComplete: () => Promise<void>
   }
   [ScreenNames.LoggedIn]: undefined
   [ScreenNames.LoggedOut]: undefined
