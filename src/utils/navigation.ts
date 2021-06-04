@@ -3,6 +3,7 @@ import {
   ParamListBase,
   NavigationState,
 } from '@react-navigation/native'
+import { Platform } from 'react-native'
 
 const getNestedStateFromRouteList = <T extends ParamListBase>(
   state: NavigationState<T> | undefined,
@@ -38,6 +39,9 @@ export const getNestedScreenParams = <T extends ParamListBase>(
  * Gets the @disableGesture param (ATTENTION! not option) of a screen. Should be added
  * to the @screenOptions prop of the @StackNavigator for which the gestures have to be
  * disabled.
+ *
+ * In order to set the @disableGesture param to a screen, use the @useDangerouslyDisableGestures
+ * hook from `~/hooks/navigation`
  */
 export const getDangerouslyDisableGestureParamFromRoute = <
   T extends ParamListBase,
