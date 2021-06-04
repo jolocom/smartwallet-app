@@ -5,6 +5,7 @@ import { ScreenNames } from '~/types/screens'
 import Walkthrough from './Walkthrough'
 import Onboarding from './Onboarding'
 import { LoggedOutParamList } from './types'
+import { getDangerouslyDisableGestureParamFromRoute } from '~/utils/navigation'
 
 const Stack = createStackNavigator<LoggedOutParamList>()
 
@@ -13,15 +14,14 @@ const LoggedOut: React.FC = () => {
     <Stack.Navigator
       headerMode="none"
       initialRouteName={ScreenNames.Walkthrough}
+      screenOptions={({ route }) => {
+        return {
+          gestureEnabled: getDangerouslyDisableGestureParamFromRoute(route),
+        }
+      }}
     >
       <Stack.Screen name={ScreenNames.Walkthrough} component={Walkthrough} />
-      <Stack.Screen
-        name={ScreenNames.Onboarding}
-        component={Onboarding}
-        options={{
-          gestureEnabled: __DEV__,
-        }}
-      />
+      <Stack.Screen name={ScreenNames.Onboarding} component={Onboarding} />
     </Stack.Navigator>
   )
 }

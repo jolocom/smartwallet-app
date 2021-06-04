@@ -4,13 +4,17 @@ import { View, StyleSheet, Animated, Platform } from 'react-native'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import Btn, { BtnTypes } from '~/components/Btn'
-import { useGoBack, useRedirect } from '~/hooks/navigation'
+import {
+  useDangerouslyDisableGestures,
+  useGoBack,
+  useRedirect,
+} from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
-import { BackArrowIcon, InfoIcon } from '~/assets/svg'
+import { InfoIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
@@ -34,6 +38,8 @@ const SeedPhraseWrite: React.FC = () => {
 
   const [showInfo, setShowInfo] = useState(true)
   const seedphrase = useGetSeedPhrase()
+
+  useDangerouslyDisableGestures()
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current
