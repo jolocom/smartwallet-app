@@ -8,7 +8,7 @@
         <!-- sets cursor color -->
         <item name="colorControlActivated">#5251c1</item>
         <!-- removes jump on splash screen -->
-        <item name="android:windowTranslucentNavigation">true</item>
+        <!-- <item name="android:windowTranslucentNavigation">true</item> -->
         <!-- removes transition when we close camera screen -->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
 
