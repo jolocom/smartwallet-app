@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { StatusBar } from 'react-native'
+import { Platform, StatusBar } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
 
 export const useForceUpdate = () => {
@@ -31,9 +31,11 @@ export const usePrevious = <T extends unknown>(value: T) => {
 // NOTE: used to change the Keyboard input mode to @adjustResize on @Android
 export const useAdjustResizeInputMode = () => {
   useEffect(() => {
-    SoftInputMode.set(SoftInputMode.ADJUST_RESIZE)
-    return () => {
-      SoftInputMode.set(SoftInputMode.ADJUST_PAN)
+    if(Platform.OS === 'android') {
+      SoftInputMode.set(SoftInputMode.ADJUST_RESIZE)
+      return () => {
+        SoftInputMode.set(SoftInputMode.ADJUST_PAN)
+      }
     }
   }, [])
 }
