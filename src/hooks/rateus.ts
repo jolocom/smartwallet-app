@@ -1,9 +1,7 @@
 import Rate, { AndroidMarket } from 'react-native-rate'
-import { useState } from 'react'
 import { Platform } from 'react-native'
-import { useDispatch } from 'react-redux'
 
-import { setPopup } from '~/modules/appState/actions'
+import { useDisableLock } from './generic'
 
 const options = {
   AppleAppID: '1223869062',
@@ -14,13 +12,20 @@ const options = {
 }
 
 const useMarketRating = () => {
-  const dispatch = useDispatch()
+  const disableLock = useDisableLock()
 
-  const rateApp = () => {
-    dispatch(setPopup(true))
-    Rate.rate(options, (success) => {
-      dispatch(setPopup(false))
+  const ratePromise = () => {
+    return new Promise<void>((res, rej) => {
+      Rate.rate(options, (success) => {
+        console.log('success')
+        if (success) res()
+        rej('Failed to rate the app')
+      })
     })
+  }
+
+  const rateApp = async () => {
+    await disableLock(ratePromise)
   }
 
   return { rateApp }
