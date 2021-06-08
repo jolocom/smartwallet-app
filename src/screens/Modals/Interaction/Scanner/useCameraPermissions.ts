@@ -29,6 +29,7 @@ const useCameraPermissions = () => {
     })
     const permission = (await Permissions.request(permissionType)) as Results
     setPermission(permission)
+    dispatch(setPopup(false))
   }
 
   const openSettings = () => {
