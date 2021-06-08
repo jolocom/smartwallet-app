@@ -17,7 +17,6 @@ const useMarketRating = () => {
   const ratePromise = () => {
     return new Promise<void>((res, rej) => {
       Rate.rate(options, (success) => {
-        console.log('success')
         if (success) res()
         rej('Failed to rate the app')
       })
