@@ -28,6 +28,7 @@ import {
 import { categorizedCredentials } from '~/utils/categoriedCredentials'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import { AttributeI } from '../attributes/types'
+import truncateDid from '~/utils/truncateDid'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -80,6 +81,15 @@ export const getInteractionId = createSelector(
 export const getInteractionCounterparty = createSelector(
   [getActiveInteraction],
   ({ counterparty }) => counterparty,
+)
+
+/**
+ * Gets the @counterparty's name, with the truncated DID as a fallback
+ */
+export const getInteractionCounterpartyName = createSelector(
+  [getInteractionCounterparty],
+  (counterparty) =>
+    counterparty.publicProfile?.name ?? truncateDid(counterparty.did),
 )
 
 /**
