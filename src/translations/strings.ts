@@ -246,7 +246,8 @@ const settings = {
     'If you want to start fresh and erase all data related to this wallet’s identity',
   CLEAR_IDENTITY_BTN: 'click here',
   CLEAR_IDENTITY_LOADER: 'Processing data removal',
-  CLEAR_IDENTITY_TITLE: 'Please pay attention that you are deleting all your data and it cannot be recovered in the future'
+  CLEAR_IDENTITY_TITLE:
+    'Please pay attention that you are deleting all your data and it cannot be recovered in the future',
 }
 
 const termsConsent = {
@@ -305,9 +306,9 @@ const toasts = {
   OFFER_RENEGOTIATION_TITLE: 'Be aware',
   OFFER_RENEGOTIATION_MSG:
     "Some documents didn't pass our security check and cannot be saved or received",
-  SHARE_MISSING_DOCS_TITLE: 'User is missing requested documents',
+  SHARE_MISSING_DOCS_TITLE: 'Missing documents',
   SHARE_MISSING_DOCS_MSG:
-    '{{serviceName}} is requesting documents that can’t be found in your wallet. \n Missing: {{documentType}} ... ',
+    "{{serviceName}} is requesting documents that can't be found in your wallet. \n Missing: {{documentType}} ... ",
   WHOOPS: 'Whoops',
   COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
   COULDNOT_ACTIVATE: 'We could not activate biometrics',
