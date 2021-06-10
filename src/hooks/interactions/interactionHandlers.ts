@@ -18,10 +18,16 @@ import { AttributeTypes } from '~/types/credentials'
 import { CredentialIssuer } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { SWErrorCodes } from '~/errors/codes'
+import { useAgent } from '../sdk'
+import useTranslation from '~/hooks/useTranslation'
+import { useToasts } from '../toasts'
+import { strings } from '~/translations'
+import truncateDid from '~/utils/truncateDid'
 
 class CredentialRequestHandler {
   #requestedCredentials: SignedCredential[]
   #validatedCredentials: SignedCredential[]
+  #missingCredentialTypes: string[]
 
   constructor(
     public interaction: Interaction,
@@ -29,6 +35,7 @@ class CredentialRequestHandler {
   ) {
     this.#requestedCredentials = []
     this.#validatedCredentials = []
+    this.#missingCredentialTypes = []
   }
 
   private get requestedCredentialTypes(): string[][] {
@@ -41,6 +48,10 @@ class CredentialRequestHandler {
 
   private get requestedTypes(): string[] {
     return this.requestedCredentialTypes.map((t) => t[1])
+  }
+
+  public get missingCredentialTypes() {
+    return this.#missingCredentialTypes
   }
 
   async getStoredRequestedCredentials() {
@@ -68,34 +79,31 @@ class CredentialRequestHandler {
     // FIX: this returns not correct number of credentials
     // because first types of constraint and actual credential
     // do not match Credentials vs VerifiableCredential
-    // @ts-expect-error: correctRequestedCredentials do not match SignedCredential type
+
     this.#validatedCredentials = (
       this.interaction.getMessages()[0].interactionToken as CredentialRequest
-    ).applyConstraints(
-      // @ts-expect-error: correctRequestedCredentials do not match SignedCredential type
-      this.#requestedCredentials,
     )
+      .applyConstraints(this.#requestedCredentials.map((c) => c.toJSON()))
+      .map((c) => SignedCredential.fromJSON(c))
 
     return this
   }
 
   checkForMissingServiceIssuedCredentials() {
-    const hasNoMissingServiceIssuedCredentials = this.requestedTypes.every(
-      (t) => {
-        if (Object.values(AttributeTypes).includes(t)) {
-          // credential is a self issued credential
-          return true
-        } else {
-          // credential is a service issued credential
-          return Boolean(
-            this.#validatedCredentials.find((c) => c.type[1] === t),
-          )
-        }
-      },
-    )
+    const missingServiceIssuedCredentials = this.requestedTypes.filter((t) => {
+      if (Object.values(AttributeTypes).includes(t as AttributeTypes)) {
+        // credential is a self issued credential
+        return false
+      } else {
+        // credential is a service issued credential
+        return Boolean(this.#validatedCredentials.find((c) => c.type[1] === t))
+      }
+    })
 
-    if (!hasNoMissingServiceIssuedCredentials)
-      throw new Error(SWErrorCodes.SWInteractionRequestMissingDocuments)
+    if (!!missingServiceIssuedCredentials.length) {
+      this.#missingCredentialTypes = missingServiceIssuedCredentials
+    }
+
     return this
   }
 
@@ -149,53 +157,70 @@ const credentialOfferHandler = (state: CredentialOfferFlowState) => {
  * before we dispatch interaction details into redux store
  * 2. Map interaction details to the wallet UI structure
  */
-export const interactionHandler = async (
-  agent: Agent,
-  interaction: Interaction,
-  did: string,
-) => {
-  const { state, initiator } = interaction.getSummary()
+export const useInteractionHandler = () => {
+  const agent = useAgent()
+  const { did } = agent.idw
+  const { t } = useTranslation()
+  const { scheduleWarning } = useToasts()
 
-  let flowSpecificData
+  return async (interaction: Interaction) => {
+    const { state, initiator } = interaction.getSummary()
+    const serviceName =
+      initiator.publicProfile?.name ?? truncateDid(initiator.did)
 
-  switch (interaction.flow.type) {
-    case FlowType.Authorization: {
-      flowSpecificData = authorizationHandler(state as AuthenticationFlowState)
-      break
+    let flowSpecificData
+
+    switch (interaction.flow.type) {
+      case FlowType.Authorization: {
+        flowSpecificData = authorizationHandler(
+          state as AuthenticationFlowState,
+        )
+        break
+      }
+      case FlowType.Authentication: {
+        flowSpecificData = authenticationHandler(
+          state as AuthorizationFlowState,
+        )
+        break
+      }
+      case FlowType.CredentialOffer: {
+        flowSpecificData = credentialOfferHandler(
+          state as CredentialOfferFlowState,
+        )
+        break
+      }
+      case FlowType.CredentialShare: {
+        const handler = new CredentialRequestHandler(
+          interaction,
+          agent.credentials,
+        )
+
+        flowSpecificData = await (await handler.getStoredRequestedCredentials())
+          .validateAgainstConstrains()
+          .checkForMissingServiceIssuedCredentials()
+          .prepareCredentialsForUI(did)
+
+        if (!handler.missingCredentialTypes.length) {
+          flowSpecificData = undefined
+          // FIXME: there is an issue with the strings here, will be fixed when the
+          // i18n and PoEditor are properly set up.
+          scheduleWarning({
+            title: t(strings.SHARE_MISSING_DOCS_TITLE),
+            message: t(strings.SHARE_MISSING_DOCS_MSG, {
+              serviceName,
+              documentType: handler.missingCredentialTypes[0],
+            }),
+          })
+        }
+
+        break
+      }
+
+      default:
+        // TODO: Define error and use translations
+        throw new Error('Interaction not supported')
     }
-    case FlowType.Authentication: {
-      flowSpecificData = authenticationHandler(state as AuthorizationFlowState)
-      break
-    }
-    case FlowType.CredentialOffer: {
-      flowSpecificData = credentialOfferHandler(
-        state as CredentialOfferFlowState,
-      )
-      break
-    }
-    case FlowType.CredentialShare: {
-      const handler = new CredentialRequestHandler(
-        interaction,
-        agent.credentials,
-      )
 
-      flowSpecificData = await (
-        await handler.getStoredRequestedCredentials()
-      )
-        .validateAgainstConstrains()
-        .checkForMissingServiceIssuedCredentials() // this will throw
-        .prepareCredentialsForUI(did)
-
-      break
-    }
-
-    default:
-      // TODO: Define error and use translations
-      throw new Error('Interaction not supported')
-  }
-
-  return {
-    counterparty: initiator,
-    ...flowSpecificData,
+    return flowSpecificData
   }
 }
