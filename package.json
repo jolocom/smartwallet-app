@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "0.0.1.012",
+  "version": "0.0.1.013",
   "private": true,
   "scripts": {
     "run:ios": "react-native run-ios",
