@@ -1,16 +1,13 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenHeader from '~/components/ScreenHeader'
 import BiometryAnimation from '~/components/BiometryAnimation'
 
 import { strings } from '~/translations/strings'
 import { useSuccess } from '~/hooks/loader'
-import { setPopup } from '~/modules/appState/actions'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
@@ -22,20 +19,19 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { useBiometry } from '~/hooks/biometry'
 import BtnGroup from '~/components/BtnGroup'
 import { View } from 'react-native'
+import { useDisableLock } from '~/hooks/generic'
 
 const RegisterBiometry: React.FC = () => {
   const { biometryType } = useDeviceAuthState()
   const { authenticate, setBiometry } = useBiometry()
+  const disableLock = useDisableLock()
   const displaySuccessLoader = useSuccess()
-
-  const dispatch = useDispatch()
 
   const handleRedirectToLogin = useRedirectToLoggedIn()
 
   const handleAuthenticate = async () => {
-    dispatch(setPopup(true))
     try {
-      const result = await authenticate(biometryType)
+      const result = await disableLock(() => authenticate(biometryType))
       if (result.success) {
         setBiometry(biometryType)
         displaySuccessLoader(handleRedirectToLogin)

@@ -14,7 +14,7 @@ import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
-import { setPopup } from '~/modules/appState/actions'
+import { useDisableLock } from '~/hooks/generic'
 
 const Lock = () => {
   const dispatch = useDispatch()
@@ -22,6 +22,7 @@ const Lock = () => {
   const { authenticate, getEnrolledBiometry } = useBiometry()
   const [biometryType, setBiometryType] = useState<BiometryType>()
   const [biometryAvailable, setBiometryAvailable] = useState(false)
+  const disableLock = useDisableLock()
 
   const { currentAppState, prevAppState } = useGetAppStates()
 
@@ -62,18 +63,15 @@ const Lock = () => {
 
   const handleBiometryAuthentication = async () => {
     try {
-      dispatch(setPopup(true))
       /* in case user disabled biometrics we don't want to run authenticate */
       if (biometryAvailable) {
-        const { success } = await authenticate(biometryType)
+        const { success } = await disableLock(() => authenticate(biometryType))
         if (success) {
           unlockApp()
         }
       }
     } catch (err) {
       console.log('Error in authenticating with biometry on Lock', { err })
-    } finally {
-      dispatch(setPopup(false))
     }
   }
 
