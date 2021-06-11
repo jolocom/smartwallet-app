@@ -141,6 +141,7 @@ const DocumentList = () => {
                     renderItem={({ item: c }) => (
                       <DocumentCard
                         key={c.id}
+                        type={c.type}
                         id={c.id}
                         mandatoryFields={[
                           {
@@ -203,6 +204,7 @@ const DocumentList = () => {
                     renderItem={({ item: c }) => (
                       <OtherCard
                         id={c.id}
+                        type={c.type}
                         key={c.id}
                         mandatoryFields={[
                           {

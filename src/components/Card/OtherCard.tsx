@@ -12,19 +12,19 @@ import { ICardProps } from './types'
 
 const OtherCard: React.FC<ICardProps> = ({
   id,
+  type,
   mandatoryFields,
   optionalFields,
   photo,
-  claims,
 }) => {
   return (
     <CardContainer testID="otherCard">
       <Card
         id={id}
+        type={type}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
         photo={photo}
-        claims={claims}
       >
         <OtherCardMedium>
           <View

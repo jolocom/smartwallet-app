@@ -12,6 +12,7 @@ import { CardContext } from './context'
 const Card: React.FC<ICardProps> & ICardComposition = ({
   children,
   id,
+  type,
   optionalFields,
   mandatoryFields,
   photo,
@@ -28,6 +29,7 @@ const Card: React.FC<ICardProps> & ICardComposition = ({
   const contextValue = useMemo(
     () => ({
       id,
+      type,
       document,
       restMandatoryField,
       optionalFields,
