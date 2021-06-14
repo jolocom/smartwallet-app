@@ -15,11 +15,10 @@ import { ScreenNames } from '~/types/screens'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
-const CardDetails = () => {
+const CredentialDetails = () => {
   const navigation = useNavigation()
-  const route = useRoute<
-    RouteProp<MainStackParamList, ScreenNames.CardDetails>
-  >()
+  const route =
+    useRoute<RouteProp<MainStackParamList, ScreenNames.CredentialDetails>>()
   const { title, photo, fields } = route.params
 
   return (
@@ -131,4 +130,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CardDetails
+export default CredentialDetails

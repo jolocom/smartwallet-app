@@ -25,7 +25,7 @@ import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
 import { IField } from '~/components/Card/types'
-import CardDetails from './Documents/CardDetails'
+import CredentialDetails from './Documents/CredentialDetails'
 import InteractionTest from './Settings/Development/InteractionCardsTest'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
@@ -72,7 +72,7 @@ export type MainStackParamList = {
   [ScreenNames.TermsOfService]: undefined
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
-  [ScreenNames.CardDetails]: {
+  [ScreenNames.CredentialDetails]: {
     fields: IField[]
     title?: string
     photo?: string
@@ -208,8 +208,8 @@ const Main: React.FC = () => {
             options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen
-            name={ScreenNames.CardDetails}
-            component={CardDetails}
+            name={ScreenNames.CredentialDetails}
+            component={CredentialDetails}
             options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen

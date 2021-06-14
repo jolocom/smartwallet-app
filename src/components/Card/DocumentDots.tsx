@@ -43,7 +43,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
       {
         title: strings.INFO,
         navigation: {
-          screen: ScreenNames.CardDetails,
+          screen: ScreenNames.CredentialDetails,
           params: {
             fields: claimsDisplay,
             photo,
