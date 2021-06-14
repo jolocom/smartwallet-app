@@ -72,9 +72,7 @@ const SelectableField: React.FC<
 > = ({ value, isSelected, onSelect }) => {
   return (
     <TouchableOpacity activeOpacity={1} onPress={onSelect}>
-      <FieldContainer
-        customStyles={{ borderWidth: 1, borderColor: Colors.balticSea }}
-      >
+      <FieldContainer>
         <FieldText value={value} customStyles={{ width: '85%' }} />
         {isSelected ? (
           <View style={styles.radio}>
@@ -140,6 +138,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     minHeight: 50,
     marginVertical: 2,
+    borderWidth: 1,
+    borderColor: Colors.balticSea,
   },
 })
 
