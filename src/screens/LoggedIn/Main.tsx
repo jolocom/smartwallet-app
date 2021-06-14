@@ -60,7 +60,6 @@ const TransparentModals = () => {
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
   [ScreenNames.LoggedInTermsConsent]: undefined
-  [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
   [ScreenNames.ChangePin]: undefined
