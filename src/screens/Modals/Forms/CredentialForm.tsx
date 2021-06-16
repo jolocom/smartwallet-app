@@ -161,7 +161,7 @@ const CredentialForm = () => {
                 // NOTE: allow scrolling if there are too many fields
                 paddingBottom:
                   formConfig.fields.length > 3
-                    ? Platform.select({ ios: 200, android: 300 })
+                    ? Platform.select({ ios: 200, android: 0 })
                     : 0,
               }}
             >
