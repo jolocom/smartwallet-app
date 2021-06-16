@@ -11,14 +11,14 @@ export const useToggleExpand = ({onExpand, onCollapse}: IToggleExpand = {}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handelToggleExpand = () => {
-    setIsExpanded(prev => !prev);
-  }
-
-  useEffect(() => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 200,
     })
+    setIsExpanded(prev => !prev);
+  }
+
+  useEffect(() => {
     if(isExpanded) {
       onExpand && onExpand()
     } else {
