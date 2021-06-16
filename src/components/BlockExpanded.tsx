@@ -6,7 +6,7 @@ import JoloText from './JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
-import { useToggleExpand } from '~/hooks/interface'
+import { useToggleExpand } from '~/hooks/ui'
 
 interface Props {
   title: string

@@ -12,7 +12,7 @@ import Collapsible from '~/components/Collapsible'
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
-import { useToggleExpand } from '~/hooks/interface'
+import { useToggleExpand } from '~/hooks/ui'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 

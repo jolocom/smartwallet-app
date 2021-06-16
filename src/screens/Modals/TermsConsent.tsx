@@ -20,7 +20,7 @@ import { Colors } from '~/utils/colors'
 import { CheckmarkIconSmall } from '~/assets/svg'
 import useTermsConsent from '~/hooks/consent'
 import { useAgent } from '~/hooks/sdk'
-import { useToggleExpand } from '~/hooks/interface'
+import { useToggleExpand } from '~/hooks/ui'
 
 const legalTextConfig = [
   { title: 'Terms of Service', content: termsOfServiceEN },
