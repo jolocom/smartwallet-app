@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import Keychain from 'react-native-keychain'
 
@@ -19,9 +19,9 @@ import {
   useDeviceAuthState,
 } from './module/deviceAuthContext'
 import { showBiometry } from './module/deviceAuthActions'
-import { useKeyboardHeight } from '~/hooks/useKeyboardHeight'
 import Passcode from '~/components/Passcode'
 import { useToasts } from '~/hooks/toasts'
+import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -30,12 +30,23 @@ const RegisterPin = () => {
   const [selectedPasscode, setSelectedPasscode] = useState('')
 
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
+  const resetKeychainPasscode = useResetKeychainValues(PIN_SERVICE)
 
   const { biometryType } = useDeviceAuthState()
   const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
   const { scheduleWarning } = useToasts()
+
+  /**
+   * NOTE: a user does not have a possibility to remove the passcode from the keychain,
+   * which leaves her with the passcode already being present when the app is being
+   * reinstalled. The below will clean the keychain every time a user is on
+   * the register pin screen.
+   */
+  useEffect(() => {
+    resetKeychainPasscode()
+  }, [])
 
   const handlePasscodeSubmit = useCallback((pin) => {
     setSelectedPasscode(pin)
