@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, Dispatch, SetStateAction } from 'react'
 import { Platform, StatusBar } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
 import { useDispatch } from 'react-redux'
@@ -42,6 +42,26 @@ export const useAdjustResizeInputMode = () => {
       }
     }
   }, [])
+}
+
+/**
+ * This hook is responsible for toggling a
+ * state back to its initial state after 100ms
+ * @param state 
+ * @param updateState 
+ */
+ export const useRevertToInitialState = (
+  state: boolean,
+  updateState: Dispatch<SetStateAction<boolean>>,
+  delay: number = 100
+) => {
+  useEffect(() => {
+    if (state) {
+      setTimeout(() => {
+        updateState(prevValue => !prevValue)
+      }, delay)
+    }
+  }, [state])
 }
 
 /**
