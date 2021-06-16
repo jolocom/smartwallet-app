@@ -7,8 +7,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from './context'
 import { IWithCustomStyle } from '../Card/types'
-import JoloText, { JoloTextKind } from '../JoloText'
-import BP from '~/utils/breakpoints'
+import JoloText from '../JoloText'
 
 export type TField = IFieldComposition & React.FC
 
@@ -20,7 +19,7 @@ interface IFieldComposition {
 
 export interface IWidgetField {
   id: string
-  value: string
+  value: string | string[]
   isSelected?: boolean
   color?: Colors
   onSelect?: () => void
@@ -29,31 +28,28 @@ export interface IWidgetField {
 const FieldText: React.FC<
   Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
 > = ({ value, color = Colors.white90, customStyles = {} }) => {
-  /**
-   * NOTE: this is to allocate 4 lines for address attribute type
-   */
-  const numberOfValueLines = value.split('\n').length
-
-  return (
+  const renderText = (value: string) => (
     <JoloText
-      numberOfLines={numberOfValueLines}
-      kind={JoloTextKind.subtitle}
+      numberOfLines={1}
       size={JoloTextSizes.middle}
       color={color}
       customStyles={[
         {
           textAlign: 'left',
-          ...(numberOfValueLines > 1 && {
-            lineHeight: BP({ default: 22, large: 26 }),
-            paddingVertical: BP({ default: 20, xsmall: 16 }),
-            paddingTop: BP({ default: 14, xsmall: 10 }),
-          }),
         },
         customStyles,
       ]}
     >
       {value}
     </JoloText>
+  )
+
+  return Array.isArray(value) ? (
+    <View style={{ paddingTop: 12, paddingBottom: 16 }}>
+      {value.map(renderText)}
+    </View>
+  ) : (
+    renderText(value)
   )
 }
 
@@ -72,9 +68,7 @@ const SelectableField: React.FC<
 > = ({ value, isSelected, onSelect }) => {
   return (
     <TouchableOpacity activeOpacity={1} onPress={onSelect}>
-      <FieldContainer
-        customStyles={{ borderWidth: 1, borderColor: Colors.balticSea }}
-      >
+      <FieldContainer>
         <FieldText value={value} customStyles={{ width: '85%' }} />
         {isSelected ? (
           <View style={styles.radio}>
@@ -140,6 +134,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     minHeight: 50,
     marginVertical: 2,
+    borderWidth: 1,
+    borderColor: Colors.balticSea,
   },
 })
 

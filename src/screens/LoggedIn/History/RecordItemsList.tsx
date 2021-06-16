@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
+import { FlowType, Interaction } from 'react-native-jolocom'
 
 import { useTabs } from '~/components/Tabs/context'
 import { useHistory } from '~/hooks/history'
@@ -38,12 +39,25 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
 
   const { activeSubtab } = useTabs()
 
+  const shouldUpdateRecords = (
+    interaction: Interaction,
+    flows?: FlowType[],
+  ) => {
+    if (!flows) return true
+
+    return flows.includes(interaction.flow.type)
+  }
+
   useInteractionCreate((interaction) => {
-    setInteractions((prev) => createInteractionRecord(interaction, prev))
+    if (shouldUpdateRecords(interaction, flows)) {
+      setInteractions((prev) => createInteractionRecord(interaction, prev))
+    }
   })
 
   useInteractionUpdate((interaction) => {
-    setInteractions((prev) => updateInteractionRecord(interaction, prev))
+    if (shouldUpdateRecords(interaction, flows)) {
+      setInteractions((prev) => updateInteractionRecord(interaction, prev))
+    }
   })
 
   useEffect(() => {

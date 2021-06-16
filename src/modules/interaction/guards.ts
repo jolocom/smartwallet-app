@@ -8,12 +8,7 @@ import {
 import { FlowType } from 'react-native-jolocom'
 
 export function isAuthDetails(details: any): details is AuthenticationDetailsI {
-  return (
-    details.flowType === FlowType.Authentication &&
-    !!details.description &&
-    !details.action &&
-    !details.image
-  )
+  return details.flowType === FlowType.Authentication
 }
 export function isAuthzDetails(details: any): details is AuthorizationDetailsI {
   return (

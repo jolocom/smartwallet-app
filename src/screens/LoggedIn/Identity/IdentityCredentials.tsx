@@ -33,9 +33,12 @@ const getFormattedValue = (value: ClaimValues, type: AttributeTypes) => {
   /**
    * NOTE: this is to allocate 4 lines for address attribute type
    */
-  return Object.values(value).join(
-    type === AttributeTypes.postalAddress ? '\n' : ' ',
-  )
+  switch (type) {
+    case AttributeTypes.postalAddress:
+      return Object.values(value).map((v) => (v ? v.toString() : ''))
+    default:
+      return Object.values(value).join(' ')
+  }
 }
 
 const IdentityCredentials = () => {
