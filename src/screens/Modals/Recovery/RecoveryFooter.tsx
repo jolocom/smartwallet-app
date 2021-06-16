@@ -12,7 +12,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 import { strings } from '~/translations/strings'
 
 import { useLoader } from '~/hooks/loader'
-import { useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
+import { StorageKeys, useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
@@ -80,6 +80,9 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
       await restoreEntropy()
     } else {
       const idw = await agent.loadFromMnemonic(phrase.join(' '))
+      await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
+        finished: true,
+      })
       dispatch(setDid(idw.did))
     }
   }
