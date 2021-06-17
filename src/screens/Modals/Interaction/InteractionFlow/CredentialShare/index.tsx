@@ -12,6 +12,7 @@ import {
   getIsReadyToSubmitRequest,
   getCustomRequestedCredentialsByCategoryByType,
   getSelectedShareCredentials,
+  getServiceDescription,
 } from '~/modules/interaction/selectors'
 import { strings } from '~/translations'
 import {
@@ -19,6 +20,7 @@ import {
   CredentialsByType,
   DisplayCredential,
   CredentialCategories,
+  AttributeTypes,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import { IncomingRequestDoc } from '../components/card/request/document'
@@ -46,17 +48,22 @@ import { getObjectFirstValue } from '~/utils/objectUtils'
 import Space from '~/components/Space'
 import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
+import useTranslation from '~/hooks/useTranslation'
+import { attributeConfig } from '~/config/claims'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
     getRequestedCredentialDetailsBAS,
   )
 
+  const { t } = useTranslation()
+  const { name: serviceName } = useSelector(getServiceDescription)
+
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const singleMissingAttribute =
     singleRequestedAttribute &&
     !getObjectFirstValue(singleRequestedAttribute).length
-      ? Object.keys(singleRequestedAttribute)[0]
+      ? (Object.keys(singleRequestedAttribute)[0] as AttributeTypes)
       : undefined
 
   const handleShare = useCredentialShareSubmit()
@@ -125,7 +132,19 @@ export const CredentialShareBAS = () => {
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={strings.INCOMING_REQUEST} />
+      <InteractionTitle
+        label={
+          singleMissingAttribute
+            ? t(strings.INCOMING_REQUEST_SINGLE, {
+                service: serviceName,
+                attribute:
+                  attributeConfig[
+                    singleMissingAttribute
+                  ].label.toLocaleLowerCase(),
+              })
+            : strings.INCOMING_REQUEST
+        }
+      />
       <InteractionDescription
         label={
           singleMissingAttribute
