@@ -24,9 +24,8 @@ export const useResetKeychainValues = (service: string) => {
 
 export const useGetStoredAuthValues = () => {
   const [isLoadingStorage, setIsLoadingStorage] = useState(false)
-  const [biometryType, setBiometryType] = useState<BiometryType | undefined>(
-    undefined,
-  )
+  const [biometryType, setBiometryType] =
+    useState<BiometryType | undefined>(undefined)
   const [keychainPin, setKeychainPin] = useState('')
   const [isBiometrySelected, setIsBiometrySelected] = useState(false)
 

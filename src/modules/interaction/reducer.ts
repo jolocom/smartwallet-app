@@ -45,21 +45,21 @@ const reducer = (
       }
       return state
     case AttrActions.updateAttrs: {
-      const {flowType} = state.details;
-      const {type, attribute} = action.payload as AttributePayload;
-      if(flowType === null) {
-        return state;
+      const { flowType } = state.details
+      const { type, attribute } = action.payload as AttributePayload
+      if (flowType === null) {
+        return state
       }
       /**
        * Upon interaction request,
-       * we should populate with newly created attribute 
+       * we should populate with newly created attribute
        * attribute property of interaction details,
-       * because we store separate instance of 
+       * because we store separate instance of
        * service and self issued credentials within
        * interaction state.
        */
-      if(isCredShareDetails(state.details)) {
-        const interactionAttributes = state.details.attributes[type];
+      if (isCredShareDetails(state.details)) {
+        const interactionAttributes = state.details.attributes[type]
         return {
           ...state,
           details: {
@@ -69,19 +69,21 @@ const reducer = (
              */
             attributes: {
               ...state.details.attributes,
-              [type]: interactionAttributes ? [...interactionAttributes, attribute] : [attribute]
+              [type]: interactionAttributes
+                ? [...interactionAttributes, attribute]
+                : [attribute],
             },
             /**
              * Selecting newly create attribute
              */
-             selectedCredentials: {
+            selectedCredentials: {
               ...state.details.selectedCredentials,
-              [type]: attribute.id
-            }
-          }
+              [type]: attribute.id,
+            },
+          },
         }
       }
-      return state;
+      return state
     }
     default:
       return state

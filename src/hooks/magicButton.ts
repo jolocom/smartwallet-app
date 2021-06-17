@@ -15,8 +15,9 @@ export const useMagicBtnAnimations = (animationDuration: number) => {
   const magicOpacity = useRef<Animated.Value>(
     new Animated.Value(INITIAL_MAGIC_BTN_OPACITY),
   ).current
-  const shadowScale = useRef<Animated.Value>(new Animated.Value(INITIAL_SHADOW))
-    .current
+  const shadowScale = useRef<Animated.Value>(
+    new Animated.Value(INITIAL_SHADOW),
+  ).current
   const circleScale = useRef<Animated.Value>(
     new Animated.Value(INITIAL_CIRCLE_SCALE),
   ).current

@@ -66,15 +66,17 @@ export const useInteractionStart = () => {
       },
       { showSuccess: false },
       (error) => {
-        if(isError(error)) {
+        if (isError(error)) {
           // @ts-ignore
-          if(isUIError(error)) scheduleWarning(UIErrors[error.message])
-          else scheduleErrorWarning(error, {
-            title: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.title,
-            message: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.message
-          })
+          if (isUIError(error)) scheduleWarning(UIErrors[error.message])
+          else
+            scheduleErrorWarning(error, {
+              title: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.title,
+              message:
+                UIErrors[SWErrorCodes.SWInteractionUnknownError]?.message,
+            })
         }
-      }
+      },
     )
   }
 }

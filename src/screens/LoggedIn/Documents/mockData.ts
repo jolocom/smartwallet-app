@@ -51,8 +51,7 @@ export const DOCUMENTS = [
             'Information that should be previewed here Information that should be previewed here',
         },
         {
-          name:
-            'Some more info that can fit in here and if it is not going over two lines agreed previou',
+          name: 'Some more info that can fit in here and if it is not going over two lines agreed previou',
           value:
             'Some more info that can fit in here and if it is not going over two lines agreed previou over two lines agreed previou',
         },
@@ -88,8 +87,7 @@ export const DOCUMENTS = [
             'Information that should be previewed here Information that should be previewed here',
         },
         {
-          name:
-            'Some more info that can fit in here and if it is not going over two lines agreed previou',
+          name: 'Some more info that can fit in here and if it is not going over two lines agreed previou',
           value:
             'Some more info that can fit in here and if it is not going over two lines agreed previou over two lines agreed previou',
         },
@@ -117,8 +115,7 @@ export const OTHER = [
           value: 'Information that should be previewed here',
         },
         {
-          name:
-            'Some more info that can fit in here and if it is not going over two lines agreed previou',
+          name: 'Some more info that can fit in here and if it is not going over two lines agreed previou',
           value: 'Information that should be',
         },
         {
@@ -126,8 +123,7 @@ export const OTHER = [
           value: 'Information',
         },
       ],
-      logo:
-        'https://i.pinimg.com/564x/db/3f/9b/db3f9bce5262323d79cc020950db08bc.jpg',
+      logo: 'https://i.pinimg.com/564x/db/3f/9b/db3f9bce5262323d79cc020950db08bc.jpg',
     },
   },
   {
@@ -172,8 +168,7 @@ export const OTHER = [
           value: 'Information that should be previewed here',
         },
       ],
-      logo:
-        'https://i.pinimg.com/564x/db/3f/9b/db3f9bce5262323d79cc020950db08bc.jpg',
+      logo: 'https://i.pinimg.com/564x/db/3f/9b/db3f9bce5262323d79cc020950db08bc.jpg',
     },
   },
 ]

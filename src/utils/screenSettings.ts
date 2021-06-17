@@ -1,20 +1,27 @@
-import { StackNavigationOptions, TransitionPresets } from "@react-navigation/stack";
+import {
+  StackNavigationOptions,
+  TransitionPresets,
+} from '@react-navigation/stack'
 
 export const screenTransitionSlideFromRight = {
   ...TransitionPresets.SlideFromRightIOS,
 }
 
-export const screenTransitionSlideFromBottom = TransitionPresets.ModalSlideFromBottomIOS;
+export const screenTransitionSlideFromBottom =
+  TransitionPresets.ModalSlideFromBottomIOS
 
-export const screeDisableGestures = {gestureEnabled: false}
+export const screeDisableGestures = { gestureEnabled: false }
 
-export const screenTransitionFromBottomDisabledGestures = {...screenTransitionSlideFromBottom, ...screeDisableGestures}
+export const screenTransitionFromBottomDisabledGestures = {
+  ...screenTransitionSlideFromBottom,
+  ...screeDisableGestures,
+}
 
 export const transparentModalOptions: StackNavigationOptions = {
   headerShown: false,
   cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
-  cardStyleInterpolator: ({current: {progress}}) => ({
+  cardStyleInterpolator: ({ current: { progress } }) => ({
     overlayStyle: {
       opacity: progress.interpolate({
         inputRange: [0, 1],
