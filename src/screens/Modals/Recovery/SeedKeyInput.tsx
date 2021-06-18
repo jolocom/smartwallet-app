@@ -168,6 +168,7 @@ const SeedKeyInput: React.FC = () => {
           keyboardAppearance="dark"
           underlineColorAndroid="transparent"
           autoCapitalize="none"
+          editable={currentWordIdx < 12}
           autoFocus
           //@ts-ignore
           textAlign="center"

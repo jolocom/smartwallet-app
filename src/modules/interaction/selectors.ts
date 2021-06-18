@@ -29,6 +29,7 @@ import { categorizedCredentials } from '~/utils/categoriedCredentials'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import { AttributeI } from '../attributes/types'
 import truncateDid from '~/utils/truncateDid'
+import { attributeConfig } from '~/config/claims'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (details: InteractionDetails) => details is T,
@@ -115,7 +116,11 @@ export const getRequestedAttributes = createSelector(
   [getCredShareDetails],
   (details) => {
     const { requestedTypes, attributes } = details
-    const updatedAttributes = requestedTypes.reduce<
+    // NOTE: sorting the requested types according to the order from the @AttributeConfig
+    const sortedRequestedTypes = Object.keys(attributeConfig).filter((type) =>
+      requestedTypes.includes(type),
+    )
+    const updatedAttributes = sortedRequestedTypes.reduce<
       Partial<Record<AttributeTypes, AttributeI[]>>
     >((attrs, t) => {
       // add missing attribute

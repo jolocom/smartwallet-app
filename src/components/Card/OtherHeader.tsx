@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
+import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
 import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
 import Space from '../Space'
@@ -10,8 +11,9 @@ const LARGE_LOGO_SIZE = BP({ default: 78, xsmall: 60 })
 const SMALL_LOGO_SIZE = 37
 
 const OtherHeader: React.FC = () => {
-  const { document, photo: logo } = useCard()
+  const { document, photo: logo, type } = useCard()
   const [isHeaderScalled, setIsHeaderScaled] = useState(false)
+  const credentialUIType = getCredentialUIType(type)
 
   const handleHeaderTextLayout = (e: TextLayoutEvent) => {
     if (!isHeaderScalled) {
@@ -30,7 +32,7 @@ const OtherHeader: React.FC = () => {
               : BP({ default: 8, xsmall: 4 }),
           }}
         >
-          {strings.TYPE_OF_DOCUMENT}
+          {credentialUIType}
         </FieldName>
         <Space height={BP({ default: 10, xsmall: 4 })} />
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>

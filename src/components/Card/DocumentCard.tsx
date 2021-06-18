@@ -11,6 +11,7 @@ import { ICardProps } from './types'
 
 const DocumentCard: React.FC<ICardProps> = ({
   id,
+  type,
   mandatoryFields,
   optionalFields,
   photo,
@@ -20,6 +21,7 @@ const DocumentCard: React.FC<ICardProps> = ({
     <CardContainer testID="document-card">
       <Card
         id={id}
+        type={type}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
         photo={photo}

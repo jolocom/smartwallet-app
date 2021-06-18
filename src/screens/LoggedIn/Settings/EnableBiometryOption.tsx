@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View } from 'react-native'
-import Biometry, { BiometryType } from 'react-native-biometrics'
+import { BiometryType } from 'react-native-biometrics'
 import { useDispatch } from 'react-redux'
 
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useBiometry } from '~/hooks/biometry'
+import { useDisableLock } from '~/hooks/generic'
 import { useToasts } from '~/hooks/toasts'
-import { setPopup } from '~/modules/appState/actions'
 import { strings } from '~/translations/strings'
 import Option from './components/Option'
 
@@ -16,20 +16,20 @@ const EnableBiometryOption = () => {
   /* On state that is controlled and passed to ToggleSwitch */
   const [isOn, setIsOn] = useState(false)
   /* State represent what biometrics were enrolled */
-  const [enrolledBiometry, setEnrolledBiometry] = useState<
-    BiometryType | undefined
-    >(undefined)
-  
-  const dispatch = useDispatch();
+  const [enrolledBiometry, setEnrolledBiometry] =
+    useState<BiometryType | undefined>(undefined)
+
+  const dispatch = useDispatch()
 
   const {
     resetBiometry,
     getBiometry,
     setBiometry,
     authenticate,
-    getEnrolledBiometry
+    getEnrolledBiometry,
   } = useBiometry()
   const { scheduleWarning } = useToasts()
+  const disableLock = useDisableLock()
 
   /* check if we should display this component or not */
   const checkIfBiometryIsEnrolled = async () => {
@@ -63,14 +63,13 @@ const EnableBiometryOption = () => {
   }, [])
 
   const handleToggle = async () => {
-    dispatch(setPopup(true));
     try {
       if (!isOn) {
         /* if next state is on */
 
         // if user wants to activate biometry
         setIsOn(true)
-        const result = await authenticate(enrolledBiometry)
+        const result = await disableLock(() => authenticate(enrolledBiometry))
         if (result.success) {
           enrolledBiometry && setBiometry(enrolledBiometry)
         } else {
@@ -90,8 +89,6 @@ const EnableBiometryOption = () => {
         title: strings.WHOOPS,
         message: isOn ? strings.COULDNOT_DEACTIVATE : strings.COULDNOT_ACTIVATE,
       })
-    } finally {
-      dispatch(setPopup(false))
     }
   }
 

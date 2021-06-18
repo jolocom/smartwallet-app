@@ -23,7 +23,7 @@ import { CloseIcon } from '~/assets/svg'
 interface Props {
   type: AttributeTypes
   id: string
-  value: string
+  value: string | string[]
   onDelete: () => void
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -57,6 +57,20 @@ const Walkthrough: React.FC = () => {
 
   const insets = useSafeArea()
 
+  /**
+   * To prevent slider autoplay onMount
+   * as it creates flickering effect
+   */
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setIsMounted(true)
+    }, 1000)
+    return () => {
+      clearTimeout(id)
+    }
+  }, [])
+
   return (
     <ScreenContainer
       isFullscreen
@@ -65,7 +79,7 @@ const Walkthrough: React.FC = () => {
     >
       <Swiper
         loop
-        autoplay
+        autoplay={isMounted}
         autoplayTimeout={5}
         renderPagination={renderPagination}
       >

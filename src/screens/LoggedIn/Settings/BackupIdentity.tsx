@@ -62,9 +62,10 @@ const BackupIdentity = () => {
       </Collapsible.Header>
       <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
         <Collapsible.ScrollView
-          contentContainerStyle={{
+          customStyles={{
             flexGrow: 1,
             justifyContent: 'space-between',
+            paddingBottom: 0,
           }}
         >
           <Collapsible.HidingTextContainer>
@@ -84,7 +85,13 @@ const BackupIdentity = () => {
               onPress={() => {}}
             />
           </View>
-          <View style={{ width: '100%', paddingBottom: 32, paddingTop: 20 }}>
+          <View
+            style={{
+              width: '100%',
+              paddingBottom: 32,
+              paddingTop: 20,
+            }}
+          >
             <JoloText color={Colors.white30}>{strings.LAST_BACKUP}</JoloText>
             <JoloText color={Colors.white30}>{lastBackup}</JoloText>
           </View>
