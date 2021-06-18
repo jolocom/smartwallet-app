@@ -110,11 +110,11 @@ const CredentialForm = () => {
     >
       {(formProps) => {
         const {
-          handleChange,
           values,
           errors,
           setFieldTouched,
           setFieldError,
+          setFieldValue,
           touched,
           isValid,
           dirty,
@@ -173,7 +173,7 @@ const CredentialForm = () => {
                       // @ts-expect-error
                       name={field.key as string}
                       key={field.key}
-                      updateInput={handleChange(field.key)}
+                      updateInput={(v) => setFieldValue(field.key, v.trim())}
                       value={values[field.key]}
                       placeholder={field.label}
                       autoFocus={i === 0}

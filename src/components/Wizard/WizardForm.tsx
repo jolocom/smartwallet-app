@@ -36,7 +36,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
         onSubmit={handleFormSubmit}
         validationSchema={validationSchema}
       >
-        {({ handleChange, values, isValid, errors, dirty }) => (
+        {({ setFieldValue, values, isValid, errors, dirty }) => (
           <>
             <AutofocusContainer
               style={{
@@ -53,7 +53,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                     key={field.key}
                     // @ts-ignore
                     value={values[field.key]}
-                    updateInput={handleChange(field.key)}
+                    updateInput={(v) => setFieldValue(field.key, v.trim())}
                     placeholder={field.label}
                     autoFocus={idx === 0}
                     withHighlight={
