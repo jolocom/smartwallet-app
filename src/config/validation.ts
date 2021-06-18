@@ -20,8 +20,9 @@ yup.addMethod<ObjectSchema<any>>(
 
 yup.addMethod(yup.string, 'phone', function () {
   return this.matches(
-    /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
-    strings.PHONE_FORMAT_ERROR,
+    // NOTE: regex for + or +1232312312312 -> to allow only numbers
+    /^\+{1}\d+$|^\+$/,
+    strings.ONLY_NUMBERS,
   )
 })
 
@@ -51,7 +52,7 @@ export const postalAddressValidation = yup.object().shape({
 })
 
 export const mobileNumberValidation = yup.object().shape({
-  [ClaimKeys.telephone]: yup.string().phone().required(strings.VALUE_MISSING),
+  [ClaimKeys.telephone]: yup.string().phone().required(strings.VALUE_MISSING).min(7, strings.SHORT).max(17, strings.LARGE),
 })
 
 export const contactValidation = yup
