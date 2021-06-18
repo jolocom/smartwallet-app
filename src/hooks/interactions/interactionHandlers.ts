@@ -88,10 +88,10 @@ class CredentialRequestHandler {
     const missingServiceIssuedCredentials = this.requestedTypes.filter((t) => {
       if (Object.values(AttributeTypes).includes(t as AttributeTypes)) {
         // credential is a self issued credential
-        return false
+        return true
       } else {
         // credential is a service issued credential
-        return Boolean(this.#validatedCredentials.find((c) => c.type[1] === t))
+        return !Boolean(this.#validatedCredentials.find((c) => c.type[1] === t))
       }
     })
 
@@ -195,7 +195,7 @@ export const useInteractionHandler = () => {
           .checkForMissingServiceIssuedCredentials()
           .prepareCredentialsForUI(did)
 
-        if (!handler.missingCredentialTypes.length) {
+        if (!!handler.missingCredentialTypes.length) {
           flowSpecificData = undefined
           // FIXME: there is an issue with the strings here, will be fixed when the
           // i18n and PoEditor are properly set up.
