@@ -1,16 +1,12 @@
-import React, { useState } from 'react'
-import {
-  View,
-  TouchableWithoutFeedback,
-  LayoutAnimation,
-  StyleSheet,
-} from 'react-native'
+import React from 'react'
+import { View, TouchableWithoutFeedback, StyleSheet } from 'react-native'
 
 import Block from './Block'
 import JoloText from './JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
+import { useToggleExpand } from '~/hooks/ui'
 
 interface Props {
   title: string
@@ -23,22 +19,9 @@ const BlockExpanded: React.FC<Props> = ({
   expandedText,
   onExpand = () => {},
 }) => {
-  const [showText, setShowText] = useState(false)
-
-  const handleExpand = () => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: 200,
-    })
-    setShowText((prev) => {
-      if (!prev)
-        setTimeout(() => {
-          onExpand()
-        }, 1)
-
-      return !prev
-    })
-  }
+  const { isExpanded, onToggleExpand } = useToggleExpand({
+    onExpand,
+  })
 
   return (
     <Block
@@ -46,7 +29,7 @@ const BlockExpanded: React.FC<Props> = ({
         marginBottom: BP({ default: 16, xsmall: 12 }),
       }}
     >
-      <TouchableWithoutFeedback onPress={handleExpand}>
+      <TouchableWithoutFeedback onPress={onToggleExpand}>
         <View style={styles.container}>
           <JoloText
             size={JoloTextSizes.middle}
@@ -55,7 +38,7 @@ const BlockExpanded: React.FC<Props> = ({
           >
             {title}
           </JoloText>
-          {showText && (
+          {isExpanded && (
             <View>
               <JoloText
                 size={JoloTextSizes.mini}

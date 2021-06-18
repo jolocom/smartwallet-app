@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  LayoutAnimation,
-} from 'react-native'
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 
 import {
   termsOfServiceEN,
@@ -26,6 +20,7 @@ import { Colors } from '~/utils/colors'
 import { CheckmarkIconSmall } from '~/assets/svg'
 import useTermsConsent from '~/hooks/consent'
 import { useAgent } from '~/hooks/sdk'
+import { useToggleExpand } from '~/hooks/ui'
 
 const legalTextConfig = [
   { title: 'Terms of Service', content: termsOfServiceEN },
@@ -44,20 +39,12 @@ const ExpandingButton: React.FC<{ title: string; content: string }> = ({
   title,
   content,
 }) => {
-  const [expanded, setExpanded] = useState(false)
-
-  const handleExpand = () => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: 300,
-    })
-    setExpanded((prev) => !prev)
-  }
+  const { isExpanded, onToggleExpand } = useToggleExpand()
 
   return (
     <>
-      <ConsentButton text={title} onPress={handleExpand} />
-      {expanded && <ConsentText text={content} onPress={handleExpand} />}
+      <ConsentButton text={title} onPress={onToggleExpand} />
+      {isExpanded && <ConsentText text={content} onPress={onToggleExpand} />}
     </>
   )
 }

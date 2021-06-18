@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Image, StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -12,15 +12,29 @@ import Collapsible from '~/components/Collapsible'
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
+import { useToggleExpand } from '~/hooks/ui'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
-const CardDetails = () => {
+const CredentialDetails = () => {
   const navigation = useNavigation()
-  const route = useRoute<
-    RouteProp<MainStackParamList, ScreenNames.CardDetails>
-  >()
+  const route =
+    useRoute<RouteProp<MainStackParamList, ScreenNames.CredentialDetails>>()
   const { title, photo, fields } = route.params
+
+  const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
+  const { isExpanded, onToggleExpand } = useToggleExpand()
+
+  const handleToggleExpand = (idx: number) => {
+    setExpandedFieldIdx(idx)
+    onToggleExpand()
+  }
+
+  useEffect(() => {
+    if (!isExpanded) {
+      setExpandedFieldIdx(-1)
+    }
+  }, [isExpanded])
 
   return (
     <Collapsible>
@@ -72,16 +86,23 @@ const CardDetails = () => {
                   >
                     {field.label}
                   </JoloText>
-                  <JoloText
-                    color={Colors.black95}
-                    numberOfLines={4}
-                    customStyles={[
-                      styles.fieldText,
-                      { marginTop: BP({ default: 8, xsmall: 4 }) },
-                    ]}
+                  <TouchableOpacity
+                    onPress={() => handleToggleExpand(i)}
+                    activeOpacity={1}
                   >
-                    {field.value}
-                  </JoloText>
+                    <JoloText
+                      color={Colors.black95}
+                      numberOfLines={
+                        isExpanded && expandedFieldIdx === i ? 0 : 4
+                      }
+                      customStyles={[
+                        styles.fieldText,
+                        { marginTop: BP({ default: 8, xsmall: 4 }) },
+                      ]}
+                    >
+                      {field.value}
+                    </JoloText>
+                  </TouchableOpacity>
                 </View>
                 {i !== Object.keys(fields).length - 1 && (
                   <View style={styles.divider} />
@@ -131,4 +152,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CardDetails
+export default CredentialDetails
