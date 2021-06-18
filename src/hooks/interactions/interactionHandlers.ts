@@ -27,7 +27,7 @@ import truncateDid from '~/utils/truncateDid'
 class CredentialRequestHandler {
   #requestedCredentials: SignedCredential[]
   #validatedCredentials: SignedCredential[]
-  #missingCredentialTypes: string[]
+  public missingCredentialTypes: string[] = []
 
   constructor(
     public interaction: Interaction,
@@ -35,7 +35,6 @@ class CredentialRequestHandler {
   ) {
     this.#requestedCredentials = []
     this.#validatedCredentials = []
-    this.#missingCredentialTypes = []
   }
 
   private get requestedCredentialTypes(): string[][] {
@@ -48,10 +47,6 @@ class CredentialRequestHandler {
 
   private get requestedTypes(): string[] {
     return this.requestedCredentialTypes.map((t) => t[1])
-  }
-
-  public get missingCredentialTypes() {
-    return this.#missingCredentialTypes
   }
 
   async getStoredRequestedCredentials() {
@@ -101,7 +96,7 @@ class CredentialRequestHandler {
     })
 
     if (!!missingServiceIssuedCredentials.length) {
-      this.#missingCredentialTypes = missingServiceIssuedCredentials
+      this.missingCredentialTypes = missingServiceIssuedCredentials
     }
 
     return this
