@@ -19,6 +19,7 @@ const InteractionTitle: React.FC<IInteractionText> = ({ label }) => {
         lineHeight: BP({ xsmall: 24, default: 28 }),
         marginTop: BP({ default: 10, medium: 14, large: 14 }),
         marginBottom: BP({ default: 4, medium: 8, large: 8 }),
+        marginHorizontal: BP({ default: 10, xsmall: 5 }),
       }}
     >
       {label}
