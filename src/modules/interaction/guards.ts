@@ -12,9 +12,7 @@ export function isAuthDetails(details: any): details is AuthenticationDetailsI {
 }
 export function isAuthzDetails(details: any): details is AuthorizationDetailsI {
   return (
-    details.flowType === FlowType.Authorization &&
-    !!details.description &&
-    !!details.action
+    details.flowType === FlowType.Authorization
   )
 }
 
