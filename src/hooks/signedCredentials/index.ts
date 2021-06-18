@@ -15,10 +15,8 @@ import {
 
 const makeSeparateSignedTransformToUI = (agent: Agent, did: string) => {
   return async (credentials: SignedCredential[]) => {
-    const {
-      credentials: serviceIssuedCredentials,
-      selfIssuedCredentials,
-    } = separateCredentialsAndAttributes(credentials, did)
+    const { credentials: serviceIssuedCredentials, selfIssuedCredentials } =
+      separateCredentialsAndAttributes(credentials, did)
 
     const attributes = mapAttributesToDisplay(selfIssuedCredentials)
     const displayCredentials = await makeTransformSignedCredentialToUI(agent)(
@@ -40,10 +38,8 @@ export const makeInitializeCredentials = (
   return async () => {
     try {
       const allCredentials: SignedCredential[] = await agent.credentials.query()
-      const {
-        attributes,
-        displayCredentials,
-      } = await makeSeparateSignedTransformToUI(agent, did)(allCredentials)
+      const { attributes, displayCredentials } =
+        await makeSeparateSignedTransformToUI(agent, did)(allCredentials)
 
       // TODO: namings are inconsistent across modules: initAttrs vs setCredentials
       dispatch(initAttrs(attributes))
@@ -54,13 +50,13 @@ export const makeInitializeCredentials = (
   }
 }
 
-const makeTransformSignedCredentialToUI = (agent: Agent) => async (
-  credentials: SignedCredential[],
-): Promise<DisplayCredential[]> => {
-  return Promise.all(
-    credentials.map((c) => mapCredentialsToDisplay(agent.credentials, c)),
-  )
-}
+const makeTransformSignedCredentialToUI =
+  (agent: Agent) =>
+  async (credentials: SignedCredential[]): Promise<DisplayCredential[]> => {
+    return Promise.all(
+      credentials.map((c) => mapCredentialsToDisplay(agent.credentials, c)),
+    )
+  }
 
 export const useCredentials = () => {
   const agent = useAgent()

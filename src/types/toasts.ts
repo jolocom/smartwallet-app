@@ -49,14 +49,14 @@ export type ToastBody = PartialToast & ToastMessage
 
 let toastIds = 0
 
-const createToastFactory = (template: PartialToast & Omit<ToastBase, 'id'>) => (
-  overrides: ToastBody,
-): Toast =>
-  ({
-    id: toastIds++,
-    ...template,
-    ...overrides,
-  } as Toast)
+const createToastFactory =
+  (template: PartialToast & Omit<ToastBase, 'id'>) =>
+  (overrides: ToastBody): Toast =>
+    ({
+      id: toastIds++,
+      ...template,
+      ...overrides,
+    } as Toast)
 
 export type Toast = ToastBase & ToastInteract & ToastDismiss & ToastPayload
 

@@ -240,9 +240,10 @@ describe('Record Assembler', () => {
       const expectedSteps = recordConfig.CredentialShare?.steps.finished.map(
         (title) => ({
           title,
-          description: genericRequestArgs.summary.state.providedCredentials[0].suppliedCredentials
-            .map((c) => c.name)
-            .join(', '),
+          description:
+            genericRequestArgs.summary.state.providedCredentials[0].suppliedCredentials
+              .map((c) => c.name)
+              .join(', '),
         }),
       )
 

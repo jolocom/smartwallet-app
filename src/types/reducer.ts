@@ -24,6 +24,5 @@ export interface RootReducerI {
 
 export type ThunkDispatch = OriginalThunkDispatch<RootReducerI, null, AnyAction>
 
-export type ThunkAction<
-  R = AnyAction | Promise<AnyAction | void>
-> = OriginalThunkAction<R, RootReducerI, null, AnyAction>
+export type ThunkAction<R = AnyAction | Promise<AnyAction | void>> =
+  OriginalThunkAction<R, RootReducerI, null, AnyAction>

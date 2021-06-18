@@ -13,33 +13,34 @@ const setActiveFilter = createAction<ToastFilter>(ToastsActions.setActiveFilter)
 
 const clearActiveToast = setActiveToast({ toast: null, expiry: 0 })
 
-export const scheduleToast = (toast: Toast): ThunkAction => (dispatch) => {
-  dispatch(addToQueue(toast))
-  return dispatch(updateToastState)
-}
-
-export const removeToastAndUpdate = (
-  toast: Toast,
-  clearActive = true,
-): ThunkAction => (dispatch, getState) => {
-  dispatch(removeFromQueue(toast))
-
-  if (clearActive) {
-    const { active } = getState().toasts
-    if (active && active.id === toast.id) {
-      dispatch(clearActiveToast)
-    }
+export const scheduleToast =
+  (toast: Toast): ThunkAction =>
+  (dispatch) => {
+    dispatch(addToQueue(toast))
+    return dispatch(updateToastState)
   }
 
-  return dispatch(updateToastState)
-}
+export const removeToastAndUpdate =
+  (toast: Toast, clearActive = true): ThunkAction =>
+  (dispatch, getState) => {
+    dispatch(removeFromQueue(toast))
 
-export const setActiveFilterAndUpdate = (filter: ToastFilter): ThunkAction => (
-  dispatch,
-) => {
-  dispatch(setActiveFilter(filter))
-  return dispatch(updateToastState)
-}
+    if (clearActive) {
+      const { active } = getState().toasts
+      if (active && active.id === toast.id) {
+        dispatch(clearActiveToast)
+      }
+    }
+
+    return dispatch(updateToastState)
+  }
+
+export const setActiveFilterAndUpdate =
+  (filter: ToastFilter): ThunkAction =>
+  (dispatch) => {
+    dispatch(setActiveFilter(filter))
+    return dispatch(updateToastState)
+  }
 
 const updateToastState = (() => {
   let nextUpdateTimeout: NodeJS.Timeout | null = null
