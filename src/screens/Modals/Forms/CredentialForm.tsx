@@ -147,16 +147,17 @@ const CredentialForm = () => {
           v: string,
           field: IAttributeClaimFieldWithValue,
         ) => {
+          const trimmedValue = v.trim()
           /**
            * normalizing phone field to append + at the beginning
            */
           if (field.key === ClaimKeys.telephone) {
             setFieldValue(
               field.key,
-              v.charAt(0) === '+' ? v.trim() : '+' + v.trim(),
+              v.charAt(0) === '+' ? trimmedValue : '+' + trimmedValue,
             )
           } else {
-            setFieldValue(field.key, v.trim())
+            setFieldValue(field.key, trimmedValue)
           }
         }
 
