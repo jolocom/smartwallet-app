@@ -53,7 +53,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                     key={field.key}
                     // @ts-ignore
                     value={values[field.key]}
-                    updateInput={(v) => setFieldValue(field.key, v.trim())}
+                    updateInput={(v) => setFieldValue(field.key, v.trimLeft())}
                     placeholder={field.label}
                     autoFocus={idx === 0}
                     withHighlight={
