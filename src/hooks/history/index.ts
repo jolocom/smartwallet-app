@@ -52,7 +52,7 @@ export const useHistory = () => {
     records: IPreLoadedInteraction[],
   ) => [getSectionDetails(interaction), ...records]
 
-  const getInteractionDetails = async (
+  const assembleInteractionDetails = async (
     nonce: string,
   ): Promise<IRecordDetails> => {
     const interaction = await agent.interactionManager.getInteraction(nonce)
@@ -72,7 +72,7 @@ export const useHistory = () => {
 
   return {
     getInteractions,
-    getInteractionDetails,
+    assembleInteractionDetails,
     updateInteractionRecord,
     createInteractionRecord,
   }

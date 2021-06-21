@@ -13,7 +13,7 @@ jest.mock('../../../src/hooks/history', () => ({
 const mockHistoryDetails = (details = {}) => {
   //@ts-ignore
   useHistory.mockImplementation(() => ({
-    getInteractionDetails: jest.fn().mockResolvedValueOnce(details),
+    assembleInteractionDetails: jest.fn().mockResolvedValueOnce(details),
     getInteractions: jest.fn(),
   }))
 }
