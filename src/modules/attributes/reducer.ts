@@ -16,7 +16,7 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
     }
     case AttrActions.updateAttrs: {
       const { type, attribute } = action.payload as AttributePayload
-      const availableAttr = state.all[type]
+      const availableAttr = state.all[type];
       return {
         ...state,
         all: {
@@ -27,13 +27,11 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
     }
     case AttrActions.editAttr: {
       const { type, attribute, id } = action.payload as AttributePayloadEdit
-      const updatedAttrsOfType =
-        state.all[type]?.filter((a) => a.id !== id) || []
       return {
         ...state,
         all: {
           ...state.all,
-          [action.payload.type]: [...updatedAttrsOfType, attribute],
+          [type]: state.all[type]?.map(c => c.id === id ? attribute : c),
         },
       }
     }
