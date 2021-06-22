@@ -45,7 +45,7 @@ const Camera = () => {
   const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
   const shouldScan = !interactionType && !isLoaderVisible
-  const overlayVisible = useIsFocused()
+  const isScreenFocused = useIsFocused()
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -125,12 +125,12 @@ const Camera = () => {
   return (
     <ScreenContainer hideStatusBar isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
-        {overlayVisible && (
+        {isScreenFocused && (
           <View style={[styles.navigationContainer, { top }]}>
             <NavigationHeader type={NavHeaderType.Close} />
           </View>
         )}
-        {renderCamera && (
+        {isScreenFocused && renderCamera && (
           <QRCodeScanner
             containerStyle={{ position: 'absolute' }}
             onRead={shouldScan ? handleScan : () => {}}
@@ -147,7 +147,7 @@ const Camera = () => {
             }}
           />
         )}
-        {overlayVisible ? (
+        {isScreenFocused ? (
           <>
             <View style={styles.topOverlay}>
               {SHOW_LOCAL_NETWORK_DIALOG && (
