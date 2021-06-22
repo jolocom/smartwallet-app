@@ -157,6 +157,7 @@ export const CredentialShareBAS = () => {
       <InteractionFooter
         disabled={!isReadyToSubmit}
         onSubmit={handleSubmit}
+        disableLoader={Boolean(singleMissingAttribute)}
         submitLabel={singleMissingAttribute ? strings.ADD_INFO : strings.SHARE}
       />
     </ContainerBAS>
