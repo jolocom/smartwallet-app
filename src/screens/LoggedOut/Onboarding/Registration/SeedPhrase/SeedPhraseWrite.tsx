@@ -151,6 +151,7 @@ const SeedPhraseWrite: React.FC = () => {
     <Animated.View style={{ opacity: buttonOpacity }}>
       <Btn
         type={BtnTypes.primary}
+        disabled={gestureState !== GestureState.Success}
         onPress={
           gestureState === GestureState.Success
             ? () => redirect(ScreenNames.SeedPhraseRepeat)
@@ -159,7 +160,11 @@ const SeedPhraseWrite: React.FC = () => {
       >
         {strings.DONE}
       </Btn>
-      <Btn type={BtnTypes.secondary} onPress={goBack}>
+      <Btn
+        type={BtnTypes.secondary}
+        onPress={goBack}
+        disabled={gestureState !== GestureState.Success}
+      >
         {strings.SEEDPHRASE_GO_BACK}
       </Btn>
     </Animated.View>
