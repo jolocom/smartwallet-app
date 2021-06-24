@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { ObjectSchema } from 'yup'
 import { strings } from '~/translations'
 import { ClaimKeys } from '~/types/credentials'
+import { InputValidation, regexValidations } from '~/utils/stringUtils'
 
 yup.addMethod<ObjectSchema<any>>(
   yup.object,
@@ -27,7 +28,7 @@ yup.addMethod(yup.string, 'phone', function () {
 
 yup.addMethod(yup.string, 'customEmail', function() {
   return this.matches(
-    /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+    regexValidations[InputValidation.email],
     strings.EMAIL_FORMAT_ERROR
   )
 })
