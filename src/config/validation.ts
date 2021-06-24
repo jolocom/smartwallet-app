@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { ObjectSchema } from 'yup'
 import { strings } from '~/translations'
 import { ClaimKeys } from '~/types/credentials'
+import { InputValidation, regexValidations } from '~/utils/stringUtils'
 
 yup.addMethod<ObjectSchema<any>>(
   yup.object,
@@ -21,7 +22,7 @@ yup.addMethod<ObjectSchema<any>>(
 yup.addMethod(yup.string, 'phone', function () {
   return this.matches(
     // NOTE: regex for + or +1232312312312 -> to allow only numbers
-    /^\+{1}\d+$|^\+$/,
+    regexValidations[InputValidation.phone],
     strings.ONLY_NUMBERS,
   )
 })
