@@ -25,7 +25,7 @@ export enum InputValidation {
 export const regexValidations = {
   [InputValidation.all]: /./,
   [InputValidation.email]:
-    /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+    /^(?!\.|_|-{1})+([a-zA-Z0-9_\.\-])+((?!_)\w)+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
   [InputValidation.phone]:
     /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
 }
