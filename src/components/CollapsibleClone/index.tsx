@@ -12,8 +12,6 @@ import { compare } from './utils'
 import { TITLE_HEIGHT, HEADER_HEIGHT } from './consts'
 import Header from './Header'
 import { CollapsibleCloneContext } from './context'
-import ScreenContainer from '../ScreenContainer'
-import { debugView } from '~/utils/dev'
 
 interface ICollapsibleClone {
   renderHeader: (
@@ -96,30 +94,21 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
   )
 
   return (
-    <ScreenContainer
-      customStyles={{
-        justifyContent: 'flex-start',
-        flex: 1,
-        paddingHorizontal: 0,
-        ...debugView(),
-      }}
-    >
-      <CollapsibleCloneContext.Provider value={contextValue}>
-        {renderHeader(currentTitleText, scrollY, setHeaderHeight)}
-        <Animated.ScrollView
-          ref={ref}
-          contentContainerStyle={{
-            paddingTop: headerHeight,
-          }}
-          style={{ width: '100%' }}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          onScrollEndDrag={handleSnap}
-        >
-          {children}
-        </Animated.ScrollView>
-      </CollapsibleCloneContext.Provider>
-    </ScreenContainer>
+    <CollapsibleCloneContext.Provider value={contextValue}>
+      {renderHeader(currentTitleText, scrollY, setHeaderHeight)}
+      <Animated.ScrollView
+        ref={ref}
+        contentContainerStyle={{
+          paddingTop: headerHeight,
+        }}
+        style={{ width: '100%' }}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        onScrollEndDrag={handleSnap}
+      >
+        {children}
+      </Animated.ScrollView>
+    </CollapsibleCloneContext.Provider>
   )
 }
 
