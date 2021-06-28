@@ -1,4 +1,4 @@
-import { TTitle } from "~/screens/LoggedIn/Settings/Development/CollapsibleClone/types";
+import { TTitle } from "./types";
 
 export const compare = ( a: TTitle, b: TTitle ): number => {
   if ( a.startY < b.startY ){

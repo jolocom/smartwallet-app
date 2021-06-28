@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { View, StyleSheet, ViewStyle, Platform, StatusBar } from 'react-native'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'

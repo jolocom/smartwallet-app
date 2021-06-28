@@ -1,17 +1,11 @@
 import React from 'react'
 import { LayoutChangeEvent, View, Text, StyleSheet } from 'react-native'
-import {
-  HEADER_HEIGHT,
-  TITLE_HEIGHT,
-} from '~/screens/LoggedIn/Settings/Development/CollapsibleClone/consts'
-import { TTitle } from '~/screens/LoggedIn/Settings/Development/CollapsibleClone/types'
+import { HEADER_HEIGHT, TITLE_HEIGHT } from './consts'
+import { useCollapsibleClone } from './context'
+import { ICollapsibleCloneComposite } from './types'
 
-interface ITitle {
-  text: string
-  onAddTitle: (title: TTitle) => void
-}
-
-const Title: React.FC<ITitle> = ({ text, onAddTitle }) => {
+const Title: ICollapsibleCloneComposite['Title'] = ({ text }) => {
+  const { onAddTitle } = useCollapsibleClone()
   const handleLayout = (event: LayoutChangeEvent) => {
     const { y, height } = event.nativeEvent.layout
     onAddTitle({

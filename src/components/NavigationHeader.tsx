@@ -54,6 +54,7 @@ const NavigationHeader: React.FC<Props> = ({
 const styles = StyleSheet.create({
   navContainer: {
     width: '100%',
+    // TODO: should be exported: used in Collapsible too
     height: 50,
     flexDirection: 'row',
     alignItems: 'center',
