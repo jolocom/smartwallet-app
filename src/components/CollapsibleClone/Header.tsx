@@ -11,6 +11,7 @@ const Header: React.FC = () => {
     inputRange: [HEADER_HEIGHT / 2, HEADER_HEIGHT],
     outputRange: [0, 1],
   })
+
   return (
     <NavigationHeader type={NavHeaderType.Back} customStyles={styles.container}>
       <Animated.Text
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1,
+    width: '100%',
     // children related
     height: HEADER_HEIGHT,
     flexDirection: 'row',

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react'
+import React, { useRef, useState, useMemo, useCallback } from 'react'
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -79,9 +79,9 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
     }
   }
 
-  const handleAddTitle = (title: TTitle) => {
+  const handleAddTitle = useCallback((title: TTitle) => {
     setTitles((prev) => [...prev, title].sort(compare))
-  }
+  }, [])
 
   const contextValue = useMemo(
     () => ({
@@ -90,7 +90,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       onAddTitle: handleAddTitle,
       headerHeight,
     }),
-    [currentTitleIdx],
+    [currentTitleText, headerHeight],
   )
 
   return (
@@ -105,6 +105,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
         onScroll={handleScroll}
         scrollEventThrottle={16}
         onScrollEndDrag={handleSnap}
+        showsVerticalScrollIndicator={false}
       >
         {children}
       </Animated.ScrollView>
