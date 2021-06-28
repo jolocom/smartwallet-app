@@ -36,7 +36,7 @@ import {
   transparentModalOptions,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
-import CollapsibleTest from './Settings/Development/CollapsibleText'
+import CollapsibleTest from './Settings/Development/CollapsibleTest'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
