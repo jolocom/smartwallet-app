@@ -11,12 +11,15 @@ import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 import { useGoBack } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
 import { useLoader } from '~/hooks/loader'
+import { useEffect } from 'react'
 
 enum PasscodeState {
   verify = 'verify',
   create = 'create',
   repeat = 'repeat',
 }
+
+const DEFAULT_ERROR = strings.WRONG_PASSCODE
 
 const ChangePin: React.FC = () => {
   const loader = useLoader()
@@ -27,6 +30,11 @@ const ChangePin: React.FC = () => {
     PasscodeState.verify,
   )
   const [newPin, setNewPin] = useState('')
+  const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR)
+
+  useEffect(() => {
+    setErrorTitle(DEFAULT_ERROR)
+  }, [newPin])
 
   const headerTitle = () => {
     switch (passcodeState) {
@@ -65,6 +73,16 @@ const ChangePin: React.FC = () => {
     })
   }
 
+  const handleCreateNewPin = (pin: string) => {
+    if (keychainPin && pin !== keychainPin) {
+      setNewPin(pin)
+      handleStateChange(PasscodeState.repeat)
+    } else {
+      setErrorTitle('The same as old')
+      throw new Error()
+    }
+  }
+
   const handleSubmit = async (pin: string) => {
     switch (passcodeState) {
       case PasscodeState.verify:
@@ -75,8 +93,7 @@ const ChangePin: React.FC = () => {
         }
         break
       case PasscodeState.create:
-        setNewPin(pin)
-        handleStateChange(PasscodeState.repeat)
+        handleCreateNewPin(pin)
         break
       case PasscodeState.repeat:
         if (pin === newPin) {
@@ -95,10 +112,7 @@ const ChangePin: React.FC = () => {
     >
       <Passcode onSubmit={handleSubmit}>
         <Passcode.Container>
-          <Passcode.Header
-            title={headerTitle()}
-            errorTitle={strings.WRONG_PASSCODE}
-          />
+          <Passcode.Header title={headerTitle()} errorTitle={errorTitle} />
           <Passcode.Input />
         </Passcode.Container>
         <Passcode.Container>

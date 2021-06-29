@@ -36,6 +36,7 @@ import {
   transparentModalOptions,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
+import CollapsibleClone from './Settings/Development/CollapsibleClone'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -79,6 +80,7 @@ export type MainStackParamList = {
   }
   // DEV
   [ScreenNames.ButtonsTest]: undefined
+  [ScreenNames.CollapsibleTest]: undefined
   [ScreenNames.LoaderTest]: undefined
   [ScreenNames.NotificationsTest]: undefined
   [ScreenNames.InputTest]: undefined
@@ -171,6 +173,11 @@ const Main: React.FC = () => {
               <MainStack.Screen
                 name={ScreenNames.ButtonsTest}
                 component={ButtonsTest}
+                options={screenTransitionSlideFromRight}
+              />
+              <MainStack.Screen
+                name={ScreenNames.CollapsibleTest}
+                component={CollapsibleClone}
                 options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
