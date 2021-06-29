@@ -5,8 +5,11 @@ import { ErrorScreens } from '../errorContext'
 import { ErrorFallback } from '~/components/ErrorFallback'
 import { SWErrorCodes, UIErrors } from '../codes'
 import { strings } from '~/translations'
+import { useSelector } from 'react-redux'
+import { getIsAppLocked } from '~/modules/account/selectors'
 
 const ErrorDisplay = () => {
+  const isAppLocked = useSelector(getIsAppLocked)
   const { errorScreen, resetError, error, showErrorReporting } = useErrors()
   const { title, message } =
     UIErrors[error?.message as SWErrorCodes] ??
@@ -14,7 +17,7 @@ const ErrorDisplay = () => {
 
   return (
     <ModalScreen
-      isVisible={errorScreen === ErrorScreens.errorDisplay}
+      isVisible={errorScreen === ErrorScreens.errorDisplay && !isAppLocked}
       onRequestClose={resetError}
       animationType={'slide'}
     >
