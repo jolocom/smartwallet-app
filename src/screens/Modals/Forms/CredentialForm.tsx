@@ -16,6 +16,7 @@ import {
   IAttributeConfig,
   IAttributeClaimField,
   IAttributeClaimFieldWithValue,
+  ClaimKeys,
 } from '~/types/credentials'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
 import {
@@ -142,6 +143,24 @@ const CredentialForm = () => {
         const shouldDisableSubmit = !isValid || !dirty || isPrevEqual
         setAllowSubmit(!shouldDisableSubmit)
 
+        const handleFieldValueChange = (
+          v: string,
+          field: IAttributeClaimFieldWithValue,
+        ) => {
+          const trimmedValue = v.trim()
+          /**
+           * normalizing phone field to append + at the beginning
+           */
+          if (field.key === ClaimKeys.telephone) {
+            setFieldValue(
+              field.key,
+              v.charAt(0) === '+' ? trimmedValue : '+' + trimmedValue,
+            )
+          } else {
+            setFieldValue(field.key, trimmedValue)
+          }
+        }
+
         return (
           <FormContainer
             title={t(
@@ -173,7 +192,7 @@ const CredentialForm = () => {
                       // @ts-expect-error
                       name={field.key as string}
                       key={field.key}
-                      updateInput={(v) => setFieldValue(field.key, v.trim())}
+                      updateInput={(v) => handleFieldValueChange(v, field)}
                       value={values[field.key]}
                       placeholder={field.label}
                       autoFocus={i === 0}

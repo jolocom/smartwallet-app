@@ -396,8 +396,10 @@ const bottomBar = {
 const validation = {
   AT_LEAST_ONE_ERROR: 'Please provide at least one of the values',
   EMAIL_FORMAT_ERROR: 'Seems like this is not a valid email',
-  PHONE_FORMAT_ERROR: 'Seems like this is not a valid phone number',
   VALUE_MISSING: 'Please provide value',
+  SHORT: "Too little characters",
+  LARGE: "Too many characters",
+  ONLY_NUMBERS: 'Only number characters are allowed'
 }
 
 export const strings = {
