@@ -1,5 +1,5 @@
 import React from "react";
-import {Animated, ScrollView, ScrollViewProps, FlatList, NativeSyntheticEvent, NativeScrollEvent} from "react-native";
+import {Animated, ScrollView, ScrollViewProps, FlatList, NativeSyntheticEvent, NativeScrollEvent, ViewStyle, StyleProp} from "react-native";
 
 export type TTitle = {label: string, startY: number, endY: number}
 
@@ -11,10 +11,12 @@ export interface ICollapsibleCloneContext {
   scrollRef: React.RefObject<ScrollView>, 
   onScroll: ScrollViewProps['onScroll'],
   onSnap: (e: NativeSyntheticEvent<NativeScrollEvent>, ref?: React.RefObject<ScrollView | FlatList>) => void
+  currentTitle: TTitle | undefined
 }
 
 interface ITitle {
   text: string
+  customContainerStyles?: StyleProp<ViewStyle>
 }
 
 interface IScroll extends ScrollViewProps{}
@@ -23,6 +25,7 @@ export interface ICollapsibleCloneComposite {
   Title: React.FC<ITitle>
   Header: React.FC
   Scroll: React.FC<IScroll>
+  Scale: React.FC
 }
 
 export function isFlatList(ref: React.RefObject<ScrollView | FlatList>): ref is React.RefObject<FlatList> {

@@ -20,6 +20,7 @@ import { TITLE_HEIGHT, HEADER_HEIGHT } from './consts'
 import Header from './Header'
 import { CollapsibleCloneContext } from './context'
 import Scroll from './Scroll'
+import Scale from './Scale'
 
 interface ICollapsibleClone {
   renderHeader: (
@@ -108,6 +109,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
 
   const contextValue = useMemo(
     () => ({
+      // TODO: remove currentTitleText
       currentTitleText, // for Header
       scrollY, // for Title
       headerHeight, // for Title, Scroll
@@ -115,8 +117,9 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       scrollRef: ref, // for Scroll,
       onScroll: handleScroll, // for Scroll,
       onSnap: handleSnap, // for Scroll,
+      currentTitle: titles.length ? titles[currentTitleIdx] : undefined,
     }),
-    [currentTitleText, headerHeight],
+    [currentTitleText, headerHeight, currentTitleIdx],
   )
 
   return (
@@ -131,5 +134,6 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
 CollapsibleClone.Title = Title
 CollapsibleClone.Header = Header
 CollapsibleClone.Scroll = Scroll
+CollapsibleClone.Scale = Scale
 
 export default CollapsibleClone
