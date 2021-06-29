@@ -19,6 +19,8 @@ enum PasscodeState {
   repeat = 'repeat',
 }
 
+const DEFAULT_ERROR = strings.WRONG_PASSCODE
+
 const ChangePin: React.FC = () => {
   const loader = useLoader()
   const { keychainPin } = useGetStoredAuthValues()
@@ -28,11 +30,10 @@ const ChangePin: React.FC = () => {
     PasscodeState.verify,
   )
   const [newPin, setNewPin] = useState('')
-  const defaultError = strings.WRONG_PASSCODE
-  const [errorTitle, setErrorTitle] = useState(defaultError)
+  const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR)
 
   useEffect(() => {
-    setErrorTitle(defaultError)
+    setErrorTitle(DEFAULT_ERROR)
   }, [newPin])
 
   const headerTitle = () => {
