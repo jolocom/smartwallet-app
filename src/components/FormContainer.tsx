@@ -4,6 +4,8 @@ import {
   View,
   LayoutChangeEvent,
   Animated,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -13,7 +15,6 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import CollapsibleClone from './CollapsibleClone'
-import { AnimatedKeyboardAwareScrollView } from './JoloKeyboardAwareScroll/animated'
 import { useRef } from 'react'
 
 interface Props {
@@ -59,7 +60,7 @@ const FormContainer: React.FC<Props> = ({
       outputRange: [0, 1],
     })
 
-  const ref = useRef(null)
+  const formRef = useRef(null)
 
   return (
     <ScreenContainer
@@ -87,6 +88,8 @@ const FormContainer: React.FC<Props> = ({
               right: 0,
               zIndex: 1,
               width: '100%',
+              height: 50,
+              alignItems: 'center',
             }}
             onLayout={(e) => handleLayout(e, setHeaderHeight)}
           >
@@ -130,14 +133,17 @@ const FormContainer: React.FC<Props> = ({
           </View>
         )}
         renderScroll={({ onScroll, onSnap, headerHeight }) => (
-          <AnimatedKeyboardAwareScrollView
-            // TODO: set ref correctly
-            ref={ref}
+          <Animated.ScrollView
+            ref={formRef}
             onScroll={onScroll}
-            onScrollEndDrag={(e) => onSnap(e, ref)}
+            scrollEventThrottle={16}
+            onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
+              onSnap(e, formRef)
+            }
             contentContainerStyle={{
               paddingTop: headerHeight,
             }}
+            showsVerticalScrollIndicator={false}
           >
             <CollapsibleClone.Title text={title} />
             <JoloText
@@ -151,7 +157,7 @@ const FormContainer: React.FC<Props> = ({
               {description}
             </JoloText>
             {children}
-          </AnimatedKeyboardAwareScrollView>
+          </Animated.ScrollView>
         )}
       ></CollapsibleClone>
     </ScreenContainer>
