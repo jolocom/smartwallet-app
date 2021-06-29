@@ -30,6 +30,7 @@ interface ICollapsibleClone {
      * to correctly pad scroll view
      */
     setHeaderHeight: React.Dispatch<React.SetStateAction<number>>,
+    headerHeight: number,
   ) => React.ReactElement | null
   renderScroll: (context: ICollapsibleCloneContext) => React.ReactElement | null
 }
@@ -120,7 +121,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
 
   return (
     <CollapsibleCloneContext.Provider value={contextValue}>
-      {renderHeader(currentTitleText, scrollY, setHeaderHeight)}
+      {renderHeader(currentTitleText, scrollY, setHeaderHeight, headerHeight)}
       {renderScroll(contextValue)}
       {children}
     </CollapsibleCloneContext.Provider>

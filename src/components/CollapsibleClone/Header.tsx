@@ -6,9 +6,9 @@ import { HEADER_HEIGHT } from './consts'
 import { useCollapsibleClone } from './context'
 
 const Header: React.FC = () => {
-  const { currentTitleText, scrollY } = useCollapsibleClone()
+  const { currentTitleText, scrollY, headerHeight } = useCollapsibleClone()
   const headerTitleOpacity = scrollY.interpolate({
-    inputRange: [HEADER_HEIGHT / 2, HEADER_HEIGHT],
+    inputRange: [headerHeight / 2, headerHeight],
     outputRange: [0, 1],
   })
 
