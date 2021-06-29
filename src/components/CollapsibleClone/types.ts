@@ -28,5 +28,5 @@ export function isFlatList(ref: React.RefObject<ScrollView | FlatList>): ref is 
 }
 
 export function isScrollView(ref: React.RefObject<ScrollView | FlatList>): ref is React.RefObject<ScrollView> {
-  return ref.current instanceof ScrollView
+  return ref.current?.scrollTo !== undefined
 }
