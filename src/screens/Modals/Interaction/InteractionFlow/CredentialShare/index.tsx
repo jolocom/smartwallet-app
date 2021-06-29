@@ -37,16 +37,15 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
+import CollapsibleClone from '~/components/CollapsibleClone'
 import ShareAttributeWidget from './ShareAttributeWidget'
 import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
-import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import Space from '~/components/Space'
-import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
@@ -235,51 +234,53 @@ const CredentialShareFAS = () => {
     })
 
   return (
-    <Collapsible>
-      <Collapsible.AnimatedHeader height={62}>
-        <Collapsible.HeaderText>
-          {strings.INCOMING_REQUEST}
-        </Collapsible.HeaderText>
-      </Collapsible.AnimatedHeader>
-      <ContainerFAS>
-        <Collapsible.ScrollView withoutHeaderPadding>
-          <Collapsible.HidingScale>
-            <LogoContainerFAS>
-              <InteractionLogo />
-            </LogoContainerFAS>
-          </Collapsible.HidingScale>
-          <Collapsible.HidingTextContainer>
-            <ScreenContainer.Padding>
-              <InteractionTitle label={strings.INCOMING_REQUEST} />
-            </ScreenContainer.Padding>
-          </Collapsible.HidingTextContainer>
-          <ScreenContainer.Padding>
+    <CollapsibleClone
+      renderHeader={() => <CollapsibleClone.Header />}
+      renderScroll={({ headerHeight }) => (
+        <ContainerFAS>
+          <CollapsibleClone.Scroll
+            contentContainerStyle={{
+              paddingTop: headerHeight,
+              paddingBottom: '50%',
+            }}
+          >
+            <CollapsibleClone.Scale>
+              <LogoContainerFAS>
+                <InteractionLogo />
+              </LogoContainerFAS>
+            </CollapsibleClone.Scale>
+            {/* <ScreenContainer.Padding> */}
+            <CollapsibleClone.Title text={strings.INCOMING_REQUEST} />
+            {/* </ScreenContainer.Padding> */}
+            {/* <ScreenContainer.Padding> */}
             <InteractionDescription
               label={
                 strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
               }
             />
-          </ScreenContainer.Padding>
-          <Space />
-          <ScreenContainer.Padding>
+            {/* </ScreenContainer.Padding> */}
+            <Space />
+            {/* <ScreenContainer.Padding> */}
             <ShareAttributeWidget withContainer />
-          </ScreenContainer.Padding>
-          <InteractionSection title={strings.DOCUMENTS} isPaddedTitle={true}>
-            {handleRenderCredentials(documents)}
-          </InteractionSection>
-          <InteractionSection title={strings.OTHER} isPaddedTitle={true}>
-            {handleRenderCredentials(other)}
-          </InteractionSection>
-        </Collapsible.ScrollView>
-        <FooterContainerFAS>
-          <InteractionFooter
-            disabled={!isReadyToSubmit}
-            onSubmit={handleSubmit}
-            submitLabel={strings.SHARE}
-          />
-        </FooterContainerFAS>
-      </ContainerFAS>
-    </Collapsible>
+            {/* </ScreenContainer.Padding> */}
+            <InteractionSection title={strings.DOCUMENTS} isPaddedTitle={true}>
+              {handleRenderCredentials(documents)}
+            </InteractionSection>
+            <InteractionSection title={strings.OTHER} isPaddedTitle={true}>
+              {handleRenderCredentials(other)}
+            </InteractionSection>
+          </CollapsibleClone.Scroll>
+        </ContainerFAS>
+      )}
+    >
+      <FooterContainerFAS>
+        <InteractionFooter
+          disabled={!isReadyToSubmit}
+          onSubmit={handleSubmit}
+          submitLabel={strings.SHARE}
+        />
+      </FooterContainerFAS>
+    </CollapsibleClone>
   )
 }
 

@@ -11,8 +11,8 @@ const Header: React.FC = () => {
 
   const headerTitleOpacity = scrollY.interpolate({
     inputRange: [
-      currentTitle.startY ? currentTitle.startY : 0,
-      currentTitle.endY ? currentTitle.endY : headerHeight,
+      currentTitle?.startY ? currentTitle.startY : 0,
+      currentTitle?.endY ? currentTitle.endY : headerHeight,
     ],
     outputRange: [0, 1],
   })
