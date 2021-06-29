@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { LayoutChangeEvent, View, Text, StyleSheet } from 'react-native'
-import { HEADER_HEIGHT, TITLE_HEIGHT } from './consts'
+import { TITLE_HEIGHT } from './consts'
 import { useCollapsibleClone } from './context'
 import { ICollapsibleCloneComposite } from './types'
 
 const Title: ICollapsibleCloneComposite['Title'] = ({ text }) => {
-  const { onAddTitle } = useCollapsibleClone()
+  const timesSet = useRef(0)
+  const { onAddTitle, headerHeight } = useCollapsibleClone()
   const handleLayout = (event: LayoutChangeEvent) => {
     const { y, height } = event.nativeEvent.layout
-    onAddTitle({
-      label: text,
-      startY: y - HEADER_HEIGHT,
-      endY: y + height - HEADER_HEIGHT,
-    })
+    if (timesSet.current === 0) {
+      onAddTitle({
+        label: text,
+        startY: y - headerHeight,
+        endY: y + height - headerHeight,
+      })
+      timesSet.current++
+    }
   }
   return (
     <View style={styles.container} onLayout={handleLayout}>

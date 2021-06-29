@@ -15,16 +15,21 @@ const CollapsibleTest = () => {
         paddingHorizontal: 0,
       }}
     >
-      <CollapsibleClone renderHeader={() => <CollapsibleClone.Header />}>
-        <CollapsibleClone.Title text="ONE" />
-        {[...Array(5).keys()].map((i) => (
-          <View style={styles.rect} />
-        ))}
-        <CollapsibleClone.Title text="TWO" />
-        {[...Array(20).keys()].map((i) => (
-          <View style={styles.rect} />
-        ))}
-      </CollapsibleClone>
+      <CollapsibleClone
+        renderHeader={() => <CollapsibleClone.Header />}
+        renderScroll={() => (
+          <CollapsibleClone.Scroll>
+            <CollapsibleClone.Title text="ONE" />
+            {[...Array(5).keys()].map((i) => (
+              <View style={styles.rect} />
+            ))}
+            <CollapsibleClone.Title text="TWO" />
+            {[...Array(20).keys()].map((i) => (
+              <View style={styles.rect} />
+            ))}
+          </CollapsibleClone.Scroll>
+        )}
+      ></CollapsibleClone>
     </ScreenContainer>
   )
 }

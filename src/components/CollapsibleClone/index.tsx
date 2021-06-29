@@ -4,14 +4,22 @@ import {
   NativeSyntheticEvent,
   Animated,
   ScrollView,
+  FlatList,
 } from 'react-native'
 
 import Title from './Title'
-import { ICollapsibleCloneComposite, TTitle } from './types'
+import {
+  ICollapsibleCloneComposite,
+  ICollapsibleCloneContext,
+  isFlatList,
+  isScrollView,
+  TTitle,
+} from './types'
 import { compare } from './utils'
 import { TITLE_HEIGHT, HEADER_HEIGHT } from './consts'
 import Header from './Header'
 import { CollapsibleCloneContext } from './context'
+import Scroll from './Scroll'
 
 interface ICollapsibleClone {
   renderHeader: (
@@ -23,10 +31,11 @@ interface ICollapsibleClone {
      */
     setHeaderHeight: React.Dispatch<React.SetStateAction<number>>,
   ) => React.ReactElement | null
+  renderScroll: (context: ICollapsibleCloneContext) => React.ReactElement | null
 }
 
 const CollapsibleClone: React.FC<ICollapsibleClone> &
-  ICollapsibleCloneComposite = ({ renderHeader, children }) => {
+  ICollapsibleCloneComposite = ({ renderHeader, renderScroll }) => {
   const [currentTitleIdx, setCurrentTitleIdx] = useState(0)
   const [titles, setTitles] = useState<TTitle[]>([])
   const [headerHeight, setHeaderHeight] = useState(HEADER_HEIGHT)
@@ -43,37 +52,50 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       useNativeDriver: true,
       listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const { y } = event.nativeEvent.contentOffset
-        if (titles.length) {
-          // if scrolling down
-          if (y > prevScrollPosition.current) {
-            if (currentTitleIdx !== titles.length - 1) {
-              if (y >= titles[currentTitleIdx + 1].startY) {
-                setCurrentTitleIdx((prev) => ++prev)
+        if (y !== prevScrollPosition.current) {
+          if (titles.length) {
+            // if scrolling down
+            if (y > prevScrollPosition.current) {
+              if (currentTitleIdx !== titles.length - 1) {
+                if (y >= titles[currentTitleIdx + 1].startY) {
+                  setCurrentTitleIdx((prev) => ++prev)
+                }
+              }
+            } else {
+              // if scrolling up
+              if (currentTitleIdx !== 0) {
+                if (y < titles[currentTitleIdx].startY) {
+                  setCurrentTitleIdx((prev) => --prev)
+                }
               }
             }
-          } else {
-            // if scrolling up
-            if (currentTitleIdx !== 0) {
-              if (y < titles[currentTitleIdx].startY) {
-                setCurrentTitleIdx((prev) => --prev)
-              }
-            }
+            prevScrollPosition.current = y
           }
-          prevScrollPosition.current = y
         }
       },
     },
   )
 
-  const handleSnap = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const handleSnap = <T extends ScrollView | FlatList>(
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+    passedRef?: React.RefObject<T>,
+  ) => {
+    const list = passedRef ?? ref
     const offsetY = event.nativeEvent.contentOffset.y
     if (titles.length) {
       const { startY, endY } = titles[currentTitleIdx]
       if (offsetY >= startY && offsetY <= endY) {
-        if (ref.current) {
-          ref.current.scrollTo({
-            y: offsetY < startY + TITLE_HEIGHT / 2 ? startY : endY,
-          })
+        if (list.current) {
+          const moveToY = offsetY < startY + TITLE_HEIGHT / 2 ? startY : endY
+          if (isFlatList(list)) {
+            list.current.scrollToOffset({
+              offset: moveToY,
+            })
+          } else if (isScrollView(list)) {
+            list.current.scrollTo({
+              y: moveToY,
+            })
+          }
         }
       }
     }
@@ -85,10 +107,13 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
 
   const contextValue = useMemo(
     () => ({
-      currentTitleText,
-      scrollY,
-      onAddTitle: handleAddTitle,
-      headerHeight,
+      currentTitleText, // for Header
+      scrollY, // for Title
+      headerHeight, // for Title, Scroll
+      onAddTitle: handleAddTitle, // for Title
+      scrollRef: ref, // for Scroll,
+      onScroll: handleScroll, // for Scroll,
+      onSnap: handleSnap, // for Scroll,
     }),
     [currentTitleText, headerHeight],
   )
@@ -96,24 +121,13 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
   return (
     <CollapsibleCloneContext.Provider value={contextValue}>
       {renderHeader(currentTitleText, scrollY, setHeaderHeight)}
-      <Animated.ScrollView
-        ref={ref}
-        contentContainerStyle={{
-          paddingTop: headerHeight,
-        }}
-        style={{ width: '100%' }}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        onScrollEndDrag={handleSnap}
-        showsVerticalScrollIndicator={false}
-      >
-        {children}
-      </Animated.ScrollView>
+      {renderScroll(contextValue)}
     </CollapsibleCloneContext.Provider>
   )
 }
 
 CollapsibleClone.Title = Title
 CollapsibleClone.Header = Header
+CollapsibleClone.Scroll = Scroll
 
 export default CollapsibleClone
