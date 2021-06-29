@@ -26,12 +26,12 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
       }
     }
     case AttrActions.editAttr: {
-      const { type, attribute, id } = action.payload as AttributePayloadEdit
+      const { type, attribute: editedAttribute, id } = action.payload as AttributePayloadEdit
       return {
         ...state,
         all: {
           ...state.all,
-          [type]: state.all[type]?.map(c => c.id === id ? attribute : c),
+          [type]: state.all[type]?.map(stateAttribute => stateAttribute.id === id ? editedAttribute : stateAttribute),
         },
       }
     }
