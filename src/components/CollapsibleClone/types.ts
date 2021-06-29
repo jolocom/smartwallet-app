@@ -17,10 +17,12 @@ interface ITitle {
   text: string
 }
 
+interface IScroll extends ScrollViewProps{}
+
 export interface ICollapsibleCloneComposite {
   Title: React.FC<ITitle>
   Header: React.FC
-  Scroll: React.FC
+  Scroll: React.FC<IScroll>
 }
 
 export function isFlatList(ref: React.RefObject<ScrollView | FlatList>): ref is React.RefObject<FlatList> {

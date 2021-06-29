@@ -17,6 +17,7 @@ import { useRef } from 'react'
 type TFAQItem = { question: string; answer: string }
 type FAQArray = Array<TFAQItem>
 
+// TODO: FAQ isn't snapping correctly
 const FAQ = () => {
   const listRef = useRef<FlatList>(null)
   const faqArray = faqJson as FAQArray

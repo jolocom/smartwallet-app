@@ -35,7 +35,7 @@ interface ICollapsibleClone {
 }
 
 const CollapsibleClone: React.FC<ICollapsibleClone> &
-  ICollapsibleCloneComposite = ({ renderHeader, renderScroll }) => {
+  ICollapsibleCloneComposite = ({ renderHeader, renderScroll, children }) => {
   const [currentTitleIdx, setCurrentTitleIdx] = useState(0)
   const [titles, setTitles] = useState<TTitle[]>([])
   const [headerHeight, setHeaderHeight] = useState(HEADER_HEIGHT)
@@ -122,6 +122,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
     <CollapsibleCloneContext.Provider value={contextValue}>
       {renderHeader(currentTitleText, scrollY, setHeaderHeight)}
       {renderScroll(contextValue)}
+      {children}
     </CollapsibleCloneContext.Provider>
   )
 }
