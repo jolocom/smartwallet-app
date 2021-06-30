@@ -159,7 +159,7 @@ const ErrorReporting = () => {
                 <Input.TextArea
                   value={detailsInput}
                   limit={500}
-                  updateInput={setDetailsInput}
+                  updateInput={(v) => setDetailsInput(v.trimLeft())}
                   onFocus={focusInput}
                   customStyles={{ height: 80 }}
                 />
