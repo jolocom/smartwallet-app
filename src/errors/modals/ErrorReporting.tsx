@@ -24,6 +24,7 @@ import Section from '~/screens/LoggedIn/Settings/components/Section'
 import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
 import { ErrorScreens } from '../errorContext'
 
@@ -116,127 +117,138 @@ const ErrorReporting = () => {
         customStyles={{
           justifyContent: 'flex-start',
           paddingTop: 0,
+          paddingHorizontal: 0,
         }}
       >
         <NavigationHeader
           type={NavHeaderType.Close}
           onPress={resetError}
-          customStyles={{ paddingHorizontal: 0 }}
+          customStyles={{
+            position: 'absolute',
+            zIndex: 100,
+            backgroundColor: 'purple',
+          }}
         />
-        <JoloKeyboardAwareScroll
-          style={{ width: '100%', flexGrow: 1 }}
-          contentContainerStyle={{ paddingBottom: 36 }}
-          showsVerticalScrollIndicator={false}
-          overScrollMode="never"
-          enableOnAndroid
-          keyboardShouldPersistTaps="handled"
-        >
-          <Section>
-            <Section.Title>
-              {/* FIXME: string */}
-              {strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
-            </Section.Title>
-            <Dropdown
-              options={DROPDOWN_OPTIONS}
-              onSelect={handleDropdownSelect}
-            />
-          </Section>
-
-          <Section>
-            <Section.Title customStyle={{ marginBottom: 14 }}>
-              {strings.ANYTHING_SPECIFIC_TO_MENTION}
-            </Section.Title>
-            <JoloText
-              size={JoloTextSizes.mini}
-              kind={JoloTextKind.subtitle}
-              customStyles={{ textAlign: 'left', marginBottom: 32 }}
-            >
-              {/* FIXME: strings */}
-              {strings.DARE_TO_SUGGEST_SMTH}
-            </JoloText>
-            <JoloKeyboardAwareScroll.InputContainer>
-              {({ focusInput }) => (
-                <Input.TextArea
-                  value={detailsInput}
-                  limit={500}
-                  updateInput={setDetailsInput}
-                  onFocus={focusInput}
-                  customStyles={{ height: 80 }}
-                />
-              )}
-            </JoloKeyboardAwareScroll.InputContainer>
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                marginTop: 24,
-              }}
-            >
-              <View style={{ width: 70, justifyContent: 'center' }}>
-                <ToggleSwitch
-                  on={shouldIncludeLogs}
-                  onToggle={() => setIncludeLogs((prev) => !prev)}
-                />
-              </View>
-              <View style={{ flex: 1, width: '100%' }}>
-                <JoloText
-                  size={JoloTextSizes.mini}
-                  customStyles={{ textAlign: 'left', marginBottom: 4 }}
-                >
-                  {strings.INCLUDE_LOGS}
-                </JoloText>
-                <JoloText
-                  size={JoloTextSizes.mini}
-                  customStyles={{ textAlign: 'left' }}
-                >
-                  {strings.ERROR_REPORTING_LOGS_WARNING}
-                </JoloText>
-              </View>
-            </View>
-          </Section>
-
-          <Section customStyles={{ marginBottom: 64 }}>
-            <Section.Title customStyle={{ marginBottom: 0 }}>
-              {strings.WANT_TO_GET_IN_TOUCH}
-            </Section.Title>
-            <JoloKeyboardAwareScroll.InputContainer>
-              {({ focusInput }) => (
-                <Input.Underline
-                  validation={regexValidations[InputValidation.email]}
-                  value={contactValue}
-                  updateInput={setContactValue}
-                  placeholder={strings.CONTACT_US_GET_IN_TOUCH}
-                  onValidation={handleContactValidation}
-                  onFocus={focusInput}
-                />
-              )}
-            </JoloKeyboardAwareScroll.InputContainer>
-            <JoloText
-              size={JoloTextSizes.mini}
-              kind={JoloTextKind.subtitle}
-              color={contactValid ? Colors.white30 : Colors.error}
-              customStyles={{ textAlign: 'left', marginTop: 12 }}
-            >
-              {contactValid
-                ? strings.WE_DO_NOT_STORE_DATA
-                : strings.PLEASE_ENTER_A_VALID_EMAIL}
-            </JoloText>
-          </Section>
-          <Section>
-            <Section.Title customStyle={{ marginBottom: 24 }}>
-              {strings.ERROR_REPORTING_RATE}
-            </Section.Title>
-            <EmojiSelectable />
-          </Section>
-
-          <Btn.Online
-            type={BtnTypes.primary}
-            onPress={handleSubmit}
-            disabled={!isSubmitEnabled()}
+        <ScreenContainer.Padding>
+          <JoloKeyboardAwareScroll
+            style={{
+              width: '100%',
+              flexGrow: 1,
+              paddingTop: SCREEN_HEADER_HEIGHT,
+            }}
+            contentContainerStyle={{ paddingBottom: 56 + SCREEN_HEADER_HEIGHT }}
+            showsVerticalScrollIndicator={false}
+            overScrollMode="never"
+            enableOnAndroid
+            keyboardShouldPersistTaps="handled"
           >
-            {strings.SEND}
-          </Btn.Online>
-        </JoloKeyboardAwareScroll>
+            <Section>
+              <Section.Title>
+                {/* FIXME: string */}
+                {strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
+              </Section.Title>
+              <Dropdown
+                options={DROPDOWN_OPTIONS}
+                onSelect={handleDropdownSelect}
+              />
+            </Section>
+
+            <Section>
+              <Section.Title customStyle={{ marginBottom: 14 }}>
+                {strings.ANYTHING_SPECIFIC_TO_MENTION}
+              </Section.Title>
+              <JoloText
+                size={JoloTextSizes.mini}
+                kind={JoloTextKind.subtitle}
+                customStyles={{ textAlign: 'left', marginBottom: 32 }}
+              >
+                {/* FIXME: strings */}
+                {strings.DARE_TO_SUGGEST_SMTH}
+              </JoloText>
+              <JoloKeyboardAwareScroll.InputContainer>
+                {({ focusInput }) => (
+                  <Input.TextArea
+                    value={detailsInput}
+                    limit={500}
+                    updateInput={setDetailsInput}
+                    onFocus={focusInput}
+                    customStyles={{ height: 80 }}
+                  />
+                )}
+              </JoloKeyboardAwareScroll.InputContainer>
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  marginTop: 24,
+                }}
+              >
+                <View style={{ width: 70, justifyContent: 'center' }}>
+                  <ToggleSwitch
+                    on={shouldIncludeLogs}
+                    onToggle={() => setIncludeLogs((prev) => !prev)}
+                  />
+                </View>
+                <View style={{ flex: 1, width: '100%' }}>
+                  <JoloText
+                    size={JoloTextSizes.mini}
+                    customStyles={{ textAlign: 'left', marginBottom: 4 }}
+                  >
+                    {strings.INCLUDE_LOGS}
+                  </JoloText>
+                  <JoloText
+                    size={JoloTextSizes.mini}
+                    customStyles={{ textAlign: 'left' }}
+                  >
+                    {strings.ERROR_REPORTING_LOGS_WARNING}
+                  </JoloText>
+                </View>
+              </View>
+            </Section>
+
+            <Section customStyles={{ marginBottom: 64 }}>
+              <Section.Title customStyle={{ marginBottom: 0 }}>
+                {strings.WANT_TO_GET_IN_TOUCH}
+              </Section.Title>
+              <JoloKeyboardAwareScroll.InputContainer>
+                {({ focusInput }) => (
+                  <Input.Underline
+                    validation={regexValidations[InputValidation.email]}
+                    value={contactValue}
+                    updateInput={setContactValue}
+                    placeholder={strings.CONTACT_US_GET_IN_TOUCH}
+                    onValidation={handleContactValidation}
+                    onFocus={focusInput}
+                  />
+                )}
+              </JoloKeyboardAwareScroll.InputContainer>
+              <JoloText
+                size={JoloTextSizes.mini}
+                kind={JoloTextKind.subtitle}
+                color={contactValid ? Colors.white30 : Colors.error}
+                customStyles={{ textAlign: 'left', marginTop: 12 }}
+              >
+                {contactValid
+                  ? strings.WE_DO_NOT_STORE_DATA
+                  : strings.PLEASE_ENTER_A_VALID_EMAIL}
+              </JoloText>
+            </Section>
+            <Section>
+              <Section.Title customStyle={{ marginBottom: 24 }}>
+                {strings.ERROR_REPORTING_RATE}
+              </Section.Title>
+              <EmojiSelectable />
+            </Section>
+
+            <Btn.Online
+              type={BtnTypes.primary}
+              onPress={handleSubmit}
+              disabled={!isSubmitEnabled()}
+            >
+              {strings.SEND}
+            </Btn.Online>
+          </JoloKeyboardAwareScroll>
+        </ScreenContainer.Padding>
       </ScreenContainer>
     </ModalScreen>
   )

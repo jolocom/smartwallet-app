@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { View, StyleSheet, ViewStyle, Platform, StatusBar } from 'react-native'
+import React from 'react'
+import { View, StyleSheet, ViewStyle } from 'react-native'
 import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
@@ -12,6 +12,8 @@ import JoloText, {
 } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
+import { useRef } from 'react'
+import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -70,6 +72,11 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
           )}
           {(hasHeaderClose || hasHeaderBack) && (
             <NavigationHeader
+              customStyles={{
+                position: 'absolute',
+                top,
+                zIndex: 100,
+              }}
               onPress={onClose}
               type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
             />
@@ -79,6 +86,9 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
               styles.container,
               {
                 backgroundColor,
+                ...((hasHeaderClose || hasHeaderBack) && {
+                  marginTop: SCREEN_HEADER_HEIGHT,
+                }),
                 paddingBottom: isFullscreen ? 0 : bottom,
               },
               {

@@ -3,6 +3,8 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack'
 
+export const SCREEN_HEADER_HEIGHT = 50;
+
 export const screenTransitionSlideFromRight = {
   ...TransitionPresets.SlideFromRightIOS,
 }
