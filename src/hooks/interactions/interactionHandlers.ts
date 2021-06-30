@@ -127,6 +127,7 @@ const authenticationHandler = (state: AuthenticationFlowState) => ({
 const authorizationHandler = (state: AuthorizationFlowState) => ({
   action: state.action,
   description: state.description,
+  imageURL: state.imageURL
 })
 
 const credentialOfferHandler = (state: CredentialOfferFlowState) => {
