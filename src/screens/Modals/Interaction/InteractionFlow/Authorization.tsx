@@ -37,7 +37,11 @@ const Authorization = () => {
         label={t(strings.WOULD_YOU_LIKE_TO_ACTION, { action })}
       />
       <InteractionDescription
-        label={strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS}
+        label={
+          description && !!description.length
+            ? description
+            : strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS
+        }
       />
       <Space />
       <InteractionImage source={image} />
