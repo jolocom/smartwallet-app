@@ -16,6 +16,7 @@ import LoggedIn from './screens/LoggedIn'
 import { Colors } from './utils/colors'
 import SeedPhraseInfo from './screens/LoggedOut/Onboarding/Registration/SeedPhrase/SeedPhraseInfo'
 import {
+  screenDisableGestures,
   screenTransitionSlideFromBottom,
   transparentModalOptions,
 } from './utils/screenSettings'
@@ -97,6 +98,7 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
               backgroundColor: 'transparent',
             },
             ...screenTransitionSlideFromBottom,
+            ...screenDisableGestures,
           }}
         />
         {/* Global -> End */}

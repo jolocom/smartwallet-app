@@ -1,0 +1,1 @@
+export type TTitle = {label: string, startY: number, endY: number}
