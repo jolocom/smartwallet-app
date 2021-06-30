@@ -126,7 +126,7 @@ const ErrorReporting = () => {
           customStyles={{
             position: 'absolute',
             zIndex: 100,
-            backgroundColor: 'purple',
+            backgroundColor: Colors.mainBlack,
           }}
         />
         <ScreenContainer.Padding>
