@@ -81,7 +81,12 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
                 backgroundColor,
                 paddingBottom: isFullscreen ? 0 : bottom,
               },
-              isFullscreen && styles.fullscreen,
+              {
+                ...(isFullscreen && {
+                  marginBottom: -bottom,
+                  ...styles.fullscreen,
+                }),
+              },
               customStyles,
             ]}
           >
