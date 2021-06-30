@@ -192,7 +192,9 @@ const CredentialForm = () => {
                       // @ts-expect-error
                       name={field.key as string}
                       key={field.key}
-                      updateInput={(v) => handleFieldValueChange(v, field)}
+                      updateInput={(v) =>
+                        setFieldValue(field.key, v.trimLeft())
+                      }
                       value={values[field.key]}
                       placeholder={field.label}
                       autoFocus={i === 0}
