@@ -130,7 +130,12 @@ export class RecordAssembler {
           return {
             title: this.getFinishedStepTitle(i),
             description: state.offerSummary
-              .map((s) => s.credential?.name ?? s.type)
+              /**
+               * A fallback to 'Unknown' as a credential name is
+               * happening in RecordStep || RecordFinalStep
+               * components to enable translations
+               */
+              .map((s) => s.credential?.name)
               .join(', '),
           }
         case InteractionType.CredentialsReceive:

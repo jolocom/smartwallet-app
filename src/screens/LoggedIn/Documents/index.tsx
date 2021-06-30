@@ -146,7 +146,7 @@ const DocumentList = () => {
                         mandatoryFields={[
                           {
                             label: DocumentFields.DocumentName,
-                            value: c.name ?? c.type,
+                            value: c.name || strings.UNKNOWN,
                           },
                           {
                             label: strings.SUBJECT_NAME,
@@ -209,7 +209,7 @@ const DocumentList = () => {
                         mandatoryFields={[
                           {
                             label: DocumentFields.DocumentName,
-                            value: c.name ?? c.type,
+                            value: c.name || strings.UNKNOWN,
                           },
                         ]}
                         optionalFields={getOptionalFields(c)}
