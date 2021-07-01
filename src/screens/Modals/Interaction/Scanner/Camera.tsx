@@ -34,6 +34,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Dialog from '~/components/Dialog'
 import { useIsFocused } from '@react-navigation/core'
+import { getIsAppLocked } from '~/modules/account/selectors'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -41,11 +42,12 @@ const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 const Camera = () => {
   const { height } = useWindowDimensions()
   const startInteraction = useInteractionStart()
+  const isAppLocked = useSelector(getIsAppLocked)
 
   const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
-  const shouldScan = !interactionType && !isLoaderVisible
-  const overlayVisible = useIsFocused()
+  const shouldScan = !interactionType && !isLoaderVisible && !isAppLocked
+  const isScreenFocused = useIsFocused()
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -125,7 +127,7 @@ const Camera = () => {
   return (
     <ScreenContainer hideStatusBar isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
-        {overlayVisible && (
+        {isScreenFocused && (
           <View style={[styles.navigationContainer, { top }]}>
             <NavigationHeader type={NavHeaderType.Close} />
           </View>
@@ -147,7 +149,7 @@ const Camera = () => {
             }}
           />
         )}
-        {overlayVisible ? (
+        {isScreenFocused ? (
           <>
             <View style={styles.topOverlay}>
               {SHOW_LOCAL_NETWORK_DIALOG && (

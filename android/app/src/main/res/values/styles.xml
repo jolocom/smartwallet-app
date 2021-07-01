@@ -11,6 +11,7 @@
         <!-- <item name="android:windowTranslucentNavigation">true</item> -->
         <!-- removes transition when we close camera screen -->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:forceDarkAllowed">false</item>
 
     </style>
 

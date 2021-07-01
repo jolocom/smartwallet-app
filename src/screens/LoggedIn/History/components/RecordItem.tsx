@@ -11,7 +11,7 @@ const RecordItem: React.FC<IRecordItemProps> = React.memo(
   ({ id, onDropdown, isFocused }) => {
     const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
 
-    const { getInteractionDetails } = useHistory()
+    const { assembleInteractionDetails } = useHistory()
 
     const handlePress = () => {
       if (itemDetails) {
@@ -24,7 +24,7 @@ const RecordItem: React.FC<IRecordItemProps> = React.memo(
     }
 
     useEffect(() => {
-      getInteractionDetails(id)
+      assembleInteractionDetails(id)
         .then((interaction) => {
           LayoutAnimation.configureNext({
             ...LayoutAnimation.Presets.easeInEaseOut,

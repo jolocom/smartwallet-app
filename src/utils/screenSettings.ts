@@ -10,11 +10,11 @@ export const screenTransitionSlideFromRight = {
 export const screenTransitionSlideFromBottom =
   TransitionPresets.ModalSlideFromBottomIOS
 
-export const screeDisableGestures = { gestureEnabled: false }
+export const screenDisableGestures = { gestureEnabled: false }
 
 export const screenTransitionFromBottomDisabledGestures = {
   ...screenTransitionSlideFromBottom,
-  ...screeDisableGestures,
+  ...screenDisableGestures,
 }
 
 export const transparentModalOptions: StackNavigationOptions = {

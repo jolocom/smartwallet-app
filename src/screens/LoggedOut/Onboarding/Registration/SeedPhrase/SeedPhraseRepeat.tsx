@@ -42,9 +42,11 @@ const SeedPhraseRepeat: React.FC = () => {
   }, [seedphrase])
 
   const handlePhraseUpdate = (phrase: string[]) => {
-    if (!readyToSubmit) setReadyToSubmit(true)
-    setWrongOrder(false)
-    setShuffledSeedphrase(phrase)
+    if (JSON.stringify(phrase) !== JSON.stringify(shuffledSeedphrase)) {
+      if (!readyToSubmit) setReadyToSubmit(true)
+      setWrongOrder(false)
+      setShuffledSeedphrase(phrase)
+    }
   }
 
   const onSubmit = async () => {

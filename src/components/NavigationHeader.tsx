@@ -37,13 +37,21 @@ const NavigationHeader: React.FC<Props> = ({
       ]}
     >
       <View style={{ opacity: type === NavHeaderType.Back ? 1 : 0 }}>
-        <IconBtn onPress={navigateBack} style={styles.button}>
+        <IconBtn
+          disabled={type !== NavHeaderType.Back}
+          onPress={navigateBack}
+          style={styles.button}
+        >
           <BackArrowIcon />
         </IconBtn>
       </View>
       <View style={styles.centerComponent}>{children}</View>
       <View style={{ opacity: type === NavHeaderType.Close ? 1 : 0 }}>
-        <IconBtn onPress={navigateBack} style={styles.button}>
+        <IconBtn
+          disabled={type !== NavHeaderType.Close}
+          onPress={navigateBack}
+          style={styles.button}
+        >
           <CloseIcon />
         </IconBtn>
       </View>

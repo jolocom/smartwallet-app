@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 
 import EmojiSelectable from '~/components/EmojiSelectable'
@@ -17,6 +18,7 @@ import { useSuccess } from '~/hooks/loader'
 import useSentry from '~/hooks/sentry'
 import useErrors from '~/hooks/useErrors'
 import ModalScreen from '~/modals/Modal'
+import { getIsAppLocked } from '~/modules/account/selectors'
 import Dropdown from '~/screens/LoggedIn/Settings/components/Dropdown'
 import Section from '~/screens/LoggedIn/Settings/components/Section'
 import { strings } from '~/translations'
@@ -41,7 +43,8 @@ const DROPDOWN_OPTIONS = INQUIRIES_LIST.map((el) => ({
 }))
 
 const ErrorReporting = () => {
-  const { errorScreen, resetError, showErrorDisplay } = useErrors()
+  const isAppLocked = useSelector(getIsAppLocked)
+  const { errorScreen, resetError } = useErrors()
   const { sendErrorReport } = useSentry()
   const showSuccess = useSuccess()
 
@@ -102,7 +105,7 @@ const ErrorReporting = () => {
 
   return (
     <ModalScreen
-      isVisible={errorScreen === ErrorScreens.errorReporting}
+      isVisible={errorScreen === ErrorScreens.errorReporting && !isAppLocked}
       onRequestClose={resetError}
       animationType={'slide'}
     >
@@ -156,7 +159,7 @@ const ErrorReporting = () => {
                 <Input.TextArea
                   value={detailsInput}
                   limit={500}
-                  updateInput={setDetailsInput}
+                  updateInput={(v) => setDetailsInput(v.trimLeft())}
                   onFocus={focusInput}
                   customStyles={{ height: 80 }}
                 />

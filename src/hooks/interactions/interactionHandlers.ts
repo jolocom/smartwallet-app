@@ -124,7 +124,11 @@ const authenticationHandler = (state: AuthenticationFlowState) => ({
   description: state.description,
 })
 
-const authorizationHandler = (state: AuthorizationFlowState) => state
+const authorizationHandler = (state: AuthorizationFlowState) => ({
+  action: state.action,
+  description: state.description,
+  imageURL: state.imageURL
+})
 
 const credentialOfferHandler = (state: CredentialOfferFlowState) => {
   return {
