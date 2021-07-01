@@ -5,6 +5,7 @@ import { findBestAvailableLanguage } from 'react-native-localize'
 import en from './en.json'
 // @ts-ignore
 import de from './de.json'
+import { isJestTesting } from '~/utils/dev'
 
 export enum Locales {
   en = 'en',
@@ -28,7 +29,7 @@ const getSystemLng = () => {
 
 i18n.use(initReactI18next).init({
   fallbackLng: Locales.en,
-  debug: __DEV__,
+  debug: __DEV__ && !isJestTesting(),
   lng: getSystemLng(),
   resources,
   keySeparator: false,
