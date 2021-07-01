@@ -18,6 +18,7 @@ import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
 interface ScreenContainerI {
   isTransparent?: boolean
   customStyles?: ViewStyle
+  navigationStyles?: ViewStyle
   isFullscreen?: boolean
   backgroundColor?: Colors
   hasHeaderBack?: boolean
@@ -38,6 +39,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
     isTransparent = false,
     isFullscreen = false,
     customStyles = {},
+    navigationStyles = {},
     backgroundColor = Colors.mainBlack,
     hasHeaderBack = false,
     hasHeaderClose = false,
@@ -72,11 +74,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
           )}
           {(hasHeaderClose || hasHeaderBack) && (
             <NavigationHeader
-              customStyles={{
-                position: 'absolute',
-                top,
-                zIndex: 100,
-              }}
+              customStyles={navigationStyles}
               onPress={onClose}
               type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
             />
@@ -86,9 +84,10 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
               styles.container,
               {
                 backgroundColor,
-                ...((hasHeaderClose || hasHeaderBack) && {
-                  marginTop: SCREEN_HEADER_HEIGHT,
-                }),
+                ...((hasHeaderClose || hasHeaderBack) &&
+                  navigationStyles.position === 'absolute' && {
+                    marginTop: SCREEN_HEADER_HEIGHT,
+                  }),
                 paddingBottom: isFullscreen ? 0 : bottom,
               },
               {
