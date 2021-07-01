@@ -35,19 +35,23 @@ import { useSafeArea } from 'react-native-safe-area-context'
 import Dialog from '~/components/Dialog'
 import { useIsFocused } from '@react-navigation/core'
 import { getIsAppLocked } from '~/modules/account/selectors'
+import useErrors from '~/hooks/useErrors'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 
 const Camera = () => {
   const { height } = useWindowDimensions()
+  const { errorScreen } = useErrors()
   const startInteraction = useInteractionStart()
-  const isAppLocked = useSelector(getIsAppLocked)
+  const isScreenFocused = useIsFocused()
 
+  const isAppLocked = useSelector(getIsAppLocked)
   const interactionType = useSelector(getInteractionType)
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
-  const shouldScan = !interactionType && !isLoaderVisible && !isAppLocked
-  const isScreenFocused = useIsFocused()
+
+  const shouldScan =
+    !interactionType && !isLoaderVisible && !isAppLocked && !errorScreen
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
