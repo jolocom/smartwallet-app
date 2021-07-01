@@ -74,10 +74,16 @@ const IdentityCredentials = () => {
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
         {primitiveAttributesWithValues.map(({ type, label, values }) => {
+          const isEmpty = !values.length
           const hideCreateNew =
             type === AttributeTypes.name && values.length > 0
+
           return (
-            <View style={styles.group} key={type}>
+            <View
+              style={styles.group}
+              key={type}
+              testID={isEmpty ? 'id-widget-empty' : 'id-widget-with-values'}
+            >
               <Widget
                 onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
               >
@@ -85,7 +91,7 @@ const IdentityCredentials = () => {
                   <Widget.Header.Name value={label} />
                   {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>
-                {values.length ? (
+                {!isEmpty ? (
                   values.map((field) => (
                     <IdentityField
                       key={field.id}
