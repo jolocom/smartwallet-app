@@ -10,6 +10,9 @@ const mockAppState = {
   loader: {
     isVisible: false,
   },
+  account: {
+    screenHeight: 800,
+  },
 }
 
 jest.useFakeTimers()
@@ -44,6 +47,7 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     dispatch: jest.fn(),
     goBack: jest.fn(),
+    canGoBack: jest.fn(() => true),
   }),
 }))
 
@@ -69,7 +73,7 @@ describe('User on a Recovery screen', () => {
     expect(getByTestId('seedphrase-input')).toBeDefined()
     expect(getByText(strings.WHAT_IF_I_FORGOT)).toBeDefined()
     expect(getByText(strings.CONFIRM)).toBeDefined()
-    expect(getByText(strings.BACK)).toBeDefined()
+    expect(getByText(strings.EXIT_RECOVERY)).toBeDefined()
   })
 
   test('can add a seed key to a phrase', async () => {
