@@ -33,35 +33,38 @@ jest.mock('react-native-keychain', () => {
       AES: 'aes',
     },
     setGenericPassword: jest.fn(() => Promise.resolve(true)),
+    resetGenericPassword: jest.fn(() => Promise.resolve(true)),
   }
 })
 
-test('User is able to set up pin', async () => {
-  const { getByText, getByTestId, queryByText } = renderWithSafeArea(
-    <RegisterPin />,
-  )
+describe('Register Passcode', () => {
+  it('User is able to set up pin', async () => {
+    const { getByText, getByTestId, queryByText } = renderWithSafeArea(
+      <RegisterPin />,
+    )
 
-  expect(getByText(strings.CREATE_PASSCODE)).toBeDefined()
-  expect(getByText(strings.IN_ORDER_TO_PROTECT_YOUR_DATA)).toBeDefined()
-  expect(queryByText(/strings.YOU_CAN_CHANGE_THE_PASSCODE/)).toBeDefined()
+    expect(getByText(strings.CREATE_PASSCODE)).toBeDefined()
+    expect(getByText(strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY)).toBeDefined()
+    expect(getByText(strings.YOU_CAN_CHANGE_THE_PASSCODE)).toBeDefined()
 
-  inputPasscode(getByTestId, [1, 1, 1, 1])
+    inputPasscode(getByTestId, [1, 1, 1, 1])
 
-  expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
-  expect(getByText(strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY)).toBeDefined()
+    expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
+    expect(getByText(strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY)).toBeDefined()
 
-  inputPasscode(getByTestId, [1, 1, 1, 2])
+    inputPasscode(getByTestId, [1, 1, 1, 2])
 
-  await waitFor(() => {
-    // expect input to clean up because pins don't match
-    expect(queryByText('*')).toBe(null)
-  })
+    await waitFor(() => {
+      // expect input to clean up because pins don't match
+      expect(queryByText('*')).toBe(null)
+    })
 
-  inputPasscode(getByTestId, [1, 1, 1, 1])
+    inputPasscode(getByTestId, [1, 1, 1, 1])
 
-  expect(setGenericPassword).toHaveBeenCalledTimes(1)
-  expect(setGenericPassword).toHaveBeenCalledWith(PIN_USERNAME, '1111', {
-    service: PIN_SERVICE,
-    storage: STORAGE_TYPE.AES,
+    expect(setGenericPassword).toHaveBeenCalledTimes(1)
+    expect(setGenericPassword).toHaveBeenCalledWith(PIN_USERNAME, '1111', {
+      service: PIN_SERVICE,
+      storage: STORAGE_TYPE.AES,
+    })
   })
 })
