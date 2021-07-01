@@ -20,6 +20,7 @@ import Input from '~/components/Input'
 import { InputValidityState } from '~/components/Input/types'
 import { useAssertConnection } from '~/hooks/connection'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 const INQUIRIES_LIST = [
   strings.POSSIBLE_PARTNERSHIP,
@@ -72,8 +73,10 @@ const ContactUs: React.FC = () => {
     return fieldValues.length > 1 && contactValid
   }
 
+  const { top } = useSafeArea()
   return (
     <ScreenContainer
+      navigationStyles={{ position: 'absolute', top, zIndex: 100 }}
       hasHeaderBack
       customStyles={{ justifyContent: 'flex-end', flex: 1, paddingTop: 0 }}
     >
