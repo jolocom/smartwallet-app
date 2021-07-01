@@ -29,11 +29,12 @@ import {
 } from '../components/styled'
 import Collapsible from '~/components/Collapsible'
 import Space from '~/components/Space'
+import useTranslation from '~/hooks/useTranslation'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
-
+  const { t } = useTranslation()
   return (
     <ContainerBAS>
       <LogoContainerBAS>
@@ -49,7 +50,7 @@ const CredentialOfferBAS = () => {
           return (
             <IncomingOfferDoc
               key={d.name}
-              name={d.name}
+              name={d.name || t(strings.UNKNOWN)}
               properties={d.properties}
             />
           )
@@ -57,7 +58,7 @@ const CredentialOfferBAS = () => {
         return (
           <IncomingOfferOther
             key={d.name}
-            name={d.name}
+            name={d.name || t(strings.UNKNOWN)}
             properties={d.properties}
           />
         )
@@ -80,6 +81,8 @@ const CredentialOfferFAS = () => {
   const documents = categories[CredentialCategories.document]
   const other = categories[CredentialCategories.other]
 
+  const { t } = useTranslation()
+
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
     return credentials.map(
       ({ invalid, category, properties, name, type }, idx) => (
@@ -93,13 +96,13 @@ const CredentialOfferFAS = () => {
           {category === CredentialCategories.document ? (
             <IncomingOfferDoc
               key={name + type}
-              name={name || type}
+              name={name || t(strings.UNKNOWN)}
               properties={properties}
             />
           ) : (
             <IncomingOfferOther
               key={name + type}
-              name={name || type}
+              name={name || t(strings.UNKNOWN)}
               properties={properties}
             />
           )}

@@ -22,5 +22,6 @@ declare module 'yup' {
     TOut extends TType = TType,
   > {
     phone(): StringSchema<TType, TContext, TOut>
+    customEmail(): StringSchema<TType, TContext, TOut>
   }
 }

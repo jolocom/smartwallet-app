@@ -110,7 +110,7 @@ const ContactUs: React.FC = () => {
               <Input.TextArea
                 limit={500}
                 value={detailsInput}
-                updateInput={setDetailsInput}
+                updateInput={(v) => setDetailsInput(v.trimLeft())}
                 onFocus={focusInput}
               />
             )}

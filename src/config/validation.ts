@@ -27,6 +27,13 @@ yup.addMethod(yup.string, 'phone', function () {
   )
 })
 
+yup.addMethod(yup.string, 'customEmail', function() {
+  return this.matches(
+    regexValidations[InputValidation.email],
+    strings.EMAIL_FORMAT_ERROR
+  )
+})
+
 export const nameValidation = yup
   .object()
   .shape({
@@ -41,7 +48,8 @@ export const nameValidation = yup
 export const emailValidation = yup.object().shape({
   [ClaimKeys.email]: yup
     .string()
-    .email(strings.EMAIL_FORMAT_ERROR)
+    .customEmail()
+    .max(100, strings.LARGE)
     .required(strings.VALUE_MISSING),
 })
 

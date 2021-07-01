@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/core'
 import {
   useEffect,
   useState,
@@ -5,6 +6,7 @@ import {
   useRef,
   Dispatch,
   SetStateAction,
+  useLayoutEffect,
 } from 'react'
 import { Platform, StatusBar } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
@@ -20,13 +22,15 @@ export const useForceUpdate = () => {
 }
 
 export const useHideStatusBar = () => {
-  useEffect(() => {
-    StatusBar.setHidden(true)
+  const isFocused = useIsFocused()
+
+  useLayoutEffect(() => {
+    isFocused ? StatusBar.setHidden(true) : StatusBar.setHidden(false)
 
     return () => {
       StatusBar.setHidden(false)
     }
-  }, [])
+  }, [isFocused])
 }
 
 export const usePrevious = <T extends unknown>(value: T) => {
