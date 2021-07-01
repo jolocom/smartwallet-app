@@ -398,6 +398,7 @@ const validation = {
   EMAIL_FORMAT_ERROR: 'Seems like this is not a valid email',
   PHONE_FORMAT_ERROR: 'Seems like this is not a valid phone number',
   VALUE_MISSING: 'Please provide value',
+  LARGE: "Too many characters"
 }
 
 export const strings = {

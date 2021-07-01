@@ -48,6 +48,7 @@ export const emailValidation = yup.object().shape({
   [ClaimKeys.email]: yup
     .string()
     .customEmail()
+    .max(100, strings.LARGE)
     .required(strings.VALUE_MISSING),
 })
 
