@@ -64,7 +64,7 @@ jest.mock(
 
 jest.mock('react-native-gesture-handler', () => {
   const gestureHandlerMocks = jest.requireActual(
-    '../../node_modules/react-native-gesture-handler/__mocks__/RNGestureHandlerModule.js',
+    '../../node_modules/react-native-gesture-handler/src/mocks.ts',
   ).default
 
   return {
