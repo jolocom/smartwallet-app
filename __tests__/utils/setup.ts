@@ -1,3 +1,5 @@
+import { NativeModules } from 'react-native'
+
 jest.mock('react-native-keychain', () => ({
   SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
   SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
@@ -74,3 +76,9 @@ jest.mock('react-native-gesture-handler', () => {
 
 // @ts-ignore
 global.__reanimatedWorkletInit = jest.fn()
+
+NativeModules.RNCNetInfo = {
+  getCurrentState: jest.fn(() => Promise.resolve()),
+  addListener: jest.fn(),
+  removeListeners: jest.fn(),
+}
