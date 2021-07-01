@@ -156,8 +156,10 @@ const CredentialForm = () => {
               field.key,
               v.charAt(0) === '+' ? trimmedValue : '+' + trimmedValue,
             )
-          } else {
+          } else if (field.key === ClaimKeys.email) {
             setFieldValue(field.key, trimmedValue)
+          } else {
+            setFieldValue(field.key, v.trimLeft())
           }
         }
 
@@ -192,9 +194,7 @@ const CredentialForm = () => {
                       // @ts-expect-error
                       name={field.key as string}
                       key={field.key}
-                      updateInput={(v) =>
-                        setFieldValue(field.key, v.trimLeft())
-                      }
+                      updateInput={(v) => handleFieldValueChange(v, field)}
                       value={values[field.key]}
                       placeholder={field.label}
                       autoFocus={i === 0}
