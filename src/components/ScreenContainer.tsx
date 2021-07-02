@@ -12,7 +12,6 @@ import JoloText, {
 } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
-import { useRef } from 'react'
 import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
 
 interface ScreenContainerI {
@@ -50,7 +49,6 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
     hideStatusBar && useHideStatusBar()
 
     const { top, bottom } = useSafeArea()
-    const statusHeight = useRef(top)
 
     return (
       <SafeAreaView
@@ -66,7 +64,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
           {!isFullscreen && !hideStatusBar && (
             <View
               style={{
-                height: statusHeight.current,
+                height: top,
                 width: '100%',
                 backgroundColor,
               }}
