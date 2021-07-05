@@ -48,7 +48,7 @@ const genericAuthzArgs = {
 const genericOfferArgs = {
   ...genericArgs,
   ...buildSummary({
-    offerSummary: [{ type: 'test-type' }],
+    offerSummary: [{ type: 'test-type', credential: { name: 'test-name' } }],
     issued: [{ type: 'test-type', name: 'test-name' }],
   }),
   flowType: FlowType.CredentialOffer,
@@ -223,7 +223,7 @@ describe('Record Assembler', () => {
           description:
             i !== 2
               ? genericOfferArgs.summary.state.offerSummary
-                  .map((s) => s.type)
+                  .map((s) => s.credential.name)
                   .join(', ')
               : genericOfferArgs.summary.state.issued
                   .map((s) => s.name)
