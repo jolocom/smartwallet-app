@@ -12,6 +12,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import Permissions from 'react-native-permissions'
 import { useSelector } from 'react-redux'
+import { useIsFocused } from '@react-navigation/core'
 
 import { SDKError } from 'react-native-jolocom'
 
@@ -33,7 +34,6 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Dialog from '~/components/Dialog'
-import { useIsFocused } from '@react-navigation/core'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import useErrors from '~/hooks/useErrors'
 

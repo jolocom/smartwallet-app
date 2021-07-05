@@ -23,7 +23,13 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: jest.fn(),
     canGoBack: jest.fn().mockReturnValue(true),
+    goBack: jest.fn(),
   }),
+  createNavigatorFactory: jest.fn(),
+}))
+
+jest.mock('@react-navigation/core', () => ({
+  useIsFocused: jest.fn().mockReturnValue(true),
 }))
 
 test('it displays permission request, denies it and opens settings ', async () => {
