@@ -82,3 +82,8 @@ NativeModules.RNCNetInfo = {
   addListener: jest.fn(),
   removeListeners: jest.fn(),
 }
+
+jest.mock('react-native-keyboard-aware-scroll-view', () => {
+  const KeyboardAwareScrollView = ({ children }: { children: any }) => children
+  return { KeyboardAwareScrollView }
+})
