@@ -93,14 +93,14 @@ export const CredentialShareBAS = () => {
         singleRequestedCredential,
       )
 
-      const { type, name } = displaySingleCredential
+      const { name } = displaySingleCredential
       const claimFields = getOptionalFields(displaySingleCredential)
 
       return (
         <>
           {isDocument(displaySingleCredential) ? (
             <IncomingRequestDoc
-              name={name ?? type}
+              name={name}
               holderName={displaySingleCredential.holderName}
               properties={claimFields}
               highlight={`${displaySingleCredential.highlight?.slice(
@@ -110,10 +110,7 @@ export const CredentialShareBAS = () => {
               photo={displaySingleCredential.photo}
             />
           ) : (
-            <IncomingRequestOther
-              name={name ?? type}
-              properties={claimFields}
-            />
+            <IncomingRequestOther name={name} properties={claimFields} />
           )}
           <Space />
         </>

@@ -55,7 +55,7 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
                 numberOfLines={2}
                 customStyles={{ textAlign: 'left' }}
               >
-                {name}
+                {!!name.length ? name : strings.UNKNOWN}
               </CredentialName>
             </HeaderContainer>
             {properties.length ? (

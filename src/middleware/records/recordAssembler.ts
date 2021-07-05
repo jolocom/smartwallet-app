@@ -13,6 +13,7 @@ import {
 import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
+import { strings } from '~/translations'
 
 interface IRecordAssembler {
   messageTypes: string[]
@@ -160,8 +161,8 @@ export class RecordAssembler {
 
         const displayCreds = areCredsSupplied
           ? state.providedCredentials[0].suppliedCredentials
-              .map((c) => c.name)
-              .join(',  ')
+              .map((c) => (!!c.name.length ? c.name : strings.UNKNOWN))
+              .join(', ')
           : requestedCreds
 
         switch (type) {
