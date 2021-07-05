@@ -1954,9 +1954,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
                 undefined,
               ]
             }
-          >
-            ███████
-          </Text>
+          />
           <Text
             style={
               Array [
@@ -1978,9 +1976,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
               ]
             }
             testID="record-item-time"
-          >
-            ██
-          </Text>
+          />
         </View>
         <Text
           style={
@@ -2000,7 +1996,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
             ]
           }
         >
-          █████
+          Unknown
         </Text>
       </View>
     </View>
