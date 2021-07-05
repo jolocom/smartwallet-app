@@ -15,7 +15,7 @@ jest.mock('../../../src/hooks/history', () => ({
       { id: 'test-auth', section: 'Yesterday', type: 'Authentication' },
       { id: 'test-share', section: 'Yesterday', type: 'CredentialShare' },
     ]),
-    getInteractionDetails: jest.fn().mockResolvedValueOnce({
+    assembleInteractionDetails: jest.fn().mockResolvedValueOnce({
       issuer: { did: 'did: test' },
       status: 'finished',
       steps: [
