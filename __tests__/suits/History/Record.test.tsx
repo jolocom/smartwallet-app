@@ -3,6 +3,11 @@ import { waitFor, act, fireEvent } from '@testing-library/react-native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import History from '~/screens/LoggedIn/History'
 
+jest.mock('../../../src/hooks/interactions/listeners', () => ({
+  useInteractionUpdate: jest.fn(),
+  useInteractionCreate: jest.fn(),
+}))
+
 jest.mock('../../../src/hooks/history', () => ({
   useHistory: () => ({
     getInteractions: jest.fn().mockResolvedValueOnce([
