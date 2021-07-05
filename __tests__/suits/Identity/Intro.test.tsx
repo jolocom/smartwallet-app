@@ -26,7 +26,7 @@ jest.mock('../../../src/hooks/sdk', () => ({
       getPassword: jest.fn().mockResolvedValue(true),
     },
     credentials: {
-      issue: mockedIssueCredentialFn,
+      create: mockedIssueCredentialFn,
     },
   }),
 }))
