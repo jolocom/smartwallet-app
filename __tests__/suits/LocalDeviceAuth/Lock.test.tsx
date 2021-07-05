@@ -135,7 +135,7 @@ describe('With biometry', () => {
 
     const mockDispatchFn = getMockedDispatch()
 
-    renderWithSafeArea(<Lock />)
+    await waitFor(() => renderWithSafeArea(<Lock />))
 
     // ACT: this imitates the app going to the background
     // @ts-ignore - because it is a custom method, and react native App State has no emit method available
@@ -156,7 +156,7 @@ describe('With biometry', () => {
 
     const mockDispatchFn = getMockedDispatch()
 
-    renderWithSafeArea(<Lock />)
+    await waitFor(() => renderWithSafeArea(<Lock />))
 
     // ACT: this imitates the app going to the background
     // @ts-ignore
