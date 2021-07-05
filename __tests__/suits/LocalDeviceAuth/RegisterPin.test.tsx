@@ -24,7 +24,7 @@ jest.mock('@react-navigation/native', () => ({
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn(),
-  useDispatch: jest.fn().mockReturnValue(mockedDispatch),
+  useDispatch: () => mockedDispatch,
 }))
 
 jest.mock('react-native-keychain', () => {
