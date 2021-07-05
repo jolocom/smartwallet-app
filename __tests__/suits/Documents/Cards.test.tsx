@@ -1,7 +1,11 @@
+import * as navigation from '@react-navigation/native'
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import DocumentCard from '~/components/Card/DocumentCard'
 import OtherCard from '~/components/Card/OtherCard'
+import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
+import { IdentificationTypes } from '~/types/credentials'
+import { ScreenNames } from '~/types/screens'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const HIGHLIGHT = 'ABC123'
@@ -26,13 +30,6 @@ const FIELDS = [
       optionalFields: [{ label: 'g', value: 'h' }],
     },
   },
-]
-const CLAIMS = [
-  {
-    label: 'claim1',
-    value: 'Claim 1',
-  },
-  { label: 'claim1', value: 'Claim 1' },
 ]
 
 const testIds = {
@@ -79,6 +76,7 @@ describe('Document card is displaying passed props', () => {
     const { getByText, getByTestId, queryByText } = renderWithSafeArea(
       <DocumentCard
         id={'test-1'}
+        type="test"
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
         photo={IMAGE}
@@ -86,7 +84,6 @@ describe('Document card is displaying passed props', () => {
       />,
     )
 
-    console.log(getByText('Test Given Name'))
     expect(getByText(HIGHLIGHT)).toBeDefined()
     expect(getByTestId(testIds.highlight)).toBeDefined()
     expect(getByTestId(testIds.photo)).toBeDefined()
@@ -103,6 +100,7 @@ describe('Document card is displaying passed props', () => {
     const { queryByTestId } = renderWithSafeArea(
       <DocumentCard
         id={'test-1'}
+        type="test"
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
       />,
@@ -112,9 +110,10 @@ describe('Document card is displaying passed props', () => {
     expect(queryByTestId(testIds.highlight)).toBe(null)
   })
 
-  test('can perform actions on a card', () => {
-    const { getByTestId, getByText, debug } = renderWithSafeArea(
+  test('navigates to the popup screen', () => {
+    const { getByTestId } = renderWithSafeArea(
       <DocumentCard
+        type="test"
         id={'test-1'}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
@@ -122,32 +121,31 @@ describe('Document card is displaying passed props', () => {
         highlight={HIGHLIGHT}
       />,
     )
+    const navigationSpy = jest.spyOn(navigation.useNavigation(), 'navigate')
 
     const dots = getByTestId(testIds.more)
     fireEvent.press(dots)
 
-    const popupMenu = getByTestId(testIds.popupMenu)
-
-    expect(popupMenu.props.visible).toBe(true)
-
-    const deleteBtn = getByText('Delete')
-
-    fireEvent.press(deleteBtn)
-    expect(mockedNavigate).toHaveBeenCalledTimes(1)
+    expect(navigationSpy).toHaveBeenCalledWith(
+      ScreenNames.TransparentModals,
+      expect.objectContaining({ screen: ScreenNames.PopupMenu }),
+    )
   })
 })
 
 describe('Other card is displaying passed props', () => {
   test('no logo', () => {
+    const mockType = IdentificationTypes.ProofOfDriverLicenceDemo
     const { queryByTestId, getByText } = renderWithSafeArea(
       <OtherCard
         id={'test-1'}
+        type={mockType}
         mandatoryFields={mandatoryFields}
         optionalFields={optionalFields}
       />,
     )
 
     expect(queryByTestId(testIds.logo)).toBeNull()
-    expect(getByText('Type of the document')).toBeDefined()
+    expect(getByText(getCredentialUIType(mockType))).toBeDefined()
   })
 })
