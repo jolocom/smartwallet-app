@@ -15,6 +15,10 @@
 
     </style>
 
+    <style name="AppThemeModals" parent="Theme.ReactNative.AppCompat.Light.NoActionBar.FullScreen">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
     <!-- Add the following lines (BootTheme should inherit from AppTheme) -->
     <style name="BootTheme" parent="AppTheme">
         <!-- set the generated bootsplash.xml drawable as activity background -->
