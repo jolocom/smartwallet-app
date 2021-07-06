@@ -97,7 +97,7 @@
         "city": "City"
     },
     "CredentialForm": {
-        "header": "Edit your ${attributeName}",
+        "header": "Edit your ${attributeName, lowercase}",
         "subheader": "Once you click done, it will be displayed in the personal info section.",
         "closeBtn": "Cancel",
         "confirmBtn": "Done"

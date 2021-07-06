@@ -166,14 +166,12 @@ const CredentialForm = () => {
         return (
           <FormContainer
             title={t(
-              attributeId
-                ? strings.EDIT_YOUR_ATTRIBUTE
-                : strings.ADD_YOUR_ATTRIBUTE,
-              { attribute: formConfig.label.toLowerCase() },
+              // FIXME @terms update the terms (to `(...).editHeader` and `(...).addHeader`)
+              attributeId ? 'CredentialForm.header' : 'CredentialForm.header',
+              // @ts-ignore FIXME @terms
+              { attributeName: t(formConfig.label) },
             )}
-            description={t(
-              strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
-            )}
+            description={t('CredentialForm.subheader')}
             onSubmit={() => handleCredentialSubmit(values)}
             isSubmitDisabled={shouldDisableSubmit}
           >
@@ -196,7 +194,8 @@ const CredentialForm = () => {
                       key={field.key}
                       updateInput={(v) => handleFieldValueChange(v, field)}
                       value={values[field.key]}
-                      placeholder={field.label}
+                      // @ts-ignore FIXME @terms
+                      placeholder={t(field.label)}
                       autoFocus={i === 0}
                       onBlur={() => setFieldTouched(field.key, true, false)}
                       /* we want to show highlighted focused input only if

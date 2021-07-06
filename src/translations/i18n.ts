@@ -33,6 +33,10 @@ i18n.use(initReactI18next).init({
   interpolation: {
     prefix: '${',
     suffix: '}',
+    format: (value: string, format, lng) => {
+      if (format === 'lowercase') return value.toLowerCase()
+      return value
+    },
   },
   resources,
   //keySeparator: false,
