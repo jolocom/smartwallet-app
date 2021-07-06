@@ -12,6 +12,7 @@ import { Platform, StatusBar } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
 import { useDispatch } from 'react-redux'
 import { setPopup } from '~/modules/appState/actions'
+import useErrors from './useErrors'
 
 export const useForceUpdate = () => {
   const [, setTick] = useState(0)
@@ -23,6 +24,7 @@ export const useForceUpdate = () => {
 
 export const useHideStatusBar = () => {
   const isFocused = useIsFocused()
+  const { errorScreen } = useErrors()
 
   useLayoutEffect(() => {
     isFocused ? StatusBar.setHidden(true) : StatusBar.setHidden(false)
@@ -31,6 +33,10 @@ export const useHideStatusBar = () => {
       StatusBar.setHidden(false)
     }
   }, [isFocused])
+
+  useEffect(() => {
+    !!errorScreen ? StatusBar.setHidden(false) : StatusBar.setHidden(true)
+  }, [errorScreen])
 }
 
 export const usePrevious = <T extends unknown>(value: T) => {
