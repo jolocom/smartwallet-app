@@ -6,7 +6,6 @@ import {
   AttributeKeys,
   ClaimKeys,
 } from '~/types/credentials'
-import { strings } from '~/translations'
 import {
   emailValidation,
   nameValidation,
@@ -24,12 +23,12 @@ const numberPadKeyboardType: KeyboardTypeOptions = Platform.select({
 // TODO: add input validation for each field
 const emailConfig: IAttributeConfig = {
   key: AttributeKeys.emailAddress,
-  label: strings.EMAIL,
+  label: 'Identity.emailLabel',
   metadata: claimsMetadata[AttributeKeys.emailAddress],
   fields: [
     {
       key: ClaimKeys.email,
-      label: strings.EMAIL,
+      label: 'Identity.emailLabel',
       keyboardOptions: {
         keyboardType: 'email-address',
         autoCapitalize: 'none',
@@ -41,12 +40,12 @@ const emailConfig: IAttributeConfig = {
 
 const postalAddressConfig: IAttributeConfig = {
   key: AttributeKeys.postalAddress,
-  label: strings.ADDRESS,
+  label: 'Indentity.addressLabel',
   metadata: claimsMetadata[AttributeKeys.postalAddress],
   fields: [
     {
       key: ClaimKeys.addressLine,
-      label: strings.ADDRESS_LINE_FIELD,
+      label: 'Placeholder.addressLine',
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'sentences',
@@ -54,7 +53,7 @@ const postalAddressConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.postalCode,
-      label: strings.POSTAL_CODE_FIELD,
+      label: 'Placeholder.postalCode',
       keyboardOptions: {
         keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
@@ -62,7 +61,7 @@ const postalAddressConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.city,
-      label: strings.CITY_FIELD,
+      label: 'Placeholder.city',
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'sentences',
@@ -70,7 +69,7 @@ const postalAddressConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.country,
-      label: strings.COUNTRY_FIELD,
+      label: 'Placeholder.country',
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'words',
@@ -82,12 +81,12 @@ const postalAddressConfig: IAttributeConfig = {
 
 const mobileNumberConfig: IAttributeConfig = {
   key: AttributeKeys.mobilePhoneNumber,
-  label: strings.NUMBER,
+  label: 'Identity.phoneNumberLabel',
   metadata: claimsMetadata[AttributeKeys.mobilePhoneNumber],
   fields: [
     {
       key: ClaimKeys.telephone,
-      label: strings.NUMBER,
+      label: 'Identity.phoneNumberLabel',
       keyboardOptions: {
         keyboardType: numberPadKeyboardType,
         autoCapitalize: 'none',
@@ -99,12 +98,12 @@ const mobileNumberConfig: IAttributeConfig = {
 
 const nameConfig: IAttributeConfig = {
   key: AttributeKeys.name,
-  label: strings.NAME,
+  label: 'Identity.nameLabel',
   metadata: claimsMetadata[AttributeKeys.name],
   fields: [
     {
       key: ClaimKeys.givenName,
-      label: strings.GIVEN_NAME_FIELD,
+      label: 'InputPlaceholder.givenName',
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'words',
@@ -112,7 +111,7 @@ const nameConfig: IAttributeConfig = {
     },
     {
       key: ClaimKeys.familyName,
-      label: strings.FAMILY_NAME_FIELD,
+      label: 'InputPlaceholder.familyName',
       keyboardOptions: {
         keyboardType: 'default',
         autoCapitalize: 'words',

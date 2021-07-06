@@ -37,6 +37,7 @@ const RegisterBiometry: React.FC = () => {
         displaySuccessLoader(handleRedirectToLogin)
       }
     } catch (err) {
+      // FIXME @terms
       console.log('Error authenticating with Biometrics in RegisterBiometry', {
         err,
       })

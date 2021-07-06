@@ -4,12 +4,12 @@ import Fallin from '~/components/animation/Fallin'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 
 import SingleCredentialWizard from './SingleCredentialWizard'
 import { IdentityTabIds } from './types'
+import useTranslation from '~/hooks/useTranslation'
 
 enum IdentityForms {
   SingleCredential = 'SingleCredential',
@@ -21,6 +21,7 @@ interface Props {
 const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
   const [isTopSheetVisible, setTopSheetVisibility] = useState(true)
   const [activeForm, setActiveForm] = useState<IdentityForms | null>(null)
+  const { t } = useTranslation()
 
   const animateSheet = () =>
     LayoutAnimation.configureNext({
@@ -91,7 +92,7 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
                 }),
               }}
             >
-              {strings.IT_IS_TIME_TO_CREATE}
+              {t('Identity.widgetWelcome')}
             </JoloText>
 
             <Btn
@@ -100,7 +101,7 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
               customContainerStyles={{ backgroundColor: Colors.mainBlack }}
               testID="single-credential-button"
             >
-              {strings.START_NOW}
+              {t('Identity.widgetStartBtn')}
             </Btn>
           </View>
         )}

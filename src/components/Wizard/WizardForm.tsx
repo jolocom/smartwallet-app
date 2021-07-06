@@ -15,11 +15,13 @@ import JoloText from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import WizardBody from './WizardBody'
 import WizardFooter from './WizardFooter'
+import useTranslation from '~/hooks/useTranslation'
 
 const AutofocusInput = withNextInputAutoFocusInput(Input.Block)
 const AutofocusContainer = withNextInputAutoFocusForm(View)
 
 const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
+  const { t } = useTranslation()
   const { config, setActiveStep, isLastStep } = useWizard()
   const { form: formConfig, validationSchema } = config[step]
   const initialValues = assembleFormInitialValues(formConfig.fields)
@@ -54,7 +56,8 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                     // @ts-ignore
                     value={values[field.key]}
                     updateInput={(v) => setFieldValue(field.key, v.trimLeft())}
-                    placeholder={field.label}
+                    // @ts-ignore terms
+                    placeholder={t(field.label) as string}
                     autoFocus={idx === 0}
                     withHighlight={
                       !Boolean(errors[field.key]) && Boolean(values[field.key])
