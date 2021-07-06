@@ -13,8 +13,6 @@ import { RNCamera } from 'react-native-camera'
 import Permissions from 'react-native-permissions'
 import { useSelector } from 'react-redux'
 
-import { SDKError } from 'react-native-jolocom'
-
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
@@ -28,7 +26,6 @@ import { useInteractionStart } from '~/hooks/interactions/handlers'
 
 import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
 
-import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -36,11 +33,13 @@ import Dialog from '~/components/Dialog'
 import { useIsFocused } from '@react-navigation/core'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import useErrors from '~/hooks/useErrors'
+import useTranslation from '~/hooks/useTranslation'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 
 const Camera = () => {
+  const { t } = useTranslation()
   const { height } = useWindowDimensions()
   const { errorScreen } = useErrors()
   const startInteraction = useInteractionStart()
@@ -111,11 +110,7 @@ const Camera = () => {
       console.log({ err })
 
       setError(true)
-      if (err.code === SDKError.codes.ParseJWTFailed) {
-        setErrorText(strings.IS_THIS_THE_RIGHT_QR_CODE_TRY_AGAIN)
-      } else {
-        setErrorText(strings.LOOKS_LIKE_WE_CANT_PROVIDE_THIS_SERVICE)
-      }
+      setErrorText(t('Camera.errorMsg'))
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
       })
@@ -163,12 +158,12 @@ const Camera = () => {
                     size={JoloTextSizes.mini}
                     color={Colors.white}
                   >
-                    {strings.LOCAL_PERMISSION_DIALOG}
+                    {t('Camera.localNetworkMessage')}
                     {'     '}
                     <JoloText size={JoloTextSizes.mini} color={Colors.blue}>
                       {BP({
-                        default: strings.MANAGE,
-                        large: strings.TAP_TO_MANAGE,
+                        default: t('Camera.localNetworkBtn_short'),
+                        large: t('Camera.localNetworkBtn_long'),
                       })}
                     </JoloText>
                   </JoloText>
@@ -212,9 +207,7 @@ const Camera = () => {
                   size={JoloTextSizes.middle}
                   customStyles={{ width: MARKER_SIZE }}
                 >
-                  {
-                    strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE
-                  }
+                  {t('Camera.details')}
                 </JoloText>
               )}
               <TouchableHighlight
