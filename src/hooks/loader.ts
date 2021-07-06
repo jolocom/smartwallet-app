@@ -105,11 +105,11 @@ const openLoader = (type: LoaderTypes, msg: string) => (delay: number) => {
 export const useSuccess = (delay: number = 2500) => {
   const { t } = useTranslation()
 
-  return openLoader(LoaderTypes.success, t('Loader.failedDefault'))(delay)
+  return openLoader(LoaderTypes.success, t('Loader.successDefault'))(delay)
 }
 
 export const useFailed = (delay: number = 2500) => {
   const { t } = useTranslation()
 
-  return openLoader(LoaderTypes.error, t('Loader.successDefault'))(delay)
+  return openLoader(LoaderTypes.error, t('Loader.failedDefault'))(delay)
 }
