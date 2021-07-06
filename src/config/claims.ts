@@ -40,7 +40,7 @@ const emailConfig: IAttributeConfig = {
 
 const postalAddressConfig: IAttributeConfig = {
   key: AttributeKeys.postalAddress,
-  label: 'Indentity.addressLabel',
+  label: 'Identity.addressLabel',
   metadata: claimsMetadata[AttributeKeys.postalAddress],
   fields: [
     {

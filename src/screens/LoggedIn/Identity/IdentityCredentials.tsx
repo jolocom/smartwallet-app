@@ -22,6 +22,7 @@ import IdentityField from './IdentityField'
 import { useSICActions } from '~/hooks/attributes'
 import BP from '~/utils/breakpoints'
 import { ClaimValues } from '~/modules/attributes/types'
+import useTranslation from '~/hooks/useTranslation'
 
 const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
   return attributeConfig
@@ -42,6 +43,7 @@ const getFormattedValue = (value: ClaimValues, type: AttributeTypes) => {
 }
 
 const IdentityCredentials = () => {
+  const { t } = useTranslation()
   const redirect = useRedirect()
   const attributes = useSelector(getAttributes)
   const { handleDeleteCredentialSI } = useSICActions()
@@ -82,7 +84,8 @@ const IdentityCredentials = () => {
                 onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
               >
                 <Widget.Header>
-                  <Widget.Header.Name value={label} />
+                  {/* @ts-ignore FIXME terms */}
+                  <Widget.Header.Name value={t(label) as string} />
                   {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>
                 {values.length ? (
