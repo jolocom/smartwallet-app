@@ -17,7 +17,6 @@ const attrObjToAttrMap = (type: AttributeTypes, attribute: AttributeI): Attribut
    * A util function to preserve order of claim properties
    */
   export const getAttributeValueBasedOnConfig = (type: AttributeTypes, values: AttributeI[]): Array<AttributeI<Map<ClaimKeys, ClaimEntry>>> => {
-    console.log(JSON.stringify(values));
     return values.map(value => attrObjToAttrMap(type, value))
   }
   
