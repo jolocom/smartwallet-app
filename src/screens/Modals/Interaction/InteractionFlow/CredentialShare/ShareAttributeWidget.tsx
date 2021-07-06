@@ -16,6 +16,10 @@ import { Colors } from '~/utils/colors'
 import Field, { IWidgetField } from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
 import Space from '~/components/Space'
+import {
+  concatValuesShare,
+  getAttributeValueBasedOnConfig,
+} from '~/utils/attributeUtils'
 
 interface IShareAttributeWidgetProps {
   withContainer?: boolean
@@ -116,12 +120,9 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
                 onSelect={(attrType, id) =>
                   handleSelectCredential({ [attrType]: id })
                 }
-                fields={attribute.map((attr) => ({
-                  id: attr.id,
-                  value: Object.values(attr.value).join(
-                    attrType === AttributeTypes.name ? ' ' : ', ',
-                  ),
-                }))}
+                fields={getAttributeValueBasedOnConfig(attrType, attribute).map(
+                  (value) => concatValuesShare(attrType, value),
+                )}
               />
               {idx !== arr.length - 1 ? <View style={{ height: 20 }} /> : null}
             </View>
