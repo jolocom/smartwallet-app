@@ -22,10 +22,12 @@ import { showBiometry } from './module/deviceAuthActions'
 import Passcode from '~/components/Passcode'
 import { useToasts } from '~/hooks/toasts'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
+import useTranslation from '~/hooks/useTranslation'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const RegisterPin = () => {
+  const { t } = useTranslation()
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [selectedPasscode, setSelectedPasscode] = useState('')
 
@@ -72,6 +74,8 @@ const RegisterPin = () => {
         displaySuccessLoader(redirectTo)
       } catch (err) {
         // an error with storing PIN to the keychain -> redirect back to create passcode
+
+        // FIXME @terms
         scheduleWarning({
           title: 'Try again',
           message: 'We could not store your passcode. Please try again',
@@ -103,9 +107,11 @@ const RegisterPin = () => {
         <Passcode.Container>
           <ScreenHeader
             title={
-              isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE
+              isCreating
+                ? t('CreatePasscode.createHeader')
+                : t('VerifyPasscode.verifyHeader')
             }
-            subtitle={strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY}
+            subtitle={t('CreatePasscode.createSubheader')}
           />
           <View style={styles.passcodeContainer}>
             <Passcode.Input />
@@ -119,7 +125,7 @@ const RegisterPin = () => {
               opacity: isCreating ? 1 : 0,
             }}
           >
-            {strings.YOU_CAN_CHANGE_THE_PASSCODE}
+            {t('CreatePasscode.helperText')}
           </JoloText>
         </Passcode.Container>
         <Passcode.Container
@@ -127,6 +133,7 @@ const RegisterPin = () => {
         >
           {!isCreating && (
             <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
+              {/* FIXME @terms is not present in the designs*/}
               {strings.RESET}
             </Btn>
           )}
