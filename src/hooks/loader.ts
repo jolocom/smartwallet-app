@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
@@ -84,24 +85,31 @@ export const useLoader = () => {
   }
 }
 
-const openLoader =
-  (type: LoaderTypes, msg: string) =>
-  (delay: number = 2500) => {
-    const dispatch = useDispatch()
+const openLoader = (type: LoaderTypes, msg: string) => (delay: number) => {
+  const dispatch = useDispatch()
 
-    return (onComplete?: () => void) => {
-      dispatch(
-        setLoader({
-          type,
-          msg,
-        }),
-      )
-      setTimeout(() => {
-        onComplete && onComplete()
-        dispatch(dismissLoader())
-      }, delay)
-    }
+  return (onComplete?: () => void) => {
+    dispatch(
+      setLoader({
+        type,
+        msg,
+      }),
+    )
+    setTimeout(() => {
+      onComplete && onComplete()
+      dispatch(dismissLoader())
+    }, delay)
   }
+}
 
-export const useSuccess = openLoader(LoaderTypes.success, strings.SUCCESS)
-export const useFailed = openLoader(LoaderTypes.error, strings.FAILED)
+export const useSuccess = (delay: number = 2500) => {
+  const { t } = useTranslation()
+
+  return openLoader(LoaderTypes.success, t('Loader.failedDefault'))(delay)
+}
+
+export const useFailed = (delay: number = 2500) => {
+  const { t } = useTranslation()
+
+  return openLoader(LoaderTypes.error, t('Loader.successDefault'))(delay)
+}
