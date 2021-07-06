@@ -10,8 +10,9 @@ import {
 } from 'react'
 import { Platform, StatusBar } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setPopup } from '~/modules/appState/actions'
+import { getLoaderState } from '~/modules/loader/selectors'
 import useErrors from './useErrors'
 
 export const useForceUpdate = () => {
@@ -25,18 +26,30 @@ export const useForceUpdate = () => {
 export const useHideStatusBar = () => {
   const isFocused = useIsFocused()
   const { errorScreen } = useErrors()
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
+
+  const hide = () => {
+    StatusBar.setHidden(true)
+  }
+  const show = () => {
+    StatusBar.setHidden(false)
+  }
 
   useLayoutEffect(() => {
-    isFocused ? StatusBar.setHidden(true) : StatusBar.setHidden(false)
+    isFocused ? hide() : show()
 
     return () => {
-      StatusBar.setHidden(false)
+      show()
     }
   }, [isFocused])
 
-  useEffect(() => {
-    !!errorScreen ? StatusBar.setHidden(false) : StatusBar.setHidden(true)
+  useLayoutEffect(() => {
+    !!errorScreen ? show() : hide()
   }, [errorScreen])
+
+  useLayoutEffect(() => {
+    isLoaderVisible ? show() : hide()
+  }, [isLoaderVisible])
 }
 
 export const usePrevious = <T extends unknown>(value: T) => {
