@@ -11,7 +11,6 @@ import { ScreenNames } from '~/types/screens'
 
 import { useRedirect } from '~/hooks/navigation'
 import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
-import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
