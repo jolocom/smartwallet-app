@@ -30,8 +30,12 @@ i18n.use(initReactI18next).init({
   fallbackLng: Locales.en,
   debug: __DEV__,
   lng: getSystemLng(),
+  interpolation: {
+    prefix: '${',
+    suffix: '}',
+  },
   resources,
-  keySeparator: false,
+  //keySeparator: false,
 })
 
 export default i18n
