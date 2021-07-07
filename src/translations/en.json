@@ -142,19 +142,19 @@
         "localNetworkBtn_short": "Manage"
     },
     "CredentialShare": {
-        "missingDocsToastHeader": "Missing ${document-type, lowercase}",
-        "missingDocsToastSubheader": "${service-name} is requesting a document that can’t be found in your wallet",
+        "missingDocsToastHeader": "Missing ${documentType, lowercase}",
+        "missingDocsToastSubheader": "${serviceName} is requesting a document that can’t be found in your wallet",
         "attributeMissingValue": "Missing info",
-        "headerSingleMissing": "${service-name} requests email",
+        "headerSingleMissing": "${serviceName} requests email",
         "singleMissingSubheader": "It seems like your wallet is missing something important for this request",
         "singleMissingAcceptBtn": "Add info",
         "selectInstructions": "Tap to choose"
     },
     "CredentialOffer": {
         "invalidDocsToastHeader": "Invalid offer",
-        "invalidDocsToastSubheader": "Unable to save any of the documents sent by ${service-name}",
+        "invalidDocsToastSubheader": "Unable to save any of the documents sent by ${serviceName}",
         "header": "Incoming offer",
-        "subheader": "${service-name} sent your wallet the following document(s):",
+        "subheader": "${serviceName} sent your wallet the following document(s):",
         "cardInfoHeader": "Included info:",
         "confirmBtn": "Accept",
         "acceptBtn": "Accept"
@@ -164,7 +164,7 @@
     },
     "Interaction": {
         "cancelBtn": "Ignore",
-        "subheaderAnonymous": "This public profile ${did-number} chose to remain anonymous. Pay attention before sharing data."
+        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data."
     },
     "Documents": {
         "documentsTab": "Documents",
@@ -187,12 +187,12 @@
     },
     "CredentialRequest": {
         "header": "Incoming request",
-        "subheader": "Choose one or more documents requested by ${service-name} to proceed",
+        "subheader": "Choose one or more documents requested by ${serviceName} to proceed",
         "acceptBtn": "Share"
     },
     "Authorization": {
         "header": "Would you like to ${authAction}?",
-        "subheader": "${service-name}  is now ready to grant you access",
+        "subheader": "${serviceName}  is now ready to grant you access",
         "acceptBtn": "Allow"
     },
     "Dates": {

@@ -142,19 +142,19 @@
         "localNetworkBtn_short": "Verwalten"
     },
     "CredentialShare": {
-        "missingDocsToastHeader": "${document-type} fehlt",
-        "missingDocsToastSubheader": "${service-name} fordert ein Dokument an, das nicht in deiner Wallet vorhanden ist",
+        "missingDocsToastHeader": "${documentType} fehlt",
+        "missingDocsToastSubheader": "${serviceName} fordert ein Dokument an, das nicht in deiner Wallet vorhanden ist",
         "attributeMissingValue": "Fehlende Info",
-        "headerSingleMissing": "${service-name} fordert E-Mail",
+        "headerSingleMissing": "${serviceName} fordert E-Mail",
         "singleMissingSubheader": "Es sieht so aus, als würde deiner Wallet etwas Wichtiges für diese Anfrage fehlen",
         "singleMissingAcceptBtn": "Info hinzufügen",
         "selectInstructions": "Zur Auswahl antippen"
     },
     "CredentialOffer": {
         "invalidDocsToastHeader": "Ungültige Übertragung",
-        "invalidDocsToastSubheader": "Keines der von ${service-name} gesendeten Dokumente konnte gespeichert werden",
+        "invalidDocsToastSubheader": "Keines der von ${serviceName} gesendeten Dokumente konnte gespeichert werden",
         "header": "Eingehende Übertragung",
-        "subheader": "${service-name} hat deiner Wallet das/die folgende(n) Dokument(e) geschickt:",
+        "subheader": "${serviceName} hat deiner Wallet das/die folgende(n) Dokument(e) geschickt:",
         "cardInfoHeader": "Enthaltene Infos:",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren"
@@ -164,7 +164,7 @@
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
-        "subheaderAnonymous": "Das öffentliche Profil ${did-number} hat sich entschieden, anonym zu bleiben. Gib Acht, bevor du Daten teilst."
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Gib Acht, bevor du Daten teilst."
     },
     "Documents": {
         "documentsTab": "Dokumente",
@@ -187,12 +187,12 @@
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
-        "subheader": "Wähle ein oder mehrere von ${service-name} angeforderte Dokumente aus, um fortzufahren",
+        "subheader": "Wähle ein oder mehrere von ${serviceName} angeforderte Dokumente aus, um fortzufahren",
         "acceptBtn": "Teilen"
     },
     "Authorization": {
         "header": "Möchtest du ${authAction}?",
-        "subheader": "${service-name} ist jetzt bereit, dir Zugang zu gewähren",
+        "subheader": "${serviceName} ist jetzt bereit, dir Zugang zu gewähren",
         "acceptBtn": "Erlauben"
     },
     "Dates": {
