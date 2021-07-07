@@ -39,7 +39,6 @@ i18n.use(initReactI18next).init({
     },
   },
   resources,
-  //keySeparator: false,
 })
 
 export default i18n
