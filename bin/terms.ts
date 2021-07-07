@@ -1,6 +1,6 @@
-const fetch = require('node-fetch')
-const fs = require('fs')
-const shell = require('shelljs')
+import fetch from 'node-fetch'
+import fs from 'fs'
+import shell from 'shelljs'
 
 const CURRENT_PATH = process.cwd()
 const EXPORT_URL = 'https://api.poeditor.com/v2/projects/export'
@@ -8,6 +8,11 @@ const SECRETS_REPO = 'dev@hetz1.jolocom.io:poeditor-key'
 const API_KEY_LOCATION = `${CURRENT_PATH}/bin/poeditor-key/POEDITOR_TOKEN.txt`
 const PROJECT_ID_LOCATION = `${CURRENT_PATH}/bin/poeditor-key/POEDITOR_SW2_PROJECT_ID.txt`
 const TRANSLATIONS_LOCATION = `${CURRENT_PATH}/src/translations/`
+
+enum Languages {
+  en = 'en',
+  de = 'de',
+}
 
 const cloneSecrets = () => {
   return new Promise((res, rej) => {
@@ -24,23 +29,27 @@ const cloneSecrets = () => {
   })
 }
 
-const readTextFile = (location) => {
-  return new Promise((res, rej) => {
+const readTextFile = (location: string) => {
+  return new Promise<string>((res, rej) => {
     fs.readFile(location, 'utf8', (err, data) => {
       if (err) rej(err)
-      else res(data.toString())
+      else res(data.toString().trim())
     })
   })
 }
 
-const getPoeditorData = async () => {
-  const apiKey = (await readTextFile(API_KEY_LOCATION)).trim()
-  const projectId = (await readTextFile(PROJECT_ID_LOCATION)).trim()
+const getPoeditorSecrets = async () => {
+  const apiKey = await readTextFile(API_KEY_LOCATION)
+  const projectId = await readTextFile(PROJECT_ID_LOCATION)
 
   return { apiKey, projectId }
 }
 
-const getExportUrl = (apiKey, projectId, language) => {
+const getExportUrl = async (
+  apiKey: string,
+  projectId: string,
+  language: Languages,
+) => {
   const params = new URLSearchParams({
     api_token: apiKey,
     id: projectId,
@@ -57,22 +66,22 @@ const getExportUrl = (apiKey, projectId, language) => {
     .then((json) => json.result.url)
 }
 
-const downloadTerms = (url) => fetch(url).then((res) => res.json())
+const downloadTerms = (url: string) => fetch(url).then((res) => res.json())
 
-const saveTerms = (name, terms) => {
+const saveTerms = (name: string, terms: any) => {
   fs.writeFile(
     `${TRANSLATIONS_LOCATION}/${name}`,
     JSON.stringify(terms, null, 4),
     (err) => {
       if (err) {
-        throw new Error(err)
+        throw err
       }
     },
   )
 }
 
-const getTerms = (language) =>
-  getPoeditorData()
+const assembleTermsForLanguage = (language: Languages) =>
+  getPoeditorSecrets()
     .then(({ apiKey, projectId }) => getExportUrl(apiKey, projectId, language))
     .then(downloadTerms)
     .then((terms) => saveTerms(`${language}.json`, terms))
@@ -85,8 +94,8 @@ const getTerms = (language) =>
 
 const main = async () => {
   await cloneSecrets().then(console.log)
-  getTerms('en')
-  getTerms('de')
+  assembleTermsForLanguage(Languages.en)
+  assembleTermsForLanguage(Languages.de)
 }
 
 main()
