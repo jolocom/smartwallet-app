@@ -136,13 +136,19 @@ export class RecordAssembler {
                * happening in RecordStep || RecordFinalStep
                * components to enable translations
                */
-              .map((s) => s.credential?.name)
+              .map((s) =>
+                s.credential?.name?.length
+                  ? s.credential?.name
+                  : strings.UNKNOWN,
+              )
               .join(', '),
           }
         case InteractionType.CredentialsReceive:
           return {
             title: this.getFinishedStepTitle(i),
-            description: state.issued.map((c) => c.name).join(', '),
+            description: state.issued
+              .map((c) => (c.name.length ? c.name : strings.UNKNOWN))
+              .join(', '),
           }
         default:
           throw new Error('Wrong interaction type for flow')
