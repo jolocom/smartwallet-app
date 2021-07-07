@@ -75,7 +75,7 @@
         "nameLabel": "Name",
         "emailLabel": "Email",
         "phoneNumberLabel": "Number",
-        "addressLabel": "Address line",
+        "addressLabel": "Address",
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases"
     },
@@ -97,10 +97,11 @@
         "city": "City"
     },
     "CredentialForm": {
-        "header": "Edit your ${attributeName, lowercase}",
+        "editHeader": "Edit your ${attributeName, lowercase}",
         "subheader": "Once you click done, it will be displayed in the personal info section.",
         "closeBtn": "Cancel",
-        "confirmBtn": "Done"
+        "confirmBtn": "Done",
+        "addHeader": "Add your ${attributeName, lowercase}"
     },
     "CreatePasscode": {
         "createHeader": "Create passcode",
@@ -109,13 +110,17 @@
     },
     "VerifyPasscode": {
         "verifyHeader": "Verify passcode",
-        "verifySubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet"
+        "verifySubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
+        "resetBtn": "Reset"
     },
     "Biometry": {
         "header": "Use ${biometryType} to authorize wallet",
         "subheader": "So you don’t need to confirm your passcode every time you open the app",
         "activateBtn": "Tap to activate",
-        "skipBtn": "Skip"
+        "skipBtn": "Skip",
+        "promptFaceId": "Scan your face to continue",
+        "promptFingerprint": "Scan your fingerprint on the device scanner to continue",
+        "promptBiometrics": "Provide biometrics to continue"
     },
     "PasscodeRecoveryInstructions": {
         "header": "How to change your passcode"
@@ -163,7 +168,22 @@
     },
     "Documents": {
         "documentsTab": "Documents",
-        "othersTab": "Others"
+        "othersTab": "Others",
+        "typeSubtab": "Type",
+        "issuerSubtab": "Issuer",
+        "identificationCategory": "Identification",
+        "educationCategory": "Education",
+        "ticketsCategory": "Tickets",
+        "infoCardOption": "Info",
+        "deleteCardOption": "Delete",
+        "cancelCardOption": "Cancel",
+        "deleteDocumentHeader": "Do you want to delete ${documentName}?",
+        "deleteCredentialInstruction": "Drag the white ball into the circle to delete",
+        "cancelBtn": "Cancel",
+        "placeholderHeader": "It’s still empty",
+        "documentsPlaceholderSubheader": "You haven't saved any documents yet.\nGet one today!",
+        "othersPlaceholderHeader": "Nothing here yet",
+        "othersPlaceholderSubheader": "You haven't saved anything yet"
     },
     "CredentialRequest": {
         "header": "Incoming request",
@@ -171,6 +191,34 @@
         "acceptBtn": "Share"
     },
     "Authorization": {
-        "header": "Would you like to ${authAction}?"
+        "header": "Would you like to ${authAction}?",
+        "subheader": "%{service-name}  is now ready to grant you access",
+        "acceptBtn": "Allow"
+    },
+    "Dates": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "lastMonday": "Last Monday",
+        "lastTuesday": "Last Tuesday"
+    },
+    "History": {
+        "allTab": "All",
+        "sharedTab": "Shared",
+        "receivedTab": "Received",
+        "authenticationHeader": "Authentication",
+        "credentialOfferHeader": "Incoming offer",
+        "offerRequestStepHeader": "Offered",
+        "offerResponseStepHeader": "Selected",
+        "offerReceiveStepHeader": "Issued",
+        "authenticationRequestStepHeader": "Requested",
+        "authResponseStepHeader": "Confirmed",
+        "notFinishedStepHeader": "Not ${text}",
+        "pendingState": "Pending",
+        "expiredState": "Expired",
+        "credShareHeader": "Incoming request",
+        "credShareRequestStepHeader": "Requested",
+        "credShareResponseStepHeader": "Shared",
+        "placeholderHeader": "No history yet",
+        "placeholderSubheader": "You dont have any completed interactions yet.\nMake one today!"
     }
 }

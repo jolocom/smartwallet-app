@@ -76,7 +76,7 @@
         "emailLabel": "E-Mail",
         "phoneNumberLabel": "Telefonnummer",
         "addressLabel": "Adresse",
-        "addClaimBtn": "hinzufügen",
+        "addClaimBtn": "Hinzufügen",
         "attributesMissingInfo": "Deine Infos sehen ziemlich leer aus\nErgänze sie für die zukünftigen Anwendungen"
     },
     "BottomBar": {
@@ -97,10 +97,11 @@
         "city": "Stadt"
     },
     "CredentialForm": {
-        "header": "${attributeName} bearbeiten",
+        "editHeader": "${attributeName} bearbeiten",
         "subheader": "Sobald du auf \"Fertig\" klickst, wird es im Bereich \"Persönliche Infos\" angezeigt.",
         "closeBtn": "Abbrechen",
-        "confirmBtn": "Fertig"
+        "confirmBtn": "Fertig",
+        "addHeader": ""
     },
     "CreatePasscode": {
         "createHeader": "Passcode erstellen",
@@ -109,13 +110,17 @@
     },
     "VerifyPasscode": {
         "verifyHeader": "Passcode bestätigen",
-        "verifySubheader": "Eine zusätzliche Sicherheitsebene hilft, unerlaubten Zugriff auf deine Wallet zu verhindern"
+        "verifySubheader": "Eine zusätzliche Sicherheitsebene hilft, unerlaubten Zugriff auf deine Wallet zu verhindern",
+        "resetBtn": "Zurücksetzen"
     },
     "Biometry": {
         "header": "Verwende ${biometryType} um die Wallet zu autorisieren",
         "subheader": "So musst du deinen Passcode nicht jedes Mal bestätigen, wenn du die App öffnest",
         "activateBtn": "Zum Aktivieren antippen",
-        "skipBtn": "Überspringen"
+        "skipBtn": "Überspringen",
+        "promptFaceId": "Scanne dein Gesicht um fortzufahren",
+        "promptFingerprint": "",
+        "promptBiometrics": ""
     },
     "PasscodeRecoveryInstructions": {
         "header": "So änderst du deinen Passcode"
@@ -163,7 +168,22 @@
     },
     "Documents": {
         "documentsTab": "Dokumente",
-        "othersTab": "Sonstige"
+        "othersTab": "Sonstige",
+        "typeSubtab": "Typ",
+        "issuerSubtab": "Herausgeber",
+        "identificationCategory": "Identifikation",
+        "educationCategory": "Ausbildung",
+        "ticketsCategory": "Tickets",
+        "infoCardOption": "Info",
+        "deleteCardOption": "Löschen",
+        "cancelCardOption": "Abbrechen",
+        "deleteDocumentHeader": "Möchtest du ${documentName} löschen?",
+        "deleteCredentialInstruction": "Zum Löschen, zieh den weißen Punkt in den Kreis",
+        "cancelBtn": "Abbrechen",
+        "placeholderHeader": "Hier gibt es noch nix zu sehen",
+        "documentsPlaceholderSubheader": "Du hast noch keine Dokumente gespeichert.\nBesorg dir noch heute eins!",
+        "othersPlaceholderHeader": "Gähnende Leere",
+        "othersPlaceholderSubheader": "Du hast noch nichts gespeichert"
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -171,6 +191,34 @@
         "acceptBtn": "Teilen"
     },
     "Authorization": {
-        "header": "Möchtest du ${authAction}?"
+        "header": "Möchtest du ${authAction}?",
+        "subheader": "%{service-name} ist jetzt bereit, dir Zugang zu gewähren",
+        "acceptBtn": "Erlauben"
+    },
+    "Dates": {
+        "today": "Heute",
+        "yesterday": "Gestern",
+        "lastMonday": "Letzten Montag",
+        "lastTuesday": "Letzten Dienstag"
+    },
+    "History": {
+        "allTab": "Alle",
+        "sharedTab": "Geteilt",
+        "receivedTab": "Erhalten",
+        "authenticationHeader": "Authentifizierung",
+        "credentialOfferHeader": "Eingehende Übertragung",
+        "offerRequestStepHeader": "",
+        "offerResponseStepHeader": "",
+        "offerReceiveStepHeader": "",
+        "authenticationRequestStepHeader": "",
+        "authResponseStepHeader": "Bestätigt",
+        "notFinishedStepHeader": "Nicht ${text}",
+        "pendingState": "Ausstehend",
+        "expiredState": "Abgelaufen",
+        "credShareHeader": "Eingehende Übertragung",
+        "credShareRequestStepHeader": "Angefordert",
+        "credShareResponseStepHeader": "Freigegeben",
+        "placeholderHeader": "Noch keine Historie vorhanden",
+        "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!"
     }
 }
