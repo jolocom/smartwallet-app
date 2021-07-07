@@ -6,16 +6,18 @@ import { strings } from '~/translations'
 import Tabs from '~/components/Tabs/Tabs'
 import TabsContainer from '~/components/Tabs/Container'
 import { DocumentList } from './DocumentList'
+import useTranslation from '~/hooks/useTranslation'
 
 const Documents: React.FC = () => {
+  const { t } = useTranslation()
   const tabs = [
-    { id: CredentialCategories.document, value: strings.DOCUMENTS },
-    { id: CredentialCategories.other, value: strings.OTHER },
+    { id: CredentialCategories.document, value: t('Documents.documentsTab') },
+    { id: CredentialCategories.other, value: t('Documents.othersTab') },
   ]
 
   const subtabs = [
-    { id: 'type', value: strings.TYPE },
-    { id: 'issuer', value: strings.ISSUER },
+    { id: 'type', value: t('Documents.typeSubtab') },
+    { id: 'issuer', value: t('Documents.issuerSubtab') },
   ]
 
   return (

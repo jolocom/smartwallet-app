@@ -19,6 +19,7 @@ import {
   CredentialsByType,
   CredentialsByIssuer,
   CredentialsByCategory,
+  CredentialUITypes,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { strings } from '~/translations'
@@ -31,6 +32,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
+import { uiTypesTerms } from '~/hooks/signedCredentials/utils'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -119,6 +121,8 @@ export const DocumentList = () => {
               const { credentials, value } = d as
                 | CredentialsByType<DisplayCredentialDocument>
                 | CredentialsByIssuer<DisplayCredentialDocument>
+
+              const uiType = t(uiTypesTerms[value as CredentialUITypes])
               return (
                 <>
                   <ScreenContainer.Padding>
@@ -130,7 +134,7 @@ export const DocumentList = () => {
                         marginBottom: BP({ default: 30, xsmall: 16 }),
                       }}
                     >
-                      {`${value}  • ${credentials.length}`}
+                      {`${uiType}  • ${credentials.length}`}
                     </JoloText>
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
