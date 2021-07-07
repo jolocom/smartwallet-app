@@ -7,6 +7,7 @@ const EXPORT_URL = 'https://api.poeditor.com/v2/projects/export'
 const SECRETS_REPO = 'dev@hetz1.jolocom.io:poeditor-key'
 const API_KEY_LOCATION = `${CURRENT_PATH}/bin/poeditor-key/POEDITOR_TOKEN.txt`
 const PROJECT_ID_LOCATION = `${CURRENT_PATH}/bin/poeditor-key/POEDITOR_SW2_PROJECT_ID.txt`
+const TRANSLATIONS_LOCATION = `${CURRENT_PATH}/src/translations/`
 
 const cloneSecrets = () => {
   return new Promise((res, rej) => {
@@ -60,7 +61,7 @@ const downloadTerms = (url) => fetch(url).then((res) => res.json())
 
 const saveTerms = (name, terms) => {
   fs.writeFile(
-    `${CURRENT_PATH}/src/translations/${name}`,
+    `${TRANSLATIONS_LOCATION}/${name}`,
     JSON.stringify(terms, null, 4),
     (err) => {
       if (err) {
