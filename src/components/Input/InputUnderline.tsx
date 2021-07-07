@@ -43,7 +43,7 @@ const InputUnderline: React.FC<IInputUnderline> = React.forwardRef<
       const newValidity =
         text.length < 1
           ? InputValidityState.none
-          : validation.test(text)
+          : text.match(validation)
           ? InputValidityState.valid
           : InputValidityState.error
 
