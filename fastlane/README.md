@@ -30,6 +30,11 @@ Get API token for MS AppCenter
 fastlane sentry_auth
 ```
 Get Sentry Auth Token
+### release
+```
+fastlane release
+```
+Release the app to the Test Flight or the App Store
 
 ----
 
@@ -53,7 +58,12 @@ Build iOS application and upload to Appcenter
 ```
 fastlane ios beta
 ```
-Build iOS application for Beta release
+Build iOS application and upload to TestFlight
+### ios store
+```
+fastlane ios store
+```
+Build iOS application and upload to the App Store
 
 ----
 

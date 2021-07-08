@@ -47,6 +47,25 @@ lane :sentry_auth do
   sh("cp ./sentry-auth/sentry2.properties ../android/sentry.properties")
 end
 
+desc "Release the app to the Test Flight or the App Store"
+lane :release do |options|
+  sentry_auth
+  get_appstoreconnect_api_key
+  match(type: 'appstore')
+  build_app(
+    scheme: "SmartWallet",
+    workspace: './ios/SmartWallet.xcworkspace',
+    export_method: 'app-store',
+    include_bitcode: false,
+  )
+  case options[:target]
+  when "release"
+    upload_to_app_store
+  when "beta"
+    upload_to_testflight
+  end
+end
+
 
 # lanes for ios building, signing and deployment
 platform :ios do 
@@ -84,18 +103,16 @@ platform :ios do
 
   desc 'Build iOS application and upload to TestFlight'
   lane :beta do
-    sentry_auth
-    get_appstoreconnect_api_key
-    match(type: 'appstore')
-    build_app(
-      scheme: "SmartWallet",
-      workspace: './ios/SmartWallet.xcworkspace',
-      export_method: 'app-store',
-      include_bitcode: false,
-    )
-    upload_to_testflight
+    release(target: "beta")
   end
-  
+
+  desc 'Build iOS application and upload to the App Store'
+  lane :store do
+    #ensure_git_branch(branch: 'master')
+    #ensure_git_status_clean
+    release(target: "release")
+  end
+
 end
 
 # lanes for android building, signing and deployment
