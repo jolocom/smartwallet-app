@@ -49,6 +49,11 @@ Fetch certificates. Build the iOS application.
 fastlane ios alpha
 ```
 Build iOS application and upload to Appcenter
+### ios beta
+```
+fastlane ios beta
+```
+Build iOS application for Beta release
 
 ----
 
