@@ -31,14 +31,15 @@ const concat = (mapFn: (e: AttributeI<Map<ClaimKeys, ClaimEntry>>['value'], type
   }
 }
 export const concatValuesIdentity = concat((attributeValue: AttributeI<Map<ClaimKeys, ClaimEntry>>['value'], type: AttributeTypes) => {
-  return Array.from(attributeValue.values()).reduce((acc, v, idx, array) => {
-    if(type === AttributeTypes.postalAddress) {
-      acc += v ? v.toString() + `${array.length - 1 === idx ? '' : ', '}` : ''
-    } else {
+  // NOTE: address returns an array to allow line break for each value 
+  if(type === AttributeTypes.postalAddress) {
+    return Array.from(attributeValue.values()).map(v => (v ? v.toString() : ''));
+  } else {
+    return Array.from(attributeValue.values()).reduce((acc, v) => {
       acc += v + ' '
-    }
-    return acc;
-  }, '')
+      return acc;
+    }, '')
+  }
 })
 
 export const concatValuesShare = concat((attributeValue: AttributeI<Map<ClaimKeys, ClaimEntry>>['value'], type: AttributeTypes) => {
