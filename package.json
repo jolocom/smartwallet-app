@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "0.0.1.020",
+  "version": "1.12.0",
 
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "ios:xcode": "open ./ios/SmartWallet.xcworkspace",
     "alpha:ios": "bundle exec fastlane ios alpha",
     "alpha:android": "bundle exec fastlane android alpha",
+    "beta:ios": "bundle exec fastlane ios beta",
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts? --coverageDirectory=coverage",
     "test": "jest",
