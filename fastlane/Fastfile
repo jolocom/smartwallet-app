@@ -199,4 +199,10 @@ platform :android do
     upload(target: 'beta')
   end
 
+  desc "Submit a new Release Build to Play Store"
+  lane :beta do
+    build
+    upload(target: 'release')
+  end
+
 end
