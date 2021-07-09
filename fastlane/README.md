@@ -30,6 +30,16 @@ Get API token for MS AppCenter
 fastlane sentry_auth
 ```
 Get Sentry Auth Token
+### release
+```
+fastlane release
+```
+Release the app to the Test Flight or the App Store
+### upload
+```
+fastlane upload
+```
+
 
 ----
 
@@ -49,20 +59,45 @@ Fetch certificates. Build the iOS application.
 fastlane ios alpha
 ```
 Build iOS application and upload to Appcenter
+### ios beta
+```
+fastlane ios beta
+```
+Build iOS application and upload to TestFlight
+### ios store
+```
+fastlane ios store
+```
+Build iOS application and upload to the App Store
 
 ----
 
 ## Android
+### android get_secrets
+```
+fastlane android get_secrets
+```
+Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password
 ### android build
 ```
 fastlane android build
 ```
-Build the Android application
+
 ### android alpha
 ```
 fastlane android alpha
 ```
 Build Android application and upload to Appcenter
+### android beta
+```
+fastlane android beta
+```
+Submit a new Beta Build to Play Store
+### android release
+```
+fastlane android release
+```
+Submit a new Release Build to Play Store
 
 ----
 
