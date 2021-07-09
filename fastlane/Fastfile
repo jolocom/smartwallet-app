@@ -115,17 +115,66 @@ platform :ios do
 
 end
 
+
+lane :upload do |options|
+  case options[:target]
+  when 'release'
+    upload_to_play_store
+  when 'beta'
+    upload_to_play_store(track: 'beta')
+  end
+end
+
 # lanes for android building, signing and deployment
 platform :android do
-
-  desc 'Build the Android application'
-  lane :build do
-    build_android_app(
-      task: 'assemble',
-      build_type: 'Release',
-      gradle_path: './gradlew',
-      project_dir: './android'
+  desc "Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password"
+  lane :get_secrets do
+    begin
+      sh("git clone git@infra.jolocom.io:android-secrets")
+    rescue
+      puts "secrets already present"
+    end
+    password = prompt(
+      # password is in notion
+      text: "password: ",
+      secure_text: true
     )
+    sh(
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out ../key.json -k #{password} -md md5",
+      log: false
+    )
+    sh(
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/keystorePass.enc -k #{password} -md md5",
+      log: false
+    )
+  end
+
+  lane :build do |options|
+    releaseFilePath = File.join(Dir.pwd, "android-secrets", "JoloSmartWallet.keystore")
+    #build_android_app(task: 'clean')
+    sentry_auth
+    if options[:local]
+      build_android_app(
+        task: 'assemble',
+        build_type: 'Staging',
+        print_command: false,
+      )
+    else
+      keyPass = get_secrets.strip
+      build_android_app(
+        task: 'assemble',
+        build_type: 'Release',
+        project_dir: './android',
+        gradle_path: './gradlew',
+        print_command: true,
+        properties: {
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => keyPass,
+          "android.injected.signing.key.alias" => "JoloSmartWallet",
+          "android.injected.signing.key.password" => keyPass,
+        }
+      )
+    end
   end
 
   desc 'Build Android application and upload to Appcenter'
@@ -142,4 +191,12 @@ platform :android do
       notify_testers: true
     )
   end
+
+
+  desc "Submit a new Beta Build to Play Store"
+  lane :beta do
+    build
+    upload(target: 'beta')
+  end
+
 end
