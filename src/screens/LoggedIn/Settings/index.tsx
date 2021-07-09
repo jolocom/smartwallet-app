@@ -64,7 +64,8 @@ const SettingsGeneral: React.FC = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
-        <Section>
+        {/* NOTE: commenting out till translations are available */}
+        {/* <Section>
           <Section.Title>{strings.APP_PREFERENCES}</Section.Title>
           <Section.Block>
             <Option
@@ -74,7 +75,7 @@ const SettingsGeneral: React.FC = () => {
               <Option.RightIcon />
             </Option>
           </Section.Block>
-        </Section>
+        </Section> */}
 
         <Section>
           <Section.Title>{strings.SECURITY}</Section.Title>
@@ -86,7 +87,8 @@ const SettingsGeneral: React.FC = () => {
               <Option.RightIcon />
             </Option>
             <EnableBiometryOption />
-            <Option
+            {/* NOTE: commenting out till backup feature is ready  */}
+            {/* <Option
               onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
             >
               <View style={{ alignItems: 'flex-start' }}>
@@ -106,7 +108,7 @@ const SettingsGeneral: React.FC = () => {
                   </JoloText>
                 )}
               </View>
-            </Option>
+            </Option> */}
           </Section.Block>
         </Section>
 

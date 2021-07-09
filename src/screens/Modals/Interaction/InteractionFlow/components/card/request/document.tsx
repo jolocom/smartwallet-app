@@ -59,7 +59,9 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
           <HeaderContainer
             customStyles={{ flex: highlight || !properties.length ? 0 : 0.5 }}
           >
-            <CredentialName numberOfLines={1}>{name}</CredentialName>
+            <CredentialName numberOfLines={1}>
+              {!!name.length ? name : strings.UNKNOWN}
+            </CredentialName>
             {holderName && (
               <ResponsiveCard.HolderName>
                 {holderName}

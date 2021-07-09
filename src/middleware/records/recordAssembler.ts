@@ -13,6 +13,7 @@ import {
 import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
+import { strings } from '~/translations'
 
 interface IRecordAssembler {
   messageTypes: string[]
@@ -135,13 +136,19 @@ export class RecordAssembler {
                * happening in RecordStep || RecordFinalStep
                * components to enable translations
                */
-              .map((s) => s.credential?.name)
+              .map((s) =>
+                s.credential?.name?.length
+                  ? s.credential?.name
+                  : strings.UNKNOWN,
+              )
               .join(', '),
           }
         case InteractionType.CredentialsReceive:
           return {
             title: this.getFinishedStepTitle(i),
-            description: state.issued.map((c) => c.name).join(', '),
+            description: state.issued
+              .map((c) => (c.name.length ? c.name : strings.UNKNOWN))
+              .join(', '),
           }
         default:
           throw new Error('Wrong interaction type for flow')
@@ -160,8 +167,8 @@ export class RecordAssembler {
 
         const displayCreds = areCredsSupplied
           ? state.providedCredentials[0].suppliedCredentials
-              .map((c) => c.name)
-              .join(',  ')
+              .map((c) => (!!c.name.length ? c.name : strings.UNKNOWN))
+              .join(', ')
           : requestedCreds
 
         switch (type) {
