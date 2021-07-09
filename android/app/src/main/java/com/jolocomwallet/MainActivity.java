@@ -1,4 +1,4 @@
-package com.smartwallet;
+package com.jolocomwallet;
 
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "SmartWallet";
+    return "JolocomWallet";
   }
 
   @Override
