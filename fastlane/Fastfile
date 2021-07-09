@@ -156,8 +156,10 @@ platform :android do
     if options[:local]
       build_android_app(
         task: 'assemble',
-        build_type: 'Staging',
+        build_type: 'Release',
         print_command: false,
+        project_dir: './android',
+        gradle_path: './gradlew',
       )
     else
       keyPass = get_secrets.strip
@@ -180,7 +182,7 @@ platform :android do
   desc 'Build Android application and upload to Appcenter'
   lane :alpha do
     sentry_auth
-    build
+    build(local: true)
     api_token = get_appcenter_token.strip
     appcenter_upload(
       api_token: api_token,
