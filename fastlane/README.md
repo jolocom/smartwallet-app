@@ -25,9 +25,9 @@ Load the App Store Connect API token
 fastlane get_appcenter_token
 ```
 Get API token for MS AppCenter
-### upload
+### sentry_auth
 ```
-fastlane upload
+fastlane sentry_auth
 ```
 Get Sentry Auth Token
 ### release
@@ -35,6 +35,11 @@ Get Sentry Auth Token
 fastlane release
 ```
 Release the app to the Test Flight or the App Store
+### upload
+```
+fastlane upload
+```
+
 
 ----
 
@@ -68,11 +73,6 @@ Build iOS application and upload to the App Store
 ----
 
 ## Android
-### android sentry_auth
-```
-fastlane android sentry_auth
-```
-Get Sentry Auth Token
 ### android get_secrets
 ```
 fastlane android get_secrets
@@ -93,6 +93,11 @@ Build Android application and upload to Appcenter
 fastlane android beta
 ```
 Submit a new Beta Build to Play Store
+### android release
+```
+fastlane android release
+```
+Submit a new Release Build to Play Store
 
 ----
 
