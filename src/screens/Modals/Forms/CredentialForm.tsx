@@ -172,7 +172,7 @@ const CredentialForm = () => {
                   ? 'CredentialForm.editHeader'
                   : 'CredentialForm.addHeader',
                 // @ts-ignore FIXME @terms
-                { attributeName: t(formConfig.label) },
+                { attributeName: t(formConfig.label).toString().toLowerCase() },
               ) as string
             }
             description={t('CredentialForm.subheader')}

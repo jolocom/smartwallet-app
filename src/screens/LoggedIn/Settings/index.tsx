@@ -64,7 +64,6 @@ const SettingsGeneral: React.FC = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
       >
-        {/* NOTE: commenting out till translations are available */}
         <Section>
           <Section.Title>{strings.APP_PREFERENCES}</Section.Title>
           <Section.Block>

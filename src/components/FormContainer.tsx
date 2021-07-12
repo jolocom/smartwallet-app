@@ -57,7 +57,7 @@ const FormContainer: React.FC<Props> = ({
             {t('CredentialForm.closeBtn')}
           </JoloText>
         </TouchableOpacity>
-        <View style={{ paddingHorizontal: 8 }}>
+        <View style={{ paddingHorizontal: 8, flex: 1 }}>
           <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
         </View>
         <TouchableOpacity
