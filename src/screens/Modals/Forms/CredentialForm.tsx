@@ -135,6 +135,7 @@ const CredentialForm = () => {
           if (!errors[Object.keys(values)[0]]) {
             setFieldError(
               Object.keys(values)[0],
+              // FIXME @terms add to poeditor
               strings.ERROR_ATTRIBUTE_ALREADY_EXISTS,
             )
           }
