@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import {
   View,
-  useWindowDimensions,
   Dimensions,
   StyleSheet,
   TouchableHighlight,
@@ -34,13 +33,13 @@ import { useIsFocused } from '@react-navigation/core'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
+import { SCREEN_HEIGHT } from '~/utils/dimensions'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 
 const Camera = () => {
   const { t } = useTranslation()
-  const { height } = useWindowDimensions()
   const { errorScreen } = useErrors()
   const startInteraction = useInteractionStart()
   const isScreenFocused = useIsFocused()
@@ -139,7 +138,7 @@ const Camera = () => {
             reactivate={true}
             reactivateTimeout={3000}
             fadeIn
-            cameraStyle={{ height }}
+            cameraStyle={{ height: SCREEN_HEIGHT }}
             cameraProps={{
               captureAudio: false,
               flashMode: isTorchPressed

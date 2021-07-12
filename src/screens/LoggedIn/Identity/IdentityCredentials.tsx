@@ -21,8 +21,11 @@ import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
 import { useSICActions } from '~/hooks/attributes'
 import BP from '~/utils/breakpoints'
-import { ClaimValues } from '~/modules/attributes/types'
 import useTranslation from '~/hooks/useTranslation'
+import {
+  concatValuesIdentity,
+  getAttributeValueBasedOnConfig,
+} from '~/utils/attributeUtils'
 
 const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
   return attributeConfig
@@ -30,22 +33,11 @@ const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
-const getFormattedValue = (value: ClaimValues, type: AttributeTypes) => {
-  /**
-   * NOTE: this is to allocate 4 lines for address attribute type
-   */
-  switch (type) {
-    case AttributeTypes.postalAddress:
-      return Object.values(value).map((v) => (v ? v.toString() : ''))
-    default:
-      return Object.values(value).join(' ')
-  }
-}
-
 const IdentityCredentials = () => {
   const { t } = useTranslation()
   const redirect = useRedirect()
   const attributes = useSelector(getAttributes)
+
   const { handleDeleteCredentialSI } = useSICActions()
 
   useLayoutEffect(() => {
@@ -76,8 +68,11 @@ const IdentityCredentials = () => {
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
         {primitiveAttributesWithValues.map(({ type, label, values }) => {
+          const concatValues = getAttributeValueBasedOnConfig(type, values).map(
+            (value) => concatValuesIdentity(type, value),
+          )
           const hideCreateNew =
-            type === AttributeTypes.name && values.length > 0
+            type === AttributeTypes.name && concatValues.length > 0
           return (
             <View style={styles.group} key={type}>
               <Widget
@@ -88,13 +83,13 @@ const IdentityCredentials = () => {
                   <Widget.Header.Name value={t(label) as string} />
                   {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>
-                {values.length ? (
-                  values.map((field) => (
+                {concatValues.length ? (
+                  concatValues.map((field) => (
                     <IdentityField
                       key={field.id}
                       id={field.id}
                       type={type}
-                      value={getFormattedValue(field.value, type)}
+                      value={field.value as string}
                       onDelete={() => handleDeleteCredentialSI(field.id, type)}
                     />
                   ))
