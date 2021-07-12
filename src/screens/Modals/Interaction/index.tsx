@@ -8,9 +8,10 @@ import { ScreenNames } from '~/types/screens'
 import Scanner from '~/screens/Modals/Interaction/Scanner'
 import { useSelector } from 'react-redux'
 import { getInteractionType } from '~/modules/interaction/selectors'
-import { useNavigation } from '@react-navigation/native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import InteractionFlow from '~/screens/Modals/Interaction/InteractionFlow'
 import { screenDisableGestures } from '~/utils/screenSettings'
+import { MainStackParamList } from '~/screens/LoggedIn/Main'
 
 export type InteractionStackParamList = {
   [ScreenNames.Scanner]: undefined
@@ -30,6 +31,9 @@ const Interactions: React.FC = () => {
   const isInteracting = useSelector(getInteractionType)
   const navigation = useNavigation()
 
+  const { params } =
+    useRoute<RouteProp<MainStackParamList, ScreenNames.Interaction>>()
+
   useEffect(() => {
     if (isInteracting) {
       navigation.navigate(ScreenNames.InteractionFlow)
@@ -42,7 +46,9 @@ const Interactions: React.FC = () => {
       mode="modal"
       screenOptions={screenDisableGestures}
     >
-      <Stack.Screen name={ScreenNames.Scanner} component={Scanner} />
+      {params.isScannerShown ? (
+        <Stack.Screen name={ScreenNames.Scanner} component={Scanner} />
+      ) : null}
       <Stack.Screen
         options={modalStyleOptions}
         name={ScreenNames.InteractionFlow}

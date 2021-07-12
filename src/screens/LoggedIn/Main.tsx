@@ -37,6 +37,7 @@ import {
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import CollapsibleClone from './Settings/Development/CollapsibleClone'
+import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -59,7 +60,9 @@ const TransparentModals = () => {
 }
 
 export type MainStackParamList = {
-  [ScreenNames.Interaction]: undefined
+  [ScreenNames.Interaction]: {
+    isScannerShown: true
+  }
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
@@ -79,6 +82,7 @@ export type MainStackParamList = {
     photo?: string
   }
   // DEV
+  [ScreenNames.InteractionPasteTest]: undefined
   [ScreenNames.ButtonsTest]: undefined
   [ScreenNames.CollapsibleTest]: undefined
   [ScreenNames.LoaderTest]: undefined
@@ -170,6 +174,11 @@ const Main: React.FC = () => {
 
           {__DEV__ && (
             <>
+              <MainStack.Screen
+                name={ScreenNames.InteractionPasteTest}
+                component={InteractionPasteTest}
+                options={screenTransitionSlideFromRight}
+              />
               <MainStack.Screen
                 name={ScreenNames.ButtonsTest}
                 component={ButtonsTest}
