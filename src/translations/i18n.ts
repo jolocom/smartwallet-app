@@ -29,6 +29,7 @@ const getSystemLng = () => {
 i18n.use(initReactI18next).init({
   fallbackLng: Locales.en,
   debug: __DEV__,
+  returnEmptyString: false,
   lng: getSystemLng(),
   interpolation: {
     prefix: '${',

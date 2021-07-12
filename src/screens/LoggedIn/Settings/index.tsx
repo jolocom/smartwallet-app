@@ -65,7 +65,7 @@ const SettingsGeneral: React.FC = () => {
         overScrollMode="never"
       >
         {/* NOTE: commenting out till translations are available */}
-        {/* <Section>
+        <Section>
           <Section.Title>{strings.APP_PREFERENCES}</Section.Title>
           <Section.Block>
             <Option
@@ -75,7 +75,7 @@ const SettingsGeneral: React.FC = () => {
               <Option.RightIcon />
             </Option>
           </Section.Block>
-        </Section> */}
+        </Section>
 
         <Section>
           <Section.Title>{strings.SECURITY}</Section.Title>
