@@ -8,6 +8,7 @@ import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import useConnection from '~/hooks/connection'
+import useTranslation from '~/hooks/useTranslation'
 
 interface Props {
   onSubmit: () => Promise<any> | any
@@ -23,6 +24,7 @@ const InteractionFooter: React.FC<Props> = ({
   disableLoader = false,
   submitLabel,
 }) => {
+  const { t } = useTranslation()
   const loader = useLoader()
   const finishInteraction = useFinishInteraction()
   const { connected } = useConnection()
@@ -62,7 +64,7 @@ const InteractionFooter: React.FC<Props> = ({
             customContainerStyles={styles.cancelBtn}
             withoutMargins
           >
-            {strings.IGNORE}
+            {t('Interaction.cancelBtn')}
           </Btn>
         </View>
       </View>
