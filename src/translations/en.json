@@ -27,7 +27,7 @@
     },
     "OnboardingBackup": {
         "header": "Upload backup file?",
-        "instruction": "Drag the ball to start",
+        "instruction": "Drag the ball into the circle to start",
         "skipBtn": "I don't have it"
     },
     "RecoveryInfo": {
@@ -74,7 +74,7 @@
         "header": "Your info",
         "nameLabel": "Name",
         "emailLabel": "Email",
-        "phoneNumberLabel": "Number",
+        "phoneNumberLabel": "Phone number",
         "addressLabel": "Address",
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases"
@@ -220,5 +220,112 @@
         "credShareResponseStepHeader": "Shared",
         "placeholderHeader": "No history yet",
         "placeholderSubheader": "You dont have any completed interactions yet.\nMake one today!"
+    },
+    "Settings": {
+        "preferencesSection": "App preferences",
+        "notificationsBlock": "Notifications",
+        "languageBlock": "Language",
+        "securitySection": "Security",
+        "changePasscodeBlock": "Change passcode",
+        "biometricsBlock": "Use Biometrics to log in",
+        "backupBlock": "Backup identity",
+        "backupBlockWarning": "Your documents run the risk of being irreversibly lost",
+        "generalSection": "General",
+        "faqBlock": "FAQ",
+        "contactUsBlock": "Contact us",
+        "rateBlock": "Rate us",
+        "aboutBlock": "About",
+        "imprintBlock": "Imprint",
+        "deleteDataInfo": "If you want to start fresh and erase all data related to this wallet’s identity ",
+        "deleteDataBtn": "click here"
+    },
+    "Language": {
+        "english": "English",
+        "german": "German",
+        "dutch": "Dutch"
+    },
+    "BackupOptions": {
+        "header": "Backup options",
+        "exportHeader": "Backup your data",
+        "exportSubheader": "Download an encrypted copy of the data in your SmartWallet to your device. Make sure to keep your backups up-to-date and stored somewhere safe",
+        "exportBtn": "Export backup file",
+        "importHeader": "Restore your data",
+        "importSubheader": "In case you deleted something important by mistake. Only possible if backup was created using this wallet",
+        "importBtn": "Import file",
+        "lastBackupInfo": "Last backup"
+    },
+    "FAQ": {
+        "header": "Popular questions",
+        "header_q1": "What happens if my phone gets lost or stolen?",
+        "subheader_q1": "You can regain control over your wallet using the secret phrase created during setup of your SmartWallet. This will not recover any documents or other information stored in a wallet on a lost device. We highly recommend making backups of your SmartWallet (via the settings menu) in order to safeguard the contents of your wallet.",
+        "header_q2": "Who access to my data?",
+        "subheader_q2": "All your data is stored and managed on your device. You are in full control over who gets access to information. Jolocom has no access to the data on your device nor does anybody else without your permission. In case you grant access to information to another party, like your driver’s’ license in our car sharing company example, you can always see what you shared with them and request them to delete your information. In fact, you can always quickly and easily check which service has access to which data. This provides you with an instant overview over your connections.",
+        "header_q3": "Are Jolocom identities and the SmartWallet GDPR-compliant?",
+        "subheader_q3": "Emphatically, YES. Jolocom identities, the SmartWallet, and all our products are designed to prioritize the integrity, privacy, and security of user data. The wallet as well as the protocol for creating identities and sharing identity information are fully GDPR-compliant.",
+        "header_q4": "What can the SmartWallet do?",
+        "subheader_q4": "The SmartWallet is an application designed by Jolocom that lets you manage data related to your identity — like your email address, phone number, or ID card.\nYour wallet holds documents and other digital contents which you can exchange and share with services at the press of a button."
+    },
+    "About": {
+        "versionInfo": "You are running version ${version}"
+    },
+    "Terms of Service": {
+        "header": "Terms of Service"
+    },
+    "ChangePasscode": {
+        "wrongCodeHeader": "Wrong code",
+        "currentHeader": "Current passcode",
+        "successHeader": "Passcode changed!"
+    },
+    "ContactUs": {
+        "issueOption_1": "Possible partnership with Jolocom",
+        "issueOption_2": "Issues with the application",
+        "issueOption_3": "I lost my wallet",
+        "issueOption_4": "How to become a part of the project?",
+        "issueOption_5": "Other",
+        "issueHeader": "What are we going to talk about?",
+        "issuePlaceholder": "Select an option",
+        "suggestionHeader": "Anything specific to mention?",
+        "suggestionSubheader": "Dare to suggest you have something to tell us, so we will \nbe prepared for the future conversations",
+        "suggestionPlaceholder": "Tap to write …",
+        "contactHeader": "Want to get in touch?",
+        "contactPlaceholder": "Write your email here …",
+        "contactInputInfo": "We do not store data and do not spam",
+        "submitBtn": "Send"
+    },
+    "EraseData": {
+        "dialogTitle": "Are you sure?",
+        "dialogMessage": "Please pay attention that deleted data cannot be recovered in the future",
+        "submitBtn": "I understand",
+        "cancelBtn": "Cancel"
+    },
+    "Errors": {
+        "unknownTitle": "Unknown error",
+        "unknownMessage": "And if this is not the first time, we’d appreciate you letting us know",
+        "reportBtn": "Submit Report",
+        "closeBtn": "Close",
+        "crashTitle": "System crash",
+        "crashMessage": "But don’t worry - your data is safe and nothing will be lost",
+        "restartBtn": "Restart Application"
+    },
+    "ErrorReporting": {
+        "issueHeader": "Tell us the problem",
+        "issuePlaceholder": "Choose related topic",
+        "detailsHeader": "Anything specific to mention?",
+        "detailsSubheader": "If the problem is not listed - the space below is the best place to describe it",
+        "logsHeader": "Include your logs",
+        "logsSubheader": "This includes certain private metadata info (like file sizes — but not personal information) and will help developers fix bugs more quickly",
+        "contactHeader": "Want to get in touch?",
+        "contactInputInfo": "We do not store data and do not spam. Any user information will be deleted immediately after solving the problem",
+        "rateHeader": "Rate this issue",
+        "submitBtn": "Submit report",
+        "contactInputError": "Please enter a valid email or phone number",
+        "issueOption_1": "No internet connection",
+        "issueOption_2": "The app keeps crashing",
+        "issueOption_3": "Can’t login",
+        "issueOption_4": "Backup is empty",
+        "issueOption_5": "Problems with the interface",
+        "issueOption_6": "Something doesn't seem right",
+        "issueOption_7": "Other",
+        "contactPlaceholder": "Write your email here …"
     }
 }

@@ -10,7 +10,7 @@
         "descriptionThree": "Halte alle deine Informationen gesichert und in den richtigen Händen - also in deinen"
     },
     "TermsConsent": {
-        "header": "SmartWallet Vorstellung \nAllgemeine Geschäftsbedingungen und Datenschutzerklärung (or short: AGBs und Datenschutz)"
+        "header": "SmartWallet Vorstellung der AGBs und Datenschutz"
     },
     "Recovery": {
         "header": "Wiederherstellung",
@@ -27,7 +27,7 @@
     },
     "OnboardingBackup": {
         "header": "Backup hochladen?",
-        "instruction": "Zieh den Ball zum Starten",
+        "instruction": "Zieh den weißen Punkt in den Kreis zum Starten",
         "skipBtn": "Ich hab keins"
     },
     "RecoveryInfo": {
@@ -65,7 +65,7 @@
     },
     "Identity": {
         "widgetWelcome": "Es ist Zeit, deine erste Digitale Identität zu erstellen",
-        "widgetStartBtn": "Start",
+        "widgetStartBtn": "Jetzt loslegen",
         "widgetNameHeader": "Wie heißt du?",
         "widgetConfirmBtn": "Erstellen",
         "widgetBusinessCardNameHeader": "Stell dich bitte vor",
@@ -101,7 +101,7 @@
         "subheader": "Sobald du auf \"Fertig\" klickst, wird es im Bereich \"Persönliche Infos\" angezeigt.",
         "closeBtn": "Abbrechen",
         "confirmBtn": "Fertig",
-        "addHeader": ""
+        "addHeader": "Füge deinen ${attributeName, smallcase} hinzu"
     },
     "CreatePasscode": {
         "createHeader": "Passcode erstellen",
@@ -119,8 +119,8 @@
         "activateBtn": "Zum Aktivieren antippen",
         "skipBtn": "Überspringen",
         "promptFaceId": "Scanne dein Gesicht um fortzufahren",
-        "promptFingerprint": "",
-        "promptBiometrics": ""
+        "promptFingerprint": "Scanne deinen Fingerabdruck auf dem Gerätescanner um fortzufahren",
+        "promptBiometrics": "Biometrische Daten bereitstellen um fortzufahren"
     },
     "PasscodeRecoveryInstructions": {
         "header": "So änderst du deinen Passcode"
@@ -135,10 +135,10 @@
         "confirmBtn": "Antippen um die Kamera zu aktivieren"
     },
     "Camera": {
-        "details": "Das geht ganz automatisch, platziere einfach dein Handy über dem Code",
+        "details": "Platziere einfach dein Handy über dem Code, der Rest geht ganz automatisch",
         "errorMsg": "Sieht so aus, als können wir diesen Service nicht anbieten.",
         "localNetworkMessage": "Um Geräte im lokalen Netzwerk zu aktivieren, erlaube bitte den Zugriff für die SmartWallet",
-        "localNetworkBtn_long": "Antippen zum Verwalten",
+        "localNetworkBtn_long": "Zum Verwalten antippen",
         "localNetworkBtn_short": "Verwalten"
     },
     "CredentialShare": {
@@ -155,7 +155,7 @@
         "invalidDocsToastSubheader": "Keines der von ${serviceName} gesendeten Dokumente konnte gespeichert werden",
         "header": "Eingehende Übertragung",
         "subheader": "${serviceName} hat deiner Wallet das/die folgende(n) Dokument(e) geschickt:",
-        "cardInfoHeader": "Enthaltene Infos:",
+        "cardInfoHeader": "Enthaltene Info:",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren"
     },
@@ -203,14 +203,14 @@
     },
     "History": {
         "allTab": "Alle",
-        "sharedTab": "Geteilt",
+        "sharedTab": "Freigegeben",
         "receivedTab": "Erhalten",
         "authenticationHeader": "Authentifizierung",
         "credentialOfferHeader": "Eingehende Übertragung",
-        "offerRequestStepHeader": "",
-        "offerResponseStepHeader": "",
-        "offerReceiveStepHeader": "",
-        "authenticationRequestStepHeader": "",
+        "offerRequestStepHeader": "Angeboten",
+        "offerResponseStepHeader": "Ausgewählt",
+        "offerReceiveStepHeader": "Ausgestellt",
+        "authenticationRequestStepHeader": "Angefordert",
         "authResponseStepHeader": "Bestätigt",
         "notFinishedStepHeader": "Nicht ${text}",
         "pendingState": "Ausstehend",
@@ -220,5 +220,112 @@
         "credShareResponseStepHeader": "Freigegeben",
         "placeholderHeader": "Noch keine Historie vorhanden",
         "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!"
+    },
+    "Settings": {
+        "preferencesSection": "App Einstellungen",
+        "notificationsBlock": "Benachrichtigungen",
+        "languageBlock": "Sprache",
+        "securitySection": "Sicherheit",
+        "changePasscodeBlock": "Passcode ändern",
+        "biometricsBlock": "Biometrie zum Einloggen verwenden",
+        "backupBlock": "Backup Identität",
+        "backupBlockWarning": "Deine Dokumente laufen Gefahr, unwiederbringlich verloren zu gehen",
+        "generalSection": "Allgemein",
+        "faqBlock": "FAQ",
+        "contactUsBlock": "Kontaktiere uns",
+        "rateBlock": "Bewerte uns",
+        "aboutBlock": "Über uns",
+        "imprintBlock": "Impressum",
+        "deleteDataInfo": "Wenn du neu anfangen und alle Daten löschen willst, die mit der Identität dieser Wallet zusammenhängen, ",
+        "deleteDataBtn": "klicke hier"
+    },
+    "Language": {
+        "english": "Englisch",
+        "german": "Deutsch",
+        "dutch": "Holländisch"
+    },
+    "BackupOptions": {
+        "header": "Backup Optionen",
+        "exportHeader": "Sichere deine Daten",
+        "exportSubheader": "Lade eine verschlüsselte Kopie der Daten in deiner SmartWallet auf dein Gerät herunter. Achte darauf, deine Backups aktuell zu halten und an einem sicheren Ort aufzubewahren",
+        "exportBtn": "Backup-Datei exportieren",
+        "importHeader": "Daten wiederherstellen",
+        "importSubheader": "Für den Fall, dass du aus Versehen etwas Wichtiges gelöscht hast. Nur möglich, wenn das Backup mit dieser Wallet erstellt wurde",
+        "importBtn": "Datei importieren",
+        "lastBackupInfo": "Letztes Backup"
+    },
+    "FAQ": {
+        "header": "Beliebte Fragen",
+        "header_q1": "Was passiert, wenn mein Telefon verliere oder es gestohlen wird?",
+        "subheader_q1": "Du kannst die Kontrolle über deine Wallet wiedererlangen, indem du die geheime Phrase verwendest, die du während der Einrichtung deines SmartWallet erstellt hast. Dies wird keine Dokumente oder andere Informationen wiederherstellen, die in einer Wallet auf einem verlorenen Gerät gespeichert sind. Wir empfehlen dir dringend, Backups deiner SmartWallet zu erstellen (über das Einstellungsmenü), um den Inhalt deiner Wallet zu schützen.",
+        "header_q2": "Wer hat Zugriff auf meine Daten?",
+        "subheader_q2": "Alle deine Daten werden auf deinem Gerät gespeichert und verwaltet. Du hast die volle Kontrolle darüber, wer Zugang zu den Informationen erhält. Jolocom hat keinen Zugriff auf die Daten auf deinem Gerät, noch hat irgendjemand anderes ohne deine Erlaubnis Zugriff darauf. Falls du einer anderen Partei Zugriff auf Informationen gewährst, wie z.B. deinen Führerschein in unserem Carsharing-Unternehmensbeispiel, kannst du jederzeit sehen, was du mit ihnen geteilt hast und sie bitten, deine Informationen zu löschen. Tatsächlich kannst du immer schnell und einfach überprüfen, welcher Dienst Zugriff auf welche Daten hat. So erhältst du einen sofortigen Überblick über deine Verbindungen.",
+        "header_q3": "Sind die Jolocom Identitäten und das SmartWallet GDPR-konform?",
+        "subheader_q3": "JA, absolut. Jolocom Identitäten, die SmartWallet und alle unsere Produkte sind so konzipiert, dass die Integrität, die Privatsphäre und die Sicherheit der Nutzerdaten im Vordergrund stehen. Sowohl die Wallet als auch das Protokoll zur Erstellung von Identitäten und zum Austausch von Identitätsinformationen sind vollständig GDPR-konform.",
+        "header_q4": "Was kann das SmartWallet?",
+        "subheader_q4": "Die SmartWallet ist eine von Jolocom entwickelte Anwendung, mit der du Daten verwalten kannst, die mit deiner Identität zusammenhängen - wie deine E-Mail-Adresse, Telefonnummer oder deinen Personalausweis.\nDeine Wallet enthält Dokumente und andere digitale Inhalte, die du per Knopfdruck mit Diensten austauschen und teilen kannst."
+    },
+    "About": {
+        "versionInfo": "Du benutzt die Version ${version}"
+    },
+    "Terms of Service": {
+        "header": "AGBs"
+    },
+    "ChangePasscode": {
+        "wrongCodeHeader": "Falscher Code",
+        "currentHeader": "Aktueller Passcode",
+        "successHeader": "Passcode geändert!"
+    },
+    "ContactUs": {
+        "issueOption_1": "Mögliche Partnerschaft mit Jolocom",
+        "issueOption_2": "Probleme mit der Anwendung",
+        "issueOption_3": "Ich habe meine Wallet verloren",
+        "issueOption_4": "Wie kann man Teil des Projekts werden?",
+        "issueOption_5": "Sonstiges",
+        "issueHeader": "Worüber werden wir sprechen?",
+        "issuePlaceholder": "Wähle eine Option aus",
+        "suggestionHeader": "Gibt es etwas Konkretes zu sagen?",
+        "suggestionSubheader": "Trau dich uns zu sagen, was du auf dem Herzen hast – damit sind wir für die zukünftigen Gespräche vorbereitet",
+        "suggestionPlaceholder": "Zum schreiben antippen ...",
+        "contactHeader": "Willst du Kontakt aufnehmen?",
+        "contactPlaceholder": "Trag deine E-Mail hier ein ...",
+        "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam",
+        "submitBtn": "Senden"
+    },
+    "EraseData": {
+        "dialogTitle": "Bist du sicher?",
+        "dialogMessage": "Bitte beachte, dass gelöschte Daten in Zukunft nicht wiederhergestellt werden können",
+        "submitBtn": "Ich habe verstanden",
+        "cancelBtn": "Abbrechen"
+    },
+    "Errors": {
+        "unknownTitle": "Unbekannter Fehler",
+        "unknownMessage": "Und wenn es nicht das erste Mal ist, würden wir uns freuen, wenn du uns das mitteilst",
+        "reportBtn": "Bericht senden",
+        "closeBtn": "Schließen",
+        "crashTitle": "Systemabsturz",
+        "crashMessage": "Aber keine Sorge - deine Daten sind sicher und es geht nichts verloren",
+        "restartBtn": "App neu starten"
+    },
+    "ErrorReporting": {
+        "issueHeader": "Schildere uns das Problem",
+        "issuePlaceholder": "Zugehöriges Thema wählen",
+        "detailsHeader": "Gibt es etwas Konkretes zu sagen?",
+        "detailsSubheader": "Wenn das Problem nicht aufgelistet ist - das Textfeld unten ist der beste Platz, um es zu beschreiben",
+        "logsHeader": "Deine Logs einbeziehen",
+        "logsSubheader": "Dies beinhaltet bestimmte private Metadaten (wie z.B. Dateigrößen - aber keine persönlichen Informationen) und wird den Entwicklern helfen, Fehler schneller zu beheben",
+        "contactHeader": "Willst du Kontakt aufnehmen?",
+        "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam. Jegliche Benutzerinformationen werden sofort nach Lösung des Problems gelöscht",
+        "rateHeader": "Bewerte diese Angelegenheit",
+        "submitBtn": "Bericht senden",
+        "contactInputError": "Bitte gib eine gültige E-Mail oder Telefonnummer ein",
+        "issueOption_1": "Keine Internetverbindung",
+        "issueOption_2": "Die App stürzt immer wieder ab",
+        "issueOption_3": "Kann mich nicht einloggen",
+        "issueOption_4": "Backup enthält keine Daten",
+        "issueOption_5": "Probleme mit der Oberfläche",
+        "issueOption_6": "Irgendetwas scheint nicht richtig zu sein",
+        "issueOption_7": "Sonstiges",
+        "contactPlaceholder": "Trag deine E-Mail hier ein ..."
     }
 }
