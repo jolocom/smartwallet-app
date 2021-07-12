@@ -331,5 +331,10 @@
     },
     "General": {
         "unknown": "Unknown"
+    },
+    "Authentication": {
+        "header": "Is it really you?",
+        "subheader": "${serviceName} would like to confirm your digital identity before proceeding",
+        "confirmBtn": "Allow"
     }
 }

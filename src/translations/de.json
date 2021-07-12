@@ -331,5 +331,10 @@
     },
     "General": {
         "unknown": ""
+    },
+    "Authentication": {
+        "header": "",
+        "subheader": "",
+        "confirmBtn": ""
     }
 }

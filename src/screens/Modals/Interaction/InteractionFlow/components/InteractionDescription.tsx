@@ -15,14 +15,10 @@ interface IInteractionDescriptionProps {
 const InteractionDescription: React.FC<IInteractionDescriptionProps> = ({
   label,
 }) => {
-  const { did, name, isAnonymous } = useSelector(getServiceDescription)
+  const { isAnonymous } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
-  const desc = isAnonymous
-    ? t(strings.THIS_PUBLIC_PROFILE_CHOSE_TO_REMAIN_ANONYMOUS, {
-        did: truncateDid(did),
-      })
-    : t(label, { service: name })
+  const desc = isAnonymous ? t('Interaction.subheaderAnonymous') : label
 
   return (
     <JoloText

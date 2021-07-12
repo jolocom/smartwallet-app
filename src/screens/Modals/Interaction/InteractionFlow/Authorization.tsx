@@ -7,7 +7,10 @@ import { ContainerBAS, LogoContainerBAS } from './components/styled'
 import InteractionImage from './components/InteractionAuthzImage'
 import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit'
 import { useSelector } from 'react-redux'
-import { getAuthzUIDetails } from '~/modules/interaction/selectors'
+import {
+  getAuthzUIDetails,
+  getServiceDescription,
+} from '~/modules/interaction/selectors'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 import useTranslation from '~/hooks/useTranslation'
 import Space from '~/components/Space'
@@ -18,6 +21,7 @@ const Authorization = () => {
     imageURL: image,
     description,
   } = useSelector(getAuthzUIDetails)
+  const { name } = useSelector(getServiceDescription)
 
   const { t } = useTranslation()
 
@@ -39,7 +43,7 @@ const Authorization = () => {
         label={
           description && !!description.length
             ? description
-            : t('Authorization.subheader')
+            : t('Authorization.subheader', { sericeName: name })
         }
       />
       <Space />
