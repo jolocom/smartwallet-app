@@ -140,11 +140,11 @@ platform :android do
       secure_text: true
     )
     sh(
-      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out ../key.json -k #{password} -md md5",
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out ../key.json -k #{password} -md md5 2>/dev/null ",
       log: false
     )
     sh(
-      "openssl enc -aes-256-cbc -d -in ./android-secrets/keystorePass.enc -k #{password} -md md5",
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/keystorePass.enc -k #{password} -md md5 2>/dev/null ",
       log: false
     )
   end
