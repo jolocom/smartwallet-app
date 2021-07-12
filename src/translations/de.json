@@ -145,7 +145,7 @@
         "missingDocsToastHeader": "${documentType} fehlt",
         "missingDocsToastSubheader": "${serviceName} fordert ein Dokument an, das nicht in deiner Wallet vorhanden ist",
         "attributeMissingValue": "Fehlende Info",
-        "headerSingleMissing": "${serviceName} fordert E-Mail",
+        "headerSingleMissing": "${serviceName} fordert ${attribute, lowercase}",
         "singleMissingSubheader": "Es sieht so aus, als würde deiner Wallet etwas Wichtiges für diese Anfrage fehlen",
         "singleMissingAcceptBtn": "Info hinzufügen",
         "selectInstructions": "Zur Auswahl antippen"
