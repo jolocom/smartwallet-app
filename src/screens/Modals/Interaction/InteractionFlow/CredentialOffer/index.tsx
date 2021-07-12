@@ -8,7 +8,6 @@ import {
   getOfferedCredentialsByCategories,
   getOfferedCredentials,
 } from '~/modules/interaction/selectors'
-import { strings } from '~/translations'
 import {
   OfferedCredentialDisplay,
   CredentialCategories,
@@ -35,22 +34,21 @@ const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
   const { t } = useTranslation()
+
   return (
     <ContainerBAS>
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={strings.INCOMING_OFFER} />
-      <InteractionDescription
-        label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
-      />
+      <InteractionTitle label={t('CredentialOffer.header')} />
+      <InteractionDescription label={t('CredentialOffer.subheader')} />
       <Space />
       {offeredCredentials.map((d) => {
         if (d.category === CredentialCategories.document) {
           return (
             <IncomingOfferDoc
               key={d.name}
-              name={d.name || t(strings.UNKNOWN)}
+              name={d.name || t('General.unknown')}
               properties={d.properties}
             />
           )
@@ -58,7 +56,7 @@ const CredentialOfferBAS = () => {
         return (
           <IncomingOfferOther
             key={d.name}
-            name={d.name || t(strings.UNKNOWN)}
+            name={d.name || t('General.unknown')}
             properties={d.properties}
           />
         )
@@ -67,7 +65,7 @@ const CredentialOfferBAS = () => {
 
       <InteractionFooter
         onSubmit={handleSubmit}
-        submitLabel={strings.RECEIVE}
+        submitLabel={t('CredentialOffer.confirmBtn')}
       />
     </ContainerBAS>
   )
@@ -96,13 +94,13 @@ const CredentialOfferFAS = () => {
           {category === CredentialCategories.document ? (
             <IncomingOfferDoc
               key={name + type}
-              name={name || t(strings.UNKNOWN)}
+              name={name || t('General.unknown')}
               properties={properties}
             />
           ) : (
             <IncomingOfferOther
               key={name + type}
-              name={name || t(strings.UNKNOWN)}
+              name={name || t('General.unknown')}
               properties={properties}
             />
           )}
@@ -115,7 +113,7 @@ const CredentialOfferFAS = () => {
     <Collapsible>
       <Collapsible.AnimatedHeader height={62}>
         <Collapsible.HeaderText>
-          {strings.INCOMING_OFFER}
+          {t('CredentialOffer.header')}
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
@@ -129,23 +127,21 @@ const CredentialOfferFAS = () => {
             </LogoContainerFAS>
           </Collapsible.HidingScale>
           <Collapsible.HidingTextContainer>
-            <InteractionTitle label={strings.INCOMING_OFFER} />
+            <InteractionTitle label={t('CredentialOffer.header')} />
           </Collapsible.HidingTextContainer>
-          <InteractionDescription
-            label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
-          />
+          <InteractionDescription label={t('CredentialOffer.subheader')} />
           <Space />
-          <InteractionSection title={strings.DOCUMENTS}>
+          <InteractionSection title={t('Documents.documentsTab')}>
             {handleRenderCredentials(documents)}
           </InteractionSection>
-          <InteractionSection title={strings.OTHER}>
+          <InteractionSection title={t('Documents.othersTab')}>
             {handleRenderCredentials(other)}
           </InteractionSection>
         </Collapsible.ScrollView>
         <FooterContainerFAS>
           <InteractionFooter
             onSubmit={handleSubmit}
-            submitLabel={strings.RECEIVE}
+            submitLabel={t('CredentialOffer.confirmBtn')}
           />
         </FooterContainerFAS>
       </ContainerFAS>

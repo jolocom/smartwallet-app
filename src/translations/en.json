@@ -157,7 +157,8 @@
         "subheader": "${serviceName} sent your wallet the following document(s):",
         "cardInfoHeader": "Included info:",
         "confirmBtn": "Accept",
-        "acceptBtn": "Accept"
+        "acceptBtn": "Accept",
+        "cardNoPreview": "No info can be previewed"
     },
     "Toasts": {
         "reportBtn": "Report"
@@ -327,5 +328,8 @@
         "issueOption_6": "Something doesn't seem right",
         "issueOption_7": "Other",
         "contactPlaceholder": "Write your email here …"
+    },
+    "General": {
+        "unknown": "Unknown"
     }
 }
