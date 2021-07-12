@@ -7,6 +7,7 @@ import {
   getIsFullscreenCredOffer,
   getOfferedCredentialsByCategories,
   getOfferedCredentials,
+  getServiceDescription,
 } from '~/modules/interaction/selectors'
 import {
   OfferedCredentialDisplay,
@@ -33,6 +34,7 @@ import useTranslation from '~/hooks/useTranslation'
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
+  const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   return (
@@ -41,7 +43,9 @@ const CredentialOfferBAS = () => {
         <InteractionLogo />
       </LogoContainerBAS>
       <InteractionTitle label={t('CredentialOffer.header')} />
-      <InteractionDescription label={t('CredentialOffer.subheader')} />
+      <InteractionDescription
+        label={t('CredentialOffer.subheader', { serviceName: name })}
+      />
       <Space />
       {offeredCredentials.map((d) => {
         if (d.category === CredentialCategories.document) {
@@ -73,12 +77,12 @@ const CredentialOfferBAS = () => {
 
 const CredentialOfferFAS = () => {
   const categories = useSelector(getOfferedCredentialsByCategories)
-
   const handleSubmit = useCredentialOfferSubmit()
 
   const documents = categories[CredentialCategories.document]
   const other = categories[CredentialCategories.other]
 
+  const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
@@ -129,7 +133,9 @@ const CredentialOfferFAS = () => {
           <Collapsible.HidingTextContainer>
             <InteractionTitle label={t('CredentialOffer.header')} />
           </Collapsible.HidingTextContainer>
-          <InteractionDescription label={t('CredentialOffer.subheader')} />
+          <InteractionDescription
+            label={t('CredentialOffer.subheader', { serviceName: name })}
+          />
           <Space />
           <InteractionSection title={t('Documents.documentsTab')}>
             {handleRenderCredentials(documents)}
