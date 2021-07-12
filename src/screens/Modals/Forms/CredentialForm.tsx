@@ -165,12 +165,15 @@ const CredentialForm = () => {
 
         return (
           <FormContainer
-            title={t(
-              // FIXME @terms update the terms (to `(...).editHeader` and `(...).addHeader`)
-              attributeId ? 'CredentialForm.header' : 'CredentialForm.header',
-              // @ts-ignore FIXME @terms
-              { attributeName: t(formConfig.label) },
-            )}
+            title={
+              t(
+                attributeId
+                  ? 'CredentialForm.editHeader'
+                  : 'CredentialForm.addHeader',
+                // @ts-ignore FIXME @terms
+                { attributeName: t(formConfig.label) },
+              ) as string
+            }
             description={t('CredentialForm.subheader')}
             onSubmit={() => handleCredentialSubmit(values)}
             isSubmitDisabled={shouldDisableSubmit}
