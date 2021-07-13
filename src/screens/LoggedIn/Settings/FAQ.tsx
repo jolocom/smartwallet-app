@@ -4,16 +4,30 @@ import { FlatList } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import BlockExpanded from '~/components/BlockExpanded'
 import Section from './components/Section'
-// @ts-ignore
-import faqJson from '~/translations/faq.json'
-import { strings } from '~/translations/strings'
 import Collapsible from '~/components/Collapsible'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
-
-type FAQArray = Array<{ question: string; answer: string }>
+import useTranslation from '~/hooks/useTranslation'
 
 const FAQ = () => {
-  const faqArray = faqJson as FAQArray
+  const { t } = useTranslation()
+  const faqArray = [
+    {
+      question: t('FAQ.header_q1'),
+      answer: t('FAQ.subheader_q1'),
+    },
+    {
+      question: t('FAQ.header_q2'),
+      answer: t('FAQ.subheader_q2'),
+    },
+    {
+      question: t('FAQ.header_q3'),
+      answer: t('FAQ.subheader_q3'),
+    },
+    {
+      question: t('FAQ.header_q4'),
+      answer: t('FAQ.subheader_q4'),
+    },
+  ]
 
   const flatlistRef = useRef<FlatList | null>(null)
 
@@ -29,18 +43,15 @@ const FAQ = () => {
     <Collapsible>
       <Collapsible.Header>
         <NavigationHeader type={NavHeaderType.Back}>
-          <Collapsible.HeaderText>
-            {strings.POPULAR_QUESTIONS}
-          </Collapsible.HeaderText>
+          <Collapsible.HeaderText>{t('FAQ.header')}</Collapsible.HeaderText>
         </NavigationHeader>
       </Collapsible.Header>
       <ScreenContainer
-        //hasHeaderBack
         customStyles={{ justifyContent: 'flex-start', paddingTop: 0 }}
       >
         <Collapsible.FlatList
           renderHidingText={() => (
-            <Section.Title>{strings.POPULAR_QUESTIONS}</Section.Title>
+            <Section.Title>{t('FAQ.header')}</Section.Title>
           )}
           data={faqArray}
           overScrollMode={'never'}
