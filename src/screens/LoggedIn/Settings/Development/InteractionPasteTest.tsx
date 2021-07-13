@@ -24,7 +24,7 @@ const InteractionPasteTest = () => {
     try {
       await startInteraction(token)
       setToken(DEFAULT_TOKEN)
-      navigation.navigate(ScreenNames.Interaction, { isScannerShown: false })
+      navigation.navigate(ScreenNames.Interaction)
     } catch (e) {
       if (e instanceof SyntaxError) {
         setError(SDKError.codes.ParseJWTFailed)

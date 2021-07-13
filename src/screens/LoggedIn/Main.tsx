@@ -38,6 +38,7 @@ import {
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import CollapsibleClone from './Settings/Development/CollapsibleClone'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
+import { Colors } from '~/utils/colors'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -60,9 +61,7 @@ const TransparentModals = () => {
 }
 
 export type MainStackParamList = {
-  [ScreenNames.Interaction]: {
-    isScannerShown: boolean
-  }
+  [ScreenNames.Interaction]: undefined
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
@@ -221,8 +220,12 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Interaction}
             component={Interaction}
-            options={screenTransitionFromBottomDisabledGestures}
-            initialParams={{ isScannerShown: true }}
+            options={{
+              cardStyle: {
+                backgroundColor: __DEV__ ? Colors.white35 : 'transparent',
+              },
+              ...screenTransitionFromBottomDisabledGestures,
+            }}
           />
           <MainStack.Screen
             name={ScreenNames.CredentialDetails}
