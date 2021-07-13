@@ -8,6 +8,7 @@ import {
   SelectableProvider,
   useSelectableState,
 } from '~/components/Selectable'
+import useTranslation from '~/hooks/useTranslation'
 
 import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
@@ -22,6 +23,7 @@ const animateLayout = () => {
 }
 
 const Dropdown = () => {
+  const { t } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
 
   const { selectedValue, setSelectedValue, options, onSelect } =
@@ -67,7 +69,7 @@ const Dropdown = () => {
       <Block>
         <Option onPress={toggleExpanded}>
           <Option.Title
-            title={selectedValueTruncated ?? strings.SELECT_AN_OPTION}
+            title={selectedValueTruncated ?? t('ContactUs.issuePlaceholder')}
             color={isExpanded ? Colors.white30 : Colors.white70}
           />
           <Option.IconContainer>

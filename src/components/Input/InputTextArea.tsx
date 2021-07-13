@@ -17,6 +17,7 @@ import Block from '../Block'
 import { Colors } from '~/utils/colors'
 import JoloText from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import useTranslation from '~/hooks/useTranslation'
 
 const InputTextArea = React.forwardRef<TextInput, ITextAreaInputProps>(
   (
@@ -31,6 +32,7 @@ const InputTextArea = React.forwardRef<TextInput, ITextAreaInputProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation()
     const [showLimit, setShowLimit] = useState(false)
     const [limitCount, setLimitCount] = useState(0)
     const [limitWarning, setLimitWarning] = useState(false)
@@ -85,7 +87,7 @@ const InputTextArea = React.forwardRef<TextInput, ITextAreaInputProps>(
         <Block customStyle={{ padding: 13 }}>
           <CoreInput
             ref={ref}
-            placeholder={`${strings.TAP_TO_WRITE}...`}
+            placeholder={t('ContactUs.suggestionPlaceholder')}
             value={value}
             maxLength={limit}
             onChangeText={updateInput}
