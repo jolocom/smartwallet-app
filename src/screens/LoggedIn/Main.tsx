@@ -222,6 +222,11 @@ const Main: React.FC = () => {
             component={Interaction}
             options={{
               cardStyle: {
+                /**
+                 * NOTE: adding screen background in dev as
+                 * color palette of bottom sheet blends into
+                 * screen rendered behind it
+                 */
                 backgroundColor: __DEV__ ? Colors.white35 : 'transparent',
               },
               ...screenTransitionFromBottomDisabledGestures,
