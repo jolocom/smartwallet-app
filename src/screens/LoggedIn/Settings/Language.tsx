@@ -6,7 +6,7 @@ import SingleSelectBlock, {
 } from '~/components/SingleSelectBlock'
 import Section from './components/Section'
 import useTranslation from '~/hooks/useTranslation'
-import { Locales, strings } from '~/translations'
+import { Locales } from '~/translations'
 import { useAgent } from '~/hooks/sdk'
 
 const Language = () => {
@@ -14,8 +14,8 @@ const Language = () => {
   const agent = useAgent()
 
   const languages = [
-    { id: Locales.en, value: t(strings.ENGLISH), disabled: false },
-    { id: Locales.de, value: t(strings.GERMAN), disabled: false },
+    { id: Locales.en, value: t('Language.english'), disabled: false },
+    { id: Locales.de, value: t('Language.german'), disabled: false },
   ]
 
   const storedLanguage = languages.find((l) => l.id === currentLanguage)
@@ -33,7 +33,7 @@ const Language = () => {
         alignItems: 'flex-start',
       }}
     >
-      <Section.Title>{t(strings.LANGUAGE)}</Section.Title>
+      <Section.Title>{t('Settings.languageBlock')}</Section.Title>
       <SingleSelectBlock
         initialSelect={storedLanguage}
         selection={languages}
