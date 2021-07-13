@@ -308,7 +308,7 @@ const toasts = {
     "Some documents didn't pass our security check and cannot be saved or received",
   SHARE_MISSING_DOCS_TITLE: 'Missing documents',
   SHARE_MISSING_DOCS_MSG:
-    "{{serviceName}} is requesting documents that can't be found in your wallet. \n Missing: {{documentType}} ... ",
+    "{{serviceName}} is requesting documents that can't be found in your wallet. \n Missing: {{documentType}}",
   WHOOPS: 'Whoops',
   COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
   COULDNOT_ACTIVATE: 'We could not activate biometrics',

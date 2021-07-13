@@ -87,10 +87,14 @@ class CredentialRequestHandler {
   checkForMissingServiceIssuedCredentials() {
     const missingServiceIssuedCredentials = this.requestedTypes.filter((t) => {
       if (Object.values(AttributeTypes).includes(t as AttributeTypes)) {
-        // credential is a self issued credential
-        return true
+        /**
+         * credential is a self issued credential -> exclude it
+         */
+        return false
       } else {
-        // credential is a service issued credential
+        /**
+         * credential is a service issued credential -> check its presence in validated credentials
+         */
         return !Boolean(this.#validatedCredentials.find((c) => c.type[1] === t))
       }
     })
@@ -203,7 +207,7 @@ export const useInteractionHandler = () => {
             title: t(strings.SHARE_MISSING_DOCS_TITLE),
             message: t(strings.SHARE_MISSING_DOCS_MSG, {
               serviceName,
-              documentType: handler.missingCredentialTypes[0],
+              documentType: handler.missingCredentialTypes.join(', '),
             }),
           })
         }
