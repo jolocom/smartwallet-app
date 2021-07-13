@@ -106,7 +106,8 @@
         "subheader": "Once you click done, it will be displayed in the personal info section.",
         "closeBtn": "Cancel",
         "confirmBtn": "Done",
-        "addHeader": "Add your ${attributeName, lowercase}"
+        "addHeader": "Add your ${attributeName, lowercase}",
+        "errorAttributeExists": "Attribute of the same value already exists"
     },
     "CreatePasscode": {
         "createHeader": "Create passcode",

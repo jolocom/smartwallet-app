@@ -26,7 +26,6 @@ import {
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
-import { strings } from '~/translations'
 import { AttributeI } from '~/modules/attributes/types'
 import { Colors } from '~/utils/colors'
 import { FormFieldContainer, FormError } from '~/components/Form/components'
@@ -135,8 +134,7 @@ const CredentialForm = () => {
           if (!errors[Object.keys(values)[0]]) {
             setFieldError(
               Object.keys(values)[0],
-              // FIXME @terms add to poeditor
-              strings.ERROR_ATTRIBUTE_ALREADY_EXISTS,
+              t('CredentialForm.errorAttributeExists'),
             )
           }
         }

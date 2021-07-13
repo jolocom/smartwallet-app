@@ -106,7 +106,8 @@
         "subheader": "Sobald du auf \"Fertig\" klickst, wird es im Bereich \"Persönliche Infos\" angezeigt.",
         "closeBtn": "Abbrechen",
         "confirmBtn": "Fertig",
-        "addHeader": "Füge deinen ${attributeName, smallcase} hinzu"
+        "addHeader": "Füge deinen ${attributeName, smallcase} hinzu",
+        "errorAttributeExists": ""
     },
     "CreatePasscode": {
         "createHeader": "Passcode erstellen",
