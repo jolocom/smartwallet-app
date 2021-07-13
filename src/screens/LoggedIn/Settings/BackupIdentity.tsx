@@ -1,17 +1,17 @@
 import React from 'react'
-import { ScrollView, View } from 'react-native'
+import { View } from 'react-native'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { JoloTextSizes } from '~/utils/fonts'
 import Section from './components/Section'
-import { strings } from '~/translations'
 import Block from '~/components/Block'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import Collapsible from '~/components/Collapsible'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import useTranslation from '~/hooks/useTranslation'
 
 const BackupBlock: React.FC<{
   title: string
@@ -48,6 +48,7 @@ const BackupBlock: React.FC<{
 )
 
 const BackupIdentity = () => {
+  const { t } = useTranslation()
   // FIXME: add proper values
   const lastBackup = '18.07.2020'
 
@@ -56,7 +57,7 @@ const BackupIdentity = () => {
       <Collapsible.Header>
         <NavigationHeader type={NavHeaderType.Back}>
           <Collapsible.HeaderText>
-            {strings.BACKUP_OPTIONS}
+            {t('BackupOptions.header')}
           </Collapsible.HeaderText>
         </NavigationHeader>
       </Collapsible.Header>
@@ -69,19 +70,19 @@ const BackupIdentity = () => {
           }}
         >
           <Collapsible.HidingTextContainer>
-            <Section.Title>{strings.BACKUP_OPTIONS}</Section.Title>
+            <Section.Title>{t('BackupOptions.header')}</Section.Title>
           </Collapsible.HidingTextContainer>
           <View>
             <BackupBlock
-              title={strings.BACKUP_YOUR_DATA}
-              description={strings.DOWNLOAD_AN_ENCRYPTED_COPY_OF_THE_DATA}
-              btnText={strings.EXPORT_BACKUP_FILE}
+              title={t('BackupOptions.exportHeader')}
+              description={t('BackupOptions.exportSubheader')}
+              btnText={t('BackupOptions.exportBtn')}
               onPress={() => {}}
             />
             <BackupBlock
-              title={strings.RESTORE_YOUR_DATA}
-              description={strings.IN_CASE_YOU_DELETED_SOMETHING_IMPORTANT}
-              btnText={strings.IMPORT_FILE}
+              title={t('BackupOptions.importHeader')}
+              description={t('BackupOptions.importSubheader')}
+              btnText={t('BackupOptions.importBtn')}
               onPress={() => {}}
             />
           </View>
@@ -92,7 +93,9 @@ const BackupIdentity = () => {
               paddingTop: 20,
             }}
           >
-            <JoloText color={Colors.white30}>{strings.LAST_BACKUP}</JoloText>
+            <JoloText color={Colors.white30}>
+              {t('BackupOptions.lastBackupInfo')}
+            </JoloText>
             <JoloText color={Colors.white30}>{lastBackup}</JoloText>
           </View>
         </Collapsible.ScrollView>
