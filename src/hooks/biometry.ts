@@ -1,9 +1,10 @@
 import Biometry, { BiometryType } from 'react-native-biometrics'
-import { getBiometryDescription } from '~/screens/Modals/DeviceAuthentication/utils/getText'
+import { useBiometryDescription } from '~/screens/Modals/DeviceAuthentication/utils/getText'
 import { StorageKeys, useAgent } from './sdk'
 
 export const useBiometry = () => {
   const agent = useAgent()
+  const getBiometryDescription = useBiometryDescription()
 
   const authenticate = async (biometryType: BiometryType | undefined) => {
     return await Biometry.simplePrompt({
