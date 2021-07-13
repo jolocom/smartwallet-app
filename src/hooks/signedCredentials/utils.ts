@@ -45,8 +45,7 @@ export const getCredentialUIType = (type: string) => {
 export const uiTypesTerms = {
   [CredentialUITypes.identification]: 'Documents.identificationCategory',
   [CredentialUITypes.tickets]: 'Documents.ticketsCategory',
-  // FIXME @terms Not yet in terms
-  [CredentialUITypes.unknown]: 'Documents.unknownCategory',
+  [CredentialUITypes.unknown]: 'General.unknown',
 }
 
 export const separateCredentialsAndAttributes = (

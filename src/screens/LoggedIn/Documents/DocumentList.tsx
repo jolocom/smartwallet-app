@@ -122,6 +122,7 @@ export const DocumentList = () => {
                 | CredentialsByType<DisplayCredentialDocument>
                 | CredentialsByIssuer<DisplayCredentialDocument>
 
+              // @ts-ignore @terms
               const uiType = t(uiTypesTerms[value as CredentialUITypes])
               return (
                 <>
