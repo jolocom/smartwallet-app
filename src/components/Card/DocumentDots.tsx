@@ -26,7 +26,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const deleteTitle = `${t('Documents.deleteDocumentHeader', {
     documentName: title,
   })}?`
-  const cancelText = strings.CANCEL
+
   const handleDelete = async () => {
     try {
       await deleteCredential(id)
@@ -61,7 +61,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
           screen: ScreenNames.DragToConfirm,
           params: {
             title: deleteTitle,
-            cancelText,
+            cancelText: t('Documents.cancelCardOption'),
             onComplete: handleDelete,
           },
         },
