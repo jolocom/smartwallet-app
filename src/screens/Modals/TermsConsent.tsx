@@ -21,6 +21,7 @@ import { CheckmarkIconSmall } from '~/assets/svg'
 import useTermsConsent from '~/hooks/consent'
 import { useAgent } from '~/hooks/sdk'
 import { useToggleExpand } from '~/hooks/ui'
+import useTranslation from '~/hooks/useTranslation'
 
 const legalTextConfig = [
   { title: 'Terms of Service', content: termsOfServiceEN },
@@ -50,6 +51,7 @@ const ExpandingButton: React.FC<{ title: string; content: string }> = ({
 }
 
 const TermsConsent: React.FC = () => {
+  const { t } = useTranslation()
   const agent = useAgent()
   const { acceptConsent } = useTermsConsent()
 
@@ -64,9 +66,7 @@ const TermsConsent: React.FC = () => {
           color={Colors.white85}
           customStyles={{ textAlign: 'left' }}
         >
-          {
-            strings.SMARTWALLET_INTRODUCING_TERMS_AND_CONDITIONS_AND_PRIVACY_POLICY
-          }
+          {t('TermsConsent.header')}
         </JoloText>
       </View>
       <View style={styles.termsWrapper}>
@@ -84,9 +84,7 @@ const TermsConsent: React.FC = () => {
               marginBottom: BP({ default: 32, medium: 54, large: 54 }),
             }}
           >
-            {
-              strings.YOU_CAN_FIND_THE_GERMAN_AND_ENGLISH_VERSION_OF_THE_DOCUMENTS_BELOW
-            }
+            {t('TermsConsent.subheader')}
           </JoloText>
           {legalTextConfig.map(({ title, content }) => {
             return <ExpandingButton title={title} content={content} />
@@ -115,9 +113,7 @@ const TermsConsent: React.FC = () => {
               color={Colors.white90}
               customStyles={{ textAlign: 'left' }}
             >
-              {
-                strings.I_UNDERSTAND_AND_ACCEPT_THE_TERMS_OF_SERVICE_AND_PRIVACY_POLICY
-              }
+              {t('TermsConsent.footer')}
             </JoloText>
           </View>
         </TouchableOpacity>
@@ -126,7 +122,7 @@ const TermsConsent: React.FC = () => {
           onPress={() => acceptConsent(agent)}
           disabled={!accepted}
         >
-          {strings.ACCEPT_NEW_TERMS}
+          {t('TermsConsent.footerBtn')}
         </Btn>
       </BottomSheet>
     </ScreenContainer>

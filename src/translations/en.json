@@ -10,7 +10,10 @@
         "descriptionThree": "Keep all your info backed up and in the right hands - a.k.a. yours"
     },
     "TermsConsent": {
-        "header": "SmartWallet introducing \nTerms and Conditions and Privacy Policy"
+        "header": "SmartWallet introducing \nTerms and Conditions and Privacy Policy",
+        "subheader": "You can find the German and English version of the documents below. Please note that the German version is legally binding",
+        "footer": "I understand and accept the Terms of Service and Privacy Policy",
+        "footerBtn": "Accept new terms"
     },
     "Recovery": {
         "header": "Recovery",
@@ -186,7 +189,8 @@
         "placeholderHeader": "It’s still empty",
         "documentsPlaceholderSubheader": "You haven't saved any documents yet.\nGet one today!",
         "othersPlaceholderHeader": "Nothing here yet",
-        "othersPlaceholderSubheader": "You haven't saved anything yet"
+        "othersPlaceholderSubheader": "You haven't saved anything yet",
+        "unspecifiedField": "Not specified"
     },
     "CredentialRequest": {
         "header": "Incoming request",
@@ -344,5 +348,8 @@
     "PrivacyPolicy": {
         "header": "Privacy Policy",
         "footer": "If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us."
+    },
+    "DragToConfirm": {
+        "instruction": "Drop the ball"
     }
 }

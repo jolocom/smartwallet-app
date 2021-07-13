@@ -10,7 +10,10 @@
         "descriptionThree": "Halte alle deine Informationen gesichert und in den richtigen Händen - also in deinen"
     },
     "TermsConsent": {
-        "header": "SmartWallet Vorstellung der AGBs und Datenschutz"
+        "header": "SmartWallet Vorstellung der AGBs und Datenschutz",
+        "subheader": "",
+        "footer": "",
+        "footerBtn": ""
     },
     "Recovery": {
         "header": "Wiederherstellung",
@@ -186,7 +189,8 @@
         "placeholderHeader": "Hier gibt es nix zu sehen",
         "documentsPlaceholderSubheader": "Du hast noch keine Dokumente gespeichert.\nBesorg dir noch heute eins!",
         "othersPlaceholderHeader": "Gähnende Leere",
-        "othersPlaceholderSubheader": "Du hast noch nichts gespeichert"
+        "othersPlaceholderSubheader": "Du hast noch nichts gespeichert",
+        "unspecifiedField": ""
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -344,5 +348,8 @@
     "PrivacyPolicy": {
         "header": "",
         "footer": ""
+    },
+    "DragToConfirm": {
+        "instruction": ""
     }
 }
