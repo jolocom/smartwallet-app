@@ -23,7 +23,8 @@
     },
     "Loader": {
         "successDefault": "Success!",
-        "failedDefault": "Failed"
+        "failedDefault": "Failed",
+        "loading": "Loading"
     },
     "OnboardingBackup": {
         "header": "Upload backup file?",
@@ -275,7 +276,8 @@
     "ChangePasscode": {
         "wrongCodeHeader": "Wrong code",
         "currentHeader": "Current passcode",
-        "successHeader": "Passcode changed!"
+        "successHeader": "Passcode changed!",
+        "sameCodeHeader": "Same as old"
     },
     "ContactUs": {
         "issueOption_1": "Possible partnership with Jolocom",
