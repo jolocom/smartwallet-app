@@ -25,8 +25,10 @@ import useMarketRating from '~/hooks/rateus'
 import { useAgent } from '~/hooks/sdk'
 import ClearIdentityBtn from './components/ClearIdentityBtn'
 import Btn, { BtnTypes } from '~/components/Btn'
+import useTranslation from '~/hooks/useTranslation'
 
 const SettingsGeneral: React.FC = () => {
+  const { t } = useTranslation()
   const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
   const { resetBiometry } = useBiometry()
   const { shouldWarnBackup } = useBackup()
@@ -65,24 +67,24 @@ const SettingsGeneral: React.FC = () => {
         overScrollMode="never"
       >
         <Section>
-          <Section.Title>{strings.APP_PREFERENCES}</Section.Title>
+          <Section.Title>{t('Settings.preferencesSection')}</Section.Title>
           <Section.Block>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.Language)}
             >
-              <Option.Title title={strings.LANGUAGE} />
+              <Option.Title title={t('Settings.languageBlock')} />
               <Option.RightIcon />
             </Option>
           </Section.Block>
         </Section>
 
         <Section>
-          <Section.Title>{strings.SECURITY}</Section.Title>
+          <Section.Title>{t('Settings.securitySection')}</Section.Title>
           <Section.Block>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
             >
-              <Option.Title title={strings.CHANGE_PASSCODE} />
+              <Option.Title title={t('Settings.changePasscodeBlock')} />
               <Option.RightIcon />
             </Option>
             <EnableBiometryOption />
@@ -91,7 +93,7 @@ const SettingsGeneral: React.FC = () => {
               onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
             >
               <View style={{ alignItems: 'flex-start' }}>
-                <Option.Title title={strings.BACKUP_IDENTITY} />
+                <Option.Title title={t('Settings.backupBlock')} />
                 {shouldWarnBackup() && (
                   <JoloText
                     kind={JoloTextKind.subtitle}
@@ -103,7 +105,7 @@ const SettingsGeneral: React.FC = () => {
                       marginTop: 10,
                     }}
                   >
-                    {strings.YOUR_DOCUMENTS_ARE_AT_RISK}
+                    {t('Settings.backupBlockWarning')}
                   </JoloText>
                 )}
               </View>
@@ -112,27 +114,27 @@ const SettingsGeneral: React.FC = () => {
         </Section>
 
         <Section>
-          <Section.Title>{strings.GENERAL}</Section.Title>
+          <Section.Title>{t('Settings.generalSection')}</Section.Title>
           <Section.Block>
             <Option onPress={() => handleNavigateToScreen(ScreenNames.FAQ)}>
-              <Option.Title title={strings.FAQ} />
+              <Option.Title title={t('Settings.faqBlock')} />
               <Option.RightIcon />
             </Option>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ContactUs)}
             >
-              <Option.Title title={strings.CONTACT_US} />
+              <Option.Title title={t('Settings.contactUsBlock')} />
               <Option.RightIcon />
             </Option>
             <Option onPress={rateApp}>
-              <Option.Title title={strings.RATE_US} />
+              <Option.Title title={t('Settings.rateBlock')} />
             </Option>
             <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
-              <Option.Title title={strings.IMPRINT} />
+              <Option.Title title={t('Settings.imprintBlock')} />
               <Option.RightIcon />
             </Option>
             <Option onPress={() => handleNavigateToScreen(ScreenNames.About)}>
-              <Option.Title title={strings.ABOUT} />
+              <Option.Title title={t('Settings.aboutBlock')} />
               <Option.RightIcon />
             </Option>
           </Section.Block>

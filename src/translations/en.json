@@ -297,7 +297,8 @@
         "dialogTitle": "Are you sure?",
         "dialogMessage": "Please pay attention that deleted data cannot be recovered in the future",
         "submitBtn": "I understand",
-        "cancelBtn": "Cancel"
+        "cancelBtn": "Cancel",
+        "loader": "Processing data removal"
     },
     "Errors": {
         "unknownTitle": "Unknown error",

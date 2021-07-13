@@ -297,7 +297,8 @@
         "dialogTitle": "Bist du sicher?",
         "dialogMessage": "Bitte beachte, dass gelöschte Daten in Zukunft nicht wiederhergestellt werden können",
         "submitBtn": "Ich habe verstanden",
-        "cancelBtn": "Abbrechen"
+        "cancelBtn": "Abbrechen",
+        "loader": ""
     },
     "Errors": {
         "unknownTitle": "Unbekannter Fehler",

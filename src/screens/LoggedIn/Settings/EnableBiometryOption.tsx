@@ -7,10 +7,13 @@ import ToggleSwitch from '~/components/ToggleSwitch'
 import { useBiometry } from '~/hooks/biometry'
 import { useDisableLock } from '~/hooks/generic'
 import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
 import { strings } from '~/translations/strings'
+import { debugView } from '~/utils/dev'
 import Option from './components/Option'
 
 const EnableBiometryOption = () => {
+  const { t } = useTranslation()
   /* State to define of this component is displayed: depends on if any biometrics were enrolled */
   const [isOptionVisible, setIsOptionVisible] = useState(false)
   /* On state that is controlled and passed to ToggleSwitch */
@@ -95,7 +98,10 @@ const EnableBiometryOption = () => {
   if (!isOptionVisible) return null
   return (
     <Option>
-      <Option.Title title={strings.USE_BIOMETRICS_TO_LOGIN} />
+      <Option.Title
+        title={t('Settings.biometricsBlock')}
+        customStyles={{ marginRight: 60 }}
+      />
       <View style={{ position: 'absolute', right: 16 }}>
         <ToggleSwitch on={isOn} onToggle={handleToggle} />
       </View>
