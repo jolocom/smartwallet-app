@@ -339,5 +339,9 @@
         "header": "",
         "subheader": "",
         "confirmBtn": ""
+    },
+    "PrivacyPolicy": {
+        "header": "",
+        "footer": ""
     }
 }

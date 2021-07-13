@@ -339,5 +339,9 @@
         "header": "Is it really you?",
         "subheader": "${serviceName} would like to confirm your digital identity before proceeding",
         "confirmBtn": "Allow"
+    },
+    "PrivacyPolicy": {
+        "header": "Privacy Policy",
+        "footer": "If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us."
     }
 }

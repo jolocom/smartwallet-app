@@ -11,8 +11,10 @@ import { ScreenNames } from '~/types/screens'
 // @ts-ignore
 import packageJson from '~/../package.json'
 import { strings } from '~/translations/strings'
+import useTranslation from '~/hooks/useTranslation'
 
 const About = () => {
+  const { t } = useTranslation()
   const redirectToTerms = useRedirectTo(ScreenNames.TermsOfService)
   const redirectToPrivacyPolicy = useRedirectTo(ScreenNames.PrivacyPolicy)
 
@@ -28,7 +30,7 @@ const About = () => {
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.middle}
         >
-          {`You are running version ${version}`}
+          {t('About.versionInfo', { version })}
         </JoloText>
         <View
           style={{
@@ -41,10 +43,10 @@ const About = () => {
       <View style={styles.container}>
         <BtnGroup>
           <Btn onPress={redirectToTerms} type={BtnTypes.secondary}>
-            {strings.TERMS_OF_SERVICE}
+            {t('Terms of Service.header')}
           </Btn>
           <Btn onPress={redirectToPrivacyPolicy} type={BtnTypes.secondary}>
-            {strings.PRIVACY_POLICY}
+            {t('PrivacyPolicy.header')}
           </Btn>
         </BtnGroup>
       </View>
