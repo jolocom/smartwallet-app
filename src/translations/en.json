@@ -190,7 +190,8 @@
         "documentsPlaceholderSubheader": "You haven't saved any documents yet.\nGet one today!",
         "othersPlaceholderHeader": "Nothing here yet",
         "othersPlaceholderSubheader": "You haven't saved anything yet",
-        "unspecifiedField": "Not specified"
+        "unspecifiedField": "Not specified",
+        "subjectNameField": "Subject name"
     },
     "CredentialRequest": {
         "header": "Incoming request",

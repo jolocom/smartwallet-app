@@ -190,7 +190,8 @@
         "documentsPlaceholderSubheader": "Du hast noch keine Dokumente gespeichert.\nBesorg dir noch heute eins!",
         "othersPlaceholderHeader": "Gähnende Leere",
         "othersPlaceholderSubheader": "Du hast noch nichts gespeichert",
-        "unspecifiedField": ""
+        "unspecifiedField": "",
+        "subjectNameField": ""
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
-import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
 import Space from '../Space'
 import { useCard } from './context'

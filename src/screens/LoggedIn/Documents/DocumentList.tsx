@@ -22,7 +22,6 @@ import {
   CredentialUITypes,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
-import { strings } from '~/translations'
 import { getOptionalFields } from './utils'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { MainTabsParamList } from '../MainTabs'
@@ -151,10 +150,10 @@ export const DocumentList = () => {
                           {
                             label: DocumentFields.DocumentName,
                             // FIXME @terms
-                            value: c.name || strings.UNKNOWN,
+                            value: c.name || t('General.unknown'),
                           },
                           {
-                            label: strings.SUBJECT_NAME,
+                            label: t('Documents.subjectNameField'),
                             // FIXME @terms
                             value: c.holderName,
                           },
@@ -216,7 +215,7 @@ export const DocumentList = () => {
                           {
                             label: DocumentFields.DocumentName,
                             // FIXME @terms
-                            value: c.name || strings.UNKNOWN,
+                            value: c.name || t('General.unknown'),
                           },
                         ]}
                         optionalFields={getOptionalFields(c)}
