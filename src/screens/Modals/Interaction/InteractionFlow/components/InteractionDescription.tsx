@@ -3,7 +3,6 @@ import useTranslation from '~/hooks/useTranslation'
 import { useSelector } from 'react-redux'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { getServiceDescription } from '~/modules/interaction/selectors'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import truncateDid from '~/utils/truncateDid'
@@ -15,10 +14,12 @@ interface IInteractionDescriptionProps {
 const InteractionDescription: React.FC<IInteractionDescriptionProps> = ({
   label,
 }) => {
-  const { isAnonymous } = useSelector(getServiceDescription)
+  const { isAnonymous, did } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
-  const desc = isAnonymous ? t('Interaction.subheaderAnonymous') : label
+  const desc = isAnonymous
+    ? t('Interaction.subheaderAnonymous', { did: truncateDid(did) })
+    : label
 
   return (
     <JoloText

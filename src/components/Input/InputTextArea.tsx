@@ -9,7 +9,6 @@ import {
 // @ts-ignore no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
-import { strings } from '~/translations'
 import BP from '~/utils/breakpoints'
 import { ITextAreaInputProps } from './types'
 import { CoreInput } from './CoreInput'

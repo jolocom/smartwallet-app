@@ -5,7 +5,6 @@ import Keychain from 'react-native-keychain'
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
-import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
@@ -134,7 +133,7 @@ const RegisterPin = () => {
           {!isCreating && (
             <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
               {/* FIXME @terms is not present in the designs*/}
-              {strings.RESET}
+              {t('VerifyPasscode.resetBtn')}
             </Btn>
           )}
           <Passcode.Keyboard />

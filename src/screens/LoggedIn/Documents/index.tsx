@@ -2,7 +2,6 @@ import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import { CredentialCategories } from '~/types/credentials'
-import { strings } from '~/translations'
 import Tabs from '~/components/Tabs/Tabs'
 import TabsContainer from '~/components/Tabs/Container'
 import { DocumentList } from './DocumentList'

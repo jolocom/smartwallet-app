@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { strings } from '~/translations'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'

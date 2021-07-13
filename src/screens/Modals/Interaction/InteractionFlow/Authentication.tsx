@@ -7,7 +7,6 @@ import InteractionLogo from './components/InteractionLogo'
 import InteractionTitle from './components/InteractionTitle'
 import { ContainerBAS, LogoContainerBAS } from './components/styled'
 import useAuthSubmit from '~/hooks/interactions/useAuthSubmit'
-import { strings } from '~/translations'
 import { useSelector } from 'react-redux'
 import {
   getAuthenticationDetails,

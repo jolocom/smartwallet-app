@@ -7,7 +7,6 @@ import {
   privacyPolicyEN,
   privacyPolicyDE,
 } from '~/translations/terms'
-import { strings } from '~/translations/strings'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import BottomSheet from '~/components/BottomSheet'

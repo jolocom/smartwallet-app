@@ -1,9 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
