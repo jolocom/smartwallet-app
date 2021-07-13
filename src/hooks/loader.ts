@@ -1,10 +1,9 @@
-import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import { strings } from '~/translations/strings'
 import { sleep } from '~/utils/generic'
+import useTranslation from './useTranslation'
 
 export interface LoaderConfig {
   showFailed?: boolean
@@ -14,16 +13,17 @@ export interface LoaderConfig {
   failed?: string
 }
 
-const defaultConfig = {
-  loading: strings.LOADING,
-  showFailed: true,
-  showSuccess: true,
-  success: strings.SUCCESS,
-  failed: strings.FAILED,
-}
-
 export const useLoader = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
+
+  const defaultConfig = {
+    loading: t('Loader.loading'),
+    showFailed: true,
+    showSuccess: true,
+    success: t('Loader.successDefault'),
+    failed: t('Loader.failedDefault'),
+  }
 
   return async (
     callback: () => Promise<any>,
