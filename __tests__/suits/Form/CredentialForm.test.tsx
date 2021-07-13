@@ -3,12 +3,14 @@ import CredentialForm from '~/screens/Modals/Forms/CredentialForm'
 import { useRoute } from '@react-navigation/native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AttributeTypes, ClaimKeys } from '~/types/credentials'
-import { mockSelectorReturn } from '../../utils/selector'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import useTranslation from '~/hooks/useTranslation'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 import { editAttr, updateAttrs } from '~/modules/attributes/actions'
-import { getMockedDispatch } from '../../utils/dispatch'
+import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { strings } from '~/translations'
+import { mockedAgent } from '../../mocks/agent'
+import { mockedNoAttributes } from '../../mocks/store/attributes'
 
 const ATTRIBUTE_ID = 'claim:email:id'
 const ATTRIBUTE_ID_UPDATED = 'claim:email:id-1'
@@ -32,13 +34,6 @@ const mockedStore = {
     },
   },
 }
-const mockedStoreNoAttributes = {
-  account: { did: 'did-1' },
-  toasts: { active: null },
-  attrs: {
-    all: {},
-  },
-}
 
 const mockedIssueCredentialFn = jest.fn()
 const mockDeleteVCFn = jest.fn()
@@ -49,9 +44,7 @@ jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 jest.mock('../../../src/hooks/useTranslation')
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
-    passwordStore: {
-      getPassword: jest.fn().mockResolvedValue(true),
-    },
+    passwordStore: mockedAgent.passwordStore,
     credentials: {
       create: mockedIssueCredentialFn,
       delete: mockDeleteVCFn,
@@ -158,7 +151,7 @@ describe('Form in mode', () => {
         type: ATTRIBUTE_TYPE,
       },
     })
-    mockSelectorReturn(mockedStoreNoAttributes)
+    mockSelectorReturn(mockedNoAttributes)
 
     // RENDER
     const queries = renderCredentialForm()

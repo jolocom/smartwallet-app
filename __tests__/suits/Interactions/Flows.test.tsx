@@ -1,8 +1,8 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 
 import * as interactionsHooks from '~/hooks/interactions/handlers'
-import { mockSelectorReturn } from '../../utils/selector'
-import { getMockedDispatch } from '../../utils/dispatch'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
+import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { FlowType } from 'react-native-jolocom'
 import { setInteractionDetails } from '~/modules/interaction/actions'
 
@@ -34,14 +34,11 @@ jest.mock('../../../src/hooks/loader', () => ({
   useLoader: jest
     .fn()
     .mockImplementation(
-      () => async (
-        cb: () => Promise<void>,
-        _: object,
-        onSuccess: () => void,
-      ) => {
-        await cb()
-        onSuccess()
-      },
+      () =>
+        async (cb: () => Promise<void>, _: object, onSuccess: () => void) => {
+          await cb()
+          onSuccess()
+        },
     ),
 }))
 

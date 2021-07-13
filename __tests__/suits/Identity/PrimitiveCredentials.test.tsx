@@ -5,37 +5,19 @@ import IdentityCredentials from '~/screens/LoggedIn/Identity/IdentityCredentials
 import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
+import {
+  getMockedEmailAttribute,
+  mockedNoAttributes,
+} from '../../mocks/store/attributes'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { mockSelectorReturn } from '../../utils/selector'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 
 const ATTRIBUTE_ID_1 = 'claim:id-1'
 const ATTRIBUTE_ID_2 = 'claim:id-2'
 const EMAIL_VALUE_1 = 'dev-1@jolocom.com'
 const EMAIL_VALUE_2 = 'dev-2@jolocom.com'
 
-const mockedStoreNoAttributes = {
-  attrs: {
-    all: {},
-  },
-}
-
-const mockedStoreEmailAttribute = {
-  attrs: {
-    all: {
-      ProofOfEmailCredential: [
-        { id: ATTRIBUTE_ID_1, value: { email: EMAIL_VALUE_1 } },
-        { id: ATTRIBUTE_ID_2, value: { email: EMAIL_VALUE_2 } },
-      ],
-    },
-  },
-}
-
 const mockedNavigate = jest.fn()
-
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn(),
-}))
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -71,7 +53,7 @@ describe('Primitive credentials component displays', () => {
   })
 
   test('placeholders if there are no credentials', () => {
-    mockSelectorReturn(mockedStoreNoAttributes)
+    mockSelectorReturn(mockedNoAttributes)
     const { getByText, getAllByTestId } = renderWithSafeArea(
       <IdentityCredentials />,
     )
@@ -92,11 +74,12 @@ describe('Primitive credentials component displays', () => {
   })
 
   test('fields are rendered', () => {
-    const {
-      attrs: {
-        all: { ProofOfEmailCredential },
-      },
-    } = mockedStoreEmailAttribute
+    const mockedStoreEmailAttribute = getMockedEmailAttribute(
+      ATTRIBUTE_ID_1,
+      ATTRIBUTE_ID_2,
+      EMAIL_VALUE_1,
+      EMAIL_VALUE_2,
+    )
     mockSelectorReturn(mockedStoreEmailAttribute)
 
     const { getAllByTestId } = renderWithSafeArea(<IdentityCredentials />)
@@ -105,11 +88,12 @@ describe('Primitive credentials component displays', () => {
   })
 
   test('adding on press create new', () => {
-    const {
-      attrs: {
-        all: { ProofOfEmailCredential },
-      },
-    } = mockedStoreEmailAttribute
+    const mockedStoreEmailAttribute = getMockedEmailAttribute(
+      ATTRIBUTE_ID_1,
+      ATTRIBUTE_ID_2,
+      EMAIL_VALUE_1,
+      EMAIL_VALUE_2,
+    )
     mockSelectorReturn(mockedStoreEmailAttribute)
     const { getByTestId } = renderWithSafeArea(<IdentityCredentials />)
 
@@ -129,15 +113,19 @@ describe('Primitive credentials component displays', () => {
   })
 
   test('navigating on press', () => {
+    const mockedStoreEmailAttribute = getMockedEmailAttribute(
+      ATTRIBUTE_ID_1,
+      ATTRIBUTE_ID_2,
+      EMAIL_VALUE_1,
+      EMAIL_VALUE_2,
+    )
     const {
       attrs: {
         all: { ProofOfEmailCredential },
       },
     } = mockedStoreEmailAttribute
     mockSelectorReturn(mockedStoreEmailAttribute)
-    const { getAllByTestId, toJSON } = renderWithSafeArea(
-      <IdentityCredentials />,
-    )
+    const { getAllByTestId } = renderWithSafeArea(<IdentityCredentials />)
 
     const emailFields = getAllByTestId('widget-field-static')
 

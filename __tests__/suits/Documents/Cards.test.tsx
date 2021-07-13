@@ -6,31 +6,11 @@ import OtherCard from '~/components/Card/OtherCard'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
 import { IdentificationTypes } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
+import { mockedFields } from '../../mocks/documents'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const HIGHLIGHT = 'ABC123'
 const IMAGE = 'data:abc'
-const FIELDS = [
-  {
-    id: 1,
-    type: 'document',
-    details: {
-      mandatoryFields: [
-        { label: 'givenName', value: 'Test Given Name' },
-        { label: 'Document Name', value: 'some doc' },
-      ],
-      optionalFields: [{ label: 'c', value: 'd' }],
-    },
-  },
-  {
-    id: 2,
-    type: 'other',
-    details: {
-      mandatoryFields: [{ label: 'givenName', value: 'f' }],
-      optionalFields: [{ label: 'g', value: 'h' }],
-    },
-  },
-]
 
 const testIds = {
   photo: 'card-photo',
@@ -66,9 +46,9 @@ jest.mock('../../../src/hooks/credentials', () => ({
   useDeleteCredential: () => jest.fn(),
 }))
 
-const [mandatoryFields] = FIELDS.map((f) => f.details.mandatoryFields)
+const [mandatoryFields] = mockedFields.map((f) => f.details.mandatoryFields)
 
-const [optionalFields] = FIELDS.map((f) => f.details.optionalFields)
+const [optionalFields] = mockedFields.map((f) => f.details.optionalFields)
 
 describe('Document card is displaying passed props', () => {
   // TODO: fix me

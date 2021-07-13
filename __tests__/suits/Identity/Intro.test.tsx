@@ -7,10 +7,11 @@ import {
   waitFor,
 } from '@testing-library/react-native'
 import { strings } from '~/translations'
-import { getMockedDispatch } from '../../utils/dispatch'
+import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes } from '~/types/credentials'
 import { ReactTestInstance } from 'react-test-renderer'
+import { mockedAgent } from '../../mocks/agent'
 
 const ATTRIBUTE_ID = 'claim:id-1'
 const GIVEN_NAME = 'Karl'
@@ -22,9 +23,7 @@ const noop = () => {}
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
-    passwordStore: {
-      getPassword: jest.fn().mockResolvedValue(true),
-    },
+    passwordStore: mockedAgent.passwordStore,
     credentials: {
       create: mockedIssueCredentialFn,
     },

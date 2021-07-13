@@ -12,6 +12,7 @@ import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AppStatusState } from '~/modules/appState/types'
 import { ReactTestInstance } from 'react-test-renderer'
 import { inputPasscode } from '../../utils/inputPasscode'
+import { getMockedDispatch } from '../../mocks/libs/react-redux'
 
 const mockGetBiometry = jest.fn()
 const mockedDispatch = jest.fn()
@@ -60,12 +61,12 @@ jest.mock(
   },
 )
 
-const getMockedDispatch = () => {
-  const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
-  const mockDispatchFn = jest.fn()
-  useDispatchSpy.mockReturnValue(mockDispatchFn)
-  return mockDispatchFn
-}
+// const getMockedDispatch = () => {
+//   const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
+//   const mockDispatchFn = jest.fn()
+//   useDispatchSpy.mockReturnValue(mockDispatchFn)
+//   return mockDispatchFn
+// }
 
 describe('Without biometry', () => {
   beforeEach(() => {
