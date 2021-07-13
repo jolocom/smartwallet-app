@@ -36,7 +36,8 @@
         "textPartOne": "Ohne deine geheime Phrase wirst du nicht in der Lage sein, deine Identität zu reaktivieren.",
         "textPartTwo": "Um deine gesamte Wallet wiederherzustellen, brauchst du die geheime Phrase als auch eine Backup-Datei.",
         "textPartThree": "Hast du wirklich keine Kopie irgendwo sicher aufbewahrt?",
-        "textPartFour": "Erinnere dich an den Moment, als du deine Identität geschaffen hast"
+        "textPartFour": "Erinnere dich an den Moment, als du deine Identität geschaffen hast",
+        "closeBtn": ""
     },
     "Entropy": {
         "header": "Mach es einzigartig",

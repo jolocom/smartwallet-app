@@ -36,7 +36,8 @@
         "textPartOne": "Without your secret phrase you will not be able to re-activate your identity.",
         "textPartTwo": "Recovering your entire wallet requires both the secret phrase and a backup file.",
         "textPartThree": "Are you sure you do not have a copy stored somewhere safe?",
-        "textPartFour": "Think back to when you first created your identity"
+        "textPartFour": "Think back to when you first created your identity",
+        "closeBtn": "Continue"
     },
     "Entropy": {
         "header": "Add uniqueness",
