@@ -4,11 +4,12 @@ import useErrors from '~/hooks/useErrors'
 import { ErrorScreens } from '../errorContext'
 import { ErrorFallback } from '~/components/ErrorFallback'
 import { SWErrorCodes, UIErrors } from '../codes'
-import { strings } from '~/translations'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
+import useTranslation from '~/hooks/useTranslation'
 
 const ErrorDisplay = () => {
+  const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
   const { errorScreen, resetError, error, showErrorReporting } = useErrors()
   const { title, message } =
@@ -26,8 +27,8 @@ const ErrorDisplay = () => {
         description={message}
         onPressTop={showErrorReporting}
         onPressBottom={resetError}
-        topButtonText={strings.SUBMIT_REPORT}
-        bottomButtonText={strings.CLOSE}
+        topButtonText={t('Errors.reportBtn')}
+        bottomButtonText={t('Errors.closeBtn')}
       />
     </ModalScreen>
   )
