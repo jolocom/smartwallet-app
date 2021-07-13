@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 
-import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import { JoloTextSizes } from '~/utils/fonts'
 import { PIN_SERVICE } from '~/utils/keychainConsts'

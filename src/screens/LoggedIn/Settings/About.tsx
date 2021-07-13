@@ -10,7 +10,6 @@ import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 // @ts-ignore
 import packageJson from '~/../package.json'
-import { strings } from '~/translations/strings'
 import useTranslation from '~/hooks/useTranslation'
 
 const About = () => {
