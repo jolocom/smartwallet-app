@@ -15,7 +15,6 @@ import {
 } from '~/types/credentials'
 
 import IdentityTabs from './tabs'
-import { strings } from '~/translations'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
@@ -64,7 +63,7 @@ const IdentityCredentials = () => {
   return (
     <View testID="identity-credentials-present" style={styles.container}>
       <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
-        {strings.YOUR_INFO_IS_QUITE_EMPTY}
+        {t('Identity.attributesMissingInfo')}
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
         {primitiveAttributesWithValues.map(({ type, label, values }) => {
