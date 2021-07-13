@@ -36,7 +36,7 @@ const Identity = () => {
       </ScreenContainer.Header>
       <IdentityTabs initialTab={initialTab}>
         <IdentityTabs.Page id={IdentityTabIds.credentials}>
-          <IdentityCredentials />
+          {/* <IdentityCredentials /> */}
         </IdentityTabs.Page>
       </IdentityTabs>
     </ScreenContainer>
