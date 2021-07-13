@@ -15,8 +15,13 @@ import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useIsFocused } from '@react-navigation/core'
+import { Colors } from '~/utils/colors'
 
-const InteractionFlow: React.FC = () => {
+interface IInteractionFlow {
+  isTransparent: boolean
+}
+
+const InteractionFlow: React.FC<IInteractionFlow> = ({ isTransparent }) => {
   const interactionType = useSelector(getInteractionType)
   const isFocused = useIsFocused()
 
@@ -51,7 +56,12 @@ const InteractionFlow: React.FC = () => {
   }
 
   return (
-    <View style={styles.fullScreen}>
+    <View
+      style={[
+        styles.fullScreen,
+        { ...(!isTransparent && { backgroundColor: Colors.osloGray }) },
+      ]}
+    >
       <ScreenDismissArea onDismiss={handleDismissInteraction} />
       <View style={styles.interactionBody}>{renderInteractionBody()}</View>
     </View>

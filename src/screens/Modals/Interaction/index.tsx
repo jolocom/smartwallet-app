@@ -52,7 +52,9 @@ const Interactions: React.FC = () => {
       <Stack.Screen
         options={modalStyleOptions}
         name={ScreenNames.InteractionFlow}
-        component={InteractionFlow}
+        component={() => (
+          <InteractionFlow isTransparent={params.isScannerShown} />
+        )}
       />
     </Stack.Navigator>
   )

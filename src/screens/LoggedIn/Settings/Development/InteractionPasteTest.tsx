@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { SDKError } from 'react-native-jolocom'
 import Btn from '~/components/Btn'
 import Input from '~/components/Input'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -25,9 +26,20 @@ const InteractionPasteTest = () => {
       setToken(DEFAULT_TOKEN)
       navigation.navigate(ScreenNames.Interaction, { isScannerShown: false })
     } catch (e) {
-      console.log({ e })
+      if (e instanceof SyntaxError) {
+        setError(SDKError.codes.ParseJWTFailed)
+      } else if (e.message === 'Token expired') {
+        setError(SDKError.codes.TokenExpired)
+      } else {
+        setError(SDKError.codes.Unknown)
+      }
+      console.warn({ e })
     }
   }
+
+  useEffect(() => {
+    setError('')
+  }, [token])
 
   return (
     <ScreenContainer

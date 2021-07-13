@@ -61,7 +61,7 @@ const TransparentModals = () => {
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: {
-    isScannerShown: true
+    isScannerShown: boolean
   }
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
@@ -222,6 +222,7 @@ const Main: React.FC = () => {
             name={ScreenNames.Interaction}
             component={Interaction}
             options={screenTransitionFromBottomDisabledGestures}
+            initialParams={{ isScannerShown: true }}
           />
           <MainStack.Screen
             name={ScreenNames.CredentialDetails}
