@@ -91,7 +91,11 @@ const ContactUs: React.FC = () => {
       >
         <Section>
           <Section.Title>{t('ContactUs.issueHeader')}</Section.Title>
-          <Dropdown options={options} onSelect={handleDropdownSelect} />
+          <Dropdown
+            placeholder={t('ContactUs.issuePlaceholder')}
+            options={options}
+            onSelect={handleDropdownSelect}
+          />
         </Section>
         <Section>
           <Section.Title customStyle={{ marginBottom: 14 }}>

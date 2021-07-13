@@ -8,11 +8,8 @@ import {
   SelectableProvider,
   useSelectableState,
 } from '~/components/Selectable'
-import useTranslation from '~/hooks/useTranslation'
 
-import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import Option from './Option'
 
 const animateLayout = () => {
@@ -22,8 +19,7 @@ const animateLayout = () => {
   })
 }
 
-const Dropdown = () => {
-  const { t } = useTranslation()
+const Dropdown: React.FC<{ placeholder: string }> = ({ placeholder }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const { selectedValue, setSelectedValue, options, onSelect } =
@@ -69,7 +65,7 @@ const Dropdown = () => {
       <Block>
         <Option onPress={toggleExpanded}>
           <Option.Title
-            title={selectedValueTruncated ?? t('ContactUs.issuePlaceholder')}
+            title={selectedValueTruncated ?? placeholder}
             color={isExpanded ? Colors.white30 : Colors.white70}
           />
           <Option.IconContainer>
@@ -125,13 +121,15 @@ const styles = StyleSheet.create({
 export default ({
   options,
   onSelect,
+  placeholder,
 }: {
   options: IOption<string>[]
   onSelect: (val: IOption<string>) => void
+  placeholder: string
 }) => {
   return (
     <SelectableProvider<string> options={options} onSelect={onSelect}>
-      <Dropdown />
+      <Dropdown placeholder={placeholder} />
     </SelectableProvider>
   )
 }
