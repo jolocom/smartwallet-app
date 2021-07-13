@@ -6,7 +6,6 @@ import JoloText from '~/components/JoloText'
 import { useLoader } from '~/hooks/loader'
 import { useReplaceWith } from '~/hooks/navigation'
 import { useAgent, useWalletReset } from '~/hooks/sdk'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
@@ -42,6 +41,7 @@ const ClearIdentityBtn = () => {
     navigation.navigate(ScreenNames.DragToConfirm, {
       title: t('EraseData.dialogMessage'),
       cancelText: t('EraseData.cancelBtn'),
+      instructionText: t('EraseData.dragInstructions'),
       onComplete: clearIdentityData,
     })
   }

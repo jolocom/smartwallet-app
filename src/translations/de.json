@@ -184,7 +184,7 @@
         "deleteCardOption": "Löschen",
         "cancelCardOption": "Abbrechen",
         "deleteDocumentHeader": "Möchtest du ${documentName} löschen?",
-        "deleteCredentialInstruction": "Zum Löschen, zieh den weißen Punkt in den Kreis",
+        "deleteCredentialInstruction": "",
         "cancelBtn": "Abbrechen",
         "placeholderHeader": "Hier gibt es nix zu sehen",
         "documentsPlaceholderSubheader": "Du hast noch keine Dokumente gespeichert.\nBesorg dir noch heute eins!",
@@ -305,7 +305,8 @@
         "dialogMessage": "Bitte beachte, dass gelöschte Daten in Zukunft nicht wiederhergestellt werden können",
         "submitBtn": "Ich habe verstanden",
         "cancelBtn": "Abbrechen",
-        "loader": ""
+        "loader": "",
+        "dragInstructions": ""
     },
     "Errors": {
         "unknownTitle": "Unbekannter Fehler",

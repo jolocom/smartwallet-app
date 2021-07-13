@@ -62,6 +62,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
           params: {
             title: deleteTitle,
             cancelText: t('Documents.cancelCardOption'),
+            instructionText: t('Documents.deleteCredentialInstruction'),
             onComplete: handleDelete,
           },
         },

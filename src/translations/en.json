@@ -184,7 +184,7 @@
         "deleteCardOption": "Delete",
         "cancelCardOption": "Cancel",
         "deleteDocumentHeader": "Do you want to delete ${documentName}?",
-        "deleteCredentialInstruction": "Drag the white ball into the circle to delete",
+        "deleteCredentialInstruction": "Drop the ball to delete",
         "cancelBtn": "Cancel",
         "placeholderHeader": "It’s still empty",
         "documentsPlaceholderSubheader": "You haven't saved any documents yet.\nGet one today!",
@@ -305,7 +305,8 @@
         "dialogMessage": "Please pay attention that deleted data cannot be recovered in the future",
         "submitBtn": "I understand",
         "cancelBtn": "Cancel",
-        "loader": "Processing data removal"
+        "loader": "Processing data removal",
+        "dragInstructions": "Drop the ball to delete"
     },
     "Errors": {
         "unknownTitle": "Unknown error",
