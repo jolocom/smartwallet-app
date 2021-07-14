@@ -62,58 +62,65 @@ export const useHistory = () => {
       })
 
     return {
-      [FlowType.Authentication]: {
-        title: t('History.authenticationHeader'),
-        steps: {
-          finished: [
-            t('History.authenticationRequestStepHeader'),
-            t('History.authResponseStepHeader'),
-          ],
-          unfinished: [
-            unfinishStep(t('History.authenticationRequestStepHeader')),
-            unfinishStep(t('History.authResponseStepHeader')),
-          ],
-        },
+      status: {
+        unknown: t('General.unknown'),
+        expired: t('History.expiredState'),
+        pending: t('History.pendingState'),
       },
-      [FlowType.Authorization]: {
-        title: t('History.authzHeader'),
-        steps: {
-          finished: [
-            t('History.authzRequestStepHeader'),
-            t('History.authzResponseStepHeader'),
-          ],
-          unfinished: [
-            unfinishStep(t('History.authzRequestStepHeader')),
-            unfinishStep(t('History.authzResponseStepHeader')),
-          ],
+      flows: {
+        [FlowType.Authentication]: {
+          title: t('History.authenticationHeader'),
+          steps: {
+            finished: [
+              t('History.authenticationRequestStepHeader'),
+              t('History.authResponseStepHeader'),
+            ],
+            unfinished: [
+              unfinishStep(t('History.authenticationRequestStepHeader')),
+              unfinishStep(t('History.authResponseStepHeader')),
+            ],
+          },
         },
-      },
-      [FlowType.CredentialOffer]: {
-        title: t('History.credentialOfferHeader'),
-        steps: {
-          finished: [
-            t('History.offerRequestStepHeader'),
-            t('History.offerResponseStepHeader'),
-            t('History.offerReceiveStepHeader'),
-          ],
-          unfinished: [
-            unfinishStep(t('History.offerRequestStepHeader')),
-            unfinishStep(t('History.offerResponseStepHeader')),
-            unfinishStep(t('History.offerReceiveStepHeader')),
-          ],
+        [FlowType.Authorization]: {
+          title: t('History.authzHeader'),
+          steps: {
+            finished: [
+              t('History.authzRequestStepHeader'),
+              t('History.authzResponseStepHeader'),
+            ],
+            unfinished: [
+              unfinishStep(t('History.authzRequestStepHeader')),
+              unfinishStep(t('History.authzResponseStepHeader')),
+            ],
+          },
         },
-      },
-      [FlowType.CredentialShare]: {
-        title: t('History.credShareHeader'),
-        steps: {
-          finished: [
-            t('History.credShareRequestStepHeader'),
-            t('History.credShareResponseStepHeader'),
-          ],
-          unfinished: [
-            unfinishStep(t('History.credShareRequestStepHeader')),
-            unfinishStep(t('History.credShareResponseStepHeader')),
-          ],
+        [FlowType.CredentialOffer]: {
+          title: t('History.credentialOfferHeader'),
+          steps: {
+            finished: [
+              t('History.offerRequestStepHeader'),
+              t('History.offerResponseStepHeader'),
+              t('History.offerReceiveStepHeader'),
+            ],
+            unfinished: [
+              unfinishStep(t('History.offerRequestStepHeader')),
+              unfinishStep(t('History.offerResponseStepHeader')),
+              unfinishStep(t('History.offerReceiveStepHeader')),
+            ],
+          },
+        },
+        [FlowType.CredentialShare]: {
+          title: t('History.credShareHeader'),
+          steps: {
+            finished: [
+              t('History.credShareRequestStepHeader'),
+              t('History.credShareResponseStepHeader'),
+            ],
+            unfinished: [
+              unfinishStep(t('History.credShareRequestStepHeader')),
+              unfinishStep(t('History.credShareResponseStepHeader')),
+            ],
+          },
         },
       },
     }

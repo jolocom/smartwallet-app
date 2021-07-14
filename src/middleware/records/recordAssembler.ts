@@ -1,5 +1,11 @@
-import { IRecordDetails, IRecordStatus, IRecordSteps } from '~/types/records'
-import { IRecordConfig } from '~/config/records'
+import {
+  IRecordDetails,
+  IRecordStatus,
+  IRecordSteps,
+  IRecordConfig,
+  IFlowRecordConfig,
+  IStatusRecordConfig,
+} from '~/types/records'
 import { FlowType } from '@jolocom/sdk'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import truncateDid from '~/utils/truncateDid'
@@ -21,11 +27,12 @@ interface IRecordAssembler {
   summary: InteractionSummary
   lastMessageDate: number
   expirationDate: number
-  config: Partial<Record<FlowType, IRecordConfig>>
+  config: IRecordConfig
 }
 
 export class RecordAssembler {
-  private config: IRecordConfig | undefined
+  private config: IFlowRecordConfig | undefined
+  private statusConfig: IStatusRecordConfig | undefined
   private messageTypes: string[]
   private flowType: FlowType
   private summary: InteractionSummary
@@ -48,7 +55,8 @@ export class RecordAssembler {
     this.summary = summary
     this.expirationDate = expirationDate
     this.lastMessageDate = lastMessageDate
-    this.config = config[flowType]
+    this.config = config.flows[flowType]
+    this.statusConfig = config.status
     this.status = this.processStatus()
     this.steps = this.processSteps()
   }
@@ -64,7 +72,7 @@ export class RecordAssembler {
   }
 
   private getTitle(): string {
-    return this.config?.title ?? 'Unknown'
+    return this.config?.title ?? this.statusConfig?.unknown!
   }
 
   private processStatus(): IRecordStatus {
@@ -111,9 +119,13 @@ export class RecordAssembler {
 
   private appendUnfinishedStep(steps: IRecordSteps[]) {
     steps.push({
-      title: this.config?.steps.unfinished[steps.length] ?? 'Unknown',
+      title:
+        this.config?.steps.unfinished[steps.length] ??
+        this.statusConfig?.unknown!,
       description:
-        this.status === IRecordStatus.expired ? 'Expired' : 'Pending',
+        this.status === IRecordStatus.expired
+          ? this.statusConfig?.expired!
+          : this.statusConfig?.pending!,
     })
   }
 
