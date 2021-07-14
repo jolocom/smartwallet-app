@@ -228,7 +228,10 @@
         "credShareRequestStepHeader": "Angefordert",
         "credShareResponseStepHeader": "Freigegeben",
         "placeholderHeader": "Noch keine Historie vorhanden",
-        "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!"
+        "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!",
+        "authzHeader": "",
+        "authzRequestStepHeader": "",
+        "authzResponseStepHeader": ""
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",

@@ -228,7 +228,10 @@
         "credShareRequestStepHeader": "Requested",
         "credShareResponseStepHeader": "Shared",
         "placeholderHeader": "No history yet",
-        "placeholderSubheader": "You dont have any completed interactions yet.\nMake one today!"
+        "placeholderSubheader": "You dont have any completed interactions yet.\nMake one today!",
+        "authzHeader": "Authorization",
+        "authzRequestStepHeader": "Authorized",
+        "authzResponseStepHeader": "Confirmed"
     },
     "Settings": {
         "preferencesSection": "App preferences",
