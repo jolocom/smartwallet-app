@@ -19,7 +19,6 @@ import {
 import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
-import { strings } from '~/translations'
 
 interface IRecordAssembler {
   messageTypes: string[]
@@ -151,7 +150,7 @@ export class RecordAssembler {
               .map((s) =>
                 s.credential?.name?.length
                   ? s.credential?.name
-                  : strings.UNKNOWN,
+                  : this.statusConfig?.unknown,
               )
               .join(', '),
           }
@@ -159,7 +158,7 @@ export class RecordAssembler {
           return {
             title: this.getFinishedStepTitle(i),
             description: state.issued
-              .map((c) => (c.name.length ? c.name : strings.UNKNOWN))
+              .map((c) => (c.name.length ? c.name : this.statusConfig?.unknown))
               .join(', '),
           }
         default:
@@ -179,7 +178,9 @@ export class RecordAssembler {
 
         const displayCreds = areCredsSupplied
           ? state.providedCredentials[0].suppliedCredentials
-              .map((c) => (!!c.name.length ? c.name : strings.UNKNOWN))
+              .map((c) =>
+                !!c.name.length ? c.name : this.statusConfig?.unknown,
+              )
               .join(', ')
           : requestedCreds
 
