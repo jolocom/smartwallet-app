@@ -207,8 +207,14 @@
     "Dates": {
         "today": "Today",
         "yesterday": "Yesterday",
+        "lastDay": "Last ${day}",
         "lastMonday": "Last Monday",
-        "lastTuesday": "Last Tuesday"
+        "lastTuesday": "Last Tuesday",
+        "lastWednesday": "Last Wednesday",
+        "lastThursday": "Last Thursday",
+        "lastFriday": "Last Friday",
+        "lastSaturday": "Last Saturday",
+        "lastSunday": "Last Sunday"
     },
     "History": {
         "allTab": "All",

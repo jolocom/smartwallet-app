@@ -15,7 +15,13 @@ export const useHistory = () => {
     const { issued } = interaction.lastMessage
     const section = getDateSection(new Date(issued))
 
-    return { type, section, lastUpdate: issued.toString(), id: interaction.id }
+    return {
+      type,
+      // @ts-ignore
+      section: t(section) as string,
+      lastUpdate: issued.toString(),
+      id: interaction.id,
+    }
   }
 
   const getInteractions = async (
