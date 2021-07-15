@@ -169,7 +169,7 @@ const CredentialForm = () => {
                 attributeId
                   ? 'CredentialForm.editHeader'
                   : 'CredentialForm.addHeader',
-                // @ts-ignore FIXME @terms
+                // @ts-expect-error @TERMS
                 { attributeName: t(formConfig.label).toString().toLowerCase() },
               ) as string
             }
@@ -191,12 +191,11 @@ const CredentialForm = () => {
                   <FormFieldContainer key={field.key}>
                     <AutofocusInput
                       testID="credential-form-input"
-                      // @ts-expect-error
                       name={field.key as string}
                       key={field.key}
                       updateInput={(v) => handleFieldValueChange(v, field)}
                       value={values[field.key]}
-                      // @ts-ignore FIXME @terms
+                      // @ts-expect-error @TERMS
                       placeholder={t(field.label)}
                       autoFocus={i === 0}
                       onBlur={() => setFieldTouched(field.key, true, false)}
