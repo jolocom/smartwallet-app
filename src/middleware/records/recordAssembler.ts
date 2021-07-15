@@ -209,7 +209,9 @@ export class RecordAssembler {
         case 'AuthorizationResponse':
           return {
             title: this.getFinishedStepTitle(i),
-            description: capitalizeWord(state.action ?? 'Authorize'),
+            description: capitalizeWord(
+              state.action ?? this.statusConfig?.unknown!,
+            ),
           }
         default:
           throw new Error('Wrong interaction type for flow')
