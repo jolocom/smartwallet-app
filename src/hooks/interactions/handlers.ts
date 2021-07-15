@@ -21,8 +21,6 @@ import { useToasts } from '../toasts'
 import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
-import { FlowType, Interaction } from 'react-native-jolocom'
-import { InteractionDetails } from '~/modules/interaction/types'
 
 export const useInteraction = () => {
   const agent = useAgent()

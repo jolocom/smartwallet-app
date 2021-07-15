@@ -5,9 +5,7 @@ import {
 } from '@jolocom/sdk/js/interactionManager/types'
 
 import { FlowType, Interaction } from 'react-native-jolocom'
-import {
-  getCredentialCategory,
-} from '../signedCredentials/utils'
+import { getCredentialCategory } from '../signedCredentials/utils'
 import { useAgent } from '../sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '../toasts'
@@ -22,7 +20,7 @@ const authenticationHandler = (state: AuthenticationFlowState) => ({
 const authorizationHandler = (state: AuthorizationFlowState) => ({
   action: state.action,
   description: state.description,
-  imageURL: state.imageURL
+  imageURL: state.imageURL,
 })
 
 const credentialOfferHandler = (state: CredentialOfferFlowState) => {
@@ -96,8 +94,8 @@ export const useInteractionHandler = () => {
           // FIXME: there is an issue with the strings here, will be fixed when the
           // i18n and PoEditor are properly set up.
           scheduleWarning({
-            title: t(strings.SHARE_MISSING_DOCS_TITLE),
-            message: t(strings.SHARE_MISSING_DOCS_MSG, {
+            title: t('Toasts.shareMissingDocsTitle'),
+            message: t('Toasts.shareMissingDocsTitle', {
               serviceName,
               documentType: handler.missingCredentialTypes.join(', '),
             }),
