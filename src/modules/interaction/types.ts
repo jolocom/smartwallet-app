@@ -50,6 +50,7 @@ interface InteractionCommonI {
 export interface NotActiveInteractionDetailsI {
   flowType: null
   id: null
+  counterparty: null
 }
 
 export interface AuthenticationDetailsI extends InteractionCommonI {
