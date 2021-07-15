@@ -19,10 +19,6 @@ export const UIErrors: Partial<
     message:
       strings.AND_IF_THIS_IS_NOT_THE_FIRST_TIME_WE_STRONGLY_RECOMMEND_LETTING_US_KNOW,
   },
-  [SWErrorCodes.SWInteractionRequestMissingDocuments]: {
-    title: strings.SHARE_MISSING_DOCS_TITLE,
-    message: strings.SHARE_MISSING_DOCS_MSG,
-  },
   [SWErrorCodes.SWInteractionUnknownError]: {
     title: strings.INTERACTION_ERROR_TITLE,
     message: strings.INTERACTION_ERROR_MESSAGE,

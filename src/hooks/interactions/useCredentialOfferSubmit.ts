@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
@@ -12,9 +12,13 @@ import { useCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
 import { CredentialCategories } from '~/types/credentials'
 import { SWErrorCodes } from '~/errors/codes'
+import { useTranslation } from 'react-i18next'
+import { getInteractionCounterpartyName } from '~/modules/interaction/selectors'
 
 const useCredentialOfferSubmit = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
+  const counterpartyName = useSelector(getInteractionCounterpartyName)
   const {
     assembleOfferResponseToken,
     processOfferReceiveToken,
@@ -86,7 +90,9 @@ const useCredentialOfferSubmit = () => {
           new Error(SWErrorCodes.SWInteractionOfferAllInvalid),
           {
             title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
-            message: strings.OFFER_ALL_INVALID_TOAST_MSG,
+            message: t(strings.OFFER_ALL_INVALID_TOAST_MSG, {
+              serviceName: counterpartyName,
+            }),
           },
         )
         finishInteraction()

@@ -16,12 +16,13 @@ import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
 import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { interactionHandler } from './interactionHandlers'
-import { getDid } from '~/modules/account/selectors'
+import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
+import { FlowType, Interaction } from 'react-native-jolocom'
+import { InteractionDetails } from '~/modules/interaction/types'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -33,9 +34,9 @@ export const useInteraction = () => {
 
 export const useInteractionStart = () => {
   const agent = useAgent()
-  const did = useSelector(getDid)
   const dispatch = useDispatch()
   const loader = useLoader()
+  const interactionHandler = useInteractionHandler()
   const { connected, showDisconnectedToast } = useConnection()
   const { scheduleWarning, scheduleErrorWarning } = useToasts()
 
@@ -51,20 +52,21 @@ export const useInteractionStart = () => {
     return loader(
       async () => {
         const interaction = await agent.processJWT(jwt)
-        const interactionData = await interactionHandler(
-          agent,
-          interaction,
-          did,
-        )
-        dispatch(
-          setInteractionDetails({
-            id: interaction.id,
-            flowType: interaction.flow.type,
-            ...interactionData,
-          }),
-        )
+        const counterparty = interaction.getSummary().initiator
+        const interactionData = await interactionHandler(interaction)
+
+        if (interactionData) {
+          dispatch(
+            setInteractionDetails({
+              id: interaction.id,
+              flowType: interaction.flow.type,
+              counterparty,
+              ...interactionData,
+            }),
+          )
+        }
       },
-      { showSuccess: false },
+      { showSuccess: false, showFailed: false },
       (error) => {
         if (isError(error)) {
           // @ts-ignore
