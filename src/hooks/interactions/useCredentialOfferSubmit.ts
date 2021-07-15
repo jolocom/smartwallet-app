@@ -69,10 +69,12 @@ const useCredentialOfferSubmit = () => {
       // NOTE: Uncomment the line below to test the duplicates edge-case
       // await storeSelectedCredentials()
       const anyDuplicates = await checkDuplicates()
-      if (anyDuplicates)
-        throw new Error(
-          "Duplicates were found. Can't proceed with the interaction",
-        )
+      if (anyDuplicates) {
+        return scheduleInfo({
+          title: t('Toasts.offerDuplicateTitle'),
+          message: t('Toasts.offerDuplicateSingleMsg'),
+        })
+      }
 
       const validatedCredentials = await getValidatedCredentials()
       const allValid = validatedCredentials.every((cred) => !cred.invalid)
