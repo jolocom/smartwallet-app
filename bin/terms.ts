@@ -23,7 +23,8 @@ const cloneSecrets = () => {
       {
         silent: true,
       },
-      (code, stdout, stderr) => {
+      // NOTE: stderr and stdout are switched in the types for some reason
+      (code, stderr, stdout) => {
         if (code != 0) return rej(new Error(stderr))
         return res(stdout)
       },
