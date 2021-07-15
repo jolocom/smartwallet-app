@@ -170,7 +170,7 @@ const CredentialForm = () => {
                   ? 'CredentialForm.editHeader'
                   : 'CredentialForm.addHeader',
                 // @ts-expect-error @TERMS
-                { attributeName: t(formConfig.label).toString().toLowerCase() },
+                { attributeName: t(formConfig.label).toString() },
               ) as string
             }
             description={t('CredentialForm.subheader')}
