@@ -19,11 +19,13 @@ import BtnGroup from '~/components/BtnGroup'
 import { View } from 'react-native'
 import { useDisableLock } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
+import { useToasts } from '~/hooks/toasts'
 
 const RegisterBiometry: React.FC = () => {
   const { t } = useTranslation()
   const { biometryType } = useDeviceAuthState()
   const { authenticate, setBiometry } = useBiometry()
+  const { scheduleErrorWarning } = useToasts()
   const disableLock = useDisableLock()
   const displaySuccessLoader = useSuccess()
 
@@ -37,10 +39,7 @@ const RegisterBiometry: React.FC = () => {
         displaySuccessLoader(handleRedirectToLogin)
       }
     } catch (err) {
-      // FIXME @terms
-      console.log('Error authenticating with Biometrics in RegisterBiometry', {
-        err,
-      })
+      scheduleErrorWarning(err)
     }
   }
 
