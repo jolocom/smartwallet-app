@@ -121,7 +121,7 @@ export const DocumentList = () => {
                 | CredentialsByType<DisplayCredentialDocument>
                 | CredentialsByIssuer<DisplayCredentialDocument>
 
-              // @ts-ignore @terms
+              // @ts-expect-error @terms
               const uiType = t(uiTypesTerms[value as CredentialUITypes])
               return (
                 <>
@@ -149,12 +149,10 @@ export const DocumentList = () => {
                         mandatoryFields={[
                           {
                             label: DocumentFields.DocumentName,
-                            // FIXME @terms
                             value: c.name || t('General.unknown'),
                           },
                           {
                             label: t('Documents.subjectNameField'),
-                            // FIXME @terms
                             value: c.holderName,
                           },
                         ]}
@@ -214,7 +212,6 @@ export const DocumentList = () => {
                         mandatoryFields={[
                           {
                             label: DocumentFields.DocumentName,
-                            // FIXME @terms
                             value: c.name || t('General.unknown'),
                           },
                         ]}

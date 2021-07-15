@@ -132,7 +132,6 @@ const RegisterPin = () => {
         >
           {!isCreating && (
             <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {/* FIXME @terms is not present in the designs*/}
               {t('VerifyPasscode.resetBtn')}
             </Btn>
           )}
