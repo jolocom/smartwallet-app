@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { useRedirectTo } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
-import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { useCard } from './context'
@@ -13,8 +11,7 @@ import useTranslation from '~/hooks/useTranslation'
 
 const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const { t } = useTranslation()
-  const { scheduleWarning } = useToasts()
-  const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
+  const { scheduleErrorWarning } = useToasts()
   const deleteCredential = useDeleteCredential()
 
   const { id, photo, document, restMandatoryField, optionalFields } = useCard()
@@ -31,14 +28,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
     try {
       await deleteCredential(id)
     } catch (e) {
-      scheduleWarning({
-        title: strings.WHOOPS,
-        message: strings.ERROR_TOAST_MSG,
-        interact: {
-          label: strings.REPORT,
-          onInteract: redirectToContactUs, // TODO: change to Reporting screen once available
-        },
-      })
+      scheduleErrorWarning(e)
     }
   }
 
