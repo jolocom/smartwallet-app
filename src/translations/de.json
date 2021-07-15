@@ -186,7 +186,8 @@
         "shareMissingDocsMsg": "",
         "failedStoreMsg": "",
         "reconnectedInternetTitle": "",
-        "reconnectedInternetMsg": ""
+        "reconnectedInternetMsg": "",
+        "successfulInteractionMsg": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",

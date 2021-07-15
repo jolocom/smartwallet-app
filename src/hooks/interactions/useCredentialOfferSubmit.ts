@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useToasts } from '../toasts'
-import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
 import { useRedirect } from '../navigation'
@@ -36,7 +35,7 @@ const useCredentialOfferSubmit = () => {
   const scheduleSuccess = (initialTab: CredentialCategories) =>
     scheduleSuccessInteraction({
       interact: {
-        label: strings.REVIEW,
+        label: t('Toasts.successfulOfferInteractionBtn'),
         onInteract: () => redirect(ScreenNames.Documents, { initialTab }),
       },
     })
@@ -89,8 +88,8 @@ const useCredentialOfferSubmit = () => {
         scheduleErrorWarning(
           new Error(SWErrorCodes.SWInteractionOfferAllInvalid),
           {
-            title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
-            message: t(strings.OFFER_ALL_INVALID_TOAST_MSG, {
+            title: t('Toasts.offerInvalidDocsTitle'),
+            message: t('Toasts.offerInvalidDocsMsg', {
               serviceName: counterpartyName,
             }),
           },
@@ -99,8 +98,8 @@ const useCredentialOfferSubmit = () => {
       } else {
         dispatch(updateOfferValidation(validatedCredentials))
         scheduleInfo({
-          title: strings.OFFER_RENEGOTIATION_TITLE,
-          message: strings.OFFER_RENEGOTIATION_MSG,
+          title: t('Toasts.offerRenegotiationTitle'),
+          message: t('Toasts.offerRenegotiationMsg'),
         })
       }
     } catch (err) {

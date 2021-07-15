@@ -9,10 +9,11 @@ import {
   ToastBody,
 } from '~/types/toasts'
 import { scheduleToast, removeToastAndUpdate } from '~/modules/toasts/actions'
-import { strings } from '~/translations'
 import useErrors from './useErrors'
+import useTranslation from './useTranslation'
 
 export const useToasts = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const activeToast = useSelector(getActiveToast)
   const { showErrorReporting } = useErrors()
@@ -32,10 +33,10 @@ export const useToasts = () => {
   //TODO: don't pass title and message, but rather get them based on the SW error code
   const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) =>
     scheduleWarning({
-      title: strings.ERROR_TOAST_TITLE,
-      message: strings.ERROR_TOAST_MSG,
+      title: t('Toasts.failedInteractionTitle'),
+      message: t('Toasts.failedInteractionMsg'),
       interact: {
-        label: strings.REPORT,
+        label: t('Toasts.reportBtn'),
         onInteract: () => {
           showErrorReporting(error)
         },

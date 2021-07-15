@@ -186,7 +186,8 @@
         "shareMissingDocsMsg": "${serviceName} is requesting a document that can’t be found in your wallet. \n\nMissing: ${documentType}",
         "failedStoreMsg": "We could not store your passcode. Please try again",
         "reconnectedInternetTitle": "You're back online",
-        "reconnectedInternetMsg": "All wallet functionalities are back again"
+        "reconnectedInternetMsg": "All wallet functionalities are back again",
+        "successfulInteractionMsg": "You should have all you need to continue your interaction now"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
