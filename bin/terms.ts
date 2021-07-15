@@ -20,7 +20,9 @@ const cloneSecrets = () => {
     shell.rm('-rf', `poeditor-key`)
     shell.exec(
       `git clone ${SECRETS_REPO} -b master`,
-      {},
+      {
+        silent: true,
+      },
       (code, stdout, stderr) => {
         if (code != 0) return rej(new Error(stderr))
         return res(stdout)
