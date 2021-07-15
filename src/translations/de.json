@@ -167,7 +167,26 @@
         "cardNoPreview": ""
     },
     "Toasts": {
-        "reportBtn": "Bericht"
+        "reportBtn": "Bericht",
+        "noInternetTitle": "",
+        "noInternetMsg": "",
+        "failedInteractionTitle": "",
+        "failedInteractionMsg": "",
+        "successfulInteractionTitle": "",
+        "successfulInternetMsg": "",
+        "successfulOfferInteractionBtn": "",
+        "offerDuplicateTitle": "",
+        "offerDuplicateSingleMsg": "",
+        "offerDuplicateMultipleMsg": "",
+        "offerInvalidDocsTitle": "",
+        "offerInvalidDocsMsg": "",
+        "offerRenegotiationTitle": "",
+        "offerRenegotiationMsg": "",
+        "shareMissingDocsTitle": "",
+        "shareMissingDocsMsg": "",
+        "failedStoreMsg": "",
+        "reconnectedInternetTitle": "",
+        "reconnectedInternetMsg": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -207,8 +226,14 @@
     "Dates": {
         "today": "Heute",
         "yesterday": "Gestern",
-        "lastMonday": "Letzten Montag",
-        "lastTuesday": "Letzten Dienstag"
+        "lastDay": "Letzten ${day}",
+        "lastMonday": "",
+        "lastTuesday": "",
+        "lastWednesday": "",
+        "lastThursday": "",
+        "lastFriday": "",
+        "lastSaturday": "",
+        "lastSunday": ""
     },
     "History": {
         "allTab": "Alle",
@@ -228,7 +253,10 @@
         "credShareRequestStepHeader": "Angefordert",
         "credShareResponseStepHeader": "Freigegeben",
         "placeholderHeader": "Noch keine Historie vorhanden",
-        "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!"
+        "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!",
+        "authzHeader": "",
+        "authzRequestStepHeader": "",
+        "authzResponseStepHeader": ""
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",
