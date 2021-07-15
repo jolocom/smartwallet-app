@@ -1,10 +1,24 @@
 import Biometry, { BiometryType } from 'react-native-biometrics'
-import { useBiometryDescription } from '~/screens/Modals/DeviceAuthentication/utils/getText'
+import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
 import { StorageKeys, useAgent } from './sdk'
+import useTranslation from './useTranslation'
 
 export const useBiometry = () => {
+  const { t } = useTranslation()
   const agent = useAgent()
-  const getBiometryDescription = useBiometryDescription()
+
+  const getBiometryDescription = (biometryType: BiometryType | undefined) => {
+    switch (biometryType) {
+      case BiometryTypes.TouchID:
+        return t('Biometry.promptFingerprint')
+      case BiometryTypes.FaceID:
+        return t('Biometry.promptFaceId')
+      case 'Biometrics':
+        return t('Biometry.promptBiometrics')
+      default:
+        throw new Error('We do not support this type of biometry')
+    }
+  }
 
   const authenticate = async (biometryType: BiometryType | undefined) => {
     return await Biometry.simplePrompt({
