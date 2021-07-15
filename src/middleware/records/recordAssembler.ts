@@ -129,7 +129,7 @@ export class RecordAssembler {
   }
 
   private getFinishedStepTitle(index: number) {
-    return this.config?.steps.finished[index] ?? 'Unknown'
+    return this.config?.steps.finished[index] ?? this.statusConfig?.unknown!
   }
 
   private assembleCredentialOfferSteps() {
@@ -238,7 +238,7 @@ export class RecordAssembler {
   private assembleUnknownSteps() {
     return this.assembleAllSteps((_, i) => ({
       title: this.getFinishedStepTitle(i),
-      description: 'Unknown',
+      description: this.statusConfig?.unknown!,
     }))
   }
 
