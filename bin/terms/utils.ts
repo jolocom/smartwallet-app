@@ -19,16 +19,16 @@ interface IResult  {
   }
 }
 
-interface IResponse {
+export interface IResponse<T = IResult> {
   response: {
     status: string,
     code: string,
     message: string,
   },
-  result: IResult
+  result: T
 }
 
-const cloneSecrets = () => {
+export const cloneSecrets = () => {
   return new Promise((res, rej) => {
     const keyExists = fs.existsSync(API_KEY_LOCATION);
     const idExists = fs.existsSync(PROJECT_ID_LOCATION);
@@ -44,7 +44,7 @@ const cloneSecrets = () => {
         },
       )
     } else {
-      res(true);
+      res('Secrets are already present');
     }
   })
 }
@@ -59,14 +59,13 @@ const readTextFile = (location: string) => {
 }
 
 const getPoeditorSecrets = async () => {
-    await cloneSecrets();
     const apiKey = await readTextFile(API_KEY_LOCATION)
     const projectId = await readTextFile(PROJECT_ID_LOCATION)
     return { apiKey, projectId }
 }
 
 
-export const sendPostRequest = async (path: string, params: Record<string, string>) => {
+export const sendPostRequest = async <T = IResponse, >(path: string, params: Record<string, string>) => {
   try {
     const { apiKey, projectId } = await getPoeditorSecrets();
     const requestParams = new URLSearchParams({
@@ -81,7 +80,7 @@ export const sendPostRequest = async (path: string, params: Record<string, strin
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     })
-    return await res.json() as IResponse;
+    return await res.json() as T;
   } catch(err) {
     console.error(err);
   }

@@ -1,7 +1,7 @@
 import minimist from 'minimist';
 import inquirer from 'inquirer';
 
-import { Languages, sendPostRequest } from './utils';
+import { cloneSecrets, Languages, sendPostRequest } from './utils';
 import { questionsAddingTerm, questionUpdateTranslation } from './questions';
 
 const args = minimist(process.argv.slice(2), {
@@ -88,10 +88,11 @@ const addTranslation = async (mode: 'add' | 'update' = 'add') => {
 
 const main = async () => {
   try {
+    await cloneSecrets();
     await addTerm();
     await addTranslation();
   } catch(err) {
-    console.log('\x1b[4;91m%s\x1b[0m', err)
+    console.log('\x1b[0;91m%s\x1b[0m', err)
   }
 }
 
