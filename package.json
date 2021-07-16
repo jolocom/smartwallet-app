@@ -1,7 +1,6 @@
 {
   "name": "SmartWallet",
   "version": "0.0.1.021",
-
   "private": true,
   "scripts": {
     "run:ios": "react-native run-ios",
@@ -17,8 +16,10 @@
     "release:android": "bundle exec fastlane android release",
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "exportTerms": "ts-node ./bin/terms.ts",
+    "term:add": "ts-node ./bin/terms/add-term.ts",
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts? --coverageDirectory=coverage",
-    "test": "jest", "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prettier:check": "prettier --check",
     "prettier:checkAll": "prettier --check './**/*.ts|*.tsx'",
     "prettier:format": "prettier --write",
@@ -109,7 +110,9 @@
     "@react-native-community/eslint-config": "^1.1.0",
     "@testing-library/jest-native": "^3.3.0",
     "@testing-library/react-native": "^7.0.2",
+    "@types/inquirer": "^7.3.3",
     "@types/jest": "^24.0.24",
+    "@types/minimist": "^1.2.2",
     "@types/node-fetch": "^2.5.11",
     "@types/react-native": "^0.62.0",
     "@types/react-native-snap-carousel": "^3.8.2",
@@ -126,9 +129,11 @@
     "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.5.1",
     "husky": "^4.2.5",
+    "inquirer": "^8.1.2",
     "jest": "^24.9.0",
     "metro-minify-terser": "^0.65.1",
     "metro-react-native-babel-preset": "^0.65.1",
+    "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
     "prettier": "^2.0.4",
     "react-devtools": "^4.6.0",
@@ -136,6 +141,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-mock-store": "^1.5.4",
     "shelljs": "^0.8.4",
+    "ts-node": "^10.1.0",
     "typescript": "^4.2.3"
   },
   "jest": {
