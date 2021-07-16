@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import fs from 'fs'
-import { cloneSecrets, IResponse, Languages, sendPostRequest } from './terms/utils'
+import { cloneSecrets, IResponse, Languages, sendPostRequest } from './utils'
 
 const CURRENT_PATH = process.cwd()
 const TRANSLATIONS_LOCATION = `${CURRENT_PATH}/src/translations/`
