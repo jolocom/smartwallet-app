@@ -2,24 +2,7 @@ import minimist from 'minimist';
 import inquirer from 'inquirer';
 
 import { Languages, sendPostRequest } from './utils';
-
-var questions = [
-  {
-    type: 'input',
-    name: 'ctx',
-    message: "What's a term context?"
-  },
-  {
-    type: 'input',
-    name: 'term',
-    message: "What's a term label?"
-  },
-  {
-    type: 'input',
-    name: 'content',
-    message: "What's a term value?"
-  }
-]
+import { questionsAddingTerm, questionUpdateTranslation } from './questions';
 
 const args = minimist(process.argv.slice(2), {
   string: ["ctx", "term", "content", "lang"],
@@ -64,10 +47,12 @@ const addTerm = async () => {
   }
 }
 
-const addTranslation = async () => {
-  if(lang !== Languages) {
+const addTranslation = async (mode: 'add' | 'update' = 'add') => {
+  if(lang !== Languages && mode === 'add') {
+    console.log("");
     console.log('\x1b[0;93m%s\x1b[0m', `Provided lang argument "${lang}" is not supported.`);
     console.log('\x1b[0;93m%s\x1b[0m', `Falling back to "${Languages.en}".`);
+    console.log("");
     lang = Languages.en;
   }
   const params = {
@@ -82,14 +67,22 @@ const addTranslation = async () => {
       }
     ])
   }
-  const data = await sendPostRequest('/translations/add', params);
-  if(data && data.response.code === "200" && data.result.translations.added === 1) {
+  const data = await sendPostRequest(`/translations/${mode}`, params);
+  const key = `${mode}${mode === 'add' ? 'ed' : 'd'}`;
+  if(data && data.response.code === "200" && data.result.translations[key] === 1) {
     return data;
-  } else if(data && data.response.code === "200" && data.result.translations.added === 0) {
-    // term already exists
-    return data;
+  } else if(data && data.response.code === "200" && data.result.translations[key] === 0) {
+    if(mode === 'add') {
+      const {update: shouldUpdate} = await inquirer.prompt(questionUpdateTranslation);
+      if(shouldUpdate) {
+        // overwrite translation
+        await addTranslation('update')
+      }
+      return data;
+    }
+    return;
   } else {
-    throw `Translation "${content}" could not added`
+    throw `Translation "${content}" could not be added`
   }
 }
 
@@ -112,7 +105,7 @@ if(!ctx || !term || !content) {
   printHelp();  
   console.log("");
   console.log('\x1b[4;92m%s\x1b[0m', 'Let\'s fill in missing arguments');
-  const updatedQuestions = questions.filter(q => !Boolean(args[q.name]));
+  const updatedQuestions = questionsAddingTerm.filter(q => !Boolean(args[q.name]));
   (async() => {
     const answers = await inquirer.prompt(updatedQuestions); 
     ctx = args.ctx || answers.ctx;
