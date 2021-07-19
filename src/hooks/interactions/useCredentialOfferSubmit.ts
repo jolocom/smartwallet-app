@@ -11,7 +11,7 @@ import { useCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
 import { CredentialCategories } from '~/types/credentials'
 import { SWErrorCodes } from '~/errors/codes'
-import { useTranslation } from 'react-i18next'
+import useTranslation from '~/hooks/useTranslation'
 import { getInteractionCounterpartyName } from '~/modules/interaction/selectors'
 
 const useCredentialOfferSubmit = () => {
