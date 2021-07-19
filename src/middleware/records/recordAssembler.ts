@@ -1,5 +1,11 @@
-import { IRecordDetails, IRecordStatus, IRecordSteps } from '~/types/records'
-import { IRecordConfig } from '~/config/records'
+import {
+  IRecordDetails,
+  IRecordStatus,
+  IRecordSteps,
+  IRecordConfig,
+  IFlowRecordConfig,
+  IStatusRecordConfig,
+} from '~/types/records'
 import { FlowType } from '@jolocom/sdk'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import truncateDid from '~/utils/truncateDid'
@@ -13,7 +19,6 @@ import {
 import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
-import { strings } from '~/translations'
 
 interface IRecordAssembler {
   messageTypes: string[]
@@ -21,11 +26,12 @@ interface IRecordAssembler {
   summary: InteractionSummary
   lastMessageDate: number
   expirationDate: number
-  config: Partial<Record<FlowType, IRecordConfig>>
+  config: IRecordConfig
 }
 
 export class RecordAssembler {
-  private config: IRecordConfig | undefined
+  private config: IFlowRecordConfig | undefined
+  private statusConfig: IStatusRecordConfig
   private messageTypes: string[]
   private flowType: FlowType
   private summary: InteractionSummary
@@ -48,7 +54,8 @@ export class RecordAssembler {
     this.summary = summary
     this.expirationDate = expirationDate
     this.lastMessageDate = lastMessageDate
-    this.config = config[flowType]
+    this.config = config.flows[flowType]
+    this.statusConfig = config.status
     this.status = this.processStatus()
     this.steps = this.processSteps()
   }
@@ -64,7 +71,7 @@ export class RecordAssembler {
   }
 
   private getTitle(): string {
-    return this.config?.title ?? 'Unknown'
+    return this.config?.title ?? this.statusConfig.unknown
   }
 
   private processStatus(): IRecordStatus {
@@ -111,14 +118,18 @@ export class RecordAssembler {
 
   private appendUnfinishedStep(steps: IRecordSteps[]) {
     steps.push({
-      title: this.config?.steps.unfinished[steps.length] ?? 'Unknown',
+      title:
+        this.config?.steps.unfinished[steps.length] ??
+        this.statusConfig.unknown,
       description:
-        this.status === IRecordStatus.expired ? 'Expired' : 'Pending',
+        this.status === IRecordStatus.expired
+          ? this.statusConfig.expired
+          : this.statusConfig.pending,
     })
   }
 
   private getFinishedStepTitle(index: number) {
-    return this.config?.steps.finished[index] ?? 'Unknown'
+    return this.config?.steps.finished[index] ?? this.statusConfig.unknown
   }
 
   private assembleCredentialOfferSteps() {
@@ -139,7 +150,7 @@ export class RecordAssembler {
               .map((s) =>
                 s.credential?.name?.length
                   ? s.credential?.name
-                  : strings.UNKNOWN,
+                  : this.statusConfig.unknown,
               )
               .join(', '),
           }
@@ -147,7 +158,7 @@ export class RecordAssembler {
           return {
             title: this.getFinishedStepTitle(i),
             description: state.issued
-              .map((c) => (c.name.length ? c.name : strings.UNKNOWN))
+              .map((c) => (c.name.length ? c.name : this.statusConfig.unknown))
               .join(', '),
           }
         default:
@@ -167,7 +178,9 @@ export class RecordAssembler {
 
         const displayCreds = areCredsSupplied
           ? state.providedCredentials[0].suppliedCredentials
-              .map((c) => (!!c.name.length ? c.name : strings.UNKNOWN))
+              .map((c) =>
+                !!c.name.length ? c.name : this.statusConfig.unknown,
+              )
               .join(', ')
           : requestedCreds
 
@@ -196,7 +209,9 @@ export class RecordAssembler {
         case 'AuthorizationResponse':
           return {
             title: this.getFinishedStepTitle(i),
-            description: capitalizeWord(state.action ?? 'Authorize'),
+            description: capitalizeWord(
+              state.action ?? this.statusConfig.unknown,
+            ),
           }
         default:
           throw new Error('Wrong interaction type for flow')
@@ -225,7 +240,7 @@ export class RecordAssembler {
   private assembleUnknownSteps() {
     return this.assembleAllSteps((_, i) => ({
       title: this.getFinishedStepTitle(i),
-      description: 'Unknown',
+      description: this.statusConfig.unknown,
     }))
   }
 
