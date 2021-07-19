@@ -11,6 +11,7 @@ import BottomBar from '~/components/BottomBar'
 import Settings from './Settings'
 import Identity from './Identity'
 import { CredentialCategories } from '~/types/credentials'
+import useTranslation from '~/hooks/useTranslation'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
@@ -21,26 +22,37 @@ export type MainTabsParamList = {
 
 const MainTabsNavigator = createBottomTabNavigator<MainTabsParamList>()
 
-const MainTabs = () => (
-  <MainTabsNavigator.Navigator
-    tabBar={(props: BottomTabBarProps) => {
-      return <BottomBar {...props} />
-    }}
-  >
-    <MainTabsNavigator.Screen
-      name={ScreenNames.Identity}
-      component={Identity}
-    />
-    <MainTabsNavigator.Screen
-      name={ScreenNames.Documents}
-      component={Documents}
-    />
-    <MainTabsNavigator.Screen name={ScreenNames.History} component={History} />
-    <MainTabsNavigator.Screen
-      name={ScreenNames.Settings}
-      component={Settings}
-    />
-  </MainTabsNavigator.Navigator>
-)
+const MainTabs = () => {
+  const { t } = useTranslation()
+
+  return (
+    <MainTabsNavigator.Navigator
+      tabBar={(props: BottomTabBarProps) => {
+        return <BottomBar {...props} />
+      }}
+    >
+      <MainTabsNavigator.Screen
+        name={ScreenNames.Identity}
+        component={Identity}
+        options={{ tabBarLabel: t('BottomBar.identity') }}
+      />
+      <MainTabsNavigator.Screen
+        name={ScreenNames.Documents}
+        component={Documents}
+        options={{ tabBarLabel: t('BottomBar.documents') }}
+      />
+      <MainTabsNavigator.Screen
+        name={ScreenNames.History}
+        component={History}
+        options={{ tabBarLabel: t('BottomBar.history') }}
+      />
+      <MainTabsNavigator.Screen
+        name={ScreenNames.Settings}
+        component={Settings}
+        options={{ tabBarLabel: t('BottomBar.settings') }}
+      />
+    </MainTabsNavigator.Navigator>
+  )
+}
 
 export default MainTabs

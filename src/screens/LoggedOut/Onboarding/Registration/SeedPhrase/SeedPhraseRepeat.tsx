@@ -4,7 +4,6 @@ import { useFailed } from '~/hooks/loader'
 import { useSubmitIdentity } from '~/hooks/sdk'
 import { BackArrowIcon } from '~/assets/svg'
 import { useDangerouslyDisableGestures, useGoBack } from '~/hooks/navigation'
-import { strings } from '~/translations/strings'
 
 import SeedPhrase from './components/Styled'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -12,12 +11,14 @@ import { Colors } from '~/utils/colors'
 import { useGetSeedPhrase } from '~/hooks/sdk'
 import shuffleArray from '~/utils/arrayUtils'
 import Dnd from './Dnd'
+import useTranslation from '~/hooks/useTranslation'
 
 const SeedPhraseRepeat: React.FC = () => {
   const goBack = useGoBack()
   const submitIdentity = useSubmitIdentity()
   const seedphrase = useGetSeedPhrase()
   const showFailedLoader = useFailed()
+  const { t } = useTranslation()
 
   useDangerouslyDisableGestures()
 
@@ -75,11 +76,11 @@ const SeedPhraseRepeat: React.FC = () => {
       </SeedPhrase.Styled.Header>
       {wrongOrder ? (
         <SeedPhrase.Styled.ErrorText>
-          {strings.CHECK_CAREFULLY_FOR_MISTAKES_AND_TRY_AGAIN}
+          {t('SeedphraseRepeat.matchingError')}
         </SeedPhrase.Styled.ErrorText>
       ) : (
         <SeedPhrase.Styled.HelperText>
-          {strings.DRAG_AND_DROP_THE_WORDS(isFirstFragment.current)}
+          {t('SeedphraseRepeat.orderInstructions')}
         </SeedPhrase.Styled.HelperText>
       )}
       <SeedPhrase.Styled.ActiveArea>
@@ -93,7 +94,7 @@ const SeedPhraseRepeat: React.FC = () => {
           onPress={onSubmit}
           type={BtnTypes.primary}
         >
-          {strings.DONE}
+          {t('SeedphraseRepeat.confirmBtn')}
         </Btn>
       </SeedPhrase.Styled.CTA>
     </SeedPhrase.Styled.ScreenContainer>

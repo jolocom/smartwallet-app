@@ -2,19 +2,19 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import { HandAnimation } from '~/components/HandAnimation'
-import { strings } from '~/translations/strings'
 import ScreenHeader from '~/components/ScreenHeader'
+import useTranslation from '~/hooks/useTranslation'
 
 export const EntropyIntro: React.FC = () => {
+  const { t } = useTranslation()
+
   return (
     <View style={styles.container}>
       <HandAnimation />
       <View style={styles.textContainer}>
         <ScreenHeader
-          title={strings.SET_UP_YOUR_IDENTITY}
-          subtitle={
-            strings.TAP_THE_SCREEN_AND_DRAW_RANDOMLY_ON_IT_UNTIL_YOU_COLLECT_100
-          }
+          title={t('Entropy.header')}
+          subtitle={t('Entropy.subheader')}
         />
       </View>
     </View>

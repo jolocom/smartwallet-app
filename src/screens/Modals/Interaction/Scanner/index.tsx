@@ -6,11 +6,12 @@ import useCameraPermissions, {
   Results,
 } from '~/screens/Modals/Interaction/Scanner/useCameraPermissions'
 import { Colors } from '~/utils/colors'
-import { strings } from '~/translations/strings'
 import Camera from '~/screens/Modals/Interaction/Scanner/Camera'
 import ScreenHeader from '~/components/ScreenHeader'
+import useTranslation from '~/hooks/useTranslation'
 
 const Scanner: React.FC = () => {
+  const { t } = useTranslation()
   const { permission, handlePlatformPermissions } = useCameraPermissions()
 
   return permission === Results.GRANTED ? (
@@ -18,15 +19,15 @@ const Scanner: React.FC = () => {
   ) : (
     <ScreenContainer hasHeaderClose>
       <ScreenHeader
-        title={strings.CAMERA_PERMISSION}
-        subtitle={strings.YOU_CANT_SCAN_WITHOUT_MAIN_FUNCTION}
+        title={t('CameraPermission.header')}
+        subtitle={t('CameraPermission.subheader')}
       />
       <Btn
         type={BtnTypes.secondary}
         customTextStyles={{ color: Colors.activity }}
         onPress={handlePlatformPermissions}
       >
-        {strings.TAP_TO_ACTIVATE_CAMERA}
+        {t('CameraPermission.confirmBtn')}
       </Btn>
     </ScreenContainer>
   )

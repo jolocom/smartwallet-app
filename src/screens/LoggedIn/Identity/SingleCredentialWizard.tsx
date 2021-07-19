@@ -2,25 +2,26 @@ import React from 'react'
 import { View } from 'react-native'
 import { attributeConfig } from '~/config/claims'
 import { useSICActions } from '~/hooks/attributes'
-import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
 import Wizard from '~/components/Wizard'
 import { nameValidation } from '~/config/validation'
 import { trimObjectValues } from '~/utils/stringUtils'
-
-const WIZARD_CONFIG = {
-  0: {
-    label: strings.WHAT_IS_YOUR_NAME,
-    form: attributeConfig[AttributeTypes.name],
-    submitLabel: strings.CREATE,
-    validationSchema: nameValidation,
-  },
-}
+import useTranslation from '~/hooks/useTranslation'
 
 const SingleCredentialWizard: React.FC<{ onFormSubmit: () => void }> = ({
   onFormSubmit,
 }) => {
   const { handleCreateCredentialSI } = useSICActions()
+  const { t } = useTranslation()
+
+  const WIZARD_CONFIG = {
+    0: {
+      label: t('Identity.widgetNameHeader'),
+      form: attributeConfig[AttributeTypes.name],
+      submitLabel: t('Identity.widgetConfirmBtn'),
+      validationSchema: nameValidation,
+    },
+  }
 
   const handleSubmit = async (fields: Record<string, string>) => {
     fields = trimObjectValues(fields)

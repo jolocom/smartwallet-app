@@ -1,6 +1,14 @@
 import React from 'react'
-import { StyleSheet, View, Platform, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Platform,
+  TouchableOpacity,
+  TextProps,
+  TextStyle,
+} from 'react-native'
 import { CaretRight } from '~/assets/svg'
+import { IWithCustomStyle } from '~/components/Card/types'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -9,11 +17,16 @@ interface TitlePropsI {
   title: string | number
   color?: Colors
 }
-const Title: React.FC<TitlePropsI> = ({ title, color }) => (
+const Title: React.FC<TitlePropsI & IWithCustomStyle<TextStyle>> = ({
+  title,
+  color,
+  customStyles,
+}) => (
   <JoloText
     kind={JoloTextKind.subtitle}
     size={JoloTextSizes.middle}
     color={color}
+    customStyles={[{ textAlign: 'left' }, customStyles]}
   >
     {title}
   </JoloText>
@@ -36,7 +49,7 @@ interface PropsI {
 }
 
 const Option: React.FC<PropsI> & {
-  Title: React.FC<TitlePropsI>
+  Title: React.FC<TitlePropsI & IWithCustomStyle<TextStyle>>
   RightIcon: React.FC
   IconContainer: React.FC
 } = ({ onPress, hasBorder = true, disabled = false, children }) => {

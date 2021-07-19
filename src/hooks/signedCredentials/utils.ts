@@ -2,6 +2,7 @@ import { IdentitySummary } from '@jolocom/sdk'
 import { CredentialIssuer } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
+import { CredentialUITypes } from '~/types/credentials'
 import { strings } from '~/translations'
 import {
   AttributeTypes,
@@ -33,12 +34,18 @@ export const getCredentialUIType = (type: string) => {
   switch (type) {
     case IdentificationTypes.ProofOfIdCredentialDemo:
     case IdentificationTypes.ProofOfDriverLicenceDemo:
-      return strings.IDENTIFICATION
+      return CredentialUITypes.identification
     case TicketTypes.ProofOfTicketDemo:
-      return strings.TICKET
+      return CredentialUITypes.tickets
     default:
-      return strings.UNKNOWN
+      return CredentialUITypes.unknown
   }
+}
+
+export const uiTypesTerms = {
+  [CredentialUITypes.identification]: 'Documents.identificationCategory',
+  [CredentialUITypes.tickets]: 'Documents.ticketsCategory',
+  [CredentialUITypes.unknown]: 'General.unknown',
 }
 
 export const separateCredentialsAndAttributes = (

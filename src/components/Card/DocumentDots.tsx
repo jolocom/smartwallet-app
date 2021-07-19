@@ -9,8 +9,10 @@ import { useCard } from './context'
 import { IWithCustomStyle } from './types'
 import Dots from '../Dots'
 import { useDeleteCredential } from '~/hooks/credentials'
+import useTranslation from '~/hooks/useTranslation'
 
 const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
+  const { t } = useTranslation()
   const { scheduleWarning } = useToasts()
   const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
   const deleteCredential = useDeleteCredential()
@@ -21,8 +23,10 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const claimsDisplay = [...mandatoryFields, ...optionalFields]
   const title = document?.value as string
 
-  const deleteTitle = `${strings.DO_YOU_WANT_TO_DELETE} ${title}?`
-  const cancelText = strings.CANCEL
+  const deleteTitle = `${t('Documents.deleteDocumentHeader', {
+    documentName: title,
+  })}?`
+
   const handleDelete = async () => {
     try {
       await deleteCredential(id)
@@ -41,7 +45,7 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
   const popupOptions = useMemo(
     () => [
       {
-        title: strings.INFO,
+        title: t('Documents.infoCardOption'),
         navigation: {
           screen: ScreenNames.CredentialDetails,
           params: {
@@ -52,12 +56,13 @@ const DocumentDots: React.FC<IWithCustomStyle> = ({ customStyles }) => {
         },
       },
       {
-        title: strings.DELETE,
+        title: t('Documents.deleteCardOption'),
         navigation: {
           screen: ScreenNames.DragToConfirm,
           params: {
             title: deleteTitle,
-            cancelText,
+            cancelText: t('Documents.cancelCardOption'),
+            instructionText: t('Documents.deleteCredentialInstruction'),
             onComplete: handleDelete,
           },
         },

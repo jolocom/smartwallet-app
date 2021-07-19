@@ -7,6 +7,7 @@ appcenter-secrets
 report.xml
 .bundle/
 vendor/
+poeditor-key/
 
 # App connect keys
 app-store-connect-auth

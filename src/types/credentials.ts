@@ -33,6 +33,11 @@ export enum AttributeTypes {
   postalAddress = 'ProofOfPostalAddressCredential',
 }
 
+export enum CredentialUITypes {
+  identification = 'identification',
+  tickets = 'tickets',
+  unknown = 'unknown',
+}
 /**
  * #### NOTE/FIXME
  * > every time offered credential types changes we need to update this value

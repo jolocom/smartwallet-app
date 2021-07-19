@@ -14,7 +14,6 @@ import {
   getSelectedShareCredentials,
   getServiceDescription,
 } from '~/modules/interaction/selectors'
-import { strings } from '~/translations'
 import {
   isDocument,
   CredentialsByType,
@@ -132,21 +131,19 @@ export const CredentialShareBAS = () => {
       <InteractionTitle
         label={
           singleMissingAttribute
-            ? t(strings.INCOMING_REQUEST_SINGLE, {
-                service: serviceName,
-                attribute:
-                  attributeConfig[
-                    singleMissingAttribute
-                  ].label.toLocaleLowerCase(),
+            ? t('CredentialShare.headerSingleMissing', {
+                serviceName,
+                // @ts-expect-error @terms
+                attribute: t(attributeConfig[singleMissingAttribute].label),
               })
-            : strings.INCOMING_REQUEST
+            : t('CredentialRequest.header')
         }
       />
       <InteractionDescription
         label={
           singleMissingAttribute
-            ? strings.INTERACTION_DESC_MISSING_SINGLE
-            : strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
+            ? t('CredentialShare.singleMissingSubheader')
+            : t('CredentialRequest.subheader', { serviceName })
         }
       />
       <Space />
@@ -155,13 +152,18 @@ export const CredentialShareBAS = () => {
         disabled={!isReadyToSubmit}
         onSubmit={handleSubmit}
         disableLoader={Boolean(singleMissingAttribute)}
-        submitLabel={singleMissingAttribute ? strings.ADD_INFO : strings.SHARE}
+        submitLabel={
+          singleMissingAttribute
+            ? t('CredentialShare.singleMissingAcceptBtn')
+            : t('CredentialRequest.acceptBtn')
+        }
       />
     </ContainerBAS>
   )
 }
 
 const CredentialShareFAS = () => {
+  const { t } = useTranslation()
   const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
 
@@ -236,7 +238,7 @@ const CredentialShareFAS = () => {
     <Collapsible>
       <Collapsible.AnimatedHeader height={62}>
         <Collapsible.HeaderText>
-          {strings.INCOMING_REQUEST}
+          {t('CredentialRequest.header')}
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
@@ -248,24 +250,26 @@ const CredentialShareFAS = () => {
           </Collapsible.HidingScale>
           <Collapsible.HidingTextContainer>
             <ScreenContainer.Padding>
-              <InteractionTitle label={strings.INCOMING_REQUEST} />
+              <InteractionTitle label={t('CredentialRequest.header')} />
             </ScreenContainer.Padding>
           </Collapsible.HidingTextContainer>
           <ScreenContainer.Padding>
-            <InteractionDescription
-              label={
-                strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
-              }
-            />
+            <InteractionDescription label={t('CredentialRequest.subheader')} />
           </ScreenContainer.Padding>
           <Space />
           <ScreenContainer.Padding>
             <ShareAttributeWidget withContainer />
           </ScreenContainer.Padding>
-          <InteractionSection title={strings.DOCUMENTS} isPaddedTitle={true}>
+          <InteractionSection
+            title={t('Documents.documentsTab')}
+            isPaddedTitle={true}
+          >
             {handleRenderCredentials(documents)}
           </InteractionSection>
-          <InteractionSection title={strings.OTHER} isPaddedTitle={true}>
+          <InteractionSection
+            title={t('Documents.othersTab')}
+            isPaddedTitle={true}
+          >
             {handleRenderCredentials(other)}
           </InteractionSection>
         </Collapsible.ScrollView>
@@ -273,7 +277,7 @@ const CredentialShareFAS = () => {
           <InteractionFooter
             disabled={!isReadyToSubmit}
             onSubmit={handleSubmit}
-            submitLabel={strings.SHARE}
+            submitLabel={t('CredentialRequest.acceptBtn')}
           />
         </FooterContainerFAS>
       </ContainerFAS>

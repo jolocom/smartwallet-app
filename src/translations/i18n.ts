@@ -29,9 +29,17 @@ const getSystemLng = () => {
 i18n.use(initReactI18next).init({
   fallbackLng: Locales.en,
   debug: __DEV__,
+  returnEmptyString: false,
   lng: getSystemLng(),
+  interpolation: {
+    prefix: '${',
+    suffix: '}',
+    format: (value: string, format, lng) => {
+      if (format === 'lowercase') return value.toLowerCase()
+      return value
+    },
+  },
   resources,
-  keySeparator: false,
 })
 
 export default i18n
