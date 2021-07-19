@@ -8,15 +8,26 @@ export enum ErrorScreens {
   errorDisplay = 'errorDisplay',
 }
 
+export interface ErrorDetails {
+  title: string
+  message: string
+}
+
 interface IErrorContext {
   error?: Error
   errorScreen?: ErrorScreens
-  setError: (screen?: ErrorScreens, err?: Error) => void
+  errorDetails?: ErrorDetails
+  setError: (
+    screen?: ErrorScreens,
+    err?: Error,
+    errorDetails?: ErrorDetails,
+  ) => void
 }
 
 const initialState = {
   error: undefined,
   errorScreen: undefined,
+  errorDetails: undefined,
   setError: () => {},
 }
 
@@ -24,17 +35,21 @@ export const ErrorContext = createContext<IErrorContext>(initialState)
 
 export const ErrorContextProvider: React.FC = ({ children }) => {
   const [state, setState] = useState<
-    Pick<IErrorContext, 'error' | 'errorScreen'>
+    Pick<IErrorContext, 'error' | 'errorScreen' | 'errorDetails'>
   >({
     error: undefined,
     errorScreen: undefined,
+    errorDetails: undefined,
   })
 
   const contextValue = useMemo<IErrorContext>(
     () => ({
       ...state,
-      setError: (errorScreen?: ErrorScreens, error?: Error) =>
-        setState({ error, errorScreen }),
+      setError: (
+        errorScreen?: ErrorScreens,
+        error?: Error,
+        errorDetails?: ErrorDetails,
+      ) => setState({ error, errorScreen, errorDetails }),
     }),
     [JSON.stringify({ state, setState })],
   )

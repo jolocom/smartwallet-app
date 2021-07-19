@@ -1,11 +1,15 @@
 import { StatusBar } from 'react-native'
-import { useErrorContext, ErrorScreens } from '~/errors/errorContext'
+import {
+  useErrorContext,
+  ErrorScreens,
+  ErrorDetails,
+} from '~/errors/errorContext'
 
 const useErrors = () => {
   const { setError, ...state } = useErrorContext()
 
-  const showErrorDisplay = (error?: Error) => {
-    setError(ErrorScreens.errorDisplay, error)
+  const showErrorDisplay = (error: Error, errorDetails?: ErrorDetails) => {
+    setError(ErrorScreens.errorDisplay, error, errorDetails)
   }
 
   const showErrorReporting = (error?: Error) => {
@@ -17,7 +21,7 @@ const useErrors = () => {
   }
 
   const resetError = () => {
-    setError(undefined, undefined)
+    setError()
   }
 
   return { ...state, showErrorDisplay, showErrorReporting, resetError }

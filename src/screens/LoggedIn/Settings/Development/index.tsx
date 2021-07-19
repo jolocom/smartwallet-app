@@ -47,7 +47,12 @@ const DevelopmentSection = () => {
           <Option.Title title="Loader" />
         </Option>
         <Option
-          onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
+          onPress={() =>
+            showErrorDisplay(new Error(SWErrorCodes.SWUnknown), {
+              title: 'Random Error',
+              message: 'A description of a random error',
+            })
+          }
         >
           <Option.Title title="Throw error" />
         </Option>

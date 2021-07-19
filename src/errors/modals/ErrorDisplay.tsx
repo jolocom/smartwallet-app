@@ -11,10 +11,8 @@ import useTranslation from '~/hooks/useTranslation'
 const ErrorDisplay = () => {
   const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
-  const { errorScreen, resetError, error, showErrorReporting } = useErrors()
-  const { title, message } =
-    UIErrors[error?.message as SWErrorCodes] ??
-    UIErrors[SWErrorCodes.SWUnknown]!
+  const { errorScreen, resetError, error, showErrorReporting, errorDetails } =
+    useErrors()
 
   return (
     <ModalScreen
@@ -23,8 +21,8 @@ const ErrorDisplay = () => {
       animationType={'slide'}
     >
       <ErrorFallback
-        title={title}
-        description={message}
+        title={errorDetails?.title ?? t('Errors.unknownTitle')}
+        description={errorDetails?.message ?? t('Errors.unknownMessage')}
         onPressTop={showErrorReporting}
         onPressBottom={resetError}
         topButtonText={t('Errors.reportBtn')}
