@@ -12,6 +12,7 @@ import { useToasts } from '../toasts'
 import { strings } from '~/translations'
 import truncateDid from '~/utils/truncateDid'
 import { CredentialRequestHandler } from '~/middleware/interaction/credentialRequestConstrains'
+import { getCounterpartyName } from '~/utils/dataMapping'
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({
   description: state.description,
@@ -54,8 +55,7 @@ export const useInteractionHandler = () => {
 
   return async (interaction: Interaction) => {
     const { state, initiator } = interaction.getSummary()
-    const serviceName =
-      initiator.publicProfile?.name ?? truncateDid(initiator.did)
+    const serviceName = getCounterpartyName(initiator)
 
     let flowSpecificData
 
