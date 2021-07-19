@@ -4,14 +4,9 @@ import React from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
 import Tabs from '~/components/Tabs/Tabs'
+import useTranslation from '~/hooks/useTranslation'
 import { strings } from '~/translations'
 import Record from './Record'
-
-const SUBTABS = [
-  { id: 'all', value: strings.ALL },
-  { id: 'shared', value: strings.SHARED },
-  { id: 'received', value: strings.RECEIVED },
-]
 
 export enum RecordTypes {
   all = 'all',
@@ -20,6 +15,13 @@ export enum RecordTypes {
 }
 
 const History = () => {
+  const { t } = useTranslation()
+  const SUBTABS = [
+    { id: 'all', value: t('History.allTab') },
+    { id: 'shared', value: t('History.sharedTab') },
+    { id: 'received', value: t('History.receivedTab') },
+  ]
+
   return (
     <ScreenContainer
       testID="history-screen"

@@ -7,9 +7,9 @@ import {
 
 export const getDateSection = (date: Date) =>
   moment(date).calendar(null, {
-    sameDay: '[Today]',
-    lastDay: '[Yesterday]',
-    lastWeek: '[Last] dddd',
+    sameDay: '[Dates.today]',
+    lastDay: '[Dates.yesterday]',
+    lastWeek: '[Dates.last]dddd',
     sameElse: 'DD/MM/YYYY',
   })
 
