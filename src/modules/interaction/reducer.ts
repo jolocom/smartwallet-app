@@ -4,7 +4,7 @@ import { isCredShareDetails, isCredOfferDetails } from './guards'
 import { AttrActions, AttributePayload } from '../attributes/types'
 
 const initialState: InteractionState = {
-  details: { flowType: null, id: null },
+  details: { flowType: null, id: null, counterparty: null },
 }
 
 const reducer = (
