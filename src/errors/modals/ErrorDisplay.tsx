@@ -3,7 +3,6 @@ import ModalScreen from '~/modals/Modal'
 import useErrors from '~/hooks/useErrors'
 import { ErrorScreens } from '../errorContext'
 import { ErrorFallback } from '~/components/ErrorFallback'
-import { SWErrorCodes, UIErrors } from '../codes'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import useTranslation from '~/hooks/useTranslation'
@@ -11,7 +10,7 @@ import useTranslation from '~/hooks/useTranslation'
 const ErrorDisplay = () => {
   const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
-  const { errorScreen, resetError, error, showErrorReporting, errorDetails } =
+  const { errorScreen, resetError, showErrorReporting, errorDetails } =
     useErrors()
 
   return (
