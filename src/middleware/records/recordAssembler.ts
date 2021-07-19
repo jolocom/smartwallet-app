@@ -31,7 +31,7 @@ interface IRecordAssembler {
 
 export class RecordAssembler {
   private config: IFlowRecordConfig | undefined
-  private statusConfig: IStatusRecordConfig | undefined
+  private statusConfig: IStatusRecordConfig
   private messageTypes: string[]
   private flowType: FlowType
   private summary: InteractionSummary
@@ -71,7 +71,7 @@ export class RecordAssembler {
   }
 
   private getTitle(): string {
-    return this.config?.title ?? this.statusConfig?.unknown!
+    return this.config?.title ?? this.statusConfig.unknown
   }
 
   private processStatus(): IRecordStatus {
@@ -120,16 +120,16 @@ export class RecordAssembler {
     steps.push({
       title:
         this.config?.steps.unfinished[steps.length] ??
-        this.statusConfig?.unknown!,
+        this.statusConfig.unknown,
       description:
         this.status === IRecordStatus.expired
-          ? this.statusConfig?.expired!
-          : this.statusConfig?.pending!,
+          ? this.statusConfig.expired
+          : this.statusConfig.pending,
     })
   }
 
   private getFinishedStepTitle(index: number) {
-    return this.config?.steps.finished[index] ?? this.statusConfig?.unknown!
+    return this.config?.steps.finished[index] ?? this.statusConfig.unknown
   }
 
   private assembleCredentialOfferSteps() {
@@ -150,7 +150,7 @@ export class RecordAssembler {
               .map((s) =>
                 s.credential?.name?.length
                   ? s.credential?.name
-                  : this.statusConfig?.unknown,
+                  : this.statusConfig.unknown,
               )
               .join(', '),
           }
@@ -158,7 +158,7 @@ export class RecordAssembler {
           return {
             title: this.getFinishedStepTitle(i),
             description: state.issued
-              .map((c) => (c.name.length ? c.name : this.statusConfig?.unknown))
+              .map((c) => (c.name.length ? c.name : this.statusConfig.unknown))
               .join(', '),
           }
         default:
@@ -179,7 +179,7 @@ export class RecordAssembler {
         const displayCreds = areCredsSupplied
           ? state.providedCredentials[0].suppliedCredentials
               .map((c) =>
-                !!c.name.length ? c.name : this.statusConfig?.unknown,
+                !!c.name.length ? c.name : this.statusConfig.unknown,
               )
               .join(', ')
           : requestedCreds
@@ -210,7 +210,7 @@ export class RecordAssembler {
           return {
             title: this.getFinishedStepTitle(i),
             description: capitalizeWord(
-              state.action ?? this.statusConfig?.unknown!,
+              state.action ?? this.statusConfig.unknown,
             ),
           }
         default:
@@ -240,7 +240,7 @@ export class RecordAssembler {
   private assembleUnknownSteps() {
     return this.assembleAllSteps((_, i) => ({
       title: this.getFinishedStepTitle(i),
-      description: this.statusConfig?.unknown!,
+      description: this.statusConfig.unknown,
     }))
   }
 
