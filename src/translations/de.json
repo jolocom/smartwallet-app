@@ -170,8 +170,8 @@
         "reportBtn": "Bericht",
         "noInternetTitle": "",
         "noInternetMsg": "",
-        "failedInteractionTitle": "",
-        "failedInteractionMsg": "",
+        "errorWarningTitle": "",
+        "errorWarningMsg": "",
         "successfulInteractionTitle": "",
         "successfulInternetMsg": "",
         "successfulOfferInteractionBtn": "",
@@ -257,7 +257,8 @@
         "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!",
         "authzHeader": "",
         "authzRequestStepHeader": "",
-        "authzResponseStepHeader": ""
+        "authzResponseStepHeader": "",
+        "authzActionPlaceholder": ""
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",

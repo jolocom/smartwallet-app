@@ -33,8 +33,8 @@ export const useToasts = () => {
   //TODO: don't pass title and message, but rather get them based on the SW error code
   const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) =>
     scheduleWarning({
-      title: t('Toasts.failedInteractionTitle'),
-      message: t('Toasts.failedInteractionMsg'),
+      title: t('Toasts.errorWarningTitle'),
+      message: t('Toasts.errorWarningMsg'),
       interact: {
         label: t('Toasts.reportBtn'),
         onInteract: () => {
