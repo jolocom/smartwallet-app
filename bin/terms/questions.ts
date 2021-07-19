@@ -1,25 +1,26 @@
 export const questionsAddingTerm = [
   {
     type: 'input',
-    name: 'ctx',
-    message: "What's a term context?"
+    name: 'term',
+    message: "What's the name of the term?",
   },
   {
     type: 'input',
-    name: 'term',
-    message: "What's a term label?"
+    name: 'ctx',
+    message: "What's the term's context?",
   },
   {
     type: 'input',
     name: 'content',
-    message: "What's a term value?"
-  }
-];
+    message: "What's the term's copy?",
+  },
+]
 
 export const questionUpdateTranslation = [
   {
     type: 'confirm',
     name: 'update',
-    message: 'Seems like translation for provided term is already present. Would you like to overwrite it?'
-  }
+    message:
+      'Seems like a translation for the provided term is already present. Would you like to overwrite it?',
+  },
 ]
