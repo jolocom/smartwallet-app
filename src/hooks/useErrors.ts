@@ -5,7 +5,7 @@ const useErrors = () => {
   const { setError, ...state } = useErrorContext()
 
   const showErrorDisplay = (error?: Error) => {
-    setError(ErrorScreens.errorDisplay, error ?? null)
+    setError(ErrorScreens.errorDisplay, error)
   }
 
   const showErrorReporting = (error?: Error) => {
@@ -13,11 +13,11 @@ const useErrors = () => {
     // does not show up after the modal is visible. Must be shown before the modal is
     // visible.
     StatusBar.setHidden(false)
-    setError(ErrorScreens.errorReporting, error ?? null)
+    setError(ErrorScreens.errorReporting, error)
   }
 
   const resetError = () => {
-    setError(null, null)
+    setError(undefined, undefined)
   }
 
   return { ...state, showErrorDisplay, showErrorReporting, resetError }
