@@ -1,9 +1,8 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { updateOfferValidation } from '~/modules/interaction/actions'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { useToasts } from '../toasts'
-import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import useInteractionToasts from './useInteractionToasts'
 import { useRedirect } from '../navigation'
@@ -12,9 +11,13 @@ import { useCredentials } from '../signedCredentials'
 import { useFinishInteraction } from './handlers'
 import { CredentialCategories } from '~/types/credentials'
 import { SWErrorCodes } from '~/errors/codes'
+import useTranslation from '~/hooks/useTranslation'
+import { getInteractionCounterpartyName } from '~/modules/interaction/selectors'
 
 const useCredentialOfferSubmit = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
+  const counterpartyName = useSelector(getInteractionCounterpartyName)
   const {
     assembleOfferResponseToken,
     processOfferReceiveToken,
@@ -32,7 +35,7 @@ const useCredentialOfferSubmit = () => {
   const scheduleSuccess = (initialTab: CredentialCategories) =>
     scheduleSuccessInteraction({
       interact: {
-        label: strings.REVIEW,
+        label: t('Toasts.successfulOfferInteractionBtn'),
         onInteract: () => redirect(ScreenNames.Documents, { initialTab }),
       },
     })
@@ -66,10 +69,12 @@ const useCredentialOfferSubmit = () => {
       // NOTE: Uncomment the line below to test the duplicates edge-case
       // await storeSelectedCredentials()
       const anyDuplicates = await checkDuplicates()
-      if (anyDuplicates)
-        throw new Error(
-          "Duplicates were found. Can't proceed with the interaction",
-        )
+      if (anyDuplicates) {
+        return scheduleInfo({
+          title: t('Toasts.offerDuplicateTitle'),
+          message: t('Toasts.offerDuplicateSingleMsg'),
+        })
+      }
 
       const validatedCredentials = await getValidatedCredentials()
       const allValid = validatedCredentials.every((cred) => !cred.invalid)
@@ -85,16 +90,18 @@ const useCredentialOfferSubmit = () => {
         scheduleErrorWarning(
           new Error(SWErrorCodes.SWInteractionOfferAllInvalid),
           {
-            title: strings.OFFER_ALL_INVALID_TOAST_TITLE,
-            message: strings.OFFER_ALL_INVALID_TOAST_MSG,
+            title: t('Toasts.offerInvalidDocsTitle'),
+            message: t('Toasts.offerInvalidDocsMsg', {
+              serviceName: counterpartyName,
+            }),
           },
         )
         finishInteraction()
       } else {
         dispatch(updateOfferValidation(validatedCredentials))
         scheduleInfo({
-          title: strings.OFFER_RENEGOTIATION_TITLE,
-          message: strings.OFFER_RENEGOTIATION_MSG,
+          title: t('Toasts.offerRenegotiationTitle'),
+          message: t('Toasts.offerRenegotiationMsg'),
         })
       }
     } catch (err) {

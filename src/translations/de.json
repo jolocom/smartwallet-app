@@ -167,7 +167,27 @@
         "cardNoPreview": ""
     },
     "Toasts": {
-        "reportBtn": "Bericht"
+        "reportBtn": "Bericht",
+        "noInternetTitle": "",
+        "noInternetMsg": "",
+        "errorWarningTitle": "",
+        "errorWarningMsg": "",
+        "successfulInteractionTitle": "",
+        "successfulInternetMsg": "",
+        "successfulOfferInteractionBtn": "",
+        "offerDuplicateTitle": "",
+        "offerDuplicateSingleMsg": "",
+        "offerDuplicateMultipleMsg": "",
+        "offerInvalidDocsTitle": "",
+        "offerInvalidDocsMsg": "",
+        "offerRenegotiationTitle": "",
+        "offerRenegotiationMsg": "",
+        "shareMissingDocsTitle": "",
+        "shareMissingDocsMsg": "",
+        "failedStoreMsg": "",
+        "reconnectedInternetTitle": "",
+        "reconnectedInternetMsg": "",
+        "successfulInteractionMsg": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -237,6 +257,8 @@
         "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!",
         "authzHeader": "",
         "authzRequestStepHeader": "",
+        "authzResponseStepHeader": "",
+        "authzActionPlaceholder": "",
         "authzResponseStepHeader": ""
     },
     "Settings": {

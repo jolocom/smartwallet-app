@@ -167,7 +167,27 @@
         "cardNoPreview": "No info can be previewed"
     },
     "Toasts": {
-        "reportBtn": "Report"
+        "reportBtn": "Report",
+        "noInternetTitle": "Uh, oh ... you’re not connected!",
+        "noInternetMsg": "An internet connection is required to proceed.",
+        "errorWarningTitle": "Whoops...",
+        "errorWarningMsg": "We weren't expecting that to happen either. Help us help everyone by sharing the error you encountered",
+        "successfulInteractionTitle": "Great success!",
+        "successfulInternetMsg": "You should have all you need to continue your interaction now",
+        "successfulOfferInteractionBtn": "Review",
+        "offerDuplicateTitle": "Duplicate detected",
+        "offerDuplicateSingleMsg": "You already have this document",
+        "offerDuplicateMultipleMsg": "You can still receive the other documents",
+        "offerInvalidDocsTitle": "Unable to save",
+        "offerInvalidDocsMsg": "There seems to be an issue with the documents sent by ${serviceName}",
+        "offerRenegotiationTitle": "Be aware",
+        "offerRenegotiationMsg": "Some documents didn't pass our security check and cannot be saved or received",
+        "shareMissingDocsTitle": "Missing documents",
+        "shareMissingDocsMsg": "${serviceName} is requesting a document that can’t be found in your wallet. \n\nMissing: ${documentType}",
+        "failedStoreMsg": "We could not store your passcode. Please try again",
+        "reconnectedInternetTitle": "You're back online",
+        "reconnectedInternetMsg": "All wallet functionalities are back again",
+        "successfulInteractionMsg": "You should have all you need to continue your interaction now"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -237,6 +257,8 @@
         "placeholderSubheader": "You dont have any completed interactions yet.\nMake one today!",
         "authzHeader": "Authorization",
         "authzRequestStepHeader": "Authorized",
+        "authzResponseStepHeader": "Confirmed",
+        "authzActionPlaceholder": "Authorize",
         "authzResponseStepHeader": "Confirmed"
     },
     "Settings": {

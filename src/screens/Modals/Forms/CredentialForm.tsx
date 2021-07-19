@@ -66,7 +66,7 @@ const CredentialForm = () => {
   )
 
   const { handleCreateCredentialSI, handleEditCredentialSI } = useSICActions()
-  const { scheduleWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
   const navigation = useNavigation()
 
   const formInitial = formConfig
@@ -96,7 +96,7 @@ const CredentialForm = () => {
         )
       }
     } catch (e) {
-      scheduleWarning({ title: 'Oops', message: 'Something went wrong!' })
+      scheduleErrorWarning(e)
     } finally {
       navigation.goBack()
     }
