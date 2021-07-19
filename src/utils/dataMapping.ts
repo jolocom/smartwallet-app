@@ -7,6 +7,8 @@ import {
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
+import { IdentitySummary } from 'react-native-jolocom'
+import truncateDid from './truncateDid'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
 
@@ -32,4 +34,8 @@ export const assembleFormInitialValues = (
     acc[f.key] = f.value ?? ''
     return acc
   }, {})
+}
+
+export const getCounterpartyName = (counterparty: IdentitySummary) => {
+  return counterparty.publicProfile?.name ?? truncateDid(counterparty.did)
 }

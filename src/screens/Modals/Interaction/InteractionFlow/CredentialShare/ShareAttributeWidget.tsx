@@ -114,7 +114,7 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
             <View key={credType}>
               <InteractionAttributesWidget
                 key={attrType}
-                // @ts-ignore FIXME @terms
+                // @ts-expect-error @terms
                 name={t(config.label)}
                 type={attrType}
                 onAdd={() =>

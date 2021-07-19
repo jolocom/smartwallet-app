@@ -9,7 +9,6 @@ import { useDisableLock } from '~/hooks/generic'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { strings } from '~/translations/strings'
-import { debugView } from '~/utils/dev'
 import Option from './components/Option'
 
 const EnableBiometryOption = () => {
@@ -22,8 +21,6 @@ const EnableBiometryOption = () => {
   const [enrolledBiometry, setEnrolledBiometry] =
     useState<BiometryType | undefined>(undefined)
 
-  const dispatch = useDispatch()
-
   const {
     resetBiometry,
     getBiometry,
@@ -31,7 +28,7 @@ const EnableBiometryOption = () => {
     authenticate,
     getEnrolledBiometry,
   } = useBiometry()
-  const { scheduleWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
   const disableLock = useDisableLock()
 
   /* check if we should display this component or not */
@@ -88,10 +85,7 @@ const EnableBiometryOption = () => {
       }
     } catch (e) {
       setIsOn((prevState) => !prevState)
-      scheduleWarning({
-        title: strings.WHOOPS,
-        message: isOn ? strings.COULDNOT_DEACTIVATE : strings.COULDNOT_ACTIVATE,
-      })
+      scheduleErrorWarning(e)
     }
   }
 

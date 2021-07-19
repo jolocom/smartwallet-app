@@ -78,7 +78,7 @@ const IdentityCredentials = () => {
                 onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
               >
                 <Widget.Header>
-                  {/* @ts-ignore FIXME terms */}
+                  {/* @ts-expect-error @TERMS */}
                   <Widget.Header.Name value={t(label) as string} />
                   {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>

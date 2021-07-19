@@ -37,7 +37,7 @@ const RegisterPin = () => {
   const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
-  const { scheduleWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
 
   /**
    * NOTE: a user does not have a possibility to remove the passcode from the keychain,
@@ -74,10 +74,8 @@ const RegisterPin = () => {
       } catch (err) {
         // an error with storing PIN to the keychain -> redirect back to create passcode
 
-        // FIXME @terms
-        scheduleWarning({
-          title: 'Try again',
-          message: 'We could not store your passcode. Please try again',
+        scheduleErrorWarning(err, {
+          message: t('Toasts.failedStoreMsg'),
         })
         resetPasscode()
       }
@@ -132,7 +130,6 @@ const RegisterPin = () => {
         >
           {!isCreating && (
             <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {/* FIXME @terms is not present in the designs*/}
               {t('VerifyPasscode.resetBtn')}
             </Btn>
           )}

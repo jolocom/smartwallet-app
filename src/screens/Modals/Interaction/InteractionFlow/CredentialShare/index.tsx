@@ -133,7 +133,7 @@ export const CredentialShareBAS = () => {
           singleMissingAttribute
             ? t('CredentialShare.headerSingleMissing', {
                 serviceName,
-                // @ts-ignore @terms
+                // @ts-expect-error @terms
                 attribute: t(attributeConfig[singleMissingAttribute].label),
               })
             : t('CredentialRequest.header')

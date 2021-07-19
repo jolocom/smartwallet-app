@@ -12,6 +12,7 @@ import Passcode from '~/components/Passcode'
 import { useLoader } from '~/hooks/loader'
 import { useEffect } from 'react'
 import useTranslation from '~/hooks/useTranslation'
+import { useToasts } from '~/hooks/toasts'
 
 enum PasscodeState {
   verify = 'verify',
@@ -24,6 +25,7 @@ const ChangePin: React.FC = () => {
   const loader = useLoader()
   const { keychainPin } = useGetStoredAuthValues()
   const goBack = useGoBack()
+  const { scheduleErrorWarning } = useToasts()
 
   const [passcodeState, setPasscodeState] = useState<PasscodeState>(
     PasscodeState.verify,
@@ -57,7 +59,9 @@ const ChangePin: React.FC = () => {
       { success: t('ChangePasscode.successHeader') },
       (error) => {
         if (error) {
-          //TODO: possibility to show toast?
+          scheduleErrorWarning(error, {
+            message: t('Toasts.failedStoreMsg'),
+          })
           setPasscodeState(PasscodeState.verify)
         } else {
           goBack()

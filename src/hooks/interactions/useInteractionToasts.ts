@@ -1,14 +1,15 @@
 import { useToasts } from '~/hooks/toasts'
 import { ToastBody } from '~/types/toasts'
-import { strings } from '~/translations/strings'
+import useTranslation from '../useTranslation'
 
 const useInteractionToasts = () => {
+  const { t } = useTranslation()
   const { scheduleInfo } = useToasts()
 
   const scheduleSuccessInteraction = (config?: Partial<ToastBody>) =>
     scheduleInfo({
-      title: strings.INTERACTION_SUCCESS_TOAST_TITLE,
-      message: strings.INTERACTION_SUCCESS_TOAST_MSG,
+      title: t('Toasts.successfulInteractionTitle'),
+      message: t('Toasts.successfulInteractionMsg'),
       ...config,
     })
 

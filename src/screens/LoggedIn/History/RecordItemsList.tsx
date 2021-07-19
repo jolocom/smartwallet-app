@@ -16,12 +16,13 @@ import { IHistorySectionData } from '~/types/records'
 import { useRecord } from './context'
 import RecordItem from './components/RecordItem'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
-import { strings } from '~/translations'
 import RecordHeader from './RecordHeader'
+import useTranslation from '~/hooks/useTranslation'
 
 const ITEMS_PER_PAGE = 5
 
 const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
+  const { t } = useTranslation()
   const sectionListRef = useRef<SectionList | null>(null)
   const { updateActiveSection } = useRecord()
 
@@ -172,10 +173,8 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
     />
   ) : (
     <ScreenPlaceholder
-      title={strings.NO_HISTORY_YET}
-      description={
-        strings.YOU_DONT_HAVE_ANY_COMPLETED_INTERACTIIONS_YET_MAKE_ONE_TODAY
-      }
+      title={t('History.placeholderHeader')}
+      description={t('History.placeholderSubheader')}
     />
   )
 }
