@@ -258,7 +258,8 @@
         "authzHeader": "",
         "authzRequestStepHeader": "",
         "authzResponseStepHeader": "",
-        "authzActionPlaceholder": ""
+        "authzActionPlaceholder": "",
+        "authzResponseStepHeader": ""
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",

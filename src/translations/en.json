@@ -258,7 +258,8 @@
         "authzHeader": "Authorization",
         "authzRequestStepHeader": "Authorized",
         "authzResponseStepHeader": "Confirmed",
-        "authzActionPlaceholder": "Authorize"
+        "authzActionPlaceholder": "Authorize",
+        "authzResponseStepHeader": "Confirmed"
     },
     "Settings": {
         "preferencesSection": "App preferences",

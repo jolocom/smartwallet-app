@@ -16,8 +16,7 @@ import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
 import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { interactionHandler } from './interactionHandlers'
-import { getDid } from '~/modules/account/selectors'
+import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
@@ -32,9 +31,9 @@ export const useInteraction = () => {
 
 export const useInteractionStart = () => {
   const agent = useAgent()
-  const did = useSelector(getDid)
   const dispatch = useDispatch()
   const loader = useLoader()
+  const interactionHandler = useInteractionHandler()
   const { connected, showDisconnectedToast } = useConnection()
   const { scheduleErrorWarning } = useToasts()
 
@@ -50,20 +49,21 @@ export const useInteractionStart = () => {
     return loader(
       async () => {
         const interaction = await agent.processJWT(jwt)
-        const interactionData = await interactionHandler(
-          agent,
-          interaction,
-          did,
-        )
-        dispatch(
-          setInteractionDetails({
-            id: interaction.id,
-            flowType: interaction.flow.type,
-            ...interactionData,
-          }),
-        )
+        const counterparty = interaction.getSummary().initiator
+        const interactionData = await interactionHandler(interaction)
+
+        if (interactionData) {
+          dispatch(
+            setInteractionDetails({
+              id: interaction.id,
+              flowType: interaction.flow.type,
+              counterparty,
+              ...interactionData,
+            }),
+          )
+        }
       },
-      { showSuccess: false },
+      { showSuccess: false, showFailed: false },
       (error) => {
         if (error) scheduleErrorWarning(error)
       },
