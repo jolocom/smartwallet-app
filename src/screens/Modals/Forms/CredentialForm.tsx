@@ -226,7 +226,8 @@ const CredentialForm = () => {
                     {(attributeType === AttributeTypes.postalAddress &&
                       touched[field.key]) ||
                     attributeType !== AttributeTypes.postalAddress ? (
-                      <FormError message={errors[field.key]} />
+                      // @ts-expect-error terms
+                      <FormError message={t(errors[field.key])} />
                     ) : null}
                   </FormFieldContainer>
                 )
