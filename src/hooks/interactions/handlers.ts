@@ -18,7 +18,6 @@ import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
-import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
 
@@ -36,7 +35,7 @@ export const useInteractionStart = () => {
   const loader = useLoader()
   const interactionHandler = useInteractionHandler()
   const { connected, showDisconnectedToast } = useConnection()
-  const { scheduleWarning, scheduleErrorWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
 
   return async (jwt: string) => {
     // NOTE: not continuing the interaction if there is no network connection
@@ -66,16 +65,7 @@ export const useInteractionStart = () => {
       },
       { showSuccess: false, showFailed: false },
       (error) => {
-        if (isError(error)) {
-          // @ts-ignore
-          if (isUIError(error)) scheduleWarning(UIErrors[error.message])
-          else
-            scheduleErrorWarning(error, {
-              title: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.title,
-              message:
-                UIErrors[SWErrorCodes.SWInteractionUnknownError]?.message,
-            })
-        }
+        if (error) scheduleErrorWarning(error)
       },
     )
   }
