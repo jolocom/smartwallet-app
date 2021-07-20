@@ -5,7 +5,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
 import Tabs from '~/components/Tabs/Tabs'
 import useTranslation from '~/hooks/useTranslation'
-import { strings } from '~/translations'
 import Record from './Record'
 
 export enum RecordTypes {

@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View } from 'react-native'
 import { BiometryType } from 'react-native-biometrics'
-import { useDispatch } from 'react-redux'
 
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useBiometry } from '~/hooks/biometry'
 import { useDisableLock } from '~/hooks/generic'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
-import { strings } from '~/translations/strings'
 import Option from './components/Option'
 
 const EnableBiometryOption = () => {
