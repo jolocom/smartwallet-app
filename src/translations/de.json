@@ -390,5 +390,13 @@
     },
     "Test": {
         "testTerm": ""
+    },
+    "Validations": {
+        "onlyNumbers": "",
+        "tooMany": "",
+        "tooFew": "",
+        "missingValue": "",
+        "wrongEmail": "",
+        "atLeastOneValue": ""
     }
 }

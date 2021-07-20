@@ -390,5 +390,13 @@
     },
     "Test": {
         "testTerm": "whoopsytest"
+    },
+    "Validations": {
+        "onlyNumbers": "Only number characters are allowed",
+        "tooMany": "Too many characters",
+        "tooFew": "Too few characters",
+        "missingValue": "Please provide a value",
+        "wrongEmail": "Seems like this is not a valid email",
+        "atLeastOneValue": "Please provide at least one of the values"
     }
 }
