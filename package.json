@@ -131,6 +131,7 @@
     "react-test-renderer": "16.13.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-mock-store": "^1.5.4",
+    "ts-node": "^10.1.0",
     "typescript": "^4.2.3"
   },
   "jest": {
@@ -146,7 +147,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "node bin/precommit.js",
+      "pre-commit": "ts-node bin/precommit.ts ",
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
