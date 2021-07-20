@@ -37,7 +37,6 @@ import {
   LogoContainerFAS,
 } from '../components/styled'
 import ShareAttributeWidget from './ShareAttributeWidget'
-import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
 import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
@@ -49,6 +48,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
+import { useCredentialOptionalFields } from '~/hooks/credentials'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -68,6 +68,7 @@ export const CredentialShareBAS = () => {
   const handleShare = useCredentialShareSubmit()
   const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
+  const { getOptionalFields } = useCredentialOptionalFields()
 
   /* We are preselecting a credential that is requested */
   useEffect(() => {

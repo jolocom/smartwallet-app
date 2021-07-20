@@ -22,7 +22,6 @@ import {
   CredentialUITypes,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
-import { getOptionalFields } from './utils'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { MainTabsParamList } from '../MainTabs'
 import { ScreenNames } from '~/types/screens'
@@ -32,6 +31,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
 import { uiTypesTerms } from '~/hooks/signedCredentials/utils'
+import { useCredentialOptionalFields } from '~/hooks/credentials'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -64,6 +64,7 @@ export const DocumentList = () => {
     >(null)
   const { activeTab, activeSubtab, setActiveTab, tabs } = useTabs()
   const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
+  const { getOptionalFields } = useCredentialOptionalFields()
 
   const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
   const categoriesByIssuer = useSelector(
