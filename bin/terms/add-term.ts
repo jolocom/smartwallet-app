@@ -91,6 +91,7 @@ const main = async () => {
     await cloneSecrets();
     await addTerm();
     await addTranslation();
+    await import('./import-terms');
   } catch(err) {
     console.log('\x1b[0;91m%s\x1b[0m', err)
   }
@@ -112,11 +113,11 @@ if(!ctx || !term || !content) {
     ctx = args.ctx || answers.ctx;
     term = args.term || answers.term;
     content = args.content || answers.content;
-    await main()
+    await main();
   })();
 } else {
   (async () => {
-    await main()
+    await main();
   })()
 }
 
