@@ -40,7 +40,7 @@ module.exports = {
     'prefer-const': ['error'],
     semi: ['error', 'never'],
     'use-isnan': ['error'],
-    '@typescript-eslint/array-type': ['error', 'array-simple'],
+    '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
     '@typescript-eslint/ban-types': [
       'error',
       {

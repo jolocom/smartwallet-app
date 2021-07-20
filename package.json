@@ -18,6 +18,7 @@
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts? --coverageDirectory=coverage",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:files": "eslint --ext .js,.jsx,.ts,.tsx -f ./bin/commit/formatter.js",
     "prettier:check": "prettier --check",
     "prettier:checkAll": "prettier --check './**/*.ts|*.tsx'",
     "prettier:format": "prettier --write",
