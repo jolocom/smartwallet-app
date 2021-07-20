@@ -107,7 +107,7 @@
         "closeBtn": "Cancel",
         "confirmBtn": "Done",
         "addHeader": "Add your ${attributeName, lowercase}",
-        "errorAttributeExists": "Attribute of the same value already exists"
+        "errorAttributeExists": "Attribute with the same value already exists"
     },
     "CreatePasscode": {
         "createHeader": "Create passcode",
@@ -129,7 +129,13 @@
         "promptBiometrics": "Provide biometrics to continue"
     },
     "PasscodeRecoveryInstructions": {
-        "header": "How to change your passcode"
+        "header": "How to change your passcode",
+        "subheader1": "We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!",
+        "subheader2": "You can change your passcode by entering your secret phrase. Click Restore Access below to make the change",
+        "imageCaption": "Repeat your phrase word by word",
+        "submitBtn": "Restore access",
+        "footer": "Setting a new passcode will not affect your stored data",
+        "cancelBtn": "Cancel"
     },
     "Lock": {
         "header": "Enter your passcode",
@@ -212,7 +218,10 @@
         "othersPlaceholderHeader": "Nothing here yet",
         "othersPlaceholderSubheader": "You haven't saved anything yet",
         "unspecifiedField": "Not specified",
-        "subjectNameField": "Subject name"
+        "subjectNameField": "Subject name",
+        "issuedFieldLabel": "Issued",
+        "issuerFieldLabel": "Issuer",
+        "expiresFieldLabel": "Expires"
     },
     "CredentialRequest": {
         "header": "Incoming request",
@@ -258,8 +267,7 @@
         "authzHeader": "Authorization",
         "authzRequestStepHeader": "Authorized",
         "authzResponseStepHeader": "Confirmed",
-        "authzActionPlaceholder": "Authorize",
-        "authzResponseStepHeader": "Confirmed"
+        "authzActionPlaceholder": "Authorize"
     },
     "Settings": {
         "preferencesSection": "App preferences",
@@ -315,7 +323,7 @@
         "wrongCodeHeader": "Wrong code",
         "currentHeader": "Current passcode",
         "successHeader": "Passcode changed!",
-        "sameCodeHeader": "Same as old"
+        "sameCodeHeader": "You have entered the current passcode"
     },
     "ContactUs": {
         "issueOption_1": "Possible partnership with Jolocom",
@@ -385,5 +393,16 @@
     },
     "DragToConfirm": {
         "instruction": "Drop the ball"
+    },
+    "Test": {
+        "testTerm": "whoopsytest"
+    },
+    "Validations": {
+        "onlyNumbers": "Only number characters are allowed",
+        "tooMany": "Too many characters",
+        "tooFew": "Too few characters",
+        "missingValue": "Please provide a value",
+        "wrongEmail": "Seems like this is not a valid email",
+        "atLeastOneValue": "Please provide at least one of the values"
     }
 }

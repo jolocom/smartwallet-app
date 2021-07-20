@@ -107,7 +107,7 @@
         "closeBtn": "Abbrechen",
         "confirmBtn": "Fertig",
         "addHeader": "Füge deinen ${attributeName, smallcase} hinzu",
-        "errorAttributeExists": ""
+        "errorAttributeExists": "Attribut mit dem gleichen Wert existiert bereits"
     },
     "CreatePasscode": {
         "createHeader": "Passcode erstellen",
@@ -129,7 +129,13 @@
         "promptBiometrics": "Biometrische Daten bereitstellen um fortzufahren"
     },
     "PasscodeRecoveryInstructions": {
-        "header": "So änderst du deinen Passcode"
+        "header": "So änderst du deinen Passcode",
+        "subheader1": "",
+        "subheader2": "",
+        "imageCaption": "",
+        "submitBtn": "",
+        "footer": "",
+        "cancelBtn": ""
     },
     "Lock": {
         "header": "Gib deinen Passcode ein",
@@ -212,7 +218,10 @@
         "othersPlaceholderHeader": "Gähnende Leere",
         "othersPlaceholderSubheader": "Du hast noch nichts gespeichert",
         "unspecifiedField": "",
-        "subjectNameField": ""
+        "subjectNameField": "",
+        "issuedFieldLabel": "",
+        "issuerFieldLabel": "",
+        "expiresFieldLabel": ""
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -258,8 +267,7 @@
         "authzHeader": "",
         "authzRequestStepHeader": "",
         "authzResponseStepHeader": "",
-        "authzActionPlaceholder": "",
-        "authzResponseStepHeader": ""
+        "authzActionPlaceholder": ""
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",
@@ -315,7 +323,7 @@
         "wrongCodeHeader": "Falscher Code",
         "currentHeader": "Aktueller Passcode",
         "successHeader": "Passcode geändert!",
-        "sameCodeHeader": ""
+        "sameCodeHeader": "Du hast den aktuellen Passcode eingegeben"
     },
     "ContactUs": {
         "issueOption_1": "Mögliche Partnerschaft mit Jolocom",
@@ -385,5 +393,16 @@
     },
     "DragToConfirm": {
         "instruction": ""
+    },
+    "Test": {
+        "testTerm": ""
+    },
+    "Validations": {
+        "onlyNumbers": "",
+        "tooMany": "",
+        "tooFew": "",
+        "missingValue": "",
+        "wrongEmail": "",
+        "atLeastOneValue": ""
     }
 }

@@ -5,28 +5,32 @@ import { StyleSheet } from 'react-native'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import ScreenContainer from '~/components/ScreenContainer'
-import { strings } from '~/translations/strings'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
+import useTranslation from '~/hooks/useTranslation'
 
 interface PropsI {
   navigation: NavigationProp<{}>
 }
 
 const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
+  const { t } = useTranslation()
+
   const redirectToRecovery = () => {
     const pushAction = StackActions.push(ScreenNames.PasscodeRecovery, {
       isAccessRestore: true,
     })
     navigation.dispatch(pushAction)
   }
+
   const handleGoBack = useCallback(() => {
     navigation.goBack()
   }, [])
+
   return (
     <ScreenContainer
       customStyles={{ justifyContent: 'flex-start' }}
@@ -42,7 +46,7 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
           marginTop: BP({ default: 40, xsmall: 32 }),
         }}
       >
-        {strings.HOW_TO_CHANGE_PIN}
+        {t('PasscodeRecoveryInstructions.header')}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
@@ -53,7 +57,7 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
           marginTop: BP({ xsmall: 12, small: 12, medium: 12, large: 24 }),
         }}
       >
-        {strings.WE_ARE_SORRY_THAT_YOU_FORGOT}
+        {t('PasscodeRecoveryInstructions.subheader1')}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
@@ -64,14 +68,16 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
           marginTop: 12,
         }}
       >
-        {strings.YOU_CAN_CHANGE_PIN}
+        {t('PasscodeRecoveryInstructions.subheader2')}
       </JoloText>
       <AbsoluteBottom customStyles={styles.btnsContainer}>
         <Image
           style={styles.instructionImage}
           source={require('~/assets/images/pinrecovery.png')}
         />
-        <Btn onPress={redirectToRecovery}>{strings.RESTORE_ACCESS}</Btn>
+        <Btn onPress={redirectToRecovery}>
+          {t('PasscodeRecoveryInstructions.submitBtn')}
+        </Btn>
         <JoloText
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.tiniest}
@@ -86,10 +92,10 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
             lineHeight: BP({ xsmall: 14, small: 18, medium: 22, large: 22 }),
           }}
         >
-          {strings.STORING_NO_AFFECT_DATA}
+          {t('PasscodeRecoveryInstructions.footer')}
         </JoloText>
         <Btn onPress={handleGoBack} type={BtnTypes.secondary}>
-          {strings.CANCEL}
+          {t('PasscodeRecoveryInstructions.cancelBtn')}
         </Btn>
       </AbsoluteBottom>
     </ScreenContainer>
