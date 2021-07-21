@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Image } from 'react-native'
+import { Image, View } from 'react-native'
 import { NavigationProp, StackActions } from '@react-navigation/native'
 import { StyleSheet } from 'react-native'
 
@@ -7,7 +7,6 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import ScreenContainer from '~/components/ScreenContainer'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
-import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
@@ -44,6 +43,7 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
         customStyles={{
           alignSelf: 'flex-start',
           marginTop: BP({ default: 40, xsmall: 32 }),
+          textAlign: 'left',
         }}
       >
         {t('PasscodeRecoveryInstructions.header')}
@@ -70,46 +70,59 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
       >
         {t('PasscodeRecoveryInstructions.subheader2')}
       </JoloText>
-      <AbsoluteBottom customStyles={styles.btnsContainer}>
-        <Image
-          style={styles.instructionImage}
-          source={require('~/assets/images/pinrecovery.png')}
-        />
-        <Btn onPress={redirectToRecovery}>
-          {t('PasscodeRecoveryInstructions.submitBtn')}
-        </Btn>
-        <JoloText
-          kind={JoloTextKind.subtitle}
-          size={JoloTextSizes.tiniest}
-          color={Colors.white70}
-          customStyles={{
-            paddingBottom: BP({
-              xsmall: 10,
-              small: 10,
-              medium: 35,
-              large: 35,
-            }),
-            lineHeight: BP({ xsmall: 14, small: 18, medium: 22, large: 22 }),
-          }}
-        >
-          {t('PasscodeRecoveryInstructions.footer')}
-        </JoloText>
+      <View style={styles.btnsContainer}>
+        <View>
+          <View style={styles.instructionImage}>
+            <JoloText
+              color={Colors.purple}
+              size={JoloTextSizes.mini}
+              customStyles={styles.instructionText}
+            >
+              {t('PasscodeRecoveryInstructions.imageCaption')}
+            </JoloText>
+            <Image source={require('~/assets/images/pinrecovery.png')} />
+          </View>
+          <Btn onPress={redirectToRecovery}>
+            {t('PasscodeRecoveryInstructions.submitBtn')}
+          </Btn>
+          <JoloText
+            kind={JoloTextKind.subtitle}
+            size={JoloTextSizes.tiniest}
+            color={Colors.white70}
+            customStyles={{
+              lineHeight: BP({ xsmall: 14, small: 18, medium: 22, large: 22 }),
+            }}
+          >
+            {t('PasscodeRecoveryInstructions.footer')}
+          </JoloText>
+        </View>
         <Btn onPress={handleGoBack} type={BtnTypes.secondary}>
           {t('PasscodeRecoveryInstructions.cancelBtn')}
         </Btn>
-      </AbsoluteBottom>
+      </View>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
+  instructionText: {
+    position: 'absolute',
+    top: -40,
+    right: '15%',
+    width: 130,
+  },
   instructionImage: {
-    bottom: BP({ xsmall: -120, small: -80, medium: -80, large: -50 }),
+    //bottom: BP({ xsmall: -120, small: -80, medium: -80, large: -50 }),
+    bottom: '-15%',
     alignSelf: 'center',
     transform: [{ scale: BP({ xsmall: 0.7, small: 1, medium: 1, large: 1 }) }],
   },
   btnsContainer: {
     alignSelf: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingBottom: 16,
+    flex: 1,
   },
   descriptionText: {
     alignSelf: 'flex-start',
