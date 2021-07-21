@@ -31,9 +31,12 @@ const prettifyFiles = (stagedFiles: string) => {
 
 const main = async () => {
   try {
-    await promisify(checkStagedGradleProp)(undefined)
-
     const stagedFiles = listStagedFiles().toString('utf-8')
+    if (stagedFiles === '') {
+      throw new Error('No files staged')
+    }
+
+    await promisify(checkStagedGradleProp)(undefined)
     await promisify(prettifyFiles)(stagedFiles)
     await promisify(lintFiles)(stagedFiles)
   } catch (e: unknown) {
