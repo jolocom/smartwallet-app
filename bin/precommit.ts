@@ -6,6 +6,7 @@ import {
   listStagedFiles,
   logStep,
   promisify,
+  stageModifiedFiles,
 } from './commit/utils'
 import { lintFiles } from './commit/lint'
 
@@ -20,12 +21,12 @@ const checkStagedGradleProp = () => {
   }
 }
 
-const formatFiles = (stagedFiles: string) => {
+const prettifyFiles = (stagedFiles: string) => {
   logStep('Prettifying staged files')
   childProcess.execSync(
     `echo "${stagedFiles}" | xargs ./node_modules/.bin/prettier --ignore-unknown --write`,
   )
-  childProcess.execSync(`echo "${stagedFiles}" | xargs git add`)
+  stageModifiedFiles(stagedFiles)
 }
 
 const main = async () => {
@@ -33,9 +34,8 @@ const main = async () => {
     await promisify(checkStagedGradleProp)(undefined)
 
     const stagedFiles = listStagedFiles().toString('utf-8')
-    await promisify(formatFiles)(stagedFiles)
-
-    // lintFiles(stagedFiles)
+    await promisify(prettifyFiles)(stagedFiles)
+    await promisify(lintFiles)(stagedFiles)
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)

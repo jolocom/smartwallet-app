@@ -1,5 +1,5 @@
 import childProcess from 'child_process'
-import { abortScript, logStep } from './utils'
+import { abortScript, logStep, stageModifiedFiles } from './utils'
 
 const showLintErrors = (files: string) => {
   const rootDir = process.env.PWD
@@ -33,6 +33,7 @@ export const lintFiles = (files: string) => {
      */
     if (output.length === 2) {
       // no linting errors
+      stageModifiedFiles(files)
     } else {
       console.log(
         '\x1b[0;33m%s\x1b[0m',
