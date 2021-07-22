@@ -3,7 +3,6 @@ import { CredentialIssuer } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { CredentialUITypes } from '~/types/credentials'
-import { strings } from '~/translations'
 import {
   AttributeTypes,
   BaseUICredential,
