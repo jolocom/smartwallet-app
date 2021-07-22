@@ -101,7 +101,9 @@ export const CredentialShareBAS = () => {
           {isDocument(displaySingleCredential) ? (
             <IncomingRequestDoc
               name={name}
-              holderName={displaySingleCredential.holderName}
+              holderName={
+                displaySingleCredential.holderName || t('General.unknown')
+              }
               properties={claimFields}
               highlight={`${displaySingleCredential.highlight?.slice(
                 0,
@@ -170,6 +172,7 @@ const CredentialShareFAS = () => {
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
+  const { getOptionalFields } = useCredentialOptionalFields()
 
   const handleSubmit = useCredentialShareSubmit()
 
@@ -204,7 +207,7 @@ const CredentialShareFAS = () => {
                     <IncomingRequestDoc
                       name={name ?? type}
                       properties={claimFields}
-                      holderName={cred.holderName}
+                      holderName={cred.holderName || t('General.unknown')}
                       highlight={`${
                         cred.photo && cred.highlight
                           ? cred.highlight?.length > 18

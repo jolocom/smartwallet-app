@@ -47,8 +47,8 @@ export const useCredentialOptionalFields = () => {
     return credential.properties
       .filter((p) => !filteredOptionalFields.includes(p.key as ClaimKeys))
       .map(({ label, value }) => ({
-        label,
-        value,
+        label: label || t('Documents.unspecifiedField'),
+        value: value || t('Documents.unspecifiedField'),
       }))
       .concat(additionalFields)
   }

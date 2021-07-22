@@ -121,9 +121,20 @@ export const DocumentList = () => {
               const { credentials, value } = d as
                 | CredentialsByType<DisplayCredentialDocument>
                 | CredentialsByIssuer<DisplayCredentialDocument>
-
-              // @ts-expect-error @terms
-              const uiType = t(uiTypesTerms[value as CredentialUITypes])
+              /**
+               * - if value is defined
+               *   and it isn't not a <context.term> pattern: use it as a type;
+               * - if value is empty make it unknown
+               */
+              let uiType: string | undefined =
+                uiTypesTerms[value as CredentialUITypes]
+              const credentialUIType = uiType
+                ? // @ts-expect-error
+                  t(uiType)
+                : value === ''
+                ? // @ts-expect-error
+                  t(uiTypesTerms[CredentialUITypes.unknown])
+                : value
               return (
                 <>
                   <ScreenContainer.Padding>
@@ -135,7 +146,7 @@ export const DocumentList = () => {
                         marginBottom: BP({ default: 30, xsmall: 16 }),
                       }}
                     >
-                      {`${uiType}  • ${credentials.length}`}
+                      {`${credentialUIType}  • ${credentials.length}`}
                     </JoloText>
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
@@ -154,7 +165,8 @@ export const DocumentList = () => {
                           },
                           {
                             label: t('Documents.subjectNameField'),
-                            value: c.holderName,
+                            // TODO: add new term Anonymous
+                            value: c.holderName || t('General.unknown'),
                           },
                         ]}
                         optionalFields={getOptionalFields(c)}
