@@ -65,7 +65,7 @@
     "SeedphraseRepeat": {
         "orderInstructions": "Drag and drop the words until they are in the correct order",
         "confirmBtn": "Done",
-        "confirmLoader": "",
+        "confirmLoader": "Creating your personal secret number",
         "matchingError": "Check carefully for mistakes and try again"
     },
     "Identity": {
