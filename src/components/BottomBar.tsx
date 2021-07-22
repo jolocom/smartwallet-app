@@ -90,7 +90,9 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
 }
 
 const ScannerButton = () => {
-  const redirectToScanner = useRedirectTo(ScreenNames.Interaction)
+  const redirectToScanner = useRedirectTo(ScreenNames.Interaction, {
+    screen: ScreenNames.Scanner,
+  })
   const insets = useSafeArea()
   return (
     <TouchableOpacity
