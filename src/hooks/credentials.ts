@@ -18,7 +18,7 @@ export const useDeleteCredential = () => {
 export const useCredentialOptionalFields = () => {
   const { t } = useTranslation()
 
-  const filteredOptionalFields = [
+  const nonOptionalFields = [
     ClaimKeys.familyName,
     ClaimKeys.givenName,
     ClaimKeys.id,
@@ -45,7 +45,7 @@ export const useCredentialOptionalFields = () => {
     if (!credential.properties.length) return additionalFields
 
     return credential.properties
-      .filter((p) => !filteredOptionalFields.includes(p.key as ClaimKeys))
+      .filter((p) => !nonOptionalFields.includes(p.key as ClaimKeys))
       .map(({ label, value }) => ({
         label: label || t('Documents.unspecifiedField'),
         value: value || t('Documents.unspecifiedField'),
@@ -53,5 +53,5 @@ export const useCredentialOptionalFields = () => {
       .concat(additionalFields)
   }
 
-  return { filteredOptionalFields, getOptionalFields }
+  return { nonOptionalFields, getOptionalFields }
 }

@@ -169,6 +169,7 @@ const CredentialShareFAS = () => {
   const { t } = useTranslation()
   const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
+  const { getOptionalFields } = useCredentialOptionalFields()
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
