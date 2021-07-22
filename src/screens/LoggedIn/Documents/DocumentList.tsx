@@ -22,7 +22,6 @@ import {
   CredentialUITypes,
 } from '~/types/credentials'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
-import { getOptionalFields } from './utils'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { MainTabsParamList } from '../MainTabs'
 import { ScreenNames } from '~/types/screens'
@@ -32,6 +31,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
 import { uiTypesTerms } from '~/hooks/signedCredentials/utils'
+import { useCredentialOptionalFields } from '~/hooks/credentials'
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -64,6 +64,7 @@ export const DocumentList = () => {
     >(null)
   const { activeTab, activeSubtab, setActiveTab, tabs } = useTabs()
   const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
+  const { getOptionalFields } = useCredentialOptionalFields()
 
   const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
   const categoriesByIssuer = useSelector(
@@ -120,9 +121,20 @@ export const DocumentList = () => {
               const { credentials, value } = d as
                 | CredentialsByType<DisplayCredentialDocument>
                 | CredentialsByIssuer<DisplayCredentialDocument>
-
-              // @ts-expect-error @terms
-              const uiType = t(uiTypesTerms[value as CredentialUITypes])
+              /**
+               * - if value is defined
+               *   and it isn't not a <context.term> pattern: use it as a type;
+               * - if value is empty make it unknown
+               */
+              let uiType: string | undefined =
+                uiTypesTerms[value as CredentialUITypes]
+              const credentialUIType = uiType
+                ? // @ts-expect-error
+                  t(uiType)
+                : value === ''
+                ? // @ts-expect-error
+                  t(uiTypesTerms[CredentialUITypes.unknown])
+                : value
               return (
                 <>
                   <ScreenContainer.Padding>
@@ -134,7 +146,7 @@ export const DocumentList = () => {
                         marginBottom: BP({ default: 30, xsmall: 16 }),
                       }}
                     >
-                      {`${uiType}  • ${credentials.length}`}
+                      {`${credentialUIType}  • ${credentials.length}`}
                     </JoloText>
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
@@ -153,7 +165,7 @@ export const DocumentList = () => {
                           },
                           {
                             label: t('Documents.subjectNameField'),
-                            value: c.holderName,
+                            value: c.holderName || t('General.anonymous'),
                           },
                         ]}
                         optionalFields={getOptionalFields(c)}

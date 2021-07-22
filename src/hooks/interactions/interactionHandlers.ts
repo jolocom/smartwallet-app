@@ -9,8 +9,6 @@ import { getCredentialCategory } from '../signedCredentials/utils'
 import { useAgent } from '../sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '../toasts'
-import { strings } from '~/translations'
-import truncateDid from '~/utils/truncateDid'
 import { CredentialRequestHandler } from '~/middleware/interaction/credentialRequestConstrains'
 import { getCounterpartyName } from '~/utils/dataMapping'
 
