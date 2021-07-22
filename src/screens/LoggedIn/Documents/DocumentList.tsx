@@ -165,8 +165,7 @@ export const DocumentList = () => {
                           },
                           {
                             label: t('Documents.subjectNameField'),
-                            // TODO: add new term Anonymous
-                            value: c.holderName || t('General.unknown'),
+                            value: c.holderName || t('General.anonymous'),
                           },
                         ]}
                         optionalFields={getOptionalFields(c)}

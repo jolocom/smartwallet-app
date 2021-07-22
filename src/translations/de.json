@@ -129,7 +129,13 @@
         "promptBiometrics": "Biometrische Daten bereitstellen um fortzufahren"
     },
     "PasscodeRecoveryInstructions": {
-        "header": "So änderst du deinen Passcode"
+        "header": "So änderst du deinen Passcode",
+        "subheader1": "",
+        "subheader2": "",
+        "imageCaption": "",
+        "submitBtn": "",
+        "footer": "",
+        "cancelBtn": ""
     },
     "Lock": {
         "header": "Gib deinen Passcode ein",
@@ -374,7 +380,8 @@
         "contactPlaceholder": "Trag deine E-Mail hier ein ..."
     },
     "General": {
-        "unknown": ""
+        "unknown": "",
+        "anonymous": ""
     },
     "Authentication": {
         "header": "",

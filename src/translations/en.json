@@ -129,7 +129,13 @@
         "promptBiometrics": "Provide biometrics to continue"
     },
     "PasscodeRecoveryInstructions": {
-        "header": "How to change your passcode"
+        "header": "How to change your passcode",
+        "subheader1": "We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!",
+        "subheader2": "You can change your passcode by entering your secret phrase. Click Restore Access below to make the change",
+        "imageCaption": "Repeat your phrase word by word",
+        "submitBtn": "Restore access",
+        "footer": "Setting a new passcode will not affect your stored data",
+        "cancelBtn": "Cancel"
     },
     "Lock": {
         "header": "Enter your passcode",
@@ -374,7 +380,8 @@
         "contactPlaceholder": "Write your email here …"
     },
     "General": {
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "anonymous": "Anonymous"
     },
     "Authentication": {
         "header": "Is it really you?",
