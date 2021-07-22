@@ -173,7 +173,6 @@ const CredentialShareFAS = () => {
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
-  const { getOptionalFields } = useCredentialOptionalFields()
 
   const handleSubmit = useCredentialShareSubmit()
 
