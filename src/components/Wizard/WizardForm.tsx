@@ -56,7 +56,8 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                     // @ts-ignore
                     value={values[field.key]}
                     updateInput={(v) => setFieldValue(field.key, v.trimLeft())}
-                    placeholder={field.label}
+                    // @ts-expect-error terms
+                    placeholder={t(field.label)}
                     autoFocus={idx === 0}
                     withHighlight={
                       !Boolean(errors[field.key]) && Boolean(values[field.key])
