@@ -32,44 +32,46 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
 
   return (
     <ScreenContainer
-      customStyles={{ justifyContent: 'flex-start' }}
+      customStyles={{ justifyContent: 'space-between' }}
       backgroundColor={Colors.black}
     >
-      <JoloText
-        kind={JoloTextKind.title}
-        size={JoloTextSizes.middle}
-        weight={JoloTextWeight.regular}
-        color={Colors.white85}
-        customStyles={{
-          alignSelf: 'flex-start',
-          marginTop: BP({ default: 40, xsmall: 32 }),
-          textAlign: 'left',
-        }}
-      >
-        {t('PasscodeRecoveryInstructions.header')}
-      </JoloText>
-      <JoloText
-        kind={JoloTextKind.subtitle}
-        color={Colors.white80}
-        size={JoloTextSizes.middle}
-        customStyles={{
-          ...styles.descriptionText,
-          marginTop: BP({ xsmall: 12, small: 12, medium: 12, large: 24 }),
-        }}
-      >
-        {t('PasscodeRecoveryInstructions.subheader1')}
-      </JoloText>
-      <JoloText
-        kind={JoloTextKind.subtitle}
-        color={Colors.white80}
-        size={JoloTextSizes.middle}
-        customStyles={{
-          ...styles.descriptionText,
-          marginTop: 12,
-        }}
-      >
-        {t('PasscodeRecoveryInstructions.subheader2')}
-      </JoloText>
+      <View>
+        <JoloText
+          kind={JoloTextKind.title}
+          size={JoloTextSizes.middle}
+          weight={JoloTextWeight.regular}
+          color={Colors.white85}
+          customStyles={{
+            alignSelf: 'flex-start',
+            marginTop: BP({ default: 40, xsmall: 32 }),
+            textAlign: 'left',
+          }}
+        >
+          {t('PasscodeRecoveryInstructions.header')}
+        </JoloText>
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          color={Colors.white80}
+          size={JoloTextSizes.middle}
+          customStyles={{
+            ...styles.descriptionText,
+            marginTop: BP({ xsmall: 12, small: 12, medium: 12, large: 24 }),
+          }}
+        >
+          {t('PasscodeRecoveryInstructions.subheader1')}
+        </JoloText>
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          color={Colors.white80}
+          size={JoloTextSizes.middle}
+          customStyles={{
+            ...styles.descriptionText,
+            marginTop: 12,
+          }}
+        >
+          {t('PasscodeRecoveryInstructions.subheader2')}
+        </JoloText>
+      </View>
       <View style={styles.btnsContainer}>
         <View>
           <View style={styles.instructionImage}>
@@ -80,7 +82,11 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
             >
               {t('PasscodeRecoveryInstructions.imageCaption')}
             </JoloText>
-            <Image source={require('~/assets/images/pinrecovery.png')} />
+            <Image
+              resizeMode="contain"
+              style={{ flex: BP({ xsmall: 0.8, default: 0 }) }}
+              source={require('~/assets/images/pinrecovery.png')}
+            />
           </View>
           <Btn onPress={redirectToRecovery}>
             {t('PasscodeRecoveryInstructions.submitBtn')}
@@ -112,23 +118,22 @@ const styles = StyleSheet.create({
     width: 130,
   },
   instructionImage: {
-    //bottom: BP({ xsmall: -120, small: -80, medium: -80, large: -50 }),
-    bottom: '-15%',
+    bottom: BP({ default: '-5%', xsmall: '-40%' }),
     alignSelf: 'center',
-    transform: [{ scale: BP({ xsmall: 0.7, small: 1, medium: 1, large: 1 }) }],
   },
   btnsContainer: {
-    alignSelf: 'center',
-    justifyContent: 'space-between',
+    alignSelf: 'flex-end',
+    justifyContent: BP({ default: 'space-between', xsmall: 'flex-end' }),
     width: '100%',
     paddingBottom: 16,
     flex: 1,
+    maxHeight: 430,
   },
   descriptionText: {
     alignSelf: 'flex-start',
     textAlign: 'left',
     letterSpacing: 0,
-    lineHeight: BP({ xsmall: 14, small: 18, medium: 22, large: 22 }),
+    lineHeight: BP({ xsmall: 16, small: 18, medium: 22, large: 22 }),
     color: BP({
       xsmall: Colors.white,
       small: Colors.white90,
