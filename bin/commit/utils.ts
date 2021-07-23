@@ -10,10 +10,6 @@ export const abortScript = (msg: string) => {
   process.exit(1)
 }
 
-export const logStep = (msg: string) => {
-  console.log('\x1b[0;34m%s\x1b[0m', `${msg}`)
-}
-
 export const spawnProcess = (
   onClose: (
     code: number | null,

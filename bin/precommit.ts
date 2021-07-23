@@ -4,7 +4,6 @@ import {
   abortScript,
   formatOutput,
   listStagedFiles,
-  logStep,
   spawnProcess,
 } from './commit/utils'
 import EventEmitter from 'events'
@@ -38,6 +37,7 @@ eventEmmiter.on(
     result[processName].isFinished = true
     result[processName].passed = passed
     result[processName].cmd = cmd
+    console.log('\x1b[0;33m%s\x1b[0m', `Finished running ${processName}`)
     const allFinished = Object.keys(result).every(
       (k) => result[k as ChildProcessVariants].isFinished,
     )
@@ -50,15 +50,13 @@ eventEmmiter.on(
         console.log({ result })
         abortScript('Not all checks passed')
       } else {
-        console.log('All checks passed')
+        console.log('\x1b[1;32m%s\x1b[0m', 'All checks passed')
       }
     }
   },
 )
 
 const checkStagedGradleProp = (files: string[]) => {
-  logStep('Checking for gradle.properties file')
-
   const gradlePropertiesFiles = files.filter((p) =>
     /(gradle\.properties)/.exec(p),
   )
@@ -73,7 +71,6 @@ const checkStagedGradleProp = (files: string[]) => {
 }
 
 const prettifyFiles = (files: string[]) => {
-  logStep('Prettifying staged files')
   const handleProcessClose = (
     code: number | null,
     dataOutput: string,
@@ -100,7 +97,6 @@ const prettifyFiles = (files: string[]) => {
 }
 
 const lintFiles = (files: string[]) => {
-  logStep('Checking for linting errors')
   const handleProcessClose = (
     code: number | null,
     dataOutput: string,
@@ -113,8 +109,6 @@ const lintFiles = (files: string[]) => {
         .split(' ')
         .filter((f) => Boolean(f))
         .join(' ')
-      console.log({ erroredFiles })
-
       eventEmmiter.emit(
         'process-finished',
         'linter',
@@ -128,8 +122,12 @@ const lintFiles = (files: string[]) => {
   spawnProcess(handleProcessClose, 'npm', ['run', 'lint:check', ...files])
 }
 
-const main = async () => {
+const main = () => {
   try {
+    console.log('\x1b[0;34m%s\x1b[0m', 'Running check for:')
+    console.log('\x1b[0;34m%s\x1b[0m', '\t - staged gradle.propeties')
+    console.log('\x1b[0;34m%s\x1b[0m', '\t - prettier')
+    console.log('\x1b[0;34m%s\x1b[0m', '\t - linter')
     const stagedFiles = listStagedFiles().toString('utf-8')
     if (stagedFiles === '') {
       throw new Error('No files staged')
@@ -148,4 +146,4 @@ const main = async () => {
   }
 }
 
-;(async () => main())()
+main()

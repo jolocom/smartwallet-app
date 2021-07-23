@@ -72,5 +72,5 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': ['off'],
     'import/no-duplicates': ['off'],
   },
-  ignorePatterns: ['package.json'],
+  ignorePatterns: ['package.json', 'gradle.properties'],
 }
