@@ -113,17 +113,19 @@ const lintFiles = (files: string[]) => {
         .split(' ')
         .filter((f) => Boolean(f))
         .join(' ')
+      console.log({ erroredFiles })
+
       eventEmmiter.emit(
         'process-finished',
         'linter',
         false,
-        `yarn lint:files --fix ${erroredFiles}`,
+        `yarn lint:fix ${erroredFiles}`,
       )
     } else {
       eventEmmiter.emit('process-finished', 'linter', true, '')
     }
   }
-  spawnProcess(handleProcessClose, 'npm', ['run', 'lint:files', ...files])
+  spawnProcess(handleProcessClose, 'npm', ['run', 'lint:check', ...files])
 }
 
 const main = async () => {
