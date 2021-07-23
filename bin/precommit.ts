@@ -21,24 +21,47 @@ const checkStagedGradleProp = () => {
   }
 }
 
-const prettifyFiles = (stagedFiles: string) => {
+const prettifyFiles = (stagedFiles: string[]) => {
   logStep('Prettifying staged files')
-  childProcess.execSync(
-    `echo "${stagedFiles}" | xargs ./node_modules/.bin/prettier --ignore-unknown --write`,
-  )
-  stageModifiedFiles(stagedFiles)
+
+  const prettierProcess = childProcess.spawn('npm', [
+    'run',
+    'prettier:check',
+    ...stagedFiles,
+  ])
+  let dataOutput: string = ''
+  let errorOutput: string = ''
+  prettierProcess.stdout.on('data', (data) => {
+    dataOutput += data.toString() + '\n'
+    // console.log('data', data.toString());
+  })
+  prettierProcess.stderr.on('data', (error: Buffer) => {
+    // errorOutput += error.toString() + '\n';
+    errorOutput += error
+    // console.log('error', data.toString());
+  })
+  prettierProcess.stderr.pipe(process.stderr)
+  prettierProcess.on('close', (code) => {
+    if (code === 1) {
+      // TODO: format error and display its output process.stderr.write(formattedError>)
+      abortScript('Prettier check failed. Fix Prettier errors')
+    } else if (code === 2) {
+      abortScript('Prettier check failed. Something is wrong with prettier')
+    }
+  })
 }
 
 const main = async () => {
   try {
     const stagedFiles = listStagedFiles().toString('utf-8')
+
     if (stagedFiles === '') {
       throw new Error('No files staged')
     }
 
     await promisify(checkStagedGradleProp)(undefined)
-    await promisify(prettifyFiles)(stagedFiles)
-    await promisify(lintFiles)(stagedFiles)
+    prettifyFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
+    // await promisify(prettifyFiles)(stagedFiles)
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)
