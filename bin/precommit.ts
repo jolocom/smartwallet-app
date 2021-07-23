@@ -7,6 +7,7 @@ import {
   spawnProcess,
 } from './commit/utils'
 import EventEmitter from 'events'
+import { Table } from 'console-table-printer'
 
 type ChildProcessVariants = 'gradle.properties' | 'prettier' | 'linter'
 type ResultOption = { isFinished: boolean; passed: boolean; cmd: string }
@@ -47,10 +48,36 @@ eventEmmiter.on(
       )
 
       if (!allPassed) {
-        console.log({ result })
+        const t = new Table({
+          columns: [
+            {
+              name: 'index',
+              title: 'Process',
+              alignment: 'right',
+              color: 'blue',
+            },
+            { name: 'isFinished', title: 'Has finished?', alignment: 'right' },
+            { name: 'passed', title: 'Did check pass?', alignment: 'right' },
+            {
+              name: 'cmd',
+              title: 'Fix it by the following instruction',
+              alignment: 'left',
+            }, // with Title as separate Text
+          ],
+        })
+        Object.keys(result).forEach((p) => {
+          const process = p as ChildProcessVariants
+          t.addRow(
+            { index: p, ...result[process] },
+            { color: result[process].passed ? 'green' : 'red' },
+          )
+        })
+        t.printTable()
         abortScript('Not all checks passed')
       } else {
-        console.log('\x1b[1;32m%s\x1b[0m', 'All checks passed')
+        console.log('')
+        console.log('\x1b[0;42m%s\x1b[0m', 'All checks passed')
+        console.log('')
       }
     }
   },
