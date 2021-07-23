@@ -7,18 +7,17 @@ import {
   logStep,
   promisify,
   spawnProcess,
-  stageModifiedFiles,
 } from './commit/utils'
 import { lintFiles } from './commit/lint'
 
-const checkStagedGradleProp = () => {
+const checkStagedGradleProp = (files: string[]) => {
   logStep('Checking for gradle.properties file')
 
-  const gradlePropertiesDiff = childProcess.execSync(
-    'git diff --cached --raw ./android/gradle.properties',
+  const gradlePropertiesFiles = files.filter((p) =>
+    /(gradle\.properties)/.exec(p),
   )
-  if (gradlePropertiesDiff.toString() !== '') {
-    throw new Error('Remove ./android/gradle.properties from staging area')
+  if (gradlePropertiesFiles.length) {
+    process.exit(1)
   }
 }
 
@@ -43,14 +42,16 @@ const prettifyFiles = (files: string[]) => {
 const main = async () => {
   try {
     const stagedFiles = listStagedFiles().toString('utf-8')
-
     if (stagedFiles === '') {
       throw new Error('No files staged')
     }
+    const formattedStagedFiles = stagedFiles
+      .split('\n')
+      .filter((path) => Boolean(path))
 
-    await promisify(checkStagedGradleProp)(undefined)
-    prettifyFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
-    lintFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
+    checkStagedGradleProp(formattedStagedFiles)
+    prettifyFiles(formattedStagedFiles)
+    lintFiles(formattedStagedFiles)
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)
