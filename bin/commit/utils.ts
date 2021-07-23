@@ -35,8 +35,10 @@ export const spawnProcess = (
   /**
    * NOTE: this is for debug mode to see the original output of processes
    */
-  // spawnedProcess.stderr.pipe(process.stderr)
-  // spawnedProcess.stdout.pipe(process.stdout)
+  if (process.env.DEBUG) {
+    spawnedProcess.stderr.pipe(process.stderr)
+    spawnedProcess.stdout.pipe(process.stdout)
+  }
 
   spawnedProcess.on('close', (code) => onClose(code, dataOutput, errorOutput))
 
