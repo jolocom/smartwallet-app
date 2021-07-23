@@ -1,17 +1,5 @@
 import childProcess from 'child_process'
 
-export const promisify =
-  <T>(fn: (args: T) => void) =>
-  (args: T): Promise<void> =>
-    new Promise((res, rej) => {
-      try {
-        fn(args)
-        res()
-      } catch (e) {
-        rej(e)
-      }
-    })
-
 export const listStagedFiles = () =>
   childProcess.execSync(`git diff --cached --name-only --diff-filter=ACMR`)
 
@@ -48,10 +36,16 @@ export const spawnProcess = (
     errorOutput += error.toString() + '\n'
   })
 
-  spawnedProcess.stderr.pipe(process.stderr)
-  spawnedProcess.stdout.pipe(process.stdout)
+  /**
+   * NOTE: this is for debug mode to see the original output of processes
+   */
+  // spawnedProcess.stderr.pipe(process.stderr)
+  // spawnedProcess.stdout.pipe(process.stdout)
 
   spawnedProcess.on('close', (code) => onClose(code, dataOutput, errorOutput))
 
   return spawnedProcess
 }
+
+export const formatOutput = (output: string): string[] =>
+  output.split('\n').filter((o) => Boolean(o))
