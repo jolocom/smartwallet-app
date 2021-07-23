@@ -6,6 +6,7 @@ import {
   listStagedFiles,
   logStep,
   promisify,
+  spawnProcess,
   stageModifiedFiles,
 } from './commit/utils'
 import { lintFiles } from './commit/lint'
@@ -21,34 +22,18 @@ const checkStagedGradleProp = () => {
   }
 }
 
-const prettifyFiles = (stagedFiles: string[]) => {
+const prettifyFiles = (files: string[]) => {
   logStep('Prettifying staged files')
 
-  const prettierProcess = childProcess.spawn('npm', [
-    'run',
-    'prettier:check',
-    ...stagedFiles,
-  ])
-  let dataOutput: string = ''
-  let errorOutput: string = ''
-  prettierProcess.stdout.on('data', (data) => {
-    dataOutput += data.toString() + '\n'
-    // console.log('data', data.toString());
-  })
-  prettierProcess.stderr.on('data', (error: Buffer) => {
-    // errorOutput += error.toString() + '\n';
-    errorOutput += error
-    // console.log('error', data.toString());
-  })
-  prettierProcess.stderr.pipe(process.stderr)
-  prettierProcess.on('close', (code) => {
+  const handleProcessClose = (code: number) => {
     if (code === 1) {
       // TODO: format error and display its output process.stderr.write(formattedError>)
       abortScript('Prettier check failed. Fix Prettier errors')
     } else if (code === 2) {
       abortScript('Prettier check failed. Something is wrong with prettier')
     }
-  })
+  }
+  spawnProcess(handleProcessClose, 'npm', ['run', 'prettier:check', ...files])
 }
 
 const main = async () => {
@@ -61,7 +46,7 @@ const main = async () => {
 
     await promisify(checkStagedGradleProp)(undefined)
     prettifyFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
-    // await promisify(prettifyFiles)(stagedFiles)
+    // lintFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)

@@ -28,3 +28,23 @@ export const abortScript = (msg: string) => {
 export const logStep = (msg: string) => {
   console.log('\x1b[0;34m%s\x1b[0m', `${msg}`)
 }
+
+export const spawnProcess = (
+  onClose: (code: number) => void,
+  cmd: string,
+  args?: readonly string[],
+  options?: childProcess.SpawnOptionsWithoutStdio,
+) => {
+  const spawnedProcess = childProcess.spawn(cmd, args)
+  let dataOutput: string = ''
+  let errorOutput: string = ''
+  spawnedProcess.stdout.on('data', (data) => {
+    dataOutput += data.toString() + '\n'
+  })
+  spawnedProcess.stderr.on('data', (error: Buffer) => {
+    errorOutput += error.toString() + '\n'
+  })
+  spawnedProcess.stderr.pipe(process.stderr)
+  spawnedProcess.on('close', onClose)
+  return spawnedProcess
+}
