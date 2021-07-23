@@ -25,7 +25,11 @@ const checkStagedGradleProp = () => {
 const prettifyFiles = (files: string[]) => {
   logStep('Prettifying staged files')
 
-  const handleProcessClose = (code: number) => {
+  const handleProcessClose = (
+    code: number | null,
+    dataOutput: string,
+    errorOutput: string,
+  ) => {
     if (code === 1) {
       // TODO: format error and display its output process.stderr.write(formattedError>)
       abortScript('Prettier check failed. Fix Prettier errors')
@@ -46,7 +50,7 @@ const main = async () => {
 
     await promisify(checkStagedGradleProp)(undefined)
     prettifyFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
-    // lintFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
+    lintFiles(stagedFiles.split('\n').filter((path) => Boolean(path)))
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)

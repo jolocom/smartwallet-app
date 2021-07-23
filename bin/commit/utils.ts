@@ -30,21 +30,31 @@ export const logStep = (msg: string) => {
 }
 
 export const spawnProcess = (
-  onClose: (code: number) => void,
+  onClose: (
+    code: number | null,
+    dataOutput: string,
+    errorOutput: string,
+  ) => void,
   cmd: string,
   args?: readonly string[],
   options?: childProcess.SpawnOptionsWithoutStdio,
 ) => {
-  const spawnedProcess = childProcess.spawn(cmd, args)
-  let dataOutput: string = ''
-  let errorOutput: string = ''
+  const spawnedProcess = childProcess.spawn(cmd, args, options)
+
+  let dataOutput = ''
+  let errorOutput = ''
+
   spawnedProcess.stdout.on('data', (data) => {
     dataOutput += data.toString() + '\n'
   })
   spawnedProcess.stderr.on('data', (error: Buffer) => {
     errorOutput += error.toString() + '\n'
   })
+
   spawnedProcess.stderr.pipe(process.stderr)
-  spawnedProcess.on('close', onClose)
+  spawnedProcess.stdout.pipe(process.stdout)
+
+  spawnedProcess.on('close', (code) => onClose(code, dataOutput, errorOutput))
+
   return spawnedProcess
 }
