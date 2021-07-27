@@ -1,5 +1,4 @@
 import { Dimensions } from 'react-native'
-import { SCREEN_WIDTH } from '~/utils/dimensions'
 
 export type DefiningOption =
   | { baseScreenWidth: number; availableWidth?: number }
