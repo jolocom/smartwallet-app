@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
+import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import Space from '../Space'
@@ -14,12 +15,13 @@ type CredentialDocumentCardProps = {
   fields: Array<Required<DisplayVal>>
   highlight?: string
   photo?: string
-  onHandleMore: () => void // id is required here, to be able to delete a credential
+  onHandleMore: (id: string) => void // id is required here, to be able to delete a credential
 }
 
 /**
  * TODO:
  * - if given name or family name is not provided it displays 'not specified'
+ * - semicolons after field label
  */
 export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   credentialName,
@@ -218,6 +220,144 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
           justifyContent: 'center',
           top: 18,
           right: 17,
+          zIndex: 100,
+          paddingHorizontal: 3,
+          paddingVertical: 10,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            zIndex: 1,
+          }}
+        >
+          {[...Array(3).keys()].map((c) => (
+            <View
+              key={c}
+              style={{
+                width: 4,
+                height: 4,
+                borderRadius: 2,
+                marginHorizontal: 2,
+                backgroundColor: Colors.black,
+              }}
+            />
+          ))}
+        </View>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
+type CredentialOtherCardProps = {
+  credentialType: string
+  credentialName: string
+  fields: Array<Required<DisplayVal>>
+  logo?: string
+  onHandleMore: (id: string) => void // id is required here, to be able to delete a credential
+}
+/**
+ * TODO:
+ * - icon
+ * - icon scaling
+ * - what type do we display
+ * - semicolons after field label
+ */
+export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
+  credentialType,
+  credentialName,
+  fields,
+  onHandleMore,
+}) => {
+  return (
+    <View style={{ position: 'relative' }}>
+      <OtherCardMedium>
+        <View
+          style={{
+            paddingVertical: 16,
+            paddingRight: 22,
+            paddingLeft: 20,
+            height: '100%',
+          }}
+        >
+          <View style={{ flex: 0.29 }}>
+            <Text
+              style={{
+                fontSize: 18,
+                lineHeight: 18,
+                letterSpacing: 0.09,
+                color: Colors.jumbo,
+                // TODO: update this when scaling is known
+                width: '88.3%',
+                fontFamily: Fonts.Regular,
+              }}
+            >
+              {credentialType}
+            </Text>
+            <Space height={13} />
+            {/* scaled */}
+            <Text
+              style={{
+                fontSize: 22,
+                lineHeight: 24,
+                letterSpacing: 0.15,
+                color: Colors.black80,
+                width: '100%',
+                fontFamily: Fonts.Regular,
+              }}
+            >
+              {credentialName}
+            </Text>
+            {/* non-scaled */}
+            {/* <Text style={{
+              fontSize: 28,
+              lineHeight: 28,
+              letterSpacing: 0.15,
+              color: Colors.black80,
+              width: '100%',      
+              fontFamily: Fonts.Regular                      
+            }}>{credentialName}</Text> */}
+          </View>
+          <View style={{ flex: 0.71, paddingHorizontal: 10 }}>
+            {fields.map((f, idx) => (
+              <>
+                <Space height={20} />
+                {/* TODO: share the same with document card */}
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontSize: 16,
+                    fontFamily: Fonts.Regular,
+                    color: Colors.slateGray,
+                  }}
+                >
+                  {f.label}
+                </Text>
+                <Space height={7} />
+                <Text
+                  style={{
+                    fontSize: 20,
+                    lineHeight: 20,
+                    letterSpacing: 0.14,
+                    fontFamily: Fonts.Medium,
+                  }}
+                >
+                  {f.value}
+                </Text>
+              </>
+            ))}
+          </View>
+        </View>
+      </OtherCardMedium>
+      {/* Dots - more action */}
+      <TouchableOpacity
+        onPress={onHandleMore}
+        style={{
+          position: 'absolute',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bottom: 20,
+          right: 24,
           zIndex: 100,
           paddingHorizontal: 3,
           paddingVertical: 10,
