@@ -6,6 +6,8 @@ import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import { Fonts } from '~/utils/fonts'
 import Space from '../Space'
 import { Colors } from '~/utils/colors'
+import { useState } from 'react'
+import { TextLayoutEvent } from '../Card/Field'
 
 type CredentialDocumentCardProps = {
   credentialName: string
@@ -29,6 +31,16 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   highlight,
   onHandleMore,
 }) => {
+  /**
+   * logic to define if credential text should be scaled
+   */
+  const [isCredentialNameScaled, setIsCredentialNameScaled] = useState(false)
+  const handleHeaderTextLayout = (e: TextLayoutEvent) => {
+    if (!isCredentialNameScaled) {
+      setIsCredentialNameScaled(e.nativeEvent.lines.length > 2)
+    }
+  }
+
   return (
     <View style={{ position: 'relative' }}>
       <DocumentCardMedium>
@@ -40,31 +52,21 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
           }}
         >
           <View style={{ flexDirection: 'row' }}>
-            {/* scaled credential name */}
             <Text
+              // @ts-expect-error
+              onTextLayout={handleHeaderTextLayout}
+              numberOfLines={isCredentialNameScaled ? 2 : undefined}
               style={{
-                fontSize: 22,
-                lineHeight: 22,
+                fontSize: isCredentialNameScaled ? 22 : 28,
+                lineHeight: isCredentialNameScaled ? 22 : 28,
                 fontFamily: Fonts.Regular,
                 flex: 0.863,
               }}
             >
               {credentialName}
             </Text>
-            {/* non-scaled credential name */}
-            {/* <Text style={{
-              fontSize: 28,
-              lineHeight: 28,
-              fontFamily: Fonts.Regular,
-              flex: 0.863              
-            }}>
-              {credentialName}
-            </Text> */}
           </View>
-          {/* scaled credential name */}
-          <Space height={22} />
-          {/* non-scaled credential name */}
-          {/* <Space height={16} /> */}
+          <Space height={isCredentialNameScaled ? 22 : 16} />
           <View
             style={{
               paddingHorizontal: 10,
