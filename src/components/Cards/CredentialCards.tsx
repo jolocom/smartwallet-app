@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useRef, useMemo, useState } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import { Fonts } from '~/utils/fonts'
-import Space from '../Space'
 import { Colors } from '~/utils/colors'
-import { useState } from 'react'
+import Space from '../Space'
 import { TextLayoutEvent } from '../Card/Field'
 
 type CredentialDocumentCardProps = {
@@ -21,7 +20,6 @@ type CredentialDocumentCardProps = {
 /**
  * TODO:
  * - if given name or family name is not provided it displays 'not specified'
- * - trim highlight
  */
 export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   credentialName,
@@ -35,11 +33,54 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
    * logic to define if credential text should be scaled
    */
   const [isCredentialNameScaled, setIsCredentialNameScaled] = useState(false)
-  const handleHeaderTextLayout = (e: TextLayoutEvent) => {
+  const handleCredentialNameTextLayout = (e: TextLayoutEvent) => {
     if (!isCredentialNameScaled) {
       setIsCredentialNameScaled(e.nativeEvent.lines.length > 2)
     }
   }
+
+  /**
+   * logic to define number of displayed fields
+   */
+  const [displayedFields, setDisplayedFields] = useState(fields.slice(0, 3))
+  const lines = useRef(0)
+  const handleOptionalFieldTextLayout = () => {
+    let calculatedTimes = 0
+    return (e: TextLayoutEvent) => {
+      calculatedTimes++
+      // disable lines manipulation if the number of times this function was invoked
+      // exceeds length of optional fields twice (because we calculate field name and
+      // field value )
+      if (calculatedTimes < fields.length * 2 + 1) {
+        const numberOfLines = e.nativeEvent.lines.length
+        lines.current += numberOfLines
+        if (calculatedTimes === fields.length * 2) {
+          /* check wether to show last optional field */
+          if (lines.current > 7 && (highlight || photo)) {
+            setDisplayedFields((prevState) =>
+              prevState.slice(0, Math.floor(lines.current / fields.length)),
+            )
+          } else if (lines.current > 9 && !highlight) {
+            setDisplayedFields((prevState) => prevState.slice(0, 3))
+          }
+        }
+      }
+    }
+  }
+  const onTextLayoutChange = handleOptionalFieldTextLayout()
+
+  /**
+   * trim highlight value if necessary
+   */
+  const displayedHighlight = useMemo(() => {
+    if (highlight) {
+      return highlight?.length > 14
+        ? highlight?.slice(0, 14) + '...'
+        : highlight
+    } else {
+      return undefined
+    }
+  }, [highlight])
 
   return (
     <View style={{ position: 'relative' }}>
@@ -54,7 +95,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
           <View style={{ flexDirection: 'row' }}>
             <Text
               // @ts-expect-error
-              onTextLayout={handleHeaderTextLayout}
+              onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={isCredentialNameScaled ? 2 : undefined}
               style={{
                 fontSize: isCredentialNameScaled ? 22 : 28,
@@ -84,10 +125,13 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
             </Text>
           </View>
           <Space height={16} />
-          {fields.map((f, idx) => (
+          {displayedFields.map((f, idx) => (
             <>
               {idx !== 0 && <Space height={14} />}
               <Text
+                // @ts-expect-error
+                onTextLayout={onTextLayoutChange}
+                numberOfLines={1}
                 style={{
                   fontSize: 16,
                   lineHeight: 16,
@@ -99,11 +143,17 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
               </Text>
               <Space height={9} />
               <Text
+                // @ts-expect-error
+                onTextLayout={onTextLayoutChange}
+                numberOfLines={idx === displayedFields.length - 1 ? 3 : 2}
                 style={{
                   fontSize: 20,
                   lineHeight: 20,
                   fontFamily: Fonts.Medium,
-                  width: photo && idx === fields.length - 1 ? '66.4%' : '100%',
+                  width:
+                    photo && idx === displayedFields.length - 1
+                      ? '66.4%'
+                      : '100%',
                 }}
               >
                 {f.value}
@@ -131,7 +181,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
           />
         </View>
       )}
-      {highlight && (
+      {displayedHighlight && (
         <View
           style={{
             position: 'absolute',
@@ -155,7 +205,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
               width: photo ? '66.4%' : '100%',
             }}
           >
-            {highlight.toUpperCase()}
+            {displayedHighlight.toUpperCase()}
           </Text>
         </View>
       )}
