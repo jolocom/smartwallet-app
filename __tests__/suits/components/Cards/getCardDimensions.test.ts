@@ -32,11 +32,6 @@ describe('getCardDimensions', () => {
     beforeAll(() => {
       // @ts-expect-error
       Dimensions.get.mockReturnValue({ width: mockDeviceScreenWidth })
-      /**
-       * NOTE: requiring fn here, for to mock Dimension before it is rendered
-       */
-      // getCardDimensions =
-      //   require('~/components/Cards/getCardDimenstions').getCardDimensions
     })
 
     afterAll(() => {
@@ -48,15 +43,27 @@ describe('getCardDimensions', () => {
       expect(() => {
         // @ts-expect-error
         getCardDimensions(320, 398, { baseScreenWidth: 'baseWidth' })
-      }).toThrowError(new Error('"definigOption" param was used incorrectly'))
+      }).toThrowError(
+        new Error(
+          '"definigOption" param in getCardDimensions fn was used incorrectly',
+        ),
+      )
       expect(() => {
         // @ts-expect-error
         getCardDimensions(320, 398, { availableWidth: 'baseWidth' })
-      }).toThrowError(new Error('"definigOption" param was used incorrectly'))
+      }).toThrowError(
+        new Error(
+          '"definigOption" param in getCardDimensions fn was used incorrectly',
+        ),
+      )
       expect(() => {
         // @ts-expect-error
         getCardDimensions(320, 398, {})
-      }).toThrowError(new Error('"definigOption" param was used incorrectly'))
+      }).toThrowError(
+        new Error(
+          '"definigOption" param in getCardDimensions fn was used incorrectly',
+        ),
+      )
     })
 
     it('calculates card dimensions based on baseScreenWidth defining property', () => {
@@ -79,7 +86,6 @@ describe('getCardDimensions', () => {
         mockBaseCardHeight,
         { availableWidth: mockAvailableWidth },
       )
-      console.log({ cardWidth, cardHeight, scaleBy })
 
       expect(scaleBy).toBe(mockAvailableWidth / mockBaseCardWidth)
       expect(cardWidth).toBe(mockAvailableWidth)
@@ -111,7 +117,6 @@ describe('getCardDimensions', () => {
         mockBaseCardHeight,
         { baseScreenWidth: mockBaseScreenWidth },
       )
-      console.log({ cardWidth, cardHeight, scaleBy })
 
       expect(scaleBy).toBe(mockDeviceScreenWidthLarge / mockBaseScreenWidth)
       expect(cardWidth).toBe(mockBaseCardWidth)

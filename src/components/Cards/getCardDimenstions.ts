@@ -1,23 +1,38 @@
 import { Dimensions } from 'react-native'
 
 export type DefiningOption =
-  | { baseScreenWidth: number; availableWidth?: number }
-  | { baseScreenWidth?: number; availableWidth: number }
+  | DefiningOptionScreenWidth
+  | DefiningOptionAvailabeWidth
+export interface DefiningOptionScreenWidth {
+  baseScreenWidth: number
+}
+export interface DefiningOptionAvailabeWidth {
+  availableWidth: number
+}
 export type CardDimensions = {
   cardWidth: number
   cardHeight: number
   scaleBy: number
 }
-function isScreenWidthDefinig(
-  baseScreenWidth: number | undefined,
-): baseScreenWidth is number {
-  return typeof baseScreenWidth === 'number'
+function isScreenWidthDefining(
+  definingOption: DefiningOption,
+): definingOption is DefiningOptionScreenWidth {
+  return (
+    'baseScreenWidth' in definingOption &&
+    typeof definingOption.baseScreenWidth === 'number' &&
+    !('availableWidth' in definingOption)
+  )
 }
-function isAvailableWidthDefinig(
-  baseScreenWidth: number | undefined,
-): baseScreenWidth is number {
-  return typeof baseScreenWidth === 'number'
+function isAvailableWidthDefining(
+  definingOption: DefiningOption,
+): definingOption is DefiningOptionAvailabeWidth {
+  return (
+    'availableWidth' in definingOption &&
+    typeof definingOption.availableWidth === 'number' &&
+    !('baseScreenWidth' in definingOption)
+  )
 }
+
 /**
  * A hook to define how to scale card visual properties.
  * It should either define scale by property by:
@@ -32,43 +47,38 @@ export const getCardDimensions = (
   definingOption: DefiningOption,
 ): CardDimensions => {
   // when baseScreenWidth should define scaleBy property
-  const { baseScreenWidth, availableWidth } = definingOption
   const baseAspectRation = baseCardWidth / baseCardHeight
   let scaleBy: number, cardWidth: number, cardHeight: number
-  if (isScreenWidthDefinig(baseScreenWidth)) {
-    scaleBy = Dimensions.get('screen').width / baseScreenWidth
-    /**
-     * in case screen is larger than baseScreenWidth
-     * limit card width to baseCardWidth value
-     */
-    if (scaleBy > 1) {
-      cardWidth = baseCardWidth
-      cardHeight = baseCardHeight
-    } else {
+  if (isScreenWidthDefining(definingOption)) {
+    scaleBy = Dimensions.get('screen').width / definingOption.baseScreenWidth
+    if (scaleBy < 1) {
       cardWidth = baseCardWidth * scaleBy
-      cardHeight = (1 / baseAspectRation) * cardWidth
     }
   }
   // when availableWidth should define scaleBy property
-  else if (isAvailableWidthDefinig(availableWidth)) {
-    scaleBy = availableWidth / baseCardWidth
-    /**
-     * in case screen is larger than baseScreenWidth
-     * limit card width to baseCardWidth value
-     */
-    if (scaleBy > 1) {
-      cardWidth = baseCardWidth
-      cardHeight = baseCardHeight
-    } else {
-      cardWidth = availableWidth
-      cardHeight = (1 / baseAspectRation) * cardWidth
+  else if (isAvailableWidthDefining(definingOption)) {
+    scaleBy = definingOption.availableWidth / baseCardWidth
+    if (scaleBy < 1) {
+      cardWidth = definingOption.availableWidth
     }
   } else {
-    throw new Error('"definigOption" param was used incorrectly')
+    throw new Error(
+      '"definigOption" param in getCardDimensions fn was used incorrectly',
+    )
+  }
+  /**
+   * in case screen is larger than baseScreenWidth
+   * limit card width to baseCardWidth value
+   */
+  if (scaleBy > 1) {
+    cardWidth = baseCardWidth
+    cardHeight = baseCardHeight
+  } else {
+    cardHeight = (1 / baseAspectRation) * cardWidth!
   }
   return {
-    cardWidth,
-    cardHeight,
+    cardWidth: cardWidth!,
+    cardHeight: cardHeight!,
     scaleBy,
   }
 }
