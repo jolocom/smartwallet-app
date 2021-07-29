@@ -22,7 +22,6 @@ type CredentialDocumentCardProps = {
 /**
  * TODO:
  * - if given name or family name is not provided it displays 'not specified'
- * - semicolons after field label
  */
 export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   credentialName,
@@ -142,7 +141,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
                   color: Colors.slateGray,
                 }}
               >
-                {f.label}
+                {f.label}:
               </Text>
               <Space height={9} />
               <Text
@@ -257,10 +256,7 @@ type CredentialOtherCardProps = {
   logo?: string
   onHandleMore: (id: string) => void // id is required here, to be able to delete a credential
 }
-/**
- * TODO:
- * - semicolons after field label
- */
+
 export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
   credentialType,
   credentialName,
@@ -372,7 +368,7 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
                     color: Colors.slateGray,
                   }}
                 >
-                  {f.label}
+                  {f.label}:
                 </Text>
                 <Space height={7} />
                 <Text
