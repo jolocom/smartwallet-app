@@ -258,8 +258,6 @@ type CredentialOtherCardProps = {
 }
 /**
  * TODO:
- * - icon
- * - icon scaling
  * - what type do we display
  * - semicolons after field label
  */
@@ -267,8 +265,19 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
   credentialType,
   credentialName,
   fields,
+  logo,
   onHandleMore,
 }) => {
+  /**
+   * logic to define if credential text should be scaled
+   */
+  const [isCredentialNameScaled, setIsCredentialNameScaled] = useState(false)
+  const handleCredentialNameLayout = (e: TextLayoutEvent) => {
+    if (!isCredentialNameScaled) {
+      setIsCredentialNameScaled(e.nativeEvent.lines.length > 2)
+    }
+  }
+
   return (
     <View style={{ position: 'relative' }}>
       <OtherCardMedium>
@@ -287,39 +296,32 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
                 lineHeight: 18,
                 letterSpacing: 0.09,
                 color: Colors.jumbo,
-                // TODO: update this when scaling is known
-                width: '88.3%',
+                width: logo ? '70%' : '100%',
                 fontFamily: Fonts.Regular,
               }}
             >
               {credentialType}
             </Text>
             <Space height={13} />
-            {/* scaled */}
             <Text
+              // @ts-expect-error
+              onTextLayout={handleCredentialNameLayout}
+              numberOfLines={isCredentialNameScaled ? 2 : undefined}
               style={{
-                fontSize: 22,
-                lineHeight: 24,
+                fontSize: isCredentialNameScaled ? 22 : 28,
+                lineHeight: isCredentialNameScaled ? 24 : 28,
                 letterSpacing: 0.15,
                 color: Colors.black80,
-                width: '100%',
                 fontFamily: Fonts.Regular,
+                flexWrap: 'wrap',
+                width: logo && !isCredentialNameScaled ? '70%' : '100%',
               }}
             >
               {credentialName}
             </Text>
-            {/* non-scaled */}
-            {/* <Text style={{
-              fontSize: 28,
-              lineHeight: 28,
-              letterSpacing: 0.15,
-              color: Colors.black80,
-              width: '100%',      
-              fontFamily: Fonts.Regular                      
-            }}>{credentialName}</Text> */}
           </View>
           <View style={{ flex: 0.71, paddingHorizontal: 10 }}>
-            {fields.map((f, idx) => (
+            {fields.map((f) => (
               <>
                 <Space height={20} />
                 {/* TODO: share the same with document card */}
@@ -349,6 +351,24 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
           </View>
         </View>
       </OtherCardMedium>
+      {logo && (
+        <View
+          style={{
+            position: 'absolute',
+            top: isCredentialNameScaled ? 14 : 16,
+            right: isCredentialNameScaled ? 19 : 16,
+          }}
+        >
+          <Image
+            source={{ uri: logo }}
+            style={{
+              width: isCredentialNameScaled ? 37 : 78,
+              height: isCredentialNameScaled ? 37 : 78,
+              borderRadius: isCredentialNameScaled ? 37 / 2 : 78 / 2,
+            }}
+          />
+        </View>
+      )}
       {/* Dots - more action */}
       <TouchableOpacity
         onPress={onHandleMore}
