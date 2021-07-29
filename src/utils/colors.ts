@@ -34,6 +34,7 @@ export enum Colors {
   bastille = '#201A21',
   bastille1 = '#161217',
   gravel = '#454146',
+  jumbo = '#8a8a91',
   success = '#5251c1',
   serenade = '#fff1e3',
   white = '#ffffff',

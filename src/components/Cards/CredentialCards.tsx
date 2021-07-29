@@ -285,6 +285,36 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
     return getCredentialUIType(credentialType)
   }, [credentialType])
 
+  /**
+   * logic to define how many fields are displayed
+   */
+  const [displayedFields, setDisplayedFields] = useState(fields.slice(0, 3))
+  const lines = useRef(0)
+  const handleOptionalFieldTextLayout = () => {
+    let calculatedTimes = 0
+    return (e: TextLayoutEvent) => {
+      calculatedTimes++
+      // disable lines manipulation if the number of times this function was invoked
+      // exceeds length of optional fields twice (because we calculate field name and
+      // field value )
+      if (calculatedTimes < fields.length * 2 + 1) {
+        const numberOfLines = e.nativeEvent.lines.length
+        lines.current += numberOfLines
+        if (calculatedTimes === fields.length * 2) {
+          /* check wether to show last optional field */
+          if (lines.current > 7) {
+            setDisplayedFields((prevState) =>
+              prevState.slice(0, Math.floor(lines.current / fields.length)),
+            )
+          } else if (lines.current > 9) {
+            setDisplayedFields((prevState) => prevState.slice(0, 3))
+          }
+        }
+      }
+    }
+  }
+  const onTextLayoutChange = handleOptionalFieldTextLayout()
+
   return (
     <View style={{ position: 'relative' }}>
       <OtherCardMedium>
@@ -328,12 +358,14 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
             </Text>
           </View>
           <View style={{ flex: 0.71, paddingHorizontal: 10 }}>
-            {fields.map((f) => (
+            {displayedFields.map((f) => (
               <>
                 <Space height={20} />
                 {/* TODO: share the same with document card */}
                 <Text
                   numberOfLines={1}
+                  // @ts-expect-error
+                  onTextLayout={onTextLayoutChange}
                   style={{
                     fontSize: 16,
                     fontFamily: Fonts.Regular,
@@ -344,6 +376,9 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
                 </Text>
                 <Space height={7} />
                 <Text
+                  numberOfLines={2}
+                  // @ts-expect-error
+                  onTextLayout={onTextLayoutChange}
                   style={{
                     fontSize: 20,
                     lineHeight: 20,
