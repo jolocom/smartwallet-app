@@ -8,6 +8,7 @@ import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import Space from '../Space'
 import { TextLayoutEvent } from '../Card/Field'
+import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
 
 type CredentialDocumentCardProps = {
   credentialName: string
@@ -258,7 +259,6 @@ type CredentialOtherCardProps = {
 }
 /**
  * TODO:
- * - what type do we display
  * - semicolons after field label
  */
 export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
@@ -277,6 +277,13 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
       setIsCredentialNameScaled(e.nativeEvent.lines.length > 2)
     }
   }
+
+  /**
+   * Display credential type
+   */
+  const displayCredentialType = useMemo(() => {
+    return getCredentialUIType(credentialType)
+  }, [credentialType])
 
   return (
     <View style={{ position: 'relative' }}>
@@ -300,7 +307,7 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
                 fontFamily: Fonts.Regular,
               }}
             >
-              {credentialType}
+              {displayCredentialType}
             </Text>
             <Space height={13} />
             <Text
