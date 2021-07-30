@@ -71,10 +71,6 @@ type CredentialDocumentCardProps = {
   onHandleMore: (id: string) => void // id is required here, to be able to delete a credential
 }
 
-/**
- * TODO:
- * - if given name or family name is not provided it displays 'not specified'
- */
 export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   credentialName,
   holderName,

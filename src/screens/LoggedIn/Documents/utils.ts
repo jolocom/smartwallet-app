@@ -31,8 +31,8 @@ export const getOptionalFields = <T extends DisplayCredential>(
   return credential.properties
     .filter((p) => !filteredOptionalFields.includes(p.key as ClaimKeys))
     .map(({ label, value }) => ({
-      label,
-      value,
+      label: label || strings.NOT_SPECIFIED,
+      value: value || strings.NOT_SPECIFIED,
     }))
     .concat(additionalFields)
 }
