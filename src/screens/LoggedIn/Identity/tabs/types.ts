@@ -1,4 +1,4 @@
-import { IWithCustomStyle } from '~/components/Card/types'
+import { IWithCustomStyle } from '~/types/props'
 
 export interface ITabsContext {
   activeTab: string | undefined

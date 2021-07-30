@@ -4,9 +4,9 @@ import {
   FlatListProps,
   FlatList,
 } from 'react-native'
-import { IWithCustomStyle } from '../Card/types'
 import { ForwardRefExoticComponent, RefAttributes, ReactElement } from 'react'
 import { IJoloKeyboardAwareScrollProps } from '../JoloKeyboardAwareScroll/types'
+import { IWithCustomStyle } from '~/types/props'
 
 interface IHeaderProps extends IWithCustomStyle {
   height?: number
@@ -19,7 +19,7 @@ interface IListProps {
 type IScrollViewProps = IWithCustomStyle & ScrollViewProps & IListProps
 
 export type IFlatListProps = IWithCustomStyle &
-  ForwardRefExoticComponent<FlatListProps<any>> &
+  ForwardRefExoticComponent<FlatListProps<unknown>> &
   RefAttributes<Animated.AnimatedComponent<typeof FlatList>> &
   IListProps & {
     renderHidingText: () => ReactElement
@@ -47,5 +47,5 @@ export interface ICollapsibleContext {
   headerHeight: number
   hidingTextHeight: number
   interpolateYValue: (inputRange: number[], outputRange: number[]) => void
-  handleScroll: (...args: any[]) => void
+  handleScroll: (...args: unknown[]) => void
 }

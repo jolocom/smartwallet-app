@@ -1,6 +1,6 @@
 import React, { SetStateAction } from 'react'
 import { BiometryType } from 'react-native-biometrics'
-import { IWithCustomStyle } from '../Card/types'
+import { IWithCustomStyle } from '~/types/props'
 
 export interface IPasscodeProps {
   onSubmit: (passcode: string) => void | Promise<void>

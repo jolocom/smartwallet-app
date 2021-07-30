@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { usePopupMenu } from '~/hooks/popupMenu'
+import { IWithCustomStyle } from '~/types/props'
 import { Colors } from '~/utils/colors'
-import { IWithCustomStyle } from './Card/types'
 import { IPopupOption } from './PopupMenu'
 
 interface IDots extends IWithCustomStyle {

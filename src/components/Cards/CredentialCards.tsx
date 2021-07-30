@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from 'react'
+import React, { useRef, useMemo, useState, SyntheticEvent } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
@@ -6,8 +6,8 @@ import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-import { TextLayoutEvent } from '../Card/Field'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
+import { TextLayoutEvent } from '~/types/props'
 
 /**
  * logic to define if credential text should be scaled
@@ -102,7 +102,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   }, [highlight])
 
   return (
-    <View style={{ position: 'relative' }}>
+    <View style={{ position: 'relative' }} testID="otherCard">
       <DocumentCardMedium>
         <View style={styles.documentBodyContainer}>
           <View style={{ flexDirection: 'row' }}>
@@ -228,9 +228,10 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
   /**
    * Display credential type
    */
-  const displayCredentialType = useMemo(() => {
-    return getCredentialUIType(credentialType)
-  }, [credentialType])
+  const displayCredentialType = useMemo(
+    () => getCredentialUIType(credentialType),
+    [credentialType],
+  )
 
   const { displayedFields, onTextLayoutChange } = useTrimFields(fields, logo)
 
