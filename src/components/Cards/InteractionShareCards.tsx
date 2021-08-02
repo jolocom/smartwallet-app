@@ -7,8 +7,10 @@ import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 // TODO: import from types folder once available
 import { TextLayoutEvent } from '../Card/Field'
+import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 
 const MAX_FIELD_DOC = 2
+const MAX_FIELD_OTHER = 3
 
 type FieldsCalculatorProps<C> = (
   child: C,
@@ -214,6 +216,115 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             </Text>
           </View>
         )}
+      </View>
+    )
+  }
+
+type InteractionShareOtherCardProps = {
+  credentialName: string
+  fields: Array<Required<DisplayVal>>
+}
+
+/**
+ * TODO:
+ * - width of body
+ * - semicolon after label
+ */
+export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps> =
+  ({ credentialName, fields }) => {
+    const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
+    const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
+      const lines = e.nativeEvent.lines.length
+      setFieldLines((prevState) => ({
+        ...prevState,
+        [idx]: prevState[idx] ?? lines,
+      }))
+    }
+
+    const handleFieldValuesVisibility = (
+      child: React.ReactNode,
+      idx: number,
+    ) => {
+      if (idx + 1 > MAX_FIELD_OTHER) {
+        /* 1. Do not display anything that is more than max */
+        return null
+      } else if (
+        fieldLines[0] &&
+        fieldLines[1] &&
+        fieldLines[0] + fieldLines[1] > 2 &&
+        idx > 1
+      ) {
+        /* 2. If the sum of first and second field values is greater than 2 do not display anything later*/
+        return null
+      }
+      return child
+    }
+
+    return (
+      <View
+        style={{
+          position: 'relative',
+          // width: cardWidth
+        }}
+      >
+        <InteractionCardOther>
+          <View
+            style={{
+              // width: cardWidth,
+              // height: cardHeight,
+
+              // TODO: correct values once available
+              // add width once available
+              paddingBottom: 18,
+              paddingTop: 16,
+              paddingLeft: 20,
+              paddingRight: 17,
+            }}
+          >
+            <Text
+              style={[
+                { fontFamily: Fonts.Regular, color: Colors.black80 },
+                { fontSize: 22, lineHeight: 24 },
+              ]}
+            >
+              {credentialName}
+            </Text>
+            <View style={{ paddingBottom: 16 }} />
+            <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
+              {fields.map((f, idx) => (
+                <>
+                  {idx !== 0 && <View style={{ paddingBottom: 12 }} />}
+
+                  <Text
+                    style={[
+                      { fontFamily: Fonts.Regular, color: Colors.slateGray },
+                      { fontSize: 16 },
+                    ]}
+                  >
+                    {f.label}
+                  </Text>
+                  <View style={{ paddingBottom: 4 }} />
+                  {/* TODO: the same as in document card */}
+                  <Text
+                    numberOfLines={2}
+                    //@ts-expect-error
+                    onTextLayout={(e: TextLayoutEvent) =>
+                      handleFieldValueLayout(e, idx)
+                    }
+                    style={{
+                      fontSize: 18,
+                      lineHeight: 18,
+                      fontFamily: Fonts.Regular,
+                      letterSpacing: 0.09,
+                    }}
+                  >
+                    {f.value}
+                  </Text>
+                </>
+              ))}
+            </FieldsCalculator>
+          </View>
+        </InteractionCardOther>
       </View>
     )
   }
