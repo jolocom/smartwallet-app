@@ -106,7 +106,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
     <ScaledCard
       originalHeight={398}
       originalWidth={320}
-      //originalScreenWidth={375}
+      originalScreenWidth={375}
     >
       <View style={{ position: 'relative' }} testID="otherCard">
         <DocumentCardMedium>
