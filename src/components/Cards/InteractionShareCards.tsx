@@ -8,9 +8,25 @@ import { Colors } from '~/utils/colors'
 // TODO: import from types folder once available
 import { TextLayoutEvent } from '../Card/Field'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
+import { StyleSheet } from 'react-native'
 
 const MAX_FIELD_DOC = 2
 const MAX_FIELD_OTHER = 3
+
+const useCalculateFieldLines = () => {
+  const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
+  const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
+    const lines = e.nativeEvent.lines.length
+    setFieldLines((prevState) => ({
+      ...prevState,
+      [idx]: prevState[idx] ?? lines,
+    }))
+  }
+  return {
+    fieldLines,
+    handleFieldValueLayout,
+  }
+}
 
 type FieldsCalculatorProps<C> = (
   child: C,
@@ -51,14 +67,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       setHolderNameLines(lines)
     }
 
-    const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
-    const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
-      const lines = e.nativeEvent.lines.length
-      setFieldLines((prevState) => ({
-        ...prevState,
-        [idx]: prevState[idx] ?? lines,
-      }))
-    }
+    const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
 
     const handleFieldValuesVisibility = (child, idx) => {
       if (idx + 1 > MAX_FIELD_DOC) {
@@ -88,26 +97,10 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
         }}
       >
         <InteractionCardDoc>
-          <View
-            style={{
-              // width: cardWidth,
-              // height: cardHeight,
-              paddingBottom: 18,
-              paddingTop: 16,
-              paddingLeft: 20,
-              paddingRight: 17,
-            }}
-          >
+          <View style={styles.documentBodyContainer}>
             <Text
               numberOfLines={1}
-              style={{
-                width: '90%',
-                fontSize: 22,
-                lineHeight: 24,
-                letterSpacing: 0.15,
-                color: Colors.black80,
-                fontFamily: Fonts.Regular,
-              }}
+              style={[styles.regularText, styles.documentCredentialName]}
             >
               {credentialName}
             </Text>
@@ -116,11 +109,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
               numberOfLines={2}
               // @ts-expect-error
               onTextLayout={(e: TextLayoutEvent) => handleHolderNameLayout(e)}
-              style={{
-                fontSize: 28,
-                lineHeight: 28,
-                fontFamily: Fonts.Medium,
-              }}
+              style={[styles.mediumText, styles.documentHolderName]}
             >
               {holderName}
             </Text>
@@ -133,11 +122,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                     {idx !== 0 && <View style={{ paddingBottom: 4 }} />}
                     <Text
                       numberOfLines={1}
-                      style={{
-                        fontSize: 14,
-                        fontFamily: Fonts.Regular,
-                        color: Colors.slateGray,
-                      }}
+                      style={[styles.regularText, styles.fieldLabelDocument]}
                     >
                       {f.label}
                     </Text>
@@ -148,12 +133,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                       onTextLayout={(e: TextLayoutEvent) =>
                         handleFieldValueLayout(e, idx)
                       }
-                      style={{
-                        fontSize: 18,
-                        lineHeight: 18,
-                        fontFamily: Fonts.Regular,
-                        letterSpacing: 0.09,
-                      }}
+                      style={[styles.regularText, styles.fieldValue]}
                     >
                       {f.value}
                     </Text>
@@ -164,54 +144,13 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
           </View>
         </InteractionCardDoc>
         {photo && (
-          <View
-            style={[
-              {
-                position: 'absolute',
-                zIndex: 10,
-              },
-              { bottom: 18, right: 17 },
-            ]}
-          >
-            <Image
-              style={{
-                width: 105,
-                height: 105,
-                borderRadius: 105 / 2,
-              }}
-              source={{ uri: photo }}
-            />
+          <View style={styles.documentPhotoContainer}>
+            <Image style={styles.documentPhoto} source={{ uri: photo }} />
           </View>
         )}
         {highlight && (
-          <View
-            style={[
-              {
-                position: 'absolute',
-                bottom: 0,
-                width: '100%',
-                backgroundColor: 'black',
-                borderBottomLeftRadius: 12,
-                borderBottomRightRadius: 12,
-                zIndex: 9,
-              },
-              {
-                height: 56,
-                paddingTop: 17,
-                paddingBottom: 13,
-                paddingLeft: 23,
-              },
-            ]}
-          >
-            <Text
-              style={[
-                {
-                  fontFamily: Fonts.Regular,
-                  color: Colors.white,
-                },
-                { fontSize: 26 },
-              ]}
-            >
+          <View style={styles.documentHighlightContainer}>
+            <Text style={[styles.regularText, styles.documentHighlight]}>
               {highlight.toUpperCase()}
             </Text>
           </View>
@@ -232,14 +171,7 @@ type InteractionShareOtherCardProps = {
  */
 export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps> =
   ({ credentialName, fields }) => {
-    const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
-    const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
-      const lines = e.nativeEvent.lines.length
-      setFieldLines((prevState) => ({
-        ...prevState,
-        [idx]: prevState[idx] ?? lines,
-      }))
-    }
+    const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
 
     const handleFieldValuesVisibility = (
       child: React.ReactNode,
@@ -264,29 +196,11 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
       <View
         style={{
           position: 'relative',
-          // width: cardWidth
         }}
       >
         <InteractionCardOther>
-          <View
-            style={{
-              // width: cardWidth,
-              // height: cardHeight,
-
-              // TODO: correct values once available
-              // add width once available
-              paddingBottom: 18,
-              paddingTop: 16,
-              paddingLeft: 20,
-              paddingRight: 17,
-            }}
-          >
-            <Text
-              style={[
-                { fontFamily: Fonts.Regular, color: Colors.black80 },
-                { fontSize: 22, lineHeight: 24 },
-              ]}
-            >
+          <View style={styles.otherBodyContainer}>
+            <Text style={[styles.regularText, styles.otherCredentialName]}>
               {credentialName}
             </Text>
             <View style={{ paddingBottom: 16 }} />
@@ -295,12 +209,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                 <>
                   {idx !== 0 && <View style={{ paddingBottom: 12 }} />}
 
-                  <Text
-                    style={[
-                      { fontFamily: Fonts.Regular, color: Colors.slateGray },
-                      { fontSize: 16 },
-                    ]}
-                  >
+                  <Text style={[styles.regularText, styles.fieldLabelOther]}>
                     {f.label}
                   </Text>
                   <View style={{ paddingBottom: 4 }} />
@@ -311,12 +220,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                     onTextLayout={(e: TextLayoutEvent) =>
                       handleFieldValueLayout(e, idx)
                     }
-                    style={{
-                      fontSize: 18,
-                      lineHeight: 18,
-                      fontFamily: Fonts.Regular,
-                      letterSpacing: 0.09,
-                    }}
+                    style={[styles.regularText, styles.fieldValue]}
                   >
                     {f.value}
                   </Text>
@@ -328,3 +232,89 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
       </View>
     )
   }
+
+const styles = StyleSheet.create({
+  documentBodyContainer: {
+    paddingBottom: 18,
+    paddingTop: 16,
+    paddingLeft: 20,
+    paddingRight: 17,
+  },
+  documentCredentialName: {
+    width: '90%',
+    fontSize: 22,
+    lineHeight: 24,
+    letterSpacing: 0.15,
+    color: Colors.black80,
+  },
+  documentHolderName: {
+    fontSize: 28,
+    lineHeight: 28,
+  },
+  otherBodyContainer: {
+    // TODO: correct values once available
+    // add width once available
+    paddingBottom: 18,
+    paddingTop: 16,
+    paddingLeft: 20,
+    paddingRight: 17,
+  },
+  otherCredentialName: {
+    color: Colors.black80,
+    fontSize: 22,
+    lineHeight: 24,
+  },
+  // TODO: the same as credentials
+  regularText: {
+    fontFamily: Fonts.Regular,
+    color: Colors.black,
+  },
+  // TODO: the same as credentials
+  mediumText: {
+    fontFamily: Fonts.Medium,
+    color: Colors.black,
+  },
+  fieldLabelDocument: {
+    fontSize: 14,
+    color: Colors.slateGray,
+  },
+  // TODO: the same as credentials
+  fieldLabelOther: {
+    fontSize: 16,
+    lineHeight: 16,
+    color: Colors.slateGray,
+  },
+  fieldValue: {
+    fontSize: 18,
+    lineHeight: 18,
+    letterSpacing: 0.09,
+  },
+  documentPhotoContainer: {
+    position: 'absolute',
+    zIndex: 10,
+    bottom: 18,
+    right: 17,
+  },
+  documentPhoto: {
+    width: 105,
+    height: 105,
+    borderRadius: 105 / 2,
+  },
+  documentHighlightContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: 'black',
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    zIndex: 9,
+    height: 56,
+    paddingTop: 17,
+    paddingBottom: 13,
+    paddingLeft: 23,
+  },
+  documentHighlight: {
+    color: Colors.white,
+    fontSize: 26,
+  },
+})
