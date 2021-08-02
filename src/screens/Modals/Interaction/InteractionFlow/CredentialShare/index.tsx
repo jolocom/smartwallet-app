@@ -23,6 +23,7 @@ import {
   AttributeTypes,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
+// TODO: remove once completely not used anywhere
 import { IncomingRequestDoc } from '../components/card/request/document'
 import { IncomingRequestOther } from '../components/card/request/other'
 import InteractionDescription from '../components/InteractionDescription'
@@ -50,6 +51,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
+import { InteractionShareDocumentCard } from '~/components/Cards/InteractionShareCards'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -99,10 +101,12 @@ export const CredentialShareBAS = () => {
       return (
         <>
           {isDocument(displaySingleCredential) ? (
-            <IncomingRequestDoc
-              name={name}
-              holderName={displaySingleCredential.holderName}
-              properties={claimFields}
+            <InteractionShareDocumentCard
+              credentialName={name}
+              holderName={
+                displaySingleCredential.holderName || strings.ANONYMOUS
+              }
+              fields={claimFields}
               highlight={`${displaySingleCredential.highlight?.slice(
                 0,
                 18,
@@ -115,13 +119,14 @@ export const CredentialShareBAS = () => {
           <Space />
         </>
       )
-    } else
+    } else {
       return (
         <>
           <ShareAttributeWidget />
           <Space />
         </>
       )
+    }
   }
 
   return (
@@ -174,63 +179,61 @@ const CredentialShareFAS = () => {
   const other = categories[CredentialCategories.other]
 
   const handleRenderCredentials = (
-    credCollections: CredentialsByType<DisplayCredential>[],
+    credCollections: Array<CredentialsByType<DisplayCredential>>,
   ) =>
-    credCollections.map(({ key, value, credentials }) => {
-      return (
-        <AdoptedCarousel
-          key={key}
-          activeSlideAlignment="center"
-          data={credentials}
-          itemWidth={SCREEN_WIDTH - 48}
-          customStyles={{ marginLeft: 0 }}
-          renderItem={({ item: cred }) => {
-            const claimFields = getOptionalFields(cred)
-            const { name, type, id } = cred
-            return (
-              <TouchableWithoutFeedback
-                key={id}
-                onPress={() => handleSelectCredential({ [type]: id })}
+    credCollections.map(({ key, value, credentials }) => (
+      <AdoptedCarousel
+        key={key}
+        activeSlideAlignment="center"
+        data={credentials}
+        itemWidth={SCREEN_WIDTH - 48}
+        customStyles={{ marginLeft: 0 }}
+        renderItem={({ item: cred }) => {
+          const claimFields = getOptionalFields(cred)
+          const { name, type, id } = cred
+          return (
+            <TouchableWithoutFeedback
+              key={id}
+              onPress={() => handleSelectCredential({ [type]: id })}
+            >
+              <View
+                style={{
+                  marginBottom: BP({ default: 24, xsmall: 16 }),
+                }}
               >
-                <View
-                  style={{
-                    marginBottom: BP({ default: 24, xsmall: 16 }),
-                  }}
-                >
-                  {isDocument(cred) ? (
-                    <IncomingRequestDoc
-                      name={name ?? type}
-                      properties={claimFields}
-                      holderName={cred.holderName}
-                      highlight={`${
-                        cred.photo && cred.highlight
-                          ? cred.highlight?.length > 18
-                            ? cred.highlight?.slice(0, 18) + '...'
-                            : cred.highlight
+                {isDocument(cred) ? (
+                  <InteractionShareDocumentCard
+                    credentialName={name ?? type}
+                    fields={claimFields}
+                    holderName={cred.holderName || strings.ANONYMOUS}
+                    highlight={`${
+                      cred.photo && cred.highlight
+                        ? cred.highlight?.length > 18
+                          ? cred.highlight?.slice(0, 18) + '...'
                           : cred.highlight
-                      }`}
-                      photo={cred.photo}
-                    />
+                        : cred.highlight
+                    }`}
+                    photo={cred.photo}
+                  />
+                ) : (
+                  <IncomingRequestOther
+                    name={name ?? type}
+                    properties={claimFields}
+                  />
+                )}
+                <View style={styles.selectIndicator}>
+                  {selectedCredentials[type] === id ? (
+                    <PurpleTickSuccess />
                   ) : (
-                    <IncomingRequestOther
-                      name={name ?? type}
-                      properties={claimFields}
-                    />
+                    <View style={styles.notSelected} />
                   )}
-                  <View style={styles.selectIndicator}>
-                    {selectedCredentials[type] === id ? (
-                      <PurpleTickSuccess />
-                    ) : (
-                      <View style={styles.notSelected} />
-                    )}
-                  </View>
                 </View>
-              </TouchableWithoutFeedback>
-            )
-          }}
-        />
-      )
-    })
+              </View>
+            </TouchableWithoutFeedback>
+          )
+        }}
+      />
+    ))
 
   return (
     <Collapsible>
