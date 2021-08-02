@@ -51,7 +51,10 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
-import { InteractionShareDocumentCard } from '~/components/Cards/InteractionShareCards'
+import {
+  InteractionShareDocumentCard,
+  InteractionShareOtherCard,
+} from '~/components/Cards/InteractionShareCards'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -106,6 +109,7 @@ export const CredentialShareBAS = () => {
               holderName={
                 displaySingleCredential.holderName || strings.ANONYMOUS
               }
+              // TODO: correct type
               fields={claimFields}
               highlight={`${displaySingleCredential.highlight?.slice(
                 0,
@@ -114,7 +118,11 @@ export const CredentialShareBAS = () => {
               photo={displaySingleCredential.photo}
             />
           ) : (
-            <IncomingRequestOther name={name} properties={claimFields} />
+            <InteractionShareOtherCard
+              // TODO: correct type
+              credentialName={name}
+              fields={claimFields}
+            />
           )}
           <Space />
         </>
@@ -204,6 +212,7 @@ const CredentialShareFAS = () => {
                 {isDocument(cred) ? (
                   <InteractionShareDocumentCard
                     credentialName={name ?? type}
+                    // TODO: correct type
                     fields={claimFields}
                     holderName={cred.holderName || strings.ANONYMOUS}
                     highlight={`${
@@ -216,9 +225,10 @@ const CredentialShareFAS = () => {
                     photo={cred.photo}
                   />
                 ) : (
-                  <IncomingRequestOther
-                    name={name ?? type}
-                    properties={claimFields}
+                  <InteractionShareOtherCard
+                    credentialName={name ?? type}
+                    // TODO: correct type
+                    fields={claimFields}
                   />
                 )}
                 <View style={styles.selectIndicator}>
