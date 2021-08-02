@@ -34,6 +34,66 @@ import {
   CredentialDocumentCard,
   CredentialOtherCard,
 } from '~/components/Cards/CredentialCards'
+import { useDeleteCredential } from '~/hooks/credentials'
+import { useToasts } from '~/hooks/toasts'
+import { useRedirectTo } from '~/hooks/navigation'
+import { usePopupMenu } from '~/hooks/popupMenu'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
+
+const useHandleMorePress = () => {
+  const { scheduleWarning } = useToasts()
+  const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
+
+  const { showPopup } = usePopupMenu()
+  const deleteCredential = useDeleteCredential()
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteCredential(id)
+    } catch (e) {
+      scheduleWarning({
+        title: strings.WHOOPS,
+        message: strings.ERROR_TOAST_MSG,
+        interact: {
+          label: strings.REPORT,
+          onInteract: redirectToContactUs, // TODO: change to Reporting screen once available
+        },
+      })
+    }
+  }
+
+  return (
+    id: string,
+    credentialName: string,
+    fields: Array<Required<DisplayVal>>,
+    photo?: string,
+  ) => {
+    const popupOptions = [
+      {
+        title: strings.INFO,
+        navigation: {
+          screen: ScreenNames.CredentialDetails,
+          params: {
+            fields,
+            photo,
+            title: credentialName,
+          },
+        },
+      },
+      {
+        title: strings.DELETE,
+        navigation: {
+          screen: ScreenNames.DragToConfirm,
+          params: {
+            title: `${strings.DO_YOU_WANT_TO_DELETE} ${credentialName}?`,
+            cancelText: strings.CANCEL,
+            onComplete: () => handleDelete(id),
+          },
+        },
+      },
+    ]
+    showPopup(popupOptions)
+  }
+}
 
 const CardList: React.FC = ({ children }) => (
   <ScrollView
@@ -97,6 +157,8 @@ const DocumentList = () => {
     [JSON.stringify(categories)],
   )
 
+  const onHandleMore = useHandleMorePress()
+
   if (categories === null) return null
   return (
     <>
@@ -144,6 +206,21 @@ const DocumentList = () => {
                         fields={getOptionalFields(c)}
                         highlight={c.id}
                         photo={c.photo}
+                        onHandleMore={() =>
+                          onHandleMore(
+                            c.id,
+                            c.name,
+                            [
+                              {
+                                key: 'subjectName',
+                                label: strings.SUBJECT_NAME,
+                                value: c.holderName || strings.ANONYMOUS,
+                              },
+                              ...getOptionalFields(c),
+                            ],
+                            c.photo,
+                          )
+                        }
                       />
                     )}
                   />
@@ -195,6 +272,14 @@ const DocumentList = () => {
                         credentialType={c.type}
                         fields={getOptionalFields(c)}
                         logo={c.photo}
+                        onHandleMore={() =>
+                          onHandleMore(
+                            c.id,
+                            c.name,
+                            getOptionalFields(c),
+                            c.photo,
+                          )
+                        }
                       />
                     )}
                   />
