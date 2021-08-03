@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import {
   LayoutChangeEvent,
   LayoutRectangle,
+  StyleProp,
+  StyleSheet,
   Text,
   TextStyle,
   View,
@@ -9,12 +11,24 @@ import {
 } from 'react-native'
 import { getCardDimensions } from '../getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
-import {
-  IScaledCardContext,
-  IScaledCardProps,
-  IScaledTextProps,
-  IScaledViewProps,
-} from './types'
+import { IScaledCardProps, IScaledTextProps, IScaledViewProps } from './types'
+
+const scaleStyleObject = <
+  T extends StyleProp<ViewStyle> | StyleProp<TextStyle>,
+>(
+  style: T,
+  scaleBy: number,
+) => {
+  style = StyleSheet.flatten(style) as T
+
+  return Object.entries(style ?? {}).reduce<ViewStyle | TextStyle>(
+    (acc, [key, value]) => ({
+      ...acc,
+      [key]: Number.isInteger(value) ? value * scaleBy : value,
+    }),
+    {},
+  )
+}
 
 const ScaledCard: React.FC<IScaledCardProps> = ({
   originalHeight,
@@ -47,17 +61,8 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
     })
   }
 
-  const scaleStyleObject: IScaledCardContext['scaleStyleObject'] = (style) =>
-    Object.entries(style ?? {}).reduce<ViewStyle | TextStyle>(
-      (acc, [key, value]) => ({
-        ...acc,
-        [key]: Number.isInteger(value) ? value * scaleBy : value,
-      }),
-      {},
-    )
-
   return (
-    <ScaledCardContext.Provider value={{ scaleBy, scaleStyleObject }}>
+    <ScaledCardContext.Provider value={{ scaleBy }}>
       <View
         {...viewProps}
         style={[
@@ -80,8 +85,8 @@ export const ScaledView: React.FC<IScaledViewProps> = ({
   children,
   ...props
 }) => {
-  const { scaleStyleObject } = useScaledCard()
-  const scaledStyles = scaleStyleObject(scaleStyle)
+  const { scaleBy } = useScaledCard()
+  const scaledStyles = scaleStyleObject(scaleStyle, scaleBy)
 
   return (
     <View {...props} style={[style, scaledStyles]}>
@@ -96,8 +101,8 @@ export const ScaledText: React.FC<IScaledTextProps> = ({
   children,
   ...props
 }) => {
-  const { scaleStyleObject } = useScaledCard()
-  const scaledStyles = scaleStyleObject(scaleStyle)
+  const { scaleBy } = useScaledCard()
+  const scaledStyles = scaleStyleObject(scaleStyle, scaleBy)
 
   return (
     <Text {...props} style={[style, scaledStyles]}>

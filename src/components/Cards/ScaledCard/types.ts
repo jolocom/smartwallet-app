@@ -1,7 +1,12 @@
-import { TextProps, TextStyle, ViewProps, ViewStyle } from 'react-native'
+import {
+  TextProps,
+  TextStyle,
+  ViewProps,
+  ViewStyle,
+  StyleProp,
+} from 'react-native'
 
 export interface IScaledCardContext {
-  scaleStyleObject: <T extends ViewStyle | TextStyle>(style: T) => object
   scaleBy: number
 }
 
@@ -22,9 +27,9 @@ export type IScaledCardProps = {
   ViewProps
 
 export interface IScaledViewProps extends ViewProps {
-  scaleStyle: ViewStyle
+  scaleStyle: StyleProp<ViewStyle>
 }
 
 export interface IScaledTextProps extends TextProps {
-  scaleStyle: TextStyle
+  scaleStyle: StyleProp<TextStyle>
 }

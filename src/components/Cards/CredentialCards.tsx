@@ -117,12 +117,12 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
               // @ts-expect-error
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={isCredentialNameScaled ? 2 : undefined}
-              scaleStyle={{
-                ...styles.regularText,
-                ...(isCredentialNameScaled
+              scaleStyle={[
+                styles.regularText,
+                isCredentialNameScaled
                   ? styles.documentCredentialNameScaled
-                  : styles.documentCredentialName),
-              }}
+                  : styles.documentCredentialName,
+              ]}
               style={[{ flex: 0.863 }]}
             >
               {credentialName}
@@ -138,10 +138,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
           >
             <ScaledText
               numberOfLines={2}
-              scaleStyle={{
-                ...styles.mediumText,
-                ...styles.documentHolderName,
-              }}
+              scaleStyle={[styles.mediumText, styles.documentHolderName]}
             >
               {holderName}
             </ScaledText>
@@ -154,7 +151,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
                 // @ts-expect-error
                 onTextLayout={onTextLayoutChange}
                 numberOfLines={1}
-                scaleStyle={{ ...styles.regularText, ...styles.fieldLabel }}
+                scaleStyle={[styles.regularText, styles.fieldLabel]}
               >
                 {f.label}:
               </ScaledText>
@@ -163,10 +160,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
                 // @ts-expect-error
                 onTextLayout={onTextLayoutChange}
                 numberOfLines={idx === displayedFields.length - 1 ? 3 : 2}
-                scaleStyle={{
-                  ...styles.mediumText,
-                  ...styles.fieldText,
-                }}
+                scaleStyle={[styles.mediumText, styles.fieldText]}
                 style={{
                   width:
                     photo && idx === displayedFields.length - 1
@@ -192,10 +186,7 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
       {displayedHighlight && (
         <ScaledView scaleStyle={styles.documentHighlightContainer}>
           <ScaledText
-            scaleStyle={{
-              ...styles.regularText,
-              ...styles.documentHighlight,
-            }}
+            scaleStyle={[styles.regularText, styles.documentHighlight]}
             style={{
               width: photo ? '66.4%' : '100%',
             }}
@@ -206,15 +197,15 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
       )}
       {/* Dots - more action */}
       <ScaledView
-        scaleStyle={{
-          ...styles.dotsContainer,
-          ...{
+        scaleStyle={[
+          styles.dotsContainer,
+          {
             top: 18,
             right: 17,
           },
-        }}
+        ]}
       >
-        <TouchableOpacity onPress={onHandleMore} style={[styles.dotsBtn]}>
+        <TouchableOpacity onPress={onHandleMore} style={styles.dotsBtn}>
           {[...Array(3).keys()].map((c) => (
             <ScaledView key={c} scaleStyle={styles.dot} />
           ))}
