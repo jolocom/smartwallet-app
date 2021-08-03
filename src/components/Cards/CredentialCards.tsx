@@ -8,6 +8,7 @@ import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
 import { TextLayoutEvent } from '~/types/props'
+import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
 /**
  * logic to define if credential text should be scaled
@@ -102,96 +103,101 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   }, [highlight])
 
   return (
-    <View style={{ position: 'relative' }} testID="otherCard">
+    <ScaledCard
+      originalHeight={398}
+      originalWidth={320}
+      originalScreenWidth={375}
+      style={{ position: 'relative' }}
+      testID="otherCard"
+    >
       <DocumentCardMedium>
-        <View style={styles.documentBodyContainer}>
+        <ScaledView scaleStyle={styles.documentBodyContainer}>
           <View style={{ flexDirection: 'row' }}>
-            <Text
+            <ScaledText
               // @ts-expect-error
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={isCredentialNameScaled ? 2 : undefined}
-              style={[
+              scaleStyle={[
                 styles.regularText,
                 isCredentialNameScaled
                   ? styles.documentCredentialNameScaled
                   : styles.documentCredentialName,
-                { flex: 0.863 },
               ]}
+              style={[{ flex: 0.863 }]}
             >
               {credentialName}
-            </Text>
+            </ScaledText>
           </View>
-          <View style={{ paddingBottom: isCredentialNameScaled ? 22 : 16 }} />
-          <View
-            style={{
+          <ScaledView
+            scaleStyle={{ paddingBottom: isCredentialNameScaled ? 22 : 16 }}
+          />
+          <ScaledView
+            scaleStyle={{
               paddingHorizontal: 10,
             }}
           >
-            <Text
+            <ScaledText
               numberOfLines={2}
-              style={[styles.mediumText, styles.documentHolderName]}
+              scaleStyle={[styles.mediumText, styles.documentHolderName]}
             >
               {holderName}
-            </Text>
-          </View>
-          <View style={{ paddingBottom: 16 }} />
+            </ScaledText>
+          </ScaledView>
+          <ScaledView scaleStyle={{ paddingBottom: 16 }} />
           {displayedFields.map((f, idx) => (
             <>
-              {idx !== 0 && <View style={{ paddingBottom: 14 }} />}
-              <Text
+              {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
+              <ScaledText
                 // @ts-expect-error
                 onTextLayout={onTextLayoutChange}
                 numberOfLines={1}
-                style={[styles.regularText, styles.fieldLabel]}
+                scaleStyle={[styles.regularText, styles.fieldLabel]}
               >
                 {f.label}:
-              </Text>
-              <View style={{ paddingBottom: 9 }} />
-              <Text
+              </ScaledText>
+              <ScaledView scaleStyle={{ paddingBottom: 9 }} />
+              <ScaledText
                 // @ts-expect-error
                 onTextLayout={onTextLayoutChange}
                 numberOfLines={idx === displayedFields.length - 1 ? 3 : 2}
-                style={[
-                  styles.mediumText,
-                  styles.fieldText,
-                  {
-                    width:
-                      photo && idx === displayedFields.length - 1
-                        ? '66.4%'
-                        : '100%',
-                  },
-                ]}
+                scaleStyle={[styles.mediumText, styles.fieldText]}
+                style={{
+                  width:
+                    photo && idx === displayedFields.length - 1
+                      ? '66.4%'
+                      : '100%',
+                }}
               >
                 {f.value}
-              </Text>
+              </ScaledText>
             </>
           ))}
-        </View>
+        </ScaledView>
       </DocumentCardMedium>
       {photo && (
-        <View style={styles.documentPhotoContainer}>
-          <Image style={styles.documentPhoto} source={{ uri: photo }} />
-        </View>
+        <ScaledView scaleStyle={styles.documentPhotoContainer}>
+          <Image
+            resizeMode="cover"
+            style={styles.documentPhoto}
+            source={{ uri: photo }}
+          />
+        </ScaledView>
       )}
       {displayedHighlight && (
-        <View style={styles.documentHighlightContainer}>
-          <Text
-            style={[
-              styles.regularText,
-              styles.documentHighlight,
-              {
-                width: photo ? '66.4%' : '100%',
-              },
-            ]}
+        <ScaledView scaleStyle={styles.documentHighlightContainer}>
+          <ScaledText
+            scaleStyle={[styles.regularText, styles.documentHighlight]}
+            style={{
+              width: photo ? '66.4%' : '100%',
+            }}
           >
             {displayedHighlight.toUpperCase()}
-          </Text>
-        </View>
+          </ScaledText>
+        </ScaledView>
       )}
       {/* Dots - more action */}
-      <TouchableOpacity
-        onPress={onHandleMore}
-        style={[
+      <ScaledView
+        scaleStyle={[
           styles.dotsContainer,
           {
             top: 18,
@@ -199,11 +205,13 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
           },
         ]}
       >
-        {[...Array(3).keys()].map((c) => (
-          <View key={c} style={styles.dot} />
-        ))}
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={onHandleMore} style={styles.dotsBtn}>
+          {[...Array(3).keys()].map((c) => (
+            <ScaledView key={c} scaleStyle={styles.dot} />
+          ))}
+        </TouchableOpacity>
+      </ScaledView>
+    </ScaledCard>
   )
 }
 
@@ -364,11 +372,14 @@ const styles = StyleSheet.create({
     bottom: 27,
     right: 14,
     zIndex: 10,
-  },
-  documentPhoto: {
     width: 82,
     height: 82,
     borderRadius: 41,
+    overflow: 'hidden',
+  },
+  documentPhoto: {
+    width: '100%',
+    height: '100%',
   },
   documentHighlightContainer: {
     position: 'absolute',
@@ -446,11 +457,13 @@ const styles = StyleSheet.create({
   },
   dotsContainer: {
     position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 100,
     paddingHorizontal: 3,
     paddingVertical: 10,
+    zIndex: 100,
+  },
+  dotsBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'row',
   },
   dot: {
