@@ -26,7 +26,7 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
   return (
     <ScaledCard originalWidth={368} originalHeight={232} scaleToFit>
       <Card>
-        <ScaledView scaleStyle={styles.documentBodyContainer}>
+        <ScaledView scaleStyle={styles.bodyContainer}>
           <ScaledText
             numberOfLines={1}
             scaleStyle={styles.credentialName}
@@ -54,7 +54,7 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
                 </ScaledText>
                 <ScaledView scaleStyle={{ paddingBottom: 0.5 }} />
                 <ScaledView
-                  scaleStyle={styles.documentValuePlaceholder}
+                  scaleStyle={styles.valuePlaceholder}
                   style={{ opacity: 0.57 }}
                 />
               </>
@@ -79,7 +79,6 @@ export const InteractionOfferOtherCard: React.FC<InteractionOfferCardProps> = (
   props,
 ) => <OfferCard {...props} cardType="other" />
 
-// TODO: there is no separation between doc and other -> remove unnecessary styles
 const styles = StyleSheet.create({
   fieldSectionTitle: {
     fontSize: 16,
@@ -90,22 +89,15 @@ const styles = StyleSheet.create({
     letterSpacing: 0.15,
     color: Colors.black80,
   },
-  documentBodyContainer: {
+  bodyContainer: {
     paddingBottom: 21,
     paddingTop: 16,
     paddingHorizontal: 14,
   },
-
-  documentValuePlaceholder: {
+  valuePlaceholder: {
     width: '45.8%',
     height: 20,
     borderRadius: 5,
     backgroundColor: Colors.alto,
-  },
-  otherBodyContainer: {
-    // TODO: update once LIZ will provide values
-    paddingBottom: 21,
-    paddingTop: 16,
-    paddingHorizontal: 14,
   },
 })
