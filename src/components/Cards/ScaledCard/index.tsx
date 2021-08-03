@@ -50,8 +50,8 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
     originalHeight,
     {
       ...(scaleToFit
-        ? { containerWidth: containerDimensions?.width }
-        : { originalScreenWidth }),
+        ? { containerWidth: containerDimensions?.width! }
+        : { originalScreenWidth: originalScreenWidth! }),
     },
   )
 

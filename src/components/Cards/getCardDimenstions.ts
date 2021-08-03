@@ -1,4 +1,4 @@
-import { SCREEN_WIDTH } from '~/utils/dimensions'
+import { Dimensions } from 'react-native'
 
 export interface DefiningOptionScreenWidth {
   originalScreenWidth: number
@@ -6,7 +6,7 @@ export interface DefiningOptionScreenWidth {
 }
 
 export interface DefiningOptionAvailabeWidth {
-  containerWidth?: number
+  containerWidth: number
   originalScreenWidth?: never
 }
 
@@ -57,7 +57,8 @@ export const getCardDimensions = (
   let scaleBy: number, cardWidth: number, cardHeight: number
 
   if (isScreenWidthDefining(definingOption)) {
-    scaleBy = SCREEN_WIDTH / definingOption.originalScreenWidth
+    scaleBy =
+      Dimensions.get('screen').width / definingOption.originalScreenWidth
     if (scaleBy < 1) {
       cardWidth = originalCardWidth * scaleBy
     }
