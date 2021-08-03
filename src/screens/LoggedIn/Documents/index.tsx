@@ -263,6 +263,7 @@ const DocumentList = () => {
 
                   <AdoptedCarousel
                     data={credentials}
+                    customStyles={{ marginLeft: -4 }}
                     renderItem={({ item: c }) => (
                       <OtherCard
                         credentialName={c.name || strings.UNKNOWN}
