@@ -1,19 +1,25 @@
 import { Dimensions } from 'react-native'
 
+export interface DefiningOptionScreenWidth {
+  baseScreenWidth: number
+  availableWidth?: never
+}
+
+export interface DefiningOptionAvailabeWidth {
+  availableWidth: number
+  baseScreenWidth?: never
+}
+
 export type DefiningOption =
   | DefiningOptionScreenWidth
   | DefiningOptionAvailabeWidth
-export interface DefiningOptionScreenWidth {
-  baseScreenWidth: number
-}
-export interface DefiningOptionAvailabeWidth {
-  availableWidth: number
-}
+
 export type CardDimensions = {
   cardWidth: number
   cardHeight: number
   scaleBy: number
 }
+
 function isScreenWidthDefining(
   definingOption: DefiningOption,
 ): definingOption is DefiningOptionScreenWidth {
@@ -23,6 +29,7 @@ function isScreenWidthDefining(
     !('availableWidth' in definingOption)
   )
 }
+
 function isAvailableWidthDefining(
   definingOption: DefiningOption,
 ): definingOption is DefiningOptionAvailabeWidth {
