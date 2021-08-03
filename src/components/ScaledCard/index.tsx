@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  Dimensions,
   LayoutChangeEvent,
   LayoutRectangle,
   Text,
@@ -8,6 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
+import { SCREEN_WIDTH } from '~/utils/dimensions'
 import { ScaledCardContext, useScaledCard } from './context'
 import {
   IScaledCardContext,
@@ -48,7 +48,7 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   }
 
   if (originalScreenWidth) {
-    scaleBy = Dimensions.get('screen').width / originalScreenWidth
+    scaleBy = SCREEN_WIDTH / originalScreenWidth
 
     if (scaleBy < 1) {
       scaledWidth = originalWidth * scaleBy
