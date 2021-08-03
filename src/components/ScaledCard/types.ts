@@ -5,12 +5,20 @@ export interface IScaledCardContext {
   scaleBy: number
 }
 
-export interface IScaledCardProps {
+interface IScaleToFitProp {
+  scaleToFit: boolean
+  originalScreenWidth?: never
+}
+
+interface IOriginalScreenWidthProp {
+  scaleToFit?: never
+  originalScreenWidth: number
+}
+
+export type IScaledCardProps = {
   originalWidth: number
   originalHeight: number
-  scaleToFit?: boolean
-  originalScreenWidth?: number
-}
+} & (IScaleToFitProp | IOriginalScreenWidthProp)
 
 export interface IScaledViewProps extends ViewProps {
   scaleStyle: ViewStyle
