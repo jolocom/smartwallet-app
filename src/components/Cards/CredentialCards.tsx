@@ -107,119 +107,119 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
       originalHeight={398}
       originalWidth={320}
       originalScreenWidth={375}
+      style={{ position: 'relative' }}
+      testID="otherCard"
     >
-      <View style={{ position: 'relative' }} testID="otherCard">
-        <DocumentCardMedium>
-          <ScaledView scaleStyle={styles.documentBodyContainer}>
-            <View style={{ flexDirection: 'row' }}>
-              <ScaledText
-                // @ts-expect-error
-                onTextLayout={handleCredentialNameTextLayout}
-                numberOfLines={isCredentialNameScaled ? 2 : undefined}
-                scaleStyle={{
-                  ...styles.regularText,
-                  ...(isCredentialNameScaled
-                    ? styles.documentCredentialNameScaled
-                    : styles.documentCredentialName),
-                }}
-                style={[{ flex: 0.863 }]}
-              >
-                {credentialName}
-              </ScaledText>
-            </View>
-            <ScaledView
-              scaleStyle={{ paddingBottom: isCredentialNameScaled ? 22 : 16 }}
-            />
-            <ScaledView
-              scaleStyle={{
-                paddingHorizontal: 10,
-              }}
-            >
-              <ScaledText
-                numberOfLines={2}
-                scaleStyle={{
-                  ...styles.mediumText,
-                  ...styles.documentHolderName,
-                }}
-              >
-                {holderName}
-              </ScaledText>
-            </ScaledView>
-            <ScaledView scaleStyle={{ paddingBottom: 16 }} />
-            {displayedFields.map((f, idx) => (
-              <>
-                {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
-                <ScaledText
-                  // @ts-expect-error
-                  onTextLayout={onTextLayoutChange}
-                  numberOfLines={1}
-                  scaleStyle={{ ...styles.regularText, ...styles.fieldLabel }}
-                >
-                  {f.label}:
-                </ScaledText>
-                <ScaledView scaleStyle={{ paddingBottom: 9 }} />
-                <ScaledText
-                  // @ts-expect-error
-                  onTextLayout={onTextLayoutChange}
-                  numberOfLines={idx === displayedFields.length - 1 ? 3 : 2}
-                  scaleStyle={{
-                    ...styles.mediumText,
-                    ...styles.fieldText,
-                  }}
-                  style={{
-                    width:
-                      photo && idx === displayedFields.length - 1
-                        ? '66.4%'
-                        : '100%',
-                  }}
-                >
-                  {f.value}
-                </ScaledText>
-              </>
-            ))}
-          </ScaledView>
-        </DocumentCardMedium>
-        {photo && (
-          <ScaledView scaleStyle={styles.documentPhotoContainer}>
-            <Image
-              resizeMode="cover"
-              style={styles.documentPhoto}
-              source={{ uri: photo }}
-            />
-          </ScaledView>
-        )}
-        {displayedHighlight && (
-          <ScaledView scaleStyle={styles.documentHighlightContainer}>
+      <DocumentCardMedium>
+        <ScaledView scaleStyle={styles.documentBodyContainer}>
+          <View style={{ flexDirection: 'row' }}>
             <ScaledText
+              // @ts-expect-error
+              onTextLayout={handleCredentialNameTextLayout}
+              numberOfLines={isCredentialNameScaled ? 2 : undefined}
               scaleStyle={{
                 ...styles.regularText,
-                ...styles.documentHighlight,
+                ...(isCredentialNameScaled
+                  ? styles.documentCredentialNameScaled
+                  : styles.documentCredentialName),
               }}
-              style={{
-                width: photo ? '66.4%' : '100%',
+              style={[{ flex: 0.863 }]}
+            >
+              {credentialName}
+            </ScaledText>
+          </View>
+          <ScaledView
+            scaleStyle={{ paddingBottom: isCredentialNameScaled ? 22 : 16 }}
+          />
+          <ScaledView
+            scaleStyle={{
+              paddingHorizontal: 10,
+            }}
+          >
+            <ScaledText
+              numberOfLines={2}
+              scaleStyle={{
+                ...styles.mediumText,
+                ...styles.documentHolderName,
               }}
             >
-              {displayedHighlight.toUpperCase()}
+              {holderName}
             </ScaledText>
           </ScaledView>
-        )}
-        {/* Dots - more action */}
-        <ScaledView
-          scaleStyle={{
-            ...styles.dotsContainer,
-            ...{
-              top: 18,
-              right: 17,
-            },
-          }}
-        >
-          <TouchableOpacity onPress={onHandleMore} style={[styles.dotsBtn]}>
-            {[...Array(3).keys()].map((c) => (
-              <ScaledView key={c} scaleStyle={styles.dot} />
-            ))}
-          </TouchableOpacity>
+          <ScaledView scaleStyle={{ paddingBottom: 16 }} />
+          {displayedFields.map((f, idx) => (
+            <>
+              {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
+              <ScaledText
+                // @ts-expect-error
+                onTextLayout={onTextLayoutChange}
+                numberOfLines={1}
+                scaleStyle={{ ...styles.regularText, ...styles.fieldLabel }}
+              >
+                {f.label}:
+              </ScaledText>
+              <ScaledView scaleStyle={{ paddingBottom: 9 }} />
+              <ScaledText
+                // @ts-expect-error
+                onTextLayout={onTextLayoutChange}
+                numberOfLines={idx === displayedFields.length - 1 ? 3 : 2}
+                scaleStyle={{
+                  ...styles.mediumText,
+                  ...styles.fieldText,
+                }}
+                style={{
+                  width:
+                    photo && idx === displayedFields.length - 1
+                      ? '66.4%'
+                      : '100%',
+                }}
+              >
+                {f.value}
+              </ScaledText>
+            </>
+          ))}
         </ScaledView>
-      </View>
+      </DocumentCardMedium>
+      {photo && (
+        <ScaledView scaleStyle={styles.documentPhotoContainer}>
+          <Image
+            resizeMode="cover"
+            style={styles.documentPhoto}
+            source={{ uri: photo }}
+          />
+        </ScaledView>
+      )}
+      {displayedHighlight && (
+        <ScaledView scaleStyle={styles.documentHighlightContainer}>
+          <ScaledText
+            scaleStyle={{
+              ...styles.regularText,
+              ...styles.documentHighlight,
+            }}
+            style={{
+              width: photo ? '66.4%' : '100%',
+            }}
+          >
+            {displayedHighlight.toUpperCase()}
+          </ScaledText>
+        </ScaledView>
+      )}
+      {/* Dots - more action */}
+      <ScaledView
+        scaleStyle={{
+          ...styles.dotsContainer,
+          ...{
+            top: 18,
+            right: 17,
+          },
+        }}
+      >
+        <TouchableOpacity onPress={onHandleMore} style={[styles.dotsBtn]}>
+          {[...Array(3).keys()].map((c) => (
+            <ScaledView key={c} scaleStyle={styles.dot} />
+          ))}
+        </TouchableOpacity>
+      </ScaledView>
     </ScaledCard>
   )
 }

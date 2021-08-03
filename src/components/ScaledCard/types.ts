@@ -18,7 +18,8 @@ interface IOriginalScreenWidthProp {
 export type IScaledCardProps = {
   originalWidth: number
   originalHeight: number
-} & (IScaleToFitProp | IOriginalScreenWidthProp)
+} & (IScaleToFitProp | IOriginalScreenWidthProp) &
+  ViewProps
 
 export interface IScaledViewProps extends ViewProps {
   scaleStyle: ViewStyle

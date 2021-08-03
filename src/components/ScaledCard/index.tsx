@@ -21,7 +21,9 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   originalWidth,
   scaleToFit = false,
   originalScreenWidth,
+  style: viewStyle,
   children,
+  ...viewProps
 }) => {
   const [containerDimensions, setContainerDimensions] =
     useState<Pick<LayoutRectangle, 'width' | 'height'>>()
@@ -83,7 +85,8 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   return (
     <ScaledCardContext.Provider value={{ scaleBy, scaleStyleObject }}>
       <View
-        style={{ width: scaledWidth!, height: scaledHeight! }}
+        {...viewProps}
+        style={[viewStyle, { width: scaledWidth!, height: scaledHeight! }]}
         onLayout={handleLayout}
       >
         {children}
