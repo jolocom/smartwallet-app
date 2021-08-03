@@ -1,16 +1,14 @@
-import React, { useRef, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
-import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
-import { TextLayoutEvent } from '~/types/props'
-import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
+import { useCredentialNameScale, useTrimFields } from '../hooks'
 
-type CredentialOtherCardProps = {
+type OtherCardProps = {
   credentialType: string
   credentialName: string
   fields: Array<Required<DisplayVal>>
@@ -18,7 +16,7 @@ type CredentialOtherCardProps = {
   onHandleMore: (id: string) => void // id is required here, to be able to delete a credential
 }
 
-export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
+const OtherCard: React.FC<OtherCardProps> = ({
   credentialType,
   credentialName,
   fields,
@@ -145,54 +143,6 @@ export const CredentialOtherCard: React.FC<CredentialOtherCardProps> = ({
 }
 
 const styles = StyleSheet.create({
-  documentBodyContainer: {
-    paddingTop: 22,
-    paddingHorizontal: 14,
-    paddingBottom: 14,
-  },
-  documentCredentialName: {
-    fontSize: 28,
-    lineHeight: 28,
-  },
-  documentCredentialNameScaled: {
-    fontSize: 22,
-    lineHeight: 22,
-  },
-  documentHolderName: {
-    fontSize: 20,
-    lineHeight: 20,
-  },
-  documentPhotoContainer: {
-    position: 'absolute',
-    bottom: 27,
-    right: 14,
-    zIndex: 10,
-    width: 82,
-    height: 82,
-    borderRadius: 41,
-    overflow: 'hidden',
-  },
-  documentPhoto: {
-    width: '100%',
-    height: '100%',
-  },
-  documentHighlightContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    backgroundColor: Colors.black,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    zIndex: 9,
-    height: 56,
-    paddingTop: 17,
-    paddingBottom: 13,
-    paddingLeft: 23,
-  },
-  documentHighlight: {
-    fontSize: 26,
-    color: Colors.white90,
-  },
   otherBodyContainer: {
     paddingVertical: 16,
     paddingRight: 22,
@@ -269,3 +219,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
   },
 })
+
+export default OtherCard
