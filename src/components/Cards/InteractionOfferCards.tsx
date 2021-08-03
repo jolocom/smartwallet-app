@@ -1,11 +1,12 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations'
 import { sharedStyles } from './sharedStyle'
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
+import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
 type InteractionOfferCardProps = {
   credentialName: string
@@ -23,41 +24,52 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
   const Card =
     cardType === 'document' ? InteractionCardDoc : InteractionCardOther
   return (
-    <Card>
-      <View style={styles.documentBodyContainer}>
-        <Text
-          numberOfLines={1}
-          style={[sharedStyles.regularText, styles.credentialName]}
-        >
-          {credentialName}
-        </Text>
-        <View style={{ paddingBottom: 16 }} />
-        <Text style={[sharedStyles.regularText, styles.fieldSectionTitle]}>
-          {strings.INCLUDED_INFO}:
-        </Text>
-        <View style={{ paddingBottom: 11 }} />
-        {fields.length ? (
-          fields.slice(0, 3).map((f, idx) => (
-            <>
-              {idx !== 0 && <View style={{ paddingBottom: 4 }} />}
-              <Text
-                style={[sharedStyles.regularText, sharedStyles.fieldLabelSmall]}
-              >
-                {f.label}
-              </Text>
-              <View style={{ paddingBottom: 0.5 }} />
-              <View style={styles.documentValuePlaceholder} />
-            </>
-          ))
-        ) : (
-          <Text
-            style={[sharedStyles.regularText, sharedStyles.fieldLabelSmall]}
+    <ScaledCard originalWidth={368} originalHeight={232} scaleToFit>
+      <Card>
+        <ScaledView scaleStyle={styles.documentBodyContainer}>
+          <ScaledText
+            numberOfLines={1}
+            scaleStyle={styles.credentialName}
+            style={sharedStyles.regularText}
           >
-            {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
-          </Text>
-        )}
-      </View>
-    </Card>
+            {credentialName}
+          </ScaledText>
+          <ScaledView scaleStyle={{ paddingBottom: 16 }} />
+          <ScaledText
+            scaleStyle={styles.fieldSectionTitle}
+            style={sharedStyles.regularText}
+          >
+            {strings.INCLUDED_INFO}:
+          </ScaledText>
+          <ScaledView scaleStyle={{ paddingBottom: 11 }} />
+          {fields.length ? (
+            fields.slice(0, 3).map((f, idx) => (
+              <>
+                {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 10 }} />}
+                <ScaledText
+                  scaleStyle={sharedStyles.fieldLabelSmall}
+                  style={sharedStyles.regularText}
+                >
+                  {f.label}
+                </ScaledText>
+                <ScaledView scaleStyle={{ paddingBottom: 0.5 }} />
+                <ScaledView
+                  scaleStyle={styles.documentValuePlaceholder}
+                  style={{ opacity: 0.57 }}
+                />
+              </>
+            ))
+          ) : (
+            <ScaledText
+              scaleStyle={sharedStyles.fieldLabelSmall}
+              style={sharedStyles.regularText}
+            >
+              {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
+            </ScaledText>
+          )}
+        </ScaledView>
+      </Card>
+    </ScaledCard>
   )
 }
 
@@ -67,6 +79,7 @@ export const InteractionOfferOtherCard: React.FC<InteractionOfferCardProps> = (
   props,
 ) => <OfferCard {...props} cardType="other" />
 
+// TODO: there is no separation between doc and other -> remove unnecessary styles
 const styles = StyleSheet.create({
   fieldSectionTitle: {
     fontSize: 16,
@@ -87,7 +100,6 @@ const styles = StyleSheet.create({
     width: '45.8%',
     height: 20,
     borderRadius: 5,
-    opacity: 0.57,
     backgroundColor: Colors.alto,
   },
   otherBodyContainer: {
