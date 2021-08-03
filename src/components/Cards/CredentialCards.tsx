@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, SyntheticEvent } from 'react'
+import React, { useRef, useMemo, useState } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
