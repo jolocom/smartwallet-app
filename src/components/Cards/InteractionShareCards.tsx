@@ -5,10 +5,11 @@ import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-// TODO: import from types folder once available
-import { TextLayoutEvent } from '../Card/Field'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 import { StyleSheet } from 'react-native'
+import { TextLayoutEvent } from '~/types/props'
+import { useMemo } from 'react'
+import { getTrimmedHighlight } from './utils'
 
 const MAX_FIELD_DOC = 2
 const MAX_FIELD_OTHER = 3
@@ -49,12 +50,6 @@ type InteractionShareDocumentCardProps = {
   photo?: string
 }
 
-/**
- * TODO:
- * - trim highlight, take implementation from credential cards
- * - add semicolons
- * - calculate available space
- */
 export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCardProps> =
   ({ credentialName, holderName, fields, photo, highlight }) => {
     /**
@@ -66,6 +61,11 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       const lines = e.nativeEvent.lines.length
       setHolderNameLines(lines)
     }
+
+    const displayedHighlight = useMemo(
+      () => getTrimmedHighlight(highlight),
+      [highlight],
+    )
 
     const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
 
@@ -124,7 +124,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                       numberOfLines={1}
                       style={[styles.regularText, styles.fieldLabelDocument]}
                     >
-                      {f.label}
+                      {f.label}:
                     </Text>
                     <View style={{ paddingBottom: 6 }} />
                     <Text
@@ -148,10 +148,10 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             <Image style={styles.documentPhoto} source={{ uri: photo }} />
           </View>
         )}
-        {highlight && (
+        {displayedHighlight && (
           <View style={styles.documentHighlightContainer}>
             <Text style={[styles.regularText, styles.documentHighlight]}>
-              {highlight.toUpperCase()}
+              {displayedHighlight.toUpperCase()}
             </Text>
           </View>
         )}
@@ -167,7 +167,6 @@ type InteractionShareOtherCardProps = {
 /**
  * TODO:
  * - width of body
- * - semicolon after label
  */
 export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps> =
   ({ credentialName, fields }) => {
@@ -210,7 +209,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                   {idx !== 0 && <View style={{ paddingBottom: 12 }} />}
 
                   <Text style={[styles.regularText, styles.fieldLabelOther]}>
-                    {f.label}
+                    {f.label}:
                   </Text>
                   <View style={{ paddingBottom: 4 }} />
                   {/* TODO: the same as in document card */}

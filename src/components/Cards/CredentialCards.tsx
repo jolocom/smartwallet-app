@@ -9,6 +9,7 @@ import { Colors } from '~/utils/colors'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
 import { TextLayoutEvent } from '~/types/props'
 import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
+import { getTrimmedHighlight } from './utils'
 
 /**
  * logic to define if credential text should be scaled
@@ -92,15 +93,10 @@ export const CredentialDocumentCard: React.FC<CredentialDocumentCardProps> = ({
   /**
    * trim highlight value if necessary
    */
-  const displayedHighlight = useMemo(() => {
-    if (highlight) {
-      return highlight?.length > 14
-        ? highlight?.slice(0, 14) + '...'
-        : highlight
-    } else {
-      return undefined
-    }
-  }, [highlight])
+  const displayedHighlight = useMemo(
+    () => getTrimmedHighlight(highlight),
+    [highlight],
+  )
 
   return (
     <ScaledCard
