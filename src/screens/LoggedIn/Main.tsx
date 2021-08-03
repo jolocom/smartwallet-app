@@ -24,7 +24,6 @@ import TermsConsent from '~/screens/Modals/TermsConsent'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import { IField } from '~/components/Card/types'
 import CredentialDetails from './Documents/CredentialDetails'
 import InteractionTest from './Settings/Development/InteractionCardsTest'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
@@ -39,26 +38,25 @@ import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import CollapsibleClone from './Settings/Development/CollapsibleClone'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import { Colors } from '~/utils/colors'
+import { IField } from '~/types/props'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
 }
 const TransparentModalsStack = createStackNavigator()
 
-const TransparentModals = () => {
-  return (
-    <TransparentModalsStack.Navigator
-      headerMode="none"
-      mode="modal"
-      screenOptions={transparentModalOptions}
-    >
-      <TransparentModalsStack.Screen
-        name={ScreenNames.PopupMenu}
-        component={PopupMenu}
-      />
-    </TransparentModalsStack.Navigator>
-  )
-}
+const TransparentModals = () => (
+  <TransparentModalsStack.Navigator
+    headerMode="none"
+    mode="modal"
+    screenOptions={transparentModalOptions}
+  >
+    <TransparentModalsStack.Screen
+      name={ScreenNames.PopupMenu}
+      component={PopupMenu}
+    />
+  </TransparentModalsStack.Navigator>
+)
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
