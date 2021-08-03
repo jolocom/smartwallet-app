@@ -1,84 +1,97 @@
 import { Dimensions } from 'react-native'
 
+export interface DefiningOptionScreenWidth {
+  originalScreenWidth: number
+  containerWidth?: never
+}
+
+export interface DefiningOptionAvailabeWidth {
+  containerWidth: number
+  originalScreenWidth?: never
+}
+
 export type DefiningOption =
   | DefiningOptionScreenWidth
   | DefiningOptionAvailabeWidth
-export interface DefiningOptionScreenWidth {
-  baseScreenWidth: number
-}
-export interface DefiningOptionAvailabeWidth {
-  availableWidth: number
-}
+
 export type CardDimensions = {
-  cardWidth: number
-  cardHeight: number
+  scaledWidth: number
+  scaledHeight: number
   scaleBy: number
 }
-function isScreenWidthDefining(
+
+function isOriginalScreenWidthDefining(
   definingOption: DefiningOption,
 ): definingOption is DefiningOptionScreenWidth {
   return (
-    'baseScreenWidth' in definingOption &&
-    typeof definingOption.baseScreenWidth === 'number' &&
-    !('availableWidth' in definingOption)
+    'originalScreenWidth' in definingOption &&
+    !('containerWidth' in definingOption)
   )
 }
-function isAvailableWidthDefining(
+
+function isContainerWidthDefining(
   definingOption: DefiningOption,
 ): definingOption is DefiningOptionAvailabeWidth {
   return (
-    'availableWidth' in definingOption &&
-    typeof definingOption.availableWidth === 'number' &&
-    !('baseScreenWidth' in definingOption)
+    'containerWidth' in definingOption &&
+    !('originalScreenWidth' in definingOption)
   )
 }
 
 /**
  * A hook to define how to scale card visual properties.
  * It should either define scale by property by:
- * - baseScreenWidth
+ * - originalScreenWidth
  * - widthAvailable
- * @param baseCardWidth - a width of card for iPhoneX
+ * @param originalCardWidth - a width of card for iPhoneX
  * @param definingOption - an option that defines how scaled by return param is being calculated
  */
 export const getCardDimensions = (
-  baseCardWidth: number,
-  baseCardHeight: number,
+  originalCardWidth: number,
+  originalCardHeight: number,
   definingOption: DefiningOption,
 ): CardDimensions => {
-  // when baseScreenWidth should define scaleBy property
-  const baseAspectRation = baseCardWidth / baseCardHeight
+  // when originalScreenWidth should define scaleBy property
+  const baseAspectRation = originalCardWidth / originalCardHeight
+
   let scaleBy: number, cardWidth: number, cardHeight: number
-  if (isScreenWidthDefining(definingOption)) {
-    scaleBy = Dimensions.get('screen').width / definingOption.baseScreenWidth
-    if (scaleBy < 1) {
-      cardWidth = baseCardWidth * scaleBy
+
+  if (isOriginalScreenWidthDefining(definingOption)) {
+    scaleBy =
+      Dimensions.get('screen').width / definingOption.originalScreenWidth
+    if (scaleBy <= 1) {
+      cardWidth = originalCardWidth * scaleBy
     }
-  }
-  // when availableWidth should define scaleBy property
-  else if (isAvailableWidthDefining(definingOption)) {
-    scaleBy = definingOption.availableWidth / baseCardWidth
-    if (scaleBy < 1) {
-      cardWidth = definingOption.availableWidth
+  } else if (isContainerWidthDefining(definingOption)) {
+    if (!definingOption.containerWidth) {
+      scaleBy = 1
+      cardWidth = originalCardWidth
+    } else {
+      scaleBy = definingOption.containerWidth / originalCardWidth
+      if (scaleBy <= 1) {
+        cardWidth = definingOption.containerWidth
+      }
     }
   } else {
     throw new Error(
       '"definigOption" param in getCardDimensions fn was used incorrectly',
     )
   }
+
   /**
-   * in case screen is larger than baseScreenWidth
-   * limit card width to baseCardWidth value
+   * in case screen is larger than originalScreenWidth
+   * limit card width to originalCardWidth value
    */
   if (scaleBy > 1) {
-    cardWidth = baseCardWidth
-    cardHeight = baseCardHeight
+    cardWidth = originalCardWidth
+    cardHeight = originalCardHeight
   } else {
     cardHeight = (1 / baseAspectRation) * cardWidth!
   }
+
   return {
-    cardWidth: cardWidth!,
-    cardHeight: cardHeight!,
+    scaledWidth: cardWidth!,
+    scaledHeight: cardHeight!,
     scaleBy,
   }
 }

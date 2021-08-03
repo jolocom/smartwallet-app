@@ -4,7 +4,6 @@ import { ScrollView, View } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
 import {
   getCustomCredentialsByCategoriesByType,
@@ -13,10 +12,8 @@ import {
 import DocumentTabs, {
   documentTabs,
 } from '~/screens/LoggedIn/Documents/DocumentTabs'
-import OtherCard from '~/components/Card/OtherCard'
 import {
   CredentialCategories,
-  DocumentFields,
   DisplayCredentialDocument,
   DisplayCredentialOther,
   CredentialsByType,
@@ -33,21 +30,83 @@ import JoloText from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
+import {
+  CredentialDocumentCard,
+  CredentialOtherCard,
+} from '~/components/Cards/CredentialCards'
+import { useDeleteCredential } from '~/hooks/credentials'
+import { useToasts } from '~/hooks/toasts'
+import { useRedirectTo } from '~/hooks/navigation'
+import { usePopupMenu } from '~/hooks/popupMenu'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
-const CardList: React.FC = ({ children }) => {
+const useHandleMorePress = () => {
+  const { scheduleWarning } = useToasts()
+  const redirectToContactUs = useRedirectTo(ScreenNames.ContactUs)
+
+  const { showPopup } = usePopupMenu()
+  const deleteCredential = useDeleteCredential()
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteCredential(id)
+    } catch (e) {
+      scheduleWarning({
+        title: strings.WHOOPS,
+        message: strings.ERROR_TOAST_MSG,
+        interact: {
+          label: strings.REPORT,
+          onInteract: redirectToContactUs, // TODO: change to Reporting screen once available
+        },
+      })
+    }
+  }
+
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      overScrollMode={'never'}
-      contentContainerStyle={{
-        paddingBottom: '40%',
-        paddingTop: 32,
-      }}
-    >
-      {children}
-    </ScrollView>
-  )
+    id: string,
+    credentialName: string,
+    fields: Array<Required<DisplayVal>>,
+    photo?: string,
+  ) => {
+    const popupOptions = [
+      {
+        title: strings.INFO,
+        navigation: {
+          screen: ScreenNames.CredentialDetails,
+          params: {
+            fields,
+            photo,
+            title: credentialName,
+          },
+        },
+      },
+      {
+        title: strings.DELETE,
+        navigation: {
+          screen: ScreenNames.DragToConfirm,
+          params: {
+            title: `${strings.DO_YOU_WANT_TO_DELETE} ${credentialName}?`,
+            cancelText: strings.CANCEL,
+            onComplete: () => handleDelete(id),
+          },
+        },
+      },
+    ]
+    showPopup(popupOptions)
+  }
 }
+
+const CardList: React.FC = ({ children }) => (
+  <ScrollView
+    showsVerticalScrollIndicator={false}
+    overScrollMode={'never'}
+    contentContainerStyle={{
+      paddingBottom: '40%',
+      paddingTop: 32,
+    }}
+  >
+    {children}
+  </ScrollView>
+)
 
 const DocumentList = () => {
   const [categories, setCategories] =
@@ -98,6 +157,8 @@ const DocumentList = () => {
     [JSON.stringify(categories)],
   )
 
+  const onHandleMore = useHandleMorePress()
+
   if (categories === null) return null
   return (
     <>
@@ -139,23 +200,27 @@ const DocumentList = () => {
                     customStyles={{ marginLeft: -4 }}
                     data={credentials}
                     renderItem={({ item: c }) => (
-                      <DocumentCard
-                        key={c.id}
-                        type={c.type}
-                        id={c.id}
-                        mandatoryFields={[
-                          {
-                            label: DocumentFields.DocumentName,
-                            value: c.name || strings.UNKNOWN,
-                          },
-                          {
-                            label: strings.SUBJECT_NAME,
-                            value: c.holderName,
-                          },
-                        ]}
-                        optionalFields={getOptionalFields(c)}
-                        highlight={c.id.slice(0, 14)}
+                      <CredentialDocumentCard
+                        credentialName={c.name || strings.UNKNOWN}
+                        holderName={c.holderName || strings.ANONYMOUS}
+                        fields={getOptionalFields(c)}
+                        highlight={c.id}
                         photo={c.photo}
+                        onHandleMore={() =>
+                          onHandleMore(
+                            c.id,
+                            c.name,
+                            [
+                              {
+                                key: 'subjectName',
+                                label: strings.SUBJECT_NAME,
+                                value: c.holderName || strings.ANONYMOUS,
+                              },
+                              ...getOptionalFields(c),
+                            ],
+                            c.photo,
+                          )
+                        }
                       />
                     )}
                   />
@@ -202,18 +267,19 @@ const DocumentList = () => {
                   <AdoptedCarousel
                     data={credentials}
                     renderItem={({ item: c }) => (
-                      <OtherCard
-                        id={c.id}
-                        type={c.type}
-                        key={c.id}
-                        mandatoryFields={[
-                          {
-                            label: DocumentFields.DocumentName,
-                            value: c.name || strings.UNKNOWN,
-                          },
-                        ]}
-                        optionalFields={getOptionalFields(c)}
-                        photo={c.photo}
+                      <CredentialOtherCard
+                        credentialName={c.name || strings.UNKNOWN}
+                        credentialType={c.type}
+                        fields={getOptionalFields(c)}
+                        logo={c.photo}
+                        onHandleMore={() =>
+                          onHandleMore(
+                            c.id,
+                            c.name,
+                            getOptionalFields(c),
+                            c.photo,
+                          )
+                        }
                       />
                     )}
                   />
@@ -227,19 +293,17 @@ const DocumentList = () => {
   )
 }
 
-const Documents: React.FC = () => {
-  return (
-    <ScreenContainer
-      customStyles={{
-        justifyContent: 'flex-start',
-        paddingHorizontal: 0,
-      }}
-    >
-      <DocumentTabs>
-        <DocumentList />
-      </DocumentTabs>
-    </ScreenContainer>
-  )
-}
+const Documents: React.FC = () => (
+  <ScreenContainer
+    customStyles={{
+      justifyContent: 'flex-start',
+      paddingHorizontal: 0,
+    }}
+  >
+    <DocumentTabs>
+      <DocumentList />
+    </DocumentTabs>
+  </ScreenContainer>
+)
 
 export default Documents

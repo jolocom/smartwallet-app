@@ -5,8 +5,7 @@ import CloseIcon from '~/assets/svg/CloseIcon'
 import { useGoBack } from '~/hooks/navigation'
 import IconBtn from './IconBtn'
 import { BackArrowIcon } from '~/assets/svg'
-import { IWithCustomStyle } from './Card/types'
-import BP from '~/utils/breakpoints'
+import { IWithCustomStyle } from '~/types/props'
 
 export enum NavHeaderType {
   Back = 'back',

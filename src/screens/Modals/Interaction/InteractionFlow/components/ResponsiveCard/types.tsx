@@ -1,6 +1,5 @@
 import { Dispatch, PropsWithChildren, SetStateAction } from 'react'
-import { TextLayoutEvent } from '~/components/Card/Field'
-import { IWithCustomStyle } from '~/components/Card/types'
+import { IWithCustomStyle, TextLayoutEvent } from '~/types/props'
 
 export interface IResponsiveCardContext {
   scaleRatio: number

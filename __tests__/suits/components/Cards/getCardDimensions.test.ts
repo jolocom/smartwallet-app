@@ -23,8 +23,8 @@ const mockAvailableWidthLarge = 320
  * NOTE: this mock is volatile because if path to
  * Dimenstion class changes we need to update path here
  */
-jest.mock('react-native/Libraries/Utilities/Dimensions.js', () => ({
-  get: jest.fn(),
+jest.mock('react-native', () => ({
+  Dimensions: { get: jest.fn() },
 }))
 
 describe('getCardDimensions', () => {
@@ -42,15 +42,10 @@ describe('getCardDimensions', () => {
     it("throws an error if defining option argument wasn't used correctly", () => {
       expect(() => {
         // @ts-expect-error
-        getCardDimensions(320, 398, { baseScreenWidth: 'baseWidth' })
-      }).toThrowError(
-        new Error(
-          '"definigOption" param in getCardDimensions fn was used incorrectly',
-        ),
-      )
-      expect(() => {
-        // @ts-expect-error
-        getCardDimensions(320, 398, { availableWidth: 'baseWidth' })
+        getCardDimensions(320, 398, {
+          originalScreenWidth: 100,
+          containerWidth: 300,
+        })
       }).toThrowError(
         new Error(
           '"definigOption" param in getCardDimensions fn was used incorrectly',
@@ -66,43 +61,43 @@ describe('getCardDimensions', () => {
       )
     })
 
-    it('calculates card dimensions based on baseScreenWidth defining property', () => {
-      const { cardWidth, cardHeight, scaleBy } = getCardDimensions(
+    it('calculates card dimensions based on originalScreenWidth defining property', () => {
+      const { scaledWidth, scaledHeight, scaleBy } = getCardDimensions(
         mockBaseCardWidth,
         mockBaseCardHeight,
-        { baseScreenWidth: mockBaseScreenWidth },
+        { originalScreenWidth: mockBaseScreenWidth },
       )
       expect(scaleBy).toBe(mockDeviceScreenWidth / mockBaseScreenWidth)
-      expect(cardWidth).toBe(
+      expect(scaledWidth).toBe(
         (mockDeviceScreenWidth / mockBaseScreenWidth) * mockBaseCardWidth,
       )
-      expect(cardHeight).toBe(
+      expect(scaledHeight).toBe(
         mockBaseCardHeight * (mockDeviceScreenWidth / mockBaseScreenWidth),
       )
     })
-    it('calculates card dimensions based on availableWidth defining property: availableWidth is smaller than baseCardWidth', () => {
-      const { cardWidth, cardHeight, scaleBy } = getCardDimensions(
+    it('calculates card dimensions based on containerWidth defining property: containerWidth is smaller than baseCardWidth', () => {
+      const { scaledWidth, scaledHeight, scaleBy } = getCardDimensions(
         mockBaseCardWidth,
         mockBaseCardHeight,
-        { availableWidth: mockAvailableWidth },
+        { containerWidth: mockAvailableWidth },
       )
 
       expect(scaleBy).toBe(mockAvailableWidth / mockBaseCardWidth)
-      expect(cardWidth).toBe(mockAvailableWidth)
-      expect(cardHeight).toBe(
+      expect(scaledWidth).toBe(mockAvailableWidth)
+      expect(scaledHeight).toBe(
         mockBaseCardHeight * (mockAvailableWidth / mockBaseCardWidth),
       )
     })
-    it('calculates card dimensions based on availableWidth defining property: availableWidth is larger than baseCardWidth', () => {
-      const { cardWidth, cardHeight, scaleBy } = getCardDimensions(
+    it('calculates card dimensions based on containerWidth defining property: containerWidth is larger than baseCardWidth', () => {
+      const { scaledWidth, scaledHeight, scaleBy } = getCardDimensions(
         mockBaseCardWidth,
         mockBaseCardHeight,
-        { availableWidth: mockAvailableWidthLarge },
+        { containerWidth: mockAvailableWidthLarge },
       )
 
       expect(scaleBy).toBe(mockAvailableWidthLarge / mockBaseCardWidth)
-      expect(cardWidth).toBe(mockBaseCardWidth)
-      expect(cardHeight).toBe(mockBaseCardHeight)
+      expect(scaledWidth).toBe(mockBaseCardWidth)
+      expect(scaledHeight).toBe(mockBaseCardHeight)
     })
   })
   describe('runs tests for screens larger than base screen', () => {
@@ -111,16 +106,16 @@ describe('getCardDimensions', () => {
       Dimensions.get.mockReturnValue({ width: mockDeviceScreenWidthLarge })
     })
 
-    it('calculates card dimensions based on baseScreenWidth defining property', () => {
-      const { cardWidth, cardHeight, scaleBy } = getCardDimensions(
+    it('calculates card dimensions based on originalScreenWidth defining property', () => {
+      const { scaledWidth, scaledHeight, scaleBy } = getCardDimensions(
         mockBaseCardWidth,
         mockBaseCardHeight,
-        { baseScreenWidth: mockBaseScreenWidth },
+        { originalScreenWidth: mockBaseScreenWidth },
       )
 
       expect(scaleBy).toBe(mockDeviceScreenWidthLarge / mockBaseScreenWidth)
-      expect(cardWidth).toBe(mockBaseCardWidth)
-      expect(cardHeight).toBe(mockBaseCardHeight)
+      expect(scaledWidth).toBe(mockBaseCardWidth)
+      expect(scaledHeight).toBe(mockBaseCardHeight)
     })
   })
 })
