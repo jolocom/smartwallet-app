@@ -3,12 +3,12 @@ import { Text, View, Image } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
-import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 // TODO: import from types folder once available
 import { TextLayoutEvent } from '../Card/Field'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 import { StyleSheet } from 'react-native'
+import { sharedStyles } from './sharedStyle'
 
 const MAX_FIELD_DOC = 2
 const MAX_FIELD_OTHER = 3
@@ -100,7 +100,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
           <View style={styles.documentBodyContainer}>
             <Text
               numberOfLines={1}
-              style={[styles.regularText, styles.documentCredentialName]}
+              style={[sharedStyles.regularText, styles.documentCredentialName]}
             >
               {credentialName}
             </Text>
@@ -109,7 +109,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
               numberOfLines={2}
               // @ts-expect-error
               onTextLayout={(e: TextLayoutEvent) => handleHolderNameLayout(e)}
-              style={[styles.mediumText, styles.documentHolderName]}
+              style={[sharedStyles.mediumText, styles.documentHolderName]}
             >
               {holderName}
             </Text>
@@ -122,7 +122,10 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                     {idx !== 0 && <View style={{ paddingBottom: 4 }} />}
                     <Text
                       numberOfLines={1}
-                      style={[styles.regularText, styles.fieldLabelDocument]}
+                      style={[
+                        sharedStyles.regularText,
+                        sharedStyles.fieldLabelSmall,
+                      ]}
                     >
                       {f.label}
                     </Text>
@@ -133,7 +136,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                       onTextLayout={(e: TextLayoutEvent) =>
                         handleFieldValueLayout(e, idx)
                       }
-                      style={[styles.regularText, styles.fieldValue]}
+                      style={[sharedStyles.regularText, styles.fieldValue]}
                     >
                       {f.value}
                     </Text>
@@ -150,7 +153,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
         )}
         {highlight && (
           <View style={styles.documentHighlightContainer}>
-            <Text style={[styles.regularText, styles.documentHighlight]}>
+            <Text style={[sharedStyles.regularText, styles.documentHighlight]}>
               {highlight.toUpperCase()}
             </Text>
           </View>
@@ -200,7 +203,9 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
       >
         <InteractionCardOther>
           <View style={styles.otherBodyContainer}>
-            <Text style={[styles.regularText, styles.otherCredentialName]}>
+            <Text
+              style={[sharedStyles.regularText, styles.otherCredentialName]}
+            >
               {credentialName}
             </Text>
             <View style={{ paddingBottom: 16 }} />
@@ -209,7 +214,9 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                 <>
                   {idx !== 0 && <View style={{ paddingBottom: 12 }} />}
 
-                  <Text style={[styles.regularText, styles.fieldLabelOther]}>
+                  <Text
+                    style={[sharedStyles.regularText, sharedStyles.fieldLabel]}
+                  >
                     {f.label}
                   </Text>
                   <View style={{ paddingBottom: 4 }} />
@@ -220,7 +227,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                     onTextLayout={(e: TextLayoutEvent) =>
                       handleFieldValueLayout(e, idx)
                     }
-                    style={[styles.regularText, styles.fieldValue]}
+                    style={[sharedStyles.regularText, styles.fieldValue]}
                   >
                     {f.value}
                   </Text>
@@ -263,26 +270,6 @@ const styles = StyleSheet.create({
     color: Colors.black80,
     fontSize: 22,
     lineHeight: 24,
-  },
-  // TODO: the same as credentials
-  regularText: {
-    fontFamily: Fonts.Regular,
-    color: Colors.black,
-  },
-  // TODO: the same as credentials
-  mediumText: {
-    fontFamily: Fonts.Medium,
-    color: Colors.black,
-  },
-  fieldLabelDocument: {
-    fontSize: 14,
-    color: Colors.slateGray,
-  },
-  // TODO: the same as credentials
-  fieldLabelOther: {
-    fontSize: 16,
-    lineHeight: 16,
-    color: Colors.slateGray,
   },
   fieldValue: {
     fontSize: 18,
