@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
-import { SCREEN_WIDTH } from '~/utils/dimensions'
+import { getCardDimensions } from '../Cards/getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
 import {
   IScaledCardContext,
@@ -28,49 +28,23 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   const [containerDimensions, setContainerDimensions] =
     useState<Pick<LayoutRectangle, 'width' | 'height'>>()
 
+  const isContainerLayoutReady = scaleToFit && !containerDimensions
+
+  const { scaleBy, scaledHeight, scaledWidth } = getCardDimensions(
+    originalWidth,
+    originalHeight,
+    {
+      ...(scaleToFit
+        ? { containerWidth: containerDimensions?.width }
+        : { originalScreenWidth }),
+    },
+  )
+
   const handleLayout = (e: LayoutChangeEvent) => {
     setContainerDimensions({
       height: e.nativeEvent.layout.height,
       width: e.nativeEvent.layout.width,
     })
-  }
-
-  let scaleBy = 1,
-    scaledHeight: number,
-    scaledWidth: number
-
-  if (scaleToFit && originalScreenWidth) {
-    console.warn(
-      'ScaledCard component received both "scaleToFit" and "originalScreenWidth" props. Falling back to "scaleToFit".',
-    )
-  } else if (!scaleToFit && !originalScreenWidth) {
-    console.warn(
-      'ScaledCard component received neither "scaleToFit" nor "originalScreenWidth" props. Falling back to "scaleToFit".',
-    )
-  }
-
-  if (originalScreenWidth) {
-    scaleBy = SCREEN_WIDTH / originalScreenWidth
-
-    if (scaleBy < 1) {
-      scaledWidth = originalWidth * scaleBy
-      scaledHeight = originalHeight * scaleBy
-    }
-  } else if (scaleToFit && containerDimensions) {
-    scaleBy = containerDimensions.width / originalWidth
-
-    if (scaleBy < 1) {
-      scaledWidth = containerDimensions.width
-      scaledHeight = originalHeight * scaleBy
-    }
-  } else {
-    scaledWidth = originalWidth
-    scaledHeight = originalHeight
-  }
-
-  if (scaleBy > 1) {
-    scaledWidth = originalWidth
-    scaledHeight = originalHeight
   }
 
   const scaleStyleObject: IScaledCardContext['scaleStyleObject'] = (style) =>
@@ -86,7 +60,12 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
     <ScaledCardContext.Provider value={{ scaleBy, scaleStyleObject }}>
       <View
         {...viewProps}
-        style={[viewStyle, { width: scaledWidth!, height: scaledHeight! }]}
+        style={[
+          viewStyle,
+          isContainerLayoutReady
+            ? { width: 'auto', height: 'auto' }
+            : { width: scaledWidth, height: scaledHeight },
+        ]}
         onLayout={handleLayout}
       >
         {children}
