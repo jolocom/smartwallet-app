@@ -207,43 +207,49 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
     }
 
     return (
-      <View
-        style={{
-          position: 'relative',
-        }}
-      >
+      <ScaledCard originalHeight={232} originalWidth={368} scaleToFit>
         <InteractionCardOther>
-          <View style={styles.otherBodyContainer}>
-            <Text style={[styles.regularText, styles.otherCredentialName]}>
+          <ScaledView scaleStyle={styles.otherBodyContainer}>
+            <ScaledText
+              numberOfLines={2}
+              scaleStyle={styles.otherCredentialName}
+              style={styles.regularText}
+            >
               {credentialName}
-            </Text>
-            <View style={{ paddingBottom: 16 }} />
+            </ScaledText>
+            <ScaledView scaleStyle={{ paddingBottom: 16 }} />
             <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
               {fields.map((f, idx) => (
                 <>
-                  {idx !== 0 && <View style={{ paddingBottom: 12 }} />}
+                  {idx !== 0 && (
+                    <ScaledView scaleStyle={{ paddingBottom: 12 }} />
+                  )}
 
-                  <Text style={[styles.regularText, styles.fieldLabelOther]}>
+                  <ScaledText
+                    scaleStyle={styles.fieldLabelOther}
+                    style={styles.regularText}
+                  >
                     {f.label}:
-                  </Text>
-                  <View style={{ paddingBottom: 4 }} />
+                  </ScaledText>
+                  <ScaledView scaleStyle={{ paddingBottom: 4 }} />
                   {/* TODO: the same as in document card */}
-                  <Text
+                  <ScaledText
                     numberOfLines={2}
                     //@ts-expect-error
                     onTextLayout={(e: TextLayoutEvent) =>
                       handleFieldValueLayout(e, idx)
                     }
-                    style={[styles.regularText, styles.fieldValue]}
+                    scaleStyle={styles.fieldValue}
+                    style={styles.regularText}
                   >
                     {f.value}
-                  </Text>
+                  </ScaledText>
                 </>
               ))}
             </FieldsCalculator>
-          </View>
+          </ScaledView>
         </InteractionCardOther>
-      </View>
+      </ScaledCard>
     )
   }
 
@@ -272,6 +278,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingLeft: 20,
     paddingRight: 17,
+    width: '73%',
   },
   otherCredentialName: {
     color: Colors.black80,
