@@ -1,5 +1,5 @@
 import { TextInputProps, ViewStyle } from 'react-native'
-import { IWithCustomStyle } from '../Card/types'
+import { IWithCustomStyle } from '~/types/props'
 
 export interface IInput extends TextInputProps, IWithCustomStyle {
   value: string
