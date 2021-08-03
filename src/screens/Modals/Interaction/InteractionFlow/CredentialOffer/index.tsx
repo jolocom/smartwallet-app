@@ -53,7 +53,9 @@ const CredentialOfferBAS = () => {
             <InteractionOfferDocumentCard
               key={d.name}
               credentialName={d.name || t(strings.UNKNOWN)}
-              fields={d.properties}
+              fields={d.properties.map((p) => ({
+                label: p.label || strings.NOT_SPECIFIED,
+              }))}
             />
           )
         }
@@ -61,7 +63,9 @@ const CredentialOfferBAS = () => {
           <InteractionOfferOtherCard
             key={d.name}
             credentialName={d.name || t(strings.UNKNOWN)}
-            fields={d.properties}
+            fields={d.properties.map((p) => ({
+              label: p.label || strings.NOT_SPECIFIED,
+            }))}
           />
         )
       })}
@@ -99,13 +103,17 @@ const CredentialOfferFAS = () => {
             <InteractionOfferDocumentCard
               key={name + type}
               credentialName={name || t(strings.UNKNOWN)}
-              fields={properties}
+              fields={properties.map((p) => ({
+                label: p.label || strings.NOT_SPECIFIED,
+              }))}
             />
           ) : (
             <InteractionOfferOtherCard
               key={name + type}
               credentialName={name || t(strings.UNKNOWN)}
-              fields={properties}
+              fields={properties.map((p) => ({
+                label: p.label || strings.NOT_SPECIFIED,
+              }))}
             />
           )}
         </View>
