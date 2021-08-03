@@ -56,19 +56,18 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
       testID="otherCard"
     >
       <DocumentCardMedium>
-        <ScaledView scaleStyle={styles.documentBodyContainer}>
+        <ScaledView scaleStyle={styles.bodyContainer}>
           <View style={{ flexDirection: 'row' }}>
             <ScaledText
               // @ts-expect-error
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={isCredentialNameScaled ? 2 : undefined}
-              scaleStyle={[
-                styles.regularText,
+              scaleStyle={
                 isCredentialNameScaled
-                  ? styles.documentCredentialNameScaled
-                  : styles.documentCredentialName,
-              ]}
-              style={[{ flex: 0.863 }]}
+                  ? styles.credentialNameScaled
+                  : styles.credentialName
+              }
+              style={[styles.regularText, { flex: 0.863 }]}
             >
               {credentialName}
             </ScaledText>
@@ -83,7 +82,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
           >
             <ScaledText
               numberOfLines={2}
-              scaleStyle={[styles.mediumText, styles.documentHolderName]}
+              style={styles.mediumText}
+              scaleStyle={styles.holderName}
             >
               {holderName}
             </ScaledText>
@@ -96,7 +96,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
                 // @ts-expect-error
                 onTextLayout={onTextLayoutChange}
                 numberOfLines={1}
-                scaleStyle={[styles.regularText, styles.fieldLabel]}
+                style={styles.regularText}
+                scaleStyle={styles.fieldLabel}
               >
                 {f.label}:
               </ScaledText>
@@ -105,13 +106,16 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
                 // @ts-expect-error
                 onTextLayout={onTextLayoutChange}
                 numberOfLines={idx === displayedFields.length - 1 ? 3 : 2}
-                scaleStyle={[styles.mediumText, styles.fieldText]}
-                style={{
-                  width:
-                    photo && idx === displayedFields.length - 1
-                      ? '66.4%'
-                      : '100%',
-                }}
+                scaleStyle={styles.fieldText}
+                style={[
+                  styles.mediumText,
+                  {
+                    width:
+                      photo && idx === displayedFields.length - 1
+                        ? '66.4%'
+                        : '100%',
+                  },
+                ]}
               >
                 {f.value}
               </ScaledText>
@@ -120,21 +124,30 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         </ScaledView>
       </DocumentCardMedium>
       {photo && (
-        <ScaledView scaleStyle={styles.documentPhotoContainer}>
+        <ScaledView
+          scaleStyle={styles.photoContainerScaled}
+          style={styles.photoContainer}
+        >
           <Image
             resizeMode="cover"
-            style={styles.documentPhoto}
+            style={styles.photo}
             source={{ uri: photo }}
           />
         </ScaledView>
       )}
       {displayedHighlight && (
-        <ScaledView scaleStyle={styles.documentHighlightContainer}>
+        <ScaledView
+          style={styles.highlightContainer}
+          scaleStyle={styles.highlightContainerScaled}
+        >
           <ScaledText
-            scaleStyle={[styles.regularText, styles.documentHighlight]}
-            style={{
-              width: photo ? '66.4%' : '100%',
-            }}
+            scaleStyle={[styles.highlight]}
+            style={[
+              styles.regularText,
+              {
+                width: photo ? '66.4%' : '100%',
+              },
+            ]}
           >
             {displayedHighlight.toUpperCase()}
           </ScaledText>
@@ -142,13 +155,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
       )}
       {/* Dots - more action */}
       <ScaledView
-        scaleStyle={[
-          styles.dotsContainer,
-          {
-            top: 18,
-            right: 17,
-          },
-        ]}
+        scaleStyle={styles.dotsContainerScaled}
+        style={styles.dotsContainer}
       >
         <TouchableOpacity onPress={onHandleMore} style={styles.dotsBtn}>
           {[...Array(3).keys()].map((c) => (
@@ -161,51 +169,55 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 }
 
 const styles = StyleSheet.create({
-  documentBodyContainer: {
+  bodyContainer: {
     paddingTop: 22,
     paddingHorizontal: 14,
     paddingBottom: 14,
   },
-  documentCredentialName: {
+  credentialName: {
     fontSize: 28,
     lineHeight: 28,
   },
-  documentCredentialNameScaled: {
+  credentialNameScaled: {
     fontSize: 22,
     lineHeight: 22,
   },
-  documentHolderName: {
+  holderName: {
     fontSize: 20,
     lineHeight: 20,
   },
-  documentPhotoContainer: {
+  photoContainer: {
     position: 'absolute',
+    overflow: 'hidden',
+    zIndex: 10,
+  },
+  photoContainerScaled: {
     bottom: 27,
     right: 14,
-    zIndex: 10,
     width: 82,
     height: 82,
     borderRadius: 41,
-    overflow: 'hidden',
   },
-  documentPhoto: {
+  photo: {
     width: '100%',
     height: '100%',
   },
-  documentHighlightContainer: {
-    position: 'absolute',
+  highlightContainerScaled: {
     bottom: 0,
-    width: '100%',
-    backgroundColor: Colors.black,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    zIndex: 9,
     height: 56,
     paddingTop: 17,
     paddingBottom: 13,
     paddingLeft: 23,
   },
-  documentHighlight: {
+  highlightContainer: {
+    position: 'absolute',
+    width: '100%',
+    backgroundColor: Colors.black,
+    zIndex: 9,
+  },
+  highlight: {
     fontSize: 26,
     color: Colors.white90,
   },
@@ -227,10 +239,14 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     letterSpacing: 0.14,
   },
-  dotsContainer: {
-    position: 'absolute',
+  dotsContainerScaled: {
     paddingHorizontal: 3,
     paddingVertical: 10,
+    top: 18,
+    right: 17,
+  },
+  dotsContainer: {
+    position: 'absolute',
     zIndex: 100,
   },
   dotsBtn: {
