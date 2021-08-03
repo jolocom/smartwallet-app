@@ -10,6 +10,7 @@ import { StyleSheet } from 'react-native'
 import { TextLayoutEvent } from '~/types/props'
 import { useMemo } from 'react'
 import { getTrimmedHighlight } from './utils'
+import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
 const MAX_FIELD_DOC = 2
 const MAX_FIELD_OTHER = 3
@@ -90,72 +91,86 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2
 
     return (
-      <View
-        style={{
-          position: 'relative',
-          // width: cardWidth
-        }}
-      >
+      <ScaledCard originalWidth={368} originalHeight={232} scaleToFit>
         <InteractionCardDoc>
-          <View style={styles.documentBodyContainer}>
-            <Text
+          <ScaledView scaleStyle={styles.documentBodyContainer}>
+            <ScaledText
               numberOfLines={1}
-              style={[styles.regularText, styles.documentCredentialName]}
+              scaleStyle={styles.documentCredentialName}
+              style={styles.regularText}
             >
               {credentialName}
-            </Text>
-            <View style={{ paddingBottom: 8 }} />
-            <Text
+            </ScaledText>
+            <ScaledView scaleStyle={{ paddingBottom: 8 }} />
+            <ScaledText
               numberOfLines={2}
               // @ts-expect-error
               onTextLayout={(e: TextLayoutEvent) => handleHolderNameLayout(e)}
-              style={[styles.mediumText, styles.documentHolderName]}
+              scaleStyle={styles.documentHolderName}
+              style={styles.mediumText}
             >
               {holderName}
-            </Text>
+            </ScaledText>
             {/* TODO: this doesn't include logic when padding is bigger */}
-            <View style={{ paddingBottom: 4 }} />
+            <ScaledView scaleStyle={{ paddingBottom: 4 }} />
             <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
               {fields.map((f, idx) => (
                 <View style={{ flexDirection: 'row' }}>
                   <View style={{ width: photo ? '64.9%' : '100%' }}>
-                    {idx !== 0 && <View style={{ paddingBottom: 4 }} />}
-                    <Text
+                    {idx !== 0 && (
+                      <ScaledView scaleStyle={{ paddingBottom: 4 }} />
+                    )}
+                    <ScaledText
                       numberOfLines={1}
-                      style={[styles.regularText, styles.fieldLabelDocument]}
+                      scaleStyle={styles.fieldLabelDocument}
+                      style={styles.regularText}
                     >
                       {f.label}:
-                    </Text>
-                    <View style={{ paddingBottom: 6 }} />
-                    <Text
+                    </ScaledText>
+                    <ScaledView scaleStyle={{ paddingBottom: 6 }} />
+                    <ScaledText
                       numberOfLines={handleNumberOfValueLinesToDisplay(idx)}
                       //@ts-expect-error
                       onTextLayout={(e: TextLayoutEvent) =>
                         handleFieldValueLayout(e, idx)
                       }
-                      style={[styles.regularText, styles.fieldValue]}
+                      scaleStyle={styles.fieldValue}
+                      style={styles.regularText}
                     >
                       {f.value}
-                    </Text>
+                    </ScaledText>
                   </View>
                 </View>
               ))}
             </FieldsCalculator>
-          </View>
+          </ScaledView>
         </InteractionCardDoc>
         {photo && (
-          <View style={styles.documentPhotoContainer}>
-            <Image style={styles.documentPhoto} source={{ uri: photo }} />
-          </View>
+          <ScaledView
+            scaleStyle={styles.documentPhotoContainer}
+            style={{ zIndex: 10 }}
+          >
+            <Image
+              style={styles.documentPhoto}
+              source={{ uri: photo }}
+              resizeMode="cover"
+            />
+          </ScaledView>
         )}
         {displayedHighlight && (
-          <View style={styles.documentHighlightContainer}>
-            <Text style={[styles.regularText, styles.documentHighlight]}>
+          <ScaledView
+            style={{ zIndex: 9 }}
+            scaleStyle={styles.documentHighlightContainer}
+          >
+            <ScaledText
+              scaleStyle={styles.documentHighlight}
+              style={styles.regularText}
+            >
               {displayedHighlight.toUpperCase()}
-            </Text>
-          </View>
+            </ScaledText>
+          </ScaledView>
         )}
-      </View>
+      </ScaledCard>
     )
   }
 
@@ -290,14 +305,16 @@ const styles = StyleSheet.create({
   },
   documentPhotoContainer: {
     position: 'absolute',
-    zIndex: 10,
+    overflow: 'hidden',
     bottom: 18,
     right: 17,
-  },
-  documentPhoto: {
+    borderRadius: 105 / 2,
     width: 105,
     height: 105,
-    borderRadius: 105 / 2,
+  },
+  documentPhoto: {
+    width: '100%',
+    height: '100%',
   },
   documentHighlightContainer: {
     position: 'absolute',
