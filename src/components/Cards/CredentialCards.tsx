@@ -8,7 +8,7 @@ import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
 import { TextLayoutEvent } from '~/types/props'
-import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
+import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
 /**
  * logic to define if credential text should be scaled

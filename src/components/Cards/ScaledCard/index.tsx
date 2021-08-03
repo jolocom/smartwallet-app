@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
-import { getCardDimensions } from '../Cards/getCardDimenstions'
+import { getCardDimensions } from '../getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
 import {
   IScaledCardContext,
