@@ -1,12 +1,18 @@
 import React, { useMemo } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-
 import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { getCredentialUIType } from '~/hooks/signedCredentials/utils'
 import { useCredentialNameScale, useTrimFields } from '../hooks'
+import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
+import {
+  ORIGINAL_DOCUMENT_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_CARD_WIDTH,
+  ORIGINAL_DOCUMENT_SCREEN_WIDTH,
+} from './consts'
+import { debugView } from '~/utils/dev'
 
 type OtherCardProps = {
   credentialType: string
@@ -37,35 +43,44 @@ const OtherCard: React.FC<OtherCardProps> = ({
   const { displayedFields, onTextLayoutChange } = useTrimFields(fields, logo)
 
   return (
-    <View style={{ position: 'relative' }}>
+    <ScaledCard
+      originalHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
+      originalWidth={ORIGINAL_DOCUMENT_CARD_WIDTH}
+      originalScreenWidth={ORIGINAL_DOCUMENT_SCREEN_WIDTH}
+      style={{ position: 'relative' }}
+      testID="otherCard"
+    >
       <OtherCardMedium>
-        <View style={styles.otherBodyContainer}>
+        <ScaledView scaleStyle={styles.otherBodyContainer}>
           <View style={{ flex: 0.29 }}>
-            <Text
+            <ScaledText
               numberOfLines={1}
+              scaleStyle={styles.otherCredentialType}
               style={[
                 styles.regularText,
-                styles.otherCredentialType,
                 {
                   width: logo ? '70%' : '100%',
                 },
               ]}
             >
               {displayCredentialType}
-            </Text>
-
-            <View style={{ paddingBottom: 13 }} />
-            <Text
+            </ScaledText>
+            <ScaledView scaleStyle={{ paddingBottom: 13 }} />
+            <ScaledText
               // @ts-expect-error
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={isCredentialNameScaled ? 2 : undefined}
-              style={[
-                styles.regularText,
+              scaleStyle={[
                 isCredentialNameScaled
                   ? styles.otherCredentialNameScaled
                   : styles.otherCredentialName,
                 {
                   letterSpacing: 0.15,
+                },
+              ]}
+              style={[
+                styles.regularText,
+                {
                   color: Colors.black80,
                   flexWrap: 'wrap',
                   width: logo && !isCredentialNameScaled ? '70%' : '100%',
@@ -73,72 +88,64 @@ const OtherCard: React.FC<OtherCardProps> = ({
               ]}
             >
               {credentialName}
-            </Text>
+            </ScaledText>
           </View>
-          <View style={{ flex: 0.71, paddingHorizontal: 10 }}>
+          <ScaledView
+            scaleStyle={{ paddingHorizontal: 10 }}
+            style={{ flex: 0.71 }}
+          >
             {displayedFields.map((f) => (
               <>
-                <View style={{ paddingBottom: 20 }} />
+                <ScaledView scaleStyle={{ paddingBottom: 20 }} />
                 {/* TODO: share the same with document card */}
-                <Text
+                <ScaledText
                   numberOfLines={1}
                   // @ts-expect-error
                   onTextLayout={onTextLayoutChange}
-                  style={[styles.regularText, styles.fieldLabel]}
+                  scaleStyle={styles.fieldLabel}
+                  style={styles.regularText}
                 >
                   {f.label}:
-                </Text>
-                <View style={{ paddingBottom: 7 }} />
-                <Text
+                </ScaledText>
+                <ScaledView scaleStyle={{ paddingBottom: 7 }} />
+                <ScaledText
                   numberOfLines={2}
                   // @ts-expect-error
                   onTextLayout={onTextLayoutChange}
-                  style={[styles.mediumText, styles.fieldText]}
+                  scaleStyle={styles.fieldText}
+                  style={styles.mediumText}
                 >
                   {f.value}
-                </Text>
+                </ScaledText>
               </>
             ))}
-          </View>
-        </View>
+          </ScaledView>
+        </ScaledView>
       </OtherCardMedium>
       {logo && (
-        <View
-          style={[
-            {
-              position: 'absolute',
-            },
+        <ScaledView
+          scaleStyle={
             isCredentialNameScaled
               ? styles.otherLogoContainerScaled
-              : styles.otherLogoContainer,
-          ]}
+              : styles.otherLogoContainer
+          }
+          style={styles.logoContainerDefault}
         >
-          <Image
-            source={{ uri: logo }}
-            style={[
-              isCredentialNameScaled
-                ? styles.otherLogoScaled
-                : styles.otherLogo,
-            ]}
-          />
-        </View>
+          <Image source={{ uri: logo }} style={styles.image} />
+        </ScaledView>
       )}
       {/* Dots - more action */}
-      <TouchableOpacity
-        onPress={onHandleMore}
-        style={[
-          styles.dotsContainer,
-          {
-            bottom: 20,
-            right: 24,
-          },
-        ]}
+      <ScaledView
+        style={styles.dotsContainer}
+        scaleStyle={styles.dotsContainerScaled}
       >
-        {[...Array(3).keys()].map((c) => (
-          <View key={c} style={styles.dot} />
-        ))}
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={onHandleMore} style={styles.dotsBtn}>
+          {[...Array(3).keys()].map((c) => (
+            <ScaledView key={c} scaleStyle={styles.dot} />
+          ))}
+        </TouchableOpacity>
+      </ScaledView>
+    </ScaledCard>
   )
 }
 
@@ -163,25 +170,28 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 24,
   },
+  logoContainerDefault: {
+    overflow: 'hidden',
+    position: 'absolute',
+    zIndex: 10,
+    borderRadius: 40,
+  },
   otherLogoContainer: {
     top: 16,
     right: 16,
+    width: 78,
+    height: 78,
   },
   otherLogoContainerScaled: {
     top: 14,
     right: 19,
-  },
-  otherLogo: {
-    width: 78,
-    height: 78,
-    borderRadius: 78 / 2,
-  },
-  otherLogoScaled: {
     width: 37,
     height: 37,
-    borderRadius: 37 / 2,
   },
-
+  image: {
+    width: '100%',
+    height: '100%',
+  },
   regularText: {
     fontFamily: Fonts.Regular,
     color: Colors.black,
@@ -200,16 +210,20 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     letterSpacing: 0.14,
   },
+  dotsContainerScaled: {
+    paddingHorizontal: 3,
+    bottom: 20,
+    right: 24,
+  },
   dotsContainer: {
     position: 'absolute',
-    paddingHorizontal: 3,
-    paddingVertical: 10,
     zIndex: 100,
   },
   dotsBtn: {
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    paddingVertical: 10,
   },
   dot: {
     width: 4,

@@ -7,6 +7,11 @@ import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
 import { useCredentialNameScale, useTrimFields } from '../hooks'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import {
+  ORIGINAL_DOCUMENT_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_CARD_WIDTH,
+  ORIGINAL_DOCUMENT_SCREEN_WIDTH,
+} from './consts'
 
 type DocumentCardProps = {
   credentialName: string
@@ -49,11 +54,11 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
   return (
     <ScaledCard
-      originalHeight={398}
-      originalWidth={320}
-      originalScreenWidth={375}
+      originalHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
+      originalWidth={ORIGINAL_DOCUMENT_CARD_WIDTH}
+      originalScreenWidth={ORIGINAL_DOCUMENT_SCREEN_WIDTH}
       style={{ position: 'relative' }}
-      testID="otherCard"
+      testID="documentCard"
     >
       <DocumentCardMedium>
         <ScaledView scaleStyle={styles.bodyContainer}>
@@ -241,7 +246,6 @@ const styles = StyleSheet.create({
   },
   dotsContainerScaled: {
     paddingHorizontal: 3,
-    paddingVertical: 10,
     top: 18,
     right: 17,
   },
@@ -253,6 +257,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    paddingVertical: 10,
   },
   dot: {
     width: 4,
