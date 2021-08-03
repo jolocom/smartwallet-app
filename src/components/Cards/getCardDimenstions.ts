@@ -20,7 +20,7 @@ export type CardDimensions = {
   scaleBy: number
 }
 
-function isScreenWidthDefining(
+function isOriginalScreenWidthDefining(
   definingOption: DefiningOption,
 ): definingOption is DefiningOptionScreenWidth {
   return (
@@ -29,7 +29,7 @@ function isScreenWidthDefining(
   )
 }
 
-function isAvailableWidthDefining(
+function isContainerWidthDefining(
   definingOption: DefiningOption,
 ): definingOption is DefiningOptionAvailabeWidth {
   return (
@@ -56,19 +56,19 @@ export const getCardDimensions = (
 
   let scaleBy: number, cardWidth: number, cardHeight: number
 
-  if (isScreenWidthDefining(definingOption)) {
+  if (isOriginalScreenWidthDefining(definingOption)) {
     scaleBy =
       Dimensions.get('screen').width / definingOption.originalScreenWidth
-    if (scaleBy < 1) {
+    if (scaleBy <= 1) {
       cardWidth = originalCardWidth * scaleBy
     }
-  } else if (isAvailableWidthDefining(definingOption)) {
+  } else if (isContainerWidthDefining(definingOption)) {
     if (!definingOption.containerWidth) {
       scaleBy = 1
       cardWidth = originalCardWidth
     } else {
       scaleBy = definingOption.containerWidth / originalCardWidth
-      if (scaleBy < 1) {
+      if (scaleBy <= 1) {
         cardWidth = definingOption.containerWidth
       }
     }
