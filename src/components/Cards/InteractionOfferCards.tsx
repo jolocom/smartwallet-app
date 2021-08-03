@@ -7,20 +7,28 @@ import { sharedStyles } from './sharedStyle'
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 
-type InteractionOfferDocumentCardProps = {
+type InteractionOfferCardProps = {
   credentialName: string
   fields: Array<Required<Pick<DisplayVal, 'label'>>>
 }
+type CardType = {
+  cardType: 'document' | 'other'
+}
 
-/**
- * TODO:
- * - View with padding-bottom transform to Space component
- */
-export const InteractionOfferDocumentCard: React.FC<InteractionOfferDocumentCardProps> =
-  ({ credentialName, fields }) => (
-    <InteractionCardDoc>
+const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
+  cardType,
+  credentialName,
+  fields,
+}) => {
+  const Card =
+    cardType === 'document' ? InteractionCardDoc : InteractionCardOther
+  return (
+    <Card>
       <View style={styles.documentBodyContainer}>
-        <Text style={[sharedStyles.regularText, styles.credentialName]}>
+        <Text
+          numberOfLines={1}
+          style={[sharedStyles.regularText, styles.credentialName]}
+        >
           {credentialName}
         </Text>
         <View style={{ paddingBottom: 16 }} />
@@ -49,53 +57,15 @@ export const InteractionOfferDocumentCard: React.FC<InteractionOfferDocumentCard
           </Text>
         )}
       </View>
-    </InteractionCardDoc>
+    </Card>
   )
-
-type InteractionOfferOtherCardProps = {
-  credentialName: string
-  fields: Array<Required<Pick<DisplayVal, 'label'>>>
 }
 
-// TODO: ask Liz to make available paddings for other card
-// label size is different in other and document is it intentional ?
-
-// TODO: this is very similar to document card - abstract
-export const InteractionOfferOtherCard: React.FC<InteractionOfferOtherCardProps> =
-  ({ credentialName, fields }) => (
-    <InteractionCardOther>
-      <View style={styles.otherBodyContainer}>
-        <Text style={[sharedStyles.regularText, styles.credentialName]}>
-          {credentialName}
-        </Text>
-        <View style={{ paddingBottom: 16 }} />
-        <Text style={[sharedStyles.regularText, styles.fieldSectionTitle]}>
-          {strings.INCLUDED_INFO}:
-        </Text>
-        <View style={{ paddingBottom: 11 }} />
-        {fields.length ? (
-          fields.slice(0, 3).map((f, idx) => (
-            <>
-              {idx !== 0 && <View style={{ paddingBottom: 4 }} />}
-              <Text
-                style={[sharedStyles.regularText, sharedStyles.fieldLabelSmall]}
-              >
-                {f.label}
-              </Text>
-              <View style={{ paddingBottom: 0.5 }} />
-              <View style={styles.documentValuePlaceholder} />
-            </>
-          ))
-        ) : (
-          <Text
-            style={[sharedStyles.regularText, sharedStyles.fieldLabelSmall]}
-          >
-            {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
-          </Text>
-        )}
-      </View>
-    </InteractionCardOther>
-  )
+export const InteractionOfferDocumentCard: React.FC<InteractionOfferCardProps> =
+  (props) => <OfferCard {...props} cardType="document" />
+export const InteractionOfferOtherCard: React.FC<InteractionOfferCardProps> = (
+  props,
+) => <OfferCard {...props} cardType="other" />
 
 const styles = StyleSheet.create({
   fieldSectionTitle: {
