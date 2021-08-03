@@ -30,10 +30,7 @@ import JoloText from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
-import {
-  CredentialDocumentCard,
-  CredentialOtherCard,
-} from '~/components/Cards/CredentialCards'
+import { DocumentCard, OtherCard } from '~/components/Cards/DocumentCards'
 import { useDeleteCredential } from '~/hooks/credentials'
 import { useToasts } from '~/hooks/toasts'
 import { useRedirectTo } from '~/hooks/navigation'
@@ -200,7 +197,7 @@ const DocumentList = () => {
                     customStyles={{ marginLeft: -4 }}
                     data={credentials}
                     renderItem={({ item: c }) => (
-                      <CredentialDocumentCard
+                      <DocumentCard
                         credentialName={c.name || strings.UNKNOWN}
                         holderName={c.holderName || strings.ANONYMOUS}
                         fields={getOptionalFields(c)}
@@ -267,7 +264,7 @@ const DocumentList = () => {
                   <AdoptedCarousel
                     data={credentials}
                     renderItem={({ item: c }) => (
-                      <CredentialOtherCard
+                      <OtherCard
                         credentialName={c.name || strings.UNKNOWN}
                         credentialType={c.type}
                         fields={getOptionalFields(c)}
