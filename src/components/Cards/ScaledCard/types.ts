@@ -26,10 +26,8 @@ export type IScaledCardProps = {
 } & (IScaleToFitProp | IOriginalScreenWidthProp) &
   ViewProps
 
-export interface IScaledViewProps extends ViewProps {
-  scaleStyle: StyleProp<ViewStyle>
-}
+export type TSupportedComponentProps = ViewProps | TextProps
 
-export interface IScaledTextProps extends TextProps {
-  scaleStyle: StyleProp<TextStyle>
-}
+export type IScaledComponentProps<T extends TSupportedComponentProps> = {
+  scaleStyle: StyleProp<T['style']>
+} & T

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
   LayoutChangeEvent,
   LayoutRectangle,
-  StyleProp,
   StyleSheet,
   Text,
   TextStyle,
@@ -11,11 +10,13 @@ import {
 } from 'react-native'
 import { getCardDimensions } from '../getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
-import { IScaledCardProps, IScaledTextProps, IScaledViewProps } from './types'
+import {
+  IScaledCardProps,
+  IScaledComponentProps,
+  TSupportedComponentProps,
+} from './types'
 
-const scaleStyleObject = <
-  T extends StyleProp<ViewStyle> | StyleProp<TextStyle>,
->(
+const scaleStyleObject = <T extends TSupportedComponentProps['style']>(
   style: T,
   scaleBy: number,
 ) => {
@@ -79,35 +80,29 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   )
 }
 
-export const ScaledView: React.FC<IScaledViewProps> = ({
-  scaleStyle,
-  style,
-  children,
-  ...props
-}) => {
-  const { scaleBy } = useScaledCard()
-  const scaledStyles = scaleStyleObject(scaleStyle, scaleBy)
+/*
+ * The HOC is used to inject the newly scaled styles into components that accept
+ * the `style` prop.
+ */
 
-  return (
-    <View {...props} style={[style, scaledStyles]}>
-      {children}
-    </View>
-  )
-}
+const withScaledComponent =
+  <T extends TSupportedComponentProps>(
+    Component: React.ElementType<T>,
+  ): React.FC<IScaledComponentProps<T>> =>
+  ({ scaleStyle, style, children, ...props }) => {
+    const { scaleBy } = useScaledCard()
+    const scaledStyles = scaleStyleObject(scaleStyle as T['style'], scaleBy)
 
-export const ScaledText: React.FC<IScaledTextProps> = ({
-  scaleStyle,
-  style,
-  children,
-  ...props
-}) => {
-  const { scaleBy } = useScaledCard()
-  const scaledStyles = scaleStyleObject(scaleStyle, scaleBy)
+    return (
+      // @ts-expect-error Typing the @Component as React.Element<any> removes the error,
+      // but loses the type inheritance of T
+      <Component style={[style, scaledStyles]} {...props}>
+        {children}
+      </Component>
+    )
+  }
 
-  return (
-    <Text {...props} style={[style, scaledStyles]}>
-      {children}
-    </Text>
-  )
-}
+export const ScaledView = withScaledComponent(View)
+export const ScaledText = withScaledComponent(Text)
+
 export default ScaledCard
