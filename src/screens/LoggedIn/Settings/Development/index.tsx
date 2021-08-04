@@ -17,9 +17,7 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
-  const redirectToInteractionCards = useRedirectTo(
-    ScreenNames.InteractionCardsTest,
-  )
+
   const redirect = useRedirect()
   const { showPopup } = usePopupMenu()
 
@@ -69,9 +67,9 @@ const DevelopmentSection = () => {
           <Option
             onPress={() =>
               showPopup([
-                { title: 'Help', onPress: () => {} },
-                { title: 'Me', onPress: () => {} },
-                { title: 'Please', onPress: () => {} },
+                { title: 'Help', onPress: console.log },
+                { title: 'Me', onPress: console.log },
+                { title: 'Please', onPress: console.log },
               ])
             }
           >
@@ -85,9 +83,6 @@ const DevelopmentSection = () => {
           </Option>
           <Option onPress={redirectToPasscode}>
             <Option.Title title="Passcode" />
-          </Option>
-          <Option onPress={redirectToInteractionCards}>
-            <Option.Title title="Interaction Cards" />
           </Option>
           <Option onPress={() => redirect(ScreenNames.CollapsibleTest)}>
             <Option.Title title="Collapsible" />

@@ -25,7 +25,6 @@ import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
 import CredentialDetails from './Documents/CredentialDetails'
-import InteractionTest from './Settings/Development/InteractionCardsTest'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import {
@@ -86,7 +85,6 @@ export type MainStackParamList = {
   [ScreenNames.NotificationsTest]: undefined
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
-  [ScreenNames.InteractionCardsTest]: undefined
   [ScreenNames.PinRecoveryInstructions]: undefined
   [ScreenNames.PasscodeRecovery]: {
     isAccessRestore: boolean
@@ -203,11 +201,6 @@ const Main: React.FC = () => {
               <MainStack.Screen
                 name={ScreenNames.PasscodeTest}
                 component={PasscodeTest}
-                options={screenTransitionSlideFromRight}
-              />
-              <MainStack.Screen
-                name={ScreenNames.InteractionCardsTest}
-                component={InteractionTest}
                 options={screenTransitionSlideFromRight}
               />
             </>

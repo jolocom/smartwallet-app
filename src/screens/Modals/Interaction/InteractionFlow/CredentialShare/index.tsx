@@ -23,9 +23,6 @@ import {
   AttributeTypes,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
-// TODO: remove once completely not used anywhere
-import { IncomingRequestDoc } from '../components/card/request/document'
-import { IncomingRequestOther } from '../components/card/request/other'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
