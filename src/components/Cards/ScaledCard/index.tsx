@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
-import {
-  LayoutChangeEvent,
-  LayoutRectangle,
-  StyleSheet,
-  Text,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native'
+import { StyleSheet, TextStyle, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-native'
 import { getCardDimensions } from '../getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
 import {
@@ -16,7 +9,10 @@ import {
   TSupportedComponentProps,
 } from './types'
 
-const scaleStyleObject = <T extends TSupportedComponentProps['style']>(
+/**
+ * @internal
+ */
+export const scaleStyleObject = <T extends TSupportedComponentProps['style']>(
   style: T,
   scaleBy: number,
 ) => {
@@ -36,7 +32,7 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   originalWidth,
   scaleToFit = false,
   originalScreenWidth,
-  style: viewStyle,
+  style: viewStyle = {},
   children,
   ...viewProps
 }) => {
@@ -89,14 +85,17 @@ const withScaledComponent =
   <T extends TSupportedComponentProps>(
     Component: React.ElementType<T>,
   ): React.FC<IScaledComponentProps<T>> =>
-  ({ scaleStyle, style, children, ...props }) => {
+  ({ scaleStyle, style = {}, children, ...props }) => {
     const { scaleBy } = useScaledCard()
     const scaledStyles = scaleStyleObject(scaleStyle as T['style'], scaleBy)
-
     return (
       // @ts-expect-error Typing the @Component as React.Element<any> removes the error,
       // but loses the type inheritance of T
-      <Component style={[style, scaledStyles]} {...props}>
+      <Component
+        style={[style, scaledStyles]}
+        {...props}
+        testID={`scaled-${Component.displayName}`}
+      >
         {children}
       </Component>
     )

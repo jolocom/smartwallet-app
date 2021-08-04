@@ -1,10 +1,4 @@
-import {
-  TextProps,
-  TextStyle,
-  ViewProps,
-  ViewStyle,
-  StyleProp,
-} from 'react-native'
+import { TextProps, ViewProps, StyleProp } from 'react-native'
 
 export interface IScaledCardContext {
   scaleBy: number
