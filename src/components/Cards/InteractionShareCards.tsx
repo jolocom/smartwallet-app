@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, View, Image } from 'react-native'
+import { View, Image } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
@@ -30,18 +30,18 @@ const useCalculateFieldLines = () => {
   }
 }
 
-type FieldsCalculatorProps<C> = (
-  child: C,
+type FieldsCalculatorProps = (
+  child: React.ReactNode,
   idx: number,
-) => Array<Exclude<C, boolean | null | undefined>>
+) => React.ReactNode
 
-const FieldsCalculator = <C,>({
-  children,
-  cbFieldsVisibility,
-}: {
-  children: C | C[]
-  cbFieldsVisibility: FieldsCalculatorProps<C>
-}) => React.Children.map(children, cbFieldsVisibility)
+const FieldsCalculator: React.FC<{
+  cbFieldsVisibility: FieldsCalculatorProps
+}> = ({ children, cbFieldsVisibility }) =>
+  React.Children.map(children, cbFieldsVisibility) as React.ReactElement<
+    unknown,
+    string
+  > | null
 
 type InteractionShareDocumentCardProps = {
   credentialName: string
