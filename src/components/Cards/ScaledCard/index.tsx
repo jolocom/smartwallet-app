@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { StyleSheet, TextStyle, ViewStyle } from 'react-native'
 import { LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-native'
 import { getCardDimensions } from '../getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
@@ -8,24 +7,7 @@ import {
   IScaledComponentProps,
   TSupportedComponentProps,
 } from './types'
-
-/**
- * @internal
- */
-export const scaleStyleObject = <T extends TSupportedComponentProps['style']>(
-  style: T,
-  scaleBy: number,
-) => {
-  style = StyleSheet.flatten(style) as T
-
-  return Object.entries(style ?? {}).reduce<ViewStyle | TextStyle>(
-    (acc, [key, value]) => ({
-      ...acc,
-      [key]: Number.isInteger(value) ? value * scaleBy : value,
-    }),
-    {},
-  )
-}
+import { handleContainerLayout, scaleStyleObject } from './utils'
 
 const ScaledCard: React.FC<IScaledCardProps> = ({
   originalHeight,
@@ -52,9 +34,10 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   )
 
   const handleLayout = (e: LayoutChangeEvent) => {
+    const { width, height } = handleContainerLayout(e)
     setContainerDimensions({
-      height: e.nativeEvent.layout.height,
-      width: e.nativeEvent.layout.width,
+      height,
+      width,
     })
   }
 
@@ -69,6 +52,7 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
             : { width: scaledWidth, height: scaledHeight },
         ]}
         onLayout={handleLayout}
+        testID="scaled-container"
       >
         {children}
       </View>
