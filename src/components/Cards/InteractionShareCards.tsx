@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
-import { View, Image } from 'react-native'
+import React, { useState, useMemo } from 'react'
+import { View, Image, StyleSheet } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
-import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
-import { StyleSheet } from 'react-native'
+import { sharedStyles } from './sharedStyle'
 import { TextLayoutEvent } from '~/types/props'
-import { useMemo } from 'react'
 import { getTrimmedHighlight } from './utils'
 import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
@@ -70,7 +68,10 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
 
     const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
 
-    const handleFieldValuesVisibility = (child, idx) => {
+    const handleFieldValuesVisibility = (
+      child: React.ReactNode,
+      idx: number,
+    ) => {
       if (idx + 1 > MAX_FIELD_DOC) {
         /* 1. Do not display anything that is more than max */
         return null
@@ -97,7 +98,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             <ScaledText
               numberOfLines={1}
               scaleStyle={styles.documentCredentialName}
-              style={styles.regularText}
+              style={sharedStyles.regularText}
             >
               {credentialName}
             </ScaledText>
@@ -107,7 +108,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
               // @ts-expect-error
               onTextLayout={(e: TextLayoutEvent) => handleHolderNameLayout(e)}
               scaleStyle={styles.documentHolderName}
-              style={styles.mediumText}
+              style={sharedStyles.mediumText}
             >
               {holderName}
             </ScaledText>
@@ -122,8 +123,8 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                     )}
                     <ScaledText
                       numberOfLines={1}
-                      scaleStyle={styles.fieldLabelDocument}
-                      style={styles.regularText}
+                      scaleStyle={sharedStyles.fieldLabel}
+                      style={sharedStyles.regularText}
                     >
                       {f.label}:
                     </ScaledText>
@@ -135,7 +136,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                         handleFieldValueLayout(e, idx)
                       }
                       scaleStyle={styles.fieldValue}
-                      style={styles.regularText}
+                      style={sharedStyles.regularText}
                     >
                       {f.value}
                     </ScaledText>
@@ -164,7 +165,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
           >
             <ScaledText
               scaleStyle={styles.documentHighlight}
-              style={styles.regularText}
+              style={sharedStyles.regularText}
             >
               {displayedHighlight.toUpperCase()}
             </ScaledText>
@@ -213,7 +214,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
             <ScaledText
               numberOfLines={2}
               scaleStyle={styles.otherCredentialName}
-              style={styles.regularText}
+              style={sharedStyles.regularText}
             >
               {credentialName}
             </ScaledText>
@@ -226,8 +227,8 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                   )}
 
                   <ScaledText
-                    scaleStyle={styles.fieldLabelOther}
-                    style={styles.regularText}
+                    scaleStyle={sharedStyles.fieldLabel}
+                    style={sharedStyles.regularText}
                   >
                     {f.label}:
                   </ScaledText>
@@ -240,7 +241,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                       handleFieldValueLayout(e, idx)
                     }
                     scaleStyle={styles.fieldValue}
-                    style={styles.regularText}
+                    style={sharedStyles.regularText}
                   >
                     {f.value}
                   </ScaledText>
@@ -284,26 +285,6 @@ const styles = StyleSheet.create({
     color: Colors.black80,
     fontSize: 22,
     lineHeight: 24,
-  },
-  // TODO: the same as credentials
-  regularText: {
-    fontFamily: Fonts.Regular,
-    color: Colors.black,
-  },
-  // TODO: the same as credentials
-  mediumText: {
-    fontFamily: Fonts.Medium,
-    color: Colors.black,
-  },
-  fieldLabelDocument: {
-    fontSize: 14,
-    color: Colors.slateGray,
-  },
-  // TODO: the same as credentials
-  fieldLabelOther: {
-    fontSize: 16,
-    lineHeight: 16,
-    color: Colors.slateGray,
   },
   fieldValue: {
     fontSize: 18,

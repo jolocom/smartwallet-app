@@ -13,8 +13,6 @@ import {
   OfferedCredentialDisplay,
   CredentialCategories,
 } from '~/types/credentials'
-import IncomingOfferDoc from '../components/card/offer/document'
-import IncomingOfferOther from '../components/card/offer/other'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -30,6 +28,10 @@ import {
 import Collapsible from '~/components/Collapsible'
 import Space from '~/components/Space'
 import useTranslation from '~/hooks/useTranslation'
+import {
+  InteractionOfferDocumentCard,
+  InteractionOfferOtherCard,
+} from '~/components/Cards/InteractionOfferCards'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -48,18 +50,22 @@ const CredentialOfferBAS = () => {
       {offeredCredentials.map((d) => {
         if (d.category === CredentialCategories.document) {
           return (
-            <IncomingOfferDoc
+            <InteractionOfferDocumentCard
               key={d.name}
-              name={d.name || t(strings.UNKNOWN)}
-              properties={d.properties}
+              credentialName={d.name || t(strings.UNKNOWN)}
+              fields={d.properties.map((p) => ({
+                label: p.label || strings.NOT_SPECIFIED,
+              }))}
             />
           )
         }
         return (
-          <IncomingOfferOther
+          <InteractionOfferOtherCard
             key={d.name}
-            name={d.name || t(strings.UNKNOWN)}
-            properties={d.properties}
+            credentialName={d.name || t(strings.UNKNOWN)}
+            fields={d.properties.map((p) => ({
+              label: p.label || strings.NOT_SPECIFIED,
+            }))}
           />
         )
       })}
@@ -94,16 +100,20 @@ const CredentialOfferFAS = () => {
           }}
         >
           {category === CredentialCategories.document ? (
-            <IncomingOfferDoc
+            <InteractionOfferDocumentCard
               key={name + type}
-              name={name || t(strings.UNKNOWN)}
-              properties={properties}
+              credentialName={name || t(strings.UNKNOWN)}
+              fields={properties.map((p) => ({
+                label: p.label || strings.NOT_SPECIFIED,
+              }))}
             />
           ) : (
-            <IncomingOfferOther
+            <InteractionOfferOtherCard
               key={name + type}
-              name={name || t(strings.UNKNOWN)}
-              properties={properties}
+              credentialName={name || t(strings.UNKNOWN)}
+              fields={properties.map((p) => ({
+                label: p.label || strings.NOT_SPECIFIED,
+              }))}
             />
           )}
         </View>
