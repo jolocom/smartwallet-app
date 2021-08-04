@@ -11,9 +11,9 @@
     },
     "TermsConsent": {
         "header": "SmartWallet Vorstellung der AGBs und Datenschutz",
-        "subheader": "",
-        "footer": "",
-        "footerBtn": ""
+        "subheader": "Nachfolgend findest du die deutsche und englische Version der Dokumente. Bitte beachte, dass die deutsche Version rechtsgültig ist",
+        "footer": "Ich habe die Nutzungsbedingungen und Datenschutzrichtlinien verstanden und akzeptiere sie",
+        "footerBtn": "Neue Bedingungen annehmen"
     },
     "Recovery": {
         "header": "Wiederherstellung",
@@ -27,7 +27,7 @@
     "Loader": {
         "successDefault": "Volltreffer!",
         "failedDefault": "Fehlgeschlagen",
-        "loading": ""
+        "loading": "Ladevorgang"
     },
     "OnboardingBackup": {
         "header": "Backup hochladen?",
@@ -40,7 +40,7 @@
         "textPartTwo": "Um deine gesamte Wallet wiederherzustellen, brauchst du die geheime Phrase als auch eine Backup-Datei.",
         "textPartThree": "Hast du wirklich keine Kopie irgendwo sicher aufbewahrt?",
         "textPartFour": "Erinnere dich an den Moment, als du deine Identität geschaffen hast",
-        "closeBtn": ""
+        "closeBtn": "Weiter"
     },
     "Entropy": {
         "header": "Mach es einzigartig",
@@ -130,12 +130,12 @@
     },
     "PasscodeRecoveryInstructions": {
         "header": "So änderst du deinen Passcode",
-        "subheader1": "",
-        "subheader2": "",
-        "imageCaption": "",
-        "submitBtn": "",
-        "footer": "",
-        "cancelBtn": ""
+        "subheader1": "Wir bedauern es sehr, dass du dein Passwort vergessen hast und keinen Zugriff auf deine Wallet hast – aber keine Sorge, es gibt eine Lösung!",
+        "subheader2": "Durch Eingabe deiner geheimen Phrase kannst du deinen Passcode ändern. Klicke unten auf Zugang wiederherstellen, um die Änderung vorzunehmen",
+        "imageCaption": "Wiederhole deine Phrase Wort für Wort",
+        "submitBtn": "Zugang wiederherstellen",
+        "footer": "Wenn du einen neuen Passcode einstellst, hat das keinen Einfluss auf deine gespeicherten Daten",
+        "cancelBtn": "Abbrechen"
     },
     "Lock": {
         "header": "Gib deinen Passcode ein",
@@ -170,30 +170,30 @@
         "cardInfoHeader": "Enthaltene Info:",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren",
-        "cardNoPreview": ""
+        "cardNoPreview": "Keine Informationen können in der Vorschau angezeigt werden"
     },
     "Toasts": {
         "reportBtn": "Bericht",
-        "noInternetTitle": "",
-        "noInternetMsg": "",
-        "errorWarningTitle": "",
-        "errorWarningMsg": "",
-        "successfulInteractionTitle": "",
-        "successfulInternetMsg": "",
-        "successfulOfferInteractionBtn": "",
-        "offerDuplicateTitle": "",
-        "offerDuplicateSingleMsg": "",
-        "offerDuplicateMultipleMsg": "",
-        "offerInvalidDocsTitle": "",
-        "offerInvalidDocsMsg": "",
-        "offerRenegotiationTitle": "",
-        "offerRenegotiationMsg": "",
-        "shareMissingDocsTitle": "",
-        "shareMissingDocsMsg": "",
-        "failedStoreMsg": "",
-        "reconnectedInternetTitle": "",
-        "reconnectedInternetMsg": "",
-        "successfulInteractionMsg": ""
+        "noInternetTitle": "Hoppala ... du bist nicht verbunden!",
+        "noInternetMsg": "Zum Fortfahren ist eine Internetverbindung erforderlich.",
+        "errorWarningTitle": "Hoppla ...",
+        "errorWarningMsg": "Damit haben wir auch nicht gerechnet. Bitte hilf uns, indem du uns den Fehler mitteilst, auf den du gestoßen bist – damit hilfst du auch den anderen!",
+        "successfulInteractionTitle": "Super, dass hat geklappt!",
+        "successfulInternetMsg": "Du solltest jetzt alles haben, was du brauchst, um deine Interaktion fortzusetzen",
+        "successfulOfferInteractionBtn": "Überprüfung",
+        "offerDuplicateTitle": "Duplikat gefunden",
+        "offerDuplicateSingleMsg": "Du hast dieses Dokument bereits",
+        "offerDuplicateMultipleMsg": "Du kannst immer noch die anderen Dokumente erhalten",
+        "offerInvalidDocsTitle": "Kann nicht gespeichert werden",
+        "offerInvalidDocsMsg": "Anscheinend gibt es ein Problem mit den Dokumenten, die von ${serviceName} gesendet werden.",
+        "offerRenegotiationTitle": "Aufmerksam sein",
+        "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden",
+        "shareMissingDocsTitle": "Fehlende Dokumente",
+        "shareMissingDocsMsg": "${Servicename} fordert ein Dokument an, das sich nicht in deiner Wallet befindet. \n\nFehlt: ${documentType}",
+        "failedStoreMsg": "Leider konnten wir deinen Passcode nicht speichern. Bitte versuche es erneut",
+        "reconnectedInternetTitle": "Du bist wieder online",
+        "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
+        "successfulInteractionMsg": "Du solltest jetzt alles haben, was du brauchst, um deine Interaktion fortzusetzen"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -211,17 +211,17 @@
         "deleteCardOption": "Löschen",
         "cancelCardOption": "Abbrechen",
         "deleteDocumentHeader": "Möchtest du ${documentName} löschen?",
-        "deleteCredentialInstruction": "",
+        "deleteCredentialInstruction": "Zum Löschen den Kreis loslassen",
         "cancelBtn": "Abbrechen",
         "placeholderHeader": "Hier gibt es nix zu sehen",
         "documentsPlaceholderSubheader": "Du hast noch keine Dokumente gespeichert.\nBesorg dir noch heute eins!",
         "othersPlaceholderHeader": "Gähnende Leere",
         "othersPlaceholderSubheader": "Du hast noch nichts gespeichert",
-        "unspecifiedField": "",
-        "subjectNameField": "",
-        "issuedFieldLabel": "",
-        "issuerFieldLabel": "",
-        "expiresFieldLabel": ""
+        "unspecifiedField": "Keine Angaben",
+        "subjectNameField": "Betreff",
+        "issuedFieldLabel": "Ausgestellt",
+        "issuerFieldLabel": "Herausgeber",
+        "expiresFieldLabel": "Läuft ab"
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -237,13 +237,13 @@
         "today": "Heute",
         "yesterday": "Gestern",
         "lastDay": "Letzten ${day}",
-        "lastMonday": "",
-        "lastTuesday": "",
-        "lastWednesday": "",
-        "lastThursday": "",
-        "lastFriday": "",
-        "lastSaturday": "",
-        "lastSunday": ""
+        "lastMonday": "Letzter Montag\n",
+        "lastTuesday": "Letzter Dienstag",
+        "lastWednesday": "Letzter Mittwoch",
+        "lastThursday": "Letzter Donnerstag",
+        "lastFriday": "Letzter Freitag",
+        "lastSaturday": "Letzter Samstag",
+        "lastSunday": "Letzter Sonntag^"
     },
     "History": {
         "allTab": "Alle",
@@ -264,10 +264,10 @@
         "credShareResponseStepHeader": "Freigegeben",
         "placeholderHeader": "Noch keine Historie vorhanden",
         "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!",
-        "authzHeader": "",
-        "authzRequestStepHeader": "",
-        "authzResponseStepHeader": "",
-        "authzActionPlaceholder": ""
+        "authzHeader": "Autorisierung",
+        "authzRequestStepHeader": "Autorisiert",
+        "authzResponseStepHeader": "Bestätigt",
+        "authzActionPlaceholder": "Autorisieren"
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",
@@ -346,8 +346,8 @@
         "dialogMessage": "Bitte beachte, dass gelöschte Daten in Zukunft nicht wiederhergestellt werden können",
         "submitBtn": "Ich habe verstanden",
         "cancelBtn": "Abbrechen",
-        "loader": "",
-        "dragInstructions": ""
+        "loader": "Daten werden gelöscht",
+        "dragInstructions": "Zum löschen den Punkt ziehen"
     },
     "Errors": {
         "unknownTitle": "Unbekannter Fehler",
@@ -380,30 +380,30 @@
         "contactPlaceholder": "Trag deine E-Mail hier ein ..."
     },
     "General": {
-        "unknown": "",
-        "anonymous": ""
+        "unknown": "Unbekannt",
+        "anonymous": "Anonym"
     },
     "Authentication": {
-        "header": "",
-        "subheader": "",
-        "confirmBtn": ""
+        "header": "Bist du es wirklich?",
+        "subheader": "${serviceName} möchte deine digitale Identität bestätigen, bevor es weiter geht",
+        "confirmBtn": "Erlauben"
     },
     "PrivacyPolicy": {
-        "header": "",
-        "footer": ""
+        "header": "Datenschutz",
+        "footer": "Wenn du Fragen oder Anregungen zu unseren Datenschutzrichtlinien hast, schreib uns einfach."
     },
     "DragToConfirm": {
-        "instruction": ""
+        "instruction": "Punkt loslassen"
     },
     "Test": {
-        "testTerm": ""
+        "testTerm": "whoopsytest"
     },
     "Validations": {
-        "onlyNumbers": "",
-        "tooMany": "",
-        "tooFew": "",
-        "missingValue": "",
-        "wrongEmail": "",
-        "atLeastOneValue": ""
+        "onlyNumbers": "Nur Zahlen sind erlaubt",
+        "tooMany": "Zu viele Zeichen",
+        "tooFew": "Zu wenig Zeichen",
+        "missingValue": "Bitte gib einen Wert an",
+        "wrongEmail": "Es sieht so aus, als ob dies keine gültige E-Mail ist",
+        "atLeastOneValue": "Trage bitte mindestens einen der Werte ein"
     }
 }
