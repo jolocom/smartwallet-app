@@ -9,12 +9,12 @@ import {
 import EventEmitter from 'events'
 import { Table } from 'console-table-printer'
 
-type ChildProcessVariants = 'gradle.properties' | 'prettier' | 'linter'
+type ChildProcessVariants = 'local.properties' | 'prettier' | 'linter'
 type ResultOption = { isFinished: boolean; passed: boolean; cmd: string }
 type Result = Record<ChildProcessVariants, ResultOption>
 
 const result: Result = {
-  ['gradle.properties']: {
+  ['local.properties']: {
     isFinished: false,
     passed: false,
     cmd: '',
@@ -83,17 +83,17 @@ eventEmmiter.on(
   },
 )
 
-const checkStagedGradleProp = (files: string[]) => {
-  const gradlePropertiesFiles = files.filter((p) =>
-    /(gradle\.properties)/.exec(p),
+const checkStagedLocalProp = (files: string[]) => {
+  const localPropertiesFiles = files.filter((p) =>
+    /(local\.properties)/.exec(p),
   )
   eventEmmiter.emit(
     'process-finished',
-    'gradle.properties',
-    !gradlePropertiesFiles.length,
-    !gradlePropertiesFiles.length
+    'local.properties',
+    !localPropertiesFiles.length,
+    !localPropertiesFiles.length
       ? ''
-      : `Remove gradle.properties file from staged area`,
+      : `Remove local.properties file from staged area`,
   )
 }
 
@@ -152,7 +152,7 @@ const lintFiles = (files: string[]) => {
 const main = () => {
   try {
     console.log('\x1b[0;34m%s\x1b[0m', 'Running check for:')
-    console.log('\x1b[0;34m%s\x1b[0m', '\t - staged gradle.propeties')
+    console.log('\x1b[0;34m%s\x1b[0m', '\t - staged local.propeties')
     console.log('\x1b[0;34m%s\x1b[0m', '\t - prettier')
     console.log('\x1b[0;34m%s\x1b[0m', '\t - linter')
     const stagedFiles = listStagedFiles().toString('utf-8')
@@ -163,7 +163,7 @@ const main = () => {
       .split('\n')
       .filter((path) => Boolean(path))
 
-    checkStagedGradleProp(formattedStagedFiles)
+    checkStagedLocalProp(formattedStagedFiles)
     prettifyFiles(formattedStagedFiles)
     lintFiles(formattedStagedFiles)
   } catch (e: unknown) {
