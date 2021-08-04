@@ -74,8 +74,7 @@ module.exports = {
   },
   ignorePatterns: [
     'package.json',
-    'gradle.properties',
-    'yarn.lock',
     'jest.config.js',
+    'app.json',
   ],
 }
