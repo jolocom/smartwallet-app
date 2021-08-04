@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import { View, Image, StyleSheet } from 'react-native'
 
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
@@ -13,15 +12,7 @@ import {
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from './consts'
 import { CardMoreBtn } from './components'
-
-type DocumentCardProps = {
-  credentialName: string
-  holderName: string
-  fields: Array<Required<DisplayVal>>
-  highlight?: string
-  photo?: string
-  onHandleMore: (id: string) => void // id is required here, to be able to delete a credential
-}
+import { DocumentCardProps } from './types'
 
 const DocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import { View, Image, StyleSheet } from 'react-native'
 import OtherCardMedium from '~/assets/svg/OtherCardMedium'
 import { Fonts } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
@@ -12,16 +11,8 @@ import {
   ORIGINAL_DOCUMENT_CARD_WIDTH,
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from './consts'
-import { debugView } from '~/utils/dev'
 import { CardMoreBtn } from './components'
-
-type OtherCardProps = {
-  credentialType: string
-  credentialName: string
-  fields: Array<Required<DisplayVal>>
-  logo?: string
-  onHandleMore: (id: string) => void // id is required here, to be able to delete a credential
-}
+import { OtherCardProps } from './types'
 
 const OtherCard: React.FC<OtherCardProps> = ({
   credentialType,
