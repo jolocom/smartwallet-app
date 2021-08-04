@@ -15,6 +15,7 @@ import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useIsFocused } from '@react-navigation/core'
+import { Colors } from '~/utils/colors'
 
 const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)

@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "0.0.1.021",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "run:ios": "react-native run-ios",
@@ -20,6 +20,8 @@
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts? --coverageDirectory=coverage",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:check": "eslint --ext .js,.jsx,.ts,.tsx -f ./bin/commit/formatter.js",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx -f table --fix",
     "prettier:check": "prettier --check",
     "prettier:checkAll": "prettier --check './**/*.ts|*.tsx'",
     "prettier:format": "prettier --write",
@@ -48,6 +50,7 @@
     "assert": "^1.1.1",
     "asyncstorage-down": "^4.2.0",
     "bip39": "^3.0.2",
+    "console-table-printer": "^2.9.0",
     "crypto-browserify": "^3.12.0",
     "events": "^3.1.0",
     "formik": "^2.2.6",
@@ -157,7 +160,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "node bin/precommit.js",
+      "pre-commit": "ts-node bin/precommit.ts ",
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
