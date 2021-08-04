@@ -30,7 +30,10 @@ import JoloText from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
-import { DocumentCard, OtherCard } from '~/components/Cards/DocumentCards'
+import {
+  DocumentCard,
+  OtherCard,
+} from '~/components/Cards/DocumentSectionCards'
 import { useDeleteCredential } from '~/hooks/credentials'
 import { useToasts } from '~/hooks/toasts'
 import { useRedirectTo } from '~/hooks/navigation'
