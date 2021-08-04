@@ -7,31 +7,36 @@ import InteractionLogo from './components/InteractionLogo'
 import InteractionTitle from './components/InteractionTitle'
 import { ContainerBAS, LogoContainerBAS } from './components/styled'
 import useAuthSubmit from '~/hooks/interactions/useAuthSubmit'
-import { strings } from '~/translations'
 import { useSelector } from 'react-redux'
-import { getAuthenticationDetails } from '~/modules/interaction/selectors'
+import {
+  getAuthenticationDetails,
+  getServiceDescription,
+} from '~/modules/interaction/selectors'
+import useTranslation from '~/hooks/useTranslation'
 
 const Authentication = () => {
   const handleSubmit = useAuthSubmit()
   const { description } = useSelector(getAuthenticationDetails)
+  const { name } = useSelector(getServiceDescription)
+  const { t } = useTranslation()
 
   return (
     <ContainerBAS>
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={strings.IS_IT_REALLY_YOU} />
+      <InteractionTitle label={t('Authentication.header')} />
       <InteractionDescription
         label={
           description && !!description.length
             ? description
-            : strings.SERVICE_WOULD_LIKE_TO_CONFIRM_YOUR_DIGITAL_IDENTITY
+            : t('Authentication.subheader', { serviceName: name })
         }
       />
       <Space />
       <InteractionFooter
         onSubmit={handleSubmit}
-        submitLabel={strings.AUTHENTICATE}
+        submitLabel={t('Authentication.confirmBtn')}
       />
     </ContainerBAS>
   )

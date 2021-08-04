@@ -5,7 +5,6 @@ import { IRecordSteps } from '~/types/records'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { strings } from '~/translations'
 import useTranslation from '~/hooks/useTranslation'
 
 const RecordStep: React.FC<IRecordSteps> = ({ title, description }) => {
@@ -34,7 +33,7 @@ const RecordStep: React.FC<IRecordSteps> = ({ title, description }) => {
           customStyles={{ textAlign: 'left' }}
           numberOfLines={1}
         >
-          {description || t(strings.UNKNOWN)}
+          {description || t('General.unknown')}
         </JoloText>
       </View>
     </View>

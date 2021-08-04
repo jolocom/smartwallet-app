@@ -23,6 +23,7 @@ import { SCREEN_WIDTH } from '~/utils/dimensions'
 interface IconPropsI {
   label: string
   key: number
+  route: string
   isActive: boolean
 }
 
@@ -44,12 +45,12 @@ const TABS_POSITION_BOTTOM = BP({
 /* picture has invisble bottom margins, therefore adding 1 point to hide it */
 const INVISIBLE_BOTTOM_MARGIN = 1
 
-const Tab: React.FC<IconPropsI> = ({ label, isActive }) => {
-  const redirectToTab = useRedirectTo(label as ScreenNames)
+const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
+  const redirectToTab = useRedirectTo(route as ScreenNames)
   const renderIcon = () => {
     const color = isActive ? Colors.white : Colors.white40
 
-    switch (label) {
+    switch (route) {
       case ScreenNames.Identity: {
         return <IdentityTabIcon color={color} />
       }
@@ -123,6 +124,7 @@ const ScannerButton = () => {
 }
 
 const BottomBar = (props: BottomTabBarProps) => {
+  const { descriptors } = props
   const { history, routeNames, routes } = props.state
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
@@ -156,10 +158,13 @@ const BottomBar = (props: BottomTabBarProps) => {
         ]}
       >
         <View style={styles.iconGroup}>
-          {routeNames.slice(0, 2).map((routeName: string, idx: number) => (
+          {routes.slice(0, 2).map(({ name: routeName, key }, idx: number) => (
             <Tab
               key={idx}
-              label={routeName}
+              route={routeName}
+              label={
+                (descriptors[key].options.tabBarLabel as string) ?? routeName
+              }
               isActive={
                 history[history.length - 1].key ===
                 getSelectedRoute(routeName).key
@@ -168,18 +173,19 @@ const BottomBar = (props: BottomTabBarProps) => {
           ))}
         </View>
         <View style={styles.iconGroup}>
-          {props.state.routeNames
-            .slice(2)
-            .map((routeName: string, idx: number) => (
-              <Tab
-                key={idx}
-                label={routeName}
-                isActive={
-                  history[history.length - 1].key ===
-                  getSelectedRoute(routeName).key
-                }
-              />
-            ))}
+          {routes.slice(2).map(({ name: routeName, key }, idx: number) => (
+            <Tab
+              key={idx}
+              route={routeName}
+              label={
+                (descriptors[key].options.tabBarLabel as string) ?? routeName
+              }
+              isActive={
+                history[history.length - 1].key ===
+                getSelectedRoute(routeName).key
+              }
+            />
+          ))}
         </View>
       </View>
     </Hide>

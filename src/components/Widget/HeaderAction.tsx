@@ -1,13 +1,14 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { PlusIcon } from '~/assets/svg'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from './context'
 import JoloText, { JoloTextKind } from '../JoloText'
+import useTranslation from '~/hooks/useTranslation'
 
 const CreateNew: React.FC = () => {
+  const { t } = useTranslation()
   const widgetContext = useWidget()
   if (!widgetContext?.onAdd) {
     throw new Error('No onCreate prop passed to the widget')
@@ -27,7 +28,7 @@ const CreateNew: React.FC = () => {
         size={JoloTextSizes.middle}
         color={Colors.white}
       >
-        {strings.ADD_ATTRIBUTE}
+        {t('Identity.addClaimBtn')}
       </JoloText>
     </TouchableOpacity>
   )

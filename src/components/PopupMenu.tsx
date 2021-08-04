@@ -12,6 +12,7 @@ import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { IWithCustomStyle } from './Card/types'
 import ScreenDismissArea from './ScreenDismissArea'
 import { TransparentModalsParamsList } from '~/screens/LoggedIn/Main'
+import useTranslation from '~/hooks/useTranslation'
 
 export interface IPopupOption {
   title: string
@@ -45,6 +46,7 @@ const PopupButton: React.FC<{ onPress: () => void }> = ({
 )
 
 const PopupMenu = () => {
+  const { t } = useTranslation()
   const goBack = useGoBack()
   const redirect = useRedirect()
   const { bottom } = useSafeArea()
@@ -81,7 +83,9 @@ const PopupMenu = () => {
             marginTop: 16,
           }}
         >
-          <PopupButton onPress={goBack}>Close</PopupButton>
+          <PopupButton onPress={goBack}>
+            {t('Documents.cancelCardOption')}
+          </PopupButton>
         </SolidBlock>
       </View>
     </ScreenContainer>

@@ -6,12 +6,13 @@ import JoloText from '~/components/JoloText'
 import { useLoader } from '~/hooks/loader'
 import { useReplaceWith } from '~/hooks/navigation'
 import { useAgent, useWalletReset } from '~/hooks/sdk'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
+import useTranslation from '~/hooks/useTranslation'
 
 const ClearIdentityBtn = () => {
+  const { t } = useTranslation()
   const agent = useAgent()
   const loader = useLoader()
   const replaceWith = useReplaceWith()
@@ -32,14 +33,15 @@ const ClearIdentityBtn = () => {
         await resetWallet()
         replaceWith(ScreenNames.Main)
       },
-      { loading: strings.CLEAR_IDENTITY_LOADER },
+      { loading: t('EraseData.loader') },
     )
   }
 
   const handleShowConfirmationScreen = () => {
     navigation.navigate(ScreenNames.DragToConfirm, {
-      title: strings.CLEAR_IDENTITY_TITLE,
-      cancelText: strings.CANCEL,
+      title: t('EraseData.dialogMessage'),
+      cancelText: t('EraseData.cancelBtn'),
+      instructionText: t('EraseData.dragInstructions'),
       onComplete: clearIdentityData,
     })
   }
@@ -47,13 +49,13 @@ const ClearIdentityBtn = () => {
   return (
     <View style={styles.container}>
       <JoloText size={JoloTextSizes.mini}>
-        {strings.CLEAR_IDENTITY_DETAILS}{' '}
+        {t('Settings.deleteDataInfo')}{' '}
         <JoloText
           size={JoloTextSizes.mini}
           onPress={handleShowConfirmationScreen}
           color={Colors.success}
         >
-          {strings.CLEAR_IDENTITY_BTN}
+          {t('Settings.deleteDataBtn')}
         </JoloText>
       </JoloText>
     </View>
