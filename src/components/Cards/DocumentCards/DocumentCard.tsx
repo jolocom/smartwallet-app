@@ -12,6 +12,7 @@ import {
   ORIGINAL_DOCUMENT_CARD_WIDTH,
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from './consts'
+import { CardMoreBtn } from './components'
 
 type DocumentCardProps = {
   credentialName: string
@@ -159,16 +160,13 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         </ScaledView>
       )}
       {/* Dots - more action */}
-      <ScaledView
-        scaleStyle={styles.dotsContainerScaled}
-        style={styles.dotsContainer}
-      >
-        <TouchableOpacity onPress={onHandleMore} style={styles.dotsBtn}>
-          {[...Array(3).keys()].map((c) => (
-            <ScaledView key={c} scaleStyle={styles.dot} />
-          ))}
-        </TouchableOpacity>
-      </ScaledView>
+      <CardMoreBtn
+        onPress={onHandleMore}
+        positionStyles={{
+          top: 18,
+          right: 17,
+        }}
+      />
     </ScaledCard>
   )
 }
@@ -243,28 +241,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 20,
     letterSpacing: 0.14,
-  },
-  dotsContainerScaled: {
-    paddingHorizontal: 3,
-    top: 18,
-    right: 17,
-  },
-  dotsContainer: {
-    position: 'absolute',
-    zIndex: 100,
-  },
-  dotsBtn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingVertical: 10,
-  },
-  dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    marginHorizontal: 2,
-    backgroundColor: Colors.black,
   },
 })
 

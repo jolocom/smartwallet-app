@@ -13,6 +13,7 @@ import {
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from './consts'
 import { debugView } from '~/utils/dev'
+import { CardMoreBtn } from './components'
 
 type OtherCardProps = {
   credentialType: string
@@ -135,16 +136,13 @@ const OtherCard: React.FC<OtherCardProps> = ({
         </ScaledView>
       )}
       {/* Dots - more action */}
-      <ScaledView
-        style={styles.dotsContainer}
-        scaleStyle={styles.dotsContainerScaled}
-      >
-        <TouchableOpacity onPress={onHandleMore} style={styles.dotsBtn}>
-          {[...Array(3).keys()].map((c) => (
-            <ScaledView key={c} scaleStyle={styles.dot} />
-          ))}
-        </TouchableOpacity>
-      </ScaledView>
+      <CardMoreBtn
+        onPress={onHandleMore}
+        positionStyles={{
+          bottom: 20,
+          right: 24,
+        }}
+      />
     </ScaledCard>
   )
 }
@@ -209,28 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 20,
     letterSpacing: 0.14,
-  },
-  dotsContainerScaled: {
-    paddingHorizontal: 3,
-    bottom: 20,
-    right: 24,
-  },
-  dotsContainer: {
-    position: 'absolute',
-    zIndex: 100,
-  },
-  dotsBtn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingVertical: 10,
-  },
-  dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    marginHorizontal: 2,
-    backgroundColor: Colors.black,
   },
 })
 
