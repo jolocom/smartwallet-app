@@ -9,20 +9,18 @@ interface Props {
   positionStyles: Partial<Pick<ViewStyle, 'left' | 'right' | 'top' | 'bottom'>>
 }
 
-export const CardMoreBtn: React.FC<Props> = ({ onPress, positionStyles }) => {
-  return (
-    <ScaledView
-      scaleStyle={[styles.dotsContainerScaled, positionStyles]}
-      style={styles.dotsContainer}
-    >
-      <TouchableOpacity onPress={onPress} style={styles.dotsBtn}>
-        {[...Array(3).keys()].map((c) => (
-          <ScaledView key={c} scaleStyle={styles.dot} />
-        ))}
-      </TouchableOpacity>
-    </ScaledView>
-  )
-}
+export const CardMoreBtn: React.FC<Props> = ({ onPress, positionStyles }) => (
+  <ScaledView
+    scaleStyle={[styles.dotsContainerScaled, positionStyles]}
+    style={styles.dotsContainer}
+  >
+    <TouchableOpacity onPress={onPress} style={styles.dotsBtn}>
+      {[...Array(3).keys()].map((c) => (
+        <ScaledView key={c} scaleStyle={styles.dot} />
+      ))}
+    </TouchableOpacity>
+  </ScaledView>
+)
 
 const styles = StyleSheet.create({
   dotsContainerScaled: {
