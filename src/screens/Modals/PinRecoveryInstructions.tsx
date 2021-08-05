@@ -11,12 +11,14 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
+import { useState } from 'react'
 
 interface PropsI {
   navigation: NavigationProp<{}>
 }
 
 const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
   const { t } = useTranslation()
 
   const redirectToRecovery = () => {
@@ -75,15 +77,18 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
       <View style={styles.btnsContainer}>
         <View>
           <View style={styles.instructionImage}>
-            <JoloText
-              color={Colors.purple}
-              size={JoloTextSizes.mini}
-              customStyles={styles.instructionText}
-            >
-              {t('PasscodeRecoveryInstructions.imageCaption')}
-            </JoloText>
+            {isImageLoaded && (
+              <JoloText
+                color={Colors.purple}
+                size={JoloTextSizes.mini}
+                customStyles={styles.instructionText}
+              >
+                {t('PasscodeRecoveryInstructions.imageCaption')}
+              </JoloText>
+            )}
             <Image
               resizeMode="contain"
+              onLoad={() => setIsImageLoaded(true)}
               style={{ flex: BP({ xsmall: 0.8, default: 0 }) }}
               source={require('~/assets/images/pinrecovery.png')}
             />
