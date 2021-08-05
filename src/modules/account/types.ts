@@ -1,3 +1,5 @@
+import { Locales } from '~/translations'
+
 export enum AccountActions {
   setDid = 'setDid',
   setLogged = 'setLogged',
@@ -6,6 +8,7 @@ export enum AccountActions {
   showTermsConsent = 'showTermsConsent',
   setAppLocked = 'setAppLocked',
   setScreenHeight = 'setScreenHeight',
+  setCurrentLanguage = 'setCurrentLanguage',
 }
 
 export interface AccountState {
@@ -15,4 +18,5 @@ export interface AccountState {
   isAppLocked: boolean
   showTermsConsent: boolean
   screenHeight: number
+  currentLanguage: Locales
 }

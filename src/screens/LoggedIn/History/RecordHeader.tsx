@@ -12,9 +12,12 @@ const RecordHeader: React.FC<IRecordHeader> = ({
   const { activeSection } = useRecord()
   return (
     <ScreenContainer.Header testID={testID} customStyles={{ marginBottom: 18 }}>
-      {title ||
-        (Object.values(activeSection)[0] as string) ||
-        t('BottomBar.history')}
+      {t(
+        // @ts-expect-error
+        title ||
+          (Object.values(activeSection)[0] as string) ||
+          'BottomBar.history',
+      )}
     </ScreenContainer.Header>
   )
 }

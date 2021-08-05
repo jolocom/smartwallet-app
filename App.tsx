@@ -28,8 +28,8 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>
           <ErrorContextProvider>
             <ErrorBoundary>
               <AgentContextProvider>
@@ -38,8 +38,8 @@ const App = () => {
               </AgentContextProvider>
             </ErrorBoundary>
           </ErrorContextProvider>
-        </Provider>
-      </I18nextProvider>
+        </I18nextProvider>
+      </Provider>
     </SafeAreaProvider>
   )
 }
