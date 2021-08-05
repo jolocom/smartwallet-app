@@ -182,7 +182,7 @@ platform :android do
   desc 'Build Android application and upload to Appcenter'
   lane :alpha do
     sentry_auth
-    build(local: true)
+    build
     api_token = get_appcenter_token.strip
     appcenter_upload(
       api_token: api_token,
