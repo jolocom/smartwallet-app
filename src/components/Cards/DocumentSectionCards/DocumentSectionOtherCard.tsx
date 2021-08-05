@@ -14,7 +14,7 @@ import {
 import { CardMoreBtn } from './components'
 import { OtherCardProps } from './types'
 
-const OtherCard: React.FC<OtherCardProps> = ({
+const DocumentSectionOtherCard: React.FC<OtherCardProps> = ({
   credentialType,
   credentialName,
   fields,
@@ -201,4 +201,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default OtherCard
+export default DocumentSectionOtherCard

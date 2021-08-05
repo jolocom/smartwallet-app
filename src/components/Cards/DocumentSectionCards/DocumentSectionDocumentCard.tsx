@@ -14,7 +14,7 @@ import {
 import { CardMoreBtn } from './components'
 import { DocumentCardProps } from './types'
 
-const DocumentCard: React.FC<DocumentCardProps> = ({
+const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
   holderName,
   fields,
@@ -235,4 +235,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default DocumentCard
+export default DocumentSectionDocumentCard
