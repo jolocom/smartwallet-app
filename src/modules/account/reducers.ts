@@ -1,5 +1,6 @@
 import { AccountState, AccountActions } from './types'
 import { Action } from '~/types/actions'
+import { Locales } from '~/translations'
 
 const initialState: AccountState = {
   did: '',
@@ -8,6 +9,7 @@ const initialState: AccountState = {
   showTermsConsent: false,
   isAppLocked: true,
   screenHeight: 0,
+  currentLanguage: Locales.en,
 }
 
 const reducer = (
@@ -29,6 +31,8 @@ const reducer = (
       return { ...state, isAppLocked: action.payload }
     case AccountActions.setScreenHeight:
       return { ...state, screenHeight: action.payload }
+    case AccountActions.setCurrentLanguage:
+      return { ...state, currentLanguage: action.payload }
     default:
       return state
   }
