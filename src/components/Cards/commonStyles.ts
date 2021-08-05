@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
-export const sharedStyles = StyleSheet.create({
+export const commonStyles = StyleSheet.create({
   fieldLabelSmall: {
     fontSize: 14,
     color: Colors.slateGray,

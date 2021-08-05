@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import { Colors } from '~/utils/colors'
 import { strings } from '~/translations'
-import { sharedStyles } from './sharedStyle'
+import { commonStyles } from './commonStyles'
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
@@ -30,14 +30,14 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
           <ScaledText
             numberOfLines={1}
             scaleStyle={styles.credentialName}
-            style={sharedStyles.regularText}
+            style={commonStyles.regularText}
           >
             {credentialName}
           </ScaledText>
           <ScaledView scaleStyle={{ paddingBottom: 16 }} />
           <ScaledText
             scaleStyle={styles.fieldSectionTitle}
-            style={sharedStyles.regularText}
+            style={commonStyles.regularText}
           >
             {strings.INCLUDED_INFO}:
           </ScaledText>
@@ -47,8 +47,8 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
               <>
                 {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 10 }} />}
                 <ScaledText
-                  scaleStyle={sharedStyles.fieldLabelSmall}
-                  style={sharedStyles.regularText}
+                  scaleStyle={commonStyles.fieldLabelSmall}
+                  style={commonStyles.regularText}
                 >
                   {f.label}
                 </ScaledText>
@@ -61,8 +61,8 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
             ))
           ) : (
             <ScaledText
-              scaleStyle={sharedStyles.fieldLabelSmall}
-              style={sharedStyles.regularText}
+              scaleStyle={commonStyles.fieldLabelSmall}
+              style={commonStyles.regularText}
             >
               {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
             </ScaledText>

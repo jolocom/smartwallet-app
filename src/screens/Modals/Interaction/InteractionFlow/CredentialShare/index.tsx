@@ -51,7 +51,7 @@ import { attributeConfig } from '~/config/claims'
 import {
   InteractionShareDocumentCard,
   InteractionShareOtherCard,
-} from '~/components/Cards/InteractionShareCards'
+} from '~/components/Cards/InteractionShare'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -209,7 +209,6 @@ const CredentialShareFAS = () => {
                 {isDocument(cred) ? (
                   <InteractionShareDocumentCard
                     credentialName={name ?? type}
-                    // TODO: correct type
                     fields={claimFields}
                     holderName={cred.holderName || strings.ANONYMOUS}
                     highlight={`${
