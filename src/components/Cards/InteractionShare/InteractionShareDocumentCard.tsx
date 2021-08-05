@@ -10,7 +10,11 @@ import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
 import { getTrimmedHighlight } from '../utils'
 
 import { FieldsCalculator } from './components'
-import { MAX_FIELD_DOC } from './consts'
+import {
+  MAX_FIELD_DOC,
+  ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH,
+} from './consts'
 import { shareStyles } from './styles'
 import { InteractionShareDocumentCardProps } from './types'
 
@@ -57,7 +61,11 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2
 
     return (
-      <ScaledCard originalWidth={368} originalHeight={232} scaleToFit>
+      <ScaledCard
+        originalWidth={ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH}
+        originalHeight={ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT}
+        scaleToFit
+      >
         <InteractionCardDoc>
           <ScaledView scaleStyle={styles.documentBodyContainer}>
             <ScaledText

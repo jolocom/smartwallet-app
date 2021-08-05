@@ -8,8 +8,8 @@ import { Colors } from '~/utils/colors'
 import { commonStyles } from '../commonStyles'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
 import {
-  ORIGINAL_DOCUMENT_CARD_HEIGHT,
-  ORIGINAL_DOCUMENT_CARD_WIDTH,
+  ORIGINAL_DOCUMENT_OFFER_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_OFFER_CARD_WIDTH,
 } from './consts'
 import { CardType, InteractionOfferCardProps } from './types'
 
@@ -20,8 +20,8 @@ export const InteractionOfferCard: React.FC<
     cardType === 'document' ? InteractionCardDoc : InteractionCardOther
   return (
     <ScaledCard
-      originalWidth={ORIGINAL_DOCUMENT_CARD_WIDTH}
-      originalHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
+      originalWidth={ORIGINAL_DOCUMENT_OFFER_CARD_WIDTH}
+      originalHeight={ORIGINAL_DOCUMENT_OFFER_CARD_HEIGHT}
       scaleToFit
     >
       <Card>
