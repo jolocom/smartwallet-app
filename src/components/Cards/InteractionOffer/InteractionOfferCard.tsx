@@ -1,30 +1,29 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import { Colors } from '~/utils/colors'
-import { strings } from '~/translations'
-import { commonStyles } from './commonStyles'
+
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
-import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
+import { strings } from '~/translations'
+import { Colors } from '~/utils/colors'
+import { commonStyles } from '../commonStyles'
+import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
+import {
+  ORIGINAL_DOCUMENT_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_CARD_WIDTH,
+} from './consts'
+import { CardType, InteractionOfferCardProps } from './types'
 
-type InteractionOfferCardProps = {
-  credentialName: string
-  fields: Array<Required<Pick<DisplayVal, 'label'>>>
-}
-type CardType = {
-  cardType: 'document' | 'other'
-}
-
-const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
-  cardType,
-  credentialName,
-  fields,
-}) => {
+export const InteractionOfferCard: React.FC<
+  InteractionOfferCardProps & CardType
+> = ({ cardType, credentialName, fields }) => {
   const Card =
     cardType === 'document' ? InteractionCardDoc : InteractionCardOther
   return (
-    <ScaledCard originalWidth={368} originalHeight={232} scaleToFit>
+    <ScaledCard
+      originalWidth={ORIGINAL_DOCUMENT_CARD_WIDTH}
+      originalHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
+      scaleToFit
+    >
       <Card>
         <ScaledView scaleStyle={styles.bodyContainer}>
           <ScaledText
@@ -72,12 +71,6 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
     </ScaledCard>
   )
 }
-
-export const InteractionOfferDocumentCard: React.FC<InteractionOfferCardProps> =
-  (props) => <OfferCard {...props} cardType="document" />
-export const InteractionOfferOtherCard: React.FC<InteractionOfferCardProps> = (
-  props,
-) => <OfferCard {...props} cardType="other" />
 
 const styles = StyleSheet.create({
   fieldSectionTitle: {
