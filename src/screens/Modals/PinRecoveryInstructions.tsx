@@ -11,12 +11,14 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
+import { useState } from 'react'
 
 interface PropsI {
   navigation: NavigationProp<{}>
 }
 
 const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
   const { t } = useTranslation()
 
   const redirectToRecovery = () => {
@@ -43,7 +45,7 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
           color={Colors.white85}
           customStyles={{
             alignSelf: 'flex-start',
-            marginTop: BP({ default: 40, xsmall: 32 }),
+            marginTop: BP({ default: 20, xsmall: 10 }),
             textAlign: 'left',
           }}
         >
@@ -75,15 +77,18 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
       <View style={styles.btnsContainer}>
         <View>
           <View style={styles.instructionImage}>
-            <JoloText
-              color={Colors.purple}
-              size={JoloTextSizes.mini}
-              customStyles={styles.instructionText}
-            >
-              {t('PasscodeRecoveryInstructions.imageCaption')}
-            </JoloText>
+            {isImageLoaded && (
+              <JoloText
+                color={Colors.purple}
+                size={JoloTextSizes.mini}
+                customStyles={styles.instructionText}
+              >
+                {t('PasscodeRecoveryInstructions.imageCaption')}
+              </JoloText>
+            )}
             <Image
               resizeMode="contain"
+              onLoad={() => setIsImageLoaded(true)}
               style={{ flex: BP({ xsmall: 0.8, default: 0 }) }}
               source={require('~/assets/images/pinrecovery.png')}
             />
@@ -115,11 +120,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -40,
     right: '15%',
-    width: 130,
+    width: BP({ xsmall: 130, default: 150 }),
   },
   instructionImage: {
-    bottom: BP({ default: '-5%', xsmall: '-40%' }),
+    bottom: BP({ default: '-12%', xsmall: '-35%' }),
     alignSelf: 'center',
+    transform: [{ scale: BP({ xsmall: 0.91, small: 1, medium: 1, large: 1 }) }],
   },
   btnsContainer: {
     alignSelf: 'flex-end',
