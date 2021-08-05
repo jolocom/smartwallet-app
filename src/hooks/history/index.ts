@@ -18,7 +18,7 @@ export const useHistory = () => {
     return {
       type,
       // @ts-ignore
-      section: t(section) as string,
+      section,
       lastUpdate: issued.toString(),
       id: interaction.id,
     }
