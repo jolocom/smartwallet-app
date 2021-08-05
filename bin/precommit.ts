@@ -164,8 +164,12 @@ const main = () => {
       .filter((path) => Boolean(path))
 
     checkStagedLocalProp(formattedStagedFiles)
-    prettifyFiles(formattedStagedFiles)
-    lintFiles(formattedStagedFiles)
+
+    const onlyJSTSFiles = formattedStagedFiles.filter((f) =>
+      /\.(ts|tsx|js|jsx)$/g.exec(f),
+    )
+    prettifyFiles(onlyJSTSFiles)
+    lintFiles(onlyJSTSFiles)
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)
