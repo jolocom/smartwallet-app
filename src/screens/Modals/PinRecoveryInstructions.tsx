@@ -43,7 +43,7 @@ const PinRecoveryInstructions: React.FC<PropsI> = ({ navigation }) => {
           color={Colors.white85}
           customStyles={{
             alignSelf: 'flex-start',
-            marginTop: BP({ default: 40, xsmall: 32 }),
+            marginTop: BP({ default: 20, xsmall: 10 }),
             textAlign: 'left',
           }}
         >
@@ -115,11 +115,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -40,
     right: '15%',
-    width: 130,
+    width: BP({ xsmall: 130, default: 150 }),
   },
   instructionImage: {
-    bottom: BP({ default: '-5%', xsmall: '-40%' }),
+    bottom: BP({ default: '-12%', xsmall: '-35%' }),
     alignSelf: 'center',
+    transform: [{ scale: BP({ xsmall: 0.91, small: 1, medium: 1, large: 1 }) }],
   },
   btnsContainer: {
     alignSelf: 'flex-end',
