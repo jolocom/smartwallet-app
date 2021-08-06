@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
-import { strings } from '~/translations'
+import useTranslation from '~/hooks/useTranslation'
 import ResponsiveCard from '../../ResponsiveCard'
 import {
   BodyContainer,
@@ -26,6 +26,8 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
   highlight,
   photo,
 }) => {
+  const { t } = useTranslation()
+
   const handleFieldValuesVisibility = (
     child: React.ReactNode,
     idx: number,
@@ -48,9 +50,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
   const handleNumberOfValueLinesToDisplay = (
     idx: number,
     fieldLines: Record<number, number>,
-  ) => {
-    return idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2
-  }
+  ) => (idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2)
 
   return (
     <ResponsiveCard>
@@ -60,7 +60,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
             customStyles={{ flex: highlight || !properties.length ? 0 : 0.5 }}
           >
             <CredentialName numberOfLines={1}>
-              {!!name.length ? name : strings.UNKNOWN}
+              {!!name.length ? name : t('General.unknown')}
             </CredentialName>
             {holderName && (
               <ResponsiveCard.HolderName>
@@ -95,9 +95,9 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
               </BodyContainer>
             ) : (
               <EmptyContainer>
-                <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
+                <HelperTitle>{t('CredentialOffer.cardInfoHeader')}</HelperTitle>
                 <HelperDescription>
-                  {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
+                  {t('CredentialOffer.cardNoPreview')}
                 </HelperDescription>
               </EmptyContainer>
             )}

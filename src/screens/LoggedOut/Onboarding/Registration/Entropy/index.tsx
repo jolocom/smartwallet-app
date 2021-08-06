@@ -15,7 +15,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useGenerateSeed } from '~/hooks/sdk'
 import { useLoader } from '~/hooks/loader'
-import { strings } from '~/translations'
+import useTranslation from '~/hooks/useTranslation'
 
 //NOTE: Determines the duration of entropy collection
 const ENOUGH_ENTROPY_PROGRESS = 0.3
@@ -24,6 +24,7 @@ const Entropy: React.FC = () => {
   const replaceWith = useReplaceWith()
   const generateSeed = useGenerateSeed()
   const loader = useLoader()
+  const { t } = useTranslation()
 
   //NOTE: not using the user generated entropy
   const submitEntropy = async (entropy: string) => {
@@ -35,7 +36,7 @@ const Entropy: React.FC = () => {
     }
     await loader(
       generateSeed,
-      { showSuccess: false, loading: strings.ENTROPY_LOADER },
+      { showSuccess: false, loading: t('Entropy.loader') },
       handleDone,
     )
   }

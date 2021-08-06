@@ -1,12 +1,11 @@
 import React from 'react'
+import { withTranslation, WithTranslation } from 'react-i18next'
 import RNRestart from 'react-native-restart'
 
 import { ErrorFallback } from '~/components/ErrorFallback'
-import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-import { strings } from '~/translations/strings'
 import { ErrorContext, ErrorScreens } from './errorContext'
 
-export class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component<WithTranslation> {
   static contextType = ErrorContext
 
   public state = {
@@ -32,14 +31,15 @@ export class ErrorBoundary extends React.Component {
   }
 
   render() {
+    const { t } = this.props
     if (this.state.hasError) {
       return (
         <ErrorFallback
-          title={strings.SYSTEM_CRASH}
-          description={strings.BUT_DONT_WORRY_YOUR_DATA_IS_SAFE}
-          topButtonText={strings.SUBMIT_REPORT}
+          title={t('Errors.crashTitle')}
+          description={t('Errors.crashMessage')}
+          topButtonText={t('Errors.reportBtn')}
           onPressTop={this.handleReport}
-          bottomButtonText={strings.RESTART_APPLICATION}
+          bottomButtonText={t('Errors.restartBtn')}
           onPressBottom={this.handleRestart}
         />
       )
@@ -47,3 +47,5 @@ export class ErrorBoundary extends React.Component {
     return this.props.children
   }
 }
+
+export default withTranslation()(ErrorBoundary)

@@ -176,7 +176,7 @@ const interactions = {
   ERROR_ATTRIBUTE_ALREADY_EXISTS: 'Attribute of the same value already exists',
   INTERACTION_DESC_MISSING_SINGLE:
     'It seems like your wallet is missing something important for this request',
-  INCOMING_REQUEST_SINGLE: '{{service}} requests {{attribute}}'
+  INCOMING_REQUEST_SINGLE: '{{service}} requests {{attribute}}',
 }
 
 const lock = {
@@ -307,9 +307,9 @@ const toasts = {
   OFFER_RENEGOTIATION_TITLE: 'Be aware',
   OFFER_RENEGOTIATION_MSG:
     "Some documents didn't pass our security check and cannot be saved or received",
-  SHARE_MISSING_DOCS_TITLE: 'User is missing requested documents',
+  SHARE_MISSING_DOCS_TITLE: 'Missing documents',
   SHARE_MISSING_DOCS_MSG:
-    '{{serviceName}} is requesting documents that can’t be found in your wallet. \n Missing: {{documentType}} ... ',
+    "{{serviceName}} is requesting documents that can't be found in your wallet. \n Missing: {{documentType}}",
   WHOOPS: 'Whoops',
   COULDNOT_DEACTIVATE: 'We could not deactivate biometrics',
   COULDNOT_ACTIVATE: 'We could not activate biometrics',
@@ -398,9 +398,9 @@ const validation = {
   AT_LEAST_ONE_ERROR: 'Please provide at least one of the values',
   EMAIL_FORMAT_ERROR: 'Seems like this is not a valid email',
   VALUE_MISSING: 'Please provide value',
-  SHORT: "Too little characters",
-  LARGE: "Too many characters",
-  ONLY_NUMBERS: 'Only number characters are allowed'
+  SHORT: 'Too little characters',
+  LARGE: 'Too many characters',
+  ONLY_NUMBERS: 'Only number characters are allowed',
 }
 
 export const strings = {

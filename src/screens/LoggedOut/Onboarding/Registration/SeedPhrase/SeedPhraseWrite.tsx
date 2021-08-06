@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { View, StyleSheet, Animated, Platform } from 'react-native'
-// @ts-ignore no typescript support as of yet
+// @ts-expect-error no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -12,7 +12,6 @@ import {
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { strings } from '~/translations/strings'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { InfoIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -20,6 +19,7 @@ import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
 import SeedPhrase from './components/Styled'
 import { useGetSeedPhrase } from '~/hooks/sdk'
+import useTranslation from '~/hooks/useTranslation'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -27,6 +27,7 @@ const vibrationOptions = {
 }
 
 const SeedPhraseWrite: React.FC = () => {
+  const { t } = useTranslation()
   const redirect = useRedirect()
   const goBack = useGoBack()
   const {
@@ -110,22 +111,20 @@ const SeedPhraseWrite: React.FC = () => {
     </>
   )
 
-  const renderSeedphrase = () => {
-    return (
-      <Animated.View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
-        }}
-      >
-        {seedphrase.split(' ').map((w) => (
-          <WordPill.Write key={w}>{w}</WordPill.Write>
-        ))}
-      </Animated.View>
-    )
-  }
+  const renderSeedphrase = () => (
+    <Animated.View
+      style={{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+      }}
+    >
+      {seedphrase.split(' ').map((w) => (
+        <WordPill.Write key={w}>{w}</WordPill.Write>
+      ))}
+    </Animated.View>
+  )
 
   const renderMagicButton = () => (
     <MagicButton
@@ -142,7 +141,7 @@ const SeedPhraseWrite: React.FC = () => {
         color={Colors.white70}
         customStyles={{ opacity: 0.7 }}
       >
-        {strings.HOLD_YOUR_FINGER_ON_THE_CIRCLE}
+        {t('SeedphraseWrite.touchInstructions')}
       </JoloText>
     </Animated.View>
   )
@@ -152,20 +151,20 @@ const SeedPhraseWrite: React.FC = () => {
       <Btn
         type={BtnTypes.primary}
         disabled={gestureState !== GestureState.Success}
-        onPress={
-          gestureState === GestureState.Success
-            ? () => redirect(ScreenNames.SeedPhraseRepeat)
-            : () => {}
-        }
+        onPress={() => {
+          if (gestureState === GestureState.Success) {
+            redirect(ScreenNames.SeedPhraseRepeat)
+          }
+        }}
       >
-        {strings.DONE}
+        {t('SeedphraseWrite.confirmBtn')}
       </Btn>
       <Btn
         type={BtnTypes.secondary}
         onPress={goBack}
         disabled={gestureState !== GestureState.Success}
       >
-        {strings.SEEDPHRASE_GO_BACK}
+        {t('SeedphraseWrite.exitBtn')}
       </Btn>
     </Animated.View>
   )
@@ -189,7 +188,7 @@ const SeedPhraseWrite: React.FC = () => {
         </Animated.View>
         <Animated.View style={{ opacity: buttonOpacity }}>
           <SeedPhrase.Styled.HelperText>
-            {strings.WRITE_DOWN_THIS_PHRASE_SOMEWHERE_SAFE}
+            {t('SeedphraseWrite.writeInstructions')}
           </SeedPhrase.Styled.HelperText>
         </Animated.View>
         <SeedPhrase.Styled.ActiveArea>

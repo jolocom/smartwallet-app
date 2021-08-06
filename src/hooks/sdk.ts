@@ -8,11 +8,11 @@ import { SDKError, Agent } from 'react-native-jolocom'
 import { AgentContext } from '~/utils/sdk/context'
 import { useLoader } from './loader'
 import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
-import { strings } from '~/translations/strings'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { PIN_SERVICE } from '~/utils/keychainConsts'
 import useTermsConsent from './consent'
 import { makeInitializeCredentials, useCredentials } from './signedCredentials'
+import useTranslation from './useTranslation'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -158,6 +158,7 @@ export const useSubmitIdentity = () => {
   const dispatch = useDispatch()
   const createIdentity = useIdentityCreate()
   const loader = useLoader()
+  const { t } = useTranslation()
 
   return async () => {
     await loader(
@@ -166,7 +167,7 @@ export const useSubmitIdentity = () => {
         await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
       },
       {
-        loading: strings.CREATING,
+        loading: t('SeedphraseRepeat.confirmLoader'),
       },
       (error) => dispatch(setLogged(!Boolean(error))),
     )

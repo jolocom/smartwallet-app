@@ -1,7 +1,7 @@
 import React from 'react'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 import Space from '~/components/Space'
-import { strings } from '~/translations'
+import useTranslation from '~/hooks/useTranslation'
 import ResponsiveCard from '../../ResponsiveCard'
 import {
   BodyContainer,
@@ -23,6 +23,8 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
   name,
   properties,
 }) => {
+  const { t } = useTranslation()
+
   const handleChildVisibility = (
     child: React.ReactNode,
     idx: number,
@@ -41,9 +43,7 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
   /* NOTE: in other cards we can allow to display 2 lines
     constantly no matter how many lines are in the first value
   */
-  const handleNumberOfValueLinesToDisplay = (idx: number) => {
-    return 2
-  }
+  const handleNumberOfValueLinesToDisplay = (idx: number) => 2
 
   return (
     <ResponsiveCard>
@@ -55,7 +55,7 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
                 numberOfLines={2}
                 customStyles={{ textAlign: 'left' }}
               >
-                {!!name.length ? name : strings.UNKNOWN}
+                {!!name.length ? name : t('General.unknown')}
               </CredentialName>
             </HeaderContainer>
             {properties.length ? (
@@ -84,9 +84,9 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
               </BodyContainer>
             ) : (
               <EmptyContainer>
-                <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
+                <HelperTitle>{t('CredentialOffer.cardInfoHeader')}</HelperTitle>
                 <HelperDescription>
-                  {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
+                  {t('CredentialOffer.cardNoPreview')}
                 </HelperDescription>
               </EmptyContainer>
             )}

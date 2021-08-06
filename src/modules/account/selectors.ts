@@ -9,3 +9,5 @@ export const shouldShowTermsConsent = (state: RootReducerI) =>
 export const getIsAppLocked = (state: RootReducerI) => state.account.isAppLocked
 export const getScreenHeight = (state: RootReducerI) =>
   state.account.screenHeight
+export const getCurrentLanguage = (state: RootReducerI) =>
+  state.account.currentLanguage

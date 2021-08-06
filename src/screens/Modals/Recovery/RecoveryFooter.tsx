@@ -9,8 +9,6 @@ import BtnGroup from '~/components/BtnGroup'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
-import { strings } from '~/translations/strings'
-
 import { useLoader } from '~/hooks/loader'
 import { StorageKeys, useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
 
@@ -24,6 +22,7 @@ import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
 import { useReplaceWith, usePop, useGoBack } from '~/hooks/navigation'
 import { LockStackParamList } from '~/screens/LoggedIn/LockStack'
+import useTranslation from '~/hooks/useTranslation'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -33,6 +32,7 @@ interface RecoveryFooterI {
 }
 
 const useRecoveryPhraseUtils = (phrase: string[]) => {
+  const { t } = useTranslation()
   const loader = useLoader()
   const recoveryDispatch = useRecoveryDispatch()
   const replaceWith = useReplaceWith()
@@ -50,7 +50,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const isAccessRestore = route?.params?.isAccessRestore ?? false
 
   const handlePhraseSubmit = useCallback(async () => {
-    const handleDone = (error: any) => {
+    const handleDone = (error: unknown) => {
       if (!error) {
         dispatch(setLogged(true))
         replaceWith(ScreenNames.LoggedIn)
@@ -59,7 +59,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     await loader(
       () => submitCb(),
       {
-        loading: strings.MATCHING,
+        loading: t('Recovery.confirmLoader'),
       },
       handleDone,
     )
@@ -90,7 +90,11 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const isPhraseComplete = phrase.length === 12
 
   const handleCancel = () => {
-    isAccessRestore ? pop(2) : goBack()
+    if (isAccessRestore) {
+      pop(2)
+    } else {
+      goBack()
+    }
   }
 
   return { handlePhraseSubmit, isPhraseComplete, handleCancel }
@@ -103,6 +107,7 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
     handleCancel,
     isPhraseComplete,
   }) => {
+    const { t } = useTranslation()
     const { animatedBtns, animatedSuggestions } = useAnimateRecoveryFooter()
     const { keyboardHeight } = useKeyboard()
 
@@ -126,10 +131,10 @@ const RecoveryFooter: React.FC<RecoveryFooterI> = memo(
         <Animated.View style={{ width: '100%', opacity: animatedBtns }}>
           <BtnGroup>
             <Btn onPress={handlePhraseSubmit} disabled={!isPhraseComplete}>
-              {strings.CONFIRM}
+              {t('Recovery.confirmBtn')}
             </Btn>
             <Btn type={BtnTypes.secondary} onPress={handleCancel}>
-              {strings.EXIT_RECOVERY}
+              {t('Recovery.exitBtn')}
             </Btn>
           </BtnGroup>
         </Animated.View>

@@ -2,12 +2,12 @@ import React, { memo } from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import ScreenHeader from '~/components/ScreenHeader'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
+import useTranslation from '~/hooks/useTranslation'
 
 interface RecoveryHeaderI {
   phrase: string[]
@@ -21,7 +21,7 @@ const arePropsEqual = (
   if (prevProps.currentWordIdx !== nextProps.currentWordIdx) {
     return false
   }
-  if (prevProps.phrase.toString() != nextProps.phrase.toString()) {
+  if (prevProps.phrase.toString() !== nextProps.phrase.toString()) {
     return false
   }
   return true
@@ -29,6 +29,7 @@ const arePropsEqual = (
 
 const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
   ({ phrase, currentWordIdx }) => {
+    const { t } = useTranslation()
     return (
       <View style={styles.header}>
         {phrase.length ? (
@@ -89,8 +90,8 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
             }}
           >
             <ScreenHeader
-              title={strings.RECOVERY}
-              subtitle={strings.START_ENTERING_SEED_PHRASE}
+              title={t('Recovery.header')}
+              subtitle={t('Recovery.subheader')}
             />
           </View>
         )}

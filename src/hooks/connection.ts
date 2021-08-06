@@ -1,33 +1,26 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import { useEffect } from 'react'
 
-import { strings } from '~/translations'
 import { usePrevious } from './generic'
 import { useToasts } from './toasts'
-
-const DISCONNECTED_TOAST = {
-  title: strings.NOT_CONNECTED,
-  message: strings.WE_CANT_REACH_YOU,
-}
-
-const CONNECTED_TOAST = {
-  title: strings.YOU_ARE_BACK_ONLINE,
-  message: strings.ALL_WALLET_FUNCTIONALITIES,
-}
+import useTranslation from './useTranslation'
 
 const useConnection = () => {
+  const { t } = useTranslation()
   const { scheduleWarning, scheduleInfo } = useToasts()
   const netInfo = useNetInfo()
 
   const showDisconnectedToast = () => {
     scheduleWarning({
-      ...DISCONNECTED_TOAST,
+      title: t('Toasts.noInternetTitle'),
+      message: t('Toasts.noInternetMsg'),
     })
   }
 
   const showConnectedToast = () => {
     scheduleInfo({
-      ...CONNECTED_TOAST,
+      title: t('Toasts.reconnectedInternetTitle'),
+      message: t('Toasts.reconnectedInternetMsg'),
     })
   }
 

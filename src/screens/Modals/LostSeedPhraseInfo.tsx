@@ -2,30 +2,30 @@ import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Info from '~/components/Info'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
+import useTranslation from '~/hooks/useTranslation'
 
 const LostSeedPhraseInfo = () => {
+  const { t } = useTranslation()
+
   return (
     <ScreenContainer backgroundColor={Colors.black65}>
       <Info.Content>
-        <Info.Title>
-          {strings.WHAT_TO_DO_IF_YOU_FORGOT_YOUR_SECRET_PHRASE}
-        </Info.Title>
+        <Info.Title>{t('RecoveryInfo.header')}</Info.Title>
         <Info.Description>
           <Info.Highlight>
-            {strings.FORGOT_SEED_INFO_HIGHLIGHT_1 +
+            {t('RecoveryInfo.textPartOne') +
               Info.newline +
-              strings.FORGOT_SEED_INFO_HIGHLIGHT_2 +
+              t('RecoveryInfo.textPartTwo') +
               Info.newline}
           </Info.Highlight>
-          {strings.FORGOT_SEED_INFO_3 + Info.newline}
+          {t('RecoveryInfo.textPartThree') + Info.newline}
           <Info.Highlight>
-            {strings.FORGOT_SEED_INFO_HIGHLIGHT_4 + Info.newline}
+            {t('RecoveryInfo.textPartFour') + Info.newline}
           </Info.Highlight>
         </Info.Description>
       </Info.Content>
-      <Info.Button>{strings.CONTINUE}</Info.Button>
+      <Info.Button>{t('RecoveryInfo.closeBtn')}</Info.Button>
     </ScreenContainer>
   )
 }

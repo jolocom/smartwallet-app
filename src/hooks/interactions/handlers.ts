@@ -16,10 +16,8 @@ import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
 import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { interactionHandler } from './interactionHandlers'
-import { getDid } from '~/modules/account/selectors'
+import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
-import { isError, isUIError, SWErrorCodes, UIErrors } from '~/errors/codes'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
 
@@ -33,11 +31,11 @@ export const useInteraction = () => {
 
 export const useInteractionStart = () => {
   const agent = useAgent()
-  const did = useSelector(getDid)
   const dispatch = useDispatch()
   const loader = useLoader()
+  const interactionHandler = useInteractionHandler()
   const { connected, showDisconnectedToast } = useConnection()
-  const { scheduleWarning, scheduleErrorWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
 
   return async (jwt: string) => {
     // NOTE: not continuing the interaction if there is no network connection
@@ -51,31 +49,23 @@ export const useInteractionStart = () => {
     return loader(
       async () => {
         const interaction = await agent.processJWT(jwt)
-        const interactionData = await interactionHandler(
-          agent,
-          interaction,
-          did,
-        )
-        dispatch(
-          setInteractionDetails({
-            id: interaction.id,
-            flowType: interaction.flow.type,
-            ...interactionData,
-          }),
-        )
-      },
-      { showSuccess: false },
-      (error) => {
-        if (isError(error)) {
-          // @ts-ignore
-          if (isUIError(error)) scheduleWarning(UIErrors[error.message])
-          else
-            scheduleErrorWarning(error, {
-              title: UIErrors[SWErrorCodes.SWInteractionUnknownError]?.title,
-              message:
-                UIErrors[SWErrorCodes.SWInteractionUnknownError]?.message,
-            })
+        const counterparty = interaction.getSummary().initiator
+        const interactionData = await interactionHandler(interaction)
+
+        if (interactionData) {
+          dispatch(
+            setInteractionDetails({
+              id: interaction.id,
+              flowType: interaction.flow.type,
+              counterparty,
+              ...interactionData,
+            }),
+          )
         }
+      },
+      { showSuccess: false, showFailed: false },
+      (error) => {
+        if (error) scheduleErrorWarning(error)
       },
     )
   }

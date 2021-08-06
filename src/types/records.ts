@@ -38,3 +38,22 @@ export interface IPreLoadedInteraction {
   type: FlowType
   lastUpdate: string
 }
+
+export interface IFlowRecordConfig {
+  title: string
+  steps: {
+    finished: string[]
+    unfinished: string[]
+  }
+}
+
+export interface IStatusRecordConfig {
+  unknown: string
+  pending: string
+  expired: string
+}
+
+export interface IRecordConfig {
+  status: IStatusRecordConfig
+  flows: Partial<Record<FlowType, IFlowRecordConfig>>
+}

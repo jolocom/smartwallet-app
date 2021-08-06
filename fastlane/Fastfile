@@ -47,6 +47,25 @@ lane :sentry_auth do
   sh("cp ./sentry-auth/sentry2.properties ../android/sentry.properties")
 end
 
+desc "Release the app to the Test Flight or the App Store"
+lane :release do |options|
+  sentry_auth
+  get_appstoreconnect_api_key
+  match(type: 'appstore')
+  build_app(
+    scheme: "SmartWallet",
+    workspace: './ios/SmartWallet.xcworkspace',
+    export_method: 'app-store',
+    include_bitcode: false,
+  )
+  case options[:target]
+  when "release"
+    upload_to_app_store
+  when "beta"
+    upload_to_testflight
+  end
+end
+
 
 # lanes for ios building, signing and deployment
 platform :ios do 
@@ -81,20 +100,83 @@ platform :ios do
       notify_testers: true # Set to false if you don't want to notify testers of your new release (default: `false`)
     )
   end
-  
+
+  desc 'Build iOS application and upload to TestFlight'
+  lane :beta do
+    release(target: "beta")
+  end
+
+  desc 'Build iOS application and upload to the App Store'
+  lane :store do
+    #ensure_git_branch(branch: 'master')
+    #ensure_git_status_clean
+    release(target: "release")
+  end
+
+end
+
+
+lane :upload do |options|
+  case options[:target]
+  when 'release'
+    upload_to_play_store
+  when 'beta'
+    upload_to_play_store(track: 'beta')
+  end
 end
 
 # lanes for android building, signing and deployment
 platform :android do
-
-  desc 'Build the Android application'
-  lane :build do
-    build_android_app(
-      task: 'assemble',
-      build_type: 'Release',
-      gradle_path: './gradlew',
-      project_dir: './android'
+  desc "Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password"
+  lane :get_secrets do
+    begin
+      sh("git clone git@infra.jolocom.io:android-secrets")
+    rescue
+      puts "secrets already present"
+    end
+    password = prompt(
+      # password is in notion
+      text: "password: ",
+      secure_text: true
     )
+    sh(
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out ./key.json -k #{password} -md md5 2>/dev/null ",
+      log: false
+    )
+    sh(
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/keystorePass.enc -k #{password} -md md5 2>/dev/null ",
+      log: false
+    )
+  end
+
+  lane :build do |options|
+    releaseFilePath = File.join(Dir.pwd, "android-secrets", "JoloSmartWallet.keystore")
+    #build_android_app(task: 'clean')
+    sentry_auth
+    if options[:local]
+      build_android_app(
+        task: 'assemble',
+        build_type: 'Release',
+        print_command: false,
+        project_dir: './android',
+        gradle_path: './gradlew',
+      )
+    else
+      keyPass = get_secrets.strip
+      build_android_app(
+        task: 'assemble',
+        build_type: 'Release',
+        project_dir: './android',
+        gradle_path: './gradlew',
+        print_command: true,
+        properties: {
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => keyPass,
+          "android.injected.signing.key.alias" => "JoloSmartWallet",
+          "android.injected.signing.key.password" => keyPass,
+        }
+      )
+    end
   end
 
   desc 'Build Android application and upload to Appcenter'
@@ -111,4 +193,18 @@ platform :android do
       notify_testers: true
     )
   end
+
+
+  desc "Submit a new Beta Build to Play Store"
+  lane :beta do
+    build
+    upload(target: 'beta')
+  end
+
+  desc "Submit a new Release Build to Play Store"
+  lane :release do
+    build
+    upload(target: 'release')
+  end
+
 end

@@ -7,7 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { I18nextProvider } from 'react-i18next'
 
 import RootNavigation from '~/RootNavigation'
-import { ErrorBoundary } from '~/errors/ErrorBoundary'
+import ErrorBoundary from '~/errors/ErrorBoundary'
 import { AgentContextProvider } from '~/utils/sdk/context'
 import configureStore from './configureStore'
 import Overlays from '~/Overlays'
@@ -28,8 +28,8 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>
           <ErrorContextProvider>
             <ErrorBoundary>
               <AgentContextProvider>
@@ -38,8 +38,8 @@ const App = () => {
               </AgentContextProvider>
             </ErrorBoundary>
           </ErrorContextProvider>
-        </Provider>
-      </I18nextProvider>
+        </I18nextProvider>
+      </Provider>
     </SafeAreaProvider>
   )
 }

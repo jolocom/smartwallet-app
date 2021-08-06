@@ -2,10 +2,9 @@ import { InteractionActions, InteractionState } from './types'
 import { Action } from '~/types/actions'
 import { isCredShareDetails, isCredOfferDetails } from './guards'
 import { AttrActions, AttributePayload } from '../attributes/types'
-import { AttributeTypes } from '~/types/credentials'
 
 const initialState: InteractionState = {
-  details: { flowType: null, id: null },
+  details: { flowType: null, id: null, counterparty: null },
 }
 
 const reducer = (

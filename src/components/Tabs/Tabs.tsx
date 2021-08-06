@@ -10,6 +10,8 @@ export const Tabs: React.FC<ITabs> & ITabsComposition = ({
   initialActiveTab,
   initialActiveSubtab,
   children,
+  tabs,
+  subtabs,
 }) => {
   const [activeTab, setActiveTab] = useState(initialActiveTab)
   const [activeSubtab, setActiveSubtab] = useState(initialActiveSubtab)
@@ -20,6 +22,8 @@ export const Tabs: React.FC<ITabs> & ITabsComposition = ({
       activeSubtab,
       setActiveTab,
       setActiveSubtab,
+      tabs,
+      subtabs,
     }),
     [activeTab, activeSubtab],
   )

@@ -8,6 +8,7 @@ import { TouchableOpacity, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
+import useTranslation from '~/hooks/useTranslation'
 
 interface Props {
   title: string
@@ -23,6 +24,7 @@ const FormContainer: React.FC<Props> = ({
   children,
   isSubmitDisabled = false,
 }) => {
+  const { t } = useTranslation()
   const navigation = useNavigation()
 
   useAdjustResizeInputMode()
@@ -52,10 +54,10 @@ const FormContainer: React.FC<Props> = ({
             color={Colors.white90}
             customStyles={{ fontFamily: Fonts.Medium }}
           >
-            Cancel
+            {t('CredentialForm.closeBtn')}
           </JoloText>
         </TouchableOpacity>
-        <View style={{ paddingHorizontal: 8 }}>
+        <View style={{ paddingHorizontal: 8, flex: 1 }}>
           <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
         </View>
         <TouchableOpacity
@@ -72,7 +74,7 @@ const FormContainer: React.FC<Props> = ({
               ...(isSubmitDisabled && { opacity: 0.5 }),
             }}
           >
-            Done
+            {t('CredentialForm.confirmBtn')}
           </JoloText>
         </TouchableOpacity>
       </Collapsible.Header>
