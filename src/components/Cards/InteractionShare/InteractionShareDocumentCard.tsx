@@ -133,7 +133,11 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
         )}
         {displayedHighlight && (
           <ScaledView
-            style={{ zIndex: 9 }}
+            style={{
+              zIndex: 9,
+              borderBottomLeftRadius: 9,
+              borderBottomRightRadius: 9,
+            }}
             scaleStyle={styles.documentHighlightContainer}
           >
             <ScaledText
@@ -184,8 +188,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     backgroundColor: 'black',
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
+    // borderBottomLeftRadius: 12,
+    // borderBottomRightRadius: 12,
     zIndex: 9,
     height: 56,
     paddingTop: 17,

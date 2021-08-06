@@ -198,8 +198,6 @@ const styles = StyleSheet.create({
   },
   highlightContainerScaled: {
     bottom: 0,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
     height: 56,
     paddingTop: 17,
     paddingBottom: 13,
@@ -210,6 +208,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: Colors.black,
     zIndex: 9,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   highlight: {
     fontSize: 26,
