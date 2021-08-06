@@ -7,6 +7,8 @@ import {
 } from '~/types/credentials'
 
 import { attributeConfig } from '~/config/claims'
+import { IdentitySummary } from 'react-native-jolocom'
+import truncateDid from './truncateDid'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
 
@@ -26,10 +28,12 @@ export const isCredentialDocument = (cred: SignedCredential, did: string) =>
 
 export const assembleFormInitialValues = (
   fields: Array<IAttributeClaimField | IAttributeClaimFieldWithValue>,
-) => {
-  return fields.reduce<Record<string, string>>((acc, f) => {
-    // @ts-ignore
+) =>
+  fields.reduce<Record<string, string>>((acc, f) => {
+    // @ts-expect-error
     acc[f.key] = f.value ?? ''
     return acc
   }, {})
-}
+
+export const getCounterpartyName = (counterparty: IdentitySummary) =>
+  counterparty.publicProfile?.name ?? truncateDid(counterparty.did)

@@ -3,17 +3,15 @@ import ModalScreen from '~/modals/Modal'
 import useErrors from '~/hooks/useErrors'
 import { ErrorScreens } from '../errorContext'
 import { ErrorFallback } from '~/components/ErrorFallback'
-import { SWErrorCodes, UIErrors } from '../codes'
-import { strings } from '~/translations'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
+import useTranslation from '~/hooks/useTranslation'
 
 const ErrorDisplay = () => {
+  const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
-  const { errorScreen, resetError, error, showErrorReporting } = useErrors()
-  const { title, message } =
-    UIErrors[error?.message as SWErrorCodes] ??
-    UIErrors[SWErrorCodes.SWUnknown]!
+  const { errorScreen, resetError, showErrorReporting, errorDetails } =
+    useErrors()
 
   return (
     <ModalScreen
@@ -22,12 +20,12 @@ const ErrorDisplay = () => {
       animationType={'slide'}
     >
       <ErrorFallback
-        title={title}
-        description={message}
+        title={errorDetails?.title ?? t('Errors.unknownTitle')}
+        description={errorDetails?.message ?? t('Errors.unknownMessage')}
         onPressTop={showErrorReporting}
         onPressBottom={resetError}
-        topButtonText={strings.SUBMIT_REPORT}
-        bottomButtonText={strings.CLOSE}
+        topButtonText={t('Errors.reportBtn')}
+        bottomButtonText={t('Errors.closeBtn')}
       />
     </ModalScreen>
   )

@@ -7,8 +7,8 @@ import {
   getIsFullscreenCredOffer,
   getOfferedCredentialsByCategories,
   getOfferedCredentials,
+  getServiceDescription,
 } from '~/modules/interaction/selectors'
-import { strings } from '~/translations'
 import {
   OfferedCredentialDisplay,
   CredentialCategories,
@@ -36,15 +36,17 @@ import {
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
+  const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
+
   return (
     <ContainerBAS>
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={strings.INCOMING_OFFER} />
+      <InteractionTitle label={t('CredentialOffer.header')} />
       <InteractionDescription
-        label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+        label={t('CredentialOffer.subheader', { serviceName: name })}
       />
       <Space />
       {offeredCredentials.map((d) => {
@@ -52,9 +54,9 @@ const CredentialOfferBAS = () => {
           return (
             <InteractionOfferDocumentCard
               key={d.name}
-              credentialName={d.name || t(strings.UNKNOWN)}
+              credentialName={d.name || t('General.unknown')}
               fields={d.properties.map((p) => ({
-                label: p.label || strings.NOT_SPECIFIED,
+                label: p.label || t('Documents.unspecifiedField'),
               }))}
             />
           )
@@ -62,9 +64,9 @@ const CredentialOfferBAS = () => {
         return (
           <InteractionOfferOtherCard
             key={d.name}
-            credentialName={d.name || t(strings.UNKNOWN)}
+            credentialName={d.name || t('General.unknown')}
             fields={d.properties.map((p) => ({
-              label: p.label || strings.NOT_SPECIFIED,
+              label: p.label || t('Documents.unspecifiedField'),
             }))}
           />
         )
@@ -73,7 +75,7 @@ const CredentialOfferBAS = () => {
 
       <InteractionFooter
         onSubmit={handleSubmit}
-        submitLabel={strings.RECEIVE}
+        submitLabel={t('CredentialOffer.confirmBtn')}
       />
     </ContainerBAS>
   )
@@ -81,12 +83,12 @@ const CredentialOfferBAS = () => {
 
 const CredentialOfferFAS = () => {
   const categories = useSelector(getOfferedCredentialsByCategories)
-
   const handleSubmit = useCredentialOfferSubmit()
 
   const documents = categories[CredentialCategories.document]
   const other = categories[CredentialCategories.other]
 
+  const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
@@ -101,17 +103,17 @@ const CredentialOfferFAS = () => {
         {category === CredentialCategories.document ? (
           <InteractionOfferDocumentCard
             key={name + type}
-            credentialName={name || t(strings.UNKNOWN)}
+            credentialName={name || t('General.unknown')}
             fields={properties.map((p) => ({
-              label: p.label || strings.NOT_SPECIFIED,
+              label: p.label || t('Documents.unspecifiedField'),
             }))}
           />
         ) : (
           <InteractionOfferOtherCard
             key={name + type}
-            credentialName={name || t(strings.UNKNOWN)}
+            credentialName={name || t('General.unknown')}
             fields={properties.map((p) => ({
-              label: p.label || strings.NOT_SPECIFIED,
+              label: p.label || t('Documents.unspecifiedField'),
             }))}
           />
         )}
@@ -122,7 +124,7 @@ const CredentialOfferFAS = () => {
     <Collapsible>
       <Collapsible.AnimatedHeader height={62}>
         <Collapsible.HeaderText>
-          {strings.INCOMING_OFFER}
+          {t('CredentialOffer.header')}
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
@@ -136,23 +138,23 @@ const CredentialOfferFAS = () => {
             </LogoContainerFAS>
           </Collapsible.HidingScale>
           <Collapsible.HidingTextContainer>
-            <InteractionTitle label={strings.INCOMING_OFFER} />
+            <InteractionTitle label={t('CredentialOffer.header')} />
           </Collapsible.HidingTextContainer>
           <InteractionDescription
-            label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+            label={t('CredentialOffer.subheader', { serviceName: name })}
           />
           <Space />
-          <InteractionSection title={strings.DOCUMENTS}>
+          <InteractionSection title={t('Documents.documentsTab')}>
             {handleRenderCredentials(documents)}
           </InteractionSection>
-          <InteractionSection title={strings.OTHER}>
+          <InteractionSection title={t('Documents.othersTab')}>
             {handleRenderCredentials(other)}
           </InteractionSection>
         </Collapsible.ScrollView>
         <FooterContainerFAS>
           <InteractionFooter
             onSubmit={handleSubmit}
-            submitLabel={strings.RECEIVE}
+            submitLabel={t('CredentialOffer.confirmBtn')}
           />
         </FooterContainerFAS>
       </ContainerFAS>

@@ -33,6 +33,11 @@ export enum AttributeTypes {
   postalAddress = 'ProofOfPostalAddressCredential',
 }
 
+export enum CredentialUITypes {
+  identification = 'identification',
+  tickets = 'tickets',
+  unknown = 'unknown',
+}
 /**
  * #### NOTE/FIXME
  * > every time offered credential types changes we need to update this value
@@ -66,6 +71,7 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   label: string
   metadata: BaseMetadata
   fields: T[]
+  // eslint-disable-next-line
   validationSchema: ObjectSchema<Record<string, any>>
 }
 
@@ -78,7 +84,7 @@ export type BaseUICredential = Pick<
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
   category: CredentialCategories
   invalid: boolean
-  properties: Array<DisplayVal>
+  properties: DisplayVal[]
 }
 
 export type OfferedCredentialDisplay = OfferedCredential &

@@ -6,12 +6,10 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenHeader from '~/components/ScreenHeader'
 import BiometryAnimation from '~/components/BiometryAnimation'
 
-import { strings } from '~/translations/strings'
 import { useSuccess } from '~/hooks/loader'
 
 import { useDeviceAuthState } from './module/deviceAuthContext'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
-import { getBiometryHeader } from './utils/getText'
 
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
@@ -20,10 +18,14 @@ import { useBiometry } from '~/hooks/biometry'
 import BtnGroup from '~/components/BtnGroup'
 import { View } from 'react-native'
 import { useDisableLock } from '~/hooks/generic'
+import useTranslation from '~/hooks/useTranslation'
+import { useToasts } from '~/hooks/toasts'
 
 const RegisterBiometry: React.FC = () => {
+  const { t } = useTranslation()
   const { biometryType } = useDeviceAuthState()
   const { authenticate, setBiometry } = useBiometry()
+  const { scheduleErrorWarning } = useToasts()
   const disableLock = useDisableLock()
   const displaySuccessLoader = useSuccess()
 
@@ -37,9 +39,7 @@ const RegisterBiometry: React.FC = () => {
         displaySuccessLoader(handleRedirectToLogin)
       }
     } catch (err) {
-      console.log('Error authenticating with Biometrics in RegisterBiometry', {
-        err,
-      })
+      scheduleErrorWarning(err)
     }
   }
 
@@ -51,8 +51,8 @@ const RegisterBiometry: React.FC = () => {
       }}
     >
       <ScreenHeader
-        title={getBiometryHeader(biometryType)}
-        subtitle={strings.SO_YOU_DONT_NEED_TO_CONFIRM}
+        title={t('Biometry.header', { biometryType })}
+        subtitle={t('Biometry.subheader')}
       />
       <BiometryAnimation
         biometryType={biometryType}
@@ -64,12 +64,12 @@ const RegisterBiometry: React.FC = () => {
         color={Colors.activity}
         customStyles={{ paddingHorizontal: 25, opacity: 0.8 }}
       >
-        {strings.TAP_TO_ACTIVATE}
+        {t('Biometry.activateBtn')}
       </JoloText>
       <View style={{ flex: 1 }} />
       <BtnGroup>
         <Btn type={BtnTypes.secondary} onPress={handleRedirectToLogin}>
-          {strings.SKIP}
+          {t('Biometry.skipBtn')}
         </Btn>
       </BtnGroup>
     </ScreenContainer>

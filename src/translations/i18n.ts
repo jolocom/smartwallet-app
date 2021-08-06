@@ -1,9 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { findBestAvailableLanguage } from 'react-native-localize'
-// @ts-ignore
 import en from './en.json'
-// @ts-ignore
 import de from './de.json'
 
 export enum Locales {
@@ -29,9 +27,17 @@ const getSystemLng = () => {
 i18n.use(initReactI18next).init({
   fallbackLng: Locales.en,
   debug: __DEV__,
+  returnEmptyString: false,
   lng: getSystemLng(),
+  interpolation: {
+    prefix: '${',
+    suffix: '}',
+    format: (value: string, format, lng) => {
+      if (format === 'lowercase') return value.toLowerCase()
+      return value
+    },
+  },
   resources,
-  keySeparator: false,
 })
 
 export default i18n

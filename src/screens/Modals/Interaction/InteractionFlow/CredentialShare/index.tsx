@@ -14,7 +14,6 @@ import {
   getSelectedShareCredentials,
   getServiceDescription,
 } from '~/modules/interaction/selectors'
-import { strings } from '~/translations'
 import {
   isDocument,
   CredentialsByType,
@@ -36,7 +35,6 @@ import {
   LogoContainerFAS,
 } from '../components/styled'
 import ShareAttributeWidget from './ShareAttributeWidget'
-import { getOptionalFields } from '~/screens/LoggedIn/Documents/utils'
 import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
@@ -52,6 +50,7 @@ import {
   InteractionShareDocumentCard,
   InteractionShareOtherCard,
 } from '~/components/Cards/InteractionShare'
+import { useCredentialOptionalFields } from '~/hooks/credentials'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -71,6 +70,7 @@ export const CredentialShareBAS = () => {
   const handleShare = useCredentialShareSubmit()
   const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
+  const { getOptionalFields } = useCredentialOptionalFields()
 
   /* We are preselecting a credential that is requested */
   useEffect(() => {
@@ -104,19 +104,14 @@ export const CredentialShareBAS = () => {
             <InteractionShareDocumentCard
               credentialName={name}
               holderName={
-                displaySingleCredential.holderName || strings.ANONYMOUS
+                displaySingleCredential.holderName || t('General.anonymous')
               }
-              // TODO: correct type
               fields={claimFields}
-              highlight={`${displaySingleCredential.highlight?.slice(
-                0,
-                18,
-              )}...`}
+              highlight={displaySingleCredential.highlight}
               photo={displaySingleCredential.photo}
             />
           ) : (
             <InteractionShareOtherCard
-              // TODO: correct type
               credentialName={name}
               fields={claimFields}
             />
@@ -142,21 +137,19 @@ export const CredentialShareBAS = () => {
       <InteractionTitle
         label={
           singleMissingAttribute
-            ? t(strings.INCOMING_REQUEST_SINGLE, {
-                service: serviceName,
-                attribute:
-                  attributeConfig[
-                    singleMissingAttribute
-                  ].label.toLocaleLowerCase(),
+            ? t('CredentialShare.headerSingleMissing', {
+                serviceName,
+                // @ts-expect-error @terms
+                attribute: t(attributeConfig[singleMissingAttribute].label),
               })
-            : strings.INCOMING_REQUEST
+            : t('CredentialRequest.header')
         }
       />
       <InteractionDescription
         label={
           singleMissingAttribute
-            ? strings.INTERACTION_DESC_MISSING_SINGLE
-            : strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
+            ? t('CredentialShare.singleMissingSubheader')
+            : t('CredentialRequest.subheader', { serviceName })
         }
       />
       <Space />
@@ -165,15 +158,21 @@ export const CredentialShareBAS = () => {
         disabled={!isReadyToSubmit}
         onSubmit={handleSubmit}
         disableLoader={Boolean(singleMissingAttribute)}
-        submitLabel={singleMissingAttribute ? strings.ADD_INFO : strings.SHARE}
+        submitLabel={
+          singleMissingAttribute
+            ? t('CredentialShare.singleMissingAcceptBtn')
+            : t('CredentialRequest.acceptBtn')
+        }
       />
     </ContainerBAS>
   )
 }
 
 const CredentialShareFAS = () => {
+  const { t } = useTranslation()
   const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
+  const { getOptionalFields } = useCredentialOptionalFields()
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
@@ -210,20 +209,13 @@ const CredentialShareFAS = () => {
                   <InteractionShareDocumentCard
                     credentialName={name ?? type}
                     fields={claimFields}
-                    holderName={cred.holderName || strings.ANONYMOUS}
-                    highlight={`${
-                      cred.photo && cred.highlight
-                        ? cred.highlight?.length > 18
-                          ? cred.highlight?.slice(0, 18) + '...'
-                          : cred.highlight
-                        : cred.highlight
-                    }`}
+                    holderName={cred.holderName || t('General.anonymous')}
+                    highlight={cred.highlight}
                     photo={cred.photo}
                   />
                 ) : (
                   <InteractionShareOtherCard
                     credentialName={name ?? type}
-                    // TODO: correct type
                     fields={claimFields}
                   />
                 )}
@@ -245,7 +237,7 @@ const CredentialShareFAS = () => {
     <Collapsible>
       <Collapsible.AnimatedHeader height={62}>
         <Collapsible.HeaderText>
-          {strings.INCOMING_REQUEST}
+          {t('CredentialRequest.header')}
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
@@ -257,24 +249,26 @@ const CredentialShareFAS = () => {
           </Collapsible.HidingScale>
           <Collapsible.HidingTextContainer>
             <ScreenContainer.Padding>
-              <InteractionTitle label={strings.INCOMING_REQUEST} />
+              <InteractionTitle label={t('CredentialRequest.header')} />
             </ScreenContainer.Padding>
           </Collapsible.HidingTextContainer>
           <ScreenContainer.Padding>
-            <InteractionDescription
-              label={
-                strings.CHOOSE_ONE_OR_MORE_DOCUMENTS_REQUESTED_BY_SERVICE_TO_PROCEED
-              }
-            />
+            <InteractionDescription label={t('CredentialRequest.subheader')} />
           </ScreenContainer.Padding>
           <Space />
           <ScreenContainer.Padding>
             <ShareAttributeWidget withContainer />
           </ScreenContainer.Padding>
-          <InteractionSection title={strings.DOCUMENTS} isPaddedTitle={true}>
+          <InteractionSection
+            title={t('Documents.documentsTab')}
+            isPaddedTitle={true}
+          >
             {handleRenderCredentials(documents)}
           </InteractionSection>
-          <InteractionSection title={strings.OTHER} isPaddedTitle={true}>
+          <InteractionSection
+            title={t('Documents.othersTab')}
+            isPaddedTitle={true}
+          >
             {handleRenderCredentials(other)}
           </InteractionSection>
         </Collapsible.ScrollView>
@@ -282,7 +276,7 @@ const CredentialShareFAS = () => {
           <InteractionFooter
             disabled={!isReadyToSubmit}
             onSubmit={handleSubmit}
-            submitLabel={strings.SHARE}
+            submitLabel={t('CredentialRequest.acceptBtn')}
           />
         </FooterContainerFAS>
       </ContainerFAS>
