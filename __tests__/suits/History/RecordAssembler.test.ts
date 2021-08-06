@@ -1,19 +1,83 @@
 import { RecordAssembler } from '~/middleware/records/recordAssembler'
 import { FlowType } from '@jolocom/sdk'
-import { recordConfig } from '~/config/records'
+// import { recordConfig } from '~/config/records'
 import { IRecordStatus } from '~/types/records'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import truncateDid from '~/utils/truncateDid'
 import { capitalizeWord } from '~/utils/stringUtils'
 
+const mockedConfig = {
+  status: {
+    unknown: 'General.unknown',
+    expired: 'History.expiredState',
+    pending: 'History.pendingState',
+  },
+  flows: {
+    [FlowType.Authentication]: {
+      title: 'History.authenticationHeader',
+      steps: {
+        finished: [
+          'History.authenticationRequestStepHeader',
+          'History.authResponseStepHeader',
+        ],
+        unfinished: [
+          'History.authenticationRequestStepHeader',
+          'History.authResponseStepHeader',
+        ],
+      },
+    },
+    [FlowType.Authorization]: {
+      title: 'History.authzHeader',
+      steps: {
+        finished: [
+          'History.authzRequestStepHeader',
+          'History.authzResponseStepHeader',
+        ],
+        unfinished: [
+          'History.authzRequestStepHeader',
+          'History.authzResponseStepHeader',
+        ],
+      },
+    },
+    [FlowType.CredentialOffer]: {
+      title: 'History.credentialOfferHeader',
+      steps: {
+        finished: [
+          'History.offerRequestStepHeader',
+          'History.offerResponseStepHeader',
+          'History.offerReceiveStepHeader',
+        ],
+        unfinished: [
+          'History.offerRequestStepHeader',
+          'History.offerResponseStepHeader',
+          'History.offerReceiveStepHeader',
+        ],
+      },
+    },
+    [FlowType.CredentialShare]: {
+      title: 'History.credShareHeader',
+      steps: {
+        finished: [
+          'History.credShareRequestStepHeader',
+          'History.credShareResponseStepHeader',
+        ],
+        unfinished: [
+          'History.credShareRequestStepHeader',
+          'History.credShareResponseStepHeader',
+        ],
+      },
+    },
+  },
+}
+
 const addDays = (days: number) => {
-  var result = new Date()
+  const result = new Date()
   result.setDate(result.getDate() + days)
   return result.getTime()
 }
 
 const subDays = (days: number) => {
-  var result = new Date()
+  const result = new Date()
   result.setDate(result.getDate() - days)
   return result.getTime()
 }
@@ -25,7 +89,7 @@ const buildSummary = <T>(state: T) => ({
 const genericArgs = {
   lastMessageDate: Date.now(),
   expirationDate: addDays(1),
-  config: recordConfig,
+  config: mockedConfig,
 }
 
 const genericAuthArgs = {
@@ -183,20 +247,19 @@ describe('Record Assembler', () => {
       const steps = assembler.getRecordDetails().steps
 
       expect(steps[steps.length - 1]).toStrictEqual({
-        title: recordConfig.Authentication?.steps.unfinished[1],
-        description: 'Expired',
+        title: mockedConfig.flows.Authentication?.steps.unfinished[1],
+        description: 'History.expiredState',
       })
     })
 
     it('should return the correct authentication steps', () => {
       const assembler = new RecordAssembler(genericAuthArgs)
 
-      const expectedSteps = recordConfig.Authentication?.steps.finished.map(
-        (title) => ({
+      const expectedSteps =
+        mockedConfig.flows.Authentication?.steps.finished.map((title) => ({
           title,
           description: truncateDid(genericAuthArgs.summary.initiator.did),
-        }),
-      )
+        }))
 
       expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
     })
@@ -204,12 +267,11 @@ describe('Record Assembler', () => {
     it('should return the correct authorization steps', () => {
       const assembler = new RecordAssembler(genericAuthzArgs)
 
-      const expectedSteps = recordConfig.Authorization?.steps.finished.map(
-        (title) => ({
+      const expectedSteps =
+        mockedConfig.flows.Authorization?.steps.finished.map((title) => ({
           title,
           description: capitalizeWord(genericAuthzArgs.summary.state.action),
-        }),
-      )
+        }))
 
       expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
     })
@@ -217,8 +279,8 @@ describe('Record Assembler', () => {
     it('should return the correct offer steps', () => {
       const assembler = new RecordAssembler(genericOfferArgs)
 
-      const expectedSteps = recordConfig.CredentialOffer?.steps.finished.map(
-        (title, i) => ({
+      const expectedSteps =
+        mockedConfig.flows.CredentialOffer?.steps.finished.map((title, i) => ({
           title,
           description:
             i !== 2
@@ -228,8 +290,7 @@ describe('Record Assembler', () => {
               : genericOfferArgs.summary.state.issued
                   .map((s) => s.name)
                   .join(', '),
-        }),
-      )
+        }))
 
       expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
     })
@@ -237,15 +298,14 @@ describe('Record Assembler', () => {
     it('should return the correct share steps', () => {
       const assembler = new RecordAssembler(genericRequestArgs)
 
-      const expectedSteps = recordConfig.CredentialShare?.steps.finished.map(
-        (title) => ({
+      const expectedSteps =
+        mockedConfig.flows.CredentialShare?.steps.finished.map((title) => ({
           title,
           description:
             genericRequestArgs.summary.state.providedCredentials[0].suppliedCredentials
               .map((c) => c.name)
               .join(', '),
-        }),
-      )
+        }))
 
       expect(assembler.getRecordDetails().steps).toEqual(expectedSteps)
     })
