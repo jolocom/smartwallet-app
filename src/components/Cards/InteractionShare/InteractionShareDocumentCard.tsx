@@ -1,53 +1,22 @@
-import React, { useState, useMemo } from 'react'
-import { View, Image, StyleSheet } from 'react-native'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import React, { useMemo, useState } from 'react'
+import { Image, StyleSheet, View } from 'react-native'
 
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
-import { Colors } from '~/utils/colors'
-import InteractionCardOther from '~/assets/svg/InteractionCardOther'
-import { sharedStyles } from './sharedStyle'
 import { TextLayoutEvent } from '~/types/props'
-import { getTrimmedHighlight } from './utils'
-import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
+import { Colors } from '~/utils/colors'
+import { commonStyles } from '../commonStyles'
+import { useCalculateFieldLines } from '../hooks'
+import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
+import { getTrimmedHighlight } from '../utils'
 
-const MAX_FIELD_DOC = 2
-const MAX_FIELD_OTHER = 3
-
-const useCalculateFieldLines = () => {
-  const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
-  const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
-    const lines = e.nativeEvent.lines.length
-    setFieldLines((prevState) => ({
-      ...prevState,
-      [idx]: prevState[idx] ?? lines,
-    }))
-  }
-  return {
-    fieldLines,
-    handleFieldValueLayout,
-  }
-}
-
-type FieldsCalculatorProps = (
-  child: React.ReactNode,
-  idx: number,
-) => React.ReactNode
-
-const FieldsCalculator: React.FC<{
-  cbFieldsVisibility: FieldsCalculatorProps
-}> = ({ children, cbFieldsVisibility }) =>
-  React.Children.map(children, cbFieldsVisibility) as React.ReactElement<
-    unknown,
-    string
-  > | null
-
-type InteractionShareDocumentCardProps = {
-  credentialName: string
-  holderName: string
-  fields: Array<Required<DisplayVal>>
-  highlight?: string
-  photo?: string
-}
+import { FieldsCalculator } from './components'
+import {
+  MAX_FIELD_DOC,
+  ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH,
+} from './consts'
+import { shareStyles } from './styles'
+import { InteractionShareDocumentCardProps } from './types'
 
 export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCardProps> =
   ({ credentialName, holderName, fields, photo, highlight }) => {
@@ -92,13 +61,17 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2
 
     return (
-      <ScaledCard originalWidth={368} originalHeight={232} scaleToFit>
+      <ScaledCard
+        originalWidth={ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH}
+        originalHeight={ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT}
+        scaleToFit
+      >
         <InteractionCardDoc>
           <ScaledView scaleStyle={styles.documentBodyContainer}>
             <ScaledText
               numberOfLines={1}
               scaleStyle={styles.documentCredentialName}
-              style={sharedStyles.regularText}
+              style={commonStyles.regularText}
             >
               {credentialName}
             </ScaledText>
@@ -108,7 +81,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
               // @ts-expect-error
               onTextLayout={(e: TextLayoutEvent) => handleHolderNameLayout(e)}
               scaleStyle={styles.documentHolderName}
-              style={sharedStyles.mediumText}
+              style={commonStyles.mediumText}
             >
               {holderName}
             </ScaledText>
@@ -123,8 +96,8 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                     )}
                     <ScaledText
                       numberOfLines={1}
-                      scaleStyle={sharedStyles.fieldLabel}
-                      style={sharedStyles.regularText}
+                      scaleStyle={commonStyles.fieldLabel}
+                      style={commonStyles.regularText}
                     >
                       {f.label}:
                     </ScaledText>
@@ -135,8 +108,8 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
                       onTextLayout={(e: TextLayoutEvent) =>
                         handleFieldValueLayout(e, idx)
                       }
-                      scaleStyle={styles.fieldValue}
-                      style={sharedStyles.regularText}
+                      scaleStyle={shareStyles.fieldValue}
+                      style={commonStyles.regularText}
                     >
                       {f.value}
                     </ScaledText>
@@ -165,91 +138,12 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
           >
             <ScaledText
               scaleStyle={styles.documentHighlight}
-              style={sharedStyles.regularText}
+              style={commonStyles.regularText}
             >
               {displayedHighlight.toUpperCase()}
             </ScaledText>
           </ScaledView>
         )}
-      </ScaledCard>
-    )
-  }
-
-type InteractionShareOtherCardProps = {
-  credentialName: string
-  fields: Array<Required<DisplayVal>>
-}
-
-/**
- * TODO:
- * - width of body
- */
-export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps> =
-  ({ credentialName, fields }) => {
-    const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
-
-    const handleFieldValuesVisibility = (
-      child: React.ReactNode,
-      idx: number,
-    ) => {
-      if (idx + 1 > MAX_FIELD_OTHER) {
-        /* 1. Do not display anything that is more than max */
-        return null
-      } else if (
-        fieldLines[0] &&
-        fieldLines[1] &&
-        fieldLines[0] + fieldLines[1] > 2 &&
-        idx > 1
-      ) {
-        /* 2. If the sum of first and second field values is greater than 2 do not display anything later*/
-        return null
-      }
-      return child
-    }
-
-    return (
-      <ScaledCard originalHeight={232} originalWidth={368} scaleToFit>
-        <InteractionCardOther>
-          <ScaledView scaleStyle={styles.otherBodyContainer}>
-            <ScaledText
-              numberOfLines={2}
-              scaleStyle={styles.otherCredentialName}
-              style={sharedStyles.regularText}
-            >
-              {credentialName}
-            </ScaledText>
-            <ScaledView scaleStyle={{ paddingBottom: 16 }} />
-            <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
-              {fields.map((f, idx) => (
-                <>
-                  {idx !== 0 && (
-                    <ScaledView scaleStyle={{ paddingBottom: 12 }} />
-                  )}
-
-                  <ScaledText
-                    scaleStyle={sharedStyles.fieldLabel}
-                    style={sharedStyles.regularText}
-                  >
-                    {f.label}:
-                  </ScaledText>
-                  <ScaledView scaleStyle={{ paddingBottom: 4 }} />
-                  {/* TODO: the same as in document card */}
-                  <ScaledText
-                    numberOfLines={2}
-                    //@ts-expect-error
-                    onTextLayout={(e: TextLayoutEvent) =>
-                      handleFieldValueLayout(e, idx)
-                    }
-                    scaleStyle={styles.fieldValue}
-                    style={sharedStyles.regularText}
-                  >
-                    {f.value}
-                  </ScaledText>
-                </>
-              ))}
-            </FieldsCalculator>
-          </ScaledView>
-        </InteractionCardOther>
       </ScaledCard>
     )
   }
@@ -271,25 +165,6 @@ const styles = StyleSheet.create({
   documentHolderName: {
     fontSize: 28,
     lineHeight: 28,
-  },
-  otherBodyContainer: {
-    // TODO: correct values once available
-    // add width once available
-    paddingBottom: 18,
-    paddingTop: 16,
-    paddingLeft: 20,
-    paddingRight: 17,
-    width: '73%',
-  },
-  otherCredentialName: {
-    color: Colors.black80,
-    fontSize: 22,
-    lineHeight: 24,
-  },
-  fieldValue: {
-    fontSize: 18,
-    lineHeight: 18,
-    letterSpacing: 0.09,
   },
   documentPhotoContainer: {
     position: 'absolute',

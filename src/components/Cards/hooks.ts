@@ -18,7 +18,8 @@ export const useCredentialNameScale = () => {
 }
 
 /**
- * logic to define number of displayed fields
+ * a hook to decide about nr of displayed fields for document
+ * section cards
  */
 export const useTrimFields = <FP>(
   fields: FP[],
@@ -52,4 +53,22 @@ export const useTrimFields = <FP>(
   }
   const onTextLayoutChange = handleOptionalFieldTextLayout()
   return { displayedFields, onTextLayoutChange }
+}
+
+/**
+ * a hook to calculate nr of displayed fields for interaction cards
+ */
+export const useCalculateFieldLines = () => {
+  const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
+  const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
+    const lines = e.nativeEvent.lines.length
+    setFieldLines((prevState) => ({
+      ...prevState,
+      [idx]: prevState[idx] ?? lines,
+    }))
+  }
+  return {
+    fieldLines,
+    handleFieldValueLayout,
+  }
 }

@@ -1,43 +1,42 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import { Colors } from '~/utils/colors'
-import { strings } from '~/translations'
-import { sharedStyles } from './sharedStyle'
+
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
-import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
+import { strings } from '~/translations'
+import { Colors } from '~/utils/colors'
+import { commonStyles } from '../commonStyles'
+import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
+import {
+  ORIGINAL_DOCUMENT_OFFER_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_OFFER_CARD_WIDTH,
+} from './consts'
+import { CardType, InteractionOfferCardProps } from './types'
 
-type InteractionOfferCardProps = {
-  credentialName: string
-  fields: Array<Required<Pick<DisplayVal, 'label'>>>
-}
-type CardType = {
-  cardType: 'document' | 'other'
-}
-
-const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
-  cardType,
-  credentialName,
-  fields,
-}) => {
+export const InteractionOfferCard: React.FC<
+  InteractionOfferCardProps & CardType
+> = ({ cardType, credentialName, fields }) => {
   const Card =
     cardType === 'document' ? InteractionCardDoc : InteractionCardOther
   return (
-    <ScaledCard originalWidth={368} originalHeight={232} scaleToFit>
+    <ScaledCard
+      originalWidth={ORIGINAL_DOCUMENT_OFFER_CARD_WIDTH}
+      originalHeight={ORIGINAL_DOCUMENT_OFFER_CARD_HEIGHT}
+      scaleToFit
+    >
       <Card>
         <ScaledView scaleStyle={styles.bodyContainer}>
           <ScaledText
             numberOfLines={1}
             scaleStyle={styles.credentialName}
-            style={sharedStyles.regularText}
+            style={commonStyles.regularText}
           >
             {credentialName}
           </ScaledText>
           <ScaledView scaleStyle={{ paddingBottom: 16 }} />
           <ScaledText
             scaleStyle={styles.fieldSectionTitle}
-            style={sharedStyles.regularText}
+            style={commonStyles.regularText}
           >
             {strings.INCLUDED_INFO}:
           </ScaledText>
@@ -47,8 +46,8 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
               <>
                 {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 10 }} />}
                 <ScaledText
-                  scaleStyle={sharedStyles.fieldLabelSmall}
-                  style={sharedStyles.regularText}
+                  scaleStyle={commonStyles.fieldLabelSmall}
+                  style={commonStyles.regularText}
                 >
                   {f.label}
                 </ScaledText>
@@ -61,8 +60,8 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
             ))
           ) : (
             <ScaledText
-              scaleStyle={sharedStyles.fieldLabelSmall}
-              style={sharedStyles.regularText}
+              scaleStyle={commonStyles.fieldLabelSmall}
+              style={commonStyles.regularText}
             >
               {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
             </ScaledText>
@@ -72,12 +71,6 @@ const OfferCard: React.FC<InteractionOfferCardProps & CardType> = ({
     </ScaledCard>
   )
 }
-
-export const InteractionOfferDocumentCard: React.FC<InteractionOfferCardProps> =
-  (props) => <OfferCard {...props} cardType="document" />
-export const InteractionOfferOtherCard: React.FC<InteractionOfferCardProps> = (
-  props,
-) => <OfferCard {...props} cardType="other" />
 
 const styles = StyleSheet.create({
   fieldSectionTitle: {
