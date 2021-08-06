@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
 import InteractionCardOther from '~/assets/svg/InteractionCardOther'
-import { strings } from '~/translations'
+import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import { commonStyles } from '../commonStyles'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
@@ -16,6 +16,7 @@ import { CardType, InteractionOfferCardProps } from './types'
 export const InteractionOfferCard: React.FC<
   InteractionOfferCardProps & CardType
 > = ({ cardType, credentialName, fields }) => {
+  const { t } = useTranslation()
   const Card =
     cardType === 'document' ? InteractionCardDoc : InteractionCardOther
   return (
@@ -38,7 +39,7 @@ export const InteractionOfferCard: React.FC<
             scaleStyle={styles.fieldSectionTitle}
             style={commonStyles.regularText}
           >
-            {strings.INCLUDED_INFO}:
+            {t('CredentialOffer.cardInfoHeader')}:
           </ScaledText>
           <ScaledView scaleStyle={{ paddingBottom: 11 }} />
           {fields.length ? (
@@ -63,7 +64,7 @@ export const InteractionOfferCard: React.FC<
               scaleStyle={commonStyles.fieldLabelSmall}
               style={commonStyles.regularText}
             >
-              {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
+              {t('CredentialOffer.cardNoPreview')}
             </ScaledText>
           )}
         </ScaledView>
