@@ -1,13 +1,5 @@
 import React, { useState } from 'react'
-import {
-  LayoutChangeEvent,
-  LayoutRectangle,
-  StyleSheet,
-  Text,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native'
+import { LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-native'
 import { getCardDimensions } from '../getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
 import {
@@ -15,28 +7,14 @@ import {
   IScaledComponentProps,
   TSupportedComponentProps,
 } from './types'
-
-const scaleStyleObject = <T extends TSupportedComponentProps['style']>(
-  style: T,
-  scaleBy: number,
-) => {
-  style = StyleSheet.flatten(style) as T
-
-  return Object.entries(style ?? {}).reduce<ViewStyle | TextStyle>(
-    (acc, [key, value]) => ({
-      ...acc,
-      [key]: Number.isInteger(value) ? value * scaleBy : value,
-    }),
-    {},
-  )
-}
+import { handleContainerLayout, scaleStyleObject } from './utils'
 
 const ScaledCard: React.FC<IScaledCardProps> = ({
   originalHeight,
   originalWidth,
   scaleToFit = false,
   originalScreenWidth,
-  style: viewStyle,
+  style: viewStyle = {},
   children,
   ...viewProps
 }) => {
@@ -56,9 +34,10 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   )
 
   const handleLayout = (e: LayoutChangeEvent) => {
+    const { width, height } = handleContainerLayout(e)
     setContainerDimensions({
-      height: e.nativeEvent.layout.height,
-      width: e.nativeEvent.layout.width,
+      height,
+      width,
     })
   }
 
@@ -73,6 +52,7 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
             : { width: scaledWidth, height: scaledHeight },
         ]}
         onLayout={handleLayout}
+        testID="scaled-container"
       >
         {children}
       </View>
@@ -89,14 +69,17 @@ const withScaledComponent =
   <T extends TSupportedComponentProps>(
     Component: React.ElementType<T>,
   ): React.FC<IScaledComponentProps<T>> =>
-  ({ scaleStyle, style, children, ...props }) => {
+  ({ scaleStyle, style = {}, children, ...props }) => {
     const { scaleBy } = useScaledCard()
     const scaledStyles = scaleStyleObject(scaleStyle as T['style'], scaleBy)
-
     return (
       // @ts-expect-error Typing the @Component as React.Element<any> removes the error,
       // but loses the type inheritance of T
-      <Component style={[style, scaledStyles]} {...props}>
+      <Component
+        style={[style, scaledStyles]}
+        {...props}
+        testID={`scaled-${Component.displayName}`}
+      >
         {children}
       </Component>
     )
