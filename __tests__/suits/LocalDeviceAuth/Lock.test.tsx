@@ -2,15 +2,13 @@ import React from 'react'
 import * as redux from 'react-redux'
 import { AppState } from 'react-native'
 
-import { fireEvent, waitFor, act } from '@testing-library/react-native'
+import { waitFor } from '@testing-library/react-native'
 
 import * as deviceAuthHooks from '~/hooks/deviceAuth'
 import Lock from '~/screens/Modals/Lock'
-import { strings } from '~/translations/strings'
 import { setAppLocked } from '~/modules/account/actions'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AppStatusState } from '~/modules/appState/types'
-import { ReactTestInstance } from 'react-test-renderer'
 import { inputPasscode } from '../../utils/inputPasscode'
 import { getMockedDispatch } from '../../mocks/libs/react-redux'
 
@@ -31,6 +29,7 @@ jest.mock('../../../src/hooks/biometry', () => ({
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
+  // eslint-disable-next-line
   useFocusEffect: jest.fn().mockImplementation(() => {}),
   useNavigation: () => ({}),
 }))
@@ -51,22 +50,13 @@ jest.mock(
           listeners.push(handler)
         }
       }),
-      removeEventListener: jest.fn((event, handler) => {
-        return undefined
-      }),
+      removeEventListener: jest.fn((event, handler) => undefined),
       emit: jest.fn((event, nextAppState: AppStatusState) => {
         listeners.forEach((l) => l(nextAppState))
       }),
     }
   },
 )
-
-// const getMockedDispatch = () => {
-//   const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
-//   const mockDispatchFn = jest.fn()
-//   useDispatchSpy.mockReturnValue(mockDispatchFn)
-//   return mockDispatchFn
-// }
 
 describe('Without biometry', () => {
   beforeEach(() => {
@@ -86,9 +76,9 @@ describe('Without biometry', () => {
 
     mockGetBiometry.mockResolvedValue(undefined)
 
-    expect(getByText(strings.ENTER_YOUR_PASSCODE)).toBeDefined()
+    expect(getByText(/Lock.header/)).toBeDefined()
+    expect(getByText(/Lock.forgotBtn/)).toBeDefined()
     expect(getByTestId('passcode-keyboard')).toBeDefined()
-    expect(getByText(strings.FORGOT_YOUR_PASSCODE)).toBeDefined()
   })
 
   test("The app is locked if pins don't match", async () => {
@@ -97,7 +87,7 @@ describe('Without biometry', () => {
     inputPasscode(getByTestId, [3, 3, 3, 3])
 
     await waitFor(() => {
-      expect(getByText(strings.WRONG_PASSCODE)).toBeDefined()
+      expect(getByText(/ChangePasscode.wrongCodeHeader/)).toBeDefined()
     })
   })
 
@@ -139,9 +129,9 @@ describe('With biometry', () => {
     await waitFor(() => renderWithSafeArea(<Lock />))
 
     // ACT: this imitates the app going to the background
-    // @ts-ignore - because it is a custom method, and react native App State has no emit method available
+    // @ts-expect-error - because it is a custom method, and react native App State has no emit method available
     AppState.emit('change', 'background')
-    // @ts-ignore
+    // @ts-expect-error
     AppState.emit('change', 'active')
 
     await waitFor(() => {
@@ -160,9 +150,9 @@ describe('With biometry', () => {
     await waitFor(() => renderWithSafeArea(<Lock />))
 
     // ACT: this imitates the app going to the background
-    // @ts-ignore
+    // @ts-expect-error
     AppState.emit('change', 'background')
-    // @ts-ignore
+    // @ts-expect-error
     AppState.emit('change', 'active')
 
     await waitFor(() => {
