@@ -116,7 +116,7 @@
     "@types/inquirer": "^7.3.3",
     "@types/jest": "^24.0.24",
     "@types/minimist": "^1.2.2",
-    "@types/node-fetch": "^2.5.11",
+    "@types/node-fetch": "^2.5.12",
     "@types/react-native": "^0.62.0",
     "@types/react-native-snap-carousel": "^3.8.2",
     "@types/react-redux": "^7.1.7",

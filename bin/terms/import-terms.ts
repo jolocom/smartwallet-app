@@ -7,7 +7,7 @@ const TRANSLATIONS_LOCATION = `${CURRENT_PATH}/src/translations/`
 
 const downloadTerms = (url: string) => fetch(url).then((res) => res.json())
 
-const saveTerms = (name: string, terms: any) => {
+const saveTerms = (name: string, terms: unknown) => {
   fs.writeFile(
     `${TRANSLATIONS_LOCATION}/${name}`,
     JSON.stringify(terms, null, 4),
@@ -24,9 +24,9 @@ const assembleTermsForLanguage = (language: Languages) =>
     language,
     type: 'key_value_json',
   })
-    .then(res => {
-      if(res) return res.result.url as string
-      else throw 'Url not found'
+    .then((res) => {
+      if (res) return res.result.url as string
+      else throw new Error('Url not found')
     })
     .then(downloadTerms)
     .then((terms) => saveTerms(`${language}.json`, terms))
@@ -43,6 +43,6 @@ const main = async () => {
   await assembleTermsForLanguage(Languages.de)
 }
 
-(async() => {
-  main();
-})();
+;(async () => {
+  main()
+})()

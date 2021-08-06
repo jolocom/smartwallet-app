@@ -167,7 +167,7 @@
         "invalidDocsToastSubheader": "Unable to save any of the documents sent by ${serviceName}",
         "header": "Incoming offer",
         "subheader": "${serviceName} sent your wallet the following document(s):",
-        "cardInfoHeader": "Included info:",
+        "cardInfoHeader": "Included info",
         "confirmBtn": "Accept",
         "acceptBtn": "Accept",
         "cardNoPreview": "No info can be previewed"

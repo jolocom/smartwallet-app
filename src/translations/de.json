@@ -167,7 +167,7 @@
         "invalidDocsToastSubheader": "Keines der von ${serviceName} gesendeten Dokumente konnte gespeichert werden",
         "header": "Eingehende Übertragung",
         "subheader": "${serviceName} hat deiner Wallet das/die folgende(n) Dokument(e) geschickt:",
-        "cardInfoHeader": "Enthaltene Info:",
+        "cardInfoHeader": "Enthaltene Info",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren",
         "cardNoPreview": "Keine Informationen können in der Vorschau angezeigt werden"
