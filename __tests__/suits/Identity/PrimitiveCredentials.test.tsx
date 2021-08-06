@@ -57,7 +57,7 @@ describe('Primitive credentials component displays', () => {
     const { getByText, getAllByTestId } = renderWithSafeArea(
       <IdentityCredentials />,
     )
-    expect(getByText(strings.YOUR_INFO_IS_QUITE_EMPTY)).toBeDefined()
+    expect(getByText(/Identity.attributesMissingInfo/)).toBeDefined()
 
     const emptyFields = getAllByTestId('widget-field-empty')
     expect(emptyFields.length).toBe(4)
