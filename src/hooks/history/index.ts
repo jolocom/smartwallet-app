@@ -17,7 +17,6 @@ export const useHistory = () => {
 
     return {
       type,
-      // @ts-ignore
       section,
       lastUpdate: issued.toString(),
       id: interaction.id,
@@ -37,9 +36,7 @@ export const useHistory = () => {
     })
 
     const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>(
-      (acc, intx) => {
-        return [...acc, getSectionDetails(intx)]
-      },
+      (acc, intx) => [...acc, getSectionDetails(intx)],
       [],
     )
 
