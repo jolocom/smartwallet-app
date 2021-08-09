@@ -2,7 +2,7 @@ import { FlowType, Interaction } from '@jolocom/sdk'
 
 import { useAgent } from '~/hooks/sdk'
 import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
-import { getDateSection } from './utils'
+import { getDateSection, translateRecordConfig } from './utils'
 import { RecordAssembler } from '~/middleware/records/recordAssembler'
 import useTranslation from '../useTranslation'
 
@@ -56,79 +56,6 @@ export const useHistory = () => {
     records: IPreLoadedInteraction[],
   ) => [getSectionDetails(interaction), ...records]
 
-  const getConfig = () => {
-    // NOTE: the first unfinished step will never be used, due to the fact
-    // that there is always a request i.e. first step.
-    const unfinishStep = (text: string) =>
-      t('History.notFinishedStepHeader', {
-        text: text.toLowerCase(),
-      })
-
-    return {
-      status: {
-        unknown: t('General.unknown'),
-        expired: t('History.expiredState'),
-        pending: t('History.pendingState'),
-      },
-      flows: {
-        [FlowType.Authentication]: {
-          title: t('History.authenticationHeader'),
-          steps: {
-            finished: [
-              t('History.authenticationRequestStepHeader'),
-              t('History.authResponseStepHeader'),
-            ],
-            unfinished: [
-              unfinishStep(t('History.authenticationRequestStepHeader')),
-              unfinishStep(t('History.authResponseStepHeader')),
-            ],
-          },
-        },
-        [FlowType.Authorization]: {
-          title: t('History.authzHeader'),
-          steps: {
-            finished: [
-              t('History.authzRequestStepHeader'),
-              t('History.authzResponseStepHeader'),
-            ],
-            unfinished: [
-              unfinishStep(t('History.authzRequestStepHeader')),
-              unfinishStep(t('History.authzResponseStepHeader')),
-            ],
-          },
-        },
-        [FlowType.CredentialOffer]: {
-          title: t('History.credentialOfferHeader'),
-          steps: {
-            finished: [
-              t('History.offerRequestStepHeader'),
-              t('History.offerResponseStepHeader'),
-              t('History.offerReceiveStepHeader'),
-            ],
-            unfinished: [
-              unfinishStep(t('History.offerRequestStepHeader')),
-              unfinishStep(t('History.offerResponseStepHeader')),
-              unfinishStep(t('History.offerReceiveStepHeader')),
-            ],
-          },
-        },
-        [FlowType.CredentialShare]: {
-          title: t('History.credShareHeader'),
-          steps: {
-            finished: [
-              t('History.credShareRequestStepHeader'),
-              t('History.credShareResponseStepHeader'),
-            ],
-            unfinished: [
-              unfinishStep(t('History.credShareRequestStepHeader')),
-              unfinishStep(t('History.credShareResponseStepHeader')),
-            ],
-          },
-        },
-      },
-    }
-  }
-
   const assembleInteractionDetails = async (
     nonce: string,
   ): Promise<IRecordDetails> => {
@@ -141,7 +68,7 @@ export const useHistory = () => {
       summary: interaction.getSummary(),
       lastMessageDate: issued,
       expirationDate: expires,
-      config: getConfig(),
+      config: translateRecordConfig(t),
     })
 
     return recordAssembler.getRecordDetails()

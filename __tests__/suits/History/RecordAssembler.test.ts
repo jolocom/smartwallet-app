@@ -5,70 +5,9 @@ import { IRecordStatus } from '~/types/records'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 import truncateDid from '~/utils/truncateDid'
 import { capitalizeWord } from '~/utils/stringUtils'
+import { recordConfig } from '~/hooks/history/utils'
 
-const mockedConfig = {
-  status: {
-    unknown: 'General.unknown',
-    expired: 'History.expiredState',
-    pending: 'History.pendingState',
-  },
-  flows: {
-    [FlowType.Authentication]: {
-      title: 'History.authenticationHeader',
-      steps: {
-        finished: [
-          'History.authenticationRequestStepHeader',
-          'History.authResponseStepHeader',
-        ],
-        unfinished: [
-          'History.authenticationRequestStepHeader',
-          'History.authResponseStepHeader',
-        ],
-      },
-    },
-    [FlowType.Authorization]: {
-      title: 'History.authzHeader',
-      steps: {
-        finished: [
-          'History.authzRequestStepHeader',
-          'History.authzResponseStepHeader',
-        ],
-        unfinished: [
-          'History.authzRequestStepHeader',
-          'History.authzResponseStepHeader',
-        ],
-      },
-    },
-    [FlowType.CredentialOffer]: {
-      title: 'History.credentialOfferHeader',
-      steps: {
-        finished: [
-          'History.offerRequestStepHeader',
-          'History.offerResponseStepHeader',
-          'History.offerReceiveStepHeader',
-        ],
-        unfinished: [
-          'History.offerRequestStepHeader',
-          'History.offerResponseStepHeader',
-          'History.offerReceiveStepHeader',
-        ],
-      },
-    },
-    [FlowType.CredentialShare]: {
-      title: 'History.credShareHeader',
-      steps: {
-        finished: [
-          'History.credShareRequestStepHeader',
-          'History.credShareResponseStepHeader',
-        ],
-        unfinished: [
-          'History.credShareRequestStepHeader',
-          'History.credShareResponseStepHeader',
-        ],
-      },
-    },
-  },
-}
+const mockedConfig = recordConfig
 
 const addDays = (days: number) => {
   const result = new Date()
