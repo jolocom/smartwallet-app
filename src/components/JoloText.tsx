@@ -6,6 +6,7 @@ import {
   Platform,
   Text,
   TextProps,
+  StyleProp,
 } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts, fonts, scaleFont } from '~/utils/fonts'
@@ -25,7 +26,7 @@ export interface IJoloTextProps extends TextProps {
   size?: JoloTextSizes
   weight?: JoloTextWeight
   color?: Colors
-  customStyles?: TextStyle | Animated.WithAnimatedValue<TextStyle>
+  customStyles?: StyleProp<TextStyle> | Animated.WithAnimatedValue<TextStyle>
   animated?: boolean
   testID?: string
   ignoreScaling?: boolean

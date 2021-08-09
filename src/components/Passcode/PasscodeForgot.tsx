@@ -1,18 +1,19 @@
 import React from 'react'
 
-import { strings } from '~/translations'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import useTranslation from '~/hooks/useTranslation'
 
 const PasscodeForgot = () => {
+  const { t } = useTranslation()
   const redirectToPinRecoveryInstruction = useRedirectTo(
     ScreenNames.PinRecoveryInstructions,
   )
 
   return (
     <Btn type={BtnTypes.secondary} onPress={redirectToPinRecoveryInstruction}>
-      {strings.FORGOT_YOUR_PASSCODE}
+      {t('Lock.forgotBtn')}
     </Btn>
   )
 }

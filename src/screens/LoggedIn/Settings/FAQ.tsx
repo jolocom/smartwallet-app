@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import React from 'react'
 import {
   Animated,
@@ -8,21 +9,36 @@ import {
 
 import ScreenContainer from '~/components/ScreenContainer'
 import BlockExpanded from '~/components/BlockExpanded'
-// @ts-ignore
-import faqJson from '~/translations/faq.json'
-import { strings } from '~/translations/strings'
 import CollapsibleClone from '~/components/CollapsibleClone'
-import { useRef } from 'react'
 
 type TFAQItem = { question: string; answer: string }
-type FAQArray = Array<TFAQItem>
+import useTranslation from '~/hooks/useTranslation'
 
 // TODO: FAQ isn't snapping correctly
 const FAQ = () => {
   const listRef = useRef<FlatList>(null)
-  const faqArray = faqJson as FAQArray
+  const { t } = useTranslation()
+  const faqArray = [
+    {
+      question: t('FAQ.header_q1'),
+      answer: t('FAQ.subheader_q1'),
+    },
+    {
+      question: t('FAQ.header_q2'),
+      answer: t('FAQ.subheader_q2'),
+    },
+    {
+      question: t('FAQ.header_q3'),
+      answer: t('FAQ.subheader_q3'),
+    },
+    {
+      question: t('FAQ.header_q4'),
+      answer: t('FAQ.subheader_q4'),
+    },
+  ]
 
   const handleExpand = (ref: React.RefObject<FlatList>, index: number) => {
+    // eslint-disable-next-line
     listRef.current?.scrollToIndex({
       index,
       //NOTE: attempts to center the view
@@ -45,7 +61,7 @@ const FAQ = () => {
             <Animated.FlatList
               ref={listRef}
               ListHeaderComponent={() => (
-                <CollapsibleClone.Title text={strings.POPULAR_QUESTIONS} />
+                <CollapsibleClone.Title text={t('FAQ.header')} />
               )}
               data={faqArray}
               overScrollMode={'never'}

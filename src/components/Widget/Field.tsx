@@ -2,12 +2,12 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity, View, TextStyle } from 'react-native'
 
 import { PurpleTickSuccess } from '~/assets/svg'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from './context'
 import { IWithCustomStyle } from '../Card/types'
 import JoloText from '../JoloText'
+import useTranslation from '~/hooks/useTranslation'
 
 export type TField = IFieldComposition & React.FC
 
@@ -83,6 +83,7 @@ const SelectableField: React.FC<
 }
 
 const EmptyField: React.FC = ({ children }) => {
+  const { t } = useTranslation()
   const widgetContext = useWidget()
   if (!widgetContext?.onAdd)
     throw new Error('No method provided for creating new attribute')
@@ -93,7 +94,10 @@ const EmptyField: React.FC = ({ children }) => {
         {children ? (
           children
         ) : (
-          <FieldText value={strings.MISSING_INFO} color={Colors.error} />
+          <FieldText
+            value={t('CredentialShare.attributeMissingValue')}
+            color={Colors.error}
+          />
         )}
       </FieldContainer>
     </TouchableOpacity>

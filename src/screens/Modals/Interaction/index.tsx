@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux'
 import { getInteractionType } from '~/modules/interaction/selectors'
 import { useNavigation } from '@react-navigation/native'
 import InteractionFlow from '~/screens/Modals/Interaction/InteractionFlow'
-import { screeDisableGestures } from '~/utils/screenSettings'
 
 export type InteractionStackParamList = {
   [ScreenNames.Scanner]: undefined
@@ -37,17 +36,13 @@ const Interactions: React.FC = () => {
   }, [isInteracting])
 
   return (
-    <Stack.Navigator
-      headerMode="none"
-      mode="modal"
-      screenOptions={screeDisableGestures}
-    >
-      <Stack.Screen name={ScreenNames.Scanner} component={Scanner} />
+    <Stack.Navigator headerMode="none" mode="modal">
       <Stack.Screen
         options={modalStyleOptions}
         name={ScreenNames.InteractionFlow}
         component={InteractionFlow}
       />
+      <Stack.Screen name={ScreenNames.Scanner} component={Scanner} />
     </Stack.Navigator>
   )
 }

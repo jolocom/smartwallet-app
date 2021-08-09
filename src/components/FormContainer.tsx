@@ -16,6 +16,7 @@ import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import CollapsibleClone from './CollapsibleClone'
 import { useRef } from 'react'
+import useTranslation from '~/hooks/useTranslation'
 
 interface Props {
   title: string
@@ -31,6 +32,7 @@ const FormContainer: React.FC<Props> = ({
   children,
   isSubmitDisabled = false,
 }) => {
+  const { t } = useTranslation()
   const navigation = useNavigation()
 
   useAdjustResizeInputMode()
@@ -100,7 +102,7 @@ const FormContainer: React.FC<Props> = ({
                 color={Colors.white90}
                 customStyles={{ fontFamily: Fonts.Medium }}
               >
-                Cancel
+                {t('CredentialForm.closeBtn')}
               </JoloText>
             </TouchableOpacity>
             <View style={{ paddingHorizontal: 8 }}>
@@ -127,7 +129,7 @@ const FormContainer: React.FC<Props> = ({
                   ...(isSubmitDisabled && { opacity: 0.5 }),
                 }}
               >
-                Done
+                {t('CredentialForm.confirmBtn')}
               </JoloText>
             </TouchableOpacity>
           </View>

@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/core'
 import {
   useEffect,
   useState,
@@ -5,11 +6,14 @@ import {
   useRef,
   Dispatch,
   SetStateAction,
+  useLayoutEffect,
 } from 'react'
 import { Platform, StatusBar } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setPopup } from '~/modules/appState/actions'
+import { getLoaderState } from '~/modules/loader/selectors'
+import useErrors from './useErrors'
 
 export const useForceUpdate = () => {
   const [, setTick] = useState(0)
@@ -20,13 +24,32 @@ export const useForceUpdate = () => {
 }
 
 export const useHideStatusBar = () => {
-  useEffect(() => {
+  const isFocused = useIsFocused()
+  const { errorScreen } = useErrors()
+  const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
+
+  const hide = () => {
     StatusBar.setHidden(true)
+  }
+  const show = () => {
+    StatusBar.setHidden(false)
+  }
+
+  useLayoutEffect(() => {
+    isFocused ? hide() : show()
 
     return () => {
-      StatusBar.setHidden(false)
+      show()
     }
-  }, [])
+  }, [isFocused])
+
+  useLayoutEffect(() => {
+    !!errorScreen ? show() : hide()
+  }, [errorScreen])
+
+  useLayoutEffect(() => {
+    isLoaderVisible ? show() : hide()
+  }, [isLoaderVisible])
 }
 
 export const usePrevious = <T extends unknown>(value: T) => {

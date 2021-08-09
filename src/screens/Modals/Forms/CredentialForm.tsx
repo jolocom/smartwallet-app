@@ -16,6 +16,7 @@ import {
   IAttributeConfig,
   IAttributeClaimField,
   IAttributeClaimFieldWithValue,
+  ClaimKeys,
 } from '~/types/credentials'
 import { assembleFormInitialValues } from '~/utils/dataMapping'
 import {
@@ -25,7 +26,6 @@ import {
 import { useSICActions } from '~/hooks/attributes'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
-import { strings } from '~/translations'
 import { AttributeI } from '~/modules/attributes/types'
 import { Colors } from '~/utils/colors'
 import { FormFieldContainer, FormError } from '~/components/Form/components'
@@ -66,7 +66,7 @@ const CredentialForm = () => {
   )
 
   const { handleCreateCredentialSI, handleEditCredentialSI } = useSICActions()
-  const { scheduleWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
   const navigation = useNavigation()
 
   const formInitial = formConfig
@@ -96,7 +96,7 @@ const CredentialForm = () => {
         )
       }
     } catch (e) {
-      scheduleWarning({ title: 'Oops', message: 'Something went wrong!' })
+      scheduleErrorWarning(e)
     } finally {
       navigation.goBack()
     }
@@ -134,7 +134,7 @@ const CredentialForm = () => {
           if (!errors[Object.keys(values)[0]]) {
             setFieldError(
               Object.keys(values)[0],
-              strings.ERROR_ATTRIBUTE_ALREADY_EXISTS,
+              t('CredentialForm.errorAttributeExists'),
             )
           }
         }
@@ -142,17 +142,38 @@ const CredentialForm = () => {
         const shouldDisableSubmit = !isValid || !dirty || isPrevEqual
         setAllowSubmit(!shouldDisableSubmit)
 
+        const handleFieldValueChange = (
+          v: string,
+          field: IAttributeClaimFieldWithValue,
+        ) => {
+          const trimmedValue = v.trim()
+          /**
+           * normalizing phone field to append + at the beginning
+           */
+          if (field.key === ClaimKeys.telephone) {
+            setFieldValue(
+              field.key,
+              v.charAt(0) === '+' ? trimmedValue : '+' + trimmedValue,
+            )
+          } else if (field.key === ClaimKeys.email) {
+            setFieldValue(field.key, trimmedValue)
+          } else {
+            setFieldValue(field.key, v.trimLeft())
+          }
+        }
+
         return (
           <FormContainer
-            title={t(
-              attributeId
-                ? strings.EDIT_YOUR_ATTRIBUTE
-                : strings.ADD_YOUR_ATTRIBUTE,
-              { attribute: formConfig.label.toLowerCase() },
-            )}
-            description={t(
-              strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
-            )}
+            title={
+              t(
+                attributeId
+                  ? 'CredentialForm.editHeader'
+                  : 'CredentialForm.addHeader',
+                // @ts-expect-error @TERMS
+                { attributeName: t(formConfig.label).toString() },
+              ) as string
+            }
+            description={t('CredentialForm.subheader')}
             onSubmit={() => handleCredentialSubmit(values)}
             isSubmitDisabled={shouldDisableSubmit}
           >
@@ -170,12 +191,12 @@ const CredentialForm = () => {
                   <FormFieldContainer key={field.key}>
                     <AutofocusInput
                       testID="credential-form-input"
-                      // @ts-expect-error
                       name={field.key as string}
                       key={field.key}
-                      updateInput={(v) => setFieldValue(field.key, v.trim())}
+                      updateInput={(v) => handleFieldValueChange(v, field)}
                       value={values[field.key]}
-                      placeholder={field.label}
+                      // @ts-expect-error @TERMS
+                      placeholder={t(field.label)}
                       autoFocus={i === 0}
                       onBlur={() => setFieldTouched(field.key, true, false)}
                       /* we want to show highlighted focused input only if
@@ -205,7 +226,8 @@ const CredentialForm = () => {
                     {(attributeType === AttributeTypes.postalAddress &&
                       touched[field.key]) ||
                     attributeType !== AttributeTypes.postalAddress ? (
-                      <FormError message={errors[field.key]} />
+                      // @ts-expect-error terms
+                      <FormError message={t(errors[field.key])} />
                     ) : null}
                   </FormFieldContainer>
                 )

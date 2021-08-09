@@ -1,6 +1,6 @@
 import React from 'react'
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
-import { strings } from '~/translations'
+import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import ResponsiveCard from '../../ResponsiveCard'
 import { Space } from '../../styled'
@@ -19,6 +19,8 @@ const IncomingOfferDoc: React.FC<IIncomingOfferDocProps> = ({
   name,
   properties,
 }) => {
+  const { t } = useTranslation()
+
   const displayedProps = properties.slice(0, 3)
   return (
     <ResponsiveCard>
@@ -28,7 +30,7 @@ const IncomingOfferDoc: React.FC<IIncomingOfferDocProps> = ({
             <CredentialName numberOfLines={1}>{name}</CredentialName>
           </HeaderContainer>
           <BodyFieldsContainer isStretched>
-            <HelperTitle>{strings.INCLUDED_INFO}</HelperTitle>
+            <HelperTitle>{t('CredentialOffer.cardInfoHeader')}</HelperTitle>
             {displayedProps.length ? (
               <>
                 <Space height={BP({ default: 8, small: 4, xsmall: 4 })} />
@@ -43,7 +45,7 @@ const IncomingOfferDoc: React.FC<IIncomingOfferDocProps> = ({
               </>
             ) : (
               <HelperDescription>
-                {strings.NO_INFO_THAT_CAN_BE_PREVIEWED}
+                {t('CredentialOffer.cardNoPreview')}
               </HelperDescription>
             )}
           </BodyFieldsContainer>

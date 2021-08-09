@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
-import { strings } from '~/translations'
+import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 
 interface IAction {
@@ -29,20 +29,22 @@ const ActionBtn: React.FC<IAction> = ({ color, onPress, children }) => {
 }
 
 const Cancel: IFormHeaderComposition['Cancel'] = ({ onCancel }) => {
+  const { t } = useTranslation()
   return (
     <ActionBtn
       onPress={onCancel}
       color={Colors.white}
-      children={strings.CANCEL}
+      children={t('CredentialForm.closeBtn')}
     />
   )
 }
 const Done: IFormHeaderComposition['Done'] = ({ onSubmit }) => {
+  const { t } = useTranslation()
   return (
     <ActionBtn
       onPress={onSubmit}
       color={Colors.activity}
-      children={strings.DONE}
+      children={t('CredentialForm.confirmBtn')}
     />
   )
 }

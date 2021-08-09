@@ -5,7 +5,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useState } from 'react'
 import { ConsentText } from './ConsentText'
 import ConsentButton from './ConsentTextButton'
-import { strings } from '~/translations/strings'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
@@ -34,7 +33,7 @@ const LegalTextWrapper: React.FC<Props> = ({
         <ConsentText text={deText} onPress={() => setToggleGerman(false)} />
       ) : (
         <ConsentButton
-          text={strings.DE_VERSION}
+          text={'DE Version'}
           onPress={() => setToggleGerman(true)}
         />
       )

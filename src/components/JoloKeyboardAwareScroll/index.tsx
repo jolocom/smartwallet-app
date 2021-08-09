@@ -1,9 +1,6 @@
 import React, { useMemo, useRef } from 'react'
-import RN, { NativeSyntheticEvent, TargetedEvent } from 'react-native'
-import {
-  KeyboardAwareScrollView,
-  KeyboardAwareScrollViewProps,
-} from 'react-native-keyboard-aware-scroll-view'
+import RN, { NativeSyntheticEvent, Platform, TargetedEvent } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import InputContainer from './InputContainer'
 import {
   IJoloKeyboardAwareScrollComposition,
@@ -35,7 +32,7 @@ const JoloKeyboardAwareScroll: React.FC<IJoloKeyboardAwareScrollProps> &
     <JoloKeyboardAwareScrollContext.Provider value={contextValue}>
       <KeyboardAwareScrollView
         ref={scrollViewRef}
-        extraScrollHeight={50}
+        extraScrollHeight={Platform.select({ ios: 50, android: 150 })}
         keyboardOpeningTime={0}
         children={children}
         {...(disableInsets && { contentInset: undefined })}

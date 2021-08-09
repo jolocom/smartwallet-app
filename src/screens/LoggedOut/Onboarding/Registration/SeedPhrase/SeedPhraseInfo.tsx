@@ -3,26 +3,27 @@ import React from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
 import Info from '~/components/Info'
-import { strings } from '~/translations'
+import useTranslation from '~/hooks/useTranslation'
 
 const SeedPhraseInfo = () => {
+  const { t } = useTranslation()
   return (
     <ScreenContainer backgroundColor={Colors.black65}>
       <Info.Content>
-        <Info.Title>{strings.WHY_THESE_WORDS_ARE_IMPORTANT_TO_YOU}</Info.Title>
+        <Info.Title>{t('SeedphraseInfo.header')}</Info.Title>
         <Info.Description>
-          {strings.SEEDPHRASE_INFO_1 + Info.newline}
+          {t('SeedphraseInfo.textOne') + Info.newline}
           <Info.Highlight>
-            {strings.SEEDPHRASE_INFO_HIGHLIGHT_2 + ' '}
+            {t('SeedphraseInfo.textTwoHighlight') + ' '}
           </Info.Highlight>
-          {strings.SEEDPHRASE_INFO_3 + Info.newline}
+          {t('SeedphraseInfo.textTwoDefault') + Info.newline}
           <Info.Highlight>
-            {strings.SEEDPHRASE_INFO_HIGHLIGHT_4 + Info.newline}
+            {t('SeedphraseInfo.textThree') + Info.newline}
           </Info.Highlight>
-          {strings.SEEDPHRASE_INFO_5}
+          {t('SeedphraseInfo.textFour')}
         </Info.Description>
       </Info.Content>
-      <Info.Button>{strings.GOT_THIS}</Info.Button>
+      <Info.Button>{t('SeedphraseInfo.confirmBtn')}</Info.Button>
     </ScreenContainer>
   )
 }

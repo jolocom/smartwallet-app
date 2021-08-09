@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 
 import EmojiSelectable from '~/components/EmojiSelectable'
@@ -16,32 +17,21 @@ import useConnection from '~/hooks/connection'
 import { useSuccess } from '~/hooks/loader'
 import useSentry from '~/hooks/sentry'
 import useErrors from '~/hooks/useErrors'
+import useTranslation from '~/hooks/useTranslation'
 import ModalScreen from '~/modals/Modal'
+import { getIsAppLocked } from '~/modules/account/selectors'
 import Dropdown from '~/screens/LoggedIn/Settings/components/Dropdown'
 import Section from '~/screens/LoggedIn/Settings/components/Section'
-import { strings } from '~/translations'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
 import { ErrorScreens } from '../errorContext'
 
-const INQUIRIES_LIST = [
-  strings.NO_INTERNET_CONNECTION,
-  strings.THE_APP_KEEPS_CRASHING,
-  strings.CANT_LOGIN,
-  strings.BACKUP_IS_EMPTY,
-  strings.PROBLEMS_WITH_THE_INTERFACE,
-  strings.SOMETHING_DOESNT_SEEM_RIGHT,
-  strings.OTHER,
-]
-
-const DROPDOWN_OPTIONS = INQUIRIES_LIST.map((el) => ({
-  id: el.split(' ').join(''),
-  value: el,
-}))
-
 const ErrorReporting = () => {
-  const { errorScreen, resetError, showErrorDisplay } = useErrors()
+  const { t } = useTranslation()
+  const isAppLocked = useSelector(getIsAppLocked)
+  const { errorScreen, resetError } = useErrors()
   const { sendErrorReport } = useSentry()
   const showSuccess = useSuccess()
 
@@ -62,6 +52,21 @@ const ErrorReporting = () => {
 
   const [contactValue, setContactValue] = useState('')
   const [contactValid, setContactValid] = useState(true)
+
+  const INQUIRIES_LIST = [
+    t('ErrorReporting.issueOption_1'),
+    t('ErrorReporting.issueOption_2'),
+    t('ErrorReporting.issueOption_3'),
+    t('ErrorReporting.issueOption_4'),
+    t('ErrorReporting.issueOption_5'),
+    t('ErrorReporting.issueOption_6'),
+    t('ErrorReporting.issueOption_7'),
+  ]
+
+  const DROPDOWN_OPTIONS = INQUIRIES_LIST.map((el) => ({
+    id: el.split(' ').join(''),
+    value: el,
+  }))
 
   const assembledData = {
     issue: selectedIssue,
@@ -102,7 +107,7 @@ const ErrorReporting = () => {
 
   return (
     <ModalScreen
-      isVisible={errorScreen === ErrorScreens.errorReporting}
+      isVisible={errorScreen === ErrorScreens.errorReporting && !isAppLocked}
       onRequestClose={resetError}
       animationType={'slide'}
     >
@@ -113,127 +118,135 @@ const ErrorReporting = () => {
         customStyles={{
           justifyContent: 'flex-start',
           paddingTop: 0,
+          paddingHorizontal: 0,
         }}
       >
         <NavigationHeader
           type={NavHeaderType.Close}
           onPress={resetError}
-          customStyles={{ paddingHorizontal: 0 }}
+          customStyles={{
+            position: 'absolute',
+            zIndex: 100,
+            backgroundColor: Colors.mainBlack,
+          }}
         />
-        <JoloKeyboardAwareScroll
-          style={{ width: '100%', flexGrow: 1 }}
-          contentContainerStyle={{ paddingBottom: 36 }}
-          showsVerticalScrollIndicator={false}
-          overScrollMode="never"
-          enableOnAndroid
-          keyboardShouldPersistTaps="handled"
-        >
-          <Section>
-            <Section.Title>
-              {/* FIXME: string */}
-              {strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
-            </Section.Title>
-            <Dropdown
-              options={DROPDOWN_OPTIONS}
-              onSelect={handleDropdownSelect}
-            />
-          </Section>
-
-          <Section>
-            <Section.Title customStyle={{ marginBottom: 14 }}>
-              {strings.ANYTHING_SPECIFIC_TO_MENTION}
-            </Section.Title>
-            <JoloText
-              size={JoloTextSizes.mini}
-              kind={JoloTextKind.subtitle}
-              customStyles={{ textAlign: 'left', marginBottom: 32 }}
-            >
-              {/* FIXME: strings */}
-              {strings.DARE_TO_SUGGEST_SMTH}
-            </JoloText>
-            <JoloKeyboardAwareScroll.InputContainer>
-              {({ focusInput }) => (
-                <Input.TextArea
-                  value={detailsInput}
-                  limit={500}
-                  updateInput={setDetailsInput}
-                  onFocus={focusInput}
-                  customStyles={{ height: 80 }}
-                />
-              )}
-            </JoloKeyboardAwareScroll.InputContainer>
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                marginTop: 24,
-              }}
-            >
-              <View style={{ width: 70, justifyContent: 'center' }}>
-                <ToggleSwitch
-                  on={shouldIncludeLogs}
-                  onToggle={() => setIncludeLogs((prev) => !prev)}
-                />
-              </View>
-              <View style={{ flex: 1, width: '100%' }}>
-                <JoloText
-                  size={JoloTextSizes.mini}
-                  customStyles={{ textAlign: 'left', marginBottom: 4 }}
-                >
-                  {strings.INCLUDE_LOGS}
-                </JoloText>
-                <JoloText
-                  size={JoloTextSizes.mini}
-                  customStyles={{ textAlign: 'left' }}
-                >
-                  {strings.ERROR_REPORTING_LOGS_WARNING}
-                </JoloText>
-              </View>
-            </View>
-          </Section>
-
-          <Section customStyles={{ marginBottom: 64 }}>
-            <Section.Title customStyle={{ marginBottom: 0 }}>
-              {strings.WANT_TO_GET_IN_TOUCH}
-            </Section.Title>
-            <JoloKeyboardAwareScroll.InputContainer>
-              {({ focusInput }) => (
-                <Input.Underline
-                  validation={regexValidations[InputValidation.email]}
-                  value={contactValue}
-                  updateInput={setContactValue}
-                  placeholder={strings.CONTACT_US_GET_IN_TOUCH}
-                  onValidation={handleContactValidation}
-                  onFocus={focusInput}
-                />
-              )}
-            </JoloKeyboardAwareScroll.InputContainer>
-            <JoloText
-              size={JoloTextSizes.mini}
-              kind={JoloTextKind.subtitle}
-              color={contactValid ? Colors.white30 : Colors.error}
-              customStyles={{ textAlign: 'left', marginTop: 12 }}
-            >
-              {contactValid
-                ? strings.WE_DO_NOT_STORE_DATA
-                : strings.PLEASE_ENTER_A_VALID_EMAIL}
-            </JoloText>
-          </Section>
-          <Section>
-            <Section.Title customStyle={{ marginBottom: 24 }}>
-              {strings.ERROR_REPORTING_RATE}
-            </Section.Title>
-            <EmojiSelectable />
-          </Section>
-
-          <Btn.Online
-            type={BtnTypes.primary}
-            onPress={handleSubmit}
-            disabled={!isSubmitEnabled()}
+        <ScreenContainer.Padding>
+          <JoloKeyboardAwareScroll
+            style={{
+              width: '100%',
+              flexGrow: 1,
+              paddingTop: SCREEN_HEADER_HEIGHT,
+            }}
+            contentContainerStyle={{ paddingBottom: 56 + SCREEN_HEADER_HEIGHT }}
+            showsVerticalScrollIndicator={false}
+            overScrollMode="never"
+            enableOnAndroid
+            keyboardShouldPersistTaps="handled"
           >
-            {strings.SEND}
-          </Btn.Online>
-        </JoloKeyboardAwareScroll>
+            <Section>
+              <Section.Title>{t('ErrorReporting.issueHeader')}</Section.Title>
+              <Dropdown
+                placeholder={t('ErrorReporting.issuePlaceholder')}
+                options={DROPDOWN_OPTIONS}
+                onSelect={handleDropdownSelect}
+              />
+            </Section>
+
+            <Section>
+              <Section.Title customStyle={{ marginBottom: 14 }}>
+                {t('ErrorReporting.detailsHeader')}
+              </Section.Title>
+              <JoloText
+                size={JoloTextSizes.mini}
+                kind={JoloTextKind.subtitle}
+                customStyles={{ textAlign: 'left', marginBottom: 32 }}
+              >
+                {t('ErrorReporting.detailsSubheader')}
+              </JoloText>
+              <JoloKeyboardAwareScroll.InputContainer>
+                {({ focusInput }) => (
+                  <Input.TextArea
+                    value={detailsInput}
+                    limit={500}
+                    updateInput={setDetailsInput}
+                    onFocus={focusInput}
+                    customStyles={{ height: 80 }}
+                  />
+                )}
+              </JoloKeyboardAwareScroll.InputContainer>
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  marginTop: 24,
+                }}
+              >
+                <View style={{ width: 70, justifyContent: 'center' }}>
+                  <ToggleSwitch
+                    on={shouldIncludeLogs}
+                    onToggle={() => setIncludeLogs((prev) => !prev)}
+                  />
+                </View>
+                <View style={{ flex: 1, width: '100%' }}>
+                  <JoloText
+                    size={JoloTextSizes.mini}
+                    customStyles={{ textAlign: 'left', marginBottom: 4 }}
+                  >
+                    {t('ErrorReporting.logsHeader')}
+                  </JoloText>
+                  <JoloText
+                    size={JoloTextSizes.mini}
+                    customStyles={{ textAlign: 'left' }}
+                  >
+                    {t('ErrorReporting.logsSubheader')}
+                  </JoloText>
+                </View>
+              </View>
+            </Section>
+
+            <Section customStyles={{ marginBottom: 64 }}>
+              <Section.Title customStyle={{ marginBottom: 0 }}>
+                {t('ErrorReporting.contactHeader')}
+              </Section.Title>
+              <JoloKeyboardAwareScroll.InputContainer>
+                {({ focusInput }) => (
+                  <Input.Underline
+                    validation={regexValidations[InputValidation.email]}
+                    value={contactValue}
+                    updateInput={setContactValue}
+                    placeholder={t('ErrorReporting.contactPlaceholder')}
+                    onValidation={handleContactValidation}
+                    onFocus={focusInput}
+                  />
+                )}
+              </JoloKeyboardAwareScroll.InputContainer>
+              <JoloText
+                size={JoloTextSizes.mini}
+                kind={JoloTextKind.subtitle}
+                color={contactValid ? Colors.white30 : Colors.error}
+                customStyles={{ textAlign: 'left', marginTop: 12 }}
+              >
+                {contactValid
+                  ? t('ErrorReporting.contactInputInfo')
+                  : t('ErrorReporting.contactInputError')}
+              </JoloText>
+            </Section>
+            <Section>
+              <Section.Title customStyle={{ marginBottom: 24 }}>
+                {t('ErrorReporting.rateHeader')}
+              </Section.Title>
+              <EmojiSelectable />
+            </Section>
+
+            <Btn.Online
+              type={BtnTypes.primary}
+              onPress={handleSubmit}
+              disabled={!isSubmitEnabled()}
+            >
+              {t('ErrorReporting.submitBtn')}
+            </Btn.Online>
+          </JoloKeyboardAwareScroll>
+        </ScreenContainer.Padding>
       </ScreenContainer>
     </ModalScreen>
   )

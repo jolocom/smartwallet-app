@@ -7,8 +7,10 @@ import { ContainerBAS, LogoContainerBAS } from './components/styled'
 import InteractionImage from './components/InteractionAuthzImage'
 import useAuthzSubmit from '~/hooks/interactions/useAuthzSubmit'
 import { useSelector } from 'react-redux'
-import { getAuthzUIDetails } from '~/modules/interaction/selectors'
-import { strings } from '~/translations'
+import {
+  getAuthzUIDetails,
+  getServiceDescription,
+} from '~/modules/interaction/selectors'
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 import useTranslation from '~/hooks/useTranslation'
 import Space from '~/components/Space'
@@ -17,14 +19,15 @@ const Authorization = () => {
   const {
     action,
     imageURL: image,
-    description, // NOTE: it isn't used
+    description,
   } = useSelector(getAuthzUIDetails)
+  const { name } = useSelector(getServiceDescription)
 
   const { t } = useTranslation()
 
   const cta = action
     ? capitalizeWord(truncateFirstWord(action))
-    : strings.AUTHORIZE
+    : t('Authorization.acceptBtn')
 
   const handleSubmit = useAuthzSubmit()
 
@@ -34,10 +37,14 @@ const Authorization = () => {
         <InteractionLogo />
       </LogoContainerBAS>
       <InteractionTitle
-        label={t(strings.WOULD_YOU_LIKE_TO_ACTION, { action })}
+        label={t('Authorization.header', { authAction: action })}
       />
       <InteractionDescription
-        label={strings.SERVICE_IS_NOW_READY_TO_GRANT_YOU_ACCESS}
+        label={
+          description && !!description.length
+            ? description
+            : t('Authorization.subheader', { sericeName: name })
+        }
       />
       <Space />
       <InteractionImage source={image} />

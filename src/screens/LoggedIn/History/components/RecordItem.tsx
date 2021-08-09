@@ -6,12 +6,15 @@ import { IRecordDetails } from '~/types/records'
 import { IRecordItemProps } from '../types'
 import RecordItemHeader from './RecordItemHeader'
 import RecordItemDetails from './RecordItemDetails'
+import { useSelector } from 'react-redux'
+import { getCurrentLanguage } from '~/modules/account/selectors'
 
 const RecordItem: React.FC<IRecordItemProps> = React.memo(
   ({ id, onDropdown, isFocused }) => {
     const [itemDetails, setItemDetails] = useState<IRecordDetails | null>(null)
+    const currentLanguage = useSelector(getCurrentLanguage)
 
-    const { getInteractionDetails } = useHistory()
+    const { assembleInteractionDetails } = useHistory()
 
     const handlePress = () => {
       if (itemDetails) {
@@ -24,7 +27,7 @@ const RecordItem: React.FC<IRecordItemProps> = React.memo(
     }
 
     useEffect(() => {
-      getInteractionDetails(id)
+      assembleInteractionDetails(id)
         .then((interaction) => {
           LayoutAnimation.configureNext({
             ...LayoutAnimation.Presets.easeInEaseOut,
@@ -37,7 +40,7 @@ const RecordItem: React.FC<IRecordItemProps> = React.memo(
 
           // scheduleErrorWarning(e)
         })
-    }, [])
+    }, [currentLanguage])
 
     return (
       <TouchableOpacity
@@ -52,14 +55,11 @@ const RecordItem: React.FC<IRecordItemProps> = React.memo(
       </TouchableOpacity>
     )
   },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.isFocused === nextProps.isFocused &&
-      prevProps.lastUpdated === nextProps.lastUpdated &&
-      JSON.stringify(prevProps.onDropdown) ===
-        JSON.stringify(nextProps.onDropdown)
-    )
-  },
+  (prevProps, nextProps) =>
+    prevProps.isFocused === nextProps.isFocused &&
+    prevProps.lastUpdated === nextProps.lastUpdated &&
+    JSON.stringify(prevProps.onDropdown) ===
+      JSON.stringify(nextProps.onDropdown),
 )
 
 export default RecordItem

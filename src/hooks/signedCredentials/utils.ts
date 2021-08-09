@@ -2,7 +2,7 @@ import { IdentitySummary } from '@jolocom/sdk'
 import { CredentialIssuer } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
-import { strings } from '~/translations'
+import { CredentialUITypes } from '~/types/credentials'
 import {
   AttributeTypes,
   BaseUICredential,
@@ -33,12 +33,18 @@ export const getCredentialUIType = (type: string) => {
   switch (type) {
     case IdentificationTypes.ProofOfIdCredentialDemo:
     case IdentificationTypes.ProofOfDriverLicenceDemo:
-      return strings.IDENTIFICATION
+      return CredentialUITypes.identification
     case TicketTypes.ProofOfTicketDemo:
-      return strings.TICKET
+      return CredentialUITypes.tickets
     default:
-      return strings.UNKNOWN
+      return CredentialUITypes.unknown
   }
+}
+
+export const uiTypesTerms = {
+  [CredentialUITypes.identification]: 'Documents.identificationCategory',
+  [CredentialUITypes.tickets]: 'Documents.ticketsCategory',
+  [CredentialUITypes.unknown]: 'General.unknown',
 }
 
 export const separateCredentialsAndAttributes = (
@@ -89,8 +95,8 @@ export async function mapCredentialsToDisplay(
     properties: properties
       ? properties.map((p, idx) => ({
           key: p.key ? p.key.split('.')[1] : `${Date.now()}${idx}}`,
-          label: p.label ?? strings.NOT_SPECIFIED,
-          value: p.value || strings.NOT_SPECIFIED,
+          label: p.label ?? '',
+          value: p.value || '',
         }))
       : [],
   }
@@ -121,7 +127,7 @@ export function mapDisplayToCustomDisplay(
           .split(' ')
           .filter((e) => Boolean(e))
           .join(' ')
-      : strings.ANONYMOUS
+      : ''
 
     updatedProperties = updatedProperties.filter(
       (p) =>
@@ -259,14 +265,14 @@ export const reduceCustomDisplayCredentialsByType = <
  * Used in:
  * * documents
  */
-export const reduceCustomDisplayCredentialsByIssuer = <
+const reduceCustomDisplayCredentialsByIssuer = <
   T extends { issuer: IdentitySummary },
 >(
   credentials: T[],
 ): Array<CredentialsByIssuer<T>> => {
   return credentials.reduce(
     (groupedCredentials: Array<CredentialsByIssuer<T>>, cred: T) => {
-      const issuer = cred.issuer.publicProfile?.name ?? strings.UNKNOWN
+      const issuer = cred.issuer.publicProfile?.name ?? ''
       const group = groupedCredentials.filter((c) => c.value === issuer)
       if (group.length) {
         groupedCredentials = groupedCredentials.map((g) => {

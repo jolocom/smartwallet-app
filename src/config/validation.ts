@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { ObjectSchema } from 'yup'
-import { strings } from '~/translations'
 import { ClaimKeys } from '~/types/credentials'
+import { InputValidation, regexValidations } from '~/utils/stringUtils'
 
 yup.addMethod<ObjectSchema<any>>(
   yup.object,
@@ -20,8 +20,16 @@ yup.addMethod<ObjectSchema<any>>(
 
 yup.addMethod(yup.string, 'phone', function () {
   return this.matches(
-    /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
-    strings.PHONE_FORMAT_ERROR,
+    // NOTE: regex for + or +1232312312312 -> to allow only numbers
+    regexValidations[InputValidation.phone],
+    'Validations.onlyNumbers',
+  )
+})
+
+yup.addMethod(yup.string, 'customEmail', function () {
+  return this.matches(
+    regexValidations[InputValidation.email],
+    'Validations.wrongEmail',
   )
 })
 
@@ -33,38 +41,46 @@ export const nameValidation = yup
   })
   .atLeastOneOf(
     [ClaimKeys.givenName, ClaimKeys.familyName],
-    strings.AT_LEAST_ONE_ERROR,
+    'Validations.atLeastOneValue',
   )
 
 export const emailValidation = yup.object().shape({
   [ClaimKeys.email]: yup
     .string()
-    .email(strings.EMAIL_FORMAT_ERROR)
-    .required(strings.VALUE_MISSING),
+    .customEmail()
+    .max(100, 'Validations.tooMany')
+    .required('Validations.missingValue'),
 })
 
 export const postalAddressValidation = yup.object().shape({
-  [ClaimKeys.addressLine]: yup.string().required(strings.VALUE_MISSING),
-  [ClaimKeys.postalCode]: yup.string().required(strings.VALUE_MISSING),
-  [ClaimKeys.city]: yup.string().required(strings.VALUE_MISSING),
-  [ClaimKeys.country]: yup.string().required(strings.VALUE_MISSING),
+  [ClaimKeys.addressLine]: yup.string().required('Validations.missingValue'),
+  [ClaimKeys.postalCode]: yup.string().required('Validations.missingValue'),
+  [ClaimKeys.city]: yup.string().required('Validations.missingValue'),
+  [ClaimKeys.country]: yup.string().required('Validations.missingValue'),
 })
 
 export const mobileNumberValidation = yup.object().shape({
-  [ClaimKeys.telephone]: yup.string().phone().required(strings.VALUE_MISSING),
+  [ClaimKeys.telephone]: yup
+    .string()
+    .phone()
+    .required('Validations.missingValue')
+    .min(7, 'Validations.tooFew')
+    .max(17, 'Validations.tooMany'),
 })
 
 export const contactValidation = yup
   .object()
   .shape({
-    [ClaimKeys.email]: yup.string().email(strings.EMAIL_FORMAT_ERROR),
+    [ClaimKeys.email]: yup.string().email('Validations.wrongEmail'),
     [ClaimKeys.telephone]: yup.string().phone(),
   })
   .atLeastOneOf(
     [ClaimKeys.email, ClaimKeys.telephone],
-    strings.AT_LEAST_ONE_ERROR,
+    'Validations.atLeastOneValue',
   )
 
 export const companyValidation = yup.object().shape({
-  [ClaimKeys.legalCompanyName]: yup.string().required(strings.VALUE_MISSING),
+  [ClaimKeys.legalCompanyName]: yup
+    .string()
+    .required('Validations.missingValue'),
 })

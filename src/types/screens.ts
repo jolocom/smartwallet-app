@@ -65,6 +65,7 @@ export enum ScreenNames {
   PasscodeTest = 'PasscodeTest',
   InteractionCardsTest = 'InteractionCardsTest',
   CollapsibleTest = 'CollapsibleTest',
+  InteractionPasteTest = 'InteractionPasteTest',
 
   //Modals
   GlobalModals = 'GlobalModals',

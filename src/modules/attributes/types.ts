@@ -18,9 +18,9 @@ export type ClaimValues = {
   [key in ClaimKeys]?: ClaimEntry
 }
 
-export interface AttributeI {
+export interface AttributeI<V = ClaimValues> {
   id: string
-  value: ClaimValues
+  value: V
 }
 
 export interface AttributePayload {

@@ -3,6 +3,8 @@ export interface ITabsContext {
   activeSubtab: ITabProps | undefined
   setActiveTab: (value: ITabProps) => void
   setActiveSubtab: (value: ITabProps) => void
+  tabs?: ITabProps[]
+  subtabs?: ITabProps[]
 }
 
 export interface ITabProps {
@@ -35,4 +37,6 @@ export interface ITabsComposition {
 export interface ITabs {
   initialActiveTab?: ITabProps
   initialActiveSubtab?: ITabProps
+  tabs?: ITabProps[]
+  subtabs?: ITabProps[]
 }

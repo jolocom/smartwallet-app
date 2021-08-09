@@ -12,12 +12,11 @@ import { useAnimateLayoutToast } from './useAnimateToast'
 const SCREEN_WIDTH = Dimensions.get('window').width
 
 const Toasts: React.FC = () => {
-  const { activeToast, invokeInteract } = useToasts()
+  const { activeToast, invokeInteract, removeToast } = useToasts()
 
-  /* Context value that will be share with consumern -> Start */
-  const [toastToShow, setToastToShow] = useState<Toast | null | undefined>(
-    activeToast,
-  )
+  /* Context value that will be share with consumers -> Start */
+  const [toastToShow, setToastToShow] =
+    useState<Toast | null | undefined>(activeToast)
 
   const {
     animationStyles,
@@ -33,18 +32,23 @@ const Toasts: React.FC = () => {
       : Colors.error
     : Colors.error
 
+  const handleToastInvoke = () => {
+    invokeInteract()
+    activeToast && removeToast(activeToast)
+  }
+
   const memoizedContextValue = useMemo(
     () => ({
       toastToShow,
       toastColor,
-      invokeInteract,
+      invokeInteract: handleToastInvoke,
       isNormal: !!(toastToShow?.dismiss && !toastToShow?.interact),
       isInteractive: !!(toastToShow?.interact && toastToShow.dismiss),
       isSticky: !!(toastToShow && !toastToShow?.dismiss),
     }),
     [JSON.stringify(toastToShow), invokeInteract],
   )
-  /* Context value that will be share with consumern -> End */
+  /* Context value that will be share with consumers -> End */
 
   return (
     <Animated.View style={[animationStyles]} onLayout={handleContainerLayout}>

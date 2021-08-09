@@ -36,7 +36,9 @@ import {
   transparentModalOptions,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
-import CollapsibleTest from './Settings/Development/CollapsibleTest'
+import CollapsibleClone from './Settings/Development/CollapsibleClone'
+import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
+import { Colors } from '~/utils/colors'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -79,6 +81,7 @@ export type MainStackParamList = {
     photo?: string
   }
   // DEV
+  [ScreenNames.InteractionPasteTest]: undefined
   [ScreenNames.ButtonsTest]: undefined
   [ScreenNames.CollapsibleTest]: undefined
   [ScreenNames.LoaderTest]: undefined
@@ -171,13 +174,18 @@ const Main: React.FC = () => {
           {__DEV__ && (
             <>
               <MainStack.Screen
+                name={ScreenNames.InteractionPasteTest}
+                component={InteractionPasteTest}
+                options={screenTransitionSlideFromRight}
+              />
+              <MainStack.Screen
                 name={ScreenNames.ButtonsTest}
                 component={ButtonsTest}
                 options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
                 name={ScreenNames.CollapsibleTest}
-                component={CollapsibleTest}
+                component={CollapsibleClone}
                 options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
@@ -212,7 +220,17 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Interaction}
             component={Interaction}
-            options={screenTransitionFromBottomDisabledGestures}
+            options={{
+              cardStyle: {
+                /**
+                 * NOTE: adding screen background in dev as
+                 * color palette of bottom sheet blends into
+                 * screen rendered behind it
+                 */
+                backgroundColor: __DEV__ ? Colors.white35 : 'transparent',
+              },
+              ...screenTransitionFromBottomDisabledGestures,
+            }}
           />
           <MainStack.Screen
             name={ScreenNames.CredentialDetails}

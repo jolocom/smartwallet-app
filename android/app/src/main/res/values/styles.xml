@@ -11,7 +11,12 @@
         <!-- <item name="android:windowTranslucentNavigation">true</item> -->
         <!-- removes transition when we close camera screen -->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:forceDarkAllowed">false</item>
 
+    </style>
+
+    <style name="AppThemeModals" parent="Theme.ReactNative.AppCompat.Light.NoActionBar.FullScreen">
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <!-- Add the following lines (BootTheme should inherit from AppTheme) -->

@@ -3,8 +3,6 @@ import { BackHandler } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { BiometryType } from 'react-native-biometrics'
 
-import { strings } from '~/translations/strings'
-
 import ScreenContainer from '~/components/ScreenContainer'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
@@ -15,8 +13,10 @@ import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
 import { useDisableLock } from '~/hooks/generic'
+import useTranslation from '~/hooks/useTranslation'
 
 const Lock = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const { keychainPin, isBiometrySelected } = useGetStoredAuthValues()
   const { authenticate, getEnrolledBiometry } = useBiometry()
@@ -92,8 +92,8 @@ const Lock = () => {
       <Passcode onSubmit={handlePINSubmit}>
         <Passcode.Container>
           <Passcode.Header
-            title={strings.ENTER_YOUR_PASSCODE}
-            errorTitle={strings.WRONG_PASSCODE}
+            title={t('Lock.header')}
+            errorTitle={t('ChangePasscode.wrongCodeHeader')}
           />
           <Passcode.Input />
         </Passcode.Container>

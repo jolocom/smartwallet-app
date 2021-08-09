@@ -16,6 +16,11 @@ import { Colors } from '~/utils/colors'
 import Field, { IWidgetField } from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
 import Space from '~/components/Space'
+import {
+  concatValuesShare,
+  getAttributeValueBasedOnConfig,
+} from '~/utils/attributeUtils'
+import useTranslation from '~/hooks/useTranslation'
 
 interface IShareAttributeWidgetProps {
   withContainer?: boolean
@@ -77,6 +82,7 @@ const InteractionAttributesWidget: React.FC<IInteractionWidgetProps> = ({
 const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   withContainer = false,
 }) => {
+  const { t } = useTranslation()
   const attributes = useSelector(getRequestedAttributes)
   const selectedCredentials = useSelector(getSelectedShareCredentials)
 
@@ -108,7 +114,8 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
             <View key={credType}>
               <InteractionAttributesWidget
                 key={attrType}
-                name={config.label}
+                // @ts-expect-error @terms
+                name={t(config.label)}
                 type={attrType}
                 onAdd={() =>
                   redirect(ScreenNames.CredentialForm, { type: attrType })
@@ -116,12 +123,9 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
                 onSelect={(attrType, id) =>
                   handleSelectCredential({ [attrType]: id })
                 }
-                fields={attribute.map((attr) => ({
-                  id: attr.id,
-                  value: Object.values(attr.value).join(
-                    attrType === AttributeTypes.name ? ' ' : ', ',
-                  ),
-                }))}
+                fields={getAttributeValueBasedOnConfig(attrType, attribute).map(
+                  (value) => concatValuesShare(attrType, value),
+                )}
               />
               {idx !== arr.length - 1 ? <View style={{ height: 20 }} /> : null}
             </View>

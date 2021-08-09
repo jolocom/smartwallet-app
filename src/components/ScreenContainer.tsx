@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { View, StyleSheet, ViewStyle } from 'react-native'
 import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
@@ -12,10 +12,12 @@ import JoloText, {
 } from './JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
+import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
 
 interface ScreenContainerI {
   isTransparent?: boolean
   customStyles?: ViewStyle
+  navigationStyles?: ViewStyle
   isFullscreen?: boolean
   backgroundColor?: Colors
   hasHeaderBack?: boolean
@@ -36,6 +38,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
     isTransparent = false,
     isFullscreen = false,
     customStyles = {},
+    navigationStyles = {},
     backgroundColor = Colors.mainBlack,
     hasHeaderBack = false,
     hasHeaderClose = false,
@@ -46,7 +49,6 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
     hideStatusBar && useHideStatusBar()
 
     const { top, bottom } = useSafeArea()
-    const statusHeight = useRef(top)
 
     return (
       <SafeAreaView
@@ -62,7 +64,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
           {!isFullscreen && !hideStatusBar && (
             <View
               style={{
-                height: statusHeight.current,
+                height: top,
                 width: '100%',
                 backgroundColor,
               }}
@@ -70,6 +72,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
           )}
           {(hasHeaderClose || hasHeaderBack) && (
             <NavigationHeader
+              customStyles={navigationStyles}
               onPress={onClose}
               type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
             />
@@ -79,9 +82,18 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
               styles.container,
               {
                 backgroundColor,
+                ...((hasHeaderClose || hasHeaderBack) &&
+                  navigationStyles.position === 'absolute' && {
+                    marginTop: SCREEN_HEADER_HEIGHT,
+                  }),
                 paddingBottom: isFullscreen ? 0 : bottom,
               },
-              isFullscreen && styles.fullscreen,
+              {
+                ...(isFullscreen && {
+                  marginBottom: -bottom,
+                  ...styles.fullscreen,
+                }),
+              },
               customStyles,
             ]}
           >
