@@ -109,8 +109,10 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
    * trim highlight value if necessary
    */
   const displayedHighlight = useMemo(() => {
-    if (highlight) {
-      return getTrimmedHighlight(highlight)
+    if (highlight && photo) {
+      return getTrimmedHighlight(highlight, 14)
+    } else if (highlight) {
+      return getTrimmedHighlight(highlight, 20)
     } else {
       return undefined
     }
