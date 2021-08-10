@@ -48,7 +48,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   }, [JSON.stringify(fieldLines)])
 
   /**
-   * We can not display more than 5 lines of all field value lines
+   * We can not display more than 4 lines of all field value lines
    */
   const handleFieldValuesVisibility = (child: React.ReactNode, idx: number) => {
     /**
@@ -87,8 +87,9 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
              * change numberOfLines display for field value
              */
             return React.Children.map(child.props.children, (c, idx) => {
-              // field value child
-              if (idx === child.props.children.length - 1) {
+              // NOTE: using idx 3 as field.value is located under 3rd idx,
+              // if texts will get reorganized this will have to be updated
+              if (idx === 3) {
                 return React.cloneElement(c, {
                   numberOfLines:
                     MAX_FIELD_LINES - fieldLines[0] - fieldLines[1],
