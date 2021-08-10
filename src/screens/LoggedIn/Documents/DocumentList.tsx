@@ -290,7 +290,7 @@ export const DocumentList = () => {
                     renderItem={({ item: c }) => (
                       <DocumentSectionOtherCard
                         credentialName={c.name || t('General.unknown')}
-                        credentialType={c.type}
+                        credentialType={credentialUIType}
                         fields={getOptionalFields(c)}
                         logo={c.photo}
                         onHandleMore={() =>
