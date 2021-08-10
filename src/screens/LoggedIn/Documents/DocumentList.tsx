@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -194,7 +194,7 @@ export const DocumentList = () => {
                   t(uiTypesTerms[CredentialUITypes.unknown])
                 : value
               return (
-                <>
+                <View style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
                     <JoloText
                       size={JoloTextSizes.mini}
@@ -209,7 +209,7 @@ export const DocumentList = () => {
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
                     activeSlideAlignment="center"
-                    customStyles={{ marginLeft: -4 }}
+                    customStyles={{ marginLeft: -12 }}
                     data={credentials}
                     renderItem={({ item: c }) => (
                       <DocumentSectionDocumentCard
@@ -237,7 +237,7 @@ export const DocumentList = () => {
                       />
                     )}
                   />
-                </>
+                </View>
               )
             })}
           </CardList>
@@ -263,7 +263,7 @@ export const DocumentList = () => {
                 | CredentialsByType<DisplayCredentialOther>
                 | CredentialsByIssuer<DisplayCredentialOther>
               return (
-                <>
+                <View style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
                     <JoloText
                       size={JoloTextSizes.mini}
@@ -279,6 +279,7 @@ export const DocumentList = () => {
 
                   <AdoptedCarousel
                     data={credentials}
+                    customStyles={{ marginLeft: -12 }}
                     renderItem={({ item: c }) => (
                       <DocumentSectionOtherCard
                         credentialName={c.name || t('General.unknown')}
@@ -296,7 +297,7 @@ export const DocumentList = () => {
                       />
                     )}
                   />
-                </>
+                </View>
               )
             })}
           </CardList>
@@ -305,3 +306,9 @@ export const DocumentList = () => {
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  sectionContainer: {
+    paddingBottom: 22,
+  },
+})
