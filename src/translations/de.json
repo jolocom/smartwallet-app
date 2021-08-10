@@ -167,7 +167,7 @@
         "invalidDocsToastSubheader": "Keines der von ${serviceName} gesendeten Dokumente konnte gespeichert werden",
         "header": "Eingehende Übertragung",
         "subheader": "${serviceName} hat deiner Wallet das/die folgende(n) Dokument(e) geschickt:",
-        "cardInfoHeader": "Enthaltene Info:",
+        "cardInfoHeader": "Enthaltene Info",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren",
         "cardNoPreview": "Keine Informationen können in der Vorschau angezeigt werden"
@@ -189,7 +189,7 @@
         "offerRenegotiationTitle": "Aufmerksam sein",
         "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden",
         "shareMissingDocsTitle": "Fehlende Dokumente",
-        "shareMissingDocsMsg": "${Servicename} fordert ein Dokument an, das sich nicht in deiner Wallet befindet. \n\nFehlt: ${documentType}",
+        "shareMissingDocsMsg": "${Servicename} fordert ein Dokument an, das sich nicht in deiner Wallet befindet. \nFehlt: ${documentType}",
         "failedStoreMsg": "Leider konnten wir deinen Passcode nicht speichern. Bitte versuche es erneut",
         "reconnectedInternetTitle": "Du bist wieder online",
         "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
