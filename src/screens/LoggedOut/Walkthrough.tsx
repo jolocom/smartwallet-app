@@ -41,8 +41,8 @@ const Walkthrough: React.FC = () => {
     },
     {
       background: Walkthrough3,
-      header: t('Walkthrough.titleOne'),
-      paragraph: t('Walkthrough.descriptionTwo'),
+      header: t('Walkthrough.titleThree'),
+      paragraph: t('Walkthrough.descriptionThree'),
     },
   ]
 
