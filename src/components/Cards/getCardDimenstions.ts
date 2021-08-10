@@ -83,6 +83,7 @@ export const getCardDimensions = (
    * limit card width to originalCardWidth value
    */
   if (scaleBy > 1) {
+    scaleBy = 1
     cardWidth = originalCardWidth
     cardHeight = originalCardHeight
   } else {
