@@ -163,7 +163,15 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
                 {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
                 <ScaledText
                   numberOfLines={1}
-                  style={styles.regularText}
+                  style={[
+                    styles.regularText,
+                    {
+                      width:
+                        photo && idx === displayedFields.length - 1
+                          ? '66.4%'
+                          : '100%',
+                    },
+                  ]}
                   scaleStyle={styles.fieldLabel}
                 >
                   {f.label.trim()}:
