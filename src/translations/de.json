@@ -369,7 +369,7 @@
         "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam. Jegliche Benutzerinformationen werden sofort nach Lösung des Problems gelöscht",
         "rateHeader": "Bewerte diese Angelegenheit",
         "submitBtn": "Bericht senden",
-        "contactInputError": "Bitte gib eine gültige E-Mail oder Telefonnummer ein",
+        "contactInputError": "Bitte gib eine gültige E-Mail",
         "issueOption_1": "Keine Internetverbindung",
         "issueOption_2": "Die App stürzt immer wieder ab",
         "issueOption_3": "Kann mich nicht einloggen",

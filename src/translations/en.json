@@ -369,7 +369,7 @@
         "contactInputInfo": "We do not store data and do not spam. Any user information will be deleted immediately after solving the problem",
         "rateHeader": "Rate this issue",
         "submitBtn": "Submit report",
-        "contactInputError": "Please enter a valid email or phone number",
+        "contactInputError": "Please enter a valid email",
         "issueOption_1": "No internet connection",
         "issueOption_2": "The app keeps crashing",
         "issueOption_3": "Can’t login",
