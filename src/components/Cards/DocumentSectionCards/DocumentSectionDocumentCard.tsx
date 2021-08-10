@@ -3,7 +3,7 @@ import { View, Image, StyleSheet } from 'react-native'
 
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
-import { useCredentialNameScale, useTrimFields } from '../hooks'
+import { useCalculateFieldLines, useCredentialNameScale } from '../hooks'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import {
@@ -13,6 +13,11 @@ import {
 } from './consts'
 import { CardMoreBtn } from './components'
 import { DocumentCardProps } from './types'
+import { FieldsCalculator } from '../InteractionShare/components'
+import { getTrimmedHighlight } from '../utils'
+
+const MAX_FIELDS = 3
+const MAX_FIELD_LINES = 4
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
@@ -25,20 +30,86 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   const { isCredentialNameScaled, handleCredentialNameTextLayout } =
     useCredentialNameScale()
 
-  const { displayedFields, onTextLayoutChange } = useTrimFields(
-    fields,
-    photo,
-    highlight,
+  const displayedFields = useMemo(
+    () => fields.splice(0, MAX_FIELDS),
+    [fields.length],
   )
+
+  const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
+
+  const sumFieldLines = useMemo(() => {
+    if (Object.keys(fieldLines).length === displayedFields.length) {
+      return Object.keys(fieldLines).reduce(
+        (acc, key) => acc + fieldLines[parseInt(key)],
+        0,
+      )
+    }
+    return 0
+  }, [JSON.stringify(fieldLines)])
+
+  /**
+   * We can not display more than 5 lines of all field value lines
+   */
+  const handleFieldValuesVisibility = (child: React.ReactNode, idx: number) => {
+    /**
+     * Once nr of lines of all displayed fields was calculated
+     */
+    if (
+      Object.keys(fieldLines).length === displayedFields.length &&
+      sumFieldLines !== 0
+    ) {
+      /**
+       * if sum of all field lines doesn't exceed max
+       * amount of lines that can be displayed
+       */
+      if (sumFieldLines <= MAX_FIELD_LINES) {
+        return child
+      } else {
+        /**
+         * safely display lines of first and second fields,
+         * because max number of lines for a field value is 2,
+         * and even if both of these fields (1st, 2nd)
+         * have max amount of field lines display it will still display 4 lines
+         */
+        if (idx === 0 || idx === 1) {
+          return child
+        } else {
+          const remainingNrLines =
+            MAX_FIELD_LINES - fieldLines[0] - fieldLines[1]
+          /**
+           * If no lines are left to display do not display the whole field
+           */
+          if (remainingNrLines === 0) {
+            return null
+          } else {
+            /**
+             * otherwise,
+             * change numberOfLines display for field value
+             */
+            return React.Children.map(child.props.children, (c, idx) => {
+              // field value child
+              if (idx === child.props.children.length - 1) {
+                return React.cloneElement(c, {
+                  numberOfLines:
+                    MAX_FIELD_LINES - fieldLines[0] - fieldLines[1],
+                })
+              }
+              // the rest of children
+              return c
+            })
+          }
+        }
+      }
+    }
+    return child
+  }
 
   /**
    * trim highlight value if necessary
    */
   const displayedHighlight = useMemo(() => {
     if (highlight) {
-      return highlight?.length > 14
-        ? highlight?.slice(0, 14) + '...'
-        : highlight
+      return getTrimmedHighlight(highlight)
     } else {
       return undefined
     }
@@ -86,38 +157,40 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             </ScaledText>
           </ScaledView>
           <ScaledView scaleStyle={{ paddingBottom: 16 }} />
-          {displayedFields.map((f, idx) => (
-            <>
-              {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
-              <ScaledText
-                // @ts-expect-error
-                onTextLayout={onTextLayoutChange}
-                numberOfLines={1}
-                style={styles.regularText}
-                scaleStyle={styles.fieldLabel}
-              >
-                {f.label}:
-              </ScaledText>
-              <ScaledView scaleStyle={{ paddingBottom: 9 }} />
-              <ScaledText
-                // @ts-expect-error
-                onTextLayout={onTextLayoutChange}
-                numberOfLines={idx === displayedFields.length - 1 ? 3 : 2}
-                scaleStyle={styles.fieldText}
-                style={[
-                  styles.mediumText,
-                  {
-                    width:
-                      photo && idx === displayedFields.length - 1
-                        ? '66.4%'
-                        : '100%',
-                  },
-                ]}
-              >
-                {f.value}
-              </ScaledText>
-            </>
-          ))}
+          <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
+            {displayedFields.map((f, idx) => (
+              <>
+                {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
+                <ScaledText
+                  numberOfLines={1}
+                  style={styles.regularText}
+                  scaleStyle={styles.fieldLabel}
+                >
+                  {f.label.trim()}:
+                </ScaledText>
+                <ScaledView scaleStyle={{ paddingBottom: 9 }} />
+                <ScaledText
+                  numberOfLines={2}
+                  //@ts-expect-error
+                  onTextLayout={(e: TextLayoutEvent) =>
+                    handleFieldValueLayout(e, idx)
+                  }
+                  scaleStyle={styles.fieldText}
+                  style={[
+                    styles.mediumText,
+                    {
+                      width:
+                        photo && idx === displayedFields.length - 1
+                          ? '66.4%'
+                          : '100%',
+                    },
+                  ]}
+                >
+                  {f.value}
+                </ScaledText>
+              </>
+            ))}
+          </FieldsCalculator>
         </ScaledView>
       </DocumentCardMedium>
       {photo && (
