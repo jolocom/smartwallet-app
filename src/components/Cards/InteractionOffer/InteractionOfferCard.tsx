@@ -62,7 +62,7 @@ export const InteractionOfferCard: React.FC<
           ) : (
             <ScaledText
               scaleStyle={commonStyles.fieldLabelSmall}
-              style={commonStyles.regularText}
+              style={[commonStyles.regularText, styles.preview]}
             >
               {t('CredentialOffer.cardNoPreview')}
             </ScaledText>
@@ -93,5 +93,8 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 5,
     backgroundColor: Colors.alto,
+  },
+  preview: {
+    textAlign: 'left',
   },
 })
