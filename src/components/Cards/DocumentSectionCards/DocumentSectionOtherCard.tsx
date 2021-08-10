@@ -24,14 +24,6 @@ const DocumentSectionOtherCard: React.FC<OtherCardProps> = ({
   const { isCredentialNameScaled, handleCredentialNameTextLayout } =
     useCredentialNameScale()
 
-  /**
-   * Display credential type
-   */
-  const displayCredentialType = useMemo(
-    () => getCredentialUIType(credentialType),
-    [credentialType],
-  )
-
   const { displayedFields, onTextLayoutChange } = useTrimFields(fields, logo)
 
   return (
@@ -55,7 +47,7 @@ const DocumentSectionOtherCard: React.FC<OtherCardProps> = ({
                 },
               ]}
             >
-              {displayCredentialType}
+              {credentialType}
             </ScaledText>
             <ScaledView scaleStyle={{ paddingBottom: 13 }} />
             <ScaledText
