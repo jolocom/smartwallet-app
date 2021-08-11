@@ -10,14 +10,17 @@ const mockDeviceScreenWidth = 350
  * NOTE: this variable is used to test when device screen width
  * is larger than base screen width
  */
-const mockDeviceScreenWidthLarge = 600
+const mockDeviceScreenWidthModifier = 1.4
+const mockDeviceScreenWidthLarge =
+  mockBaseScreenWidth * mockDeviceScreenWidthModifier
 
 const mockAvailableWidth = 280
 /**
  * NOTE: this variable is used to test when available width
  * is larger than base card width
  */
-const mockAvailableWidthLarge = 320
+const mockLargeWidthModifier = 1.2
+const mockAvailableWidthLarge = mockBaseCardWidth * mockLargeWidthModifier
 
 /**
  * NOTE: this mock is volatile because if path to
@@ -95,9 +98,9 @@ describe('getCardDimensions', () => {
         { containerWidth: mockAvailableWidthLarge },
       )
 
-      expect(scaleBy).toBe(1)
-      expect(scaledWidth).toBe(mockBaseCardWidth)
-      expect(scaledHeight).toBe(mockBaseCardHeight)
+      expect(scaleBy).toBe(mockLargeWidthModifier)
+      expect(scaledWidth).toBe(mockBaseCardWidth * mockLargeWidthModifier)
+      expect(scaledHeight).toBe(mockBaseCardHeight * mockLargeWidthModifier)
     })
   })
   describe('runs tests for screens larger than base screen', () => {
@@ -113,9 +116,13 @@ describe('getCardDimensions', () => {
         { originalScreenWidth: mockBaseScreenWidth },
       )
 
-      expect(scaleBy).toBe(1)
-      expect(scaledWidth).toBe(mockBaseCardWidth)
-      expect(scaledHeight).toBe(mockBaseCardHeight)
+      expect(scaleBy).toBe(mockDeviceScreenWidthModifier)
+      expect(scaledWidth).toBe(
+        mockBaseCardWidth * mockDeviceScreenWidthModifier,
+      )
+      expect(scaledHeight).toBe(
+        mockBaseCardHeight * mockDeviceScreenWidthModifier,
+      )
     })
   })
 })
