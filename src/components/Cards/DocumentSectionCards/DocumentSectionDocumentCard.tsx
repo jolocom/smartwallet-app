@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
@@ -30,19 +30,6 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     photo,
     highlight,
   )
-
-  /**
-   * trim highlight value if necessary
-   */
-  const displayedHighlight = useMemo(() => {
-    if (highlight) {
-      return highlight?.length > 14
-        ? highlight?.slice(0, 14) + '...'
-        : highlight
-    } else {
-      return undefined
-    }
-  }, [highlight])
 
   return (
     <ScaledCard
@@ -132,21 +119,22 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
           />
         </ScaledView>
       )}
-      {displayedHighlight && (
+      {highlight && (
         <ScaledView
           style={styles.highlightContainer}
           scaleStyle={styles.highlightContainerScaled}
         >
           <ScaledText
+            numberOfLines={1}
             scaleStyle={[styles.highlight]}
             style={[
               styles.regularText,
               {
-                width: photo ? '66.4%' : '100%',
+                width: photo ? '76%' : '100%',
               },
             ]}
           >
-            {displayedHighlight.toUpperCase()}
+            {highlight.toUpperCase()}
           </ScaledText>
         </ScaledView>
       )}
@@ -201,7 +189,7 @@ const styles = StyleSheet.create({
     height: 56,
     paddingTop: 17,
     paddingBottom: 13,
-    paddingLeft: 23,
+    paddingHorizontal: 23,
   },
   highlightContainer: {
     position: 'absolute',
