@@ -35,6 +35,11 @@ export const groupBySection = (
   }))
 }
 
+/**
+ * NOTE: finished and unfinished states are the same here,
+ * because 'not' particle in unfinished step is added during
+ * translation of record config (fn translateRecordConfig)
+ */
 export const recordConfig = {
   status: {
     unknown: 'General.unknown',
