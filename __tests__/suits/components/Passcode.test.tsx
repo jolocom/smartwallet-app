@@ -6,7 +6,6 @@ import {
   cleanup,
 } from '@testing-library/react-native'
 import Passcode from '~/components/Passcode'
-import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
 import { inputPasscode } from '../../utils/inputPasscode'
 
@@ -15,6 +14,7 @@ const mockNavigate = jest.fn()
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
+  // eslint-disable-next-line
   useFocusEffect: jest.fn().mockImplementation(() => {}),
   useNavigation: () => ({
     navigate: mockNavigate,
@@ -58,20 +58,20 @@ describe('Passcode', () => {
     const { getByText, getByTestId } = render(
       <Passcode onSubmit={mockSubmit}>
         <Passcode.Header
-          title={strings.CREATE_PASSCODE}
-          errorTitle={strings.WRONG_PASSCODE}
+          title="CreatePasscode.createHeader"
+          errorTitle="ChangePasscode.wrongCodeHeader"
         />
         <Passcode.Input />
         <Passcode.Keyboard />
       </Passcode>,
     )
 
-    expect(getByText(strings.CREATE_PASSCODE)).toBeDefined()
+    expect(getByText(/CreatePasscode.createHeader/)).toBeDefined()
 
     inputPasscode(getByTestId, [1, 1, 1, 1])
 
     await waitFor(() => {
-      expect(getByText(strings.WRONG_PASSCODE)).toBeDefined()
+      expect(getByText(/ChangePasscode.wrongCodeHeader/)).toBeDefined()
     })
   })
 
@@ -83,7 +83,7 @@ describe('Passcode', () => {
       </Passcode>,
     )
 
-    expect(getByText(strings.FORGOT_YOUR_PASSCODE)).toBeDefined()
+    expect(getByText(/Lock.forgotBtn/)).toBeDefined()
 
     const forgotBtn = getByTestId('button')
     fireEvent.press(forgotBtn)

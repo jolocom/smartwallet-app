@@ -1,8 +1,8 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 
 import * as interactionsHooks from '~/hooks/interactions/handlers'
-import { mockSelectorReturn } from '../../utils/selector'
-import { getMockedDispatch } from '../../utils/dispatch'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
+import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { FlowType } from 'react-native-jolocom'
 import { setInteractionDetails } from '~/modules/interaction/actions'
 
@@ -20,6 +20,9 @@ const mockProcessJWTRequestOffer = jest.fn()
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
     processJWT: mockProcessJWTRequestOffer,
+    idw: {
+      did: 'did:example',
+    },
   }),
 }))
 
@@ -34,14 +37,11 @@ jest.mock('../../../src/hooks/loader', () => ({
   useLoader: jest
     .fn()
     .mockImplementation(
-      () => async (
-        cb: () => Promise<void>,
-        _: object,
-        onSuccess: () => void,
-      ) => {
-        await cb()
-        onSuccess()
-      },
+      () =>
+        async (cb: () => Promise<void>, _: object, onSuccess: () => void) => {
+          await cb()
+          onSuccess()
+        },
     ),
 }))
 
@@ -99,6 +99,7 @@ describe('Correct data was set in the store for ', () => {
           did: COUNTERPARTY_DID,
         },
         credentials: {
+          // eslint-disable-next-line
           service_issued: [
             {
               type: CREDENTIAL_TYPE,

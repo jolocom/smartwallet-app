@@ -6,27 +6,26 @@ import {
   getQueriesForElement,
   waitFor,
 } from '@testing-library/react-native'
-import { strings } from '~/translations'
-import { getMockedDispatch } from '../../utils/dispatch'
+import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { updateAttrs } from '~/modules/attributes/actions'
 import { AttributeTypes } from '~/types/credentials'
 import { ReactTestInstance } from 'react-test-renderer'
+import { mockedAgent } from '../../mocks/agent'
 
 const ATTRIBUTE_ID = 'claim:id-1'
 const GIVEN_NAME = 'Karl'
 const FAMILY_NAME = 'Muller'
 
 const mockedIssueCredentialFn = jest.fn()
+// eslint-disable-next-line
 const noop = () => {}
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
-    passwordStore: {
-      getPassword: jest.fn().mockResolvedValue(true),
-    },
+    passwordStore: mockedAgent.passwordStore,
     credentials: {
-      issue: mockedIssueCredentialFn,
+      create: mockedIssueCredentialFn,
     },
   }),
 }))
@@ -52,9 +51,9 @@ describe('Intro displays', () => {
       singleCredentialButton,
     )
 
-    expect(getSingleCredText(strings.START_NOW)).toBeDefined()
+    expect(getSingleCredText(/Identity.widgetStartBtn/)).toBeDefined()
 
-    expect(getByText(strings.IT_IS_TIME_TO_CREATE)).toBeDefined()
+    expect(getByText(/Identity.widgetWelcome/)).toBeDefined()
   })
 
   beforeEach(() => {
@@ -79,7 +78,7 @@ describe('Intro displays', () => {
     const singleCredentialButton = getByTestId('single-credential-button')
     fireEvent.press(singleCredentialButton)
 
-    expect(getByText(strings.WHAT_IS_YOUR_NAME)).toBeDefined()
+    expect(getByText(/Identity.widgetNameHeader/)).toBeDefined()
 
     const submitBtnStep1 = getByTestId('button')
     fireEvent.press(submitBtnStep1)
