@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, View } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import { TFunction } from 'i18next'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import { useTabs } from '~/components/Tabs/context'
@@ -32,11 +34,27 @@ import {
   useCredentialOptionalFields,
   useDeleteCredential,
 } from '~/hooks/credentials'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import { useToasts } from '~/hooks/toasts'
 import { usePopupMenu } from '~/hooks/popupMenu'
 import DocumentSectionDocumentCard from '~/components/Cards/DocumentSectionCards/DocumentSectionDocumentCard'
 import DocumentSectionOtherCard from '~/components/Cards/DocumentSectionCards/DocumentSectionOtherCard'
+
+const getCredentialDisplayType = (displayType: string, t: TFunction) => {
+  /**
+   * - if value is defined
+   *   and it isn't not a <context.term> pattern: use it as a type;
+   * - if value is empty make it unknown
+   */
+  const uiType: string | undefined =
+    uiTypesTerms[displayType as CredentialUITypes]
+
+  const credentialUIType = uiType
+    ? t(uiType)
+    : displayType === ''
+    ? t(uiTypesTerms[CredentialUITypes.unknown])
+    : displayType
+  return credentialUIType
+}
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()
@@ -179,20 +197,8 @@ export const DocumentList = () => {
               const { credentials, value } = d as
                 | CredentialsByType<DisplayCredentialDocument>
                 | CredentialsByIssuer<DisplayCredentialDocument>
-              /**
-               * - if value is defined
-               *   and it isn't not a <context.term> pattern: use it as a type;
-               * - if value is empty make it unknown
-               */
-              const uiType: string | undefined =
-                uiTypesTerms[value as CredentialUITypes]
-              const credentialUIType = uiType
-                ? // @ts-expect-error
-                  t(uiType)
-                : value === ''
-                ? // @ts-expect-error
-                  t(uiTypesTerms[CredentialUITypes.unknown])
-                : value
+
+              const credentialUIType = getCredentialDisplayType(value, t)
               return (
                 <>
                   <ScreenContainer.Padding>
@@ -262,6 +268,8 @@ export const DocumentList = () => {
               const { credentials, value } = o as
                 | CredentialsByType<DisplayCredentialOther>
                 | CredentialsByIssuer<DisplayCredentialOther>
+              const credentialUIType = getCredentialDisplayType(value, t)
+
               return (
                 <>
                   <ScreenContainer.Padding>
@@ -273,7 +281,7 @@ export const DocumentList = () => {
                         marginBottom: BP({ default: 30, xsmall: 16 }),
                       }}
                     >
-                      {`${value}  • ${credentials.length}`}
+                      {`${credentialUIType}  • ${credentials.length}`}
                     </JoloText>
                   </ScreenContainer.Padding>
 
@@ -282,7 +290,7 @@ export const DocumentList = () => {
                     renderItem={({ item: c }) => (
                       <DocumentSectionOtherCard
                         credentialName={c.name || t('General.unknown')}
-                        credentialType={c.type}
+                        credentialType={credentialUIType}
                         fields={getOptionalFields(c)}
                         logo={c.photo}
                         onHandleMore={() =>
