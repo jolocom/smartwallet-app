@@ -17,13 +17,11 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
 
-const Dot: React.FC<{ active: boolean }> = ({ active }) => {
-  return (
-    <View style={styles.dot}>
-      <View style={active ? styles.activeDot : styles.inactiveDot} />
-    </View>
-  )
-}
+const Dot: React.FC<{ active: boolean }> = ({ active }) => (
+  <View style={styles.dot}>
+    <View style={active ? styles.activeDot : styles.inactiveDot} />
+  </View>
+)
 const Walkthrough: React.FC = () => {
   const redirect = useRedirect()
   const { t } = useTranslation()
@@ -41,20 +39,18 @@ const Walkthrough: React.FC = () => {
     },
     {
       background: Walkthrough3,
-      header: t('Walkthrough.titleOne'),
-      paragraph: t('Walkthrough.descriptionTwo'),
+      header: t('Walkthrough.titleThree'),
+      paragraph: t('Walkthrough.descriptionThree'),
     },
   ]
 
-  const renderPagination = (index: number, total: number) => {
-    return (
-      <View style={styles.dotContainer}>
-        {[...Array(total)].map((_, key) => (
-          <Dot key={key} active={index === key} />
-        ))}
-      </View>
-    )
-  }
+  const renderPagination = (index: number, total: number) => (
+    <View style={styles.dotContainer}>
+      {[...Array(total)].map((_, key) => (
+        <Dot key={key} active={index === key} />
+      ))}
+    </View>
+  )
 
   const insets = useSafeArea()
 

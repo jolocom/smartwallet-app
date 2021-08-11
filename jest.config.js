@@ -9,6 +9,7 @@ module.exports = {
   testPathIgnorePatterns: [
     './node_modules/.*',
     './__tests__/utils/.*',
+    './__tests__/mocks/.*',
     './src/assets/svg/',
     '/node_modules/(?!(react-native|@sentry/react-native)/)',
   ],
