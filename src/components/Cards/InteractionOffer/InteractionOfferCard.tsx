@@ -47,6 +47,7 @@ export const InteractionOfferCard: React.FC<
               <>
                 {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 10 }} />}
                 <ScaledText
+                  numberOfLines={1}
                   scaleStyle={commonStyles.fieldLabelSmall}
                   style={commonStyles.regularText}
                 >
