@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
-import { useCalculateFieldLines, useCredentialNameScale } from '../hooks'
+import { useCredentialNameScale, usePruneFields } from '../hooks'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import {
@@ -16,7 +16,7 @@ import { DocumentCardProps } from './types'
 import { FieldsCalculator } from '../InteractionShare/components'
 
 const MAX_FIELDS = 3
-const MAX_FIELD_LINES = 4
+const MAX_FIELD_LINES = 5
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
@@ -29,80 +29,11 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   const { isCredentialNameScaled, handleCredentialNameTextLayout } =
     useCredentialNameScale()
 
-  const displayedFields = useMemo(
-    () => fields.splice(0, MAX_FIELDS),
-    [fields.length],
-  )
-
-  const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
-
-  const sumFieldLines = useMemo(() => {
-    if (Object.keys(fieldLines).length === displayedFields.length) {
-      return Object.keys(fieldLines).reduce(
-        (acc, key) => acc + fieldLines[parseInt(key)],
-        0,
-      )
-    }
-    return 0
-  }, [JSON.stringify(fieldLines)])
-
-  /**
-   * We can not display more than 4 lines of all field value lines
-   */
-  const handleFieldValuesVisibility = (child: React.ReactNode, idx: number) => {
-    /**
-     * Once nr of lines of all displayed fields was calculated
-     */
-    if (
-      Object.keys(fieldLines).length === displayedFields.length &&
-      sumFieldLines !== 0
-    ) {
-      /**
-       * if sum of all field lines doesn't exceed max
-       * amount of lines that can be displayed
-       */
-      if (sumFieldLines <= MAX_FIELD_LINES) {
-        return child
-      } else {
-        /**
-         * safely display lines of first and second fields,
-         * because max number of lines for a field value is 2,
-         * and even if both of these fields (1st, 2nd)
-         * have max amount of field lines display it will still display 4 lines
-         */
-        if (idx === 0 || idx === 1) {
-          return child
-        } else {
-          const remainingNrLines =
-            MAX_FIELD_LINES - fieldLines[0] - fieldLines[1]
-          /**
-           * If no lines are left to display do not display the whole field
-           */
-          if (remainingNrLines === 0) {
-            return null
-          } else {
-            /**
-             * otherwise,
-             * change numberOfLines display for field value
-             */
-            return React.Children.map(child.props.children, (c, idx) => {
-              // NOTE: using idx 3 as field.value is located under 3rd idx,
-              // if texts will get reorganized this will have to be updated
-              if (idx === 3) {
-                return React.cloneElement(c, {
-                  numberOfLines:
-                    MAX_FIELD_LINES - fieldLines[0] - fieldLines[1],
-                })
-              }
-              // the rest of children
-              return c
-            })
-          }
-        }
-      }
-    }
-    return child
-  }
+  const {
+    displayedFields,
+    handleFieldValueLayout,
+    handleFieldValuesVisibility,
+  } = usePruneFields(fields, MAX_FIELDS, MAX_FIELD_LINES)
 
   return (
     <ScaledCard

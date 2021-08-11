@@ -4,35 +4,22 @@ import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 
 import { Colors } from '~/utils/colors'
 import { commonStyles } from '../commonStyles'
-import { useCalculateFieldLines } from '../hooks'
+import { usePruneFields } from '../hooks'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
 import { FieldsCalculator, SelectedToggle } from './components'
-import { MAX_FIELD_OTHER } from './consts'
 import { shareStyles } from './styles'
 import { InteractionShareOtherCardProps } from './types'
 
+const MAX_FIELDS = 3
+const MAX_FIELD_LINES = 3
+
 export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps> =
   ({ credentialName, fields, selected }) => {
-    const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
-
-    const handleFieldValuesVisibility = (
-      child: React.ReactNode,
-      idx: number,
-    ) => {
-      if (idx + 1 > MAX_FIELD_OTHER) {
-        /* 1. Do not display anything that is more than max */
-        return null
-      } else if (
-        fieldLines[0] &&
-        fieldLines[1] &&
-        fieldLines[0] + fieldLines[1] > 2 &&
-        idx > 1
-      ) {
-        /* 2. If the sum of first and second field values is greater than 2 do not display anything later*/
-        return null
-      }
-      return child
-    }
+    const {
+      displayedFields,
+      handleFieldValueLayout,
+      handleFieldValuesVisibility,
+    } = usePruneFields(fields, MAX_FIELDS, MAX_FIELD_LINES)
 
     return (
       <ScaledCard originalHeight={232} originalWidth={368} scaleToFit>
@@ -47,7 +34,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
             </ScaledText>
             <ScaledView scaleStyle={{ paddingBottom: 16 }} />
             <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
-              {fields.map((f, idx) => (
+              {displayedFields.map((f, idx) => (
                 <>
                   {idx !== 0 && (
                     <ScaledView scaleStyle={{ paddingBottom: 12 }} />
