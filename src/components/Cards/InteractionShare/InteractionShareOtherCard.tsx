@@ -54,6 +54,7 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
                   )}
 
                   <ScaledText
+                    numberOfLines={1}
                     scaleStyle={commonStyles.fieldLabel}
                     style={commonStyles.regularText}
                   >
