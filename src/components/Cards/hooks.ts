@@ -77,6 +77,26 @@ export const useCalculateFieldLines = (maxLinesPerField = 2) => {
   }
 }
 
+/**
+ *
+ * @param fields
+ * @param maxNrFields
+ * @param maxNrFieldLines
+ * @returns
+ */
+
+/**
+ * NOTE: this hook is currently used in
+ * DocumentSectionDocumentCard and InteractionShareOtherCard components.
+ * @param fields - claims of a credential
+ * @param maxNrField - max number of fields a card can display
+ * @param maxNrFieldLines - max number of lines each field can display
+ * @returns displayFields - pruned field length based on maxNrField argument
+ * @returns handleFieldValueLayout - fn executed in onTextLayout event of field value text
+ * to calculate how many lines each field value has
+ * @returns handleFieldValuesVisibility - used to decide how many fields
+ * and how many field lines in field value are displayed. Should it thould beused in FieldCalculator component
+ */
 export const usePruneFields = (
   fields: Array<Required<DisplayVal>>,
   maxNrFields: number,
@@ -99,7 +119,21 @@ export const usePruneFields = (
   }, [JSON.stringify(fieldLines)])
 
   /**
-   * We can not display more than maxNrFieldLines lines of all field value lines
+   * NOTE: We can not display more than maxNrFieldLines lines of all field value lines
+   */
+  /**
+   *
+   * @param child a field node (a fragement with 4 children) of the collection of displayfields node
+   * children:
+   * 0 idx - top padding of a field
+   * 1 idx - field label
+   * 2 idx - padding between field label and field value
+   * 3 idx - field value
+   * @param idx an index of a field node in collection of displayedFields
+   * @returns
+   * - a field node if sum of displayed filed lines doesnt exceeed maxNrFieldLines
+   * - null if no space is left because all available field lines were occupied
+   * - modiedied field node, where field value display number of remaining available fields (nr = 1)
    */
   const handleFieldValuesVisibility = (child: React.ReactNode, idx: number) => {
     /**
@@ -138,9 +172,18 @@ export const usePruneFields = (
              * change numberOfLines display for field value
              */
             return React.Children.map(child.props.children, (c, idx) => {
-              // NOTE: performing operation on the last child as this is a components
-              // responsible for rendering field.value,
-              // if texts will get reorganized this will have to be updated
+              /**
+               * NOTE: performing operation on the last child as this is a components
+               * responsible for rendering field.value,
+               * NOTE: !!!! if texts will get reorganized this will have to be updated
+               */
+              /**
+               * NOTE: as of now children of field caculator fragment are:
+               * 0 idx - top padding of a field
+               * 1 idx - field label
+               * 2 idx - padding between field label and field value
+               * 3 idx - field value
+               */
               if (idx === child.props.children.length - 1) {
                 return React.cloneElement(c, {
                   numberOfLines:
