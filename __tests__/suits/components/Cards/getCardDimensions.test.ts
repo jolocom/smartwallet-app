@@ -95,7 +95,7 @@ describe('getCardDimensions', () => {
         { containerWidth: mockAvailableWidthLarge },
       )
 
-      expect(scaleBy).toBe(mockAvailableWidthLarge / mockBaseCardWidth)
+      expect(scaleBy).toBe(1)
       expect(scaledWidth).toBe(mockBaseCardWidth)
       expect(scaledHeight).toBe(mockBaseCardHeight)
     })
@@ -113,7 +113,7 @@ describe('getCardDimensions', () => {
         { originalScreenWidth: mockBaseScreenWidth },
       )
 
-      expect(scaleBy).toBe(mockDeviceScreenWidthLarge / mockBaseScreenWidth)
+      expect(scaleBy).toBe(1)
       expect(scaledWidth).toBe(mockBaseCardWidth)
       expect(scaledHeight).toBe(mockBaseCardHeight)
     })
