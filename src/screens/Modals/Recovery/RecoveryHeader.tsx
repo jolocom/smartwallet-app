@@ -21,7 +21,7 @@ const arePropsEqual = (
   if (prevProps.currentWordIdx !== nextProps.currentWordIdx) {
     return false
   }
-  if (prevProps.phrase.toString() != nextProps.phrase.toString()) {
+  if (prevProps.phrase.toString() !== nextProps.phrase.toString()) {
     return false
   }
   return true

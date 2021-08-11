@@ -5,37 +5,19 @@ import IdentityCredentials from '~/screens/LoggedIn/Identity/IdentityCredentials
 import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
+import {
+  getMockedEmailAttribute,
+  mockedNoAttributes,
+} from '../../mocks/store/attributes'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { mockSelectorReturn } from '../../utils/selector'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 
 const ATTRIBUTE_ID_1 = 'claim:id-1'
 const ATTRIBUTE_ID_2 = 'claim:id-2'
 const EMAIL_VALUE_1 = 'dev-1@jolocom.com'
 const EMAIL_VALUE_2 = 'dev-2@jolocom.com'
 
-const mockedStoreNoAttributes = {
-  attrs: {
-    all: {},
-  },
-}
-
-const mockedStoreEmailAttribute = {
-  attrs: {
-    all: {
-      ProofOfEmailCredential: [
-        { id: ATTRIBUTE_ID_1, value: { email: EMAIL_VALUE_1 } },
-        { id: ATTRIBUTE_ID_2, value: { email: EMAIL_VALUE_2 } },
-      ],
-    },
-  },
-}
-
 const mockedNavigate = jest.fn()
-
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn(),
-}))
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -71,11 +53,11 @@ describe('Primitive credentials component displays', () => {
   })
 
   test('placeholders if there are no credentials', () => {
-    mockSelectorReturn(mockedStoreNoAttributes)
+    mockSelectorReturn(mockedNoAttributes)
     const { getByText, getAllByTestId } = renderWithSafeArea(
       <IdentityCredentials />,
     )
-    expect(getByText(strings.YOUR_INFO_IS_QUITE_EMPTY)).toBeDefined()
+    expect(getByText(/Identity.attributesMissingInfo/)).toBeDefined()
 
     const emptyFields = getAllByTestId('widget-field-empty')
     expect(emptyFields.length).toBe(4)
@@ -91,7 +73,52 @@ describe('Primitive credentials component displays', () => {
     clickAndAssertNavigationCall(AttributeTypes.postalAddress)
   })
 
-  test('credential values', () => {
+  test('fields are rendered', () => {
+    const mockedStoreEmailAttribute = getMockedEmailAttribute(
+      ATTRIBUTE_ID_1,
+      ATTRIBUTE_ID_2,
+      EMAIL_VALUE_1,
+      EMAIL_VALUE_2,
+    )
+    mockSelectorReturn(mockedStoreEmailAttribute)
+
+    const { getAllByTestId } = renderWithSafeArea(<IdentityCredentials />)
+
+    expect(getAllByTestId('widget-field-static')).toHaveLength(2)
+  })
+
+  test('adding on press create new', () => {
+    const mockedStoreEmailAttribute = getMockedEmailAttribute(
+      ATTRIBUTE_ID_1,
+      ATTRIBUTE_ID_2,
+      EMAIL_VALUE_1,
+      EMAIL_VALUE_2,
+    )
+    mockSelectorReturn(mockedStoreEmailAttribute)
+    const { getByTestId } = renderWithSafeArea(<IdentityCredentials />)
+
+    const { getAllByTestId } = getQueriesForElement(
+      getByTestId('id-widget-with-values'),
+    )
+
+    // Part2: (without id) asserting if correct parameters where passed in navigation
+    const addNewOneButtonsEmail = getAllByTestId('widget-add-new')
+
+    mockedNavigate.mockClear()
+    const clickAndAssertNavigationCallEmail = pressFieldAndAssertNavigation(
+      mockedNavigate,
+      addNewOneButtonsEmail,
+    )
+    clickAndAssertNavigationCallEmail(AttributeTypes.emailAddress)
+  })
+
+  test('navigating on press', () => {
+    const mockedStoreEmailAttribute = getMockedEmailAttribute(
+      ATTRIBUTE_ID_1,
+      ATTRIBUTE_ID_2,
+      EMAIL_VALUE_1,
+      EMAIL_VALUE_2,
+    )
     const {
       attrs: {
         all: { ProofOfEmailCredential },
@@ -100,22 +127,7 @@ describe('Primitive credentials component displays', () => {
     mockSelectorReturn(mockedStoreEmailAttribute)
     const { getAllByTestId } = renderWithSafeArea(<IdentityCredentials />)
 
-    const widgets = getAllByTestId('widget')
-    expect(widgets.length).toBe(4)
-
-    const {
-      getByText: getByTextEmailWidget,
-      getAllByTestId: getAllByTestIdEmailWidget,
-    } = getQueriesForElement(widgets[0])
-    // asserting sorting and values are there
-    expect(
-      getByTextEmailWidget(ProofOfEmailCredential[0].value.email),
-    ).toBeDefined()
-    expect(
-      getByTextEmailWidget(ProofOfEmailCredential[1].value.email),
-    ).toBeDefined()
-
-    const emailFields = getAllByTestIdEmailWidget('widget-field-static')
+    const emailFields = getAllByTestId('widget-field-static')
 
     // Part1: (with id) asserting if correct parameters where passed in navigation
     const clickAndAssertNavigationCall = pressFieldAndAssertNavigation(
@@ -130,15 +142,5 @@ describe('Primitive credentials component displays', () => {
       AttributeTypes.emailAddress,
       ProofOfEmailCredential[1].id,
     )
-
-    // Part2: (without id) asserting if correct parameters where passed in navigation
-    const addNewOneButtonsEmail = getAllByTestIdEmailWidget('widget-add-new')
-
-    mockedNavigate.mockClear()
-    const clickAndAssertNavigationCallEmail = pressFieldAndAssertNavigation(
-      mockedNavigate,
-      addNewOneButtonsEmail,
-    )
-    clickAndAssertNavigationCallEmail(AttributeTypes.emailAddress)
   })
 })

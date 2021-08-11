@@ -28,14 +28,12 @@ export const isCredentialDocument = (cred: SignedCredential, did: string) =>
 
 export const assembleFormInitialValues = (
   fields: Array<IAttributeClaimField | IAttributeClaimFieldWithValue>,
-) => {
-  return fields.reduce<Record<string, string>>((acc, f) => {
-    // @ts-ignore
+) =>
+  fields.reduce<Record<string, string>>((acc, f) => {
+    // @ts-expect-error
     acc[f.key] = f.value ?? ''
     return acc
   }, {})
-}
 
-export const getCounterpartyName = (counterparty: IdentitySummary) => {
-  return counterparty.publicProfile?.name ?? truncateDid(counterparty.did)
-}
+export const getCounterpartyName = (counterparty: IdentitySummary) =>
+  counterparty.publicProfile?.name ?? truncateDid(counterparty.did)
