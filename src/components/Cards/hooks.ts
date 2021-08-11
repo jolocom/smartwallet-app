@@ -59,7 +59,7 @@ export const useTrimFields = <FP>(
 /**
  * a hook to calculate nr of displayed fields for interaction cards
  */
-export const useCalculateFieldLines = () => {
+export const useCalculateFieldLines = (maxLinesPerField = 2) => {
   const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
   const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
     const lines = e.nativeEvent.lines.length
@@ -67,7 +67,7 @@ export const useCalculateFieldLines = () => {
       const value = prevState[idx] ?? lines
       return {
         ...prevState,
-        [idx]: value > 2 ? 2 : value,
+        [idx]: value > maxLinesPerField ? maxLinesPerField : value,
       }
     })
   }
@@ -138,9 +138,10 @@ export const usePruneFields = (
              * change numberOfLines display for field value
              */
             return React.Children.map(child.props.children, (c, idx) => {
-              // NOTE: using idx 3 as field.value is located under 3rd idx,
+              // NOTE: performing operation on the last child as this is a components
+              // responsible for rendering field.value,
               // if texts will get reorganized this will have to be updated
-              if (idx === 3) {
+              if (idx === child.props.children.length - 1) {
                 return React.cloneElement(c, {
                   numberOfLines:
                     maxNrFieldLines - fieldLines[0] - fieldLines[1],
