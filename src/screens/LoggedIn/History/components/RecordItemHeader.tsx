@@ -27,6 +27,11 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
             ignoreScaling
             kind={JoloTextKind.title}
             size={JoloTextSizes.mini}
+            numberOfLines={1}
+            customStyles={{
+              flex: 1,
+              textAlign: 'left',
+            }}
           >
             {details ? details.title : '███████'}
           </JoloText>
@@ -36,7 +41,11 @@ const RecordItemHeader: React.FC<{ details: IRecordDetails | null }> = ({
             testID="record-item-time"
             size={JoloTextSizes.mini}
             color={Colors.white}
-            customStyles={{ alignSelf: 'center', marginRight: 16 }}
+            customStyles={{
+              alignSelf: 'center',
+              marginRight: 16,
+              marginLeft: 8,
+            }}
           >
             {details ? details.time : '██'}
           </JoloText>

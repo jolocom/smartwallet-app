@@ -1,3 +1,5 @@
+import { NativeModules } from 'react-native'
+
 jest.mock('react-native-keychain', () => ({
   SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
   SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
@@ -35,7 +37,7 @@ jest.mock('react-native-jolocom', () => ({
 }))
 
 jest.mock('react-native-localize', () => ({
-  findBestAvailableLanguage: (_: Array<string>) => 'en',
+  findBestAvailableLanguage: (_: string[]) => 'en',
 }))
 
 jest.mock('../../src/errors/errorContext.tsx', () => ({
@@ -62,7 +64,7 @@ jest.mock(
 
 jest.mock('react-native-gesture-handler', () => {
   const gestureHandlerMocks = jest.requireActual(
-    '../../node_modules/react-native-gesture-handler/__mocks__/RNGestureHandlerModule.js',
+    '../../node_modules/react-native-gesture-handler/src/mocks.ts',
   ).default
 
   return {
@@ -72,5 +74,25 @@ jest.mock('react-native-gesture-handler', () => {
   }
 })
 
-// @ts-ignore
+jest.mock('../../src/hooks/useTranslation.ts', () => () => ({
+  currentLanguage: 'en',
+  t: jest
+    .fn()
+    .mockImplementation(
+      (term, interpolationValue) => term + interpolationValue,
+    ),
+}))
+
+// @ts-expect-error
 global.__reanimatedWorkletInit = jest.fn()
+
+NativeModules.RNCNetInfo = {
+  getCurrentState: jest.fn(() => Promise.resolve()),
+  addListener: jest.fn(),
+  removeListeners: jest.fn(),
+}
+
+jest.mock('react-native-keyboard-aware-scroll-view', () => {
+  const KeyboardAwareScrollView = ({ children }: { children: any }) => children
+  return { KeyboardAwareScrollView }
+})
