@@ -229,20 +229,22 @@ export const ScannerComponent = (props: Props) => {
                 strings.ITS_ALL_AUTOMATIC_JUST_PLACE_YOUR_PHONE_ABOVE_THE_CODE,
               )}
             </Text>
-            <View>
-              <Text style={styles.descriptionText}>
-                {I18n.t(strings.OR_PASTE_JWT_HERE)}
-              </Text>
-              <TextInput
-                onChangeText={async (value: string) => {
-                  if (value) {
-                    await onRead({ data: value.trim() })
-                    setQrTextValue('')
-                  }
-                }}
-                value={qrTextValue}
-                style={styles.inputText}></TextInput>
-            </View>
+            {__DEV__ && (
+              <View>
+                <Text style={styles.descriptionText}>
+                  {I18n.t(strings.OR_PASTE_JWT_HERE)}
+                </Text>
+                <TextInput
+                  onChangeText={async (value: string) => {
+                    if (value) {
+                      await onRead({ data: value.trim() })
+                      setQrTextValue('')
+                    }
+                  }}
+                  value={qrTextValue}
+                  style={styles.inputText}></TextInput>
+              </View>
+            )}
           </View>
         )}
         <TouchableHighlight
