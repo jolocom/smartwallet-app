@@ -59,18 +59,14 @@ export const getCardDimensions = (
   if (isOriginalScreenWidthDefining(definingOption)) {
     scaleBy =
       Dimensions.get('screen').width / definingOption.originalScreenWidth
-    if (scaleBy <= 1) {
-      cardWidth = originalCardWidth * scaleBy
-    }
+    cardWidth = originalCardWidth * scaleBy
   } else if (isContainerWidthDefining(definingOption)) {
     if (!definingOption.containerWidth) {
       scaleBy = 1
       cardWidth = originalCardWidth
     } else {
       scaleBy = definingOption.containerWidth / originalCardWidth
-      if (scaleBy <= 1) {
-        cardWidth = definingOption.containerWidth
-      }
+      cardWidth = definingOption.containerWidth
     }
   } else {
     throw new Error(
@@ -82,17 +78,11 @@ export const getCardDimensions = (
    * in case screen is larger than originalScreenWidth
    * limit card width to originalCardWidth value
    */
-  if (scaleBy > 1) {
-    scaleBy = 1
-    cardWidth = originalCardWidth
-    cardHeight = originalCardHeight
-  } else {
-    cardHeight = (1 / baseAspectRation) * cardWidth!
-  }
+  cardHeight = (1 / baseAspectRation) * cardWidth!
 
   return {
-    scaledWidth: cardWidth!,
-    scaledHeight: cardHeight!,
+    scaledWidth: cardWidth,
+    scaledHeight: cardHeight,
     scaleBy,
   }
 }
