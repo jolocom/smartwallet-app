@@ -106,10 +106,12 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
 
   const handleHoleLayout = () => {
     if (Platform.OS === 'android') {
+      // eslint-disable-next-line
       holeRef.current?.measureInWindow((x, y, width, height) => {
         setHolePosition({ x, y, width, height })
       })
     } else {
+      // eslint-disable-next-line
       holeRef.current?.measure((x, y, width, height) => {
         setHolePosition({ x, y, width, height })
       })

@@ -50,9 +50,7 @@ export const IncomingRequestDoc: React.FC<IIncomingRequestDocCardProps> = ({
   const handleNumberOfValueLinesToDisplay = (
     idx: number,
     fieldLines: Record<number, number>,
-  ) => {
-    return idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2
-  }
+  ) => (idx !== 0 ? (fieldLines[0] > 1 || !!highlight ? 1 : 2) : 2)
 
   return (
     <ResponsiveCard>

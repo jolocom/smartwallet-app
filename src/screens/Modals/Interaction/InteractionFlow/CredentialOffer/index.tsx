@@ -85,33 +85,30 @@ const CredentialOfferFAS = () => {
   const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
-  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
-    return credentials.map(
-      ({ invalid, category, properties, name, type }, idx) => (
-        <View
-          key={type + idx}
-          style={{
-            marginBottom: idx === credentials.length - 1 ? 0 : 30,
-            opacity: invalid ? 0.5 : 1,
-          }}
-        >
-          {category === CredentialCategories.document ? (
-            <IncomingOfferDoc
-              key={name + type}
-              name={name || t('General.unknown')}
-              properties={properties}
-            />
-          ) : (
-            <IncomingOfferOther
-              key={name + type}
-              name={name || t('General.unknown')}
-              properties={properties}
-            />
-          )}
-        </View>
-      ),
-    )
-  }
+  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
+    credentials.map(({ invalid, category, properties, name, type }, idx) => (
+      <View
+        key={type + idx}
+        style={{
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
+          opacity: invalid ? 0.5 : 1,
+        }}
+      >
+        {category === CredentialCategories.document ? (
+          <IncomingOfferDoc
+            key={name + type}
+            name={name || t('General.unknown')}
+            properties={properties}
+          />
+        ) : (
+          <IncomingOfferOther
+            key={name + type}
+            name={name || t('General.unknown')}
+            properties={properties}
+          />
+        )}
+      </View>
+    ))
 
   return (
     <Collapsible>

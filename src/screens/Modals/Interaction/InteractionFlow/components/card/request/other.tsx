@@ -43,9 +43,7 @@ export const IncomingRequestOther: React.FC<IIncomingRequestDocCardProps> = ({
   /* NOTE: in other cards we can allow to display 2 lines
     constantly no matter how many lines are in the first value
   */
-  const handleNumberOfValueLinesToDisplay = (idx: number) => {
-    return 2
-  }
+  const handleNumberOfValueLinesToDisplay = (idx: number) => 2
 
   return (
     <ResponsiveCard>

@@ -44,7 +44,7 @@ describe('useHistory Hook', () => {
     const today = grouped.find((r) => r.id === 'today-record')
     const yesterday = grouped.find((r) => r.id === 'yesterday-record')
 
-    expect(today?.section).toBe('Today')
-    expect(yesterday?.section).toBe('Yesterday')
+    expect(today?.section).toBe('Dates.today')
+    expect(yesterday?.section).toBe('Dates.yesterday')
   })
 })
