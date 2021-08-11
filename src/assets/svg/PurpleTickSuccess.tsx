@@ -3,7 +3,7 @@ import Svg, { G, Path } from 'react-native-svg'
 
 function PurpleTickSuccess() {
   return (
-    <Svg width={20} height={20} viewBox="0 0 20 20">
+    <Svg width={'100%'} height={'100%'} viewBox="0 0 20 20">
       <G fillRule="nonzero" fill="none">
         <Path
           d="M17.071 2.929A9.935 9.935 0 0010 0a9.935 9.935 0 00-7.071 2.929A9.935 9.935 0 000 10a9.934 9.934 0 002.929 7.071A9.935 9.935 0 0010 20a9.935 9.935 0 007.071-2.929A9.935 9.935 0 0020 10a9.935 9.935 0 00-2.929-7.071z"

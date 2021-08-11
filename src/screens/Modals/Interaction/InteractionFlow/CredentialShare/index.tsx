@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
@@ -12,7 +12,6 @@ import {
   getIsReadyToSubmitRequest,
   getCustomRequestedCredentialsByCategoryByType,
   getSelectedShareCredentials,
-  getServiceDescription,
   getInteractionCounterpartyName,
 } from '~/modules/interaction/selectors'
 import {
@@ -38,8 +37,6 @@ import {
 import ShareAttributeWidget from './ShareAttributeWidget'
 import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
-import { PurpleTickSuccess } from '~/assets/svg'
-import { Colors } from '~/utils/colors'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import Space from '~/components/Space'
@@ -214,20 +211,15 @@ const CredentialShareFAS = () => {
                     holderName={cred.holderName || t('General.anonymous')}
                     highlight={cred.highlight}
                     photo={cred.photo}
+                    selected={selectedCredentials[type] === id}
                   />
                 ) : (
                   <InteractionShareOtherCard
                     credentialName={name ?? type}
                     fields={claimFields}
+                    selected={selectedCredentials[type] === id}
                   />
                 )}
-                <View style={styles.selectIndicator}>
-                  {selectedCredentials[type] === id ? (
-                    <PurpleTickSuccess />
-                  ) : (
-                    <View style={styles.notSelected} />
-                  )}
-                </View>
               </View>
             </TouchableWithoutFeedback>
           )
@@ -292,21 +284,5 @@ const CredentialShare = () => {
   const isFAS = useSelector(getIsFullscreenCredShare)
   return isFAS ? <CredentialShareFAS /> : <CredentialShareBAS />
 }
-
-const styles = StyleSheet.create({
-  notSelected: {
-    width: 20,
-    height: 20,
-    borderColor: Colors.black,
-    opacity: 0.3,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  selectIndicator: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-  },
-})
 
 export default CredentialShare

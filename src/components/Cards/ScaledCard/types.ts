@@ -1,4 +1,4 @@
-import { TextProps, ViewProps, StyleProp } from 'react-native'
+import { TextProps, ViewProps, StyleProp, ViewStyle } from 'react-native'
 
 export interface IScaledCardContext {
   scaleBy: number
@@ -17,6 +17,7 @@ interface IOriginalScreenWidthProp {
 export type IScaledCardProps = {
   originalWidth: number
   originalHeight: number
+  scaleStyle?: StyleProp<ViewStyle>
 } & (IScaleToFitProp | IOriginalScreenWidthProp) &
   ViewProps
 

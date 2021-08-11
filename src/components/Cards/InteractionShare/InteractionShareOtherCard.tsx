@@ -6,7 +6,7 @@ import { Colors } from '~/utils/colors'
 import { commonStyles } from '../commonStyles'
 import { usePruneFields } from '../hooks'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
-import { FieldsCalculator } from './components'
+import { FieldsCalculator, SelectedToggle } from './components'
 import { shareStyles } from './styles'
 import { InteractionShareOtherCardProps } from './types'
 
@@ -14,7 +14,7 @@ const MAX_FIELDS = 3
 const MAX_FIELD_LINES = 3
 
 export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps> =
-  ({ credentialName, fields }) => {
+  ({ credentialName, fields, selected }) => {
     const {
       displayedFields,
       handleFieldValueLayout,
@@ -65,6 +65,9 @@ export const InteractionShareOtherCard: React.FC<InteractionShareOtherCardProps>
             </FieldsCalculator>
           </ScaledView>
         </InteractionCardOther>
+        {typeof selected !== 'undefined' && (
+          <SelectedToggle selected={selected} />
+        )}
       </ScaledCard>
     )
   }

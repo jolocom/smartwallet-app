@@ -8,7 +8,7 @@ import { commonStyles } from '../commonStyles'
 import { useCalculateFieldLines } from '../hooks'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
 
-import { FieldsCalculator } from './components'
+import { FieldsCalculator, SelectedToggle } from './components'
 import {
   MAX_FIELD_DOC,
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
@@ -18,7 +18,7 @@ import { shareStyles } from './styles'
 import { InteractionShareDocumentCardProps } from './types'
 
 export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCardProps> =
-  ({ credentialName, holderName, fields, photo, highlight }) => {
+  ({ credentialName, holderName, fields, photo, highlight, selected }) => {
     /**
      * Logic to calculate number of lines a holder name takes
      * to decide how many fields can be displayed
@@ -58,6 +58,8 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       <ScaledCard
         originalWidth={ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH}
         originalHeight={ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT}
+        style={{ overflow: 'hidden' }}
+        scaleStyle={{ borderRadius: 13 }}
         scaleToFit
       >
         <InteractionCardDoc>
@@ -113,24 +115,10 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             </FieldsCalculator>
           </ScaledView>
         </InteractionCardDoc>
-        {photo && (
-          <ScaledView
-            scaleStyle={styles.documentPhotoContainer}
-            style={{ zIndex: 10 }}
-          >
-            <Image
-              style={styles.documentPhoto}
-              source={{ uri: photo }}
-              resizeMode="cover"
-            />
-          </ScaledView>
-        )}
         {highlight && (
           <ScaledView
             style={{
               zIndex: 9,
-              borderBottomLeftRadius: 9,
-              borderBottomRightRadius: 9,
             }}
             scaleStyle={styles.documentHighlightContainer}
           >
@@ -147,6 +135,21 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
               {highlight.toUpperCase()}
             </ScaledText>
           </ScaledView>
+        )}
+        {photo && (
+          <ScaledView
+            scaleStyle={styles.documentPhotoContainer}
+            style={{ zIndex: 10 }}
+          >
+            <Image
+              style={styles.documentPhoto}
+              source={{ uri: photo }}
+              resizeMode="cover"
+            />
+          </ScaledView>
+        )}
+        {typeof selected !== 'undefined' && (
+          <SelectedToggle selected={selected} />
         )}
       </ScaledCard>
     )
@@ -175,7 +178,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     bottom: 18,
     right: 17,
-    borderRadius: 105 / 2,
+    borderRadius: 70,
     width: 105,
     height: 105,
   },
