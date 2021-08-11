@@ -31,17 +31,27 @@ const testAuthDetails = {
 }
 
 describe('Record Item', () => {
-  it('should render the placeholder when the details are unavailable', () => {
+  it('should render the placeholder when the details are unavailable', async () => {
     mockHistoryDetails()
-    const props = { id: 'test', onDropdown: jest.fn(), isFocused: false }
+    const props = {
+      id: 'test',
+      onDropdown: jest.fn(),
+      isFocused: false,
+      lastUpdated: Date.now().toString(),
+    }
     const { toJSON } = renderWithSafeArea(<RecordItem {...props} />)
 
-    expect(toJSON()).toMatchSnapshot()
+    await waitFor(() => expect(toJSON()).toMatchSnapshot())
   })
 
   it('should render a generic Record Item', async () => {
     mockHistoryDetails(testAuthDetails)
-    const props = { id: 'test', onDropdown: jest.fn(), isFocused: false }
+    const props = {
+      id: 'test',
+      onDropdown: jest.fn(),
+      isFocused: false,
+      lastUpdated: Date.now().toString(),
+    }
     const { toJSON } = await waitFor(() =>
       renderWithSafeArea(<RecordItem {...props} />),
     )
@@ -51,7 +61,12 @@ describe('Record Item', () => {
 
   it('should render the dropdown with the FINISHED state', async () => {
     mockHistoryDetails(testAuthDetails)
-    const props = { id: 'test', onDropdown: jest.fn(), isFocused: true }
+    const props = {
+      id: 'test',
+      onDropdown: jest.fn(),
+      isFocused: true,
+      lastUpdated: Date.now().toString(),
+    }
     const { toJSON } = await waitFor(() =>
       renderWithSafeArea(<RecordItem {...props} />),
     )
@@ -60,7 +75,12 @@ describe('Record Item', () => {
   })
   it('should render the dropdown with the PENDING state', async () => {
     mockHistoryDetails({ ...testAuthDetails, status: IRecordStatus.pending })
-    const props = { id: 'test', onDropdown: jest.fn(), isFocused: true }
+    const props = {
+      id: 'test',
+      onDropdown: jest.fn(),
+      isFocused: true,
+      lastUpdated: Date.now().toString(),
+    }
     const { toJSON } = await waitFor(() =>
       renderWithSafeArea(<RecordItem {...props} />),
     )
@@ -69,7 +89,12 @@ describe('Record Item', () => {
   }),
     it('should render the dropdown with the EXPIRED state', async () => {
       mockHistoryDetails({ ...testAuthDetails, status: IRecordStatus.expired })
-      const props = { id: 'test', onDropdown: jest.fn(), isFocused: true }
+      const props = {
+        id: 'test',
+        onDropdown: jest.fn(),
+        isFocused: true,
+        lastUpdated: Date.now().toString(),
+      }
       const { toJSON } = await waitFor(() =>
         renderWithSafeArea(<RecordItem {...props} />),
       )

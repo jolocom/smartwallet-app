@@ -1,33 +1,17 @@
 import React from 'react'
 import Identity from '~/screens/LoggedIn/Identity'
+import {
+  mockedAttributes,
+  mockedNoAttributes,
+} from '../../mocks/store/attributes'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { mockSelectorReturn } from '../../utils/selector'
-
-const mockedNoAttributes = {
-  attrs: {
-    all: {},
-  },
-}
-
-const mockedAttributes = {
-  attrs: {
-    all: {
-      ProofOfEmailCredential: [
-        { id: 'claimId', value: { givenName: 'Karl', familyName: 'Muller' } },
-      ],
-    },
-  },
-}
-
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn(),
-}))
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 
 /* Mocking these components as we are not interested to render it fully
 at this stage */
-jest.mock('../../../src/screens/LoggedIn/Identity/IdentityIntro', () => () =>
-  null,
+jest.mock(
+  '../../../src/screens/LoggedIn/Identity/IdentityIntro',
+  () => () => null,
 )
 jest.mock(
   '../../../src/screens/LoggedIn/Identity/IdentityCredentials',

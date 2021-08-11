@@ -123,9 +123,10 @@ const CredentialForm = () => {
           if (formInitial[k] === values[k].trim()) return true
           return false
         })
-        const concatValue = Object.keys(values).reduce<string>((acc, v) => {
-          return acc + values[v]
-        }, '')
+        const concatValue = Object.keys(values).reduce<string>(
+          (acc, v) => acc + values[v],
+          '',
+        )
 
         const storedAttribute = attributeValues?.find(
           (a) => a.value === concatValue && a.id !== attributeId,
@@ -186,52 +187,49 @@ const CredentialForm = () => {
                     : 0,
               }}
             >
-              {formConfig.fields.map((field, i) => {
-                return (
-                  <FormFieldContainer key={field.key}>
-                    <AutofocusInput
-                      testID="credential-form-input"
-                      name={field.key as string}
-                      key={field.key}
-                      updateInput={(v) => handleFieldValueChange(v, field)}
-                      value={values[field.key]}
-                      // @ts-expect-error @TERMS
-                      placeholder={t(field.label)}
-                      autoFocus={i === 0}
-                      onBlur={() => setFieldTouched(field.key, true, false)}
-                      /* we want to show highlighted focused input only if
+              {formConfig.fields.map((field, i) => (
+                <FormFieldContainer key={field.key}>
+                  <AutofocusInput
+                    testID="credential-form-input"
+                    name={field.key as string}
+                    key={field.key}
+                    updateInput={(v) => handleFieldValueChange(v, field)}
+                    value={values[field.key]}
+                    // @ts-expect-error @TERMS
+                    placeholder={t(field.label)}
+                    autoFocus={i === 0}
+                    onBlur={() => setFieldTouched(field.key, true, false)}
+                    /* we want to show highlighted focused input only if
                         - there are no errors
                         - value is truthy
                       */
-                      withHighlight={
-                        !Boolean(errors[field.key]) &&
-                        Boolean(values[field.key])
-                      }
-                      /* NOTE: all these conditions is an ugly workaround when errors are displayed in postal address.
+                    withHighlight={
+                      !Boolean(errors[field.key]) && Boolean(values[field.key])
+                    }
+                    /* NOTE: all these conditions is an ugly workaround when errors are displayed in postal address.
                          We need to check if a field was touched and only then show an error,
                          otherwise all the errors appear at once if one field is incorrect
                       */
-                      containerStyle={{
-                        borderColor: Colors.gravel,
-                        backgroundColor: Colors.bastille,
-                        ...(((attributeType === AttributeTypes.postalAddress &&
-                          touched[field.key]) ||
-                          attributeType !== AttributeTypes.postalAddress) &&
-                          errors[field.key] && {
-                            borderColor: Colors.error,
-                          }),
-                      }}
-                      {...field.keyboardOptions}
-                    />
-                    {(attributeType === AttributeTypes.postalAddress &&
-                      touched[field.key]) ||
-                    attributeType !== AttributeTypes.postalAddress ? (
-                      // @ts-expect-error terms
-                      <FormError message={t(errors[field.key])} />
-                    ) : null}
-                  </FormFieldContainer>
-                )
-              })}
+                    containerStyle={{
+                      borderColor: Colors.gravel,
+                      backgroundColor: Colors.bastille,
+                      ...(((attributeType === AttributeTypes.postalAddress &&
+                        touched[field.key]) ||
+                        attributeType !== AttributeTypes.postalAddress) &&
+                        errors[field.key] && {
+                          borderColor: Colors.error,
+                        }),
+                    }}
+                    {...field.keyboardOptions}
+                  />
+                  {(attributeType === AttributeTypes.postalAddress &&
+                    touched[field.key]) ||
+                  attributeType !== AttributeTypes.postalAddress ? (
+                    // @ts-expect-error terms
+                    <FormError message={t(errors[field.key])} />
+                  ) : null}
+                </FormFieldContainer>
+              ))}
             </AutofocusContainer>
           </FormContainer>
         )

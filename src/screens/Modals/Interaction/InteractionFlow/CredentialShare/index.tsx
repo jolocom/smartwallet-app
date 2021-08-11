@@ -13,6 +13,7 @@ import {
   getCustomRequestedCredentialsByCategoryByType,
   getSelectedShareCredentials,
   getServiceDescription,
+  getInteractionCounterpartyName,
 } from '~/modules/interaction/selectors'
 import {
   isDocument,
@@ -56,7 +57,7 @@ export const CredentialShareBAS = () => {
   )
 
   const { t } = useTranslation()
-  const { name: serviceName } = useSelector(getServiceDescription)
+  const serviceName = useSelector(getInteractionCounterpartyName)
 
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const singleMissingAttribute =
@@ -117,13 +118,14 @@ export const CredentialShareBAS = () => {
           <Space />
         </>
       )
-    } else
+    } else {
       return (
         <>
           <ShareAttributeWidget />
           <Space />
         </>
       )
+    }
   }
 
   return (
@@ -170,6 +172,7 @@ const CredentialShareFAS = () => {
   const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const { getOptionalFields } = useCredentialOptionalFields()
+  const serviceName = useSelector(getInteractionCounterpartyName)
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
@@ -180,63 +183,61 @@ const CredentialShareFAS = () => {
   const other = categories[CredentialCategories.other]
 
   const handleRenderCredentials = (
-    credCollections: CredentialsByType<DisplayCredential>[],
+    credCollections: Array<CredentialsByType<DisplayCredential>>,
   ) =>
-    credCollections.map(({ key, value, credentials }) => {
-      return (
-        <AdoptedCarousel
-          key={key}
-          activeSlideAlignment="center"
-          data={credentials}
-          itemWidth={SCREEN_WIDTH - 48}
-          customStyles={{ marginLeft: 0 }}
-          renderItem={({ item: cred }) => {
-            const claimFields = getOptionalFields(cred)
-            const { name, type, id } = cred
-            return (
-              <TouchableWithoutFeedback
-                key={id}
-                onPress={() => handleSelectCredential({ [type]: id })}
+    credCollections.map(({ key, value, credentials }) => (
+      <AdoptedCarousel
+        key={key}
+        activeSlideAlignment="center"
+        data={credentials}
+        itemWidth={SCREEN_WIDTH - 48}
+        customStyles={{ marginLeft: 0 }}
+        renderItem={({ item: cred }) => {
+          const claimFields = getOptionalFields(cred)
+          const { name, type, id } = cred
+          return (
+            <TouchableWithoutFeedback
+              key={id}
+              onPress={() => handleSelectCredential({ [type]: id })}
+            >
+              <View
+                style={{
+                  marginBottom: BP({ default: 24, xsmall: 16 }),
+                }}
               >
-                <View
-                  style={{
-                    marginBottom: BP({ default: 24, xsmall: 16 }),
-                  }}
-                >
-                  {isDocument(cred) ? (
-                    <IncomingRequestDoc
-                      name={name ?? type}
-                      properties={claimFields}
-                      holderName={cred.holderName || t('General.unknown')}
-                      highlight={`${
-                        cred.photo && cred.highlight
-                          ? cred.highlight?.length > 18
-                            ? cred.highlight?.slice(0, 18) + '...'
-                            : cred.highlight
+                {isDocument(cred) ? (
+                  <IncomingRequestDoc
+                    name={name ?? type}
+                    properties={claimFields}
+                    holderName={cred.holderName || t('General.unknown')}
+                    highlight={`${
+                      cred.photo && cred.highlight
+                        ? cred.highlight?.length > 18
+                          ? cred.highlight?.slice(0, 18) + '...'
                           : cred.highlight
-                      }`}
-                      photo={cred.photo}
-                    />
+                        : cred.highlight
+                    }`}
+                    photo={cred.photo}
+                  />
+                ) : (
+                  <IncomingRequestOther
+                    name={name ?? type}
+                    properties={claimFields}
+                  />
+                )}
+                <View style={styles.selectIndicator}>
+                  {selectedCredentials[type] === id ? (
+                    <PurpleTickSuccess />
                   ) : (
-                    <IncomingRequestOther
-                      name={name ?? type}
-                      properties={claimFields}
-                    />
+                    <View style={styles.notSelected} />
                   )}
-                  <View style={styles.selectIndicator}>
-                    {selectedCredentials[type] === id ? (
-                      <PurpleTickSuccess />
-                    ) : (
-                      <View style={styles.notSelected} />
-                    )}
-                  </View>
                 </View>
-              </TouchableWithoutFeedback>
-            )
-          }}
-        />
-      )
-    })
+              </View>
+            </TouchableWithoutFeedback>
+          )
+        }}
+      />
+    ))
 
   return (
     <Collapsible>
@@ -258,7 +259,9 @@ const CredentialShareFAS = () => {
             </ScreenContainer.Padding>
           </Collapsible.HidingTextContainer>
           <ScreenContainer.Padding>
-            <InteractionDescription label={t('CredentialRequest.subheader')} />
+            <InteractionDescription
+              label={t('CredentialRequest.subheader', { serviceName })}
+            />
           </ScreenContainer.Padding>
           <Space />
           <ScreenContainer.Padding>

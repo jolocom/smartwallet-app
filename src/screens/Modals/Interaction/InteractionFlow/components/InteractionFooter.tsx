@@ -9,7 +9,7 @@ import useConnection from '~/hooks/connection'
 import useTranslation from '~/hooks/useTranslation'
 
 interface Props {
-  onSubmit: () => Promise<any> | any
+  onSubmit: () => Promise<void> | void
   disabled?: boolean
   disableLoader?: boolean
   submitLabel: string
