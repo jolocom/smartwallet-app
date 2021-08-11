@@ -37,7 +37,7 @@ jest.mock('react-native-jolocom', () => ({
 }))
 
 jest.mock('react-native-localize', () => ({
-  findBestAvailableLanguage: (_: Array<string>) => 'en',
+  findBestAvailableLanguage: (_: string[]) => 'en',
 }))
 
 jest.mock('../../src/errors/errorContext.tsx', () => ({
@@ -74,7 +74,16 @@ jest.mock('react-native-gesture-handler', () => {
   }
 })
 
-// @ts-ignore
+jest.mock('../../src/hooks/useTranslation.ts', () => () => ({
+  currentLanguage: 'en',
+  t: jest
+    .fn()
+    .mockImplementation(
+      (term, interpolationValue) => term + interpolationValue,
+    ),
+}))
+
+// @ts-expect-error
 global.__reanimatedWorkletInit = jest.fn()
 
 NativeModules.RNCNetInfo = {

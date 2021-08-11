@@ -4,11 +4,9 @@ import { useRoute } from '@react-navigation/native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AttributeTypes, ClaimKeys } from '~/types/credentials'
 import { mockSelectorReturn } from '../../mocks/libs/react-redux'
-import useTranslation from '~/hooks/useTranslation'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 import { editAttr, updateAttrs } from '~/modules/attributes/actions'
 import { getMockedDispatch } from '../../mocks/libs/react-redux'
-import { strings } from '~/translations'
 import { mockedAgent } from '../../mocks/agent'
 import { mockedNoAttributes } from '../../mocks/store/attributes'
 
@@ -41,7 +39,6 @@ const mockDeleteVCFn = jest.fn()
 jest.mock('@react-navigation/native')
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
-jest.mock('../../../src/hooks/useTranslation')
 jest.mock('../../../src/hooks/sdk', () => ({
   useAgent: () => ({
     passwordStore: mockedAgent.passwordStore,
@@ -75,16 +72,6 @@ describe('Form in mode', () => {
   let mockDispatchFn: jest.Mock
 
   beforeAll(() => {
-    // @ts-expect-error
-    useTranslation.mockReturnValue({
-      t: jest.fn().mockReturnValue('Something'), // TODO: This will return something for title and description
-    })
-    // @ts-expect-error
-    useTranslation.mockImplementation(() => ({
-      t: (text: string) => {
-        return text
-      },
-    }))
     mockDispatchFn = getMockedDispatch()
   })
 
@@ -115,13 +102,9 @@ describe('Form in mode', () => {
     const queries = renderCredentialForm()
 
     expect(
-      queries.getAllByText(strings.EDIT_YOUR_ATTRIBUTE).length,
+      queries.getAllByText(/CredentialForm.editHeader/).length,
     ).toBeDefined()
-    expect(
-      queries.getByText(
-        strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
-      ),
-    ).toBeDefined()
+    expect(queries.getByText(/CredentialForm.subheader/)).toBeDefined()
 
     // ASSERT ASYNC SUBMIT HANDLING
     await waitFor(() => {
@@ -157,13 +140,9 @@ describe('Form in mode', () => {
     const queries = renderCredentialForm()
 
     expect(
-      queries.getAllByText(strings.ADD_YOUR_ATTRIBUTE).length,
+      queries.getAllByText(/CredentialForm.addHeader/).length,
     ).toBeDefined()
-    expect(
-      queries.getByText(
-        strings.ONCE_YOU_CLICK_DONE_IT_WILL_BE_DISPLAYED_IN_THE_PERSONAL_INFO_SECTION,
-      ),
-    ).toBeDefined()
+    expect(queries.getByText(/CredentialForm.subheader/)).toBeDefined()
 
     // ASSERT ASYNC SUBMIT HANDLING
     await waitFor(() => {

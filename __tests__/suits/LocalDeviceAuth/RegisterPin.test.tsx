@@ -1,9 +1,8 @@
 import React from 'react'
-import { fireEvent, waitFor } from '@testing-library/react-native'
+import { waitFor } from '@testing-library/react-native'
 import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
 
 import RegisterPin from '~/screens/Modals/DeviceAuthentication/RegisterPin'
-import { strings } from '~/translations'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 import { inputPasscode } from '../../utils/inputPasscode'
@@ -14,6 +13,7 @@ const mockedDispatch = jest.fn()
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
+  // eslint-disable-next-line
   useFocusEffect: jest.fn().mockImplementation(() => {}),
   useNavigation: () => ({
     navigation: mockNavigation,
@@ -27,15 +27,13 @@ jest.mock('react-redux', () => ({
   useDispatch: () => mockedDispatch,
 }))
 
-jest.mock('react-native-keychain', () => {
-  return {
-    STORAGE_TYPE: {
-      AES: 'aes',
-    },
-    setGenericPassword: jest.fn(() => Promise.resolve(true)),
-    resetGenericPassword: jest.fn(() => Promise.resolve(true)),
-  }
-})
+jest.mock('react-native-keychain', () => ({
+  STORAGE_TYPE: {
+    AES: 'aes',
+  },
+  setGenericPassword: jest.fn(() => Promise.resolve(true)),
+  resetGenericPassword: jest.fn(() => Promise.resolve(true)),
+}))
 
 describe('Register Passcode', () => {
   it('User is able to set up pin', async () => {
@@ -43,14 +41,14 @@ describe('Register Passcode', () => {
       <RegisterPin />,
     )
 
-    expect(getByText(strings.CREATE_PASSCODE)).toBeDefined()
-    expect(getByText(strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY)).toBeDefined()
-    expect(getByText(strings.YOU_CAN_CHANGE_THE_PASSCODE)).toBeDefined()
+    expect(getByText(/CreatePasscode.createHeader/)).toBeDefined()
+    expect(getByText(/CreatePasscode.createSubheader/)).toBeDefined()
+    expect(getByText(/CreatePasscode.helperText/)).toBeDefined()
 
     inputPasscode(getByTestId, [1, 1, 1, 1])
 
-    expect(getByText(strings.VERIFY_PASSCODE)).toBeDefined()
-    expect(getByText(strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY)).toBeDefined()
+    expect(getByText(/VerifyPasscode.verifyHeader/)).toBeDefined()
+    expect(getByText(/VerifyPasscode.verifySubheader/)).toBeDefined()
 
     inputPasscode(getByTestId, [1, 1, 1, 2])
 
