@@ -23,8 +23,6 @@ import {
   AttributeTypes,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
-import { IncomingRequestDoc } from '../components/card/request/document'
-import { IncomingRequestOther } from '../components/card/request/other'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -49,6 +47,10 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
+import {
+  InteractionShareDocumentCard,
+  InteractionShareOtherCard,
+} from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 
 export const CredentialShareBAS = () => {
@@ -100,20 +102,20 @@ export const CredentialShareBAS = () => {
       return (
         <>
           {isDocument(displaySingleCredential) ? (
-            <IncomingRequestDoc
-              name={name}
+            <InteractionShareDocumentCard
+              credentialName={name}
               holderName={
-                displaySingleCredential.holderName || t('General.unknown')
+                displaySingleCredential.holderName || t('General.anonymous')
               }
-              properties={claimFields}
-              highlight={`${displaySingleCredential.highlight?.slice(
-                0,
-                18,
-              )}...`}
+              fields={claimFields}
+              highlight={displaySingleCredential.highlight}
               photo={displaySingleCredential.photo}
             />
           ) : (
-            <IncomingRequestOther name={name} properties={claimFields} />
+            <InteractionShareOtherCard
+              credentialName={name}
+              fields={claimFields}
+            />
           )}
           <Space />
         </>
@@ -206,23 +208,17 @@ const CredentialShareFAS = () => {
                 }}
               >
                 {isDocument(cred) ? (
-                  <IncomingRequestDoc
-                    name={name ?? type}
-                    properties={claimFields}
-                    holderName={cred.holderName || t('General.unknown')}
-                    highlight={`${
-                      cred.photo && cred.highlight
-                        ? cred.highlight?.length > 18
-                          ? cred.highlight?.slice(0, 18) + '...'
-                          : cred.highlight
-                        : cred.highlight
-                    }`}
+                  <InteractionShareDocumentCard
+                    credentialName={name ?? type}
+                    fields={claimFields}
+                    holderName={cred.holderName || t('General.anonymous')}
+                    highlight={cred.highlight}
                     photo={cred.photo}
                   />
                 ) : (
-                  <IncomingRequestOther
-                    name={name ?? type}
-                    properties={claimFields}
+                  <InteractionShareOtherCard
+                    credentialName={name ?? type}
+                    fields={claimFields}
                   />
                 )}
                 <View style={styles.selectIndicator}>

@@ -5,8 +5,8 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useWidget } from './context'
-import { IWithCustomStyle } from '../Card/types'
 import JoloText from '../JoloText'
+import { IWithCustomStyle } from '~/types/props'
 import useTranslation from '~/hooks/useTranslation'
 
 export type TField = IFieldComposition & React.FC
@@ -53,40 +53,37 @@ const FieldText: React.FC<
   )
 }
 
-const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => {
-  return (
-    <View testID="widget-field-static">
-      <FieldContainer>
-        <FieldText value={value} />
-      </FieldContainer>
-    </View>
-  )
-}
+const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => (
+  <View testID="widget-field-static">
+    <FieldContainer>
+      <FieldText value={value} />
+    </FieldContainer>
+  </View>
+)
 
 const SelectableField: React.FC<
   Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>
-> = ({ value, isSelected, onSelect }) => {
-  return (
-    <TouchableOpacity activeOpacity={1} onPress={onSelect}>
-      <FieldContainer>
-        <FieldText value={value} customStyles={{ width: '85%' }} />
-        {isSelected ? (
-          <View style={styles.radio}>
-            <PurpleTickSuccess />
-          </View>
-        ) : (
-          <View style={[styles.radio, styles.notSelected]} />
-        )}
-      </FieldContainer>
-    </TouchableOpacity>
-  )
-}
+> = ({ value, isSelected, onSelect }) => (
+  <TouchableOpacity activeOpacity={1} onPress={onSelect}>
+    <FieldContainer>
+      <FieldText value={value} customStyles={{ width: '85%' }} />
+      {isSelected ? (
+        <View style={styles.radio}>
+          <PurpleTickSuccess />
+        </View>
+      ) : (
+        <View style={[styles.radio, styles.notSelected]} />
+      )}
+    </FieldContainer>
+  </TouchableOpacity>
+)
 
 const EmptyField: React.FC = ({ children }) => {
   const { t } = useTranslation()
   const widgetContext = useWidget()
-  if (!widgetContext?.onAdd)
+  if (!widgetContext?.onAdd) {
     throw new Error('No method provided for creating new attribute')
+  }
 
   return (
     <TouchableOpacity onPress={widgetContext.onAdd} testID="widget-field-empty">
@@ -107,13 +104,11 @@ const EmptyField: React.FC = ({ children }) => {
 const FieldContainer: React.FC<IWithCustomStyle> = ({
   children,
   customStyles,
-}) => {
-  return <View style={[styles.field, customStyles]}>{children}</View>
-}
+}) => <View style={[styles.field, customStyles]}>{children}</View>
 
-const Field: React.FC & IFieldComposition = ({ children }) => {
-  return <View style={styles.container}>{children}</View>
-}
+const Field: React.FC & IFieldComposition = ({ children }) => (
+  <View style={styles.container}>{children}</View>
+)
 
 const styles = StyleSheet.create({
   container: {

@@ -28,15 +28,18 @@ export const useCredentialOptionalFields = () => {
   const getOptionalFields = <T extends DisplayCredential>(credential: T) => {
     const additionalFields = [
       {
+        key: 'issued',
         label: t('Documents.issuedFieldLabel'),
         value: moment(credential.issued).format('DD.MM.YYYY'),
       },
       {
+        key: 'issuer',
         label: t('Documents.issuerFieldLabel'),
         value:
           credential.issuer?.publicProfile?.name ?? credential.issuer?.did!,
       },
       {
+        key: 'expire',
         label: t('Documents.expiresFieldLabel'),
         value: moment(credential.expires).format('DD.MM.YYYY'),
       },
@@ -46,7 +49,8 @@ export const useCredentialOptionalFields = () => {
 
     return credential.properties
       .filter((p) => !nonOptionalFields.includes(p.key as ClaimKeys))
-      .map(({ label, value }) => ({
+      .map(({ label, value, key }) => ({
+        key,
         label: label || t('Documents.unspecifiedField'),
         value: value || t('Documents.unspecifiedField'),
       }))

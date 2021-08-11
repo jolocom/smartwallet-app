@@ -4,16 +4,13 @@ import { ScrollView, View } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
 import {
   getCustomCredentialsByCategoriesByType,
   getCustomCredentialsByCategoriesByIssuer,
 } from '~/modules/credentials/selectors'
-import OtherCard from '~/components/Card/OtherCard'
 import {
   CredentialCategories,
-  DocumentFields,
   DisplayCredentialDocument,
   DisplayCredentialOther,
   CredentialsByType,
@@ -31,7 +28,66 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
 import { uiTypesTerms } from '~/hooks/signedCredentials/utils'
-import { useCredentialOptionalFields } from '~/hooks/credentials'
+import {
+  useCredentialOptionalFields,
+  useDeleteCredential,
+} from '~/hooks/credentials'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import { useToasts } from '~/hooks/toasts'
+import { usePopupMenu } from '~/hooks/popupMenu'
+import DocumentSectionDocumentCard from '~/components/Cards/DocumentSectionCards/DocumentSectionDocumentCard'
+import DocumentSectionOtherCard from '~/components/Cards/DocumentSectionCards/DocumentSectionOtherCard'
+
+const useHandleMorePress = () => {
+  const { t } = useTranslation()
+  const { scheduleErrorWarning } = useToasts()
+
+  const { showPopup } = usePopupMenu()
+  const deleteCredential = useDeleteCredential()
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteCredential(id)
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
+  }
+
+  return (
+    id: string,
+    credentialName: string,
+    fields: Array<Required<DisplayVal>>,
+    photo?: string,
+  ) => {
+    const popupOptions = [
+      {
+        title: t('Documents.infoCardOption'),
+        navigation: {
+          screen: ScreenNames.CredentialDetails,
+          params: {
+            fields,
+            photo,
+            title: credentialName,
+          },
+        },
+      },
+      {
+        title: t('Documents.deleteCardOption'),
+        navigation: {
+          screen: ScreenNames.DragToConfirm,
+          params: {
+            title: `${t('Documents.deleteDocumentHeader', {
+              documentName: credentialName,
+            })}?`,
+            cancelText: t('Documents.cancelCardOption'),
+            instructionText: t('Documents.deleteCredentialInstruction'),
+            onComplete: () => handleDelete(id),
+          },
+        },
+      },
+    ]
+    showPopup(popupOptions)
+  }
+}
 
 const CardList: React.FC = ({ children }) => {
   return (
@@ -99,6 +155,8 @@ export const DocumentList = () => {
     [JSON.stringify(categories)],
   )
 
+  const onHandleMore = useHandleMorePress()
+
   if (categories === null) return null
   return (
     <>
@@ -126,7 +184,7 @@ export const DocumentList = () => {
                *   and it isn't not a <context.term> pattern: use it as a type;
                * - if value is empty make it unknown
                */
-              let uiType: string | undefined =
+              const uiType: string | undefined =
                 uiTypesTerms[value as CredentialUITypes]
               const credentialUIType = uiType
                 ? // @ts-expect-error
@@ -154,23 +212,28 @@ export const DocumentList = () => {
                     customStyles={{ marginLeft: -4 }}
                     data={credentials}
                     renderItem={({ item: c }) => (
-                      <DocumentCard
+                      <DocumentSectionDocumentCard
                         key={c.id}
-                        type={c.type}
-                        id={c.id}
-                        mandatoryFields={[
-                          {
-                            label: DocumentFields.DocumentName,
-                            value: c.name || t('General.unknown'),
-                          },
-                          {
-                            label: t('Documents.subjectNameField'),
-                            value: c.holderName || t('General.anonymous'),
-                          },
-                        ]}
-                        optionalFields={getOptionalFields(c)}
-                        highlight={c.id.slice(0, 14)}
+                        credentialName={c.name || t('General.unknown')}
+                        holderName={c.holderName || t('General.anonymous')}
+                        fields={getOptionalFields(c)}
+                        highlight={c.id}
                         photo={c.photo}
+                        onHandleMore={() =>
+                          onHandleMore(
+                            c.id,
+                            c.name,
+                            [
+                              {
+                                key: 'subjectName',
+                                label: t('Documents.subjectNameField'),
+                                value: c.holderName || t('General.anonymous'),
+                              },
+                              ...getOptionalFields(c),
+                            ],
+                            c.photo,
+                          )
+                        }
                       />
                     )}
                   />
@@ -217,18 +280,19 @@ export const DocumentList = () => {
                   <AdoptedCarousel
                     data={credentials}
                     renderItem={({ item: c }) => (
-                      <OtherCard
-                        id={c.id}
-                        type={c.type}
-                        key={c.id}
-                        mandatoryFields={[
-                          {
-                            label: DocumentFields.DocumentName,
-                            value: c.name || t('General.unknown'),
-                          },
-                        ]}
-                        optionalFields={getOptionalFields(c)}
-                        photo={c.photo}
+                      <DocumentSectionOtherCard
+                        credentialName={c.name || t('General.unknown')}
+                        credentialType={c.type}
+                        fields={getOptionalFields(c)}
+                        logo={c.photo}
+                        onHandleMore={() =>
+                          onHandleMore(
+                            c.id,
+                            c.name,
+                            getOptionalFields(c),
+                            c.photo,
+                          )
+                        }
                       />
                     )}
                   />

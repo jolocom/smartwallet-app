@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import Svg, { Defs, Path, G, Use, Line, Rect, Polygon } from 'react-native-svg'
 /* SVGR has dropped some elements not supported by react-native-svg: title, filter */
 
-const SvgComponent: React.FC = ({ children }) => {
+const InteractionCardOther: React.FC = ({ children }) => {
   return (
     <View style={{ aspectRatio: 369 / 232 }}>
       <Svg width={'100%'} height={'100%'} viewBox="0 0 369 232">
@@ -481,4 +481,4 @@ const SvgComponent: React.FC = ({ children }) => {
   )
 }
 
-export default SvgComponent
+export default InteractionCardOther
