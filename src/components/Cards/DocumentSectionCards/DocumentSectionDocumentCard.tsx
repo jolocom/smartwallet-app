@@ -109,7 +109,8 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
       originalHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
       originalWidth={ORIGINAL_DOCUMENT_CARD_WIDTH}
       originalScreenWidth={ORIGINAL_DOCUMENT_SCREEN_WIDTH}
-      style={{ position: 'relative' }}
+      style={{ position: 'relative', overflow: 'hidden' }}
+      scaleStyle={{ borderRadius: 15 }}
       testID="documentCard"
     >
       <DocumentCardMedium>
@@ -273,8 +274,6 @@ const styles = StyleSheet.create({
     paddingTop: 17,
     paddingBottom: 13,
     paddingHorizontal: 23,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
   },
   highlightContainer: {
     position: 'absolute',

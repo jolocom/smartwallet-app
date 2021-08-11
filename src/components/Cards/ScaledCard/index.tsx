@@ -15,6 +15,7 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
   scaleToFit = false,
   originalScreenWidth,
   style: viewStyle = {},
+  scaleStyle = {},
   children,
   ...viewProps
 }) => {
@@ -47,6 +48,7 @@ const ScaledCard: React.FC<IScaledCardProps> = ({
         {...viewProps}
         style={[
           viewStyle,
+          scaleStyleObject(scaleStyle, scaleBy),
           isContainerLayoutReady
             ? { width: 'auto', height: 'auto' }
             : { width: scaledWidth, height: scaledHeight },

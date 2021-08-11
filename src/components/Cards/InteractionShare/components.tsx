@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { ScaledView } from '../ScaledCard'
@@ -33,6 +33,8 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
 const styles = StyleSheet.create({
   selectIndicator: {
     position: 'absolute',
+    width: 20,
+    height: 20,
     top: 8,
     right: 8,
   },

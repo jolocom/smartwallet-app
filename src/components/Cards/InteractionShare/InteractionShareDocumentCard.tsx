@@ -58,6 +58,8 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       <ScaledCard
         originalWidth={ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH}
         originalHeight={ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT}
+        style={{ overflow: 'hidden' }}
+        scaleStyle={{ borderRadius: 13 }}
         scaleToFit
       >
         <InteractionCardDoc>
@@ -113,24 +115,10 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             </FieldsCalculator>
           </ScaledView>
         </InteractionCardDoc>
-        {photo && (
-          <ScaledView
-            scaleStyle={styles.documentPhotoContainer}
-            style={{ zIndex: 10 }}
-          >
-            <Image
-              style={styles.documentPhoto}
-              source={{ uri: photo }}
-              resizeMode="cover"
-            />
-          </ScaledView>
-        )}
         {highlight && (
           <ScaledView
             style={{
               zIndex: 9,
-              borderBottomLeftRadius: 9,
-              borderBottomRightRadius: 9,
             }}
             scaleStyle={styles.documentHighlightContainer}
           >
@@ -146,6 +134,18 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             >
               {highlight.toUpperCase()}
             </ScaledText>
+          </ScaledView>
+        )}
+        {photo && (
+          <ScaledView
+            scaleStyle={styles.documentPhotoContainer}
+            style={{ zIndex: 10 }}
+          >
+            <Image
+              style={styles.documentPhoto}
+              source={{ uri: photo }}
+              resizeMode="cover"
+            />
           </ScaledView>
         )}
         {typeof selected !== 'undefined' && (
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     bottom: 18,
     right: 17,
-    borderRadius: 105 / 2,
+    borderRadius: 70,
     width: 105,
     height: 105,
   },
