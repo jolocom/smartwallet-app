@@ -93,7 +93,7 @@ export const useInteractionHandler = () => {
           // i18n and PoEditor are properly set up.
           scheduleWarning({
             title: t('Toasts.shareMissingDocsTitle'),
-            message: t('Toasts.shareMissingDocsTitle', {
+            message: t('Toasts.shareMissingDocsMsg', {
               serviceName,
               documentType: handler.missingCredentialTypes.join(', '),
             }),
