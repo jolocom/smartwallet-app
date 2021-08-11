@@ -16,3 +16,10 @@ export const debugView = () => {
       }
     : {}
 }
+
+/**
+ * Finds whether the app is in the Jest testing environment
+ */
+export const isJestTesting = () => {
+  return process.env.JEST_WORKER_ID !== undefined
+}

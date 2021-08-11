@@ -47,6 +47,7 @@ export const InteractionOfferCard: React.FC<
               <>
                 {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 10 }} />}
                 <ScaledText
+                  numberOfLines={1}
                   scaleStyle={commonStyles.fieldLabelSmall}
                   style={commonStyles.regularText}
                 >
@@ -62,7 +63,7 @@ export const InteractionOfferCard: React.FC<
           ) : (
             <ScaledText
               scaleStyle={commonStyles.fieldLabelSmall}
-              style={commonStyles.regularText}
+              style={[commonStyles.regularText, styles.preview]}
             >
               {t('CredentialOffer.cardNoPreview')}
             </ScaledText>
@@ -93,5 +94,8 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 5,
     backgroundColor: Colors.alto,
+  },
+  preview: {
+    textAlign: 'left',
   },
 })

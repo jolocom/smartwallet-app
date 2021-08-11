@@ -3,12 +3,14 @@ import * as redux from 'react-redux'
 import { fireEvent } from '@testing-library/react-native'
 
 import Recovery from '~/screens/Modals/Recovery'
-import { strings } from '~/translations/strings'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const mockAppState = {
   loader: {
     isVisible: false,
+  },
+  account: {
+    screenHeight: 800,
   },
 }
 
@@ -44,6 +46,7 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     dispatch: jest.fn(),
     goBack: jest.fn(),
+    canGoBack: jest.fn(() => true),
   }),
 }))
 
@@ -59,17 +62,19 @@ describe('User on a Recovery screen', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
     const mockDispatchFn = jest.fn()
     useDispatchSpy.mockReturnValue(mockDispatchFn)
-    // @ts-ignore
-    redux.useSelector.mockImplementation((callback: (state: any) => void) => {
-      return callback(mockAppState)
-    })
+    // @ts-expect-error
+    redux.useSelector.mockImplementation(
+      (callback: (state: unknown) => void) => {
+        return callback(mockAppState)
+      },
+    )
     const { getByText, getByTestId } = renderWithSafeArea(<Recovery />)
-    expect(getByText(strings.RECOVERY)).toBeDefined()
-    expect(getByText(strings.START_ENTERING_SEED_PHRASE)).toBeDefined()
+    expect(getByText(/Recovery.header/)).toBeDefined()
+    expect(getByText(/Recovery.subheader/)).toBeDefined()
     expect(getByTestId('seedphrase-input')).toBeDefined()
-    expect(getByText(strings.WHAT_IF_I_FORGOT)).toBeDefined()
-    expect(getByText(strings.CONFIRM)).toBeDefined()
-    expect(getByText(strings.BACK)).toBeDefined()
+    expect(getByText(/Recovery.forgotBtn/)).toBeDefined()
+    expect(getByText(/Recovery.confirmBtn/)).toBeDefined()
+    expect(getByText(/Recovery.exitBtn/)).toBeDefined()
   })
 
   test('can add a seed key to a phrase', async () => {
