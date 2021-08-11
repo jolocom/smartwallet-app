@@ -26,7 +26,12 @@ export const InteractionOfferCard: React.FC<
       scaleToFit
     >
       <Card>
-        <ScaledView scaleStyle={styles.bodyContainer}>
+        <ScaledView
+          scaleStyle={[
+            styles.bodyContainer,
+            { ...(cardType === 'other' && { width: '73%' }) },
+          ]}
+        >
           <ScaledText
             numberOfLines={1}
             scaleStyle={styles.credentialName}
