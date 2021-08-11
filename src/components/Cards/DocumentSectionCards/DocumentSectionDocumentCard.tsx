@@ -273,14 +273,14 @@ const styles = StyleSheet.create({
     paddingTop: 17,
     paddingBottom: 13,
     paddingHorizontal: 23,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   highlightContainer: {
     position: 'absolute',
     width: '100%',
     backgroundColor: Colors.black,
     zIndex: 9,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
   },
   highlight: {
     fontSize: 26,
