@@ -30,7 +30,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -160,12 +160,13 @@ exports[`Record Item should render a generic Record Item 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
         >
           <Text
+            numberOfLines={1}
             style={
               Array [
                 Object {
@@ -179,7 +180,10 @@ exports[`Record Item should render a generic Record Item 1`] = `
                   "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
-                undefined,
+                Object {
+                  "flex": 1,
+                  "textAlign": "left",
+                },
               ]
             }
           >
@@ -201,6 +205,7 @@ exports[`Record Item should render a generic Record Item 1`] = `
                 },
                 Object {
                   "alignSelf": "center",
+                  "marginLeft": 8,
                   "marginRight": 16,
                 },
               ]
@@ -266,7 +271,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -396,12 +401,13 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
         >
           <Text
+            numberOfLines={1}
             style={
               Array [
                 Object {
@@ -415,7 +421,10 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                   "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
-                undefined,
+                Object {
+                  "flex": 1,
+                  "textAlign": "left",
+                },
               ]
             }
           >
@@ -437,6 +446,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
                 },
                 Object {
                   "alignSelf": "center",
+                  "marginLeft": 8,
                   "marginRight": 16,
                 },
               ]
@@ -691,6 +701,7 @@ exports[`Record Item should render the dropdown with the EXPIRED state 1`] = `
           style={
             Object {
               "flex": 0.75,
+              "justifyContent": "center",
               "paddingLeft": 4,
             }
           }
@@ -777,7 +788,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -907,12 +918,13 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
         >
           <Text
+            numberOfLines={1}
             style={
               Array [
                 Object {
@@ -926,7 +938,10 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                   "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
-                undefined,
+                Object {
+                  "flex": 1,
+                  "textAlign": "left",
+                },
               ]
             }
           >
@@ -948,6 +963,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
                 },
                 Object {
                   "alignSelf": "center",
+                  "marginLeft": 8,
                   "marginRight": 16,
                 },
               ]
@@ -1202,6 +1218,7 @@ exports[`Record Item should render the dropdown with the FINISHED state 1`] = `
           style={
             Object {
               "flex": 0.75,
+              "justifyContent": "center",
               "paddingLeft": 4,
             }
           }
@@ -1288,7 +1305,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -1418,12 +1435,13 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
         >
           <Text
+            numberOfLines={1}
             style={
               Array [
                 Object {
@@ -1437,7 +1455,10 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                   "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
-                undefined,
+                Object {
+                  "flex": 1,
+                  "textAlign": "left",
+                },
               ]
             }
           >
@@ -1459,6 +1480,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
                 },
                 Object {
                   "alignSelf": "center",
+                  "marginLeft": 8,
                   "marginRight": 16,
                 },
               ]
@@ -1713,6 +1735,7 @@ exports[`Record Item should render the dropdown with the PENDING state 1`] = `
           style={
             Object {
               "flex": 0.75,
+              "justifyContent": "center",
               "paddingLeft": 4,
             }
           }
@@ -1799,7 +1822,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#000",
+          "backgroundColor": "rgba(6,1,7, 0.55)",
           "borderRadius": 15,
           "flexDirection": "row",
           "height": 80,
@@ -1929,12 +1952,13 @@ exports[`Record Item should render the placeholder when the details are unavaila
               "alignItems": "flex-end",
               "flexDirection": "row",
               "justifyContent": "space-between",
-              "marginBottom": 8,
+              "marginBottom": 0,
               "width": "100%",
             }
           }
         >
           <Text
+            numberOfLines={1}
             style={
               Array [
                 Object {
@@ -1948,12 +1972,13 @@ exports[`Record Item should render the placeholder when the details are unavaila
                   "letterSpacing": 0.09,
                   "lineHeight": 24,
                 },
-                undefined,
+                Object {
+                  "flex": 1,
+                  "textAlign": "left",
+                },
               ]
             }
-          >
-            ███████
-          </Text>
+          />
           <Text
             style={
               Array [
@@ -1970,14 +1995,13 @@ exports[`Record Item should render the placeholder when the details are unavaila
                 },
                 Object {
                   "alignSelf": "center",
+                  "marginLeft": 8,
                   "marginRight": 16,
                 },
               ]
             }
             testID="record-item-time"
-          >
-            ██
-          </Text>
+          />
         </View>
         <Text
           style={
@@ -1997,7 +2021,7 @@ exports[`Record Item should render the placeholder when the details are unavaila
             ]
           }
         >
-          █████
+          Unknown
         </Text>
       </View>
     </View>

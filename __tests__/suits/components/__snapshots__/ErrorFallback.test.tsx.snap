@@ -10,7 +10,6 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
   }
 >
   <View
-    mode="padding"
     style={
       Array [
         Object {
@@ -20,9 +19,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
           "paddingTop": 0,
         },
         Object {
-          "backgroundColor": "#201a21",
           "flex": 1,
-          "paddingBottom": 0,
           "paddingTop": 0,
         },
       ]
@@ -42,21 +39,28 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
     >
       <View
         style={
+          Object {
+            "backgroundColor": "#201a21",
+            "height": 0,
+            "width": "100%",
+          }
+        }
+      />
+      <View
+        style={
           Array [
             Object {
               "alignItems": "center",
               "flex": 1,
               "justifyContent": "center",
-              "paddingHorizontal": "5%",
+              "paddingHorizontal": 16,
               "width": "100%",
             },
             Object {
-              "paddingTop": 0,
-            },
-            Object {
               "backgroundColor": "#201a21",
+              "paddingBottom": 0,
             },
-            false,
+            Object {},
             Object {
               "paddingTop": 0,
             },
@@ -263,10 +267,10 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
                       "marginVertical": 5,
                     },
                   ],
-                  undefined,
                   Object {
                     "height": 45,
                   },
+                  undefined,
                 ]
               }
               testID="non-gradient"

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { View, StyleSheet, Animated, Platform } from 'react-native'
-// @ts-ignore no typescript support as of yet
+// @ts-expect-error no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -111,22 +111,20 @@ const SeedPhraseWrite: React.FC = () => {
     </>
   )
 
-  const renderSeedphrase = () => {
-    return (
-      <Animated.View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
-        }}
-      >
-        {seedphrase.split(' ').map((w) => (
-          <WordPill.Write key={w}>{w}</WordPill.Write>
-        ))}
-      </Animated.View>
-    )
-  }
+  const renderSeedphrase = () => (
+    <Animated.View
+      style={{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
+      }}
+    >
+      {seedphrase.split(' ').map((w) => (
+        <WordPill.Write key={w}>{w}</WordPill.Write>
+      ))}
+    </Animated.View>
+  )
 
   const renderMagicButton = () => (
     <MagicButton
@@ -153,11 +151,11 @@ const SeedPhraseWrite: React.FC = () => {
       <Btn
         type={BtnTypes.primary}
         disabled={gestureState !== GestureState.Success}
-        onPress={
-          gestureState === GestureState.Success
-            ? () => redirect(ScreenNames.SeedPhraseRepeat)
-            : () => {}
-        }
+        onPress={() => {
+          if (gestureState === GestureState.Success) {
+            redirect(ScreenNames.SeedPhraseRepeat)
+          }
+        }}
       >
         {t('SeedphraseWrite.confirmBtn')}
       </Btn>
