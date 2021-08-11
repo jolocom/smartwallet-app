@@ -18,7 +18,14 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
 }) => {
   return (
     <ScaledView scaleStyle={styles.selectIndicator}>
-      {selected ? <PurpleTickSuccess /> : <View style={styles.notSelected} />}
+      {selected ? (
+        <PurpleTickSuccess />
+      ) : (
+        <ScaledView
+          scaleStyle={styles.notSelectedScale}
+          style={styles.notSelected}
+        />
+      )}
     </ScaledView>
   )
 }
@@ -28,14 +35,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    width: 20,
-    height: 20,
   },
   notSelected: {
-    width: '100%',
-    height: '100%',
     borderColor: Colors.black,
     opacity: 0.3,
+  },
+  notSelectedScale: {
+    width: 20,
+    height: 20,
     borderWidth: 1,
     borderRadius: 10,
   },
