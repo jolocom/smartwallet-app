@@ -26,9 +26,8 @@ import {
   getAttributeValueBasedOnConfig,
 } from '~/utils/attributeUtils'
 
-const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
-  return attributeConfig
-}
+const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig =>
+  attributeConfig
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
@@ -48,13 +47,11 @@ const IdentityCredentials = () => {
 
   const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
     primitiveAttributesConfig,
-  ).map(([type, config]) => {
-    return {
-      type: type as PrimitiveAttributeTypes,
-      label: config.label,
-      values: attributes[type as PrimitiveAttributeTypes] ?? [],
-    }
-  })
+  ).map(([type, config]) => ({
+    type: type as PrimitiveAttributeTypes,
+    label: config.label,
+    values: attributes[type as PrimitiveAttributeTypes] ?? [],
+  }))
 
   const isPrimitiveAttributesEmpty = primitiveAttributesWithValues.every(
     (a) => !a.values.length,

@@ -78,7 +78,7 @@ const DocumentSectionOtherCard: React.FC<OtherCardProps> = ({
             scaleStyle={{ paddingHorizontal: 10 }}
             style={{ flex: 0.71 }}
           >
-            {displayedFields.map((f) => (
+            {displayedFields.map((f, idx) => (
               <>
                 <ScaledView scaleStyle={{ paddingBottom: 20 }} />
                 {/* TODO: share the same with document card */}
@@ -97,9 +97,16 @@ const DocumentSectionOtherCard: React.FC<OtherCardProps> = ({
                   // @ts-expect-error
                   onTextLayout={onTextLayoutChange}
                   scaleStyle={styles.fieldText}
-                  style={styles.mediumText}
+                  style={[
+                    styles.mediumText,
+                    {
+                      ...(idx === displayedFields.length - 1 && {
+                        width: '80%',
+                      }),
+                    },
+                  ]}
                 >
-                  {f.value}
+                  {f.value.trim()}
                 </ScaledText>
               </>
             ))}

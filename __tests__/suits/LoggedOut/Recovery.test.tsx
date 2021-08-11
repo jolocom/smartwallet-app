@@ -63,10 +63,8 @@ describe('User on a Recovery screen', () => {
     const mockDispatchFn = jest.fn()
     useDispatchSpy.mockReturnValue(mockDispatchFn)
     // @ts-expect-error
-    redux.useSelector.mockImplementation(
-      (callback: (state: unknown) => void) => {
-        return callback(mockAppState)
-      },
+    redux.useSelector.mockImplementation((callback: (state: unknown) => void) =>
+      callback(mockAppState),
     )
     const { getByText, getByTestId } = renderWithSafeArea(<Recovery />)
     expect(getByText(/Recovery.header/)).toBeDefined()

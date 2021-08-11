@@ -16,7 +16,12 @@ export const mockedAttributes = {
   },
 }
 
-export const getMockedEmailAttribute = (attrId1: string, attrId2: string, email1: string, email2: string) => ({
+export const getMockedEmailAttribute = (
+  attrId1: string,
+  attrId2: string,
+  email1: string,
+  email2: string,
+) => ({
   attrs: {
     all: {
       ProofOfEmailCredential: [

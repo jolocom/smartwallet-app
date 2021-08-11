@@ -1,8 +1,8 @@
 /**
  * Debugs a view with a random color. Only works in __DEV__ mode
  */
-export const debugView = () => {
-  return __DEV__
+export const debugView = () =>
+  __DEV__
     ? {
         borderWidth: 1,
         borderColor:
@@ -15,11 +15,8 @@ export const debugView = () => {
           ')',
       }
     : {}
-}
 
 /**
  * Finds whether the app is in the Jest testing environment
  */
-export const isJestTesting = () => {
-  return process.env.JEST_WORKER_ID !== undefined
-}
+export const isJestTesting = () => process.env.JEST_WORKER_ID !== undefined

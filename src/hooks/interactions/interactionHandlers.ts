@@ -22,21 +22,20 @@ const authorizationHandler = (state: AuthorizationFlowState) => ({
   imageURL: state.imageURL,
 })
 
-const credentialOfferHandler = (state: CredentialOfferFlowState) => {
-  return {
-    credentials: {
-      service_issued: state.offerSummary.map(
-        ({ renderInfo, type, credential }) => ({
-          type: type,
-          category: getCredentialCategory(renderInfo),
-          invalid: false,
-          name: credential?.name ?? '',
-          properties: credential?.display?.properties || [],
-        }),
-      ),
-    },
-  }
-}
+const credentialOfferHandler = (state: CredentialOfferFlowState) => ({
+  credentials: {
+    // eslint-disable-next-line
+    service_issued: state.offerSummary.map(
+      ({ renderInfo, type, credential }) => ({
+        type,
+        category: getCredentialCategory(renderInfo),
+        invalid: false,
+        name: credential?.name ?? '',
+        properties: credential?.display?.properties || [],
+      }),
+    ),
+  },
+})
 
 /**
  * 1. Use it to check whatever logic should happen before

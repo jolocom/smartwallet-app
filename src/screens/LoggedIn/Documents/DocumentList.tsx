@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { TFunction } from 'i18next'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
@@ -107,20 +107,18 @@ const useHandleMorePress = () => {
   }
 }
 
-const CardList: React.FC = ({ children }) => {
-  return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      overScrollMode={'never'}
-      contentContainerStyle={{
-        paddingBottom: '40%',
-        paddingTop: 32,
-      }}
-    >
-      {children}
-    </ScrollView>
-  )
-}
+const CardList: React.FC = ({ children }) => (
+  <ScrollView
+    showsVerticalScrollIndicator={false}
+    overScrollMode={'never'}
+    contentContainerStyle={{
+      paddingBottom: '40%',
+      paddingTop: 32,
+    }}
+  >
+    {children}
+  </ScrollView>
+)
 
 export const DocumentList = () => {
   const { t } = useTranslation()
@@ -200,7 +198,7 @@ export const DocumentList = () => {
 
               const credentialUIType = getCredentialDisplayType(value, t)
               return (
-                <>
+                <View style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
                     <JoloText
                       size={JoloTextSizes.mini}
@@ -215,7 +213,7 @@ export const DocumentList = () => {
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
                     activeSlideAlignment="center"
-                    customStyles={{ marginLeft: -4 }}
+                    customStyles={{ marginLeft: -12 }}
                     data={credentials}
                     renderItem={({ item: c }) => (
                       <DocumentSectionDocumentCard
@@ -243,7 +241,7 @@ export const DocumentList = () => {
                       />
                     )}
                   />
-                </>
+                </View>
               )
             })}
           </CardList>
@@ -271,7 +269,7 @@ export const DocumentList = () => {
               const credentialUIType = getCredentialDisplayType(value, t)
 
               return (
-                <>
+                <View style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
                     <JoloText
                       size={JoloTextSizes.mini}
@@ -287,6 +285,7 @@ export const DocumentList = () => {
 
                   <AdoptedCarousel
                     data={credentials}
+                    customStyles={{ marginLeft: -12 }}
                     renderItem={({ item: c }) => (
                       <DocumentSectionOtherCard
                         credentialName={c.name || t('General.unknown')}
@@ -304,7 +303,7 @@ export const DocumentList = () => {
                       />
                     )}
                   />
-                </>
+                </View>
               )
             })}
           </CardList>
@@ -313,3 +312,9 @@ export const DocumentList = () => {
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  sectionContainer: {
+    paddingBottom: 22,
+  },
+})
