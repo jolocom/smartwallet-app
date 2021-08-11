@@ -8,7 +8,7 @@ import { commonStyles } from '../commonStyles'
 import { useCalculateFieldLines } from '../hooks'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
 
-import { FieldsCalculator } from './components'
+import { FieldsCalculator, SelectedToggle } from './components'
 import {
   MAX_FIELD_DOC,
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
@@ -18,7 +18,7 @@ import { shareStyles } from './styles'
 import { InteractionShareDocumentCardProps } from './types'
 
 export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCardProps> =
-  ({ credentialName, holderName, fields, photo, highlight }) => {
+  ({ credentialName, holderName, fields, photo, highlight, selected }) => {
     /**
      * Logic to calculate number of lines a holder name takes
      * to decide how many fields can be displayed
@@ -147,6 +147,9 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
               {highlight.toUpperCase()}
             </ScaledText>
           </ScaledView>
+        )}
+        {typeof selected !== 'undefined' && (
+          <SelectedToggle selected={selected} />
         )}
       </ScaledCard>
     )
