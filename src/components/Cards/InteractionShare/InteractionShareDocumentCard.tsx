@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
@@ -7,7 +7,6 @@ import { Colors } from '~/utils/colors'
 import { commonStyles } from '../commonStyles'
 import { useCalculateFieldLines } from '../hooks'
 import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
-import { getTrimmedHighlight } from '../utils'
 
 import { FieldsCalculator } from './components'
 import {
@@ -29,11 +28,6 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
       const lines = e.nativeEvent.lines.length
       setHolderNameLines(lines)
     }
-
-    const displayedHighlight = useMemo(
-      () => getTrimmedHighlight(highlight),
-      [highlight],
-    )
 
     const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
 
@@ -131,7 +125,7 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             />
           </ScaledView>
         )}
-        {displayedHighlight && (
+        {highlight && (
           <ScaledView
             style={{
               zIndex: 9,
@@ -141,10 +135,16 @@ export const InteractionShareDocumentCard: React.FC<InteractionShareDocumentCard
             scaleStyle={styles.documentHighlightContainer}
           >
             <ScaledText
+              numberOfLines={1}
               scaleStyle={styles.documentHighlight}
-              style={commonStyles.regularText}
+              style={[
+                commonStyles.regularText,
+                {
+                  width: photo ? '76%' : '100%',
+                },
+              ]}
             >
-              {displayedHighlight.toUpperCase()}
+              {highlight.toUpperCase()}
             </ScaledText>
           </ScaledView>
         )}
@@ -188,13 +188,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     backgroundColor: 'black',
-    // borderBottomLeftRadius: 12,
-    // borderBottomRightRadius: 12,
     zIndex: 9,
     height: 56,
     paddingTop: 17,
     paddingBottom: 13,
-    paddingLeft: 23,
+    paddingHorizontal: 23,
   },
   documentHighlight: {
     color: Colors.white,
