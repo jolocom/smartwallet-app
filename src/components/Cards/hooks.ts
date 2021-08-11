@@ -63,10 +63,13 @@ export const useCalculateFieldLines = () => {
   const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
   const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
     const lines = e.nativeEvent.lines.length
-    setFieldLines((prevState) => ({
-      ...prevState,
-      [idx]: prevState[idx] ?? lines,
-    }))
+    setFieldLines((prevState) => {
+      const value = prevState[idx] ?? lines
+      return {
+        ...prevState,
+        [idx]: value > 2 ? 2 : value,
+      }
+    })
   }
   return {
     fieldLines,

@@ -16,7 +16,7 @@ import { DocumentCardProps } from './types'
 import { FieldsCalculator } from '../InteractionShare/components'
 
 const MAX_FIELDS = 3
-const MAX_FIELD_LINES = 4
+const MAX_FIELD_LINES = 5
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
