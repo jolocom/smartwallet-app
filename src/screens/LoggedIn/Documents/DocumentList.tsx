@@ -95,7 +95,7 @@ const useHandleMorePress = () => {
           params: {
             title: `${t('Documents.deleteDocumentHeader', {
               documentName: credentialName,
-            })}?`,
+            })}`,
             cancelText: t('Documents.cancelCardOption'),
             instructionText: t('Documents.deleteCredentialInstruction'),
             onComplete: () => handleDelete(id),
