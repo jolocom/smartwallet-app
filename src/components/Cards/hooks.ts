@@ -164,7 +164,7 @@ export const usePruneFields = (
           /**
            * If no lines are left to display do not display the whole field
            */
-          if (remainingNrLines === 0) {
+          if (remainingNrLines <= 0) {
             return null
           } else {
             /**
