@@ -215,9 +215,9 @@ export const DocumentList = () => {
                     activeSlideAlignment="center"
                     customStyles={{ marginLeft: -12 }}
                     data={credentials}
-                    renderItem={({ item: c }) => (
+                    renderItem={({ item: c, index }) => (
                       <DocumentSectionDocumentCard
-                        key={c.id}
+                        key={`${index}-${c.id}`}
                         credentialName={c.name || t('General.unknown')}
                         holderName={c.holderName || t('General.anonymous')}
                         fields={getOptionalFields(c)}
@@ -286,22 +286,21 @@ export const DocumentList = () => {
                   <AdoptedCarousel
                     data={credentials}
                     customStyles={{ marginLeft: -12 }}
-                    renderItem={({ item: c }) => (
-                      <DocumentSectionOtherCard
-                        credentialName={c.name || t('General.unknown')}
-                        credentialType={credentialUIType}
-                        fields={getOptionalFields(c)}
-                        logo={c.photo}
-                        onHandleMore={() =>
-                          onHandleMore(
-                            c.id,
-                            c.name,
-                            getOptionalFields(c),
-                            c.photo,
-                          )
-                        }
-                      />
-                    )}
+                    renderItem={({ item: c, index }) => {
+                      const fields = getOptionalFields(c)
+                      return (
+                        <DocumentSectionOtherCard
+                          key={`${index}-${c.id}`}
+                          credentialName={c.name || t('General.unknown')}
+                          credentialType={credentialUIType}
+                          fields={fields}
+                          logo={c.photo}
+                          onHandleMore={() =>
+                            onHandleMore(c.id, c.name, fields, c.photo)
+                          }
+                        />
+                      )
+                    }}
                   />
                 </View>
               )
