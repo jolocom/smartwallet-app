@@ -1,10 +1,5 @@
-import React, { SetStateAction } from 'react'
-import {
-  TouchableOpacity,
-  View,
-  LayoutChangeEvent,
-  Animated,
-} from 'react-native'
+import React from 'react'
+import { TouchableOpacity, View, Animated } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import ScreenContainer from './ScreenContainer'
@@ -42,14 +37,6 @@ const FormContainer: React.FC<Props> = ({
     onSubmit()
   }
 
-  const handleLayout = (
-    e: LayoutChangeEvent,
-    setHeaderHeight: React.Dispatch<SetStateAction<number>>,
-  ) => {
-    const { height } = e.nativeEvent.layout
-    setHeaderHeight(height)
-  }
-
   const getHeaderTitleOpacity = (
     scrollY: Animated.Value,
     headerHeight: number,
@@ -68,27 +55,16 @@ const FormContainer: React.FC<Props> = ({
       }}
     >
       <CollapsibleClone
-        renderHeader={(
-          currentTitleText,
-          scrollY,
-          setHeaderHeight,
-          headerHeight,
-        ) => (
+        renderHeader={(currentTitleText, scrollY, headerHeight) => (
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
+              alignItems: 'center',
               backgroundColor: Colors.codGrey,
               paddingHorizontal: 24,
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              zIndex: 1,
-              width: '100%',
               height: 50,
-              alignItems: 'center',
             }}
-            onLayout={(e) => handleLayout(e, setHeaderHeight)}
           >
             <TouchableOpacity onPress={dismissScreen}>
               <JoloText
@@ -129,8 +105,12 @@ const FormContainer: React.FC<Props> = ({
             </TouchableOpacity>
           </View>
         )}
-        renderScroll={() => (
-          <CollapsibleClone.KeyboardAwareScroll>
+        renderScroll={({ headerHeight }) => (
+          <CollapsibleClone.KeyboardAwareScroll
+            contentContainerStyle={{
+              paddingTop: headerHeight,
+            }}
+          >
             <CollapsibleClone.Title text={title} />
             <JoloText
               size={JoloTextSizes.mini}

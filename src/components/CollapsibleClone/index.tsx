@@ -5,6 +5,8 @@ import {
   Animated,
   ScrollView,
   FlatList,
+  View,
+  LayoutChangeEvent,
 } from 'react-native'
 
 import Title from './Title'
@@ -32,7 +34,6 @@ interface ICollapsibleClone {
      * NOTE: it is important to calculate header height and set it
      * to correctly pad scroll view
      */
-    setHeaderHeight: React.Dispatch<React.SetStateAction<number>>,
     headerHeight: number,
   ) => React.ReactElement | null
   renderScroll: (context: ICollapsibleCloneContext) => React.ReactElement | null
@@ -135,9 +136,24 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
     [currentTitleText, headerHeight, currentTitleIdx],
   )
 
+  const handleHeaderContainerLayout = (e: LayoutChangeEvent) => {
+    const { height } = e.nativeEvent.layout
+    setHeaderHeight(height)
+  }
+
   return (
     <CollapsibleCloneContext.Provider value={contextValue}>
-      {renderHeader(currentTitleText, scrollY, setHeaderHeight, headerHeight)}
+      <View
+        onLayout={handleHeaderContainerLayout}
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          zIndex: 10,
+        }}
+      >
+        {renderHeader(currentTitleText, scrollY, headerHeight)}
+      </View>
       {renderScroll(contextValue)}
       {children}
     </CollapsibleCloneContext.Provider>
