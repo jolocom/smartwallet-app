@@ -2,8 +2,8 @@ import { useDispatch } from 'react-redux'
 
 import { setLoader, dismissLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import { strings } from '~/translations/strings'
 import { sleep } from '~/utils/generic'
+import useTranslation from './useTranslation'
 
 export interface LoaderConfig {
   showFailed?: boolean
@@ -13,16 +13,17 @@ export interface LoaderConfig {
   failed?: string
 }
 
-const defaultConfig = {
-  loading: strings.LOADING,
-  showFailed: true,
-  showSuccess: true,
-  success: strings.SUCCESS,
-  failed: strings.FAILED,
-}
-
 export const useLoader = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
+
+  const defaultConfig = {
+    loading: t('Loader.loading'),
+    showFailed: true,
+    showSuccess: true,
+    success: t('Loader.successDefault'),
+    failed: t('Loader.failedDefault'),
+  }
 
   return async (
     callback: () => Promise<any>,
@@ -84,24 +85,31 @@ export const useLoader = () => {
   }
 }
 
-const openLoader =
-  (type: LoaderTypes, msg: string) =>
-  (delay: number = 2500) => {
-    const dispatch = useDispatch()
+const openLoader = (type: LoaderTypes, msg: string) => (delay: number) => {
+  const dispatch = useDispatch()
 
-    return (onComplete?: () => void) => {
-      dispatch(
-        setLoader({
-          type,
-          msg,
-        }),
-      )
-      setTimeout(() => {
-        onComplete && onComplete()
-        dispatch(dismissLoader())
-      }, delay)
-    }
+  return (onComplete?: () => void) => {
+    dispatch(
+      setLoader({
+        type,
+        msg,
+      }),
+    )
+    setTimeout(() => {
+      onComplete && onComplete()
+      dispatch(dismissLoader())
+    }, delay)
   }
+}
 
-export const useSuccess = openLoader(LoaderTypes.success, strings.SUCCESS)
-export const useFailed = openLoader(LoaderTypes.error, strings.FAILED)
+export const useSuccess = (delay: number = 2500) => {
+  const { t } = useTranslation()
+
+  return openLoader(LoaderTypes.success, t('Loader.successDefault'))(delay)
+}
+
+export const useFailed = (delay: number = 2500) => {
+  const { t } = useTranslation()
+
+  return openLoader(LoaderTypes.error, t('Loader.failedDefault'))(delay)
+}

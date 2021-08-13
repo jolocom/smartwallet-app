@@ -15,24 +15,24 @@ import {
 } from '~/types/credentials'
 
 import IdentityTabs from './tabs'
-import { strings } from '~/translations'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import IdentityField from './IdentityField'
 import { useSICActions } from '~/hooks/attributes'
 import BP from '~/utils/breakpoints'
+import useTranslation from '~/hooks/useTranslation'
 import {
   concatValuesIdentity,
   getAttributeValueBasedOnConfig,
 } from '~/utils/attributeUtils'
 
-const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
-  return attributeConfig
-}
+const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig =>
+  attributeConfig
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
 const IdentityCredentials = () => {
+  const { t } = useTranslation()
   const redirect = useRedirect()
   const attributes = useSelector(getAttributes)
 
@@ -47,13 +47,11 @@ const IdentityCredentials = () => {
 
   const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
     primitiveAttributesConfig,
-  ).map(([type, config]) => {
-    return {
-      type: type as PrimitiveAttributeTypes,
-      label: config.label,
-      values: attributes[type as PrimitiveAttributeTypes] ?? [],
-    }
-  })
+  ).map(([type, config]) => ({
+    type: type as PrimitiveAttributeTypes,
+    label: config.label,
+    values: attributes[type as PrimitiveAttributeTypes] ?? [],
+  }))
 
   const isPrimitiveAttributesEmpty = primitiveAttributesWithValues.every(
     (a) => !a.values.length,
@@ -62,31 +60,37 @@ const IdentityCredentials = () => {
   return (
     <View testID="identity-credentials-present" style={styles.container}>
       <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
-        {strings.YOUR_INFO_IS_QUITE_EMPTY}
+        {t('Identity.attributesMissingInfo')}
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
         {primitiveAttributesWithValues.map(({ type, label, values }) => {
+          const isEmpty = !values.length
           const concatValues = getAttributeValueBasedOnConfig(type, values).map(
             (value) => concatValuesIdentity(type, value),
           )
           const hideCreateNew =
             type === AttributeTypes.name && concatValues.length > 0
           return (
-            <View style={styles.group} key={type}>
+            <View
+              style={styles.group}
+              key={type}
+              testID={isEmpty ? 'id-widget-empty' : 'id-widget-with-values'}
+            >
               <Widget
                 onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
               >
                 <Widget.Header>
-                  <Widget.Header.Name value={label} />
+                  {/* @ts-expect-error @TERMS */}
+                  <Widget.Header.Name value={t(label) as string} />
                   {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>
-                {concatValues.length ? (
+                {!isEmpty ? (
                   concatValues.map((field) => (
                     <IdentityField
                       key={field.id}
                       id={field.id}
                       type={type}
-                      value={field.value}
+                      value={field.value as string}
                       onDelete={() => handleDeleteCredentialSI(field.id, type)}
                     />
                   ))

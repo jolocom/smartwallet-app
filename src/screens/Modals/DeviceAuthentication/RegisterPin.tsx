@@ -5,7 +5,6 @@ import Keychain from 'react-native-keychain'
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
-import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 
@@ -22,10 +21,12 @@ import { showBiometry } from './module/deviceAuthActions'
 import Passcode from '~/components/Passcode'
 import { useToasts } from '~/hooks/toasts'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
+import useTranslation from '~/hooks/useTranslation'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const RegisterPin = () => {
+  const { t } = useTranslation()
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [selectedPasscode, setSelectedPasscode] = useState('')
 
@@ -36,7 +37,7 @@ const RegisterPin = () => {
   const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
-  const { scheduleWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
 
   /**
    * NOTE: a user does not have a possibility to remove the passcode from the keychain,
@@ -72,9 +73,9 @@ const RegisterPin = () => {
         displaySuccessLoader(redirectTo)
       } catch (err) {
         // an error with storing PIN to the keychain -> redirect back to create passcode
-        scheduleWarning({
-          title: 'Try again',
-          message: 'We could not store your passcode. Please try again',
+
+        scheduleErrorWarning(err, {
+          message: t('Toasts.failedStoreMsg'),
         })
         resetPasscode()
       }
@@ -103,9 +104,15 @@ const RegisterPin = () => {
         <Passcode.Container>
           <ScreenHeader
             title={
-              isCreating ? strings.CREATE_PASSCODE : strings.VERIFY_PASSCODE
+              isCreating
+                ? t('CreatePasscode.createHeader')
+                : t('VerifyPasscode.verifyHeader')
             }
-            subtitle={strings.ADDING_AN_EXTRA_LAYER_OF_SECURITY}
+            subtitle={
+              isCreating
+                ? t('CreatePasscode.createSubheader')
+                : t('VerifyPasscode.verifySubheader')
+            }
           />
           <View style={styles.passcodeContainer}>
             <Passcode.Input />
@@ -119,7 +126,7 @@ const RegisterPin = () => {
               opacity: isCreating ? 1 : 0,
             }}
           >
-            {strings.YOU_CAN_CHANGE_THE_PASSCODE}
+            {t('CreatePasscode.helperText')}
           </JoloText>
         </Passcode.Container>
         <Passcode.Container
@@ -127,7 +134,7 @@ const RegisterPin = () => {
         >
           {!isCreating && (
             <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {strings.RESET}
+              {t('VerifyPasscode.resetBtn')}
             </Btn>
           )}
           <Passcode.Keyboard />

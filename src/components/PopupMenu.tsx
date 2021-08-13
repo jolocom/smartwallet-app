@@ -9,15 +9,16 @@ import { RouteProp, useRoute } from '@react-navigation/core'
 import { ScreenNames } from '~/types/screens'
 import ScreenContainer from './ScreenContainer'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
-import { IWithCustomStyle } from './Card/types'
 import ScreenDismissArea from './ScreenDismissArea'
 import { TransparentModalsParamsList } from '~/screens/LoggedIn/Main'
+import { IWithCustomStyle } from '~/types/props'
+import useTranslation from '~/hooks/useTranslation'
 
 export interface IPopupOption {
   title: string
   navigation?: {
     screen: ScreenNames
-    params?: Record<string, any>
+    params?: Record<string, unknown>
   }
   onPress?: () => void
 }
@@ -26,9 +27,9 @@ export interface PopupMenuProps {
   options: IPopupOption[]
 }
 
-const SolidBlock: React.FC<IWithCustomStyle> = ({ children, customStyles }) => {
-  return <Block customStyle={[styles.block, customStyles]}>{children}</Block>
-}
+const SolidBlock: React.FC<IWithCustomStyle> = ({ children, customStyles }) => (
+  <Block customStyle={[styles.block, customStyles]}>{children}</Block>
+)
 
 const PopupButton: React.FC<{ onPress: () => void }> = ({
   onPress,
@@ -45,6 +46,7 @@ const PopupButton: React.FC<{ onPress: () => void }> = ({
 )
 
 const PopupMenu = () => {
+  const { t } = useTranslation()
   const goBack = useGoBack()
   const redirect = useRedirect()
   const { bottom } = useSafeArea()
@@ -52,6 +54,24 @@ const PopupMenu = () => {
     useRoute<RouteProp<TransparentModalsParamsList, ScreenNames.PopupMenu>>()
       .params
 
+  const onOptionBtnPress = ({
+    navigation,
+    onPress,
+  }: {
+    navigation: IPopupOption['navigation']
+    onPress: IPopupOption['onPress']
+  }) => {
+    if (onPress) {
+      onPress()
+    }
+    if (navigation) {
+      redirect(ScreenNames.Main, {
+        screen: navigation.screen,
+        params: navigation.params,
+      })
+    }
+    goBack()
+  }
   return (
     <ScreenContainer isFullscreen backgroundColor={Colors.black65}>
       <ScreenDismissArea onDismiss={goBack} />
@@ -60,15 +80,7 @@ const PopupMenu = () => {
           {options.map(({ title, navigation, onPress }, i) => (
             <React.Fragment key={i}>
               <PopupButton
-                onPress={() => {
-                  onPress && onPress()
-                  navigation &&
-                    redirect(ScreenNames.Main, {
-                      screen: navigation.screen,
-                      params: navigation.params,
-                    })
-                  goBack()
-                }}
+                onPress={() => onOptionBtnPress({ navigation, onPress })}
               >
                 {title}
               </PopupButton>
@@ -81,7 +93,9 @@ const PopupMenu = () => {
             marginTop: 16,
           }}
         >
-          <PopupButton onPress={goBack}>Close</PopupButton>
+          <PopupButton onPress={goBack}>
+            {t('Documents.cancelCardOption')}
+          </PopupButton>
         </SolidBlock>
       </View>
     </ScreenContainer>

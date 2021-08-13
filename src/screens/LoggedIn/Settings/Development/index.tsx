@@ -17,9 +17,7 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
-  const redirectToInteractionCards = useRedirectTo(
-    ScreenNames.InteractionCardsTest,
-  )
+
   const redirect = useRedirect()
   const { showPopup } = usePopupMenu()
 
@@ -31,54 +29,67 @@ const DevelopmentSection = () => {
   }
 
   return (
-    <Section>
-      <Section.Title>Development</Section.Title>
-      <Section.Block>
-        <Option>
-          <Option.Title title="Toggle Switch" />
-          <View style={{ position: 'absolute', right: 16 }}>
-            <ToggleSwitch onToggle={handleToggle} />
-          </View>
-        </Option>
-        <Option onPress={() => redirect(ScreenNames.ButtonsTest)}>
-          <Option.Title title="Buttons" />
-        </Option>
-        <Option onPress={() => redirect(ScreenNames.LoaderTest)}>
-          <Option.Title title="Loader" />
-        </Option>
-        <Option
-          onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
-        >
-          <Option.Title title="Throw error" />
-        </Option>
-        <Option
-          onPress={() =>
-            showPopup([
-              { title: 'Help', onPress: () => {} },
-              { title: 'Me', onPress: () => {} },
-              { title: 'Please', onPress: () => {} },
-            ])
-          }
-        >
-          <Option.Title title="Popup menu" />
-        </Option>
-        <Option onPress={redirectToNotifications}>
-          <Option.Title title="Notifications" />
-        </Option>
-        <Option onPress={redirectToInputs}>
-          <Option.Title title="Inputs" />
-        </Option>
-        <Option onPress={redirectToPasscode}>
-          <Option.Title title="Passcode" />
-        </Option>
-        <Option onPress={redirectToInteractionCards}>
-          <Option.Title title="Interaction Cards" />
-        </Option>
-        <Option onPress={() => redirect(ScreenNames.CollapsibleTest)}>
-          <Option.Title title="Collapsible" />
-        </Option>
-      </Section.Block>
-    </Section>
+    <>
+      <Section>
+        <Section.Title>[DEV] Interactions</Section.Title>
+        <Section.Block>
+          <Option onPress={() => redirect(ScreenNames.InteractionPasteTest)}>
+            <Option.Title title="Paste interaction token" />
+          </Option>
+        </Section.Block>
+      </Section>
+      <Section>
+        <Section.Title>[DEV] Error handling</Section.Title>
+        <Section.Block>
+          <Option
+            onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
+          >
+            <Option.Title title="Throw error" />
+          </Option>
+        </Section.Block>
+      </Section>
+
+      <Section>
+        <Section.Title>[DEV] UI component</Section.Title>
+        <Section.Block>
+          <Option>
+            <Option.Title title="Toggle Switch" />
+            <View style={{ position: 'absolute', right: 16 }}>
+              <ToggleSwitch onToggle={handleToggle} />
+            </View>
+          </Option>
+          <Option onPress={() => redirect(ScreenNames.ButtonsTest)}>
+            <Option.Title title="Buttons" />
+          </Option>
+          <Option onPress={() => redirect(ScreenNames.LoaderTest)}>
+            <Option.Title title="Loader" />
+          </Option>
+          <Option
+            onPress={() =>
+              showPopup([
+                { title: 'Help', onPress: console.log },
+                { title: 'Me', onPress: console.log },
+                { title: 'Please', onPress: console.log },
+              ])
+            }
+          >
+            <Option.Title title="Popup menu" />
+          </Option>
+          <Option onPress={redirectToNotifications}>
+            <Option.Title title="Notifications" />
+          </Option>
+          <Option onPress={redirectToInputs}>
+            <Option.Title title="Inputs" />
+          </Option>
+          <Option onPress={redirectToPasscode}>
+            <Option.Title title="Passcode" />
+          </Option>
+          <Option onPress={() => redirect(ScreenNames.CollapsibleTest)}>
+            <Option.Title title="Collapsible" />
+          </Option>
+        </Section.Block>
+      </Section>
+    </>
   )
 }
 

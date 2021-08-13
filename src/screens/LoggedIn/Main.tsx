@@ -24,9 +24,7 @@ import TermsConsent from '~/screens/Modals/TermsConsent'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import { IField } from '~/components/Card/types'
 import CredentialDetails from './Documents/CredentialDetails'
-import InteractionTest from './Settings/Development/InteractionCardsTest'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import {
@@ -37,26 +35,27 @@ import {
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import CollapsibleClone from './Settings/Development/CollapsibleClone'
+import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
+import { Colors } from '~/utils/colors'
+import { IField } from '~/types/props'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
 }
 const TransparentModalsStack = createStackNavigator()
 
-const TransparentModals = () => {
-  return (
-    <TransparentModalsStack.Navigator
-      headerMode="none"
-      mode="modal"
-      screenOptions={transparentModalOptions}
-    >
-      <TransparentModalsStack.Screen
-        name={ScreenNames.PopupMenu}
-        component={PopupMenu}
-      />
-    </TransparentModalsStack.Navigator>
-  )
-}
+const TransparentModals = () => (
+  <TransparentModalsStack.Navigator
+    headerMode="none"
+    mode="modal"
+    screenOptions={transparentModalOptions}
+  >
+    <TransparentModalsStack.Screen
+      name={ScreenNames.PopupMenu}
+      component={PopupMenu}
+    />
+  </TransparentModalsStack.Navigator>
+)
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
@@ -79,13 +78,13 @@ export type MainStackParamList = {
     photo?: string
   }
   // DEV
+  [ScreenNames.InteractionPasteTest]: undefined
   [ScreenNames.ButtonsTest]: undefined
   [ScreenNames.CollapsibleTest]: undefined
   [ScreenNames.LoaderTest]: undefined
   [ScreenNames.NotificationsTest]: undefined
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
-  [ScreenNames.InteractionCardsTest]: undefined
   [ScreenNames.PinRecoveryInstructions]: undefined
   [ScreenNames.PasscodeRecovery]: {
     isAccessRestore: boolean
@@ -171,6 +170,11 @@ const Main: React.FC = () => {
           {__DEV__ && (
             <>
               <MainStack.Screen
+                name={ScreenNames.InteractionPasteTest}
+                component={InteractionPasteTest}
+                options={screenTransitionSlideFromRight}
+              />
+              <MainStack.Screen
                 name={ScreenNames.ButtonsTest}
                 component={ButtonsTest}
                 options={screenTransitionSlideFromRight}
@@ -199,11 +203,6 @@ const Main: React.FC = () => {
                 component={PasscodeTest}
                 options={screenTransitionSlideFromRight}
               />
-              <MainStack.Screen
-                name={ScreenNames.InteractionCardsTest}
-                component={InteractionTest}
-                options={screenTransitionSlideFromRight}
-              />
             </>
           )}
           {/* Settings Screens -> End   */}
@@ -212,7 +211,17 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Interaction}
             component={Interaction}
-            options={screenTransitionFromBottomDisabledGestures}
+            options={{
+              cardStyle: {
+                /**
+                 * NOTE: adding screen background in dev as
+                 * color palette of bottom sheet blends into
+                 * screen rendered behind it
+                 */
+                backgroundColor: __DEV__ ? Colors.white35 : 'transparent',
+              },
+              ...screenTransitionFromBottomDisabledGestures,
+            }}
           />
           <MainStack.Screen
             name={ScreenNames.CredentialDetails}

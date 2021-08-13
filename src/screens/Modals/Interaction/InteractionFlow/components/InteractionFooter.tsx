@@ -1,16 +1,15 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import BtnGroup, { BtnsAlignment } from '~/components/BtnGroup'
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
-import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import useConnection from '~/hooks/connection'
+import useTranslation from '~/hooks/useTranslation'
 
 interface Props {
-  onSubmit: () => Promise<any> | any
+  onSubmit: () => Promise<void> | void
   disabled?: boolean
   disableLoader?: boolean
   submitLabel: string
@@ -23,6 +22,7 @@ const InteractionFooter: React.FC<Props> = ({
   disableLoader = false,
   submitLabel,
 }) => {
+  const { t } = useTranslation()
   const loader = useLoader()
   const finishInteraction = useFinishInteraction()
   const { connected } = useConnection()
@@ -62,7 +62,7 @@ const InteractionFooter: React.FC<Props> = ({
             customContainerStyles={styles.cancelBtn}
             withoutMargins
           >
-            {strings.IGNORE}
+            {t('Interaction.cancelBtn')}
           </Btn>
         </View>
       </View>

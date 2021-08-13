@@ -21,7 +21,6 @@ import MagicButton from '~/components/MagicButton'
 import { useMagicBtnAnimations } from '~/hooks/magicButton'
 import { useGoBack } from '~/hooks/navigation'
 import { RootStackParamList } from '~/RootNavigation'
-import { strings } from '~/translations'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import AbsoluteBottom from '../../components/AbsoluteBottom'
@@ -43,7 +42,7 @@ interface IProps {
 }
 
 const DragToConfirm: React.FC<IProps> = ({ route }) => {
-  const { title, cancelText, onComplete } = route?.params
+  const { title, cancelText, instructionText, onComplete } = route?.params
   const goBack = useGoBack()
 
   const { scheduleErrorWarning } = useToasts()
@@ -107,10 +106,12 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
 
   const handleHoleLayout = () => {
     if (Platform.OS === 'android') {
+      // eslint-disable-next-line
       holeRef.current?.measureInWindow((x, y, width, height) => {
         setHolePosition({ x, y, width, height })
       })
     } else {
+      // eslint-disable-next-line
       holeRef.current?.measure((x, y, width, height) => {
         setHolePosition({ x, y, width, height })
       })
@@ -231,7 +232,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
                 color={Colors.white21}
                 customStyles={{ marginBottom: 20 }}
               >
-                {strings.DROP_THE_BALL}
+                {instructionText}
               </JoloText>
             ) : null}
             <View style={styles.ballContainer} {...panResponder.panHandlers}>

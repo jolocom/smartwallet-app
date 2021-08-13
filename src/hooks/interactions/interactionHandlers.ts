@@ -5,15 +5,12 @@ import {
 } from '@jolocom/sdk/js/interactionManager/types'
 
 import { FlowType, Interaction } from 'react-native-jolocom'
-import {
-  getCredentialCategory,
-} from '../signedCredentials/utils'
+import { getCredentialCategory } from '../signedCredentials/utils'
 import { useAgent } from '../sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '../toasts'
-import { strings } from '~/translations'
-import truncateDid from '~/utils/truncateDid'
 import { CredentialRequestHandler } from '~/middleware/interaction/credentialRequestConstrains'
+import { getCounterpartyName } from '~/utils/dataMapping'
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({
   description: state.description,
@@ -22,24 +19,23 @@ const authenticationHandler = (state: AuthenticationFlowState) => ({
 const authorizationHandler = (state: AuthorizationFlowState) => ({
   action: state.action,
   description: state.description,
-  imageURL: state.imageURL
+  imageURL: state.imageURL,
 })
 
-const credentialOfferHandler = (state: CredentialOfferFlowState) => {
-  return {
-    credentials: {
-      service_issued: state.offerSummary.map(
-        ({ renderInfo, type, credential }) => ({
-          type: type,
-          category: getCredentialCategory(renderInfo),
-          invalid: false,
-          name: credential?.name ?? '',
-          properties: credential?.display?.properties || [],
-        }),
-      ),
-    },
-  }
-}
+const credentialOfferHandler = (state: CredentialOfferFlowState) => ({
+  credentials: {
+    // eslint-disable-next-line
+    service_issued: state.offerSummary.map(
+      ({ renderInfo, type, credential }) => ({
+        type,
+        category: getCredentialCategory(renderInfo),
+        invalid: false,
+        name: credential?.name ?? '',
+        properties: credential?.display?.properties || [],
+      }),
+    ),
+  },
+})
 
 /**
  * 1. Use it to check whatever logic should happen before
@@ -56,8 +52,7 @@ export const useInteractionHandler = () => {
 
   return async (interaction: Interaction) => {
     const { state, initiator } = interaction.getSummary()
-    const serviceName =
-      initiator.publicProfile?.name ?? truncateDid(initiator.did)
+    const serviceName = getCounterpartyName(initiator)
 
     let flowSpecificData
 
@@ -96,8 +91,8 @@ export const useInteractionHandler = () => {
           // FIXME: there is an issue with the strings here, will be fixed when the
           // i18n and PoEditor are properly set up.
           scheduleWarning({
-            title: t(strings.SHARE_MISSING_DOCS_TITLE),
-            message: t(strings.SHARE_MISSING_DOCS_MSG, {
+            title: t('Toasts.shareMissingDocsTitle'),
+            message: t('Toasts.shareMissingDocsMsg', {
               serviceName,
               documentType: handler.missingCredentialTypes.join(', '),
             }),

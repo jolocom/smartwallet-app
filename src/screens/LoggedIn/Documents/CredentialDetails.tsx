@@ -80,7 +80,10 @@ const CredentialDetails = () => {
               <React.Fragment key={i}>
                 <View style={styles.fieldContainer}>
                   <JoloText
-                    customStyles={styles.fieldText}
+                    customStyles={[
+                      styles.fieldText,
+                      { width: i === 0 ? '80%' : '100%' },
+                    ]}
                     size={JoloTextSizes.mini}
                     color={Colors.osloGray}
                   >

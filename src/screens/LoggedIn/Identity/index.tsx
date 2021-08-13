@@ -6,10 +6,11 @@ import { getAttributes } from '~/modules/attributes/selectors'
 import { useSelector } from 'react-redux'
 import IdentityCredentials from './IdentityCredentials'
 import IdentityTabs from './tabs'
-import { strings } from '~/translations'
 import { IdentityTabIds } from './types'
+import useTranslation from '~/hooks/useTranslation'
 
 const Identity = () => {
+  const { t } = useTranslation()
   const attributes = useSelector(getAttributes)
   const showIdentityIntro = !Boolean(Object.keys(attributes).length)
   const [initialTab, setInitialTab] = useState(IdentityTabIds.credentials)
@@ -32,7 +33,7 @@ const Identity = () => {
       customStyles={{ paddingHorizontal: 0 }}
     >
       <ScreenContainer.Header customStyles={{ paddingLeft: '5%' }}>
-        {strings.YOUR_INFO}
+        {t('Identity.header')}
       </ScreenContainer.Header>
       <IdentityTabs initialTab={initialTab}>
         <IdentityTabs.Page id={IdentityTabIds.credentials}>

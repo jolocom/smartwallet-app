@@ -20,6 +20,7 @@ import {
   concatValuesShare,
   getAttributeValueBasedOnConfig,
 } from '~/utils/attributeUtils'
+import useTranslation from '~/hooks/useTranslation'
 
 interface IShareAttributeWidgetProps {
   withContainer?: boolean
@@ -81,6 +82,7 @@ const InteractionAttributesWidget: React.FC<IInteractionWidgetProps> = ({
 const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
   withContainer = false,
 }) => {
+  const { t } = useTranslation()
   const attributes = useSelector(getRequestedAttributes)
   const selectedCredentials = useSelector(getSelectedShareCredentials)
 
@@ -112,7 +114,8 @@ const ShareAttributeWidget: React.FC<IShareAttributeWidgetProps> = ({
             <View key={credType}>
               <InteractionAttributesWidget
                 key={attrType}
-                name={config.label}
+                // @ts-expect-error @terms
+                name={t(config.label)}
                 type={attrType}
                 onAdd={() =>
                   redirect(ScreenNames.CredentialForm, { type: attrType })

@@ -7,14 +7,12 @@ import {
   getIsFullscreenCredOffer,
   getOfferedCredentialsByCategories,
   getOfferedCredentials,
+  getServiceDescription,
 } from '~/modules/interaction/selectors'
-import { strings } from '~/translations'
 import {
   OfferedCredentialDisplay,
   CredentialCategories,
 } from '~/types/credentials'
-import IncomingOfferDoc from '../components/card/offer/document'
-import IncomingOfferOther from '../components/card/offer/other'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -30,36 +28,46 @@ import {
 import Collapsible from '~/components/Collapsible'
 import Space from '~/components/Space'
 import useTranslation from '~/hooks/useTranslation'
+import {
+  InteractionOfferDocumentCard,
+  InteractionOfferOtherCard,
+} from '~/components/Cards/InteractionOffer'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
+  const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
+
   return (
     <ContainerBAS>
       <LogoContainerBAS>
         <InteractionLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={strings.INCOMING_OFFER} />
+      <InteractionTitle label={t('CredentialOffer.header')} />
       <InteractionDescription
-        label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+        label={t('CredentialOffer.subheader', { serviceName: name })}
       />
       <Space />
       {offeredCredentials.map((d) => {
         if (d.category === CredentialCategories.document) {
           return (
-            <IncomingOfferDoc
+            <InteractionOfferDocumentCard
               key={d.name}
-              name={d.name || t(strings.UNKNOWN)}
-              properties={d.properties}
+              credentialName={d.name || t('General.unknown')}
+              fields={d.properties.map((p) => ({
+                label: p.label || t('Documents.unspecifiedField'),
+              }))}
             />
           )
         }
         return (
-          <IncomingOfferOther
+          <InteractionOfferOtherCard
             key={d.name}
-            name={d.name || t(strings.UNKNOWN)}
-            properties={d.properties}
+            credentialName={d.name || t('General.unknown')}
+            fields={d.properties.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
           />
         )
       })}
@@ -67,7 +75,7 @@ const CredentialOfferBAS = () => {
 
       <InteractionFooter
         onSubmit={handleSubmit}
-        submitLabel={strings.RECEIVE}
+        submitLabel={t('CredentialOffer.confirmBtn')}
       />
     </ContainerBAS>
   )
@@ -75,47 +83,48 @@ const CredentialOfferBAS = () => {
 
 const CredentialOfferFAS = () => {
   const categories = useSelector(getOfferedCredentialsByCategories)
-
   const handleSubmit = useCredentialOfferSubmit()
 
   const documents = categories[CredentialCategories.document]
   const other = categories[CredentialCategories.other]
 
+  const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
-  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
-    return credentials.map(
-      ({ invalid, category, properties, name, type }, idx) => (
-        <View
-          key={type + idx}
-          style={{
-            marginBottom: idx === credentials.length - 1 ? 0 : 30,
-            opacity: invalid ? 0.5 : 1,
-          }}
-        >
-          {category === CredentialCategories.document ? (
-            <IncomingOfferDoc
-              key={name + type}
-              name={name || t(strings.UNKNOWN)}
-              properties={properties}
-            />
-          ) : (
-            <IncomingOfferOther
-              key={name + type}
-              name={name || t(strings.UNKNOWN)}
-              properties={properties}
-            />
-          )}
-        </View>
-      ),
-    )
-  }
+  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
+    credentials.map(({ invalid, category, properties, name, type }, idx) => (
+      <View
+        key={type + idx}
+        style={{
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
+          opacity: invalid ? 0.5 : 1,
+        }}
+      >
+        {category === CredentialCategories.document ? (
+          <InteractionOfferDocumentCard
+            key={name + type}
+            credentialName={name || t('General.unknown')}
+            fields={properties.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
+          />
+        ) : (
+          <InteractionOfferOtherCard
+            key={name + type}
+            credentialName={name || t('General.unknown')}
+            fields={properties.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
+          />
+        )}
+      </View>
+    ))
 
   return (
     <Collapsible>
       <Collapsible.AnimatedHeader height={62}>
         <Collapsible.HeaderText>
-          {strings.INCOMING_OFFER}
+          {t('CredentialOffer.header')}
         </Collapsible.HeaderText>
       </Collapsible.AnimatedHeader>
       <ContainerFAS>
@@ -129,23 +138,23 @@ const CredentialOfferFAS = () => {
             </LogoContainerFAS>
           </Collapsible.HidingScale>
           <Collapsible.HidingTextContainer>
-            <InteractionTitle label={strings.INCOMING_OFFER} />
+            <InteractionTitle label={t('CredentialOffer.header')} />
           </Collapsible.HidingTextContainer>
           <InteractionDescription
-            label={strings.SERVICE_SENT_YOUR_WALLET_THE_FOLLOWING_DOCUMENTS}
+            label={t('CredentialOffer.subheader', { serviceName: name })}
           />
           <Space />
-          <InteractionSection title={strings.DOCUMENTS}>
+          <InteractionSection title={t('Documents.documentsTab')}>
             {handleRenderCredentials(documents)}
           </InteractionSection>
-          <InteractionSection title={strings.OTHER}>
+          <InteractionSection title={t('Documents.othersTab')}>
             {handleRenderCredentials(other)}
           </InteractionSection>
         </Collapsible.ScrollView>
         <FooterContainerFAS>
           <InteractionFooter
             onSubmit={handleSubmit}
-            submitLabel={strings.RECEIVE}
+            submitLabel={t('CredentialOffer.confirmBtn')}
           />
         </FooterContainerFAS>
       </ContainerFAS>

@@ -6,7 +6,6 @@ import { Colors } from '~/utils/colors'
 import JoloText from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
-import { strings } from '~/translations'
 import useTranslation from '~/hooks/useTranslation'
 
 const RecordFinalStep: React.FC<IRecordSteps & { status: IRecordStatus }> = ({
@@ -45,7 +44,7 @@ const RecordFinalStep: React.FC<IRecordSteps & { status: IRecordStatus }> = ({
           customStyles={{ textAlign: 'left' }}
           numberOfLines={1}
         >
-          {description || t(strings.UNKNOWN)}
+          {description || t('General.unknown')}
         </JoloText>
       </View>
     </View>

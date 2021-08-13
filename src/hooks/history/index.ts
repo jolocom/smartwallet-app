@@ -2,11 +2,12 @@ import { FlowType, Interaction } from '@jolocom/sdk'
 
 import { useAgent } from '~/hooks/sdk'
 import { IRecordDetails, IPreLoadedInteraction } from '~/types/records'
-import { getDateSection } from './utils'
+import { getDateSection, translateRecordConfig } from './utils'
 import { RecordAssembler } from '~/middleware/records/recordAssembler'
-import { recordConfig } from '~/config/records'
+import useTranslation from '../useTranslation'
 
 export const useHistory = () => {
+  const { t } = useTranslation()
   const agent = useAgent()
 
   const getSectionDetails = (interaction: Interaction) => {
@@ -14,7 +15,12 @@ export const useHistory = () => {
     const { issued } = interaction.lastMessage
     const section = getDateSection(new Date(issued))
 
-    return { type, section, lastUpdate: issued.toString(), id: interaction.id }
+    return {
+      type,
+      section,
+      lastUpdate: issued.toString(),
+      id: interaction.id,
+    }
   }
 
   const getInteractions = async (
@@ -30,9 +36,7 @@ export const useHistory = () => {
     })
 
     const groupedInteractions = allInteractions.reduce<IPreLoadedInteraction[]>(
-      (acc, intx) => {
-        return [...acc, getSectionDetails(intx)]
-      },
+      (acc, intx) => [...acc, getSectionDetails(intx)],
       [],
     )
 
@@ -64,7 +68,7 @@ export const useHistory = () => {
       summary: interaction.getSummary(),
       lastMessageDate: issued,
       expirationDate: expires,
-      config: recordConfig,
+      config: translateRecordConfig(t),
     })
 
     return recordAssembler.getRecordDetails()

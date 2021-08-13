@@ -2,15 +2,12 @@ import React, { memo } from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import { strings } from '~/translations/strings'
 import { useRecoveryState } from './module/recoveryContext'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import Btn, { BtnTypes } from '~/components/Btn'
-import { debugView } from '~/utils/dev'
+import useTranslation from '~/hooks/useTranslation'
 
 interface RecoveryInputMetadataI {
   keyHasError: boolean
@@ -18,6 +15,7 @@ interface RecoveryInputMetadataI {
 
 const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
   ({ keyHasError }) => {
+    const { t } = useTranslation()
     const redirect = useRedirect()
 
     return (
@@ -27,11 +25,12 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
             type={BtnTypes.secondary}
             withoutMargins
             customContainerStyles={{ height: 'auto' }}
+            // eslint-disable-next-line
             onPress={() => {}}
             customTextStyles={{ color: Colors.error }}
             activeOpacity={1}
           >
-            {strings.CANT_MATCH_WORD}
+            {t('Recovery.wrongWord')}
           </Btn>
         ) : (
           <Btn
@@ -44,7 +43,7 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
             withoutMargins
             customContainerStyles={{ height: 'auto' }}
           >
-            {strings.WHAT_IF_I_FORGOT}
+            {t('Recovery.forgotBtn')}
           </Btn>
         )}
       </View>

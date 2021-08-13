@@ -7,7 +7,6 @@ import { IOption } from '~/components/Selectable'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 
-import { strings } from '~/translations/strings'
 import { JoloTextSizes } from '~/utils/fonts'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
 import { Colors } from '~/utils/colors'
@@ -21,16 +20,10 @@ import { InputValidityState } from '~/components/Input/types'
 import { useAssertConnection } from '~/hooks/connection'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import { useSafeArea } from 'react-native-safe-area-context'
-
-const INQUIRIES_LIST = [
-  strings.POSSIBLE_PARTNERSHIP,
-  strings.ISSUES_WITH_THE_APP,
-  strings.I_LOST_MY_WALLET,
-  strings.HOW_TO_BECOME_PART_OF_THE_PROJECT,
-  strings.OTHER,
-]
+import useTranslation from '~/hooks/useTranslation'
 
 const ContactUs: React.FC = () => {
+  const { t } = useTranslation()
   const navigateBack = useGoBack()
   const showSuccess = useSuccess()
   const { sendContactReport } = useSentry()
@@ -42,6 +35,14 @@ const ContactUs: React.FC = () => {
 
   useAdjustResizeInputMode()
   useAssertConnection()
+
+  const INQUIRIES_LIST = [
+    t('ContactUs.issueOption_1'),
+    t('ContactUs.issueOption_2'),
+    t('ContactUs.issueOption_3'),
+    t('ContactUs.issueOption_4'),
+    t('ContactUs.issueOption_5'),
+  ]
 
   const options = useMemo(
     () =>
@@ -89,21 +90,23 @@ const ContactUs: React.FC = () => {
         keyboardShouldPersistTaps="handled"
       >
         <Section>
-          <Section.Title>
-            {strings.WHAT_WE_ARE_GOING_TO_TALK_ABOUT}
-          </Section.Title>
-          <Dropdown options={options} onSelect={handleDropdownSelect} />
+          <Section.Title>{t('ContactUs.issueHeader')}</Section.Title>
+          <Dropdown
+            placeholder={t('ContactUs.issuePlaceholder')}
+            options={options}
+            onSelect={handleDropdownSelect}
+          />
         </Section>
         <Section>
           <Section.Title customStyle={{ marginBottom: 14 }}>
-            {strings.ANYTHING_SPECIFIC_TO_MENTION}
+            {t('ContactUs.suggestionHeader')}
           </Section.Title>
           <JoloText
             size={JoloTextSizes.mini}
             kind={JoloTextKind.subtitle}
             customStyles={{ textAlign: 'left', marginBottom: 32 }}
           >
-            {strings.DARE_TO_SUGGEST_SMTH}
+            {t('ContactUs.suggestionSubheader')}
           </JoloText>
           <JoloKeyboardAwareScroll.InputContainer>
             {({ focusInput }) => (
@@ -119,7 +122,7 @@ const ContactUs: React.FC = () => {
 
         <Section customStyles={{ marginBottom: 84 }}>
           <Section.Title customStyle={{ marginBottom: 0 }}>
-            {strings.WANT_TO_GET_IN_TOUCH}
+            {t('ContactUs.contactHeader')}
           </Section.Title>
           <JoloKeyboardAwareScroll.InputContainer>
             {({ focusInput }) => (
@@ -127,7 +130,7 @@ const ContactUs: React.FC = () => {
                 validation={regexValidations[InputValidation.email]}
                 value={contactValue}
                 updateInput={setContactValue}
-                placeholder={strings.CONTACT_US_GET_IN_TOUCH}
+                placeholder={t('ContactUs.contactPlaceholder')}
                 onValidation={handleContactValidation}
                 onFocus={focusInput}
               />
@@ -140,8 +143,8 @@ const ContactUs: React.FC = () => {
             customStyles={{ textAlign: 'left', marginTop: 12 }}
           >
             {contactValid
-              ? strings.WE_DO_NOT_STORE_DATA
-              : strings.PLEASE_ENTER_A_VALID_EMAIL}
+              ? t('ContactUs.contactInputInfo')
+              : t('ErrorReporting.contactInputError')}
           </JoloText>
         </Section>
         <Btn.Online
@@ -149,7 +152,7 @@ const ContactUs: React.FC = () => {
           onPress={handleSubmit}
           disabled={!isBtnEnabled()}
         >
-          {strings.SEND}
+          {t('ContactUs.submitBtn')}
         </Btn.Online>
       </JoloKeyboardAwareScroll>
     </ScreenContainer>

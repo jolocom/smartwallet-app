@@ -11,49 +11,46 @@ import { ScreenNames } from '~/types/screens'
 
 import { useRedirect } from '~/hooks/navigation'
 import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
-import { strings } from '~/translations/strings'
 import { Colors } from '~/utils/colors'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import useTranslation from '~/hooks/useTranslation'
 
-const walkthroughData = [
-  {
-    background: Walkthrough1,
-    header: strings.WALKTHROUGH_TITLE_STEP_1,
-    paragraph: strings.WALKTHROUGH_DESCRIPTION_STEP_1,
-  },
-  {
-    background: Walkthrough2,
-    header: strings.WALKTHROUGH_TITLE_STEP_2,
-    paragraph: strings.WALKTHROUGH_DESCRIPTION_STEP_2,
-  },
-  {
-    background: Walkthrough3,
-    header: strings.WALKTHROUGH_TITLE_STEP_3,
-    paragraph: strings.WALKTHROUGH_DESCRIPTION_STEP_3,
-  },
-]
-
-const Dot: React.FC<{ active: boolean }> = ({ active }) => {
-  return (
-    <View style={styles.dot}>
-      <View style={active ? styles.activeDot : styles.inactiveDot} />
-    </View>
-  )
-}
+const Dot: React.FC<{ active: boolean }> = ({ active }) => (
+  <View style={styles.dot}>
+    <View style={active ? styles.activeDot : styles.inactiveDot} />
+  </View>
+)
 const Walkthrough: React.FC = () => {
   const redirect = useRedirect()
+  const { t } = useTranslation()
 
-  const renderPagination = (index: number, total: number) => {
-    return (
-      <View style={styles.dotContainer}>
-        {[...Array(total)].map((_, key) => (
-          <Dot key={key} active={index === key} />
-        ))}
-      </View>
-    )
-  }
+  const walkthroughData = [
+    {
+      background: Walkthrough1,
+      header: t('Walkthrough.titleOne'),
+      paragraph: t('Walkthrough.descriptionOne'),
+    },
+    {
+      background: Walkthrough2,
+      header: t('Walkthrough.titleTwo'),
+      paragraph: t('Walkthrough.descriptionTwo'),
+    },
+    {
+      background: Walkthrough3,
+      header: t('Walkthrough.titleThree'),
+      paragraph: t('Walkthrough.descriptionThree'),
+    },
+  ]
+
+  const renderPagination = (index: number, total: number) => (
+    <View style={styles.dotContainer}>
+      {[...Array(total)].map((_, key) => (
+        <Dot key={key} active={index === key} />
+      ))}
+    </View>
+  )
 
   const insets = useSafeArea()
 
@@ -126,7 +123,7 @@ const Walkthrough: React.FC = () => {
               })
             }
           >
-            {strings.GET_STARTED}
+            {t('Walkthrough.registrationBtn')}
           </Btn>
           <Btn
             size={BtnSize.large}
@@ -137,7 +134,7 @@ const Walkthrough: React.FC = () => {
               })
             }
           >
-            {strings.NEED_RESTORE}
+            {t('Walkthrough.recoveryBtn')}
           </Btn>
         </BtnGroup>
       </AbsoluteBottom>
