@@ -4,8 +4,6 @@ import {
   View,
   LayoutChangeEvent,
   Animated,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -15,7 +13,6 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import CollapsibleClone from './CollapsibleClone'
-import { useRef } from 'react'
 import useTranslation from '~/hooks/useTranslation'
 
 interface Props {
@@ -61,8 +58,6 @@ const FormContainer: React.FC<Props> = ({
       inputRange: [headerHeight / 2, headerHeight],
       outputRange: [0, 1],
     })
-
-  const formRef = useRef(null)
 
   return (
     <ScreenContainer
@@ -134,19 +129,8 @@ const FormContainer: React.FC<Props> = ({
             </TouchableOpacity>
           </View>
         )}
-        renderScroll={({ onScroll, onSnap, headerHeight }) => (
-          <Animated.ScrollView
-            ref={formRef}
-            onScroll={onScroll}
-            scrollEventThrottle={16}
-            onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
-              onSnap(e, formRef)
-            }
-            contentContainerStyle={{
-              paddingTop: headerHeight,
-            }}
-            showsVerticalScrollIndicator={false}
-          >
+        renderScroll={() => (
+          <CollapsibleClone.KeyboardAwareScroll>
             <CollapsibleClone.Title text={title} />
             <JoloText
               size={JoloTextSizes.mini}
@@ -159,7 +143,7 @@ const FormContainer: React.FC<Props> = ({
               {description}
             </JoloText>
             {children}
-          </Animated.ScrollView>
+          </CollapsibleClone.KeyboardAwareScroll>
         )}
       ></CollapsibleClone>
     </ScreenContainer>

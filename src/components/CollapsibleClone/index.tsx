@@ -12,6 +12,7 @@ import {
   ICollapsibleCloneComposite,
   ICollapsibleCloneContext,
   isFlatList,
+  isKeyboardAwareScroll,
   isScrollView,
   TTitle,
 } from './types'
@@ -21,6 +22,7 @@ import Header from './Header'
 import { CollapsibleCloneContext } from './context'
 import Scroll from './Scroll'
 import Scale from './Scale'
+import KeyboardAwareScrollView from './KeyboardAwareScroll'
 
 interface ICollapsibleClone {
   renderHeader: (
@@ -82,7 +84,12 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
     event: NativeSyntheticEvent<NativeScrollEvent>,
     passedRef?: React.RefObject<T>,
   ) => {
-    const list = passedRef ?? ref
+    /**
+     * if reference to another scroll component was passed - using it instead,
+     * to control snap from outside of Collapsible component
+     */
+    const list = passedRef?.current ? passedRef : ref
+
     const offsetY = event.nativeEvent.contentOffset.y
     if (titles.length) {
       const { startY, endY } = titles[currentTitleIdx]
@@ -93,6 +100,12 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
             list.current.scrollToOffset({
               offset: moveToY,
             })
+          } else if (isKeyboardAwareScroll(list)) {
+            list.current.scrollToPosition(
+              list.current.position.x,
+              moveToY,
+              true,
+            )
           } else if (isScrollView(list)) {
             list.current.scrollTo({
               y: moveToY,
@@ -134,6 +147,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
 CollapsibleClone.Title = Title
 CollapsibleClone.Header = Header
 CollapsibleClone.Scroll = Scroll
+CollapsibleClone.KeyboardAwareScroll = KeyboardAwareScrollView
 CollapsibleClone.Scale = Scale
 
 export default CollapsibleClone
