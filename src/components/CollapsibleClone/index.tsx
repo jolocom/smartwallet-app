@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react'
+import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -19,7 +19,7 @@ import {
   TTitle,
 } from './types'
 import { compare } from './utils'
-import { TITLE_HEIGHT, HEADER_HEIGHT } from './consts'
+import { TITLE_HEIGHT } from './consts'
 import Header from './Header'
 import { CollapsibleCloneContext } from './context'
 import Scroll from './Scroll'
@@ -43,7 +43,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
   ICollapsibleCloneComposite = ({ renderHeader, renderScroll, children }) => {
   const [currentTitleIdx, setCurrentTitleIdx] = useState(0)
   const [titles, setTitles] = useState<TTitle[]>([])
-  const [headerHeight, setHeaderHeight] = useState(HEADER_HEIGHT)
+  const [headerHeight, setHeaderHeight] = useState(0)
 
   const currentTitleText = titles.length ? titles[currentTitleIdx].label : ''
 
@@ -121,6 +121,11 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
     setTitles((prev) => [...prev, title].sort(compare))
   }, [])
 
+  const handleHeaderContainerLayout = (e: LayoutChangeEvent) => {
+    const { height } = e.nativeEvent.layout
+    setHeaderHeight(height)
+  }
+
   const contextValue = useMemo(
     () => ({
       // TODO: remove currentTitleText
@@ -135,11 +140,6 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
     }),
     [currentTitleText, headerHeight, currentTitleIdx],
   )
-
-  const handleHeaderContainerLayout = (e: LayoutChangeEvent) => {
-    const { height } = e.nativeEvent.layout
-    setHeaderHeight(height)
-  }
 
   return (
     <CollapsibleCloneContext.Provider value={contextValue}>

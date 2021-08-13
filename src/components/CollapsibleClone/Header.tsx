@@ -2,7 +2,6 @@ import React from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
-import { HEADER_HEIGHT } from './consts'
 import { useCollapsibleClone } from './context'
 
 const Header: React.FC = () => {
@@ -31,13 +30,7 @@ const Header: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 1,
-    width: '100%',
-    // children related
-    height: HEADER_HEIGHT,
+    height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: Colors.mainBlack,
