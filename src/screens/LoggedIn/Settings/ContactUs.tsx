@@ -5,7 +5,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Dropdown from './components/Dropdown'
 import { IOption } from '~/components/Selectable'
 import Btn, { BtnTypes } from '~/components/Btn'
-import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 
 import { JoloTextSizes } from '~/utils/fonts'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
@@ -21,6 +20,7 @@ import { useAssertConnection } from '~/hooks/connection'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import { useSafeArea } from 'react-native-safe-area-context'
 import useTranslation from '~/hooks/useTranslation'
+import CollapsibleClone from '~/components/CollapsibleClone'
 
 const ContactUs: React.FC = () => {
   const { t } = useTranslation()
@@ -78,83 +78,85 @@ const ContactUs: React.FC = () => {
   return (
     <ScreenContainer
       navigationStyles={{ position: 'absolute', top, zIndex: 100 }}
-      hasHeaderBack
-      customStyles={{ justifyContent: 'flex-end', flex: 1, paddingTop: 0 }}
+      customStyles={{ justifyContent: 'flex-start', flex: 1, paddingTop: 0 }}
     >
-      <JoloKeyboardAwareScroll
-        style={{ width: '100%', flexGrow: 1 }}
-        contentContainerStyle={{ paddingBottom: 36 }}
-        showsVerticalScrollIndicator={false}
-        overScrollMode="never"
-        enableOnAndroid={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Section>
-          <Section.Title>{t('ContactUs.issueHeader')}</Section.Title>
-          <Dropdown
-            placeholder={t('ContactUs.issuePlaceholder')}
-            options={options}
-            onSelect={handleDropdownSelect}
-          />
-        </Section>
-        <Section>
-          <Section.Title customStyle={{ marginBottom: 14 }}>
-            {t('ContactUs.suggestionHeader')}
-          </Section.Title>
-          <JoloText
-            size={JoloTextSizes.mini}
-            kind={JoloTextKind.subtitle}
-            customStyles={{ textAlign: 'left', marginBottom: 32 }}
+      <CollapsibleClone
+        renderHeader={() => <CollapsibleClone.Header />}
+        renderScroll={({ headerHeight }) => (
+          <CollapsibleClone.KeyboardAwareScroll
+            style={{ width: '100%', flexGrow: 1 }}
+            contentContainerStyle={{
+              paddingBottom: 36,
+              paddingTop: headerHeight,
+            }}
+            showsVerticalScrollIndicator={false}
+            overScrollMode="never"
+            enableOnAndroid={false}
+            keyboardShouldPersistTaps="handled"
           >
-            {t('ContactUs.suggestionSubheader')}
-          </JoloText>
-          <JoloKeyboardAwareScroll.InputContainer>
-            {({ focusInput }) => (
-              <Input.TextArea
-                limit={500}
-                value={detailsInput}
-                updateInput={(v) => setDetailsInput(v.trimLeft())}
-                onFocus={focusInput}
+            <Section>
+              <CollapsibleClone.Title text={t('ContactUs.issueHeader')} />
+              <Dropdown
+                placeholder={t('ContactUs.issuePlaceholder')}
+                options={options}
+                onSelect={handleDropdownSelect}
               />
-            )}
-          </JoloKeyboardAwareScroll.InputContainer>
-        </Section>
-
-        <Section customStyles={{ marginBottom: 84 }}>
-          <Section.Title customStyle={{ marginBottom: 0 }}>
-            {t('ContactUs.contactHeader')}
-          </Section.Title>
-          <JoloKeyboardAwareScroll.InputContainer>
-            {({ focusInput }) => (
-              <Input.Underline
-                validation={regexValidations[InputValidation.email]}
-                value={contactValue}
-                updateInput={setContactValue}
-                placeholder={t('ContactUs.contactPlaceholder')}
-                onValidation={handleContactValidation}
-                onFocus={focusInput}
-              />
-            )}
-          </JoloKeyboardAwareScroll.InputContainer>
-          <JoloText
-            size={JoloTextSizes.mini}
-            kind={JoloTextKind.subtitle}
-            color={contactValid ? Colors.white30 : Colors.error}
-            customStyles={{ textAlign: 'left', marginTop: 12 }}
-          >
-            {contactValid
-              ? t('ContactUs.contactInputInfo')
-              : t('ErrorReporting.contactInputError')}
-          </JoloText>
-        </Section>
-        <Btn.Online
-          type={BtnTypes.primary}
-          onPress={handleSubmit}
-          disabled={!isBtnEnabled()}
-        >
-          {t('ContactUs.submitBtn')}
-        </Btn.Online>
-      </JoloKeyboardAwareScroll>
+            </Section>
+            <Section>
+              <CollapsibleClone.Title text={t('ContactUs.suggestionHeader')} />
+              <JoloText
+                size={JoloTextSizes.mini}
+                kind={JoloTextKind.subtitle}
+                customStyles={{ textAlign: 'left', marginBottom: 32 }}
+              >
+                {t('ContactUs.suggestionSubheader')}
+              </JoloText>
+              {/* <CollapsibleClone.KeyboardAwareScroll.InputContainer>
+                {({ focusInput }) => (
+                  <Input.TextArea
+                    limit={500}
+                    value={detailsInput}
+                    updateInput={(v) => setDetailsInput(v.trimLeft())}
+                    onFocus={focusInput}
+                  />
+                )}
+              </CollapsibleClone.KeyboardAwareScroll.InputContainer> */}
+            </Section>
+            <Section customStyles={{ marginBottom: 84 }}>
+              <CollapsibleClone.Title text={t('ContactUs.contactHeader')} />
+              {/* <CollapsibleClone.KeyboardAwareScroll.InputContainer>
+                {({ focusInput }) => (
+                  <Input.Underline
+                    validation={regexValidations[InputValidation.email]}
+                    value={contactValue}
+                    updateInput={setContactValue}
+                    placeholder={t('ContactUs.contactPlaceholder')}
+                    onValidation={handleContactValidation}
+                    onFocus={focusInput}
+                  />
+                )}
+              </CollapsibleClone.KeyboardAwareScroll.InputContainer> */}
+              <JoloText
+                size={JoloTextSizes.mini}
+                kind={JoloTextKind.subtitle}
+                color={contactValid ? Colors.white30 : Colors.error}
+                customStyles={{ textAlign: 'left', marginTop: 12 }}
+              >
+                {contactValid
+                  ? t('ContactUs.contactInputInfo')
+                  : t('ErrorReporting.contactInputError')}
+              </JoloText>
+            </Section>
+            <Btn.Online
+              type={BtnTypes.primary}
+              onPress={handleSubmit}
+              disabled={!isBtnEnabled()}
+            >
+              {t('ContactUs.submitBtn')}
+            </Btn.Online>
+          </CollapsibleClone.KeyboardAwareScroll>
+        )}
+      />
     </ScreenContainer>
   )
 }
