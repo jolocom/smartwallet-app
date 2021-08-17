@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react'
+import React, { useRef, useState, useMemo, useCallback, useEffect } from 'react'
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -25,6 +25,7 @@ import { CollapsibleCloneContext } from './context'
 import Scroll from './Scroll'
 import Scale from './Scale'
 import KeyboardAwareScrollView from './KeyboardAwareScroll'
+import { Colors } from '~/utils/colors'
 
 interface ICollapsibleClone {
   renderHeader: (
@@ -41,15 +42,30 @@ interface ICollapsibleClone {
 
 const CollapsibleClone: React.FC<ICollapsibleClone> &
   ICollapsibleCloneComposite = ({ renderHeader, renderScroll, children }) => {
+  /**
+   * A support of multiple titles
+   */
   const [currentTitleIdx, setCurrentTitleIdx] = useState(0)
   const [titles, setTitles] = useState<TTitle[]>([])
-  const [headerHeight, setHeaderHeight] = useState(0)
-
   const currentTitleText = titles.length ? titles[currentTitleIdx].label : ''
+
+  const [headerHeight, setHeaderHeight] = useState(0)
 
   const ref = useRef<ScrollView>(null)
   const prevScrollPosition = useRef(0)
   const scrollY = useRef(new Animated.Value(0)).current
+
+  /**
+   * NOTE y position of the collapsible container is needed
+   * to correctly calculate position of collapsible title(-s)
+   */
+  const [containerY, setContainerY] = useState(0)
+  const collapsibleCloneRef = useRef<View>(null)
+  useEffect(() => {
+    collapsibleCloneRef.current?.measureInWindow((x, y, width, height) => {
+      setContainerY(y)
+    })
+  }, [])
 
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -61,6 +77,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
           if (titles.length) {
             // if scrolling down
             if (y > prevScrollPosition.current) {
+              // if it is not the last title
               if (currentTitleIdx !== titles.length - 1) {
                 if (y >= titles[currentTitleIdx + 1].startY) {
                   setCurrentTitleIdx((prev) => ++prev)
@@ -140,25 +157,28 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       onScroll: handleScroll, // for Scroll,
       onSnap: handleSnap, // for Scroll,
       currentTitle: titles.length ? titles[currentTitleIdx] : undefined,
+      containerY,
     }),
     [currentTitleText, headerHeight, currentTitleIdx],
   )
 
   return (
     <CollapsibleCloneContext.Provider value={contextValue}>
-      <View
-        onLayout={handleHeaderContainerLayout}
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          zIndex: 10,
-        }}
-      >
-        {renderHeader(currentTitleText, scrollY, headerHeight)}
+      <View ref={collapsibleCloneRef}>
+        <View
+          onLayout={handleHeaderContainerLayout}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            zIndex: 10,
+          }}
+        >
+          {renderHeader(currentTitleText, scrollY, headerHeight)}
+        </View>
+        {renderScroll(contextValue)}
+        {children}
       </View>
-      {renderScroll(contextValue)}
-      {children}
     </CollapsibleCloneContext.Provider>
   )
 }
