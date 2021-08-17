@@ -36,9 +36,9 @@ import {
   transparentModalOptions,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
-import CollapsibleClone from './Settings/Development/CollapsibleClone'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import { Colors } from '~/utils/colors'
+import CollapsibleTest from './Settings/Development/CollapsibleTest'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -185,7 +185,7 @@ const Main: React.FC = () => {
               />
               <MainStack.Screen
                 name={ScreenNames.CollapsibleTest}
-                component={CollapsibleClone}
+                component={CollapsibleTest}
                 options={screenTransitionSlideFromRight}
               />
               <MainStack.Screen
