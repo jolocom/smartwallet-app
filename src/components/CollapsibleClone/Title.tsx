@@ -4,13 +4,15 @@ import { TITLE_HEIGHT } from './consts'
 import { useCollapsibleClone } from './context'
 import { ICollapsibleCloneComposite } from './types'
 
+/**
+ * NOTE: layout is calculated incorrectly sometimes
+ */
 const Title: ICollapsibleCloneComposite['Title'] = ({
   text,
   customContainerStyles = {},
 }) => {
   const timesSet = useRef(0)
   const { onAddTitle, headerHeight } = useCollapsibleClone()
-
   const handleLayout = (event: LayoutChangeEvent) => {
     const { y, height } = event.nativeEvent.layout
     if (timesSet.current === 0) {
@@ -22,6 +24,7 @@ const Title: ICollapsibleCloneComposite['Title'] = ({
       timesSet.current++
     }
   }
+
   return (
     <View
       style={[styles.container, customContainerStyles]}
@@ -40,8 +43,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   titleText: {
-    borderColor: 'yellow',
-    borderWidth: 2,
     color: 'white',
     fontSize: 20,
     paddingHorizontal: 10,

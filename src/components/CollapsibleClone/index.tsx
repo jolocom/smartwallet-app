@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import React, { useRef, useState, useMemo, useCallback } from 'react'
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -75,6 +75,9 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
               }
             }
             prevScrollPosition.current = y
+
+            // TODO: add functionality of handleSnap id the scroll stops somewhere
+            // in the middle of title container.
           }
         }
       },
