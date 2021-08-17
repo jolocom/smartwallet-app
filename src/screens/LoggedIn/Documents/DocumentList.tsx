@@ -93,9 +93,10 @@ const useHandleMorePress = () => {
         navigation: {
           screen: ScreenNames.DragToConfirm,
           params: {
-            title: `${t('Documents.deleteDocumentHeader', {
-              documentName: credentialName,
-            })}`,
+            title: t('Documents.deleteDocumentHeader', {
+              documentName: `${credentialName}`,
+              interpolation: { escapeValue: false },
+            }),
             cancelText: t('Documents.cancelCardOption'),
             instructionText: t('Documents.deleteCredentialInstruction'),
             onComplete: () => handleDelete(id),

@@ -189,7 +189,7 @@
         "offerRenegotiationTitle": "Aufmerksam sein",
         "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden",
         "shareMissingDocsTitle": "Fehlende Dokumente",
-        "shareMissingDocsMsg": "${Servicename} fordert ein Dokument an, das sich nicht in deiner Wallet befindet. \nFehlt: ${documentType}",
+        "shareMissingDocsMsg": "${serviceName} fordert ein Dokument an, das sich nicht in deiner Wallet befindet. \nFehlt: ${documentType}",
         "failedStoreMsg": "Leider konnten wir deinen Passcode nicht speichern. Bitte versuche es erneut",
         "reconnectedInternetTitle": "Du bist wieder online",
         "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
