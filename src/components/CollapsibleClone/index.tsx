@@ -19,13 +19,11 @@ import {
   TTitle,
 } from './types'
 import { compare } from './utils'
-import { TITLE_HEIGHT } from './consts'
 import Header from './Header'
 import { CollapsibleCloneContext } from './context'
 import Scroll from './Scroll'
 import Scale from './Scale'
 import KeyboardAwareScrollView from './KeyboardAwareScroll'
-import { Colors } from '~/utils/colors'
 
 interface ICollapsibleClone {
   renderHeader: (
@@ -116,7 +114,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       const { startY, endY } = titles[currentTitleIdx]
       if (offsetY >= startY && offsetY <= endY) {
         if (list.current) {
-          const moveToY = offsetY < startY + TITLE_HEIGHT / 2 ? startY : endY
+          const moveToY = offsetY < startY + endY / 2 ? startY : endY
           if (isFlatList(list)) {
             list.current.scrollToOffset({
               offset: moveToY,
@@ -159,7 +157,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       currentTitle: titles.length ? titles[currentTitleIdx] : undefined,
       containerY,
     }),
-    [currentTitleText, headerHeight, currentTitleIdx],
+    [currentTitleText, headerHeight, currentTitleIdx, containerY],
   )
 
   return (

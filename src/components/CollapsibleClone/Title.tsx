@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import { useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { TITLE_HEIGHT } from './consts'
 import { useCollapsibleClone } from './context'
 import { ICollapsibleCloneComposite } from './types'
 
@@ -13,18 +12,26 @@ const Title: ICollapsibleCloneComposite['Title'] = ({
   customContainerStyles = {},
 }) => {
   const titleRef = useRef<View>(null)
-  const { onAddTitle, containerY } = useCollapsibleClone()
+  const { onAddTitle, containerY, headerHeight } = useCollapsibleClone()
 
   useEffect(() => {
-    titleRef.current?.measureInWindow((x, y, width, height) => {
-      const titlePositionInContainer = y - containerY
-      onAddTitle({
-        label: text,
-        startY: titlePositionInContainer,
-        endY: titlePositionInContainer + height,
+    if (containerY !== 0) {
+      titleRef.current?.measureInWindow((x, y, width, height) => {
+        /**
+         * to get a proper position of the title,
+         * first, we need to find the position of y within the collapsible container,
+         * which is y - containerY;
+         * secondly, we need to subtract from it header height
+         */
+        const titlePositionInContainer = y - containerY - headerHeight
+        onAddTitle({
+          label: text,
+          startY: titlePositionInContainer,
+          endY: titlePositionInContainer + height,
+        })
       })
-    })
-  }, [])
+    }
+  }, [containerY])
 
   return (
     <View style={[styles.container, customContainerStyles]} ref={titleRef}>
@@ -36,7 +43,7 @@ const Title: ICollapsibleCloneComposite['Title'] = ({
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    height: TITLE_HEIGHT,
+    height: 80,
     borderColor: 'green',
     borderWidth: 2,
   },
