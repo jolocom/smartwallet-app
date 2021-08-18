@@ -17,7 +17,10 @@ const Header: React.FC = () => {
   const headerTitleOpacity = useMemo(() => {
     if (currentTitle === undefined) return 0
     return scrollY.interpolate({
-      inputRange: [currentTitle.startY / 2, currentTitle.endY],
+      inputRange: [
+        (currentTitle.startY + currentTitle.endY) / 2,
+        currentTitle.endY,
+      ],
       outputRange: [0, 1],
     })
   }, [JSON.stringify(currentTitle)])
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: Colors.white21,
+    backgroundColor: Colors.mainBlack,
   },
   text: {
     fontSize: 20,
