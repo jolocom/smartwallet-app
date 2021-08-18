@@ -5,6 +5,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import Dropdown from './components/Dropdown'
 import { IOption } from '~/components/Selectable'
 import Btn, { BtnTypes } from '~/components/Btn'
+import JoloKeyboardAwareScroll from '~/components/JoloKeyboardAwareScroll'
 
 import { JoloTextSizes } from '~/utils/fonts'
 import { InputValidation, regexValidations } from '~/utils/stringUtils'
@@ -111,7 +112,7 @@ const ContactUs: React.FC = () => {
               >
                 {t('ContactUs.suggestionSubheader')}
               </JoloText>
-              {/* <CollapsibleClone.KeyboardAwareScroll.InputContainer>
+              <JoloKeyboardAwareScroll.InputContainer>
                 {({ focusInput }) => (
                   <Input.TextArea
                     limit={500}
@@ -120,11 +121,11 @@ const ContactUs: React.FC = () => {
                     onFocus={focusInput}
                   />
                 )}
-              </CollapsibleClone.KeyboardAwareScroll.InputContainer> */}
+              </JoloKeyboardAwareScroll.InputContainer>
             </Section>
             <Section customStyles={{ marginBottom: 84 }}>
               <CollapsibleClone.Title text={t('ContactUs.contactHeader')} />
-              {/* <CollapsibleClone.KeyboardAwareScroll.InputContainer>
+              <JoloKeyboardAwareScroll.InputContainer>
                 {({ focusInput }) => (
                   <Input.Underline
                     validation={regexValidations[InputValidation.email]}
@@ -135,7 +136,7 @@ const ContactUs: React.FC = () => {
                     onFocus={focusInput}
                   />
                 )}
-              </CollapsibleClone.KeyboardAwareScroll.InputContainer> */}
+              </JoloKeyboardAwareScroll.InputContainer>
               <JoloText
                 size={JoloTextSizes.mini}
                 kind={JoloTextKind.subtitle}
