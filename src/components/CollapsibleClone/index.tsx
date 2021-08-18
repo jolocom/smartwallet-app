@@ -167,7 +167,10 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
 
   return (
     <CollapsibleCloneContext.Provider value={contextValue}>
-      <View ref={collapsibleCloneRef}>
+      {/* NOTE: `collapsible` props makes sure that view is being drawn
+       * https://reactnative.dev/docs/view#collapsable
+       */}
+      <View ref={collapsibleCloneRef} collapsable={false}>
         <View
           onLayout={handleHeaderContainerLayout}
           style={{
