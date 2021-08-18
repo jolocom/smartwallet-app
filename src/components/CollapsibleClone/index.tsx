@@ -26,15 +26,7 @@ import Scale from './Scale'
 import KeyboardAwareScrollView from './KeyboardAwareScroll'
 
 interface ICollapsibleClone {
-  renderHeader: (
-    currentTitle: string,
-    scrollY: Animated.Value,
-    /**
-     * NOTE: it is important to calculate header height and set it
-     * to correctly pad scroll view
-     */
-    headerHeight: number,
-  ) => React.ReactElement | null
+  renderHeader: (context: ICollapsibleCloneContext) => React.ReactElement | null
   renderScroll: (context: ICollapsibleCloneContext) => React.ReactElement | null
 }
 
@@ -57,7 +49,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
    * NOTE y position of the collapsible container is needed
    * to correctly calculate position of collapsible title(-s)
    */
-  const [containerY, setContainerY] = useState(0)
+  const [containerY, setContainerY] = useState<number | undefined>(undefined)
   const collapsibleCloneRef = useRef<View>(null)
   useEffect(() => {
     collapsibleCloneRef.current?.measureInWindow((x, y, width, height) => {
@@ -178,9 +170,11 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
             left: 0,
             right: 0,
             zIndex: 10,
+            // borderColor: 'yellow',
+            // borderWidth: 2,
           }}
         >
-          {renderHeader(currentTitleText, scrollY, headerHeight)}
+          {renderHeader(contextValue)}
         </View>
         {renderScroll(contextValue)}
         {children}

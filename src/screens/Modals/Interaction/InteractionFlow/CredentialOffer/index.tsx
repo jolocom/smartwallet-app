@@ -30,6 +30,7 @@ import {
 import Space from '~/components/Space'
 import CollapsibleClone from '~/components/CollapsibleClone'
 import useTranslation from '~/hooks/useTranslation'
+import ScreenContainer from '~/components/ScreenContainer'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -124,17 +125,21 @@ const CredentialOfferFAS = () => {
                 <InteractionLogo />
               </LogoContainerFAS>
             </CollapsibleClone.Scale>
-            <CollapsibleClone.Title text={t('CredentialOffer.header')} />
+            <CollapsibleClone.Title text={t('CredentialOffer.header')}>
+              <InteractionTitle label={t('CredentialOffer.header')} />
+            </CollapsibleClone.Title>
             <InteractionDescription
               label={t('CredentialOffer.subheader', { serviceName: name })}
             />
             <Space />
-            <InteractionSection title={t('Documents.documentsTab')}>
-              {handleRenderCredentials(documents)}
-            </InteractionSection>
-            <InteractionSection title={t('Documents.othersTab')}>
-              {handleRenderCredentials(other)}
-            </InteractionSection>
+            <ScreenContainer.Padding>
+              <InteractionSection title={t('Documents.documentsTab')}>
+                {handleRenderCredentials(documents)}
+              </InteractionSection>
+              <InteractionSection title={t('Documents.othersTab')}>
+                {handleRenderCredentials(other)}
+              </InteractionSection>
+            </ScreenContainer.Padding>
           </CollapsibleClone.Scroll>
         </ContainerFAS>
       )}

@@ -13,6 +13,7 @@ import JoloText, {
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
+import { Dimensions } from 'react-native'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -159,7 +160,8 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   padding: {
-    width: '100%',
+    // TODO: double check in places that use ScreenContainer.Padding
+    width: Dimensions.get('window').width,
     paddingHorizontal: 16,
   },
 })

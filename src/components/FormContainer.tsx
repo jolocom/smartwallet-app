@@ -9,6 +9,7 @@ import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import CollapsibleClone from './CollapsibleClone'
 import useTranslation from '~/hooks/useTranslation'
+import { TTitle } from './CollapsibleClone/types'
 
 interface Props {
   title: string
@@ -39,15 +40,21 @@ const FormContainer: React.FC<Props> = ({
 
   const getHeaderTitleOpacity = (
     scrollY: Animated.Value,
-    headerHeight: number,
-  ) =>
-    scrollY.interpolate({
-      inputRange: [headerHeight / 2, headerHeight],
+    currentTitle: TTitle | undefined,
+  ) => {
+    if (currentTitle === undefined) return 0
+    return scrollY.interpolate({
+      inputRange: [
+        (currentTitle.startY + currentTitle.endY) / 2,
+        currentTitle.endY,
+      ],
       outputRange: [0, 1],
     })
+  }
 
   return (
     <ScreenContainer
+      backgroundColor={Colors.codGrey}
       customStyles={{
         justifyContent: 'flex-start',
         flex: 1,
@@ -55,7 +62,7 @@ const FormContainer: React.FC<Props> = ({
       }}
     >
       <CollapsibleClone
-        renderHeader={(currentTitleText, scrollY, headerHeight) => (
+        renderHeader={({ currentTitleText, scrollY, currentTitle }) => (
           <View
             style={{
               flexDirection: 'row',
@@ -79,7 +86,7 @@ const FormContainer: React.FC<Props> = ({
             <View style={{ paddingHorizontal: 8 }}>
               <Animated.Text
                 style={{
-                  opacity: getHeaderTitleOpacity(scrollY, headerHeight),
+                  opacity: getHeaderTitleOpacity(scrollY, currentTitle),
                   color: 'white',
                 }}
               >
@@ -111,7 +118,9 @@ const FormContainer: React.FC<Props> = ({
               paddingTop: headerHeight,
             }}
           >
-            <CollapsibleClone.Title text={title} />
+            <CollapsibleClone.Title text={title}>
+              <JoloText kind={JoloTextKind.title}>{title}</JoloText>
+            </CollapsibleClone.Title>
             <JoloText
               size={JoloTextSizes.mini}
               customStyles={{
@@ -122,7 +131,7 @@ const FormContainer: React.FC<Props> = ({
             >
               {description}
             </JoloText>
-            {children}
+            <ScreenContainer.Padding>{children}</ScreenContainer.Padding>
           </CollapsibleClone.KeyboardAwareScroll>
         )}
       ></CollapsibleClone>

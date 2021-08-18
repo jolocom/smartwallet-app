@@ -25,7 +25,7 @@ export interface ICollapsibleCloneContext {
     ref?: React.RefObject<ScrollView | FlatList>,
   ) => void
   currentTitle: TTitle | undefined
-  containerY: number
+  containerY: number | undefined
 }
 
 interface ITitle {

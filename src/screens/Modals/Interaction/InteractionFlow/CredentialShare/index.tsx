@@ -48,6 +48,7 @@ import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
+import ScreenContainer from '~/components/ScreenContainer'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -254,16 +255,14 @@ const CredentialShareFAS = () => {
                 <InteractionLogo />
               </LogoContainerFAS>
             </CollapsibleClone.Scale>
-            {/* <ScreenContainer.Padding> */}
-            <CollapsibleClone.Title text={t('CredentialRequest.header')} />
-            {/* </ScreenContainer.Padding> */}
-            {/* <ScreenContainer.Padding> */}
+            <CollapsibleClone.Title text={t('CredentialRequest.header')}>
+              <InteractionTitle label={t('CredentialRequest.header')} />
+            </CollapsibleClone.Title>
             <InteractionDescription label={t('CredentialRequest.subheader')} />
-            {/* </ScreenContainer.Padding> */}
             <Space />
-            {/* <ScreenContainer.Padding> */}
-            <ShareAttributeWidget withContainer />
-            {/* </ScreenContainer.Padding> */}
+            <ScreenContainer.Padding>
+              <ShareAttributeWidget withContainer />
+            </ScreenContainer.Padding>
             <InteractionSection
               title={t('Documents.documentsTab')}
               isPaddedTitle={true}

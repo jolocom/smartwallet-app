@@ -9,6 +9,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import CollapsibleClone from '~/components/CollapsibleClone'
+import Section from './Section'
 
 interface Props {
   locale: string
@@ -60,7 +61,13 @@ const LegalTextWrapper: React.FC<Props> = ({
                 paddingBottom: '30%',
               }}
             >
-              <CollapsibleClone.Title text={title} />
+              <CollapsibleClone.Title text={title}>
+                <Section.Title
+                  customStyle={{ marginBottom: 16, marginTop: 16 }}
+                >
+                  {title}
+                </Section.Title>
+              </CollapsibleClone.Title>
               <JoloText
                 color={Colors.white80}
                 kind={JoloTextKind.subtitle}

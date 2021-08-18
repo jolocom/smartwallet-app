@@ -13,8 +13,8 @@ import CollapsibleClone from '~/components/CollapsibleClone'
 
 type TFAQItem = { question: string; answer: string }
 import useTranslation from '~/hooks/useTranslation'
+import Section from './components/Section'
 
-// TODO: FAQ isn't snapping correctly
 const FAQ = () => {
   const listRef = useRef<FlatList>(null)
   const { t } = useTranslation()
@@ -47,7 +47,11 @@ const FAQ = () => {
   }
 
   function renderTitle() {
-    return <CollapsibleClone.Title text={t('FAQ.header')} />
+    return (
+      <CollapsibleClone.Title text={t('FAQ.header')}>
+        <Section.Title>{t('FAQ.header')}</Section.Title>
+      </CollapsibleClone.Title>
+    )
   }
 
   return (
@@ -61,35 +65,37 @@ const FAQ = () => {
       <CollapsibleClone
         renderHeader={() => <CollapsibleClone.Header />}
         renderScroll={({ headerHeight, onScroll, onSnap }) => (
-          <Animated.FlatList
-            ref={listRef}
-            ListHeaderComponent={renderTitle()}
-            data={faqArray}
-            overScrollMode={'never'}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingTop: headerHeight,
-            }}
-            renderItem={({
-              item,
-              index,
-            }: {
-              item: TFAQItem
-              index: number
-            }) => (
-              <BlockExpanded
-                key={index}
-                title={item.question}
-                expandedText={item.answer}
-                onExpand={() => handleExpand(listRef, index)}
-              />
-            )}
-            onScroll={onScroll}
-            onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
-              onSnap(e, listRef)
-            }
-            keyExtractor={(_: TFAQItem, index: number) => index.toString()}
-          />
+          <ScreenContainer.Padding>
+            <Animated.FlatList
+              ref={listRef}
+              ListHeaderComponent={renderTitle()}
+              data={faqArray}
+              overScrollMode={'never'}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingTop: headerHeight,
+              }}
+              renderItem={({
+                item,
+                index,
+              }: {
+                item: TFAQItem
+                index: number
+              }) => (
+                <BlockExpanded
+                  key={index}
+                  title={item.question}
+                  expandedText={item.answer}
+                  onExpand={() => handleExpand(listRef, index)}
+                />
+              )}
+              onScroll={onScroll}
+              onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
+                onSnap(e, listRef)
+              }
+              keyExtractor={(_: TFAQItem, index: number) => index.toString()}
+            />
+          </ScreenContainer.Padding>
         )}
       />
     </ScreenContainer>
