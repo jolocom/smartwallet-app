@@ -65,9 +65,8 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
     })
   }, [])
 
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    {
+  const handleScroll = useCallback(
+    Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
       useNativeDriver: true,
       listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const { y } = event.nativeEvent.contentOffset
@@ -75,7 +74,6 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
           if (titles.length) {
             // if scrolling down
             if (y > prevScrollPosition.current) {
-              // if it is not the last title
               if (currentTitleIdx !== titles.length - 1) {
                 if (y >= titles[currentTitleIdx + 1].startY) {
                   setCurrentTitleIdx((prev) => ++prev)
@@ -96,7 +94,8 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
           }
         }
       },
-    },
+    }),
+    [JSON.stringify(titles), currentTitleIdx],
   )
 
   const handleSnap = <T extends ScrollView | FlatList>(
@@ -114,7 +113,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       const { startY, endY } = titles[currentTitleIdx]
       if (offsetY >= startY && offsetY <= endY) {
         if (list.current) {
-          const moveToY = offsetY < startY + endY / 2 ? startY : endY
+          const moveToY = offsetY < (startY + endY) / 2 ? startY : endY
           if (isFlatList(list)) {
             list.current.scrollToOffset({
               offset: moveToY,
@@ -157,7 +156,13 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       currentTitle: titles.length ? titles[currentTitleIdx] : undefined,
       containerY,
     }),
-    [currentTitleText, headerHeight, currentTitleIdx, containerY],
+    [
+      currentTitleText,
+      headerHeight,
+      currentTitleIdx,
+      containerY,
+      JSON.stringify(titles),
+    ],
   )
 
   return (
