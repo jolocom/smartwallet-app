@@ -38,6 +38,7 @@ const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
         numberOfLines={1}
         style={[
           styles.text,
+          type === undefined && { textAlign: 'center' },
           {
             flex: 0.5,
             opacity: headerTitleOpacity,
