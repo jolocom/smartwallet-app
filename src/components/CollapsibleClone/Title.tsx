@@ -35,7 +35,11 @@ const Title: ICollapsibleCloneComposite['Title'] = ({
   }, [containerY])
 
   return (
-    <View style={[styles.container, customContainerStyles]} ref={titleRef}>
+    <View
+      style={[styles.container, customContainerStyles]}
+      ref={titleRef}
+      renderToHardwareTextureAndroid
+    >
       {children}
     </View>
   )
