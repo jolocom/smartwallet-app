@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useEffect } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, findNodeHandle } from 'react-native'
 import { useCollapsibleClone } from './context'
 import { ICollapsibleCloneComposite } from './types'
 
@@ -13,26 +13,28 @@ const Title: ICollapsibleCloneComposite['Title'] = ({
   children,
 }) => {
   const titleRef = useRef<View>(null)
-  const { onAddTitle, containerY, headerHeight } = useCollapsibleClone()
+  const { onAddTitle, headerHeight, collapsibleCloneRef } =
+    useCollapsibleClone()
 
   useEffect(() => {
-    if (containerY !== undefined) {
-      titleRef.current?.measureInWindow((x, y, width, height) => {
-        /**
-         * to get a proper position of the title,
-         * first, we need to find the position of y within the collapsible container,
-         * which is y - containerY;
-         * secondly, we need to subtract from it header height
-         */
-        const titlePositionInContainer = y - containerY - headerHeight
-        onAddTitle({
-          label: text,
-          startY: titlePositionInContainer,
-          endY: titlePositionInContainer + height,
-        })
-      })
+    if (collapsibleCloneRef.current !== null) {
+      titleRef.current?.measureLayout(
+        findNodeHandle(collapsibleCloneRef.current)!,
+        (x, y, width, height) => {
+          const titlePosition = y - headerHeight
+          onAddTitle({
+            label: text,
+            startY: titlePosition,
+            endY: titlePosition + height,
+          })
+        },
+        () => {
+          // TODO: find a better way to handle this error
+          console.log('Failed measuring title')
+        },
+      )
     }
-  }, [containerY])
+  }, [])
 
   return (
     <View

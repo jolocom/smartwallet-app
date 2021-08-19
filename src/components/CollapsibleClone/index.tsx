@@ -45,17 +45,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
   const prevScrollPosition = useRef(0)
   const scrollY = useRef(new Animated.Value(0)).current
 
-  /**
-   * NOTE y position of the collapsible container is needed
-   * to correctly calculate position of collapsible title(-s)
-   */
-  const [containerY, setContainerY] = useState<number | undefined>(undefined)
   const collapsibleCloneRef = useRef<View>(null)
-  useEffect(() => {
-    collapsibleCloneRef.current?.measureInWindow((x, y, width, height) => {
-      setContainerY(y)
-    })
-  }, [])
 
   const handleScroll = useCallback(
     Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
@@ -146,15 +136,9 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       onScroll: handleScroll, // for Scroll,
       onSnap: handleSnap, // for Scroll,
       currentTitle: titles.length ? titles[currentTitleIdx] : undefined,
-      containerY,
+      collapsibleCloneRef,
     }),
-    [
-      currentTitleText,
-      headerHeight,
-      currentTitleIdx,
-      containerY,
-      JSON.stringify(titles),
-    ],
+    [currentTitleText, headerHeight, currentTitleIdx, JSON.stringify(titles)],
   )
 
   return (

@@ -8,6 +8,7 @@ import {
   NativeScrollEvent,
   ViewStyle,
   StyleProp,
+  View,
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { NavHeaderType } from '../NavigationHeader'
@@ -26,7 +27,7 @@ export interface ICollapsibleCloneContext {
     ref?: React.RefObject<ScrollView | FlatList>,
   ) => void
   currentTitle: TTitle | undefined
-  containerY: number | undefined
+  collapsibleCloneRef: React.RefObject<View>
 }
 
 interface ITitle {
@@ -38,10 +39,14 @@ interface IHeader {
   type?: NavHeaderType
 }
 
+interface IScroll extends ScrollViewProps {
+  containerStyles: StyleProp<ViewStyle>
+}
+
 export interface ICollapsibleCloneComposite {
   Title: React.FC<ITitle>
   Header: React.FC<IHeader>
-  Scroll: React.FC<ScrollViewProps>
+  Scroll: React.FC<IScroll>
   KeyboardAwareScroll: React.FC<ScrollViewProps>
   Scale: React.FC
 }
