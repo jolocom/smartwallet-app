@@ -10,6 +10,7 @@ import {
   StyleProp,
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { NavHeaderType } from '../NavigationHeader'
 
 export type TTitle = { label: string; startY: number; endY: number }
 
@@ -33,9 +34,13 @@ interface ITitle {
   customContainerStyles?: StyleProp<ViewStyle>
 }
 
+interface IHeader {
+  type?: NavHeaderType
+}
+
 export interface ICollapsibleCloneComposite {
   Title: React.FC<ITitle>
-  Header: React.FC
+  Header: React.FC<IHeader>
   Scroll: React.FC<ScrollViewProps>
   KeyboardAwareScroll: React.FC<ScrollViewProps>
   Scale: React.FC

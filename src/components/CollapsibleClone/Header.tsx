@@ -2,9 +2,10 @@ import React from 'react'
 import { useMemo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import NavigationHeader from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
 import { useCollapsibleClone } from './context'
+import { ICollapsibleCloneComposite } from './types'
 
 /**
  *
@@ -13,7 +14,7 @@ import { useCollapsibleClone } from './context'
  * on scroll
  * -> changing opacity of the header text when scrolling
  */
-const Header: React.FC = () => {
+const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
   const { currentTitleText, scrollY, currentTitle } = useCollapsibleClone()
   const headerTitleOpacity = useMemo(() => {
     if (currentTitle === undefined) return 0
@@ -30,7 +31,7 @@ const Header: React.FC = () => {
 
   return (
     <NavigationHeader
-      type={NavHeaderType.Back}
+      type={type}
       customStyles={[styles.container, { paddingTop: top, height: 50 + top }]}
     >
       <Animated.Text

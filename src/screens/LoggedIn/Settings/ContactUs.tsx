@@ -21,6 +21,7 @@ import { useAssertConnection } from '~/hooks/connection'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
 import CollapsibleClone from '~/components/CollapsibleClone'
+import { NavHeaderType } from '~/components/NavigationHeader'
 
 const ContactUs: React.FC = () => {
   const { t } = useTranslation()
@@ -84,7 +85,9 @@ const ContactUs: React.FC = () => {
       }}
     >
       <CollapsibleClone
-        renderHeader={() => <CollapsibleClone.Header />}
+        renderHeader={() => (
+          <CollapsibleClone.Header type={NavHeaderType.Back} />
+        )}
         renderScroll={({ headerHeight }) => (
           <ScreenContainer.Padding>
             <CollapsibleClone.KeyboardAwareScroll

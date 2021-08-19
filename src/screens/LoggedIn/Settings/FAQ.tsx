@@ -14,6 +14,7 @@ import CollapsibleClone from '~/components/CollapsibleClone'
 type TFAQItem = { question: string; answer: string }
 import useTranslation from '~/hooks/useTranslation'
 import Section from './components/Section'
+import { NavHeaderType } from '~/components/NavigationHeader'
 
 const FAQ = () => {
   const listRef = useRef<FlatList>(null)
@@ -63,7 +64,9 @@ const FAQ = () => {
       }}
     >
       <CollapsibleClone
-        renderHeader={() => <CollapsibleClone.Header />}
+        renderHeader={() => (
+          <CollapsibleClone.Header type={NavHeaderType.Back} />
+        )}
         renderScroll={({ headerHeight, onScroll, onSnap }) => (
           <ScreenContainer.Padding>
             <Animated.FlatList
