@@ -5,16 +5,14 @@ import { ICollapsibleCloneComposite } from './types'
 
 const Scroll: ICollapsibleCloneComposite['Scroll'] = ({
   children,
+  containerStyles,
   ...scrollProps
 }) => {
   const { headerHeight, scrollRef, onScroll, onSnap } = useCollapsibleClone()
   return (
     <Animated.ScrollView
       ref={scrollRef}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-      }}
-      style={{ width: '100%' }}
+      contentContainerStyle={[{ paddingTop: headerHeight }, containerStyles]}
       onScroll={onScroll}
       scrollEventThrottle={16}
       onScrollEndDrag={onSnap}

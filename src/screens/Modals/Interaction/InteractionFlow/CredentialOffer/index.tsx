@@ -119,7 +119,7 @@ const CredentialOfferFAS = () => {
       renderHeader={() => <CollapsibleClone.Header />}
       renderScroll={() => (
         <ContainerFAS>
-          <CollapsibleClone.Scroll>
+          <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
             <CollapsibleClone.Scale>
               <LogoContainerFAS>
                 <InteractionLogo />

@@ -8,8 +8,6 @@ const Scale: ICollapsibleCloneComposite['Scale'] = ({ children }) => {
   const { scrollY, currentTitle } = useCollapsibleClone()
 
   const getScale = useCallback(() => {
-    console.log({ currentTitle })
-
     if (currentTitle === undefined) return 1
     return scrollY.interpolate({
       inputRange: [0, currentTitle.startY],

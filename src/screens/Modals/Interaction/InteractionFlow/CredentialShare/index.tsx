@@ -242,14 +242,9 @@ const CredentialShareFAS = () => {
   return (
     <CollapsibleClone
       renderHeader={() => <CollapsibleClone.Header />}
-      renderScroll={({ headerHeight }) => (
+      renderScroll={() => (
         <ContainerFAS>
-          <CollapsibleClone.Scroll
-            contentContainerStyle={{
-              paddingTop: headerHeight,
-              paddingBottom: '50%',
-            }}
-          >
+          <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
             <CollapsibleClone.Scale>
               <LogoContainerFAS>
                 <InteractionLogo />

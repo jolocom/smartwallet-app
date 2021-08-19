@@ -10,6 +10,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import CollapsibleClone from '~/components/CollapsibleClone'
 import Section from './Section'
+import { NavHeaderType } from '~/components/NavigationHeader'
 
 interface Props {
   locale: string
@@ -52,12 +53,13 @@ const LegalTextWrapper: React.FC<Props> = ({
       }}
     >
       <CollapsibleClone
-        renderHeader={() => <CollapsibleClone.Header />}
-        renderScroll={({ headerHeight }) => (
+        renderHeader={() => (
+          <CollapsibleClone.Header type={NavHeaderType.Back} />
+        )}
+        renderScroll={() => (
           <ScreenContainer.Padding>
             <CollapsibleClone.Scroll
-              contentContainerStyle={{
-                paddingTop: headerHeight,
+              containerStyles={{
                 paddingBottom: '30%',
               }}
             >
