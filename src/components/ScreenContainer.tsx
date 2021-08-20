@@ -87,10 +87,10 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
                     marginTop: SCREEN_HEADER_HEIGHT,
                   }),
                 paddingBottom: isFullscreen ? 0 : bottom,
+                marginBottom: -bottom,
               },
               {
                 ...(isFullscreen && {
-                  marginBottom: -bottom,
                   ...styles.fullscreen,
                 }),
               },
