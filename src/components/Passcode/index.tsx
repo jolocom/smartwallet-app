@@ -15,6 +15,12 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
 
+  /**
+   * TODO: Nr of attempts will vary
+   * based on an attempt cycle
+   */
+  const [pinAttempts, setPinAttempts] = useState(3)
+
   const handleSubmit = async () => {
     try {
       await onSubmit(pin)
@@ -37,11 +43,24 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   // this will remove the error after 1000 ms
   useEffect(() => {
+    let id: number | undefined
     if (pinError) {
-      setTimeout(() => {
-        setPinError(false)
-        setPin('')
+      setPinAttempts((prev) => --prev)
+      id = setTimeout(() => {
+        /**
+         * NOTE at this point pinAttempts is still an old value,
+         * therefore we compare with 1 not 0
+         */
+        if (pinAttempts > 1) {
+          setPinError(false)
+          setPin('')
+        }
       }, 1000)
+    }
+    return () => {
+      if (id) {
+        clearTimeout(id)
+      }
     }
   }, [pinError])
 
