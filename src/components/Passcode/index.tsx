@@ -9,11 +9,19 @@ import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
 import { Colors } from '~/utils/colors'
 import { SettingKeys, useSettings } from '~/hooks/settings'
+import JoloText, { JoloTextKind } from '../JoloText'
+import Space from '../Space'
+import { Fonts, JoloTextSizes } from '~/utils/fonts'
+import BtnGroup from '../BtnGroup'
+import Btn, { BtnTypes } from '../Btn'
+import ScreenContainer from '../ScreenContainer'
+import AbsoluteBottom from '../AbsoluteBottom'
 
 const PIN_ATTEMPTS = 3
 const PIN_ATTEMPTS_CYCLES = 3
 const INITIAL_COUNTDOWN = 20 * 1
 
+// TODO: translation
 const useDisableApp = (pinError: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
   /**
@@ -38,6 +46,16 @@ const useDisableApp = (pinError: boolean) => {
     set(SettingKeys.pinNrAttemptsLeft, { value })
 
   const [isRestoreAccess, setIsRestoreAccess] = useState(false)
+
+  /**
+   * reset stored value back to initial PIN_ATTEMPTS_CYCLES nr
+   * TODO: remove after full implementation
+   */
+  // useEffect(() => {
+  //   ;(async () => {
+  //     await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+  //   })()
+  // }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -220,28 +238,81 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     [pin, setPin, pinError, pinSuccess],
   )
 
+  // eslint-disable-next-line
+  const handleAccessRestore = () => {}
+
   return (
     <>
       <PasscodeContext.Provider value={contextValue} children={children} />
       <Modal
-        animationType="none"
+        animationType="fade"
         transparent
         visible={isAppDisabled}
         statusBarTranslucent
       >
         <View
           style={{
-            backgroundColor: Colors.black80,
+            backgroundColor: Colors.black90,
             flex: 1,
-            justifyContent: 'center',
             alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           {startCountdown && (
-            <Text style={{ color: Colors.white }}>{countdown}</Text>
+            <View style={{ alignSelf: 'center', marginHorizontal: 25 }}>
+              <JoloText
+                kind={JoloTextKind.title}
+                color={Colors.white85}
+                customStyles={{ fontFamily: Fonts.Regular }}
+              >
+                Your wallet is disabled for security reasons
+              </JoloText>
+              <Space height={17} />
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontSize: 18,
+                  lineHeight: 18,
+                  textAlign: 'center',
+                  fontFamily: Fonts.Regular,
+                }}
+              >
+                Try again in{' '}
+                <Text style={{ color: Colors.error }}>{countdown}</Text>
+              </Text>
+            </View>
           )}
           {isRestoreAccess && (
-            <Text style={{ color: Colors.error }}>Restore</Text>
+            <View style={{ alignSelf: 'center' }}>
+              <JoloText
+                kind={JoloTextKind.title}
+                color={Colors.white85}
+                customStyles={{
+                  marginHorizontal: 25,
+                  fontFamily: Fonts.Regular,
+                }}
+              >
+                You have reached the limit of your attempts
+              </JoloText>
+            </View>
+          )}
+          {isRestoreAccess && (
+            <AbsoluteBottom>
+              <ScreenContainer.Padding>
+                <BtnGroup>
+                  <Btn onPress={handleAccessRestore} type={BtnTypes.primary}>
+                    Restore Access
+                  </Btn>
+                  <Space height={12} />
+                  <JoloText
+                    size={JoloTextSizes.tiniest}
+                    customStyles={{ color: Colors.white70 }}
+                  >
+                    Setting a new passcode will not affect your stored data
+                  </JoloText>
+                </BtnGroup>
+              </ScreenContainer.Padding>
+            </AbsoluteBottom>
           )}
         </View>
       </Modal>
