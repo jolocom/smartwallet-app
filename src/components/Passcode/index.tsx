@@ -8,9 +8,11 @@ import { PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
 import { Colors } from '~/utils/colors'
+import { SettingKeys, useSettings } from '~/hooks/settings'
 
 const PIN_ATTEMPTS = 3
-const INITIAL_COUNTDOWN = 60 * 1
+const PIN_ATTEMPTS_CYCLES = 3
+const INITIAL_COUNTDOWN = 20 * 1
 
 const useDisableApp = (pinError: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
@@ -26,6 +28,34 @@ const useDisableApp = (pinError: boolean) => {
    */
   const [pinAttemptsLeft, setPinAttemptsLeft] = useState(PIN_ATTEMPTS)
 
+  const [attemptCyclesLeft, setAttemptCyclesLeft] =
+    useState<number | undefined>(undefined)
+  const { get, set } = useSettings()
+  const getPinNrAttemptCyclesLeft = async (): Promise<
+    { value: number } | undefined
+  > => get(SettingKeys.pinNrAttemptsLeft)
+  const storePinNrAttemptCyclesLeft = async (value: number) =>
+    set(SettingKeys.pinNrAttemptsLeft, { value })
+
+  const [isRestoreAccess, setIsRestoreAccess] = useState(false)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const response = await getPinNrAttemptCyclesLeft()
+        if (response?.value !== undefined) {
+          setAttemptCyclesLeft(response.value)
+        } else {
+          // initialize nr of pin attempt cycles left
+          await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+          setAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+        }
+      } catch (e) {
+        console.log('Error retrieving or storing nr of pin attempt cycles left')
+      }
+    })()
+  }, [])
+
   // count amount of wrong pins provided
   useEffect(() => {
     if (pinError) {
@@ -33,44 +63,69 @@ const useDisableApp = (pinError: boolean) => {
     }
   }, [pinError])
 
-  // disable the app when no attempt are left
+  // disable the app when no attempt is left
   useEffect(() => {
     if (pinAttemptsLeft === 0) {
+      ;(async () => {
+        if (attemptCyclesLeft) {
+          await storePinNrAttemptCyclesLeft(attemptCyclesLeft - 1)
+          setAttemptCyclesLeft(attemptCyclesLeft - 1)
+        }
+      })()
       setIsAppDisabled(true)
+      setStartCountdown(true)
     }
   }, [pinAttemptsLeft])
 
   // countdown
   useEffect(() => {
     let countdownId: number | undefined
+    const clearCountdown = (id: number | undefined) => {
+      if (id) {
+        clearInterval(id)
+      }
+    }
     if (startCountdown) {
       countdownId = setInterval(() => {
         setCountdown((prev) => --prev)
       }, 1000)
+    } else {
+      clearCountdown(countdownId)
     }
     return () => {
-      if (countdownId) {
-        clearInterval(countdownId)
-      }
+      clearCountdown(countdownId)
     }
   }, [startCountdown])
 
   // enable app when the countdown expired
   useEffect(() => {
     if (countdown === 0) {
-      // TODO: check if this is not the last attempt cycle
-      setIsAppDisabled(false)
+      if (attemptCyclesLeft && attemptCyclesLeft > 0) {
+        setIsAppDisabled(false)
+      }
     }
-  }, [countdown])
+  }, [countdown, attemptCyclesLeft])
+
+  useEffect(() => {
+    if (attemptCyclesLeft === 0) {
+      setIsAppDisabled(true)
+      setIsRestoreAccess(true)
+    }
+  }, [attemptCyclesLeft])
+
+  // disable countdown
+  useEffect(() => {
+    if (isRestoreAccess) {
+      setStartCountdown(false)
+    }
+  }, [isRestoreAccess])
 
   /**
    * start countdown when the app is disabled
    * reset countdown when the app is enabled
    */
   useEffect(() => {
-    if (isAppDisabled) {
-      setStartCountdown(true)
-    } else {
+    if (!isAppDisabled) {
       /**
        * TODO: Nr of minutes will vary
        * based on an attempt cycle
@@ -81,7 +136,13 @@ const useDisableApp = (pinError: boolean) => {
     }
   }, [isAppDisabled])
 
-  return { isAppDisabled, pinAttemptsLeft, countdown }
+  return {
+    isAppDisabled,
+    pinAttemptsLeft,
+    countdown,
+    isRestoreAccess,
+    startCountdown,
+  }
 }
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
@@ -92,7 +153,13 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
 
-  const { isAppDisabled, pinAttemptsLeft, countdown } = useDisableApp(pinError)
+  const {
+    isAppDisabled,
+    pinAttemptsLeft,
+    countdown,
+    isRestoreAccess,
+    startCountdown,
+  } = useDisableApp(pinError)
 
   const handleSubmit = async () => {
     try {
@@ -170,7 +237,12 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
             alignItems: 'center',
           }}
         >
-          <Text style={{ color: Colors.white }}>{countdown}</Text>
+          {startCountdown && (
+            <Text style={{ color: Colors.white }}>{countdown}</Text>
+          )}
+          {isRestoreAccess && (
+            <Text style={{ color: Colors.error }}>Restore</Text>
+          )}
         </View>
       </Modal>
     </>
