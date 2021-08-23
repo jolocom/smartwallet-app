@@ -12,7 +12,7 @@ import { Colors } from '~/utils/colors'
 const PIN_ATTEMPTS = 3
 const INITIAL_COUNTDOWN = 60 * 1
 
-const useDisabledApp = (pinError: boolean) => {
+const useDisableApp = (pinError: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
   /**
    * TODO: Nr of minutes will vary
@@ -24,21 +24,21 @@ const useDisabledApp = (pinError: boolean) => {
    * TODO: Nr of attempts will vary
    * based on an attempt cycle
    */
-  const [pinAttempts, setPinAttempts] = useState(PIN_ATTEMPTS)
+  const [pinAttemptsLeft, setPinAttemptsLeft] = useState(PIN_ATTEMPTS)
 
   // count amount of wrong pins provided
   useEffect(() => {
     if (pinError) {
-      setPinAttempts((prev) => --prev)
+      setPinAttemptsLeft((prev) => --prev)
     }
   }, [pinError])
 
   // disable the app when no attempt are left
   useEffect(() => {
-    if (pinAttempts === 0) {
+    if (pinAttemptsLeft === 0) {
       setIsAppDisabled(true)
     }
-  }, [pinAttempts])
+  }, [pinAttemptsLeft])
 
   // countdown
   useEffect(() => {
@@ -77,11 +77,11 @@ const useDisabledApp = (pinError: boolean) => {
        */
       setCountdown(INITIAL_COUNTDOWN)
       setStartCountdown(false)
-      setPinAttempts(PIN_ATTEMPTS)
+      setPinAttemptsLeft(PIN_ATTEMPTS)
     }
   }, [isAppDisabled])
 
-  return { isAppDisabled, pinAttempts, countdown }
+  return { isAppDisabled, pinAttemptsLeft, countdown }
 }
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
@@ -92,7 +92,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
 
-  const { isAppDisabled, pinAttempts, countdown } = useDisabledApp(pinError)
+  const { isAppDisabled, pinAttemptsLeft, countdown } = useDisableApp(pinError)
 
   const handleSubmit = async () => {
     try {
@@ -120,10 +120,10 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     if (pinError) {
       id = setTimeout(() => {
         /**
-         * NOTE at this point pinAttempts is still an old value,
+         * NOTE at this point pinAttemptsLeft is still an old value,
          * therefore we compare with 1 not 0
          */
-        if (pinAttempts > 1) {
+        if (pinAttemptsLeft > 1) {
           setPinError(false)
           setPin('')
         }
