@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { useEffect } from 'react'
 import { View, StyleSheet, findNodeHandle } from 'react-native'
 import { useCollapsibleClone } from './context'
 import { ICollapsibleCloneComposite } from './types'
@@ -16,7 +15,7 @@ const Title: ICollapsibleCloneComposite['Title'] = ({
   const { onAddTitle, headerHeight, collapsibleCloneRef } =
     useCollapsibleClone()
 
-  useEffect(() => {
+  const handleLayout = () => {
     if (collapsibleCloneRef.current !== null) {
       titleRef.current?.measureLayout(
         findNodeHandle(collapsibleCloneRef.current)!,
@@ -34,13 +33,14 @@ const Title: ICollapsibleCloneComposite['Title'] = ({
         },
       )
     }
-  }, [])
+  }
 
   return (
     <View
       style={[styles.container, customContainerStyles]}
       ref={titleRef}
       renderToHardwareTextureAndroid
+      onLayout={handleLayout}
     >
       {children}
     </View>
