@@ -1,16 +1,18 @@
 import React from 'react'
 import { View } from 'react-native'
+import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import JoloText from '../JoloText'
 import { ALL_PIN_ATTEMPTS, usePasscode } from './context'
 
-// TODO: add translation
 const PasscodeError = () => {
+  const { t } = useTranslation()
   const { pinAttemptsLeft, pinError } = usePasscode()
   if (!pinError) return null
   const attemptsLeft = ALL_PIN_ATTEMPTS - pinAttemptsLeft + 1 || 1
+
   return (
     <View style={{ position: 'absolute', top: 20 }}>
       <JoloText
@@ -21,7 +23,12 @@ const PasscodeError = () => {
           fontFamily: Fonts.Regular,
           letterSpacing: 0.09,
         }}
-      >{`You have used ${attemptsLeft}/${ALL_PIN_ATTEMPTS} attempts`}</JoloText>
+      >
+        {t('Lock.errorMsg', {
+          attempts: `${attemptsLeft}/${ALL_PIN_ATTEMPTS}`,
+          escapeValue: false,
+        })}
+      </JoloText>
     </View>
   )
 }

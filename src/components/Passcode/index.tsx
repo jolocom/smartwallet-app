@@ -16,14 +16,9 @@ import PasscodeError from './PasscodeError'
 
 const PIN_ATTEMPTS_CYCLES = 3
 
-// TODO: translation
 const useDisableApp = (pinError: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
 
-  /**
-   * TODO: Nr of attempts will vary
-   * based on an attempt cycle
-   */
   const [pinAttemptsLeft, setPinAttemptsLeft] = useState(ALL_PIN_ATTEMPTS)
 
   const [attemptCyclesLeft, setAttemptCyclesLeft] =

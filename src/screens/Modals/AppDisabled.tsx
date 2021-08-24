@@ -14,6 +14,7 @@ import { ScreenNames } from '~/types/screens'
 import { useBackHandler } from '@react-native-community/hooks'
 import { GlobalModalsParamsList } from '~/RootNavigation'
 import moment from 'moment'
+import useTranslation from '~/hooks/useTranslation'
 
 // TODO: update the value to commented out
 // const LONG_COUNTDOWN = 60 * 5
@@ -28,6 +29,7 @@ const AppDisabled = ({ navigation }) => {
     useRoute<RouteProp<GlobalModalsParamsList, ScreenNames.AppDisabled>>()
 
   const { attemptCyclesLeft } = params
+  const { t } = useTranslation()
 
   const getInitialCountdownValue = () => {
     if (attemptCyclesLeft !== undefined) {
@@ -101,7 +103,7 @@ const AppDisabled = ({ navigation }) => {
             color={Colors.white85}
             customStyles={{ fontFamily: Fonts.Regular }}
           >
-            Your wallet is disabled for security reasons
+            {t('DisableOverlay.headerTitle')}
           </JoloText>
           <Space height={17} />
           <Text
@@ -113,7 +115,7 @@ const AppDisabled = ({ navigation }) => {
               fontFamily: Fonts.Regular,
             }}
           >
-            Try again in{' '}
+            {t('DisableOverlay.descriptionTitle')}{' '}
             <Text style={{ color: Colors.error }}>{formattedCountdown}</Text>
           </Text>
         </View>
@@ -128,7 +130,7 @@ const AppDisabled = ({ navigation }) => {
               fontFamily: Fonts.Regular,
             }}
           >
-            You have reached the limit of your attempts
+            {t('DisableOverlay.headerBlockedTitle')}
           </JoloText>
         </View>
       )}
@@ -137,14 +139,14 @@ const AppDisabled = ({ navigation }) => {
           <ScreenContainer.Padding>
             <BtnGroup>
               <Btn onPress={handleAccessRestore} type={BtnTypes.primary}>
-                Restore Access
+                {t('DisableOverlay.submitBtn')}
               </Btn>
               <Space height={12} />
               <JoloText
                 size={JoloTextSizes.tiniest}
                 customStyles={{ color: Colors.white70 }}
               >
-                Setting a new passcode will not affect your stored data
+                {t('DisableOverlay.submitDescription')}
               </JoloText>
             </BtnGroup>
           </ScreenContainer.Padding>
