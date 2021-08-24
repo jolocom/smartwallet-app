@@ -11,6 +11,7 @@ import { ScreenNames } from '~/types/screens'
 import { useRedirect } from '~/hooks/navigation'
 import { useIsFocused } from '@react-navigation/native'
 import { useCallback } from 'react'
+import { usePrevious } from '~/hooks/generic'
 
 const PIN_ATTEMPTS = 3
 const PIN_ATTEMPTS_CYCLES = 3
@@ -96,13 +97,28 @@ const useDisableApp = (pinError: boolean) => {
           setAttemptCyclesLeft((prev) => prev! - 1)
         }
       })()
-      setIsAppDisabled(true)
     }
   }, [pinAttemptsLeft])
 
+  const prevAttemptCycle = usePrevious(attemptCyclesLeft)
+  /**
+   * We are not disabling the app in the hook above
+   * since we need to wait for decreased state of attempt
+   * cycles to take place, otherwise the param 'attemptCyclesLeft'
+   * will be stale
+   */
+  useEffect(() => {
+    if (
+      attemptCyclesLeft !== undefined &&
+      prevAttemptCycle !== undefined &&
+      attemptCyclesLeft < prevAttemptCycle
+    ) {
+      setIsAppDisabled(true)
+    }
+  }, [attemptCyclesLeft])
+
   useEffect(() => {
     if (isAppDisabled && isFocused) {
-      console.log('disable app')
       disableApp()
     } else if (!isFocused) {
       setIsAppDisabled(false)
@@ -110,7 +126,6 @@ const useDisableApp = (pinError: boolean) => {
   }, [isAppDisabled, isFocused])
 
   const disableApp = useCallback(() => {
-    // TODO: this receives stale attemptCyclesLeft state
     redirect(ScreenNames.GlobalModals, {
       screen: ScreenNames.AppDisabled,
       params: { attemptCyclesLeft },
