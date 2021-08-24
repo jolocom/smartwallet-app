@@ -13,6 +13,7 @@ import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
 import { useBackHandler } from '@react-native-community/hooks'
 import { GlobalModalsParamsList } from '~/RootNavigation'
+import moment from 'moment'
 
 // TODO: update the value to commented out
 // const LONG_COUNTDOWN = 60 * 5
@@ -36,6 +37,7 @@ const AppDisabled = ({ navigation }) => {
         return LONG_COUNTDOWN
       }
     }
+    return SHORT_COUNTDOWN
   }
   const [countdown, setCountdown] = useState(getInitialCountdownValue)
 
@@ -79,6 +81,17 @@ const AppDisabled = ({ navigation }) => {
 
   useBackHandler(() => true)
 
+  const formattedCountdown = useMemo(() => {
+    const duration = moment.duration(countdown * 1000, 'milliseconds')
+    const minutes = duration.minutes()
+    const seconds = duration.seconds()
+    const lengthMins = minutes.toString().length
+    const lengthSecs = seconds.toString().length
+    return `${lengthMins > 1 ? minutes : '0' + minutes}:${
+      lengthSecs > 1 ? seconds : '0' + seconds
+    }`
+  }, [countdown])
+
   return (
     <ScreenContainer backgroundColor={Colors.black65}>
       {!isRestoreAccess && (
@@ -101,7 +114,7 @@ const AppDisabled = ({ navigation }) => {
             }}
           >
             Try again in{' '}
-            <Text style={{ color: Colors.error }}>{countdown}</Text>
+            <Text style={{ color: Colors.error }}>{formattedCountdown}</Text>
           </Text>
         </View>
       )}
