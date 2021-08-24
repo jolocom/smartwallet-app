@@ -18,7 +18,6 @@ import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
-import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
 import { useReplaceWith, usePop, useGoBack } from '~/hooks/navigation'
 import { LockStackParamList } from '~/screens/LoggedIn/LockStack'
@@ -42,7 +41,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
 
   const agent = useAgent()
   const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
-  const resetPin = useResetKeychainValues(PIN_SERVICE)
+  const resetPin = useResetKeychainValues()
 
   const route =
     useRoute<RouteProp<LockStackParamList, ScreenNames.PasscodeRecovery>>()

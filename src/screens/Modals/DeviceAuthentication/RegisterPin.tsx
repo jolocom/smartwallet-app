@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
 import { Colors } from '~/utils/colors'
-import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
+import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
 
 import BP from '~/utils/breakpoints'
 import ScreenHeader from '~/components/ScreenHeader'
@@ -31,13 +30,14 @@ const RegisterPin = () => {
   const [selectedPasscode, setSelectedPasscode] = useState('')
 
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
-  const resetKeychainPasscode = useResetKeychainValues(PIN_SERVICE)
+  const resetKeychainPasscode = useResetKeychainValues()
 
   const { biometryType } = useDeviceAuthState()
   const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
   const { scheduleErrorWarning } = useToasts()
+  const secureStorage = useSecureStorage()
 
   /**
    * NOTE: a user does not have a possibility to remove the passcode from the keychain,
@@ -65,11 +65,10 @@ const RegisterPin = () => {
   const handleVerifiedPasscodeSubmit = async (pin: string) => {
     if (selectedPasscode === pin) {
       try {
-        // setting up pin in the keychain
-        await Keychain.setGenericPassword(PIN_USERNAME, selectedPasscode, {
-          service: PIN_SERVICE,
-          storage: Keychain.STORAGE_TYPE.AES,
-        })
+        await secureStorage.setItem(
+          SecureStorageKeys.passcode,
+          selectedPasscode,
+        )
         displaySuccessLoader(redirectTo)
       } catch (err) {
         // an error with storing PIN to the keychain -> redirect back to create passcode

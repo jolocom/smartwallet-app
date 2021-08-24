@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import Keychain from 'react-native-keychain'
 
 import { setLocalAuth } from '~/modules/account/actions'
-import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { useBiometry } from './biometry'
 import { BiometryType } from 'react-native-biometrics'
+import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 
-export const useResetKeychainValues = (service: string) => {
+export const useResetKeychainValues = () => {
   const dispatch = useDispatch()
+  const secureStorage = useSecureStorage()
   const resetServiceValuesInKeychain = async () => {
     try {
-      await Keychain.resetGenericPassword({
-        service,
-      })
+      await secureStorage.removeItem(SecureStorageKeys.passcode)
       dispatch(setLocalAuth(false))
     } catch (err) {
       console.log({ err })
@@ -30,6 +28,7 @@ export const useGetStoredAuthValues = () => {
   const [isBiometrySelected, setIsBiometrySelected] = useState(false)
 
   const { getBiometry } = useBiometry()
+  const secureStorage = useSecureStorage()
 
   useEffect(() => {
     let isCurrent = true
@@ -39,14 +38,12 @@ export const useGetStoredAuthValues = () => {
       try {
         const [storedBiometry, storedPin] = await Promise.all([
           getBiometry(),
-          Keychain.getGenericPassword({
-            service: PIN_SERVICE,
-          }),
+          secureStorage.getItem(SecureStorageKeys.passcode),
         ])
 
         isCurrent && setBiometryType(storedBiometry?.type)
         if (storedPin) {
-          isCurrent && setKeychainPin(storedPin.password)
+          isCurrent && setKeychainPin(storedPin)
         } else {
           throw new Error('No PIN was set, revisit your flow of setting up PIN')
         }
