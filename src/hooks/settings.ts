@@ -2,6 +2,7 @@ import { Agent } from 'react-native-jolocom'
 import { useAgent } from './sdk'
 
 export enum SettingKeys {
+  pinNrAttemptCyclesLeft = 'pinNrAttemptCyclesLeft',
   pinNrAttemptsLeft = 'pinNrAttemptsLeft',
 }
 

@@ -20,15 +20,20 @@ const useDisableApp = (pinError: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
 
   const [pinAttemptsLeft, setPinAttemptsLeft] = useState(ALL_PIN_ATTEMPTS)
+  const getPinNrAttemptsLeft = async (): Promise<
+    { value: number } | undefined
+  > => get(SettingKeys.pinNrAttemptsLeft)
+  const storePinNrAttemptsLeft = async (value: number) =>
+    set(SettingKeys.pinNrAttemptsLeft, { value })
 
   const [attemptCyclesLeft, setAttemptCyclesLeft] =
     useState<number | undefined>(undefined)
   const { get, set } = useSettings()
   const getPinNrAttemptCyclesLeft = async (): Promise<
     { value: number } | undefined
-  > => get(SettingKeys.pinNrAttemptsLeft)
+  > => get(SettingKeys.pinNrAttemptCyclesLeft)
   const storePinNrAttemptCyclesLeft = async (value: number) =>
-    set(SettingKeys.pinNrAttemptsLeft, { value })
+    set(SettingKeys.pinNrAttemptCyclesLeft, { value })
 
   /**
    * reset stored value back to initial PIN_ATTEMPTS_CYCLES nr
@@ -73,6 +78,26 @@ const useDisableApp = (pinError: boolean) => {
   }, [])
 
   /**
+   * fetch nr of attempts within a cycle available for the user
+   */
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const response = await getPinNrAttemptsLeft()
+        if (response?.value !== undefined) {
+          setPinAttemptsLeft(response.value)
+        } else {
+          // initialize nr of pin attempt cycles left
+          await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
+          setPinAttemptsLeft(ALL_PIN_ATTEMPTS)
+        }
+      } catch (e) {
+        console.log('Error retrieving or storing nr of pin attempt cycles left')
+      }
+    })()
+  }, [])
+
+  /**
    * count amount of wrong pins provided
    */
   useEffect(() => {
@@ -80,6 +105,32 @@ const useDisableApp = (pinError: boolean) => {
       setPinAttemptsLeft((prev) => --prev)
     }
   }, [pinError])
+
+  /**
+   * store pinAttemptsLeft value when it diminishes
+   */
+  const prevPinAttempts = usePrevious(pinAttemptsLeft)
+  useEffect(() => {
+    if (pinAttemptsLeft !== undefined && prevPinAttempts !== undefined) {
+      ;(async () => {
+        await storePinNrAttemptsLeft(pinAttemptsLeft)
+      })()
+    }
+  }, [pinAttemptsLeft])
+
+  /**
+   * store attemptCyclesLeft value when it diminishes
+   */
+  const prevAttemptCycle = usePrevious(attemptCyclesLeft)
+  useEffect(() => {
+    if (
+      attemptCyclesLeft !== undefined &&
+      prevAttemptCycle !== undefined &&
+      attemptCyclesLeft < prevAttemptCycle
+    ) {
+      setIsAppDisabled(true)
+    }
+  }, [attemptCyclesLeft])
 
   /**
    *  disable the app when no passcode input attempts are left
@@ -94,23 +145,6 @@ const useDisableApp = (pinError: boolean) => {
       })()
     }
   }, [pinAttemptsLeft])
-
-  const prevAttemptCycle = usePrevious(attemptCyclesLeft)
-  /**
-   * We are not disabling the app in the hook above
-   * since we need to wait for decreased state of attempt
-   * cycles to take place, otherwise the param 'attemptCyclesLeft'
-   * will be stale
-   */
-  useEffect(() => {
-    if (
-      attemptCyclesLeft !== undefined &&
-      prevAttemptCycle !== undefined &&
-      attemptCyclesLeft < prevAttemptCycle
-    ) {
-      setIsAppDisabled(true)
-    }
-  }, [attemptCyclesLeft])
 
   useEffect(() => {
     if (isAppDisabled && isFocused) {
