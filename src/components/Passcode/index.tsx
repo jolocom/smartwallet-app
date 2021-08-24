@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Modal, View, Text } from 'react-native'
 import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
@@ -7,29 +6,19 @@ import { IPasscodeProps, IPasscodeComposition } from './types'
 import { PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
-import { Colors } from '~/utils/colors'
 import { SettingKeys, useSettings } from '~/hooks/settings'
-import JoloText, { JoloTextKind } from '../JoloText'
-import Space from '../Space'
-import { Fonts, JoloTextSizes } from '~/utils/fonts'
-import BtnGroup from '../BtnGroup'
-import Btn, { BtnTypes } from '../Btn'
-import ScreenContainer from '../ScreenContainer'
-import AbsoluteBottom from '../AbsoluteBottom'
+import { ScreenNames } from '~/types/screens'
+import { useRedirect } from '~/hooks/navigation'
+import { useIsFocused } from '@react-navigation/native'
+import { useCallback } from 'react'
 
 const PIN_ATTEMPTS = 3
 const PIN_ATTEMPTS_CYCLES = 3
-const INITIAL_COUNTDOWN = 20 * 1
 
 // TODO: translation
 const useDisableApp = (pinError: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
-  /**
-   * TODO: Nr of minutes will vary
-   * based on an attempt cycle
-   */
-  const [countdown, setCountdown] = useState(INITIAL_COUNTDOWN)
-  const [startCountdown, setStartCountdown] = useState(false)
+
   /**
    * TODO: Nr of attempts will vary
    * based on an attempt cycle
@@ -45,8 +34,6 @@ const useDisableApp = (pinError: boolean) => {
   const storePinNrAttemptCyclesLeft = async (value: number) =>
     set(SettingKeys.pinNrAttemptsLeft, { value })
 
-  const [isRestoreAccess, setIsRestoreAccess] = useState(false)
-
   /**
    * reset stored value back to initial PIN_ATTEMPTS_CYCLES nr
    * TODO: remove after full implementation
@@ -57,6 +44,21 @@ const useDisableApp = (pinError: boolean) => {
   //   })()
   // }, [])
 
+  const redirect = useRedirect()
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if (isFocused) {
+      setPinAttemptsLeft(PIN_ATTEMPTS)
+      if (attemptCyclesLeft === 0) {
+        disableApp()
+      }
+    }
+  }, [isFocused, attemptCyclesLeft])
+
+  /**
+   * fetch nr of attempt cycles available for the user
+   */
   useEffect(() => {
     ;(async () => {
       try {
@@ -74,92 +76,49 @@ const useDisableApp = (pinError: boolean) => {
     })()
   }, [])
 
-  // count amount of wrong pins provided
+  /**
+   * count amount of wrong pins provided
+   */
   useEffect(() => {
     if (pinError) {
       setPinAttemptsLeft((prev) => --prev)
     }
   }, [pinError])
 
-  // disable the app when no attempt is left
+  /**
+   *  disable the app when no passcode input attempts are left
+   */
   useEffect(() => {
     if (pinAttemptsLeft === 0) {
       ;(async () => {
-        if (attemptCyclesLeft) {
+        if (attemptCyclesLeft !== undefined) {
           await storePinNrAttemptCyclesLeft(attemptCyclesLeft - 1)
-          setAttemptCyclesLeft(attemptCyclesLeft - 1)
+          setAttemptCyclesLeft((prev) => prev! - 1)
         }
       })()
       setIsAppDisabled(true)
-      setStartCountdown(true)
     }
   }, [pinAttemptsLeft])
 
-  // countdown
   useEffect(() => {
-    let countdownId: number | undefined
-    const clearCountdown = (id: number | undefined) => {
-      if (id) {
-        clearInterval(id)
-      }
+    if (isAppDisabled && isFocused) {
+      console.log('disable app')
+      disableApp()
+    } else if (!isFocused) {
+      setIsAppDisabled(false)
     }
-    if (startCountdown) {
-      countdownId = setInterval(() => {
-        setCountdown((prev) => --prev)
-      }, 1000)
-    } else {
-      clearCountdown(countdownId)
-    }
-    return () => {
-      clearCountdown(countdownId)
-    }
-  }, [startCountdown])
+  }, [isAppDisabled, isFocused])
 
-  // enable app when the countdown expired
-  useEffect(() => {
-    if (countdown === 0) {
-      if (attemptCyclesLeft && attemptCyclesLeft > 0) {
-        setIsAppDisabled(false)
-      }
-    }
-  }, [countdown, attemptCyclesLeft])
-
-  useEffect(() => {
-    if (attemptCyclesLeft === 0) {
-      setIsAppDisabled(true)
-      setIsRestoreAccess(true)
-    }
+  const disableApp = useCallback(() => {
+    // TODO: this receives stale attemptCyclesLeft state
+    redirect(ScreenNames.GlobalModals, {
+      screen: ScreenNames.AppDisabled,
+      params: { attemptCyclesLeft },
+    })
   }, [attemptCyclesLeft])
 
-  // disable countdown
-  useEffect(() => {
-    if (isRestoreAccess) {
-      setStartCountdown(false)
-    }
-  }, [isRestoreAccess])
-
-  /**
-   * start countdown when the app is disabled
-   * reset countdown when the app is enabled
-   */
-  useEffect(() => {
-    if (!isAppDisabled) {
-      /**
-       * TODO: Nr of minutes will vary
-       * based on an attempt cycle
-       */
-      setCountdown(INITIAL_COUNTDOWN)
-      setStartCountdown(false)
-      setPinAttemptsLeft(PIN_ATTEMPTS)
-    }
-  }, [isAppDisabled])
-
   return {
-    isAppDisabled,
     pinAttemptsLeft,
-    countdown,
-    isRestoreAccess,
-    startCountdown,
   }
 }
 
@@ -171,13 +130,16 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
 
-  const {
-    isAppDisabled,
-    pinAttemptsLeft,
-    countdown,
-    isRestoreAccess,
-    startCountdown,
-  } = useDisableApp(pinError)
+  const { pinAttemptsLeft } = useDisableApp(pinError)
+
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if (isFocused) {
+      setPinError(false)
+      setPin('')
+    }
+  }, [isFocused])
 
   const handleSubmit = async () => {
     try {
@@ -221,13 +183,6 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     }
   }, [pinError])
 
-  useEffect(() => {
-    if (!isAppDisabled) {
-      setPinError(false)
-      setPin('')
-    }
-  }, [isAppDisabled])
-
   const contextValue = useMemo(
     () => ({
       pin,
@@ -238,86 +193,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     [pin, setPin, pinError, pinSuccess],
   )
 
-  // eslint-disable-next-line
-  const handleAccessRestore = () => {}
-
-  return (
-    <>
-      <PasscodeContext.Provider value={contextValue} children={children} />
-      <Modal
-        animationType="fade"
-        transparent
-        visible={isAppDisabled}
-        statusBarTranslucent
-      >
-        <View
-          style={{
-            backgroundColor: Colors.black90,
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          {startCountdown && (
-            <View style={{ alignSelf: 'center', marginHorizontal: 25 }}>
-              <JoloText
-                kind={JoloTextKind.title}
-                color={Colors.white85}
-                customStyles={{ fontFamily: Fonts.Regular }}
-              >
-                Your wallet is disabled for security reasons
-              </JoloText>
-              <Space height={17} />
-              <Text
-                style={{
-                  color: Colors.white,
-                  fontSize: 18,
-                  lineHeight: 18,
-                  textAlign: 'center',
-                  fontFamily: Fonts.Regular,
-                }}
-              >
-                Try again in{' '}
-                <Text style={{ color: Colors.error }}>{countdown}</Text>
-              </Text>
-            </View>
-          )}
-          {isRestoreAccess && (
-            <View style={{ alignSelf: 'center' }}>
-              <JoloText
-                kind={JoloTextKind.title}
-                color={Colors.white85}
-                customStyles={{
-                  marginHorizontal: 25,
-                  fontFamily: Fonts.Regular,
-                }}
-              >
-                You have reached the limit of your attempts
-              </JoloText>
-            </View>
-          )}
-          {isRestoreAccess && (
-            <AbsoluteBottom>
-              <ScreenContainer.Padding>
-                <BtnGroup>
-                  <Btn onPress={handleAccessRestore} type={BtnTypes.primary}>
-                    Restore Access
-                  </Btn>
-                  <Space height={12} />
-                  <JoloText
-                    size={JoloTextSizes.tiniest}
-                    customStyles={{ color: Colors.white70 }}
-                  >
-                    Setting a new passcode will not affect your stored data
-                  </JoloText>
-                </BtnGroup>
-              </ScreenContainer.Padding>
-            </AbsoluteBottom>
-          )}
-        </View>
-      </Modal>
-    </>
-  )
+  return <PasscodeContext.Provider value={contextValue} children={children} />
 }
 
 Passcode.Input = PasscodeInput
