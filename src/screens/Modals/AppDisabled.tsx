@@ -14,9 +14,11 @@ import { ScreenNames } from '~/types/screens'
 import { useBackHandler } from '@react-native-community/hooks'
 import { GlobalModalsParamsList } from '~/RootNavigation'
 
-const INITIAL_COUNTDOWN = 20 * 1
-const LONG_COUNTDOWN = 60 * 5
-const SHORT_COUNTDOWN = 60 * 1
+// TODO: update the value to commented out
+// const LONG_COUNTDOWN = 60 * 5
+const LONG_COUNTDOWN = 20 * 5
+// const SHORT_COUNTDOWN = 60 * 1
+const SHORT_COUNTDOWN = 20 * 1
 
 // TODO: translation
 // TODO: disable go back with hardware back btn
@@ -26,9 +28,16 @@ const AppDisabled = ({ navigation }) => {
 
   const { attemptCyclesLeft } = params
 
-  console.log({ attemptCyclesLeft })
-
-  const [countdown, setCountdown] = useState(INITIAL_COUNTDOWN)
+  const getInitialCountdownValue = () => {
+    if (attemptCyclesLeft !== undefined) {
+      if (attemptCyclesLeft === 2) {
+        return SHORT_COUNTDOWN
+      } else if (attemptCyclesLeft === 1) {
+        return LONG_COUNTDOWN
+      }
+    }
+  }
+  const [countdown, setCountdown] = useState(getInitialCountdownValue)
 
   const isRestoreAccess = useMemo(
     () => !(attemptCyclesLeft > 0),
