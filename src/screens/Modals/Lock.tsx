@@ -14,6 +14,7 @@ import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
 import { useDisableLock } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
+import Space from '~/components/Space'
 
 const Lock = () => {
   const { t } = useTranslation()
@@ -96,6 +97,8 @@ const Lock = () => {
             errorTitle={t('ChangePasscode.wrongCodeHeader')}
           />
           <Passcode.Input />
+          <Space height={20} />
+          <Passcode.Error />
         </Passcode.Container>
         <Passcode.Container>
           <Passcode.Forgot />

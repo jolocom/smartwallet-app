@@ -3,7 +3,7 @@ import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 import { IPasscodeProps, IPasscodeComposition } from './types'
-import { PasscodeContext } from './context'
+import { ALL_PIN_ATTEMPTS, PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
 import { SettingKeys, useSettings } from '~/hooks/settings'
@@ -12,8 +12,8 @@ import { useRedirect } from '~/hooks/navigation'
 import { useIsFocused } from '@react-navigation/native'
 import { useCallback } from 'react'
 import { usePrevious } from '~/hooks/generic'
+import PasscodeError from './PasscodeError'
 
-const PIN_ATTEMPTS = 3
 const PIN_ATTEMPTS_CYCLES = 3
 
 // TODO: translation
@@ -24,7 +24,7 @@ const useDisableApp = (pinError: boolean) => {
    * TODO: Nr of attempts will vary
    * based on an attempt cycle
    */
-  const [pinAttemptsLeft, setPinAttemptsLeft] = useState(PIN_ATTEMPTS)
+  const [pinAttemptsLeft, setPinAttemptsLeft] = useState(ALL_PIN_ATTEMPTS)
 
   const [attemptCyclesLeft, setAttemptCyclesLeft] =
     useState<number | undefined>(undefined)
@@ -50,7 +50,7 @@ const useDisableApp = (pinError: boolean) => {
 
   useEffect(() => {
     if (isFocused) {
-      setPinAttemptsLeft(PIN_ATTEMPTS)
+      setPinAttemptsLeft(ALL_PIN_ATTEMPTS)
       if (attemptCyclesLeft === 0) {
         disableApp()
       }
@@ -204,6 +204,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
       setPin,
       pinError,
       pinSuccess,
+      pinAttemptsLeft,
     }),
     [pin, setPin, pinError, pinSuccess],
   )
@@ -216,5 +217,6 @@ Passcode.Header = PasscodeHeader
 Passcode.Forgot = PasscodeForgot
 Passcode.Keyboard = PasscodeKeyboard
 Passcode.Container = PasscodeContainer
+Passcode.Error = PasscodeError
 
 export default Passcode
