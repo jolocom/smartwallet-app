@@ -26,7 +26,7 @@ export const useForceUpdate = () => {
 /**
  * Used to hide the StatusBar on an individual screen.
  *
- * NOTE: used within the ScreenContainer and can be controlled through props
+ * NODE: was previously used for the Scanner screen, but currently not used anywhere.
  */
 export const useHideStatusBar = () => {
   const isFocused = useIsFocused()
