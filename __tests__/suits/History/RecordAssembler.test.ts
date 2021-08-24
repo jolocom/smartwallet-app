@@ -53,6 +53,7 @@ const genericOfferArgs = {
   ...buildSummary({
     offerSummary: [{ type: 'test-type', credential: { name: 'test-name' } }],
     issued: [{ type: 'test-type', name: 'test-name' }],
+    credentialsValidity: [true, true],
   }),
   flowType: FlowType.CredentialOffer,
   messageTypes: [
