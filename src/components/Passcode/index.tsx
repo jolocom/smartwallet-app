@@ -16,13 +16,7 @@ import PasscodeError from './PasscodeError'
 
 const PIN_ATTEMPTS_CYCLES = 3
 
-const useDisableApp = (pinError: boolean) => {
-  const [isAppDisabled, setIsAppDisabled] = useState(false)
-
-  const [countdown, setCountdown] = useState<number | undefined>(undefined)
-
-  const [pinAttemptsLeft, setPinAttemptsLeft] = useState(ALL_PIN_ATTEMPTS)
-
+const useGetStoreCountdownValues = () => {
   const { get, set } = useSettings()
   const getPinNrAttemptsLeft = async (): Promise<
     { value: number } | undefined
@@ -30,8 +24,6 @@ const useDisableApp = (pinError: boolean) => {
   const storePinNrAttemptsLeft = async (value: number) =>
     set(SettingKeys.pinNrAttemptsLeft, { value })
 
-  const [attemptCyclesLeft, setAttemptCyclesLeft] =
-    useState<number | undefined>(undefined)
   const getPinNrAttemptCyclesLeft = async (): Promise<
     { value: number } | undefined
   > => get(SettingKeys.pinNrAttemptCyclesLeft)
@@ -43,6 +35,35 @@ const useDisableApp = (pinError: boolean) => {
   const storeLastCountdown = async (value: number) =>
     set(SettingKeys.countdown, { value })
 
+  return {
+    getPinNrAttemptsLeft,
+    storePinNrAttemptsLeft,
+    getPinNrAttemptCyclesLeft,
+    storePinNrAttemptCyclesLeft,
+    getLastCountdown,
+    storeLastCountdown,
+  }
+}
+
+const useDisableApp = (pinError: boolean, pinSuccess: boolean) => {
+  const [isAppDisabled, setIsAppDisabled] = useState(false)
+
+  const [countdown, setCountdown] = useState<number | undefined>(undefined)
+
+  const [pinAttemptsLeft, setPinAttemptsLeft] = useState(ALL_PIN_ATTEMPTS)
+
+  const [attemptCyclesLeft, setAttemptCyclesLeft] =
+    useState<number | undefined>(undefined)
+
+  const {
+    getPinNrAttemptsLeft,
+    storePinNrAttemptsLeft,
+    getPinNrAttemptCyclesLeft,
+    storePinNrAttemptCyclesLeft,
+    getLastCountdown,
+    storeLastCountdown,
+  } = useGetStoreCountdownValues()
+
   /**
    * reset stored value back to initial PIN_ATTEMPTS_CYCLES nr
    * TODO: remove after full implementation
@@ -52,6 +73,11 @@ const useDisableApp = (pinError: boolean) => {
   //     await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
   //   })()
   // }, [])
+
+  /**
+   * reset all stored value after
+   * successful submission of the pass code
+   */
 
   const redirect = useRedirect()
   const isFocused = useIsFocused()
@@ -214,7 +240,12 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
 
-  const { pinAttemptsLeft } = useDisableApp(pinError)
+  const { pinAttemptsLeft } = useDisableApp(pinError, pinSuccess)
+  const {
+    storeLastCountdown,
+    storePinNrAttemptCyclesLeft,
+    storePinNrAttemptsLeft,
+  } = useGetStoreCountdownValues()
 
   const isFocused = useIsFocused()
 
@@ -237,6 +268,20 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
       setPinError(true)
     }
   }
+
+  /**
+   * clearing app stored value
+   * upon successful submission of the pass code
+   */
+  useEffect(() => {
+    return () => {
+      ;(async () => {
+        await storeLastCountdown(0)
+        await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+        await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
+      })()
+    }
+  }, [])
 
   // submit when full pin is provided
   useEffect(() => {
