@@ -4,6 +4,7 @@ import { useAgent } from './sdk'
 export enum SettingKeys {
   pinNrAttemptCyclesLeft = 'pinNrAttemptCyclesLeft',
   pinNrAttemptsLeft = 'pinNrAttemptsLeft',
+  countdown = 'countdown',
 }
 
 const handleRetrieveSettingValue = (agent: Agent) => {

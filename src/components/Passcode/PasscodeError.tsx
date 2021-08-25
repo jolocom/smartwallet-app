@@ -25,7 +25,7 @@ const PasscodeError = () => {
         }}
       >
         {t('Lock.errorMsg', {
-          attempts: `${attemptsLeft}/${ALL_PIN_ATTEMPTS}`,
+          attempts: `${attemptsLeft}\/{ALL_PIN_ATTEMPTS}`,
           escapeValue: false,
         })}
       </JoloText>

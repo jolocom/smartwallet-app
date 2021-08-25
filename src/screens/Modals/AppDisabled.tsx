@@ -1,6 +1,8 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { RouteProp, useRoute } from '@react-navigation/native'
+import { useBackHandler } from '@react-native-community/hooks'
+import moment from 'moment'
 
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -11,10 +13,9 @@ import Space from '~/components/Space'
 import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
-import { useBackHandler } from '@react-native-community/hooks'
 import { GlobalModalsParamsList } from '~/RootNavigation'
-import moment from 'moment'
 import useTranslation from '~/hooks/useTranslation'
+import { SettingKeys, useSettings } from '~/hooks/settings'
 
 // TODO: update the value to commented out
 // const LONG_COUNTDOWN = 60 * 5
@@ -28,12 +29,18 @@ const AppDisabled = ({ navigation }) => {
   const { params } =
     useRoute<RouteProp<GlobalModalsParamsList, ScreenNames.AppDisabled>>()
 
-  const { attemptCyclesLeft } = params
+  const { attemptCyclesLeft, countdown: storedCountdown } = params
   const { t } = useTranslation()
+
+  const { set } = useSettings()
+  const storeLastCountdown = async (value: number) =>
+    set(SettingKeys.countdown, { value })
 
   const getInitialCountdownValue = () => {
     if (attemptCyclesLeft !== undefined) {
-      if (attemptCyclesLeft === 2) {
+      if (storedCountdown !== 0) {
+        return storedCountdown
+      } else if (attemptCyclesLeft === 2) {
         return SHORT_COUNTDOWN
       } else if (attemptCyclesLeft === 1) {
         return LONG_COUNTDOWN
@@ -42,6 +49,7 @@ const AppDisabled = ({ navigation }) => {
     return SHORT_COUNTDOWN
   }
   const [countdown, setCountdown] = useState(getInitialCountdownValue)
+  const [startStoreCountdown, setStoreCountdown] = useState(false)
 
   const isRestoreAccess = useMemo(
     () => !(attemptCyclesLeft > 0),
@@ -67,6 +75,27 @@ const AppDisabled = ({ navigation }) => {
       clearCountdown(countdownId)
     }
   }, [attemptCyclesLeft])
+
+  /**
+   * every 10 sec store countdown value
+   */
+  useEffect(() => {
+    if (countdown % 10 === 0) {
+      setStoreCountdown(true)
+    }
+  }, [countdown])
+
+  /**
+   * store countdown value
+   */
+  useEffect(() => {
+    if (startStoreCountdown) {
+      ;(async () => {
+        await storeLastCountdown(countdown)
+        setStoreCountdown(false)
+      })()
+    }
+  }, [startStoreCountdown, countdown])
 
   // enable app when the countdown expired
   useEffect(() => {

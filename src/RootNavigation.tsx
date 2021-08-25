@@ -54,6 +54,7 @@ export type GlobalModalsParamsList = {
   [ScreenNames.SeedPhraseInfo]: undefined
   [ScreenNames.AppDisabled]: {
     attemptCyclesLeft: number
+    countdown: number
   }
 }
 

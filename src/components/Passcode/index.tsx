@@ -19,7 +19,11 @@ const PIN_ATTEMPTS_CYCLES = 3
 const useDisableApp = (pinError: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
 
+  const [countdown, setCountdown] = useState<number | undefined>(undefined)
+
   const [pinAttemptsLeft, setPinAttemptsLeft] = useState(ALL_PIN_ATTEMPTS)
+
+  const { get, set } = useSettings()
   const getPinNrAttemptsLeft = async (): Promise<
     { value: number } | undefined
   > => get(SettingKeys.pinNrAttemptsLeft)
@@ -28,12 +32,16 @@ const useDisableApp = (pinError: boolean) => {
 
   const [attemptCyclesLeft, setAttemptCyclesLeft] =
     useState<number | undefined>(undefined)
-  const { get, set } = useSettings()
   const getPinNrAttemptCyclesLeft = async (): Promise<
     { value: number } | undefined
   > => get(SettingKeys.pinNrAttemptCyclesLeft)
   const storePinNrAttemptCyclesLeft = async (value: number) =>
     set(SettingKeys.pinNrAttemptCyclesLeft, { value })
+
+  const getLastCountdown = async (): Promise<{ value: number } | undefined> =>
+    get(SettingKeys.countdown)
+  const storeLastCountdown = async (value: number) =>
+    set(SettingKeys.countdown, { value })
 
   /**
    * reset stored value back to initial PIN_ATTEMPTS_CYCLES nr
@@ -98,6 +106,38 @@ const useDisableApp = (pinError: boolean) => {
   }, [])
 
   /**
+   * fetch uncompleted countdown
+   */
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const response = await getLastCountdown()
+        if (response?.value !== undefined) {
+          setCountdown(response.value)
+        } else {
+          await storeLastCountdown(0)
+          setCountdown(0)
+        }
+      } catch (e) {
+        console.log('Error retrieving or storing countdown')
+      }
+    })()
+  }, [])
+
+  /**
+   * check if we have stored countdown value
+   * and disable the app if its value is not
+   * equal to zero, meaning countdown has completed
+   */
+  useEffect(() => {
+    if (countdown !== undefined) {
+      if (countdown !== 0) {
+        setIsAppDisabled(true)
+      }
+    }
+  }, [countdown])
+
+  /**
    * count amount of wrong pins provided
    */
   useEffect(() => {
@@ -157,9 +197,9 @@ const useDisableApp = (pinError: boolean) => {
   const disableApp = useCallback(() => {
     redirect(ScreenNames.GlobalModals, {
       screen: ScreenNames.AppDisabled,
-      params: { attemptCyclesLeft },
+      params: { attemptCyclesLeft, countdown },
     })
-  }, [attemptCyclesLeft])
+  }, [attemptCyclesLeft, countdown])
 
   return {
     pinAttemptsLeft,
