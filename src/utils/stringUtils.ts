@@ -16,6 +16,9 @@ export const trimObjectValues = (obj: Record<string, string>) => {
   }, {})
 }
 
+export const truncateString = (text: string, n: number) =>
+  text.slice(0, n) + '...'
+
 export enum InputValidation {
   email = 'email',
   phone = 'phone',
@@ -26,6 +29,5 @@ export const regexValidations = {
   [InputValidation.all]: /./,
   [InputValidation.email]:
     /^(?!\.|_|-{1})+(\d*?[a-z]+\d*)+(([_\.\-])?((?!_)\w))+@([a-z0-9])+([\.\-])?((?!_)\w)+(\.)([a-z][a-z\d]{1,4})+$/,
-  [InputValidation.phone]:
-    /^\+{1}\d+$|^\+$/,
+  [InputValidation.phone]: /^\+{1}\d+$|^\+$/,
 }

@@ -38,6 +38,7 @@ import { useToasts } from '~/hooks/toasts'
 import { usePopupMenu } from '~/hooks/popupMenu'
 import DocumentSectionDocumentCard from '~/components/Cards/DocumentSectionCards/DocumentSectionDocumentCard'
 import DocumentSectionOtherCard from '~/components/Cards/DocumentSectionCards/DocumentSectionOtherCard'
+import { truncateString } from '~/utils/stringUtils'
 
 const getCredentialDisplayType = (displayType: string, t: TFunction) => {
   /**
@@ -94,7 +95,7 @@ const useHandleMorePress = () => {
           screen: ScreenNames.DragToConfirm,
           params: {
             title: t('Documents.deleteDocumentHeader', {
-              documentName: `${credentialName}`,
+              documentName: `${truncateString(credentialName, 30)}`,
               interpolation: { escapeValue: false },
             }),
             cancelText: t('Documents.cancelCardOption'),
