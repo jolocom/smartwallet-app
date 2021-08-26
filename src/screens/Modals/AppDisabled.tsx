@@ -32,9 +32,9 @@ const AppDisabled = ({ navigation }) => {
   const { attemptCyclesLeft, countdown: storedCountdown } = params
   const { t } = useTranslation()
 
-  const { set } = useSettings()
+  const { settings } = useSettings()
   const storeLastCountdown = async (value: number) =>
-    set(SettingKeys.countdown, { value })
+    settings.set(SettingKeys.countdown, { value })
 
   const getInitialCountdownValue = () => {
     if (attemptCyclesLeft !== undefined) {

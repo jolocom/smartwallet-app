@@ -20,7 +20,9 @@ const handleSetSettingValue = (agent: Agent) => {
 export const useSettings = () => {
   const agent = useAgent()
   return {
-    get: handleRetrieveSettingValue(agent),
-    set: handleSetSettingValue(agent),
+    settings: {
+      get: handleRetrieveSettingValue(agent),
+      set: handleSetSettingValue(agent),
+    },
   }
 }
