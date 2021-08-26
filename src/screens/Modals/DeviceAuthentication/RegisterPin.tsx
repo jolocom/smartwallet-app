@@ -132,11 +132,7 @@ const RegisterPin = () => {
         <Passcode.Container
           customStyles={{ justifyContent: 'flex-end', paddingBottom: 20 }}
         >
-          {!isCreating && (
-            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {t('VerifyPasscode.resetBtn')}
-            </Btn>
-          )}
+          {!isCreating && <Passcode.ResetBtn onPress={resetPasscode} />}
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
