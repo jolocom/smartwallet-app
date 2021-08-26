@@ -25,6 +25,7 @@ const PasscodeInput: React.FC = () => {
 
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
+    if (!pin.length) setSelectedIndex(0)
     let isCurrent = true
     const updateSelectedIndex = async () => {
       // it is implemented with delay to be able to preview digits and not seeing asterics straight away
