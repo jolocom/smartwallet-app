@@ -80,6 +80,7 @@ export const useDisableApp = (pinError: boolean, pinSuccess: boolean) => {
       if (attemptCyclesLeft === 0) {
         disableApp()
       }
+      setCountdown(0)
     }
   }, [isFocused, attemptCyclesLeft])
 
