@@ -15,7 +15,7 @@ import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
 import { GlobalModalsParamsList } from '~/RootNavigation'
 import useTranslation from '~/hooks/useTranslation'
-import { SettingKeys, useSettings } from '~/hooks/settings'
+import useSettings, { SettingKeys } from '~/hooks/settings'
 
 // TODO: update the value to commented out
 // const LONG_COUNTDOWN = 60 * 5
@@ -32,7 +32,7 @@ const AppDisabled = ({ navigation }) => {
   const { attemptCyclesLeft, countdown: storedCountdown } = params
   const { t } = useTranslation()
 
-  const { settings } = useSettings()
+  const settings = useSettings()
   const storeLastCountdown = async (value: number) =>
     settings.set(SettingKeys.countdown, { value })
 

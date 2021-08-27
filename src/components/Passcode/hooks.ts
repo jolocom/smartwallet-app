@@ -2,14 +2,14 @@ import { useIsFocused } from '@react-navigation/native'
 import { useCallback, useEffect, useState } from 'react'
 import { usePrevious } from '~/hooks/generic'
 import { useRedirect } from '~/hooks/navigation'
-import { SettingKeys, useSettings } from '~/hooks/settings'
+import useSettings, { SettingKeys } from '~/hooks/settings'
 import { ScreenNames } from '~/types/screens'
 import { ALL_PIN_ATTEMPTS } from './context'
 
 export const PIN_ATTEMPTS_CYCLES = 3
 
 export const useGetStoreCountdownValues = () => {
-  const { settings } = useSettings()
+  const settings = useSettings()
   const getPinNrAttemptsLeft = async (): Promise<
     { value: number } | undefined
   > => settings.get(SettingKeys.pinNrAttemptsLeft)

@@ -17,12 +17,12 @@ const handleSetSettingValue = (agent: Agent) => {
 }
 
 // TODO: use this hook in all places we set/get setting values
-export const useSettings = () => {
+const useSettings = () => {
   const agent = useAgent()
   return {
-    settings: {
-      get: handleRetrieveSettingValue(agent),
-      set: handleSetSettingValue(agent),
-    },
+    get: handleRetrieveSettingValue(agent),
+    set: handleSetSettingValue(agent),
   }
 }
+
+export default useSettings
