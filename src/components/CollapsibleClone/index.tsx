@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useCallback, useEffect } from 'react'
+import React, { useRef, useState, useMemo, useCallback } from 'react'
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -160,8 +160,12 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
         >
           {renderHeader(contextValue)}
         </View>
-        {renderScroll(contextValue)}
-        {children}
+        {headerHeight !== 0 && (
+          <>
+            {renderScroll(contextValue)}
+            {children}
+          </>
+        )}
       </View>
     </CollapsibleCloneContext.Provider>
   )

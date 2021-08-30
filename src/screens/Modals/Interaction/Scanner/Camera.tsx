@@ -123,7 +123,7 @@ const Camera = () => {
   }
 
   return (
-    <ScreenContainer hideStatusBar isFullscreen backgroundColor={Colors.black}>
+    <ScreenContainer isFullscreen backgroundColor={Colors.black}>
       <View style={styles.scannerContainer}>
         {isScreenFocused && (
           <View style={[styles.navigationContainer, { top }]}>
