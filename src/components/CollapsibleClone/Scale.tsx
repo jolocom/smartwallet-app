@@ -12,6 +12,7 @@ const Scale: ICollapsibleCloneComposite['Scale'] = ({ children }) => {
     return scrollY.interpolate({
       inputRange: [0, currentTitle.startY],
       outputRange: [1, 0.2],
+      extrapolate: 'clamp',
     })
   }, [JSON.stringify(currentTitle)])
 
