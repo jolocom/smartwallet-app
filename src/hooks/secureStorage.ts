@@ -1,29 +1,29 @@
-import EncryptedStorage from 'react-native-encrypted-storage'
+import { SecureStorage } from 'react-native-jolocom/js/secureStorage'
 
 export enum SecureStorageKeys {
-  passcode = 'passcode',
+  passcode = 'com.jolocom.wallet-PIN',
 }
 
-interface SecureStorage {
+interface ISecureStorage {
   [SecureStorageKeys.passcode]: string
 }
 
 export const useSecureStorage = () => {
   const setItem = <T extends SecureStorageKeys>(
     key: T,
-    value: SecureStorage[T],
+    value: ISecureStorage[T],
   ) => {
-    return EncryptedStorage.setItem(key, value)
+    return SecureStorage.storeValue(key, value)
   }
 
   const getItem = async <T extends SecureStorageKeys>(
     key: T,
-  ): Promise<SecureStorage[T] | null> => {
-    return EncryptedStorage.getItem(key)
+  ): Promise<ISecureStorage[T] | null> => {
+    return SecureStorage.getValue(key)
   }
 
   const removeItem = <T extends SecureStorageKeys>(key: T) => {
-    return EncryptedStorage.removeItem(key)
+    return SecureStorage.removeValue(key)
   }
 
   return { setItem, getItem, removeItem }
