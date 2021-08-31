@@ -37,6 +37,7 @@ interface ITitle {
 
 interface IHeader {
   type?: NavHeaderType
+  onPress?: () => void
 }
 
 interface IScroll extends ScrollViewProps {
