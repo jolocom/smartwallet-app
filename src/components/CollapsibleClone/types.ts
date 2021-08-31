@@ -40,7 +40,7 @@ interface IHeader {
 }
 
 interface IScroll extends ScrollViewProps {
-  containerStyles: StyleProp<ViewStyle>
+  containerStyles?: StyleProp<ViewStyle>
 }
 
 export interface ICollapsibleCloneComposite {
