@@ -49,6 +49,8 @@ import {
 } from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
+import { Colors } from '~/utils/colors'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -227,49 +229,60 @@ const CredentialShareFAS = () => {
       />
     ))
 
+  const { top } = useSafeArea()
+
   return (
-    <CollapsibleClone
-      renderHeader={() => <CollapsibleClone.Header />}
-      renderScroll={() => (
-        <ContainerFAS>
-          <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
-            <CollapsibleClone.Scale>
-              <LogoContainerFAS>
-                <InteractionLogo />
-              </LogoContainerFAS>
-            </CollapsibleClone.Scale>
-            <CollapsibleClone.Title text={t('CredentialRequest.header')}>
-              <InteractionTitle label={t('CredentialRequest.header')} />
-            </CollapsibleClone.Title>
-            <InteractionDescription label={t('CredentialRequest.subheader')} />
-            <Space />
-            <ScreenContainer.Padding>
-              <ShareAttributeWidget withContainer />
-            </ScreenContainer.Padding>
-            <InteractionSection
-              title={t('Documents.documentsTab')}
-              isPaddedTitle={true}
-            >
-              {handleRenderCredentials(documents)}
-            </InteractionSection>
-            <InteractionSection
-              title={t('Documents.othersTab')}
-              isPaddedTitle={true}
-            >
-              {handleRenderCredentials(other)}
-            </InteractionSection>
-          </CollapsibleClone.Scroll>
-        </ContainerFAS>
-      )}
+    <View
+      style={{
+        paddingTop: top,
+        backgroundColor: Colors.mainBlack,
+      }}
     >
-      <FooterContainerFAS>
-        <InteractionFooter
-          disabled={!isReadyToSubmit}
-          onSubmit={handleSubmit}
-          submitLabel={t('CredentialRequest.acceptBtn')}
-        />
-      </FooterContainerFAS>
-    </CollapsibleClone>
+      <CollapsibleClone
+        renderHeader={() => <CollapsibleClone.Header />}
+        renderScroll={() => (
+          <ContainerFAS>
+            <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
+              <CollapsibleClone.Scale>
+                <LogoContainerFAS>
+                  <InteractionLogo />
+                </LogoContainerFAS>
+              </CollapsibleClone.Scale>
+              <CollapsibleClone.Title text={t('CredentialRequest.header')}>
+                <InteractionTitle label={t('CredentialRequest.header')} />
+              </CollapsibleClone.Title>
+              <InteractionDescription
+                label={t('CredentialRequest.subheader')}
+              />
+              <Space />
+              <ScreenContainer.Padding>
+                <ShareAttributeWidget withContainer />
+              </ScreenContainer.Padding>
+              <InteractionSection
+                title={t('Documents.documentsTab')}
+                isPaddedTitle={true}
+              >
+                {handleRenderCredentials(documents)}
+              </InteractionSection>
+              <InteractionSection
+                title={t('Documents.othersTab')}
+                isPaddedTitle={true}
+              >
+                {handleRenderCredentials(other)}
+              </InteractionSection>
+            </CollapsibleClone.Scroll>
+          </ContainerFAS>
+        )}
+      >
+        <FooterContainerFAS>
+          <InteractionFooter
+            disabled={!isReadyToSubmit}
+            onSubmit={handleSubmit}
+            submitLabel={t('CredentialRequest.acceptBtn')}
+          />
+        </FooterContainerFAS>
+      </CollapsibleClone>
+    </View>
   )
 }
 

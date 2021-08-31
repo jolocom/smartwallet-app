@@ -29,10 +29,10 @@ const NavigationHeader: React.FC<Props> = ({
     <View
       style={[
         styles.navContainer,
-        customStyles,
         {
           justifyContent: 'space-between',
         },
+        customStyles,
       ]}
     >
       {type === NavHeaderType.Back && (

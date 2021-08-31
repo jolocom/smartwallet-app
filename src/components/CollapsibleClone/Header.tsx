@@ -1,7 +1,6 @@
 import React from 'react'
 import { useMemo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
-import { useSafeArea } from 'react-native-safe-area-context'
 import NavigationHeader from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
 import { useCollapsibleClone } from './context'
@@ -39,20 +38,14 @@ const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
     })
   }, [JSON.stringify(currentTitle)])
 
-  const { top } = useSafeArea()
-
   return (
-    <NavigationHeader
-      type={type}
-      customStyles={[styles.container, { paddingTop: top, height: 50 + top }]}
-    >
+    <NavigationHeader type={type} customStyles={[styles.container]}>
       <Animated.Text
         numberOfLines={1}
         style={[
           styles.text,
           type === undefined && { textAlign: 'center' },
           {
-            flex: 0.5,
             opacity: headerTitleOpacity,
             transform: [
               {
@@ -70,8 +63,6 @@ const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     backgroundColor: Colors.mainBlack,
   },
   text: {

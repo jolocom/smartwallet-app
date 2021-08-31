@@ -1,6 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import {
@@ -33,6 +34,7 @@ import {
   InteractionOfferDocumentCard,
   InteractionOfferOtherCard,
 } from '~/components/Cards/InteractionOffer'
+import { Colors } from '~/utils/colors'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -121,43 +123,51 @@ const CredentialOfferFAS = () => {
       </View>
     ))
 
+  const { top } = useSafeArea()
   return (
-    <CollapsibleClone
-      renderHeader={() => <CollapsibleClone.Header />}
-      renderScroll={() => (
-        <ContainerFAS>
-          <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
-            <CollapsibleClone.Scale>
-              <LogoContainerFAS>
-                <InteractionLogo />
-              </LogoContainerFAS>
-            </CollapsibleClone.Scale>
-            <CollapsibleClone.Title text={t('CredentialOffer.header')}>
-              <InteractionTitle label={t('CredentialOffer.header')} />
-            </CollapsibleClone.Title>
-            <InteractionDescription
-              label={t('CredentialOffer.subheader', { serviceName: name })}
-            />
-            <Space />
-            <ScreenContainer.Padding>
-              <InteractionSection title={t('Documents.documentsTab')}>
-                {handleRenderCredentials(documents)}
-              </InteractionSection>
-              <InteractionSection title={t('Documents.othersTab')}>
-                {handleRenderCredentials(other)}
-              </InteractionSection>
-            </ScreenContainer.Padding>
-          </CollapsibleClone.Scroll>
-        </ContainerFAS>
-      )}
+    <View
+      style={{
+        paddingTop: top,
+        backgroundColor: Colors.mainBlack,
+      }}
     >
-      <FooterContainerFAS>
-        <InteractionFooter
-          onSubmit={handleSubmit}
-          submitLabel={t('CredentialOffer.confirmBtn')}
-        />
-      </FooterContainerFAS>
-    </CollapsibleClone>
+      <CollapsibleClone
+        renderHeader={() => <CollapsibleClone.Header />}
+        renderScroll={() => (
+          <ContainerFAS>
+            <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
+              <CollapsibleClone.Scale>
+                <LogoContainerFAS>
+                  <InteractionLogo />
+                </LogoContainerFAS>
+              </CollapsibleClone.Scale>
+              <CollapsibleClone.Title text={t('CredentialOffer.header')}>
+                <InteractionTitle label={t('CredentialOffer.header')} />
+              </CollapsibleClone.Title>
+              <InteractionDescription
+                label={t('CredentialOffer.subheader', { serviceName: name })}
+              />
+              <Space />
+              <ScreenContainer.Padding>
+                <InteractionSection title={t('Documents.documentsTab')}>
+                  {handleRenderCredentials(documents)}
+                </InteractionSection>
+                <InteractionSection title={t('Documents.othersTab')}>
+                  {handleRenderCredentials(other)}
+                </InteractionSection>
+              </ScreenContainer.Padding>
+            </CollapsibleClone.Scroll>
+          </ContainerFAS>
+        )}
+      >
+        <FooterContainerFAS>
+          <InteractionFooter
+            onSubmit={handleSubmit}
+            submitLabel={t('CredentialOffer.confirmBtn')}
+          />
+        </FooterContainerFAS>
+      </CollapsibleClone>
+    </View>
   )
 }
 
