@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import Carousel, { CarouselProps } from 'react-native-snap-carousel'
 import { usePrevious, useRevertToInitialState } from '~/hooks/generic'
+import { IWithCustomStyle } from '~/types/props'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
-import { IWithCustomStyle } from './Card/types'
 
 interface IAdoptedCarousel<T> extends CarouselProps<T>, IWithCustomStyle {}
 
@@ -15,7 +15,7 @@ const AdoptedCarousel = <T extends unknown>({
   ...rest
 }: IAdoptedCarousel<T>) => {
   const prevLength = usePrevious(data.length)
-  const carouselRef = useRef<Carousel<any> | null>(null)
+  const carouselRef = useRef<Carousel<T> | null>(null)
 
   const [isHidden, setIsHidden] = useState(false)
 
@@ -30,6 +30,7 @@ const AdoptedCarousel = <T extends unknown>({
       if (data.length === 1) {
         setIsHidden(true)
       }
+      // eslint-disable-next-line no-unused-expressions
       carouselRef.current?.snapToPrev()
     }
   }, [data.length])

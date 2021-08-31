@@ -25,6 +25,7 @@ const RecoveryInputMetadata: React.FC<RecoveryInputMetadataI> = memo(
             type={BtnTypes.secondary}
             withoutMargins
             customContainerStyles={{ height: 'auto' }}
+            // eslint-disable-next-line
             onPress={() => {}}
             customTextStyles={{ color: Colors.error }}
             activeOpacity={1}

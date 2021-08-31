@@ -50,7 +50,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const isAccessRestore = route?.params?.isAccessRestore ?? false
 
   const handlePhraseSubmit = useCallback(async () => {
-    const handleDone = (error: any) => {
+    const handleDone = (error: unknown) => {
       if (!error) {
         dispatch(setLogged(true))
         replaceWith(ScreenNames.LoggedIn)
@@ -90,7 +90,11 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const isPhraseComplete = phrase.length === 12
 
   const handleCancel = () => {
-    isAccessRestore ? pop(2) : goBack()
+    if (isAccessRestore) {
+      pop(2)
+    } else {
+      goBack()
+    }
   }
 
   return { handlePhraseSubmit, isPhraseComplete, handleCancel }

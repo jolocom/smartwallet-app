@@ -26,9 +26,8 @@ import {
   getAttributeValueBasedOnConfig,
 } from '~/utils/attributeUtils'
 
-const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig => {
-  return attributeConfig
-}
+const getAttributeConfigPrimitive = (): TPrimitiveAttributesConfig =>
+  attributeConfig
 
 const primitiveAttributesConfig = getAttributeConfigPrimitive()
 
@@ -48,13 +47,11 @@ const IdentityCredentials = () => {
 
   const primitiveAttributesWithValues = Object.entries<IAttributeConfig>(
     primitiveAttributesConfig,
-  ).map(([type, config]) => {
-    return {
-      type: type as PrimitiveAttributeTypes,
-      label: config.label,
-      values: attributes[type as PrimitiveAttributeTypes] ?? [],
-    }
-  })
+  ).map(([type, config]) => ({
+    type: type as PrimitiveAttributeTypes,
+    label: config.label,
+    values: attributes[type as PrimitiveAttributeTypes] ?? [],
+  }))
 
   const isPrimitiveAttributesEmpty = primitiveAttributesWithValues.every(
     (a) => !a.values.length,
@@ -67,13 +64,18 @@ const IdentityCredentials = () => {
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
         {primitiveAttributesWithValues.map(({ type, label, values }) => {
+          const isEmpty = !values.length
           const concatValues = getAttributeValueBasedOnConfig(type, values).map(
             (value) => concatValuesIdentity(type, value),
           )
           const hideCreateNew =
             type === AttributeTypes.name && concatValues.length > 0
           return (
-            <View style={styles.group} key={type}>
+            <View
+              style={styles.group}
+              key={type}
+              testID={isEmpty ? 'id-widget-empty' : 'id-widget-with-values'}
+            >
               <Widget
                 onAdd={() => redirect(ScreenNames.CredentialForm, { type })}
               >
@@ -82,7 +84,7 @@ const IdentityCredentials = () => {
                   <Widget.Header.Name value={t(label) as string} />
                   {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>
-                {concatValues.length ? (
+                {!isEmpty ? (
                   concatValues.map((field) => (
                     <IdentityField
                       key={field.id}

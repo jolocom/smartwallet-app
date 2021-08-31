@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.bastille1,
   },
   spacings: {
-    paddingHorizontal: 20,
-    paddingVertical: BP({ default: 10, xsmall: 8 }),
+    paddingHorizontal: BP({ default: 20, xsmall: 15 }),
+    paddingVertical: BP({ default: 10, xsmall: 6 }),
   },
   active: {
     borderWidth: 1.7,

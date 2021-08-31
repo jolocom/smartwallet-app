@@ -108,7 +108,11 @@ const RegisterPin = () => {
                 ? t('CreatePasscode.createHeader')
                 : t('VerifyPasscode.verifyHeader')
             }
-            subtitle={t('CreatePasscode.createSubheader')}
+            subtitle={
+              isCreating
+                ? t('CreatePasscode.createSubheader')
+                : t('VerifyPasscode.verifySubheader')
+            }
           />
           <View style={styles.passcodeContainer}>
             <Passcode.Input />

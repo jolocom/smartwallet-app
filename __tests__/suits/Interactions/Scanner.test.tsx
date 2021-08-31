@@ -23,7 +23,13 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: jest.fn(),
     canGoBack: jest.fn().mockReturnValue(true),
+    goBack: jest.fn(),
   }),
+  createNavigatorFactory: jest.fn(),
+}))
+
+jest.mock('@react-navigation/core', () => ({
+  useIsFocused: jest.fn().mockReturnValue(true),
 }))
 
 test('it displays permission request, denies it and opens settings ', async () => {
@@ -34,9 +40,9 @@ test('it displays permission request, denies it and opens settings ', async () =
 
   const { getByText } = renderWithSafeArea(<ScannerIntro />)
 
-  expect(getByText(strings.CAMERA_PERMISSION)).toBeDefined()
+  expect(getByText(/CameraPermission.header/)).toBeDefined()
 
-  fireEvent.press(getByText(strings.TAP_TO_ACTIVATE_CAMERA))
+  fireEvent.press(getByText(/CameraPermission.confirmBtn/))
 
   await waitFor(() => expect(openSettings).toHaveBeenCalledTimes(1))
 })

@@ -1,19 +1,18 @@
 import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import { TFunction } from 'i18next'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import DocumentCard from '~/components/Card/DocumentCard'
 import { useTabs } from '~/components/Tabs/context'
 import {
   getCustomCredentialsByCategoriesByType,
   getCustomCredentialsByCategoriesByIssuer,
 } from '~/modules/credentials/selectors'
-import OtherCard from '~/components/Card/OtherCard'
 import {
   CredentialCategories,
-  DocumentFields,
   DisplayCredentialDocument,
   DisplayCredentialOther,
   CredentialsByType,
@@ -31,22 +30,96 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
 import { uiTypesTerms } from '~/hooks/signedCredentials/utils'
-import { useCredentialOptionalFields } from '~/hooks/credentials'
+import {
+  useCredentialOptionalFields,
+  useDeleteCredential,
+} from '~/hooks/credentials'
+import { useToasts } from '~/hooks/toasts'
+import { usePopupMenu } from '~/hooks/popupMenu'
+import DocumentSectionDocumentCard from '~/components/Cards/DocumentSectionCards/DocumentSectionDocumentCard'
+import DocumentSectionOtherCard from '~/components/Cards/DocumentSectionCards/DocumentSectionOtherCard'
 
-const CardList: React.FC = ({ children }) => {
-  return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      overScrollMode={'never'}
-      contentContainerStyle={{
-        paddingBottom: '40%',
-        paddingTop: 32,
-      }}
-    >
-      {children}
-    </ScrollView>
-  )
+const getCredentialDisplayType = (displayType: string, t: TFunction) => {
+  /**
+   * - if value is defined
+   *   and it isn't not a <context.term> pattern: use it as a type;
+   * - if value is empty make it unknown
+   */
+  const uiType: string | undefined =
+    uiTypesTerms[displayType as CredentialUITypes]
+
+  const credentialUIType = uiType
+    ? t(uiType)
+    : displayType === ''
+    ? t(uiTypesTerms[CredentialUITypes.unknown])
+    : displayType
+  return credentialUIType
 }
+
+const useHandleMorePress = () => {
+  const { t } = useTranslation()
+  const { scheduleErrorWarning } = useToasts()
+
+  const { showPopup } = usePopupMenu()
+  const deleteCredential = useDeleteCredential()
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteCredential(id)
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
+  }
+
+  return (
+    id: string,
+    credentialName: string,
+    fields: Array<Required<DisplayVal>>,
+    photo?: string,
+  ) => {
+    const popupOptions = [
+      {
+        title: t('Documents.infoCardOption'),
+        navigation: {
+          screen: ScreenNames.CredentialDetails,
+          params: {
+            fields,
+            photo,
+            title: credentialName,
+          },
+        },
+      },
+      {
+        title: t('Documents.deleteCardOption'),
+        navigation: {
+          screen: ScreenNames.DragToConfirm,
+          params: {
+            title: t('Documents.deleteDocumentHeader', {
+              documentName: `${credentialName}`,
+              interpolation: { escapeValue: false },
+            }),
+            cancelText: t('Documents.cancelCardOption'),
+            instructionText: t('Documents.deleteCredentialInstruction'),
+            onComplete: () => handleDelete(id),
+          },
+        },
+      },
+    ]
+    showPopup(popupOptions)
+  }
+}
+
+const CardList: React.FC = ({ children }) => (
+  <ScrollView
+    showsVerticalScrollIndicator={false}
+    overScrollMode={'never'}
+    contentContainerStyle={{
+      paddingBottom: '40%',
+      paddingTop: 32,
+    }}
+  >
+    {children}
+  </ScrollView>
+)
 
 export const DocumentList = () => {
   const { t } = useTranslation()
@@ -99,6 +172,8 @@ export const DocumentList = () => {
     [JSON.stringify(categories)],
   )
 
+  const onHandleMore = useHandleMorePress()
+
   if (categories === null) return null
   return (
     <>
@@ -121,22 +196,10 @@ export const DocumentList = () => {
               const { credentials, value } = d as
                 | CredentialsByType<DisplayCredentialDocument>
                 | CredentialsByIssuer<DisplayCredentialDocument>
-              /**
-               * - if value is defined
-               *   and it isn't not a <context.term> pattern: use it as a type;
-               * - if value is empty make it unknown
-               */
-              let uiType: string | undefined =
-                uiTypesTerms[value as CredentialUITypes]
-              const credentialUIType = uiType
-                ? // @ts-expect-error
-                  t(uiType)
-                : value === ''
-                ? // @ts-expect-error
-                  t(uiTypesTerms[CredentialUITypes.unknown])
-                : value
+
+              const credentialUIType = getCredentialDisplayType(value, t)
               return (
-                <>
+                <View style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
                     <JoloText
                       size={JoloTextSizes.mini}
@@ -151,30 +214,35 @@ export const DocumentList = () => {
                   </ScreenContainer.Padding>
                   <AdoptedCarousel
                     activeSlideAlignment="center"
-                    customStyles={{ marginLeft: -4 }}
+                    customStyles={{ marginLeft: -12 }}
                     data={credentials}
-                    renderItem={({ item: c }) => (
-                      <DocumentCard
-                        key={c.id}
-                        type={c.type}
-                        id={c.id}
-                        mandatoryFields={[
-                          {
-                            label: DocumentFields.DocumentName,
-                            value: c.name || t('General.unknown'),
-                          },
-                          {
-                            label: t('Documents.subjectNameField'),
-                            value: c.holderName || t('General.anonymous'),
-                          },
-                        ]}
-                        optionalFields={getOptionalFields(c)}
-                        highlight={c.id.slice(0, 14)}
+                    renderItem={({ item: c, index }) => (
+                      <DocumentSectionDocumentCard
+                        key={`${index}-${c.id}`}
+                        credentialName={c.name || t('General.unknown')}
+                        holderName={c.holderName || t('General.anonymous')}
+                        fields={getOptionalFields(c)}
+                        highlight={c.id}
                         photo={c.photo}
+                        onHandleMore={() =>
+                          onHandleMore(
+                            c.id,
+                            c.name,
+                            [
+                              {
+                                key: 'subjectName',
+                                label: t('Documents.subjectNameField'),
+                                value: c.holderName || t('General.anonymous'),
+                              },
+                              ...getOptionalFields(c),
+                            ],
+                            c.photo,
+                          )
+                        }
                       />
                     )}
                   />
-                </>
+                </View>
               )
             })}
           </CardList>
@@ -199,8 +267,10 @@ export const DocumentList = () => {
               const { credentials, value } = o as
                 | CredentialsByType<DisplayCredentialOther>
                 | CredentialsByIssuer<DisplayCredentialOther>
+              const credentialUIType = getCredentialDisplayType(value, t)
+
               return (
-                <>
+                <View style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
                     <JoloText
                       size={JoloTextSizes.mini}
@@ -210,29 +280,30 @@ export const DocumentList = () => {
                         marginBottom: BP({ default: 30, xsmall: 16 }),
                       }}
                     >
-                      {`${value}  • ${credentials.length}`}
+                      {`${credentialUIType}  • ${credentials.length}`}
                     </JoloText>
                   </ScreenContainer.Padding>
 
                   <AdoptedCarousel
                     data={credentials}
-                    renderItem={({ item: c }) => (
-                      <OtherCard
-                        id={c.id}
-                        type={c.type}
-                        key={c.id}
-                        mandatoryFields={[
-                          {
-                            label: DocumentFields.DocumentName,
-                            value: c.name || t('General.unknown'),
-                          },
-                        ]}
-                        optionalFields={getOptionalFields(c)}
-                        photo={c.photo}
-                      />
-                    )}
+                    customStyles={{ marginLeft: -12 }}
+                    renderItem={({ item: c, index }) => {
+                      const fields = getOptionalFields(c)
+                      return (
+                        <DocumentSectionOtherCard
+                          key={`${index}-${c.id}`}
+                          credentialName={c.name || t('General.unknown')}
+                          credentialType={credentialUIType}
+                          fields={fields}
+                          logo={c.photo}
+                          onHandleMore={() =>
+                            onHandleMore(c.id, c.name, fields, c.photo)
+                          }
+                        />
+                      )
+                    }}
                   />
-                </>
+                </View>
               )
             })}
           </CardList>
@@ -241,3 +312,9 @@ export const DocumentList = () => {
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  sectionContainer: {
+    paddingBottom: 22,
+  },
+})

@@ -24,9 +24,7 @@ import TermsConsent from '~/screens/Modals/TermsConsent'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import { IField } from '~/components/Card/types'
 import CredentialDetails from './Documents/CredentialDetails'
-import InteractionTest from './Settings/Development/InteractionCardsTest'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import {
@@ -39,26 +37,25 @@ import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import { Colors } from '~/utils/colors'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
+import { IField } from '~/types/props'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
 }
 const TransparentModalsStack = createStackNavigator()
 
-const TransparentModals = () => {
-  return (
-    <TransparentModalsStack.Navigator
-      headerMode="none"
-      mode="modal"
-      screenOptions={transparentModalOptions}
-    >
-      <TransparentModalsStack.Screen
-        name={ScreenNames.PopupMenu}
-        component={PopupMenu}
-      />
-    </TransparentModalsStack.Navigator>
-  )
-}
+const TransparentModals = () => (
+  <TransparentModalsStack.Navigator
+    headerMode="none"
+    mode="modal"
+    screenOptions={transparentModalOptions}
+  >
+    <TransparentModalsStack.Screen
+      name={ScreenNames.PopupMenu}
+      component={PopupMenu}
+    />
+  </TransparentModalsStack.Navigator>
+)
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
@@ -88,7 +85,6 @@ export type MainStackParamList = {
   [ScreenNames.NotificationsTest]: undefined
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
-  [ScreenNames.InteractionCardsTest]: undefined
   [ScreenNames.PinRecoveryInstructions]: undefined
   [ScreenNames.PasscodeRecovery]: {
     isAccessRestore: boolean
@@ -205,11 +201,6 @@ const Main: React.FC = () => {
               <MainStack.Screen
                 name={ScreenNames.PasscodeTest}
                 component={PasscodeTest}
-                options={screenTransitionSlideFromRight}
-              />
-              <MainStack.Screen
-                name={ScreenNames.InteractionCardsTest}
-                component={InteractionTest}
                 options={screenTransitionSlideFromRight}
               />
             </>
