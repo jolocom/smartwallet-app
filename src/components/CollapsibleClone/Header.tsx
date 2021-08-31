@@ -27,6 +27,18 @@ const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
     })
   }, [JSON.stringify(currentTitle)])
 
+  const headerTitlePosition = useMemo(() => {
+    if (currentTitle === undefined) return 0
+    return scrollY.interpolate({
+      inputRange: [
+        (currentTitle.startY + currentTitle.endY) / 2,
+        currentTitle.endY,
+      ],
+      outputRange: [30, 0],
+      extrapolate: 'clamp',
+    })
+  }, [JSON.stringify(currentTitle)])
+
   const { top } = useSafeArea()
 
   return (
@@ -42,6 +54,11 @@ const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
           {
             flex: 0.5,
             opacity: headerTitleOpacity,
+            transform: [
+              {
+                translateY: headerTitlePosition,
+              },
+            ],
           },
         ]}
       >
