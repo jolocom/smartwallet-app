@@ -2,7 +2,7 @@ import React from 'react'
 import { useCustomContext } from '~/hooks/context'
 import { IPasscodeContext } from './types'
 
-export const ALL_PIN_ATTEMPTS = 3
+export const ALL_PIN_ATTEMPTS = 5
 
 export const PasscodeContext = React.createContext<
   IPasscodeContext | undefined
