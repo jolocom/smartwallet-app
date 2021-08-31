@@ -20,6 +20,7 @@ import {
   screenTransitionSlideFromBottom,
   transparentModalOptions,
 } from './utils/screenSettings'
+import AppDisabled from './screens/Modals/AppDisabled'
 
 export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
@@ -48,6 +49,15 @@ const navigationTheme: Theme = {
   },
 }
 
+export type GlobalModalsParamsList = {
+  [ScreenNames.LostSeedPhraseInfo]: undefined
+  [ScreenNames.SeedPhraseInfo]: undefined
+  [ScreenNames.AppDisabled]: {
+    attemptCyclesLeft: number
+    countdown: number
+  }
+}
+
 const ModalStack = createStackNavigator()
 
 const GlobalModals = () => {
@@ -64,6 +74,10 @@ const GlobalModals = () => {
       <ModalStack.Screen
         name={ScreenNames.SeedPhraseInfo}
         component={SeedPhraseInfo}
+      />
+      <ModalStack.Screen
+        name={ScreenNames.AppDisabled}
+        component={AppDisabled}
       />
     </ModalStack.Navigator>
   )
