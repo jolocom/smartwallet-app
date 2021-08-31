@@ -1,4 +1,4 @@
-import { SecureStorage } from 'react-native-jolocom/js/secureStorage'
+import { SecureStorage } from 'react-native-jolocom'
 
 export enum SecureStorageKeys {
   passcode = 'com.jolocom.wallet-PIN',
