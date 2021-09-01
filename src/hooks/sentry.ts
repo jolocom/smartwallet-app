@@ -24,9 +24,9 @@ const useSentry = () => {
     if (eventId) {
       const body = JSON.stringify({
         event_id: eventId,
-        name: report.issue ?? 'Unknown',
-        email: report.email ?? '-',
-        comments: report.details ?? '-',
+        name: report.issue ?? '[UNKNOWN]',
+        email: report.email ?? 'placeholder@jolocom.com',
+        comments: report.details ?? '[NO_COMMENT]',
       })
 
       await fetch(USER_FEEDBACK_URL, {
