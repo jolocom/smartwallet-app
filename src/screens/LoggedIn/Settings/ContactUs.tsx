@@ -20,7 +20,7 @@ import { InputValidityState } from '~/components/Input/types'
 import { useAssertConnection } from '~/hooks/connection'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 import { NavHeaderType } from '~/components/NavigationHeader'
 
 const ContactUs: React.FC = () => {
@@ -84,13 +84,11 @@ const ContactUs: React.FC = () => {
         paddingTop: 0,
       }}
     >
-      <CollapsibleClone
-        renderHeader={() => (
-          <CollapsibleClone.Header type={NavHeaderType.Back} />
-        )}
+      <Collapsible
+        renderHeader={() => <Collapsible.Header type={NavHeaderType.Back} />}
         renderScroll={({ headerHeight }) => (
           <ScreenContainer.Padding>
-            <CollapsibleClone.KeyboardAwareScroll
+            <Collapsible.KeyboardAwareScroll
               style={{ width: '100%', flexGrow: 1 }}
               contentContainerStyle={{
                 paddingBottom: 36,
@@ -102,9 +100,9 @@ const ContactUs: React.FC = () => {
               keyboardShouldPersistTaps="handled"
             >
               <Section>
-                <CollapsibleClone.Title text={t('ContactUs.issueHeader')}>
+                <Collapsible.Title text={t('ContactUs.issueHeader')}>
                   <Section.Title>{t('ContactUs.issueHeader')}</Section.Title>
-                </CollapsibleClone.Title>
+                </Collapsible.Title>
                 <Dropdown
                   placeholder={t('ContactUs.issuePlaceholder')}
                   options={options}
@@ -112,11 +110,11 @@ const ContactUs: React.FC = () => {
                 />
               </Section>
               <Section>
-                <CollapsibleClone.Title text={t('ContactUs.suggestionHeader')}>
+                <Collapsible.Title text={t('ContactUs.suggestionHeader')}>
                   <Section.Title customStyle={{ marginBottom: 14 }}>
                     {t('ContactUs.suggestionHeader')}
                   </Section.Title>
-                </CollapsibleClone.Title>
+                </Collapsible.Title>
                 <JoloText
                   size={JoloTextSizes.mini}
                   kind={JoloTextKind.subtitle}
@@ -136,11 +134,11 @@ const ContactUs: React.FC = () => {
                 </JoloKeyboardAwareScroll.InputContainer>
               </Section>
               <Section customStyles={{ marginBottom: 84 }}>
-                <CollapsibleClone.Title text={t('ContactUs.contactHeader')}>
+                <Collapsible.Title text={t('ContactUs.contactHeader')}>
                   <Section.Title customStyle={{ marginBottom: 0 }}>
                     {t('ContactUs.contactHeader')}
                   </Section.Title>
-                </CollapsibleClone.Title>
+                </Collapsible.Title>
                 <JoloKeyboardAwareScroll.InputContainer>
                   {({ focusInput }) => (
                     <Input.Underline
@@ -171,7 +169,7 @@ const ContactUs: React.FC = () => {
               >
                 {t('ContactUs.submitBtn')}
               </Btn.Online>
-            </CollapsibleClone.KeyboardAwareScroll>
+            </Collapsible.KeyboardAwareScroll>
           </ScreenContainer.Padding>
         )}
       />

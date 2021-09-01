@@ -1,24 +1,23 @@
 import React, { useRef } from 'react'
 import { View, StyleSheet, findNodeHandle } from 'react-native'
-import { useCollapsibleClone } from './context'
-import { ICollapsibleCloneComposite } from './types'
+import { useCollapsible } from './context'
+import { ICollapsibleComposite } from './types'
 
 /**
  * NOTE: layout is calculated incorrectly sometimes
  */
-const Title: ICollapsibleCloneComposite['Title'] = ({
+const Title: ICollapsibleComposite['Title'] = ({
   text,
   customContainerStyles = {},
   children,
 }) => {
   const titleRef = useRef<View>(null)
-  const { onAddTitle, headerHeight, collapsibleCloneRef } =
-    useCollapsibleClone()
+  const { onAddTitle, headerHeight, collapsibleRef } = useCollapsible()
 
   const handleLayout = () => {
-    if (collapsibleCloneRef.current !== null) {
+    if (collapsibleRef.current !== null) {
       titleRef.current?.measureLayout(
-        findNodeHandle(collapsibleCloneRef.current)!,
+        findNodeHandle(collapsibleRef.current)!,
         (x, y, width, height) => {
           const titlePosition = y - headerHeight
           onAddTitle({
