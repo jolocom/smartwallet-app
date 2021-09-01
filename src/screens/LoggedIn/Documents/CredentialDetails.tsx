@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
+import { useRoute, RouteProp } from '@react-navigation/native'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -12,12 +12,11 @@ import { NavHeaderType } from '~/components/NavigationHeader'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import { useToggleExpand } from '~/hooks/ui'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CredentialDetails = () => {
-  const navigation = useNavigation()
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.CredentialDetails>>()
   const { title, photo, fields } = route.params
@@ -37,14 +36,12 @@ const CredentialDetails = () => {
   }, [isExpanded])
 
   return (
-    <CollapsibleClone
-      renderHeader={() => (
-        <CollapsibleClone.Header type={NavHeaderType.Close} />
-      )}
+    <Collapsible
+      renderHeader={() => <Collapsible.Header type={NavHeaderType.Close} />}
       renderScroll={() => (
         <ScreenContainer.Padding>
-          <CollapsibleClone.Scroll>
-            <CollapsibleClone.Title
+          <Collapsible.Scroll>
+            <Collapsible.Title
               text={title ?? ''}
               customContainerStyles={{
                 width: photo ? '68%' : '100%',
@@ -63,7 +60,7 @@ const CredentialDetails = () => {
               >
                 {title}
               </JoloText>
-            </CollapsibleClone.Title>
+            </Collapsible.Title>
             <Block customStyle={{ backgroundColor: Colors.white }}>
               {photo && <Image source={{ uri: photo }} style={styles.photo} />}
               {fields.map((field, i) => (
@@ -100,7 +97,7 @@ const CredentialDetails = () => {
                 </React.Fragment>
               ))}
             </Block>
-          </CollapsibleClone.Scroll>
+          </Collapsible.Scroll>
         </ScreenContainer.Padding>
       )}
     />

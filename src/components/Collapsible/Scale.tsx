@@ -1,11 +1,11 @@
 import React from 'react'
 import { useCallback } from 'react'
 import { Animated } from 'react-native'
-import { useCollapsibleClone } from './context'
-import { ICollapsibleCloneComposite } from './types'
+import { useCollapsible } from './context'
+import { ICollapsibleComposite } from './types'
 
-const Scale: ICollapsibleCloneComposite['Scale'] = ({ children }) => {
-  const { scrollY, currentTitle } = useCollapsibleClone()
+const Scale: ICollapsibleComposite['Scale'] = ({ children }) => {
+  const { scrollY, currentTitle } = useCollapsible()
 
   const getScale = useCallback(() => {
     if (currentTitle === undefined) return 1

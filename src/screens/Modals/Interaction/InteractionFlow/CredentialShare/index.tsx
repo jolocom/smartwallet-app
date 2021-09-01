@@ -36,7 +36,7 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 import ShareAttributeWidget from './ShareAttributeWidget'
 import BP from '~/utils/breakpoints'
 import { PurpleTickSuccess } from '~/assets/svg'
@@ -240,19 +240,19 @@ const CredentialShareFAS = () => {
     })
 
   return (
-    <CollapsibleClone
-      renderHeader={() => <CollapsibleClone.Header />}
+    <Collapsible
+      renderHeader={() => <Collapsible.Header />}
       renderScroll={() => (
         <ContainerFAS>
-          <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
-            <CollapsibleClone.Scale>
+          <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
+            <Collapsible.Scale>
               <LogoContainerFAS>
                 <InteractionLogo />
               </LogoContainerFAS>
-            </CollapsibleClone.Scale>
-            <CollapsibleClone.Title text={t('CredentialRequest.header')}>
+            </Collapsible.Scale>
+            <Collapsible.Title text={t('CredentialRequest.header')}>
               <InteractionTitle label={t('CredentialRequest.header')} />
-            </CollapsibleClone.Title>
+            </Collapsible.Title>
             <InteractionDescription label={t('CredentialRequest.subheader')} />
             <Space />
             <ScreenContainer.Padding>
@@ -270,7 +270,7 @@ const CredentialShareFAS = () => {
             >
               {handleRenderCredentials(other)}
             </InteractionSection>
-          </CollapsibleClone.Scroll>
+          </Collapsible.Scroll>
         </ContainerFAS>
       )}
     >
@@ -281,7 +281,7 @@ const CredentialShareFAS = () => {
           submitLabel={t('CredentialRequest.acceptBtn')}
         />
       </FooterContainerFAS>
-    </CollapsibleClone>
+    </Collapsible>
   )
 }
 

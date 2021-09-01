@@ -11,8 +11,8 @@ import {
 
 import Title from './Title'
 import {
-  ICollapsibleCloneComposite,
-  ICollapsibleCloneContext,
+  ICollapsibleComposite,
+  ICollapsibleContext,
   isFlatList,
   isKeyboardAwareScroll,
   isScrollView,
@@ -20,18 +20,21 @@ import {
 } from './types'
 import { compare } from './utils'
 import Header from './Header'
-import { CollapsibleCloneContext } from './context'
+import { CollapsibleContext } from './context'
 import Scroll from './Scroll'
 import Scale from './Scale'
 import KeyboardAwareScrollView from './KeyboardAwareScroll'
 
-interface ICollapsibleClone {
-  renderHeader: (context: ICollapsibleCloneContext) => React.ReactElement | null
-  renderScroll: (context: ICollapsibleCloneContext) => React.ReactElement | null
+interface ICollapsible {
+  renderHeader: (context: ICollapsibleContext) => React.ReactElement | null
+  renderScroll: (context: ICollapsibleContext) => React.ReactElement | null
 }
 
-const CollapsibleClone: React.FC<ICollapsibleClone> &
-  ICollapsibleCloneComposite = ({ renderHeader, renderScroll, children }) => {
+const Collapsible: React.FC<ICollapsible> & ICollapsibleComposite = ({
+  renderHeader,
+  renderScroll,
+  children,
+}) => {
   /**
    * A support of multiple titles
    */
@@ -45,7 +48,7 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
   const prevScrollPosition = useRef(0)
   const scrollY = useRef(new Animated.Value(0)).current
 
-  const collapsibleCloneRef = useRef<View>(null)
+  const collapsibleRef = useRef<View>(null)
 
   const handleScroll = useCallback(
     Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
@@ -136,17 +139,17 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
       onScroll: handleScroll, // for Scroll,
       onSnap: handleSnap, // for Scroll,
       currentTitle: titles.length ? titles[currentTitleIdx] : undefined,
-      collapsibleCloneRef,
+      collapsibleRef,
     }),
     [currentTitleText, headerHeight, currentTitleIdx, JSON.stringify(titles)],
   )
 
   return (
-    <CollapsibleCloneContext.Provider value={contextValue}>
+    <CollapsibleContext.Provider value={contextValue}>
       {/* NOTE: `collapsible` props makes sure that view is being drawn
        * https://reactnative.dev/docs/view#collapsable
        */}
-      <View ref={collapsibleCloneRef} collapsable={false}>
+      <View ref={collapsibleRef} collapsable={false}>
         <View
           onLayout={handleHeaderContainerLayout}
           style={{
@@ -167,14 +170,14 @@ const CollapsibleClone: React.FC<ICollapsibleClone> &
           </>
         )}
       </View>
-    </CollapsibleCloneContext.Provider>
+    </CollapsibleContext.Provider>
   )
 }
 
-CollapsibleClone.Title = Title
-CollapsibleClone.Header = Header
-CollapsibleClone.Scroll = Scroll
-CollapsibleClone.KeyboardAwareScroll = KeyboardAwareScrollView
-CollapsibleClone.Scale = Scale
+Collapsible.Title = Title
+Collapsible.Header = Header
+Collapsible.Scroll = Scroll
+Collapsible.KeyboardAwareScroll = KeyboardAwareScrollView
+Collapsible.Scale = Scale
 
-export default CollapsibleClone
+export default Collapsible

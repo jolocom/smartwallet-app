@@ -11,7 +11,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 
 const BackupBlock: React.FC<{
   title: string
@@ -53,14 +53,14 @@ const BackupIdentity = () => {
   const lastBackup = '18.07.2020'
 
   return (
-    <CollapsibleClone
-      renderHeader={() => <CollapsibleClone.Header type={NavHeaderType.Back} />}
+    <Collapsible
+      renderHeader={() => <Collapsible.Header type={NavHeaderType.Back} />}
       renderScroll={() => (
         <ScreenContainer.Padding>
-          <CollapsibleClone.Scroll>
-            <CollapsibleClone.Title text={t('BackupOptions.header')}>
+          <Collapsible.Scroll>
+            <Collapsible.Title text={t('BackupOptions.header')}>
               <Section.Title>{t('BackupOptions.header')}</Section.Title>
-            </CollapsibleClone.Title>
+            </Collapsible.Title>
             <View>
               <BackupBlock
                 title={t('BackupOptions.exportHeader')}
@@ -87,7 +87,7 @@ const BackupIdentity = () => {
               </JoloText>
               <JoloText color={Colors.white30}>{lastBackup}</JoloText>
             </View>
-          </CollapsibleClone.Scroll>
+          </Collapsible.Scroll>
         </ScreenContainer.Padding>
       )}
     />

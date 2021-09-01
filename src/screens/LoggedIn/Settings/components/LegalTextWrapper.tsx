@@ -8,7 +8,7 @@ import ConsentButton from './ConsentTextButton'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 import Section from './Section'
 import { NavHeaderType } from '~/components/NavigationHeader'
 
@@ -52,24 +52,22 @@ const LegalTextWrapper: React.FC<Props> = ({
         paddingHorizontal: 0,
       }}
     >
-      <CollapsibleClone
-        renderHeader={() => (
-          <CollapsibleClone.Header type={NavHeaderType.Back} />
-        )}
+      <Collapsible
+        renderHeader={() => <Collapsible.Header type={NavHeaderType.Back} />}
         renderScroll={() => (
           <ScreenContainer.Padding>
-            <CollapsibleClone.Scroll
+            <Collapsible.Scroll
               containerStyles={{
                 paddingBottom: '30%',
               }}
             >
-              <CollapsibleClone.Title text={title}>
+              <Collapsible.Title text={title}>
                 <Section.Title
                   customStyle={{ marginBottom: 16, marginTop: 16 }}
                 >
                   {title}
                 </Section.Title>
-              </CollapsibleClone.Title>
+              </Collapsible.Title>
               <JoloText
                 color={Colors.white80}
                 kind={JoloTextKind.subtitle}
@@ -80,7 +78,7 @@ const LegalTextWrapper: React.FC<Props> = ({
               </JoloText>
               {renderGermanToggle()}
               {children}
-            </CollapsibleClone.Scroll>
+            </Collapsible.Scroll>
           </ScreenContainer.Padding>
         )}
       />

@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 import EmojiSelectable from '~/components/EmojiSelectable'
 import Input from '~/components/Input'
 import { InputValidityState } from '~/components/Input/types'
@@ -121,16 +121,16 @@ const ErrorReporting = () => {
           paddingHorizontal: 0,
         }}
       >
-        <CollapsibleClone
+        <Collapsible
           renderHeader={() => (
-            <CollapsibleClone.Header
+            <Collapsible.Header
               type={NavHeaderType.Close}
               onPress={resetError}
             />
           )}
           renderScroll={({ headerHeight }) => (
             <ScreenContainer.Padding>
-              <CollapsibleClone.KeyboardAwareScroll
+              <Collapsible.KeyboardAwareScroll
                 style={{ width: '100%', flexGrow: 1 }}
                 contentContainerStyle={{
                   paddingBottom: 36,
@@ -142,13 +142,11 @@ const ErrorReporting = () => {
                 keyboardShouldPersistTaps="handled"
               >
                 <Section>
-                  <CollapsibleClone.Title
-                    text={t('ErrorReporting.issueHeader')}
-                  >
+                  <Collapsible.Title text={t('ErrorReporting.issueHeader')}>
                     <Section.Title>
                       {t('ErrorReporting.issueHeader')}
                     </Section.Title>
-                  </CollapsibleClone.Title>
+                  </Collapsible.Title>
                   <Dropdown
                     placeholder={t('ErrorReporting.issuePlaceholder')}
                     options={DROPDOWN_OPTIONS}
@@ -157,13 +155,11 @@ const ErrorReporting = () => {
                 </Section>
 
                 <Section>
-                  <CollapsibleClone.Title
-                    text={t('ErrorReporting.detailsHeader')}
-                  >
+                  <Collapsible.Title text={t('ErrorReporting.detailsHeader')}>
                     <Section.Title customStyle={{ marginBottom: 14 }}>
                       {t('ErrorReporting.detailsHeader')}
                     </Section.Title>
-                  </CollapsibleClone.Title>
+                  </Collapsible.Title>
                   <JoloText
                     size={JoloTextSizes.mini}
                     kind={JoloTextKind.subtitle}
@@ -213,13 +209,11 @@ const ErrorReporting = () => {
                 </Section>
 
                 <Section customStyles={{ marginBottom: 84 }}>
-                  <CollapsibleClone.Title
-                    text={t('ErrorReporting.contactHeader')}
-                  >
+                  <Collapsible.Title text={t('ErrorReporting.contactHeader')}>
                     <Section.Title customStyle={{ marginBottom: 0 }}>
                       {t('ErrorReporting.contactHeader')}
                     </Section.Title>
-                  </CollapsibleClone.Title>
+                  </Collapsible.Title>
                   <JoloKeyboardAwareScroll.InputContainer>
                     {({ focusInput }) => (
                       <Input.Underline
@@ -245,11 +239,11 @@ const ErrorReporting = () => {
                 </Section>
 
                 <Section>
-                  <CollapsibleClone.Title text={t('ErrorReporting.rateHeader')}>
+                  <Collapsible.Title text={t('ErrorReporting.rateHeader')}>
                     <Section.Title customStyle={{ marginBottom: 24 }}>
                       {t('ErrorReporting.rateHeader')}
                     </Section.Title>
-                  </CollapsibleClone.Title>
+                  </Collapsible.Title>
                   <EmojiSelectable />
                 </Section>
                 <Btn.Online
@@ -259,7 +253,7 @@ const ErrorReporting = () => {
                 >
                   {t('ErrorReporting.submitBtn')}
                 </Btn.Online>
-              </CollapsibleClone.KeyboardAwareScroll>
+              </Collapsible.KeyboardAwareScroll>
             </ScreenContainer.Padding>
           )}
         />

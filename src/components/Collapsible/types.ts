@@ -15,7 +15,7 @@ import { NavHeaderType } from '../NavigationHeader'
 
 export type TTitle = { label: string; startY: number; endY: number }
 
-export interface ICollapsibleCloneContext {
+export interface ICollapsibleContext {
   currentTitleText: string
   scrollY: Animated.Value
   onAddTitle: (title: TTitle) => void
@@ -27,7 +27,7 @@ export interface ICollapsibleCloneContext {
     ref?: React.RefObject<ScrollView | FlatList>,
   ) => void
   currentTitle: TTitle | undefined
-  collapsibleCloneRef: React.RefObject<View>
+  collapsibleRef: React.RefObject<View>
 }
 
 interface ITitle {
@@ -44,7 +44,7 @@ interface IScroll extends ScrollViewProps {
   containerStyles?: StyleProp<ViewStyle>
 }
 
-export interface ICollapsibleCloneComposite {
+export interface ICollapsibleComposite {
   Title: React.FC<ITitle>
   Header: React.FC<IHeader>
   Scroll: React.FC<IScroll>

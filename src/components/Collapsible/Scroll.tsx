@@ -1,14 +1,14 @@
 import React from 'react'
 import { Animated } from 'react-native'
-import { useCollapsibleClone } from './context'
-import { ICollapsibleCloneComposite } from './types'
+import { useCollapsible } from './context'
+import { ICollapsibleComposite } from './types'
 
-const Scroll: ICollapsibleCloneComposite['Scroll'] = ({
+const Scroll: ICollapsibleComposite['Scroll'] = ({
   children,
   containerStyles,
   ...scrollProps
 }) => {
-  const { headerHeight, scrollRef, onScroll, onSnap } = useCollapsibleClone()
+  const { headerHeight, scrollRef, onScroll, onSnap } = useCollapsible()
   return (
     <Animated.ScrollView
       ref={scrollRef}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 import ScreenContainer from '~/components/ScreenContainer'
 
 export const TITLE_LABEL_1 = 'ONE'
@@ -15,21 +15,21 @@ const CollapsibleTest = () => {
         paddingHorizontal: 0,
       }}
     >
-      <CollapsibleClone
-        renderHeader={() => <CollapsibleClone.Header />}
+      <Collapsible
+        renderHeader={() => <Collapsible.Header />}
         renderScroll={() => (
-          <CollapsibleClone.Scroll>
-            <CollapsibleClone.Title text="ONE" />
+          <Collapsible.Scroll>
+            <Collapsible.Title text="ONE" />
             {[...Array(5).keys()].map((i) => (
               <View style={styles.rect} />
             ))}
-            <CollapsibleClone.Title text="TWO" />
+            <Collapsible.Title text="TWO" />
             {[...Array(20).keys()].map((i) => (
               <View style={styles.rect} />
             ))}
-          </CollapsibleClone.Scroll>
+          </Collapsible.Scroll>
         )}
-      ></CollapsibleClone>
+      ></Collapsible>
     </ScreenContainer>
   )
 }
