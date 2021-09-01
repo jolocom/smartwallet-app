@@ -3,18 +3,18 @@ import { useMemo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import NavigationHeader from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
-import { useCollapsibleClone } from './context'
-import { ICollapsibleCloneComposite } from './types'
+import { useCollapsible } from './context'
+import { ICollapsibleComposite } from './types'
 
 /**
  *
- * Header component of CollapsibleClone is responsible for:
+ * Header component of Collapsible is responsible for:
  * -> displaying text of the current title, which is a title that changes
  * on scroll
  * -> changing opacity of the header text when scrolling
  */
-const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
-  const { currentTitleText, scrollY, currentTitle } = useCollapsibleClone()
+const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
+  const { currentTitleText, scrollY, currentTitle } = useCollapsible()
   const headerTitleOpacity = useMemo(() => {
     if (currentTitle === undefined) return 0
     return scrollY.interpolate({
@@ -39,7 +39,11 @@ const Header: ICollapsibleCloneComposite['Header'] = ({ type }) => {
   }, [JSON.stringify(currentTitle)])
 
   return (
-    <NavigationHeader type={type} customStyles={[styles.container]}>
+    <NavigationHeader
+      type={type}
+      customStyles={styles.container}
+      onPress={onPress}
+    >
       <Animated.Text
         numberOfLines={1}
         style={[

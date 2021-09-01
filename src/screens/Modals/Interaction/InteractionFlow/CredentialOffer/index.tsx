@@ -27,7 +27,7 @@ import {
   LogoContainerFAS,
 } from '../components/styled'
 import Space from '~/components/Space'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 import useTranslation from '~/hooks/useTranslation'
 import ScreenContainer from '~/components/ScreenContainer'
 import {
@@ -125,25 +125,20 @@ const CredentialOfferFAS = () => {
 
   const { top } = useSafeArea()
   return (
-    <View
-      style={{
-        paddingTop: top,
-        backgroundColor: Colors.mainBlack,
-      }}
-    >
-      <CollapsibleClone
-        renderHeader={() => <CollapsibleClone.Header />}
+    <View style={{ paddingTop: top, backgroundColor: Colors.mainBlack }}>
+      <Collapsible
+        renderHeader={() => <Collapsible.Header />}
         renderScroll={() => (
           <ContainerFAS>
-            <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
-              <CollapsibleClone.Scale>
+            <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
+              <Collapsible.Scale>
                 <LogoContainerFAS>
                   <InteractionLogo />
                 </LogoContainerFAS>
-              </CollapsibleClone.Scale>
-              <CollapsibleClone.Title text={t('CredentialOffer.header')}>
+              </Collapsible.Scale>
+              <Collapsible.Title text={t('CredentialOffer.header')}>
                 <InteractionTitle label={t('CredentialOffer.header')} />
-              </CollapsibleClone.Title>
+              </Collapsible.Title>
               <InteractionDescription
                 label={t('CredentialOffer.subheader', { serviceName: name })}
               />
@@ -156,7 +151,7 @@ const CredentialOfferFAS = () => {
                   {handleRenderCredentials(other)}
                 </InteractionSection>
               </ScreenContainer.Padding>
-            </CollapsibleClone.Scroll>
+            </Collapsible.Scroll>
           </ContainerFAS>
         )}
       >
@@ -166,7 +161,7 @@ const CredentialOfferFAS = () => {
             submitLabel={t('CredentialOffer.confirmBtn')}
           />
         </FooterContainerFAS>
-      </CollapsibleClone>
+      </Collapsible>
     </View>
   )
 }

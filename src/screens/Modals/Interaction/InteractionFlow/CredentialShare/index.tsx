@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
@@ -34,7 +35,7 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 import ShareAttributeWidget from './ShareAttributeWidget'
 import BP from '~/utils/breakpoints'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
@@ -50,7 +51,6 @@ import {
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
-import { useSafeArea } from 'react-native-safe-area-context'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -230,27 +230,21 @@ const CredentialShareFAS = () => {
     ))
 
   const { top } = useSafeArea()
-
   return (
-    <View
-      style={{
-        paddingTop: top,
-        backgroundColor: Colors.mainBlack,
-      }}
-    >
-      <CollapsibleClone
-        renderHeader={() => <CollapsibleClone.Header />}
+    <View style={{ paddingTop: top, backgroundColor: Colors.mainBlack }}>
+      <Collapsible
+        renderHeader={() => <Collapsible.Header />}
         renderScroll={() => (
           <ContainerFAS>
-            <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
-              <CollapsibleClone.Scale>
+            <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
+              <Collapsible.Scale>
                 <LogoContainerFAS>
                   <InteractionLogo />
                 </LogoContainerFAS>
-              </CollapsibleClone.Scale>
-              <CollapsibleClone.Title text={t('CredentialRequest.header')}>
+              </Collapsible.Scale>
+              <Collapsible.Title text={t('CredentialRequest.header')}>
                 <InteractionTitle label={t('CredentialRequest.header')} />
-              </CollapsibleClone.Title>
+              </Collapsible.Title>
               <InteractionDescription
                 label={t('CredentialRequest.subheader')}
               />
@@ -270,7 +264,7 @@ const CredentialShareFAS = () => {
               >
                 {handleRenderCredentials(other)}
               </InteractionSection>
-            </CollapsibleClone.Scroll>
+            </Collapsible.Scroll>
           </ContainerFAS>
         )}
       >
@@ -281,7 +275,7 @@ const CredentialShareFAS = () => {
             submitLabel={t('CredentialRequest.acceptBtn')}
           />
         </FooterContainerFAS>
-      </CollapsibleClone>
+      </Collapsible>
     </View>
   )
 }

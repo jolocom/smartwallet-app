@@ -1,51 +1,72 @@
+import React from 'react'
 import {
   Animated,
+  ScrollView,
   ScrollViewProps,
-  FlatListProps,
   FlatList,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  ViewStyle,
+  StyleProp,
+  View,
 } from 'react-native'
-import { ForwardRefExoticComponent, RefAttributes, ReactElement } from 'react'
-import { IJoloKeyboardAwareScrollProps } from '../JoloKeyboardAwareScroll/types'
-import { IWithCustomStyle } from '~/types/props'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-interface IHeaderProps extends IWithCustomStyle {
-  height?: number
-}
+import { NavHeaderType } from '../NavigationHeader'
 
-interface IListProps {
-  withoutHeaderPadding?: boolean
-}
-
-type IScrollViewProps = IWithCustomStyle & ScrollViewProps & IListProps
-
-export type IFlatListProps = IWithCustomStyle &
-  ForwardRefExoticComponent<FlatListProps<unknown>> &
-  RefAttributes<Animated.AnimatedComponent<typeof FlatList>> &
-  IListProps & {
-    renderHidingText: () => ReactElement
-  }
-
-export interface ICollapsibleComposite {
-  Header: React.FC<IHeaderProps>
-  AnimatedHeader: React.FC<IHeaderProps>
-  ScrollView: React.FC<IScrollViewProps>
-  KeyboardAwareScrollView: React.FC<
-    IJoloKeyboardAwareScrollProps & IScrollViewProps
-  >
-  FlatList: React.FC<IFlatListProps>
-  HeaderText: React.FC
-  HidingTextContainer: React.FC<IWithCustomStyle>
-  HidingScale: React.FC
-}
+export type TTitle = { label: string; startY: number; endY: number }
 
 export interface ICollapsibleContext {
-  setHeaderHeight: (height: number) => void
-  setHidingTextHeight: (height: number) => void
-  setDistanceToText: (distance: number) => void
-  distanceToTop: number
-  distanceToHeader: number
+  currentTitleText: string
+  scrollY: Animated.Value
+  onAddTitle: (title: TTitle) => void
   headerHeight: number
-  hidingTextHeight: number
-  interpolateYValue: (inputRange: number[], outputRange: number[]) => void
-  handleScroll: (...args: unknown[]) => void
+  scrollRef: React.RefObject<ScrollView>
+  onScroll: ScrollViewProps['onScroll']
+  onSnap: (
+    e: NativeSyntheticEvent<NativeScrollEvent>,
+    ref?: React.RefObject<ScrollView | FlatList>,
+  ) => void
+  currentTitle: TTitle | undefined
+  collapsibleRef: React.RefObject<View>
+}
+
+interface ITitle {
+  text: string
+  customContainerStyles?: StyleProp<ViewStyle>
+}
+
+interface IHeader {
+  type?: NavHeaderType
+  onPress?: () => void
+}
+
+interface IScroll extends ScrollViewProps {
+  containerStyles?: StyleProp<ViewStyle>
+}
+
+export interface ICollapsibleComposite {
+  Title: React.FC<ITitle>
+  Header: React.FC<IHeader>
+  Scroll: React.FC<IScroll>
+  KeyboardAwareScroll: React.FC<ScrollViewProps>
+  Scale: React.FC
+}
+
+export function isFlatList(
+  ref: React.RefObject<ScrollView | FlatList>,
+): ref is React.RefObject<FlatList> {
+  return ref.current instanceof FlatList
+}
+
+export function isKeyboardAwareScroll(
+  ref: React.RefObject<ScrollView | FlatList | KeyboardAwareScrollView>,
+): ref is React.RefObject<KeyboardAwareScrollView> {
+  return ref.current instanceof KeyboardAwareScrollView
+}
+
+export function isScrollView(
+  ref: React.RefObject<ScrollView | FlatList>,
+): ref is React.RefObject<ScrollView> {
+  return ref.current?.scrollTo !== undefined
 }

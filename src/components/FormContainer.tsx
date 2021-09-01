@@ -7,9 +7,9 @@ import JoloText, { JoloTextKind } from './JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts } from '~/utils/fonts'
 import { useAdjustResizeInputMode } from '~/hooks/generic'
-import CollapsibleClone from './CollapsibleClone'
+import Collapsible from './Collapsible'
 import useTranslation from '~/hooks/useTranslation'
-import { TTitle } from './CollapsibleClone/types'
+import { TTitle } from './Collapsible/types'
 
 interface Props {
   title: string
@@ -61,7 +61,7 @@ const FormContainer: React.FC<Props> = ({
         paddingHorizontal: 0,
       }}
     >
-      <CollapsibleClone
+      <Collapsible
         renderHeader={({ currentTitleText, scrollY, currentTitle }) => (
           <View
             style={{
@@ -113,14 +113,14 @@ const FormContainer: React.FC<Props> = ({
           </View>
         )}
         renderScroll={({ headerHeight }) => (
-          <CollapsibleClone.KeyboardAwareScroll
+          <Collapsible.KeyboardAwareScroll
             contentContainerStyle={{
               paddingTop: headerHeight,
             }}
           >
-            <CollapsibleClone.Title text={title}>
+            <Collapsible.Title text={title}>
               <JoloText kind={JoloTextKind.title}>{title}</JoloText>
-            </CollapsibleClone.Title>
+            </Collapsible.Title>
             <JoloText
               size={JoloTextSizes.mini}
               customStyles={{
@@ -132,9 +132,9 @@ const FormContainer: React.FC<Props> = ({
               {description}
             </JoloText>
             <ScreenContainer.Padding>{children}</ScreenContainer.Padding>
-          </CollapsibleClone.KeyboardAwareScroll>
+          </Collapsible.KeyboardAwareScroll>
         )}
-      ></CollapsibleClone>
+      ></Collapsible>
     </ScreenContainer>
   )
 }

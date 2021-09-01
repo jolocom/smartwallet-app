@@ -9,7 +9,7 @@ import {
 
 import ScreenContainer from '~/components/ScreenContainer'
 import BlockExpanded from '~/components/BlockExpanded'
-import CollapsibleClone from '~/components/CollapsibleClone'
+import Collapsible from '~/components/Collapsible'
 
 type TFAQItem = { question: string; answer: string }
 import useTranslation from '~/hooks/useTranslation'
@@ -49,9 +49,9 @@ const FAQ = () => {
 
   function renderTitle() {
     return (
-      <CollapsibleClone.Title text={t('FAQ.header')}>
+      <Collapsible.Title text={t('FAQ.header')}>
         <Section.Title>{t('FAQ.header')}</Section.Title>
-      </CollapsibleClone.Title>
+      </Collapsible.Title>
     )
   }
 
@@ -63,10 +63,8 @@ const FAQ = () => {
         flex: 1,
       }}
     >
-      <CollapsibleClone
-        renderHeader={() => (
-          <CollapsibleClone.Header type={NavHeaderType.Back} />
-        )}
+      <Collapsible
+        renderHeader={() => <Collapsible.Header type={NavHeaderType.Back} />}
         renderScroll={({ headerHeight, onScroll, onSnap }) => (
           <ScreenContainer.Padding>
             <Animated.FlatList
