@@ -16,40 +16,43 @@ const PACKAGE_VERSION = (packageJson.version as string).split('.')
 const BUILD_NUMBER = last(PACKAGE_VERSION)
 const APP_VERSION = PACKAGE_VERSION.filter((e) => e !== BUILD_NUMBER).join('.')
 
+const sendUserFeedback = async (report: UserReport) => {
+  const eventId = Sentry.getCurrentHub().lastEventId()
+
+  if (eventId) {
+    const body = JSON.stringify({
+      // eslint-disable-next-line
+      event_id: eventId,
+      name: report.issue ?? '[UNKNOWN]',
+      email: report.email || 'placeholder@jolocom.com',
+      comments: report.details ?? '[NO_COMMENT]',
+    })
+
+    await fetch(USER_FEEDBACK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `DSN ${SENTRY_DSN}`,
+      },
+      body,
+    })
+      .then((res) => {
+        if (!res.ok) {
+          console.warn(
+            `Error ${res.status}: Failed to send user feedback report!`,
+          )
+        }
+      })
+      .catch(console.warn)
+  } else {
+    console.warn(
+      'Error: Could not find Sentry EventID to send a user feedback report!',
+    )
+  }
+}
+
 const useSentry = () => {
   const { error } = useErrors()
-
-  const sendUserFeedback = async (report: UserReport) => {
-    const eventId = Sentry.getCurrentHub().lastEventId()
-    if (eventId) {
-      const body = JSON.stringify({
-        event_id: eventId,
-        name: report.issue ?? '[UNKNOWN]',
-        email: report.email ?? 'placeholder@jolocom.com',
-        comments: report.details ?? '[NO_COMMENT]',
-      })
-
-      await fetch(USER_FEEDBACK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `DSN ${SENTRY_DSN}`,
-        },
-        body,
-      })
-        .then((res) => {
-          if (!res.ok)
-            console.warn(
-              `Error ${res.status}: Failed to send user feedback report!`,
-            )
-        })
-        .catch(console.warn)
-    } else {
-      console.warn(
-        'Error: Could not find Sentry EventID to send a user feedback report!',
-      )
-    }
-  }
 
   const sendContactReport = (report: UserReport) => {
     Sentry.withScope((scope) => {
