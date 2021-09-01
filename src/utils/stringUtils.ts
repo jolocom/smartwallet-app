@@ -17,7 +17,7 @@ export const trimObjectValues = (obj: Record<string, string>) => {
 }
 
 export const truncateString = (text: string, n: number) =>
-  text.slice(0, n) + '...'
+  n <= text.length ? text : text.slice(0, n) + '...'
 
 export enum InputValidation {
   email = 'email',
