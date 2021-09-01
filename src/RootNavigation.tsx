@@ -4,7 +4,10 @@ import {
   NavigationContainerRef,
   Theme,
 } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'
@@ -112,7 +115,8 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
             cardStyle: {
               backgroundColor: 'transparent',
             },
-            ...screenTransitionSlideFromBottom,
+            cardStyleInterpolator:
+              CardStyleInterpolators.forFadeFromBottomAndroid,
             ...screenDisableGestures,
           }}
         />
