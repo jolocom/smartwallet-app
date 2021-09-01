@@ -17,14 +17,9 @@ import { GlobalModalsParamsList } from '~/RootNavigation'
 import useTranslation from '~/hooks/useTranslation'
 import useSettings, { SettingKeys } from '~/hooks/settings'
 
-// TODO: update the value to commented out
-// const LONG_COUNTDOWN = 60 * 5
-const LONG_COUNTDOWN = 20 * 5
-// const SHORT_COUNTDOWN = 60 * 1
-const SHORT_COUNTDOWN = 20 * 1
+const LONG_COUNTDOWN = 60 * 5
+const SHORT_COUNTDOWN = 60 * 1
 
-// TODO: translation
-// TODO: disable go back with hardware back btn
 const AppDisabled = ({ navigation }) => {
   const { params } =
     useRoute<RouteProp<GlobalModalsParamsList, ScreenNames.AppDisabled>>()
