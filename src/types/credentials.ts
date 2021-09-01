@@ -71,6 +71,7 @@ export interface IAttributeConfig<T = IAttributeClaimField> {
   label: string
   metadata: BaseMetadata
   fields: T[]
+  // eslint-disable-next-line
   validationSchema: ObjectSchema<Record<string, any>>
 }
 
@@ -83,7 +84,7 @@ export type BaseUICredential = Pick<
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
   category: CredentialCategories
   invalid: boolean
-  properties: Array<DisplayVal>
+  properties: DisplayVal[]
 }
 
 export type OfferedCredentialDisplay = OfferedCredential &

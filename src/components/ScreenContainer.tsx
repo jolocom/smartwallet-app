@@ -4,7 +4,6 @@ import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
-import { useHideStatusBar } from '~/hooks/generic'
 import JoloText, {
   JoloTextKind,
   JoloTextWeight,
@@ -23,7 +22,6 @@ interface ScreenContainerI {
   backgroundColor?: Colors
   hasHeaderBack?: boolean
   hasHeaderClose?: boolean
-  hideStatusBar?: boolean
   onClose?: () => void
   testID?: string
 }
@@ -43,12 +41,9 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
     backgroundColor = Colors.mainBlack,
     hasHeaderBack = false,
     hasHeaderClose = false,
-    hideStatusBar = false,
     onClose,
     testID,
   }) => {
-    hideStatusBar && useHideStatusBar()
-
     const { top, bottom } = useSafeArea()
 
     return (
@@ -62,7 +57,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
         <View
           style={[styles.navContainer, isTransparent && styles.transparent]}
         >
-          {!isFullscreen && !hideStatusBar && (
+          {!isFullscreen && (
             <View
               style={{
                 height: top,

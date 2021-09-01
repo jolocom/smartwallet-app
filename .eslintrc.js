@@ -72,4 +72,5 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': ['off'],
     'import/no-duplicates': ['error'],
   },
+  ignorePatterns: ['package.json', 'jest.config.js', 'app.json'],
 }

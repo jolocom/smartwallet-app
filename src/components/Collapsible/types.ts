@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import { NavHeaderType } from '../NavigationHeader'
 
 export type TTitle = { label: string; startY: number; endY: number }

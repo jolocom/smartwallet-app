@@ -13,8 +13,6 @@ import {
   OfferedCredentialDisplay,
   CredentialCategories,
 } from '~/types/credentials'
-import IncomingOfferDoc from '../components/card/offer/document'
-import IncomingOfferOther from '../components/card/offer/other'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionLogo from '../components/InteractionLogo'
@@ -31,6 +29,10 @@ import Space from '~/components/Space'
 import Collapsible from '~/components/Collapsible'
 import useTranslation from '~/hooks/useTranslation'
 import ScreenContainer from '~/components/ScreenContainer'
+import {
+  InteractionOfferDocumentCard,
+  InteractionOfferOtherCard,
+} from '~/components/Cards/InteractionOffer'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -51,18 +53,22 @@ const CredentialOfferBAS = () => {
       {offeredCredentials.map((d) => {
         if (d.category === CredentialCategories.document) {
           return (
-            <IncomingOfferDoc
+            <InteractionOfferDocumentCard
               key={d.name}
-              name={d.name || t('General.unknown')}
-              properties={d.properties}
+              credentialName={d.name || t('General.unknown')}
+              fields={d.properties.map((p) => ({
+                label: p.label || t('Documents.unspecifiedField'),
+              }))}
             />
           )
         }
         return (
-          <IncomingOfferOther
+          <InteractionOfferOtherCard
             key={d.name}
-            name={d.name || t('General.unknown')}
-            properties={d.properties}
+            credentialName={d.name || t('General.unknown')}
+            fields={d.properties.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
           />
         )
       })}
@@ -86,33 +92,34 @@ const CredentialOfferFAS = () => {
   const { name } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
-  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) => {
-    return credentials.map(
-      ({ invalid, category, properties, name, type }, idx) => (
-        <View
-          key={type + idx}
-          style={{
-            marginBottom: idx === credentials.length - 1 ? 0 : 30,
-            opacity: invalid ? 0.5 : 1,
-          }}
-        >
-          {category === CredentialCategories.document ? (
-            <IncomingOfferDoc
-              key={name + type}
-              name={name || t('General.unknown')}
-              properties={properties}
-            />
-          ) : (
-            <IncomingOfferOther
-              key={name + type}
-              name={name || t('General.unknown')}
-              properties={properties}
-            />
-          )}
-        </View>
-      ),
-    )
-  }
+  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
+    credentials.map(({ invalid, category, properties, name, type }, idx) => (
+      <View
+        key={type + idx}
+        style={{
+          marginBottom: idx === credentials.length - 1 ? 0 : 30,
+          opacity: invalid ? 0.5 : 1,
+        }}
+      >
+        {category === CredentialCategories.document ? (
+          <InteractionOfferDocumentCard
+            key={name + type}
+            credentialName={name || t('General.unknown')}
+            fields={properties.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
+          />
+        ) : (
+          <InteractionOfferOtherCard
+            key={name + type}
+            credentialName={name || t('General.unknown')}
+            fields={properties.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
+          />
+        )}
+      </View>
+    ))
 
   return (
     <Collapsible

@@ -19,6 +19,7 @@ import {
 import { getCredentialType } from '~/utils/dataMapping'
 import { capitalizeWord } from '~/utils/stringUtils'
 import { FlowState } from '@jolocom/sdk/js/interactionManager/flow'
+import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 interface IRecordAssembler {
   messageTypes: string[]
@@ -158,6 +159,13 @@ export class RecordAssembler {
           return {
             title: this.getFinishedStepTitle(i),
             description: state.issued
+              .reduce<SignedCredential[]>((validCreds, c, idx) => {
+                const cred = c as SignedCredential
+                if (state.credentialsValidity[idx] === true) {
+                  validCreds.push(cred)
+                }
+                return validCreds
+              }, [])
               .map((c) => (c.name.length ? c.name : this.statusConfig.unknown))
               .join(', '),
           }

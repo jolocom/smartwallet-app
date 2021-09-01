@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "2.0.0.022",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "run:ios": "react-native run-ios",
@@ -44,7 +44,7 @@
     "@react-navigation/bottom-tabs": "^5.2.7",
     "@react-navigation/native": "^5.1.6",
     "@react-navigation/stack": "^5.2.11",
-    "@sentry/react-native": "1.3.3",
+    "@sentry/react-native": "^2.6.2",
     "@testing-library/react-hooks": "^3.2.1",
     "D": "^1.0.0",
     "assert": "^1.1.1",
@@ -116,7 +116,7 @@
     "@types/inquirer": "^7.3.3",
     "@types/jest": "^24.0.24",
     "@types/minimist": "^1.2.2",
-    "@types/node-fetch": "^2.5.11",
+    "@types/node-fetch": "^2.5.12",
     "@types/react-native": "^0.62.0",
     "@types/react-native-snap-carousel": "^3.8.2",
     "@types/react-redux": "^7.1.7",
