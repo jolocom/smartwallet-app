@@ -48,6 +48,7 @@ const CredentialDetails = () => {
                 text={title ?? ''}
                 customContainerStyles={{
                   width: photo ? '68%' : '100%',
+                  marginTop: 30,
                   paddingBottom: 12,
                 }}
               >
