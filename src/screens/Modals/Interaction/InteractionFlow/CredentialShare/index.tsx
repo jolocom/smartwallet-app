@@ -34,13 +34,12 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
+import CollapsibleClone from '~/components/CollapsibleClone'
 import ShareAttributeWidget from './ShareAttributeWidget'
-import Collapsible from '~/components/Collapsible'
 import BP from '~/utils/breakpoints'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import Space from '~/components/Space'
-import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
@@ -49,6 +48,7 @@ import {
   InteractionShareOtherCard,
 } from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
+import ScreenContainer from '~/components/ScreenContainer'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -228,55 +228,48 @@ const CredentialShareFAS = () => {
     ))
 
   return (
-    <Collapsible>
-      <Collapsible.AnimatedHeader height={62}>
-        <Collapsible.HeaderText>
-          {t('CredentialRequest.header')}
-        </Collapsible.HeaderText>
-      </Collapsible.AnimatedHeader>
-      <ContainerFAS>
-        <Collapsible.ScrollView withoutHeaderPadding>
-          <Collapsible.HidingScale>
-            <LogoContainerFAS>
-              <InteractionLogo />
-            </LogoContainerFAS>
-          </Collapsible.HidingScale>
-          <Collapsible.HidingTextContainer>
-            <ScreenContainer.Padding>
+    <CollapsibleClone
+      renderHeader={() => <CollapsibleClone.Header />}
+      renderScroll={() => (
+        <ContainerFAS>
+          <CollapsibleClone.Scroll containerStyles={{ paddingBottom: '30%' }}>
+            <CollapsibleClone.Scale>
+              <LogoContainerFAS>
+                <InteractionLogo />
+              </LogoContainerFAS>
+            </CollapsibleClone.Scale>
+            <CollapsibleClone.Title text={t('CredentialRequest.header')}>
               <InteractionTitle label={t('CredentialRequest.header')} />
+            </CollapsibleClone.Title>
+            <InteractionDescription label={t('CredentialRequest.subheader')} />
+            <Space />
+            <ScreenContainer.Padding>
+              <ShareAttributeWidget withContainer />
             </ScreenContainer.Padding>
-          </Collapsible.HidingTextContainer>
-          <ScreenContainer.Padding>
-            <InteractionDescription
-              label={t('CredentialRequest.subheader', { serviceName })}
-            />
-          </ScreenContainer.Padding>
-          <Space />
-          <ScreenContainer.Padding>
-            <ShareAttributeWidget withContainer />
-          </ScreenContainer.Padding>
-          <InteractionSection
-            title={t('Documents.documentsTab')}
-            isPaddedTitle={true}
-          >
-            {handleRenderCredentials(documents)}
-          </InteractionSection>
-          <InteractionSection
-            title={t('Documents.othersTab')}
-            isPaddedTitle={true}
-          >
-            {handleRenderCredentials(other)}
-          </InteractionSection>
-        </Collapsible.ScrollView>
-        <FooterContainerFAS>
-          <InteractionFooter
-            disabled={!isReadyToSubmit}
-            onSubmit={handleSubmit}
-            submitLabel={t('CredentialRequest.acceptBtn')}
-          />
-        </FooterContainerFAS>
-      </ContainerFAS>
-    </Collapsible>
+            <InteractionSection
+              title={t('Documents.documentsTab')}
+              isPaddedTitle={true}
+            >
+              {handleRenderCredentials(documents)}
+            </InteractionSection>
+            <InteractionSection
+              title={t('Documents.othersTab')}
+              isPaddedTitle={true}
+            >
+              {handleRenderCredentials(other)}
+            </InteractionSection>
+          </CollapsibleClone.Scroll>
+        </ContainerFAS>
+      )}
+    >
+      <FooterContainerFAS>
+        <InteractionFooter
+          disabled={!isReadyToSubmit}
+          onSubmit={handleSubmit}
+          submitLabel={t('CredentialRequest.acceptBtn')}
+        />
+      </FooterContainerFAS>
+    </CollapsibleClone>
   )
 }
 

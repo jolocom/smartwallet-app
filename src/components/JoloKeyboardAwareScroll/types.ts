@@ -1,8 +1,19 @@
 import React from 'react'
-import { NativeSyntheticEvent, TargetedEvent } from 'react-native'
-import { KeyboardAwareScrollViewProps } from 'react-native-keyboard-aware-scroll-view'
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  TargetedEvent,
+} from 'react-native'
+import {
+  KeyboardAwareScrollView,
+  KeyboardAwareScrollViewProps,
+} from 'react-native-keyboard-aware-scroll-view'
 
 export type IJoloKeyboardAwareScrollProps = KeyboardAwareScrollViewProps & {
+  onScrollEndDrag: (
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+    ref: React.RefObject<KeyboardAwareScrollView>,
+  ) => void
   disableInsets?: boolean
 }
 
