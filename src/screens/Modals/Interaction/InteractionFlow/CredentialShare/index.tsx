@@ -246,7 +246,9 @@ const CredentialShareFAS = () => {
                 <InteractionTitle label={t('CredentialRequest.header')} />
               </Collapsible.Title>
               <InteractionDescription
-                label={t('CredentialRequest.subheader')}
+                label={t('CredentialRequest.subheader', {
+                  serviceName,
+                })}
               />
               <Space />
               <ScreenContainer.Padding>
