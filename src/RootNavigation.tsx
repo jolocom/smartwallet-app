@@ -4,7 +4,10 @@ import {
   NavigationContainerRef,
   Theme,
 } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import LoggedOut from '~/screens/LoggedOut'
@@ -20,6 +23,7 @@ import {
   screenTransitionSlideFromBottom,
   transparentModalOptions,
 } from './utils/screenSettings'
+import AppDisabled from './screens/Modals/AppDisabled'
 
 export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
@@ -48,6 +52,15 @@ const navigationTheme: Theme = {
   },
 }
 
+export type GlobalModalsParamsList = {
+  [ScreenNames.LostSeedPhraseInfo]: undefined
+  [ScreenNames.SeedPhraseInfo]: undefined
+  [ScreenNames.AppDisabled]: {
+    attemptCyclesLeft: number
+    countdown: number
+  }
+}
+
 const ModalStack = createStackNavigator()
 
 const GlobalModals = () => {
@@ -64,6 +77,10 @@ const GlobalModals = () => {
       <ModalStack.Screen
         name={ScreenNames.SeedPhraseInfo}
         component={SeedPhraseInfo}
+      />
+      <ModalStack.Screen
+        name={ScreenNames.AppDisabled}
+        component={AppDisabled}
       />
     </ModalStack.Navigator>
   )
@@ -98,7 +115,8 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
             cardStyle: {
               backgroundColor: 'transparent',
             },
-            ...screenTransitionSlideFromBottom,
+            cardStyleInterpolator:
+              CardStyleInterpolators.forFadeFromBottomAndroid,
             ...screenDisableGestures,
           }}
         />
