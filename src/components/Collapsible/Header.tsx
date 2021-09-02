@@ -1,7 +1,6 @@
 import React from 'react'
 import { useMemo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
-import { useSafeArea } from 'react-native-safe-area-context'
 import NavigationHeader from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
 import { useCollapsible } from './context'
@@ -27,12 +26,22 @@ const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
     })
   }, [JSON.stringify(currentTitle)])
 
-  const { top } = useSafeArea()
+  const headerTitlePosition = useMemo(() => {
+    if (currentTitle === undefined) return 0
+    return scrollY.interpolate({
+      inputRange: [
+        (currentTitle.startY + currentTitle.endY) / 2,
+        currentTitle.endY,
+      ],
+      outputRange: [30, 0],
+      extrapolate: 'clamp',
+    })
+  }, [JSON.stringify(currentTitle)])
 
   return (
     <NavigationHeader
       type={type}
-      customStyles={[styles.container, { paddingTop: top, height: 50 + top }]}
+      customStyles={styles.container}
       onPress={onPress}
     >
       <Animated.Text
@@ -41,8 +50,12 @@ const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
           styles.text,
           type === undefined && { textAlign: 'center' },
           {
-            flex: 0.5,
             opacity: headerTitleOpacity,
+            transform: [
+              {
+                translateY: headerTitlePosition,
+              },
+            ],
           },
         ]}
       >
@@ -54,8 +67,6 @@ const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     backgroundColor: Colors.mainBlack,
   },
   text: {

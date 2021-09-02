@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
@@ -49,6 +50,7 @@ import {
 } from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
+import { Colors } from '~/utils/colors'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -227,49 +229,56 @@ const CredentialShareFAS = () => {
       />
     ))
 
+  const { top } = useSafeArea()
   return (
-    <Collapsible
-      renderHeader={() => <Collapsible.Header />}
-      renderScroll={() => (
-        <ContainerFAS>
-          <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
-            <Collapsible.Scale>
-              <LogoContainerFAS>
-                <InteractionLogo />
-              </LogoContainerFAS>
-            </Collapsible.Scale>
-            <Collapsible.Title text={t('CredentialRequest.header')}>
-              <InteractionTitle label={t('CredentialRequest.header')} />
-            </Collapsible.Title>
-            <InteractionDescription label={t('CredentialRequest.subheader')} />
-            <Space />
-            <ScreenContainer.Padding>
-              <ShareAttributeWidget withContainer />
-            </ScreenContainer.Padding>
-            <InteractionSection
-              title={t('Documents.documentsTab')}
-              isPaddedTitle={true}
-            >
-              {handleRenderCredentials(documents)}
-            </InteractionSection>
-            <InteractionSection
-              title={t('Documents.othersTab')}
-              isPaddedTitle={true}
-            >
-              {handleRenderCredentials(other)}
-            </InteractionSection>
-          </Collapsible.Scroll>
-        </ContainerFAS>
-      )}
-    >
-      <FooterContainerFAS>
-        <InteractionFooter
-          disabled={!isReadyToSubmit}
-          onSubmit={handleSubmit}
-          submitLabel={t('CredentialRequest.acceptBtn')}
-        />
-      </FooterContainerFAS>
-    </Collapsible>
+    <View style={{ paddingTop: top, backgroundColor: Colors.mainBlack }}>
+      <Collapsible
+        renderHeader={() => <Collapsible.Header />}
+        renderScroll={() => (
+          <ContainerFAS>
+            <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
+              <Collapsible.Scale>
+                <LogoContainerFAS>
+                  <InteractionLogo />
+                </LogoContainerFAS>
+              </Collapsible.Scale>
+              <Collapsible.Title text={t('CredentialRequest.header')}>
+                <InteractionTitle label={t('CredentialRequest.header')} />
+              </Collapsible.Title>
+              <InteractionDescription
+                label={t('CredentialRequest.subheader', {
+                  serviceName,
+                })}
+              />
+              <Space />
+              <ScreenContainer.Padding>
+                <ShareAttributeWidget withContainer />
+              </ScreenContainer.Padding>
+              <InteractionSection
+                title={t('Documents.documentsTab')}
+                isPaddedTitle={true}
+              >
+                {handleRenderCredentials(documents)}
+              </InteractionSection>
+              <InteractionSection
+                title={t('Documents.othersTab')}
+                isPaddedTitle={true}
+              >
+                {handleRenderCredentials(other)}
+              </InteractionSection>
+            </Collapsible.Scroll>
+          </ContainerFAS>
+        )}
+      >
+        <FooterContainerFAS>
+          <InteractionFooter
+            disabled={!isReadyToSubmit}
+            onSubmit={handleSubmit}
+            submitLabel={t('CredentialRequest.acceptBtn')}
+          />
+        </FooterContainerFAS>
+      </Collapsible>
+    </View>
   )
 }
 

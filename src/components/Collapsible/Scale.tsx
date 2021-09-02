@@ -15,9 +15,21 @@ const Scale: ICollapsibleComposite['Scale'] = ({ children }) => {
       extrapolate: 'clamp',
     })
   }, [JSON.stringify(currentTitle)])
+  const getTranslateY = useCallback(() => {
+    if (currentTitle === undefined) return 1
+    return scrollY.interpolate({
+      inputRange: [0, currentTitle.startY],
+      outputRange: [0, 20],
+      extrapolate: 'clamp',
+    })
+  }, [JSON.stringify(currentTitle)])
 
   return (
-    <Animated.View style={[{ transform: [{ scale: getScale() }] }]}>
+    <Animated.View
+      style={[
+        { transform: [{ scale: getScale() }, { translateY: getTranslateY() }] },
+      ]}
+    >
       {children}
     </Animated.View>
   )
