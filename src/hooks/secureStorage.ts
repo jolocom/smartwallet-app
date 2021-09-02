@@ -3,26 +3,18 @@ import { SecureStorage } from 'react-native-jolocom'
 export enum SecureStorageKeys {
   passcode = 'com.jolocom.wallet-PIN',
 }
-
-interface ISecureStorage {
-  [SecureStorageKeys.passcode]: string
-}
+type TSecureStorage = Record<keyof typeof SecureStorageKeys, string>
 
 export const useSecureStorage = () => {
-  const setItem = <T extends SecureStorageKeys>(
-    key: T,
-    value: ISecureStorage[T],
-  ) => {
+  const setItem = (key: SecureStorageKeys, value: TSecureStorage) => {
     return SecureStorage.storeValue(key, value)
   }
 
-  const getItem = async <T extends SecureStorageKeys>(
-    key: T,
-  ): Promise<ISecureStorage[T] | null> => {
+  const getItem = (key: SecureStorageKeys): Promise<string | null> => {
     return SecureStorage.getValue(key)
   }
 
-  const removeItem = <T extends SecureStorageKeys>(key: T) => {
+  const removeItem = (key: SecureStorageKeys) => {
     return SecureStorage.removeValue(key)
   }
 
