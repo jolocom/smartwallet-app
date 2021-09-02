@@ -7,7 +7,7 @@ Interested in our vision? Take a look at our [whitepaper](https://jolocom.io/wp-
 ## Prerequisites
 
 - Set-up requires [Node.js](https://nodejs.org/en/download/) to be installed on your computer.
-  - The Jolocom SmartWallet requires `Node.js v12+` to build the project.
+  - The Jolocom SmartWallet requires `Node.js v12+` to build the project. You can either manually install Node version above 12, or you can delegate it to `Volta` (follow [this link](https://docs.volta.sh/guide/getting-started) to install `Volta`). Node `12.4.1` is pinned to the project
 - We use [Yarn](https://yarnpkg.com) as our package manager.
 - We use [CocoaPods](https://cocoapods.org/) for `iOS` dependency management.
 
