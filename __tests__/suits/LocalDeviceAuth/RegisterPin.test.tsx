@@ -1,6 +1,6 @@
 import React from 'react'
 import { waitFor } from '@testing-library/react-native'
-import EncryptedStorage from 'react-native-encrypted-storage'
+import { SecureStorage } from 'react-native-jolocom'
 
 import RegisterPin from '~/screens/Modals/DeviceAuthentication/RegisterPin'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
@@ -27,15 +27,17 @@ jest.mock('react-redux', () => ({
   useDispatch: () => mockedDispatch,
 }))
 
-jest.mock('react-native-encrypted-storage', () => ({
-  setItem: jest.fn(),
-  getItem: jest.fn().mockResolvedValue(null),
-  removeItem: jest.fn(),
+jest.mock('react-native-jolocom', () => ({
+  SecureStorage: {
+    storeValue: jest.fn(),
+    getValue: jest.fn().mockResolvedValue(null),
+    removeValue: jest.fn(),
+  },
 }))
 
 describe('Register Passcode', () => {
   it('User is able to set up pin', async () => {
-    const setEncryptedPasswordSpy = jest.spyOn(EncryptedStorage, 'setItem')
+    const setEncryptedPasswordSpy = jest.spyOn(SecureStorage, 'storeValue')
     const { getByText, getByTestId, queryByText } = renderWithSafeArea(
       <RegisterPin />,
     )
