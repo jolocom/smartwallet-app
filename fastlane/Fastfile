@@ -43,8 +43,8 @@ lane :sentry_auth do
   rescue
       puts "sentry token already present"
   end
-  sh("cp ./sentry-auth/sentry2.properties ../ios/sentry.properties")
-  sh("cp ./sentry-auth/sentry2.properties ../android/sentry.properties")
+  sh("cp ./sentry-auth/sentry.properties ../ios/sentry.properties")
+  sh("cp ./sentry-auth/sentry.properties ../android/sentry.properties")
 end
 
 desc "Release the app to the Test Flight or the App Store"

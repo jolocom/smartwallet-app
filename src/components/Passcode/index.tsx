@@ -3,10 +3,17 @@ import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 import { IPasscodeProps, IPasscodeComposition } from './types'
-import { PasscodeContext } from './context'
+import { ALL_PIN_ATTEMPTS, PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
 import ResetBtn from './ResetBtn'
+import { useIsFocused } from '@react-navigation/native'
+import PasscodeError from './PasscodeError'
+import {
+  PIN_ATTEMPTS_CYCLES,
+  useDisableApp,
+  useGetStoreCountdownValues,
+} from './hooks'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -15,6 +22,22 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
+
+  const { pinAttemptsLeft } = useDisableApp(pinError, pinSuccess)
+  const {
+    storeLastCountdown,
+    storePinNrAttemptCyclesLeft,
+    storePinNrAttemptsLeft,
+  } = useGetStoreCountdownValues()
+
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if (isFocused) {
+      setPinError(false)
+      setPin('')
+    }
+  }, [isFocused])
 
   const handleSubmit = async () => {
     try {
@@ -29,6 +52,21 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     }
   }
 
+  /**
+   * clearing app stored value
+   * upon successful submission of the pass code
+   */
+  useEffect(
+    () => () => {
+      ;(async () => {
+        await storeLastCountdown(0)
+        await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+        await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
+      })()
+    },
+    [],
+  )
+
   // submit when full pin is provided
   useEffect(() => {
     if (pin.length === 4) {
@@ -38,11 +76,23 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   // this will remove the error after 1000 ms
   useEffect(() => {
+    let id: number | undefined
     if (pinError) {
-      setTimeout(() => {
-        setPinError(false)
-        setPin('')
+      id = setTimeout(() => {
+        /**
+         * NOTE at this point pinAttemptsLeft is still an old value,
+         * therefore we compare with 1 not 0
+         */
+        if (pinAttemptsLeft > 1) {
+          setPinError(false)
+          setPin('')
+        }
       }, 1000)
+    }
+    return () => {
+      if (id) {
+        clearTimeout(id)
+      }
     }
   }, [pinError])
 
@@ -52,6 +102,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
       setPin,
       pinError,
       pinSuccess,
+      pinAttemptsLeft,
     }),
     [pin, setPin, pinError, pinSuccess],
   )
@@ -65,5 +116,6 @@ Passcode.Forgot = PasscodeForgot
 Passcode.Keyboard = PasscodeKeyboard
 Passcode.Container = PasscodeContainer
 Passcode.ResetBtn = ResetBtn
+Passcode.Error = PasscodeError
 
 export default Passcode

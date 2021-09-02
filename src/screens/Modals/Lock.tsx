@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { BackHandler } from 'react-native'
+import { BackHandler, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { BiometryType } from 'react-native-biometrics'
 
@@ -96,6 +96,9 @@ const Lock = () => {
             errorTitle={t('ChangePasscode.wrongCodeHeader')}
           />
           <Passcode.Input />
+          <View style={{ position: 'relative', alignItems: 'center' }}>
+            <Passcode.Error />
+          </View>
         </Passcode.Container>
         <Passcode.Container>
           <Passcode.Forgot />

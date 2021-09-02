@@ -36,7 +36,7 @@ jest.mock('react-native-keychain', () => ({
 }))
 
 describe('Register Passcode', () => {
-  it('User is able to set up pin', async () => {
+  xit('User is able to set up pin', async () => {
     const { getByText, getByTestId, queryByText } = renderWithSafeArea(
       <RegisterPin />,
     )
