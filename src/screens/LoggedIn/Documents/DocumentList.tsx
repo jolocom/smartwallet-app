@@ -77,6 +77,7 @@ const useHandleMorePress = () => {
     fields: Array<Required<DisplayVal>>,
     photo?: string,
   ) => {
+    const displayDocumentName = truncateString(credentialName, 30)
     const popupOptions = [
       {
         title: t('Documents.infoCardOption'),
@@ -85,7 +86,7 @@ const useHandleMorePress = () => {
           params: {
             fields,
             photo,
-            title: credentialName,
+            title: displayDocumentName,
           },
         },
       },
@@ -95,7 +96,7 @@ const useHandleMorePress = () => {
           screen: ScreenNames.DragToConfirm,
           params: {
             title: t('Documents.deleteDocumentHeader', {
-              documentName: `${truncateString(credentialName, 30)}`,
+              documentName: displayDocumentName,
               interpolation: { escapeValue: false },
             }),
             cancelText: t('Documents.cancelCardOption'),
