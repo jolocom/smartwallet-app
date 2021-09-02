@@ -6,6 +6,7 @@ import { IPasscodeProps, IPasscodeComposition } from './types'
 import { ALL_PIN_ATTEMPTS, PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
+import ResetBtn from './ResetBtn'
 import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
 import {
@@ -114,6 +115,7 @@ Passcode.Header = PasscodeHeader
 Passcode.Forgot = PasscodeForgot
 Passcode.Keyboard = PasscodeKeyboard
 Passcode.Container = PasscodeContainer
+Passcode.ResetBtn = ResetBtn
 Passcode.Error = PasscodeError
 
 export default Passcode

@@ -20,19 +20,17 @@ interface NumberButtonProps {
   onPress: (value: number) => void
 }
 
-const NumberButton: React.FC<NumberButtonProps> = ({ value, onPress }) => {
-  return (
-    <TouchableOpacity
-      testID={`keyboard-button-${value}`}
-      onPress={() => onPress(value)}
-      style={styles.button}
-    >
-      <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
-        {value}
-      </JoloText>
-    </TouchableOpacity>
-  )
-}
+const NumberButton: React.FC<NumberButtonProps> = ({ value, onPress }) => (
+  <TouchableOpacity
+    testID={`keyboard-button-${value}`}
+    onPress={() => onPress(value)}
+    style={styles.button}
+  >
+    <JoloText kind={JoloTextKind.title} size={JoloTextSizes.middle}>
+      {value}
+    </JoloText>
+  </TouchableOpacity>
+)
 
 interface CustomButtonProps {
   onPress?: () => void
@@ -40,21 +38,19 @@ interface CustomButtonProps {
 
 const CustomButton: React.FC<CustomButtonProps> = ({
   children,
-  onPress = () => {},
-}) => {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.button, { backgroundColor: Colors.transparent }]}
-    >
-      {children}
-    </TouchableOpacity>
-  )
-}
+  onPress = () => undefined,
+}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={[styles.button, { backgroundColor: Colors.transparent }]}
+  >
+    {children}
+  </TouchableOpacity>
+)
 
-const KeyboardRow: React.FC = ({ children }) => {
-  return <View style={styles.row}>{children}</View>
-}
+const KeyboardRow: React.FC = ({ children }) => (
+  <View style={styles.row}>{children}</View>
+)
 
 const PasscodeKeyboard: React.FC<IPasscodeKeyboardProps> = ({
   biometryType,
