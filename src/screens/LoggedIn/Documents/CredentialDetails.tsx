@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { useRoute, RouteProp } from '@react-navigation/native'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -7,17 +8,16 @@ import { Colors } from '~/utils/colors'
 import Block from '~/components/Block'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
-import Collapsible from '~/components/Collapsible'
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
+import { NavHeaderType } from '~/components/NavigationHeader'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import { useToggleExpand } from '~/hooks/ui'
+import Collapsible from '~/components/Collapsible'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CredentialDetails = () => {
-  const navigation = useNavigation()
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.CredentialDetails>>()
   const { title, photo, fields } = route.params
@@ -36,86 +36,78 @@ const CredentialDetails = () => {
     }
   }, [isExpanded])
 
+  const { top } = useSafeArea()
   return (
-    <Collapsible>
-      <Collapsible.Header>
-        <NavigationHeader
-          type={NavHeaderType.Close}
-          onPress={navigation.goBack}
-        >
-          <Collapsible.HeaderText>{title}</Collapsible.HeaderText>
-        </NavigationHeader>
-      </Collapsible.Header>
-      <ScreenContainer>
-        <Collapsible.ScrollView
-          customStyles={{
-            paddingBottom: 50,
-          }}
-        >
-          <Collapsible.HidingTextContainer
-            customStyles={[
-              styles.titleContainer,
-              {
-                paddingRight: photo ? '40%' : 0,
-                marginTop: 30,
-              },
-            ]}
-          >
-            <JoloText
-              customStyles={{
-                ...styles.fieldText,
-                lineHeight: BP({ xsmall: 24, default: 28 }),
-              }}
-              kind={JoloTextKind.title}
-              size={JoloTextSizes.middle}
-              color={Colors.white90}
-              weight={JoloTextWeight.regular}
-            >
-              {title}
-            </JoloText>
-          </Collapsible.HidingTextContainer>
-          <Block customStyle={{ backgroundColor: Colors.white }}>
-            {photo && <Image source={{ uri: photo }} style={styles.photo} />}
-            {fields.map((field, i) => (
-              <React.Fragment key={i}>
-                <View style={styles.fieldContainer}>
-                  <JoloText
-                    customStyles={[
-                      styles.fieldText,
-                      { width: i === 0 ? '80%' : '100%' },
-                    ]}
-                    size={JoloTextSizes.mini}
-                    color={Colors.osloGray}
-                  >
-                    {field.label}
-                  </JoloText>
-                  <TouchableOpacity
-                    onPress={() => handleToggleExpand(i)}
-                    activeOpacity={1}
-                  >
-                    <JoloText
-                      color={Colors.black95}
-                      numberOfLines={
-                        isExpanded && expandedFieldIdx === i ? 0 : 4
-                      }
-                      customStyles={[
-                        styles.fieldText,
-                        { marginTop: BP({ default: 8, xsmall: 4 }) },
-                      ]}
-                    >
-                      {field.value}
-                    </JoloText>
-                  </TouchableOpacity>
-                </View>
-                {i !== Object.keys(fields).length - 1 && (
-                  <View style={styles.divider} />
+    <View style={{ paddingTop: top }}>
+      <Collapsible
+        renderHeader={() => <Collapsible.Header type={NavHeaderType.Close} />}
+        renderScroll={() => (
+          <ScreenContainer.Padding>
+            <Collapsible.Scroll>
+              <Collapsible.Title
+                text={title ?? ''}
+                customContainerStyles={{
+                  width: photo ? '68%' : '100%',
+                  ...(photo && { marginTop: 30 }),
+                  paddingBottom: 12,
+                }}
+              >
+                <JoloText
+                  customStyles={{
+                    ...styles.fieldText,
+                    lineHeight: BP({ xsmall: 24, default: 28 }),
+                  }}
+                  kind={JoloTextKind.title}
+                  size={JoloTextSizes.middle}
+                  color={Colors.white90}
+                  weight={JoloTextWeight.regular}
+                >
+                  {title}
+                </JoloText>
+              </Collapsible.Title>
+              <Block customStyle={{ backgroundColor: Colors.white }}>
+                {photo && (
+                  <Image source={{ uri: photo }} style={styles.photo} />
                 )}
-              </React.Fragment>
-            ))}
-          </Block>
-        </Collapsible.ScrollView>
-      </ScreenContainer>
-    </Collapsible>
+                {fields.map((field, i) => (
+                  <React.Fragment key={i}>
+                    <View style={styles.fieldContainer}>
+                      <JoloText
+                        customStyles={styles.fieldText}
+                        size={JoloTextSizes.mini}
+                        color={Colors.osloGray}
+                      >
+                        {field.label}
+                      </JoloText>
+                      <TouchableOpacity
+                        onPress={() => handleToggleExpand(i)}
+                        activeOpacity={1}
+                      >
+                        <JoloText
+                          color={Colors.black95}
+                          numberOfLines={
+                            isExpanded && expandedFieldIdx === i ? 0 : 4
+                          }
+                          customStyles={[
+                            styles.fieldText,
+                            { marginTop: BP({ default: 8, xsmall: 4 }) },
+                          ]}
+                        >
+                          {field.value}
+                        </JoloText>
+                      </TouchableOpacity>
+                    </View>
+                    {i !== Object.keys(fields).length - 1 && (
+                      <View style={styles.divider} />
+                    )}
+                  </React.Fragment>
+                ))}
+              </Block>
+            </Collapsible.Scroll>
+          </ScreenContainer.Padding>
+        )}
+      />
+    </View>
   )
 }
 
