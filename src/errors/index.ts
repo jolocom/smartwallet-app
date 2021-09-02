@@ -2,11 +2,11 @@ import { Platform } from 'react-native'
 import * as Sentry from '@sentry/react-native'
 import VersionNumber from 'react-native-version-number'
 
-import { SENTRY_DNS } from './config'
+import { SENTRY_DSN } from './config'
 
 export function initSentry() {
   Sentry.init({
-    dsn: SENTRY_DNS,
+    dsn: SENTRY_DSN,
     release: `${VersionNumber.bundleIdentifier}@${VersionNumber.appVersion}`,
 
     // disable automatic reporting of errors/rejections without user consent
