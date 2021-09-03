@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
+import { useDispatch } from 'react-redux'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { useBackHandler } from '@react-native-community/hooks'
 import moment from 'moment'
@@ -16,6 +17,7 @@ import { ScreenNames } from '~/types/screens'
 import { GlobalModalsParamsList } from '~/RootNavigation'
 import useTranslation from '~/hooks/useTranslation'
 import useSettings, { SettingKeys } from '~/hooks/settings'
+import { setAppDisabled } from '~/modules/account/actions'
 
 const LONG_COUNTDOWN = 60 * 5
 const SHORT_COUNTDOWN = 60 * 1
@@ -26,6 +28,15 @@ const AppDisabled = ({ navigation }) => {
 
   const { attemptCyclesLeft, countdown: storedCountdown } = params
   const { t } = useTranslation()
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setAppDisabled(true))
+    return () => {
+      dispatch(setAppDisabled(false))
+    }
+  }, [])
 
   const settings = useSettings()
   const storeLastCountdown = async (value: number) =>
