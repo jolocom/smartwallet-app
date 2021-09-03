@@ -45,6 +45,9 @@ const ChangePin: React.FC = () => {
         return t('CreatePasscode.createHeader')
       case PasscodeState.repeat:
         return t('VerifyPasscode.verifyHeader')
+      default:
+        console.warn('Warning: Wrong passcodeState in ChangePin!')
+        return ''
     }
   }
 
@@ -99,6 +102,9 @@ const ChangePin: React.FC = () => {
         if (pin === newPin) {
           await submitNewPin()
         } else throw new Error("Pins don't match")
+        break
+      default:
+        console.warn('Warning: Wrong passcodeState in ChangePin!')
         break
     }
   }
