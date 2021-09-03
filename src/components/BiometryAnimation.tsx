@@ -1,6 +1,5 @@
 import React from 'react'
 import { TouchableOpacity, View, StyleSheet, ViewStyle } from 'react-native'
-import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { FingerprintIcon, FaceIdIcon } from '~/assets/svg'
 
 import Ripple from '~/components/Ripple'
@@ -21,7 +20,7 @@ const BiometryAnimation: React.FC<PropsI> = ({
   customStyles,
 }) => {
   const isFaceBiometry =
-    biometryType === BIOMETRY_TYPE.FACE_ID || biometryType === 'FACE'
+    biometryType === BiometryTypes.FaceID || biometryType === BiometryTypes.Face
   return (
     <TouchableOpacity
       onPress={handleAuthenticate}
