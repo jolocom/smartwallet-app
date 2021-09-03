@@ -1,6 +1,6 @@
 import { waitFor } from '@testing-library/react-native'
 import React from 'react'
-import EncryptedStorage from 'react-native-encrypted-storage'
+import { SecureStorage } from 'react-native-jolocom'
 import ChangePin from '~/screens/LoggedIn/Settings/ChangePin'
 import { strings } from '~/translations'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
@@ -19,10 +19,12 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
-jest.mock('react-native-encrypted-storage', () => ({
-  setItem: jest.fn(),
-  getItem: jest.fn().mockResolvedValue('5555'),
-  removeItem: jest.fn(),
+jest.mock('react-native-jolocom', () => ({
+  SecureStorage: {
+    storeValue: jest.fn(),
+    getValue: jest.fn().mockResolvedValue(null),
+    removeValue: jest.fn(),
+  },
 }))
 
 jest.mock('../../../src/hooks/sdk', () => ({
@@ -60,7 +62,7 @@ jest.mock('../../../src/hooks/navigation', () => ({
 
 xdescribe('Change passcode', () => {
   it('should successfully change the passcode', async () => {
-    const setEncryptedPasswordSpy = jest.spyOn(EncryptedStorage, 'setItem')
+    const setEncryptedPasswordSpy = jest.spyOn(SecureStorage, 'storeValue')
 
     const { getByText, getByTestId } = await waitFor(() =>
       renderWithSafeArea(<ChangePin />),
