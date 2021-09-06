@@ -22,20 +22,7 @@ export const ContainerFAS: React.FC = ({ children }) => (
 )
 
 export const LogoContainerFAS: React.FC = ({ children }) => {
-  const { top } = useSafeArea()
-  return (
-    <View
-      style={[
-        styles.logoContainerFAS,
-        {
-          marginTop: BP({ large: 35, medium: 35, default: 20 }) + top,
-          marginBottom: 5,
-        },
-      ]}
-    >
-      {children}
-    </View>
-  )
+  return <View style={[styles.logoContainerFAS]}>{children}</View>
 }
 
 export const FooterContainerFAS: React.FC = ({ children }) => {

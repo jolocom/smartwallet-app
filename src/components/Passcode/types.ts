@@ -22,6 +22,8 @@ export interface IPasscodeComposition {
   Forgot: React.FC
   Keyboard: React.FC<IPasscodeKeyboardProps>
   Container: React.FC<IWithCustomStyle>
+  ResetBtn: React.FC<{ onPress: () => void }>
+  Error: React.FC
 }
 
 export interface IPasscodeContext {
@@ -29,4 +31,5 @@ export interface IPasscodeContext {
   setPin: React.Dispatch<SetStateAction<string>>
   pinError: boolean
   pinSuccess: boolean
+  pinAttemptsLeft: number
 }

@@ -41,7 +41,7 @@ export enum ScreenNames {
   CredentialDetails = 'CredentialDetails',
   PopupMenu = 'PopupMenu',
   TransparentModals = 'TransparentModals',
-
+  AppDisabled = 'AppDisabled',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
   //Settings
