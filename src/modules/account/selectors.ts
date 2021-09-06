@@ -11,3 +11,5 @@ export const getScreenHeight = (state: RootReducerI) =>
   state.account.screenHeight
 export const getCurrentLanguage = (state: RootReducerI) =>
   state.account.currentLanguage
+export const getIsAppDisabled = (state: RootReducerI) =>
+  state.account.isAppDisabled

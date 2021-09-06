@@ -9,6 +9,7 @@ export enum AccountActions {
   setAppLocked = 'setAppLocked',
   setScreenHeight = 'setScreenHeight',
   setCurrentLanguage = 'setCurrentLanguage',
+  setAppDisabled = 'setAppDisabled',
 }
 
 export interface AccountState {
@@ -19,4 +20,5 @@ export interface AccountState {
   showTermsConsent: boolean
   screenHeight: number
   currentLanguage: Locales
+  isAppDisabled: boolean
 }

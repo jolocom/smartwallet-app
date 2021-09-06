@@ -7,13 +7,14 @@ import ScreenContainer from '~/components/ScreenContainer'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setAppLocked } from '~/modules/account/actions'
 import { useBiometry } from '~/hooks/biometry'
 import Passcode from '~/components/Passcode'
 import { useGetAppStates } from '~/hooks/useAppState'
 import { useDisableLock } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
+import { getIsAppDisabled } from '~/modules/account/selectors'
 
 const Lock = () => {
   const { t } = useTranslation()
@@ -25,6 +26,8 @@ const Lock = () => {
   const disableLock = useDisableLock()
 
   const { currentAppState, prevAppState } = useGetAppStates()
+
+  const isAppDisabled = useSelector(getIsAppDisabled)
 
   const promptedTimes = useRef(0)
 
@@ -51,7 +54,7 @@ const Lock = () => {
       ) {
         promptedTimes.current += 1
         if (promptedTimes.current === 1) {
-          handleBiometryAuthentication()
+          !isAppDisabled && handleBiometryAuthentication()
         }
       }
     }
