@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
 
-import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import { sleep } from '~/utils/generic'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
@@ -13,6 +11,7 @@ import { useLoader } from '~/hooks/loader'
 import { useEffect } from 'react'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '~/hooks/toasts'
+import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
 
 enum PasscodeState {
   verify = 'verify',
@@ -26,6 +25,7 @@ const ChangePin: React.FC = () => {
   const { keychainPin } = useGetStoredAuthValues()
   const goBack = useGoBack()
   const { scheduleErrorWarning } = useToasts()
+  const secureStorage = useSecureStorage()
 
   const [passcodeState, setPasscodeState] = useState<PasscodeState>(
     PasscodeState.verify,
@@ -45,16 +45,16 @@ const ChangePin: React.FC = () => {
         return t('CreatePasscode.createHeader')
       case PasscodeState.repeat:
         return t('VerifyPasscode.verifyHeader')
+      default:
+        console.warn('Warning: Wrong passcodeState in ChangePin!')
+        return ''
     }
   }
 
   const submitNewPin = async () => {
     loader(
       async () => {
-        await Keychain.setGenericPassword(PIN_USERNAME, newPin, {
-          service: PIN_SERVICE,
-          storage: Keychain.STORAGE_TYPE.AES,
-        })
+        await secureStorage.setItem(SecureStorageKeys.passcode, newPin)
       },
       { success: t('ChangePasscode.successHeader') },
       (error) => {
@@ -102,6 +102,9 @@ const ChangePin: React.FC = () => {
         if (pin === newPin) {
           await submitNewPin()
         } else throw new Error("Pins don't match")
+        break
+      default:
+        console.warn('Warning: Wrong passcodeState in ChangePin!')
         break
     }
   }

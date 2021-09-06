@@ -9,7 +9,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 
 import { ScreenNames } from '~/types/screens'
 import { JoloTextSizes } from '~/utils/fonts'
-import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { resetAccount } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
@@ -28,7 +27,7 @@ import useTranslation from '~/hooks/useTranslation'
 
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
-  const resetServiceValuesInKeychain = useResetKeychainValues(PIN_SERVICE)
+  const resetServiceValuesInKeychain = useResetKeychainValues()
   const { resetBiometry } = useBiometry()
   const { shouldWarnBackup } = useBackup()
   const { rateApp } = useMarketRating()
