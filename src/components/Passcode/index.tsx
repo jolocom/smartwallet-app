@@ -3,17 +3,13 @@ import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 import { IPasscodeProps, IPasscodeComposition } from './types'
-import { ALL_PIN_ATTEMPTS, PasscodeContext } from './context'
+import { PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
 import ResetBtn from './ResetBtn'
 import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
-import {
-  PIN_ATTEMPTS_CYCLES,
-  useDisableApp,
-  useGetStoreCountdownValues,
-} from './hooks'
+import { useDisableApp, useGetResetStoredCountdownValues } from './hooks'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -24,11 +20,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinSuccess, setPinSuccess] = useState(false)
 
   const { pinAttemptsLeft } = useDisableApp(pinError, pinSuccess)
-  const {
-    storeLastCountdown,
-    storePinNrAttemptCyclesLeft,
-    storePinNrAttemptsLeft,
-  } = useGetStoreCountdownValues()
+  const resetCountdownValues = useGetResetStoredCountdownValues()
 
   const isFocused = useIsFocused()
 
@@ -58,11 +50,11 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
    */
   useEffect(
     () => () => {
-      ;(async () => {
-        await storeLastCountdown(0)
-        await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
-        await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
-      })()
+      if (pinSuccess) {
+        ;(async () => {
+          await resetCountdownValues()
+        })()
+      }
     },
     [],
   )

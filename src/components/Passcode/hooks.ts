@@ -37,6 +37,22 @@ export const useGetStoreCountdownValues = () => {
   }
 }
 
+export const useGetResetStoredCountdownValues = () => {
+  const {
+    storeLastCountdown,
+    storePinNrAttemptCyclesLeft,
+    storePinNrAttemptsLeft,
+  } = useGetStoreCountdownValues()
+
+  const handleResetCountdownValues = useCallback(async () => {
+    await storeLastCountdown(0)
+    await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+    await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
+  }, [])
+
+  return handleResetCountdownValues
+}
+
 export const useDisableApp = (pinError: boolean, pinSuccess: boolean) => {
   const [isAppDisabled, setIsAppDisabled] = useState(false)
 
