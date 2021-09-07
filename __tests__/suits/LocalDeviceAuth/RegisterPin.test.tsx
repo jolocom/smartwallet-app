@@ -43,17 +43,9 @@ jest.mock('@react-navigation/native', () => ({
   createNavigatorFactory: jest.fn(),
 }))
 
-jest.mock('../../../src/hooks/sdk', () => ({
-  useAgent: () => ({
-    storage: {
-      get: {
-        setting: jest.fn(),
-      },
-      store: {
-        setting: jest.fn(),
-      },
-    },
-  }),
+jest.mock('../../../src/hooks/settings', () => () => ({
+  get: jest.fn(),
+  set: jest.fn(),
 }))
 
 describe('Register Passcode', () => {
