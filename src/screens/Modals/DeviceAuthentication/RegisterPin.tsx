@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
 import { Colors } from '~/utils/colors'
 import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
@@ -21,6 +20,7 @@ import Passcode from '~/components/Passcode'
 import { useToasts } from '~/hooks/toasts'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import useTranslation from '~/hooks/useTranslation'
+import { promisifySubmit } from '~/components/Passcode/utils'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -49,9 +49,12 @@ const RegisterPin = () => {
     resetKeychainPasscode()
   }, [])
 
-  const handlePasscodeSubmit = useCallback((pin) => {
+  const promisifyPasscodeSubmit = promisifySubmit((pin) => {
     setSelectedPasscode(pin)
     setIsCreating(false)
+  })
+  const handlePasscodeSubmit = useCallback(async (pin, cb) => {
+    await promisifyPasscodeSubmit(pin, cb)
   }, [])
 
   const redirectTo = () => {
@@ -62,7 +65,7 @@ const RegisterPin = () => {
     }
   }
 
-  const handleVerifiedPasscodeSubmit = async (pin: string) => {
+  const handleVerifiedPasscodeSubmit = async (pin: string, cb: () => void) => {
     if (selectedPasscode === pin) {
       try {
         await secureStorage.setItem(
@@ -70,9 +73,9 @@ const RegisterPin = () => {
           selectedPasscode,
         )
         displaySuccessLoader(redirectTo)
+        cb()
       } catch (err) {
         // an error with storing PIN to the keychain -> redirect back to create passcode
-
         scheduleErrorWarning(err, {
           message: t('Toasts.failedStoreMsg'),
         })
