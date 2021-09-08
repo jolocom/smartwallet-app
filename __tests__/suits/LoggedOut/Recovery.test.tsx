@@ -57,6 +57,11 @@ jest.mock('../../../src/hooks/sdk.ts', () => ({
   }),
 }))
 
+jest.mock('../../../src/hooks/settings', () => () => ({
+  get: jest.fn(),
+  set: jest.fn(),
+}))
+
 describe('User on a Recovery screen', () => {
   test('sees screen with initial state', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
