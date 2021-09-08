@@ -54,7 +54,7 @@ describe('Passcode', () => {
 
     await waitFor(() => {
       expect(mockSubmit).toHaveBeenCalledTimes(1)
-      expect(mockSubmit).toHaveBeenCalledWith('1111')
+      expect(mockSubmit).toHaveBeenCalledWith('1111', expect.anything())
     })
   })
 
