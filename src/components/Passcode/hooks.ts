@@ -55,17 +55,6 @@ export const useDisableApp = (pinError: boolean, pinSuccess: boolean) => {
     storeLastCountdown,
   } = useGetStoreCountdownValues()
 
-  /**
-   * reset stored value back to initial PIN_ATTEMPTS_CYCLES nr
-   * TODO: remove after full implementation
-   */
-  // useEffect(() => {
-  //   ;(async () => {
-  //     await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
-  //     await storeLastCountdown(0)
-  //   })()
-  // }, [])
-
   const redirect = useRedirect()
   const isFocused = useIsFocused()
 
