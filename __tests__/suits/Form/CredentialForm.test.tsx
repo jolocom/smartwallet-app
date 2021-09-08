@@ -49,7 +49,7 @@ jest.mock('../../../src/hooks/sdk', () => ({
   }),
 }))
 
-const renderCredentialForm = async () => {
+const renderCredentialForm = () => {
   const queries = renderWithSafeArea(<CredentialForm />)
   const headerContainer = queries.getByTestId('collapsable-header-container')
 
@@ -112,7 +112,7 @@ describe('Form in mode', () => {
     mockSelectorReturn(mockedStore)
 
     // RENDER
-    const queries = await renderCredentialForm()
+    const queries = renderCredentialForm()
 
     expect(
       queries.getAllByText(/CredentialForm.editHeader/).length,
@@ -150,7 +150,7 @@ describe('Form in mode', () => {
     mockSelectorReturn(mockedNoAttributes)
 
     // RENDER
-    const queries = await renderCredentialForm()
+    const queries = renderCredentialForm()
 
     expect(
       queries.getAllByText(/CredentialForm.addHeader/).length,
