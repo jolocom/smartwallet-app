@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { usePrevious } from '~/hooks/generic'
 import { useRedirect } from '~/hooks/navigation'
 import useSettings, { SettingKeys } from '~/hooks/settings'
+import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { ALL_PIN_ATTEMPTS } from './context'
 
@@ -43,10 +44,17 @@ export const useGetResetStoredCountdownValues = () => {
     storePinNrAttemptsLeft,
   } = useGetStoreCountdownValues()
 
+  const { scheduleErrorWarning } = useToasts()
+
   const handleResetCountdownValues = useCallback(async () => {
-    await storeLastCountdown(0)
-    await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
-    await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
+    try {
+      await storeLastCountdown(0)
+      await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+      await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
+    } catch (e) {
+      // @ts-expect-error
+      scheduleErrorWarning(e)
+    }
   }, [])
 
   return handleResetCountdownValues

@@ -55,9 +55,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   useEffect(
     () => () => {
       if (pinSuccess) {
-        ;(async () => {
-          await resetCountdownValues()
-        })()
+        resetCountdownValues()
       }
     },
     [pinSuccess],
