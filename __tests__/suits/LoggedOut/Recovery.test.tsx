@@ -62,6 +62,12 @@ jest.mock('../../../src/hooks/settings', () => () => ({
   set: jest.fn(),
 }))
 
+jest.mock('../../../src/hooks/toasts', () => ({
+  useToasts: () => ({
+    scheduleErrorWarning: jest.fn(),
+  }),
+}))
+
 describe('User on a Recovery screen', () => {
   test('sees screen with initial state', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
