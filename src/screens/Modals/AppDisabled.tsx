@@ -113,7 +113,9 @@ const AppDisabled = ({ navigation }) => {
   }, [countdown, attemptCyclesLeft])
 
   const handleAccessRestore = () => {
-    navigation.navigate(ScreenNames.PasscodeRecovery)
+    navigation.navigate(ScreenNames.PasscodeRecovery, {
+      isAccessRestore: true,
+    })
   }
 
   useBackHandler(() => true)
@@ -171,20 +173,18 @@ const AppDisabled = ({ navigation }) => {
       )}
       {isRestoreAccess && (
         <AbsoluteBottom>
-          <ScreenContainer.Padding>
-            <BtnGroup>
-              <Btn onPress={handleAccessRestore} type={BtnTypes.primary}>
-                {t('DisableOverlay.submitBtn')}
-              </Btn>
-              <Space height={12} />
-              <JoloText
-                size={JoloTextSizes.tiniest}
-                customStyles={{ color: Colors.white70 }}
-              >
-                {t('DisableOverlay.submitDescription')}
-              </JoloText>
-            </BtnGroup>
-          </ScreenContainer.Padding>
+          <BtnGroup>
+            <Btn onPress={handleAccessRestore} type={BtnTypes.primary}>
+              {t('DisableOverlay.submitBtn')}
+            </Btn>
+            <Space height={12} />
+            <JoloText
+              size={JoloTextSizes.tiniest}
+              customStyles={{ color: Colors.white70 }}
+            >
+              {t('DisableOverlay.submitDescription')}
+            </JoloText>
+          </BtnGroup>
         </AbsoluteBottom>
       )}
     </ScreenContainer>
