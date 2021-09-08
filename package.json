@@ -62,6 +62,7 @@
     "react-native": "0.63.4",
     "react-native-biometrics": "^2.1.4",
     "react-native-bootsplash": "^3.2.0",
+    "react-native-branch": "^5.0.4",
     "react-native-camera": "3.30.0",
     "react-native-crypto": "^2.1.0",
     "react-native-dash": "^0.0.11",
