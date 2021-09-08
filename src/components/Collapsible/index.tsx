@@ -151,6 +151,7 @@ const Collapsible: React.FC<ICollapsible> & ICollapsibleComposite = ({
        */}
       <View ref={collapsibleRef} collapsable={false}>
         <View
+          testID="collapsable-header-container"
           onLayout={handleHeaderContainerLayout}
           style={{
             position: 'absolute',
