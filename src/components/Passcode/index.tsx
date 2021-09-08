@@ -41,12 +41,13 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   const handleSubmit = async () => {
     try {
-      await onSubmit(pin)
-      setPinSuccess(true)
-      setTimeout(() => {
-        setPin('')
-        setPinSuccess(false)
-      }, 500)
+      await onSubmit(pin, () => {
+        setPinSuccess(true)
+        setTimeout(() => {
+          setPin('')
+          setPinSuccess(false)
+        }, 500)
+      })
     } catch (e) {
       setPinError(true)
     }
@@ -54,17 +55,22 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   /**
    * clearing app stored value
-   * upon successful submission of the pass code
+   * upon successful submission of the pass code;
+   * we don't want to reset values when the hardware
+   * back button is pressed (this is another way how
+   * the screen can be unmounted)
    */
   useEffect(
     () => () => {
-      ;(async () => {
-        await storeLastCountdown(0)
-        await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
-        await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
-      })()
+      if (pinSuccess) {
+        ;(async () => {
+          await storeLastCountdown(0)
+          await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
+          await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
+        })()
+      }
     },
-    [],
+    [pinSuccess],
   )
 
   // submit when full pin is provided
