@@ -15,6 +15,7 @@ import { useGetAppStates } from '~/hooks/useAppState'
 import { useDisableLock } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
 import { getIsAppDisabled } from '~/modules/account/selectors'
+import { promisifySubmit } from '~/components/Passcode/utils'
 
 const Lock = () => {
   const { t } = useTranslation()
@@ -78,9 +79,19 @@ const Lock = () => {
     }
   }
 
-  const handlePINSubmit = (pin: string) => {
+  /**
+   * this function makes sure that promise is being resolved after
+   * injected callback has been executed.
+   * This appears on the lock screen, where we have to catch a values if
+   * pin was submitted successfully and only in this case reset values
+   * related to passcode attempts in the storage. Otherwise, unlock will be called and
+   * whatever follows will not be executed as the screen will unmount by this time
+   */
+  const promisifiedUnlock = promisifySubmit(unlockApp)
+
+  const handlePINSubmit = async (pin: string, cb: () => void) => {
     if (keychainPin.toString() === pin) {
-      unlockApp()
+      await promisifiedUnlock(pin, cb)
     } else {
       throw new Error("Pins don't match")
     }

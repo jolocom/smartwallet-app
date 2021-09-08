@@ -10,21 +10,20 @@ export const PIN_ATTEMPTS_CYCLES = 3
 
 export const useGetStoreCountdownValues = () => {
   const settings = useSettings()
-  const getPinNrAttemptsLeft = async (): Promise<
-    { value: number } | undefined
-  > => settings.get(SettingKeys.pinNrAttemptsLeft)
-  const storePinNrAttemptsLeft = async (value: number) =>
+  const getPinNrAttemptsLeft = (): Promise<{ value: number } | undefined> =>
+    settings.get(SettingKeys.pinNrAttemptsLeft)
+  const storePinNrAttemptsLeft = (value: number) =>
     settings.set(SettingKeys.pinNrAttemptsLeft, { value })
 
-  const getPinNrAttemptCyclesLeft = async (): Promise<
+  const getPinNrAttemptCyclesLeft = (): Promise<
     { value: number } | undefined
   > => settings.get(SettingKeys.pinNrAttemptCyclesLeft)
-  const storePinNrAttemptCyclesLeft = async (value: number) =>
+  const storePinNrAttemptCyclesLeft = (value: number) =>
     settings.set(SettingKeys.pinNrAttemptCyclesLeft, { value })
 
-  const getLastCountdown = async (): Promise<{ value: number } | undefined> =>
+  const getLastCountdown = (): Promise<{ value: number } | undefined> =>
     settings.get(SettingKeys.countdown)
-  const storeLastCountdown = async (value: number) =>
+  const storeLastCountdown = (value: number) =>
     settings.set(SettingKeys.countdown, { value })
 
   return {
@@ -71,21 +70,6 @@ export const useDisableApp = (pinError: boolean, pinSuccess: boolean) => {
     getLastCountdown,
     storeLastCountdown,
   } = useGetStoreCountdownValues()
-
-  /**
-   * reset stored value back to initial PIN_ATTEMPTS_CYCLES nr
-   * TODO: remove after full implementation
-   */
-  // useEffect(() => {
-  //   ;(async () => {
-  //     await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
-  //   })()
-  // }, [])
-
-  /**
-   * reset all stored value after
-   * successful submission of the pass code
-   */
 
   const redirect = useRedirect()
   const isFocused = useIsFocused()
