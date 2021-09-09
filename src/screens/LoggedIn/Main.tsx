@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
@@ -96,6 +96,7 @@ const MainStack = createStackNavigator<MainStackParamList>()
 
 const Main: React.FC = () => {
   const shouldShowConsent = useSelector(shouldShowTermsConsent)
+
   return (
     <MainStack.Navigator
       headerMode="none"
@@ -218,7 +219,7 @@ const Main: React.FC = () => {
                  * color palette of bottom sheet blends into
                  * screen rendered behind it
                  */
-                backgroundColor: __DEV__ ? Colors.white35 : 'transparent',
+                backgroundColor: Colors.black65,
               },
               ...screenTransitionFromBottomDisabledGestures,
             }}

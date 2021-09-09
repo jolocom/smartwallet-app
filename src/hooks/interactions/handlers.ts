@@ -20,6 +20,7 @@ import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
+import { Interaction } from 'react-native-jolocom'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -37,31 +38,38 @@ export const useInteractionStart = () => {
   const { connected, showDisconnectedToast } = useConnection()
   const { scheduleErrorWarning } = useToasts()
 
-  return async (jwt: string) => {
+  const processInteraction = async (jwt: string) => {
+    parseJWT(jwt)
+    const interaction = await agent.processJWT(jwt)
+
+    return interaction
+  }
+
+  const showInteraction = async (interaction: Interaction) => {
+    console.log('showing interaction')
     // NOTE: not continuing the interaction if there is no network connection
     if (connected === false) return showDisconnectedToast()
 
-    // NOTE: we're parsing the jwt here, even though it will be parsed in `agent.processJWT`
-    // below. This is to assure the error is caught before the loading screen, so that it can
-    // be handled by the scanner component.
-    parseJWT(jwt)
+    const counterparty = interaction.getSummary().initiator
+    const interactionData = await interactionHandler(interaction)
 
+    if (interactionData) {
+      dispatch(
+        setInteractionDetails({
+          id: interaction.id,
+          flowType: interaction.flow.type,
+          counterparty,
+          ...interactionData,
+        }),
+      )
+    }
+  }
+
+  const startInteraction = async (jwt: string) => {
     return loader(
       async () => {
-        const interaction = await agent.processJWT(jwt)
-        const counterparty = interaction.getSummary().initiator
-        const interactionData = await interactionHandler(interaction)
-
-        if (interactionData) {
-          dispatch(
-            setInteractionDetails({
-              id: interaction.id,
-              flowType: interaction.flow.type,
-              counterparty,
-              ...interactionData,
-            }),
-          )
-        }
+        const interaction = await processInteraction(jwt)
+        await showInteraction(interaction)
       },
       { showSuccess: false, showFailed: false },
       (error) => {
@@ -69,6 +77,8 @@ export const useInteractionStart = () => {
       },
     )
   }
+
+  return { processInteraction, showInteraction, startInteraction }
 }
 
 export const useFinishInteraction = () => {

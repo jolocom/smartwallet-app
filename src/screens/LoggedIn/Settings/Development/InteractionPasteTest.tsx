@@ -17,7 +17,7 @@ const InteractionPasteTest = () => {
 
   const navigation = useNavigation()
 
-  const startInteraction = useInteractionStart()
+  const { startInteraction } = useInteractionStart()
 
   const handleTokenSubmit = async () => {
     if (!token) setError('Please paste interaction token')

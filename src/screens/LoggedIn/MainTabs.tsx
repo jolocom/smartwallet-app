@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   createBottomTabNavigator,
   BottomTabBarProps,
@@ -12,6 +12,14 @@ import Settings from './Settings'
 import Identity from './Identity'
 import { CredentialCategories } from '~/types/credentials'
 import useTranslation from '~/hooks/useTranslation'
+import { useInteractionStart } from '~/hooks/interactions/handlers'
+import { useNavigation } from '@react-navigation/core'
+import { useAgent } from '~/hooks/sdk'
+import { InteractionTransportType } from 'react-native-jolocom'
+import { useInteractionCreate } from '~/hooks/interactions/listeners'
+import { useSelector } from 'react-redux'
+import { getIsAppLocked } from '~/modules/account/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
@@ -24,9 +32,35 @@ const MainTabsNavigator = createBottomTabNavigator<MainTabsParamList>()
 
 const MainTabs = () => {
   const { t } = useTranslation()
+  const isAppLocked = useSelector(getIsAppLocked)
+  const isInteracting = useSelector(getInteractionType)
+
+  const agent = useAgent()
+  const { showInteraction } = useInteractionStart()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    agent.sdk.transports.start(
+      { type: InteractionTransportType.Deeplink },
+      async (msg) => {
+        agent.processJWT(msg).catch(console.log)
+      },
+    )
+  }, [])
+
+  useInteractionCreate((interaction) => {
+    showInteraction(interaction)
+  })
+
+  useEffect(() => {
+    if (!isAppLocked && isInteracting) {
+      navigation.navigate(ScreenNames.Interaction)
+    }
+  }, [isInteracting, isAppLocked])
 
   return (
     <MainTabsNavigator.Navigator
+      initialRouteName={ScreenNames.Documents}
       tabBar={(props: BottomTabBarProps) => {
         return <BottomBar {...props} />
       }}
