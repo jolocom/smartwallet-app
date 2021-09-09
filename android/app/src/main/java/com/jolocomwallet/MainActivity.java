@@ -27,6 +27,7 @@ public class MainActivity extends ReactActivity {
   @Override
   public void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
+    intent.putExtra("branch_force_new_session", true);
     RNBranchModule.onNewIntent(intent);
   }
 
