@@ -148,8 +148,8 @@ export const DocumentList = () => {
 
   // NOTE: changing the active tab when the navigation params changed
   useLayoutEffect(() => {
-    const newTabId = route.params.initialTab ?? CredentialCategories.document
-    setActiveTab(tabs.find((t) => t.id === newTabId)!)
+    const newTabId = route?.params?.initialTab ?? CredentialCategories.document
+    setActiveTab(tabs?.find((t) => t.id === newTabId)!)
   }, [route])
 
   useEffect(() => {
