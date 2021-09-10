@@ -140,7 +140,7 @@
     "Lock": {
         "header": "Gib deinen Passcode ein",
         "forgotBtn": "Passcode vergessen?",
-        "errorMsg": ""
+        "errorMsg": "Du hast ${attempts} Versuche genutzt"
     },
     "CameraPermission": {
         "header": "Kamera Berechtigung",
@@ -408,10 +408,10 @@
         "atLeastOneValue": "Trage bitte mindestens einen der Werte ein"
     },
     "DisableOverlay": {
-        "headerTitle": "",
-        "descriptionTitle": "",
-        "headerBlockedTitle": "",
-        "submitBtn": "",
-        "submitDescription": ""
+        "headerTitle": "Deine Wallet ist aus Sicherheitsgründen deaktiviert",
+        "descriptionTitle": "Versuche es in",
+        "headerBlockedTitle": "Du hast die maximale Anzahl an Versuchen erreicht",
+        "submitBtn": "Zugang wiederherstellen",
+        "submitDescription": "Das Erstellen eines neuen Passcodes hat keinen Einfluss auf Deine gespeicherten Daten"
     }
 }
