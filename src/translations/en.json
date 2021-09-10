@@ -409,7 +409,7 @@
     },
     "DisableOverlay": {
         "headerTitle": "Your wallet is disabled for security reasons",
-        "descriptionTitle": " Try again in",
+        "descriptionTitle": "Try again in",
         "headerBlockedTitle": "You have reached the limit of your attempts",
         "submitBtn": "Restore Access",
         "submitDescription": "Setting a new passcode will not affect your stored data"
