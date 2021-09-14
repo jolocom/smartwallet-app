@@ -7,7 +7,7 @@ import {
   SDKError,
   ErrorCode,
   TransportMessageHandler,
-} from '@jolocom/sdk'
+} from 'react-native-jolocom'
 import branch from 'react-native-branch'
 
 export class JolocomDeepLinking implements JolocomPlugin {
@@ -21,23 +21,25 @@ export class JolocomDeepLinking implements JolocomPlugin {
   ): TransportAPI {
     const { config: callbackURL } = transport
 
-    branch.subscribe(({ error, params, uri }) => {
-      if (error) {
-        console.warn('Error processing DeepLink: ', error)
-        return
-      }
+    branch.subscribe(({ error, params }) => {
+      if (onMessage && params) {
+        console.log(JSON.stringify(params, null, 2))
 
-      if (
-        params &&
-        params['token'] &&
-        typeof params['token'] === 'string' &&
-        onMessage
-      ) {
-        onMessage(params['token'])
-        return
-      }
+        if (error) {
+          onMessage('', new Error(error))
+          console.warn('Error processing DeepLink: ', error)
+          return
+        }
 
-      console.log('Cannot process')
+        if (params['token'] && typeof params['token'] === 'string') {
+          onMessage(params['token'])
+          return
+        } else if (!params['+clicked_branch_link']) {
+          return
+        }
+
+        onMessage('', new Error(ErrorCode.InvalidToken))
+      }
     })
 
     return {

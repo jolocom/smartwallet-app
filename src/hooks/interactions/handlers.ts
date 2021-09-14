@@ -38,13 +38,21 @@ export const useInteraction = () => {
 export const useDeeplinkInteractions = () => {
   const agent = useAgent()
   const { processInteraction } = useInteractionStart()
+  const { scheduleErrorWarning } = useToasts()
   const refTransportAPI = useRef<TransportAPI>()
 
   useEffect(() => {
     agent.sdk.transports
-      .start({ type: InteractionTransportType.Deeplink }, async (msg) => {
-        processInteraction(msg, refTransportAPI.current)
-      })
+      .start(
+        { type: InteractionTransportType.Deeplink },
+        async (msg, error) => {
+          if (error) {
+            scheduleErrorWarning(error)
+          } else {
+            processInteraction(msg, refTransportAPI.current)
+          }
+        },
+      )
       .then((transportAPI) => {
         refTransportAPI.current = transportAPI
       })
@@ -63,28 +71,36 @@ export const useInteractionStart = () => {
     jwt: string,
     transportAPI?: TransportAPI,
   ) => {
-    parseJWT(jwt)
-    const interaction = await agent.processJWT(jwt, transportAPI)
+    try {
+      parseJWT(jwt)
+      const interaction = await agent.processJWT(jwt, transportAPI)
 
-    return interaction
+      return interaction
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
   }
 
   const showInteraction = async (interaction: Interaction) => {
     // NOTE: not continuing the interaction if there is no network connection
-    if (connected === false) return showDisconnectedToast()
+    try {
+      if (connected === false) return showDisconnectedToast()
 
-    const counterparty = interaction.getSummary().initiator
-    const interactionData = await interactionHandler(interaction)
+      const counterparty = interaction.getSummary().initiator
+      const interactionData = await interactionHandler(interaction)
 
-    if (interactionData) {
-      dispatch(
-        setInteractionDetails({
-          id: interaction.id,
-          flowType: interaction.flow.type,
-          counterparty,
-          ...interactionData,
-        }),
-      )
+      if (interactionData) {
+        dispatch(
+          setInteractionDetails({
+            id: interaction.id,
+            flowType: interaction.flow.type,
+            counterparty,
+            ...interactionData,
+          }),
+        )
+      }
+    } catch (e) {
+      scheduleErrorWarning(e)
     }
   }
 
