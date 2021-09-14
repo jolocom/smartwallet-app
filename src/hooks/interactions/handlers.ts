@@ -20,7 +20,12 @@ import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
-import { Interaction } from 'react-native-jolocom'
+import {
+  Interaction,
+  InteractionTransportType,
+  TransportAPI,
+} from 'react-native-jolocom'
+import { useEffect, useRef } from 'react'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -28,6 +33,22 @@ export const useInteraction = () => {
   if (!interactionId) throw new Error('Interaction not found')
 
   return () => agent.interactionManager.getInteraction(interactionId)
+}
+
+export const useDeeplinkInteractions = () => {
+  const agent = useAgent()
+  const { processInteraction } = useInteractionStart()
+  const refTransportAPI = useRef<TransportAPI>()
+
+  useEffect(() => {
+    agent.sdk.transports
+      .start({ type: InteractionTransportType.Deeplink }, async (msg) => {
+        processInteraction(msg, refTransportAPI.current)
+      })
+      .then((transportAPI) => {
+        refTransportAPI.current = transportAPI
+      })
+  }, [])
 }
 
 export const useInteractionStart = () => {
@@ -38,15 +59,17 @@ export const useInteractionStart = () => {
   const { connected, showDisconnectedToast } = useConnection()
   const { scheduleErrorWarning } = useToasts()
 
-  const processInteraction = async (jwt: string) => {
+  const processInteraction = async (
+    jwt: string,
+    transportAPI?: TransportAPI,
+  ) => {
     parseJWT(jwt)
-    const interaction = await agent.processJWT(jwt)
+    const interaction = await agent.processJWT(jwt, transportAPI)
 
     return interaction
   }
 
   const showInteraction = async (interaction: Interaction) => {
-    console.log('showing interaction')
     // NOTE: not continuing the interaction if there is no network connection
     if (connected === false) return showDisconnectedToast()
 
