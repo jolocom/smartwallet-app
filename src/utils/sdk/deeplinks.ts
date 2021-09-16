@@ -23,8 +23,6 @@ export class JolocomDeepLinking implements JolocomPlugin {
 
     branch.subscribe(({ error, params }) => {
       if (onMessage && params) {
-        console.log(JSON.stringify(params, null, 2))
-
         if (error) {
           onMessage('', new Error(error))
           console.warn('Error processing DeepLink: ', error)

@@ -47,6 +47,7 @@ export const useDeeplinkInteractions = () => {
         { type: InteractionTransportType.Deeplink },
         async (msg, error) => {
           if (error) {
+            //TODO: add error specific toasts
             scheduleErrorWarning(error)
           } else {
             processInteraction(msg, refTransportAPI.current)
