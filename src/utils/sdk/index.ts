@@ -2,8 +2,6 @@ import { createConnection, getConnection } from 'typeorm'
 import {
   JolocomKeychainPasswordStore,
   Agent,
-  JolocomLinking,
-  JolocomWebSockets,
   JolocomTypeormStorage,
   JolocomSDK,
 } from 'react-native-jolocom'
@@ -34,11 +32,8 @@ export const initSDK = async () => {
 
 export const initAgent = async (): Promise<Agent> => {
   const sdk = await initSDK()
-
-  await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
   sdk.setDefaultDidMethod('jun')
 
   const passwordStore = new JolocomKeychainPasswordStore()
-
   return new Agent({ passwordStore, sdk })
 }
