@@ -42,15 +42,31 @@ export const useDeeplinkInteractions = () => {
   const refTransportAPI = useRef<TransportAPI>()
 
   useEffect(() => {
+    /**
+     * NOTE: Here we're not using the transports API as intended. Usually `start` would
+     * create a `transportAPI` for each new interaction. Nevertheless, we are subscribing
+     * to new messages coming from the branch deeplinks inside `start`, meaning we have a
+     * single `transportAPI` for each interaction. As a result, when processing the token
+     * we have to redefine the `transportAPI` with the new `callbackURL`.
+     */
     agent.sdk.transports
       .start(
         { type: InteractionTransportType.Deeplink },
         async (msg, error) => {
           if (error) {
-            //TODO: add error specific toasts
             scheduleErrorWarning(error)
           } else {
-            processInteraction(msg, refTransportAPI.current)
+            const token = parseJWT(msg)
+            processInteraction(msg, {
+              ...refTransportAPI.current,
+              desc: {
+                type: InteractionTransportType.Deeplink,
+                config: {
+                  // @ts-expect-error
+                  callbackURL: token.interactionToken.callbackURL as string,
+                },
+              },
+            })
           }
         },
       )
