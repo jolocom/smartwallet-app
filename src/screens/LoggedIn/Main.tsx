@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import {
   CardStyleInterpolators,
   createStackNavigator,
+  TransitionPresets,
 } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
@@ -101,7 +102,7 @@ const modalStyleOptions = {
   headerShown: false,
   cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
-  ...screenTransitionSlideFromBottom,
+  ...TransitionPresets.FadeFromBottomAndroid,
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
