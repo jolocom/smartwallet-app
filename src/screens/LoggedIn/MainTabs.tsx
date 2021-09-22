@@ -17,8 +17,6 @@ import {
   useInteractionStart,
 } from '~/hooks/interactions/handlers'
 import { useNavigation } from '@react-navigation/core'
-import { useAgent } from '~/hooks/sdk'
-import { InteractionTransportType } from 'react-native-jolocom'
 import {
   useInteractionCreate,
   useInteractionUpdate,
@@ -26,7 +24,6 @@ import {
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import { getInteractionType } from '~/modules/interaction/selectors'
-import { useToasts } from '~/hooks/toasts'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined

@@ -5,6 +5,7 @@
  * with module caching, that appeared after upgrading to RN63.
  */
 
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useLoader } from '../loader'
@@ -25,7 +26,6 @@ import {
   InteractionTransportType,
   TransportAPI,
 } from 'react-native-jolocom'
-import { useEffect, useRef } from 'react'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -39,40 +39,25 @@ export const useDeeplinkInteractions = () => {
   const agent = useAgent()
   const { processInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
-  const refTransportAPI = useRef<TransportAPI>()
 
   useEffect(() => {
-    /**
-     * NOTE: Here we're not using the transports API as intended. Usually `start` would
-     * create a `transportAPI` for each new interaction. Nevertheless, we are subscribing
-     * to new messages coming from the branch deeplinks inside `start`, meaning we have a
-     * single `transportAPI` for each interaction. As a result, when processing the token
-     * we have to redefine the `transportAPI` with the new `callbackURL`.
-     */
-    agent.sdk.transports
-      .start(
-        { type: InteractionTransportType.Deeplink },
-        async (msg, error) => {
-          if (error) {
-            scheduleErrorWarning(error)
-          } else {
-            const token = parseJWT(msg)
-            processInteraction(msg, {
-              ...refTransportAPI.current,
-              desc: {
-                type: InteractionTransportType.Deeplink,
-                config: {
-                  // @ts-expect-error
-                  callbackURL: token.interactionToken.callbackURL as string,
-                },
-              },
-            })
-          }
-        },
-      )
-      .then((transportAPI) => {
-        refTransportAPI.current = transportAPI
-      })
+    agent.sdk.transports.subscribe(
+      InteractionTransportType.Deeplink,
+      async (msg, error) => {
+        if (error) {
+          scheduleErrorWarning(error)
+        } else {
+          const token = parseJWT(msg)
+          // @ts-ignore `callbackURL` is not defined on `interactionToken`, but it should be there
+          const callbackURL = token.interactionToken.callbackURL
+          const transportAPI = await agent.sdk.transports.start({
+            type: InteractionTransportType.Deeplink,
+            config: callbackURL,
+          })
+          processInteraction(msg, transportAPI)
+        }
+      },
+    )
   }, [])
 }
 
