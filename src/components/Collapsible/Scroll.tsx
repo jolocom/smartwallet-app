@@ -17,6 +17,7 @@ const Scroll: ICollapsibleComposite['Scroll'] = ({
       scrollEventThrottle={16}
       onScrollEndDrag={onSnap}
       showsVerticalScrollIndicator={false}
+      testID="collapsible-scroll"
       {...scrollProps}
     >
       {children}
