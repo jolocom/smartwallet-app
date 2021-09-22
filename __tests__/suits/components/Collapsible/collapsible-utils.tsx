@@ -1,7 +1,10 @@
+import { act } from '@testing-library/react-hooks'
+import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import { Text } from 'react-native'
 // @ts-expect-error
 import MockNativeMethods from 'react-native/jest/MockNativeMethods'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import Collapsible from '~/components/Collapsible'
 import { ICollapsibleContext } from '~/components/Collapsible/types'
@@ -19,6 +22,33 @@ export const mockMeasureLayout = (...values: MeasureValues) => {
       cb(...values)
     },
   )
+}
+
+export const scrollCollapsible = (
+  scrollEl: ReactTestInstance,
+  offsetY: number,
+) => {
+  act(() => {
+    fireEvent.scroll(scrollEl, {
+      nativeEvent: {
+        contentOffset: {
+          y: offsetY,
+        },
+      },
+    })
+  })
+}
+
+export const triggerHeaderLayout = (headerContainer: ReactTestInstance) => {
+  act(() => {
+    fireEvent(headerContainer, 'onLayout', {
+      nativeEvent: {
+        layout: {
+          height: 100,
+        },
+      },
+    })
+  })
 }
 
 export class CollapsibleBuilder {

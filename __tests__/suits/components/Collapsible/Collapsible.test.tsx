@@ -11,7 +11,18 @@ import {
   HEADER_HIGHT,
   CollapsibleBuilder,
   mockMeasureLayout,
+  scrollCollapsible,
+  triggerHeaderLayout,
 } from './collapsible-utils'
+
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    canGoBack: jest.fn().mockReturnValue(true),
+    goBack: jest.fn(),
+  }),
+}))
 
 describe('Collapsible', () => {
   it('renders custom header and observers header title change with multiple titles', async () => {
@@ -41,26 +52,15 @@ describe('Collapsible', () => {
       </Collapsible>,
     )
 
-    /**
-     * TODO: should be abstracted, reused in credentialform.test.ts
-     */
-    const headerContainer = getByTestId('collapsible-header-container')
-    act(() => {
-      fireEvent(headerContainer, 'onLayout', {
-        nativeEvent: {
-          layout: {
-            height: 100,
-          },
-        },
-      })
-    })
+    const header = getByTestId('collapsible-header-container')
+    triggerHeaderLayout(header)
 
     await waitFor(() => {
       expect(getByTestId('collapsible-scroll')).toBeDefined()
     })
 
     /**
-     * triggering title on layout event
+     * triggering title's on layout event
      */
     const titleEls = getAllByTestId('collapsible-title')
     act(() => {
@@ -69,15 +69,7 @@ describe('Collapsible', () => {
     })
 
     const scrollEl = getByTestId('collapsible-scroll')
-    act(() => {
-      fireEvent.scroll(scrollEl, {
-        nativeEvent: {
-          contentOffset: {
-            y: 60,
-          },
-        },
-      })
-    })
+    scrollCollapsible(scrollEl, 60)
 
     expect(scrollEl.props.contentContainerStyle[0].paddingTop).toBe(
       HEADER_HIGHT,
@@ -87,15 +79,39 @@ describe('Collapsible', () => {
     expect(headerText.props.children).toBe(TITLE1)
     expect(getByText(CHILDREN_TEXT)).toBeDefined()
 
-    act(() => {
-      fireEvent.scroll(scrollEl, {
-        nativeEvent: {
-          contentOffset: {
-            y: 160,
-          },
-        },
-      })
-    })
+    scrollCollapsible(scrollEl, 160)
     expect(headerText.props.children).toBe(TITLE2)
+  })
+
+  it('renders default collapsible header', async () => {
+    mockMeasureLayout(100, 100, 100, 100)
+
+    const collapsibleSetup = new CollapsibleBuilder().build()
+    const { getByTestId, getAllByTestId } = render(
+      <Collapsible {...collapsibleSetup} />,
+    )
+
+    const header = getByTestId('collapsible-header')
+    expect(header).toBeDefined()
+
+    triggerHeaderLayout(header)
+
+    await waitFor(() => {
+      expect(getByTestId('collapsible-scroll')).toBeDefined()
+    })
+
+    /**
+     * triggering title's on layout event
+     */
+    const titleEls = getAllByTestId('collapsible-title')
+    act(() => {
+      fireEvent(titleEls[0], 'onLayout')
+    })
+
+    const scrollEl = getByTestId('collapsible-scroll')
+    scrollCollapsible(scrollEl, 60)
+
+    const headerText = getByTestId('collapsible-header-text')
+    expect(headerText.props.children).toBe(TITLE1)
   })
 })
