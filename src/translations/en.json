@@ -139,7 +139,8 @@
     },
     "Lock": {
         "header": "Enter your passcode",
-        "forgotBtn": "Forgot your passcode?"
+        "forgotBtn": "Forgot your passcode?",
+        "errorMsg": "You have used ${attempts} attempts"
     },
     "CameraPermission": {
         "header": "Camera permission",
@@ -405,5 +406,12 @@
         "missingValue": "Please provide a value",
         "wrongEmail": "Seems like this is not a valid email",
         "atLeastOneValue": "Please provide at least one of the values"
+    },
+    "DisableOverlay": {
+        "headerTitle": "Your wallet is disabled for security reasons",
+        "descriptionTitle": "Try again in",
+        "headerBlockedTitle": "You have reached the limit of your attempts",
+        "submitBtn": "Restore Access",
+        "submitDescription": "Setting a new passcode will not affect your stored data"
     }
 }

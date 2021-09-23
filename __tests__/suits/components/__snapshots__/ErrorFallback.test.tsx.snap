@@ -58,6 +58,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             },
             Object {
               "backgroundColor": "#201a21",
+              "marginBottom": -0,
               "paddingBottom": 0,
             },
             Object {},

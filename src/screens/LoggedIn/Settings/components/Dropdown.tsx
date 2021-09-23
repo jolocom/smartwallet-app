@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, Animated, LayoutAnimation } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Animated,
+  LayoutAnimation,
+  Keyboard,
+} from 'react-native'
 import { CaretDown } from '~/assets/svg'
 import Block from '~/components/Block'
 import {
@@ -31,11 +37,13 @@ const Dropdown: React.FC<{ placeholder: string }> = ({ placeholder }) => {
     : selectedValue
 
   const toggleExpanded = () => {
+    Keyboard.dismiss()
     animateLayout()
     setIsExpanded((prevState) => !prevState)
   }
 
   const handleSelectOption = (option: IOption<TOptionExtend>) => {
+    Keyboard.dismiss()
     animateLayout()
     setSelectedValue(option)
     setIsExpanded(false)
@@ -123,13 +131,11 @@ export default ({
   onSelect,
   placeholder,
 }: {
-  options: IOption<string>[]
+  options: Array<IOption<string>>
   onSelect: (val: IOption<string>) => void
   placeholder: string
-}) => {
-  return (
-    <SelectableProvider<string> options={options} onSelect={onSelect}>
-      <Dropdown placeholder={placeholder} />
-    </SelectableProvider>
-  )
-}
+}) => (
+  <SelectableProvider<string> options={options} onSelect={onSelect}>
+    <Dropdown placeholder={placeholder} />
+  </SelectableProvider>
+)

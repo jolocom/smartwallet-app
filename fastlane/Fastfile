@@ -43,8 +43,8 @@ lane :sentry_auth do
   rescue
       puts "sentry token already present"
   end
-  sh("cp ./sentry-auth/sentry2.properties ../ios/sentry.properties")
-  sh("cp ./sentry-auth/sentry2.properties ../android/sentry.properties")
+  sh("cp ./sentry-auth/sentry.properties ../ios/sentry.properties")
+  sh("cp ./sentry-auth/sentry.properties ../android/sentry.properties")
 end
 
 desc "Release the app to the Test Flight or the App Store"
@@ -140,7 +140,7 @@ platform :android do
       secure_text: true
     )
     sh(
-      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out ./key.json -k #{password} -md md5 2>/dev/null ",
+      "openssl enc -aes-256-cbc -d -in ./android-secrets/key.enc -out ../key.json -k #{password} -md md5 2>/dev/null ",
       log: false
     )
     sh(
@@ -149,34 +149,26 @@ platform :android do
     )
   end
 
-  lane :build do |options|
+  # NOTE: you should run build lane from the root dir of the project
+  lane :build do
     releaseFilePath = File.join(Dir.pwd, "android-secrets", "JoloSmartWallet.keystore")
     #build_android_app(task: 'clean')
     sentry_auth
-    if options[:local]
-      build_android_app(
-        task: 'assemble',
-        build_type: 'Release',
-        print_command: false,
-        project_dir: './android',
-        gradle_path: './gradlew',
-      )
-    else
-      keyPass = get_secrets.strip
-      build_android_app(
-        task: 'assemble',
-        build_type: 'Release',
-        project_dir: './android',
-        gradle_path: './gradlew',
-        print_command: true,
-        properties: {
-          "android.injected.signing.store.file" => releaseFilePath,
-          "android.injected.signing.store.password" => keyPass,
-          "android.injected.signing.key.alias" => "JoloSmartWallet",
-          "android.injected.signing.key.password" => keyPass,
-        }
-      )
-    end
+
+    keyPass = get_secrets.strip
+    build_android_app(
+      task: 'assemble',
+      build_type: 'Release',
+      project_dir: './android',
+      gradle_path: './gradlew',
+      print_command: true,
+      properties: {
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => keyPass,
+        "android.injected.signing.key.alias" => "JoloSmartWallet",
+        "android.injected.signing.key.password" => keyPass,
+      }
+    )
   end
 
   desc 'Build Android application and upload to Appcenter'

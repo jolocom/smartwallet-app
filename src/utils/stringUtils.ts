@@ -10,11 +10,14 @@ export const camelCaseToFriendly = (label: string): string => {
     : capitalizeWord(label)
 }
 
-export const trimObjectValues = (obj: Record<string, string>) => {
-  return Object.keys(obj).reduce<Record<string, string>>((acc, claimKey) => {
-    return { ...acc, [claimKey]: obj[claimKey].trim() }
-  }, {})
-}
+export const trimObjectValues = (obj: Record<string, string>) =>
+  Object.keys(obj).reduce<Record<string, string>>(
+    (acc, claimKey) => ({ ...acc, [claimKey]: obj[claimKey].trim() }),
+    {},
+  )
+
+export const truncateString = (text: string, n: number) =>
+  text.length <= n ? text : text.slice(0, n) + '...'
 
 export enum InputValidation {
   email = 'email',
@@ -26,6 +29,5 @@ export const regexValidations = {
   [InputValidation.all]: /./,
   [InputValidation.email]:
     /^(?!\.|_|-{1})+(\d*?[a-z]+\d*)+(([_\.\-])?((?!_)\w))+@([a-z0-9])+([\.\-])?((?!_)\w)+(\.)([a-z][a-z\d]{1,4})+$/,
-  [InputValidation.phone]:
-    /^\+{1}\d+$|^\+$/,
+  [InputValidation.phone]: /^\+{1}\d+$|^\+$/,
 }

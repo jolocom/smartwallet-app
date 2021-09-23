@@ -18,11 +18,11 @@ import { useRecoveryState, useRecoveryDispatch } from './module/recoveryContext'
 import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
-import { PIN_SERVICE } from '~/utils/keychainConsts'
 import { ScreenNames } from '~/types/screens'
 import { useReplaceWith, usePop, useGoBack } from '~/hooks/navigation'
 import { LockStackParamList } from '~/screens/LoggedIn/LockStack'
 import useTranslation from '~/hooks/useTranslation'
+import { useGetResetStoredCountdownValues } from '~/components/Passcode/hooks'
 
 interface RecoveryFooterI {
   areSuggestionsVisible: boolean
@@ -42,7 +42,9 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
 
   const agent = useAgent()
   const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
-  const resetPin = useResetKeychainValues(PIN_SERVICE)
+  const resetPin = useResetKeychainValues()
+
+  const resetCountdownValues = useGetResetStoredCountdownValues()
 
   const route =
     useRoute<RouteProp<LockStackParamList, ScreenNames.PasscodeRecovery>>()
@@ -78,6 +80,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const submitCb = async () => {
     if (isAccessRestore) {
       await restoreEntropy()
+      await resetCountdownValues()
     } else {
       const idw = await agent.loadFromMnemonic(phrase.join(' '))
       await agent.storage.store.setting(StorageKeys.isOnboardingDone, {

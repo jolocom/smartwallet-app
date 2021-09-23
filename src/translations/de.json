@@ -139,7 +139,8 @@
     },
     "Lock": {
         "header": "Gib deinen Passcode ein",
-        "forgotBtn": "Passcode vergessen?"
+        "forgotBtn": "Passcode vergessen?",
+        "errorMsg": "Du hast ${attempts} Versuche genutzt"
     },
     "CameraPermission": {
         "header": "Kamera Berechtigung",
@@ -189,7 +190,7 @@
         "offerRenegotiationTitle": "Aufmerksam sein",
         "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden",
         "shareMissingDocsTitle": "Fehlende Dokumente",
-        "shareMissingDocsMsg": "${Servicename} fordert ein Dokument an, das sich nicht in deiner Wallet befindet. \nFehlt: ${documentType}",
+        "shareMissingDocsMsg": "${serviceName} fordert ein Dokument an, das sich nicht in deiner Wallet befindet. \nFehlt: ${documentType}",
         "failedStoreMsg": "Leider konnten wir deinen Passcode nicht speichern. Bitte versuche es erneut",
         "reconnectedInternetTitle": "Du bist wieder online",
         "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
@@ -405,5 +406,12 @@
         "missingValue": "Bitte gib einen Wert an",
         "wrongEmail": "Es sieht so aus, als ob dies keine gültige E-Mail ist",
         "atLeastOneValue": "Trage bitte mindestens einen der Werte ein"
+    },
+    "DisableOverlay": {
+        "headerTitle": "Deine Wallet ist aus Sicherheitsgründen deaktiviert",
+        "descriptionTitle": "Versuche es in",
+        "headerBlockedTitle": "Du hast die maximale Anzahl an Versuchen erreicht",
+        "submitBtn": "Zugang wiederherstellen",
+        "submitDescription": "Das Erstellen eines neuen Passcodes hat keinen Einfluss auf Deine gespeicherten Daten"
     }
 }

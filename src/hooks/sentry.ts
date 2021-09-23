@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/react-native'
 import { last } from '~/utils/arrayUtils'
 import useErrors from './useErrors'
-// @ts-ignore
 import packageJson from '~/../package.json'
+import { SENTRY_DSN } from '~/errors/config'
 
 interface UserReport {
   issue?: string | null
@@ -10,9 +10,46 @@ interface UserReport {
   email?: string
 }
 
+const USER_FEEDBACK_URL =
+  'https://sentry.io/api/0/projects/jolocom/smartwallet/user-feedback/'
 const PACKAGE_VERSION = (packageJson.version as string).split('.')
 const BUILD_NUMBER = last(PACKAGE_VERSION)
 const APP_VERSION = PACKAGE_VERSION.filter((e) => e !== BUILD_NUMBER).join('.')
+
+const sendUserFeedback = async (report: UserReport) => {
+  const eventId = Sentry.getCurrentHub().lastEventId()
+
+  if (eventId) {
+    const body = JSON.stringify({
+      // eslint-disable-next-line
+      event_id: eventId,
+      name: report.issue ?? '[UNKNOWN]',
+      email: report.email || 'placeholder@jolocom.com',
+      comments: report.details ?? '[NO_COMMENT]',
+    })
+
+    await fetch(USER_FEEDBACK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `DSN ${SENTRY_DSN}`,
+      },
+      body,
+    })
+      .then((res) => {
+        if (!res.ok) {
+          console.warn(
+            `Error ${res.status}: Failed to send user feedback report!`,
+          )
+        }
+      })
+      .catch(console.warn)
+  } else {
+    console.warn(
+      'Error: Could not find Sentry EventID to send a user feedback report!',
+    )
+  }
+}
 
 const useSentry = () => {
   const { error } = useErrors()
@@ -21,8 +58,9 @@ const useSentry = () => {
     Sentry.withScope((scope) => {
       scope.setExtras({ ...report, version: APP_VERSION, build: BUILD_NUMBER })
       scope.setUser(null)
-
-      Sentry.captureMessage('CONTACT_US', scope)
+      const id = Math.random().toString(36).slice(-8)
+      Sentry.captureMessage(id, scope)
+      sendUserFeedback(report)
     })
   }
 
@@ -33,6 +71,7 @@ const useSentry = () => {
 
       if (!sendPrivateData) scope.clearBreadcrumbs()
       Sentry.captureException(error)
+      sendUserFeedback(report)
     })
   }
 

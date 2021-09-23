@@ -1,5 +1,10 @@
 import React, { useMemo, useRef } from 'react'
-import RN, { NativeSyntheticEvent, Platform, TargetedEvent } from 'react-native'
+import RN, {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  TargetedEvent,
+} from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import InputContainer from './InputContainer'
 import {
@@ -21,6 +26,14 @@ const JoloKeyboardAwareScroll: React.FC<IJoloKeyboardAwareScrollProps> &
     node && scrollViewRef.current?.scrollToFocusedInput(node)
   }
 
+  const handleScrollEndDrag = (
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+  ) => {
+    if (rest.onScrollEndDrag) {
+      rest.onScrollEndDrag(event, scrollViewRef)
+    }
+  }
+
   const contextValue = useMemo(
     () => ({
       onFocusInput: handleFocusInput,
@@ -37,6 +50,11 @@ const JoloKeyboardAwareScroll: React.FC<IJoloKeyboardAwareScrollProps> &
         children={children}
         {...(disableInsets && { contentInset: undefined })}
         {...rest}
+        /**
+         * NOTE: overwriting native scroll view onScrollEndDrag prop with the one where
+         * reference to KeyboardAwareScrollView has been passed
+         */
+        onScrollEndDrag={handleScrollEndDrag}
       />
     </JoloKeyboardAwareScrollContext.Provider>
   )

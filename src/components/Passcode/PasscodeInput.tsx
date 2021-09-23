@@ -29,7 +29,7 @@ const PasscodeInput: React.FC = () => {
     const updateSelectedIndex = async () => {
       // it is implemented with delay to be able to preview digits and not seeing asterics straight away
       setTimeout(() => {
-        isCurrent &&
+        if (isCurrent) {
           setSelectedIndex(() => {
             if (digits.length < PASSCODE_LENGTH.length) {
               return digits.length
@@ -39,6 +39,7 @@ const PasscodeInput: React.FC = () => {
               return PASSCODE_LENGTH.length - 1
             }
           })
+        }
       }, 100)
     }
     updateSelectedIndex()

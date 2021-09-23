@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import Keychain from 'react-native-keychain'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import Btn, { BtnTypes } from '~/components/Btn'
 import { useSuccess } from '~/hooks/loader'
 import { Colors } from '~/utils/colors'
-import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
+import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
 
 import BP from '~/utils/breakpoints'
 import ScreenHeader from '~/components/ScreenHeader'
@@ -22,6 +20,7 @@ import Passcode from '~/components/Passcode'
 import { useToasts } from '~/hooks/toasts'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import useTranslation from '~/hooks/useTranslation'
+import { promisifySubmit } from '~/components/Passcode/utils'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -31,13 +30,14 @@ const RegisterPin = () => {
   const [selectedPasscode, setSelectedPasscode] = useState('')
 
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
-  const resetKeychainPasscode = useResetKeychainValues(PIN_SERVICE)
+  const resetKeychainPasscode = useResetKeychainValues()
 
   const { biometryType } = useDeviceAuthState()
   const dispatchToLocalAuth = useDeviceAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
   const { scheduleErrorWarning } = useToasts()
+  const secureStorage = useSecureStorage()
 
   /**
    * NOTE: a user does not have a possibility to remove the passcode from the keychain,
@@ -49,9 +49,12 @@ const RegisterPin = () => {
     resetKeychainPasscode()
   }, [])
 
-  const handlePasscodeSubmit = useCallback((pin) => {
+  const promisifyPasscodeSubmit = promisifySubmit((pin) => {
     setSelectedPasscode(pin)
     setIsCreating(false)
+  })
+  const handlePasscodeSubmit = useCallback(async (pin, cb) => {
+    await promisifyPasscodeSubmit(pin, cb)
   }, [])
 
   const redirectTo = () => {
@@ -62,18 +65,17 @@ const RegisterPin = () => {
     }
   }
 
-  const handleVerifiedPasscodeSubmit = async (pin: string) => {
+  const handleVerifiedPasscodeSubmit = async (pin: string, cb: () => void) => {
     if (selectedPasscode === pin) {
       try {
-        // setting up pin in the keychain
-        await Keychain.setGenericPassword(PIN_USERNAME, selectedPasscode, {
-          service: PIN_SERVICE,
-          storage: Keychain.STORAGE_TYPE.AES,
-        })
+        await secureStorage.setItem(
+          SecureStorageKeys.passcode,
+          selectedPasscode,
+        )
         displaySuccessLoader(redirectTo)
+        cb()
       } catch (err) {
         // an error with storing PIN to the keychain -> redirect back to create passcode
-
         scheduleErrorWarning(err, {
           message: t('Toasts.failedStoreMsg'),
         })
@@ -132,11 +134,7 @@ const RegisterPin = () => {
         <Passcode.Container
           customStyles={{ justifyContent: 'flex-end', paddingBottom: 20 }}
         >
-          {!isCreating && (
-            <Btn type={BtnTypes.secondary} onPress={resetPasscode}>
-              {t('VerifyPasscode.resetBtn')}
-            </Btn>
-          )}
+          {!isCreating && <Passcode.ResetBtn onPress={resetPasscode} />}
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
