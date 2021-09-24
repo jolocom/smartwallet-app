@@ -291,7 +291,7 @@ PODS:
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJolocom (2.7.0):
+  - RNJolocom (2.8.0):
     - React
   - RNKeychain (7.0.0):
     - React-Core
@@ -573,7 +573,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJolocom: adaea6fb6c7c7b33ec18505b3c49a6b076015bd7
+  RNJolocom: a203d98394d7d0202d3c2130adec26cc1652f8e3
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5

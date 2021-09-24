@@ -4,8 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>jolocom.app.link</string>
-		<string>jolocom-alternate.app.link</string>
+		<string>applinks:jolocom.app.link</string>
+		<string>applinks:jolocom-alternate.app.link</string>
 	</array>
 </dict>
 </plist>

@@ -17,6 +17,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* SmartWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SmartWalletTests.m */; };
 		3F82340D333DA91CE730FE78 /* libPods-SmartWallet-SmartWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A65947B90980EA9127C34081 /* libPods-SmartWallet-SmartWalletTests.a */; };
+		40AF886326FDC07900A8A4BB /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = 40AF886226FDC07900A8A4BB /* branch.json */; };
 		40BBACD726FB76610048E6EE /* SmartWallet.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 40BBACD226FB74BB0048E6EE /* SmartWallet.entitlements */; };
 		40C6A44E26FCB83C00142F7D /* ErrorVoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C6A44D26FCB83C00142F7D /* ErrorVoid.swift */; };
 		4A1F2BCAE3FF4142B395B13E /* TTCommons-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8276038867CA4E5FB58899FB /* TTCommons-Medium.otf */; };
@@ -57,6 +58,8 @@
 		299514192625DD2A0035F7B9 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = SmartWallet/BootSplash.storyboard; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* SmartWallet-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SmartWallet-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* SmartWallet-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SmartWallet-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40AF886226FDC07900A8A4BB /* branch.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = branch.json; path = ../branch.json; sourceTree = "<group>"; };
+		40AF886426FDC09C00A8A4BB /* branch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = branch.json; path = ../branch.json; sourceTree = "<group>"; };
 		40BBACD226FB74BB0048E6EE /* SmartWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SmartWallet.entitlements; path = SmartWallet/SmartWallet.entitlements; sourceTree = "<group>"; };
 		40C6A44C26FCB83C00142F7D /* SmartWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SmartWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		40C6A44D26FCB83C00142F7D /* ErrorVoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorVoid.swift; sourceTree = "<group>"; };
@@ -127,6 +130,7 @@
 		13B07FAE1A68108700A75B9A /* SmartWallet */ = {
 			isa = PBXGroup;
 			children = (
+				40AF886226FDC07900A8A4BB /* branch.json */,
 				40BBACD226FB74BB0048E6EE /* SmartWallet.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				299514192625DD2A0035F7B9 /* BootSplash.storyboard */,
@@ -172,6 +176,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				40AF886426FDC09C00A8A4BB /* branch.json */,
 				13B07FAE1A68108700A75B9A /* SmartWallet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SmartWalletTests */,
@@ -349,6 +354,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40AF886326FDC07900A8A4BB /* branch.json in Resources */,
 				40BBACD726FB76610048E6EE /* SmartWallet.entitlements in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				B0F591400B3E4539A4BFB19C /* TTCommons-Light.otf in Resources */,
