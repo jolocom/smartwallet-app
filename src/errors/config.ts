@@ -1,2 +1,3 @@
-export const SENTRY_DSN =
-  'https://a398dae96a744ee1aa1c77fca82f0f64@o962696.ingest.sentry.io/5910975'
+import Config from 'react-native-config'
+
+export const SENTRY_DSN = Config.SENTRY_DSN || ''
