@@ -11,6 +11,7 @@ const configureEnv = async () => {
     SENTRY_DSN: sentryDSN,
     SENTRY_AUTH_TOKEN: sentryAuthToken,
     BRANCH_LIVE_KEY: branchLiveKey,
+    BRANCH_URL: 'jolocom.app.link',
   })
 }
 
