@@ -2,17 +2,18 @@ import fs from 'fs'
 import { stringify as stringifyEnv, parse as parseEnv, Data } from 'envfile'
 import shell from 'shelljs'
 
+export const TMP_DIR = `${process.cwd()}/.tmp`
+
 export const cloneRepo = async (remote: string, repoName: string) => {
   return new Promise<string>((res, rej) => {
-    const dir = shell.tempdir()
-    console.log(`${dir}/${repoName}`)
-    shell.rm('-rf', `${dir}/${repoName}`)
+    shell.mkdir(TMP_DIR)
+    shell.rm('-rf', `${TMP_DIR}/${repoName}`)
     shell.exec(
-      `git clone ${remote}:${repoName} -b master ${dir}/${repoName}`,
+      `git clone ${remote}:${repoName} -b master ${TMP_DIR}/${repoName}`,
       {},
       (code, stdout, stderr) => {
         if (code != 0) return rej(new Error(stderr))
-        return res(`${dir}/${repoName}`)
+        return res(`${TMP_DIR}/${repoName}`)
       },
     )
   })

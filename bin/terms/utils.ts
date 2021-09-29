@@ -1,9 +1,10 @@
 import fetch from 'node-fetch'
 import fs from 'fs'
+import { TMP_DIR } from '../utils'
 
 const BASE_URL = 'https://api.poeditor.com/v2'
-const API_KEY_LOCATION = `/tmp/common-secrets/poeditor/POEDITOR_TOKEN.txt`
-const PROJECT_ID_LOCATION = `/tmp/common-secrets/poeditor/POEDITOR_SW2_PROJECT_ID.txt`
+const API_KEY_LOCATION = `${TMP_DIR}/common-secrets/poeditor/POEDITOR_TOKEN.txt`
+const PROJECT_ID_LOCATION = `${TMP_DIR}/common-secrets/poeditor/POEDITOR_SW2_PROJECT_ID.txt`
 
 export enum Languages {
   en = 'en',
