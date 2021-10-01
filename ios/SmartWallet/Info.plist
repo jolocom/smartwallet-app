@@ -75,11 +75,10 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>branch_key</key>
-	<string>key_live_hh8yxE52Wr4rD2A5rcH4Vaopsuan7IjZ</string>
+	<string>$(BRANCH_LIVE_KEY)</string>
 	<key>branch_universal_link_domains</key>
 	<array>
-		<string>jolocom.app.link</string>
-		<string>jolocom-alternate.app.link</string>
+		<string>$(BRANCH_URL)</string>
 	</array>
 </dict>
 </plist>
