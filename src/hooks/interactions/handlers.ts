@@ -21,11 +21,8 @@ import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
-import {
-  Interaction,
-  InteractionTransportType,
-  TransportAPI,
-} from 'react-native-jolocom'
+import { Interaction, TransportAPI } from 'react-native-jolocom'
+import branch from 'react-native-branch'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -35,29 +32,35 @@ export const useInteraction = () => {
   return () => agent.interactionManager.getInteraction(interactionId)
 }
 
+// NOTE: This should be called only in one place!
 export const useDeeplinkInteractions = () => {
-  const agent = useAgent()
   const { processInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
-    agent.sdk.transports.subscribe(
-      InteractionTransportType.Deeplink,
-      async (msg, error) => {
+    // TODO move somewhere
+    branch.disableTracking(true)
+    branch.subscribe(({ error, params }) => {
+      if (params) {
         if (error) {
-          scheduleErrorWarning(error)
-        } else {
-          const token = parseJWT(msg)
-          // @ts-ignore `callbackURL` is not defined on `interactionToken`, but it should be there
-          const callbackURL = token.interactionToken.callbackURL
-          const transportAPI = await agent.sdk.transports.start({
-            type: InteractionTransportType.Deeplink,
-            config: callbackURL,
-          })
-          processInteraction(msg, transportAPI)
+          console.warn('Error processing DeepLink: ', error)
+          return
         }
-      },
-    )
+
+        if (params['token'] && typeof params['token'] === 'string') {
+          processInteraction(params['token'])
+          return
+        } else if (
+          !params['+clicked_branch_link'] ||
+          JSON.stringify(params) === '{}'
+        ) {
+          return
+        }
+
+        // TODO: add Error Code
+        scheduleErrorWarning(new Error("Couldn't process DeepLink"))
+      }
+    })
   }, [])
 }
 

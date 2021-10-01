@@ -5,11 +5,9 @@ import {
   JolocomWebSockets,
   JolocomTypeormStorage,
   JolocomSDK,
-  JolocomDeepLinkingTransport,
 } from 'react-native-jolocom'
 
 import typeormConfig from './ormconfig'
-import { BranchDeepLinking } from './deeplinks'
 
 const initConnection = async () => {
   let connection
@@ -36,10 +34,7 @@ export const initSDK = async () => {
 export const initAgent = async (): Promise<Agent> => {
   const sdk = await initSDK()
 
-  await sdk.usePlugins(
-    new JolocomDeepLinkingTransport(new BranchDeepLinking()),
-    new JolocomWebSockets(),
-  )
+  await sdk.usePlugins(new JolocomWebSockets())
   sdk.setDefaultDidMethod('jun')
 
   const passwordStore = new JolocomKeychainPasswordStore()
