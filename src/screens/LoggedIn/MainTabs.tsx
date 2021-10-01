@@ -19,6 +19,7 @@ import {
 import { useNavigation } from '@react-navigation/core'
 import {
   useInteractionCreate,
+  useInteractionResumed,
   useInteractionUpdate,
 } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
@@ -49,6 +50,10 @@ const MainTabs = () => {
   })
 
   useInteractionUpdate((interaction) => {
+    showInteraction(interaction)
+  })
+
+  useInteractionResumed((interaction) => {
     showInteraction(interaction)
   })
 

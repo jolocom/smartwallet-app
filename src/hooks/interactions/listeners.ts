@@ -19,3 +19,5 @@ export const useInteractionUpdate =
   interactionListenerFactory('interactionUpdated')
 export const useInteractionCreate =
   interactionListenerFactory('interactionCreated')
+export const useInteractionResumed =
+  interactionListenerFactory('interactionResumed')
