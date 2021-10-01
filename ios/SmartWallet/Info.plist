@@ -39,6 +39,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To scan QR codes to interact with other services</string>
+	<key>NFCReaderUsageDescription</key>
+	<string>We need to use NFC</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires FaceID access to allow you quick and secure access</string>
 	<key>UIAppFonts</key>
