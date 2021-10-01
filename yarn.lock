@@ -1775,10 +1775,10 @@
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.3.0.tgz#2533b8a100fdbc06c12763721949aaf13f750c21"
-  integrity sha512-Dqp9FkzkS7+Jrj9nyccaWEcqLlMu3rnq+0Xj7yxjcxD2pK/dHqiw9E2My5LskDRuD83jVjO6L8Y5/7S+ngRmbQ==
+"@jolocom/sdk@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.3.2.tgz#481d25c4884d013a704c0a0b40ea62119baff50c"
+  integrity sha512-2z0RUHIXfpQvBOFsFafLhSsgjhiJrgjGqEqYuGJgE56HIdMCEXaIREC1Eeq1W/Z/MH+kit5LvEpW4ymzq81kIg==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.4"
     form-data "^3.0.0"
@@ -9283,12 +9283,12 @@ react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-react-native-jolocom@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.6.0.tgz#a7b69cee91f689cbf379aca3c5a9907e653403d3"
-  integrity sha512-AYfsEdtvlMp0uV2GyZ3j11u9xpDU0LYDnv8c6osnoNNHAiWCO8wtxYENcn8edIIDTseiw1DpV0gnB8K8+0ryIw==
+react-native-jolocom@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.7.0.tgz#d45b826a9f689d814820244923060586fdfcb607"
+  integrity sha512-VEDnEXwpuXkNij88UNxu0UWYJ+d+JLHKv73DtxUNzQ1U+XFKuYumAwVisi1lY2Vseoob2Hv/tvT8eed1bctB3A==
   dependencies:
-    "@jolocom/sdk" "^1.3.0"
+    "@jolocom/sdk" "^1.3.2"
     "@jolocom/sdk-storage-typeorm" "^4.3.0-rc0"
     crypto-browserify "^3.12.0"
     jolocom-lib "^5.2.1"
