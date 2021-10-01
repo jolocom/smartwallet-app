@@ -38,7 +38,7 @@
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="https" android:host="ecxt0.test-app.link" />
+          <data android:scheme="https" android:host="@string/BRANCH_URL" />
         </intent-filter>
       </activity>
       <activity
@@ -47,6 +47,7 @@
         android:launchMode="singleTask">
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <meta-data android:name="io.branch.sdk.BranchKey" android:value="@string/BRANCH_LIVE_KEY"/>
     </application>
 
 </manifest>
