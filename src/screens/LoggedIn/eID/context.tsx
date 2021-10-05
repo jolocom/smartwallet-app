@@ -1,5 +1,4 @@
-import { createContext, useMemo, useState } from 'react'
-import { useCustomContext } from '~/hooks/context'
+import React, { createContext, useMemo, useState } from 'react'
 import { AusweisContextValue, AusweisRequest } from './types'
 
 export const ausweisInitialState = {
