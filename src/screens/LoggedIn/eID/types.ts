@@ -1,3 +1,17 @@
+export enum eIDScreens {
+  InteractionSheet = 'InteractionSheet',
+  ReadinessCheck = 'ReadinessCheck',
+  RequestDetails = 'RequestDetails',
+  EnterPIN = 'EnterPIN',
+}
+
+export enum AA2Messages {
+  EnterPin = 'ENTER_PIN',
+  EnterCan = 'ENTER_CAN',
+  EnterPuk = 'ENTER_PUK',
+  SetPin = 'SET_PIN',
+}
+
 export enum AusweisFields {
   Address = 'Address',
   BirthName = 'BirthName',

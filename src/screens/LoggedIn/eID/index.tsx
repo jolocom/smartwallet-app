@@ -14,20 +14,7 @@ import { AusweisProvider } from './context'
 import { useAusweisContext } from './hooks'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
-
-export enum eIDScreens {
-  InteractionSheet = 'InteractionSheet',
-  ReadinessCheck = 'ReadinessCheck',
-  RequestDetails = 'RequestDetails',
-  EnterPIN = 'EnterPIN',
-}
-
-export enum AA2Messages {
-  EnterPin = 'ENTER_PIN',
-  EnterCan = 'ENTER_CAN',
-  EnterPuk = 'ENTER_PUK',
-  SetPin = 'SET_PIN',
-}
+import { AA2Messages, eIDScreens } from './types'
 
 const eIDStack = createStackNavigator()
 
