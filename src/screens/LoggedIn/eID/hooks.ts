@@ -63,9 +63,24 @@ export const useAusweisInteraction = () => {
     }
   }
 
+  const acceptRequest = async (optionalFields: Array<string>) => {
+    await aa2Module.setAccessRights(optionalFields)
+    return aa2Module.acceptAuthRequest()
+  }
+
   const disconnectAusweis = () => {
     return aa2Module.disconnectAa2Sdk()
   }
 
-  return { initAusweis, disconnectAusweis, processAusweisToken }
+  const checkIfScanned = async () => {
+    return aa2Module.checkIfCardWasRead()
+  }
+
+  return {
+    initAusweis,
+    disconnectAusweis,
+    processAusweisToken,
+    acceptRequest,
+    checkIfScanned,
+  }
 }
