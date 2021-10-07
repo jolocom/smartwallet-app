@@ -9,7 +9,7 @@ import PasscodeContainer from './PasscodeContainer'
 import ResetBtn from './ResetBtn'
 import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
-import { useDisableApp, useGetResetStoredCountdownValues } from './hooks'
+import PasscodeDisable from './PasscodeDisable'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -18,9 +18,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
   const [pinSuccess, setPinSuccess] = useState(false)
-
-  const { pinAttemptsLeft } = useDisableApp(pinError, pinSuccess)
-  const resetCountdownValues = useGetResetStoredCountdownValues()
+  const [pinErrorText, setPinErrorText] = useState<string | null>(null)
 
   const isFocused = useIsFocused()
 
@@ -45,27 +43,14 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     }
   }
 
-  /**
-   * clearing app stored value
-   * upon successful submission of the pass code;
-   * we don't want to reset values when the hardware
-   * back button is pressed (this is another way how
-   * the screen can be unmounted)
-   */
-  useEffect(
-    () => () => {
-      if (pinSuccess) {
-        resetCountdownValues()
-      }
-    },
-    [pinSuccess],
-  )
-
   // submit when full pin is provided
   useEffect(() => {
-    if (pin.length === 4) {
-      handleSubmit()
-    }
+    ;(async () => {
+      if (pin.length === 4) {
+        await handleSubmit()
+        setPin('')
+      }
+    })()
   }, [pin])
 
   // this will remove the error after 1000 ms
@@ -77,10 +62,8 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
          * NOTE at this point pinAttemptsLeft is still an old value,
          * therefore we compare with 1 not 0
          */
-        if (pinAttemptsLeft > 1) {
-          setPinError(false)
-          setPin('')
-        }
+        setPinError(false)
+        setPin('')
       }, 1000)
     }
     return () => {
@@ -95,8 +78,10 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
       pin,
       setPin,
       pinError,
+      setPinError,
       pinSuccess,
-      pinAttemptsLeft,
+      pinErrorText,
+      setPinErrorText,
     }),
     [pin, setPin, pinError, pinSuccess],
   )
@@ -111,5 +96,6 @@ Passcode.Keyboard = PasscodeKeyboard
 Passcode.Container = PasscodeContainer
 Passcode.ResetBtn = ResetBtn
 Passcode.Error = PasscodeError
+Passcode.Disable = PasscodeDisable
 
 export default Passcode
