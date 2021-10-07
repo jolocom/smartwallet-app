@@ -14,6 +14,7 @@ import PasscodeDisable from './PasscodeDisable'
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
   onSubmit,
+  length = 4,
 }) => {
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
@@ -46,7 +47,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   // submit when full pin is provided
   useEffect(() => {
     ;(async () => {
-      if (pin.length === 4) {
+      if (pin.length === length) {
         await handleSubmit()
         setPin('')
       }
@@ -75,6 +76,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   const contextValue = useMemo(
     () => ({
+      passcodeLength: length,
       pin,
       setPin,
       pinError,

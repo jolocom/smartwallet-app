@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Platform,
   StyleSheet,
@@ -10,7 +10,6 @@ import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 import BP from '~/utils/breakpoints'
 
-const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = BP({ default: 65, xsmall: 56 })
 const DIGIT_CELL_HEIGHT = BP({ default: 87, xsmall: 74 })
 const DIGIT_MARGIN_RIGHT = Platform.select({
@@ -20,8 +19,10 @@ const DIGIT_MARGIN_RIGHT = Platform.select({
 
 const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
-  const { pin, pinError, pinSuccess } = usePasscode()
+  const { pin, pinError, pinSuccess, passcodeLength: length } = usePasscode()
   const digits = pin.split('')
+
+  const passcodeCells = useMemo(() => new Array(length).fill(0), [length])
 
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
@@ -31,12 +32,12 @@ const PasscodeInput: React.FC = () => {
       setTimeout(() => {
         if (isCurrent) {
           setSelectedIndex(() => {
-            if (digits.length < PASSCODE_LENGTH.length) {
+            if (digits.length < passcodeCells.length) {
               return digits.length
-            } else if (digits.length === 4) {
+            } else if (digits.length === length) {
               return -1
             } else {
-              return PASSCODE_LENGTH.length - 1
+              return passcodeCells.length - 1
             }
           })
         }
@@ -56,7 +57,7 @@ const PasscodeInput: React.FC = () => {
             flexDirection: 'row',
           }}
         >
-          {PASSCODE_LENGTH.map((v, index) => {
+          {passcodeCells.map((v, index) => {
             const isSelected = digits.length === index
             return (
               <View
