@@ -37,10 +37,6 @@ const ChangePin: React.FC = () => {
   const [newPin, setNewPin] = useState('')
   const [errorTitle, setErrorTitle] = useState('')
 
-  useEffect(() => {
-    setErrorTitle(t('ChangePasscode.wrongCodeHeader'))
-  }, [newPin])
-
   const headerTitle = () => {
     switch (passcodeState) {
       case PasscodeState.verify:
@@ -98,6 +94,7 @@ const ChangePin: React.FC = () => {
           await handleStateChange(PasscodeState.create)
           cb()
         } else {
+          setErrorTitle(t('ChangePasscode.wrongCodeHeader'))
           throw new Error("Pins don't match")
         }
         break

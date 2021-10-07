@@ -128,6 +128,7 @@ const Lock = () => {
             }
           />
         </Passcode.Container>
+        <Passcode.Disable />
       </Passcode>
     </ScreenContainer>
   )

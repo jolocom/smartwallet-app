@@ -28,12 +28,15 @@ export interface IPasscodeComposition {
   Keyboard: React.FC<IPasscodeKeyboardProps>
   Container: React.FC<IWithCustomStyle>
   Error: React.FC
+  Disable: React.FC
 }
 
 export interface IPasscodeContext {
   pin: string
   setPin: React.Dispatch<SetStateAction<string>>
   pinError: boolean
+  setPinError: React.Dispatch<SetStateAction<boolean>>
   pinSuccess: boolean
-  pinAttemptsLeft: number
+  pinErrorText: string | null
+  setPinErrorText: React.Dispatch<SetStateAction<string | null>>
 }
