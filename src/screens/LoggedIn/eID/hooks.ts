@@ -67,5 +67,9 @@ export const useAusweisInteraction = () => {
     return aa2Module.disconnectAa2Sdk()
   }
 
-  return { initAusweis, disconnectAusweis, processAusweisToken }
+  const cancelFlow = () => {
+    aa2Module.cancelFlow().catch(scheduleErrorWarning)
+  }
+
+  return { initAusweis, disconnectAusweis, processAusweisToken, cancelFlow }
 }
