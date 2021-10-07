@@ -28,7 +28,7 @@ import {
 export const AusweisRequestReview = () => {
   const { scheduleWarning } = useToasts()
   const { providerName, requiredFields, optionalFields } = useAusweisContext()
-  const { acceptRequest, checkIfScanned } = useAusweisInteraction()
+  const { acceptRequest, checkIfScanned, cancelFlow } = useAusweisInteraction()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const redirect = useRedirect()
@@ -41,9 +41,7 @@ export const AusweisRequestReview = () => {
       try {
         await acceptRequest(selectedOptional)
         //TODO: show the popup for android
-        console.log('SHOWING POPUP')
         await checkIfScanned()
-        console.log('SCANNED')
       } catch (e) {
         console.warn(e)
         scheduleWarning({
@@ -64,7 +62,9 @@ export const AusweisRequestReview = () => {
     })
   }
 
-  const handleIgnore = () => {}
+  const handleIgnore = () => {
+    cancelFlow()
+  }
 
   const handleSelectOptional = (field: string) => {
     setSelectedOptional((prevState) => {
