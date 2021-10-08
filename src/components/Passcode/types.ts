@@ -4,6 +4,7 @@ import { IWithCustomStyle } from '~/types/props'
 
 export interface IPasscodeProps {
   onSubmit: (passcode: string, cb: () => void) => Promise<void>
+  length?: number
 }
 
 export interface IPasscodeHeaderProps {
@@ -24,12 +25,16 @@ export interface IPasscodeComposition {
   Container: React.FC<IWithCustomStyle>
   ResetBtn: React.FC<{ onPress: () => void }>
   Error: React.FC
+  Disable: React.FC
 }
 
 export interface IPasscodeContext {
+  passcodeLength: number
   pin: string
   setPin: React.Dispatch<SetStateAction<string>>
   pinError: boolean
+  setPinError: React.Dispatch<SetStateAction<boolean>>
   pinSuccess: boolean
-  pinAttemptsLeft: number
+  pinErrorText: string | null
+  setPinErrorText: React.Dispatch<SetStateAction<string | null>>
 }

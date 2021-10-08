@@ -11,8 +11,11 @@ export const PasscodeContext = React.createContext<
   // eslint-disable-next-line
   setPin: () => {},
   pinError: false,
+  setPinError: () => {},
   pinSuccess: false,
-  pinAttemptsLeft: ALL_PIN_ATTEMPTS,
+  pinErrorText: '',
+  setPinErrorText: () => {},
+  passcodeLength: 4,
 })
 PasscodeContext.displayName = 'PasscodeContext'
 

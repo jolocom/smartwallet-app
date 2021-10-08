@@ -19,6 +19,7 @@ import {
   AusweisRequestReview,
   AusweisRequest,
   CompatibilityCheck,
+  AusweisPasscode,
 } from './components'
 
 const eIDStack = createStackNavigator()
@@ -281,7 +282,7 @@ const AusweisInteraction = () => {
         name={eIDScreens.RequestDetails}
         component={AusweisRequestReview}
       />
-      <eIDStack.Screen name={eIDScreens.EnterPIN} component={EnterPIN} />
+      <eIDStack.Screen name={eIDScreens.EnterPIN} component={AusweisPasscode} />
     </eIDStack.Navigator>
   )
 }
