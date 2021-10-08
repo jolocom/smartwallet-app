@@ -24,6 +24,7 @@ import {
   AusweisHeaderDescription,
   AusweisLogo,
 } from '../styled'
+import { eIDScreens } from '../types'
 
 export const AusweisRequestReview = () => {
   const { scheduleWarning } = useToasts()
@@ -58,7 +59,7 @@ export const AusweisRequestReview = () => {
       }
 
       // @ts-expect-error Add Ausweis screens to the ScreenNames enum
-      redirect(AusweisScreens.EnterPIN)
+      redirect(eIDScreens.EnterPIN)
     })
   }
 
