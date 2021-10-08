@@ -7,12 +7,12 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 
-import { aa2EmitterTemp } from '.'
 import { useDispatch, useSelector } from 'react-redux'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { getLoaderState } from '~/modules/loader/selectors'
 import { AA2Messages } from './types'
+import { aa2EmitterTemp } from './events'
 
 type ReaderMsg = {
   msg: 'READER'
