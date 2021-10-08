@@ -37,6 +37,11 @@ const DevelopmentSection = () => {
             <Option.Title title="Paste interaction token" />
           </Option>
         </Section.Block>
+        <Section.Block>
+          <Option onPress={() => redirect(ScreenNames.eId)}>
+            <Option.Title title="Initiate eID flow" />
+          </Option>
+        </Section.Block>
       </Section>
       <Section>
         <Section.Title>[DEV] Error handling</Section.Title>

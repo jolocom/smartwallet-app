@@ -38,6 +38,7 @@ import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import { Colors } from '~/utils/colors'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
+import eID from './eID'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -59,6 +60,7 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
+  [ScreenNames.eId]: undefined
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
@@ -223,6 +225,7 @@ const Main: React.FC = () => {
               ...screenTransitionFromBottomDisabledGestures,
             }}
           />
+          <MainStack.Screen name={ScreenNames.eId} component={eID} />
           <MainStack.Screen
             name={ScreenNames.CredentialDetails}
             component={CredentialDetails}
