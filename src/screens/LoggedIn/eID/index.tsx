@@ -14,12 +14,12 @@ import { useAusweisContext } from './hooks'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import { AA2Messages, eIDScreens } from './types'
-import eIDPasscode from './eIDPasscode'
 import { aa2EmitterTemp } from './events'
 import {
   AusweisRequestReview,
   AusweisRequest,
   CompatibilityCheck,
+  AusweisPasscode,
 } from './components'
 
 const eIDStack = createStackNavigator()
@@ -282,7 +282,7 @@ const AusweisInteraction = () => {
         name={eIDScreens.RequestDetails}
         component={AusweisRequestReview}
       />
-      <eIDStack.Screen name={eIDScreens.EnterPIN} component={eIDPasscode} />
+      <eIDStack.Screen name={eIDScreens.EnterPIN} component={AusweisPasscode} />
     </eIDStack.Navigator>
   )
 }

@@ -3,8 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { ActivityIndicator, Alert, View } from 'react-native'
-import { AA2Messages } from './types'
-import { aa2EmitterTemp } from './events'
+import { AA2Messages } from '../types'
+import { aa2EmitterTemp } from '../events'
 import { usePasscode } from '~/components/Passcode/context'
 import { sleep } from '~/utils/generic'
 import { StackActions } from '@react-navigation/routers'
@@ -147,7 +147,7 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
  * QUESTION:
  * How do we handle error in send cmds (results in error prop on ENTER_PIN msg)
  */
-const eIDPasscode = ({ navigation }) => {
+export const AusweisPasscode = ({ navigation }) => {
   const [pinVariant, setPinVariant] = useState(PinVariant.PIN)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [waitingForMsg, setWaitingForMsg] = useState(false)
@@ -279,5 +279,3 @@ const eIDPasscode = ({ navigation }) => {
     </ScreenContainer>
   )
 }
-
-export default eIDPasscode
