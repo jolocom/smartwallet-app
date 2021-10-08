@@ -34,7 +34,11 @@ export const useAusweisInteraction = () => {
 
   const initAusweis = async () => {
     if (!aa2Module.isInitialized) {
-      await aa2Module.initAa2Sdk()
+      try {
+        await aa2Module.initAa2Sdk()
+      } catch (e) {
+        scheduleErrorWarning(e)
+      }
     }
   }
 
@@ -64,7 +68,11 @@ export const useAusweisInteraction = () => {
   }
 
   const disconnectAusweis = () => {
-    return aa2Module.disconnectAa2Sdk()
+    try {
+      aa2Module.disconnectAa2Sdk()
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
   }
 
   return { initAusweis, disconnectAusweis, processAusweisToken }
