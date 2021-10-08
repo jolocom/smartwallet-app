@@ -6,6 +6,7 @@ import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
+import { IAusweisRequest } from './types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -34,7 +35,11 @@ export const useAusweisInteraction = () => {
 
   const initAusweis = async () => {
     if (!aa2Module.isInitialized) {
-      await aa2Module.initAa2Sdk()
+      try {
+        await aa2Module.initAa2Sdk()
+      } catch (e) {
+        scheduleErrorWarning(e)
+      }
     }
   }
 
@@ -45,7 +50,7 @@ export const useAusweisInteraction = () => {
       const certificate: any = await aa2Module.getCertificate()
       LOG(certificate)
 
-      const requestData = {
+      const requestData: IAusweisRequest = {
         requiredFields: request.chat.required,
         optionalFields: request.chat.optional,
         certificateIssuerName: certificate.description.issuerName,
@@ -64,8 +69,16 @@ export const useAusweisInteraction = () => {
   }
 
   const disconnectAusweis = () => {
-    return aa2Module.disconnectAa2Sdk()
+    try {
+      aa2Module.disconnectAa2Sdk()
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
   }
 
-  return { initAusweis, disconnectAusweis, processAusweisToken }
+  const cancelFlow = () => {
+    aa2Module.cancelFlow().catch(scheduleErrorWarning)
+  }
+
+  return { initAusweis, disconnectAusweis, processAusweisToken, cancelFlow }
 }

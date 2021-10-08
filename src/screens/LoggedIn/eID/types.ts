@@ -40,7 +40,7 @@ export enum AusweisFields {
   PinManagement = 'PinManagement',
 }
 
-export interface AusweisRequest {
+export interface IAusweisRequest {
   requiredFields: Array<AusweisFields>
   optionalFields: Array<AusweisFields>
   certificateIssuerName: string
@@ -51,7 +51,7 @@ export interface AusweisRequest {
   expirationDate: string
 }
 
-export type AusweisContextValue = AusweisRequest & {
-  setRequest: (data: AusweisRequest) => void
+export type AusweisContextValue = IAusweisRequest & {
+  setRequest: (data: IAusweisRequest) => void
   resetRequest: () => void
 }

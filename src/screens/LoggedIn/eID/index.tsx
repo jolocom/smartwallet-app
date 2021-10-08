@@ -16,6 +16,7 @@ import { ScreenNames } from '~/types/screens'
 import { AA2Messages, eIDScreens } from './types'
 import CompatibilityCheck from './CompatibilityCheck'
 import { aa2EmitterTemp } from './events'
+import { AusweisRequest } from './components'
 
 const eIDStack = createStackNavigator()
 
@@ -267,7 +268,7 @@ const AusweisInteraction = () => {
     >
       <eIDStack.Screen
         name={eIDScreens.InteractionSheet}
-        component={InteractionSheet}
+        component={AusweisRequest}
       />
       <eIDStack.Screen
         name={eIDScreens.ReadinessCheck}

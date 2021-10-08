@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useState } from 'react'
-import { AusweisContextValue, AusweisRequest } from './types'
+import { AusweisContextValue, IAusweisRequest } from './types'
 
 export const ausweisInitialState = {
   requiredFields: [],
@@ -25,9 +25,9 @@ AusweisContext.displayName = 'AusweisContext'
 
 export const AusweisProvider: React.FC = ({ children }) => {
   const [requestData, setRequestData] =
-    useState<AusweisRequest>(ausweisInitialState)
+    useState<IAusweisRequest>(ausweisInitialState)
 
-  const setRequest = (request: AusweisRequest) => {
+  const setRequest = (request: IAusweisRequest) => {
     setRequestData(request)
   }
 
@@ -41,7 +41,7 @@ export const AusweisProvider: React.FC = ({ children }) => {
       setRequest,
       resetRequest,
     }),
-    [requestData, JSON.stringify(setRequestData)],
+    [JSON.stringify(requestData)],
   )
 
   return <AusweisContext.Provider value={contextValue} children={children} />
