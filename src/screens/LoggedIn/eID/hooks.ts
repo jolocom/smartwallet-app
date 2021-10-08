@@ -1,11 +1,12 @@
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect } from '~/hooks/navigation'
+import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
+import { IAusweisRequest } from './types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -31,10 +32,20 @@ export const useCheckNFC = () => {
 export const useAusweisInteraction = () => {
   const { scheduleErrorWarning } = useToasts()
   const redirect = useRedirect()
+  const popStack = usePopStack()
 
+  // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
+  // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
+  // to this, the @initAusweis function is not used for initialization. Instead it's used
+  // directly in the context. If the intitialization should be moved smwhere inside the
+  // navigation container, then we can use this function for intialization.
   const initAusweis = async () => {
     if (!aa2Module.isInitialized) {
-      await aa2Module.initAa2Sdk()
+      try {
+        await aa2Module.initAa2Sdk()
+      } catch (e) {
+        scheduleErrorWarning(e)
+      }
     }
   }
 
@@ -45,7 +56,7 @@ export const useAusweisInteraction = () => {
       const certificate: any = await aa2Module.getCertificate()
       LOG(certificate)
 
-      const requestData = {
+      const requestData: IAusweisRequest = {
         requiredFields: request.chat.required,
         optionalFields: request.chat.optional,
         certificateIssuerName: certificate.description.issuerName,
@@ -63,9 +74,34 @@ export const useAusweisInteraction = () => {
     }
   }
 
-  const disconnectAusweis = () => {
-    return aa2Module.disconnectAa2Sdk()
+  const acceptRequest = async (optionalFields: Array<string>) => {
+    await aa2Module.setAccessRights(optionalFields)
+    return aa2Module.acceptAuthRequest()
   }
 
-  return { initAusweis, disconnectAusweis, processAusweisToken }
+  const disconnectAusweis = () => {
+    try {
+      aa2Module.disconnectAa2Sdk()
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
+  }
+
+  const cancelFlow = async () => {
+    aa2Module.cancelFlow().catch(scheduleErrorWarning)
+    popStack()
+  }
+
+  const checkIfScanned = async () => {
+    return aa2Module.checkIfCardWasRead()
+  }
+
+  return {
+    initAusweis,
+    disconnectAusweis,
+    processAusweisToken,
+    cancelFlow,
+    acceptRequest,
+    checkIfScanned,
+  }
 }

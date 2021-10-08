@@ -16,6 +16,11 @@ import { ScreenNames } from '~/types/screens'
 import { AA2Messages, eIDScreens } from './types'
 import eIDPasscode from './eIDPasscode'
 import { aa2EmitterTemp } from './events'
+import {
+  AusweisRequestReview,
+  AusweisRequest,
+  CompatibilityCheck,
+} from './components'
 
 const eIDStack = createStackNavigator()
 
@@ -100,40 +105,6 @@ const InteractionSheet = ({ navigation }) => {
       <Btn onPress={handleProceed}>Check your readiness</Btn>
       <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
         Close
-      </Btn>
-    </View>
-  )
-}
-
-const ReadinessCheck = ({ navigation }) => {
-  const handleCheckCompatibility = () => {
-    /**
-     * TODO:
-     * 1. ios/android show popup to insert a card
-     * once the card is inserted
-     * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
-     */
-  }
-  return (
-    <View>
-      <Text style={styles.text}>
-        1. Send GET_READER cmd to receive READER msg to check for "deactivated"
-        field that checks if eID functionality was implemented {'\n'}
-        <Text style={styles.subtext}>
-          INSERT_CARD should be send, how/when ?
-        </Text>
-      </Text>
-      <Text style={styles.text}>2. Trigger iOS NFC popup</Text>
-
-      <Btn type={BtnTypes.tertiary} onPress={handleCheckCompatibility}>
-        Check compatibility
-      </Btn>
-
-      <Btn onPress={() => navigation.navigate(eIDScreens.RequestDetails)}>
-        Proceed to request details
-      </Btn>
-      <Btn type={BtnTypes.secondary} onPress={() => navigation.goBack()}>
-        Back
       </Btn>
     </View>
   )
@@ -301,15 +272,15 @@ const AusweisInteraction = () => {
     >
       <eIDStack.Screen
         name={eIDScreens.InteractionSheet}
-        component={InteractionSheet}
+        component={AusweisRequest}
       />
       <eIDStack.Screen
         name={eIDScreens.ReadinessCheck}
-        component={ReadinessCheck}
+        component={CompatibilityCheck}
       />
       <eIDStack.Screen
         name={eIDScreens.RequestDetails}
-        component={RequestDetails}
+        component={AusweisRequestReview}
       />
       <eIDStack.Screen name={eIDScreens.EnterPIN} component={eIDPasscode} />
     </eIDStack.Navigator>

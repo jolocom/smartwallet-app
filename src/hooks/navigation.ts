@@ -26,6 +26,17 @@ export const usePop = () => {
   }
 }
 
+export const usePopStack = () => {
+  const navigation = useNavigation()
+
+  return () => {
+    //NOTE: pops to the first screen of the stack
+    navigation.dispatch(StackActions.popToTop())
+    //NOTE: pops out of the stack
+    navigation.dispatch(StackActions.pop())
+  }
+}
+
 export const useRedirect = () => {
   const navigation = useNavigation()
 
