@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { StackActions } from '@react-navigation/routers'
 import NfcManager from 'react-native-nfc-manager'
 import { aa2Module } from 'react-native-aa2-sdk'
-import EventEmitter from 'events'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useToasts } from '~/hooks/toasts'
@@ -16,10 +15,9 @@ import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import { AA2Messages, eIDScreens } from './types'
 import eIDPasscode from './eIDPasscode'
+import { aa2EmitterTemp } from './events'
 
 const eIDStack = createStackNavigator()
-
-export const aa2EmitterTemp = new EventEmitter()
 
 const useCheckNFC = () => {
   return async () => {
