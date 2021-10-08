@@ -41,7 +41,7 @@ export const AusweisProvider: React.FC = ({ children }) => {
       setRequest,
       resetRequest,
     }),
-    [requestData, JSON.stringify(setRequestData)],
+    [JSON.stringify(requestData)],
   )
 
   return <AusweisContext.Provider value={contextValue} children={children} />
