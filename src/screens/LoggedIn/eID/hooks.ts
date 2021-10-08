@@ -1,7 +1,7 @@
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect } from '~/hooks/navigation'
+import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
@@ -32,6 +32,7 @@ export const useCheckNFC = () => {
 export const useAusweisInteraction = () => {
   const { scheduleErrorWarning } = useToasts()
   const redirect = useRedirect()
+  const popStack = usePopStack()
 
   const initAusweis = async () => {
     if (!aa2Module.isInitialized) {
@@ -68,6 +69,11 @@ export const useAusweisInteraction = () => {
     }
   }
 
+  const acceptRequest = async (optionalFields: Array<string>) => {
+    await aa2Module.setAccessRights(optionalFields)
+    return aa2Module.acceptAuthRequest()
+  }
+
   const disconnectAusweis = () => {
     try {
       aa2Module.disconnectAa2Sdk()
@@ -76,9 +82,21 @@ export const useAusweisInteraction = () => {
     }
   }
 
-  const cancelFlow = () => {
+  const cancelFlow = async () => {
     aa2Module.cancelFlow().catch(scheduleErrorWarning)
+    popStack()
   }
 
-  return { initAusweis, disconnectAusweis, processAusweisToken, cancelFlow }
+  const checkIfScanned = async () => {
+    return aa2Module.checkIfCardWasRead()
+  }
+
+  return {
+    initAusweis,
+    disconnectAusweis,
+    processAusweisToken,
+    cancelFlow,
+    acceptRequest,
+    checkIfScanned,
+  }
 }
