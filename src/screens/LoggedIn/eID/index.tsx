@@ -9,20 +9,12 @@ import EventEmitter from 'events'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
-
-export enum eIDScreens {
-  InteractionSheet = 'InteractionSheet',
-  ReadinessCheck = 'ReadinessCheck',
-  RequestDetails = 'RequestDetails',
-  EnterPIN = 'EnterPIN',
-}
-
-export enum AA2Messages {
-  EnterPin = 'ENTER_PIN',
-  EnterCan = 'ENTER_CAN',
-  EnterPuk = 'ENTER_PUK',
-  SetPin = 'SET_PIN',
-}
+import { RouteProp, useRoute } from '@react-navigation/core'
+import { AusweisProvider } from './context'
+import { useAusweisContext } from './hooks'
+import { MainStackParamList } from '../Main'
+import { ScreenNames } from '~/types/screens'
+import { AA2Messages, eIDScreens } from './types'
 
 const eIDStack = createStackNavigator()
 
@@ -47,7 +39,6 @@ const useCheckNFC = () => {
   }
 }
 
-
 const InteractionSheet = ({ navigation }) => {
   const checkNFC = useCheckNFC()
   const { scheduleErrorWarning } = useToasts()
@@ -57,7 +48,7 @@ const InteractionSheet = ({ navigation }) => {
   useEffect(() => {
     ;(async () => {
       try {
-        const requestDetails = await aa2Module.processRequest(tcToken);
+        const requestDetails = await aa2Module.processRequest(tcToken)
         /**
          * TODO:
          * 1. receive ACCESS_RIGHTS msg
@@ -119,7 +110,7 @@ const ReadinessCheck = ({ navigation }) => {
   const handleCheckCompatibility = () => {
     /**
      * TODO:
-     * 1. ios/android show popup to insert a card 
+     * 1. ios/android show popup to insert a card
      * once the card is inserted
      * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
      */
@@ -133,9 +124,7 @@ const ReadinessCheck = ({ navigation }) => {
           INSERT_CARD should be send, how/when ?
         </Text>
       </Text>
-      <Text style={styles.text}>
-        2. Trigger iOS NFC popup
-      </Text>
+      <Text style={styles.text}>2. Trigger iOS NFC popup</Text>
 
       <Btn type={BtnTypes.tertiary} onPress={handleCheckCompatibility}>
         Check compatibility
@@ -153,15 +142,15 @@ const ReadinessCheck = ({ navigation }) => {
 
 const RequestDetails = ({ navigation }) => {
   useEffect(() => {
-      aa2EmitterTemp.on(AA2Messages.EnterPin, () => {
-        navigation.navigate(eIDScreens.EnterPIN)
-      })
+    aa2EmitterTemp.on(AA2Messages.EnterPin, () => {
+      navigation.navigate(eIDScreens.EnterPIN)
+    })
   }, [])
 
   const handleAcceptRequest = () => {
     /**
-     * TODO: 
-     * 1. send SET_ACCESS_RIGHTS cmd 
+     * TODO:
+     * 1. send SET_ACCESS_RIGHTS cmd
      * 2. send ACCESS cmd
      */
     setTimeout(() => {
@@ -193,7 +182,7 @@ const RequestDetails = ({ navigation }) => {
           functionality implementation
         </Text>
       </Text>
-      
+
       <Text style={styles.text}>
         3. Wait for ENTER_PIN cmd {'\n'}
         <Text style={styles.subtext}>
@@ -210,14 +199,13 @@ const RequestDetails = ({ navigation }) => {
   )
 }
 
-const EnterPIN = ({navigation}) => {
-  const {scheduleInfo} = useToasts()
+const EnterPIN = ({ navigation }) => {
+  const { scheduleInfo } = useToasts()
   useEffect(() => {
     aa2EmitterTemp.on(AA2Messages.EnterCan, () => {
       /**
        * show CAN variant
        */
-
     })
     aa2EmitterTemp.on(AA2Messages.EnterPuk, () => {
       /**
@@ -228,16 +216,15 @@ const EnterPIN = ({navigation}) => {
     aa2EmitterTemp.on(AA2Messages.SetPin, (pin) => {
       scheduleInfo({
         title: 'The workflow has completed',
-        message: `You successfully shared your data and provided correct pin ${pin}`
+        message: `You successfully shared your data and provided correct pin ${pin}`,
       })
       navigation.dispatch(StackActions.popToTop())
       navigation.goBack(null)
     })
-    
   }, [])
   const handlePinSubmit = () => {
     /**
-     * TODO: 
+     * TODO:
      * if no msg is being sent then the workflow succeeded
      */
     aa2EmitterTemp.emit(AA2Messages.SetPin, 111111)
@@ -255,61 +242,64 @@ const EnterPIN = ({navigation}) => {
       <Text style={styles.text}>
         1. This screen should come up declaratively
       </Text>
-      <Text style={styles.text}>2. Send SET_PIN cmd with user pin {"\n"}
-      <Text style={styles.subtext}>
-          - Native can also send invalid cmd, then error is attached to consequent ENTER_PIN msg with error the counter is not decreased {"\n"}
-          - ENTER_PIN will attach reader prop, which contains information about the card
-        </Text>
-      </Text>
-      <Text style={styles.text}>3. If another ENTER_PIN msg comes provided PIN was incorrect -> decrease attempts left {"\n"}
+      <Text style={styles.text}>
+        2. Send SET_PIN cmd with user pin {'\n'}
         <Text style={styles.subtext}>
-          If correct PIN was provided -> attempts left should be reset to 3
+          - Native can also send invalid cmd, then error is attached to
+          consequent ENTER_PIN msg with error the counter is not decreased{' '}
+          {'\n'}- ENTER_PIN will attach reader prop, which contains information
+          about the card
         </Text>
       </Text>
       <Text style={styles.text}>
-        4. If ENTER_CAN msg is send, show CAN screen variant (CAN has unlimited attempts) {"\n"}
+        3. If another ENTER_PIN msg comes provided PIN was incorrect - decrease
+        attempts left {'\n'}
         <Text style={styles.subtext}>
-        Once your application provides a correct CAN the AusweisApp2 will send an ENTER_PIN again with a retryCounter of 1.
+          If correct PIN was provided - attempts left should be reset to 3
         </Text>
-
       </Text>
       <Text style={styles.text}>
-        5. If ENTER_PUK msg is send, show PUK screen variant (10 times) {"\n"}
+        4. If ENTER_CAN msg is send, show CAN screen variant (CAN has unlimited
+        attempts) {'\n'}
         <Text style={styles.subtext}>
-        Once your application provides a correct PUK the AusweisApp2 will send an ENTER_PIN again with a retryCounter of 3.
+          Once your application provides a correct CAN the AusweisApp2 will send
+          an ENTER_PIN again with a retryCounter of 1.
         </Text>
-
+      </Text>
+      <Text style={styles.text}>
+        5. If ENTER_PUK msg is send, show PUK screen variant (10 times) {'\n'}
+        <Text style={styles.subtext}>
+          Once your application provides a correct PUK the AusweisApp2 will send
+          an ENTER_PIN again with a retryCounter of 3.
+        </Text>
       </Text>
       <Btn type={BtnTypes.tertiary} onPress={handleShowCAN}>
-        Show CAN variant 
+        Show CAN variant
       </Btn>
       <Btn type={BtnTypes.tertiary} onPress={handleShowPUK}>
-        Show PUK variant 
+        Show PUK variant
       </Btn>
 
       <Btn onPress={handlePinSubmit}>Submit pin</Btn>
-
     </View>
   )
 }
 
-const eID = ({navigation}) => {
-  const {scheduleErrorWarning} = useToasts()
+const AusweisInteraction = () => {
+  const request =
+    useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
+  const { setRequest } = useAusweisContext()
+
   useEffect(() => {
-    (async() => {
-      try {
-        if(!aa2Module.isInitialized) {
-          await aa2Module.initAa2Sdk()
-        }
-      } catch (e) {
-        console.error('Error init AA2', e)
-        scheduleErrorWarning(e)
-      }
-    })()
+    setRequest(request)
   }, [])
 
   return (
-    <eIDStack.Navigator headerMode="none" mode="modal" initialRouteName={eIDScreens.InteractionSheet}>
+    <eIDStack.Navigator
+      headerMode="none"
+      mode="modal"
+      initialRouteName={eIDScreens.InteractionSheet}
+    >
       <eIDStack.Screen
         name={eIDScreens.InteractionSheet}
         component={InteractionSheet}
@@ -344,4 +334,8 @@ const styles = StyleSheet.create({
   },
 })
 
-export default eID
+export default () => (
+  <AusweisProvider>
+    <AusweisInteraction />
+  </AusweisProvider>
+)

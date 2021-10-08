@@ -39,6 +39,7 @@ import { Colors } from '~/utils/colors'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
 import eID from './eID'
+import { AusweisRequest } from './eID/types'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -60,7 +61,7 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
-  [ScreenNames.eId]: undefined
+  [ScreenNames.eId]: AusweisRequest
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined

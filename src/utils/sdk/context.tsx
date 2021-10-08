@@ -13,6 +13,8 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useWalletInit } from '~/hooks/sdk'
 import { initAgent } from '.'
 import useTranslation from '~/hooks/useTranslation'
+import { aa2Module } from 'react-native-aa2-sdk'
+import { useAusweisInteraction } from '~/screens/LoggedIn/eID/hooks'
 
 export const AgentContext =
   createContext<MutableRefObject<Agent | null> | null>(null)
@@ -22,6 +24,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
   const initWallet = useWalletInit()
   const { initStoredLanguage } = useTranslation()
+  const { initAusweis } = useAusweisInteraction()
 
   const initializeAll = async () => {
     try {
@@ -30,6 +33,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
 
       await initWallet(agent)
       await initStoredLanguage(agent)
+      await initAusweis()
     } catch (err) {
       console.warn('Error initializing the agent', err)
     } finally {
