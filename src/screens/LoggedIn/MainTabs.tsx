@@ -17,11 +17,7 @@ import {
   useInteractionStart,
 } from '~/hooks/interactions/handlers'
 import { useNavigation } from '@react-navigation/core'
-import {
-  useInteractionCreate,
-  useInteractionResumed,
-  useInteractionUpdate,
-} from '~/hooks/interactions/listeners'
+import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import { getInteractionType } from '~/modules/interaction/selectors'
@@ -44,18 +40,7 @@ const MainTabs = () => {
   const navigation = useNavigation()
 
   useDeeplinkInteractions()
-
-  useInteractionCreate((interaction) => {
-    showInteraction(interaction)
-  })
-
-  useInteractionUpdate((interaction) => {
-    showInteraction(interaction)
-  })
-
-  useInteractionResumed((interaction) => {
-    showInteraction(interaction)
-  })
+  useInteractionEvents(showInteraction)
 
   useEffect(() => {
     if (!isAppLocked && isInteracting) {
