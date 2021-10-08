@@ -11,8 +11,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { getLoaderState } from '~/modules/loader/selectors'
-import { AA2Messages } from '../types'
+import { AA2Messages, eIDScreens } from '../types'
 import { aa2EmitterTemp } from '../events'
+import { useRedirect } from '~/hooks/navigation'
 
 type ReaderMsg = {
   msg: 'READER'
@@ -78,10 +79,11 @@ enum CardStatus {
  * once the card is inserted
  * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
  */
-export const CompatibilityCheck = ({ navigation }) => {
+export const CompatibilityCheck = () => {
   const [readinessStatus, setReadinessStatus] = useState<boolean | null>(null)
   const [isCheckingCompatibility, setIsCheckingCompatibility] = useState(false)
   const [cardStatus, setCardStatus] = useState<CardStatus | null>(null)
+  const redirect = useRedirect()
 
   const dispatch = useDispatch()
   const loaderState = useSelector(getLoaderState)
@@ -149,8 +151,9 @@ export const CompatibilityCheck = ({ navigation }) => {
     // navigation.navigate(eIDScreens.PINInstructions)
   }
 
-  const handleClose = () => {
-    navigation.dispatch(StackActions.pop())
+  const handleSubmit = () => {
+    // @ts-expect-error
+    redirect(eIDScreens.RequestDetails)
   }
 
   useEffect(() => {
@@ -216,7 +219,7 @@ export const CompatibilityCheck = ({ navigation }) => {
         </Btn>
       </View>
 
-      <Btn type={BtnTypes.tertiary} onPress={handleClose}>
+      <Btn type={BtnTypes.tertiary} onPress={handleSubmit}>
         All done
       </Btn>
     </ScreenContainer>
