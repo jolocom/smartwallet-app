@@ -10,6 +10,7 @@ export enum AA2Messages {
   EnterCan = 'ENTER_CAN',
   EnterPuk = 'ENTER_PUK',
   SetPin = 'SET_PIN',
+  Reader = 'READER',
 }
 
 export enum AusweisFields {
