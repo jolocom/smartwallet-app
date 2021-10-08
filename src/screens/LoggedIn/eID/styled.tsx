@@ -3,8 +3,24 @@ import { StyleSheet, View } from 'react-native'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import ScreenDismissArea from '~/components/ScreenDismissArea'
+import { ContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
+import { Colors } from '~/utils/colors'
+
+export const AusweisBottomSheet: React.FC<{ onDismiss: () => void }> = ({
+  children,
+  onDismiss,
+}) => {
+  return (
+    <View style={styles.fullScreen}>
+      <ScreenDismissArea onDismiss={onDismiss} />
+      <View style={styles.interactionBody}>
+        <ContainerBAS>{children}</ContainerBAS>
+      </View>
+    </View>
+  )
+}
 
 export const AusweisButtons: React.FC<{
   submitLabel: string

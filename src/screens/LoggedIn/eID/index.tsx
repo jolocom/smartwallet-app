@@ -16,6 +16,7 @@ import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import { AA2Messages, eIDScreens } from './types'
 import { AusweisRequestReview } from './components/AusweisRequestReview'
+import { AusweisRequest } from './components'
 
 const eIDStack = createStackNavigator()
 
@@ -303,7 +304,7 @@ const AusweisInteraction = () => {
     >
       <eIDStack.Screen
         name={eIDScreens.InteractionSheet}
-        component={InteractionSheet}
+        component={AusweisRequest}
       />
       <eIDStack.Screen
         name={eIDScreens.ReadinessCheck}
