@@ -34,6 +34,11 @@ export const useAusweisInteraction = () => {
   const redirect = useRedirect()
   const popStack = usePopStack()
 
+  // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
+  // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
+  // to this, the @initAusweis function is not used for initialization. Instead it's used
+  // directly in the context. If the intitialization should be moved smwhere inside the
+  // navigation container, then we can use this function for intialization.
   const initAusweis = async () => {
     if (!aa2Module.isInitialized) {
       try {

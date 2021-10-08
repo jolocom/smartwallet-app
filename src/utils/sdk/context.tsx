@@ -14,7 +14,6 @@ import { useWalletInit } from '~/hooks/sdk'
 import { initAgent } from '.'
 import useTranslation from '~/hooks/useTranslation'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { useAusweisInteraction } from '~/screens/LoggedIn/eID/hooks'
 
 export const AgentContext =
   createContext<MutableRefObject<Agent | null> | null>(null)
@@ -24,7 +23,18 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
   const initWallet = useWalletInit()
   const { initStoredLanguage } = useTranslation()
-  const { initAusweis } = useAusweisInteraction()
+
+  const initAusweis = async () => {
+    if (!aa2Module.isInitialized) {
+      try {
+        await aa2Module.initAa2Sdk()
+      } catch (e) {
+        // NOTE: Can't use a toast since the @Toast component uses the navigation,
+        // which is not available here.
+        console.warn("Oopsie! Couldn't initiate the Ausweis SDK!")
+      }
+    }
+  }
 
   const initializeAll = async () => {
     try {
