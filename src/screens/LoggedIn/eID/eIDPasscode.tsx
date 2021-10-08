@@ -174,30 +174,10 @@ const eIDPasscode = ({ navigation }) => {
         ])
       }
     }
-    aa2EmitterTemp.on(AA2Messages.EnterPuk, updateToPuk)
-    return () => {
-      aa2EmitterTemp.off(AA2Messages.EnterPuk, updateToPuk)
-    }
-  }, [])
-
-  /**
-   * handler for CAN
-   */
-  useEffect(() => {
     const updateToCan = () => {
       setWaitingForMsg(false)
       setPinVariant(PinVariant.CAN)
     }
-    aa2EmitterTemp.on(AA2Messages.EnterCan, updateToCan)
-    return () => {
-      aa2EmitterTemp.off(AA2Messages.EnterCan, updateToCan)
-    }
-  }, [])
-
-  /**
-   * handler for PIN
-   */
-  useEffect(() => {
     const updateToPin = (data: EnterPinResponse) => {
       console.log(data.msg, data.reader.card.retryCounter)
 
@@ -211,8 +191,12 @@ const eIDPasscode = ({ navigation }) => {
         setErrorText(errorText)
       }
     }
+    aa2EmitterTemp.on(AA2Messages.EnterPuk, updateToPuk)
+    aa2EmitterTemp.on(AA2Messages.EnterCan, updateToCan)
     aa2EmitterTemp.on(AA2Messages.EnterPin, updateToPin)
     return () => {
+      aa2EmitterTemp.off(AA2Messages.EnterPuk, updateToPuk)
+      aa2EmitterTemp.off(AA2Messages.EnterCan, updateToCan)
       aa2EmitterTemp.off(AA2Messages.EnterPin, updateToPin)
     }
   }, [])
