@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 import { ContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
@@ -53,6 +55,19 @@ export const AusweisLogo: React.FC = () => {
     <View style={[styles.image, { backgroundColor: Colors.white }]}>
       <InitiatorPlaceholderIcon />
     </View>
+  )
+}
+
+export const AusweisHeaderDescription: React.FC = ({ children }) => {
+  return (
+    <JoloText
+      kind={JoloTextKind.subtitle}
+      size={JoloTextSizes.mini}
+      color={Colors.white70}
+      customStyles={{ paddingHorizontal: 10 }}
+    >
+      {children}
+    </JoloText>
   )
 }
 

@@ -64,7 +64,7 @@ const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => (
 const SelectableField: React.FC<
   Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>
 > = ({ value, isSelected, onSelect }) => (
-  <TouchableOpacity activeOpacity={1} onPress={onSelect}>
+  <TouchableOpacity activeOpacity={0.7} onPress={onSelect}>
     <FieldContainer>
       <FieldText value={value} customStyles={{ width: '85%' }} />
       {isSelected ? (
