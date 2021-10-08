@@ -11,8 +11,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { getLoaderState } from '~/modules/loader/selectors'
-import { AA2Messages } from './types'
-import { aa2EmitterTemp } from './events'
+import { AA2Messages } from '../types'
+import { aa2EmitterTemp } from '../events'
 
 type ReaderMsg = {
   msg: 'READER'
@@ -78,7 +78,7 @@ enum CardStatus {
  * once the card is inserted
  * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
  */
-const CompatibilityCheck = ({ navigation }) => {
+export const CompatibilityCheck = ({ navigation }) => {
   const [readinessStatus, setReadinessStatus] = useState<boolean | null>(null)
   const [isCheckingCompatibility, setIsCheckingCompatibility] = useState(false)
   const [cardStatus, setCardStatus] = useState<CardStatus | null>(null)
@@ -230,5 +230,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 })
-
-export default CompatibilityCheck

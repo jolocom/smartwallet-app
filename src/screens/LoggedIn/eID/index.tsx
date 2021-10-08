@@ -14,9 +14,12 @@ import { useAusweisContext } from './hooks'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import { AA2Messages, eIDScreens } from './types'
-import CompatibilityCheck from './CompatibilityCheck'
 import { aa2EmitterTemp } from './events'
-import { AusweisRequestReview, AusweisRequest } from './components'
+import {
+  AusweisRequestReview,
+  AusweisRequest,
+  CompatibilityCheck,
+} from './components'
 
 const eIDStack = createStackNavigator()
 
