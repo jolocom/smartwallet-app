@@ -6,6 +6,7 @@ import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
+import { IAusweisRequest } from './types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -45,7 +46,7 @@ export const useAusweisInteraction = () => {
       const certificate: any = await aa2Module.getCertificate()
       LOG(certificate)
 
-      const requestData = {
+      const requestData: IAusweisRequest = {
         requiredFields: request.chat.required,
         optionalFields: request.chat.optional,
         certificateIssuerName: certificate.description.issuerName,
