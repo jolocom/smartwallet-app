@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 import { ScannerIcon } from '~/assets/svg'
 import Btn from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -14,8 +15,18 @@ export const AusweisScanner = () => {
 
   return (
     <AusweisBottomSheet onDismiss={handleDismiss}>
-      <JoloText kind={JoloTextKind.title}>Ready to Scan</JoloText>
-      <ScannerIcon />
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingBottom: 24,
+        }}
+      >
+        <JoloText kind={JoloTextKind.title} customStyles={{ marginBottom: 16 }}>
+          Ready to Scan
+        </JoloText>
+        <ScannerIcon />
+      </View>
       <Btn onPress={handleDismiss}>Cancel</Btn>
     </AusweisBottomSheet>
   )
