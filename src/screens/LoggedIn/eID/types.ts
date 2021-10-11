@@ -3,6 +3,7 @@ export enum eIDScreens {
   ReadinessCheck = 'ReadinessCheck',
   RequestDetails = 'RequestDetails',
   EnterPIN = 'EnterPIN',
+  AusweisScanner = 'AusweisScanner',
 }
 
 export enum AA2Messages {

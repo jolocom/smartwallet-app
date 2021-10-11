@@ -21,6 +21,7 @@ import {
   CompatibilityCheck,
   AusweisPasscode,
 } from './components'
+import { AusweisScanner } from './components/AusweisScanner'
 
 const eIDStack = createStackNavigator()
 
@@ -277,6 +278,10 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.ReadinessCheck}
         component={CompatibilityCheck}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.AusweisScanner}
+        component={AusweisScanner}
       />
       <eIDStack.Screen
         name={eIDScreens.RequestDetails}
