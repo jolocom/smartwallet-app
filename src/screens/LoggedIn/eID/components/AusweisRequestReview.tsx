@@ -34,33 +34,30 @@ export const AusweisRequestReview = () => {
   const { top } = useSafeArea()
   const redirect = useRedirect()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
-  const disableLock = useDisableLock()
 
   //TODO: this should probably be handled by events
   const handleProceed = async () => {
-    disableLock(async () => {
-      try {
-        await acceptRequest(selectedOptional)
-        //TODO: show the popup for android
-        await checkIfScanned()
-      } catch (e) {
-        console.warn(e)
-        scheduleWarning({
-          title: 'Check compatibility',
-          message:
-            'Not the first time failing?\n Start compatibility diagnostics to be sure.',
-          interact: {
-            label: 'Start',
-            onInteract: () => {
-              //TODO add compatibility check
-            },
+    try {
+      await acceptRequest(selectedOptional)
+      //TODO: show the popup for android
+      // await checkIfScanned()
+    } catch (e) {
+      console.warn(e)
+      scheduleWarning({
+        title: 'Check compatibility',
+        message:
+          'Not the first time failing?\n Start compatibility diagnostics to be sure.',
+        interact: {
+          label: 'Start',
+          onInteract: () => {
+            //TODO add compatibility check
           },
-        })
-      }
+        },
+      })
+    }
 
-      // @ts-expect-error Add Ausweis screens to the ScreenNames enum
-      redirect(eIDScreens.EnterPIN)
-    })
+    // @ts-expect-error Add Ausweis screens to the ScreenNames enum
+    //redirect(eIDScreens.EnterPIN)
   }
 
   const handleIgnore = () => {
