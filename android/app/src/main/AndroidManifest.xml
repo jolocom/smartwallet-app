@@ -22,17 +22,32 @@
         android:exported="true"
         android:windowSoftInputMode="adjustPan"
         android:launchMode="singleTask">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        <!-- Branch URI Scheme -->
+        <intent-filter>
+          <data android:scheme="jolocomwallet" />
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+        </intent-filter>
+        <!-- Branch App Links (optional) -->
+        <intent-filter android:autoVerify="true">
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="https" android:host="@string/BRANCH_URL" />
+        </intent-filter>
       </activity>
       <activity
         android:name="com.zoontek.rnbootsplash.RNBootSplashActivity"
         android:theme="@style/BootTheme"
         android:launchMode="singleTask">
-        <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-          <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <meta-data android:name="io.branch.sdk.BranchKey" android:value="@string/BRANCH_LIVE_KEY"/>
     </application>
 
 </manifest>

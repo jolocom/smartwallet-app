@@ -106,14 +106,14 @@ const LoggedIn = () => {
             component={Main}
             options={screenTransitionFromBottomDisabledGestures}
           />
+          {!showTabs && (
+            <LoggedInStack.Screen
+              name={ScreenNames.LockStack}
+              component={LockStack}
+              options={screenTransitionFromBottomDisabledGestures}
+            />
+          )}
         </>
-      )}
-      {!showTabs && (
-        <LoggedInStack.Screen
-          name={ScreenNames.LockStack}
-          component={LockStack}
-          options={screenTransitionFromBottomDisabledGestures}
-        />
       )}
       {/* Modals -> End */}
     </LoggedInStack.Navigator>

@@ -7,5 +7,10 @@
 		<string>NDEF</string>
 		<string>TAG</string>
 	</array>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:jolocom.app.link</string>
+		<string>applinks:jolocom-alternate.app.link</string>
+	</array>
 </dict>
 </plist>
