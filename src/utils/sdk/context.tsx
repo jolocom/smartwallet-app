@@ -14,9 +14,8 @@ import { useWalletInit } from '~/hooks/sdk'
 import { initAgent } from '.'
 import useTranslation from '~/hooks/useTranslation'
 
-export const AgentContext = createContext<MutableRefObject<Agent | null> | null>(
-  null,
-)
+export const AgentContext =
+  createContext<MutableRefObject<Agent | null> | null>(null)
 
 export const AgentContextProvider: React.FC = ({ children }) => {
   const agentRef = useRef<Agent | null>(null)
@@ -32,8 +31,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
       await initWallet(agent)
       await initStoredLanguage(agent)
     } catch (err) {
-      console.warn(err)
-      throw new Error('Agent initialization failed')
+      console.warn('Error initializing the agent', err)
     } finally {
       setIsLoading(false)
     }

@@ -3,7 +3,7 @@ import { BiometryType } from 'react-native-biometrics'
 import { IWithCustomStyle } from '~/types/props'
 
 export interface IPasscodeProps {
-  onSubmit: (passcode: string) => void | Promise<void>
+  onSubmit: (passcode: string, cb: () => void) => Promise<void>
 }
 
 export interface IPasscodeHeaderProps {

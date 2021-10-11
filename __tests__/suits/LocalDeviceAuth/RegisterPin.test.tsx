@@ -35,8 +35,21 @@ jest.mock('react-native-jolocom', () => ({
   },
 }))
 
+jest.mock('@react-navigation/native', () => ({
+  useIsFocused: jest.fn().mockReturnValue(true),
+  useNavigation: () => ({
+    navigate: jest.fn(),
+  }),
+  createNavigatorFactory: jest.fn(),
+}))
+
+jest.mock('../../../src/hooks/settings', () => () => ({
+  get: jest.fn(),
+  set: jest.fn(),
+}))
+
 describe('Register Passcode', () => {
-  xit('User is able to set up pin', async () => {
+  it('User is able to set up pin', async () => {
     const setEncryptedPasswordSpy = jest.spyOn(SecureStorage, 'storeValue')
     const { getByText, getByTestId, queryByText } = renderWithSafeArea(
       <RegisterPin />,

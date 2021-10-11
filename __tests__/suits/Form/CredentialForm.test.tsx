@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AttributeTypes, ClaimKeys } from '~/types/credentials'
 import { mockSelectorReturn } from '../../mocks/libs/react-redux'
-import { fireEvent, waitFor } from '@testing-library/react-native'
+import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import { editAttr, updateAttrs } from '~/modules/attributes/actions'
 import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { mockedAgent } from '../../mocks/agent'
@@ -51,8 +51,20 @@ jest.mock('../../../src/hooks/sdk', () => ({
 
 const renderCredentialForm = () => {
   const queries = renderWithSafeArea(<CredentialForm />)
+  const headerContainer = queries.getByTestId('collapsable-header-container')
 
-  queries.debug()
+  // NOTE: The @Collapsible renders the scroll content only if the header has registered
+  // the layout
+  act(() => {
+    fireEvent(headerContainer, 'onLayout', {
+      nativeEvent: {
+        layout: {
+          height: 100,
+        },
+      },
+    })
+  })
+
   const emailInput = queries.getByTestId('credential-form-input')
   expect(emailInput).toBeDefined()
 
@@ -88,7 +100,7 @@ describe('Form in mode', () => {
     })
   })
 
-  xtest('edit', async () => {
+  test('edit', async () => {
     // ASSEMBLE
     // @ts-expect-error
     useRoute.mockReturnValue({
@@ -127,7 +139,7 @@ describe('Form in mode', () => {
     })
   })
 
-  xtest('create', async () => {
+  test('create', async () => {
     // ASSEMBLE
     // @ts-expect-error
     useRoute.mockReturnValue({

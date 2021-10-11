@@ -1,52 +1,69 @@
 import React from 'react'
 import { fireEvent } from '@testing-library/react-native'
-import Documents from '~/screens/LoggedIn/Documents'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { Colors } from '~/utils/colors'
-import { mockedDocuments } from '../../mocks/documents'
+import Tabs from '~/components/Tabs/Tabs'
+import TabsContainer from '~/components/Tabs/Container'
+import { useTabs } from '~/components/Tabs/context'
+import { View } from 'react-native'
 
 const getColorValue = (styles: Array<Record<string, any>>) => {
   const value = styles.find((stylesEl) => !!stylesEl.color)
   return value?.color
 }
 
-jest.mock('../../../src/hooks/toasts', () => ({
-  useToasts: jest.fn().mockImplementation(() => ({
-    scheduleWarning: jest.fn(),
-  })),
-}))
+const Panels = () => {
+  const { activeTab } = useTabs()
 
-jest.mock('../../../src/hooks/credentials', () => ({
-  useDeleteCredential: () => jest.fn(),
-}))
+  return (
+    <>
+      <View
+        testID="firstId"
+        style={{ display: activeTab?.id === 'first' ? 'flex' : 'none' }}
+      />
+      <View
+        testID="secondId"
+        style={{ display: activeTab?.id === 'second' ? 'flex' : 'none' }}
+      />
+    </>
+  )
+}
 
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn().mockImplementation(() => mockedDocuments),
-}))
+test('Document Tabs', () => {
+  const tabs = [
+    { id: 'first', value: 'First' },
+    { id: 'second', value: 'Second' },
+  ]
 
-// TODO: fix me
-xtest('Document Tabs', () => {
-  const { getByText, getByTestId } = renderWithSafeArea(<Documents />)
+  const { getByText, getByTestId } = renderWithSafeArea(
+    <Tabs tabs={tabs} initialActiveTab={tabs[0]}>
+      <TabsContainer>
+        {tabs.map((t) => (
+          <Tabs.Tab key={t.id} tab={t} />
+        ))}
+      </TabsContainer>
+      <Panels />
+    </Tabs>,
+  )
 
-  const documentsTab = getByText('Documents')
-  const otherTab = getByText('Other')
-  const documentCardsContainer = getByTestId('document-cards-container')
-  const otherCardsContainer = getByTestId('other-cards-container')
+  const firstTab = getByText('First')
+  const secondTab = getByText('Second')
+  const firstContainer = getByTestId('firstId')
+  const secondContainer = getByTestId('secondId')
 
-  expect(documentsTab).toBeDefined()
-  expect(otherTab).toBeDefined()
+  expect(firstTab).toBeDefined()
+  expect(secondTab).toBeDefined()
 
-  fireEvent.press(documentsTab)
+  fireEvent.press(firstTab)
 
-  expect(getColorValue(documentsTab.props.style)).toBe(Colors.white85)
-  expect(getColorValue(otherTab.props.style)).toBe(Colors.white35)
-  expect(documentCardsContainer.props.style.display).toBe('flex')
-  expect(otherCardsContainer.props.style.display).toBe('none')
+  expect(getColorValue(firstTab.props.style)).toBe(Colors.white85)
+  expect(getColorValue(secondTab.props.style)).toBe(Colors.white35)
+  expect(firstContainer.props.style.display).toBe('flex')
+  expect(secondContainer.props.style.display).toBe('none')
 
-  fireEvent.press(otherTab)
-  expect(getColorValue(documentsTab.props.style)).toBe(Colors.white35)
-  expect(getColorValue(otherTab.props.style)).toBe(Colors.white85)
-  expect(documentCardsContainer.props.style.display).toBe('none')
-  expect(otherCardsContainer.props.style.display).toBe('flex')
+  fireEvent.press(secondTab)
+  expect(getColorValue(firstTab.props.style)).toBe(Colors.white35)
+  expect(getColorValue(secondTab.props.style)).toBe(Colors.white85)
+  expect(firstContainer.props.style.display).toBe('none')
+  expect(secondContainer.props.style.display).toBe('flex')
 })

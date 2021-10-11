@@ -1,11 +1,9 @@
 {
   "name": "SmartWallet",
-  "version": "2.1.0.030",
+  "version": "2.2.0",
   "private": true,
   "scripts": {
-    "run:ios": "react-native run-ios",
-    "run:android": "react-native run-android",
-    "android": "react-native run-android",
+    "android": "react-native run-android --appIdSuffix debug",
     "ios": "react-native run-ios",
     "ios:xcode": "open ./ios/SmartWallet.xcworkspace",
     "alpha:ios": "bundle exec fastlane ios alpha",

@@ -3,17 +3,13 @@ import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 import { IPasscodeProps, IPasscodeComposition } from './types'
-import { ALL_PIN_ATTEMPTS, PasscodeContext } from './context'
+import { PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
 import ResetBtn from './ResetBtn'
 import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
-import {
-  PIN_ATTEMPTS_CYCLES,
-  useDisableApp,
-  useGetStoreCountdownValues,
-} from './hooks'
+import { useDisableApp, useGetResetStoredCountdownValues } from './hooks'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -24,11 +20,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinSuccess, setPinSuccess] = useState(false)
 
   const { pinAttemptsLeft } = useDisableApp(pinError, pinSuccess)
-  const {
-    storeLastCountdown,
-    storePinNrAttemptCyclesLeft,
-    storePinNrAttemptsLeft,
-  } = useGetStoreCountdownValues()
+  const resetCountdownValues = useGetResetStoredCountdownValues()
 
   const isFocused = useIsFocused()
 
@@ -41,12 +33,13 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   const handleSubmit = async () => {
     try {
-      await onSubmit(pin)
-      setPinSuccess(true)
-      setTimeout(() => {
-        setPin('')
-        setPinSuccess(false)
-      }, 500)
+      await onSubmit(pin, () => {
+        setPinSuccess(true)
+        setTimeout(() => {
+          setPin('')
+          setPinSuccess(false)
+        }, 500)
+      })
     } catch (e) {
       setPinError(true)
     }
@@ -54,17 +47,18 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   /**
    * clearing app stored value
-   * upon successful submission of the pass code
+   * upon successful submission of the pass code;
+   * we don't want to reset values when the hardware
+   * back button is pressed (this is another way how
+   * the screen can be unmounted)
    */
   useEffect(
     () => () => {
-      ;(async () => {
-        await storeLastCountdown(0)
-        await storePinNrAttemptCyclesLeft(PIN_ATTEMPTS_CYCLES)
-        await storePinNrAttemptsLeft(ALL_PIN_ATTEMPTS)
-      })()
+      if (pinSuccess) {
+        resetCountdownValues()
+      }
     },
-    [],
+    [pinSuccess],
   )
 
   // submit when full pin is provided

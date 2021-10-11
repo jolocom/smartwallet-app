@@ -12,6 +12,7 @@ import { useEffect } from 'react'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '~/hooks/toasts'
 import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
+import { promisifySubmit } from '~/components/Passcode/utils'
 
 enum PasscodeState {
   verify = 'verify',
@@ -76,7 +77,7 @@ const ChangePin: React.FC = () => {
     })
   }
 
-  const handleCreateNewPin = (pin: string) => {
+  const promisifyCreateNewPin = promisifySubmit((pin) => {
     if (keychainPin && pin !== keychainPin) {
       setNewPin(pin)
       handleStateChange(PasscodeState.repeat)
@@ -84,23 +85,26 @@ const ChangePin: React.FC = () => {
       setErrorTitle(t('ChangePasscode.sameCodeHeader'))
       throw new Error()
     }
-  }
+  })
+  const handleCreateNewPin = promisifyCreateNewPin
 
-  const handleSubmit = async (pin: string) => {
+  const handleSubmit = async (pin: string, cb: () => void) => {
     switch (passcodeState) {
       case PasscodeState.verify:
         if (pin === keychainPin) {
-          handleStateChange(PasscodeState.create)
+          await handleStateChange(PasscodeState.create)
+          cb()
         } else {
           throw new Error("Pins don't match")
         }
         break
       case PasscodeState.create:
-        handleCreateNewPin(pin)
+        await handleCreateNewPin(pin, cb)
         break
       case PasscodeState.repeat:
         if (pin === newPin) {
           await submitNewPin()
+          cb()
         } else throw new Error("Pins don't match")
         break
       default:

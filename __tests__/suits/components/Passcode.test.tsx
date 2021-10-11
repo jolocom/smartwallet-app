@@ -16,15 +16,21 @@ jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   // eslint-disable-next-line
   useFocusEffect: jest.fn().mockImplementation(() => {}),
+  useIsFocused: jest.fn(() => true),
   useNavigation: () => ({
     navigate: mockNavigate,
   }),
 }))
 
+jest.mock('../../../src/hooks/settings', () => () => ({
+  get: jest.fn(),
+  set: jest.fn(),
+}))
+
 describe('Passcode', () => {
   afterEach(cleanup)
 
-  xtest('Passcode input displays asterics and submits correct value', async () => {
+  test('Passcode input displays asterics and submits correct value', async () => {
     mockSubmit.mockResolvedValue(true)
 
     const { getByTestId, getAllByText } = render(
@@ -48,11 +54,11 @@ describe('Passcode', () => {
 
     await waitFor(() => {
       expect(mockSubmit).toHaveBeenCalledTimes(1)
-      expect(mockSubmit).toHaveBeenCalledWith('1111')
+      expect(mockSubmit).toHaveBeenCalledWith('1111', expect.anything())
     })
   })
 
-  xtest('Passcode Header displays error', async () => {
+  test('Passcode Header displays error', async () => {
     mockSubmit.mockRejectedValue(false)
 
     const { getByText, getByTestId } = render(
@@ -75,7 +81,7 @@ describe('Passcode', () => {
     })
   })
 
-  xtest('Passcode Forgot navigates to an instruction screen', () => {
+  test('Passcode Forgot navigates to an instruction screen', () => {
     const { getByText, getByTestId } = render(
       <Passcode onSubmit={mockSubmit}>
         <Passcode.Forgot />
