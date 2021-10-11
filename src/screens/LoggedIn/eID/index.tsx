@@ -22,6 +22,10 @@ import {
   AusweisPasscode,
 } from './components'
 import { AusweisScanner } from './components/AusweisScanner'
+import {
+  screenTransitionFromBottomDisabledGestures,
+  transparentModalOptions,
+} from '~/utils/screenSettings'
 
 const eIDStack = createStackNavigator()
 
@@ -270,24 +274,32 @@ const AusweisInteraction = () => {
       headerMode="none"
       mode="modal"
       initialRouteName={eIDScreens.InteractionSheet}
+      screenOptions={transparentModalOptions}
     >
       <eIDStack.Screen
         name={eIDScreens.InteractionSheet}
         component={AusweisRequest}
       />
       <eIDStack.Screen
-        name={eIDScreens.ReadinessCheck}
-        component={CompatibilityCheck}
-      />
-      <eIDStack.Screen
         name={eIDScreens.AusweisScanner}
         component={AusweisScanner}
+        options={transparentModalOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.ReadinessCheck}
+        component={CompatibilityCheck}
+        options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
         name={eIDScreens.RequestDetails}
         component={AusweisRequestReview}
+        options={screenTransitionFromBottomDisabledGestures}
       />
-      <eIDStack.Screen name={eIDScreens.EnterPIN} component={AusweisPasscode} />
+      <eIDStack.Screen
+        name={eIDScreens.EnterPIN}
+        component={AusweisPasscode}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
     </eIDStack.Navigator>
   )
 }

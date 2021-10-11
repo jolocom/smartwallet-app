@@ -236,7 +236,11 @@ const Main: React.FC = () => {
               ...screenTransitionSlideFromBottom,
             }}
           />
-          <MainStack.Screen name={ScreenNames.eId} component={eID} />
+          <MainStack.Screen
+            name={ScreenNames.eId}
+            component={eID}
+            options={transparentModalOptions}
+          />
           <MainStack.Screen
             name={ScreenNames.CredentialDetails}
             component={CredentialDetails}
