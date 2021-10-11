@@ -14,6 +14,7 @@ import { getInteractionType } from '~/modules/interaction/selectors'
 
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
+import { Colors } from '~/utils/colors'
 
 const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   fullScreen: {
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.black65,
   },
   tapArea: {
     flex: 1,

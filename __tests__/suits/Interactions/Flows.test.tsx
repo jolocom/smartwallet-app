@@ -49,7 +49,7 @@ const arrangeActHook = async () => {
   // ARRANGE
   const { result } = renderHook(() => interactionsHooks.useInteractionStart())
 
-  const startInteraction = result.current
+  const { startInteraction } = result.current
 
   // ACTION
   await act(async () => {

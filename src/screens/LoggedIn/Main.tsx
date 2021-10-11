@@ -1,9 +1,12 @@
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import React, { useEffect } from 'react'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import { ScreenNames } from '~/types/screens'
-import Interaction from '~/screens/Modals/Interaction'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
 import FAQ from './Settings/FAQ'
@@ -35,11 +38,12 @@ import {
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
-import { Colors } from '~/utils/colors'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
 import eID from './eID'
 import { IAusweisRequest } from './eID/types'
+import InteractionFlow from '../Modals/Interaction/InteractionFlow'
+import Scanner from '../Modals/Interaction/Scanner'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -93,12 +97,22 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
+  [ScreenNames.Scanner]: undefined
+  [ScreenNames.InteractionFlow]: undefined
+}
+
+const modalStyleOptions = {
+  headerShown: false,
+  cardStyle: { backgroundColor: 'transparent' },
+  cardOverlayEnabled: true,
+  ...TransitionPresets.FadeFromBottomAndroid,
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
 
 const Main: React.FC = () => {
   const shouldShowConsent = useSelector(shouldShowTermsConsent)
+
   return (
     <MainStack.Navigator
       headerMode="none"
@@ -118,7 +132,6 @@ const Main: React.FC = () => {
       ) : (
         <>
           <MainStack.Screen name={ScreenNames.MainTabs} component={MainTabs} />
-
           {/* Settings Screens -> Start   */}
           <MainStack.Screen
             name={ScreenNames.Language}
@@ -212,18 +225,15 @@ const Main: React.FC = () => {
 
           {/* Modals -> Start */}
           <MainStack.Screen
-            name={ScreenNames.Interaction}
-            component={Interaction}
+            options={modalStyleOptions}
+            name={ScreenNames.InteractionFlow}
+            component={InteractionFlow}
+          />
+          <MainStack.Screen
+            name={ScreenNames.Scanner}
+            component={Scanner}
             options={{
-              cardStyle: {
-                /**
-                 * NOTE: adding screen background in dev as
-                 * color palette of bottom sheet blends into
-                 * screen rendered behind it
-                 */
-                backgroundColor: __DEV__ ? Colors.white35 : 'transparent',
-              },
-              ...screenTransitionFromBottomDisabledGestures,
+              ...screenTransitionSlideFromBottom,
             }}
           />
           <MainStack.Screen name={ScreenNames.eId} component={eID} />

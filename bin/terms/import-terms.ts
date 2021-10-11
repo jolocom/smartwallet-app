@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 import fs from 'fs'
-import { cloneSecrets, IResponse, Languages, sendPostRequest } from './utils'
+import { IResponse, Languages, sendPostRequest } from './utils'
+import { cloneRepo } from '../utils'
 
 const CURRENT_PATH = process.cwd()
 const TRANSLATIONS_LOCATION = `${CURRENT_PATH}/src/translations/`
@@ -38,11 +39,9 @@ const assembleTermsForLanguage = (language: Languages) =>
     })
 
 const main = async () => {
-  await cloneSecrets().then(console.log)
+  await cloneRepo('dev@hetz1.jolocom.io', 'common-secrets')
   await assembleTermsForLanguage(Languages.en)
   await assembleTermsForLanguage(Languages.de)
 }
 
-;(async () => {
-  main()
-})()
+main()
