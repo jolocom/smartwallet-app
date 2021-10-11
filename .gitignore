@@ -3,14 +3,18 @@ sentry.properties
 sentry-auth/
 
 # Secrets
-android-secrets/
+android-secrets
+common-secrets
+ios-secrets
 ios-certificates
+sentry-auth
 appcenter-secrets
 report.xml
 .bundle/
 vendor/
 poeditor-key/
 key.json
+ios/tmp.xcconfig
 
 # App connect keys
 app-store-connect-auth

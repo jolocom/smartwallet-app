@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Agent } from '@jolocom/sdk'
+import { Agent } from 'react-native-jolocom'
 
 import { StorageKeys } from './sdk'
 import { termsOfServiceDE } from '~/translations/terms'

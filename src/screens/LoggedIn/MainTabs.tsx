@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   createBottomTabNavigator,
   BottomTabBarProps,
@@ -12,6 +12,15 @@ import Settings from './Settings'
 import Identity from './Identity'
 import { CredentialCategories } from '~/types/credentials'
 import useTranslation from '~/hooks/useTranslation'
+import {
+  useDeeplinkInteractions,
+  useInteractionStart,
+} from '~/hooks/interactions/handlers'
+import { useNavigation } from '@react-navigation/core'
+import { useInteractionEvents } from '~/hooks/interactions/listeners'
+import { useSelector } from 'react-redux'
+import { getIsAppLocked } from '~/modules/account/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
@@ -24,9 +33,24 @@ const MainTabsNavigator = createBottomTabNavigator<MainTabsParamList>()
 
 const MainTabs = () => {
   const { t } = useTranslation()
+  const isAppLocked = useSelector(getIsAppLocked)
+  const isInteracting = useSelector(getInteractionType)
+
+  const { showInteraction } = useInteractionStart()
+  const navigation = useNavigation()
+
+  useDeeplinkInteractions()
+  useInteractionEvents(showInteraction)
+
+  useEffect(() => {
+    if (!isAppLocked && isInteracting) {
+      navigation.navigate(ScreenNames.InteractionFlow)
+    }
+  }, [isInteracting, isAppLocked])
 
   return (
     <MainTabsNavigator.Navigator
+      initialRouteName={ScreenNames.Documents}
       tabBar={(props: BottomTabBarProps) => {
         return <BottomBar {...props} />
       }}

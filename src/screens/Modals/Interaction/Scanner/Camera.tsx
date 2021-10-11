@@ -41,7 +41,7 @@ const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 const Camera = () => {
   const { t } = useTranslation()
   const { errorScreen } = useErrors()
-  const startInteraction = useInteractionStart()
+  const { processInteraction } = useInteractionStart()
   const isScreenFocused = useIsFocused()
 
   const isAppLocked = useSelector(getIsAppLocked)
@@ -104,7 +104,7 @@ const Camera = () => {
 
   const handleScan = async (e: { data: string }) => {
     try {
-      await startInteraction(e.data)
+      await processInteraction(e.data)
     } catch (err) {
       console.log({ err })
 
@@ -222,7 +222,7 @@ const Camera = () => {
             </View>
           </>
         ) : (
-          <View style={{ flex: 1, backgroundColor: Colors.black65 }} />
+          <View style={{ flex: 1 }} />
         )}
       </View>
     </ScreenContainer>

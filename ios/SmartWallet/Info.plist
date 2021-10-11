@@ -20,6 +20,19 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.jolocom.wallet</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>jolocomwallet</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -59,5 +72,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>branch_key</key>
+	<string>$(BRANCH_LIVE_KEY)</string>
+	<key>branch_universal_link_domains</key>
+	<array>
+		<string>$(BRANCH_URL)</string>
+	</array>
 </dict>
 </plist>
