@@ -23,6 +23,7 @@ import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
 import branch from 'react-native-branch'
+import { SWErrorCodes } from '~/errors/codes'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -41,12 +42,12 @@ export const useDeeplinkInteractions = () => {
     // TODO move somewhere
     branch.disableTracking(true)
     branch.subscribe(({ error, params }) => {
-      if (params) {
-        if (error) {
-          console.warn('Error processing DeepLink: ', error)
-          return
-        }
+      if (error) {
+        console.warn('Error processing DeepLink: ', error)
+        return
+      }
 
+      if (params) {
         if (params['token'] && typeof params['token'] === 'string') {
           processInteraction(params['token'])
           return
@@ -57,8 +58,7 @@ export const useDeeplinkInteractions = () => {
           return
         }
 
-        // TODO: add Error Code
-        scheduleErrorWarning(new Error("Couldn't process DeepLink"))
+        scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
       }
     })
   }, [])

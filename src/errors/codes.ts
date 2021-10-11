@@ -7,4 +7,5 @@ export enum SWErrorCodes {
   SWInteractionRequestMissingDocuments = 'SWInteractionRequestMissingDocuments',
   SWInteractionUnknownError = 'SWInteractionUnknownError',
   SWInteractionOfferAllInvalid = 'SWInteractionOfferAllInvalid',
+  SWUnknownDeepLink = 'SWUnknownDeepLink',
 }
