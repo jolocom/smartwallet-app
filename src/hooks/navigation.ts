@@ -1,8 +1,13 @@
-import { useNavigation, StackActions } from '@react-navigation/native'
+import {
+  useNavigation,
+  StackActions,
+  useRoute,
+  useNavigationState,
+} from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
-import { useLayoutEffect } from 'react'
+import { useCallback, useLayoutEffect } from 'react'
 
 interface NestedSceenI {
   screen?: ScreenNames
@@ -28,10 +33,11 @@ export const usePop = () => {
 
 export const usePopStack = () => {
   const navigation = useNavigation()
+  const stackSize = useNavigationState((state) => state.index)
 
   return () => {
-    //NOTE: pops to the first screen of the stack
-    navigation.dispatch(StackActions.popToTop())
+    //NOTE: pops to the first screen of the stack, if not already there
+    if (stackSize !== 0) navigation.dispatch(StackActions.popToTop())
     //NOTE: pops out of the stack
     navigation.dispatch(StackActions.pop())
   }
