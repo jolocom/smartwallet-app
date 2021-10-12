@@ -40,7 +40,7 @@ export const AusweisRequestReview = () => {
     try {
       await acceptRequest(selectedOptional)
       //TODO: show the popup for android
-      // await checkIfScanned()
+      await checkIfScanned()
     } catch (e) {
       console.warn(e)
       scheduleWarning({

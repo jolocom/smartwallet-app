@@ -11,10 +11,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { getLoaderState } from '~/modules/loader/selectors'
-import { AA2Messages, eIDScreens } from '../types'
+import { AA2Messages, AusweisPasscodeMode, eIDScreens } from '../types'
 import { aa2EmitterTemp } from '../events'
 import { usePop, useRedirect } from '~/hooks/navigation'
 import { useFailed, useSuccess } from '~/hooks/loader'
+import { useAusweisInteraction } from '../hooks'
+import { aa2Module } from 'react-native-aa2-sdk'
 
 type ReaderMsg = {
   msg: 'READER'
@@ -81,8 +83,6 @@ enum CardStatus {
  * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
  */
 export const CompatibilityCheck = () => {
-  const [readinessStatus, setReadinessStatus] = useState<boolean | null>(null)
-  const [isCheckingCompatibility, setIsCheckingCompatibility] = useState(false)
   const [cardStatus, setCardStatus] = useState<CardStatus | null>(null)
   const redirect = useRedirect()
   const pop = usePop()
@@ -93,17 +93,36 @@ export const CompatibilityCheck = () => {
    * handler for READER msg
    */
   useEffect(() => {
-    aa2EmitterTemp.on(AA2Messages.Reader, async (data: ReaderMsg) => {
-      const { deactivated, inoperative } = data.card
-      const resultStatus = deactivated || !inoperative
-      if (deactivated) {
-        setCardStatus(CardStatus.deactivated)
-      } else if (inoperative) {
-        setCardStatus(CardStatus.inoperative)
-      } else if (resultStatus) {
-        setCardStatus(CardStatus.ready)
-      }
-      setReadinessStatus(resultStatus)
+    aa2Module.setHandlers({
+      handleCardRequest: () => {
+        // @ts-ignore
+        redirect(eIDScreens.AusweisScanner)
+      },
+      handlePinRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
+      },
+      handlePukRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
+      },
+      handleCanRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
+      },
+      handleCardInfo: (info) => {
+        if (info && !cardStatus) {
+          const { inoperative, deactivated } = info
+          const resultStatus = deactivated || !inoperative
+          if (deactivated) {
+            setCardStatus(CardStatus.deactivated)
+          } else if (inoperative) {
+            setCardStatus(CardStatus.inoperative)
+          } else if (resultStatus) {
+            setCardStatus(CardStatus.ready)
+          }
+        }
+      },
     })
   }, [])
 
@@ -111,18 +130,17 @@ export const CompatibilityCheck = () => {
    * show loader when card status is known
    */
   useEffect(() => {
-    if (readinessStatus !== null) {
+    if (cardStatus !== null) {
       Platform.OS === 'android' && pop(1)
-      if (readinessStatus) {
-        //showSuccess()
+      if (cardStatus === CardStatus.ready) {
+        showSuccess()
       } else {
-        //showFailed()
+        showFailed()
       }
     }
-  }, [readinessStatus])
+  }, [cardStatus])
 
   const handleCheckCompatibility = async () => {
-    setIsCheckingCompatibility(true)
     // @ts-expect-error
     redirect(eIDScreens.AusweisScanner)
   }
@@ -134,26 +152,6 @@ export const CompatibilityCheck = () => {
     // @ts-expect-error
     redirect(eIDScreens.RequestDetails)
   }
-
-  useEffect(() => {
-    let id: undefined | number
-    if (isCheckingCompatibility) {
-      id = setTimeout(() => {
-        /**
-         * NOTE:
-         * uncomment below to check different card variant
-         */
-        // aa2EmitterTemp.emit(AA2Messages.Reader, LOCKED_CARD)
-        // aa2EmitterTemp.emit(AA2Messages.Reader, DEACTIVATED_CARD)
-        aa2EmitterTemp.emit(AA2Messages.Reader, ACTIVE_CARD)
-      }, 2000)
-    }
-    return () => {
-      if (id) {
-        clearTimeout(id)
-      }
-    }
-  }, [isCheckingCompatibility])
 
   return (
     <ScreenContainer>

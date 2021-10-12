@@ -51,32 +51,6 @@ export const useAusweisInteraction = () => {
     }
   }
 
-  const initHandlers = () => {
-    aa2Module.setHandlers({
-      handleCardRequest: () => {
-        // @ts-ignore
-        redirect(eIDScreens.AusweisScanner)
-      },
-      handlePinRequest: (data) => {
-        console.log({ data })
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
-      },
-      handlePukRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
-      },
-      handleCanRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
-      },
-      //@ts-expect-error
-      handleCardInfo: (info) => {
-        console.log({ info })
-      },
-    })
-  }
-
   const processAusweisToken = async (token: string) => {
     try {
       const request: any = await aa2Module.processRequest(token)
@@ -153,7 +127,6 @@ export const useAusweisInteraction = () => {
     cancelFlow,
     acceptRequest,
     checkIfScanned,
-    initHandlers,
     passcodeCommands,
     finishFlow,
   }
