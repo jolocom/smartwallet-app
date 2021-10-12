@@ -27,6 +27,7 @@ export enum BtnTypes {
 export enum BtnSize {
   large,
   medium,
+  small,
 }
 
 interface BtnPropsI extends TouchableOpacityProps {
@@ -104,7 +105,12 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
     disabled && styles.disabled,
     { marginVertical: withoutMargins ? 0 : 5 },
   ]
-  const btnStyle = size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
+  const btnStyle =
+    size === BtnSize.large
+      ? styles.largeBtn
+      : size === BtnSize.small
+      ? styles.smallBtn
+      : styles.mediumBtn
 
   const renderButton = () => {
     const btnTextProps = { size, type, customTextStyles, children }
@@ -191,6 +197,9 @@ const styles = StyleSheet.create({
   },
   mediumBtn: {
     height: 45,
+  },
+  smallBtn: {
+    height: 32,
   },
   btn: {
     backgroundColor: 'transparent',
