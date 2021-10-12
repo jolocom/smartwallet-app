@@ -19,6 +19,7 @@ import {
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
+import { AusweisPasscodeDetails } from './components/PasscodeDetails'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -26,6 +27,7 @@ export type AusweisStackParamList = {
   [eIDScreens.ReadinessCheck]: undefined
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
+  [eIDScreens.PasscodeDetails]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
@@ -67,6 +69,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.EnterPIN}
         component={AusweisPasscode}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.PasscodeDetails}
+        component={AusweisPasscodeDetails}
         options={screenTransitionFromBottomDisabledGestures}
       />
     </eIDStack.Navigator>

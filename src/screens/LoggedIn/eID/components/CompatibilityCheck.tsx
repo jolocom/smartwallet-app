@@ -145,7 +145,8 @@ export const CompatibilityCheck = () => {
     redirect(eIDScreens.AusweisScanner)
   }
   const handleShowPinInstructions = () => {
-    // navigation.navigate(eIDScreens.PINInstructions)
+    // @ts-expect-error
+    redirect(eIDScreens.PasscodeDetails)
   }
 
   const handleSubmit = () => {
