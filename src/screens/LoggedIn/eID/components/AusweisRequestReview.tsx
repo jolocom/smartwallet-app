@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
+import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
+import { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
@@ -64,6 +66,11 @@ export const AusweisRequestReview = () => {
     cancelFlow()
   }
 
+  const handleMoreInfo = () => {
+    // @ts-expect-error
+    redirect(eIDScreens.ProviderDetails)
+  }
+
   const handleSelectOptional = (field: string) => {
     setSelectedOptional((prevState) => {
       if (prevState.includes(field)) {
@@ -92,8 +99,21 @@ export const AusweisRequestReview = () => {
               <AusweisHeaderDescription>
                 {`Please consider the details of the request sent by the ${providerName}`}
               </AusweisHeaderDescription>
-
-              <Space />
+              <View
+                style={{
+                  paddingHorizontal: '20%',
+                  marginTop: 8,
+                  marginBottom: 36,
+                }}
+              >
+                <Btn
+                  type={BtnTypes.senary}
+                  size={BtnSize.small}
+                  onPress={handleMoreInfo}
+                >
+                  More info
+                </Btn>
+              </View>
 
               <ScreenContainer.Padding>
                 <InteractionSection title="Mandatory">
