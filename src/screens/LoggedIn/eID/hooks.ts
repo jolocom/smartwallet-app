@@ -1,5 +1,6 @@
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
+import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
 import { useDisableLock } from '~/hooks/generic'
 import { useRedirect, usePopStack } from '~/hooks/navigation'
@@ -12,22 +13,26 @@ import { AusweisPasscodeMode, eIDScreens, IAusweisRequest } from './types'
 export const useAusweisContext = useCustomContext(AusweisContext)
 
 export const useCheckNFC = () => {
-  return async () => {
+  const checkNfcSupport = async () => {
     const supported = await NfcManager.isSupported()
-    console.log('supported', supported)
 
-    if (supported) {
-      await NfcManager.start()
-    } else {
-      throw new Error('NFC not supported')
+    if (!supported) {
+      throw new Error(SWErrorCodes.SWNfcNotSupported)
     }
+
+    await NfcManager.start()
     const isEnabled = await NfcManager.isEnabled()
-    console.log({ isEnabled })
 
     if (!isEnabled) {
-      throw new Error('NFC is not enabled')
+      throw new Error(SWErrorCodes.SWNfcNotEnabled)
     }
   }
+
+  const goToNfcSettings = () => {
+    NfcManager.goToNfcSetting()
+  }
+
+  return { checkNfcSupport, goToNfcSettings }
 }
 
 export const useAusweisInteraction = () => {
