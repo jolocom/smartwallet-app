@@ -41,7 +41,6 @@ export const AusweisRequest = () => {
   const handleIgnore = () => {
     cancelFlow()
     resetRequest()
-    goBack()
   }
 
   return (

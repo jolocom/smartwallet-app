@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
-  CardStyleInterpolators,
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack'
@@ -35,6 +34,7 @@ import {
   screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalOptions,
+  transparentModalFadeOptions,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
@@ -99,13 +99,6 @@ export type MainStackParamList = {
   [ScreenNames.TransparentModals]: undefined
   [ScreenNames.Scanner]: undefined
   [ScreenNames.InteractionFlow]: undefined
-}
-
-const modalStyleOptions = {
-  headerShown: false,
-  cardStyle: { backgroundColor: 'transparent' },
-  cardOverlayEnabled: true,
-  ...TransitionPresets.FadeFromBottomAndroid,
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -225,7 +218,7 @@ const Main: React.FC = () => {
 
           {/* Modals -> Start */}
           <MainStack.Screen
-            options={modalStyleOptions}
+            options={transparentModalFadeOptions}
             name={ScreenNames.InteractionFlow}
             component={InteractionFlow}
           />
@@ -236,7 +229,11 @@ const Main: React.FC = () => {
               ...screenTransitionSlideFromBottom,
             }}
           />
-          <MainStack.Screen name={ScreenNames.eId} component={eID} />
+          <MainStack.Screen
+            name={ScreenNames.eId}
+            component={eID}
+            options={transparentModalFadeOptions}
+          />
           <MainStack.Screen
             name={ScreenNames.CredentialDetails}
             component={CredentialDetails}

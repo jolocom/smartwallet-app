@@ -3,6 +3,7 @@ export enum eIDScreens {
   ReadinessCheck = 'ReadinessCheck',
   RequestDetails = 'RequestDetails',
   EnterPIN = 'EnterPIN',
+  AusweisScanner = 'AusweisScanner',
 }
 
 export enum AA2Messages {
@@ -11,6 +12,16 @@ export enum AA2Messages {
   EnterPuk = 'ENTER_PUK',
   SetPin = 'SET_PIN',
   Reader = 'READER',
+}
+
+export enum AusweisPasscodeMode {
+  PIN = 'PIN',
+  CAN = 'CAN',
+  PUK = 'PUK',
+}
+
+export interface AusweisPasscodeProps {
+  mode: AusweisPasscodeMode
 }
 
 export enum AusweisFields {

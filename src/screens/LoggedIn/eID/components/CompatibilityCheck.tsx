@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import { StackActions } from '@react-navigation/routers'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -11,9 +11,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { getLoaderState } from '~/modules/loader/selectors'
-import { AA2Messages, eIDScreens } from '../types'
+import { AA2Messages, AusweisPasscodeMode, eIDScreens } from '../types'
 import { aa2EmitterTemp } from '../events'
-import { useRedirect } from '~/hooks/navigation'
+import { usePop, useRedirect } from '~/hooks/navigation'
+import { useFailed, useSuccess } from '~/hooks/loader'
+import { useAusweisInteraction } from '../hooks'
+import { aa2Module } from 'react-native-aa2-sdk'
 
 type ReaderMsg = {
   msg: 'READER'
@@ -80,29 +83,46 @@ enum CardStatus {
  * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
  */
 export const CompatibilityCheck = () => {
-  const [readinessStatus, setReadinessStatus] = useState<boolean | null>(null)
-  const [isCheckingCompatibility, setIsCheckingCompatibility] = useState(false)
   const [cardStatus, setCardStatus] = useState<CardStatus | null>(null)
   const redirect = useRedirect()
-
-  const dispatch = useDispatch()
-  const loaderState = useSelector(getLoaderState)
+  const pop = usePop()
+  const showSuccess = useSuccess()
+  const showFailed = useFailed()
 
   /**
    * handler for READER msg
    */
   useEffect(() => {
-    aa2EmitterTemp.on(AA2Messages.Reader, async (data: ReaderMsg) => {
-      const { deactivated, inoperative } = data.card
-      const resultStatus = deactivated || !inoperative
-      if (deactivated) {
-        setCardStatus(CardStatus.deactivated)
-      } else if (inoperative) {
-        setCardStatus(CardStatus.inoperative)
-      } else if (resultStatus) {
-        setCardStatus(CardStatus.ready)
-      }
-      setReadinessStatus(resultStatus)
+    aa2Module.setHandlers({
+      handleCardRequest: () => {
+        // @ts-ignore
+        redirect(eIDScreens.AusweisScanner)
+      },
+      handlePinRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
+      },
+      handlePukRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
+      },
+      handleCanRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
+      },
+      handleCardInfo: (info) => {
+        if (info && !cardStatus) {
+          const { inoperative, deactivated } = info
+          const resultStatus = deactivated || !inoperative
+          if (deactivated) {
+            setCardStatus(CardStatus.deactivated)
+          } else if (inoperative) {
+            setCardStatus(CardStatus.inoperative)
+          } else if (resultStatus) {
+            setCardStatus(CardStatus.ready)
+          }
+        }
+      },
     })
   }, [])
 
@@ -110,42 +130,19 @@ export const CompatibilityCheck = () => {
    * show loader when card status is known
    */
   useEffect(() => {
-    if (readinessStatus !== null) {
-      if (readinessStatus) {
-        dispatch(
-          setLoader({
-            type: LoaderTypes.success,
-            msg: 'The card is fully ready to be used',
-          }),
-        )
+    if (cardStatus !== null) {
+      Platform.OS === 'android' && pop(1)
+      if (cardStatus === CardStatus.ready) {
+        showSuccess()
       } else {
-        dispatch(
-          setLoader({
-            type: LoaderTypes.error,
-            msg: 'Your card is not ready to be used',
-          }),
-        )
+        showFailed()
       }
     }
-  }, [readinessStatus])
-
-  /**
-   * dismissing loader
-   */
-  useEffect(() => {
-    let id: undefined | number
-    if (loaderState.type !== LoaderTypes.default) {
-      setTimeout(() => {
-        dispatch(dismissLoader())
-      }, 2000)
-    }
-    return () => {
-      id && clearTimeout(id)
-    }
-  }, [JSON.stringify(loaderState)])
+  }, [cardStatus])
 
   const handleCheckCompatibility = async () => {
-    setIsCheckingCompatibility(true)
+    // @ts-expect-error
+    redirect(eIDScreens.AusweisScanner)
   }
   const handleShowPinInstructions = () => {
     // navigation.navigate(eIDScreens.PINInstructions)
@@ -155,37 +152,6 @@ export const CompatibilityCheck = () => {
     // @ts-expect-error
     redirect(eIDScreens.RequestDetails)
   }
-
-  useEffect(() => {
-    let id: undefined | number
-    if (isCheckingCompatibility) {
-      id = setTimeout(() => {
-        /**
-         * NOTE:
-         * uncomment below to check different card variant
-         */
-        // aa2EmitterTemp.emit(AA2Messages.Reader, LOCKED_CARD)
-        // aa2EmitterTemp.emit(AA2Messages.Reader, DEACTIVATED_CARD)
-        aa2EmitterTemp.emit(AA2Messages.Reader, ACTIVE_CARD)
-      }, 2000)
-    }
-    return () => {
-      if (id) {
-        clearTimeout(id)
-      }
-    }
-  }, [isCheckingCompatibility])
-
-  useEffect(() => {
-    if (isCheckingCompatibility) {
-      dispatch(
-        setLoader({
-          type: LoaderTypes.default,
-          msg: 'Checking your card compatibility',
-        }),
-      )
-    }
-  }, [isCheckingCompatibility])
 
   return (
     <ScreenContainer>

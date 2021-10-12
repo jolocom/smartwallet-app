@@ -25,12 +25,15 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   const { initStoredLanguage } = useTranslation()
 
   const initAusweis = async () => {
+    //await aa2Module.initAa2Sdk()
     if (!aa2Module.isInitialized) {
       try {
+        //await aa2Module.cancelFlow()
         await aa2Module.initAa2Sdk()
       } catch (e) {
         // NOTE: Can't use a toast since the @Toast component uses the navigation,
         // which is not available here.
+        console.warn(e)
         console.warn("Oopsie! Couldn't initiate the Ausweis SDK!")
       }
     }

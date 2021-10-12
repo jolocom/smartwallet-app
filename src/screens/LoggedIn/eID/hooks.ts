@@ -1,12 +1,13 @@
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { useCustomContext } from '~/hooks/context'
+import { useDisableLock } from '~/hooks/generic'
 import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
-import { IAusweisRequest } from './types'
+import { AusweisPasscodeMode, eIDScreens, IAusweisRequest } from './types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -30,7 +31,8 @@ export const useCheckNFC = () => {
 }
 
 export const useAusweisInteraction = () => {
-  const { scheduleErrorWarning } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
+  const disableLock = useDisableLock()
   const redirect = useRedirect()
   const popStack = usePopStack()
 
@@ -76,7 +78,7 @@ export const useAusweisInteraction = () => {
 
   const acceptRequest = async (optionalFields: Array<string>) => {
     await aa2Module.setAccessRights(optionalFields)
-    return aa2Module.acceptAuthRequest()
+    await aa2Module.acceptAuthRequest()
   }
 
   const disconnectAusweis = () => {
@@ -96,6 +98,28 @@ export const useAusweisInteraction = () => {
     return aa2Module.checkIfCardWasRead()
   }
 
+  const passcodeCommands = {
+    setPin: (pin: number) => aa2Module.enterPin(pin),
+    setPuk: (puk: number) => aa2Module.enterPUK(puk),
+    setCan: (can: number) => aa2Module.enterCan(can),
+  }
+
+  const finishFlow = (url: string) => {
+    fetch(url)
+      .then((res) => {
+        if (res['ok']) {
+          scheduleInfo({
+            title: 'Success',
+            message: 'Successfully shared eID data!',
+          })
+        } else {
+          scheduleErrorWarning(new Error(res['statusText']))
+        }
+        cancelFlow()
+      })
+      .catch(scheduleErrorWarning)
+  }
+
   return {
     initAusweis,
     disconnectAusweis,
@@ -103,5 +127,7 @@ export const useAusweisInteraction = () => {
     cancelFlow,
     acceptRequest,
     checkIfScanned,
+    passcodeCommands,
+    finishFlow,
   }
 }
