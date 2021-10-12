@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
+import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
+import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
+import { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
@@ -24,7 +27,7 @@ import {
   AusweisHeaderDescription,
   AusweisLogo,
 } from '../styled'
-import { eIDScreens } from '../types'
+import { AusweisPasscodeMode, eIDScreens } from '../types'
 
 export const AusweisRequestReview = () => {
   const { scheduleWarning } = useToasts()
@@ -35,12 +38,32 @@ export const AusweisRequestReview = () => {
   const redirect = useRedirect()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
 
+  useEffect(() => {
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers({
+      handleCardRequest: () => {
+        // @ts-ignore
+        redirect(eIDScreens.AusweisScanner)
+      },
+      handlePinRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
+      },
+      handlePukRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
+      },
+      handleCanRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
+      },
+    })
+  }, [])
+
   //TODO: this should probably be handled by events
   const handleProceed = async () => {
     try {
       await acceptRequest(selectedOptional)
-      //TODO: show the popup for android
-      await checkIfScanned()
     } catch (e) {
       console.warn(e)
       scheduleWarning({
@@ -55,13 +78,15 @@ export const AusweisRequestReview = () => {
         },
       })
     }
-
-    // @ts-expect-error Add Ausweis screens to the ScreenNames enum
-    //redirect(eIDScreens.EnterPIN)
   }
 
   const handleIgnore = () => {
     cancelFlow()
+  }
+
+  const handleMoreInfo = () => {
+    // @ts-expect-error
+    redirect(eIDScreens.ProviderDetails)
   }
 
   const handleSelectOptional = (field: string) => {
@@ -92,8 +117,21 @@ export const AusweisRequestReview = () => {
               <AusweisHeaderDescription>
                 {`Please consider the details of the request sent by the ${providerName}`}
               </AusweisHeaderDescription>
-
-              <Space />
+              <View
+                style={{
+                  paddingHorizontal: '20%',
+                  marginTop: 8,
+                  marginBottom: 36,
+                }}
+              >
+                <Btn
+                  type={BtnTypes.senary}
+                  size={BtnSize.small}
+                  onPress={handleMoreInfo}
+                >
+                  More info
+                </Btn>
+              </View>
 
               <ScreenContainer.Padding>
                 <InteractionSection title="Mandatory">

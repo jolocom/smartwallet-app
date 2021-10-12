@@ -8,6 +8,7 @@ export const ausweisInitialState = {
   certificateIssuerUrl: '',
   providerName: '',
   providerUrl: '',
+  providerInfo: '',
   effectiveValidityDate: '',
   expirationDate: '',
 }

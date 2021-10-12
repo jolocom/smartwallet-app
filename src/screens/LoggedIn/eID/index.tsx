@@ -6,20 +6,21 @@ import { AusweisProvider } from './context'
 import { useAusweisContext } from './hooks'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
+import {
+  screenTransitionFromBottomDisabledGestures,
+  transparentModalFadeOptions,
+  transparentModalOptions,
+} from '~/utils/screenSettings'
 import { AusweisPasscodeProps, eIDScreens } from './types'
 import {
   AusweisRequestReview,
   AusweisRequest,
   CompatibilityCheck,
   AusweisPasscode,
+  AusweisPasscodeDetails,
+  AusweisProviderDetails,
+  AusweisScanner,
 } from './components'
-import { AusweisScanner } from './components/AusweisScanner'
-import {
-  screenTransitionFromBottomDisabledGestures,
-  transparentModalFadeOptions,
-  transparentModalOptions,
-} from '~/utils/screenSettings'
-import { AusweisPasscodeDetails } from './components/PasscodeDetails'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -28,6 +29,7 @@ export type AusweisStackParamList = {
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
   [eIDScreens.PasscodeDetails]: undefined
+  [eIDScreens.ProviderDetails]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
@@ -64,6 +66,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.RequestDetails}
         component={AusweisRequestReview}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.ProviderDetails}
+        component={AusweisProviderDetails}
         options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen

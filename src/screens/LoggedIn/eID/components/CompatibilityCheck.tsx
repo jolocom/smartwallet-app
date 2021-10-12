@@ -17,6 +17,7 @@ import { usePop, useRedirect } from '~/hooks/navigation'
 import { useFailed, useSuccess } from '~/hooks/loader'
 import { useAusweisInteraction } from '../hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
+import { useFocusEffect } from '@react-navigation/core'
 
 type ReaderMsg = {
   msg: 'READER'
@@ -97,18 +98,6 @@ export const CompatibilityCheck = () => {
       handleCardRequest: () => {
         // @ts-ignore
         redirect(eIDScreens.AusweisScanner)
-      },
-      handlePinRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
-      },
-      handlePukRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
-      },
-      handleCanRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
       },
       handleCardInfo: (info) => {
         if (info && !cardStatus) {

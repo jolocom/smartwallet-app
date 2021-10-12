@@ -65,6 +65,7 @@ export const useAusweisInteraction = () => {
         certificateIssuerUrl: certificate.description.issuerUrl,
         providerName: certificate.description.subjectName,
         providerUrl: certificate.description.subjectUrl,
+        providerInfo: certificate.description.termsOfUsage,
         effectiveValidityDate: certificate.validity.effectiveDate,
         expirationDate: certificate.validity.expirationDate,
       }

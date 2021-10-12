@@ -5,6 +5,7 @@ export enum eIDScreens {
   EnterPIN = 'EnterPIN',
   PasscodeDetails = 'PasscodeDetails',
   AusweisScanner = 'AusweisScanner',
+  ProviderDetails = 'ProviderDetails',
 }
 
 export enum AA2Messages {
@@ -59,6 +60,7 @@ export interface IAusweisRequest {
   certificateIssuerUrl: string
   providerName: string
   providerUrl: string
+  providerInfo: string
   effectiveValidityDate: string
   expirationDate: string
 }

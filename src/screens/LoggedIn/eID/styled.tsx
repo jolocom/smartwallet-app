@@ -1,8 +1,8 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Linking, StyleSheet, View } from 'react-native'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { IJoloTextProps, JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 import { ContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
@@ -67,6 +67,22 @@ export const AusweisHeaderDescription: React.FC = ({ children }) => {
       customStyles={{ paddingHorizontal: 10 }}
     >
       {children}
+    </JoloText>
+  )
+}
+
+export const AusweisTextLink: React.FC<{ url: string } & IJoloTextProps> = ({
+  url,
+  customStyles,
+  ...textProps
+}) => {
+  return (
+    <JoloText
+      {...textProps}
+      customStyles={[customStyles, { textDecorationLine: 'underline' }]}
+      onPress={() => Linking.openURL(url)}
+    >
+      {url}
     </JoloText>
   )
 }
