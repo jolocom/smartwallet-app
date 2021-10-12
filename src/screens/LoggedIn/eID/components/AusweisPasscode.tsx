@@ -44,7 +44,6 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
  * How do we handle error in send cmds (results in error prop on ENTER_PIN msg)
  */
 export const AusweisPasscode = () => {
-  const navigation = useNavigation()
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
@@ -57,7 +56,7 @@ export const AusweisPasscode = () => {
   useEffect(() => {
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        console.log('ignored handleCardRequest')
+        // TODO remove toast?
       },
       handlePinRequest: (card) => {
         setWaitingForMsg(false)
@@ -88,7 +87,6 @@ export const AusweisPasscode = () => {
         setWaitingForMsg(false)
         setPinVariant(AusweisPasscodeMode.CAN)
       },
-      //@ts-expect-error
       handleCardInfo: (info) => {
         if (!info) {
           scheduleInfo({
@@ -101,6 +99,10 @@ export const AusweisPasscode = () => {
         finishFlow(url)
       },
     })
+
+    return () => {
+      aa2Module.resetHandlers()
+    }
   }, [])
 
   const title = useMemo(() => {
