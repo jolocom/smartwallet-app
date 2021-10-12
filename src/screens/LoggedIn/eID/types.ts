@@ -5,6 +5,7 @@ export enum eIDScreens {
   EnterPIN = 'EnterPIN',
   PasscodeDetails = 'PasscodeDetails',
   AusweisScanner = 'AusweisScanner',
+  ProviderDetails = 'ProviderDetails',
 }
 
 export enum AA2Messages {
