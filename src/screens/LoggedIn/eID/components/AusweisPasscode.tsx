@@ -3,123 +3,19 @@ import React, { useEffect, useMemo, useState } from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { ActivityIndicator, Alert, View } from 'react-native'
-import { AA2Messages } from '../types'
+import { AA2Messages, AusweisPasscodeMode, eIDScreens } from '../types'
 import { aa2EmitterTemp } from '../events'
 import { usePasscode } from '~/components/Passcode/context'
 import { sleep } from '~/utils/generic'
 import { StackActions } from '@react-navigation/routers'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { AusweisStackParamList } from '..'
+import { useAusweisInteraction } from '../hooks'
+import { aa2Module } from 'react-native-aa2-sdk'
+import { useToasts } from '~/hooks/toasts'
+import { LOG } from '~/utils/dev'
 
 const ALL_EID_PIN_ATTEMPTS = 3
-
-enum PinVariant {
-  PIN = 'PIN',
-  CAN = 'CAN',
-  PUK = 'PUK',
-}
-
-type EnterPinResponse = {
-  msg: 'ENTER_PIN' | 'ENTER_CAN' | 'ENTER_PUK'
-  error: string
-  reader: {
-    name: 'NFC'
-    attached: boolean
-    keypad: false
-    card: {
-      inoperative: boolean
-      deactivated: boolean
-      retryCounter: number
-    }
-  }
-}
-
-/**
- * TODO:
- * remove after testing
- */
-const PIN_DATA_3 = {
-  msg: 'ENTER_PIN',
-  reader: {
-    name: 'NFC',
-    attached: true,
-    keypad: false,
-    card: {
-      inoperative: false,
-      deactivated: false,
-      retryCounter: 3,
-    },
-  },
-}
-/**
- * TODO:
- * remove after testing
- */
-const PIN_DATA_2 = {
-  msg: 'ENTER_PIN',
-  reader: {
-    name: 'NFC',
-    attached: true,
-    keypad: false,
-    card: {
-      inoperative: false,
-      deactivated: false,
-      retryCounter: 2,
-    },
-  },
-}
-
-/**
- * TODO:
- * remove after testing
- */
-const CAN_DATA = {
-  msg: 'ENTER_CAN',
-  reader: {
-    name: 'NFC',
-    attached: true,
-    keypad: false,
-    card: {
-      inoperative: false,
-      deactivated: false,
-      retryCounter: 1,
-    },
-  },
-}
-
-/**
- * TODO:
- * remove after testing
- */
-const PUK_DATA = {
-  msg: 'ENTER_PUK',
-  reader: {
-    name: 'NFC',
-    attached: true,
-    keypad: false,
-    card: {
-      inoperative: false,
-      deactivated: false,
-      retryCounter: 0,
-    },
-  },
-}
-
-/**
- * TODO:
- * remove after testing
- */
-const PUK_DATA_INOPERATIVE = {
-  msg: 'ENTER_PUK',
-  reader: {
-    name: 'NFC',
-    attached: true,
-    keypad: false,
-    card: {
-      inoperative: true,
-      deactivated: false,
-      retryCounter: 0,
-    },
-  },
-}
 
 interface PasscodeErrorSetterProps {
   errorText: string | null
@@ -147,111 +43,90 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
  * QUESTION:
  * How do we handle error in send cmds (results in error prop on ENTER_PIN msg)
  */
-export const AusweisPasscode = ({ navigation }) => {
-  const [pinVariant, setPinVariant] = useState(PinVariant.PIN)
+export const AusweisPasscode = () => {
+  const navigation = useNavigation()
+  const { mode } =
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
+
+  const { scheduleInfo } = useToasts()
+  const { passcodeCommands, cancelFlow, finishFlow } = useAusweisInteraction()
+  const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [waitingForMsg, setWaitingForMsg] = useState(false)
 
-  /**
-   * handler for PUK
-   */
   useEffect(() => {
-    const updateToPuk = (data: EnterPinResponse) => {
-      setWaitingForMsg(false)
-      setPinVariant(PinVariant.PUK)
-      if (data.reader.card.inoperative === true) {
-        /**
-         * TODO:
-         * Show the eID card locked screen
-         */
-        Alert.alert('Locked', 'You card is locked', [
-          {
-            onPress: () => {
-              navigation.dispatch(StackActions.popToTop())
-              navigation.goBack(null)
-            },
-          },
-        ])
-      }
-    }
-    const updateToCan = () => {
-      setWaitingForMsg(false)
-      setPinVariant(PinVariant.CAN)
-    }
-    const updateToPin = (data: EnterPinResponse) => {
-      console.log(data.msg, data.reader.card.retryCounter)
+    aa2Module.setHandlers({
+      handleCardRequest: () => {
+        console.log('ignored handleCardRequest')
+      },
+      handlePinRequest: (card) => {
+        setWaitingForMsg(false)
+        setPinVariant(AusweisPasscodeMode.PIN)
 
-      setWaitingForMsg(false)
+        const errorText = `Wrong PIN, you used ${
+          ALL_EID_PIN_ATTEMPTS - card.retryCounter
+        }/${ALL_EID_PIN_ATTEMPTS} attempts`
 
-      setPinVariant(PinVariant.PIN)
-      const errorText = `Wrong PIN, you used ${
-        ALL_EID_PIN_ATTEMPTS - data.reader.card.retryCounter
-      }/${ALL_EID_PIN_ATTEMPTS} attempts`
-      if (data.reader.card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
-        setErrorText(errorText)
-      }
-    }
-    aa2EmitterTemp.on(AA2Messages.EnterPuk, updateToPuk)
-    aa2EmitterTemp.on(AA2Messages.EnterCan, updateToCan)
-    aa2EmitterTemp.on(AA2Messages.EnterPin, updateToPin)
-    return () => {
-      aa2EmitterTemp.off(AA2Messages.EnterPuk, updateToPuk)
-      aa2EmitterTemp.off(AA2Messages.EnterCan, updateToCan)
-      aa2EmitterTemp.off(AA2Messages.EnterPin, updateToPin)
-    }
+        if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
+          setErrorText(errorText)
+        }
+      },
+      handlePukRequest: (card) => {
+        console.log('PUK REQUEST')
+        setWaitingForMsg(false)
+        setPinVariant(AusweisPasscodeMode.PUK)
+        if (card.inoperative) {
+          scheduleInfo({
+            title: 'Oops!',
+            message: "Seems like you're locked out of your card",
+          })
+          cancelFlow()
+        }
+      },
+      handleCanRequest: (card) => {
+        console.log('CAN REQUEST')
+        setWaitingForMsg(false)
+        setPinVariant(AusweisPasscodeMode.CAN)
+      },
+      //@ts-expect-error
+      handleCardInfo: (info) => {
+        if (!info) {
+          scheduleInfo({
+            title: 'Oops!',
+            message: 'You should still hold your card against the wallet!',
+          })
+        }
+      },
+      handleAuthResult: (url) => {
+        finishFlow(url)
+      },
+    })
   }, [])
 
   const title = useMemo(() => {
-    if (pinVariant === PinVariant.PIN) {
-      return 'To allow data exchange enter you six digit eID PIN'
-    } else if (pinVariant === PinVariant.CAN) {
-      return 'For a third attempt, please first enter the six digit Card Access Number (CAN)'
-    } else if (pinVariant === PinVariant.PUK) {
-      return 'Last change, enter your PUK'
+    if (pinVariant === AusweisPasscodeMode.PIN) {
+      return 'PIN'
+    } else if (pinVariant === AusweisPasscodeMode.CAN) {
+      return 'CAN'
+    } else if (pinVariant === AusweisPasscodeMode.PUK) {
+      return 'PUK'
     } else {
       return ''
     }
   }, [pinVariant])
 
   const handleOnSubmit = async (passcode: string) => {
+    const passcodeNumber = parseInt(passcode)
+
     setWaitingForMsg(true)
     setErrorText(null)
 
-    await sleep(2000)
-    if (pinVariant === PinVariant.PIN) {
-      /**
-       * TODO:
-       * send SET_PIN with passcode
-       */
-      /**
-       * TODO:
-       * remove after aa2 implementation is ready
-       */
-      /**
-       * test PIN
-       */
-      // aa2EmitterTemp.emit(AA2Messages.EnterPin, PIN_DATA_2)
-      // aa2EmitterTemp.emit(AA2Messages.EnterCan, CAN_DATA)
-      aa2EmitterTemp.emit(AA2Messages.EnterPuk, PUK_DATA)
-    } else if (pinVariant === PinVariant.CAN) {
-      /**
-       * send SET_CAN with passcode
-       */
-      /**
-       * TODO:
-       * remove after aa2 implementation is ready
-       */
-      aa2EmitterTemp.emit(AA2Messages.EnterCan, CAN_DATA)
-    } else if (pinVariant == PinVariant.PUK) {
-      /**
-       * send SET_PUK with passcode
-       */
-      /**
-       * TODO:
-       * remove after aa2 implementation is ready
-       */
-      // aa2EmitterTemp.emit(AA2Messages.EnterPin, PIN_DATA_3)
-      aa2EmitterTemp.emit(AA2Messages.EnterPuk, PUK_DATA_INOPERATIVE)
+    if (pinVariant === AusweisPasscodeMode.PIN) {
+      passcodeCommands.setPin(passcodeNumber)
+    } else if (pinVariant === AusweisPasscodeMode.CAN) {
+      passcodeCommands.setCan(passcodeNumber)
+    } else if (pinVariant == AusweisPasscodeMode.PUK) {
+      passcodeCommands.setPuk(passcodeNumber)
     }
   }
 
@@ -265,11 +140,14 @@ export const AusweisPasscode = ({ navigation }) => {
         <PasscodeErrorSetter errorText={errorText} />
         <Passcode.Container>
           <Passcode.Header title={title} errorTitle={title} />
-          <Passcode.Input />
+          {waitingForMsg ? (
+            <ActivityIndicator color={'white'} />
+          ) : (
+            <Passcode.Input />
+          )}
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
           </View>
-          {waitingForMsg && <ActivityIndicator />}
         </Passcode.Container>
         <Passcode.Container>
           <Passcode.Forgot />

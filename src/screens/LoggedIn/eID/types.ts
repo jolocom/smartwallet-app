@@ -14,6 +14,16 @@ export enum AA2Messages {
   Reader = 'READER',
 }
 
+export enum AusweisPasscodeMode {
+  PIN = 'PIN',
+  CAN = 'CAN',
+  PUK = 'PUK',
+}
+
+export interface AusweisPasscodeProps {
+  mode: AusweisPasscodeMode
+}
+
 export enum AusweisFields {
   Address = 'Address',
   BirthName = 'BirthName',
