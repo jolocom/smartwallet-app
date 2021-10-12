@@ -26,3 +26,8 @@ export const transparentModalOptions: StackNavigationOptions = {
   cardOverlayEnabled: true,
   cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 }
+
+export const transparentModalFadeOptions = {
+  ...transparentModalOptions,
+  ...TransitionPresets.FadeFromBottomAndroid,
+}

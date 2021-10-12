@@ -283,7 +283,7 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.AusweisScanner}
         component={AusweisScanner}
-        options={transparentModalOptions}
+        options={transparentModalFadeOptions}
       />
       <eIDStack.Screen
         name={eIDScreens.ReadinessCheck}
