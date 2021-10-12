@@ -59,6 +59,7 @@ export interface IAusweisRequest {
   certificateIssuerUrl: string
   providerName: string
   providerUrl: string
+  providerInfo: string
   effectiveValidityDate: string
   expirationDate: string
 }
