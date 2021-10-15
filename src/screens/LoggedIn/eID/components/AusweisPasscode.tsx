@@ -17,6 +17,10 @@ import { LOG } from '~/utils/dev'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useDispatch } from 'react-redux'
+import { dismissLoader, setLoader } from '~/modules/loader/actions'
+import LoaderTest from '../../Settings/Development/DevLoaders'
+import { LoaderTypes } from '~/modules/loader/types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 
@@ -57,6 +61,15 @@ export const AusweisPasscode = () => {
   const [waitingForMsg, setWaitingForMsg] = useState(false)
 
   useEffect(() => {
+    if (waitingForMsg) {
+      dispatch(setLoader({ type: LoaderTypes.default, msg: 'Checking' }))
+    } else {
+      dispatch(dismissLoader())
+    }
+  }, [waitingForMsg])
+
+  useEffect(() => {
+    //TODO: add handleBadState handler?
     aa2Module.setHandlers({
       handleCardRequest: () => {
         // TODO remove toast?
@@ -74,7 +87,6 @@ export const AusweisPasscode = () => {
         }
       },
       handlePukRequest: (card) => {
-        console.log('PUK REQUEST')
         setWaitingForMsg(false)
         setPinVariant(AusweisPasscodeMode.PUK)
         if (card.inoperative) {
@@ -86,7 +98,6 @@ export const AusweisPasscode = () => {
         }
       },
       handleCanRequest: (card) => {
-        console.log('CAN REQUEST')
         setWaitingForMsg(false)
         setPinVariant(AusweisPasscodeMode.CAN)
       },
@@ -157,11 +168,7 @@ export const AusweisPasscode = () => {
               ID card
             </JoloText>
           )}
-          {waitingForMsg ? (
-            <ActivityIndicator color={'white'} />
-          ) : (
-            <Passcode.Input cellColor={Colors.chisinauGrey} />
-          )}
+          <Passcode.Input cellColor={Colors.chisinauGrey} />
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
           </View>
