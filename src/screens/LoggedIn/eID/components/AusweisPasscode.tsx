@@ -54,6 +54,7 @@ export const AusweisPasscode = () => {
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
+  const dispatch = useDispatch()
   const { scheduleInfo } = useToasts()
   const { passcodeCommands, cancelFlow, finishFlow } = useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
