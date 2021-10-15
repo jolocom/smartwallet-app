@@ -4,10 +4,13 @@ import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 import BP from '~/utils/breakpoints'
 import { Fonts } from '~/utils/fonts'
+import { IPasscodeComposition } from './types'
 
 const CELL_ASPECT_RATIO = 0.75
 
-const PasscodeInput: React.FC = () => {
+const PasscodeInput: IPasscodeComposition['Input'] = ({
+  cellColor = Colors.black30,
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const { pin, pinError, pinSuccess, passcodeLength: length } = usePasscode()
   const digits = pin.split('')
@@ -56,6 +59,7 @@ const PasscodeInput: React.FC = () => {
                   isSelected && styles.active,
                   pinError && styles.error,
                   pinSuccess && styles.success,
+                  { backgroundColor: cellColor },
                 ]}
                 key={index}
               >
@@ -97,7 +101,6 @@ const styles = StyleSheet.create({
     flex: 1,
     aspectRatio: CELL_ASPECT_RATIO,
     borderRadius: 11,
-    backgroundColor: Colors.black30,
     overflow: 'hidden',
     borderWidth: 2.4,
     borderColor: 'transparent',
