@@ -1,21 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 import BP from '~/utils/breakpoints'
+import { Fonts } from '~/utils/fonts'
 
-const DIGIT_CELL_WIDTH = BP({ default: 65, xsmall: 56 })
-const DIGIT_CELL_HEIGHT = BP({ default: 87, xsmall: 74 })
-const DIGIT_MARGIN_RIGHT = Platform.select({
-  ios: BP({ default: 7, xsmall: 6 }),
-  android: 2,
-})
+const CELL_ASPECT_RATIO = 0.75
 
 const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
@@ -72,7 +62,11 @@ const PasscodeInput: React.FC = () => {
                 {isSelected && !digits[index] ? (
                   <View style={styles.caret} />
                 ) : (
-                  <Text style={styles.text} testID="passcode-cell">
+                  <Text
+                    adjustsFontSizeToFit
+                    style={styles.text}
+                    testID="passcode-cell"
+                  >
                     {index === selectedIndex
                       ? digits[index]
                       : index < digits.length
@@ -99,15 +93,15 @@ const styles = StyleSheet.create({
   display: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: DIGIT_CELL_WIDTH,
-    height: DIGIT_CELL_HEIGHT,
+    maxWidth: BP({ default: 65, xsmall: 56 }),
+    flex: 1,
+    aspectRatio: CELL_ASPECT_RATIO,
     borderRadius: 11,
-    marginRight: DIGIT_MARGIN_RIGHT,
     backgroundColor: Colors.black30,
-    overflow: 'visible',
-    borderWidth: 3,
+    overflow: 'hidden',
+    borderWidth: 2.4,
     borderColor: 'transparent',
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
   active: {
     borderColor: Colors.activity,
@@ -121,10 +115,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 43,
     color: Colors.white,
+    fontFamily: Fonts.Regular,
   },
   caret: {
     width: 1,
-    height: '100%',
+    height: '80%',
     backgroundColor: Colors.success,
   },
 })
