@@ -40,6 +40,7 @@ export const useAusweisInteraction = () => {
   const disableLock = useDisableLock()
   const redirect = useRedirect()
   const popStack = usePopStack()
+  const { resetRequest } = useAusweisContext()
 
   // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
   // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
@@ -98,6 +99,7 @@ export const useAusweisInteraction = () => {
   const cancelFlow = async () => {
     aa2Module.cancelFlow().catch(scheduleErrorWarning)
     popStack()
+    resetRequest()
   }
 
   const checkIfScanned = async () => {

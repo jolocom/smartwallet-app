@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { RouteProp, useRoute } from '@react-navigation/core'
 
 import { AusweisProvider } from './context'
-import { useAusweisContext } from './hooks'
+import { useAusweisContext, useAusweisInteraction } from './hooks'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import {
@@ -37,9 +37,18 @@ const AusweisInteraction = () => {
   const request =
     useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
   const { setRequest } = useAusweisContext()
+  const { cancelFlow } = useAusweisInteraction()
 
   useEffect(() => {
     setRequest(request)
+
+    /**
+     * NOTE: Resetting the requested data and cancelling workflow
+     * to be able to initialize it again
+     */
+    return () => {
+      cancelFlow()
+    }
   }, [])
 
   return (

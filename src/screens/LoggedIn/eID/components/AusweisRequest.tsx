@@ -19,7 +19,7 @@ export const AusweisRequest = () => {
   const navigation = useNavigation()
   const { checkNfcSupport, goToNfcSettings } = useCheckNFC()
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
-  const { providerUrl, providerName, resetRequest } = useAusweisContext()
+  const { providerUrl, providerName } = useAusweisContext()
   const { cancelFlow } = useAusweisInteraction()
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
 
@@ -54,7 +54,6 @@ export const AusweisRequest = () => {
 
   const handleIgnore = () => {
     cancelFlow()
-    resetRequest()
   }
 
   return (
