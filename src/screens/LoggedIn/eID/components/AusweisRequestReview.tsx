@@ -96,9 +96,13 @@ export const AusweisRequestReview = () => {
   }
 
   return (
-    <View style={{ paddingTop: top, backgroundColor: Colors.mainBlack }}>
+    <View style={{ paddingTop: top, backgroundColor: Colors.mainDark }}>
       <Collapsible
-        renderHeader={() => <Collapsible.Header />}
+        renderHeader={() => (
+          <Collapsible.Header
+            customStyles={{ backgroundColor: Colors.mainDark }}
+          />
+        )}
         renderScroll={() => (
           <ContainerFAS>
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
