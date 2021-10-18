@@ -4,16 +4,13 @@ import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
-import { NavHeaderType } from '~/components/NavigationHeader'
+import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
-import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
-import { useDisableLock } from '~/hooks/generic'
 import { useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
-import InteractionSection from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionSection'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
   ContainerFAS,
@@ -25,6 +22,7 @@ import { useAusweisContext, useAusweisInteraction } from '../hooks'
 import {
   AusweisButtons,
   AusweisHeaderDescription,
+  AusweisListSection,
   AusweisLogo,
 } from '../styled'
 import { AusweisPasscodeMode, eIDScreens } from '../types'
@@ -32,7 +30,7 @@ import { AusweisPasscodeMode, eIDScreens } from '../types'
 export const AusweisRequestReview = () => {
   const { scheduleWarning } = useToasts()
   const { providerName, requiredFields, optionalFields } = useAusweisContext()
-  const { acceptRequest, checkIfScanned, cancelFlow } = useAusweisInteraction()
+  const { acceptRequest, cancelFlow } = useAusweisInteraction()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const redirect = useRedirect()
@@ -115,25 +113,32 @@ export const AusweisRequestReview = () => {
                 <InteractionTitle label={t('CredentialRequest.header')} />
               </Collapsible.Title>
               <AusweisHeaderDescription>
-                {`Please consider the details of the request sent by the ${providerName}`}
+                {`Choose one or more documents requested by ${providerName} to proceed `}
               </AusweisHeaderDescription>
               <Btn
                 type={BtnTypes.septenary}
                 size={BtnSize.small}
                 onPress={handleMoreInfo}
-                customContainerStyles={{ width: 'auto', paddingHorizontal: 24 }}
+                customContainerStyles={{
+                  width: 'auto',
+                  paddingHorizontal: 24,
+                  marginBottom: 32,
+                  marginTop: 20,
+                }}
               >
                 More now
               </Btn>
 
-              <ScreenContainer.Padding>
-                <InteractionSection title="Mandatory">
+              <ScreenContainer.Padding
+                distance={BP({ large: 36, medium: 28, default: 16 })}
+              >
+                <AusweisListSection title="Mandatory fields">
                   {requiredFields.map((fieldName) => (
                     <Field.Static value={fieldName} />
                   ))}
-                </InteractionSection>
+                </AusweisListSection>
 
-                <InteractionSection title="Optional">
+                <AusweisListSection title="Optional fields">
                   <Widget>
                     {optionalFields.map((field, i) => (
                       <Field.Selectable
@@ -144,7 +149,7 @@ export const AusweisRequestReview = () => {
                       />
                     ))}
                   </Widget>
-                </InteractionSection>
+                </AusweisListSection>
               </ScreenContainer.Padding>
             </Collapsible.Scroll>
           </ContainerFAS>
@@ -152,7 +157,7 @@ export const AusweisRequestReview = () => {
       >
         <FooterContainerFAS>
           <AusweisButtons
-            submitLabel="Proceed"
+            submitLabel="Share"
             cancelLabel="Ignore"
             onSubmit={handleProceed}
             onCancel={handleIgnore}
