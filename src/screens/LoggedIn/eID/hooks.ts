@@ -6,13 +6,16 @@ import { useDisableLock } from '~/hooks/generic'
 import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
-import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
-import { AusweisPasscodeMode, eIDScreens, IAusweisRequest } from './types'
+import { IAusweisRequest } from './types'
+
+import { LOG } from '~/utils/dev'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
 export const useCheckNFC = () => {
+  const { scheduleInfo } = useToasts()
+
   const checkNfcSupport = async () => {
     const supported = await NfcManager.isSupported()
 
@@ -32,7 +35,20 @@ export const useCheckNFC = () => {
     NfcManager.goToNfcSetting()
   }
 
-  return { checkNfcSupport, goToNfcSettings }
+  const scheduleDisabledNfcToast = () => {
+    scheduleInfo({
+      title: 'Please turn on NFC',
+      message: 'Please go to the settings and enable NFC',
+      interact: {
+        label: 'Settings',
+        onInteract: () => {
+          goToNfcSettings()
+        },
+      },
+    })
+  }
+
+  return { checkNfcSupport, goToNfcSettings, scheduleDisabledNfcToast }
 }
 
 export const useAusweisInteraction = () => {

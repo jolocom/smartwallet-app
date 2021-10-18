@@ -18,7 +18,7 @@ import {
   LogoContainerFAS,
 } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
-import { useAusweisContext, useAusweisInteraction } from '../hooks'
+import { useAusweisContext, useAusweisInteraction, useCheckNFC } from '../hooks'
 import {
   AusweisButtons,
   AusweisHeaderDescription,
@@ -26,11 +26,13 @@ import {
   AusweisLogo,
 } from '../styled'
 import { AusweisPasscodeMode, eIDScreens } from '../types'
+import { SWErrorCodes } from '~/errors/codes'
 
 export const AusweisRequestReview = () => {
-  const { scheduleWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
   const { providerName, requiredFields, optionalFields } = useAusweisContext()
   const { acceptRequest, cancelFlow } = useAusweisInteraction()
+  const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const redirect = useRedirect()
@@ -39,6 +41,10 @@ export const AusweisRequestReview = () => {
   useEffect(() => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
+      handleCardRequest: () => {
+        //@ts-expect-error
+        redirect(eIDScreens.AusweisScanner)
+      },
       handlePinRequest: () => {
         //@ts-expect-error
         redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
@@ -54,23 +60,18 @@ export const AusweisRequestReview = () => {
     })
   }, [])
 
-  //TODO: this should probably be handled by events
   const handleProceed = async () => {
     try {
+      await checkNfcSupport()
       await acceptRequest(selectedOptional)
     } catch (e) {
-      console.warn(e)
-      scheduleWarning({
-        title: 'Check compatibility',
-        message:
-          'Not the first time failing?\n Start compatibility diagnostics to be sure.',
-        interact: {
-          label: 'Start',
-          onInteract: () => {
-            //TODO add compatibility check
-          },
-        },
-      })
+      if (e.message === SWErrorCodes.SWNfcNotEnabled) {
+        scheduleDisabledNfcToast()
+      } else {
+        console.warn('Error: ', e)
+        scheduleErrorWarning(e)
+        cancelFlow()
+      }
     }
   }
 
