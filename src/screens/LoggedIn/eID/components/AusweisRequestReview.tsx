@@ -41,10 +41,6 @@ export const AusweisRequestReview = () => {
   useEffect(() => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
-      handleCardRequest: () => {
-        // @ts-ignore
-        redirect(eIDScreens.AusweisScanner)
-      },
       handlePinRequest: () => {
         //@ts-expect-error
         redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
@@ -117,21 +113,14 @@ export const AusweisRequestReview = () => {
               <AusweisHeaderDescription>
                 {`Please consider the details of the request sent by the ${providerName}`}
               </AusweisHeaderDescription>
-              <View
-                style={{
-                  paddingHorizontal: '20%',
-                  marginTop: 8,
-                  marginBottom: 36,
-                }}
+              <Btn
+                type={BtnTypes.septenary}
+                size={BtnSize.small}
+                onPress={handleMoreInfo}
+                customContainerStyles={{ width: 'auto', paddingHorizontal: 24 }}
               >
-                <Btn
-                  type={BtnTypes.senary}
-                  size={BtnSize.small}
-                  onPress={handleMoreInfo}
-                >
-                  More info
-                </Btn>
-              </View>
+                More now
+              </Btn>
 
               <ScreenContainer.Padding>
                 <InteractionSection title="Mandatory">
