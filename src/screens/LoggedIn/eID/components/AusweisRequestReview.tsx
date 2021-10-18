@@ -134,8 +134,13 @@ export const AusweisRequestReview = () => {
                 distance={BP({ large: 36, medium: 28, default: 16 })}
               >
                 <AusweisListSection title="Mandatory fields">
-                  {requiredFields.map((fieldName) => (
-                    <Field.Static value={fieldName} />
+                  {requiredFields.map((field, i) => (
+                    <Field.Selectable
+                      value={field}
+                      isSelected={true}
+                      key={field + i}
+                      disabled={true}
+                    />
                   ))}
                 </AusweisListSection>
 
