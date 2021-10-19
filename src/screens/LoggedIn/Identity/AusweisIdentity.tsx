@@ -1,9 +1,24 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
+import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { Colors } from '~/utils/colors'
+import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 
 export const AusweisIdentity = () => {
+  const handleCompatibilityCheck = () => {
+    console.warn('Not implemented')
+  }
+
+  const handleChangePin = () => {
+    console.warn('Not implemented')
+  }
+
+  const handleUnlockCard = () => {
+    console.warn('Not implemented')
+  }
+
   return (
     <View>
       <View style={styles.cardContainer}>
@@ -24,6 +39,30 @@ export const AusweisIdentity = () => {
           All the necessary functions that will allow you to quickly and easily
           solve frequently asked questions
         </JoloText>
+
+        <View style={styles.btnContainer}>
+          <Btn
+            type={BtnTypes.secondary}
+            customContainerStyles={styles.btn}
+            onPress={handleCompatibilityCheck}
+          >
+            Compatibility check
+          </Btn>
+          <Btn
+            type={BtnTypes.secondary}
+            customContainerStyles={styles.btn}
+            onPress={handleChangePin}
+          >
+            Change your 5-digit pincode
+          </Btn>
+          <Btn
+            type={BtnTypes.secondary}
+            customContainerStyles={styles.btn}
+            onPress={handleUnlockCard}
+          >
+            Unlock blocked card
+          </Btn>
+        </View>
       </View>
     </View>
   )
@@ -39,5 +78,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
+  },
+  btn: {
+    borderWidth: 1,
+    borderColor: Colors.borderGray20,
+  },
+  btnContainer: {
+    marginTop: BP({ default: 36, large: 84 }),
   },
 })
