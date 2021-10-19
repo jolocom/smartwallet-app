@@ -20,7 +20,7 @@ export const AusweisIdentity = () => {
   }
 
   return (
-    <View>
+    <View testID="home-ausweis-identity">
       <View style={styles.cardContainer}>
         <Image
           resizeMode="contain"
