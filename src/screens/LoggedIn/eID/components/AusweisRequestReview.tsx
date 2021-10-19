@@ -18,7 +18,12 @@ import {
   LogoContainerFAS,
 } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
-import { useAusweisContext, useAusweisInteraction, useCheckNFC } from '../hooks'
+import {
+  useAusweisContext,
+  useAusweisInteraction,
+  useCheckNFC,
+  useTranslatedAusweisFields,
+} from '../hooks'
 import {
   AusweisButtons,
   AusweisHeaderDescription,
@@ -37,6 +42,7 @@ export const AusweisRequestReview = () => {
   const { top } = useSafeArea()
   const redirect = useRedirect()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
+  const translateField = useTranslatedAusweisFields()
 
   useEffect(() => {
     aa2Module.resetHandlers()
@@ -136,7 +142,7 @@ export const AusweisRequestReview = () => {
                 <AusweisListSection title="Mandatory fields">
                   {requiredFields.map((field, i) => (
                     <Field.Selectable
-                      value={field}
+                      value={translateField(field)}
                       isSelected={true}
                       key={field + i}
                       disabled={true}
@@ -149,7 +155,7 @@ export const AusweisRequestReview = () => {
                     {optionalFields.map((field, i) => (
                       <Field.Selectable
                         key={field + i}
-                        value={field}
+                        value={translateField(field)}
                         onSelect={() => handleSelectOptional(field)}
                         isSelected={selectedOptional.includes(field)}
                       />
