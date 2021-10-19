@@ -1,15 +1,16 @@
+import { useBackHandler } from '@react-native-community/hooks'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { ScannerIcon } from '~/assets/svg'
 import Btn from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { useGoBack } from '~/hooks/navigation'
 import { useAusweisInteraction } from '../hooks'
 import { AusweisBottomSheet } from '../styled'
 
 export const AusweisScanner = () => {
-  const goBack = useGoBack()
-  const { checkIfScanned } = useAusweisInteraction()
+  const { checkIfScanned, cancelInteraction } = useAusweisInteraction()
+
+  const handleDismiss = cancelInteraction
 
   useEffect(() => {
     checkIfScanned().then(() => {
@@ -17,9 +18,10 @@ export const AusweisScanner = () => {
     })
   }, [])
 
-  const handleDismiss = () => {
-    goBack()
-  }
+  useBackHandler(() => {
+    handleDismiss()
+    return true
+  })
 
   return (
     <AusweisBottomSheet onDismiss={handleDismiss}>

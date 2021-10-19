@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
@@ -32,7 +32,7 @@ import { AusweisPasscodeMode, eIDScreens } from '../types'
 export const AusweisRequestReview = () => {
   const { scheduleWarning } = useToasts()
   const { providerName, requiredFields, optionalFields } = useAusweisContext()
-  const { acceptRequest, checkIfScanned, cancelFlow } = useAusweisInteraction()
+  const { acceptRequest, cancelInteraction } = useAusweisInteraction()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const redirect = useRedirect()
@@ -42,8 +42,15 @@ export const AusweisRequestReview = () => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        // @ts-ignore
-        redirect(eIDScreens.AusweisScanner)
+        /**
+         * NOTE: on ios NFC popup is being triggered
+         * from the AusweisApp2, but in android we should
+         * explicitly show it
+         */
+        if (Platform.OS === 'android') {
+          // @ts-ignore
+          redirect(eIDScreens.AusweisScanner)
+        }
       },
       handlePinRequest: () => {
         //@ts-expect-error
@@ -56,6 +63,14 @@ export const AusweisRequestReview = () => {
       handleCanRequest: () => {
         //@ts-expect-error
         redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
+      },
+      handleAuthResult: () => {
+        /**
+         * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
+         */
+        if (Platform.OS === 'ios') {
+          cancelInteraction()
+        }
       },
     })
   }, [])
@@ -80,9 +95,11 @@ export const AusweisRequestReview = () => {
     }
   }
 
-  const handleIgnore = () => {
-    cancelFlow()
-  }
+  /**
+   * NOTE: cancelling workflow is happening implicitly
+   * in AusweissInteraction when it unmounts
+   */
+  const handleIgnore = cancelInteraction
 
   const handleMoreInfo = () => {
     // @ts-expect-error

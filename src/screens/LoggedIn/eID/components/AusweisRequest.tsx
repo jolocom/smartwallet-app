@@ -20,8 +20,8 @@ export const AusweisRequest = () => {
   const { checkNfcSupport, goToNfcSettings } = useCheckNFC()
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
   const { providerUrl, providerName } = useAusweisContext()
-  const { cancelFlow } = useAusweisInteraction()
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { cancelInteraction } = useAusweisInteraction()
 
   const handleProceed = async () => {
     checkNfcSupport()
@@ -52,9 +52,11 @@ export const AusweisRequest = () => {
       })
   }
 
-  const handleIgnore = () => {
-    cancelFlow()
-  }
+  /**
+   * NOTE: cancelling workflow is happening implicitly
+   * in AusweissInteraction when it unmounts
+   */
+  const handleIgnore = cancelInteraction
 
   return (
     <AusweisBottomSheet onDismiss={handleIgnore}>

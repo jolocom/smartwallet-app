@@ -48,7 +48,8 @@ export const AusweisPasscode = () => {
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
   const { scheduleInfo } = useToasts()
-  const { passcodeCommands, cancelFlow, finishFlow } = useAusweisInteraction()
+  const { passcodeCommands, cancelInteraction, finishFlow } =
+    useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [waitingForMsg, setWaitingForMsg] = useState(false)
@@ -79,7 +80,7 @@ export const AusweisPasscode = () => {
             title: 'Oops!',
             message: "Seems like you're locked out of your card",
           })
-          cancelFlow()
+          cancelInteraction()
         }
       },
       handleCanRequest: (card) => {
