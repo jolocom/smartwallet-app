@@ -1,138 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Platform } from 'react-native'
-import { StackActions } from '@react-navigation/routers'
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
+import { eIDScreens } from '../types'
+import { useRedirect } from '~/hooks/navigation'
+import {
+  useAusweisCompatibilityCheck,
+  useAusweisContext,
+  useAusweisInteraction,
+} from '../hooks'
+import { JoloTextSizes } from '~/utils/fonts'
+import { PurpleTickSuccess } from '~/assets/svg'
+import { AusweisButtons } from '../styled'
+import { debugView } from '~/utils/dev'
+import BtnGroup from '~/components/BtnGroup'
+import { CheckboxOption } from '~/components/CheckboxOption'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { dismissLoader, setLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
-import { getLoaderState } from '~/modules/loader/selectors'
-import { AA2Messages, AusweisPasscodeMode, eIDScreens } from '../types'
-import { aa2EmitterTemp } from '../events'
-import { usePop, useRedirect } from '~/hooks/navigation'
-import { useFailed, useSuccess } from '~/hooks/loader'
-import { useAusweisInteraction } from '../hooks'
-import { aa2Module } from 'react-native-aa2-sdk'
-import { useFocusEffect } from '@react-navigation/core'
+const Header: React.FC = ({ children }) => (
+  <JoloText kind={JoloTextKind.title} customStyles={{ marginBottom: 12 }}>
+    {children}
+  </JoloText>
+)
 
-type ReaderMsg = {
-  msg: 'READER'
-  name: 'NFC'
-  attached: boolean // Indicates whether a card reader is connected or disconnected.
-  keypad: false
-  card: {
-    inoperative: boolean
-    deactivated: boolean
-    retryCounter: number
-  }
-}
+const Description: React.FC = ({ children }) => (
+  <JoloText color={Colors.osloGray} weight={JoloTextWeight.medium}>
+    {children}
+  </JoloText>
+)
 
-/**
- * TODO:
- * - check "attached" prop permutations
- */
-const READER_BASE = {
-  msg: 'READER',
-  name: 'NFC',
-  attached: true,
-  keypad: false,
-}
-
-const LOCKED_CARD = {
-  ...READER_BASE,
-  card: {
-    inoperative: true,
-    deactivated: false,
-    retryCounter: 0,
-  },
-}
-
-const DEACTIVATED_CARD = {
-  ...READER_BASE,
-  card: {
-    inoperative: false,
-    deactivated: true, // True if eID functionality is deactivated, otherwise false
-    retryCounter: 3,
-  },
-}
-
-const ACTIVE_CARD = {
-  ...READER_BASE,
-  card: {
-    inoperative: false,
-    deactivated: false,
-    retryCounter: 3,
-  },
-}
-
-enum CardStatus {
-  inoperative = 'inoperative',
-  deactivated = 'deactivated',
-  ready = 'ready',
-}
-
-/**
- * 1. Send GET_READER cmd to receive READER msg to check for "deactivated"
- * field that checks if eID functionality was implemented {'\n'}
- * handleCheckCompatibility:
- * 1. ios/android show popup to insert a card
- * once the card is inserted
- * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
- */
 export const CompatibilityCheck = () => {
-  const [cardStatus, setCardStatus] = useState<CardStatus | null>(null)
   const redirect = useRedirect()
-  const pop = usePop()
-  const showSuccess = useSuccess()
-  const showFailed = useFailed()
+  const { providerName } = useAusweisContext()
+  const { cancelFlow } = useAusweisInteraction()
+  const { startCheck, compatibility } = useAusweisCompatibilityCheck()
 
-  /**
-   * handler for READER msg
-   */
-  useEffect(() => {
-    aa2Module.setHandlers({
-      handleCardRequest: () => {
-        // @ts-ignore
-        redirect(eIDScreens.AusweisScanner)
-      },
-      handleCardInfo: (info) => {
-        if (info && !cardStatus) {
-          const { inoperative, deactivated } = info
-          const resultStatus = deactivated || !inoperative
-          if (deactivated) {
-            setCardStatus(CardStatus.deactivated)
-          } else if (inoperative) {
-            setCardStatus(CardStatus.inoperative)
-          } else if (resultStatus) {
-            setCardStatus(CardStatus.ready)
-          }
-        }
-      },
-    })
-  }, [])
-
-  /**
-   * show loader when card status is known
-   */
-  useEffect(() => {
-    if (cardStatus !== null) {
-      Platform.OS === 'android' && pop(1)
-      if (cardStatus === CardStatus.ready) {
-        showSuccess()
-      } else {
-        showFailed()
-      }
-    }
-  }, [cardStatus])
-
-  const handleCheckCompatibility = async () => {
-    // @ts-expect-error
-    redirect(eIDScreens.AusweisScanner)
+  const handleCheckCompatibility = () => {
+    startCheck()
   }
+
   const handleShowPinInstructions = () => {
     // @ts-expect-error
     redirect(eIDScreens.PasscodeDetails)
@@ -143,49 +51,106 @@ export const CompatibilityCheck = () => {
     redirect(eIDScreens.RequestDetails)
   }
 
+  const handleIgnore = () => {
+    cancelFlow()
+  }
+
   return (
-    <ScreenContainer>
-      <JoloText kind={JoloTextKind.title}>
-        Before you proceed with digital interaction your device must meet
-        certain technical requirements
-      </JoloText>
-      <View style={styles.optionContainer}>
-        <JoloText color={Colors.success}>1</JoloText>
-        <JoloText kind={JoloTextKind.title}>
-          Check if your ID card is ready to be used
+    <ScreenContainer
+      backgroundColor={Colors.mainDark}
+      customStyles={{ justifyContent: 'flex-start' }}
+    >
+      <View>
+        <JoloText
+          kind={JoloTextKind.title}
+          color={Colors.error}
+          customStyles={{ marginTop: 36, marginBottom: 40 }}
+        >
+          Before you proceed your device must meet certain technical
+          requirements
         </JoloText>
-
-        {cardStatus ? (
-          <JoloText>{cardStatus}</JoloText>
-        ) : (
-          <Btn type={BtnTypes.quinary} onPress={handleCheckCompatibility}>
-            Check compatibility
-          </Btn>
-        )}
+        <View
+          style={{ width: '100%', paddingHorizontal: 24, marginBottom: 60 }}
+        >
+          <Header>Compatibility Check</Header>
+          <Description>
+            To complete your hotel check-in {providerName} is requesting
+            specific set of data.
+          </Description>
+          <View style={{ marginTop: 24 }}>
+            {compatibility &&
+            !compatibility.deactivated &&
+            !compatibility.inoperative ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <View style={{ width: 20, height: 20, marginRight: 9 }}>
+                  <PurpleTickSuccess />
+                </View>
+                <JoloText
+                  color={Colors.success}
+                  kind={JoloTextKind.title}
+                  size={JoloTextSizes.mini}
+                >
+                  Successfully passed
+                </JoloText>
+              </View>
+            ) : (
+              <Btn
+                onPress={handleCheckCompatibility}
+                type={BtnTypes.quaternary}
+              >
+                {compatibility?.deactivated || compatibility?.inoperative
+                  ? 'Try again'
+                  : 'Start'}
+              </Btn>
+            )}
+          </View>
+        </View>
+        <View style={{ width: '100%', paddingHorizontal: 24 }}>
+          <Header>6-digit pin status</Header>
+          <View>
+            <Description>
+              To complete your hotel check-in {providerName} is requesting
+              specific set of data.{' '}
+              <JoloText
+                onPress={handleShowPinInstructions}
+                color={Colors.activity}
+              >
+                ...more info
+              </JoloText>
+            </Description>
+          </View>
+        </View>
       </View>
-
-      <View style={styles.optionContainer}>
-        <JoloText color={Colors.success}>2</JoloText>
-        <JoloText kind={JoloTextKind.title}>
-          Make sure that your 6-digit PIN was activated
-        </JoloText>
-
-        <Btn type={BtnTypes.quinary} onPress={handleShowPinInstructions}>
-          More info
-        </Btn>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}
+      >
+        <View style={{ paddingHorizontal: 20 }}>
+          <CheckboxOption
+            description={
+              'Skip this step when performing similar interaction again'
+            }
+            onPress={() => {}}
+          />
+        </View>
+        <BtnGroup customStyles={{ marginTop: 32 }}>
+          <AusweisButtons
+            submitLabel="Done"
+            cancelLabel="Ignore"
+            onSubmit={handleSubmit}
+            onCancel={handleIgnore}
+          />
+        </BtnGroup>
       </View>
-
-      <Btn type={BtnTypes.tertiary} onPress={handleSubmit}>
-        All done
-      </Btn>
     </ScreenContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  optionContainer: {
-    marginVertical: 20,
-    alignItems: 'center',
-    width: '100%',
-  },
-})
