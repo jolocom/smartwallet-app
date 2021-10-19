@@ -72,12 +72,14 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: '100%',
     aspectRatio: 1.55,
+    marginBottom: 8,
   },
   card: {
     flex: 1,
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
+    transform: [{ scale: 1.1 }],
   },
   btn: {
     borderWidth: 1,
