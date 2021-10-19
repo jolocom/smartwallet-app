@@ -1,15 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import IdentityCredentials from './IdentityCredentials'
-import IdentityTabs from './tabs'
-import { IdentityTabIds } from './types'
-import useTranslation from '~/hooks/useTranslation'
 import Tabs from '~/components/Tabs/Tabs'
 import TabsContainer from '~/components/Tabs/Container'
+import { AusweisIdentity } from './AusweisIdentity'
+import { ScrollView } from 'react-native'
 
 const Identity = () => {
-  const { t } = useTranslation()
   const tabs = [
     { id: 'identity', value: 'Your Identity' },
     { id: 'credentials', value: 'Credentials' },
@@ -33,12 +31,20 @@ const Identity = () => {
         </ScreenContainer.Padding>
         <Tabs.Panel>
           {() => (
-            <>
-              <Tabs.Page id={'identity'}></Tabs.Page>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              overScrollMode={'never'}
+              contentContainerStyle={{
+                paddingBottom: '20%',
+              }}
+            >
+              <Tabs.Page id={'identity'}>
+                <AusweisIdentity />
+              </Tabs.Page>
               <Tabs.Page id={'credentials'}>
                 <IdentityCredentials />
               </Tabs.Page>
-            </>
+            </ScrollView>
           )}
         </Tabs.Panel>
       </Tabs>
