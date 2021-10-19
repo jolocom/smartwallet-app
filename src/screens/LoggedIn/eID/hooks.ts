@@ -7,9 +7,10 @@ import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
-import { IAusweisRequest } from './types'
+import { AusweisFields, IAusweisRequest } from './types'
 
 import { LOG } from '~/utils/dev'
+import useTranslation from '~/hooks/useTranslation'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -151,5 +152,40 @@ export const useAusweisInteraction = () => {
     checkIfScanned,
     passcodeCommands,
     finishFlow,
+  }
+}
+
+export const useTranslatedAusweisFields = () => {
+  const { t } = useTranslation()
+
+  const fieldsMapping: { [x in AusweisFields]: string } = {
+    [AusweisFields.Address]: t('ausweis.address'),
+    [AusweisFields.BirthName]: t('ausweis.birthName'),
+    [AusweisFields.FamilyName]: t('ausweis.familyName'),
+    [AusweisFields.GivenNames]: t('ausweis.givenNames'),
+    [AusweisFields.PlaceOfBirth]: t('ausweis.placeOfBirth'),
+    [AusweisFields.DateOfBirth]: t('ausweis.dateOfBirth'),
+    [AusweisFields.DoctoralDegree]: t('ausweis.doctoralDegree'),
+    [AusweisFields.ArtisticName]: t('ausweis.artisticName'),
+    [AusweisFields.Pseudonym]: t('ausweis.pseudonym'),
+    [AusweisFields.ValidUntil]: t('ausweis.validUntil'),
+    [AusweisFields.Nationality]: t('ausweis.nationality'),
+    [AusweisFields.IssuingCountry]: t('ausweis.issuingCountry'),
+    [AusweisFields.DocumentType]: t('ausweis.documentType'),
+    [AusweisFields.ResidencePermitI]: t('ausweis.residencePermitI'),
+    [AusweisFields.ResidencePermitII]: t('ausweis.residencePermitII'),
+    [AusweisFields.CommunityID]: t('ausweis.communityID'),
+    [AusweisFields.AddressVerification]: t('ausweis.addressVerification'),
+    [AusweisFields.AgeVerification]: t('ausweis.ageVerification'),
+    [AusweisFields.WriteAddress]: t('ausweis.writeAddress'),
+    [AusweisFields.WriteCommunityID]: t('ausweis.writeCommunityID'),
+    [AusweisFields.WriteResidencePermitI]: t('ausweis.writeResidencePermitI'),
+    [AusweisFields.WriteResidencePermitII]: t('ausweis.writeResidencePermitII'),
+    [AusweisFields.CanAllowed]: t('ausweis.canAllowed'),
+    [AusweisFields.PinManagement]: t('ausweis.pinManagement'),
+  }
+
+  return (field: AusweisFields) => {
+    return fieldsMapping[field]
   }
 }
