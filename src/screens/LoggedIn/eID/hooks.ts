@@ -1,14 +1,23 @@
+import { useBackHandler } from '@react-native-community/hooks'
+import { useBackButton } from '@react-navigation/native'
+import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
 import { useDisableLock } from '~/hooks/generic'
-import { useRedirect, usePopStack } from '~/hooks/navigation'
+import { useFailed, useSuccess } from '~/hooks/loader'
+import { useRedirect, usePopStack, usePop, useGoBack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
-import { AusweisPasscodeMode, eIDScreens, IAusweisRequest } from './types'
+import {
+  AusweisCompatibilityResult,
+  AusweisPasscodeMode,
+  eIDScreens,
+  IAusweisRequest,
+} from './types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -136,4 +145,44 @@ export const useAusweisInteraction = () => {
     passcodeCommands,
     finishFlow,
   }
+}
+
+export const useAusweisCompatibilityCheck = () => {
+  const showSuccess = useSuccess()
+  const showFailed = useFailed()
+  const redirect = useRedirect()
+  const pop = usePop()
+  const [compatibility, setCompatibility] =
+    useState<AusweisCompatibilityResult>()
+
+  const startCheck = () => {
+    // @ts-expect-error
+    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner })
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers({
+      handleCardInfo: (info) => {
+        console.log('READER')
+        if (info && !compatibility) {
+          const { inoperative, deactivated } = info
+          setCompatibility({ inoperative, deactivated })
+
+          pop(1)
+        }
+      },
+    })
+  }
+
+  useEffect(() => {
+    if (compatibility) {
+      aa2Module.resetHandlers()
+      if (compatibility.deactivated || compatibility.inoperative) {
+        showFailed()
+      } else {
+        showSuccess()
+      }
+      setCompatibility(undefined)
+    }
+  }, [JSON.stringify(compatibility)])
+
+  return { startCheck, compatibility }
 }
