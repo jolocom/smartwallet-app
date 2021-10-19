@@ -5,10 +5,13 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useAusweisCompatibilityCheck } from '~/screens/LoggedIn/eID/hooks'
 
 export const AusweisIdentity = () => {
+  const { startCheck } = useAusweisCompatibilityCheck()
+
   const handleCompatibilityCheck = () => {
-    console.warn('Not implemented')
+    startCheck()
   }
 
   const handleChangePin = () => {
