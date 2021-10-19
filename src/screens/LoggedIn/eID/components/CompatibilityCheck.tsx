@@ -15,12 +15,15 @@ import {
 import { JoloTextSizes } from '~/utils/fonts'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { AusweisButtons } from '../styled'
-import { debugView } from '~/utils/dev'
+import BP from '~/utils/breakpoints'
 import BtnGroup from '~/components/BtnGroup'
 import { CheckboxOption } from '~/components/CheckboxOption'
 
 const Header: React.FC = ({ children }) => (
-  <JoloText kind={JoloTextKind.title} customStyles={{ marginBottom: 12 }}>
+  <JoloText
+    kind={JoloTextKind.title}
+    customStyles={{ marginBottom: BP({ large: 12, default: 8 }) }}
+  >
     {children}
   </JoloText>
 )
@@ -70,14 +73,18 @@ export const CompatibilityCheck = () => {
           requirements
         </JoloText>
         <View
-          style={{ width: '100%', paddingHorizontal: 24, marginBottom: 60 }}
+          style={{
+            width: '100%',
+            paddingHorizontal: 24,
+            marginBottom: BP({ large: 60, default: 30 }),
+          }}
         >
           <Header>Compatibility Check</Header>
           <Description>
             To complete your hotel check-in {providerName} is requesting
             specific set of data.
           </Description>
-          <View style={{ marginTop: 24 }}>
+          <View style={{ marginTop: BP({ large: 24, default: 16 }) }}>
             {compatibility &&
             !compatibility.deactivated &&
             !compatibility.inoperative ? (
