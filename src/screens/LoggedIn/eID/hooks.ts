@@ -161,7 +161,6 @@ export const useAusweisCompatibilityCheck = () => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
-        console.log('READER')
         if (info && !compatibility) {
           const { inoperative, deactivated } = info
           setCompatibility({ inoperative, deactivated })
