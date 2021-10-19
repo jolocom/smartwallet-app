@@ -179,7 +179,6 @@ export const useAusweisCompatibilityCheck = () => {
       } else {
         showSuccess()
       }
-      setCompatibility(undefined)
     }
   }, [JSON.stringify(compatibility)])
 
