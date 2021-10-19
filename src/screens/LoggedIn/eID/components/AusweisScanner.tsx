@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
+import { aa2Module } from 'react-native-aa2-sdk'
 import { ScannerIcon } from '~/assets/svg'
 import Btn from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -15,6 +16,10 @@ export const AusweisScanner = () => {
     checkIfScanned().then(() => {
       handleDismiss()
     })
+
+    return () => {
+      aa2Module.resetHandlers()
+    }
   }, [])
 
   const handleDismiss = () => {
