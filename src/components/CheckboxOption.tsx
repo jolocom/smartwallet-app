@@ -4,6 +4,7 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText from './JoloText'
+import BP from '~/utils/breakpoints'
 
 interface Props {
   onPress: (selected: boolean) => void
@@ -41,8 +42,8 @@ export const CheckboxOption: React.FC<Props> = ({ onPress, description }) => {
 const styles = StyleSheet.create({
   container: {
     borderRadius: 9,
-    paddingTop: 20,
-    paddingBottom: 12,
+    paddingTop: BP({ large: 20, default: 16 }),
+    paddingBottom: BP({ large: 18, default: 14 }),
     paddingHorizontal: 24,
     backgroundColor: Colors.grey2,
     flexDirection: 'row',
