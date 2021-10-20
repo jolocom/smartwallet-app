@@ -6,6 +6,7 @@ export enum eIDScreens {
   PasscodeDetails = 'PasscodeDetails',
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
+  PukLock = 'PukLock',
 }
 
 export enum AA2Messages {

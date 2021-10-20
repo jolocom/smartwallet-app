@@ -51,7 +51,7 @@ export const AusweisRequestReview = () => {
       },
       handlePukRequest: () => {
         //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
+        redirect(eIDScreens.PukLock)
       },
       handleCanRequest: () => {
         //@ts-expect-error
