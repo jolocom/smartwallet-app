@@ -10,7 +10,10 @@ import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import { usePopupMenu } from '~/hooks/popupMenu'
-import { useAusweisInteraction } from '../../eID/hooks'
+import {
+  useAusweisInteraction,
+  useAusweisSkipCompatibility,
+} from '../../eID/hooks'
 import { useLoader } from '~/hooks/loader'
 
 const TC_TOKEN =
@@ -22,6 +25,7 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
+  const { shouldSkip, setShouldSkip } = useAusweisSkipCompatibility()
 
   const { processAusweisToken } = useAusweisInteraction()
   const loader = useLoader()
@@ -34,6 +38,10 @@ const DevelopmentSection = () => {
       title: 'ToggleSwitch',
       message: `I am ${toggled ? 'toggled' : 'not toggled'}!`,
     })
+  }
+
+  const handleSkipCompatibility = (toggled: boolean) => {
+    setShouldSkip(toggled)
   }
 
   return (
@@ -60,6 +68,21 @@ const DevelopmentSection = () => {
       <Section>
         <Section.Title>[DEV] Error handling</Section.Title>
         <Section.Block>
+          <Option>
+            <Option.Title title="Skip Ausweis compatibility" />
+            <View style={{ position: 'absolute', right: 16 }}>
+              <ToggleSwitch
+                on={shouldSkip}
+                onToggle={handleSkipCompatibility}
+              />
+            </View>
+          </Option>
+        </Section.Block>
+      </Section>
+
+      <Section>
+        <Section.Title>[DEV] Stored settings</Section.Title>
+        <Section.Block>
           <Option
             onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
           >
@@ -67,7 +90,6 @@ const DevelopmentSection = () => {
           </Option>
         </Section.Block>
       </Section>
-
       <Section>
         <Section.Title>[DEV] UI component</Section.Title>
         <Section.Block>
