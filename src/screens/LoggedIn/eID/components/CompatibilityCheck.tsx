@@ -30,9 +30,7 @@ const Header: React.FC = ({ children }) => (
 )
 
 const Description: React.FC = ({ children }) => (
-  <JoloText color={Colors.osloGray} weight={JoloTextWeight.medium}>
-    {children}
-  </JoloText>
+  <JoloText color={Colors.osloGray}>{children}</JoloText>
 )
 
 export const CompatibilityCheck = () => {
@@ -81,8 +79,7 @@ export const CompatibilityCheck = () => {
         <View style={styles.contentContainer}>
           <Header>Compatibility Check</Header>
           <Description>
-            To complete your hotel check-in {providerName} is requesting
-            specific set of data.
+            Make sure tour card is ready for use in one touch
           </Description>
           <View style={{ marginTop: BP({ large: 24, default: 16 }) }}>
             {compatibility &&
@@ -116,8 +113,8 @@ export const CompatibilityCheck = () => {
           <Header>6-digit pin status</Header>
           <View>
             <Description>
-              To complete your hotel check-in {providerName} is requesting
-              specific set of data.{' '}
+              Did you previously activate the card’s eID functionality? If not,
+              read about it here{' '}
               <JoloText
                 onPress={handleShowPinInstructions}
                 color={Colors.activity}
