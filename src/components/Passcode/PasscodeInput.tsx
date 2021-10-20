@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     maxWidth: BP({ default: 65, xsmall: 56 }),
+    marginHorizontal: 2,
     flex: 1,
     aspectRatio: CELL_ASPECT_RATIO,
     borderRadius: 11,
