@@ -25,7 +25,7 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
-  const { shouldSkip, setShouldSkip } = useAusweisSkipCompatibility()
+  const { setShouldSkip } = useAusweisSkipCompatibility()
 
   const { processAusweisToken } = useAusweisInteraction()
   const loader = useLoader()
