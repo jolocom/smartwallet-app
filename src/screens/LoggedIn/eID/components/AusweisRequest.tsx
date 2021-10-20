@@ -10,23 +10,36 @@ import { LogoContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/c
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { eIDScreens } from '../types'
-import { useCheckNFC, useAusweisContext, useAusweisInteraction } from '../hooks'
+import {
+  useCheckNFC,
+  useAusweisContext,
+  useAusweisInteraction,
+  useAusweisSkipCompatibility,
+} from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
 import { SWErrorCodes } from '~/errors/codes'
+import { useRedirect } from '~/hooks/navigation'
 
 export const AusweisRequest = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation()
+  const redirect = useRedirect()
   const { checkNfcSupport, goToNfcSettings } = useCheckNFC()
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
   const { providerUrl, providerName, resetRequest } = useAusweisContext()
   const { cancelFlow } = useAusweisInteraction()
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
 
   const handleProceed = async () => {
     checkNfcSupport()
-      .then(() => {
-        navigation.navigate(eIDScreens.ReadinessCheck)
+      .then(async () => {
+        if (shouldSkipCompatibility) {
+          // @ts-ignore
+          redirect(eIDScreens.RequestDetails)
+        } else {
+          // @ts-ignore
+          redirect(eIDScreens.ReadinessCheck)
+        }
       })
       .catch((e) => {
         if (e.message === SWErrorCodes.SWNfcNotSupported) {
@@ -47,6 +60,7 @@ export const AusweisRequest = () => {
             },
           })
         } else {
+          console.log(e)
           scheduleErrorWarning(e)
         }
       })

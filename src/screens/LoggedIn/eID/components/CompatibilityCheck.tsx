@@ -11,6 +11,7 @@ import {
   useAusweisCompatibilityCheck,
   useAusweisContext,
   useAusweisInteraction,
+  useAusweisSkipCompatibility,
 } from '../hooks'
 import { JoloTextSizes } from '~/utils/fonts'
 import { PurpleTickSuccess } from '~/assets/svg'
@@ -39,6 +40,7 @@ export const CompatibilityCheck = () => {
   const { providerName } = useAusweisContext()
   const { cancelFlow } = useAusweisInteraction()
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
+  const { setShouldSkip } = useAusweisSkipCompatibility()
 
   const handleCheckCompatibility = () => {
     startCheck()
@@ -56,6 +58,10 @@ export const CompatibilityCheck = () => {
 
   const handleIgnore = () => {
     cancelFlow()
+  }
+
+  const handleSkip = (selected: boolean) => {
+    setShouldSkip(selected)
   }
 
   return (
@@ -128,7 +134,7 @@ export const CompatibilityCheck = () => {
             description={
               'Skip this step when performing similar interaction again'
             }
-            onPress={() => {}}
+            onPress={handleSkip}
           />
         </View>
         <BtnGroup customStyles={{ marginTop: 32 }}>
