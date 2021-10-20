@@ -17,7 +17,6 @@ import { usePop, useRedirect } from '~/hooks/navigation'
 import { useFailed, useSuccess } from '~/hooks/loader'
 import { useAusweisInteraction } from '../hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { useFocusEffect } from '@react-navigation/core'
 
 type ReaderMsg = {
   msg: 'READER'

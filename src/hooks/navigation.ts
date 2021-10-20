@@ -7,7 +7,7 @@ import {
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
-import { useCallback, useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
 
 interface NestedSceenI {
   screen?: ScreenNames
@@ -36,9 +36,16 @@ export const usePopStack = () => {
   const stackSize = useNavigationState((state) => state.index)
 
   return () => {
+    /**
+     * TODO: this is not a reliable way to pop eid stack;
+     * because on different eID screens the state is different:
+     * i.e. on Interaction Sheet the state contains MainTabs and eID as
+     * routes, thus poping to the top (to the MainTabs) and then
+     * pop (at this point there is only one route MainTabs) results in an error
+     * becuase popu clears the route state
+     */
     //NOTE: pops to the first screen of the stack, if not already there
     if (stackSize !== 0) navigation.dispatch(StackActions.popToTop())
-    //NOTE: pops out of the stack
     navigation.dispatch(StackActions.pop())
   }
 }

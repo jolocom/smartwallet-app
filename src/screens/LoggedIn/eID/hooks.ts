@@ -91,11 +91,8 @@ export const useAusweisInteraction = () => {
     aa2Module.disconnectAa2Sdk().catch(scheduleErrorWarning)
   }
 
-  const cancelFlow = () => {
-    aa2Module.cancelFlow().catch(scheduleErrorWarning)
-  }
-
   const cancelInteraction = () => {
+    aa2Module.cancelFlow().catch(scheduleErrorWarning)
     popStack()
   }
 
@@ -129,7 +126,6 @@ export const useAusweisInteraction = () => {
     initAusweis,
     disconnectAusweis,
     processAusweisToken,
-    cancelFlow,
     cancelInteraction,
     acceptRequest,
     checkIfScanned,

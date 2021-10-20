@@ -10,7 +10,7 @@ import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
 import { useDisableLock } from '~/hooks/generic'
-import { useRedirect } from '~/hooks/navigation'
+import { usePopStack, useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import InteractionSection from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionSection'
@@ -37,6 +37,7 @@ export const AusweisRequestReview = () => {
   const { top } = useSafeArea()
   const redirect = useRedirect()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
+  const popStack = usePopStack()
 
   useEffect(() => {
     aa2Module.resetHandlers()
@@ -69,7 +70,12 @@ export const AusweisRequestReview = () => {
          * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
          */
         if (Platform.OS === 'ios') {
-          cancelInteraction()
+          /**
+           * NOTE: CANCEL should not be sent here;
+           * because the workflow by this time is
+           * aborted
+           */
+          popStack()
         }
       },
     })

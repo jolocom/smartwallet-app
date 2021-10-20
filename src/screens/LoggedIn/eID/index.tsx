@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { RouteProp, useRoute } from '@react-navigation/core'
 
@@ -21,6 +21,7 @@ import {
   AusweisProviderDetails,
   AusweisScanner,
 } from './components'
+import { BackHandler } from 'react-native'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -37,17 +38,21 @@ const AusweisInteraction = () => {
   const request =
     useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
   const { setRequest } = useAusweisContext()
-  const { cancelFlow } = useAusweisInteraction()
+  const { cancelInteraction } = useAusweisInteraction()
 
   useEffect(() => {
     setRequest(request)
+  }, [])
 
-    /**
-     * NOTE: Resetting the requested data and cancelling workflow
-     * to be able to initialize it again
-     */
+  const cancel = useCallback(() => {
+    cancelInteraction()
+    return undefined
+  }, [])
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', cancel)
     return () => {
-      cancelFlow()
+      BackHandler.removeEventListener('hardwareBackPress', cancel)
     }
   }, [])
 

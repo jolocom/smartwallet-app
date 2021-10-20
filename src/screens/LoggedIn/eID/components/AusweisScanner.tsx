@@ -1,4 +1,3 @@
-import { useBackHandler } from '@react-native-community/hooks'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { ScannerIcon } from '~/assets/svg'
@@ -17,11 +16,6 @@ export const AusweisScanner = () => {
       handleDismiss()
     })
   }, [])
-
-  useBackHandler(() => {
-    handleDismiss()
-    return true
-  })
 
   return (
     <AusweisBottomSheet onDismiss={handleDismiss}>
