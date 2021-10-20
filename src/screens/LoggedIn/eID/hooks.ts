@@ -1,20 +1,15 @@
-import { useBackHandler } from '@react-native-community/hooks'
-import { useBackButton } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
-import { useDisableLock } from '~/hooks/generic'
-import { useFailed, useSuccess } from '~/hooks/loader'
-import { useRedirect, usePopStack, usePop, useGoBack } from '~/hooks/navigation'
+import { useRedirect, usePopStack, usePop } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
 import {
   IAusweisCompatibilityResult,
-  AusweisPasscodeMode,
   eIDScreens,
   IAusweisRequest,
 } from './types'
@@ -46,7 +41,6 @@ export const useCheckNFC = () => {
 
 export const useAusweisInteraction = () => {
   const { scheduleInfo, scheduleErrorWarning } = useToasts()
-  const disableLock = useDisableLock()
   const redirect = useRedirect()
   const popStack = usePopStack()
 
