@@ -40,8 +40,12 @@ const DevelopmentSection = () => {
     })
   }
 
-  const handleSkipCompatibility = (toggled: boolean) => {
-    setShouldSkip(toggled)
+  const handleSkipCompatibility = () => {
+    scheduleInfo({
+      title: 'Success',
+      message: 'The Ausweis Compatibility Check flag was reset',
+    })
+    setShouldSkip(false)
   }
 
   return (
@@ -68,14 +72,8 @@ const DevelopmentSection = () => {
       <Section>
         <Section.Title>[DEV] Error handling</Section.Title>
         <Section.Block>
-          <Option>
-            <Option.Title title="Skip Ausweis compatibility" />
-            <View style={{ position: 'absolute', right: 16 }}>
-              <ToggleSwitch
-                on={shouldSkip}
-                onToggle={handleSkipCompatibility}
-              />
-            </View>
+          <Option onPress={handleSkipCompatibility}>
+            <Option.Title title="Reset Ausweis compatibility flag" />
           </Option>
         </Section.Block>
       </Section>
