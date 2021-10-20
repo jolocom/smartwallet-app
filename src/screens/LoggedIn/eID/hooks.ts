@@ -13,7 +13,7 @@ import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
 import {
-  AusweisCompatibilityResult,
+  IAusweisCompatibilityResult,
   AusweisPasscodeMode,
   eIDScreens,
   IAusweisRequest,
@@ -148,20 +148,19 @@ export const useAusweisInteraction = () => {
 }
 
 export const useAusweisCompatibilityCheck = () => {
-  const showSuccess = useSuccess()
-  const showFailed = useFailed()
   const redirect = useRedirect()
   const pop = usePop()
   const [compatibility, setCompatibility] =
-    useState<AusweisCompatibilityResult>()
+    useState<IAusweisCompatibilityResult>()
 
   const startCheck = () => {
+    setCompatibility(undefined)
     // @ts-expect-error
     redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner })
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
-        if (info && !compatibility) {
+        if (info) {
           const { inoperative, deactivated } = info
           setCompatibility({ inoperative, deactivated })
 
@@ -174,11 +173,11 @@ export const useAusweisCompatibilityCheck = () => {
   useEffect(() => {
     if (compatibility) {
       aa2Module.resetHandlers()
-      if (compatibility.deactivated || compatibility.inoperative) {
-        showFailed()
-      } else {
-        showSuccess()
-      }
+      redirect(ScreenNames.eId, {
+        // @ts-expect-error
+        screen: eIDScreens.CompatibilityResult,
+        params: compatibility,
+      })
     }
   }, [JSON.stringify(compatibility)])
 
