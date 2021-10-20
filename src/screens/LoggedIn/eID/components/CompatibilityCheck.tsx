@@ -67,18 +67,12 @@ export const CompatibilityCheck = () => {
         <JoloText
           kind={JoloTextKind.title}
           color={Colors.error}
-          customStyles={{ marginTop: 36, marginBottom: 40 }}
+          customStyles={styles.header}
         >
           Before you proceed your device must meet certain technical
           requirements
         </JoloText>
-        <View
-          style={{
-            width: '100%',
-            paddingHorizontal: 24,
-            marginBottom: BP({ large: 60, default: 30 }),
-          }}
-        >
+        <View style={styles.contentContainer}>
           <Header>Compatibility Check</Header>
           <Description>
             To complete your hotel check-in {providerName} is requesting
@@ -88,14 +82,8 @@ export const CompatibilityCheck = () => {
             {compatibility &&
             !compatibility.deactivated &&
             !compatibility.inoperative ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <View style={{ width: 20, height: 20, marginRight: 9 }}>
+              <View style={styles.statusContainer}>
+                <View style={styles.tickContainer}>
                   <PurpleTickSuccess />
                 </View>
                 <JoloText
@@ -118,7 +106,7 @@ export const CompatibilityCheck = () => {
             )}
           </View>
         </View>
-        <View style={{ width: '100%', paddingHorizontal: 24 }}>
+        <View style={styles.pinContainer}>
           <Header>6-digit pin status</Header>
           <View>
             <Description>
@@ -134,13 +122,7 @@ export const CompatibilityCheck = () => {
           </View>
         </View>
       </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.bottomContainer}>
         <View style={{ paddingHorizontal: 20 }}>
           <CheckboxOption
             description={
@@ -161,3 +143,34 @@ export const CompatibilityCheck = () => {
     </ScreenContainer>
   )
 }
+
+const styles = StyleSheet.create({
+  header: {
+    marginTop: 36,
+    marginBottom: 40,
+  },
+  contentContainer: {
+    width: '100%',
+    paddingHorizontal: 24,
+    marginBottom: BP({ large: 60, default: 30 }),
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tickContainer: {
+    width: 20,
+    height: 20,
+    marginRight: 9,
+  },
+  pinContainer: {
+    width: '100%',
+    paddingHorizontal: 24,
+  },
+  bottomContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+})
