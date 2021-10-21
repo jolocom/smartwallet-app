@@ -44,6 +44,7 @@ import eID from './eID'
 import { IAusweisRequest } from './eID/types'
 import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
+import { Colors } from '~/utils/colors'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -83,6 +84,7 @@ export type MainStackParamList = {
     fields: IField[]
     title?: string
     photo?: string
+    backgroundColor?: Colors
   }
   // DEV
   [ScreenNames.InteractionPasteTest]: undefined
