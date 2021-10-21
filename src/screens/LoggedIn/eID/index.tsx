@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { RouteProp, useRoute } from '@react-navigation/core'
-import { BackHandler } from 'react-native'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import { AusweisProvider } from './context'
 import { useAusweisContext, useAusweisInteraction } from './hooks'
@@ -46,15 +46,10 @@ const AusweisInteraction = () => {
 
   const cancel = useCallback(() => {
     cancelInteraction()
-    return undefined
+    return true
   }, [])
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', cancel)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', cancel)
-    }
-  }, [])
+  useBackHandler(cancel)
 
   return (
     <eIDStack.Navigator
