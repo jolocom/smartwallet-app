@@ -101,10 +101,6 @@ export const AusweisRequestReview = () => {
     }
   }
 
-  /**
-   * NOTE: cancelling workflow is happening implicitly
-   * in AusweissInteraction when it unmounts
-   */
   const handleIgnore = cancelInteraction
 
   const handleMoreInfo = () => {

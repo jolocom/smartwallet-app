@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { RouteProp, useRoute } from '@react-navigation/core'
+import { BackHandler } from 'react-native'
 
 import { AusweisProvider } from './context'
 import { useAusweisContext, useAusweisInteraction } from './hooks'
@@ -21,7 +22,6 @@ import {
   AusweisProviderDetails,
   AusweisScanner,
 } from './components'
-import { BackHandler } from 'react-native'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
