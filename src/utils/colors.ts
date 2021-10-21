@@ -16,6 +16,7 @@ export enum Colors {
   darkGray = 'rgb(108, 123, 138)',
   osloGray = 'rgb(138, 138, 145)',
   genevaGray = 'rgb(151, 151, 151)',
+  chisinauGrey = 'rgba(51, 51, 51, 0.46)',
   black95 = 'rgba(0,0,0,0.95)',
   black90 = 'rgba(0,0,0,0.90)',
   black85 = 'rgba(0,0,0,0.85)',
