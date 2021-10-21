@@ -13,7 +13,11 @@ import { ICollapsibleComposite } from './types'
  * on scroll
  * -> changing opacity of the header text when scrolling
  */
-const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
+const Header: ICollapsibleComposite['Header'] = ({
+  type,
+  onPress,
+  customStyles,
+}) => {
   const { currentTitleText, scrollY, currentTitle } = useCollapsible()
   const headerTitleOpacity = useMemo(() => {
     if (currentTitle === undefined) return 0
@@ -41,7 +45,7 @@ const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
   return (
     <NavigationHeader
       type={type}
-      customStyles={styles.container}
+      customStyles={[styles.container, customStyles]}
       onPress={onPress}
     >
       <Animated.Text

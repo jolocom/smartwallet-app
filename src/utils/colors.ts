@@ -7,6 +7,7 @@ export enum Colors {
   error = '#ffcc01',
   error40 = 'rgba(255, 204, 1, 0.4)',
   mainBlack = '#201a21',
+  mainDark = '#101010',
   black = '#000',
   elevatedElement = '#29232b',
   dark = 'rgb(32, 26, 33)',
