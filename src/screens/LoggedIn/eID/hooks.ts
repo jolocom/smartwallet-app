@@ -22,6 +22,8 @@ import {
 export const useAusweisContext = useCustomContext(AusweisContext)
 
 export const useCheckNFC = () => {
+  const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
+
   const checkNfcSupport = async () => {
     const supported = await NfcManager.isSupported()
 
@@ -37,11 +39,38 @@ export const useCheckNFC = () => {
     }
   }
 
+  const withNfcCheck = (onSuccess: () => void) => {
+    checkNfcSupport()
+      .then(onSuccess)
+      .catch((e) => {
+        if (e.message === SWErrorCodes.SWNfcNotSupported) {
+          scheduleErrorInfo(e, {
+            title: 'NFC Compatibility problem',
+            message:
+              'We have to inform you that your phone does not support the required NFC functionality',
+          })
+        } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
+          scheduleInfo({
+            title: 'Please turn on NFC',
+            message: 'Please go to the settings and enable NFC',
+            interact: {
+              label: 'Settings',
+              onInteract: () => {
+                goToNfcSettings()
+              },
+            },
+          })
+        } else {
+          scheduleErrorWarning(e)
+        }
+      })
+  }
+
   const goToNfcSettings = () => {
     NfcManager.goToNfcSetting()
   }
 
-  return { checkNfcSupport, goToNfcSettings }
+  return { checkNfcSupport, goToNfcSettings, withNfcCheck }
 }
 
 export const useAusweisInteraction = () => {

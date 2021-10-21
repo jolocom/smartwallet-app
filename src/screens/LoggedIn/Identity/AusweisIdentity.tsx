@@ -5,13 +5,17 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useAusweisCompatibilityCheck } from '~/screens/LoggedIn/eID/hooks'
+import {
+  useAusweisCompatibilityCheck,
+  useCheckNFC,
+} from '~/screens/LoggedIn/eID/hooks'
 
 export const AusweisIdentity = () => {
-  const { startCheck } = useAusweisCompatibilityCheck()
+  const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
+  const { withNfcCheck } = useCheckNFC()
 
   const handleCompatibilityCheck = () => {
-    startCheck()
+    withNfcCheck(startCompatibilityCheck)
   }
 
   const handleChangePin = () => {
