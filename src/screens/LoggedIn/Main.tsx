@@ -26,7 +26,7 @@ import TermsConsent from '~/screens/Modals/TermsConsent'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import CredentialDetails from './Documents/CredentialDetails'
+import FieldDetails from '../Modals/FieldDetails'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import {
@@ -79,7 +79,7 @@ export type MainStackParamList = {
   [ScreenNames.TermsOfService]: undefined
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
-  [ScreenNames.CredentialDetails]: {
+  [ScreenNames.FieldDetails]: {
     fields: IField[]
     title?: string
     photo?: string
@@ -235,8 +235,8 @@ const Main: React.FC = () => {
             options={transparentModalFadeOptions}
           />
           <MainStack.Screen
-            name={ScreenNames.CredentialDetails}
-            component={CredentialDetails}
+            name={ScreenNames.FieldDetails}
+            component={FieldDetails}
             options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen
