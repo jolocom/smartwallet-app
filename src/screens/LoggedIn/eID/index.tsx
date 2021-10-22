@@ -25,7 +25,9 @@ import {
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
-  [eIDScreens.AusweisScanner]: undefined
+  [eIDScreens.AusweisScanner]: {
+    dismissMode: 'back' | 'cancel'
+  }
   [eIDScreens.ReadinessCheck]: undefined
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
@@ -66,6 +68,7 @@ const AusweisInteraction = () => {
         name={eIDScreens.AusweisScanner}
         component={AusweisScanner}
         options={transparentModalFadeOptions}
+        initialParams={{ dismissMode: 'cancel' }}
       />
       <eIDStack.Screen
         name={eIDScreens.ReadinessCheck}
