@@ -5,14 +5,18 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useNavigation } from '@react-navigation/core'
+import { ScreenNames } from '~/types/screens'
 
 export const AusweisIdentity = () => {
+  const navigation = useNavigation()
+
   const handleCompatibilityCheck = () => {
     console.warn('Not implemented')
   }
 
   const handleChangePin = () => {
-    console.warn('Not implemented')
+    navigation.navigate(ScreenNames.AusweisChangePin)
   }
 
   const handleUnlockCard = () => {
@@ -56,7 +60,7 @@ export const AusweisIdentity = () => {
             customContainerStyles={styles.btn}
             onPress={handleChangePin}
           >
-            Change your 5-digit pincode
+            Change your PIN
           </Btn>
           <Btn
             type={BtnTypes.secondary}
