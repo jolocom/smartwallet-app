@@ -1,10 +1,17 @@
-import React from 'react'
-import { View } from 'react-native'
+import React, { useEffect } from 'react'
+import { Platform, View } from 'react-native'
+import { aa2Module } from 'react-native-aa2-sdk'
+
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+
+import { ScreenNames } from '~/types/screens'
+
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
+
+import { AusweisPasscodeMode, eIDScreens } from '../types'
 
 interface WhateverProps {
   headerText: string
@@ -51,16 +58,81 @@ const WhateverComponent: React.FC<WhateverProps> = ({
   )
 }
 
-const AusweisChangePin = () => {
+const AusweisChangePin = ({ navigation }) => {
+  useEffect(() => {
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers({
+      handlePinRequest: () => {
+        navigation.navigate(ScreenNames.eId, {
+          screen: eIDScreens.EnterPIN,
+          params: {
+            mode: AusweisPasscodeMode.PIN,
+          },
+        })
+      },
+      handleCanRequest: () => {
+        navigation.navigate(ScreenNames.eId, {
+          screen: eIDScreens.EnterPIN,
+          params: {
+            mode: AusweisPasscodeMode.CAN,
+          },
+        })
+      },
+      handlePukRequest: () => {
+        navigation.navigate(
+          ScreenNames.eId,
+          {
+            screen: eIDScreens.EnterPIN,
+            params: {
+              mode: AusweisPasscodeMode.PUK,
+            },
+          },
+          {},
+        )
+      },
+      handleChangePin: (success) => {
+        /**
+         * NOTE: success === false indicates
+         * that the workflow RUN_CHANGE_PIN
+         * was aborted
+         */
+        if (!success) {
+          if (Platform.OS === 'android') {
+            /**
+             * NOTE:
+             * dismissing scanner on Android
+             */
+            navigation.goBack()
+          }
+        }
+      },
+      handleCardRequest: () => {
+        if (Platform.OS === 'android') {
+          navigation.navigate(ScreenNames.eId, {
+            screen: eIDScreens.AusweisScanner,
+            params: {
+              /**
+               * TODO: define on dismiss for android
+               */
+              onDismiss: () => {
+                aa2Module.cancelFlow()
+              },
+            },
+          })
+        }
+      },
+    })
+  }, [])
+
   const handleChange5DigPin = () => {
     console.warn('not implemented')
   }
   const handleChange6DigPin = () => {
-    console.warn('not implemented')
+    aa2Module.changePin()
   }
   /**
    * TODO: update the name of the fn
-   * after figuring put where it should navigate
+   * after figuring out where it should navigate
    */
   const handleOther = () => {
     console.warn('not implemented')

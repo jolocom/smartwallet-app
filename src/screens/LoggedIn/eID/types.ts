@@ -20,6 +20,8 @@ export enum AusweisPasscodeMode {
   PIN = 'PIN',
   CAN = 'CAN',
   PUK = 'PUK',
+  NEW_PIN = 'NEW_PIN',
+  VERIFY_NEW_PIN = 'VERIFY_NEW_PIN',
 }
 
 export interface AusweisPasscodeProps {

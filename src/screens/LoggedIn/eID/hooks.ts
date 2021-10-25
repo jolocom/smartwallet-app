@@ -122,9 +122,9 @@ export const useAusweisInteraction = () => {
   }
 
   const passcodeCommands = {
-    setPin: (pin: number) => aa2Module.enterPin(pin),
-    setPuk: (puk: number) => aa2Module.enterPUK(puk),
-    setCan: (can: number) => aa2Module.enterCan(can),
+    setPin: (pin: string) => aa2Module.enterPin(pin),
+    setPuk: (puk: string) => aa2Module.enterPUK(puk),
+    setCan: (can: string) => aa2Module.enterCan(can),
   }
 
   const finishFlow = (url: string) => {

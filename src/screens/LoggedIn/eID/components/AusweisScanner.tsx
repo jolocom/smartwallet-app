@@ -1,24 +1,43 @@
+import { useRoute } from '@react-navigation/core'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
+import { aa2Module } from 'react-native-aa2-sdk'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
+
 import { ScannerIcon } from '~/assets/svg'
+
 import Btn from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+
 import { useGoBack } from '~/hooks/navigation'
-import { useAusweisInteraction } from '../hooks'
+
 import { AusweisBottomSheet } from '../styled'
 
-export const AusweisScanner = () => {
+/**
+ * TODO:
+ * Scanner on Android needs a message with a big letters
+ * saying "dont remove the card until the scanner popup is gone"
+ */
+export const AusweisScanner = ({ navigation }) => {
+  const { onDismiss } = useRoute().params
   const goBack = useGoBack()
-  const { checkIfScanned } = useAusweisInteraction()
 
   useEffect(() => {
-    checkIfScanned().then(() => {
-      handleDismiss()
+    aa2Module.setHandlers({
+      /**
+       * NOTE: hide scanner as soon
+       * as the READER msg was received
+       */
+      handleCardInfo: (card: CardInfo | null) => {
+        if (card !== null) {
+          goBack()
+        }
+      },
     })
   }, [])
 
   const handleDismiss = () => {
-    goBack()
+    onDismiss && onDismiss()
   }
 
   return (
