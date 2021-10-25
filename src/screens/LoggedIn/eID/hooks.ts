@@ -24,7 +24,7 @@ export const useAusweisContext = useCustomContext(AusweisContext)
 export const useCheckNFC = () => {
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
 
-  const checkNfcSupport = async () => {
+  const nfcCheck = async () => {
     const supported = await NfcManager.isSupported()
 
     if (!supported) {
@@ -39,8 +39,8 @@ export const useCheckNFC = () => {
     }
   }
 
-  const withNfcCheck = (onSuccess: () => void) => {
-    checkNfcSupport()
+  const checkNfcSupport = (onSuccess: () => void) => {
+    nfcCheck()
       .then(onSuccess)
       .catch((e) => {
         if (e.message === SWErrorCodes.SWNfcNotSupported) {
@@ -70,7 +70,7 @@ export const useCheckNFC = () => {
     NfcManager.goToNfcSetting()
   }
 
-  return { checkNfcSupport, goToNfcSettings, withNfcCheck }
+  return { checkNfcSupport }
 }
 
 export const useAusweisInteraction = () => {

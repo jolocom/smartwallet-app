@@ -12,10 +12,10 @@ import {
 
 export const AusweisIdentity = () => {
   const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
-  const { withNfcCheck } = useCheckNFC()
+  const { checkNfcSupport } = useCheckNFC()
 
   const handleCompatibilityCheck = () => {
-    withNfcCheck(startCompatibilityCheck)
+    checkNfcSupport(startCompatibilityCheck)
   }
 
   const handleChangePin = () => {

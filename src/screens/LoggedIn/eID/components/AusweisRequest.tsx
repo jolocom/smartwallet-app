@@ -15,13 +15,13 @@ import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
 export const AusweisRequest = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
-  const { withNfcCheck } = useCheckNFC()
+  const { checkNfcSupport } = useCheckNFC()
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
   const { providerUrl, providerName, resetRequest } = useAusweisContext()
   const { cancelFlow } = useAusweisInteraction()
 
   const handleProceed = async () => {
-    withNfcCheck(() => {
+    checkNfcSupport(() => {
       navigation.navigate(eIDScreens.ReadinessCheck)
     })
   }
