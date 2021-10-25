@@ -34,6 +34,7 @@ import { AusweisPasscodeMode, eIDScreens } from '../types'
 import { SWErrorCodes } from '~/errors/codes'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
+import moment from 'moment'
 
 export const AusweisRequestReview = () => {
   const { scheduleErrorWarning } = useToasts()
@@ -107,7 +108,10 @@ export const AusweisRequestReview = () => {
       { label: 'Provider information', value: providerInfo },
       {
         label: 'Validity',
-        value: effectiveValidityDate + ' - ' + expirationDate,
+        value:
+          moment(effectiveValidityDate).format('DD.MM.YYYY') +
+          ' - ' +
+          moment(expirationDate).format('DD.MM.YYYY'),
       },
     ]
     redirect(ScreenNames.FieldDetails, {
