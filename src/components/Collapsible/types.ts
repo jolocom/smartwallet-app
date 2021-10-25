@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { IWithCustomStyle } from '~/types/props'
 
 import { NavHeaderType } from '../NavigationHeader'
 
@@ -36,7 +37,7 @@ interface ITitle {
   customContainerStyles?: StyleProp<ViewStyle>
 }
 
-interface IHeader {
+interface IHeader extends IWithCustomStyle {
   type?: NavHeaderType
   onPress?: () => void
 }

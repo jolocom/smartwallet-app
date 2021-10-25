@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   containerFAS: {
     height: '100%',
     width: '100%',
-    backgroundColor: Colors.mainBlack,
   },
   logoContainerBAS: {
     position: 'absolute',
