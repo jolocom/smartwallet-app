@@ -82,7 +82,7 @@ const useHandleMorePress = () => {
       {
         title: t('Documents.infoCardOption'),
         navigation: {
-          screen: ScreenNames.CredentialDetails,
+          screen: ScreenNames.FieldDetails,
           params: {
             fields,
             photo,
