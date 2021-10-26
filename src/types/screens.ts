@@ -41,7 +41,7 @@ export enum ScreenNames {
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',
-  CredentialDetails = 'CredentialDetails',
+  FieldDetails = 'FieldDetails',
   PopupMenu = 'PopupMenu',
   TransparentModals = 'TransparentModals',
   AppDisabled = 'AppDisabled',

@@ -32,10 +32,23 @@ import {
 } from '../styled'
 import { AusweisPasscodeMode, eIDScreens } from '../types'
 import { SWErrorCodes } from '~/errors/codes'
+import { ScreenNames } from '~/types/screens'
+import { IField } from '~/types/props'
+import moment from 'moment'
 
 export const AusweisRequestReview = () => {
   const { scheduleErrorWarning } = useToasts()
-  const { providerName, requiredFields, optionalFields } = useAusweisContext()
+  const {
+    providerName,
+    requiredFields,
+    optionalFields,
+    providerUrl,
+    certificateIssuerName,
+    certificateIssuerUrl,
+    providerInfo,
+    effectiveValidityDate,
+    expirationDate,
+  } = useAusweisContext()
   const { acceptRequest, cancelFlow } = useAusweisInteraction()
   const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
   const { t } = useTranslation()
@@ -86,8 +99,26 @@ export const AusweisRequestReview = () => {
   }
 
   const handleMoreInfo = () => {
-    // @ts-expect-error
-    redirect(eIDScreens.ProviderDetails)
+    const fields: IField[] = [
+      { label: 'Provider', value: providerName + '\n' + providerUrl },
+      {
+        label: 'Certificate issuer',
+        value: certificateIssuerName + '\n' + certificateIssuerUrl,
+      },
+      { label: 'Provider information', value: providerInfo },
+      {
+        label: 'Validity',
+        value:
+          moment(effectiveValidityDate).format('DD.MM.YYYY') +
+          ' - ' +
+          moment(expirationDate).format('DD.MM.YYYY'),
+      },
+    ]
+    redirect(ScreenNames.FieldDetails, {
+      fields,
+      title: providerName,
+      backgroundColor: Colors.mainDark,
+    })
   }
 
   const handleSelectOptional = (field: string) => {
