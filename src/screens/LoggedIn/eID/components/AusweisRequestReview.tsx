@@ -50,7 +50,9 @@ export const AusweisRequestReview = () => {
          */
         if (Platform.OS === 'android') {
           // @ts-ignore
-          redirect(eIDScreens.AusweisScanner)
+          redirect(eIDScreens.AusweisScanner, {
+            onDismiss: cancelInteraction,
+          })
         }
       },
       handlePinRequest: () => {

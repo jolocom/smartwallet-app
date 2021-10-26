@@ -8,23 +8,25 @@ import { useAusweisInteraction } from '../hooks'
 import { AusweisBottomSheet } from '../styled'
 import { AusweisStackParamList } from '../'
 import { eIDScreens } from '../types'
+import { useGoBack } from '~/hooks/navigation'
 
-export const AusweisScanner = ({ navigation }) => {
-  const { dismissMode } =
+export const AusweisScanner = () => {
+  const { onDismiss } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
       .params
-  const { checkIfScanned, cancelInteraction } = useAusweisInteraction()
+  const { checkIfScanned } = useAusweisInteraction()
+  const goBack = useGoBack()
 
   const handleDismiss = () => {
-    if (dismissMode === 'back') {
-      navigation.goBack()
-    } else if (dismissMode === 'cancel') {
-      cancelInteraction()
-    } else {
-      throw new Error(
-        `There is no dismiss handler for ${dismissMode} (provided dismiss mode)`,
-      )
-    }
+    /**
+     * NOTE:
+     * delegating removing scanner from the
+     * navigation stack to the scanner;
+     * onDismiss should contain logic without closing
+     * the AusweisScanner screen
+     */
+    goBack()
+    onDismiss && onDismiss()
   }
 
   useEffect(() => {
