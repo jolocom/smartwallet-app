@@ -22,7 +22,7 @@ jest.mock(
   or self issued credentials on home id tab
 */
 describe('Home id tab displays', () => {
-  test('intro component', () => {
+  xtest('intro component', () => {
     mockSelectorReturn(mockedNoAttributes)
 
     const { getByTestId } = renderWithSafeArea(<Identity />)
@@ -30,10 +30,17 @@ describe('Home id tab displays', () => {
     expect(getByTestId('home-identity-intro')).toBeDefined()
   })
 
-  test('self issued credentials', () => {
+  test('self issued credentials tab', () => {
     mockSelectorReturn(mockedAttributes)
 
     const { getByTestId } = renderWithSafeArea(<Identity />)
     expect(getByTestId('home-self-issued-credentials')).toBeDefined()
+  })
+
+  test('ausweis identity tab', () => {
+    mockSelectorReturn(mockedAttributes)
+
+    const { getByTestId } = renderWithSafeArea(<Identity />)
+    expect(getByTestId('home-ausweis-identity')).toBeDefined()
   })
 })
