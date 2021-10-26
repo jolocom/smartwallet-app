@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import { useIsFocused } from '@react-navigation/core'
+import React, { useEffect, useMemo } from 'react'
 import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import { usePrevious } from '~/hooks/generic'
 
 import { ScreenNames } from '~/types/screens'
 
@@ -59,9 +61,11 @@ const WhateverComponent: React.FC<WhateverProps> = ({
 }
 
 const AusweisChangePin = ({ navigation }) => {
-  useEffect(() => {
-    aa2Module.resetHandlers()
-    aa2Module.setHandlers({
+  const isFocused = useIsFocused()
+  const prevIsFocused = usePrevious(isFocused)
+
+  const handlers = useMemo(
+    () => ({
       handlePinRequest: () => {
         navigation.navigate(ScreenNames.eId, {
           screen: eIDScreens.EnterPIN,
@@ -90,30 +94,11 @@ const AusweisChangePin = ({ navigation }) => {
           {},
         )
       },
-      handleChangePin: (success) => {
-        /**
-         * NOTE: success === false indicates
-         * that the workflow RUN_CHANGE_PIN
-         * was aborted
-         */
-        if (!success) {
-          if (Platform.OS === 'android') {
-            /**
-             * NOTE:
-             * dismissing scanner on Android
-             */
-            navigation.goBack()
-          }
-        }
-      },
       handleCardRequest: () => {
         if (Platform.OS === 'android') {
           navigation.navigate(ScreenNames.eId, {
             screen: eIDScreens.AusweisScanner,
             params: {
-              /**
-               * TODO: define on dismiss for android
-               */
               onDismiss: () => {
                 aa2Module.cancelFlow()
               },
@@ -121,7 +106,19 @@ const AusweisChangePin = ({ navigation }) => {
           })
         }
       },
-    })
+    }),
+    [],
+  )
+
+  useEffect(() => {
+    if (isFocused === true && prevIsFocused === false) {
+      aa2Module.setHandlers(handlers)
+    }
+  }, [isFocused])
+
+  useEffect(() => {
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers(handlers)
   }, [])
 
   const handleChange5DigPin = () => {

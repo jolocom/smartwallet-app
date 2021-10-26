@@ -130,13 +130,9 @@ export const AusweisPasscode = ({ navigation }) => {
        * RUN_CHANGE_PIN workflow
        */
       handleChangePin: (success) => {
-        /**
-         * TODO:
-         * check if this will work everywhere
-         */
-        if (success) {
+        if (success === true) {
           showSuccess(goBack)
-        } else {
+        } else if (success === false) {
           /**
            * NOTE: success false comes in
            * when user presses CANCEL on NFC popup on iOS
@@ -145,13 +141,6 @@ export const AusweisPasscode = ({ navigation }) => {
         }
       },
     })
-
-    /**
-     * QUESTION: why do we reset handlers here ?
-     */
-    // return () => {
-    //   aa2Module.resetHandlers()
-    // }
   }, [])
 
   const title = useMemo(() => {

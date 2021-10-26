@@ -18,7 +18,7 @@ import { AusweisBottomSheet } from '../styled'
  * Scanner on Android needs a message with a big letters
  * saying "dont remove the card until the scanner popup is gone"
  */
-export const AusweisScanner = ({ navigation }) => {
+export const AusweisScanner = () => {
   const { onDismiss } = useRoute().params
   const goBack = useGoBack()
 
@@ -37,6 +37,14 @@ export const AusweisScanner = ({ navigation }) => {
   }, [])
 
   const handleDismiss = () => {
+    /**
+     * NOTE:
+     * delegating removing scanner from the
+     * navigation stack to the scanner;
+     * onDismiss should contain logic without closing
+     * the AusweisScanner screen
+     */
+    goBack()
     onDismiss && onDismiss()
   }
 
