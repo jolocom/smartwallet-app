@@ -24,6 +24,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '.'
 import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -139,8 +140,12 @@ export const useAusweisInteraction = () => {
     }
   }
 
-  const cancelFlow = async () => {
+  const closeAusweis = () => {
     popStack()
+  }
+
+  const cancelFlow = async () => {
+    closeAusweis()
     aa2Module.cancelFlow().catch(scheduleErrorWarning)
   }
 
@@ -155,7 +160,7 @@ export const useAusweisInteraction = () => {
   }
 
   const finishFlow = (url: string) => {
-    fetch(url)
+    return fetch(url)
       .then((res) => {
         if (res['ok']) {
           scheduleInfo({
@@ -165,13 +170,22 @@ export const useAusweisInteraction = () => {
         } else {
           scheduleErrorWarning(new Error(res['statusText']))
         }
-        cancelFlow()
       })
       .catch(scheduleErrorWarning)
   }
 
+  const checkCardValidity = (card: CardInfo) => {
+    if (card.deactivated || card.inoperative) {
+      return false
+    }
+
+    return true
+  }
+
   return {
+    closeAusweis,
     initAusweis,
+    checkCardValidity,
     disconnectAusweis,
     processAusweisToken,
     cancelFlow,

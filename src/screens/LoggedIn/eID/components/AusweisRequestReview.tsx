@@ -8,8 +8,6 @@ import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
-import { useRedirect } from '~/hooks/navigation'
-import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
@@ -23,6 +21,7 @@ import {
   useAusweisInteraction,
   useCheckNFC,
   useTranslatedAusweisFields,
+  useAusweisScanner,
 } from '../hooks'
 import {
   AusweisButtons,
@@ -30,55 +29,90 @@ import {
   AusweisListSection,
   AusweisLogo,
 } from '../styled'
-import { AusweisPasscodeMode, eIDScreens } from '../types'
-import { SWErrorCodes } from '~/errors/codes'
+import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import { useNavigation } from '@react-navigation/core'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { AusweisStackParamList } from '..'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { useToasts } from '~/hooks/toasts'
 
 export const AusweisRequestReview = () => {
-  const { scheduleErrorWarning } = useToasts()
   const { providerName, requiredFields, optionalFields } = useAusweisContext()
-  const { acceptRequest, cancelFlow } = useAusweisInteraction()
-  const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
+  const { scheduleWarning } = useToasts()
+  const { acceptRequest, cancelFlow, checkCardValidity } =
+    useAusweisInteraction()
+  const { checkNfcSupport } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
-  const redirect = useRedirect()
+  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const translateField = useTranslatedAusweisFields()
+  const { showScanner, updateScanner } = useAusweisScanner()
+
+  const handleCardValidity = (card: CardInfo, onValidCard: () => void) => {
+    if (checkCardValidity(card)) {
+      onValidCard()
+    } else {
+      cancelFlow()
+      scheduleWarning({
+        title: 'Oops!',
+        message: 'Seems like the card you provided is not valid',
+      })
+    }
+  }
 
   useEffect(() => {
     aa2Module.resetHandlers()
+    //TODO: add badState handler and cancel
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.AusweisScanner)
+        showScanner(() => {
+          cancelFlow()
+        })
       },
-      handlePinRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
+      handlePinRequest: (card) => {
+        updateScanner({
+          state: AusweisScannerState.success,
+          onDone: () => {
+            handleCardValidity(card, () => {
+              navigation.navigate(eIDScreens.EnterPIN, {
+                mode: AusweisPasscodeMode.PIN,
+              })
+            })
+          },
+        })
       },
-      handlePukRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
+      handlePukRequest: (card) => {
+        updateScanner({
+          state: AusweisScannerState.success,
+          onDone: () => {
+            handleCardValidity(card, () => {
+              navigation.navigate(eIDScreens.EnterPIN, {
+                mode: AusweisPasscodeMode.PUK,
+              })
+            })
+          },
+        })
       },
-      handleCanRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
+      handleCanRequest: (card) => {
+        updateScanner({
+          state: AusweisScannerState.success,
+          onDone: () => {
+            handleCardValidity(card, () => {
+              navigation.navigate(eIDScreens.EnterPIN, {
+                mode: AusweisPasscodeMode.CAN,
+              })
+            })
+          },
+        })
       },
     })
   }, [])
 
   const handleProceed = async () => {
-    try {
-      await checkNfcSupport()
-      await acceptRequest(selectedOptional)
-    } catch (e) {
-      if (e.message === SWErrorCodes.SWNfcNotEnabled) {
-        scheduleDisabledNfcToast()
-      } else {
-        console.warn('Error: ', e)
-        scheduleErrorWarning(e)
-        cancelFlow()
-      }
-    }
+    checkNfcSupport(() => {
+      acceptRequest(selectedOptional)
+    })
   }
 
   const handleIgnore = () => {
@@ -86,8 +120,7 @@ export const AusweisRequestReview = () => {
   }
 
   const handleMoreInfo = () => {
-    // @ts-expect-error
-    redirect(eIDScreens.ProviderDetails)
+    navigation.navigate(eIDScreens.ProviderDetails)
   }
 
   const handleSelectOptional = (field: string) => {
