@@ -1,5 +1,6 @@
 import {
   CardStyleInterpolators,
+  StackCardInterpolationProps,
   StackNavigationOptions,
   TransitionPresets,
 } from '@react-navigation/stack'
@@ -27,7 +28,13 @@ export const transparentModalOptions: StackNavigationOptions = {
   cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 }
 
+const forFade = ({ current }: StackCardInterpolationProps) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+})
+
 export const transparentModalFadeOptions = {
   ...transparentModalOptions,
-  ...TransitionPresets.FadeFromBottomAndroid,
+  cardStyleInterpolator: forFade,
 }

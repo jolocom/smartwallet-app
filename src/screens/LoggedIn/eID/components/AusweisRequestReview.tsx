@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
@@ -8,6 +8,8 @@ import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
+import { usePopStack, useRedirect } from '~/hooks/navigation'
+import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
@@ -35,17 +37,32 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '..'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import { useToasts } from '~/hooks/toasts'
+import { AusweisPasscodeMode, eIDScreens } from '../types'
+import { SWErrorCodes } from '~/errors/codes'
+import { ScreenNames } from '~/types/screens'
+import { IField } from '~/types/props'
+import moment from 'moment'
 
 export const AusweisRequestReview = () => {
-  const { providerName, requiredFields, optionalFields } = useAusweisContext()
-  const { scheduleWarning } = useToasts()
-  const { acceptRequest, cancelFlow, checkCardValidity } =
-    useAusweisInteraction()
-  const { checkNfcSupport } = useCheckNFC()
+  const { acceptRequest, cancelInteraction } = useAusweisInteraction()
+  const { scheduleErrorWarning } = useToasts()
+  const {
+    providerName,
+    requiredFields,
+    optionalFields,
+    providerUrl,
+    certificateIssuerName,
+    certificateIssuerUrl,
+    providerInfo,
+    effectiveValidityDate,
+    expirationDate,
+  } = useAusweisContext()
+  const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
+  const popStack = usePopStack()
   const translateField = useTranslatedAusweisFields()
   const { showScanner, updateScanner } = useAusweisScanner()
 
@@ -66,9 +83,11 @@ export const AusweisRequestReview = () => {
     //TODO: add badState handler and cancel
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        showScanner(() => {
-          cancelFlow()
-        })
+        if (Platform.OS === 'android') {
+          showScanner(() => {
+            cancelInteraction()
+          })
+        }
       },
       handlePinRequest: (card) => {
         updateScanner({
@@ -106,6 +125,19 @@ export const AusweisRequestReview = () => {
           },
         })
       },
+      handleAuthResult: () => {
+        /**
+         * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
+         */
+        if (Platform.OS === 'ios') {
+          /**
+           * NOTE: CANCEL should not be sent here;
+           * because the workflow by this time is
+           * aborted
+           */
+          popStack()
+        }
+      },
     })
   }, [])
 
@@ -115,12 +147,30 @@ export const AusweisRequestReview = () => {
     })
   }
 
-  const handleIgnore = () => {
-    cancelFlow()
-  }
+  const handleIgnore = cancelInteraction
 
   const handleMoreInfo = () => {
-    navigation.navigate(eIDScreens.ProviderDetails)
+    const fields: IField[] = [
+      { label: 'Provider', value: providerName + '\n' + providerUrl },
+      {
+        label: 'Certificate issuer',
+        value: certificateIssuerName + '\n' + certificateIssuerUrl,
+      },
+      { label: 'Provider information', value: providerInfo },
+      {
+        label: 'Validity',
+        value:
+          moment(effectiveValidityDate).format('DD.MM.YYYY') +
+          ' - ' +
+          moment(expirationDate).format('DD.MM.YYYY'),
+      },
+    ]
+
+    redirect(ScreenNames.FieldDetails, {
+      fields,
+      title: providerName,
+      backgroundColor: Colors.mainDark,
+    })
   }
 
   const handleSelectOptional = (field: string) => {
