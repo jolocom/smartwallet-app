@@ -81,6 +81,7 @@ export enum AusweisScannerState {
 
 export interface AusweisScannerParams {
   onDone?: () => void
+  onDismiss?: () => void
   state?: AusweisScannerState
 }
 

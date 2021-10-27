@@ -1,8 +1,7 @@
 import { RouteProp, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { StyleSheet, View, Animated, ActivityIndicator } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import React, { useEffect, useRef, useState } from 'react'
+import { StyleSheet, View, Animated } from 'react-native'
 import { ErrorIcon, NfcScannerAndroid, SuccessTick } from '~/assets/svg'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -21,7 +20,11 @@ export const AUSWEIS_SCANNER_NAVIGATION_KEY = `AusweisScanner-${generateRandomSt
 export const AusweisScanner = () => {
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
-  const { onDone = () => {}, state = AusweisScannerState.idle } = route.params
+  const {
+    onDone = () => {},
+    state = AusweisScannerState.idle,
+    onDismiss,
+  } = route.params
   const goBack = useGoBack()
   const iconOpacityValue = useRef(new Animated.Value(0)).current
   const loadingOpacityValue = useRef(new Animated.Value(0)).current
@@ -80,14 +83,7 @@ export const AusweisScanner = () => {
   }
 
   const handleDismiss = () => {
-    setTimeout(() => {
-      goBack()
-    }, 1000)
-
-    //FIXME: should only be called if the scanning was successful
-    setTimeout(() => {
-      onDone()
-    }, 1500)
+    onDismiss ? onDismiss() : goBack()
   }
 
   const renderScannerIcon = () => {
