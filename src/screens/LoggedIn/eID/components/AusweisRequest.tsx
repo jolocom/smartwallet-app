@@ -29,11 +29,9 @@ export const AusweisRequest = () => {
   const handleProceed = async () => {
     checkNfcSupport(() => {
       if (shouldSkipCompatibility) {
-        // @ts-ignore
-        redirect(eIDScreens.RequestDetails)
+        navigation.navigate(eIDScreens.RequestDetails)
       } else {
-        // @ts-ignore
-        redirect(eIDScreens.ReadinessCheck)
+        navigation.navigate(eIDScreens.ReadinessCheck)
       }
     })
   }
