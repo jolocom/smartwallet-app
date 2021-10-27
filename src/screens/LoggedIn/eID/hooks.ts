@@ -1,22 +1,18 @@
-import { useBackHandler } from '@react-native-community/hooks'
-import { useBackButton } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
-import { useDisableLock } from '~/hooks/generic'
-import { useFailed, useSuccess } from '~/hooks/loader'
-import { useRedirect, usePopStack, usePop, useGoBack } from '~/hooks/navigation'
+import { useRedirect, usePopStack, usePop } from '~/hooks/navigation'
+import useSettings, { SettingKeys } from '~/hooks/settings'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
 import {
-  AusweisCompatibilityResult,
-  AusweisPasscodeMode,
+  AusweisFields,
+  AusweisCardResult,
   eIDScreens,
   IAusweisRequest,
-  AusweisFields,
 } from './types'
 
 import { LOG } from '~/utils/dev'
@@ -175,20 +171,18 @@ export const useAusweisInteraction = () => {
 }
 
 export const useAusweisCompatibilityCheck = () => {
-  const showSuccess = useSuccess()
-  const showFailed = useFailed()
   const redirect = useRedirect()
   const pop = usePop()
-  const [compatibility, setCompatibility] =
-    useState<AusweisCompatibilityResult>()
+  const [compatibility, setCompatibility] = useState<AusweisCardResult>()
 
   const startCheck = () => {
+    setCompatibility(undefined)
     // @ts-expect-error
     redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner, params: {} })
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
-        if (info && !compatibility) {
+        if (info) {
           const { inoperative, deactivated } = info
           setCompatibility({ inoperative, deactivated })
 
@@ -201,16 +195,48 @@ export const useAusweisCompatibilityCheck = () => {
   useEffect(() => {
     if (compatibility) {
       aa2Module.resetHandlers()
-      if (compatibility.deactivated || compatibility.inoperative) {
-        showFailed()
-      } else {
-        showSuccess()
-      }
-      setCompatibility(undefined)
+      redirect(ScreenNames.eId, {
+        // @ts-expect-error
+        screen: eIDScreens.CompatibilityResult,
+        params: compatibility,
+      })
     }
   }, [JSON.stringify(compatibility)])
 
   return { startCheck, compatibility }
+}
+
+export const useAusweisSkipCompatibility = () => {
+  const settings = useSettings()
+  const { scheduleErrorWarning } = useToasts()
+  const [shouldSkip, setShouldSkipValue] = useState(false)
+
+  useEffect(() => {
+    getShouldSkip().then(setShouldSkipValue)
+  }, [])
+
+  const getShouldSkip = async () => {
+    try {
+      const result = await settings.get(SettingKeys.ausweisSkipCompatibility)
+      if (!result?.value) return false
+      else return result.value as boolean
+    } catch (e) {
+      console.warn('Failed to get value from storage', e)
+      return false
+    }
+  }
+
+  const setShouldSkip = async (value: boolean) => {
+    try {
+      await settings.set(SettingKeys.ausweisSkipCompatibility, { value })
+      setShouldSkipValue(value)
+    } catch (e) {
+      console.warn('Failed to get value from storage', e)
+      scheduleErrorWarning(e)
+    }
+  }
+
+  return { shouldSkip, setShouldSkip }
 }
 
 export const useTranslatedAusweisFields = () => {

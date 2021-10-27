@@ -1,100 +1,47 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Platform } from 'react-native'
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
-
 import { eIDScreens } from '../types'
-import { usePop, useRedirect } from '~/hooks/navigation'
-import { useFailed, useSuccess } from '~/hooks/loader'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { useRedirect } from '~/hooks/navigation'
+import {
+  useAusweisCompatibilityCheck,
+  useAusweisInteraction,
+  useAusweisSkipCompatibility,
+} from '../hooks'
+import { JoloTextSizes } from '~/utils/fonts'
+import { PurpleTickSuccess } from '~/assets/svg'
+import { AusweisButtons } from '../styled'
+import BP from '~/utils/breakpoints'
+import BtnGroup from '~/components/BtnGroup'
+import { CheckboxOption } from '~/components/CheckboxOption'
 
-type ReaderMsg = {
-  msg: 'READER'
-  name: 'NFC'
-  attached: boolean // Indicates whether a card reader is connected or disconnected.
-  keypad: false
-  card: {
-    inoperative: boolean
-    deactivated: boolean
-    retryCounter: number
-  }
-}
+const Header: React.FC = ({ children }) => (
+  <JoloText
+    kind={JoloTextKind.title}
+    customStyles={{ marginBottom: BP({ large: 12, default: 8 }) }}
+  >
+    {children}
+  </JoloText>
+)
 
-enum CardStatus {
-  inoperative = 'inoperative',
-  deactivated = 'deactivated',
-  ready = 'ready',
-}
+const Description: React.FC = ({ children }) => (
+  <JoloText color={Colors.osloGray}>{children}</JoloText>
+)
 
 export const CompatibilityCheck = () => {
-  const [cardStatus, setCardStatus] = useState<CardStatus | null>(null)
   const redirect = useRedirect()
-  const pop = usePop()
-  const showSuccess = useSuccess()
-  const showFailed = useFailed()
+  const { cancelInteraction } = useAusweisInteraction()
+  const { startCheck, compatibility } = useAusweisCompatibilityCheck()
+  const { setShouldSkip } = useAusweisSkipCompatibility()
 
-  /**
-   * handler for READER msg
-   */
-  useEffect(() => {
-    aa2Module.setHandlers({
-      handleCardRequest: () => {
-        /**
-         * NOTE:
-         * we are not passing onDismiss as a param,
-         * as there are no additional logic we want to run
-         * when the scanner closes;
-         * or if we decide to abort the workflow from within
-         * the run_auth wf we shall pass to compatibility check
-         * a param (a suggestion)
-         */
-        // @ts-ignore
-        redirect(eIDScreens.AusweisScanner)
-      },
-      handleCardInfo: (info) => {
-        if (info && !cardStatus) {
-          const { inoperative, deactivated } = info
-          const resultStatus = deactivated || !inoperative
-          if (deactivated) {
-            setCardStatus(CardStatus.deactivated)
-          } else if (inoperative) {
-            setCardStatus(CardStatus.inoperative)
-          } else if (resultStatus) {
-            setCardStatus(CardStatus.ready)
-          }
-        }
-      },
-    })
-  }, [])
-
-  /**
-   * show loader when card status is known
-   */
-  useEffect(() => {
-    if (cardStatus !== null) {
-      Platform.OS === 'android' && pop(1)
-      if (cardStatus === CardStatus.ready) {
-        showSuccess()
-      } else {
-        showFailed()
-      }
-    }
-  }, [cardStatus])
-
-  const handleCheckCompatibility = async () => {
-    /**
-     * NOTE:
-     * we are not passing onDismiss as a param,
-     * as there are no additional logic we want to run
-     * when the scanner closes; it is not
-     * in any currently running workflows
-     */
-    // @ts-expect-error
-    redirect(eIDScreens.AusweisScanner)
+  const handleCheckCompatibility = () => {
+    startCheck()
   }
+
   const handleShowPinInstructions = () => {
     // @ts-expect-error
     redirect(eIDScreens.PasscodeDetails)
@@ -105,49 +52,126 @@ export const CompatibilityCheck = () => {
     redirect(eIDScreens.RequestDetails)
   }
 
+  const handleIgnore = () => {
+    cancelInteraction()
+  }
+
+  const handleSkip = (selected: boolean) => {
+    setShouldSkip(selected)
+  }
+
   return (
-    <ScreenContainer>
-      <JoloText kind={JoloTextKind.title}>
-        Before you proceed with digital interaction your device must meet
-        certain technical requirements
-      </JoloText>
-      <View style={styles.optionContainer}>
-        <JoloText color={Colors.success}>1</JoloText>
-        <JoloText kind={JoloTextKind.title}>
-          Check if your ID card is ready to be used
+    <ScreenContainer
+      backgroundColor={Colors.mainDark}
+      customStyles={{ justifyContent: 'flex-start' }}
+    >
+      <View>
+        <JoloText
+          kind={JoloTextKind.title}
+          color={Colors.error}
+          customStyles={styles.header}
+        >
+          Before you proceed your device must meet certain technical
+          requirements
         </JoloText>
-
-        {cardStatus ? (
-          <JoloText>{cardStatus}</JoloText>
-        ) : (
-          <Btn type={BtnTypes.quinary} onPress={handleCheckCompatibility}>
-            Check compatibility
-          </Btn>
-        )}
+        <View style={styles.contentContainer}>
+          <Header>Compatibility Check</Header>
+          <Description>
+            Make sure tour card is ready for use in one touch
+          </Description>
+          <View style={{ marginTop: BP({ large: 24, default: 16 }) }}>
+            {compatibility &&
+            !compatibility.deactivated &&
+            !compatibility.inoperative ? (
+              <View style={styles.statusContainer}>
+                <View style={styles.tickContainer}>
+                  <PurpleTickSuccess />
+                </View>
+                <JoloText
+                  color={Colors.success}
+                  kind={JoloTextKind.title}
+                  size={JoloTextSizes.mini}
+                >
+                  Successfully passed
+                </JoloText>
+              </View>
+            ) : (
+              <Btn
+                onPress={handleCheckCompatibility}
+                type={BtnTypes.quaternary}
+              >
+                {compatibility?.deactivated || compatibility?.inoperative
+                  ? 'Try again'
+                  : 'Start'}
+              </Btn>
+            )}
+          </View>
+        </View>
+        <View style={styles.pinContainer}>
+          <Header>6-digit pin status</Header>
+          <View>
+            <Description>
+              Did you previously activate the card’s eID functionality? If not,
+              read about it here{' '}
+              <JoloText
+                onPress={handleShowPinInstructions}
+                color={Colors.activity}
+              >
+                ...more info
+              </JoloText>
+            </Description>
+          </View>
+        </View>
       </View>
-
-      <View style={styles.optionContainer}>
-        <JoloText color={Colors.success}>2</JoloText>
-        <JoloText kind={JoloTextKind.title}>
-          Make sure that your 6-digit PIN was activated
-        </JoloText>
-
-        <Btn type={BtnTypes.quinary} onPress={handleShowPinInstructions}>
-          More info
-        </Btn>
+      <View style={styles.bottomContainer}>
+        <View style={{ paddingHorizontal: 20 }}>
+          <CheckboxOption
+            description={
+              'Skip this step when performing similar interaction again'
+            }
+            onPress={handleSkip}
+          />
+        </View>
+        <BtnGroup customStyles={{ marginTop: 32 }}>
+          <AusweisButtons
+            submitLabel="Done"
+            cancelLabel="Ignore"
+            onSubmit={handleSubmit}
+            onCancel={handleIgnore}
+          />
+        </BtnGroup>
       </View>
-
-      <Btn type={BtnTypes.tertiary} onPress={handleSubmit}>
-        All done
-      </Btn>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
-  optionContainer: {
-    marginVertical: 20,
-    alignItems: 'center',
+  header: {
+    marginTop: 36,
+    marginBottom: 40,
+  },
+  contentContainer: {
     width: '100%',
+    paddingHorizontal: 24,
+    marginBottom: BP({ large: 60, default: 30 }),
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tickContainer: {
+    width: 20,
+    height: 20,
+    marginRight: 9,
+  },
+  pinContainer: {
+    width: '100%',
+    paddingHorizontal: 24,
+  },
+  bottomContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 })

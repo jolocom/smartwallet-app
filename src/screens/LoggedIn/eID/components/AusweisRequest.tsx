@@ -9,7 +9,12 @@ import { LogoContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/c
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { eIDScreens } from '../types'
-import { useCheckNFC, useAusweisContext, useAusweisInteraction } from '../hooks'
+import {
+  useCheckNFC,
+  useAusweisContext,
+  useAusweisInteraction,
+  useAusweisSkipCompatibility,
+} from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
 
 export const AusweisRequest = () => {
@@ -19,10 +24,15 @@ export const AusweisRequest = () => {
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
   const { providerUrl, providerName } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
+  const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
 
   const handleProceed = async () => {
     checkNfcSupport(() => {
-      navigation.navigate(eIDScreens.ReadinessCheck)
+      if (shouldSkipCompatibility) {
+        navigation.navigate(eIDScreens.RequestDetails)
+      } else {
+        navigation.navigate(eIDScreens.ReadinessCheck)
+      }
     })
   }
 
