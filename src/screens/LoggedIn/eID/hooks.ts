@@ -184,7 +184,7 @@ export const useAusweisCompatibilityCheck = () => {
 
   const startCheck = () => {
     // @ts-expect-error
-    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner })
+    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner, params: {} })
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
