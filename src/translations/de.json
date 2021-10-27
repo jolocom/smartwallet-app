@@ -413,5 +413,31 @@
         "headerBlockedTitle": "Du hast die maximale Anzahl an Versuchen erreicht",
         "submitBtn": "Zugang wiederherstellen",
         "submitDescription": "Das Erstellen eines neuen Passcodes hat keinen Einfluss auf Deine gespeicherten Daten"
+    },
+    "ausweis": {
+        "birthName": "",
+        "address": "",
+        "communityID": "",
+        "writeAddress": "",
+        "residencePermitI": "",
+        "familyName": "",
+        "documentType": "",
+        "ageVerification": "",
+        "issuingCountry": "",
+        "writeResidencePermitII": "",
+        "writeCommunityID": "",
+        "artisticName": "",
+        "residencePermitII": "",
+        "writeResidencePermitI": "",
+        "givenNames": "",
+        "placeOfBirth": "",
+        "dateOfBirth": "",
+        "doctoralDegree": "",
+        "pseudonym": "",
+        "validUntil": "",
+        "nationality": "",
+        "addressVerification": "",
+        "canAllowed": "",
+        "pinManagement": ""
     }
 }

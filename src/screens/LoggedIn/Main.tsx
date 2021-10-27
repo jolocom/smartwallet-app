@@ -26,7 +26,7 @@ import TermsConsent from '~/screens/Modals/TermsConsent'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import CredentialDetails from './Documents/CredentialDetails'
+import FieldDetails from '../Modals/FieldDetails'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import {
@@ -45,6 +45,8 @@ import eID from './eID'
 import { IAusweisRequest } from './eID/types'
 import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
+import { Colors } from '~/utils/colors'
+import AusweisChangePin from './eID/components/AusweisChangePin'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -67,6 +69,7 @@ const TransparentModals = () => (
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
   [ScreenNames.eId]: IAusweisRequest
+  [ScreenNames.AusweisChangePin]: undefined
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
@@ -80,10 +83,11 @@ export type MainStackParamList = {
   [ScreenNames.TermsOfService]: undefined
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
-  [ScreenNames.CredentialDetails]: {
+  [ScreenNames.FieldDetails]: {
     fields: IField[]
     title?: string
     photo?: string
+    backgroundColor?: Colors
   }
   // DEV
   [ScreenNames.InteractionPasteTest]: undefined
@@ -239,8 +243,13 @@ const Main: React.FC = () => {
             }}
           />
           <MainStack.Screen
-            name={ScreenNames.CredentialDetails}
-            component={CredentialDetails}
+            name={ScreenNames.FieldDetails}
+            component={FieldDetails}
+            options={screenTransitionFromBottomDisabledGestures}
+          />
+          <MainStack.Screen
+            name={ScreenNames.AusweisChangePin}
+            component={AusweisChangePin}
             options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen

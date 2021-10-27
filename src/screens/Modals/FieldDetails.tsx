@@ -9,7 +9,7 @@ import Block from '~/components/Block'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import { NavHeaderType } from '~/components/NavigationHeader'
-import { MainStackParamList } from '../Main'
+import { MainStackParamList } from '../LoggedIn/Main'
 import { ScreenNames } from '~/types/screens'
 import { useToggleExpand } from '~/hooks/ui'
 import Collapsible from '~/components/Collapsible'
@@ -17,9 +17,9 @@ import { useSafeArea } from 'react-native-safe-area-context'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
-const CredentialDetails = () => {
+const FieldDetails = () => {
   const route =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.CredentialDetails>>()
+    useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
   const { title, photo, fields } = route.params
 
   const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CredentialDetails
+export default FieldDetails

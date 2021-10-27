@@ -17,10 +17,10 @@ import { SWErrorCodes } from '~/errors/codes'
 export const AusweisRequest = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
-  const { checkNfcSupport, goToNfcSettings } = useCheckNFC()
+  const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
   const { providerUrl, providerName } = useAusweisContext()
-  const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { scheduleErrorInfo, scheduleErrorWarning } = useToasts()
   const { cancelInteraction } = useAusweisInteraction()
 
   const handleProceed = async () => {
@@ -36,16 +36,7 @@ export const AusweisRequest = () => {
               'We have to inform you that your phone does not support the required NFC functionality',
           })
         } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
-          scheduleInfo({
-            title: 'Please turn on NFC',
-            message: 'Please go to the settings and enable NFC',
-            interact: {
-              label: 'Settings',
-              onInteract: () => {
-                goToNfcSettings()
-              },
-            },
-          })
+          scheduleDisabledNfcToast()
         } else {
           scheduleErrorWarning(e)
         }

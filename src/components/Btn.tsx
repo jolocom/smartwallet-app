@@ -22,6 +22,7 @@ export enum BtnTypes {
   quaternary = 'quaternary',
   quinary = 'quinary',
   senary = 'senary',
+  septenary = 'septenary',
 }
 
 export enum BtnSize {
@@ -57,6 +58,19 @@ const ButtonText: React.FC<BtnPropsI> = ({
   children,
   customTextStyles = {},
 }) => {
+  const getTextSize = () => {
+    switch (size) {
+      case BtnSize.large:
+        return 20
+      case BtnSize.medium:
+        return 18
+      case BtnSize.small:
+        return 12
+      default:
+        return 18
+    }
+  }
+
   const getTextStyle = () => {
     switch (type) {
       case BtnTypes.primary:
@@ -80,7 +94,7 @@ const ButtonText: React.FC<BtnPropsI> = ({
       style={[
         styles.text,
         getTextStyle(),
-        { fontSize: size === BtnSize.medium ? 18 : 20 },
+        { fontSize: getTextSize() },
         customTextStyles,
       ]}
     >
@@ -152,6 +166,24 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
             <ButtonText {...btnTextProps} />
           </View>
         )
+      case BtnTypes.septenary:
+        return (
+          <View
+            style={[
+              containerStyles,
+              {
+                backgroundColor: Colors.white06,
+                borderStyle: 'solid',
+                borderWidth: 0.8,
+                borderColor: Colors.silverChalice,
+              },
+              customContainerStyles,
+              btnStyle,
+            ]}
+          >
+            <ButtonText {...btnTextProps} />
+          </View>
+        )
     }
   }
 
@@ -199,7 +231,7 @@ const styles = StyleSheet.create({
     height: 45,
   },
   smallBtn: {
-    height: 32,
+    height: 26,
   },
   btn: {
     backgroundColor: 'transparent',
@@ -238,6 +270,10 @@ const styles = StyleSheet.create({
   textSenary: {
     fontFamily: Fonts.Medium,
     opacity: 0.8,
+    color: Colors.white,
+  },
+  textSeptenary: {
+    fontFamily: Fonts.Regular,
     color: Colors.white,
   },
 })

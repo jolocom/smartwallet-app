@@ -14,6 +14,13 @@ import { useAusweisInteraction } from '../hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useToasts } from '~/hooks/toasts'
 import { LOG } from '~/utils/dev'
+import { Colors } from '~/utils/colors'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { JoloTextSizes } from '~/utils/fonts'
+import { useDispatch } from 'react-redux'
+import { dismissLoader, setLoader } from '~/modules/loader/actions'
+import LoaderTest from '../../Settings/Development/DevLoaders'
+import { LoaderTypes } from '~/modules/loader/types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 
@@ -47,6 +54,7 @@ export const AusweisPasscode = () => {
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
+  const dispatch = useDispatch()
   const { scheduleInfo } = useToasts()
   const { passcodeCommands, cancelInteraction, finishFlow } =
     useAusweisInteraction()
@@ -55,6 +63,15 @@ export const AusweisPasscode = () => {
   const [waitingForMsg, setWaitingForMsg] = useState(false)
 
   useEffect(() => {
+    if (waitingForMsg) {
+      dispatch(setLoader({ type: LoaderTypes.default, msg: 'Checking' }))
+    } else {
+      dispatch(dismissLoader())
+    }
+  }, [waitingForMsg])
+
+  useEffect(() => {
+    //TODO: add handleBadState handler?
     aa2Module.setHandlers({
       handleCardRequest: () => {
         // TODO remove toast?
@@ -72,7 +89,6 @@ export const AusweisPasscode = () => {
         }
       },
       handlePukRequest: (card) => {
-        console.log('PUK REQUEST')
         setWaitingForMsg(false)
         setPinVariant(AusweisPasscodeMode.PUK)
         if (card.inoperative) {
@@ -84,7 +100,6 @@ export const AusweisPasscode = () => {
         }
       },
       handleCanRequest: (card) => {
-        console.log('CAN REQUEST')
         setWaitingForMsg(false)
         setPinVariant(AusweisPasscodeMode.CAN)
       },
@@ -108,9 +123,9 @@ export const AusweisPasscode = () => {
 
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
-      return 'PIN'
+      return 'To allow data exchange enter you six digit eID PIN'
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
-      return 'CAN'
+      return 'Before the third attempt, please enter the six digit Card Access Number (CAN)'
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
       return 'PUK'
     } else {
@@ -135,25 +150,33 @@ export const AusweisPasscode = () => {
 
   return (
     <ScreenContainer
+      backgroundColor={Colors.mainDark}
       customStyles={{
         justifyContent: 'flex-start',
       }}
     >
       <Passcode onSubmit={handleOnSubmit} length={6}>
         <PasscodeErrorSetter errorText={errorText} />
-        <Passcode.Container>
+        <Passcode.Container customStyles={{ marginTop: 42 }}>
           <Passcode.Header title={title} errorTitle={title} />
-          {waitingForMsg ? (
-            <ActivityIndicator color={'white'} />
-          ) : (
-            <Passcode.Input />
+          {pinVariant === AusweisPasscodeMode.CAN && (
+            <JoloText
+              customStyles={{ marginBottom: 36, paddingHorizontal: 24 }}
+              color={Colors.white80}
+              kind={JoloTextKind.title}
+              size={JoloTextSizes.mini}
+            >
+              You can find it in the bottom right on the front of your physical
+              ID card
+            </JoloText>
           )}
+          <Passcode.Input cellColor={Colors.chisinauGrey} />
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
           </View>
         </Passcode.Container>
-        <Passcode.Container>
-          <Passcode.Forgot />
+        <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
+          {/* <Passcode.Forgot /> */}
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
