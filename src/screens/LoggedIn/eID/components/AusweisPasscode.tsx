@@ -156,7 +156,7 @@ export const AusweisPasscode = () => {
 
   const handleOnSubmit = async (passcode: string) => {
     showScanner(() => {
-      cancelFlow()
+      cancelInteraction()
     })
     passcodeValue.current = passcode
   }

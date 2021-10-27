@@ -36,16 +36,15 @@ import { useNavigation } from '@react-navigation/core'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '..'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
-import { useToasts } from '~/hooks/toasts'
-import { AusweisPasscodeMode, eIDScreens } from '../types'
-import { SWErrorCodes } from '~/errors/codes'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import moment from 'moment'
 
 export const AusweisRequestReview = () => {
-  const { acceptRequest, cancelInteraction } = useAusweisInteraction()
-  const { scheduleErrorWarning } = useToasts()
+  const redirect = useRedirect()
+  const { acceptRequest, cancelInteraction, checkCardValidity } =
+    useAusweisInteraction()
+  const { scheduleWarning } = useToasts()
   const {
     providerName,
     requiredFields,
@@ -57,7 +56,7 @@ export const AusweisRequestReview = () => {
     effectiveValidityDate,
     expirationDate,
   } = useAusweisContext()
-  const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
+  const { checkNfcSupport } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
@@ -70,7 +69,7 @@ export const AusweisRequestReview = () => {
     if (checkCardValidity(card)) {
       onValidCard()
     } else {
-      cancelFlow()
+      cancelInteraction()
       scheduleWarning({
         title: 'Oops!',
         message: 'Seems like the card you provided is not valid',
@@ -83,6 +82,7 @@ export const AusweisRequestReview = () => {
     //TODO: add badState handler and cancel
     aa2Module.setHandlers({
       handleCardRequest: () => {
+        console.log('CARD REQUEST')
         if (Platform.OS === 'android') {
           showScanner(() => {
             cancelInteraction()
