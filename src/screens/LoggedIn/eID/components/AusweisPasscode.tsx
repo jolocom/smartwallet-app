@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import LoaderTest from '../../Settings/Development/DevLoaders'
 import { LoaderTypes } from '~/modules/loader/types'
+import { useRedirect } from '~/hooks/navigation'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 
@@ -58,23 +59,28 @@ export const AusweisPasscode = () => {
   const { scheduleInfo } = useToasts()
   const { passcodeCommands, cancelInteraction, finishFlow } =
     useAusweisInteraction()
+  const redirect = useRedirect()
+
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [waitingForMsg, setWaitingForMsg] = useState(false)
 
-  useEffect(() => {
-    if (waitingForMsg) {
-      dispatch(setLoader({ type: LoaderTypes.default, msg: 'Checking' }))
-    } else {
-      dispatch(dismissLoader())
-    }
-  }, [waitingForMsg])
+  // useEffect(() => {
+  //   if (waitingForMsg) {
+  //     dispatch(setLoader({ type: LoaderTypes.default, msg: 'Checking' }))
+  //   } else {
+  //     dispatch(dismissLoader())
+  //   }
+  // }, [waitingForMsg])
 
   useEffect(() => {
     //TODO: add handleBadState handler?
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        // TODO remove toast?
+        //@ts-expect-error
+        redirect(eIDScreens.AusweisScanner, {
+          onDismiss: cancelInteraction,
+        })
       },
       handlePinRequest: (card) => {
         setWaitingForMsg(false)
@@ -134,17 +140,15 @@ export const AusweisPasscode = () => {
   }, [pinVariant])
 
   const handleOnSubmit = async (passcode: string) => {
-    const passcodeNumber = parseInt(passcode)
-
     setWaitingForMsg(true)
     setErrorText(null)
 
     if (pinVariant === AusweisPasscodeMode.PIN) {
-      passcodeCommands.setPin(passcodeNumber)
+      passcodeCommands.setPin(passcode)
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
-      passcodeCommands.setCan(passcodeNumber)
+      passcodeCommands.setCan(passcode)
     } else if (pinVariant == AusweisPasscodeMode.PUK) {
-      passcodeCommands.setPuk(passcodeNumber)
+      passcodeCommands.setPuk(passcode)
     }
   }
 
