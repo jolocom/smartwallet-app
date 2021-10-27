@@ -1,9 +1,4 @@
-import { useBackHandler } from '@react-native-community/hooks'
-import {
-  CommonActions,
-  useBackButton,
-  useNavigation,
-} from '@react-navigation/native'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
@@ -17,7 +12,6 @@ import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
 import {
   AusweisCompatibilityResult,
-  AusweisPasscodeMode,
   eIDScreens,
   IAusweisRequest,
   AusweisFields,
@@ -271,9 +265,14 @@ export const useAusweisScanner = () => {
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
 
+  const getIsScannerActive = () => {
+    const routes = navigation.dangerouslyGetState().routes
+    const currentRoute = routes[routes.length - 1]
+    return currentRoute.key === AUSWEIS_SCANNER_NAVIGATION_KEY
+  }
+
   useEffect(() => {
-    console.log({ paramsState: scannerParams.state })
-    if (scannerParams.state !== AusweisScannerState.idle) {
+    if (getIsScannerActive()) {
       navigation.dispatch({
         ...CommonActions.setParams(scannerParams),
         source: AUSWEIS_SCANNER_NAVIGATION_KEY,
@@ -285,25 +284,23 @@ export const useAusweisScanner = () => {
     setScannerParams(defaultState)
   }
 
-  const showScanner = () => {
+  const showScanner = (onDismiss?: () => void) => {
     navigation.navigate({
       name: eIDScreens.AusweisScanner,
-      params: scannerParams,
+      params: { ...scannerParams, onDismiss },
       key: AUSWEIS_SCANNER_NAVIGATION_KEY,
     })
   }
 
   const updateScanner = (params: AusweisScannerParams) => {
     setScannerParams(params)
-    console.log({ updateState: params.state })
     if (
       params.state === AusweisScannerState.failure ||
       params.state === AusweisScannerState.success
     ) {
       setTimeout(() => {
-        console.log('resetting')
         resetScanner()
-      }, 300)
+      }, 1500)
     }
   }
 
