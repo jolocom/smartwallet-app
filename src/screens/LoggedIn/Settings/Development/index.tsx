@@ -13,7 +13,7 @@ import { usePopupMenu } from '~/hooks/popupMenu'
 import {
   useAusweisInteraction,
   useAusweisSkipCompatibility,
-} from '../../eID/hooks'
+} from '~/screens/LoggedIn/eID/hooks'
 import { useLoader } from '~/hooks/loader'
 
 const TC_TOKEN =
@@ -72,8 +72,10 @@ const DevelopmentSection = () => {
       <Section>
         <Section.Title>[DEV] Error handling</Section.Title>
         <Section.Block>
-          <Option onPress={handleSkipCompatibility}>
-            <Option.Title title="Reset Ausweis compatibility flag" />
+          <Option
+            onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
+          >
+            <Option.Title title="Throw error" />
           </Option>
         </Section.Block>
       </Section>
@@ -81,10 +83,8 @@ const DevelopmentSection = () => {
       <Section>
         <Section.Title>[DEV] Stored settings</Section.Title>
         <Section.Block>
-          <Option
-            onPress={() => showErrorDisplay(new Error(SWErrorCodes.SWUnknown))}
-          >
-            <Option.Title title="Throw error" />
+          <Option onPress={handleSkipCompatibility}>
+            <Option.Title title="Reset Ausweis compatibility flag" />
           </Option>
         </Section.Block>
       </Section>

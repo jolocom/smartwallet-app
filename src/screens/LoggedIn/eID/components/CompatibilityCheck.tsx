@@ -2,14 +2,13 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 import { eIDScreens } from '../types'
 import { useRedirect } from '~/hooks/navigation'
 import {
   useAusweisCompatibilityCheck,
-  useAusweisContext,
   useAusweisInteraction,
   useAusweisSkipCompatibility,
 } from '../hooks'
@@ -35,7 +34,6 @@ const Description: React.FC = ({ children }) => (
 
 export const CompatibilityCheck = () => {
   const redirect = useRedirect()
-  const { providerName } = useAusweisContext()
   const { cancelFlow } = useAusweisInteraction()
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
   const { setShouldSkip } = useAusweisSkipCompatibility()

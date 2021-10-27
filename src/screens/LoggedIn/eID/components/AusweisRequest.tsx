@@ -60,7 +60,7 @@ export const AusweisRequest = () => {
             },
           })
         } else {
-          console.log(e)
+          console.warn(e)
           scheduleErrorWarning(e)
         }
       })

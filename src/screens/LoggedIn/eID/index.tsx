@@ -11,11 +11,7 @@ import {
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
-import {
-  IAusweisCompatibilityResult,
-  AusweisPasscodeProps,
-  eIDScreens,
-} from './types'
+import { AusweisCardResult, AusweisPasscodeProps, eIDScreens } from './types'
 import {
   AusweisRequestReview,
   AusweisRequest,
@@ -35,7 +31,7 @@ export type AusweisStackParamList = {
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
   [eIDScreens.PasscodeDetails]: undefined
   [eIDScreens.ProviderDetails]: undefined
-  [eIDScreens.CompatibilityResult]: IAusweisCompatibilityResult
+  [eIDScreens.CompatibilityResult]: AusweisCardResult
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 

@@ -9,11 +9,7 @@ import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
-import {
-  IAusweisCompatibilityResult,
-  eIDScreens,
-  IAusweisRequest,
-} from './types'
+import { AusweisCardResult, eIDScreens, IAusweisRequest } from './types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -145,8 +141,7 @@ export const useAusweisInteraction = () => {
 export const useAusweisCompatibilityCheck = () => {
   const redirect = useRedirect()
   const pop = usePop()
-  const [compatibility, setCompatibility] =
-    useState<IAusweisCompatibilityResult>()
+  const [compatibility, setCompatibility] = useState<AusweisCardResult>()
 
   const startCheck = () => {
     setCompatibility(undefined)
@@ -191,7 +186,7 @@ export const useAusweisSkipCompatibility = () => {
   const getShouldSkip = async () => {
     try {
       const result = await settings.get(SettingKeys.ausweisSkipCompatibility)
-      if (!result.value) return false
+      if (!result?.value) return false
       else return result.value as boolean
     } catch (e) {
       console.warn('Failed to get value from storage', e)

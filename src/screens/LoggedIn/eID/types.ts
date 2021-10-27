@@ -71,7 +71,7 @@ export type AusweisContextValue = IAusweisRequest & {
   resetRequest: () => void
 }
 
-export interface IAusweisCompatibilityResult {
+export interface AusweisCardResult {
   inoperative: boolean
   deactivated: boolean
 }

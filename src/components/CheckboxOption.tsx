@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
@@ -15,10 +15,8 @@ export const CheckboxOption: React.FC<Props> = ({ onPress, description }) => {
   const [selected, setSelected] = useState(false)
 
   const handlePress = () => {
-    setSelected((prev) => {
-      onPress(!prev)
-      return !prev
-    })
+    onPress(!selected)
+    setSelected((prev) => !prev)
   }
 
   return (

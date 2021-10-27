@@ -34,12 +34,8 @@ export const AusweisCompatibilityResult: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
       goBack()
-    }, 3000)
+    }, 5000)
   }, [])
-
-  useBackHandler(() => {
-    return true
-  })
 
   return (
     <ScreenContainer
