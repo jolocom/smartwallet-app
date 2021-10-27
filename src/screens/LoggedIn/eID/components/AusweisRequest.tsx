@@ -19,9 +19,9 @@ export const AusweisRequest = () => {
   const navigation = useNavigation()
   const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
-  const { providerUrl, providerName, resetRequest } = useAusweisContext()
-  const { cancelFlow } = useAusweisInteraction()
+  const { providerUrl, providerName } = useAusweisContext()
   const { scheduleErrorInfo, scheduleErrorWarning } = useToasts()
+  const { cancelInteraction } = useAusweisInteraction()
 
   const handleProceed = async () => {
     checkNfcSupport()
@@ -43,10 +43,7 @@ export const AusweisRequest = () => {
       })
   }
 
-  const handleIgnore = () => {
-    cancelFlow()
-    resetRequest()
-  }
+  const handleIgnore = cancelInteraction
 
   return (
     <AusweisBottomSheet onDismiss={handleIgnore}>

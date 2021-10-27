@@ -35,6 +35,7 @@ import {
   screenTransitionSlideFromRight,
   transparentModalOptions,
   transparentModalFadeOptions,
+  screenDisableGestures,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
@@ -236,7 +237,10 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.eId}
             component={eID}
-            options={transparentModalFadeOptions}
+            options={{
+              ...transparentModalFadeOptions,
+              ...screenDisableGestures,
+            }}
           />
           <MainStack.Screen
             name={ScreenNames.FieldDetails}

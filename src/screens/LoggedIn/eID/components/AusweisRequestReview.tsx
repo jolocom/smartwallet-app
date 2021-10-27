@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
@@ -8,7 +8,7 @@ import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
-import { useRedirect } from '~/hooks/navigation'
+import { usePopStack, useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
@@ -37,6 +37,7 @@ import { IField } from '~/types/props'
 import moment from 'moment'
 
 export const AusweisRequestReview = () => {
+  const { acceptRequest, cancelInteraction } = useAusweisInteraction()
   const { scheduleErrorWarning } = useToasts()
   const {
     providerName,
@@ -49,20 +50,24 @@ export const AusweisRequestReview = () => {
     effectiveValidityDate,
     expirationDate,
   } = useAusweisContext()
-  const { acceptRequest, cancelFlow } = useAusweisInteraction()
   const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const redirect = useRedirect()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
+  const popStack = usePopStack()
   const translateField = useTranslatedAusweisFields()
 
   useEffect(() => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.AusweisScanner)
+        if (Platform.OS === 'android') {
+          //@ts-expect-error
+          redirect(eIDScreens.AusweisScanner, {
+            onDismiss: cancelInteraction,
+          })
+        }
       },
       handlePinRequest: () => {
         //@ts-expect-error
@@ -75,6 +80,19 @@ export const AusweisRequestReview = () => {
       handleCanRequest: () => {
         //@ts-expect-error
         redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
+      },
+      handleAuthResult: () => {
+        /**
+         * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
+         */
+        if (Platform.OS === 'ios') {
+          /**
+           * NOTE: CANCEL should not be sent here;
+           * because the workflow by this time is
+           * aborted
+           */
+          popStack()
+        }
       },
     })
   }, [])
@@ -89,14 +107,12 @@ export const AusweisRequestReview = () => {
       } else {
         console.warn('Error: ', e)
         scheduleErrorWarning(e)
-        cancelFlow()
+        cancelInteraction()
       }
     }
   }
 
-  const handleIgnore = () => {
-    cancelFlow()
-  }
+  const handleIgnore = cancelInteraction
 
   const handleMoreInfo = () => {
     const fields: IField[] = [

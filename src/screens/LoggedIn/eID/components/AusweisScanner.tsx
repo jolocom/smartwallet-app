@@ -1,25 +1,39 @@
+import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { ScannerIcon } from '~/assets/svg'
 import Btn from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { useGoBack } from '~/hooks/navigation'
 import { useAusweisInteraction } from '../hooks'
 import { AusweisBottomSheet } from '../styled'
+import { AusweisStackParamList } from '../'
+import { eIDScreens } from '../types'
+import { useGoBack } from '~/hooks/navigation'
 
 export const AusweisScanner = () => {
-  const goBack = useGoBack()
+  const { onDismiss } =
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
+      .params
   const { checkIfScanned } = useAusweisInteraction()
+  const goBack = useGoBack()
+
+  const handleDismiss = () => {
+    /**
+     * NOTE:
+     * delegating removing scanner from the
+     * navigation stack to the scanner;
+     * onDismiss should contain logic without closing
+     * the AusweisScanner screen
+     */
+    goBack()
+    onDismiss && onDismiss()
+  }
 
   useEffect(() => {
     checkIfScanned().then(() => {
       handleDismiss()
     })
   }, [])
-
-  const handleDismiss = () => {
-    goBack()
-  }
 
   return (
     <AusweisBottomSheet onDismiss={handleDismiss}>

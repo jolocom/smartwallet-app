@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
-import { StackActions } from '@react-navigation/routers'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { dismissLoader, setLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
-import { getLoaderState } from '~/modules/loader/selectors'
-import { AA2Messages, AusweisPasscodeMode, eIDScreens } from '../types'
-import { aa2EmitterTemp } from '../events'
+import { eIDScreens } from '../types'
 import { usePop, useRedirect } from '~/hooks/navigation'
 import { useFailed, useSuccess } from '~/hooks/loader'
-import { useAusweisInteraction } from '../hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { useFocusEffect } from '@react-navigation/core'
 
 type ReaderMsg = {
   msg: 'READER'
@@ -31,58 +23,12 @@ type ReaderMsg = {
   }
 }
 
-/**
- * TODO:
- * - check "attached" prop permutations
- */
-const READER_BASE = {
-  msg: 'READER',
-  name: 'NFC',
-  attached: true,
-  keypad: false,
-}
-
-const LOCKED_CARD = {
-  ...READER_BASE,
-  card: {
-    inoperative: true,
-    deactivated: false,
-    retryCounter: 0,
-  },
-}
-
-const DEACTIVATED_CARD = {
-  ...READER_BASE,
-  card: {
-    inoperative: false,
-    deactivated: true, // True if eID functionality is deactivated, otherwise false
-    retryCounter: 3,
-  },
-}
-
-const ACTIVE_CARD = {
-  ...READER_BASE,
-  card: {
-    inoperative: false,
-    deactivated: false,
-    retryCounter: 3,
-  },
-}
-
 enum CardStatus {
   inoperative = 'inoperative',
   deactivated = 'deactivated',
   ready = 'ready',
 }
 
-/**
- * 1. Send GET_READER cmd to receive READER msg to check for "deactivated"
- * field that checks if eID functionality was implemented {'\n'}
- * handleCheckCompatibility:
- * 1. ios/android show popup to insert a card
- * once the card is inserted
- * 2. Wait for READER msg to get info about "deactivated"/"inoperative" states
- */
 export const CompatibilityCheck = () => {
   const [cardStatus, setCardStatus] = useState<CardStatus | null>(null)
   const redirect = useRedirect()
@@ -96,6 +42,15 @@ export const CompatibilityCheck = () => {
   useEffect(() => {
     aa2Module.setHandlers({
       handleCardRequest: () => {
+        /**
+         * NOTE:
+         * we are not passing onDismiss as a param,
+         * as there are no additional logic we want to run
+         * when the scanner closes;
+         * or if we decide to abort the workflow from within
+         * the run_auth wf we shall pass to compatibility check
+         * a param (a suggestion)
+         */
         // @ts-ignore
         redirect(eIDScreens.AusweisScanner)
       },
@@ -130,6 +85,13 @@ export const CompatibilityCheck = () => {
   }, [cardStatus])
 
   const handleCheckCompatibility = async () => {
+    /**
+     * NOTE:
+     * we are not passing onDismiss as a param,
+     * as there are no additional logic we want to run
+     * when the scanner closes; it is not
+     * in any currently running workflows
+     */
     // @ts-expect-error
     redirect(eIDScreens.AusweisScanner)
   }

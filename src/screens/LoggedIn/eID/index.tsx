@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { RouteProp, useRoute } from '@react-navigation/core'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import { AusweisProvider } from './context'
-import { useAusweisContext } from './hooks'
+import { useAusweisContext, useAusweisInteraction } from './hooks'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
 import {
@@ -23,7 +24,9 @@ import {
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
-  [eIDScreens.AusweisScanner]: undefined
+  [eIDScreens.AusweisScanner]: {
+    onDismiss?: () => void
+  }
   [eIDScreens.ReadinessCheck]: undefined
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
@@ -35,10 +38,18 @@ const AusweisInteraction = () => {
   const request =
     useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
   const { setRequest } = useAusweisContext()
+  const { cancelInteraction } = useAusweisInteraction()
 
   useEffect(() => {
     setRequest(request)
   }, [])
+
+  const cancel = useCallback(() => {
+    cancelInteraction()
+    return true
+  }, [])
+
+  useBackHandler(cancel)
 
   return (
     <eIDStack.Navigator

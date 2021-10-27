@@ -105,14 +105,10 @@ export const useAusweisInteraction = () => {
   }
 
   const disconnectAusweis = () => {
-    try {
-      aa2Module.disconnectAa2Sdk()
-    } catch (e) {
-      scheduleErrorWarning(e)
-    }
+    aa2Module.disconnectAa2Sdk().catch(scheduleErrorWarning)
   }
 
-  const cancelFlow = async () => {
+  const cancelInteraction = () => {
     aa2Module.cancelFlow().catch(scheduleErrorWarning)
     popStack()
   }
@@ -138,7 +134,7 @@ export const useAusweisInteraction = () => {
         } else {
           scheduleErrorWarning(new Error(res['statusText']))
         }
-        cancelFlow()
+        cancelInteraction()
       })
       .catch(scheduleErrorWarning)
   }
@@ -147,7 +143,7 @@ export const useAusweisInteraction = () => {
     initAusweis,
     disconnectAusweis,
     processAusweisToken,
-    cancelFlow,
+    cancelInteraction,
     acceptRequest,
     checkIfScanned,
     passcodeCommands,
