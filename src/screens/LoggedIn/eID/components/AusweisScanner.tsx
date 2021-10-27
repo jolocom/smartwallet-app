@@ -1,20 +1,33 @@
+import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useEffect } from 'react'
-import { View } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { Platform, View } from 'react-native'
 import { ScannerIcon } from '~/assets/svg'
 import Btn from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { useGoBack } from '~/hooks/navigation'
-import { useAusweisInteraction } from '../hooks'
 import { AusweisBottomSheet } from '../styled'
+import { AusweisStackParamList } from '../'
+import { eIDScreens } from '../types'
+import { useGoBack } from '~/hooks/navigation'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { aa2Module } from 'react-native-aa2-sdk'
 
 export const AusweisScanner = () => {
+  const { onDismiss } =
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
+      .params
   const goBack = useGoBack()
-  const { checkIfScanned } = useAusweisInteraction()
 
   useEffect(() => {
-    checkIfScanned().then(() => {
-      handleDismiss()
+    aa2Module.setHandlers({
+      /**
+       * NOTE: hide scanner as soon
+       * as the READER msg was received
+       */
+      handleCardInfo: (card: CardInfo | null) => {
+        if (card !== null) {
+          goBack()
+        }
+      },
     })
 
     return () => {
@@ -23,8 +36,22 @@ export const AusweisScanner = () => {
   }, [])
 
   const handleDismiss = () => {
+    /**
+     * NOTE:
+     * delegating removing scanner from the
+     * navigation stack to the scanner;
+     * onDismiss should contain logic without closing
+     * the AusweisScanner screen
+     */
     goBack()
+    onDismiss && onDismiss()
   }
+
+  // useEffect(() => {
+  //   checkIfScanned().then(() => {
+  //     handleDismiss()
+  //   })
+  // }, [])
 
   return (
     <AusweisBottomSheet onDismiss={handleDismiss}>

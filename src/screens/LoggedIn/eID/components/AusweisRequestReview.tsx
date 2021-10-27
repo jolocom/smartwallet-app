@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
-import { NavHeaderType } from '~/components/NavigationHeader'
+import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
-import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
-import { useDisableLock } from '~/hooks/generic'
-import { useRedirect } from '~/hooks/navigation'
+import { usePopStack, useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
-import InteractionSection from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionSection'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
   ContainerFAS,
@@ -21,29 +18,56 @@ import {
   LogoContainerFAS,
 } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
-import { useAusweisContext, useAusweisInteraction } from '../hooks'
+import {
+  useAusweisContext,
+  useAusweisInteraction,
+  useCheckNFC,
+  useTranslatedAusweisFields,
+} from '../hooks'
 import {
   AusweisButtons,
   AusweisHeaderDescription,
+  AusweisListSection,
   AusweisLogo,
 } from '../styled'
 import { AusweisPasscodeMode, eIDScreens } from '../types'
+import { SWErrorCodes } from '~/errors/codes'
+import { ScreenNames } from '~/types/screens'
+import { IField } from '~/types/props'
+import moment from 'moment'
 
 export const AusweisRequestReview = () => {
-  const { scheduleWarning } = useToasts()
-  const { providerName, requiredFields, optionalFields } = useAusweisContext()
-  const { acceptRequest, checkIfScanned, cancelFlow } = useAusweisInteraction()
+  const { acceptRequest, cancelInteraction } = useAusweisInteraction()
+  const { scheduleErrorWarning } = useToasts()
+  const {
+    providerName,
+    requiredFields,
+    optionalFields,
+    providerUrl,
+    certificateIssuerName,
+    certificateIssuerUrl,
+    providerInfo,
+    effectiveValidityDate,
+    expirationDate,
+  } = useAusweisContext()
+  const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const redirect = useRedirect()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
+  const popStack = usePopStack()
+  const translateField = useTranslatedAusweisFields()
 
   useEffect(() => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        // @ts-ignore
-        redirect(eIDScreens.AusweisScanner)
+        if (Platform.OS === 'android') {
+          //@ts-expect-error
+          redirect(eIDScreens.AusweisScanner, {
+            onDismiss: cancelInteraction,
+          })
+        }
       },
       handlePinRequest: () => {
         //@ts-expect-error
@@ -57,36 +81,60 @@ export const AusweisRequestReview = () => {
         //@ts-expect-error
         redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
       },
+      handleAuthResult: () => {
+        /**
+         * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
+         */
+        if (Platform.OS === 'ios') {
+          /**
+           * NOTE: CANCEL should not be sent here;
+           * because the workflow by this time is
+           * aborted
+           */
+          popStack()
+        }
+      },
     })
   }, [])
 
-  //TODO: this should probably be handled by events
   const handleProceed = async () => {
     try {
+      await checkNfcSupport()
       await acceptRequest(selectedOptional)
     } catch (e) {
-      console.warn(e)
-      scheduleWarning({
-        title: 'Check compatibility',
-        message:
-          'Not the first time failing?\n Start compatibility diagnostics to be sure.',
-        interact: {
-          label: 'Start',
-          onInteract: () => {
-            //TODO add compatibility check
-          },
-        },
-      })
+      if (e.message === SWErrorCodes.SWNfcNotEnabled) {
+        scheduleDisabledNfcToast()
+      } else {
+        console.warn('Error: ', e)
+        scheduleErrorWarning(e)
+        cancelInteraction()
+      }
     }
   }
 
-  const handleIgnore = () => {
-    cancelFlow()
-  }
+  const handleIgnore = cancelInteraction
 
   const handleMoreInfo = () => {
-    // @ts-expect-error
-    redirect(eIDScreens.ProviderDetails)
+    const fields: IField[] = [
+      { label: 'Provider', value: providerName + '\n' + providerUrl },
+      {
+        label: 'Certificate issuer',
+        value: certificateIssuerName + '\n' + certificateIssuerUrl,
+      },
+      { label: 'Provider information', value: providerInfo },
+      {
+        label: 'Validity',
+        value:
+          moment(effectiveValidityDate).format('DD.MM.YYYY') +
+          ' - ' +
+          moment(expirationDate).format('DD.MM.YYYY'),
+      },
+    ]
+    redirect(ScreenNames.FieldDetails, {
+      fields,
+      title: providerName,
+      backgroundColor: Colors.mainDark,
+    })
   }
 
   const handleSelectOptional = (field: string) => {
@@ -100,9 +148,13 @@ export const AusweisRequestReview = () => {
   }
 
   return (
-    <View style={{ paddingTop: top, backgroundColor: Colors.mainBlack }}>
+    <View style={{ paddingTop: top, backgroundColor: Colors.mainDark }}>
       <Collapsible
-        renderHeader={() => <Collapsible.Header />}
+        renderHeader={() => (
+          <Collapsible.Header
+            customStyles={{ backgroundColor: Colors.mainDark }}
+          />
+        )}
         renderScroll={() => (
           <ContainerFAS>
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
@@ -115,43 +167,48 @@ export const AusweisRequestReview = () => {
                 <InteractionTitle label={t('CredentialRequest.header')} />
               </Collapsible.Title>
               <AusweisHeaderDescription>
-                {`Please consider the details of the request sent by the ${providerName}`}
+                {`Choose one or more documents requested by ${providerName} to proceed `}
               </AusweisHeaderDescription>
-              <View
-                style={{
-                  paddingHorizontal: '20%',
-                  marginTop: 8,
-                  marginBottom: 36,
+              <Btn
+                type={BtnTypes.septenary}
+                size={BtnSize.small}
+                onPress={handleMoreInfo}
+                customContainerStyles={{
+                  width: 'auto',
+                  paddingHorizontal: 24,
+                  marginBottom: 32,
+                  marginTop: 20,
                 }}
               >
-                <Btn
-                  type={BtnTypes.senary}
-                  size={BtnSize.small}
-                  onPress={handleMoreInfo}
-                >
-                  More info
-                </Btn>
-              </View>
+                More now
+              </Btn>
 
-              <ScreenContainer.Padding>
-                <InteractionSection title="Mandatory">
-                  {requiredFields.map((fieldName) => (
-                    <Field.Static value={fieldName} />
+              <ScreenContainer.Padding
+                distance={BP({ large: 36, medium: 28, default: 16 })}
+              >
+                <AusweisListSection title="Mandatory fields">
+                  {requiredFields.map((field, i) => (
+                    <Field.Selectable
+                      value={translateField(field)}
+                      isSelected={true}
+                      key={field + i}
+                      disabled={true}
+                    />
                   ))}
-                </InteractionSection>
+                </AusweisListSection>
 
-                <InteractionSection title="Optional">
+                <AusweisListSection title="Optional fields">
                   <Widget>
                     {optionalFields.map((field, i) => (
                       <Field.Selectable
                         key={field + i}
-                        value={field}
+                        value={translateField(field)}
                         onSelect={() => handleSelectOptional(field)}
                         isSelected={selectedOptional.includes(field)}
                       />
                     ))}
                   </Widget>
-                </InteractionSection>
+                </AusweisListSection>
               </ScreenContainer.Padding>
             </Collapsible.Scroll>
           </ContainerFAS>
@@ -159,7 +216,7 @@ export const AusweisRequestReview = () => {
       >
         <FooterContainerFAS>
           <AusweisButtons
-            submitLabel="Proceed"
+            submitLabel="Share"
             cancelLabel="Ignore"
             onSubmit={handleProceed}
             onCancel={handleIgnore}

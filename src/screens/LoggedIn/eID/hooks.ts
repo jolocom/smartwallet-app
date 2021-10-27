@@ -7,14 +7,23 @@ import { useRedirect, usePopStack, usePop } from '~/hooks/navigation'
 import useSettings, { SettingKeys } from '~/hooks/settings'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
-import { LOG } from '~/utils/dev'
 import { AusweisContext } from './context'
-import { AusweisCardResult, eIDScreens, IAusweisRequest } from './types'
+import {
+  AusweisFields,
+  AusweisCardResult,
+  eIDScreens,
+  IAusweisRequest,
+} from './types'
+
+import { LOG } from '~/utils/dev'
+import useTranslation from '~/hooks/useTranslation'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
 export const useCheckNFC = () => {
-  const checkNfcSupport = async () => {
+  const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
+
+  const nfcCheck = async () => {
     const supported = await NfcManager.isSupported()
 
     if (!supported) {
@@ -29,11 +38,38 @@ export const useCheckNFC = () => {
     }
   }
 
+  const checkNfcSupport = (onSuccess: () => void) => {
+    nfcCheck()
+      .then(onSuccess)
+      .catch((e) => {
+        if (e.message === SWErrorCodes.SWNfcNotSupported) {
+          scheduleErrorInfo(e, {
+            title: 'NFC Compatibility problem',
+            message:
+              'We have to inform you that your phone does not support the required NFC functionality',
+          })
+        } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
+          scheduleInfo({
+            title: 'Please turn on NFC',
+            message: 'Please go to the settings and enable NFC',
+            interact: {
+              label: 'Settings',
+              onInteract: () => {
+                goToNfcSettings()
+              },
+            },
+          })
+        } else {
+          scheduleErrorWarning(e)
+        }
+      })
+  }
+
   const goToNfcSettings = () => {
     NfcManager.goToNfcSetting()
   }
 
-  return { checkNfcSupport, goToNfcSettings }
+  return { checkNfcSupport }
 }
 
 export const useAusweisInteraction = () => {
@@ -88,14 +124,10 @@ export const useAusweisInteraction = () => {
   }
 
   const disconnectAusweis = () => {
-    try {
-      aa2Module.disconnectAa2Sdk()
-    } catch (e) {
-      scheduleErrorWarning(e)
-    }
+    aa2Module.disconnectAa2Sdk().catch(scheduleErrorWarning)
   }
 
-  const cancelFlow = async () => {
+  const cancelInteraction = () => {
     aa2Module.cancelFlow().catch(scheduleErrorWarning)
     popStack()
   }
@@ -105,9 +137,9 @@ export const useAusweisInteraction = () => {
   }
 
   const passcodeCommands = {
-    setPin: (pin: number) => aa2Module.enterPin(pin),
-    setPuk: (puk: number) => aa2Module.enterPUK(puk),
-    setCan: (can: number) => aa2Module.enterCan(can),
+    setPin: (pin: string) => aa2Module.enterPin(pin),
+    setPuk: (puk: string) => aa2Module.enterPUK(puk),
+    setCan: (can: string) => aa2Module.enterCan(can),
   }
 
   const finishFlow = (url: string) => {
@@ -121,7 +153,7 @@ export const useAusweisInteraction = () => {
         } else {
           scheduleErrorWarning(new Error(res['statusText']))
         }
-        cancelFlow()
+        popStack()
       })
       .catch(scheduleErrorWarning)
   }
@@ -130,7 +162,7 @@ export const useAusweisInteraction = () => {
     initAusweis,
     disconnectAusweis,
     processAusweisToken,
-    cancelFlow,
+    cancelInteraction,
     acceptRequest,
     checkIfScanned,
     passcodeCommands,
@@ -146,7 +178,7 @@ export const useAusweisCompatibilityCheck = () => {
   const startCheck = () => {
     setCompatibility(undefined)
     // @ts-expect-error
-    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner })
+    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner, params: {} })
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
@@ -205,4 +237,39 @@ export const useAusweisSkipCompatibility = () => {
   }
 
   return { shouldSkip, setShouldSkip }
+}
+
+export const useTranslatedAusweisFields = () => {
+  const { t } = useTranslation()
+
+  const fieldsMapping: { [x in AusweisFields]: string } = {
+    [AusweisFields.Address]: t('ausweis.address'),
+    [AusweisFields.BirthName]: t('ausweis.birthName'),
+    [AusweisFields.FamilyName]: t('ausweis.familyName'),
+    [AusweisFields.GivenNames]: t('ausweis.givenNames'),
+    [AusweisFields.PlaceOfBirth]: t('ausweis.placeOfBirth'),
+    [AusweisFields.DateOfBirth]: t('ausweis.dateOfBirth'),
+    [AusweisFields.DoctoralDegree]: t('ausweis.doctoralDegree'),
+    [AusweisFields.ArtisticName]: t('ausweis.artisticName'),
+    [AusweisFields.Pseudonym]: t('ausweis.pseudonym'),
+    [AusweisFields.ValidUntil]: t('ausweis.validUntil'),
+    [AusweisFields.Nationality]: t('ausweis.nationality'),
+    [AusweisFields.IssuingCountry]: t('ausweis.issuingCountry'),
+    [AusweisFields.DocumentType]: t('ausweis.documentType'),
+    [AusweisFields.ResidencePermitI]: t('ausweis.residencePermitI'),
+    [AusweisFields.ResidencePermitII]: t('ausweis.residencePermitII'),
+    [AusweisFields.CommunityID]: t('ausweis.communityID'),
+    [AusweisFields.AddressVerification]: t('ausweis.addressVerification'),
+    [AusweisFields.AgeVerification]: t('ausweis.ageVerification'),
+    [AusweisFields.WriteAddress]: t('ausweis.writeAddress'),
+    [AusweisFields.WriteCommunityID]: t('ausweis.writeCommunityID'),
+    [AusweisFields.WriteResidencePermitI]: t('ausweis.writeResidencePermitI'),
+    [AusweisFields.WriteResidencePermitII]: t('ausweis.writeResidencePermitII'),
+    [AusweisFields.CanAllowed]: t('ausweis.canAllowed'),
+    [AusweisFields.PinManagement]: t('ausweis.pinManagement'),
+  }
+
+  return (field: AusweisFields) => {
+    return fieldsMapping[field]
+  }
 }

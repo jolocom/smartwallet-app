@@ -34,7 +34,7 @@ const Description: React.FC = ({ children }) => (
 
 export const CompatibilityCheck = () => {
   const redirect = useRedirect()
-  const { cancelFlow } = useAusweisInteraction()
+  const { cancelInteraction } = useAusweisInteraction()
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
   const { setShouldSkip } = useAusweisSkipCompatibility()
 
@@ -53,7 +53,7 @@ export const CompatibilityCheck = () => {
   }
 
   const handleIgnore = () => {
-    cancelFlow()
+    cancelInteraction()
   }
 
   const handleSkip = (selected: boolean) => {

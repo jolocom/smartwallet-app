@@ -5,17 +5,24 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useAusweisCompatibilityCheck } from '~/screens/LoggedIn/eID/hooks'
+import { useNavigation } from '@react-navigation/core'
+import { ScreenNames } from '~/types/screens'
+import {
+  useAusweisCompatibilityCheck,
+  useCheckNFC,
+} from '~/screens/LoggedIn/eID/hooks'
 
 export const AusweisIdentity = () => {
-  const { startCheck } = useAusweisCompatibilityCheck()
+  const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
+  const { checkNfcSupport } = useCheckNFC()
+  const navigation = useNavigation()
 
   const handleCompatibilityCheck = () => {
-    startCheck()
+    checkNfcSupport(startCompatibilityCheck)
   }
 
   const handleChangePin = () => {
-    console.warn('Not implemented')
+    navigation.navigate(ScreenNames.AusweisChangePin)
   }
 
   const handleUnlockCard = () => {
@@ -59,7 +66,7 @@ export const AusweisIdentity = () => {
             customContainerStyles={styles.btn}
             onPress={handleChangePin}
           >
-            Change your 5-digit pincode
+            Change your PIN
           </Btn>
           <Btn
             type={BtnTypes.secondary}

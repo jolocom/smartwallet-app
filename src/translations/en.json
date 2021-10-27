@@ -413,5 +413,31 @@
         "headerBlockedTitle": "You have reached the limit of your attempts",
         "submitBtn": "Restore Access",
         "submitDescription": "Setting a new passcode will not affect your stored data"
+    },
+    "ausweis": {
+        "birthName": "Birth name",
+        "address": "Address",
+        "communityID": "Community ID",
+        "writeAddress": "Write address",
+        "residencePermitI": "Residence permit I",
+        "familyName": "Family name",
+        "documentType": "Document type",
+        "ageVerification": "Age verification",
+        "issuingCountry": "Issuing country",
+        "writeResidencePermitII": "Write residence permit II",
+        "writeCommunityID": "Write community ID",
+        "artisticName": "Artistic name",
+        "residencePermitII": "Residence permit II",
+        "writeResidencePermitI": "Write residence permit II",
+        "givenNames": "Given names",
+        "placeOfBirth": "Place of birth",
+        "dateOfBirth": "Date of birth",
+        "doctoralDegree": "Doctoral degree",
+        "pseudonym": "Pseudonym",
+        "validUntil": "Valid until",
+        "nationality": "Nationality",
+        "addressVerification": "Address verification",
+        "canAllowed": "CAN allowed",
+        "pinManagement": "PIN management"
     }
 }

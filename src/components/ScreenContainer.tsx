@@ -28,7 +28,7 @@ interface ScreenContainerI {
 
 interface IScreenContainerCompound {
   Header: React.FC<IJoloTextProps>
-  Padding: React.FC
+  Padding: React.FC<{ distance?: number }>
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
@@ -127,8 +127,14 @@ const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
   )
 }
 
-const ScreenPadding: IScreenContainerCompound['Padding'] = ({ children }) => (
-  <View style={styles.padding} children={children} />
+const ScreenPadding: IScreenContainerCompound['Padding'] = ({
+  children,
+  distance = 16,
+}) => (
+  <View
+    style={[styles.padding, { paddingHorizontal: distance }]}
+    children={children}
+  />
 )
 
 ScreenContainer.Header = ScreenContainerHeader
@@ -157,7 +163,6 @@ const styles = StyleSheet.create({
   padding: {
     // TODO: double check in places that use ScreenContainer.Padding
     width: Dimensions.get('window').width,
-    paddingHorizontal: 16,
   },
 })
 
