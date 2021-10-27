@@ -139,7 +139,14 @@ export const useAusweisInteraction = () => {
   }
 
   const cancelInteraction = () => {
-    aa2Module.cancelFlow().catch(scheduleErrorWarning)
+    aa2Module
+      .cancelFlow()
+      .catch((e) =>
+        console.warn(
+          'Ausweis Error: Something happend when canceling interaction',
+          e,
+        ),
+      )
     closeAusweis()
   }
 
