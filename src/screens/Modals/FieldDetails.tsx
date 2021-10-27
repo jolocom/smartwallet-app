@@ -20,7 +20,12 @@ const IMAGE_SIZE = BP({ large: 100, default: 90 })
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-  const { title, photo, fields } = route.params
+  const {
+    title,
+    photo,
+    fields,
+    backgroundColor = Colors.mainBlack,
+  } = route.params
 
   const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
   const { isExpanded, onToggleExpand } = useToggleExpand()
@@ -38,9 +43,14 @@ const FieldDetails = () => {
 
   const { top } = useSafeArea()
   return (
-    <View style={{ paddingTop: top }}>
+    <View style={{ paddingTop: top, backgroundColor }}>
       <Collapsible
-        renderHeader={() => <Collapsible.Header type={NavHeaderType.Close} />}
+        renderHeader={() => (
+          <Collapsible.Header
+            customStyles={{ backgroundColor }}
+            type={NavHeaderType.Close}
+          />
+        )}
         renderScroll={() => (
           <ScreenContainer.Padding>
             <Collapsible.Scroll>
