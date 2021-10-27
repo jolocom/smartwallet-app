@@ -8,6 +8,7 @@ export enum eIDScreens {
   PasscodeDetails = 'PasscodeDetails',
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
+  CompatibilityResult = 'CompatibilityResult',
 }
 
 export enum AA2Messages {
@@ -85,7 +86,7 @@ export interface AusweisScannerParams {
   state?: AusweisScannerState
 }
 
-export interface AusweisCompatibilityResult {
+export interface AusweisCardResult {
   inoperative: boolean
   deactivated: boolean
 }
