@@ -1,13 +1,23 @@
+import { useBackHandler } from '@react-native-community/hooks'
+import { useBackButton } from '@react-navigation/native'
+import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
 import { useDisableLock } from '~/hooks/generic'
-import { useRedirect, usePopStack } from '~/hooks/navigation'
+import { useFailed, useSuccess } from '~/hooks/loader'
+import { useRedirect, usePopStack, usePop, useGoBack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
-import { AusweisFields, IAusweisRequest } from './types'
+import {
+  AusweisCompatibilityResult,
+  AusweisPasscodeMode,
+  eIDScreens,
+  IAusweisRequest,
+  AusweisFields,
+} from './types'
 
 import { LOG } from '~/utils/dev'
 import useTranslation from '~/hooks/useTranslation'
@@ -15,9 +25,9 @@ import useTranslation from '~/hooks/useTranslation'
 export const useAusweisContext = useCustomContext(AusweisContext)
 
 export const useCheckNFC = () => {
-  const { scheduleInfo } = useToasts()
+  const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
 
-  const checkNfcSupport = async () => {
+  const nfcCheck = async () => {
     const supported = await NfcManager.isSupported()
 
     if (!supported) {
@@ -32,24 +42,38 @@ export const useCheckNFC = () => {
     }
   }
 
+  const checkNfcSupport = (onSuccess: () => void) => {
+    nfcCheck()
+      .then(onSuccess)
+      .catch((e) => {
+        if (e.message === SWErrorCodes.SWNfcNotSupported) {
+          scheduleErrorInfo(e, {
+            title: 'NFC Compatibility problem',
+            message:
+              'We have to inform you that your phone does not support the required NFC functionality',
+          })
+        } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
+          scheduleInfo({
+            title: 'Please turn on NFC',
+            message: 'Please go to the settings and enable NFC',
+            interact: {
+              label: 'Settings',
+              onInteract: () => {
+                goToNfcSettings()
+              },
+            },
+          })
+        } else {
+          scheduleErrorWarning(e)
+        }
+      })
+  }
+
   const goToNfcSettings = () => {
     NfcManager.goToNfcSetting()
   }
 
-  const scheduleDisabledNfcToast = () => {
-    scheduleInfo({
-      title: 'Please turn on NFC',
-      message: 'Please go to the settings and enable NFC',
-      interact: {
-        label: 'Settings',
-        onInteract: () => {
-          goToNfcSettings()
-        },
-      },
-    })
-  }
-
-  return { checkNfcSupport, goToNfcSettings, scheduleDisabledNfcToast }
+  return { checkNfcSupport }
 }
 
 export const useAusweisInteraction = () => {
@@ -148,6 +172,45 @@ export const useAusweisInteraction = () => {
     passcodeCommands,
     finishFlow,
   }
+}
+
+export const useAusweisCompatibilityCheck = () => {
+  const showSuccess = useSuccess()
+  const showFailed = useFailed()
+  const redirect = useRedirect()
+  const pop = usePop()
+  const [compatibility, setCompatibility] =
+    useState<AusweisCompatibilityResult>()
+
+  const startCheck = () => {
+    // @ts-expect-error
+    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner, params: {} })
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers({
+      handleCardInfo: (info) => {
+        if (info && !compatibility) {
+          const { inoperative, deactivated } = info
+          setCompatibility({ inoperative, deactivated })
+
+          pop(1)
+        }
+      },
+    })
+  }
+
+  useEffect(() => {
+    if (compatibility) {
+      aa2Module.resetHandlers()
+      if (compatibility.deactivated || compatibility.inoperative) {
+        showFailed()
+      } else {
+        showSuccess()
+      }
+      setCompatibility(undefined)
+    }
+  }, [JSON.stringify(compatibility)])
+
+  return { startCheck, compatibility }
 }
 
 export const useTranslatedAusweisFields = () => {

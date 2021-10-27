@@ -29,6 +29,10 @@ export const AusweisScanner = () => {
         }
       },
     })
+
+    return () => {
+      aa2Module.resetHandlers()
+    }
   }, [])
 
   const handleDismiss = () => {
