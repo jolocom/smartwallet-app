@@ -12,6 +12,7 @@ import { generateRandomString } from '~/utils/stringUtils'
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
+import Ripple from '~/components/Ripple'
 
 export const AUSWEIS_SCANNER_NAVIGATION_KEY = `AusweisScanner-${generateRandomString(
   10,
@@ -22,30 +23,40 @@ export const AusweisScanner = () => {
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
   const { onDone = () => {}, state = AusweisScannerState.idle } = route.params
   const goBack = useGoBack()
-  const opacityValue = useRef(new Animated.Value(0)).current
+  const iconOpacityValue = useRef(new Animated.Value(0)).current
+  const loadingOpacityValue = useRef(new Animated.Value(0)).current
+  const [animationState, setAnimationState] = useState(AusweisScannerState.idle)
 
   useBackHandler(() => {
     return true
   })
 
   useEffect(() => {
-    console.log({ state })
-    switch (state) {
-      case AusweisScannerState.loading:
-        return showLoading()
-      case AusweisScannerState.failure:
-        handleDismiss()
-        return showFailed()
-      case AusweisScannerState.success:
-        handleDismiss()
-        return showSuccess()
-      default:
-        return
+    if (state !== animationState) {
+      switch (state) {
+        case AusweisScannerState.loading:
+          setAnimationState(AusweisScannerState.loading)
+          return showLoading()
+        case AusweisScannerState.failure:
+          setAnimationState(AusweisScannerState.failure)
+          return showFailed()
+        case AusweisScannerState.success:
+          setAnimationState(AusweisScannerState.success)
+          setTimeout(() => {
+            goBack()
+            setTimeout(() => {
+              onDone()
+            }, 200)
+          }, 1000)
+          return showSuccess()
+        default:
+          return
+      }
     }
   }, [route])
 
   const showSuccess = () => {
-    Animated.timing(opacityValue, {
+    Animated.timing(iconOpacityValue, {
       duration: 500,
       useNativeDriver: true,
       toValue: 1,
@@ -53,16 +64,16 @@ export const AusweisScanner = () => {
   }
 
   const showFailed = () => {
-    Animated.timing(opacityValue, {
-      duration: 300,
+    Animated.timing(iconOpacityValue, {
+      duration: 500,
       useNativeDriver: true,
       toValue: 1,
     }).start()
   }
 
   const showLoading = () => {
-    Animated.timing(opacityValue, {
-      duration: 300,
+    Animated.timing(loadingOpacityValue, {
+      duration: 500,
       useNativeDriver: true,
       toValue: 1,
     }).start()
@@ -86,7 +97,7 @@ export const AusweisScanner = () => {
       case AusweisScannerState.failure:
         return (
           <Animated.View
-            style={[{ opacity: opacityValue }, styles.successContainer]}
+            style={[{ opacity: iconOpacityValue }, styles.successContainer]}
           >
             <ErrorIcon color={Colors.white} />
           </Animated.View>
@@ -94,15 +105,21 @@ export const AusweisScanner = () => {
       case AusweisScannerState.loading:
         return (
           <Animated.View
-            style={[{ opacity: opacityValue }, styles.failedContainer]}
+            style={[{ opacity: loadingOpacityValue }, styles.failedContainer]}
           >
-            <JoloText>Loading</JoloText>
+            <Ripple
+              color={Colors.white}
+              initialValue1={1}
+              maxValue1={5}
+              maxValue2={5}
+              thickness={1}
+            />
           </Animated.View>
         )
       case AusweisScannerState.success:
         return (
           <Animated.View
-            style={[{ opacity: opacityValue }, styles.failedContainer]}
+            style={[{ opacity: iconOpacityValue }, styles.failedContainer]}
           >
             <SuccessTick color={Colors.white} />
           </Animated.View>
@@ -129,7 +146,10 @@ export const AusweisScanner = () => {
         </JoloText>
       </View>
       <Btn
-        disabled={state !== AusweisScannerState.idle}
+        disabled={
+          state === AusweisScannerState.success ||
+          state === AusweisScannerState.failure
+        }
         type={BtnTypes.senary}
         onPress={handleDismiss}
       >
@@ -152,6 +172,8 @@ const styles = StyleSheet.create({
   failedContainer: {
     width: 74,
     height: 74,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
     alignItems: 'center',

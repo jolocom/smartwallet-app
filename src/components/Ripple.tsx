@@ -7,6 +7,7 @@ interface CirclePropsI {
   animatedValue: Animated.Value
   animatedOpacity: Animated.AnimatedInterpolation
   color: Colors
+  thickness?: number
 }
 
 interface RipplePropsI {
@@ -14,12 +15,14 @@ interface RipplePropsI {
   initialValue1: number
   maxValue1: number
   maxValue2: number
+  thickness?: number
 }
 
 const Circle: React.FC<CirclePropsI> = ({
   animatedValue,
   animatedOpacity,
   color,
+  thickness = StyleSheet.hairlineWidth / 5,
 }) => {
   return (
     <Animated.View
@@ -30,7 +33,7 @@ const Circle: React.FC<CirclePropsI> = ({
         width: 18,
         height: 18,
         borderRadius: 9,
-        borderWidth: StyleSheet.hairlineWidth / 5,
+        borderWidth: thickness,
         borderColor: color,
         overflow: 'hidden',
       }}
@@ -49,6 +52,7 @@ const Ripple: React.FC<RipplePropsI> = ({
   initialValue1,
   maxValue1,
   maxValue2,
+  thickness,
 }) => {
   const {
     animatedScale1,
@@ -68,11 +72,13 @@ const Ripple: React.FC<RipplePropsI> = ({
         animatedValue={animatedScale1}
         animatedOpacity={animatedOpacity1}
         color={color}
+        thickness={thickness}
       />
       <Circle
         animatedValue={animatedScale2}
         animatedOpacity={animatedOpacity2}
         color={color}
+        thickness={thickness}
       />
     </>
   )
