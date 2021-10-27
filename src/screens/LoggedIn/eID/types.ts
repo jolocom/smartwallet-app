@@ -1,3 +1,5 @@
+import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
+
 export enum eIDScreens {
   InteractionSheet = 'InteractionSheet',
   ReadinessCheck = 'ReadinessCheck',
@@ -68,6 +70,18 @@ export interface IAusweisRequest {
 export type AusweisContextValue = IAusweisRequest & {
   setRequest: (data: IAusweisRequest) => void
   resetRequest: () => void
+}
+
+export enum AusweisScannerState {
+  idle = 'idle',
+  loading = 'loading',
+  success = 'success',
+  failure = 'failure',
+}
+
+export interface AusweisScannerParams {
+  onDone?: () => void
+  state?: AusweisScannerState
 }
 
 export interface AusweisCompatibilityResult {

@@ -6,12 +6,12 @@ import { AusweisProvider } from './context'
 import { useAusweisContext } from './hooks'
 import { MainStackParamList } from '../Main'
 import { ScreenNames } from '~/types/screens'
+import { AusweisPasscodeProps, AusweisScannerParams, eIDScreens } from './types'
 import {
   screenTransitionFromBottomDisabledGestures,
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
-import { AusweisPasscodeProps, eIDScreens } from './types'
 import {
   AusweisRequestReview,
   AusweisRequest,
@@ -24,7 +24,7 @@ import {
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
-  [eIDScreens.AusweisScanner]: undefined
+  [eIDScreens.AusweisScanner]: AusweisScannerParams
   [eIDScreens.ReadinessCheck]: undefined
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
