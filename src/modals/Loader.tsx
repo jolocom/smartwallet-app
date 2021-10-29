@@ -220,6 +220,8 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
                   position: 'absolute',
                   transform: [{ scale: errorScale }],
                   opacity: errorOpacity,
+                  width: 18,
+                  height: 18,
                 }}
               >
                 <ErrorIcon color={colors.default} />
@@ -227,7 +229,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             )}
             {type === LoaderTypes.success && (
               <View style={styles.tickContainer}>
-                <View style={{ position: 'absolute' }}>
+                <View style={{ position: 'absolute', width: 26, height: 20 }}>
                   <SuccessTick color={colors.default} />
                 </View>
                 <Animated.View

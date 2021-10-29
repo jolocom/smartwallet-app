@@ -7,12 +7,18 @@ import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useNavigation } from '@react-navigation/core'
 import { ScreenNames } from '~/types/screens'
+import {
+  useAusweisCompatibilityCheck,
+  useCheckNFC,
+} from '~/screens/LoggedIn/eID/hooks'
 
 export const AusweisIdentity = () => {
+  const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
+  const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
 
   const handleCompatibilityCheck = () => {
-    console.warn('Not implemented')
+    checkNfcSupport(startCompatibilityCheck)
   }
 
   const handleChangePin = () => {

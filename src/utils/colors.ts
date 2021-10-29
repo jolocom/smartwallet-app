@@ -31,6 +31,8 @@ export enum Colors {
   stoneGrey75 = 'rgba(11, 3, 13, 0.75)',
   codGrey = '#090909',
   sadGrey = 'rgba(84, 84, 88, 0.65)',
+  badGrey = '#1f1f1f',
+  grey2 = '#212121',
   abbey = '#04040c',
   haiti = '#0b030d',
   bastille = '#201A21',

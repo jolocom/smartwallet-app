@@ -22,11 +22,8 @@ interface WhateverProps {
   btnText: string
   onPress: () => void
 }
-/**
- * TODO: find a better name for
- * this component
- */
-const WhateverComponent: React.FC<WhateverProps> = ({
+
+const TitleDescAction: React.FC<WhateverProps> = ({
   headerText,
   descriptionText,
   hasInlineBtn = false,
@@ -127,11 +124,7 @@ const AusweisChangePin = ({ navigation }) => {
   const handleChange6DigPin = () => {
     aa2Module.changePin()
   }
-  /**
-   * TODO: update the name of the fn
-   * after figuring out where it should navigate
-   */
-  const handleOther = () => {
+  const handlePreviewAuthorityInfo = () => {
     console.warn('not implemented')
   }
 
@@ -142,25 +135,25 @@ const AusweisChangePin = ({ navigation }) => {
       customStyles={{ justifyContent: 'space-around' }}
     >
       <View style={{ width: '100%', alignItems: 'center' }}>
-        <WhateverComponent
+        <TitleDescAction
           headerText="Do you have 5-digit PIN?"
           descriptionText="You should have received it with the letter together with your card"
           btnText="Start the process"
           onPress={handleChange5DigPin}
         />
-        <WhateverComponent
+        <TitleDescAction
           headerText="Activate your 6-digit PIN code"
           descriptionText="You can find it in the bottom right corner on the front side of your ID card"
           btnText="Start the process"
           onPress={handleChange6DigPin}
         />
       </View>
-      <WhateverComponent
+      <TitleDescAction
         hasInlineBtn
         headerText="Can’t find any of this?"
         descriptionText="If you completely forgot your PIN and can not find your PIN letter, please turn to the competent authority"
         btnText="find more"
-        onPress={handleOther}
+        onPress={handlePreviewAuthorityInfo}
       />
     </ScreenContainer>
   )
