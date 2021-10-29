@@ -314,9 +314,7 @@ export const useAusweisScanner = () => {
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
 
-  const currentRoute = useNavigationState(
-    (state) => state.routes[state.index - 1],
-  )
+  const currentRoute = useNavigationState((state) => state.routes[state.index])
 
   const getIsScannerActive = () => {
     return currentRoute.key === AUSWEIS_SCANNER_NAVIGATION_KEY
@@ -351,7 +349,7 @@ export const useAusweisScanner = () => {
     ) {
       setTimeout(() => {
         resetScanner()
-      }, 1500)
+      }, 2000)
     }
   }
 
