@@ -139,9 +139,9 @@ export const AusweisPasscode = () => {
         }
       },
       handleCardInfo: (info) => {
-        if (info && passcodeValue.current) {
-          sendPasscodeCommand()
-          if (IS_ANDROID) {
+        if (IS_ANDROID) {
+          if (info && passcodeValue.current) {
+            sendPasscodeCommand()
             updateScanner({ state: AusweisScannerState.loading })
           }
         }
