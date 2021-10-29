@@ -82,7 +82,14 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
         const baseIndex = (length / numberOfLines) * line
         const nextBaseIndex = (length / numberOfLines) * (line + 1)
         return (
-          <View style={styles.inputContainer}>
+          <View
+            style={[
+              styles.inputContainer,
+              line !== 0 && {
+                marginTop: 12,
+              },
+            ]}
+          >
             {passcodeCells.map((_, index) => {
               const isSelected = digits.length === index
               return index >= baseIndex && index < nextBaseIndex ? (
@@ -110,7 +117,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 12,
   },
   display: {
     alignItems: 'center',

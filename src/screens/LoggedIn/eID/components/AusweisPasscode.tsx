@@ -14,6 +14,8 @@ import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import BP from '~/utils/breakpoints'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -160,7 +162,7 @@ export const AusweisPasscode = () => {
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
       return 'Before the third attempt, please enter the six digit Card Access Number (CAN)'
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
-      return 'PUK'
+      return 'To restore access to your card please enter PUK number'
     } else {
       return ''
     }
@@ -251,7 +253,11 @@ export const AusweisPasscode = () => {
       />
       <Passcode onSubmit={handleOnSubmit} length={getPasscodeLength()}>
         <PasscodeErrorSetter errorText={errorText} />
-        <Passcode.Container customStyles={{ marginTop: 42 }}>
+        <Passcode.Container
+          customStyles={{
+            marginTop: BP({ default: 0, medium: 8, large: 36 }),
+          }}
+        >
           <Passcode.Header title={title} errorTitle={title} />
           {pinVariant === AusweisPasscodeMode.CAN && (
             <JoloText
@@ -264,17 +270,18 @@ export const AusweisPasscode = () => {
               ID card
             </JoloText>
           )}
-          <Passcode.Input
-            cellColor={Colors.chisinauGrey}
-            numberOfLines={getPasscodeNrLines()}
-          />
+          <View style={{ paddingHorizontal: 16 }}>
+            <Passcode.Input
+              cellColor={Colors.chisinauGrey}
+              numberOfLines={getPasscodeNrLines()}
+            />
+          </View>
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
           </View>
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
           {renderAccessoryBtn()}
-          {/* <Passcode.Forgot /> */}
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
