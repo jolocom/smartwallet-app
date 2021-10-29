@@ -34,56 +34,41 @@ export const AusweisScanner = () => {
     return true
   })
 
+  const showAnimation = (value: Animated.Value) =>
+    Animated.timing(value, {
+      duration: 500,
+      useNativeDriver: true,
+      toValue: 1,
+    })
+
   useEffect(() => {
     if (state !== animationState) {
       switch (state) {
         case AusweisScannerState.loading:
           setAnimationState(AusweisScannerState.loading)
-          return showLoading()
+          return showAnimation(loadingOpacityValue).start()
         case AusweisScannerState.failure:
           setAnimationState(AusweisScannerState.failure)
-          return showFailed()
+          return showAnimation(iconOpacityValue).start()
         case AusweisScannerState.success:
           setAnimationState(AusweisScannerState.success)
-          setTimeout(() => {
-            goBack()
+          return showAnimation(iconOpacityValue).start(() => {
             setTimeout(() => {
-              onDone()
-            }, 200)
-          }, 1000)
-          return showSuccess()
+              goBack()
+              setTimeout(() => {
+                onDone()
+              }, 200)
+            }, 500)
+          })
         default:
           return
       }
     }
-  }, [route])
-
-  const showSuccess = () => {
-    Animated.timing(iconOpacityValue, {
-      duration: 500,
-      useNativeDriver: true,
-      toValue: 1,
-    }).start()
-  }
-
-  const showFailed = () => {
-    Animated.timing(iconOpacityValue, {
-      duration: 500,
-      useNativeDriver: true,
-      toValue: 1,
-    }).start()
-  }
-
-  const showLoading = () => {
-    Animated.timing(loadingOpacityValue, {
-      duration: 500,
-      useNativeDriver: true,
-      toValue: 1,
-    }).start()
-  }
+  }, [route, animationState])
 
   const handleDismiss = () => {
-    onDismiss ? onDismiss() : goBack()
+    goBack()
+    onDismiss && onDismiss()
   }
 
   const renderScannerIcon = () => {
