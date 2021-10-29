@@ -40,6 +40,8 @@ import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import moment from 'moment'
 
+const IS_ANDROID = Platform.OS === 'android'
+
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
   const { acceptRequest, cancelInteraction, checkCardValidity } =
@@ -78,52 +80,75 @@ export const AusweisRequestReview = () => {
   }
 
   useEffect(() => {
+    const pinHandler = (card: CardInfo) => {
+      handleCardValidity(card, () => {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.PIN,
+        })
+      })
+    }
+
+    const pukHandler = (card: CardInfo) => {
+      handleCardValidity(card, () => {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.PUK,
+        })
+      })
+    }
+
+    const canHandler = (card: CardInfo) => {
+      handleCardValidity(card, () => {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.CAN,
+        })
+      })
+    }
+
     aa2Module.resetHandlers()
     //TODO: add badState handler and cancel
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        console.log('CARD REQUEST')
-        if (Platform.OS === 'android') {
+        if (IS_ANDROID) {
           showScanner(() => {
             cancelInteraction()
           })
         }
       },
       handlePinRequest: (card) => {
-        updateScanner({
-          state: AusweisScannerState.success,
-          onDone: () => {
-            handleCardValidity(card, () => {
-              navigation.navigate(eIDScreens.EnterPIN, {
-                mode: AusweisPasscodeMode.PIN,
-              })
-            })
-          },
-        })
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pinHandler(card)
+            },
+          })
+        } else {
+          pinHandler(card)
+        }
       },
       handlePukRequest: (card) => {
-        updateScanner({
-          state: AusweisScannerState.success,
-          onDone: () => {
-            handleCardValidity(card, () => {
-              navigation.navigate(eIDScreens.EnterPIN, {
-                mode: AusweisPasscodeMode.PUK,
-              })
-            })
-          },
-        })
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pukHandler(card)
+            },
+          })
+        } else {
+          pukHandler(card)
+        }
       },
       handleCanRequest: (card) => {
-        updateScanner({
-          state: AusweisScannerState.success,
-          onDone: () => {
-            handleCardValidity(card, () => {
-              navigation.navigate(eIDScreens.EnterPIN, {
-                mode: AusweisPasscodeMode.CAN,
-              })
-            })
-          },
-        })
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              canHandler(card)
+            },
+          })
+        } else {
+          canHandler(card)
+        }
       },
       handleAuthResult: () => {
         /**
