@@ -44,7 +44,7 @@ const IS_ANDROID = Platform.OS === 'android'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
-  const { acceptRequest, cancelInteraction, checkCardValidity } =
+  const { acceptRequest, cancelInteraction, checkIfCardValid } =
     useAusweisInteraction()
   const { scheduleWarning } = useToasts()
   const {
@@ -68,7 +68,7 @@ export const AusweisRequestReview = () => {
   const { showScanner, updateScanner } = useAusweisScanner()
 
   const handleCardValidity = (card: CardInfo, onValidCard: () => void) => {
-    if (checkCardValidity(card)) {
+    if (checkIfCardValid(card)) {
       onValidCard()
     } else {
       cancelInteraction()

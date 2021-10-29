@@ -179,7 +179,7 @@ export const useAusweisInteraction = () => {
       .catch(scheduleErrorWarning)
   }
 
-  const checkCardValidity = (card: CardInfo) => {
+  const checkIfCardValid = (card: CardInfo) => {
     if (card.deactivated || card.inoperative) {
       return false
     }
@@ -190,7 +190,7 @@ export const useAusweisInteraction = () => {
   return {
     closeAusweis,
     initAusweis,
-    checkCardValidity,
+    checkIfCardValid,
     disconnectAusweis,
     processAusweisToken,
     cancelInteraction,
