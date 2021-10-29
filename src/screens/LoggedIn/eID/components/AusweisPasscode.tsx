@@ -195,6 +195,25 @@ export const AusweisPasscode = () => {
     }
   }
 
+  const getPasscodeLength = () => {
+    switch (pinVariant) {
+      case AusweisPasscodeMode.CAN:
+      case AusweisPasscodeMode.PIN:
+        return 6
+      case AusweisPasscodeMode.PUK:
+        return 10
+    }
+  }
+
+  const getPasscodeNrLines = () => {
+    switch (pinVariant) {
+      case AusweisPasscodeMode.PUK:
+        return 2
+      default:
+        return 1
+    }
+  }
+
   return (
     <ScreenContainer
       backgroundColor={Colors.mainDark}
@@ -202,7 +221,7 @@ export const AusweisPasscode = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <Passcode onSubmit={handleOnSubmit} length={6}>
+      <Passcode onSubmit={handleOnSubmit} length={getPasscodeLength()}>
         <PasscodeErrorSetter errorText={errorText} />
         <Passcode.Container customStyles={{ marginTop: 42 }}>
           <Passcode.Header title={title} errorTitle={title} />
@@ -217,7 +236,10 @@ export const AusweisPasscode = () => {
               ID card
             </JoloText>
           )}
-          <Passcode.Input cellColor={Colors.chisinauGrey} />
+          <Passcode.Input
+            cellColor={Colors.chisinauGrey}
+            numberOfLines={getPasscodeNrLines()}
+          />
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
           </View>
