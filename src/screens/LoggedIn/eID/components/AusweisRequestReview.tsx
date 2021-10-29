@@ -23,6 +23,7 @@ import {
   useAusweisInteraction,
   useCheckNFC,
   useTranslatedAusweisFields,
+  useAusweisScanner,
 } from '../hooks'
 import {
   AusweisButtons,
@@ -30,15 +31,22 @@ import {
   AusweisListSection,
   AusweisLogo,
 } from '../styled'
-import { AusweisPasscodeMode, eIDScreens } from '../types'
-import { SWErrorCodes } from '~/errors/codes'
+import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import { useNavigation } from '@react-navigation/core'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { AusweisStackParamList } from '..'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import moment from 'moment'
 
+const IS_ANDROID = Platform.OS === 'android'
+
 export const AusweisRequestReview = () => {
-  const { acceptRequest, cancelInteraction } = useAusweisInteraction()
-  const { scheduleErrorWarning } = useToasts()
+  const redirect = useRedirect()
+  const { acceptRequest, cancelInteraction, checkIfCardValid } =
+    useAusweisInteraction()
+  const { scheduleWarning } = useToasts()
   const {
     providerName,
     requiredFields,
@@ -50,36 +58,97 @@ export const AusweisRequestReview = () => {
     effectiveValidityDate,
     expirationDate,
   } = useAusweisContext()
-  const { checkNfcSupport, scheduleDisabledNfcToast } = useCheckNFC()
+  const { checkNfcSupport } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
-  const redirect = useRedirect()
+  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const popStack = usePopStack()
   const translateField = useTranslatedAusweisFields()
+  const { showScanner, updateScanner } = useAusweisScanner()
+
+  const handleCardValidity = (card: CardInfo, onValidCard: () => void) => {
+    if (checkIfCardValid(card)) {
+      onValidCard()
+    } else {
+      cancelInteraction()
+      scheduleWarning({
+        title: 'Oops!',
+        message: 'Seems like the card you provided is not valid',
+      })
+    }
+  }
 
   useEffect(() => {
+    const pinHandler = (card: CardInfo) => {
+      handleCardValidity(card, () => {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.PIN,
+        })
+      })
+    }
+
+    const pukHandler = (card: CardInfo) => {
+      handleCardValidity(card, () => {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.PUK,
+        })
+      })
+    }
+
+    const canHandler = (card: CardInfo) => {
+      handleCardValidity(card, () => {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.CAN,
+        })
+      })
+    }
+
     aa2Module.resetHandlers()
+    //TODO: add badState handler and cancel
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        if (Platform.OS === 'android') {
-          //@ts-expect-error
-          redirect(eIDScreens.AusweisScanner, {
-            onDismiss: cancelInteraction,
+        if (IS_ANDROID) {
+          showScanner(() => {
+            cancelInteraction()
           })
         }
       },
-      handlePinRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PIN })
+      handlePinRequest: (card) => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pinHandler(card)
+            },
+          })
+        } else {
+          pinHandler(card)
+        }
       },
-      handlePukRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
+      handlePukRequest: (card) => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pukHandler(card)
+            },
+          })
+        } else {
+          pukHandler(card)
+        }
       },
-      handleCanRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
+      handleCanRequest: (card) => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              canHandler(card)
+            },
+          })
+        } else {
+          canHandler(card)
+        }
       },
       handleAuthResult: () => {
         /**
@@ -98,18 +167,9 @@ export const AusweisRequestReview = () => {
   }, [])
 
   const handleProceed = async () => {
-    try {
-      await checkNfcSupport()
-      await acceptRequest(selectedOptional)
-    } catch (e) {
-      if (e.message === SWErrorCodes.SWNfcNotEnabled) {
-        scheduleDisabledNfcToast()
-      } else {
-        console.warn('Error: ', e)
-        scheduleErrorWarning(e)
-        cancelInteraction()
-      }
-    }
+    checkNfcSupport(() => {
+      acceptRequest(selectedOptional)
+    })
   }
 
   const handleIgnore = cancelInteraction
@@ -130,6 +190,7 @@ export const AusweisRequestReview = () => {
           moment(expirationDate).format('DD.MM.YYYY'),
       },
     ]
+
     redirect(ScreenNames.FieldDetails, {
       fields,
       title: providerName,

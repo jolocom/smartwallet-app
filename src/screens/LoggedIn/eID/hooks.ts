@@ -27,6 +27,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '.'
 import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -137,9 +138,20 @@ export const useAusweisInteraction = () => {
     aa2Module.disconnectAa2Sdk().catch(scheduleErrorWarning)
   }
 
-  const cancelInteraction = () => {
-    aa2Module.cancelFlow().catch(scheduleErrorWarning)
+  const closeAusweis = () => {
     popStack()
+  }
+
+  const cancelInteraction = () => {
+    aa2Module
+      .cancelFlow()
+      .catch((e) =>
+        console.warn(
+          'Ausweis Error: Something happend when canceling interaction',
+          e,
+        ),
+      )
+    closeAusweis()
   }
 
   const checkIfScanned = async () => {
@@ -153,7 +165,7 @@ export const useAusweisInteraction = () => {
   }
 
   const finishFlow = (url: string) => {
-    fetch(url)
+    return fetch(url)
       .then((res) => {
         if (res['ok']) {
           scheduleInfo({
@@ -163,13 +175,22 @@ export const useAusweisInteraction = () => {
         } else {
           scheduleErrorWarning(new Error(res['statusText']))
         }
-        popStack()
       })
       .catch(scheduleErrorWarning)
   }
 
+  const checkIfCardValid = (card: CardInfo) => {
+    if (card.deactivated || card.inoperative) {
+      return false
+    }
+
+    return true
+  }
+
   return {
+    closeAusweis,
     initAusweis,
+    checkIfCardValid,
     disconnectAusweis,
     processAusweisToken,
     cancelInteraction,
@@ -293,9 +314,7 @@ export const useAusweisScanner = () => {
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
 
-  const currentRoute = useNavigationState(
-    (state) => state.routes[state.index - 1],
-  )
+  const currentRoute = useNavigationState((state) => state.routes[state.index])
 
   const getIsScannerActive = () => {
     return currentRoute.key === AUSWEIS_SCANNER_NAVIGATION_KEY
@@ -330,7 +349,7 @@ export const useAusweisScanner = () => {
     ) {
       setTimeout(() => {
         resetScanner()
-      }, 1500)
+      }, 2000)
     }
   }
 

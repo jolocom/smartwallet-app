@@ -1,29 +1,22 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
-import { ActivityIndicator, Alert, View } from 'react-native'
-import { AA2Messages, AusweisPasscodeMode, eIDScreens } from '../types'
-import { aa2EmitterTemp } from '../events'
+import { Platform, View } from 'react-native'
+import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 import { usePasscode } from '~/components/Passcode/context'
-import { sleep } from '~/utils/generic'
-import { StackActions } from '@react-navigation/routers'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { RouteProp, useRoute } from '@react-navigation/core'
 import { AusweisStackParamList } from '..'
-import { useAusweisInteraction } from '../hooks'
+import { useAusweisInteraction, useAusweisScanner } from '../hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useToasts } from '~/hooks/toasts'
-import { LOG } from '~/utils/dev'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useDispatch } from 'react-redux'
-import { dismissLoader, setLoader } from '~/modules/loader/actions'
-import LoaderTest from '../../Settings/Development/DevLoaders'
-import { LoaderTypes } from '~/modules/loader/types'
-import { useRedirect } from '~/hooks/navigation'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
+const IS_ANDROID = Platform.OS === 'android'
 
 interface PasscodeErrorSetterProps {
   errorText: string | null
@@ -55,70 +48,103 @@ export const AusweisPasscode = () => {
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
-  const dispatch = useDispatch()
   const { scheduleInfo } = useToasts()
-  const { passcodeCommands, cancelInteraction, finishFlow } =
+  const { passcodeCommands, cancelInteraction, finishFlow, closeAusweis } =
     useAusweisInteraction()
-  const redirect = useRedirect()
-
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
-  const [waitingForMsg, setWaitingForMsg] = useState(false)
-
-  // useEffect(() => {
-  //   if (waitingForMsg) {
-  //     dispatch(setLoader({ type: LoaderTypes.default, msg: 'Checking' }))
-  //   } else {
-  //     dispatch(dismissLoader())
-  //   }
-  // }, [waitingForMsg])
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const passcodeValue = useRef<null | string>(null)
+  const pinVariantRef = useRef(pinVariant)
 
   useEffect(() => {
-    //TODO: add handleBadState handler?
-    aa2Module.setHandlers({
-      handleCardRequest: () => {
-        //@ts-expect-error
-        redirect(eIDScreens.AusweisScanner, {
-          onDismiss: cancelInteraction,
+    pinVariantRef.current = pinVariant
+  }, [pinVariant])
+
+  useEffect(() => {
+    const pinHandler = (card: CardInfo) => {
+      setPinVariant(AusweisPasscodeMode.PIN)
+      const errorText = `Wrong PIN, you used ${
+        ALL_EID_PIN_ATTEMPTS - card.retryCounter
+      }/${ALL_EID_PIN_ATTEMPTS} attempts`
+
+      if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
+        setErrorText(errorText)
+      }
+    }
+
+    const pukHandler = (card: CardInfo) => {
+      setPinVariant(AusweisPasscodeMode.PUK)
+      if (card.inoperative) {
+        scheduleInfo({
+          title: 'Oops!',
+          message: "Seems like you're locked out of your card",
         })
+        cancelInteraction()
+      }
+    }
+
+    const canHandler = () => {
+      setPinVariant(AusweisPasscodeMode.CAN)
+    }
+
+    aa2Module.resetHandlers()
+    //TODO: add badState handler
+    aa2Module.setHandlers({
+      handleAuthResult: (url) => {
+        if (IS_ANDROID) {
+          finishFlow(url).then(() => {
+            updateScanner({
+              state: AusweisScannerState.success,
+              onDone: closeAusweis,
+            })
+          })
+        } else {
+          // TODO: at some point we should show a loader or smth
+          finishFlow(url).then(closeAusweis)
+        }
       },
       handlePinRequest: (card) => {
-        setWaitingForMsg(false)
-        setPinVariant(AusweisPasscodeMode.PIN)
-
-        const errorText = `Wrong PIN, you used ${
-          ALL_EID_PIN_ATTEMPTS - card.retryCounter
-        }/${ALL_EID_PIN_ATTEMPTS} attempts`
-
-        if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
-          setErrorText(errorText)
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pinHandler(card)
+            },
+          })
+        } else {
+          pinHandler(card)
         }
       },
       handlePukRequest: (card) => {
-        setWaitingForMsg(false)
-        setPinVariant(AusweisPasscodeMode.PUK)
-        if (card.inoperative) {
-          scheduleInfo({
-            title: 'Oops!',
-            message: "Seems like you're locked out of your card",
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pukHandler(card)
+            },
           })
-          cancelInteraction()
+        } else {
+          pukHandler(card)
         }
       },
-      handleCanRequest: (card) => {
-        setWaitingForMsg(false)
-        setPinVariant(AusweisPasscodeMode.CAN)
+      handleCanRequest: () => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: canHandler,
+          })
+        } else {
+          canHandler()
+        }
       },
       handleCardInfo: (info) => {
-        if (!info) {
-          scheduleInfo({
-            title: 'Oops!',
-            message: 'You should still hold your card against the wallet!',
-          })
+        if (info && passcodeValue.current) {
+          sendPasscodeCommand()
+          if (IS_ANDROID) {
+            updateScanner({ state: AusweisScannerState.loading })
+          }
         }
-      },
-      handleAuthResult: (url) => {
-        finishFlow(url)
       },
     })
 
@@ -139,16 +165,33 @@ export const AusweisPasscode = () => {
     }
   }, [pinVariant])
 
-  const handleOnSubmit = async (passcode: string) => {
-    setWaitingForMsg(true)
-    setErrorText(null)
+  const sendPasscodeCommand = () => {
+    if (passcodeValue.current) {
+      const passcodeNumber = passcodeValue.current
 
-    if (pinVariant === AusweisPasscodeMode.PIN) {
-      passcodeCommands.setPin(passcode)
-    } else if (pinVariant === AusweisPasscodeMode.CAN) {
-      passcodeCommands.setCan(passcode)
-    } else if (pinVariant == AusweisPasscodeMode.PUK) {
-      passcodeCommands.setPuk(passcode)
+      setErrorText(null)
+
+      if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
+        passcodeCommands.setPin(passcodeNumber)
+      } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
+        passcodeCommands.setCan(passcodeNumber)
+      } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
+        passcodeCommands.setPuk(passcodeNumber)
+      }
+
+      passcodeValue.current = null
+    }
+  }
+
+  const handleOnSubmit = async (passcode: string) => {
+    passcodeValue.current = passcode
+
+    if (IS_ANDROID) {
+      showScanner(() => {
+        cancelInteraction()
+      })
+    } else {
+      sendPasscodeCommand()
     }
   }
 
