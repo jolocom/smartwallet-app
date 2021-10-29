@@ -21,6 +21,7 @@ export interface IPasscodeKeyboardProps {
 
 export interface IPasscodeInputProps {
   cellColor?: Colors
+  numberOfLines?: number
 }
 
 export interface IPasscodeComposition {

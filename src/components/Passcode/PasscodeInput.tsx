@@ -8,8 +8,42 @@ import { IPasscodeComposition } from './types'
 
 const CELL_ASPECT_RATIO = 0.75
 
+const PasscodeCell: React.FC<{
+  selected: boolean
+  success: boolean
+  error: boolean
+  color: Colors
+  value: string | undefined
+  showValue: boolean
+  showAsterix: boolean
+}> = ({ selected, success, error, color, value, showValue, showAsterix }) => {
+  return (
+    <View
+      style={[
+        styles.display,
+        selected && styles.active,
+        error && styles.error,
+        success && styles.success,
+        {
+          backgroundColor: color,
+          maxWidth: BP({ default: 65, xsmall: 56 }),
+        },
+      ]}
+    >
+      {selected && !value ? (
+        <View style={styles.caret} />
+      ) : (
+        <Text adjustsFontSizeToFit style={styles.text} testID="passcode-cell">
+          {showValue ? value : showAsterix ? '*' : ''}
+        </Text>
+      )}
+    </View>
+  )
+}
+
 const PasscodeInput: IPasscodeComposition['Input'] = ({
   cellColor = Colors.black30,
+  numberOfLines = 1,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const { pin, pinError, pinSuccess, passcodeLength: length } = usePasscode()
@@ -43,47 +77,30 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
   }, [pin])
 
   return (
-    <TouchableWithoutFeedback>
-      <View style={styles.inputContainer}>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}
-        >
-          {passcodeCells.map((v, index) => {
-            const isSelected = digits.length === index
-            return (
-              <View
-                style={[
-                  styles.display,
-                  isSelected && styles.active,
-                  pinError && styles.error,
-                  pinSuccess && styles.success,
-                  { backgroundColor: cellColor },
-                ]}
-                key={index}
-              >
-                {isSelected && !digits[index] ? (
-                  <View style={styles.caret} />
-                ) : (
-                  <Text
-                    adjustsFontSizeToFit
-                    style={styles.text}
-                    testID="passcode-cell"
-                  >
-                    {index === selectedIndex
-                      ? digits[index]
-                      : index < digits.length
-                      ? '*'
-                      : ''}
-                  </Text>
-                )}
-              </View>
-            )
-          })}
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+    <View>
+      {Array.from(Array(numberOfLines)).map((_, line) => {
+        const baseIndex = (length / numberOfLines) * line
+        const nextBaseIndex = (length / numberOfLines) * (line + 1)
+        return (
+          <View style={styles.inputContainer}>
+            {passcodeCells.map((_, index) => {
+              const isSelected = digits.length === index
+              return index >= baseIndex && index < nextBaseIndex ? (
+                <PasscodeCell
+                  error={pinError}
+                  success={pinSuccess}
+                  selected={isSelected}
+                  value={digits[index]}
+                  showValue={index === selectedIndex}
+                  showAsterix={index < digits.length}
+                  color={cellColor}
+                />
+              ) : null
+            })}
+          </View>
+        )
+      })}
+    </View>
   )
 }
 
@@ -93,12 +110,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 12,
   },
   display: {
     alignItems: 'center',
     justifyContent: 'center',
-    maxWidth: BP({ default: 65, xsmall: 56 }),
     marginHorizontal: 2,
+    marginVertical: 2,
     flex: 1,
     aspectRatio: CELL_ASPECT_RATIO,
     borderRadius: 11,

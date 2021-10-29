@@ -52,7 +52,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
         setPin('')
       }
     })()
-  }, [pin])
+  }, [pin, length])
 
   // this will remove the error after 1000 ms
   useEffect(() => {
@@ -85,7 +85,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
       pinErrorText,
       setPinErrorText,
     }),
-    [pin, setPin, pinError, pinSuccess],
+    [pin, setPin, pinError, pinSuccess, length],
   )
 
   return <PasscodeContext.Provider value={contextValue} children={children} />
