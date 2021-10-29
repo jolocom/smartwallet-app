@@ -7,6 +7,7 @@ export enum eIDScreens {
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
   CompatibilityResult = 'CompatibilityResult',
+  PukInfo = 'PukInfo',
 }
 
 export enum AA2Messages {

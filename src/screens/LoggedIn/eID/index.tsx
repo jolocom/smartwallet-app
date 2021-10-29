@@ -26,6 +26,7 @@ import {
   AusweisPasscodeDetails,
   AusweisScanner,
   AusweisCompatibilityResult,
+  AusweisPukInfo,
 } from './components'
 
 export type AusweisStackParamList = {
@@ -36,6 +37,7 @@ export type AusweisStackParamList = {
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
   [eIDScreens.PasscodeDetails]: undefined
   [eIDScreens.ProviderDetails]: undefined
+  [eIDScreens.PukInfo]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
@@ -96,6 +98,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.CompatibilityResult}
         component={AusweisCompatibilityResult}
+        options={transparentModalFadeOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.PukInfo}
+        component={AusweisPukInfo}
         options={transparentModalFadeOptions}
       />
     </eIDStack.Navigator>

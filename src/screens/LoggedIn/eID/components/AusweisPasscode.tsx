@@ -5,7 +5,7 @@ import Passcode from '~/components/Passcode'
 import { Platform, View } from 'react-native'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 import { usePasscode } from '~/components/Passcode/context'
-import { RouteProp, useRoute } from '@react-navigation/core'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { AusweisStackParamList } from '..'
 import { useAusweisInteraction, useAusweisScanner } from '../hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
@@ -47,6 +47,7 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 export const AusweisPasscode = () => {
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
+  const navigation = useNavigation()
 
   const { scheduleInfo } = useToasts()
   const { passcodeCommands, cancelInteraction, finishFlow, closeAusweis } =
@@ -214,6 +215,29 @@ export const AusweisPasscode = () => {
     }
   }
 
+  const renderAccessoryBtn = () => {
+    let screen: eIDScreens | undefined
+    let title: string | undefined
+
+    switch (pinVariant) {
+      case AusweisPasscodeMode.PUK:
+        screen = eIDScreens.PukInfo
+        title = 'Where to find the PUK?'
+        break
+      default:
+        break
+    }
+
+    if (screen && title) {
+      return (
+        <Passcode.AccessoryBtn
+          title={title}
+          onPress={() => navigation.navigate(screen!)}
+        />
+      )
+    }
+  }
+
   return (
     <ScreenContainer
       backgroundColor={Colors.mainDark}
@@ -245,6 +269,7 @@ export const AusweisPasscode = () => {
           </View>
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
+          {renderAccessoryBtn()}
           {/* <Passcode.Forgot /> */}
           <Passcode.Keyboard />
         </Passcode.Container>
