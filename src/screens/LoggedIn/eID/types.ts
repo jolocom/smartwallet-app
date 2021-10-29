@@ -1,5 +1,3 @@
-import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
-
 export enum eIDScreens {
   InteractionSheet = 'InteractionSheet',
   ReadinessCheck = 'ReadinessCheck',

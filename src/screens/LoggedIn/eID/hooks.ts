@@ -1,4 +1,8 @@
-import { CommonActions, useNavigation } from '@react-navigation/native'
+import {
+  CommonActions,
+  useNavigation,
+  useNavigationState,
+} from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
@@ -289,9 +293,11 @@ export const useAusweisScanner = () => {
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
 
+  const currentRoute = useNavigationState(
+    (state) => state.routes[state.index - 1],
+  )
+
   const getIsScannerActive = () => {
-    const routes = navigation.dangerouslyGetState().routes
-    const currentRoute = routes[routes.length - 1]
     return currentRoute.key === AUSWEIS_SCANNER_NAVIGATION_KEY
   }
 
@@ -302,7 +308,7 @@ export const useAusweisScanner = () => {
         source: AUSWEIS_SCANNER_NAVIGATION_KEY,
       })
     }
-  }, [JSON.stringify(scannerParams)])
+  }, [JSON.stringify(scannerParams), JSON.stringify(currentRoute)])
 
   const resetScanner = () => {
     setScannerParams(defaultState)
