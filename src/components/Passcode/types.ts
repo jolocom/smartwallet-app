@@ -24,9 +24,15 @@ export interface IPasscodeInputProps {
   numberOfLines?: number
 }
 
+export interface IAccessoryBtnProps {
+  title: string
+  onPress: () => void
+}
+
 export interface IPasscodeComposition {
   Input: React.FC<IPasscodeInputProps>
   Header: React.FC<IPasscodeHeaderProps>
+  AccessoryBtn: React.FC<IAccessoryBtnProps>
   Forgot: React.FC
   Keyboard: React.FC<IPasscodeKeyboardProps>
   Container: React.FC<IWithCustomStyle>

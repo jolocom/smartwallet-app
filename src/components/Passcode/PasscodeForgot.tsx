@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Btn, { BtnTypes } from '~/components/Btn'
 import { useRedirectTo } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import useTranslation from '~/hooks/useTranslation'
+import PasscodeAccessoryBtn from './PasscodeAccessoryBtn'
 
 const PasscodeForgot = () => {
   const { t } = useTranslation()
@@ -12,9 +12,10 @@ const PasscodeForgot = () => {
   )
 
   return (
-    <Btn type={BtnTypes.secondary} onPress={redirectToPinRecoveryInstruction}>
-      {t('Lock.forgotBtn')}
-    </Btn>
+    <PasscodeAccessoryBtn
+      title={t('Lock.forgotBtn')}
+      onPress={redirectToPinRecoveryInstruction}
+    />
   )
 }
 
