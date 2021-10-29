@@ -1,3 +1,8 @@
+import {
+  CommonActions,
+  useNavigation,
+  useNavigationState,
+} from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
@@ -9,14 +14,19 @@ import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
 import {
-  AusweisFields,
-  AusweisCardResult,
   eIDScreens,
   IAusweisRequest,
+  AusweisFields,
+  AusweisScannerState,
+  AusweisScannerParams,
+  AusweisCardResult,
 } from './types'
 
 import { LOG } from '~/utils/dev'
 import useTranslation from '~/hooks/useTranslation'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { AusweisStackParamList } from '.'
+import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -272,4 +282,57 @@ export const useTranslatedAusweisFields = () => {
   return (field: AusweisFields) => {
     return fieldsMapping[field]
   }
+}
+
+export const useAusweisScanner = () => {
+  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
+  const defaultState = {
+    state: AusweisScannerState.idle,
+    onDone: () => {},
+  }
+  const [scannerParams, setScannerParams] =
+    useState<AusweisScannerParams>(defaultState)
+
+  const currentRoute = useNavigationState(
+    (state) => state.routes[state.index - 1],
+  )
+
+  const getIsScannerActive = () => {
+    return currentRoute.key === AUSWEIS_SCANNER_NAVIGATION_KEY
+  }
+
+  useEffect(() => {
+    if (getIsScannerActive()) {
+      navigation.dispatch({
+        ...CommonActions.setParams(scannerParams),
+        source: AUSWEIS_SCANNER_NAVIGATION_KEY,
+      })
+    }
+  }, [JSON.stringify(scannerParams), JSON.stringify(currentRoute)])
+
+  const resetScanner = () => {
+    setScannerParams(defaultState)
+  }
+
+  const showScanner = (onDismiss?: () => void) => {
+    navigation.navigate({
+      name: eIDScreens.AusweisScanner,
+      params: { ...scannerParams, onDismiss },
+      key: AUSWEIS_SCANNER_NAVIGATION_KEY,
+    })
+  }
+
+  const updateScanner = (params: AusweisScannerParams) => {
+    setScannerParams(params)
+    if (
+      params.state === AusweisScannerState.failure ||
+      params.state === AusweisScannerState.success
+    ) {
+      setTimeout(() => {
+        resetScanner()
+      }, 1500)
+    }
+  }
+
+  return { showScanner, updateScanner, scannerParams }
 }

@@ -11,17 +11,18 @@ import { JoloTextSizes } from '~/utils/fonts'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 import { ContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
-import BP from '~/utils/breakpoints'
 
-export const AusweisBottomSheet: React.FC<{ onDismiss: () => void }> = ({
-  children,
-  onDismiss,
-}) => {
+export const AusweisBottomSheet: React.FC<{
+  onDismiss?: () => void
+  backgroundColor?: Colors
+}> = ({ children, onDismiss = () => {}, backgroundColor = Colors.codGrey }) => {
   return (
     <View style={styles.fullScreen}>
       <ScreenDismissArea onDismiss={onDismiss} />
       <View style={styles.interactionBody}>
-        <ContainerBAS>{children}</ContainerBAS>
+        <ContainerBAS customStyles={{ backgroundColor }}>
+          {children}
+        </ContainerBAS>
       </View>
     </View>
   )

@@ -71,6 +71,19 @@ export type AusweisContextValue = IAusweisRequest & {
   resetRequest: () => void
 }
 
+export enum AusweisScannerState {
+  idle = 'idle',
+  loading = 'loading',
+  success = 'success',
+  failure = 'failure',
+}
+
+export interface AusweisScannerParams {
+  onDone?: () => void
+  onDismiss?: () => void
+  state?: AusweisScannerState
+}
+
 export interface AusweisCardResult {
   inoperative: boolean
   deactivated: boolean
