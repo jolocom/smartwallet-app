@@ -47,8 +47,10 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
  * How do we handle error in send cmds (results in error prop on ENTER_PIN msg)
  */
 export const AusweisPasscode = () => {
-  const { mode } =
-    useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
+  const route =
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
+  const { mode } = route.params
+
   const navigation = useNavigation()
 
   const { scheduleInfo } = useToasts()
@@ -65,6 +67,10 @@ export const AusweisPasscode = () => {
   }, [pinVariant])
 
   useEffect(() => {
+    setPinVariant(mode)
+  }, [route])
+
+  useEffect(() => {
     const pinHandler = (card: CardInfo) => {
       setPinVariant(AusweisPasscodeMode.PIN)
       const errorText = `Wrong PIN, you used ${
@@ -77,13 +83,14 @@ export const AusweisPasscode = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
-      setPinVariant(AusweisPasscodeMode.PUK)
       if (card.inoperative) {
         scheduleInfo({
           title: 'Oops!',
           message: "Seems like you're locked out of your card",
         })
         cancelInteraction()
+      } else {
+        navigation.navigate(eIDScreens.PukLock)
       }
     }
 
@@ -270,7 +277,7 @@ export const AusweisPasscode = () => {
               ID card
             </JoloText>
           )}
-          <View style={{ paddingHorizontal: 16 }}>
+          <View style={{ paddingHorizontal: 8 }}>
             <Passcode.Input
               cellColor={Colors.chisinauGrey}
               numberOfLines={getPasscodeNrLines()}
