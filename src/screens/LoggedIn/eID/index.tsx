@@ -28,6 +28,7 @@ import {
   AusweisCompatibilityResult,
   AusweisPukInfo,
 } from './components'
+import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -38,6 +39,7 @@ export type AusweisStackParamList = {
   [eIDScreens.PasscodeDetails]: undefined
   [eIDScreens.ProviderDetails]: undefined
   [eIDScreens.PukInfo]: undefined
+  [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
@@ -93,6 +95,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.PasscodeDetails}
         component={AusweisPasscodeDetails}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.PukLock}
+        component={AusweisLockPukInfo}
         options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
