@@ -1,4 +1,5 @@
 import { useBackHandler } from '@react-native-community/hooks'
+import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { Image, View } from 'react-native'
 
@@ -17,20 +18,20 @@ import { AusweisPasscodeMode, eIDScreens } from '../types'
  * that adds hoc to handle back btn behavior
  * 2. disable gestures also done in the above PR
  */
-const AusweisLockPukInfo: React.FC<WithNavigation> = ({ navigation }) => {
+const AusweisLockPukInfo: React.FC = () => {
   /**
    * TODO: this has changed in cancelling workflow PR,
    * this should be updated to 'cancelInteraction'
    */
-  const { cancelFlow } = useAusweisInteraction()
+  const { cancelInteraction } = useAusweisInteraction()
+  const navigation = useNavigation()
 
   useBackHandler(() => {
-    cancelFlow()
+    cancelInteraction()
     return true
   })
 
   const handleContinueWithPuk = () => {
-    // @ts-expect-error
     navigation.navigate(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
   }
 
@@ -61,7 +62,7 @@ const AusweisLockPukInfo: React.FC<WithNavigation> = ({ navigation }) => {
         <Btn onPress={handleContinueWithPuk} type={BtnTypes.quaternary}>
           Continue with the PUK code
         </Btn>
-        <Btn onPress={cancelFlow} type={BtnTypes.secondary}>
+        <Btn onPress={cancelInteraction} type={BtnTypes.secondary}>
           Close interaction
         </Btn>
       </View>
