@@ -37,10 +37,11 @@ export enum ScreenNames {
   InteractionFlow = 'InteractionFlow',
   // eId
   eId = 'eID',
+  AusweisChangePin = 'AusweisChangePin',
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',
-  CredentialDetails = 'CredentialDetails',
+  FieldDetails = 'FieldDetails',
   PopupMenu = 'PopupMenu',
   TransparentModals = 'TransparentModals',
   AppDisabled = 'AppDisabled',

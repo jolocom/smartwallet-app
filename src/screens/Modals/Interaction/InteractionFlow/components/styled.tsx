@@ -1,11 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { IWithCustomStyle } from '~/types/props'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
 
-export const ContainerBAS: React.FC = ({ children }) => {
+export const ContainerBAS: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles = {},
+}) => {
   const { bottom } = useSafeArea()
   const positionValue = useRef(new Animated.Value(SCREEN_HEIGHT)).current
 
@@ -29,6 +33,7 @@ export const ContainerBAS: React.FC = ({ children }) => {
     <Animated.View
       style={[
         styles.containerBAS,
+        customStyles,
         { marginBottom: 10 + bottom },
         { transform: [{ translateY: positionValue }] },
       ]}
@@ -75,7 +80,6 @@ const styles = StyleSheet.create({
   containerFAS: {
     height: '100%',
     width: '100%',
-    backgroundColor: Colors.mainBlack,
   },
   logoContainerBAS: {
     position: 'absolute',

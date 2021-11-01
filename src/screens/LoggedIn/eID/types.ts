@@ -7,6 +7,7 @@ export enum eIDScreens {
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
   PukLock = 'PukLock',
+  CompatibilityResult = 'CompatibilityResult',
 }
 
 export enum AA2Messages {
@@ -31,7 +32,7 @@ export enum AusweisFields {
   Address = 'Address',
   BirthName = 'BirthName',
   FamilyName = 'FamilyName',
-  GivenNames = ' GivenNames',
+  GivenNames = 'GivenNames',
   PlaceOfBirth = 'PlaceOfBirth',
   DateOfBirth = 'DateOfBirth',
   DoctoralDegree = 'DoctoralDegree',
@@ -69,4 +70,22 @@ export interface IAusweisRequest {
 export type AusweisContextValue = IAusweisRequest & {
   setRequest: (data: IAusweisRequest) => void
   resetRequest: () => void
+}
+
+export enum AusweisScannerState {
+  idle = 'idle',
+  loading = 'loading',
+  success = 'success',
+  failure = 'failure',
+}
+
+export interface AusweisScannerParams {
+  onDone?: () => void
+  onDismiss?: () => void
+  state?: AusweisScannerState
+}
+
+export interface AusweisCardResult {
+  inoperative: boolean
+  deactivated: boolean
 }
