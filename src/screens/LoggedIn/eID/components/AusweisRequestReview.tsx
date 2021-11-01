@@ -90,9 +90,7 @@ export const AusweisRequestReview = () => {
 
     const pukHandler = (card: CardInfo) => {
       handleCardValidity(card, () => {
-        navigation.navigate(eIDScreens.EnterPIN, {
-          mode: AusweisPasscodeMode.PUK,
-        })
+        navigation.navigate(eIDScreens.PukLock)
       })
     }
 
