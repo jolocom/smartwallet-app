@@ -40,7 +40,7 @@ const AusweisLockPukInfo: React.FC = () => {
       backgroundColor={Colors.mainDark}
       customStyles={{
         justifyContent: 'space-between',
-        marginVertical: 20,
+        paddingVertical: 20,
       }}
     >
       <JoloText
@@ -59,7 +59,7 @@ const AusweisLockPukInfo: React.FC = () => {
         You can always unlock your card by using “Unlock my card” button in the
         Identity tab
       </JoloText>
-      <View style={{ width: '100%' }}>
+      <View style={{ width: '100%', paddingBottom: 8 }}>
         <Btn onPress={handleContinueWithPuk} type={BtnTypes.quaternary}>
           Continue with the PUK code
         </Btn>
