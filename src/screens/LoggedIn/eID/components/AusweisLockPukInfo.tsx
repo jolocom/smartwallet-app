@@ -37,6 +37,7 @@ const AusweisLockPukInfo: React.FC = () => {
 
   return (
     <ScreenContainer
+      backgroundColor={Colors.mainDark}
       customStyles={{
         justifyContent: 'space-between',
         marginVertical: 20,
