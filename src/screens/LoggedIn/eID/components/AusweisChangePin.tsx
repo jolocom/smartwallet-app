@@ -158,10 +158,8 @@ const AusweisChangePin = () => {
         // if (IS_ANDROID) {
         //   updateScanner({
         //     state: AusweisScannerState.success,
-        //     onDone: cancelFlow,
         //   })
         // }
-        cancelFlow()
       },
     })
   }

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { View, Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { RouteProp, useRoute } from '@react-navigation/core'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -16,7 +16,6 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 import { useAusweisInteraction, useAusweisScanner } from '../hooks'
 import { AusweisStackParamList } from '..'
-import { StackNavigationProp } from '@react-navigation/stack'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -44,19 +43,13 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 }
 
 export const AusweisPasscode = () => {
-  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
   const { scheduleInfo, scheduleWarning } = useToasts()
 
-  const {
-    passcodeCommands,
-    cancelInteraction,
-    finishFlow,
-    closeAusweis,
-    cancelFlow,
-  } = useAusweisInteraction()
+  const { passcodeCommands, cancelInteraction, finishFlow, closeAusweis } =
+    useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const { showScanner, updateScanner } = useAusweisScanner()
@@ -274,8 +267,7 @@ export const AusweisPasscode = () => {
        */
       if (pinVariant !== AusweisPasscodeMode.NEW_PIN) {
         showScanner(() => {
-          cancelFlow()
-          navigation.goBack()
+          cancelInteraction()
         })
       } else {
         sendPasscodeCommand()

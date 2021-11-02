@@ -157,16 +157,14 @@ export const useAusweisInteraction = () => {
    * sends CANCEL cmd and pops the stack (too many times though!!!)
    */
   const cancelInteraction = () => {
-    console.log('CANCEL INTERACTION')
     sendCancel()
     closeAusweis()
   }
 
   /**
-   * sends CANCEL cmd and pops the stack (too many times though!!!)
+   * sends CANCEL cmd
    */
   const cancelFlow = () => {
-    console.log('CANCEL FLOW')
     sendCancel()
   }
 
