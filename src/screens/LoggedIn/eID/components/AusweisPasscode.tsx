@@ -59,7 +59,6 @@ export const AusweisPasscode = () => {
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const { showScanner, updateScanner } = useAusweisScanner()
-  const passcodeValue = useRef<null | string>(null)
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')
@@ -102,6 +101,9 @@ export const AusweisPasscode = () => {
     aa2Module.resetHandlers()
     //TODO: add badState handler
     aa2Module.setHandlers({
+      handleCardRequest: () => {
+        showScanner(cancelInteraction)
+      },
       handleAuthResult: (url) => {
         if (IS_ANDROID) {
           finishFlow(url).then(() => {
@@ -154,13 +156,8 @@ export const AusweisPasscode = () => {
       },
       handleCardInfo: (info) => {
         if (IS_ANDROID) {
-          if (info && passcodeValue.current) {
-            sendPasscodeCommand()
+          if (info) {
             updateScanner({ state: AusweisScannerState.loading })
-          } else {
-            /**
-             * TODO: when the card is removed hide scanner
-             */
           }
         }
       },
@@ -250,51 +247,24 @@ export const AusweisPasscode = () => {
     }
   }, [pinVariant])
 
-  const sendPasscodeCommand = () => {
-    if (passcodeValue.current) {
-      const passcode = passcodeValue.current
-
-      setErrorText(null)
-      if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
-        passcodeCommands.setPin(passcode)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
-        passcodeCommands.setCan(passcode)
-      } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
-        passcodeCommands.setPuk(passcode)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
-        newPasscodeRef.current = passcode
-        setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-        if (passcode === newPasscodeRef?.current) {
-          aa2Module.setNewPin(passcode)
-        } else {
-          updateScanner({ state: AusweisScannerState.failure })
-          setErrorText("PINs don't match")
-        }
-      }
-
-      passcodeValue.current = null
-    }
-  }
-
-  const handleOnSubmit = async (passcode: string) => {
-    passcodeValue.current = passcode
-
-    if (IS_ANDROID) {
-      /**
-       * NOTE:
-       * no need to show scanner when verifying new pin,
-       * as this is a local operation
-       */
-      if (pinVariant !== AusweisPasscodeMode.NEW_PIN) {
-        showScanner(() => {
-          cancelInteraction()
-        })
+  const sendPasscodeCommand = async (passcode: string) => {
+    setErrorText(null)
+    if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
+      passcodeCommands.setPin(passcode)
+    } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
+      passcodeCommands.setCan(passcode)
+    } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
+      passcodeCommands.setPuk(passcode)
+    } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
+      newPasscodeRef.current = passcode
+      setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
+    } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
+      if (passcode === newPasscodeRef?.current) {
+        aa2Module.setNewPin(passcode)
       } else {
-        sendPasscodeCommand()
+        updateScanner({ state: AusweisScannerState.failure })
+        setErrorText("PINs don't match")
       }
-    } else {
-      sendPasscodeCommand()
     }
   }
 
@@ -305,7 +275,7 @@ export const AusweisPasscode = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <Passcode onSubmit={handleOnSubmit} length={6}>
+      <Passcode onSubmit={sendPasscodeCommand} length={6}>
         <PasscodeErrorSetter errorText={errorText} />
         <Passcode.Container>
           <Passcode.Header title={title} errorTitle={title} />

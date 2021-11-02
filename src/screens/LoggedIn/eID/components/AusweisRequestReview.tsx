@@ -93,9 +93,7 @@ export const AusweisRequestReview = () => {
     aa2Module.setHandlers({
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(() => {
-            cancelInteraction()
-          })
+          showScanner(cancelInteraction)
         }
       },
       handlePinRequest: (card) => {
