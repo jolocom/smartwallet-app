@@ -175,8 +175,7 @@ export const AusweisPasscode = () => {
               closeAusweis()
               scheduleWarning({
                 title: "Pin wasn't changed",
-                message:
-                  'Unfortunately something went wrong while updating your pin. Please try again',
+                message: 'We were not able to complete update of your new pin',
               })
             },
           })
@@ -188,13 +187,22 @@ export const AusweisPasscode = () => {
        * @RUN_CHANGE_PIN
        */
       handleChangePinSuccess: () => {
+        const completeChangePinFlow = () => {
+          closeAusweis()
+          scheduleInfo({
+            title: 'Action completed',
+            message: 'You can use your new PIN now',
+          })
+        }
         if (IS_ANDROID) {
           updateScanner({
             state: AusweisScannerState.success,
-            onDone: closeAusweis,
+            onDone: () => {
+              completeChangePinFlow()
+            },
           })
         } else {
-          closeAusweis()
+          completeChangePinFlow()
         }
       },
       /**
@@ -286,9 +294,7 @@ export const AusweisPasscode = () => {
     >
       <Passcode onSubmit={handleOnSubmit} length={6}>
         <PasscodeErrorSetter errorText={errorText} />
-        <Passcode.Container
-          customStyles={{ marginTop: 42, position: 'relative' }}
-        >
+        <Passcode.Container>
           <Passcode.Header title={title} errorTitle={title} />
           {pinVariant === AusweisPasscodeMode.CAN && (
             <JoloText
