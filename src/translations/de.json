@@ -76,13 +76,14 @@
         "widgetBusinessCardNameHeader": "Stell dich bitte vor",
         "widgetNextBtn": "Weiter",
         "widgetBusinessCardCompanyHeader": "Welche Firma vertrittst du?",
-        "header": "Deine Angaben",
+        "header": "",
         "nameLabel": "Name",
         "emailLabel": "E-Mail",
         "phoneNumberLabel": "Telefonnummer",
         "addressLabel": "Adresse",
         "addClaimBtn": "Hinzufügen",
-        "attributesMissingInfo": "Deine Infos sehen ziemlich leer aus\nErgänze sie für die zukünftigen Anwendungen"
+        "attributesMissingInfo": "Deine Infos sehen ziemlich leer aus\nErgänze sie für die zukünftigen Anwendungen",
+        "headerAusweis": ""
     },
     "BottomBar": {
         "identity": "Identität",
@@ -194,7 +195,14 @@
         "failedStoreMsg": "Leider konnten wir deinen Passcode nicht speichern. Bitte versuche es erneut",
         "reconnectedInternetTitle": "Du bist wieder online",
         "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
-        "successfulInteractionMsg": "Du solltest jetzt alles haben, was du brauchst, um deine Interaktion fortzusetzen"
+        "successfulInteractionMsg": "Du solltest jetzt alles haben, was du brauchst, um deine Interaktion fortzusetzen",
+        "nfcCompatibilityTitle": "",
+        "nfcCompatibilityMsg": "",
+        "nfcOffTitle": "",
+        "nfcOffMsg": "",
+        "nfcOffBtn": "",
+        "ausweisSuccessTitle": "Your data was shared with ${serviceName}!",
+        "ausweisSuccessMsg": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -414,7 +422,7 @@
         "submitBtn": "Zugang wiederherstellen",
         "submitDescription": "Das Erstellen eines neuen Passcodes hat keinen Einfluss auf Deine gespeicherten Daten"
     },
-    "ausweis": {
+    "Ausweis": {
         "birthName": "",
         "address": "",
         "communityID": "",
@@ -438,6 +446,117 @@
         "nationality": "",
         "addressVerification": "",
         "canAllowed": "",
-        "pinManagement": ""
-    }
+        "pinManagement": "",
+        "header": ""
+    },
+    "AusweisRequest": {
+        "description": "",
+        "proceedBtn": ""
+    },
+    "AusweisLostPin": {
+        "title": "",
+        "description": "",
+        "contact": "",
+        "phoneRate": ""
+    },
+    "AusweisCompatibility": {
+        "header": "",
+        "checkHeader": "",
+        "checkSubtitle": "",
+        "checkSuccess": "",
+        "checkStart": "",
+        "checkTryAgain": "",
+        "pinTitle": "",
+        "pinSubtitle": "",
+        "pinBtn": "",
+        "proceedBtn": ""
+    },
+    "AusweisCompatibilityStatus": {
+        "header": "",
+        "status1": "",
+        "status2": "",
+        "status3": "",
+        "success": "",
+        "errorStatus1": "",
+        "error": ""
+    },
+    "AusweisReview": {
+        "subheader": "",
+        "providerBtn": "",
+        "mandatoryHeader": "",
+        "optionalHeader": ""
+    },
+    "AusweisProvider": {
+        "providerLabel": "",
+        "certificateLabel": "",
+        "providerInfoLabel": "",
+        "validityLabel": ""
+    },
+    "AusweisPasscode": {
+        "authPinHeader": "",
+        "pinForgotBtn": "",
+        "transportPinHeader": "",
+        "transportPinBtn": "",
+        "canHeader": "",
+        "canBtn": "",
+        "pukHeader": "",
+        "pukBtn": ""
+    },
+    "AusweisPukLock": {
+        "header": "",
+        "subtitle": "",
+        "proceedBtn": "",
+        "closeBtn": ""
+    },
+    "AusweisIdentity": {
+        "header": "",
+        "subheader": "",
+        "compatibilityBtn": "",
+        "changePinBtn": "",
+        "unlockBtn": ""
+    },
+    "AusweisChangePin": {
+        "transportPinHeader": "",
+        "transportPinSubheader": "",
+        "transportPinBtn": "",
+        "pinHeader": "",
+        "pinSubheader": "",
+        "pinBtn": "",
+        "forgotHeader": "",
+        "forgotSubheader": "",
+        "forgotBtn": ""
+    },
+    "AusweisPinInfo": {
+        "header": "",
+        "description": "",
+        "btn": ""
+    },
+    "AusweisScanner": {
+        "header": "",
+        "subheader": "",
+        "cancelBtn": ""
+    },
+    "AusweisCanInfo": {
+        "header": "",
+        "description": ""
+    },
+    "AusweisTransportPin": {
+        "warning": "",
+        "continueBtn": ""
+    },
+    "AusweisTransportPinInfo": {
+        "header": "",
+        "description": ""
+    },
+    "AusweisPukInfo": {
+        "header": "",
+        "description": ""
+    },
+    "AusweisUnlock": {
+        "notLockedHeader": "",
+        "closeBtn": "",
+        "pukExhaustedHeader": "",
+        "unlockedHeader": ""
+    },
+    "nfcCompatibilityMsg\n": ""
 }
