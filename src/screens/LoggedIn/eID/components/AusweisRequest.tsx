@@ -43,14 +43,14 @@ export const AusweisRequest = () => {
       <LogoContainerBAS>
         <AusweisLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={t('CredentialRequest.header')} />
+      <InteractionTitle label={t('Ausweis.header')} />
       <JoloText
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.mini}
         color={Colors.white70}
         customStyles={{ paddingHorizontal: 10 }}
       >
-        {`To complete your hotel check-in ${providerName} is requesting specific set of data.`}
+        {t('AusweisRequest.description', { serviceName: providerName })}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
@@ -65,8 +65,8 @@ export const AusweisRequest = () => {
         {providerUrl}
       </JoloText>
       <AusweisButtons
-        submitLabel="Review the request"
-        cancelLabel="Ignore"
+        submitLabel={t('AusweisRequest.proceedBtn')}
+        cancelLabel={t('Interaction.cancelBtn')}
         onSubmit={handleProceed}
         onCancel={handleIgnore}
       />
