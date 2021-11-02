@@ -1,5 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { View, Platform } from 'react-native'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { View, Platform, LayoutAnimation } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { RouteProp, useRoute } from '@react-navigation/core'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
@@ -220,6 +226,13 @@ export const AusweisPasscode = () => {
       },
     })
   }, [])
+
+  useLayoutEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+  }, [pinVariant])
 
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
