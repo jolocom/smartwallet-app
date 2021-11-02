@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 
@@ -49,6 +50,8 @@ const TitleDescAction: React.FC<WhateverProps> = ({
 }
 
 const AusweisChangePin = () => {
+  const { t } = useTranslation()
+
   const handleChange5DigPin = () => {
     console.warn('not implemented')
   }
@@ -67,23 +70,23 @@ const AusweisChangePin = () => {
     >
       <View style={{ width: '100%', alignItems: 'center' }}>
         <TitleDescAction
-          headerText="Do you have 5-digit PIN?"
-          descriptionText="You should have received it with the letter together with your card"
-          btnText="Start the process"
+          headerText={t('AusweisChangePin.transportPinHeader')}
+          descriptionText={t('AusweisChangePin.transportPinSubheader')}
+          btnText={t('AusweisChangePin.transportPinBtn')}
           onPress={handleChange5DigPin}
         />
         <TitleDescAction
-          headerText="Activate your 6-digit PIN code"
-          descriptionText="You can find it in the bottom right corner on the front side of your ID card"
-          btnText="Start the process"
+          headerText={t('AusweisChangePin.pinHeader')}
+          descriptionText={t('AusweisChangePin.pinSubheader')}
+          btnText={t('AusweisChangePin.pinBtn')}
           onPress={handleChange6DigPin}
         />
       </View>
       <TitleDescAction
         hasInlineBtn
-        headerText="Can’t find any of this?"
-        descriptionText="If you completely forgot your PIN and can not find your PIN letter, please turn to the competent authority"
-        btnText="find more"
+        headerText={t('AusweisChangePin.forgotHeader')}
+        descriptionText={t('AusweisChangePin.forgotSubheader')}
+        btnText={t('AusweisChangePin.forgotBtn')}
         onPress={handlePreviewAuthorityInfo}
       />
     </ScreenContainer>
