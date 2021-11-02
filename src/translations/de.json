@@ -202,7 +202,10 @@
         "nfcOffMsg": "",
         "nfcOffBtn": "",
         "ausweisSuccessTitle": "Your data was shared with ${serviceName}!",
-        "ausweisSuccessMsg": ""
+        "ausweisSuccessMsg": "",
+        "ausweisFailedCheckTitle": "",
+        "ausweisFailedCheckMsg": "",
+        "ausweisFailedCheckBtn": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -484,7 +487,8 @@
         "subheader": "",
         "providerBtn": "",
         "mandatoryHeader": "",
-        "optionalHeader": ""
+        "optionalHeader": "",
+        "proceedBtn": ""
     },
     "AusweisProvider": {
         "providerLabel": "",

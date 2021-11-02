@@ -202,7 +202,10 @@
         "nfcOffMsg": "To accept documents and verify your identity, you need to enable this function in the settings",
         "nfcOffBtn": "Settings",
         "ausweisSuccessTitle": "Success",
-        "ausweisSuccessMsg": "Your data was shared with ${serviceName}!"
+        "ausweisSuccessMsg": "Your data was shared with ${serviceName}!",
+        "ausweisFailedCheckTitle": "Check compatibility",
+        "ausweisFailedCheckMsg": "Not the first time failing? \\nStart compatibility diagnostics to be sure.",
+        "ausweisFailedCheckBtn": "Start"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -484,7 +487,8 @@
         "subheader": "Choose one or more documents requested by ${serviceName} to proceed",
         "providerBtn": "More now",
         "mandatoryHeader": "Mandatory fields",
-        "optionalHeader": "Optional"
+        "optionalHeader": "Optional",
+        "proceedBtn": "Share"
     },
     "AusweisProvider": {
         "providerLabel": "Provider",
