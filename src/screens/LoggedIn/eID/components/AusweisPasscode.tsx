@@ -14,6 +14,7 @@ import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import useTranslation from '~/hooks/useTranslation'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -45,6 +46,7 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
  * How do we handle error in send cmds (results in error prop on ENTER_PIN msg)
  */
 export const AusweisPasscode = () => {
+  const { t } = useTranslation()
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
@@ -64,11 +66,13 @@ export const AusweisPasscode = () => {
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
       setPinVariant(AusweisPasscodeMode.PIN)
-      const errorText = `Wrong PIN, you used ${
-        ALL_EID_PIN_ATTEMPTS - card.retryCounter
-      }/${ALL_EID_PIN_ATTEMPTS} attempts`
 
       if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
+        const errorText = t('Lock.errorMsg', {
+          attempts: `${
+            ALL_EID_PIN_ATTEMPTS - card.retryCounter
+          } / ${ALL_EID_PIN_ATTEMPTS}`,
+        })
         setErrorText(errorText)
       }
     }
@@ -76,6 +80,7 @@ export const AusweisPasscode = () => {
     const pukHandler = (card: CardInfo) => {
       setPinVariant(AusweisPasscodeMode.PUK)
       if (card.inoperative) {
+        //NOTE: this will be replaced with an overlay or removed altogether.
         scheduleInfo({
           title: 'Oops!',
           message: "Seems like you're locked out of your card",
@@ -155,11 +160,11 @@ export const AusweisPasscode = () => {
 
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
-      return 'To allow data exchange enter you six digit eID PIN'
+      return t('AusweisPasscode.authPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
-      return 'Before the third attempt, please enter the six digit Card Access Number (CAN)'
+      return t('AusweisPasscode.canHeader')
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
-      return 'PUK'
+      return t('AusweisPasscode.pukHeader')
     } else {
       return ''
     }
@@ -206,17 +211,6 @@ export const AusweisPasscode = () => {
         <PasscodeErrorSetter errorText={errorText} />
         <Passcode.Container customStyles={{ marginTop: 42 }}>
           <Passcode.Header title={title} errorTitle={title} />
-          {pinVariant === AusweisPasscodeMode.CAN && (
-            <JoloText
-              customStyles={{ marginBottom: 36, paddingHorizontal: 24 }}
-              color={Colors.white80}
-              kind={JoloTextKind.title}
-              size={JoloTextSizes.mini}
-            >
-              You can find it in the bottom right on the front of your physical
-              ID card
-            </JoloText>
-          )}
           <Passcode.Input cellColor={Colors.chisinauGrey} />
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
