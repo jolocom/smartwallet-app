@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { ActivityIndicator, View, Platform } from 'react-native'
+import { View, Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { RouteProp, useRoute } from '@react-navigation/core'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import ScreenContainer from '~/components/ScreenContainer'
@@ -10,14 +10,13 @@ import { usePasscode } from '~/components/Passcode/context'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 import { useToasts } from '~/hooks/toasts'
-import { useGoBack } from '~/hooks/navigation'
-
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 import { useAusweisInteraction, useAusweisScanner } from '../hooks'
 import { AusweisStackParamList } from '..'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -45,21 +44,26 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 }
 
 export const AusweisPasscode = () => {
+  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const { mode } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
-  const { scheduleInfo } = useToasts()
-  const goBack = useGoBack()
+  const { scheduleInfo, scheduleWarning } = useToasts()
 
-  const [waitingForMsg, setWaitingForMsg] = useState(false)
-  const [newPin, setPin] = useState('')
-  const { passcodeCommands, cancelInteraction, finishFlow, closeAusweis } =
-    useAusweisInteraction()
+  const {
+    passcodeCommands,
+    cancelInteraction,
+    finishFlow,
+    closeAusweis,
+    cancelFlow,
+  } = useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const { showScanner, updateScanner } = useAusweisScanner()
   const passcodeValue = useRef<null | string>(null)
+
   const pinVariantRef = useRef(pinVariant)
+  const newPasscodeRef = useRef('')
 
   useEffect(() => {
     pinVariantRef.current = pinVariant
@@ -90,6 +94,10 @@ export const AusweisPasscode = () => {
 
     const canHandler = () => {
       setPinVariant(AusweisPasscodeMode.CAN)
+    }
+
+    const newPinHandler = () => {
+      setPinVariant(AusweisPasscodeMode.NEW_PIN)
     }
 
     aa2Module.resetHandlers()
@@ -146,10 +154,14 @@ export const AusweisPasscode = () => {
         }
       },
       handleCardInfo: (info) => {
-        if (info && passcodeValue.current) {
-          sendPasscodeCommand()
-          if (IS_ANDROID) {
+        if (IS_ANDROID) {
+          if (info && passcodeValue.current) {
+            sendPasscodeCommand()
             updateScanner({ state: AusweisScannerState.loading })
+          } else {
+            /**
+             * TODO: when the card is removed hide scanner
+             */
           }
         }
       },
@@ -157,10 +169,53 @@ export const AusweisPasscode = () => {
        * @RUN_CHANGE_PIN
        */
       handleChangePinCancel: () => {
-        goBack()
+        if (IS_ANDROID) {
+          updateScanner({
+            /**
+             * NOTE:
+             * this is confusing UX,
+             * we show big success icon (indicating successful scanning process),
+             * and then toast that pin wasn't changed
+             */
+            state: AusweisScannerState.success,
+            onDone: () => {
+              closeAusweis()
+              scheduleWarning({
+                title: "Pin wasn't changed",
+                message:
+                  'Unfortunately something went wrong while updating your pin. Please try again',
+              })
+            },
+          })
+        } else {
+          closeAusweis()
+        }
       },
+      /**
+       * @RUN_CHANGE_PIN
+       */
       handleChangePinSuccess: () => {
-        goBack()
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: closeAusweis,
+          })
+        } else {
+          closeAusweis()
+        }
+      },
+      /**
+       * @RUN_CHANGE_PIN
+       */
+      handleEnterNewPin: () => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: newPinHandler,
+          })
+        } else {
+          newPinHandler()
+        }
       },
     })
   }, [])
@@ -183,24 +238,23 @@ export const AusweisPasscode = () => {
 
   const sendPasscodeCommand = () => {
     if (passcodeValue.current) {
-      const passcodeNumber = passcodeValue.current
+      const passcode = passcodeValue.current
 
       setErrorText(null)
-
       if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
-        passcodeCommands.setPin(passcodeNumber)
+        passcodeCommands.setPin(passcode)
       } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
-        passcodeCommands.setCan(passcodeNumber)
+        passcodeCommands.setCan(passcode)
       } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
-        passcodeCommands.setPuk(passcodeNumber)
-      } else if (pinVariant === AusweisPasscodeMode.NEW_PIN) {
-        setPin(passcode)
+        passcodeCommands.setPuk(passcode)
+      } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
+        newPasscodeRef.current = passcode
         setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
-      } else if (pinVariant === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-        if (passcode === newPin) {
-          setWaitingForMsg(true)
+      } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
+        if (passcode === newPasscodeRef?.current) {
           aa2Module.setNewPin(passcode)
         } else {
+          updateScanner({ state: AusweisScannerState.failure })
           setErrorText("PINs don't match")
         }
       }
@@ -213,9 +267,19 @@ export const AusweisPasscode = () => {
     passcodeValue.current = passcode
 
     if (IS_ANDROID) {
-      showScanner(() => {
-        cancelInteraction()
-      })
+      /**
+       * NOTE:
+       * no need to show scanner when verifying new pin,
+       * as this is a local operation
+       */
+      if (pinVariant !== AusweisPasscodeMode.NEW_PIN) {
+        showScanner(() => {
+          cancelFlow()
+          navigation.goBack()
+        })
+      } else {
+        sendPasscodeCommand()
+      }
     } else {
       sendPasscodeCommand()
     }
@@ -247,18 +311,6 @@ export const AusweisPasscode = () => {
               You can find it in the bottom right on the front of your physical
               ID card
             </JoloText>
-          )}
-          {waitingForMsg && (
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 20,
-                width: '100%',
-                alignItems: 'center',
-              }}
-            >
-              <ActivityIndicator color={Colors.activity} />
-            </View>
           )}
           <Passcode.Input cellColor={Colors.chisinauGrey} />
           <View style={{ position: 'relative', alignItems: 'center' }}>

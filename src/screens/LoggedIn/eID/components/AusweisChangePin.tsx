@@ -1,7 +1,8 @@
-import { useIsFocused } from '@react-navigation/core'
-import React, { useEffect, useMemo } from 'react'
-import { Platform, View } from 'react-native'
+import { useIsFocused, useNavigation } from '@react-navigation/core'
+import React, { useCallback, useEffect } from 'react'
+import { View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -9,10 +10,11 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { usePrevious } from '~/hooks/generic'
 
 import { ScreenNames } from '~/types/screens'
-
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
+import { IS_ANDROID } from '~/utils/generic'
 
+import { useAusweisInteraction } from '../hooks'
 import { AusweisPasscodeMode, eIDScreens } from '../types'
 
 interface WhateverProps {
@@ -57,66 +59,118 @@ const TitleDescAction: React.FC<WhateverProps> = ({
   )
 }
 
-const AusweisChangePin = ({ navigation }) => {
+const AusweisChangePin = () => {
+  const navigation = useNavigation()
   const isFocused = useIsFocused()
   const prevIsFocused = usePrevious(isFocused)
+  const { checkCardValidity, cancelFlow } = useAusweisInteraction()
 
-  const handlers = useMemo(
-    () => ({
-      handlePinRequest: () => {
+  const pinHandler = useCallback((card: CardInfo) => {
+    checkCardValidity(card, () => {
+      /**
+       * TODO:
+       * rename EnterPin to AusweisPasscode
+       */
+      /**
+       * Android
+       * because the eid stack is already there
+       */
+      if (IS_ANDROID) {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.PIN,
+        })
+      } else {
         navigation.navigate(ScreenNames.eId, {
           screen: eIDScreens.EnterPIN,
           params: {
             mode: AusweisPasscodeMode.PIN,
           },
         })
-      },
-      handleCanRequest: () => {
-        navigation.navigate(ScreenNames.eId, {
-          screen: eIDScreens.EnterPIN,
-          params: {
-            mode: AusweisPasscodeMode.CAN,
-          },
-        })
-      },
-      handlePukRequest: () => {
-        navigation.navigate(
-          ScreenNames.eId,
-          {
-            screen: eIDScreens.EnterPIN,
-            params: {
-              mode: AusweisPasscodeMode.PUK,
-            },
-          },
-          {},
-        )
-      },
+      }
+    })
+  }, [])
+
+  const canHandler = useCallback((card: CardInfo) => {
+    checkCardValidity(card, () => {
+      navigation.navigate(eIDScreens.EnterPIN, {
+        mode: AusweisPasscodeMode.CAN,
+      })
+    })
+  }, [])
+
+  const pukHandler = useCallback((card: CardInfo) => {
+    checkCardValidity(card, () => {
+      navigation.navigate(eIDScreens.EnterPIN, {
+        mode: AusweisPasscodeMode.PUK,
+      })
+    })
+  }, [])
+
+  const setupHandlers = () => {
+    aa2Module.resetHandlers()
+
+    aa2Module.setHandlers({
       handleCardRequest: () => {
-        if (Platform.OS === 'android') {
+        if (IS_ANDROID) {
           navigation.navigate(ScreenNames.eId, {
             screen: eIDScreens.AusweisScanner,
-            params: {
-              onDismiss: () => {
-                aa2Module.cancelFlow()
-              },
-            },
+            params: { onDismiss: cancelFlow },
           })
         }
       },
-    }),
-    [],
-  )
+      handlePinRequest: (card) => {
+        // if (IS_ANDROID) {
+        //   updateScanner({
+        //     state: AusweisScannerState.success,
+        //     onDone: () => {
+        //       pinHandler(card)
+        //     },
+        //   })
+        // } else {
+        pinHandler(card)
+        // }
+      },
+      handlePukRequest: (card) => {
+        // if (IS_ANDROID) {
+        //   updateScanner({
+        //     state: AusweisScannerState.success,
+        //     onDone: () => {
+        //       pukHandler(card)
+        //     },
+        //   })
+        // } else {
+        pukHandler(card)
+        // }
+      },
+      handleCanRequest: (card) => {
+        // if (IS_ANDROID) {
+        //   updateScanner({
+        //     state: AusweisScannerState.success,
+        //     onDone: () => {
+        //       canHandler(card)
+        //     },
+        //   })
+        // } else {
+        canHandler(card)
+        // }
+      },
+      handleChangePinCancel: () => {
+        // if (IS_ANDROID) {
+        //   updateScanner({
+        //     state: AusweisScannerState.success,
+        //     onDone: cancelFlow,
+        //   })
+        // }
+        cancelFlow()
+      },
+    })
+  }
 
   useEffect(() => {
-    if (isFocused === true && prevIsFocused === false) {
-      aa2Module.setHandlers(handlers)
+    if (isFocused === true && !Boolean(prevIsFocused)) {
+      setupHandlers()
     }
   }, [isFocused])
-
-  useEffect(() => {
-    aa2Module.resetHandlers()
-    aa2Module.setHandlers(handlers)
-  }, [])
 
   const handleChange5DigPin = () => {
     console.warn('not implemented')
