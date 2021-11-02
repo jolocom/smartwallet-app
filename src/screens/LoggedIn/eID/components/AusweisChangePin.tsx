@@ -67,41 +67,33 @@ const AusweisChangePin = () => {
 
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
-      /**
-       * TODO:
-       * rename EnterPin to AusweisPasscode
-       */
-      /**
-       * Android
-       * because the eid stack is already there
-       */
-      if (IS_ANDROID) {
-        navigation.navigate(eIDScreens.EnterPIN, {
+      navigation.navigate(ScreenNames.eId, {
+        screen: eIDScreens.EnterPIN,
+        params: {
           mode: AusweisPasscodeMode.PIN,
-        })
-      } else {
-        navigation.navigate(ScreenNames.eId, {
-          screen: eIDScreens.EnterPIN,
-          params: {
-            mode: AusweisPasscodeMode.PIN,
-          },
-        })
-      }
+        },
+      })
     })
   }, [])
 
   const canHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
-      navigation.navigate(eIDScreens.EnterPIN, {
-        mode: AusweisPasscodeMode.CAN,
+      navigation.navigate(ScreenNames.eId, {
+        screen: eIDScreens.EnterPIN,
+        params: {
+          mode: AusweisPasscodeMode.CAN,
+        },
       })
     })
   }, [])
 
   const pukHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
-      navigation.navigate(eIDScreens.EnterPIN, {
-        mode: AusweisPasscodeMode.PUK,
+      navigation.navigate(ScreenNames.eId, {
+        screen: eIDScreens.EnterPIN,
+        params: {
+          mode: AusweisPasscodeMode.PUK,
+        },
       })
     })
   }, [])
@@ -119,48 +111,15 @@ const AusweisChangePin = () => {
         }
       },
       handlePinRequest: (card) => {
-        // if (IS_ANDROID) {
-        //   updateScanner({
-        //     state: AusweisScannerState.success,
-        //     onDone: () => {
-        //       pinHandler(card)
-        //     },
-        //   })
-        // } else {
         pinHandler(card)
-        // }
       },
       handlePukRequest: (card) => {
-        // if (IS_ANDROID) {
-        //   updateScanner({
-        //     state: AusweisScannerState.success,
-        //     onDone: () => {
-        //       pukHandler(card)
-        //     },
-        //   })
-        // } else {
         pukHandler(card)
-        // }
       },
       handleCanRequest: (card) => {
-        // if (IS_ANDROID) {
-        //   updateScanner({
-        //     state: AusweisScannerState.success,
-        //     onDone: () => {
-        //       canHandler(card)
-        //     },
-        //   })
-        // } else {
         canHandler(card)
-        // }
       },
-      handleChangePinCancel: () => {
-        // if (IS_ANDROID) {
-        //   updateScanner({
-        //     state: AusweisScannerState.success,
-        //   })
-        // }
-      },
+      handleChangePinCancel: () => {},
     })
   }
 
