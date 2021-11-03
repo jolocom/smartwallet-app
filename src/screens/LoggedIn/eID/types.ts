@@ -68,6 +68,8 @@ export interface IAusweisRequest {
   expirationDate: string
 }
 
+export type AusweisCardInfoParams = { title: string }
+
 export type AusweisContextValue = IAusweisRequest & {
   setRequest: (data: IAusweisRequest) => void
   resetRequest: () => void
