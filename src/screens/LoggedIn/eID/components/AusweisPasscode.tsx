@@ -54,7 +54,7 @@ export const AusweisPasscode = () => {
 
   const { scheduleInfo, scheduleWarning } = useToasts()
 
-  const { passcodeCommands, cancelInteraction, finishFlow, closeAusweis } =
+  const { passcodeCommands, finishFlow, closeAusweis, cancelFlow } =
     useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
@@ -81,13 +81,6 @@ export const AusweisPasscode = () => {
 
     const pukHandler = (card: CardInfo) => {
       setPinVariant(AusweisPasscodeMode.PUK)
-      if (card.inoperative) {
-        scheduleInfo({
-          title: 'Oops!',
-          message: "Seems like you're locked out of your card",
-        })
-        cancelInteraction()
-      }
     }
 
     const canHandler = () => {
@@ -102,7 +95,7 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        showScanner(cancelInteraction)
+        showScanner(cancelFlow)
       },
       handleAuthResult: (url) => {
         if (IS_ANDROID) {
