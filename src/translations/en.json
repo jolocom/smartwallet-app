@@ -201,8 +201,8 @@
         "nfcOffTitle": "NFC is off",
         "nfcOffMsg": "To accept documents and verify your identity, you need to enable this function in the settings",
         "nfcOffBtn": "Settings",
-        "ausweisSuccessTitle": "Success",
-        "ausweisSuccessMsg": "Your data was shared with ${serviceName}!",
+        "ausweisSuccessTitle": "Action completed",
+        "ausweisSuccessMsg": "Data was shared successfully",
         "ausweisFailedCheckTitle": "Check compatibility",
         "ausweisFailedCheckMsg": "Not the first time failing? \\nStart compatibility diagnostics to be sure.",
         "ausweisFailedCheckBtn": "Start"
@@ -487,7 +487,7 @@
         "subheader": "Choose one or more documents requested by ${serviceName} to proceed",
         "providerBtn": "More now",
         "mandatoryHeader": "Mandatory fields",
-        "optionalHeader": "Optional",
+        "optionalHeader": "Optional fields",
         "proceedBtn": "Share"
     },
     "AusweisProvider": {
@@ -537,7 +537,7 @@
     },
     "AusweisScanner": {
         "header": "Ready to scan",
-        "subheader": "Please do not remove your card until current step is done",
+        "startSubheader": "Please do not remove your card until current step is done",
         "cancelBtn": "Cancel"
     },
     "AusweisCanInfo": {
@@ -561,6 +561,5 @@
         "closeBtn": "Close",
         "pukExhaustedHeader": "You used all correct PUK attempts and this card is locked now",
         "unlockedHeader": "Your card is unlocked and ready to use!"
-    },
-    "nfcCompatibilityMsg\n": ""
+    }
 }
