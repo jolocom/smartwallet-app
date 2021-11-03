@@ -8,7 +8,7 @@ import React, {
 import { View, Platform, LayoutAnimation } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { RouteProp, useRoute } from '@react-navigation/core'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
@@ -247,6 +247,14 @@ export const AusweisPasscode = () => {
     }
   }, [pinVariant])
 
+  const handleCardIsBlocked = () => {
+    closeAusweis()
+    scheduleWarning({
+      title: 'Your card is blocked',
+      message: 'Please contact competitive authority to unblock your card',
+    })
+  }
+
   const sendPasscodeCommand = async (passcode: string) => {
     setErrorText(null)
     if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
@@ -254,7 +262,20 @@ export const AusweisPasscode = () => {
     } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
       passcodeCommands.setCan(passcode)
     } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
-      passcodeCommands.setPuk(passcode)
+      try {
+        await passcodeCommands.setPuk(passcode)
+      } catch (e) {
+        if (e === CardError.cardIsBlocked) {
+          if (IS_ANDROID) {
+            updateScanner({
+              state: AusweisScannerState.failure,
+              onDone: handleCardIsBlocked,
+            })
+          } else {
+            handleCardIsBlocked()
+          }
+        }
+      }
     } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
       newPasscodeRef.current = passcode
       setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
@@ -262,7 +283,7 @@ export const AusweisPasscode = () => {
       if (passcode === newPasscodeRef?.current) {
         aa2Module.setNewPin(passcode)
       } else {
-        updateScanner({ state: AusweisScannerState.failure })
+        updateScanner({ state: AusweisScannerState.failure, onDone: () => {} })
         setErrorText("PINs don't match")
       }
     }
