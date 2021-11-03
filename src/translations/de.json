@@ -475,7 +475,7 @@
         "pinBtn": "mehr Informationen",
         "proceedBtn": "Fertig",
         "skipBtn": "Überspringen Sie diesen Schritt, wenn Sie eine ähnliche Interaktion erneut ausführen",
-        "ignoreBtn": "Nicht beachten"
+        "ignoreBtn": "Ignorieren"
     },
     "AusweisCompatibilityStatus": {
         "header": "Kompatibilitätsprüfung",
