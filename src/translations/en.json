@@ -83,7 +83,8 @@
         "addressLabel": "Address",
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
-        "headerAusweis": "Your identity"
+        "headerAusweis": "Your identity",
+        "headerCredentials": "Credentials"
     },
     "BottomBar": {
         "identity": "Identity",
@@ -472,7 +473,9 @@
         "pinTitle": "6-digit pin status",
         "pinSubtitle": "Did you previously activate the card’s eID functionality?  If not, read about it here",
         "pinBtn": "... more info",
-        "proceedBtn": "Done"
+        "proceedBtn": "Done",
+        "skipBtn": "Skip this step when performing similar interaction again",
+        "ignoreBtn": "Ignore"
     },
     "AusweisCompatibilityStatus": {
         "header": "Compatibility check",

@@ -83,7 +83,8 @@
         "addressLabel": "Adresse",
         "addClaimBtn": "Hinzufügen",
         "attributesMissingInfo": "Deine Infos sehen ziemlich leer aus\nErgänze sie für die zukünftigen Anwendungen",
-        "headerAusweis": "Ihre Identität"
+        "headerAusweis": "Ihre Identität",
+        "headerCredentials": "Referenzen"
     },
     "BottomBar": {
         "identity": "Identität",
@@ -198,7 +199,7 @@
         "successfulInteractionMsg": "Du solltest jetzt alles haben, was du brauchst, um deine Interaktion fortzusetzen",
         "nfcCompatibilityTitle": "NFC Kompabilitätsproblem",
         "nfcCompatibilityMsg": "Wir müssen Sie darüber informieren, dass Ihr Telefon die erforderliche NFC-Funktionalität nicht unterstützt.",
-        "nfcOffTitle": "NFC ist ausgeschaltet",
+        "nfcOffTitle": "NFC inaktiv",
         "nfcOffMsg": "Um Dokumente zu akzeptieren und Ihre Identität zu überprüfen, müssen Sie diese Funktion in den Einstellungen aktivieren.",
         "nfcOffBtn": "Einstellungen",
         "ausweisSuccessTitle": "Aktion vollendet.",
@@ -439,7 +440,7 @@
         "writeCommunityID": "",
         "artisticName": "Künstlername",
         "residencePermitII": "Aufenthaltsgenehmigung II",
-        "writeResidencePermitI": "Aufenthalsgenehmigung",
+        "writeResidencePermitI": "Aufenthaltsgenehmigung",
         "givenNames": "Name",
         "placeOfBirth": "Geburtsort",
         "dateOfBirth": "Geburtsdatum",
@@ -448,7 +449,7 @@
         "validUntil": "gültig bis",
         "nationality": "Nationalität",
         "addressVerification": "Adressnachweis",
-        "canAllowed": "CAN erlaubt",
+        "canAllowed": "CAN installiert",
         "pinManagement": "PIN verwalten.",
         "header": "Eingehende Anfrage"
     },
@@ -472,7 +473,9 @@
         "pinTitle": "\n6-stelliger Pin-Status",
         "pinSubtitle": "Haben Sie zuvor die eID-Funktionalität der Karte aktiviert? Wenn nicht, informieren Sie sich hier",
         "pinBtn": "mehr Informationen",
-        "proceedBtn": "Fertig"
+        "proceedBtn": "Fertig",
+        "skipBtn": "Überspringen Sie diesen Schritt, wenn Sie eine ähnliche Interaktion erneut ausführen",
+        "ignoreBtn": "Nicht beachten"
     },
     "AusweisCompatibilityStatus": {
         "header": "Kompatibilitätsprüfung",
@@ -553,7 +556,7 @@
         "description": "Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises. \\n\\n Bitte beachten Sie, dass Sie die Online-eID-Funktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige PIN ist zwingend erforderlich."
     },
     "AusweisPukInfo": {
-        "header": "PUK Karte Informationen",
+        "header": "PUK Nummer Hinweis",
         "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben. \\n\\n Bitte beachten Sie, dass Sie die Online-eID-Funktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige PIN ist zwingend erforderlich."
     },
     "AusweisUnlock": {
