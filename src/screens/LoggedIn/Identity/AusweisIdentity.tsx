@@ -14,7 +14,7 @@ import {
   useCheckNFC,
 } from '~/screens/LoggedIn/eID/hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { AusweisPasscodeMode, eIDScreens } from '../eID/types'
+import { AusweisPasscodeMode, CardInfoMode, eIDScreens } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
 
 export const AusweisIdentity = () => {
@@ -31,7 +31,7 @@ export const AusweisIdentity = () => {
     navigation.navigate(ScreenNames.AusweisChangePin)
   }
 
-  const handleShowCardLockResult = () => {
+  const handleShowCardLockResult = (mode: CardInfoMode) => {
     /**
      * NOTE: replacing for now until fixing issue with getting active route,
      * which is happening when we updating params of the Scanner screen
@@ -41,7 +41,8 @@ export const AusweisIdentity = () => {
       StackActions.replace(ScreenNames.TransparentModals, {
         screen: ScreenNames.AusweisCardInfo,
         params: {
-          title: 'System did not detect your card being blocked',
+          mode,
+          onDismiss: cancelFlow,
         },
       }),
     )
@@ -61,22 +62,22 @@ export const AusweisIdentity = () => {
         }
       },
       handlePinRequest: () => {
-        /**
-         * TODO:
-         * message should be different after providing correct PUK
-         */
-        handleShowCardLockResult()
+        handleShowCardLockResult(CardInfoMode.notBlocked)
       },
-      handleCanRequest: handleShowCardLockResult,
+      handleCanRequest: () => handleShowCardLockResult(CardInfoMode.notBlocked),
       handlePukRequest: () => {
         navigation.navigate(ScreenNames.eId, {
           screen: eIDScreens.EnterPIN,
           params: {
             mode: AusweisPasscodeMode.PUK,
+            handlers: {
+              handlePinRequest: () => {
+                handleShowCardLockResult(CardInfoMode.unblocked)
+              },
+            },
           },
         })
       },
-      handleChangePinCancel: () => {},
     })
   }
 
