@@ -472,7 +472,7 @@
         "checkTryAgain": "Erneut versuchen",
         "pinTitle": "\n6-stelliger Pin-Status",
         "pinSubtitle": "Haben Sie zuvor die eID-Funktionalität der Karte aktiviert? Wenn nicht, informieren Sie sich hier",
-        "pinBtn": "mehr Informationen",
+        "pinBtn": "... mehr Informationen",
         "proceedBtn": "Fertig",
         "skipBtn": "Überspringen Sie diesen Schritt, wenn Sie eine ähnliche Interaktion erneut ausführen",
         "ignoreBtn": "Ignorieren"
