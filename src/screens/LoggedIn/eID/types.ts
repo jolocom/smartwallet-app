@@ -8,6 +8,7 @@ export enum eIDScreens {
   ProviderDetails = 'ProviderDetails',
   PukLock = 'PukLock',
   CompatibilityResult = 'CompatibilityResult',
+  CanInfo = 'CanInfo',
 }
 
 export enum AA2Messages {

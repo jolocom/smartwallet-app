@@ -12,6 +12,7 @@ import {
   useCheckNFC,
 } from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
+import { eIDScreens } from '../eID/types'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -28,7 +29,7 @@ export const AusweisIdentity = () => {
   }
 
   const handleUnlockCard = () => {
-    console.warn('Not implemented')
+    navigation.navigate(ScreenNames.eId, { screen: eIDScreens.CanInfo })
   }
 
   return (
