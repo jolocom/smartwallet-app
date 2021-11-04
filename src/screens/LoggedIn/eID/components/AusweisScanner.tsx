@@ -49,6 +49,15 @@ export const AusweisScanner = () => {
       toValue: 1,
     })
 
+  const handleComplete = () => {
+    setTimeout(() => {
+      goBack()
+      setTimeout(() => {
+        onDone()
+      }, 200)
+    }, 500)
+  }
+
   useEffect(() => {
     if (state !== animationState) {
       switch (state) {
@@ -57,17 +66,10 @@ export const AusweisScanner = () => {
           return showAnimation(loadingOpacityValue).start()
         case AusweisScannerState.failure:
           setAnimationState(AusweisScannerState.failure)
-          return showAnimation(iconOpacityValue).start()
+          return showAnimation(iconOpacityValue).start(handleComplete)
         case AusweisScannerState.success:
           setAnimationState(AusweisScannerState.success)
-          return showAnimation(iconOpacityValue).start(() => {
-            setTimeout(() => {
-              goBack()
-              setTimeout(() => {
-                onDone()
-              }, 200)
-            }, 500)
-          })
+          return showAnimation(iconOpacityValue).start(handleComplete)
         default:
           return
       }

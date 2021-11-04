@@ -7,8 +7,9 @@ import React, {
 } from 'react'
 import { View, Platform, LayoutAnimation } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { RouteProp, useRoute } from '@react-navigation/core'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { StackActions } from '@react-navigation/routers'
+import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
@@ -19,9 +20,15 @@ import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import {
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  CardInfoMode,
+  eIDScreens,
+} from '../types'
 import { useAusweisInteraction, useAusweisScanner } from '../hooks'
 import { AusweisStackParamList } from '..'
+import { ScreenNames } from '~/types/screens'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -49,12 +56,13 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 }
 
 export const AusweisPasscode = () => {
-  const { mode } =
+  const navigation = useNavigation()
+  const { mode, handlers } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
   const { scheduleInfo, scheduleWarning } = useToasts()
 
-  const { passcodeCommands, cancelInteraction, finishFlow, closeAusweis } =
+  const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
     useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
@@ -81,13 +89,6 @@ export const AusweisPasscode = () => {
 
     const pukHandler = (card: CardInfo) => {
       setPinVariant(AusweisPasscodeMode.PUK)
-      if (card.inoperative) {
-        scheduleInfo({
-          title: 'Oops!',
-          message: "Seems like you're locked out of your card",
-        })
-        cancelInteraction()
-      }
     }
 
     const canHandler = () => {
@@ -223,6 +224,11 @@ export const AusweisPasscode = () => {
           newPinHandler()
         }
       },
+      /**
+       * NOTE: overwrite handlers for this screen
+       * with handlers that comes through navigation
+       */
+      ...handlers,
     })
   }, [])
 
@@ -249,6 +255,17 @@ export const AusweisPasscode = () => {
     }
   }, [pinVariant])
 
+  const handleCardIsBlocked = () => {
+    navigation.dispatch(
+      StackActions.replace(ScreenNames.TransparentModals, {
+        screen: ScreenNames.AusweisCardInfo,
+        params: {
+          mode: CardInfoMode.blocked,
+        },
+      }),
+    )
+  }
+
   const sendPasscodeCommand = async (passcode: string) => {
     setErrorText(null)
     if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
@@ -256,7 +273,20 @@ export const AusweisPasscode = () => {
     } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
       passcodeCommands.setCan(passcode)
     } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
-      passcodeCommands.setPuk(passcode)
+      try {
+        await passcodeCommands.setPuk(passcode)
+      } catch (e) {
+        if (e === CardError.cardIsBlocked) {
+          if (IS_ANDROID) {
+            updateScanner({
+              state: AusweisScannerState.failure,
+              onDone: handleCardIsBlocked,
+            })
+          } else {
+            handleCardIsBlocked()
+          }
+        }
+      }
     } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
       newPasscodeRef.current = passcode
       setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
@@ -264,7 +294,7 @@ export const AusweisPasscode = () => {
       if (passcode === newPasscodeRef?.current) {
         aa2Module.setNewPin(passcode)
       } else {
-        updateScanner({ state: AusweisScannerState.failure })
+        updateScanner({ state: AusweisScannerState.failure, onDone: () => {} })
         setErrorText("PINs don't match")
       }
     }
