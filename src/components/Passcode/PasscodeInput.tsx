@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 import BP from '~/utils/breakpoints'

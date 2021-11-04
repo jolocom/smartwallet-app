@@ -61,6 +61,9 @@ export const AusweisPasscode = () => {
   const { showScanner, updateScanner } = useAusweisScanner()
   const passcodeValue = useRef<null | string>(null)
   const pinVariantRef = useRef(pinVariant)
+  const shouldShowPukWarning = useRef(
+    mode === AusweisPasscodeMode.PUK ? false : true,
+  )
 
   useEffect(() => {
     pinVariantRef.current = pinVariant
@@ -90,7 +93,12 @@ export const AusweisPasscode = () => {
         })
         cancelInteraction()
       } else {
-        navigation.navigate(eIDScreens.PukLock)
+        if (shouldShowPukWarning.current) {
+          navigation.navigate(eIDScreens.PukLock)
+          shouldShowPukWarning.current = false
+        } else {
+          setPinVariant(AusweisPasscodeMode.PUK)
+        }
       }
     }
 
