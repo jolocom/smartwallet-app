@@ -8,7 +8,9 @@ export enum eIDScreens {
   PasscodeDetails = 'PasscodeDetails',
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
+  PukLock = 'PukLock',
   CompatibilityResult = 'CompatibilityResult',
+  PukInfo = 'PukInfo',
 }
 
 export enum AA2Messages {
@@ -29,7 +31,7 @@ export enum AusweisPasscodeMode {
 
 export interface AusweisPasscodeProps {
   mode: AusweisPasscodeMode
-  handlers: Partial<EventHandlers>
+  handlers?: Partial<EventHandlers>
 }
 
 export enum AusweisFields {

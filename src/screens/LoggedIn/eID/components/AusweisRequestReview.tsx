@@ -31,7 +31,7 @@ import {
   AusweisLogo,
 } from '../styled'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
-import { useNavigation, useNavigationState } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/core'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '..'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'

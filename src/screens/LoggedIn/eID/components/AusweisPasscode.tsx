@@ -16,9 +16,12 @@ import Passcode from '~/components/Passcode'
 import { usePasscode } from '~/components/Passcode/context'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 
+import { AusweisStackParamList } from '..'
 import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
 
 import {
   AusweisPasscodeMode,
@@ -27,8 +30,6 @@ import {
   eIDScreens,
 } from '../types'
 import { useAusweisInteraction, useAusweisScanner } from '../hooks'
-import { AusweisStackParamList } from '..'
-import { ScreenNames } from '~/types/screens'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -56,9 +57,11 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 }
 
 export const AusweisPasscode = () => {
+  const route =
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
+  const { mode, handlers } = route.params
+
   const navigation = useNavigation()
-  const { mode, handlers } =
-    useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
 
   const { scheduleInfo, scheduleWarning } = useToasts()
 
@@ -70,10 +73,17 @@ export const AusweisPasscode = () => {
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')
+  const shouldShowPukWarning = useRef(
+    mode === AusweisPasscodeMode.PUK ? false : true,
+  )
 
   useEffect(() => {
     pinVariantRef.current = pinVariant
   }, [pinVariant])
+
+  useEffect(() => {
+    setPinVariant(mode)
+  }, [route])
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
@@ -88,7 +98,12 @@ export const AusweisPasscode = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
-      setPinVariant(AusweisPasscodeMode.PUK)
+      if (shouldShowPukWarning.current) {
+        navigation.navigate(eIDScreens.PukLock)
+        shouldShowPukWarning.current = false
+      } else {
+        setPinVariant(AusweisPasscodeMode.PUK)
+      }
     }
 
     const canHandler = () => {
@@ -245,7 +260,7 @@ export const AusweisPasscode = () => {
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
       return 'Before the third attempt, please enter the six digit Card Access Number (CAN)'
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
-      return 'PUK'
+      return 'To restore access to your card please enter PUK number'
     } else if (pinVariant === AusweisPasscodeMode.NEW_PIN) {
       return 'Your new pin'
     } else if (pinVariant === AusweisPasscodeMode.VERIFY_NEW_PIN) {
@@ -300,16 +315,68 @@ export const AusweisPasscode = () => {
     }
   }
 
+  const getPasscodeLength = () => {
+    switch (pinVariant) {
+      case AusweisPasscodeMode.CAN:
+      case AusweisPasscodeMode.PIN:
+      case AusweisPasscodeMode.NEW_PIN:
+      case AusweisPasscodeMode.VERIFY_NEW_PIN:
+        return 6
+      case AusweisPasscodeMode.PUK:
+        return 10
+    }
+  }
+
+  const getPasscodeNrLines = () => {
+    switch (pinVariant) {
+      case AusweisPasscodeMode.PUK:
+        return 2
+      default:
+        return 1
+    }
+  }
+
+  const renderAccessoryBtn = () => {
+    let screen: eIDScreens | undefined
+    let title: string | undefined
+
+    switch (pinVariant) {
+      case AusweisPasscodeMode.PUK:
+        screen = eIDScreens.PukInfo
+        title = 'Where to find the PUK?'
+        break
+      default:
+        break
+    }
+
+    if (screen && title) {
+      return (
+        <Passcode.AccessoryBtn
+          title={title}
+          onPress={() => navigation.navigate(screen!)}
+        />
+      )
+    }
+
+    return null
+  }
+
   return (
     <ScreenContainer
       backgroundColor={Colors.mainDark}
+      hasHeaderClose
+      onClose={cancelInteraction}
       customStyles={{
         justifyContent: 'flex-start',
       }}
     >
-      <Passcode onSubmit={sendPasscodeCommand} length={6}>
+      <Passcode onSubmit={sendPasscodeCommand} length={getPasscodeLength()}>
         <PasscodeErrorSetter errorText={errorText} />
-        <Passcode.Container>
+        <Passcode.Container
+          customStyles={{
+            marginTop: BP({ default: 0, medium: 8, large: 36 }),
+          }}
+        >
           <Passcode.Header title={title} errorTitle={title} />
           {pinVariant === AusweisPasscodeMode.CAN && (
             <JoloText
@@ -325,13 +392,18 @@ export const AusweisPasscode = () => {
               ID card
             </JoloText>
           )}
-          <Passcode.Input cellColor={Colors.chisinauGrey} />
+          <View style={{ paddingHorizontal: 8 }}>
+            <Passcode.Input
+              cellColor={Colors.chisinauGrey}
+              numberOfLines={getPasscodeNrLines()}
+            />
+          </View>
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
           </View>
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
-          {/* <Passcode.Forgot /> */}
+          {renderAccessoryBtn()}
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
