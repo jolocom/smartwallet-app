@@ -36,6 +36,11 @@ export const useAppBackgroundChange = (handler: () => void) => {
     prevAppState.match(/inactive|background/) &&
     currentAppState.match(/active/)
 
+  /**
+   * Every time the app goes to the background
+   * start counter how much time the app stayed in the
+   * background
+   */
   useEffect(() => {
     if (goingToBackground) {
       backgroundTimer.current = new Date().getTime()
@@ -58,6 +63,22 @@ export const useAppBackgroundChange = (handler: () => void) => {
     }
   }
 
+  /**
+   * NOTE:
+   * whenever app comes from the background to foreground
+   * enable the Lock for both OSes
+   */
+  useEffect(() => {
+    if (comingFromBackground) {
+      dispatch(setPopup(false))
+    }
+  }, [currentAppState])
+
+  /**
+   * Run handler (i.e. lock the app) if the app
+   * - goes to background on iOS
+   * - goes from background on Android
+   */
   useEffect(() => {
     if (
       Platform.select({
@@ -65,13 +86,17 @@ export const useAppBackgroundChange = (handler: () => void) => {
         ios: goingToBackground,
       })
     ) {
-      const ignoreStateChange =
-        Platform.OS === 'android' && shouldIgnoreStateChange()
-
-      if (!isPopup && !ignoreStateChange) {
-        handler()
+      if (Platform.OS === 'android') {
+        const ignoreStateChange = shouldIgnoreStateChange()
+        if (!ignoreStateChange) {
+          if (isPopup !== true) {
+            handler()
+          }
+        }
       } else {
-        dispatch(setPopup(false))
+        if (isPopup !== true) {
+          handler()
+        }
       }
     }
   }, [currentAppState, isPopup])

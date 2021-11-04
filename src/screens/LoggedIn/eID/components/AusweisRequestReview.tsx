@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
+
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
-import { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
-import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
-import { useDisableLock } from '~/hooks/generic'
 import { useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
+import { setPopup } from '~/modules/appState/actions'
 import InteractionSection from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionSection'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
@@ -32,18 +32,21 @@ import { AusweisPasscodeMode, eIDScreens } from '../types'
 export const AusweisRequestReview = () => {
   const { scheduleWarning } = useToasts()
   const { providerName, requiredFields, optionalFields } = useAusweisContext()
-  const { acceptRequest, checkIfScanned, cancelFlow } = useAusweisInteraction()
+  const { acceptRequest, cancelFlow, finishFlow } = useAusweisInteraction()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const redirect = useRedirect()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
+  const dispatch = useDispatch()
 
   useEffect(() => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        // @ts-ignore
-        redirect(eIDScreens.AusweisScanner)
+        if (Platform.OS === 'android') {
+          // @ts-ignore
+          redirect(eIDScreens.AusweisScanner)
+        }
       },
       handlePinRequest: () => {
         //@ts-expect-error
@@ -57,12 +60,24 @@ export const AusweisRequestReview = () => {
         //@ts-expect-error
         redirect(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.CAN })
       },
+      handleAuthResult: (url) => {
+        if (url) {
+          finishFlow(url)
+        }
+      },
     })
   }, [])
 
   //TODO: this should probably be handled by events
   const handleProceed = async () => {
     try {
+      /**
+       * NOTE: the popup on iOS will bring the app
+       * to the "inactive" state;
+       */
+      if (Platform.OS === 'ios') {
+        dispatch(setPopup(true))
+      }
       await acceptRequest(selectedOptional)
     } catch (e) {
       console.warn(e)

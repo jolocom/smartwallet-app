@@ -1,19 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { aa2Module } from 'react-native-aa2-sdk'
+import { ActivityIndicator, Platform, View } from 'react-native'
+import { RouteProp, useRoute } from '@react-navigation/core'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
-import { ActivityIndicator, Alert, View } from 'react-native'
-import { AA2Messages, AusweisPasscodeMode, eIDScreens } from '../types'
-import { aa2EmitterTemp } from '../events'
 import { usePasscode } from '~/components/Passcode/context'
-import { sleep } from '~/utils/generic'
-import { StackActions } from '@react-navigation/routers'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { useToasts } from '~/hooks/toasts'
+import { setPopup } from '~/modules/appState/actions'
 import { AusweisStackParamList } from '..'
 import { useAusweisInteraction } from '../hooks'
-import { aa2Module } from 'react-native-aa2-sdk'
-import { useToasts } from '~/hooks/toasts'
-import { LOG } from '~/utils/dev'
+import { AusweisPasscodeMode, eIDScreens } from '../types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 
@@ -49,6 +47,8 @@ export const AusweisPasscode = () => {
 
   const { scheduleInfo } = useToasts()
   const { passcodeCommands, cancelFlow, finishFlow } = useAusweisInteraction()
+  const dispatch = useDispatch()
+
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [waitingForMsg, setWaitingForMsg] = useState(false)
@@ -71,7 +71,6 @@ export const AusweisPasscode = () => {
         }
       },
       handlePukRequest: (card) => {
-        console.log('PUK REQUEST')
         setWaitingForMsg(false)
         setPinVariant(AusweisPasscodeMode.PUK)
         if (card.inoperative) {
@@ -83,17 +82,8 @@ export const AusweisPasscode = () => {
         }
       },
       handleCanRequest: (card) => {
-        console.log('CAN REQUEST')
         setWaitingForMsg(false)
         setPinVariant(AusweisPasscodeMode.CAN)
-      },
-      handleCardInfo: (info) => {
-        if (!info) {
-          scheduleInfo({
-            title: 'Oops!',
-            message: 'You should still hold your card against the wallet!',
-          })
-        }
       },
       handleAuthResult: (url) => {
         finishFlow(url)
@@ -118,17 +108,23 @@ export const AusweisPasscode = () => {
   }, [pinVariant])
 
   const handleOnSubmit = async (passcode: string) => {
-    const passcodeNumber = parseInt(passcode)
-
     setWaitingForMsg(true)
     setErrorText(null)
 
+    /**
+     * NOTE: the popup on iOS will bring the app
+     * to the "inactive" state;
+     */
+    if (Platform.OS === 'ios') {
+      dispatch(setPopup(true))
+    }
+
     if (pinVariant === AusweisPasscodeMode.PIN) {
-      passcodeCommands.setPin(passcodeNumber)
+      passcodeCommands.setPin(passcode)
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
-      passcodeCommands.setCan(passcodeNumber)
+      passcodeCommands.setCan(passcode)
     } else if (pinVariant == AusweisPasscodeMode.PUK) {
-      passcodeCommands.setPuk(passcodeNumber)
+      passcodeCommands.setPuk(passcode)
     }
   }
 
