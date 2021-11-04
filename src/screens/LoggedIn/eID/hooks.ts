@@ -84,7 +84,7 @@ export const useCheckNFC = () => {
 }
 
 export const useAusweisInteraction = () => {
-  const { scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning, scheduleWarning } = useToasts()
   const redirect = useRedirect()
   const popStack = usePopStack()
 
@@ -142,7 +142,7 @@ export const useAusweisInteraction = () => {
     popStack()
   }
 
-  const cancelInteraction = () => {
+  const sendCancel = () => {
     aa2Module
       .cancelFlow()
       .catch((e) =>
@@ -151,7 +151,21 @@ export const useAusweisInteraction = () => {
           e,
         ),
       )
+  }
+
+  /**
+   * sends CANCEL cmd and pops the stack (too many times though!!!)
+   */
+  const cancelInteraction = () => {
+    sendCancel()
     closeAusweis()
+  }
+
+  /**
+   * sends CANCEL cmd
+   */
+  const cancelFlow = () => {
+    sendCancel()
   }
 
   const checkIfScanned = async () => {
@@ -187,17 +201,31 @@ export const useAusweisInteraction = () => {
     return true
   }
 
+  const checkCardValidity = (card: CardInfo, onValidCard: () => void) => {
+    if (checkIfCardValid(card)) {
+      console.log('calling onvalid card')
+      onValidCard()
+    } else {
+      cancelInteraction()
+      scheduleWarning({
+        title: 'Oops!',
+        message: 'Seems like the card you provided is not valid',
+      })
+    }
+  }
+
   return {
     closeAusweis,
     initAusweis,
-    checkIfCardValid,
     disconnectAusweis,
     processAusweisToken,
     cancelInteraction,
+    cancelFlow,
     acceptRequest,
     checkIfScanned,
     passcodeCommands,
     finishFlow,
+    checkCardValidity,
   }
 }
 
@@ -341,8 +369,10 @@ export const useAusweisScanner = () => {
     })
   }
 
-  const updateScanner = (params: AusweisScannerParams) => {
-    setScannerParams(params)
+  const updateScanner = (params: Partial<AusweisScannerParams>) => {
+    setScannerParams((prevParams) => {
+      return { ...prevParams, ...params }
+    })
     if (
       params.state === AusweisScannerState.failure ||
       params.state === AusweisScannerState.success

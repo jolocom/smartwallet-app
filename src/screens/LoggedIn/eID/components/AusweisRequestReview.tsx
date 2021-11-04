@@ -8,8 +8,7 @@ import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
-import { usePopStack, useRedirect } from '~/hooks/navigation'
-import { useToasts } from '~/hooks/toasts'
+import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
@@ -39,14 +38,12 @@ import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import moment from 'moment'
-
-const IS_ANDROID = Platform.OS === 'android'
+import { IS_ANDROID } from '~/utils/generic'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
-  const { acceptRequest, cancelInteraction, checkIfCardValid } =
+  const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
     useAusweisInteraction()
-  const { scheduleWarning } = useToasts()
   const {
     providerName,
     requiredFields,
@@ -63,25 +60,12 @@ export const AusweisRequestReview = () => {
   const { top } = useSafeArea()
   const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
-  const popStack = usePopStack()
   const translateField = useTranslatedAusweisFields()
   const { showScanner, updateScanner } = useAusweisScanner()
 
-  const handleCardValidity = (card: CardInfo, onValidCard: () => void) => {
-    if (checkIfCardValid(card)) {
-      onValidCard()
-    } else {
-      cancelInteraction()
-      scheduleWarning({
-        title: 'Oops!',
-        message: 'Seems like the card you provided is not valid',
-      })
-    }
-  }
-
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
-      handleCardValidity(card, () => {
+      checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
           mode: AusweisPasscodeMode.PIN,
         })
@@ -89,13 +73,15 @@ export const AusweisRequestReview = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
-      handleCardValidity(card, () => {
-        navigation.navigate(eIDScreens.PukLock)
+      checkCardValidity(card, () => {
+        navigation.navigate(eIDScreens.EnterPIN, {
+          mode: AusweisPasscodeMode.PUK,
+        })
       })
     }
 
     const canHandler = (card: CardInfo) => {
-      handleCardValidity(card, () => {
+      checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
           mode: AusweisPasscodeMode.CAN,
         })
@@ -107,9 +93,7 @@ export const AusweisRequestReview = () => {
     aa2Module.setHandlers({
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(() => {
-            cancelInteraction()
-          })
+          showScanner(cancelInteraction)
         }
       },
       handlePinRequest: (card) => {
@@ -158,7 +142,7 @@ export const AusweisRequestReview = () => {
            * because the workflow by this time is
            * aborted
            */
-          popStack()
+          closeAusweis()
         }
       },
     })
