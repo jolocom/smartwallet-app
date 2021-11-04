@@ -1,11 +1,14 @@
 import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useMemo } from 'react'
+import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
+import { debugView } from '~/utils/dev'
 import { TransparentModalsParamsList } from '../../Main'
 import { useAusweisInteraction } from '../hooks'
 import { CardInfoMode } from '../types'
@@ -34,11 +37,27 @@ const AusweisCardInfo = () => {
   }
 
   return (
-    <ScreenContainer backgroundColor={Colors.black90}>
-      <ScreenContainer.Padding>
-        <JoloText kind={JoloTextKind.title}>{title}</JoloText>
-      </ScreenContainer.Padding>
-      <Btn type={BtnTypes.secondary} onPress={handleDismiss}>
+    <ScreenContainer
+      backgroundColor={Colors.black95}
+      customStyles={{ justifyContent: 'flex-end' }}
+    >
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ScreenContainer.Padding>
+          <JoloText
+            kind={JoloTextKind.title}
+            customStyles={{ alignSelf: 'center' }}
+          >
+            {title}
+          </JoloText>
+        </ScreenContainer.Padding>
+      </View>
+      <Btn
+        type={BtnTypes.secondary}
+        onPress={handleDismiss}
+        customContainerStyles={{
+          marginBottom: BP({ default: 40, xsmall: 20 }),
+        }}
+      >
         {t('Errors.closeBtn')}
       </Btn>
     </ScreenContainer>
