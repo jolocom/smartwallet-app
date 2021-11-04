@@ -245,19 +245,19 @@ export const AusweisPasscode = () => {
         />
       )
     }
+
+    return null
   }
 
   return (
     <ScreenContainer
       backgroundColor={Colors.mainDark}
+      hasHeaderClose
+      onClose={cancelInteraction}
       customStyles={{
         justifyContent: 'flex-start',
       }}
     >
-      <NavigationHeader
-        type={NavHeaderType.Close}
-        onPress={cancelInteraction}
-      />
       <Passcode onSubmit={handleOnSubmit} length={getPasscodeLength()}>
         <PasscodeErrorSetter errorText={errorText} />
         <Passcode.Container
