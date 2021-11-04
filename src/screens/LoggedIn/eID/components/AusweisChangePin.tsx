@@ -1,11 +1,14 @@
+import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
+import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
+import { eIDScreens } from '../types'
 
 interface WhateverProps {
   headerText: string
@@ -51,6 +54,7 @@ const TitleDescAction: React.FC<WhateverProps> = ({
 
 const AusweisChangePin = () => {
   const { t } = useTranslation()
+  const navigation = useNavigation()
 
   const handleChange5DigPin = () => {
     console.warn('not implemented')
@@ -59,7 +63,7 @@ const AusweisChangePin = () => {
     console.warn('not implemented')
   }
   const handlePreviewAuthorityInfo = () => {
-    console.warn('not implemented')
+    navigation.navigate(ScreenNames.eId, { screen: eIDScreens.ForgotPin })
   }
 
   return (
