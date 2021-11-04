@@ -1,3 +1,5 @@
+import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
+
 export enum eIDScreens {
   InteractionSheet = 'InteractionSheet',
   ReadinessCheck = 'ReadinessCheck',
@@ -6,6 +8,9 @@ export enum eIDScreens {
   PasscodeDetails = 'PasscodeDetails',
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
+  PukLock = 'PukLock',
+  CompatibilityResult = 'CompatibilityResult',
+  PukInfo = 'PukInfo',
 }
 
 export enum AA2Messages {
@@ -20,17 +25,20 @@ export enum AusweisPasscodeMode {
   PIN = 'PIN',
   CAN = 'CAN',
   PUK = 'PUK',
+  NEW_PIN = 'NEW_PIN',
+  VERIFY_NEW_PIN = 'VERIFY_NEW_PIN',
 }
 
 export interface AusweisPasscodeProps {
   mode: AusweisPasscodeMode
+  handlers?: Partial<EventHandlers>
 }
 
 export enum AusweisFields {
   Address = 'Address',
   BirthName = 'BirthName',
   FamilyName = 'FamilyName',
-  GivenNames = ' GivenNames',
+  GivenNames = 'GivenNames',
   PlaceOfBirth = 'PlaceOfBirth',
   DateOfBirth = 'DateOfBirth',
   DoctoralDegree = 'DoctoralDegree',
@@ -65,7 +73,36 @@ export interface IAusweisRequest {
   expirationDate: string
 }
 
+export enum CardInfoMode {
+  notBlocked = 'notBlocked',
+  blocked = 'blocked',
+  unblocked = 'unblocked',
+}
+
+export type AusweisCardInfoParams = {
+  mode: CardInfoMode
+  onDismiss?: () => void
+}
+
 export type AusweisContextValue = IAusweisRequest & {
   setRequest: (data: IAusweisRequest) => void
   resetRequest: () => void
+}
+
+export enum AusweisScannerState {
+  idle = 'idle',
+  loading = 'loading',
+  success = 'success',
+  failure = 'failure',
+}
+
+export interface AusweisScannerParams {
+  onDone?: () => void
+  onDismiss?: () => void
+  state?: AusweisScannerState
+}
+
+export interface AusweisCardResult {
+  inoperative: boolean
+  deactivated: boolean
 }

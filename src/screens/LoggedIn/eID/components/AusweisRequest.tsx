@@ -3,59 +3,40 @@ import React from 'react'
 import { Linking } from 'react-native'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import { LogoContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { eIDScreens } from '../types'
-import { useCheckNFC, useAusweisContext, useAusweisInteraction } from '../hooks'
+import {
+  useCheckNFC,
+  useAusweisContext,
+  useAusweisInteraction,
+  useAusweisSkipCompatibility,
+} from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
-import { SWErrorCodes } from '~/errors/codes'
 
 export const AusweisRequest = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
-  const { checkNfcSupport, goToNfcSettings } = useCheckNFC()
+  const { checkNfcSupport } = useCheckNFC()
   //TODO: not sure whether we need the provider or certificate issuer's URL/name
-  const { providerUrl, providerName, resetRequest } = useAusweisContext()
-  const { cancelFlow } = useAusweisInteraction()
-  const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { providerUrl, providerName } = useAusweisContext()
+  const { cancelInteraction } = useAusweisInteraction()
+  const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
 
   const handleProceed = async () => {
-    checkNfcSupport()
-      .then(() => {
+    checkNfcSupport(() => {
+      if (shouldSkipCompatibility) {
+        navigation.navigate(eIDScreens.RequestDetails)
+      } else {
         navigation.navigate(eIDScreens.ReadinessCheck)
-      })
-      .catch((e) => {
-        if (e.message === SWErrorCodes.SWNfcNotSupported) {
-          scheduleErrorInfo(e, {
-            title: 'NFC Compatibility problem',
-            message:
-              'We have to inform you that your phone does not support the required NFC functionality',
-          })
-        } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
-          scheduleInfo({
-            title: 'Please turn on NFC',
-            message: 'Please go to the settings and enable NFC',
-            interact: {
-              label: 'Settings',
-              onInteract: () => {
-                goToNfcSettings()
-              },
-            },
-          })
-        } else {
-          scheduleErrorWarning(e)
-        }
-      })
+      }
+    })
   }
 
-  const handleIgnore = () => {
-    cancelFlow()
-    resetRequest()
-  }
+  const handleIgnore = cancelInteraction
 
   return (
     <AusweisBottomSheet onDismiss={handleIgnore}>

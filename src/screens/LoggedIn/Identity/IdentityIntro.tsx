@@ -10,6 +10,7 @@ import BP from '~/utils/breakpoints'
 import SingleCredentialWizard from './SingleCredentialWizard'
 import { IdentityTabIds } from './types'
 import useTranslation from '~/hooks/useTranslation'
+import ScreenContainer from '~/components/ScreenContainer'
 
 enum IdentityForms {
   SingleCredential = 'SingleCredential',
@@ -60,53 +61,59 @@ const WelcomeSheet: React.FC<Props> = ({ onSubmit }) => {
   }
 
   return (
-    <Fallin
-      isFallingIn={isTopSheetVisible}
-      from="top"
-      onDismiss={handleWidgetReset}
+    <ScreenContainer
+      testID="home-identity-intro"
+      isFullscreen
+      customStyles={{ justifyContent: 'flex-start', paddingHorizontal: 0 }}
     >
-      <View style={styles.container}>
-        {activeForm === IdentityForms.SingleCredential ? (
-          <SingleCredentialWizard
-            onFormSubmit={() => handleSubmit(IdentityTabIds.credentials)}
-          />
-        ) : (
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              paddingTop: 32,
-            }}
-          >
-            <Image source={require('~/assets/images/identityIntro.png')} />
-            <JoloText
-              kind={JoloTextKind.title}
-              color={Colors.white90}
-              customStyles={{
-                marginTop: 20,
-                marginBottom: BP({
-                  large: 48,
-                  medium: 48,
-                  small: 24,
-                  xsmall: 12,
-                }),
+      <Fallin
+        isFallingIn={isTopSheetVisible}
+        from="top"
+        onDismiss={handleWidgetReset}
+      >
+        <View style={styles.container}>
+          {activeForm === IdentityForms.SingleCredential ? (
+            <SingleCredentialWizard
+              onFormSubmit={() => handleSubmit(IdentityTabIds.credentials)}
+            />
+          ) : (
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                paddingTop: 32,
               }}
             >
-              {t('Identity.widgetWelcome')}
-            </JoloText>
+              <Image source={require('~/assets/images/identityIntro.png')} />
+              <JoloText
+                kind={JoloTextKind.title}
+                color={Colors.white90}
+                customStyles={{
+                  marginTop: 20,
+                  marginBottom: BP({
+                    large: 48,
+                    medium: 48,
+                    small: 24,
+                    xsmall: 12,
+                  }),
+                }}
+              >
+                {t('Identity.widgetWelcome')}
+              </JoloText>
 
-            <Btn
-              onPress={() => changeActiveForm(IdentityForms.SingleCredential)}
-              type={BtnTypes.senary}
-              customContainerStyles={{ backgroundColor: Colors.mainBlack }}
-              testID="single-credential-button"
-            >
-              {t('Identity.widgetStartBtn')}
-            </Btn>
-          </View>
-        )}
-      </View>
-    </Fallin>
+              <Btn
+                onPress={() => changeActiveForm(IdentityForms.SingleCredential)}
+                type={BtnTypes.senary}
+                customContainerStyles={{ backgroundColor: Colors.mainBlack }}
+                testID="single-credential-button"
+              >
+                {t('Identity.widgetStartBtn')}
+              </Btn>
+            </View>
+          )}
+        </View>
+      </Fallin>
+    </ScreenContainer>
   )
 }
 

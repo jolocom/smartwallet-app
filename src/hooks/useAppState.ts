@@ -4,6 +4,7 @@ import { useAppState } from '@react-native-community/hooks'
 import { useDispatch, useSelector } from 'react-redux'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
+import { IS_ANDROID } from '~/utils/generic'
 
 export const useGetAppStates = () => {
   const prevAppState = useRef<AppStateStatus | undefined>(undefined)
@@ -86,8 +87,7 @@ export const useAppBackgroundChange = (handler: () => void) => {
         ios: goingToBackground,
       })
     ) {
-      const ignoreStateChange =
-        Platform.OS === 'android' && shouldIgnoreStateChange()
+      const ignoreStateChange = IS_ANDROID && shouldIgnoreStateChange()
       if (!ignoreStateChange && !isPopup) handler()
     }
   }, [currentAppState, isPopup])

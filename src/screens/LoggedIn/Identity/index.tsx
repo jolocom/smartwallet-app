@@ -1,45 +1,53 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import IdentityIntro from './IdentityIntro'
-import { getAttributes } from '~/modules/attributes/selectors'
-import { useSelector } from 'react-redux'
 import IdentityCredentials from './IdentityCredentials'
-import IdentityTabs from './tabs'
-import { IdentityTabIds } from './types'
-import useTranslation from '~/hooks/useTranslation'
+import Tabs from '~/components/Tabs/Tabs'
+import TabsContainer from '~/components/Tabs/Container'
+import { AusweisIdentity } from './AusweisIdentity'
+import { ScrollView } from 'react-native'
 
 const Identity = () => {
-  const { t } = useTranslation()
-  const attributes = useSelector(getAttributes)
-  const showIdentityIntro = !Boolean(Object.keys(attributes).length)
-  const [initialTab, setInitialTab] = useState(IdentityTabIds.credentials)
+  const tabs = [
+    { id: 'identity', value: 'Your Identity' },
+    { id: 'credentials', value: 'Credentials' },
+  ]
 
-  const handleIntroSubmit = (id: IdentityTabIds) => {
-    setInitialTab(id)
-  }
-
-  return showIdentityIntro ? (
-    <ScreenContainer
-      testID="home-identity-intro"
-      isFullscreen
-      customStyles={{ justifyContent: 'flex-start', paddingHorizontal: 0 }}
-    >
-      <IdentityIntro onSubmit={handleIntroSubmit} />
-    </ScreenContainer>
-  ) : (
+  return (
     <ScreenContainer
       testID="home-self-issued-credentials"
-      customStyles={{ paddingHorizontal: 0 }}
+      customStyles={{
+        justifyContent: 'flex-start',
+        paddingHorizontal: 0,
+      }}
     >
-      <ScreenContainer.Header customStyles={{ paddingLeft: '5%' }}>
-        {t('Identity.header')}
-      </ScreenContainer.Header>
-      <IdentityTabs initialTab={initialTab}>
-        <IdentityTabs.Page id={IdentityTabIds.credentials}>
-          <IdentityCredentials />
-        </IdentityTabs.Page>
-      </IdentityTabs>
+      <Tabs tabs={tabs} initialActiveTab={tabs[0]}>
+        <ScreenContainer.Padding>
+          <TabsContainer customStyles={{ marginBottom: 12 }}>
+            {tabs.map((t) => (
+              <Tabs.Tab key={t.id} tab={t} />
+            ))}
+          </TabsContainer>
+        </ScreenContainer.Padding>
+        <Tabs.Panel>
+          {() => (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              overScrollMode={'never'}
+              contentContainerStyle={{
+                paddingBottom: '20%',
+              }}
+            >
+              <Tabs.Page id={'identity'}>
+                <AusweisIdentity />
+              </Tabs.Page>
+              <Tabs.Page id={'credentials'}>
+                <IdentityCredentials />
+              </Tabs.Page>
+            </ScrollView>
+          )}
+        </Tabs.Panel>
+      </Tabs>
     </ScreenContainer>
   )
 }

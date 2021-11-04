@@ -1,13 +1,15 @@
 import React, { SetStateAction } from 'react'
 import { BiometryType } from 'react-native-biometrics'
 import { IWithCustomStyle } from '~/types/props'
+import { Colors } from '~/utils/colors'
+import { IJoloTextProps } from '../JoloText'
 
 export interface IPasscodeProps {
   onSubmit: (passcode: string, cb: () => void) => Promise<void>
   length?: number
 }
 
-export interface IPasscodeHeaderProps {
+export interface IPasscodeHeaderProps extends IJoloTextProps {
   title: string
   errorTitle: string
 }
@@ -17,9 +19,20 @@ export interface IPasscodeKeyboardProps {
   onBiometryPress?: () => void
 }
 
+export interface IPasscodeInputProps {
+  cellColor?: Colors
+  numberOfLines?: number
+}
+
+export interface IAccessoryBtnProps {
+  title: string
+  onPress: () => void
+}
+
 export interface IPasscodeComposition {
-  Input: React.FC
+  Input: React.FC<IPasscodeInputProps>
   Header: React.FC<IPasscodeHeaderProps>
+  AccessoryBtn: React.FC<IAccessoryBtnProps>
   Forgot: React.FC
   Keyboard: React.FC<IPasscodeKeyboardProps>
   Container: React.FC<IWithCustomStyle>

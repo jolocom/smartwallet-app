@@ -1,19 +1,40 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { View, Platform, LayoutAnimation } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { ActivityIndicator, Platform, View } from 'react-native'
-import { RouteProp, useRoute } from '@react-navigation/core'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { StackActions } from '@react-navigation/routers'
+import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { usePasscode } from '~/components/Passcode/context'
-import { useToasts } from '~/hooks/toasts'
-import { setPopup } from '~/modules/appState/actions'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+
 import { AusweisStackParamList } from '..'
-import { useAusweisInteraction } from '../hooks'
-import { AusweisPasscodeMode, eIDScreens } from '../types'
+import { useToasts } from '~/hooks/toasts'
+import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
+import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
+
+import {
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  CardInfoMode,
+  eIDScreens,
+} from '../types'
+import { useAusweisInteraction, useAusweisScanner } from '../hooks'
+import { setPopup } from '~/modules/appState/actions'
+import { useDispatch } from 'react-redux'
 
 const ALL_EID_PIN_ATTEMPTS = 3
+const IS_ANDROID = Platform.OS === 'android'
 
 interface PasscodeErrorSetterProps {
   errorText: string | null
@@ -37,118 +58,358 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
   return null
 }
 
-/**
- * QUESTION:
- * How do we handle error in send cmds (results in error prop on ENTER_PIN msg)
- */
 export const AusweisPasscode = () => {
-  const { mode } =
-    useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>().params
+  const route =
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
+  const { mode, handlers } = route.params
 
-  const { scheduleInfo } = useToasts()
-  const { passcodeCommands, cancelFlow, finishFlow } = useAusweisInteraction()
+  const navigation = useNavigation()
   const dispatch = useDispatch()
 
+  const { scheduleInfo, scheduleWarning } = useToasts()
+
+  const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
+    useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
-  const [waitingForMsg, setWaitingForMsg] = useState(false)
+  const { showScanner, updateScanner } = useAusweisScanner()
+
+  const pinVariantRef = useRef(pinVariant)
+  const newPasscodeRef = useRef('')
+  const shouldShowPukWarning = useRef(
+    mode === AusweisPasscodeMode.PUK ? false : true,
+  )
 
   useEffect(() => {
+    pinVariantRef.current = pinVariant
+  }, [pinVariant])
+
+  useEffect(() => {
+    setPinVariant(mode)
+  }, [route])
+
+  useEffect(() => {
+    const pinHandler = (card: CardInfo) => {
+      setPinVariant(AusweisPasscodeMode.PIN)
+      const errorText = `Wrong PIN, you used ${
+        ALL_EID_PIN_ATTEMPTS - card.retryCounter
+      }/${ALL_EID_PIN_ATTEMPTS} attempts`
+
+      if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
+        setErrorText(errorText)
+      }
+    }
+
+    const pukHandler = (card: CardInfo) => {
+      if (shouldShowPukWarning.current) {
+        navigation.navigate(eIDScreens.PukLock)
+        shouldShowPukWarning.current = false
+      } else {
+        setPinVariant(AusweisPasscodeMode.PUK)
+      }
+    }
+
+    const canHandler = () => {
+      setPinVariant(AusweisPasscodeMode.CAN)
+    }
+
+    const newPinHandler = () => {
+      setPinVariant(AusweisPasscodeMode.NEW_PIN)
+    }
+
+    aa2Module.resetHandlers()
+    //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        // TODO remove toast?
-      },
-      handlePinRequest: (card) => {
-        setWaitingForMsg(false)
-        setPinVariant(AusweisPasscodeMode.PIN)
-
-        const errorText = `Wrong PIN, you used ${
-          ALL_EID_PIN_ATTEMPTS - card.retryCounter
-        }/${ALL_EID_PIN_ATTEMPTS} attempts`
-
-        if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
-          setErrorText(errorText)
+        if (IS_ANDROID) {
+          showScanner(cancelInteraction)
         }
-      },
-      handlePukRequest: (card) => {
-        setWaitingForMsg(false)
-        setPinVariant(AusweisPasscodeMode.PUK)
-        if (card.inoperative) {
-          scheduleInfo({
-            title: 'Oops!',
-            message: "Seems like you're locked out of your card",
-          })
-          cancelFlow()
-        }
-      },
-      handleCanRequest: (card) => {
-        setWaitingForMsg(false)
-        setPinVariant(AusweisPasscodeMode.CAN)
       },
       handleAuthResult: (url) => {
-        finishFlow(url)
+        if (IS_ANDROID) {
+          finishFlow(url).then(() => {
+            updateScanner({
+              state: AusweisScannerState.success,
+              onDone: closeAusweis,
+            })
+          })
+        } else {
+          // TODO: at some point we should show a loader or smth
+          finishFlow(url).then(closeAusweis)
+        }
       },
+      handlePinRequest: (card) => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pinHandler(card)
+            },
+          })
+        } else {
+          pinHandler(card)
+        }
+      },
+      /**
+       * ENTER_PUK
+       */
+      handlePukRequest: (card) => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pukHandler(card)
+            },
+          })
+        } else {
+          pukHandler(card)
+        }
+      },
+      handleCanRequest: () => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: canHandler,
+          })
+        } else {
+          canHandler()
+        }
+      },
+      handleCardInfo: (info) => {
+        if (IS_ANDROID) {
+          if (info) {
+            updateScanner({ state: AusweisScannerState.loading })
+          }
+        }
+      },
+      /**
+       * @RUN_CHANGE_PIN
+       */
+      handleChangePinCancel: () => {
+        if (IS_ANDROID) {
+          updateScanner({
+            /**
+             * NOTE:
+             * this is confusing UX,
+             * we show big success icon (indicating successful scanning process),
+             * and then toast that pin wasn't changed
+             */
+            state: AusweisScannerState.success,
+            onDone: () => {
+              closeAusweis()
+              scheduleWarning({
+                title: "Pin wasn't changed",
+                message: 'We were not able to complete update of your new pin',
+              })
+            },
+          })
+        } else {
+          closeAusweis()
+        }
+      },
+      /**
+       * @RUN_CHANGE_PIN
+       */
+      handleChangePinSuccess: () => {
+        const completeChangePinFlow = () => {
+          closeAusweis()
+          scheduleInfo({
+            title: 'Action completed',
+            message: 'You can use your new PIN now',
+          })
+        }
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              completeChangePinFlow()
+            },
+          })
+        } else {
+          completeChangePinFlow()
+        }
+      },
+      /**
+       * @RUN_CHANGE_PIN
+       */
+      handleEnterNewPin: () => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: newPinHandler,
+          })
+        } else {
+          newPinHandler()
+        }
+      },
+      /**
+       * NOTE: overwrite handlers for this screen
+       * with handlers that comes through navigation
+       */
+      ...handlers,
     })
-
-    return () => {
-      aa2Module.resetHandlers()
-    }
   }, [])
+
+  useLayoutEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+  }, [pinVariant])
 
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
-      return 'PIN'
+      return 'To allow data exchange enter you six digit eID PIN'
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
-      return 'CAN'
+      return 'Before the third attempt, please enter the six digit Card Access Number (CAN)'
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
-      return 'PUK'
+      return 'To restore access to your card please enter PUK number'
+    } else if (pinVariant === AusweisPasscodeMode.NEW_PIN) {
+      return 'Your new pin'
+    } else if (pinVariant === AusweisPasscodeMode.VERIFY_NEW_PIN) {
+      return 'Repeat new pin'
     } else {
       return ''
     }
   }, [pinVariant])
 
-  const handleOnSubmit = async (passcode: string) => {
-    setWaitingForMsg(true)
-    setErrorText(null)
+  const handleCardIsBlocked = () => {
+    navigation.dispatch(
+      StackActions.replace(ScreenNames.TransparentModals, {
+        screen: ScreenNames.AusweisCardInfo,
+        params: {
+          mode: CardInfoMode.blocked,
+        },
+      }),
+    )
+  }
 
-    /**
-     * NOTE: the popup on iOS will bring the app
-     * to the "inactive" state;
-     */
+  const sendPasscodeCommand = async (passcode: string) => {
     if (Platform.OS === 'ios') {
       dispatch(setPopup(true))
     }
-
-    if (pinVariant === AusweisPasscodeMode.PIN) {
+    setErrorText(null)
+    if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
       passcodeCommands.setPin(passcode)
-    } else if (pinVariant === AusweisPasscodeMode.CAN) {
+    } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
       passcodeCommands.setCan(passcode)
-    } else if (pinVariant == AusweisPasscodeMode.PUK) {
-      passcodeCommands.setPuk(passcode)
+    } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
+      try {
+        await passcodeCommands.setPuk(passcode)
+      } catch (e) {
+        if (e === CardError.cardIsBlocked) {
+          if (IS_ANDROID) {
+            updateScanner({
+              state: AusweisScannerState.failure,
+              onDone: handleCardIsBlocked,
+            })
+          } else {
+            handleCardIsBlocked()
+          }
+        }
+      }
+    } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
+      newPasscodeRef.current = passcode
+      setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
+    } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
+      if (passcode === newPasscodeRef?.current) {
+        aa2Module.setNewPin(passcode)
+      } else {
+        updateScanner({ state: AusweisScannerState.failure, onDone: () => {} })
+        setErrorText("PINs don't match")
+      }
     }
+  }
+
+  const getPasscodeLength = () => {
+    switch (pinVariant) {
+      case AusweisPasscodeMode.CAN:
+      case AusweisPasscodeMode.PIN:
+      case AusweisPasscodeMode.NEW_PIN:
+      case AusweisPasscodeMode.VERIFY_NEW_PIN:
+        return 6
+      case AusweisPasscodeMode.PUK:
+        return 10
+    }
+  }
+
+  const getPasscodeNrLines = () => {
+    switch (pinVariant) {
+      case AusweisPasscodeMode.PUK:
+        return 2
+      default:
+        return 1
+    }
+  }
+
+  const renderAccessoryBtn = () => {
+    let screen: eIDScreens | undefined
+    let title: string | undefined
+
+    switch (pinVariant) {
+      case AusweisPasscodeMode.PUK:
+        screen = eIDScreens.PukInfo
+        title = 'Where to find the PUK?'
+        break
+      default:
+        break
+    }
+
+    if (screen && title) {
+      return (
+        <Passcode.AccessoryBtn
+          title={title}
+          onPress={() => navigation.navigate(screen!)}
+        />
+      )
+    }
+
+    return null
   }
 
   return (
     <ScreenContainer
+      backgroundColor={Colors.mainDark}
+      hasHeaderClose
+      onClose={cancelInteraction}
       customStyles={{
         justifyContent: 'flex-start',
       }}
     >
-      <Passcode onSubmit={handleOnSubmit} length={6}>
+      <Passcode onSubmit={sendPasscodeCommand} length={getPasscodeLength()}>
         <PasscodeErrorSetter errorText={errorText} />
-        <Passcode.Container>
+        <Passcode.Container
+          customStyles={{
+            marginTop: BP({ default: 0, medium: 8, large: 36 }),
+          }}
+        >
           <Passcode.Header title={title} errorTitle={title} />
-          {waitingForMsg ? (
-            <ActivityIndicator color={'white'} />
-          ) : (
-            <Passcode.Input />
+          {pinVariant === AusweisPasscodeMode.CAN && (
+            <JoloText
+              customStyles={{
+                marginBottom: 36,
+                paddingHorizontal: 24,
+              }}
+              color={Colors.white80}
+              kind={JoloTextKind.title}
+              size={JoloTextSizes.mini}
+            >
+              You can find it in the bottom right on the front of your physical
+              ID card
+            </JoloText>
           )}
+          <View style={{ paddingHorizontal: 8 }}>
+            <Passcode.Input
+              cellColor={Colors.chisinauGrey}
+              numberOfLines={getPasscodeNrLines()}
+            />
+          </View>
           <View style={{ position: 'relative', alignItems: 'center' }}>
             <Passcode.Error />
           </View>
         </Passcode.Container>
-        <Passcode.Container>
-          <Passcode.Forgot />
+        <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
+          {renderAccessoryBtn()}
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
