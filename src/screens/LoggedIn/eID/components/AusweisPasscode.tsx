@@ -102,7 +102,9 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        showScanner(cancelInteraction)
+        if (IS_ANDROID) {
+          showScanner(cancelInteraction)
+        }
       },
       handleAuthResult: (url) => {
         if (IS_ANDROID) {
