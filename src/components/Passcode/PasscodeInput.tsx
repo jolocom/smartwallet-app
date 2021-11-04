@@ -85,8 +85,10 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
           <View
             style={[
               styles.inputContainer,
-              line !== 0 && {
-                marginTop: 12,
+              {
+                ...(line !== 0 && {
+                  marginTop: 12,
+                }),
               },
             ]}
           >
