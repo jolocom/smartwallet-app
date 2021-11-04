@@ -26,6 +26,7 @@ import {
   AusweisPasscodeDetails,
   AusweisScanner,
   AusweisCompatibilityResult,
+  AusweisPukInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 
@@ -37,6 +38,7 @@ export type AusweisStackParamList = {
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
   [eIDScreens.PasscodeDetails]: undefined
   [eIDScreens.ProviderDetails]: undefined
+  [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
 }
@@ -103,6 +105,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.CompatibilityResult}
         component={AusweisCompatibilityResult}
+        options={transparentModalFadeOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.PukInfo}
+        component={AusweisPukInfo}
         options={transparentModalFadeOptions}
       />
     </eIDStack.Navigator>

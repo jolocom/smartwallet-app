@@ -68,7 +68,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
           )}
           {(hasHeaderClose || hasHeaderBack) && (
             <NavigationHeader
-              customStyles={navigationStyles}
+              customStyles={[{ backgroundColor }, navigationStyles]}
               onPress={onClose}
               type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
             />

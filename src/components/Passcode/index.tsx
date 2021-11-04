@@ -10,6 +10,7 @@ import ResetBtn from './ResetBtn'
 import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
 import PasscodeDisable from './PasscodeDisable'
+import PasscodeAccessoryBtn from './PasscodeAccessoryBtn'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -52,7 +53,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
         setPin('')
       }
     })()
-  }, [pin])
+  }, [pin, length])
 
   // this will remove the error after 1000 ms
   useEffect(() => {
@@ -85,7 +86,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
       pinErrorText,
       setPinErrorText,
     }),
-    [pin, setPin, pinError, pinSuccess],
+    [pin, setPin, pinError, pinSuccess, length],
   )
 
   return <PasscodeContext.Provider value={contextValue} children={children} />
@@ -99,5 +100,6 @@ Passcode.Container = PasscodeContainer
 Passcode.ResetBtn = ResetBtn
 Passcode.Error = PasscodeError
 Passcode.Disable = PasscodeDisable
+Passcode.AccessoryBtn = PasscodeAccessoryBtn
 
 export default Passcode
