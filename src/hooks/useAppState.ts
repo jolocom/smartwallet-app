@@ -86,18 +86,9 @@ export const useAppBackgroundChange = (handler: () => void) => {
         ios: goingToBackground,
       })
     ) {
-      if (Platform.OS === 'android') {
-        const ignoreStateChange = shouldIgnoreStateChange()
-        if (!ignoreStateChange) {
-          if (isPopup !== true) {
-            handler()
-          }
-        }
-      } else {
-        if (isPopup !== true) {
-          handler()
-        }
-      }
+      const ignoreStateChange =
+        Platform.OS === 'android' && shouldIgnoreStateChange()
+      if (!ignoreStateChange && !isPopup) handler()
     }
   }, [currentAppState, isPopup])
 }
