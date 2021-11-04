@@ -62,7 +62,7 @@ export const AusweisPasscode = () => {
 
   const { scheduleInfo, scheduleWarning } = useToasts()
 
-  const { passcodeCommands, finishFlow, closeAusweis, cancelFlow } =
+  const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
     useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
@@ -103,7 +103,9 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardRequest: () => {
-        showScanner(cancelFlow)
+        if (IS_ANDROID) {
+          showScanner(cancelInteraction)
+        }
       },
       handleAuthResult: (url) => {
         if (IS_ANDROID) {
