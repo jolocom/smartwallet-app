@@ -1,13 +1,15 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core'
 import React, { useCallback, useEffect } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { useDispatch } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { usePrevious } from '~/hooks/generic'
+import { setPopup } from '~/modules/appState/actions'
 
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
@@ -64,6 +66,7 @@ const AusweisChangePin = () => {
   const isFocused = useIsFocused()
   const prevIsFocused = usePrevious(isFocused)
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
+  const dispatch = useDispatch()
 
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
@@ -133,6 +136,9 @@ const AusweisChangePin = () => {
     console.warn('not implemented')
   }
   const handleChange6DigPin = () => {
+    if (Platform.OS === 'ios') {
+      dispatch(setPopup(true))
+    }
     aa2Module.changePin()
   }
   const handlePreviewAuthorityInfo = () => {

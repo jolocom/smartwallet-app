@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
@@ -27,7 +28,6 @@ import useTranslation from '~/hooks/useTranslation'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '.'
 import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 

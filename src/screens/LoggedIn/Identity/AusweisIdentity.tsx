@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, Platform, StyleSheet, View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
@@ -16,12 +16,15 @@ import {
 import { aa2Module } from 'react-native-aa2-sdk'
 import { AusweisPasscodeMode, CardInfoMode, eIDScreens } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
+import { setPopup } from '~/modules/appState/actions'
+import { useDispatch } from 'react-redux'
 
 export const AusweisIdentity = () => {
   const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
   const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow } = useAusweisInteraction()
+  const dispatch = useDispatch()
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
@@ -82,6 +85,9 @@ export const AusweisIdentity = () => {
   }
 
   const handleUnlockCard = () => {
+    if (Platform.OS === 'ios') {
+      dispatch(setPopup(true))
+    }
     setUpUnlockCardHandlers()
     aa2Module.changePin()
   }

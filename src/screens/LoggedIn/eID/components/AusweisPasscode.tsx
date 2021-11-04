@@ -30,6 +30,8 @@ import {
   eIDScreens,
 } from '../types'
 import { useAusweisInteraction, useAusweisScanner } from '../hooks'
+import { setPopup } from '~/modules/appState/actions'
+import { useDispatch } from 'react-redux'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -62,6 +64,7 @@ export const AusweisPasscode = () => {
   const { mode, handlers } = route.params
 
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   const { scheduleInfo, scheduleWarning } = useToasts()
 
@@ -282,6 +285,9 @@ export const AusweisPasscode = () => {
   }
 
   const sendPasscodeCommand = async (passcode: string) => {
+    if (Platform.OS === 'ios') {
+      dispatch(setPopup(true))
+    }
     setErrorText(null)
     if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
       passcodeCommands.setPin(passcode)
