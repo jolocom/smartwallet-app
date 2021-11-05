@@ -50,15 +50,20 @@ export const AusweisRequest = () => {
         color={Colors.white70}
         customStyles={{ paddingHorizontal: 10 }}
       >
-        {t('AusweisRequest.description', { serviceName: providerName })}
+        {t('AusweisRequest.description', {
+          serviceName: providerName,
+          interpolation: {
+            escapeValue: false,
+          },
+        })}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.mini}
-        color={Colors.white70}
+        color={Colors.success}
         customStyles={{
-          textDecorationLine: 'underline',
-          marginVertical: 40,
+          marginTop: 16,
+          marginBottom: 32,
         }}
         onPress={() => Linking.openURL(providerUrl)}
       >
