@@ -2,22 +2,30 @@ import { RouteProp, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
-import { ErrorIcon, NfcScannerAndroid, SuccessTick } from '~/assets/svg'
+
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import Ripple from '~/components/Ripple'
+
 import { useGoBack } from '~/hooks/navigation'
+import { ErrorIcon, NfcScannerAndroid, SuccessTick } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { generateRandomString } from '~/utils/stringUtils'
+
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
-import Ripple from '~/components/Ripple'
 import useTranslation from '~/hooks/useTranslation'
 
 export const AUSWEIS_SCANNER_NAVIGATION_KEY = `AusweisScanner-${generateRandomString(
   10,
 )}`
 
+/**
+ * TODO:
+ * Scanner on Android needs a message with a big letters
+ * saying "dont remove the card until the scanner popup is gone"
+ */
 export const AusweisScanner = () => {
   const { t } = useTranslation()
   const route =
@@ -43,6 +51,15 @@ export const AusweisScanner = () => {
       toValue: 1,
     })
 
+  const handleComplete = () => {
+    setTimeout(() => {
+      goBack()
+      setTimeout(() => {
+        onDone()
+      }, 200)
+    }, 500)
+  }
+
   useEffect(() => {
     if (state !== animationState) {
       switch (state) {
@@ -51,17 +68,10 @@ export const AusweisScanner = () => {
           return showAnimation(loadingOpacityValue).start()
         case AusweisScannerState.failure:
           setAnimationState(AusweisScannerState.failure)
-          return showAnimation(iconOpacityValue).start()
+          return showAnimation(iconOpacityValue).start(handleComplete)
         case AusweisScannerState.success:
           setAnimationState(AusweisScannerState.success)
-          return showAnimation(iconOpacityValue).start(() => {
-            setTimeout(() => {
-              goBack()
-              setTimeout(() => {
-                onDone()
-              }, 200)
-            }, 500)
-          })
+          return showAnimation(iconOpacityValue).start(handleComplete)
         default:
           return
       }
@@ -69,6 +79,13 @@ export const AusweisScanner = () => {
   }, [route, animationState])
 
   const handleDismiss = () => {
+    /**
+     * NOTE:
+     * delegating removing scanner from the
+     * navigation stack to the scanner;
+     * onDismiss should contain logic without closing
+     * the AusweisScanner screen
+     */
     goBack()
     onDismiss && onDismiss()
   }

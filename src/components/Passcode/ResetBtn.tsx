@@ -1,7 +1,7 @@
 import React from 'react'
 import useTranslation from '~/hooks/useTranslation'
-import Btn, { BtnTypes } from '../Btn'
 import { usePasscode } from './context'
+import PasscodeAccessoryBtn from './PasscodeAccessoryBtn'
 import { IPasscodeComposition } from './types'
 
 const ResetBtn: IPasscodeComposition['ResetBtn'] = ({ onPress }) => {
@@ -14,9 +14,10 @@ const ResetBtn: IPasscodeComposition['ResetBtn'] = ({ onPress }) => {
   }
 
   return (
-    <Btn type={BtnTypes.secondary} onPress={handlePress}>
-      {t('VerifyPasscode.resetBtn')}
-    </Btn>
+    <PasscodeAccessoryBtn
+      title={t('VerifyPasscode.resetBtn')}
+      onPress={handlePress}
+    />
   )
 }
 

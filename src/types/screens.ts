@@ -38,6 +38,7 @@ export enum ScreenNames {
   // eId
   eId = 'eID',
   AusweisChangePin = 'AusweisChangePin',
+  AusweisCardInfo = 'AusweisCardInfo',
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',
