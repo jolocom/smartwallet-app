@@ -66,7 +66,7 @@ export const useDeeplinkInteractions = () => {
           processInteraction(tokenValue)
           return
         } else if (eidValue) {
-          processAusweisToken(eidValue).then(console.log).catch(console.warn)
+          processAusweisToken(eidValue)
           return
         } else if (
           !params['+clicked_branch_link'] ||
