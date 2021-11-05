@@ -41,7 +41,7 @@ const AusweisLockPukInfo: React.FC = () => {
       backgroundColor={Colors.mainDark}
       customStyles={{
         justifyContent: 'space-between',
-        marginVertical: 20,
+        paddingVertical: 20,
       }}
     >
       <JoloText
@@ -59,7 +59,7 @@ const AusweisLockPukInfo: React.FC = () => {
       >
         {t('AusweisPukLock.subtitle')}
       </JoloText>
-      <View style={{ width: '100%' }}>
+      <View style={{ width: '100%', paddingBottom: 8 }}>
         <Btn onPress={handleContinueWithPuk} type={BtnTypes.quaternary}>
           {t('AusweisPukLock.proceedBtn')}
         </Btn>

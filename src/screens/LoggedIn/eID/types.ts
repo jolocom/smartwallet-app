@@ -1,3 +1,5 @@
+import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
+
 export enum eIDScreens {
   InteractionSheet = 'InteractionSheet',
   ReadinessCheck = 'ReadinessCheck',
@@ -9,6 +11,7 @@ export enum eIDScreens {
   PukLock = 'PukLock',
   CompatibilityResult = 'CompatibilityResult',
   CanInfo = 'CanInfo',
+  PukInfo = 'PukInfo',
 }
 
 export enum AA2Messages {
@@ -23,10 +26,13 @@ export enum AusweisPasscodeMode {
   PIN = 'PIN',
   CAN = 'CAN',
   PUK = 'PUK',
+  NEW_PIN = 'NEW_PIN',
+  VERIFY_NEW_PIN = 'VERIFY_NEW_PIN',
 }
 
 export interface AusweisPasscodeProps {
   mode: AusweisPasscodeMode
+  handlers?: Partial<EventHandlers>
 }
 
 export enum AusweisFields {
@@ -66,6 +72,17 @@ export interface IAusweisRequest {
   providerInfo: string
   effectiveValidityDate: string
   expirationDate: string
+}
+
+export enum CardInfoMode {
+  notBlocked = 'notBlocked',
+  blocked = 'blocked',
+  unblocked = 'unblocked',
+}
+
+export type AusweisCardInfoParams = {
+  mode: CardInfoMode
+  onDismiss?: () => void
 }
 
 export type AusweisContextValue = IAusweisRequest & {
