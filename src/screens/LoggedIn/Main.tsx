@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
 import { ScreenNames } from '~/types/screens'
@@ -42,14 +39,16 @@ import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
 import eID from './eID'
-import { IAusweisRequest } from './eID/types'
+import { AusweisCardInfoParams, IAusweisRequest } from './eID/types'
 import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
 import { Colors } from '~/utils/colors'
 import AusweisChangePin from './eID/components/AusweisChangePin'
+import AusweisCardInfo from './eID/components/AusweisCardInfo'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
+  [ScreenNames.AusweisCardInfo]: AusweisCardInfoParams
 }
 const TransparentModalsStack = createStackNavigator()
 
@@ -62,6 +61,10 @@ const TransparentModals = () => (
     <TransparentModalsStack.Screen
       name={ScreenNames.PopupMenu}
       component={PopupMenu}
+    />
+    <TransparentModalsStack.Screen
+      name={ScreenNames.AusweisCardInfo}
+      component={AusweisCardInfo}
     />
   </TransparentModalsStack.Navigator>
 )

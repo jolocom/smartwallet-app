@@ -26,6 +26,7 @@ import {
   AusweisPasscodeDetails,
   AusweisScanner,
   AusweisCompatibilityResult,
+  AusweisPukInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import { AusweisForgotPin } from './components/AusweisForgotPin'
@@ -38,6 +39,7 @@ export type AusweisStackParamList = {
   [eIDScreens.EnterPIN]: AusweisPasscodeProps
   [eIDScreens.PasscodeDetails]: undefined
   [eIDScreens.ProviderDetails]: undefined
+  [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
   [eIDScreens.ForgotPin]: undefined
@@ -111,6 +113,11 @@ const AusweisInteraction = () => {
         name={eIDScreens.ForgotPin}
         component={AusweisForgotPin}
         options={screenTransitionFromBottomDisabledGestures}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.PukInfo}
+        component={AusweisPukInfo}
+        options={transparentModalFadeOptions}
       />
     </eIDStack.Navigator>
   )

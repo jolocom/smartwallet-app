@@ -1,14 +1,24 @@
-import { useNavigation } from '@react-navigation/core'
-import React from 'react'
-import { View } from 'react-native'
+import { useIsFocused, useNavigation } from '@react-navigation/core'
+import React, { useCallback, useEffect } from 'react'
+import { Platform, View } from 'react-native'
+import { aa2Module } from 'react-native-aa2-sdk'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { useDispatch } from 'react-redux'
+
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
+import { usePrevious } from '~/hooks/generic'
+import { setPopup } from '~/modules/appState/actions'
+
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { eIDScreens } from '../types'
+import { IS_ANDROID } from '~/utils/generic'
+
+import { useAusweisInteraction } from '../hooks'
+import { AusweisPasscodeMode, eIDScreens } from '../types'
 
 interface WhateverProps {
   headerText: string
@@ -55,12 +65,83 @@ const TitleDescAction: React.FC<WhateverProps> = ({
 const AusweisChangePin = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
+  const isFocused = useIsFocused()
+  const prevIsFocused = usePrevious(isFocused)
+  const { checkCardValidity, cancelFlow } = useAusweisInteraction()
+  const dispatch = useDispatch()
+
+  const pinHandler = useCallback((card: CardInfo) => {
+    checkCardValidity(card, () => {
+      navigation.navigate(ScreenNames.eId, {
+        screen: eIDScreens.EnterPIN,
+        params: {
+          mode: AusweisPasscodeMode.PIN,
+        },
+      })
+    })
+  }, [])
+
+  const canHandler = useCallback((card: CardInfo) => {
+    checkCardValidity(card, () => {
+      navigation.navigate(ScreenNames.eId, {
+        screen: eIDScreens.EnterPIN,
+        params: {
+          mode: AusweisPasscodeMode.CAN,
+        },
+      })
+    })
+  }, [])
+
+  const pukHandler = useCallback((card: CardInfo) => {
+    checkCardValidity(card, () => {
+      navigation.navigate(ScreenNames.eId, {
+        screen: eIDScreens.EnterPIN,
+        params: {
+          mode: AusweisPasscodeMode.PUK,
+        },
+      })
+    })
+  }, [])
+
+  const setupHandlers = () => {
+    aa2Module.resetHandlers()
+
+    aa2Module.setHandlers({
+      handleCardRequest: () => {
+        if (IS_ANDROID) {
+          navigation.navigate(ScreenNames.eId, {
+            screen: eIDScreens.AusweisScanner,
+            params: { onDismiss: cancelFlow },
+          })
+        }
+      },
+      handlePinRequest: (card) => {
+        pinHandler(card)
+      },
+      handlePukRequest: (card) => {
+        pukHandler(card)
+      },
+      handleCanRequest: (card) => {
+        canHandler(card)
+      },
+      handleChangePinCancel: () => {},
+    })
+  }
+
+  useEffect(() => {
+    if (isFocused === true && !Boolean(prevIsFocused)) {
+      setupHandlers()
+    }
+  }, [isFocused])
 
   const handleChange5DigPin = () => {
     console.warn('not implemented')
   }
   const handleChange6DigPin = () => {
-    console.warn('not implemented')
+    if (Platform.OS === 'ios') {
+      dispatch(setPopup(true))
+    }
+    aa2Module.changePin()
   }
   const handlePreviewAuthorityInfo = () => {
     navigation.navigate(ScreenNames.eId, { screen: eIDScreens.ForgotPin })

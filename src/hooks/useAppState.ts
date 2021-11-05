@@ -4,6 +4,7 @@ import { useAppState } from '@react-native-community/hooks'
 import { useDispatch, useSelector } from 'react-redux'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { setPopup } from '~/modules/appState/actions'
+import { IS_ANDROID } from '~/utils/generic'
 
 export const useGetAppStates = () => {
   const prevAppState = useRef<AppStateStatus | undefined>(undefined)
@@ -36,6 +37,11 @@ export const useAppBackgroundChange = (handler: () => void) => {
     prevAppState.match(/inactive|background/) &&
     currentAppState.match(/active/)
 
+  /**
+   * Every time the app goes to the background
+   * start counter how much time the app stayed in the
+   * background
+   */
   useEffect(() => {
     if (goingToBackground) {
       backgroundTimer.current = new Date().getTime()
@@ -58,6 +64,22 @@ export const useAppBackgroundChange = (handler: () => void) => {
     }
   }
 
+  /**
+   * NOTE:
+   * whenever app comes from the background to foreground
+   * enable the Lock for both OSes
+   */
+  useEffect(() => {
+    if (comingFromBackground) {
+      dispatch(setPopup(false))
+    }
+  }, [currentAppState])
+
+  /**
+   * Run handler (i.e. lock the app) if the app
+   * - goes to background on iOS
+   * - goes from background on Android
+   */
   useEffect(() => {
     if (
       Platform.select({
@@ -65,14 +87,8 @@ export const useAppBackgroundChange = (handler: () => void) => {
         ios: goingToBackground,
       })
     ) {
-      const ignoreStateChange =
-        Platform.OS === 'android' && shouldIgnoreStateChange()
-
-      if (!isPopup && !ignoreStateChange) {
-        handler()
-      } else {
-        dispatch(setPopup(false))
-      }
+      const ignoreStateChange = IS_ANDROID && shouldIgnoreStateChange()
+      if (!ignoreStateChange && !isPopup) handler()
     }
   }, [currentAppState, isPopup])
 }
