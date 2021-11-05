@@ -65,7 +65,7 @@ export const AusweisPasscode = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const { scheduleInfo, scheduleWarning } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
 
   const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
     useAusweisInteraction()
@@ -198,10 +198,11 @@ export const AusweisPasscode = () => {
             state: AusweisScannerState.success,
             onDone: () => {
               closeAusweis()
-              scheduleWarning({
-                title: "Pin wasn't changed",
-                message: 'We were not able to complete update of your new pin',
-              })
+              scheduleErrorWarning(
+                new Error(
+                  'Failed to change the eID PIN. The CHANGE_PIN flow was canceled by AusweisApp2',
+                ),
+              )
             },
           })
         } else {
@@ -215,8 +216,8 @@ export const AusweisPasscode = () => {
         const completeChangePinFlow = () => {
           closeAusweis()
           scheduleInfo({
-            title: 'Action completed',
-            message: 'You can use your new PIN now',
+            title: t('Toasts.ausweisChangePinSuccessHeader'),
+            message: t('Toasts.ausweisChangePinSuccessMsg'),
           })
         }
         if (IS_ANDROID) {
