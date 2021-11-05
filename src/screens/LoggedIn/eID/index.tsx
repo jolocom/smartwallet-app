@@ -29,6 +29,7 @@ import {
   AusweisPukInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
+import AusweisTarnsportWarning from './components/AusweisTransportWarning'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -41,6 +42,7 @@ export type AusweisStackParamList = {
   [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
+  [eIDScreens.AusweisTransportWarning]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
@@ -110,6 +112,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.PukInfo}
         component={AusweisPukInfo}
+        options={transparentModalFadeOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.AusweisTransportWarning}
+        component={AusweisTarnsportWarning}
         options={transparentModalFadeOptions}
       />
     </eIDStack.Navigator>

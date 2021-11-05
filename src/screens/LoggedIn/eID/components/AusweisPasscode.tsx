@@ -61,7 +61,7 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 export const AusweisPasscode = () => {
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
-  const { mode, handlers } = route.params
+  const { mode, handlers, origin } = route.params
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -79,6 +79,15 @@ export const AusweisPasscode = () => {
   const shouldShowPukWarning = useRef(
     mode === AusweisPasscodeMode.PUK ? false : true,
   )
+  const isTransportPin = useRef(false)
+
+  useEffect(() => {
+    if (origin === AusweisPasscodeMode.TRANSPORT_PIN) {
+      isTransportPin.current = true
+    } else {
+      isTransportPin.current = false
+    }
+  }, [origin])
 
   useEffect(() => {
     pinVariantRef.current = pinVariant
@@ -90,7 +99,11 @@ export const AusweisPasscode = () => {
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
-      setPinVariant(AusweisPasscodeMode.PIN)
+      if (isTransportPin.current === true) {
+        setPinVariant(AusweisPasscodeMode.TRANSPORT_PIN)
+      } else {
+        setPinVariant(AusweisPasscodeMode.PIN)
+      }
       const errorText = `Wrong PIN, you used ${
         ALL_EID_PIN_ATTEMPTS - card.retryCounter
       }/${ALL_EID_PIN_ATTEMPTS} attempts`
@@ -260,6 +273,8 @@ export const AusweisPasscode = () => {
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
       return 'To allow data exchange enter you six digit eID PIN'
+    } else if (pinVariant === AusweisPasscodeMode.TRANSPORT_PIN) {
+      return 'Please enter your 5-digit PIN'
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
       return 'Before the third attempt, please enter the six digit Card Access Number (CAN)'
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
@@ -290,6 +305,8 @@ export const AusweisPasscode = () => {
     }
     setErrorText(null)
     if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
+      passcodeCommands.setPin(passcode)
+    } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
       passcodeCommands.setPin(passcode)
     } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
       passcodeCommands.setCan(passcode)
@@ -323,6 +340,8 @@ export const AusweisPasscode = () => {
 
   const getPasscodeLength = () => {
     switch (pinVariant) {
+      case AusweisPasscodeMode.TRANSPORT_PIN:
+        return 5
       case AusweisPasscodeMode.CAN:
       case AusweisPasscodeMode.PIN:
       case AusweisPasscodeMode.NEW_PIN:

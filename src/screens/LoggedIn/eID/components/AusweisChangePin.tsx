@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import { usePrevious } from '~/hooks/generic'
 import { setPopup } from '~/modules/appState/actions'
 
 import { ScreenNames } from '~/types/screens'
@@ -63,17 +62,22 @@ const TitleDescAction: React.FC<WhateverProps> = ({
 
 const AusweisChangePin = () => {
   const navigation = useNavigation()
-  const isFocused = useIsFocused()
-  const prevIsFocused = usePrevious(isFocused)
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
   const dispatch = useDispatch()
+  const isTransportPin = useRef(false)
 
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
-          mode: AusweisPasscodeMode.PIN,
+          mode:
+            isTransportPin.current === true
+              ? AusweisPasscodeMode.TRANSPORT_PIN
+              : AusweisPasscodeMode.PIN,
+          origin: isTransportPin.current
+            ? AusweisPasscodeMode.TRANSPORT_PIN
+            : undefined,
         },
       })
     })
@@ -85,6 +89,9 @@ const AusweisChangePin = () => {
         screen: eIDScreens.EnterPIN,
         params: {
           mode: AusweisPasscodeMode.CAN,
+          origin: isTransportPin.current
+            ? AusweisPasscodeMode.TRANSPORT_PIN
+            : undefined,
         },
       })
     })
@@ -96,6 +103,9 @@ const AusweisChangePin = () => {
         screen: eIDScreens.EnterPIN,
         params: {
           mode: AusweisPasscodeMode.PUK,
+          origin: isTransportPin.current
+            ? AusweisPasscodeMode.TRANSPORT_PIN
+            : undefined,
         },
       })
     })
@@ -126,21 +136,22 @@ const AusweisChangePin = () => {
     })
   }
 
-  useEffect(() => {
-    if (isFocused === true && !Boolean(prevIsFocused)) {
-      setupHandlers()
-    }
-  }, [isFocused])
-
   const handleChange5DigPin = () => {
-    console.warn('not implemented')
+    isTransportPin.current = true
+    setupHandlers()
+    navigation.navigate(ScreenNames.eId, {
+      screen: eIDScreens.AusweisTransportWarning,
+    })
   }
   const handleChange6DigPin = () => {
+    isTransportPin.current = false
+    setupHandlers()
     if (Platform.OS === 'ios') {
       dispatch(setPopup(true))
     }
     aa2Module.changePin()
   }
+
   const handlePreviewAuthorityInfo = () => {
     console.warn('not implemented')
   }

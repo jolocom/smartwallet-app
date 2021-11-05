@@ -11,6 +11,7 @@ export enum eIDScreens {
   PukLock = 'PukLock',
   CompatibilityResult = 'CompatibilityResult',
   PukInfo = 'PukInfo',
+  AusweisTransportWarning = 'AusweisTransportWarning',
 }
 
 export enum AA2Messages {
@@ -23,6 +24,7 @@ export enum AA2Messages {
 
 export enum AusweisPasscodeMode {
   PIN = 'PIN',
+  TRANSPORT_PIN = 'TRANSPORT_PIN',
   CAN = 'CAN',
   PUK = 'PUK',
   NEW_PIN = 'NEW_PIN',
@@ -31,6 +33,7 @@ export enum AusweisPasscodeMode {
 
 export interface AusweisPasscodeProps {
   mode: AusweisPasscodeMode
+  origin?: AusweisPasscodeMode.TRANSPORT_PIN
   handlers?: Partial<EventHandlers>
 }
 

@@ -2,13 +2,12 @@ import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
+import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
-import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import { TransparentModalsParamsList } from '../../Main'
 import { useAusweisInteraction } from '../hooks'
 import { CardInfoMode } from '../types'
@@ -51,15 +50,11 @@ const AusweisCardInfo = () => {
           </JoloText>
         </ScreenContainer.Padding>
       </View>
-      <Btn
-        type={BtnTypes.secondary}
-        onPress={handleDismiss}
-        customContainerStyles={{
-          marginBottom: BP({ default: 40, xsmall: 20 }),
-        }}
-      >
-        {t('Errors.closeBtn')}
-      </Btn>
+      <BtnGroup>
+        <Btn type={BtnTypes.secondary} onPress={handleDismiss}>
+          {t('Errors.closeBtn')}
+        </Btn>
+      </BtnGroup>
     </ScreenContainer>
   )
 }
