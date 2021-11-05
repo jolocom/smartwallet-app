@@ -338,3 +338,6 @@ export const getAuthzUIDetails = createSelector(
     }
   },
 )
+
+export const getAusweisDetails = (state: RootReducerI) =>
+  state.interaction.ausweisDetails
