@@ -14,12 +14,10 @@ import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { usePasscode } from '~/components/Passcode/context'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 import { AusweisStackParamList } from '..'
 import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
-import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
@@ -268,9 +266,9 @@ export const AusweisPasscode = () => {
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
       return t('AusweisPasscode.pukHeader')
     } else if (pinVariant === AusweisPasscodeMode.NEW_PIN) {
-      return 'Your new pin'
+      return t('AusweisPasscode.newPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-      return 'Repeat new pin'
+      return t('AusweisPasscode.repeatPinHeader')
     } else {
       return ''
     }
@@ -319,7 +317,7 @@ export const AusweisPasscode = () => {
         aa2Module.setNewPin(passcode)
       } else {
         updateScanner({ state: AusweisScannerState.failure, onDone: () => {} })
-        setErrorText("PINs don't match")
+        setErrorText(t('AusweisPasscode.pinMatchError'))
       }
     }
   }
@@ -352,7 +350,7 @@ export const AusweisPasscode = () => {
     switch (pinVariant) {
       case AusweisPasscodeMode.PUK:
         screen = eIDScreens.PukInfo
-        title = 'Where to find the PUK?'
+        title = t('AusweisPasscode.pukBtn')
         break
       default:
         break
