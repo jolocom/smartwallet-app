@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking } from 'react-native'
+import { Linking, TouchableOpacity } from 'react-native'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
@@ -39,20 +39,16 @@ export const AusweisForgotPin = () => {
       <JoloText customStyles={{ marginTop: 32, paddingHorizontal: 18 }}>
         {t('AusweisLostPin.contact')}
       </JoloText>
-      <JoloText
-        color={Colors.success}
-        customStyles={{ marginTop: 32 }}
-        onPress={handleSendEmail}
-      >
-        {AUSWEIS_SUPPORT_EMAIL}
-      </JoloText>
-      <JoloText
-        color={Colors.success}
-        customStyles={{ marginTop: 12 }}
-        onPress={handleOpenPhone}
-      >
-        {AUSWEIS_SUPPORT_PHONE + ' (' + t('AusweisLostPin.phoneRate') + ')'}
-      </JoloText>
+      <TouchableOpacity onPress={handleSendEmail}>
+        <JoloText color={Colors.success} customStyles={{ marginTop: 32 }}>
+          {AUSWEIS_SUPPORT_EMAIL}
+        </JoloText>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleOpenPhone}>
+        <JoloText color={Colors.success} customStyles={{ marginTop: 12 }}>
+          {AUSWEIS_SUPPORT_PHONE + ' (' + t('AusweisLostPin.phoneRate') + ')'}
+        </JoloText>
+      </TouchableOpacity>
     </ScreenContainer>
   )
 }
