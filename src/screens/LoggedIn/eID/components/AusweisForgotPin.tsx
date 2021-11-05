@@ -1,6 +1,6 @@
 import React from 'react'
 import { Linking, TouchableOpacity } from 'react-native'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
@@ -29,14 +29,22 @@ export const AusweisForgotPin = () => {
     >
       <JoloText
         kind={JoloTextKind.title}
+        color={Colors.white85}
+        weight={JoloTextWeight.regular}
         customStyles={{ paddingHorizontal: 28 }}
       >
         {t('AusweisLostPin.title')}
       </JoloText>
-      <JoloText customStyles={{ marginTop: 24, paddingHorizontal: 18 }}>
+      <JoloText
+        color={Colors.osloGray}
+        customStyles={{ marginTop: 24, paddingHorizontal: 18 }}
+      >
         {t('AusweisLostPin.description')}
       </JoloText>
-      <JoloText customStyles={{ marginTop: 32, paddingHorizontal: 18 }}>
+      <JoloText
+        color={Colors.osloGray}
+        customStyles={{ marginTop: 32, paddingHorizontal: 18 }}
+      >
         {t('AusweisLostPin.contact')}
       </JoloText>
       <TouchableOpacity onPress={handleSendEmail}>
