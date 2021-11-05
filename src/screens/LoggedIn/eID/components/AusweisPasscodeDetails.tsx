@@ -56,6 +56,7 @@ export const AusweisPasscodeDetails = () => {
             bottom: 16,
             width: '100%',
             paddingVertical: 10,
+            paddingHorizontal: 20,
             backgroundColor: Colors.mainDark,
           }}
         >
