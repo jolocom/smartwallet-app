@@ -209,8 +209,13 @@ export const useAusweisInteraction = () => {
     } else {
       cancelInteraction()
       scheduleWarning({
-        title: 'Oops!',
-        message: 'Seems like the card you provided is not valid',
+        title: t('Toasts.ausweisFailedCheckTitle'),
+        message: t('Toasts.ausweisFailedCheckMsg'),
+        interact: {
+          label: t('Toasts.ausweisFailedCheckBtn'),
+          // TODO: add handler
+          onInteract: () => {},
+        },
       })
     }
   }
