@@ -10,15 +10,10 @@ import Ripple from '~/components/Ripple'
 import { useGoBack } from '~/hooks/navigation'
 import { ErrorIcon, NfcScannerAndroid, SuccessTick } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
-import { generateRandomString } from '~/utils/stringUtils'
 
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
-
-export const AUSWEIS_SCANNER_NAVIGATION_KEY = `AusweisScanner-${generateRandomString(
-  10,
-)}`
 
 /**
  * TODO:

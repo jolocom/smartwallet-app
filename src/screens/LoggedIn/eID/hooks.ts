@@ -25,9 +25,6 @@ import {
 
 import { LOG } from '~/utils/dev'
 import useTranslation from '~/hooks/useTranslation'
-import { StackNavigationProp } from '@react-navigation/stack'
-import { AusweisStackParamList } from '.'
-import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -334,7 +331,7 @@ export const useTranslatedAusweisFields = () => {
 }
 
 export const useAusweisScanner = () => {
-  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
+  const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
     onDone: () => {},
@@ -342,17 +339,22 @@ export const useAusweisScanner = () => {
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
 
-  const currentRoute = useNavigationState((state) => state.routes[state.index])
+  const currentRoute = useNavigationState((state) => {
+    return state.routes[state.index]
+  })
 
-  const getIsScannerActive = () => {
-    return currentRoute.key === AUSWEIS_SCANNER_NAVIGATION_KEY
+  const getScannerKey = () => {
+    if (currentRoute.name === eIDScreens.AusweisScanner) {
+      return currentRoute.key
+    }
   }
 
   useEffect(() => {
-    if (getIsScannerActive()) {
+    const scannerKey = getScannerKey()
+    if (scannerKey) {
       navigation.dispatch({
         ...CommonActions.setParams(scannerParams),
-        source: AUSWEIS_SCANNER_NAVIGATION_KEY,
+        source: scannerKey,
       })
     }
   }, [JSON.stringify(scannerParams), JSON.stringify(currentRoute)])
@@ -362,10 +364,9 @@ export const useAusweisScanner = () => {
   }
 
   const showScanner = (onDismiss?: () => void) => {
-    navigation.navigate({
-      name: eIDScreens.AusweisScanner,
+    navigation.navigate(ScreenNames.eId, {
+      screen: eIDScreens.AusweisScanner,
       params: { ...scannerParams, onDismiss },
-      key: AUSWEIS_SCANNER_NAVIGATION_KEY,
     })
   }
 
