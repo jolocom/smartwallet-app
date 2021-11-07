@@ -6,12 +6,14 @@ import {
   TouchableHighlight,
   Animated,
   Platform,
+  Linking,
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import Permissions from 'react-native-permissions'
 import { useSelector } from 'react-redux'
 import { useIsFocused } from '@react-navigation/core'
+import branch from 'react-native-branch'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
@@ -104,7 +106,13 @@ const Camera = () => {
 
   const handleScan = async (e: { data: string }) => {
     try {
-      await processInteraction(e.data)
+      // FIXME: Ideally we should use the value from the .env config, but there
+      // seems to be an issue with reading it.
+      if (Linking.canOpenURL(e.data) && e.data.includes('jolocom.app.link')) {
+        branch.openURL(e.data)
+      } else {
+        await processInteraction(e.data)
+      }
     } catch (err) {
       console.log({ err })
 
