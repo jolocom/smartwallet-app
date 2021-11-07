@@ -76,14 +76,10 @@ export const useInteractionStart = () => {
     jwt: string,
     transportAPI?: TransportAPI,
   ) => {
-    try {
-      parseJWT(jwt)
-      const interaction = await agent.processJWT(jwt, transportAPI)
+    parseJWT(jwt)
+    const interaction = await agent.processJWT(jwt, transportAPI)
 
-      return interaction
-    } catch (e) {
-      scheduleErrorWarning(e)
-    }
+    return interaction
   }
 
   const showInteraction = async (interaction: Interaction) => {
