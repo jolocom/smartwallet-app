@@ -1,5 +1,4 @@
 import { FlowType, IdentitySummary } from 'react-native-jolocom'
-import { IAusweisRequest } from '~/screens/LoggedIn/eID/types'
 import {
   AttributeTypes,
   DisplayCredential,
@@ -14,7 +13,6 @@ export enum InteractionActions {
   updateOfferValidation = 'updateOfferValidation',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputType = 'setAttributeInputType',
-  setAusweisInteractionDetails = 'setAusweisInteractionDetails',
 }
 
 export type InteractionDetails =
@@ -33,7 +31,6 @@ export type InteractionDetails =
  */
 export interface InteractionState {
   details: InteractionDetails
-  ausweisDetails: IAusweisRequest | null
 }
 
 /**

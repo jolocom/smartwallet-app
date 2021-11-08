@@ -5,7 +5,6 @@ import { AttrActions, AttributePayload } from '../attributes/types'
 
 const initialState: InteractionState = {
   details: { flowType: null, id: null, counterparty: null },
-  ausweisDetails: null,
 }
 
 const reducer = (
@@ -85,8 +84,6 @@ const reducer = (
       }
       return state
     }
-    case InteractionActions.setAusweisInteractionDetails:
-      return { ...state, ausweisDetails: action.payload }
     default:
       return state
   }
