@@ -26,6 +26,7 @@ import {
   AusweisPukInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
+import { AusweisCanInfo } from './components/AusweisCanInfo'
 import AusweisTarnsportWarning from './components/AusweisTransportWarning'
 import { AusweisForgotPin } from './components/AusweisForgotPin'
 import { useDispatch, useSelector } from 'react-redux'
@@ -43,6 +44,7 @@ export type AusweisStackParamList = {
   [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
+  [eIDScreens.CanInfo]: undefined
   [eIDScreens.AusweisTransportWarning]: undefined
   [eIDScreens.ForgotPin]: undefined
 }
@@ -114,6 +116,7 @@ const AusweisInteraction = () => {
         component={AusweisCompatibilityResult}
         options={transparentModalFadeOptions}
       />
+      <eIDStack.Screen name={eIDScreens.CanInfo} component={AusweisCanInfo} />
       <eIDStack.Screen
         name={eIDScreens.ForgotPin}
         component={AusweisForgotPin}

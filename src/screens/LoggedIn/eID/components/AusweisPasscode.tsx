@@ -375,6 +375,9 @@ export const AusweisPasscode = () => {
         screen = eIDScreens.PukInfo
         title = t('AusweisPasscode.pukBtn')
         break
+      case AusweisPasscodeMode.CAN:
+        screen = eIDScreens.CanInfo
+        title = t('AusweisPasscode.canBtn')
       default:
         break
     }
