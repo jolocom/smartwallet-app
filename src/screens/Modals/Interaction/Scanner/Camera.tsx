@@ -108,7 +108,8 @@ const Camera = () => {
     try {
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
-      if (Linking.canOpenURL(e.data) && e.data.includes('jolocom.app.link')) {
+      const isUrl = await Linking.canOpenURL(e.data)
+      if (isUrl && e.data.includes('jolocom.app.link')) {
         branch.openURL(e.data)
       } else {
         await processInteraction(e.data)
