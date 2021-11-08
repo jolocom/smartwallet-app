@@ -13,6 +13,7 @@ export enum eIDScreens {
   CanInfo = 'CanInfo',
   ForgotPin = 'ForgotPin',
   PukInfo = 'PukInfo',
+  AusweisTransportWarning = 'AusweisTransportWarning',
 }
 
 export enum AA2Messages {
@@ -25,6 +26,7 @@ export enum AA2Messages {
 
 export enum AusweisPasscodeMode {
   PIN = 'PIN',
+  TRANSPORT_PIN = 'TRANSPORT_PIN',
   CAN = 'CAN',
   PUK = 'PUK',
   NEW_PIN = 'NEW_PIN',
@@ -33,6 +35,13 @@ export enum AusweisPasscodeMode {
 
 export interface AusweisPasscodeProps {
   mode: AusweisPasscodeMode
+  /**
+   * NOTE:
+   * "pinContext" indicates whether passcode screens deal with
+   * normal 6-digit pin (AusweisPasscodeMode.PIN) or
+   * 5-digit pin (AusweisPasscodeMode.TRANSPORT_PIN)
+   */
+  pinContext?: AusweisPasscodeMode.TRANSPORT_PIN | AusweisPasscodeMode.PIN
   handlers?: Partial<EventHandlers>
 }
 

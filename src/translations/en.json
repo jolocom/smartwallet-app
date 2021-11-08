@@ -510,6 +510,7 @@
         "canBtn": "Where to find CAN?",
         "pukHeader": "To restore access to your card please enter the PUK number",
         "pukBtn": "Where to find the PUK?",
+        "newPinHeader": "Enter your new eID PIN",
         "repeatNewPinHeader": "Repeat your new eID PIN",
         "pinMatchError": "PINs don't match"
     },
@@ -552,8 +553,9 @@
         "description": "The card access number (CAN) is only required if you have entered the wrong PIN twice already. In order to prevent that a wrong PIN is entered for a third time without your consent, thus blocking your card, you have to enter the CAN at this point. The CAN is a 6-digit number that you can find on the front side of your ID card at the bottom right."
     },
     "AusweisTransportPin": {
-        "warning": "Please note that If you already set a six-digit PIN previously, the five-digit Transport PIN is no longer valid.\\n\\n You may use the five-digit Transport PIN only once to change your PIN.",
-        "continueBtn": "Continue"
+        "warning1": "Please note that If you already set a six-digit PIN previously, the five-digit Transport PIN is no longer valid\n",
+        "continueBtn": "Continue",
+        "warning2": "You may use the five-digit Transport PIN only once to change your PIN\n"
     },
     "AusweisTransportPinInfo": {
         "header": "Transport PIN info",
@@ -568,8 +570,5 @@
         "closeBtn": "Close",
         "pukExhaustedHeader": "You used all allowed PUK attempts. Your card is locked now",
         "unlockedHeader": "Your card is unlocked and ready to use!"
-    },
-    "ausweisPasscode": {
-        "newPinHeader": "Enter your new eID PIN"
     }
 }

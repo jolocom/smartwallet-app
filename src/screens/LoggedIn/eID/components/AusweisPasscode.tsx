@@ -60,7 +60,7 @@ export const AusweisPasscode = () => {
   const { t } = useTranslation()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
-  const { mode, handlers } = route.params
+  const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -78,6 +78,15 @@ export const AusweisPasscode = () => {
   const shouldShowPukWarning = useRef(
     mode === AusweisPasscodeMode.PUK ? false : true,
   )
+  const isTransportPin = useRef(false)
+
+  useEffect(() => {
+    if (pinContext === AusweisPasscodeMode.TRANSPORT_PIN) {
+      isTransportPin.current = true
+    } else if (pinContext === AusweisPasscodeMode.PIN) {
+      isTransportPin.current = false
+    }
+  }, [pinContext])
 
   useEffect(() => {
     pinVariantRef.current = pinVariant
@@ -89,7 +98,14 @@ export const AusweisPasscode = () => {
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
-      setPinVariant(AusweisPasscodeMode.PIN)
+      if (isTransportPin.current === true) {
+        setPinVariant(AusweisPasscodeMode.TRANSPORT_PIN)
+      } else {
+        setPinVariant(AusweisPasscodeMode.PIN)
+      }
+      const errorText = `Wrong PIN, you used ${
+        ALL_EID_PIN_ATTEMPTS - card.retryCounter
+      }/${ALL_EID_PIN_ATTEMPTS} attempts`
 
       if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
         const errorText = t('Lock.errorMsg', {
@@ -262,6 +278,8 @@ export const AusweisPasscode = () => {
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
       return t('AusweisPasscode.authPinHeader')
+    } else if (pinVariant === AusweisPasscodeMode.TRANSPORT_PIN) {
+      return t('AusweisPasscode.transportPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
       return t('AusweisPasscode.canHeader')
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
@@ -269,7 +287,7 @@ export const AusweisPasscode = () => {
     } else if (pinVariant === AusweisPasscodeMode.NEW_PIN) {
       return t('AusweisPasscode.newPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-      return t('AusweisPasscode.repeatPinHeader')
+      return t('AusweisPasscode.repeatNewPinHeader')
     } else {
       return ''
     }
@@ -292,6 +310,8 @@ export const AusweisPasscode = () => {
     }
     setErrorText(null)
     if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
+      passcodeCommands.setPin(passcode)
+    } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
       passcodeCommands.setPin(passcode)
     } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
       passcodeCommands.setCan(passcode)
@@ -325,6 +345,8 @@ export const AusweisPasscode = () => {
 
   const getPasscodeLength = () => {
     switch (pinVariant) {
+      case AusweisPasscodeMode.TRANSPORT_PIN:
+        return 5
       case AusweisPasscodeMode.CAN:
       case AusweisPasscodeMode.PIN:
       case AusweisPasscodeMode.NEW_PIN:

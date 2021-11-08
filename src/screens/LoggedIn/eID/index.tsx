@@ -27,6 +27,7 @@ import {
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import { AusweisCanInfo } from './components/AusweisCanInfo'
+import AusweisTarnsportWarning from './components/AusweisTransportWarning'
 import { AusweisForgotPin } from './components/AusweisForgotPin'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
@@ -44,6 +45,7 @@ export type AusweisStackParamList = {
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
   [eIDScreens.CanInfo]: undefined
+  [eIDScreens.AusweisTransportWarning]: undefined
   [eIDScreens.ForgotPin]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
@@ -58,10 +60,6 @@ const AusweisInteraction = () => {
     if (ausweisDetails) {
       setRequest(ausweisDetails)
       dispatch(setAusweisInteractionDetails(null))
-    } else {
-      throw new Error(
-        "ERROR: You shouldn't navigate to AusweisInteraction without dispatching the details to the state",
-      )
     }
   }, [])
 
@@ -127,6 +125,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.PukInfo}
         component={AusweisPukInfo}
+        options={transparentModalFadeOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.AusweisTransportWarning}
+        component={AusweisTarnsportWarning}
         options={transparentModalFadeOptions}
       />
     </eIDStack.Navigator>
