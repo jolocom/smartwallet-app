@@ -16,13 +16,6 @@ import { Colors } from '~/utils/colors'
 const AusweisTarnsportWarning = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  /**
-   * TODO: @translation
-   */
-  const text1 =
-    'Please note that If you already set a six-digit PIN previously, the five-digit Transport PIN is no longer valid.'
-  const text2 =
-    'You may use the five-digit Transport PIN only once to change PIN.'
 
   const handleContinue = () => {
     if (Platform.OS === 'ios') {
@@ -43,14 +36,14 @@ const AusweisTarnsportWarning = () => {
             customStyles={{ alignSelf: 'center', marginBottom: 25 }}
             color={Colors.white85}
           >
-            {text1}
+            {t('AusweisTransportPin.warning1')}
           </JoloText>
           <JoloText
             kind={JoloTextKind.title}
             customStyles={{ alignSelf: 'center' }}
             color={Colors.white85}
           >
-            {text2}
+            {t('AusweisTransportPin.warning2')}
           </JoloText>
         </ScreenContainer.Padding>
       </View>

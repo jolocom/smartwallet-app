@@ -277,9 +277,9 @@ export const AusweisPasscode = () => {
 
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
-      return 'To allow data exchange enter you six digit eID PIN'
+      return t('AusweisPasscode.authPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.TRANSPORT_PIN) {
-      return 'Please enter your 5-digit PIN'
+      return t('AusweisPasscode.transportPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
       return t('AusweisPasscode.canHeader')
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
@@ -287,7 +287,7 @@ export const AusweisPasscode = () => {
     } else if (pinVariant === AusweisPasscodeMode.NEW_PIN) {
       return t('AusweisPasscode.newPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-      return t('AusweisPasscode.repeatPinHeader')
+      return t('AusweisPasscode.repeatNewPinHeader')
     } else {
       return ''
     }

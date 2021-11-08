@@ -510,8 +510,9 @@
         "canBtn": "Wo finde ich die CAN?",
         "pukHeader": "Geben Sie die PUK-Nummer ein umIhre Karte wiederherzustellen",
         "pukBtn": "Wo finde ich die PUK?",
-        "repeatNewPinHeader": "",
-        "pinMatchError": ""
+        "newPinHeader": "Geben Sie Ihre neue eID PIN ein",
+        "repeatNewPinHeader": "Wiederholen Sie Ihre neue eID PIN",
+        "pinMatchError": "PIN Eingaben stimmen nicht überein"
     },
     "AusweisPukLock": {
         "header": "Ihre Karte ist gesperrt und Sie müssen zum entsperren den PUK-Code eingeben",
@@ -552,8 +553,9 @@
         "description": "Die Kartenzugangsnummer (CAN) wird nur benötigt, wenn Sie bereits zweimal die falsche PIN eingegeben haben. Um zu verhindern, dass ohne Ihre Zustimmung ein drittes Mal eine falsche PIN eingegeben wird und somit Ihre Karte gesperrt wird, müssen Sie an dieser Stelle die CAN eingeben. Die CAN ist eine 6-stellige Nummer, die Sie auf der Vorderseite Ihres Ausweises unten rechts finden."
     },
     "AusweisTransportPin": {
-        "warning": "Bitte beachten Sie, dass die fünfstellige Transport-PIN nicht mehr gültig ist, wenn Sie zuvor bereits eine sechsstellige PIN festgelegt haben.\\n\\n Sie können die fünfstellige Transport-PIN nur einmal verwenden, um die PIN zu ändern.",
-        "continueBtn": "Weiter"
+        "warning1": "Bitte beachten Sie, dass die fünfstellige Transport-PIN nicht mehr gültig ist, wenn Sie zuvor bereits eine sechsstellige PIN festgelegt haben",
+        "continueBtn": "Weiter",
+        "warning2": "Sie können die fünfstellige Transport-PIN nur einmal verwenden, um die PIN zu ändern"
     },
     "AusweisTransportPinInfo": {
         "header": "Transport PIN Info",
@@ -568,8 +570,5 @@
         "closeBtn": "Schließen",
         "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
         "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!"
-    },
-    "ausweisPasscode": {
-        "newPinHeader": "Geben Sie Ihre neue eID PIN ein"
     }
 }

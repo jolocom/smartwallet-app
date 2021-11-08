@@ -56,10 +56,6 @@ const AusweisInteraction = () => {
     if (ausweisDetails) {
       setRequest(ausweisDetails)
       dispatch(setAusweisInteractionDetails(null))
-    } else {
-      throw new Error(
-        "ERROR: You shouldn't navigate to AusweisInteraction without dispatching the details to the state",
-      )
     }
   }, [])
 
