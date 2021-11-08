@@ -155,7 +155,7 @@ const AusweisChangePin = () => {
   }
 
   const handlePreviewAuthorityInfo = () => {
-    console.warn('not implemented')
+    navigation.navigate(ScreenNames.eId, { screen: eIDScreens.ForgotPin })
   }
 
   return (
