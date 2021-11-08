@@ -30,8 +30,8 @@ import {
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAusweisDetails } from '~/modules/interaction/selectors'
-import { setAusweisInteractionDetails } from '~/modules/interaction/actions'
+import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
+import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -50,7 +50,7 @@ const eIDStack = createStackNavigator<AusweisStackParamList>()
 const AusweisInteraction = () => {
   const { setRequest } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
-  const ausweisDetails = useSelector(getAusweisDetails)
+  const ausweisDetails = useSelector(getAusweisInteractionDetails)
   const dispatch = useDispatch()
 
   useEffect(() => {

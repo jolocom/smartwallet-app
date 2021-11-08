@@ -20,10 +20,8 @@ import { useNavigation } from '@react-navigation/core'
 import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
-import {
-  getAusweisDetails,
-  getInteractionType,
-} from '~/modules/interaction/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
+import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
@@ -38,7 +36,7 @@ const MainTabs = () => {
   const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
   const isInteracting = useSelector(getInteractionType)
-  const isAusweisInteracting = useSelector(getAusweisDetails)
+  const isAusweisInteracting = useSelector(getAusweisInteractionDetails)
 
   const { showInteraction } = useInteractionStart()
   const navigation = useNavigation()
@@ -56,7 +54,7 @@ const MainTabs = () => {
     if (!isAppLocked && isAusweisInteracting) {
       navigation.navigate(ScreenNames.eId)
     }
-  }, [isAusweisInteracting, isAppLocked])
+  }, [JSON.stringify(isAusweisInteracting), isAppLocked])
 
   return (
     <MainTabsNavigator.Navigator

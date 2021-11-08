@@ -28,9 +28,8 @@ import useTranslation from '~/hooks/useTranslation'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '.'
 import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAusweisDetails } from '~/modules/interaction/selectors'
-import { setAusweisInteractionDetails } from '~/modules/interaction/actions'
+import { useDispatch } from 'react-redux'
+import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -125,7 +124,6 @@ export const useAusweisInteraction = () => {
         expirationDate: certificate.validity.expirationDate,
       }
 
-      //redirect(ScreenNames.eId, requestData)
       dispatch(setAusweisInteractionDetails(requestData))
     } catch (e) {
       console.warn(e)

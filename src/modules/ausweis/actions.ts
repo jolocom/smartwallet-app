@@ -5,7 +5,7 @@ import {
   SetAusweisScannerKeyAction,
 } from './types'
 
-export const setAusweisDetails = createAction<
+export const setAusweisInteractionDetails = createAction<
   SetAusweisDetailsAction['payload']
 >(AusweisModuleActions.setDetails)
 
