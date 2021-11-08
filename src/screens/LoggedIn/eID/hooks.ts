@@ -1,8 +1,4 @@
-import {
-  CommonActions,
-  useNavigation,
-  useNavigationState,
-} from '@react-navigation/native'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
@@ -25,6 +21,8 @@ import {
 
 import { LOG } from '~/utils/dev'
 import useTranslation from '~/hooks/useTranslation'
+import { useSelector } from 'react-redux'
+import { getAusweisScannerKey } from '~/modules/interaction/selectors'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -230,19 +228,22 @@ export const useAusweisCompatibilityCheck = () => {
   const redirect = useRedirect()
   const pop = usePop()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
+  const { showScanner, updateScanner } = useAusweisScanner()
 
   const startCheck = () => {
     setCompatibility(undefined)
-    // @ts-expect-error
-    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner, params: {} })
-    aa2Module.resetHandlers()
+    showScanner()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
         if (info) {
           const { inoperative, deactivated } = info
-          setCompatibility({ inoperative, deactivated })
 
-          pop(1)
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              setCompatibility({ inoperative, deactivated })
+            },
+          })
         }
       },
     })
@@ -339,25 +340,20 @@ export const useAusweisScanner = () => {
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
 
-  const currentRoute = useNavigationState((state) => {
-    return state.routes[state.index]
-  })
-
-  const getScannerKey = () => {
-    if (currentRoute.name === eIDScreens.AusweisScanner) {
-      return currentRoute.key
-    }
-  }
+  const scannerKey = useSelector(getAusweisScannerKey)
 
   useEffect(() => {
-    const scannerKey = getScannerKey()
     if (scannerKey) {
-      navigation.dispatch({
-        ...CommonActions.setParams(scannerParams),
-        source: scannerKey,
-      })
+      try {
+        navigation.dispatch({
+          ...CommonActions.setParams(scannerParams),
+          source: scannerKey,
+        })
+      } catch (e) {
+        console.warn(e)
+      }
     }
-  }, [JSON.stringify(scannerParams), JSON.stringify(currentRoute)])
+  }, [JSON.stringify(scannerParams), scannerKey])
 
   const resetScanner = () => {
     setScannerParams(defaultState)

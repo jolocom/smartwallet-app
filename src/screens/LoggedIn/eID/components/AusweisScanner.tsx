@@ -1,7 +1,13 @@
-import { RouteProp, useRoute } from '@react-navigation/core'
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigationState,
+  useRoute,
+} from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
+import { setAusweisScannerKey } from '~/modules/interaction/actions'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -14,6 +20,7 @@ import { Colors } from '~/utils/colors'
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
+import { useDispatch } from 'react-redux'
 
 /**
  * TODO:
@@ -32,6 +39,13 @@ export const AusweisScanner = () => {
   const iconOpacityValue = useRef(new Animated.Value(0)).current
   const loadingOpacityValue = useRef(new Animated.Value(0)).current
   const [animationState, setAnimationState] = useState(AusweisScannerState.idle)
+  const dispatch = useDispatch()
+
+  const isScreenFocused = useIsFocused()
+
+  useEffect(() => {
+    dispatch(setAusweisScannerKey(isScreenFocused ? route.key : null))
+  }, [isScreenFocused])
 
   useBackHandler(() => {
     return true
