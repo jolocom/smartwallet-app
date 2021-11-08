@@ -6,15 +6,20 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useNavigation } from '@react-navigation/core'
-import { StackActions } from '@react-navigation/routers'
 import { ScreenNames } from '~/types/screens'
 import {
   useAusweisCompatibilityCheck,
   useAusweisInteraction,
+  useAusweisScanner,
   useCheckNFC,
 } from '~/screens/LoggedIn/eID/hooks'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { AusweisPasscodeMode, CardInfoMode, eIDScreens } from '../eID/types'
+import {
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  CardInfoMode,
+  eIDScreens,
+} from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
 import { setPopup } from '~/modules/appState/actions'
 import { useDispatch } from 'react-redux'
@@ -25,6 +30,7 @@ export const AusweisIdentity = () => {
   const navigation = useNavigation()
   const { cancelFlow } = useAusweisInteraction()
   const dispatch = useDispatch()
+  const { showScanner, updateScanner } = useAusweisScanner()
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
@@ -40,15 +46,27 @@ export const AusweisIdentity = () => {
      * which is happening when we updating params of the Scanner screen
      * @AusweisScanner
      */
-    navigation.dispatch(
-      StackActions.replace(ScreenNames.TransparentModals, {
-        screen: ScreenNames.AusweisCardInfo,
-        params: {
-          mode,
-          onDismiss: cancelFlow,
+    navigation.navigate(ScreenNames.TransparentModals, {
+      screen: ScreenNames.AusweisCardInfo,
+      params: {
+        mode,
+        onDismiss: cancelFlow,
+      },
+    })
+  }
+
+  const handleShowPuk = () => {
+    navigation.navigate(ScreenNames.eId, {
+      screen: eIDScreens.EnterPIN,
+      params: {
+        mode: AusweisPasscodeMode.PUK,
+        handlers: {
+          handlePinRequest: () => {
+            handleShowCardLockResult(CardInfoMode.unblocked)
+          },
         },
-      }),
-    )
+      },
+    })
   }
 
   const setUpUnlockCardHandlers = () => {
@@ -56,30 +74,44 @@ export const AusweisIdentity = () => {
     aa2Module.setHandlers({
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          navigation.navigate(ScreenNames.eId, {
-            screen: eIDScreens.AusweisScanner,
-            params: {
-              onDismiss: cancelFlow,
-            },
-          })
+          showScanner(cancelFlow)
         }
       },
       handlePinRequest: () => {
-        handleShowCardLockResult(CardInfoMode.notBlocked)
-      },
-      handleCanRequest: () => handleShowCardLockResult(CardInfoMode.notBlocked),
-      handlePukRequest: () => {
-        navigation.navigate(ScreenNames.eId, {
-          screen: eIDScreens.EnterPIN,
-          params: {
-            mode: AusweisPasscodeMode.PUK,
-            handlers: {
-              handlePinRequest: () => {
-                handleShowCardLockResult(CardInfoMode.unblocked)
-              },
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              handleShowCardLockResult(CardInfoMode.notBlocked)
             },
-          },
-        })
+          })
+        } else {
+          handleShowCardLockResult(CardInfoMode.notBlocked)
+        }
+      },
+      handleCanRequest: () => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              handleShowCardLockResult(CardInfoMode.notBlocked)
+            },
+          })
+        } else {
+          handleShowCardLockResult(CardInfoMode.notBlocked)
+        }
+      },
+      handlePukRequest: () => {
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              handleShowPuk()
+            },
+          })
+        } else {
+          handleShowPuk()
+        }
       },
     })
   }
