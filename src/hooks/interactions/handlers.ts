@@ -22,8 +22,9 @@ import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
-import branch from 'react-native-branch'
+import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
+import { useAusweisInteraction } from '~/screens/LoggedIn/eID/hooks'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -35,8 +36,18 @@ export const useInteraction = () => {
 
 // NOTE: This should be called only in one place!
 export const useDeeplinkInteractions = () => {
+  const { processAusweisToken } = useAusweisInteraction()
   const { processInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
+
+  // NOTE: for now we assume all the params come in as strings
+  const getParamValue = (name: string, params: BranchParams) => {
+    if (params[name] && typeof params[name] === 'string') {
+      return params[name] as string
+    }
+
+    return
+  }
 
   useEffect(() => {
     // TODO move somewhere
@@ -48,8 +59,14 @@ export const useDeeplinkInteractions = () => {
       }
 
       if (params) {
-        if (params['token'] && typeof params['token'] === 'string') {
-          processInteraction(params['token'])
+        const tokenValue = getParamValue('token', params)
+        const eidValue = getParamValue('tcTokenUrl', params)
+
+        if (tokenValue) {
+          processInteraction(tokenValue)
+          return
+        } else if (eidValue) {
+          processAusweisToken(eidValue)
           return
         } else if (
           !params['+clicked_branch_link'] ||

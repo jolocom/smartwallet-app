@@ -48,7 +48,7 @@ const TitleDescAction: React.FC<WhateverProps> = ({
           {descriptionText}
           {hasInlineBtn && (
             <JoloText onPress={onPress} color={Colors.activity}>
-              ...find more
+              ...{btnText}
             </JoloText>
           )}
         </JoloText>

@@ -115,7 +115,7 @@ export const CompatibilityCheck = () => {
                 onPress={handleShowPinInstructions}
                 color={Colors.activity}
               >
-                {t('AusweisCompatibility.pinBtn')}
+                {`...${t('AusweisCompatibility.pinBtn')}`}
               </JoloText>
             </Description>
           </View>

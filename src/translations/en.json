@@ -206,7 +206,9 @@
         "ausweisSuccessMsg": "Identificatiuon Data was shared successfully",
         "ausweisFailedCheckTitle": "Check compatibility",
         "ausweisFailedCheckMsg": "Not the first time failing? \\nStart compatibility diagnostics to be sure",
-        "ausweisFailedCheckBtn": "Start"
+        "ausweisFailedCheckBtn": "Start",
+        "ausweisChangePinSuccessHeader": "Action Completed",
+        "ausweisChangePinSuccessMsg": "You can use your new PIN now"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -472,7 +474,7 @@
         "checkTryAgain": "Try again",
         "pinTitle": "6-digit PIN status",
         "pinSubtitle": "Did you previously activate the card’s eID functionality?  If not, read about it here",
-        "pinBtn": "... more info",
+        "pinBtn": "more info",
         "proceedBtn": "Done",
         "skipBtn": "Skip this step when performing a similar interaction again",
         "ignoreBtn": "Ignore"
