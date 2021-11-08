@@ -5,7 +5,6 @@ import {
 } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
@@ -30,10 +29,12 @@ import { AusweisStackParamList } from '.'
 import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
 import { useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
+import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
 export const useCheckNFC = () => {
+  const { t } = useTranslation()
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
 
   const nfcCheck = async () => {
@@ -57,16 +58,15 @@ export const useCheckNFC = () => {
       .catch((e) => {
         if (e.message === SWErrorCodes.SWNfcNotSupported) {
           scheduleErrorInfo(e, {
-            title: 'NFC Compatibility problem',
-            message:
-              'We have to inform you that your phone does not support the required NFC functionality',
+            title: t('Toasts.nfcCompatibilityTitle'),
+            message: t('Toasts.nfcCompatibilityMsg'),
           })
         } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
           scheduleInfo({
-            title: 'Please turn on NFC',
-            message: 'Please go to the settings and enable NFC',
+            title: t('Toasts.nfcOffTitle'),
+            message: t('Toasts.nfcOffMsg'),
             interact: {
-              label: 'Settings',
+              label: t('Toasts.nfcOffBtn'),
               onInteract: () => {
                 goToNfcSettings()
               },
@@ -86,6 +86,7 @@ export const useCheckNFC = () => {
 }
 
 export const useAusweisInteraction = () => {
+  const { t } = useTranslation()
   const { scheduleInfo, scheduleErrorWarning, scheduleWarning } = useToasts()
   const popStack = usePopStack()
   const dispatch = useDispatch()
@@ -131,7 +132,7 @@ export const useAusweisInteraction = () => {
     }
   }
 
-  const acceptRequest = async (optionalFields: Array<string>) => {
+  const acceptRequest = async (optionalFields: Array<AccessRightsFields>) => {
     await aa2Module.setAccessRights(optionalFields)
     await aa2Module.acceptAuthRequest()
   }
@@ -185,8 +186,8 @@ export const useAusweisInteraction = () => {
       .then((res) => {
         if (res['ok']) {
           scheduleInfo({
-            title: 'Success',
-            message: 'Successfully shared eID data!',
+            title: t('Toasts.ausweisSuccessTitle'),
+            message: t('Toasts.ausweisSuccessMsg'),
           })
         } else {
           scheduleErrorWarning(new Error(res['statusText']))
@@ -210,8 +211,13 @@ export const useAusweisInteraction = () => {
     } else {
       cancelInteraction()
       scheduleWarning({
-        title: 'Oops!',
-        message: 'Seems like the card you provided is not valid',
+        title: t('Toasts.ausweisFailedCheckTitle'),
+        message: t('Toasts.ausweisFailedCheckMsg'),
+        interact: {
+          label: t('Toasts.ausweisFailedCheckBtn'),
+          // TODO: add handler
+          onInteract: () => {},
+        },
       })
     }
   }
@@ -304,30 +310,30 @@ export const useTranslatedAusweisFields = () => {
   const { t } = useTranslation()
 
   const fieldsMapping: { [x in AusweisFields]: string } = {
-    [AusweisFields.Address]: t('ausweis.address'),
-    [AusweisFields.BirthName]: t('ausweis.birthName'),
-    [AusweisFields.FamilyName]: t('ausweis.familyName'),
-    [AusweisFields.GivenNames]: t('ausweis.givenNames'),
-    [AusweisFields.PlaceOfBirth]: t('ausweis.placeOfBirth'),
-    [AusweisFields.DateOfBirth]: t('ausweis.dateOfBirth'),
-    [AusweisFields.DoctoralDegree]: t('ausweis.doctoralDegree'),
-    [AusweisFields.ArtisticName]: t('ausweis.artisticName'),
-    [AusweisFields.Pseudonym]: t('ausweis.pseudonym'),
-    [AusweisFields.ValidUntil]: t('ausweis.validUntil'),
-    [AusweisFields.Nationality]: t('ausweis.nationality'),
-    [AusweisFields.IssuingCountry]: t('ausweis.issuingCountry'),
-    [AusweisFields.DocumentType]: t('ausweis.documentType'),
-    [AusweisFields.ResidencePermitI]: t('ausweis.residencePermitI'),
-    [AusweisFields.ResidencePermitII]: t('ausweis.residencePermitII'),
-    [AusweisFields.CommunityID]: t('ausweis.communityID'),
-    [AusweisFields.AddressVerification]: t('ausweis.addressVerification'),
-    [AusweisFields.AgeVerification]: t('ausweis.ageVerification'),
-    [AusweisFields.WriteAddress]: t('ausweis.writeAddress'),
-    [AusweisFields.WriteCommunityID]: t('ausweis.writeCommunityID'),
-    [AusweisFields.WriteResidencePermitI]: t('ausweis.writeResidencePermitI'),
-    [AusweisFields.WriteResidencePermitII]: t('ausweis.writeResidencePermitII'),
-    [AusweisFields.CanAllowed]: t('ausweis.canAllowed'),
-    [AusweisFields.PinManagement]: t('ausweis.pinManagement'),
+    [AusweisFields.Address]: t('Ausweis.address'),
+    [AusweisFields.BirthName]: t('Ausweis.birthName'),
+    [AusweisFields.FamilyName]: t('Ausweis.familyName'),
+    [AusweisFields.GivenNames]: t('Ausweis.givenNames'),
+    [AusweisFields.PlaceOfBirth]: t('Ausweis.placeOfBirth'),
+    [AusweisFields.DateOfBirth]: t('Ausweis.dateOfBirth'),
+    [AusweisFields.DoctoralDegree]: t('Ausweis.doctoralDegree'),
+    [AusweisFields.ArtisticName]: t('Ausweis.artisticName'),
+    [AusweisFields.Pseudonym]: t('Ausweis.pseudonym'),
+    [AusweisFields.ValidUntil]: t('Ausweis.validUntil'),
+    [AusweisFields.Nationality]: t('Ausweis.nationality'),
+    [AusweisFields.IssuingCountry]: t('Ausweis.issuingCountry'),
+    [AusweisFields.DocumentType]: t('Ausweis.documentType'),
+    [AusweisFields.ResidencePermitI]: t('Ausweis.residencePermitI'),
+    [AusweisFields.ResidencePermitII]: t('Ausweis.residencePermitII'),
+    [AusweisFields.CommunityID]: t('Ausweis.communityID'),
+    [AusweisFields.AddressVerification]: t('Ausweis.addressVerification'),
+    [AusweisFields.AgeVerification]: t('Ausweis.ageVerification'),
+    [AusweisFields.WriteAddress]: t('Ausweis.writeAddress'),
+    [AusweisFields.WriteCommunityID]: t('Ausweis.writeCommunityID'),
+    [AusweisFields.WriteResidencePermitI]: t('Ausweis.writeResidencePermitI'),
+    [AusweisFields.WriteResidencePermitII]: t('Ausweis.writeResidencePermitII'),
+    [AusweisFields.CanAllowed]: t('Ausweis.canAllowed'),
+    [AusweisFields.PinManagement]: t('Ausweis.pinManagement'),
   }
 
   return (field: AusweisFields) => {

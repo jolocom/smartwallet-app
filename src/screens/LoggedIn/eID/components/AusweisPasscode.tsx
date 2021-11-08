@@ -14,15 +14,13 @@ import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { usePasscode } from '~/components/Passcode/context'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
 
 import { AusweisStackParamList } from '..'
 import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
-import { JoloTextSizes } from '~/utils/fonts'
+import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
-
 import {
   AusweisPasscodeMode,
   AusweisScannerState,
@@ -59,6 +57,7 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 }
 
 export const AusweisPasscode = () => {
+  const { t } = useTranslation()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
   const { mode, handlers } = route.params
@@ -66,7 +65,7 @@ export const AusweisPasscode = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const { scheduleInfo, scheduleWarning } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
 
   const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
     useAusweisInteraction()
@@ -91,11 +90,13 @@ export const AusweisPasscode = () => {
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
       setPinVariant(AusweisPasscodeMode.PIN)
-      const errorText = `Wrong PIN, you used ${
-        ALL_EID_PIN_ATTEMPTS - card.retryCounter
-      }/${ALL_EID_PIN_ATTEMPTS} attempts`
 
       if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
+        const errorText = t('Lock.errorMsg', {
+          attempts: `${
+            ALL_EID_PIN_ATTEMPTS - card.retryCounter
+          }∕${ALL_EID_PIN_ATTEMPTS}`,
+        })
         setErrorText(errorText)
       }
     }
@@ -197,10 +198,11 @@ export const AusweisPasscode = () => {
             state: AusweisScannerState.success,
             onDone: () => {
               closeAusweis()
-              scheduleWarning({
-                title: "Pin wasn't changed",
-                message: 'We were not able to complete update of your new pin',
-              })
+              scheduleErrorWarning(
+                new Error(
+                  'Failed to change the eID PIN. The CHANGE_PIN flow was canceled by AusweisApp2',
+                ),
+              )
             },
           })
         } else {
@@ -214,8 +216,8 @@ export const AusweisPasscode = () => {
         const completeChangePinFlow = () => {
           closeAusweis()
           scheduleInfo({
-            title: 'Action completed',
-            message: 'You can use your new PIN now',
+            title: t('Toasts.ausweisChangePinSuccessHeader'),
+            message: t('Toasts.ausweisChangePinSuccessMsg'),
           })
         }
         if (IS_ANDROID) {
@@ -259,15 +261,15 @@ export const AusweisPasscode = () => {
 
   const title = useMemo(() => {
     if (pinVariant === AusweisPasscodeMode.PIN) {
-      return 'To allow data exchange enter you six digit eID PIN'
+      return t('AusweisPasscode.authPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.CAN) {
-      return 'Before the third attempt, please enter the six digit Card Access Number (CAN)'
+      return t('AusweisPasscode.canHeader')
     } else if (pinVariant === AusweisPasscodeMode.PUK) {
-      return 'To restore access to your card please enter PUK number'
+      return t('AusweisPasscode.pukHeader')
     } else if (pinVariant === AusweisPasscodeMode.NEW_PIN) {
-      return 'Your new pin'
+      return t('AusweisPasscode.newPinHeader')
     } else if (pinVariant === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-      return 'Repeat new pin'
+      return t('AusweisPasscode.repeatPinHeader')
     } else {
       return ''
     }
@@ -316,7 +318,7 @@ export const AusweisPasscode = () => {
         aa2Module.setNewPin(passcode)
       } else {
         updateScanner({ state: AusweisScannerState.failure, onDone: () => {} })
-        setErrorText("PINs don't match")
+        setErrorText(t('AusweisPasscode.pinMatchError'))
       }
     }
   }
@@ -349,7 +351,7 @@ export const AusweisPasscode = () => {
     switch (pinVariant) {
       case AusweisPasscodeMode.PUK:
         screen = eIDScreens.PukInfo
-        title = 'Where to find the PUK?'
+        title = t('AusweisPasscode.pukBtn')
         break
       default:
         break
@@ -384,20 +386,6 @@ export const AusweisPasscode = () => {
           }}
         >
           <Passcode.Header title={title} errorTitle={title} />
-          {pinVariant === AusweisPasscodeMode.CAN && (
-            <JoloText
-              customStyles={{
-                marginBottom: 36,
-                paddingHorizontal: 24,
-              }}
-              color={Colors.white80}
-              kind={JoloTextKind.title}
-              size={JoloTextSizes.mini}
-            >
-              You can find it in the bottom right on the front of your physical
-              ID card
-            </JoloText>
-          )}
           <View style={{ paddingHorizontal: 8 }}>
             <Passcode.Input
               cellColor={Colors.chisinauGrey}
