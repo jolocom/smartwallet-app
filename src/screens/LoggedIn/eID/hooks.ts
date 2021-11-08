@@ -1,8 +1,4 @@
-import {
-  CommonActions,
-  useNavigation,
-  useNavigationState,
-} from '@react-navigation/native'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
@@ -21,15 +17,12 @@ import {
   AusweisScannerParams,
   AusweisCardResult,
 } from './types'
-
-import { LOG } from '~/utils/dev'
 import useTranslation from '~/hooks/useTranslation'
-import { StackNavigationProp } from '@react-navigation/stack'
-import { AusweisStackParamList } from '.'
-import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
+import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
+import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -109,9 +102,7 @@ export const useAusweisInteraction = () => {
   const processAusweisToken = async (token: string) => {
     try {
       const request: any = await aa2Module.processRequest(token)
-      LOG(request)
       const certificate: any = await aa2Module.getCertificate()
-      LOG(certificate)
 
       const requestData: IAusweisRequest = {
         requiredFields: request.chat.required,
@@ -241,19 +232,22 @@ export const useAusweisCompatibilityCheck = () => {
   const redirect = useRedirect()
   const pop = usePop()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
+  const { showScanner, updateScanner } = useAusweisScanner()
 
   const startCheck = () => {
     setCompatibility(undefined)
-    // @ts-expect-error
-    redirect(ScreenNames.eId, { screen: eIDScreens.AusweisScanner, params: {} })
-    aa2Module.resetHandlers()
+    showScanner()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
         if (info) {
           const { inoperative, deactivated } = info
-          setCompatibility({ inoperative, deactivated })
 
-          pop(1)
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              setCompatibility({ inoperative, deactivated })
+            },
+          })
         }
       },
     })
@@ -342,7 +336,7 @@ export const useTranslatedAusweisFields = () => {
 }
 
 export const useAusweisScanner = () => {
-  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
+  const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
     onDone: () => {},
@@ -350,30 +344,29 @@ export const useAusweisScanner = () => {
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
 
-  const currentRoute = useNavigationState((state) => state.routes[state.index])
-
-  const getIsScannerActive = () => {
-    return currentRoute.key === AUSWEIS_SCANNER_NAVIGATION_KEY
-  }
+  const scannerKey = useSelector(getAusweisScannerKey)
 
   useEffect(() => {
-    if (getIsScannerActive()) {
-      navigation.dispatch({
-        ...CommonActions.setParams(scannerParams),
-        source: AUSWEIS_SCANNER_NAVIGATION_KEY,
-      })
+    if (scannerKey) {
+      try {
+        navigation.dispatch({
+          ...CommonActions.setParams(scannerParams),
+          source: scannerKey,
+        })
+      } catch (e) {
+        console.warn(e)
+      }
     }
-  }, [JSON.stringify(scannerParams), JSON.stringify(currentRoute)])
+  }, [JSON.stringify(scannerParams), scannerKey])
 
   const resetScanner = () => {
     setScannerParams(defaultState)
   }
 
   const showScanner = (onDismiss?: () => void) => {
-    navigation.navigate({
-      name: eIDScreens.AusweisScanner,
+    navigation.navigate(ScreenNames.eId, {
+      screen: eIDScreens.AusweisScanner,
       params: { ...scannerParams, onDismiss },
-      key: AUSWEIS_SCANNER_NAVIGATION_KEY,
     })
   }
 

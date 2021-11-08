@@ -5,12 +5,12 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { TransparentModalsParamsList } from '../../Main'
-import { useAusweisInteraction } from '../hooks'
 import { CardInfoMode } from '../types'
 
 const AusweisCardInfo = () => {
@@ -19,7 +19,7 @@ const AusweisCardInfo = () => {
       RouteProp<TransparentModalsParamsList, ScreenNames.AusweisCardInfo>
     >().params
   const { t } = useTranslation()
-  const { closeAusweis } = useAusweisInteraction()
+  const goBack = useGoBack()
 
   const title = useMemo(() => {
     if (mode === CardInfoMode.blocked) {
@@ -33,7 +33,7 @@ const AusweisCardInfo = () => {
 
   const handleDismiss = () => {
     onDismiss && onDismiss()
-    closeAusweis()
+    goBack()
   }
 
   return (

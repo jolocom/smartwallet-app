@@ -1,7 +1,8 @@
-import { RouteProp, useRoute } from '@react-navigation/core'
+import { RouteProp, useIsFocused, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
+import { setAusweisScannerKey } from '~/modules/ausweis/actions'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -10,16 +11,12 @@ import Ripple from '~/components/Ripple'
 import { useGoBack } from '~/hooks/navigation'
 import { ErrorIcon, NfcScannerAndroid, SuccessTick } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
-import { generateRandomString } from '~/utils/stringUtils'
 
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
+import { useDispatch } from 'react-redux'
 import useTranslation from '~/hooks/useTranslation'
-
-export const AUSWEIS_SCANNER_NAVIGATION_KEY = `AusweisScanner-${generateRandomString(
-  10,
-)}`
 
 /**
  * TODO:
@@ -39,6 +36,13 @@ export const AusweisScanner = () => {
   const iconOpacityValue = useRef(new Animated.Value(0)).current
   const loadingOpacityValue = useRef(new Animated.Value(0)).current
   const [animationState, setAnimationState] = useState(AusweisScannerState.idle)
+  const dispatch = useDispatch()
+
+  const isScreenFocused = useIsFocused()
+
+  useEffect(() => {
+    dispatch(setAusweisScannerKey(isScreenFocused ? route.key : null))
+  }, [isScreenFocused])
 
   useBackHandler(() => {
     return true

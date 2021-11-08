@@ -16,8 +16,8 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { IS_ANDROID } from '~/utils/generic'
 
-import { useAusweisInteraction } from '../hooks'
-import { AusweisPasscodeMode, eIDScreens } from '../types'
+import { useAusweisInteraction, useAusweisScanner } from '../hooks'
+import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 
 interface WhateverProps {
   headerText: string
@@ -65,6 +65,7 @@ const AusweisChangePin = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
+  const { showScanner, updateScanner } = useAusweisScanner()
   const dispatch = useDispatch()
   const isTransportPin = useRef(false)
 
@@ -119,20 +120,44 @@ const AusweisChangePin = () => {
     aa2Module.setHandlers({
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          navigation.navigate(ScreenNames.eId, {
-            screen: eIDScreens.AusweisScanner,
-            params: { onDismiss: cancelFlow },
-          })
+          showScanner(cancelFlow)
         }
       },
       handlePinRequest: (card) => {
-        pinHandler(card)
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pinHandler(card)
+            },
+          })
+        } else {
+          pinHandler(card)
+        }
       },
       handlePukRequest: (card) => {
-        pukHandler(card)
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              pukHandler(card)
+            },
+          })
+        } else {
+          pukHandler(card)
+        }
       },
       handleCanRequest: (card) => {
-        canHandler(card)
+        if (IS_ANDROID) {
+          updateScanner({
+            state: AusweisScannerState.success,
+            onDone: () => {
+              canHandler(card)
+            },
+          })
+        } else {
+          canHandler(card)
+        }
       },
       handleChangePinCancel: () => {},
     })
