@@ -205,7 +205,7 @@
         "ausweisSuccessTitle": "Vorgang abgeschlossen",
         "ausweisSuccessMsg": "Identifikation war erfolgreich",
         "ausweisFailedCheckTitle": "Kompabilität überprüfen",
-        "ausweisFailedCheckMsg": "Nicht das erste Mal gescheitert? \\nStarten Sie die Kompatibilitätsdiagnose, um es erneut zu probieren",
+        "ausweisFailedCheckMsg": "Nicht das erste Mal gescheitert?\nStarten Sie die Kompatibilitätsdiagnose, um es erneut zu probieren",
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Fertig",
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen"
@@ -559,11 +559,11 @@
     },
     "AusweisTransportPinInfo": {
         "header": "Transport PIN Info",
-        "description": "Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises.\\n\\n Bitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige PIN ist zwingend erforderlich."
+        "description": "Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige PIN ist zwingend erforderlich."
     },
     "AusweisPukInfo": {
         "header": "PUK Nummer Info",
-        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben. \\n\\n Bitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige PIN ist zwingend erforderlich."
+        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige PIN ist zwingend erforderlich."
     },
     "AusweisUnlock": {
         "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",

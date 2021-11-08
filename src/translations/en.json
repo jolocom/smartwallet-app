@@ -205,7 +205,7 @@
         "ausweisSuccessTitle": "Process completed",
         "ausweisSuccessMsg": "Identificatiuon Data was shared successfully",
         "ausweisFailedCheckTitle": "Check compatibility",
-        "ausweisFailedCheckMsg": "Not the first time failing? \\nStart compatibility diagnostics to be sure",
+        "ausweisFailedCheckMsg": "Not the first time failing? \nStart compatibility diagnostics to be sure",
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Action Completed",
         "ausweisChangePinSuccessMsg": "You can use your new PIN now"
@@ -559,11 +559,11 @@
     },
     "AusweisTransportPinInfo": {
         "header": "Transport PIN info",
-        "description": "You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\\n\\n Please note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
+        "description": "You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
     },
     "AusweisPukInfo": {
         "header": "PUK number info",
-        "description": "You will find the PUK number in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \\n\\n Please note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
+        "description": "You will find the PUK number in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
     },
     "AusweisUnlock": {
         "notLockedHeader": "System did not detect your card being blocked",
