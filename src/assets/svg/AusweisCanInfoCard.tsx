@@ -13,7 +13,7 @@ import Svg, {
 
 function SvgComponent(props: SvgProps) {
   return (
-    <Svg width="100%" height={203} viewBox="0 0 358 203" {...props}>
+    <Svg width="100%" height="100%" viewBox="0 0 358 203" {...props}>
       <Defs>
         <Rect id="prefix__a" x={0} y={0} width={358} height={203} rx={5.026} />
       </Defs>

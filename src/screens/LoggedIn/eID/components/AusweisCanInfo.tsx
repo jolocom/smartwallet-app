@@ -21,7 +21,7 @@ export const AusweisCanInfo = () => {
       <JoloText customStyles={{ marginTop: 24, textAlign: 'left' }}>
         {t('AusweisCanInfo.description')}
       </JoloText>
-      <View style={{ marginTop: 36, width: '100%' }}>
+      <View style={{ width: '100%', aspectRatio: 358 / 203, marginTop: 36 }}>
         <AusweisCanInfoCard />
       </View>
     </ScreenContainer>
