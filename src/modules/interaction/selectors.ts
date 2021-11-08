@@ -338,3 +338,6 @@ export const getAuthzUIDetails = createSelector(
     }
   },
 )
+
+export const getAusweisScannerKey = (state: RootReducerI) =>
+  state.interaction.ausweisScannerKey

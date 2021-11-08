@@ -18,3 +18,7 @@ export const selectShareCredential = createAction<Record<string, string>>(
 export const updateOfferValidation = createAction<OfferedCredential[]>(
   InteractionActions.updateOfferValidation,
 )
+
+export const setAusweisScannerKey = createAction<string | null>(
+  InteractionActions.setAusweisScannerKey,
+)
