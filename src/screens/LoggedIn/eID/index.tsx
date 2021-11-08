@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { RouteProp, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { AusweisProvider } from './context'
 import { useAusweisContext, useAusweisInteraction } from './hooks'
-import { MainStackParamList } from '../Main'
-import { ScreenNames } from '~/types/screens'
 import {
   AusweisCardResult,
   AusweisPasscodeProps,
@@ -29,6 +26,7 @@ import {
   AusweisPukInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
+import AusweisTarnsportWarning from './components/AusweisTransportWarning'
 import { AusweisForgotPin } from './components/AusweisForgotPin'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
@@ -45,6 +43,7 @@ export type AusweisStackParamList = {
   [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
+  [eIDScreens.AusweisTransportWarning]: undefined
   [eIDScreens.ForgotPin]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
@@ -59,10 +58,6 @@ const AusweisInteraction = () => {
     if (ausweisDetails) {
       setRequest(ausweisDetails)
       dispatch(setAusweisInteractionDetails(null))
-    } else {
-      throw new Error(
-        "ERROR: You shouldn't navigate to AusweisInteraction without dispatching the details to the state",
-      )
     }
   }, [])
 
@@ -127,6 +122,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.PukInfo}
         component={AusweisPukInfo}
+        options={transparentModalFadeOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.AusweisTransportWarning}
+        component={AusweisTarnsportWarning}
         options={transparentModalFadeOptions}
       />
     </eIDStack.Navigator>

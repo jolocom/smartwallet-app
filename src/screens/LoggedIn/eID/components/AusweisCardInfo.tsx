@@ -2,6 +2,7 @@ import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
+import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
@@ -50,15 +51,17 @@ const AusweisCardInfo = () => {
           </JoloText>
         </ScreenContainer.Padding>
       </View>
-      <Btn
-        type={BtnTypes.secondary}
-        onPress={handleDismiss}
-        customContainerStyles={{
-          marginBottom: BP({ default: 40, xsmall: 20 }),
-        }}
-      >
-        {t('AusweisUnlock.closeBtn')}
-      </Btn>
+      <BtnGroup>
+        <Btn
+          type={BtnTypes.secondary}
+          onPress={handleDismiss}
+          customContainerStyles={{
+            marginBottom: BP({ default: 40, xsmall: 20 }),
+          }}
+        >
+          {t('AusweisUnlock.closeBtn')}
+        </Btn>
+      </BtnGroup>
     </ScreenContainer>
   )
 }
