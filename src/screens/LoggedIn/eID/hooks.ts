@@ -27,6 +27,8 @@ import useTranslation from '~/hooks/useTranslation'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '.'
 import { AUSWEIS_SCANNER_NAVIGATION_KEY } from './components/AusweisScanner'
+import { useDispatch } from 'react-redux'
+import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
@@ -86,8 +88,8 @@ export const useCheckNFC = () => {
 export const useAusweisInteraction = () => {
   const { t } = useTranslation()
   const { scheduleInfo, scheduleErrorWarning, scheduleWarning } = useToasts()
-  const redirect = useRedirect()
   const popStack = usePopStack()
+  const dispatch = useDispatch()
 
   // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
   // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
@@ -123,7 +125,7 @@ export const useAusweisInteraction = () => {
         expirationDate: certificate.validity.expirationDate,
       }
 
-      redirect(ScreenNames.eId, requestData)
+      dispatch(setAusweisInteractionDetails(requestData))
     } catch (e) {
       console.warn(e)
       scheduleErrorWarning(e)

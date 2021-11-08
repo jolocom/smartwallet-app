@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { RouteProp, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { AusweisProvider } from './context'
 import { useAusweisContext, useAusweisInteraction } from './hooks'
-import { MainStackParamList } from '../Main'
-import { ScreenNames } from '~/types/screens'
 import {
   AusweisCardResult,
   AusweisPasscodeProps,
@@ -30,6 +27,9 @@ import {
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import AusweisTarnsportWarning from './components/AusweisTransportWarning'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
+import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -47,13 +47,20 @@ export type AusweisStackParamList = {
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
 const AusweisInteraction = () => {
-  const request =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
   const { setRequest } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
+  const ausweisDetails = useSelector(getAusweisInteractionDetails)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setRequest(request)
+    if (ausweisDetails) {
+      setRequest(ausweisDetails)
+      dispatch(setAusweisInteractionDetails(null))
+    } else {
+      throw new Error(
+        "ERROR: You shouldn't navigate to AusweisInteraction without dispatching the details to the state",
+      )
+    }
   }, [])
 
   const cancel = useCallback(() => {
