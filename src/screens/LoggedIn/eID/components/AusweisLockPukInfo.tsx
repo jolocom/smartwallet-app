@@ -6,7 +6,7 @@ import { Image, View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import { WithNavigation } from '~/types/props'
+import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useAusweisInteraction } from '../hooks'
@@ -19,6 +19,7 @@ import { AusweisPasscodeMode, eIDScreens } from '../types'
  * 2. disable gestures also done in the above PR
  */
 const AusweisLockPukInfo: React.FC = () => {
+  const { t } = useTranslation()
   /**
    * TODO: this has changed in cancelling workflow PR,
    * this should be updated to 'cancelInteraction'
@@ -48,7 +49,7 @@ const AusweisLockPukInfo: React.FC = () => {
         kind={JoloTextKind.title}
         color={Colors.white}
       >
-        Your card is locked now and you have to introduce PUK code to unlock it
+        {t('AusweisPukLock.header')}
       </JoloText>
       <Image source={require('~/assets/images/lockedCard.png')} />
       <JoloText
@@ -56,15 +57,14 @@ const AusweisLockPukInfo: React.FC = () => {
         kind={JoloTextKind.subtitle}
         color={Colors.white40}
       >
-        You can always unlock your card by using “Unlock my card” button in the
-        Identity tab
+        {t('AusweisPukLock.subtitle')}
       </JoloText>
       <View style={{ width: '100%', paddingBottom: 8 }}>
         <Btn onPress={handleContinueWithPuk} type={BtnTypes.quaternary}>
-          Continue with the PUK code
+          {t('AusweisPukLock.proceedBtn')}
         </Btn>
         <Btn onPress={cancelInteraction} type={BtnTypes.secondary}>
-          Close interaction
+          {t('AusweisPukLock.closeBtn')}
         </Btn>
       </View>
     </ScreenContainer>
