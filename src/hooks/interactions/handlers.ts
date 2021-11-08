@@ -39,6 +39,7 @@ export const useDeeplinkInteractions = () => {
   const { processAusweisToken } = useAusweisInteraction()
   const { processInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
+  const loader = useLoader()
 
   // NOTE: for now we assume all the params come in as strings
   const getParamValue = (name: string, params: BranchParams) => {
@@ -66,7 +67,9 @@ export const useDeeplinkInteractions = () => {
           processInteraction(tokenValue)
           return
         } else if (eidValue) {
-          processAusweisToken(eidValue)
+          loader(async () => {
+            await processAusweisToken(eidValue)
+          })
           return
         } else if (
           !params['+clicked_branch_link'] ||

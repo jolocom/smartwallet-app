@@ -126,22 +126,22 @@ const Camera = () => {
       // seems to be an issue with reading it.
       const isUrl = await Linking.canOpenURL(e.data)
       if (isUrl && e.data.includes('jolocom.app.link')) {
-        dispatch(
-          setLoader({ msg: t('Loader.loading'), type: LoaderTypes.default }),
-        )
+        // dispatch(
+        //   setLoader({ msg: t('Loader.loading'), type: LoaderTypes.default }),
+        // )
 
-        // NOTE: if the AusweisApp SDK returns BAD_STATE, we won't know of it in the scanner.
-        // As such, adding a timeout which will dismiss the loader if it's on for more than 20s.
-        setTimeout(() => {
-          if (isLoaderVisible) {
-            dispatch(dismissLoader())
-            scheduleErrorInfo(
-              new Error(
-                "The Ausweis interaction wasn't successfully processed. The loader was dismissed manually.",
-              ),
-            )
-          }
-        }, 20000)
+        // // NOTE: if the AusweisApp SDK returns BAD_STATE, we won't know of it in the scanner.
+        // // As such, adding a timeout which will dismiss the loader if it's on for more than 20s.
+        // setTimeout(() => {
+        //   if (isLoaderVisible) {
+        //     dispatch(dismissLoader())
+        //     scheduleErrorInfo(
+        //       new Error(
+        //         "The Ausweis interaction wasn't successfully processed. The loader was dismissed manually.",
+        //       ),
+        //     )
+        //   }
+        // }, 20000)
         branch.openURL(e.data)
       } else {
         await processInteraction(e.data)
