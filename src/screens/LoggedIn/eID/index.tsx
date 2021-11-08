@@ -24,6 +24,7 @@ import {
   AusweisScanner,
   AusweisCompatibilityResult,
   AusweisPukInfo,
+  AusweisTransportPinInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import { AusweisCanInfo } from './components/AusweisCanInfo'
@@ -47,6 +48,7 @@ export type AusweisStackParamList = {
   [eIDScreens.CanInfo]: undefined
   [eIDScreens.AusweisTransportWarning]: undefined
   [eIDScreens.ForgotPin]: undefined
+  [eIDScreens.AusweisTransportPinInfo]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
@@ -120,7 +122,6 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.ForgotPin}
         component={AusweisForgotPin}
-        options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
         name={eIDScreens.PukInfo}
@@ -131,6 +132,10 @@ const AusweisInteraction = () => {
         name={eIDScreens.AusweisTransportWarning}
         component={AusweisTarnsportWarning}
         options={transparentModalFadeOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.AusweisTransportPinInfo}
+        component={AusweisTransportPinInfo}
       />
     </eIDStack.Navigator>
   )
