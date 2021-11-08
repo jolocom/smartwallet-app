@@ -10,6 +10,7 @@ export enum eIDScreens {
   ProviderDetails = 'ProviderDetails',
   PukLock = 'PukLock',
   CompatibilityResult = 'CompatibilityResult',
+  ForgotPin = 'ForgotPin',
   PukInfo = 'PukInfo',
 }
 

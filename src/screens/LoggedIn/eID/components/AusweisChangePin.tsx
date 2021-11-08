@@ -144,7 +144,7 @@ const AusweisChangePin = () => {
     aa2Module.changePin()
   }
   const handlePreviewAuthorityInfo = () => {
-    console.warn('not implemented')
+    navigation.navigate(ScreenNames.eId, { screen: eIDScreens.ForgotPin })
   }
 
   return (
