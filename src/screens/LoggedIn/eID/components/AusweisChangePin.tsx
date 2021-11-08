@@ -161,8 +161,8 @@ const AusweisChangePin = () => {
   return (
     <ScreenContainer
       hasHeaderBack
-      navigationStyles={{ backgroundColor: Colors.mainBlack }}
       customStyles={{ justifyContent: 'space-around' }}
+      backgroundColor={Colors.mainDark}
     >
       <View style={{ width: '100%', alignItems: 'center' }}>
         <TitleDescAction
