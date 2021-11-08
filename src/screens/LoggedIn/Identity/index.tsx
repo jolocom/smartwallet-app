@@ -6,11 +6,13 @@ import Tabs from '~/components/Tabs/Tabs'
 import TabsContainer from '~/components/Tabs/Container'
 import { AusweisIdentity } from './AusweisIdentity'
 import { ScrollView } from 'react-native'
+import useTranslation from '~/hooks/useTranslation'
 
 const Identity = () => {
+  const { t } = useTranslation()
   const tabs = [
-    { id: 'identity', value: 'Your Identity' },
-    { id: 'credentials', value: 'Credentials' },
+    { id: 'identity', value: t('Identity.headerAusweis') },
+    { id: 'credentials', value: t('Identity.headerCredentials') },
   ]
 
   return (

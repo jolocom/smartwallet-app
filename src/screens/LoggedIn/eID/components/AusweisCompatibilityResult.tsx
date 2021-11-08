@@ -10,7 +10,7 @@ import { AusweisStackParamList } from '..'
 import { eIDScreens } from '../types'
 import BP from '~/utils/breakpoints'
 import { useGoBack } from '~/hooks/navigation'
-import { useBackHandler } from '@react-native-community/hooks'
+import useTranslation from '~/hooks/useTranslation'
 
 const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
   return (
@@ -24,6 +24,8 @@ const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
 }
 
 export const AusweisCompatibilityResult: React.FC = () => {
+  const { t } = useTranslation()
+
   const goBack = useGoBack()
   const { inoperative, deactivated } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.CompatibilityResult>>()
@@ -43,20 +45,20 @@ export const AusweisCompatibilityResult: React.FC = () => {
       customStyles={{ justifyContent: 'flex-end' }}
     >
       <View style={styles.headerContainer}>
-        <JoloText kind={JoloTextKind.title}>Compatibility check</JoloText>
+        <JoloText kind={JoloTextKind.title}>
+          {t('AusweisCompatibilityStatus.header')}
+        </JoloText>
       </View>
       <View style={styles.resultContainer}>
         {isFailed ? (
           <JoloText size={JoloTextSizes.big} color={Colors.error}>
-            {inoperative
-              ? 'This card is inoperative'
-              : 'Please change your transport PIN before you start using your card'}
+            {t('AusweisCompatibilityStatus.error')}
           </JoloText>
         ) : (
           <>
-            <SuccessResult title={'ID card access succesfull'} />
-            <SuccessResult title={'Online identification feature enabled'} />
-            <SuccessResult title={'NFC Supported'} />
+            <SuccessResult title={t('AusweisCompatibilityStatus.status1')} />
+            <SuccessResult title={t('AusweisCompatibilityStatus.status2')} />
+            <SuccessResult title={t('AusweisCompatibilityStatus.status3')} />
           </>
         )}
       </View>

@@ -71,7 +71,7 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
-  [ScreenNames.eId]: IAusweisRequest
+  [ScreenNames.eId]: undefined
   [ScreenNames.AusweisChangePin]: undefined
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined

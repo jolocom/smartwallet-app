@@ -13,6 +13,7 @@ import {
   useAusweisScanner,
   useCheckNFC,
 } from '~/screens/LoggedIn/eID/hooks'
+import useTranslation from '~/hooks/useTranslation'
 import { aa2Module } from 'react-native-aa2-sdk'
 import {
   AusweisPasscodeMode,
@@ -25,6 +26,7 @@ import { setPopup } from '~/modules/appState/actions'
 import { useDispatch } from 'react-redux'
 
 export const AusweisIdentity = () => {
+  const { t } = useTranslation()
   const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
   const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
@@ -138,14 +140,13 @@ export const AusweisIdentity = () => {
       </View>
       <View>
         <JoloText kind={JoloTextKind.title} weight={JoloTextWeight.regular}>
-          Manage your digital identity
+          {t('AusweisIdentity.header')}
         </JoloText>
         <JoloText
           size={JoloTextSizes.mini}
           customStyles={{ marginTop: 8, marginHorizontal: 16 }}
         >
-          All the necessary functions that will allow you to quickly and easily
-          solve frequently asked questions
+          {t('AusweisIdentity.subheader')}
         </JoloText>
 
         <View style={styles.btnContainer}>
@@ -154,21 +155,21 @@ export const AusweisIdentity = () => {
             customContainerStyles={styles.btn}
             onPress={handleCompatibilityCheck}
           >
-            Compatibility check
+            {t('AusweisIdentity.compatibilityBtn')}
           </Btn>
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleChangePin}
           >
-            Change your PIN
+            {t('AusweisIdentity.changePinBtn')}
           </Btn>
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleUnlockCard}
           >
-            Unlock blocked card
+            {t('AusweisIdentity.unlockBtn')}
           </Btn>
         </View>
       </View>

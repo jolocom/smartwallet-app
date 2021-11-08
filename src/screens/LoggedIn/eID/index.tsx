@@ -29,6 +29,9 @@ import {
   AusweisPukInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
+import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -45,13 +48,20 @@ export type AusweisStackParamList = {
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
 const AusweisInteraction = () => {
-  const request =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
   const { setRequest } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
+  const ausweisDetails = useSelector(getAusweisInteractionDetails)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setRequest(request)
+    if (ausweisDetails) {
+      setRequest(ausweisDetails)
+      dispatch(setAusweisInteractionDetails(null))
+    } else {
+      throw new Error(
+        "ERROR: You shouldn't navigate to AusweisInteraction without dispatching the details to the state",
+      )
+    }
   }, [])
 
   const cancel = useCallback(() => {

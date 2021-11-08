@@ -22,11 +22,11 @@ const AusweisCardInfo = () => {
 
   const title = useMemo(() => {
     if (mode === CardInfoMode.blocked) {
-      return 'You used all correct PUK attempts and this card is locked now'
+      return t('AusweisUnlock.pukExhaustedHeader')
     } else if (mode === CardInfoMode.notBlocked) {
-      return 'System did not detect your card being blocked'
+      return t('AusweisUnlock.notLockedHeader')
     } else if (mode === CardInfoMode.unblocked) {
-      return 'Your card is unlocked and ready to use!'
+      return t('AusweisUnlock.unlockedHeader')
     }
   }, [mode])
 
@@ -57,7 +57,7 @@ const AusweisCardInfo = () => {
           marginBottom: BP({ default: 40, xsmall: 20 }),
         }}
       >
-        {t('Errors.closeBtn')}
+        {t('AusweisUnlock.closeBtn')}
       </Btn>
     </ScreenContainer>
   )
