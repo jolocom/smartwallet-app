@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { RouteProp, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { AusweisProvider } from './context'
 import { useAusweisContext, useAusweisInteraction } from './hooks'
-import { MainStackParamList } from '../Main'
-import { ScreenNames } from '~/types/screens'
 import {
   AusweisCardResult,
   AusweisPasscodeProps,
