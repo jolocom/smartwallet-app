@@ -206,7 +206,9 @@
         "ausweisSuccessMsg": "Identifikation war erfolgreich",
         "ausweisFailedCheckTitle": "Kompabilität überprüfen",
         "ausweisFailedCheckMsg": "Nicht das erste Mal gescheitert? \\nStarten Sie die Kompatibilitätsdiagnose, um es erneut zu probieren",
-        "ausweisFailedCheckBtn": "Start"
+        "ausweisFailedCheckBtn": "Start",
+        "ausweisChangePinSuccessHeader": "Fertig",
+        "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -472,7 +474,7 @@
         "checkTryAgain": "Erneut versuchen",
         "pinTitle": "6-stelliger PIN Status",
         "pinSubtitle": "Haben Sie zuvor die eID-Funktionalität der Karte aktiviert? Wenn nicht, informieren Sie sich hier",
-        "pinBtn": "... mehr Info",
+        "pinBtn": "mehr Info",
         "proceedBtn": "Fertig",
         "skipBtn": "Überspringen Sie diesen Schritt, wenn Sie in Zukunft eine ähnliche Interaktion ausführen",
         "ignoreBtn": "Ignorieren"
@@ -533,7 +535,7 @@
         "pinBtn": "Prozess beginnen",
         "forgotHeader": "Sie finden nichts davon?",
         "forgotSubheader": "Wenn Sie Ihre PIN ganz vergessen haben und Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde",
-        "forgotBtn": "...mehr Informationen"
+        "forgotBtn": "mehr Informationen"
     },
     "AusweisPinInfo": {
         "header": "PIN Informationen",
@@ -568,6 +570,6 @@
         "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!"
     },
     "ausweisPasscode": {
-        "newPinHeader": ""
+        "newPinHeader": "Geben Sie Ihre neue eID PIN ein"
     }
 }
