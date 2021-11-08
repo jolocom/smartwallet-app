@@ -75,7 +75,7 @@ const AusweisChangePin = () => {
             isTransportPin.current === true
               ? AusweisPasscodeMode.TRANSPORT_PIN
               : AusweisPasscodeMode.PIN,
-          origin: isTransportPin.current
+          pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
             : undefined,
         },
@@ -89,7 +89,7 @@ const AusweisChangePin = () => {
         screen: eIDScreens.EnterPIN,
         params: {
           mode: AusweisPasscodeMode.CAN,
-          origin: isTransportPin.current
+          pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
             : undefined,
         },
@@ -103,7 +103,7 @@ const AusweisChangePin = () => {
         screen: eIDScreens.EnterPIN,
         params: {
           mode: AusweisPasscodeMode.PUK,
-          origin: isTransportPin.current
+          pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
             : undefined,
         },

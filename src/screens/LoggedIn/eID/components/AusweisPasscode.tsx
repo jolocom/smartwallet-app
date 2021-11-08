@@ -61,7 +61,7 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 export const AusweisPasscode = () => {
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
-  const { mode, handlers, origin } = route.params
+  const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -82,12 +82,12 @@ export const AusweisPasscode = () => {
   const isTransportPin = useRef(false)
 
   useEffect(() => {
-    if (origin === AusweisPasscodeMode.TRANSPORT_PIN) {
+    if (pinContext === AusweisPasscodeMode.TRANSPORT_PIN) {
       isTransportPin.current = true
-    } else {
+    } else if (pinContext === AusweisPasscodeMode.PIN) {
       isTransportPin.current = false
     }
-  }, [origin])
+  }, [pinContext])
 
   useEffect(() => {
     pinVariantRef.current = pinVariant

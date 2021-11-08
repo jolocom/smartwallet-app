@@ -33,7 +33,13 @@ export enum AusweisPasscodeMode {
 
 export interface AusweisPasscodeProps {
   mode: AusweisPasscodeMode
-  origin?: AusweisPasscodeMode.TRANSPORT_PIN
+  /**
+   * NOTE:
+   * "pinContext" indicates whether passcode screens deal with
+   * normal 6-digit pin (AusweisPasscodeMode.PIN) or
+   * 5-digit pin (AusweisPasscodeMode.TRANSPORT_PIN)
+   */
+  pinContext?: AusweisPasscodeMode.TRANSPORT_PIN | AusweisPasscodeMode.PIN
   handlers?: Partial<EventHandlers>
 }
 
