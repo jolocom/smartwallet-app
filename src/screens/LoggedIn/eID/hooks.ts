@@ -17,14 +17,12 @@ import {
   AusweisScannerParams,
   AusweisCardResult,
 } from './types'
-
-import { LOG } from '~/utils/dev'
 import useTranslation from '~/hooks/useTranslation'
 import { useSelector } from 'react-redux'
-import { getAusweisScannerKey } from '~/modules/interaction/selectors'
 import { useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
+import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -104,9 +102,7 @@ export const useAusweisInteraction = () => {
   const processAusweisToken = async (token: string) => {
     try {
       const request: any = await aa2Module.processRequest(token)
-      LOG(request)
       const certificate: any = await aa2Module.getCertificate()
-      LOG(certificate)
 
       const requestData: IAusweisRequest = {
         requiredFields: request.chat.required,

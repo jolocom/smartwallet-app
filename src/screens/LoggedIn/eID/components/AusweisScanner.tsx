@@ -1,13 +1,8 @@
-import {
-  RouteProp,
-  useIsFocused,
-  useNavigationState,
-  useRoute,
-} from '@react-navigation/core'
+import { RouteProp, useIsFocused, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
-import { setAusweisScannerKey } from '~/modules/interaction/actions'
+import { setAusweisScannerKey } from '~/modules/ausweis/actions'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
