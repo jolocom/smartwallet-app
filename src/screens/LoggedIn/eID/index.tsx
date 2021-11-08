@@ -30,6 +30,10 @@ import {
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import { AusweisCanInfo } from './components/AusweisCanInfo'
+import { AusweisForgotPin } from './components/AusweisForgotPin'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
+import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -43,17 +47,25 @@ export type AusweisStackParamList = {
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
   [eIDScreens.CanInfo]: undefined
+  [eIDScreens.ForgotPin]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
 const AusweisInteraction = () => {
-  const request =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
   const { setRequest } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
+  const ausweisDetails = useSelector(getAusweisInteractionDetails)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setRequest(request)
+    if (ausweisDetails) {
+      setRequest(ausweisDetails)
+      dispatch(setAusweisInteractionDetails(null))
+    } else {
+      throw new Error(
+        "ERROR: You shouldn't navigate to AusweisInteraction without dispatching the details to the state",
+      )
+    }
   }, [])
 
   const cancel = useCallback(() => {
@@ -109,9 +121,10 @@ const AusweisInteraction = () => {
         component={AusweisCompatibilityResult}
         options={transparentModalFadeOptions}
       />
+      <eIDStack.Screen name={eIDScreens.CanInfo} component={AusweisCanInfo} />
       <eIDStack.Screen
-        name={eIDScreens.CanInfo}
-        component={AusweisCanInfo}
+        name={eIDScreens.ForgotPin}
+        component={AusweisForgotPin}
         options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen

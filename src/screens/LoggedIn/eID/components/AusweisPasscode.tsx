@@ -95,7 +95,7 @@ export const AusweisPasscode = () => {
         const errorText = t('Lock.errorMsg', {
           attempts: `${
             ALL_EID_PIN_ATTEMPTS - card.retryCounter
-          } / ${ALL_EID_PIN_ATTEMPTS}`,
+          }∕${ALL_EID_PIN_ATTEMPTS}`,
         })
         setErrorText(errorText)
       }

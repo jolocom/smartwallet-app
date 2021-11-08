@@ -11,6 +11,7 @@ export enum eIDScreens {
   PukLock = 'PukLock',
   CompatibilityResult = 'CompatibilityResult',
   CanInfo = 'CanInfo',
+  ForgotPin = 'ForgotPin',
   PukInfo = 'PukInfo',
 }
 

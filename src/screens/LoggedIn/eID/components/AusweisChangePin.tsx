@@ -48,7 +48,7 @@ const TitleDescAction: React.FC<WhateverProps> = ({
           {descriptionText}
           {hasInlineBtn && (
             <JoloText onPress={onPress} color={Colors.activity}>
-              ...find more
+              ...{btnText}
             </JoloText>
           )}
         </JoloText>
@@ -144,7 +144,7 @@ const AusweisChangePin = () => {
     aa2Module.changePin()
   }
   const handlePreviewAuthorityInfo = () => {
-    console.warn('not implemented')
+    navigation.navigate(ScreenNames.eId, { screen: eIDScreens.ForgotPin })
   }
 
   return (
