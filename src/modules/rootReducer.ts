@@ -21,6 +21,9 @@ import { CredentialActions } from './credentials/types'
 import toastsReducer from './toasts/reducer'
 import { ToastsActions } from './toasts/types'
 
+import ausweisReducer from './ausweis/reducer'
+import { AusweisModuleActions } from './ausweis/types'
+
 const rootReducer = combineReducers({
   loader: loaderReducer,
   account: accountReducer,
@@ -29,6 +32,7 @@ const rootReducer = combineReducers({
   appState: appStateReducer,
   credentials: credentialsReducer,
   toasts: toastsReducer,
+  ausweis: ausweisReducer,
 })
 
 export type RootActions =
@@ -39,5 +43,6 @@ export type RootActions =
   | AppStateActions
   | CredentialActions
   | ToastsActions
+  | AusweisModuleActions
 
 export default rootReducer
