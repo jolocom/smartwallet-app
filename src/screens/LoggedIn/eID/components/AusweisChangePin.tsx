@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import { usePrevious } from '~/hooks/generic'
+import useTranslation from '~/hooks/useTranslation'
 import { setPopup } from '~/modules/appState/actions'
 
 import { ScreenNames } from '~/types/screens'
@@ -47,7 +47,7 @@ const TitleDescAction: React.FC<WhateverProps> = ({
           {descriptionText}
           {hasInlineBtn && (
             <JoloText onPress={onPress} color={Colors.activity}>
-              ...find more
+              ...{btnText}
             </JoloText>
           )}
         </JoloText>
@@ -62,18 +62,24 @@ const TitleDescAction: React.FC<WhateverProps> = ({
 }
 
 const AusweisChangePin = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation()
-  const isFocused = useIsFocused()
-  const prevIsFocused = usePrevious(isFocused)
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
   const dispatch = useDispatch()
+  const isTransportPin = useRef(false)
 
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
-          mode: AusweisPasscodeMode.PIN,
+          mode:
+            isTransportPin.current === true
+              ? AusweisPasscodeMode.TRANSPORT_PIN
+              : AusweisPasscodeMode.PIN,
+          pinContext: isTransportPin.current
+            ? AusweisPasscodeMode.TRANSPORT_PIN
+            : undefined,
         },
       })
     })
@@ -85,6 +91,9 @@ const AusweisChangePin = () => {
         screen: eIDScreens.EnterPIN,
         params: {
           mode: AusweisPasscodeMode.CAN,
+          pinContext: isTransportPin.current
+            ? AusweisPasscodeMode.TRANSPORT_PIN
+            : undefined,
         },
       })
     })
@@ -96,6 +105,9 @@ const AusweisChangePin = () => {
         screen: eIDScreens.EnterPIN,
         params: {
           mode: AusweisPasscodeMode.PUK,
+          pinContext: isTransportPin.current
+            ? AusweisPasscodeMode.TRANSPORT_PIN
+            : undefined,
         },
       })
     })
@@ -126,50 +138,51 @@ const AusweisChangePin = () => {
     })
   }
 
-  useEffect(() => {
-    if (isFocused === true && !Boolean(prevIsFocused)) {
-      setupHandlers()
-    }
-  }, [isFocused])
-
   const handleChange5DigPin = () => {
-    console.warn('not implemented')
+    isTransportPin.current = true
+    setupHandlers()
+    navigation.navigate(ScreenNames.eId, {
+      screen: eIDScreens.AusweisTransportWarning,
+    })
   }
   const handleChange6DigPin = () => {
+    isTransportPin.current = false
+    setupHandlers()
     if (Platform.OS === 'ios') {
       dispatch(setPopup(true))
     }
     aa2Module.changePin()
   }
+
   const handlePreviewAuthorityInfo = () => {
-    console.warn('not implemented')
+    navigation.navigate(ScreenNames.eId, { screen: eIDScreens.ForgotPin })
   }
 
   return (
     <ScreenContainer
       hasHeaderBack
-      navigationStyles={{ backgroundColor: Colors.mainBlack }}
       customStyles={{ justifyContent: 'space-around' }}
+      backgroundColor={Colors.mainDark}
     >
       <View style={{ width: '100%', alignItems: 'center' }}>
         <TitleDescAction
-          headerText="Do you have 5-digit PIN?"
-          descriptionText="You should have received it with the letter together with your card"
-          btnText="Start the process"
+          headerText={t('AusweisChangePin.transportPinHeader')}
+          descriptionText={t('AusweisChangePin.transportPinSubheader')}
+          btnText={t('AusweisChangePin.transportPinBtn')}
           onPress={handleChange5DigPin}
         />
         <TitleDescAction
-          headerText="Activate your 6-digit PIN code"
-          descriptionText="You can find it in the bottom right corner on the front side of your ID card"
-          btnText="Start the process"
+          headerText={t('AusweisChangePin.pinHeader')}
+          descriptionText={t('AusweisChangePin.pinSubheader')}
+          btnText={t('AusweisChangePin.pinBtn')}
           onPress={handleChange6DigPin}
         />
       </View>
       <TitleDescAction
         hasInlineBtn
-        headerText="Can’t find any of this?"
-        descriptionText="If you completely forgot your PIN and can not find your PIN letter, please turn to the competent authority"
-        btnText="find more"
+        headerText={t('AusweisChangePin.forgotHeader')}
+        descriptionText={t('AusweisChangePin.forgotSubheader')}
+        btnText={t('AusweisChangePin.forgotBtn')}
         onPress={handlePreviewAuthorityInfo}
       />
     </ScreenContainer>

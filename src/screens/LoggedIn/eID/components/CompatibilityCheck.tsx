@@ -18,6 +18,7 @@ import { AusweisButtons } from '../styled'
 import BP from '~/utils/breakpoints'
 import BtnGroup from '~/components/BtnGroup'
 import { CheckboxOption } from '~/components/CheckboxOption'
+import useTranslation from '~/hooks/useTranslation'
 
 const Header: React.FC = ({ children }) => (
   <JoloText
@@ -33,6 +34,7 @@ const Description: React.FC = ({ children }) => (
 )
 
 export const CompatibilityCheck = () => {
+  const { t } = useTranslation()
   const redirect = useRedirect()
   const { cancelInteraction } = useAusweisInteraction()
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
@@ -71,14 +73,11 @@ export const CompatibilityCheck = () => {
           color={Colors.error}
           customStyles={styles.header}
         >
-          Before you proceed your device must meet certain technical
-          requirements
+          {t('AusweisCompatibility.header')}
         </JoloText>
         <View style={styles.contentContainer}>
-          <Header>Compatibility Check</Header>
-          <Description>
-            Make sure tour card is ready for use in one touch
-          </Description>
+          <Header>{t('AusweisCompatibility.checkHeader')}</Header>
+          <Description>{t('AusweisCompatibility.checkSubtitle')}</Description>
           <View style={{ marginTop: BP({ large: 24, default: 16 }) }}>
             {compatibility &&
             !compatibility.deactivated &&
@@ -92,7 +91,7 @@ export const CompatibilityCheck = () => {
                   kind={JoloTextKind.title}
                   size={JoloTextSizes.mini}
                 >
-                  Successfully passed
+                  {t('AusweisCompatibility.checkSuccess')}
                 </JoloText>
               </View>
             ) : (
@@ -101,23 +100,22 @@ export const CompatibilityCheck = () => {
                 type={BtnTypes.quaternary}
               >
                 {compatibility?.deactivated || compatibility?.inoperative
-                  ? 'Try again'
-                  : 'Start'}
+                  ? t('AusweisCompatibility.checkTryAgain')
+                  : t('AusweisCompatibility.checkStart')}
               </Btn>
             )}
           </View>
         </View>
         <View style={styles.pinContainer}>
-          <Header>6-digit pin status</Header>
+          <Header>{t('AusweisCompatibility.pinTitle')}</Header>
           <View>
             <Description>
-              Did you previously activate the card’s eID functionality? If not,
-              read about it here{' '}
+              {t('AusweisCompatibility.pinSubtitle')}
               <JoloText
                 onPress={handleShowPinInstructions}
                 color={Colors.activity}
               >
-                ...more info
+                {`...${t('AusweisCompatibility.pinBtn')}`}
               </JoloText>
             </Description>
           </View>
@@ -126,16 +124,14 @@ export const CompatibilityCheck = () => {
       <View style={styles.bottomContainer}>
         <View style={{ paddingHorizontal: 20 }}>
           <CheckboxOption
-            description={
-              'Skip this step when performing similar interaction again'
-            }
+            description={t('AusweisCompatibility.skipBtn')}
             onPress={handleSkip}
           />
         </View>
         <BtnGroup customStyles={{ marginTop: 32 }}>
           <AusweisButtons
-            submitLabel="Done"
-            cancelLabel="Ignore"
+            submitLabel={t('AusweisCompatibility.proceedBtn')}
+            cancelLabel={t('AusweisCompatibility.ignoreBtn')}
             onSubmit={handleSubmit}
             onCancel={handleIgnore}
           />

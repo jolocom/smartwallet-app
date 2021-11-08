@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { RouteProp, useRoute } from '@react-navigation/core'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { AusweisProvider } from './context'
 import { useAusweisContext, useAusweisInteraction } from './hooks'
-import { MainStackParamList } from '../Main'
-import { ScreenNames } from '~/types/screens'
 import {
   AusweisCardResult,
   AusweisPasscodeProps,
@@ -29,6 +26,12 @@ import {
   AusweisPukInfo,
 } from './components'
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
+import { AusweisCanInfo } from './components/AusweisCanInfo'
+import AusweisTarnsportWarning from './components/AusweisTransportWarning'
+import { AusweisForgotPin } from './components/AusweisForgotPin'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
+import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -41,17 +44,23 @@ export type AusweisStackParamList = {
   [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
   [eIDScreens.CompatibilityResult]: AusweisCardResult
+  [eIDScreens.CanInfo]: undefined
+  [eIDScreens.AusweisTransportWarning]: undefined
+  [eIDScreens.ForgotPin]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
 const AusweisInteraction = () => {
-  const request =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.eId>>().params
   const { setRequest } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
+  const ausweisDetails = useSelector(getAusweisInteractionDetails)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setRequest(request)
+    if (ausweisDetails) {
+      setRequest(ausweisDetails)
+      dispatch(setAusweisInteractionDetails(null))
+    }
   }, [])
 
   const cancel = useCallback(() => {
@@ -107,9 +116,20 @@ const AusweisInteraction = () => {
         component={AusweisCompatibilityResult}
         options={transparentModalFadeOptions}
       />
+      <eIDStack.Screen name={eIDScreens.CanInfo} component={AusweisCanInfo} />
+      <eIDStack.Screen
+        name={eIDScreens.ForgotPin}
+        component={AusweisForgotPin}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
       <eIDStack.Screen
         name={eIDScreens.PukInfo}
         component={AusweisPukInfo}
+        options={transparentModalFadeOptions}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.AusweisTransportWarning}
+        component={AusweisTarnsportWarning}
         options={transparentModalFadeOptions}
       />
     </eIDStack.Navigator>

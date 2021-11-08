@@ -15,6 +15,7 @@ import { generateRandomString } from '~/utils/stringUtils'
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
+import useTranslation from '~/hooks/useTranslation'
 
 export const AUSWEIS_SCANNER_NAVIGATION_KEY = `AusweisScanner-${generateRandomString(
   10,
@@ -26,6 +27,7 @@ export const AUSWEIS_SCANNER_NAVIGATION_KEY = `AusweisScanner-${generateRandomSt
  * saying "dont remove the card until the scanner popup is gone"
  */
 export const AusweisScanner = () => {
+  const { t } = useTranslation()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
   const {
@@ -129,7 +131,7 @@ export const AusweisScanner = () => {
     <AusweisBottomSheet backgroundColor={Colors.badGrey}>
       <View style={styles.container}>
         <JoloText kind={JoloTextKind.title} customStyles={{ marginBottom: 32 }}>
-          Ready to Scan
+          {t('AusweisScanner.header')}
         </JoloText>
         <View
           style={{
@@ -140,7 +142,7 @@ export const AusweisScanner = () => {
           {renderScannerIcon()}
         </View>
         <JoloText color={Colors.white} customStyles={styles.footer}>
-          Please do not remove your card until current step is done
+          {t('AusweisScanner.startSubheader')}
         </JoloText>
       </View>
       <Btn
@@ -151,7 +153,7 @@ export const AusweisScanner = () => {
         type={BtnTypes.senary}
         onPress={handleDismiss}
       >
-        Cancel
+        {t('AusweisScanner.cancelBtn')}
       </Btn>
     </AusweisBottomSheet>
   )

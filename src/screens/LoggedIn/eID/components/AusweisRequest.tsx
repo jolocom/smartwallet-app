@@ -43,30 +43,35 @@ export const AusweisRequest = () => {
       <LogoContainerBAS>
         <AusweisLogo />
       </LogoContainerBAS>
-      <InteractionTitle label={t('CredentialRequest.header')} />
+      <InteractionTitle label={t('Ausweis.header')} />
       <JoloText
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.mini}
         color={Colors.white70}
         customStyles={{ paddingHorizontal: 10 }}
       >
-        {`To complete your hotel check-in ${providerName} is requesting specific set of data.`}
+        {t('AusweisRequest.description', {
+          serviceName: providerName,
+          interpolation: {
+            escapeValue: false,
+          },
+        })}
       </JoloText>
       <JoloText
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.mini}
-        color={Colors.white70}
+        color={Colors.success}
         customStyles={{
-          textDecorationLine: 'underline',
-          marginVertical: 40,
+          marginTop: 16,
+          marginBottom: 32,
         }}
         onPress={() => Linking.openURL(providerUrl)}
       >
         {providerUrl}
       </JoloText>
       <AusweisButtons
-        submitLabel="Review the request"
-        cancelLabel="Ignore"
+        submitLabel={t('AusweisRequest.proceedBtn')}
+        cancelLabel={t('Interaction.cancelBtn')}
         onSubmit={handleProceed}
         onCancel={handleIgnore}
       />

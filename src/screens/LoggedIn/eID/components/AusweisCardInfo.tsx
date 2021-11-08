@@ -2,13 +2,13 @@ import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
+import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import { TransparentModalsParamsList } from '../../Main'
 import { useAusweisInteraction } from '../hooks'
 import { CardInfoMode } from '../types'
@@ -23,11 +23,11 @@ const AusweisCardInfo = () => {
 
   const title = useMemo(() => {
     if (mode === CardInfoMode.blocked) {
-      return 'You used all correct PUK attempts and this card is locked now'
+      return t('AusweisUnlock.pukExhaustedHeader')
     } else if (mode === CardInfoMode.notBlocked) {
-      return 'System did not detect your card being blocked'
+      return t('AusweisUnlock.notLockedHeader')
     } else if (mode === CardInfoMode.unblocked) {
-      return 'Your card is unlocked and ready to use!'
+      return t('AusweisUnlock.unlockedHeader')
     }
   }, [mode])
 
@@ -51,15 +51,17 @@ const AusweisCardInfo = () => {
           </JoloText>
         </ScreenContainer.Padding>
       </View>
-      <Btn
-        type={BtnTypes.secondary}
-        onPress={handleDismiss}
-        customContainerStyles={{
-          marginBottom: BP({ default: 40, xsmall: 20 }),
-        }}
-      >
-        {t('Errors.closeBtn')}
-      </Btn>
+      <BtnGroup>
+        <Btn
+          type={BtnTypes.secondary}
+          onPress={handleDismiss}
+          customContainerStyles={{
+            marginBottom: BP({ default: 40, xsmall: 20 }),
+          }}
+        >
+          {t('AusweisUnlock.closeBtn')}
+        </Btn>
+      </BtnGroup>
     </ScreenContainer>
   )
 }

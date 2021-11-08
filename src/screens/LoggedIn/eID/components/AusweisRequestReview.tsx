@@ -165,14 +165,17 @@ export const AusweisRequestReview = () => {
 
   const handleMoreInfo = () => {
     const fields: IField[] = [
-      { label: 'Provider', value: providerName + '\n' + providerUrl },
       {
-        label: 'Certificate issuer',
+        label: t('AusweisProvider.providerLabel'),
+        value: providerName + '\n' + providerUrl,
+      },
+      {
+        label: t('AusweisProvider.certificateLabel'),
         value: certificateIssuerName + '\n' + certificateIssuerUrl,
       },
-      { label: 'Provider information', value: providerInfo },
+      { label: t('AusweisProvider.providerInfoLabel'), value: providerInfo },
       {
-        label: 'Validity',
+        label: t('AusweisProvider.validityLabel'),
         value:
           moment(effectiveValidityDate).format('DD.MM.YYYY') +
           ' - ' +
@@ -213,11 +216,11 @@ export const AusweisRequestReview = () => {
                   <AusweisLogo />
                 </LogoContainerFAS>
               </Collapsible.Scale>
-              <Collapsible.Title text={t('CredentialRequest.header')}>
-                <InteractionTitle label={t('CredentialRequest.header')} />
+              <Collapsible.Title text={t('Ausweis.header')}>
+                <InteractionTitle label={t('Ausweis.header')} />
               </Collapsible.Title>
               <AusweisHeaderDescription>
-                {`Choose one or more documents requested by ${providerName} to proceed `}
+                {t('AusweisReview.subheader', { serviceName: providerName })}
               </AusweisHeaderDescription>
               <Btn
                 type={BtnTypes.septenary}
@@ -230,13 +233,13 @@ export const AusweisRequestReview = () => {
                   marginTop: 20,
                 }}
               >
-                More now
+                {t('AusweisReview.providerBtn')}
               </Btn>
 
               <ScreenContainer.Padding
                 distance={BP({ large: 36, medium: 28, default: 16 })}
               >
-                <AusweisListSection title="Mandatory fields">
+                <AusweisListSection title={t('AusweisReview.mandatoryHeader')}>
                   {requiredFields.map((field, i) => (
                     <Field.Selectable
                       value={translateField(field)}
@@ -247,7 +250,7 @@ export const AusweisRequestReview = () => {
                   ))}
                 </AusweisListSection>
 
-                <AusweisListSection title="Optional fields">
+                <AusweisListSection title={t('AusweisReview.optionalHeader')}>
                   <Widget>
                     {optionalFields.map((field, i) => (
                       <Field.Selectable
@@ -266,8 +269,8 @@ export const AusweisRequestReview = () => {
       >
         <FooterContainerFAS>
           <AusweisButtons
-            submitLabel="Share"
-            cancelLabel="Ignore"
+            submitLabel={t('AusweisReview.proceedBtn')}
+            cancelLabel={t('Interaction.cancelBtn')}
             onSubmit={handleProceed}
             onCancel={handleIgnore}
           />
