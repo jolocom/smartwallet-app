@@ -11,7 +11,7 @@ import {
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import Permissions from 'react-native-permissions'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useIsFocused } from '@react-navigation/core'
 import branch from 'react-native-branch'
 
@@ -36,6 +36,11 @@ import { getIsAppLocked } from '~/modules/account/selectors'
 import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
+import { dismissLoader, setLoader } from '~/modules/loader/actions'
+import { LoaderTypes } from '~/modules/loader/types'
+import { getIsAusweisInteractionProcessed } from '~/modules/ausweis/selectors'
+import { scheduleToast } from '~/modules/toasts/actions'
+import { useToasts } from '~/hooks/toasts'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -44,10 +49,15 @@ const Camera = () => {
   const { t } = useTranslation()
   const { errorScreen } = useErrors()
   const { processInteraction } = useInteractionStart()
+  const dispatch = useDispatch()
   const isScreenFocused = useIsFocused()
+  const { scheduleErrorInfo } = useToasts()
 
   const isAppLocked = useSelector(getIsAppLocked)
   const interactionType = useSelector(getInteractionType)
+  const isAuseisInteractionProcessed = useSelector(
+    getIsAusweisInteractionProcessed,
+  )
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
   const shouldScan =
@@ -104,12 +114,34 @@ const Camera = () => {
     }, 300)
   }, [])
 
+  useEffect(() => {
+    if (isAuseisInteractionProcessed) {
+      dispatch(dismissLoader())
+    }
+  }, [isAuseisInteractionProcessed])
+
   const handleScan = async (e: { data: string }) => {
     try {
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
       const isUrl = await Linking.canOpenURL(e.data)
       if (isUrl && e.data.includes('jolocom.app.link')) {
+        dispatch(
+          setLoader({ msg: t('Loader.loading'), type: LoaderTypes.default }),
+        )
+
+        // NOTE: if the AusweisApp SDK returns BAD_STATE, we won't know of it in the scanner.
+        // As such, adding a timeout which will dismiss the loader if it's on for more than 20s.
+        setTimeout(() => {
+          if (isLoaderVisible) {
+            dispatch(dismissLoader())
+            scheduleErrorInfo(
+              new Error(
+                "The Ausweis interaction wasn't successfully processed. The loader was dismissed manually.",
+              ),
+            )
+          }
+        }, 20000)
         branch.openURL(e.data)
       } else {
         await processInteraction(e.data)
