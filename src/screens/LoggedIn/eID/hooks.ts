@@ -336,6 +336,9 @@ export const useTranslatedAusweisFields = () => {
 }
 
 export const useAusweisScanner = () => {
+  const { scheduleWarning } = useToasts()
+  const { cancelFlow } = useAusweisInteraction()
+  const { t } = useTranslation()
   const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
@@ -384,5 +387,24 @@ export const useAusweisScanner = () => {
     }
   }
 
-  return { showScanner, updateScanner, scannerParams }
+  const handleDeactivatedCard = () => {
+    updateScanner({
+      state: AusweisScannerState.failure,
+      onDone: () => {
+        scheduleWarning({
+          title: t('Toasts.ausweisFailedCheckTitle'),
+          message: t('Toasts.ausweisFailedCheckMsg'),
+          interact: {
+            label: t('Toasts.ausweisFailedCheckBtn'),
+            onInteract: () => {
+              cancelFlow()
+              navigation.navigate(ScreenNames.Identity)
+            },
+          },
+        })
+      },
+    })
+  }
+
+  return { showScanner, updateScanner, scannerParams, handleDeactivatedCard }
 }
