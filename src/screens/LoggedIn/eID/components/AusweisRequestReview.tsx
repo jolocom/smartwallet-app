@@ -42,6 +42,7 @@ import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import moment from 'moment'
 import { IS_ANDROID } from '~/utils/generic'
+import { useToasts } from '~/hooks/toasts'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
@@ -70,7 +71,9 @@ export const AusweisRequestReview = () => {
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const dispatch = useDispatch()
   const translateField = useTranslatedAusweisFields()
-  const { showScanner, updateScanner } = useAusweisScanner()
+  const { scheduleWarning } = useToasts()
+  const { showScanner, updateScanner, handleDeactivatedCard } =
+    useAusweisScanner()
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
@@ -100,6 +103,11 @@ export const AusweisRequestReview = () => {
     aa2Module.resetHandlers()
     //TODO: add badState handler and cancel
     aa2Module.setHandlers({
+      handleCardInfo: (card) => {
+        if (card?.deactivated && IS_ANDROID) {
+          handleDeactivatedCard()
+        }
+      },
       handleCardRequest: () => {
         if (IS_ANDROID) {
           showScanner(cancelInteraction)
