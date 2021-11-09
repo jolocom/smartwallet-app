@@ -135,8 +135,11 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (card?.deactivated && IS_ANDROID) {
-          handleDeactivatedCard()
+        if (IS_ANDROID && card) {
+          updateScanner({ state: AusweisScannerState.loading })
+          if (card?.deactivated) {
+            handleDeactivatedCard()
+          }
         }
       },
       handleCardRequest: () => {
@@ -200,13 +203,6 @@ export const AusweisPasscode = () => {
           })
         } else {
           canHandler()
-        }
-      },
-      handleCardInfo: (info) => {
-        if (IS_ANDROID) {
-          if (info) {
-            updateScanner({ state: AusweisScannerState.loading })
-          }
         }
       },
       /**
