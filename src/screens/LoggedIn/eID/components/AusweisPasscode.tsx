@@ -378,6 +378,15 @@ export const AusweisPasscode = () => {
       case AusweisPasscodeMode.CAN:
         screen = eIDScreens.CanInfo
         title = t('AusweisPasscode.canBtn')
+        break
+      case AusweisPasscodeMode.PIN:
+        screen = eIDScreens.ForgotPin
+        title = t('AusweisPasscode.pinForgotBtn')
+        break
+      case AusweisPasscodeMode.TRANSPORT_PIN:
+        screen = eIDScreens.AusweisTransportPinInfo
+        title = t('AusweisPasscode.transportPinBtn')
+        break
       default:
         break
     }
