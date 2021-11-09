@@ -172,21 +172,20 @@ export const useAusweisInteraction = () => {
     setCan: (can: string) => aa2Module.enterCan(can),
   }
 
-  const finishFlow = (message?: string) => {
-    if (message) {
-      scheduleWarning({
-        /**
-         * TODO: add translation
-         */
-        title: 'The flow aborted',
-        message,
+  const finishFlow = (url: string, message?: string) => {
+    return fetch(url)
+      .then((res) => {
+        if (!res['ok']) {
+          throw new Error(`could not send the request to the url: ${url}`)
+        }
+        if (!message) {
+          scheduleInfo({
+            title: t('Toasts.ausweisSuccessTitle'),
+            message: t('Toasts.ausweisSuccessMsg'),
+          })
+        }
       })
-    } else {
-      scheduleInfo({
-        title: t('Toasts.ausweisSuccessTitle'),
-        message: t('Toasts.ausweisSuccessMsg'),
-      })
-    }
+      .catch(scheduleErrorWarning)
   }
 
   const checkIfCardValid = (card: CardInfo) => {

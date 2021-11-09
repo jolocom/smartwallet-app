@@ -138,21 +138,25 @@ export const AusweisPasscode = () => {
           showScanner(cancelInteraction)
         }
       },
-      handleAuthFailed: (message: string) => {
-        finishFlow(message)
+      handleAuthFailed: (url: string, message: string) => {
+        if (Platform.OS === 'ios') {
+          closeAusweis()
+        }
+        finishFlow(url, message)
       },
-      handleAuthSuccess: () => {
+      handleAuthSuccess: (url: string) => {
         if (IS_ANDROID) {
-          updateScanner({
-            state: AusweisScannerState.success,
-            onDone: () => {
-              closeAusweis()
-              finishFlow()
-            },
+          finishFlow(url).then(() => {
+            updateScanner({
+              state: AusweisScannerState.success,
+              onDone: () => {
+                closeAusweis()
+              },
+            })
           })
         } else {
           closeAusweis()
-          finishFlow()
+          finishFlow(url)
         }
       },
       handlePinRequest: (card) => {

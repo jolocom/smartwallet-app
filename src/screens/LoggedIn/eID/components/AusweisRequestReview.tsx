@@ -141,14 +141,14 @@ export const AusweisRequestReview = () => {
           canHandler(card)
         }
       },
-      handleAuthFailed: () => {
+      handleAuthFailed: (url: string, message: string) => {
         /**
          * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
          */
         if (Platform.OS === 'ios') {
           closeAusweis()
         }
-        finishFlow()
+        finishFlow(url, message)
       },
     })
   }, [])
