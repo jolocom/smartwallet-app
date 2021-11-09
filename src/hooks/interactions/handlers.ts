@@ -67,9 +67,12 @@ export const useDeeplinkInteractions = () => {
           processInteraction(tokenValue)
           return
         } else if (eidValue) {
-          loader(async () => {
-            await processAusweisToken(eidValue)
-          })
+          loader(
+            async () => {
+              await processAusweisToken(eidValue)
+            },
+            { showSuccess: false, showFailed: false },
+          )
           return
         } else if (
           !params['+clicked_branch_link'] ||

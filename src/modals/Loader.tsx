@@ -17,7 +17,7 @@ import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { isLocalAuthSet } from '~/modules/account/selectors'
+import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const colors = {
@@ -284,9 +284,13 @@ const styles = StyleSheet.create({
 export default function () {
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
   const isAuthSet = useSelector(isLocalAuthSet)
+  const isAppLocked = useSelector(getIsAppLocked)
 
   // isVisible && isLocked && !isAuthSet => Logged out section
-  if (isLoaderVisible || (isLoaderVisible && !isAuthSet)) {
+  if (
+    (isLoaderVisible && !isAppLocked) ||
+    (isLoaderVisible && !isAuthSet && !isAppLocked)
+  ) {
     return <Loader />
   }
   return null
