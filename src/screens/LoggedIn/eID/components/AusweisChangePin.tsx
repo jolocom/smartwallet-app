@@ -1,13 +1,15 @@
-import { useIsFocused, useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/core'
 import React, { useCallback, useRef } from 'react'
 import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
+import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import { useDispatch } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import { setPopup } from '~/modules/appState/actions'
 
@@ -68,6 +70,7 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = useAusweisScanner()
   const dispatch = useDispatch()
   const isTransportPin = useRef(false)
+  const goBack = useGoBack()
 
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
@@ -114,7 +117,7 @@ const AusweisChangePin = () => {
     })
   }, [])
 
-  const setupHandlers = () => {
+  const setupHandlers = (handlers: Partial<EventHandlers> = {}) => {
     aa2Module.resetHandlers()
 
     aa2Module.setHandlers({
@@ -160,12 +163,22 @@ const AusweisChangePin = () => {
         }
       },
       handleChangePinCancel: () => {},
+      ...handlers,
     })
   }
 
   const handleChange5DigPin = () => {
     isTransportPin.current = true
-    setupHandlers()
+    setupHandlers({
+      handleCardRequest: () => {
+        if (IS_ANDROID) {
+          showScanner(() => {
+            cancelFlow()
+            goBack()
+          })
+        }
+      },
+    })
     navigation.navigate(ScreenNames.eId, {
       screen: eIDScreens.AusweisTransportWarning,
     })

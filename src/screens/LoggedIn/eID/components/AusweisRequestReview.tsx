@@ -45,8 +45,13 @@ import { IS_ANDROID } from '~/utils/generic'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
-  const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
-    useAusweisInteraction()
+  const {
+    acceptRequest,
+    cancelInteraction,
+    checkCardValidity,
+    finishFlow,
+    closeAusweis,
+  } = useAusweisInteraction()
   const {
     providerName,
     requiredFields,
@@ -136,18 +141,14 @@ export const AusweisRequestReview = () => {
           canHandler(card)
         }
       },
-      handleAuthResult: () => {
+      handleAuthFailed: (url: string, message: string) => {
         /**
          * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
          */
         if (Platform.OS === 'ios') {
-          /**
-           * NOTE: CANCEL should not be sent here;
-           * because the workflow by this time is
-           * aborted
-           */
           closeAusweis()
         }
+        finishFlow(url, message)
       },
     })
   }, [])
