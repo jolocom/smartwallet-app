@@ -1,5 +1,4 @@
 import { RouteProp, useIsFocused, useRoute } from '@react-navigation/core'
-import { useBackHandler } from '@react-native-community/hooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 import { setAusweisScannerKey } from '~/modules/ausweis/actions'
@@ -43,10 +42,6 @@ export const AusweisScanner = () => {
   useEffect(() => {
     dispatch(setAusweisScannerKey(isScreenFocused ? route.key : null))
   }, [isScreenFocused])
-
-  useBackHandler(() => {
-    return true
-  })
 
   const showAnimation = (value: Animated.Value) =>
     Animated.timing(value, {
