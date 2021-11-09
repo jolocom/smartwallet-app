@@ -68,8 +68,8 @@ export const useDeeplinkInteractions = () => {
           return
         } else if (eidValue) {
           loader(
-            async () => {
-              await processAusweisToken(eidValue)
+            () => {
+              return processAusweisToken(eidValue)
             },
             { showSuccess: false, showFailed: false },
           )

@@ -19,7 +19,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 import { getLoaderState } from '~/modules/loader/selectors'
-import { getInteractionType } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
@@ -36,11 +35,8 @@ import { getIsAppLocked } from '~/modules/account/selectors'
 import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
-import { dismissLoader, setLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
+import { dismissLoader } from '~/modules/loader/actions'
 import { getIsAusweisInteractionProcessed } from '~/modules/ausweis/selectors'
-import { scheduleToast } from '~/modules/toasts/actions'
-import { useToasts } from '~/hooks/toasts'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -51,17 +47,17 @@ const Camera = () => {
   const { processInteraction } = useInteractionStart()
   const dispatch = useDispatch()
   const isScreenFocused = useIsFocused()
-  const { scheduleErrorInfo } = useToasts()
 
   const isAppLocked = useSelector(getIsAppLocked)
-  const interactionType = useSelector(getInteractionType)
   const isAuseisInteractionProcessed = useSelector(
     getIsAusweisInteractionProcessed,
   )
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
+  const isFocused = useIsFocused()
+
   const shouldScan =
-    !interactionType && !isLoaderVisible && !isAppLocked && !errorScreen
+    isFocused && !isLoaderVisible && !isAppLocked && !errorScreen
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
