@@ -104,10 +104,6 @@ export const AusweisPasscode = () => {
       } else {
         setPinVariant(AusweisPasscodeMode.PIN)
       }
-      const errorText = `Wrong PIN, you used ${
-        ALL_EID_PIN_ATTEMPTS - card.retryCounter
-      }/${ALL_EID_PIN_ATTEMPTS} attempts`
-
       if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
         const errorText = t('Lock.errorMsg', {
           attempts: `${
@@ -148,17 +144,25 @@ export const AusweisPasscode = () => {
           showScanner(cancelInteraction)
         }
       },
-      handleAuthResult: (url) => {
+      handleAuthFailed: (url: string, message: string) => {
+        if (Platform.OS === 'ios') {
+          closeAusweis()
+        }
+        finishFlow(url, message)
+      },
+      handleAuthSuccess: (url: string) => {
         if (IS_ANDROID) {
           finishFlow(url).then(() => {
             updateScanner({
               state: AusweisScannerState.success,
-              onDone: closeAusweis,
+              onDone: () => {
+                closeAusweis()
+              },
             })
           })
         } else {
-          // TODO: at some point we should show a loader or smth
-          finishFlow(url).then(closeAusweis)
+          closeAusweis()
+          finishFlow(url)
         }
       },
       handlePinRequest: (card) => {

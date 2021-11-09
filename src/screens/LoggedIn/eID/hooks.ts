@@ -172,16 +172,17 @@ export const useAusweisInteraction = () => {
     setCan: (can: string) => aa2Module.enterCan(can),
   }
 
-  const finishFlow = (url: string) => {
+  const finishFlow = (url: string, message?: string) => {
     return fetch(url)
       .then((res) => {
-        if (res['ok']) {
+        if (!res['ok']) {
+          throw new Error(`could not send the request to the url: ${url}`)
+        }
+        if (!message) {
           scheduleInfo({
             title: t('Toasts.ausweisSuccessTitle'),
             message: t('Toasts.ausweisSuccessMsg'),
           })
-        } else {
-          scheduleErrorWarning(new Error(res['statusText']))
         }
       })
       .catch(scheduleErrorWarning)

@@ -5,3 +5,6 @@ export const getAusweisInteractionDetails = (state: RootReducerI) =>
 
 export const getAusweisScannerKey = (state: RootReducerI) =>
   state.ausweis.scannerKey
+
+export const getIsAusweisInteractionProcessed = (state: RootReducerI) =>
+  !!state.ausweis.details
