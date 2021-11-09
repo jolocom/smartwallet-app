@@ -1,3 +1,4 @@
+import { useBackHandler } from '@react-native-community/hooks'
 import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
@@ -35,6 +36,8 @@ const AusweisCardInfo = () => {
     onDismiss && onDismiss()
     goBack()
   }
+
+  useBackHandler(() => true)
 
   return (
     <ScreenContainer
