@@ -24,6 +24,7 @@ import {
 import { IS_ANDROID } from '~/utils/generic'
 import { setPopup } from '~/modules/appState/actions'
 import { useDispatch } from 'react-redux'
+import { useToasts } from '~/hooks/toasts'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -32,7 +33,8 @@ export const AusweisIdentity = () => {
   const navigation = useNavigation()
   const { cancelFlow } = useAusweisInteraction()
   const dispatch = useDispatch()
-  const { showScanner, updateScanner } = useAusweisScanner()
+  const { showScanner, updateScanner, handleDeactivatedCard } =
+    useAusweisScanner()
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
@@ -74,6 +76,11 @@ export const AusweisIdentity = () => {
   const setUpUnlockCardHandlers = () => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
+      handleCardInfo: (card) => {
+        if (card?.deactivated && IS_ANDROID) {
+          handleDeactivatedCard()
+        }
+      },
       handleCardRequest: () => {
         if (IS_ANDROID) {
           showScanner(cancelFlow)

@@ -71,7 +71,8 @@ export const AusweisPasscode = () => {
     useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
-  const { showScanner, updateScanner } = useAusweisScanner()
+  const { showScanner, updateScanner, handleDeactivatedCard } =
+    useAusweisScanner()
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')
@@ -137,6 +138,11 @@ export const AusweisPasscode = () => {
     aa2Module.resetHandlers()
     //TODO: add badState handler
     aa2Module.setHandlers({
+      handleCardInfo: (card) => {
+        if (card?.deactivated && IS_ANDROID) {
+          handleDeactivatedCard()
+        }
+      },
       handleCardRequest: () => {
         if (IS_ANDROID) {
           showScanner(cancelInteraction)
@@ -294,6 +300,7 @@ export const AusweisPasscode = () => {
   }, [pinVariant])
 
   const handleCardIsBlocked = () => {
+    navigation.goBack()
     navigation.dispatch(
       StackActions.replace(ScreenNames.TransparentModals, {
         screen: ScreenNames.AusweisCardInfo,

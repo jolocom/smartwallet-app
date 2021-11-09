@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { setPopup } from '~/modules/appState/actions'
 
@@ -65,7 +66,9 @@ const AusweisChangePin = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
-  const { showScanner, updateScanner } = useAusweisScanner()
+  const { showScanner, updateScanner, handleDeactivatedCard } =
+    useAusweisScanner()
+  const { scheduleWarning } = useToasts()
   const dispatch = useDispatch()
   const isTransportPin = useRef(false)
 
@@ -118,6 +121,11 @@ const AusweisChangePin = () => {
     aa2Module.resetHandlers()
 
     aa2Module.setHandlers({
+      handleCardInfo: (card) => {
+        if (card?.deactivated && IS_ANDROID) {
+          handleDeactivatedCard()
+        }
+      },
       handleCardRequest: () => {
         if (IS_ANDROID) {
           showScanner(cancelFlow)
