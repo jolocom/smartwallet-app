@@ -80,6 +80,8 @@ export const AusweisPasscode = () => {
     mode === AusweisPasscodeMode.PUK ? false : true,
   )
   const isTransportPin = useRef(false)
+  const canCounterRef = useRef(0)
+  const pukCounterRef = useRef(0)
 
   useEffect(() => {
     if (pinContext === AusweisPasscodeMode.TRANSPORT_PIN) {
@@ -115,6 +117,13 @@ export const AusweisPasscode = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
+      if (pukCounterRef.current > 0) {
+        setErrorText(
+          t('AusweisPasscode.pinWrongError', {
+            pinVariant: 'PUK',
+          }),
+        )
+      }
       if (shouldShowPukWarning.current) {
         navigation.navigate(eIDScreens.PukLock)
         shouldShowPukWarning.current = false
@@ -124,6 +133,13 @@ export const AusweisPasscode = () => {
     }
 
     const canHandler = () => {
+      if (canCounterRef.current > 0) {
+        setErrorText(
+          t('AusweisPasscode.pinWrongError', {
+            pinVariant: 'CAN',
+          }),
+        )
+      }
       setPinVariant(AusweisPasscodeMode.CAN)
     }
 
@@ -325,8 +341,10 @@ export const AusweisPasscode = () => {
     } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
       passcodeCommands.setPin(passcode)
     } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
+      canCounterRef.current++
       passcodeCommands.setCan(passcode)
     } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
+      pukCounterRef.current++
       try {
         await passcodeCommands.setPuk(passcode)
       } catch (e) {
