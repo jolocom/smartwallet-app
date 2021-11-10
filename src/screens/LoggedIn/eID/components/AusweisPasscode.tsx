@@ -48,8 +48,8 @@ const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
 
   useEffect(() => {
     if (Boolean(errorText)) {
-      setPinError(true)
-      setPinErrorText(errorText)
+      setPinError(true) // color error cells
+      setPinErrorText(errorText) // show error text
     }
   }, [errorText])
 
@@ -366,8 +366,9 @@ export const AusweisPasscode = () => {
       if (passcode === newPasscodeRef?.current) {
         aa2Module.setNewPin(passcode)
       } else {
-        updateScanner({ state: AusweisScannerState.failure, onDone: () => {} })
-        setErrorText(t('AusweisPasscode.pinMatchError'))
+        setTimeout(() => {
+          setErrorText(t('AusweisPasscode.pinMatchError'))
+        }, 100)
       }
     }
   }
