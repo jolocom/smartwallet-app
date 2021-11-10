@@ -7,10 +7,10 @@ import { PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
 import ResetBtn from './ResetBtn'
-import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
 import PasscodeDisable from './PasscodeDisable'
 import PasscodeAccessoryBtn from './PasscodeAccessoryBtn'
+import { useIsFocused } from '@react-navigation/core'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -25,9 +25,8 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    if (isFocused) {
-      setPinError(false)
-      setPin('')
+    if (!isFocused) {
+      setPinErrorText(null)
     }
   }, [isFocused])
 
@@ -55,15 +54,21 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     })()
   }, [pin, length])
 
-  // this will remove the error after 1000 ms
+  /**
+   * reset the error text after starting
+   * the process of re-entering pin
+   */
+  useEffect(() => {
+    if (pin.length > 0) {
+      setPinErrorText(null)
+    }
+  }, [pin])
+
+  // this resets the error (colors cells) 1000 ms
   useEffect(() => {
     let id: number | undefined
     if (pinError) {
       id = setTimeout(() => {
-        /**
-         * NOTE at this point pinAttemptsLeft is still an old value,
-         * therefore we compare with 1 not 0
-         */
         setPinError(false)
         setPin('')
       }, 1000)
@@ -86,7 +91,7 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
       pinErrorText,
       setPinErrorText,
     }),
-    [pin, setPin, pinError, pinSuccess, length],
+    [pin, setPin, pinError, pinErrorText, pinSuccess, length],
   )
 
   return <PasscodeContext.Provider value={contextValue} children={children} />

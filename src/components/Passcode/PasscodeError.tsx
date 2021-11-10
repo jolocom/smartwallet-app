@@ -7,8 +7,7 @@ import JoloText from '../JoloText'
 import { usePasscode } from './context'
 
 const PasscodeError = () => {
-  const { pinErrorText, pinError } = usePasscode()
-  if (!pinError) return null
+  const { pinErrorText } = usePasscode()
   return (
     <View style={{ position: 'absolute', top: 20 }}>
       <JoloText
