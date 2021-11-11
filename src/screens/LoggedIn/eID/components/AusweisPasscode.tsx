@@ -135,10 +135,19 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (IS_ANDROID && card) {
-          updateScanner({ state: AusweisScannerState.loading })
-          if (card?.deactivated) {
-            handleDeactivatedCard()
+        if (IS_ANDROID) {
+          if (card) {
+            if (card?.deactivated) {
+              handleDeactivatedCard()
+            } else {
+              updateScanner({ state: AusweisScannerState.loading })
+            }
+          } else {
+            /**
+             * When connection to the NFC tag was interrupted
+             * stop the loading
+             */
+            updateScanner({ state: AusweisScannerState.idle })
           }
         }
       },
