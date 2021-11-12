@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
@@ -29,7 +29,7 @@ export const CheckboxOption: React.FC<Props> = ({ onPress, description }) => {
       <JoloText
         size={JoloTextSizes.mini}
         color={Colors.white90}
-        customStyles={{ textAlign: 'left' }}
+        customStyles={{ textAlign: 'left', paddingRight: 24 }}
       >
         {description}
       </JoloText>
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.grey2,
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
   },
   radio: {
     width: 28,
