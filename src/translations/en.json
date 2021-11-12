@@ -83,8 +83,8 @@
         "addressLabel": "Address",
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
-        "headerAusweis": "ID card",
-        "headerCredentials": "Personal Info"
+        "headerAusweis": "Your Identity",
+        "headerCredentials": "Credentials"
     },
     "BottomBar": {
         "identity": "Identity",
@@ -502,13 +502,13 @@
         "validityLabel": "Validity"
     },
     "AusweisPasscode": {
-        "authPinHeader": "To allow identification enter your six digit eID PIN",
+        "authPinHeader": "Enter your PIN",
         "pinForgotBtn": "Forgot your PIN?",
-        "transportPinHeader": "Please enter your 5-digit PIN",
+        "transportPinHeader": "Enter your 5-digit PIN",
         "transportPinBtn": "Where can I find this?",
-        "canHeader": "For a third attempt, please first enter the six digit Card Access Number (CAN)",
+        "canHeader": "Enter your CAN",
         "canBtn": "Where to find CAN?",
-        "pukHeader": "To restore access to your card please enter the PUK number",
+        "pukHeader": "Enter your PUK",
         "pukBtn": "Where to find the PUK?",
         "newPinHeader": "Enter your new eID PIN",
         "repeatNewPinHeader": "Repeat your new eID PIN",
@@ -532,7 +532,7 @@
         "transportPinHeader": "Do you have a 5-digit PIN?",
         "transportPinSubheader": "You should have received it in the letter together with your card",
         "transportPinBtn": "Start the process",
-        "pinHeader": "Activate your 6-digit PIN code",
+        "pinHeader": "Change your 6-digit PIN code",
         "pinSubheader": "You can find it in the bottom right corner on the front side of your ID card",
         "pinBtn": "Start the process",
         "forgotHeader": "Can’t find any of this?",

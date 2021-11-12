@@ -83,8 +83,8 @@
         "addressLabel": "Adresse",
         "addClaimBtn": "Hinzufügen",
         "attributesMissingInfo": "Deine Infos sehen ziemlich leer aus\nErgänze sie für die zukünftigen Anwendungen",
-        "headerAusweis": "Online Ausweis",
-        "headerCredentials": "Persönliche Daten"
+        "headerAusweis": "Deine Identität",
+        "headerCredentials": "Nachweise"
     },
     "BottomBar": {
         "identity": "Identität",
@@ -431,7 +431,7 @@
     "Ausweis": {
         "birthName": "Geburtsname",
         "address": "Adresse",
-        "communityID": "",
+        "communityID": "Kommunal ID",
         "writeAddress": "Adresse eingeben",
         "residencePermitI": "Aufenthaltsgenehmigung",
         "familyName": "Familienname",
@@ -502,18 +502,18 @@
         "validityLabel": "Gültigkeit"
     },
     "AusweisPasscode": {
-        "authPinHeader": "Geben Sie Ihre sechsstellige eID-PIN ein um zuzustimmen",
+        "authPinHeader": "PIN eingeben",
         "pinForgotBtn": "PIN vergessen?",
-        "transportPinHeader": "Bitte 5-stelllige PIN eingeben",
+        "transportPinHeader": "5-stelllige PIN eingeben",
         "transportPinBtn": "Wo kann ich das finden?",
-        "canHeader": "Für einen dritten Versuch geben Sie bitte zuerst die sechsstellige Card Access Number (CAN) ein.",
+        "canHeader": "CAN eingeben",
         "canBtn": "Wo finde ich die CAN?",
-        "pukHeader": "Geben Sie die PUK-Nummer ein umIhre Karte wiederherzustellen",
+        "pukHeader": "PUK eingeben",
         "pukBtn": "Wo finde ich die PUK?",
         "newPinHeader": "Geben Sie Ihre neue eID PIN ein",
         "repeatNewPinHeader": "Wiederholen Sie Ihre neue eID PIN",
         "pinMatchError": "PIN Eingaben stimmen nicht überein",
-        "pinWrongError": ""
+        "pinWrongError": "Falsche ${pinVariant}"
     },
     "AusweisPukLock": {
         "header": "Ihre Karte ist gesperrt und Sie müssen zum entsperren den PUK-Code eingeben",
@@ -532,7 +532,7 @@
         "transportPinHeader": "Haben Sie eine 5-stellige PIN?",
         "transportPinSubheader": "Sie sollten diese im Brief gemeinsam mit Ihrer Karte erhalten haben",
         "transportPinBtn": "Prozess beginnen",
-        "pinHeader": "6-stelligen PIN Code aktivieren",
+        "pinHeader": "Ändere Deinen 6-Ziffern PIN Code",
         "pinSubheader": "Sie finden die CAN unten rechts auf der Vorderseite Ihres Ausweises",
         "pinBtn": "Prozess beginnen",
         "forgotHeader": "Sie finden nichts davon?",
