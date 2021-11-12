@@ -128,11 +128,13 @@ export const AusweisIdentity = () => {
   }
 
   const handleUnlockCard = () => {
-    if (Platform.OS === 'ios') {
-      dispatch(setPopup(true))
-    }
-    setUpUnlockCardHandlers()
-    aa2Module.changePin()
+    checkNfcSupport(() => {
+      if (Platform.OS === 'ios') {
+        dispatch(setPopup(true))
+      }
+      setUpUnlockCardHandlers()
+      aa2Module.changePin()
+    })
   }
 
   return (
