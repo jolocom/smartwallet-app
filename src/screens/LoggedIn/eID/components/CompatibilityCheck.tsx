@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ScrollView } from 'react-native'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -19,6 +19,7 @@ import BP from '~/utils/breakpoints'
 import BtnGroup from '~/components/BtnGroup'
 import { CheckboxOption } from '~/components/CheckboxOption'
 import useTranslation from '~/hooks/useTranslation'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 const Header: React.FC = ({ children }) => (
   <JoloText
@@ -67,7 +68,13 @@ export const CompatibilityCheck = () => {
       backgroundColor={Colors.mainDark}
       customStyles={{ justifyContent: 'flex-start' }}
     >
-      <View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        overScrollMode={'never'}
+        contentContainerStyle={{
+          paddingBottom: 230,
+        }}
+      >
         <JoloText
           kind={JoloTextKind.title}
           color={Colors.error}
@@ -120,14 +127,12 @@ export const CompatibilityCheck = () => {
             </Description>
           </View>
         </View>
-      </View>
-      <View style={styles.bottomContainer}>
-        <View style={{ paddingHorizontal: 20 }}>
-          <CheckboxOption
-            description={t('AusweisCompatibility.skipBtn')}
-            onPress={handleSkip}
-          />
-        </View>
+      </ScrollView>
+      <AbsoluteBottom customStyles={{ backfaceVisibility: 'hidden' }}>
+        <CheckboxOption
+          description={t('AusweisCompatibility.skipBtn')}
+          onPress={handleSkip}
+        />
         <BtnGroup customStyles={{ marginTop: 32 }}>
           <AusweisButtons
             submitLabel={t('AusweisCompatibility.proceedBtn')}
@@ -136,7 +141,7 @@ export const CompatibilityCheck = () => {
             onCancel={handleIgnore}
           />
         </BtnGroup>
-      </View>
+      </AbsoluteBottom>
     </ScreenContainer>
   )
 }
@@ -166,7 +171,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   bottomContainer: {
-    flex: 1,
+    position: 'absolute',
+    bottom: 12,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
