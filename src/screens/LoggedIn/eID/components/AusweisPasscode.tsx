@@ -30,7 +30,7 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
-import { useAusweisInteraction, useAusweisScanner } from '../hooks'
+import { useAusweisInteraction, useAusweisScanner, useCheckNFC } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
@@ -92,6 +92,7 @@ export const AusweisPasscode = () => {
     useAusweisInteraction()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
+  const { checkNfcSupport } = useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')
@@ -355,46 +356,48 @@ export const AusweisPasscode = () => {
     )
   }
 
-  const sendPasscodeCommand = async (passcode: string) => {
-    if (Platform.OS === 'ios') {
-      dispatch(setPopup(true))
-    }
-    setErrorText(null)
-    if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
-      passcodeCommands.setPin(passcode)
-    } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
-      passcodeCommands.setPin(passcode)
-    } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
-      canCounterRef.current++
-      passcodeCommands.setCan(passcode)
-    } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
-      pukCounterRef.current++
-      try {
-        await passcodeCommands.setPuk(passcode)
-      } catch (e) {
-        if (e === CardError.cardIsBlocked) {
-          if (IS_ANDROID) {
-            updateScanner({
-              state: AusweisScannerState.failure,
-              onDone: handleCardIsBlocked,
-            })
-          } else {
-            handleCardIsBlocked()
+  const sendPasscodeCommand = (passcode: string) => {
+    return checkNfcSupport(async () => {
+      if (Platform.OS === 'ios') {
+        dispatch(setPopup(true))
+      }
+      setErrorText(null)
+      if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
+        passcodeCommands.setPin(passcode)
+      } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
+        passcodeCommands.setPin(passcode)
+      } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
+        canCounterRef.current++
+        passcodeCommands.setCan(passcode)
+      } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
+        pukCounterRef.current++
+        try {
+          await passcodeCommands.setPuk(passcode)
+        } catch (e) {
+          if (e === CardError.cardIsBlocked) {
+            if (IS_ANDROID) {
+              updateScanner({
+                state: AusweisScannerState.failure,
+                onDone: handleCardIsBlocked,
+              })
+            } else {
+              handleCardIsBlocked()
+            }
           }
         }
+      } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
+        newPasscodeRef.current = passcode
+        setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
+      } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
+        if (passcode === newPasscodeRef?.current) {
+          aa2Module.setNewPin(passcode)
+        } else {
+          setTimeout(() => {
+            setErrorText(t('AusweisPasscode.pinMatchError'))
+          }, 100)
+        }
       }
-    } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
-      newPasscodeRef.current = passcode
-      setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
-    } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-      if (passcode === newPasscodeRef?.current) {
-        aa2Module.setNewPin(passcode)
-      } else {
-        setTimeout(() => {
-          setErrorText(t('AusweisPasscode.pinMatchError'))
-        }, 100)
-      }
-    }
+    })
   }
 
   const getPasscodeLength = () => {

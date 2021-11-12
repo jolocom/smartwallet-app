@@ -19,7 +19,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { IS_ANDROID } from '~/utils/generic'
 
-import { useAusweisInteraction, useAusweisScanner } from '../hooks'
+import { useAusweisInteraction, useAusweisScanner, useCheckNFC } from '../hooks'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 
 interface WhateverProps {
@@ -74,6 +74,7 @@ const AusweisChangePin = () => {
   const dispatch = useDispatch()
   const isTransportPin = useRef(false)
   const goBack = useGoBack()
+  const { checkNfcSupport } = useCheckNFC()
 
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
@@ -176,28 +177,32 @@ const AusweisChangePin = () => {
   }
 
   const handleChange5DigPin = () => {
-    isTransportPin.current = true
-    setupHandlers({
-      handleCardRequest: () => {
-        if (IS_ANDROID) {
-          showScanner(() => {
-            cancelFlow()
-            goBack()
-          })
-        }
-      },
-    })
-    navigation.navigate(ScreenNames.eId, {
-      screen: eIDScreens.AusweisTransportWarning,
+    checkNfcSupport(() => {
+      isTransportPin.current = true
+      setupHandlers({
+        handleCardRequest: () => {
+          if (IS_ANDROID) {
+            showScanner(() => {
+              cancelFlow()
+              goBack()
+            })
+          }
+        },
+      })
+      navigation.navigate(ScreenNames.eId, {
+        screen: eIDScreens.AusweisTransportWarning,
+      })
     })
   }
   const handleChange6DigPin = () => {
-    isTransportPin.current = false
-    setupHandlers()
-    if (Platform.OS === 'ios') {
-      dispatch(setPopup(true))
-    }
-    aa2Module.changePin()
+    checkNfcSupport(() => {
+      isTransportPin.current = false
+      setupHandlers()
+      if (Platform.OS === 'ios') {
+        dispatch(setPopup(true))
+      }
+      aa2Module.changePin()
+    })
   }
 
   const handlePreviewAuthorityInfo = () => {

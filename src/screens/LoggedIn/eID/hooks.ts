@@ -45,8 +45,8 @@ export const useCheckNFC = () => {
     }
   }
 
-  const checkNfcSupport = (onSuccess: () => void) => {
-    nfcCheck()
+  const checkNfcSupport = (onSuccess: () => void | PromiseLike<void>) => {
+    return nfcCheck()
       .then(onSuccess)
       .catch((e) => {
         if (e.message === SWErrorCodes.SWNfcNotSupported) {

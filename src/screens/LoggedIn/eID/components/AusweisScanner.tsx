@@ -16,6 +16,7 @@ import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
 import { useDispatch } from 'react-redux'
 import useTranslation from '~/hooks/useTranslation'
+import { useCheckNFC } from '../hooks'
 
 /**
  * TODO:
@@ -36,12 +37,28 @@ export const AusweisScanner = () => {
   const loadingOpacityValue = useRef(new Animated.Value(0)).current
   const [animationState, setAnimationState] = useState(AusweisScannerState.idle)
   const dispatch = useDispatch()
+  const { checkNfcSupport } = useCheckNFC()
 
   const isScreenFocused = useIsFocused()
 
   useEffect(() => {
     dispatch(setAusweisScannerKey(isScreenFocused ? route.key : null))
   }, [isScreenFocused])
+
+  /**
+   * Note:
+   * In case user has disabled NFC when the scanner is on;
+   * we don't have a listener for the NFC enabled, therefore,
+   * running it with interval
+   */
+  useEffect(() => {
+    const id = setInterval(() => {
+      checkNfcSupport(() => {})
+    }, 7000)
+    return () => {
+      clearInterval(id)
+    }
+  }, [])
 
   const showAnimation = (value: Animated.Value) =>
     Animated.timing(value, {
