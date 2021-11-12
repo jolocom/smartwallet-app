@@ -75,7 +75,12 @@ const FieldDetails = () => {
                   {title}
                 </JoloText>
               </Collapsible.Title>
-              <Block customStyle={{ backgroundColor: Colors.white }}>
+              <Block
+                customStyle={{
+                  backgroundColor: Colors.white,
+                  marginBottom: 16,
+                }}
+              >
                 {photo && (
                   <Image source={{ uri: photo }} style={styles.photo} />
                 )}
