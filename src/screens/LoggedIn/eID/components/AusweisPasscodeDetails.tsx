@@ -1,4 +1,5 @@
-import { useNavigation } from '@react-navigation/core'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { StackActions } from '@react-navigation/routers'
 import React from 'react'
 import { View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -7,18 +8,24 @@ import Collapsible from '~/components/Collapsible'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
-import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
+import { AusweisStackParamList } from '..'
+import { eIDScreens } from '../types'
 
 export const AusweisPasscodeDetails = () => {
   const { top } = useSafeArea()
   const { t } = useTranslation()
   const navigation = useNavigation()
+  const { params } =
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.PasscodeDetails>>()
+  const { onDismiss } = params
 
   const handlePasscodeSettings = () => {
-    // NOTE: This will cancel the flow right now. Maybe AusweisChangePin should
-    // be in the eID stack. This will also fix the navigation issue with the scanner
-    navigation.navigate(ScreenNames.AusweisChangePin)
+    onDismiss && onDismiss()
+    // Navigate to the InteractionSheet
+    navigation.dispatch(StackActions.popToTop())
+    // Replace InteractionSheet with AusweisChangePin
+    navigation.dispatch(StackActions.replace(eIDScreens.AusweisChangePin))
   }
 
   return (

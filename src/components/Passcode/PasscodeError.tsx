@@ -9,7 +9,12 @@ import { usePasscode } from './context'
 const PasscodeError = () => {
   const { pinErrorText } = usePasscode()
   return (
-    <View style={{ position: 'absolute', top: 20 }}>
+    <View
+      style={{
+        position: 'absolute',
+        top: BP({ default: 20, small: 12 }),
+      }}
+    >
       <JoloText
         size={JoloTextSizes.mini}
         color={Colors.error}

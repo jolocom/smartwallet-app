@@ -118,6 +118,7 @@ export const useAusweisInteraction = () => {
 
       dispatch(setAusweisInteractionDetails(requestData))
     } catch (e) {
+      cancelFlow()
       console.warn(e)
       scheduleErrorWarning(e)
     }
@@ -176,7 +177,8 @@ export const useAusweisInteraction = () => {
     return fetch(url)
       .then((res) => {
         if (!res['ok']) {
-          throw new Error(`could not send the request to the url: ${url}`)
+          scheduleErrorWarning(new Error(message))
+          console.warn(`could not send the request to the url: ${url}`)
         }
         if (!message) {
           scheduleInfo({

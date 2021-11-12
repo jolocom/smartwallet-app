@@ -58,7 +58,7 @@ const MainTabs = () => {
 
   return (
     <MainTabsNavigator.Navigator
-      initialRouteName={ScreenNames.Documents}
+      initialRouteName={ScreenNames.Identity}
       tabBar={(props: BottomTabBarProps) => {
         return <BottomBar {...props} />
       }}

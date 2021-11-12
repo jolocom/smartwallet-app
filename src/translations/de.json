@@ -492,7 +492,7 @@
         "subheader": "Wählen Sie zum fortfahren die von ${serviceName} angeforderten Attribute aus",
         "providerBtn": "Anbieter Info",
         "mandatoryHeader": "Pflichtfelder",
-        "optionalHeader": "freiwillige Angabe",
+        "optionalHeader": "Freiwillige Angabe",
         "proceedBtn": "Teilen"
     },
     "AusweisProvider": {

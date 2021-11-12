@@ -36,7 +36,10 @@ import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
 import { dismissLoader } from '~/modules/loader/actions'
-import { getIsAusweisInteractionProcessed } from '~/modules/ausweis/selectors'
+import {
+  getAusweisScannerKey,
+  getIsAusweisInteractionProcessed,
+} from '~/modules/ausweis/selectors'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -47,6 +50,8 @@ const Camera = () => {
   const { processInteraction } = useInteractionStart()
   const dispatch = useDispatch()
   const isScreenFocused = useIsFocused()
+
+  const ausweisScannerKey = useSelector(getAusweisScannerKey)
 
   const isAppLocked = useSelector(getIsAppLocked)
   const isAuseisInteractionProcessed = useSelector(
@@ -142,6 +147,12 @@ const Camera = () => {
   const handleLocalPermissionPress = () => {
     Permissions.openSettings()
   }
+
+  /**
+   * NOTE:
+   * when the camera is on NFC scanner doesn't work;
+   */
+  if (ausweisScannerKey) return null
 
   return (
     <ScreenContainer isFullscreen backgroundColor={Colors.black}>
