@@ -287,10 +287,7 @@ export default function () {
   const isAppLocked = useSelector(getIsAppLocked)
 
   // isVisible && isLocked && !isAuthSet => Logged out section
-  if (
-    (isLoaderVisible && !isAppLocked) ||
-    (isLoaderVisible && !isAuthSet && !isAppLocked)
-  ) {
+  if ((isLoaderVisible && !isAppLocked) || (isLoaderVisible && !isAuthSet)) {
     return <Loader />
   }
   return null
