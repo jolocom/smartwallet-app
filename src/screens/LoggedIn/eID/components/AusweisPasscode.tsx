@@ -491,7 +491,7 @@ export const AusweisPasscode = () => {
             <Passcode.Error />
           </View>
         </Passcode.Container>
-        <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
+        <Passcode.Container customStyles={{ justifyContent: 'center' }}>
           {renderAccessoryBtn()}
           <Passcode.Keyboard />
         </Passcode.Container>
