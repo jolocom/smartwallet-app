@@ -512,7 +512,8 @@
         "pukBtn": "Where to find the PUK?",
         "newPinHeader": "Enter your new eID PIN",
         "repeatNewPinHeader": "Repeat your new eID PIN",
-        "pinMatchError": "PINs don't match"
+        "pinMatchError": "PINs don't match",
+        "pinWrongError": "Wrong ${pinVariant}"
     },
     "AusweisPukLock": {
         "header": "Your card is locked now and you have to introduce the PUK code to unlock it",

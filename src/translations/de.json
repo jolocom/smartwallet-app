@@ -512,7 +512,8 @@
         "pukBtn": "Wo finde ich die PUK?",
         "newPinHeader": "Geben Sie Ihre neue eID PIN ein",
         "repeatNewPinHeader": "Wiederholen Sie Ihre neue eID PIN",
-        "pinMatchError": "PIN Eingaben stimmen nicht überein"
+        "pinMatchError": "PIN Eingaben stimmen nicht überein",
+        "pinWrongError": ""
     },
     "AusweisPukLock": {
         "header": "Ihre Karte ist gesperrt und Sie müssen zum entsperren den PUK-Code eingeben",

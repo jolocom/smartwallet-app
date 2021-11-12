@@ -10,17 +10,20 @@ import { aa2Module } from 'react-native-aa2-sdk'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
+import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { usePasscode } from '~/components/Passcode/context'
-
-import { AusweisStackParamList } from '..'
 import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
+import { setPopup } from '~/modules/appState/actions'
+import { useRevertToInitialState } from '~/hooks/generic'
+
+import { AusweisStackParamList } from '..'
 import {
   AusweisPasscodeMode,
   AusweisScannerState,
@@ -28,30 +31,37 @@ import {
   eIDScreens,
 } from '../types'
 import { useAusweisInteraction, useAusweisScanner } from '../hooks'
-import { setPopup } from '~/modules/appState/actions'
-import { useDispatch } from 'react-redux'
+import { IAccessoryBtnProps } from '~/components/Passcode/types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
 
 interface PasscodeErrorSetterProps {
   errorText: string | null
+  runInputReset: boolean
 }
 /**
  * NOTE:
  * this component can only be used inside Passcode context
  */
-const PasscodeErrorSetter: React.FC<PasscodeErrorSetterProps> = ({
+const PasscodeGlue: React.FC<PasscodeErrorSetterProps> = ({
   errorText,
+  runInputReset,
 }) => {
-  const { setPinError, setPinErrorText } = usePasscode()
+  const { setPinError, setPinErrorText, setPin } = usePasscode()
 
   useEffect(() => {
     if (Boolean(errorText)) {
-      setPinError(true)
-      setPinErrorText(errorText)
+      setPinError(true) // color error cells
+      setPinErrorText(errorText) // show error text
     }
   }, [errorText])
+
+  useEffect(() => {
+    if (runInputReset) {
+      setPin('')
+    }
+  }, [runInputReset])
 
   return null
 }
@@ -67,10 +77,19 @@ export const AusweisPasscode = () => {
 
   const { scheduleInfo, scheduleErrorWarning } = useToasts()
 
-  const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
-    useAusweisInteraction()
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
+  const [runInputReset, resetInput] = useState(false) // value to reset verification pin
+
+  /**
+   * Reverts back flag for resetting verification pin to make sure,
+   * the prop 'runInputReset' is updated, so local PasscodeGlue
+   * state can react on those changes
+   */
+  useRevertToInitialState(runInputReset, resetInput)
+
+  const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
+    useAusweisInteraction()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
 
@@ -80,6 +99,8 @@ export const AusweisPasscode = () => {
     mode === AusweisPasscodeMode.PUK ? false : true,
   )
   const isTransportPin = useRef(false)
+  const canCounterRef = useRef(0)
+  const pukCounterRef = useRef(0)
 
   useEffect(() => {
     if (pinContext === AusweisPasscodeMode.TRANSPORT_PIN) {
@@ -115,6 +136,13 @@ export const AusweisPasscode = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
+      if (pukCounterRef.current > 0) {
+        setErrorText(
+          t('AusweisPasscode.pinWrongError', {
+            pinVariant: 'PUK',
+          }),
+        )
+      }
       if (shouldShowPukWarning.current) {
         navigation.navigate(eIDScreens.PukLock)
         shouldShowPukWarning.current = false
@@ -124,6 +152,13 @@ export const AusweisPasscode = () => {
     }
 
     const canHandler = () => {
+      if (canCounterRef.current > 0) {
+        setErrorText(
+          t('AusweisPasscode.pinWrongError', {
+            pinVariant: 'CAN',
+          }),
+        )
+      }
       setPinVariant(AusweisPasscodeMode.CAN)
     }
 
@@ -330,8 +365,10 @@ export const AusweisPasscode = () => {
     } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
       passcodeCommands.setPin(passcode)
     } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
+      canCounterRef.current++
       passcodeCommands.setCan(passcode)
     } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
+      pukCounterRef.current++
       try {
         await passcodeCommands.setPuk(passcode)
       } catch (e) {
@@ -353,8 +390,9 @@ export const AusweisPasscode = () => {
       if (passcode === newPasscodeRef?.current) {
         aa2Module.setNewPin(passcode)
       } else {
-        updateScanner({ state: AusweisScannerState.failure, onDone: () => {} })
-        setErrorText(t('AusweisPasscode.pinMatchError'))
+        setTimeout(() => {
+          setErrorText(t('AusweisPasscode.pinMatchError'))
+        }, 100)
       }
     }
   }
@@ -383,37 +421,44 @@ export const AusweisPasscode = () => {
   }
 
   const renderAccessoryBtn = () => {
-    let screen: eIDScreens | undefined
-    let title: string | undefined
+    let props: IAccessoryBtnProps = {
+      title: '',
+      onPress: () => {},
+    }
+    let { title, onPress } = props
+
+    const handleNavigate = navigation.navigate
 
     switch (pinVariant) {
       case AusweisPasscodeMode.PUK:
-        screen = eIDScreens.PukInfo
         title = t('AusweisPasscode.pukBtn')
+        onPress = () => handleNavigate(eIDScreens.PukInfo)
         break
       case AusweisPasscodeMode.CAN:
-        screen = eIDScreens.CanInfo
         title = t('AusweisPasscode.canBtn')
+        onPress = () => handleNavigate(eIDScreens.CanInfo)
         break
       case AusweisPasscodeMode.PIN:
-        screen = eIDScreens.ForgotPin
         title = t('AusweisPasscode.pinForgotBtn')
+        onPress = () => handleNavigate(eIDScreens.ForgotPin)
         break
       case AusweisPasscodeMode.TRANSPORT_PIN:
-        screen = eIDScreens.AusweisTransportPinInfo
         title = t('AusweisPasscode.transportPinBtn')
+        onPress = () => handleNavigate(eIDScreens.AusweisTransportPinInfo)
+        break
+      case AusweisPasscodeMode.VERIFY_NEW_PIN:
+        title = t('VerifyPasscode.resetBtn')
+        onPress = () => {
+          resetInput(true)
+          setPinVariant(AusweisPasscodeMode.NEW_PIN)
+        }
         break
       default:
         break
     }
 
-    if (screen && title) {
-      return (
-        <Passcode.AccessoryBtn
-          title={title}
-          onPress={() => navigation.navigate(screen!)}
-        />
-      )
+    if (title) {
+      return <Passcode.AccessoryBtn title={title} onPress={onPress} />
     }
 
     return null
@@ -429,7 +474,7 @@ export const AusweisPasscode = () => {
       }}
     >
       <Passcode onSubmit={sendPasscodeCommand} length={getPasscodeLength()}>
-        <PasscodeErrorSetter errorText={errorText} />
+        <PasscodeGlue errorText={errorText} runInputReset={runInputReset} />
         <Passcode.Container
           customStyles={{
             marginTop: BP({ default: 0, medium: 8, large: 36 }),
