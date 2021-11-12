@@ -118,6 +118,7 @@ export const useAusweisInteraction = () => {
 
       dispatch(setAusweisInteractionDetails(requestData))
     } catch (e) {
+      cancelFlow()
       console.warn(e)
       scheduleErrorWarning(e)
     }
