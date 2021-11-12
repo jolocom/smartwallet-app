@@ -480,7 +480,9 @@ export const AusweisPasscode = () => {
             marginTop: BP({ default: 0, medium: 8, large: 36 }),
           }}
         >
-          <Passcode.Header title={title} errorTitle={title} />
+          <View style={{ justifyContent: 'center', flex: 1 }}>
+            <Passcode.Header title={title} errorTitle={title} />
+          </View>
           <View style={{ paddingHorizontal: 8 }}>
             <Passcode.Input
               cellColor={Colors.chisinauGrey}
