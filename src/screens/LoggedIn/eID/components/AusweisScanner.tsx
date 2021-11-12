@@ -54,7 +54,7 @@ export const AusweisScanner = () => {
   useEffect(() => {
     const id = setInterval(() => {
       checkNfcSupport(() => {})
-    }, 7000)
+    }, 10000)
     return () => {
       clearInterval(id)
     }
