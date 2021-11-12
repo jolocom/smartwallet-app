@@ -36,7 +36,7 @@ const Description: React.FC = ({ children }) => (
 export const CompatibilityCheck = () => {
   const { t } = useTranslation()
   const redirect = useRedirect()
-  const { cancelInteraction } = useAusweisInteraction()
+  const { cancelInteraction, cancelFlow } = useAusweisInteraction()
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
   const { setShouldSkip } = useAusweisSkipCompatibility()
 
@@ -46,7 +46,9 @@ export const CompatibilityCheck = () => {
 
   const handleShowPinInstructions = () => {
     // @ts-expect-error
-    redirect(eIDScreens.PasscodeDetails)
+    redirect(eIDScreens.PasscodeDetails, {
+      onDismiss: cancelFlow,
+    })
   }
 
   const handleSubmit = () => {

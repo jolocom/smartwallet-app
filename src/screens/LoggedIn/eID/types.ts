@@ -15,7 +15,7 @@ export enum eIDScreens {
   PukInfo = 'PukInfo',
   AusweisTransportWarning = 'AusweisTransportWarning',
   AusweisTransportPinInfo = 'AusweisTransportPinInfo',
-  AusweisChangePin = 'AusweisChangePin'
+  AusweisChangePin = 'AusweisChangePin',
 }
 
 export enum AA2Messages {
@@ -45,6 +45,10 @@ export interface AusweisPasscodeProps {
    */
   pinContext?: AusweisPasscodeMode.TRANSPORT_PIN | AusweisPasscodeMode.PIN
   handlers?: Partial<EventHandlers>
+}
+
+export interface AusweisPasscodeDetailsParams {
+  onDismiss?: () => void
 }
 
 export enum AusweisFields {
