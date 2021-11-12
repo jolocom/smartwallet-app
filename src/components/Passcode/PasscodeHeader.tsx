@@ -14,7 +14,7 @@ const PasscodeHeader: React.FC<IPasscodeHeaderProps> = ({
     <JoloText
       kind={JoloTextKind.title}
       color={Colors.white90}
-      customStyles={{ marginBottom: 32 }}
+      customStyles={{ marginBottom: 16 }}
     >
       {displayedTitle}
     </JoloText>

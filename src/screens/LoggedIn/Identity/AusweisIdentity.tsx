@@ -137,7 +137,7 @@ export const AusweisIdentity = () => {
 
   return (
     <View
-      style={{ marginBottom: BP({ large: 0, default: 80 }) }}
+      style={{ marginBottom: BP({ large: 0, default: 40 }) }}
       testID="home-ausweis-identity"
     >
       <View style={styles.cardContainer}>
@@ -202,8 +202,10 @@ const styles = StyleSheet.create({
   btn: {
     borderWidth: 1,
     borderColor: Colors.borderGray20,
+    marginVertical: 1,
   },
   btnContainer: {
-    marginTop: BP({ default: 36, large: 84 }),
+    marginTop: BP({ default: 28, large: 84 }),
+    paddingVertical: 8,
   },
 })
