@@ -83,8 +83,8 @@
         "addressLabel": "Address",
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
-        "headerAusweis": "ID card",
-        "headerCredentials": "Personal Info"
+        "headerAusweis": "Your Identity",
+        "headerCredentials": "Credentials"
     },
     "BottomBar": {
         "identity": "Identity",
@@ -502,13 +502,13 @@
         "validityLabel": "Validity"
     },
     "AusweisPasscode": {
-        "authPinHeader": "To allow identification enter your six digit eID PIN",
+        "authPinHeader": "Enter your PIN",
         "pinForgotBtn": "Forgot your PIN?",
-        "transportPinHeader": "Please enter your 5-digit PIN",
+        "transportPinHeader": "Enter your 5-digit PIN",
         "transportPinBtn": "Where can I find this?",
-        "canHeader": "For a third attempt, please first enter the six digit Card Access Number (CAN)",
+        "canHeader": "Enter your CAN",
         "canBtn": "Where to find CAN?",
-        "pukHeader": "To restore access to your card please enter the PUK number",
+        "pukHeader": "Enter your PUK",
         "pukBtn": "Where to find the PUK?",
         "newPinHeader": "Enter your new eID PIN",
         "repeatNewPinHeader": "Repeat your new eID PIN",
@@ -532,7 +532,7 @@
         "transportPinHeader": "Do you have a 5-digit PIN?",
         "transportPinSubheader": "You should have received it in the letter together with your card",
         "transportPinBtn": "Start the process",
-        "pinHeader": "Activate your 6-digit PIN code",
+        "pinHeader": "Change your 6-digit PIN code",
         "pinSubheader": "You can find it in the bottom right corner on the front side of your ID card",
         "pinBtn": "Start the process",
         "forgotHeader": "Can’t find any of this?",
@@ -542,7 +542,7 @@
     "AusweisPinInfo": {
         "header": "PIN information",
         "description": "The Personal Identification Number (PIN) is chosen by you and is required for every use of the online elD function. \nYou can change it anytime and indefinitely if you know your valid PIN. For your six-digit PIN choose a combination of numbers, that is not easy to guess, neither \"123456\" nor your birth date, or any other numbers printed on the ID card. If you are no longer aware of your valid PIN, you will need to contact your responsible authority to renew your PIN.\n\nWhen changing the PIN for the first time, please use the five-digit Transport PIN. You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory",
-        "btn": "Update my pin"
+        "btn": "Change my pin"
     },
     "AusweisScanner": {
         "header": "Ready to scan",
