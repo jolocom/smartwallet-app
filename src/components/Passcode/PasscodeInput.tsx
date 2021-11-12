@@ -87,7 +87,7 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
               styles.inputContainer,
               {
                 ...(line !== 0 && {
-                  marginTop: 12,
+                  marginTop: 3,
                 }),
               },
             ]}
@@ -123,8 +123,7 @@ const styles = StyleSheet.create({
   display: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 2,
-    marginVertical: 2,
+    marginHorizontal: 1.5,
     flex: 1,
     aspectRatio: CELL_ASPECT_RATIO,
     borderRadius: 11,
