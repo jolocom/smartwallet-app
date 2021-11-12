@@ -229,7 +229,12 @@ export const AusweisRequestReview = () => {
                 <InteractionTitle label={t('Ausweis.header')} />
               </Collapsible.Title>
               <AusweisHeaderDescription>
-                {t('AusweisReview.subheader', { serviceName: providerName })}
+                {t('AusweisReview.subheader', {
+                  serviceName: providerName,
+                  interpolation: {
+                    escapeValue: false,
+                  },
+                })}
               </AusweisHeaderDescription>
               <Btn
                 type={BtnTypes.septenary}
