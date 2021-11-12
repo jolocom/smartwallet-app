@@ -29,8 +29,13 @@ import {
   AusweisScannerState,
   CardInfoMode,
   eIDScreens,
+  IAusweisRequest,
 } from '../types'
-import { useAusweisInteraction, useAusweisScanner } from '../hooks'
+import {
+  useAusweisContext,
+  useAusweisInteraction,
+  useAusweisScanner,
+} from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
@@ -71,6 +76,7 @@ export const AusweisPasscode = () => {
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
   const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
+  const ausweisContext = useAusweisContext()
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -88,7 +94,7 @@ export const AusweisPasscode = () => {
    */
   useRevertToInitialState(runInputReset, resetInput)
 
-  const { passcodeCommands, finishFlow, closeAusweis, cancelInteraction } =
+  const { passcodeCommands, finishFlow, closeAusweis, cancelFlow } =
     useAusweisInteraction()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
@@ -188,7 +194,7 @@ export const AusweisPasscode = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelInteraction)
+          showScanner(cancelFlow)
         }
       },
       handleAuthFailed: (url: string, message: string) => {
@@ -253,34 +259,18 @@ export const AusweisPasscode = () => {
        * @RUN_CHANGE_PIN
        */
       handleChangePinCancel: () => {
-        if (IS_ANDROID) {
-          updateScanner({
-            /**
-             * NOTE:
-             * this is confusing UX,
-             * we show big success icon (indicating successful scanning process),
-             * and then toast that pin wasn't changed
-             */
-            state: AusweisScannerState.success,
-            onDone: () => {
-              closeAusweis()
-              scheduleErrorWarning(
-                new Error(
-                  'Failed to change the eID PIN. The CHANGE_PIN flow was canceled by AusweisApp2',
-                ),
-              )
-            },
-          })
-        } else {
-          closeAusweis()
-        }
+        /**
+         * NOTE:
+         * AusweisChangePin screen is part of the eID stack;
+         */
+        navigation.dispatch(StackActions.popToTop())
       },
       /**
        * @RUN_CHANGE_PIN
        */
       handleChangePinSuccess: () => {
         const completeChangePinFlow = () => {
-          closeAusweis()
+          navigation.dispatch(StackActions.popToTop())
           scheduleInfo({
             title: t('Toasts.ausweisChangePinSuccessHeader'),
             message: t('Toasts.ausweisChangePinSuccessMsg'),
@@ -464,11 +454,41 @@ export const AusweisPasscode = () => {
     return null
   }
 
+  const checkIsEmptyContext = () => {
+    return !Object.keys(ausweisContext).some((k) => {
+      const key = k as keyof IAusweisRequest
+      if (Array.isArray(k)) {
+        return ausweisContext[key].length
+      } else {
+        return Boolean(key)
+      }
+    })
+  }
+
+  const handleClosePasscode = () => {
+    cancelFlow()
+    if (!checkIsEmptyContext()) {
+      /**
+       * @RUN_AUTH flow
+       * NOTE:
+       * handleAuthFailed handler doesn't navigate from the stack,
+       * because it is done by the scanner, therefore,
+       * in the case when we press close btn we should
+       * also navigate outside of the eID stack;
+       * This is different for the RUN_CHANGE_PIN flow, where
+       * the handleChangePinCancel navigates back to the AusweisChangePin screen
+       */
+      if (IS_ANDROID) {
+        closeAusweis()
+      }
+    }
+  }
+
   return (
     <ScreenContainer
       backgroundColor={Colors.mainDark}
       hasHeaderClose
-      onClose={cancelInteraction}
+      onClose={handleClosePasscode}
       customStyles={{
         justifyContent: 'flex-start',
       }}
