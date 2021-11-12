@@ -41,7 +41,9 @@ export const AusweisIdentity = () => {
   }
 
   const handleChangePin = () => {
-    navigation.navigate(ScreenNames.AusweisChangePin)
+    navigation.navigate(ScreenNames.eId, {
+      screen: ScreenNames.AusweisChangePin,
+    })
   }
 
   const handleShowCardLockResult = (mode: CardInfoMode) => {

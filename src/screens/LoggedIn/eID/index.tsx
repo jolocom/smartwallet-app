@@ -33,6 +33,7 @@ import { AusweisForgotPin } from './components/AusweisForgotPin'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
+import AusweisChangePin from './components/AusweisChangePin'
 
 export type AusweisStackParamList = {
   [eIDScreens.InteractionSheet]: undefined
@@ -49,6 +50,7 @@ export type AusweisStackParamList = {
   [eIDScreens.AusweisTransportWarning]: undefined
   [eIDScreens.ForgotPin]: undefined
   [eIDScreens.AusweisTransportPinInfo]: undefined
+  [eIDScreens.AusweisChangePin]: undefined
 }
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
@@ -135,6 +137,11 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.AusweisTransportPinInfo}
         component={AusweisTransportPinInfo}
+      />
+      <eIDStack.Screen
+        name={eIDScreens.AusweisChangePin}
+        component={AusweisChangePin}
+        options={screenTransitionFromBottomDisabledGestures}
       />
     </eIDStack.Navigator>
   )

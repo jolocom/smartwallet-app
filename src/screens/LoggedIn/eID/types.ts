@@ -15,6 +15,7 @@ export enum eIDScreens {
   PukInfo = 'PukInfo',
   AusweisTransportWarning = 'AusweisTransportWarning',
   AusweisTransportPinInfo = 'AusweisTransportPinInfo',
+  AusweisChangePin = 'AusweisChangePin'
 }
 
 export enum AA2Messages {

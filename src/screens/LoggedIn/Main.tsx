@@ -39,11 +39,10 @@ import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
 import eID from './eID'
-import { AusweisCardInfoParams, IAusweisRequest } from './eID/types'
+import { AusweisCardInfoParams } from './eID/types'
 import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
 import { Colors } from '~/utils/colors'
-import AusweisChangePin from './eID/components/AusweisChangePin'
 import AusweisCardInfo from './eID/components/AusweisCardInfo'
 
 export type TransparentModalsParamsList = {
@@ -72,7 +71,6 @@ const TransparentModals = () => (
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
   [ScreenNames.eId]: undefined
-  [ScreenNames.AusweisChangePin]: undefined
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
@@ -248,11 +246,6 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.FieldDetails}
             component={FieldDetails}
-            options={screenTransitionFromBottomDisabledGestures}
-          />
-          <MainStack.Screen
-            name={ScreenNames.AusweisChangePin}
-            component={AusweisChangePin}
             options={screenTransitionFromBottomDisabledGestures}
           />
           <MainStack.Screen
