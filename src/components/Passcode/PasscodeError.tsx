@@ -9,24 +9,17 @@ import { usePasscode } from './context'
 const PasscodeError = () => {
   const { pinErrorText } = usePasscode()
   return (
-    <View
+    <JoloText
+      size={JoloTextSizes.mini}
+      color={Colors.error}
       style={{
-        position: 'absolute',
-        top: BP({ default: 20, small: 12 }),
+        lineHeight: BP({ default: 18, xsmall: 14 }),
+        fontFamily: Fonts.Regular,
+        letterSpacing: 0.09,
       }}
     >
-      <JoloText
-        size={JoloTextSizes.mini}
-        color={Colors.error}
-        style={{
-          lineHeight: BP({ default: 18, xsmall: 14 }),
-          fontFamily: Fonts.Regular,
-          letterSpacing: 0.09,
-        }}
-      >
-        {pinErrorText}
-      </JoloText>
-    </View>
+      {pinErrorText}
+    </JoloText>
   )
 }
 

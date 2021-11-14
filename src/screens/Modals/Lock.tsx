@@ -104,16 +104,28 @@ const Lock = () => {
       }}
     >
       <Passcode onSubmit={handlePINSubmit}>
-        <Passcode.Container>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            width: '100%',
+          }}
+        >
           <Passcode.Header
             title={t('Lock.header')}
             errorTitle={t('ChangePasscode.wrongCodeHeader')}
           />
           <Passcode.Input />
-          <View style={{ position: 'relative', alignItems: 'center' }}>
+          <View
+            style={{
+              position: 'relative',
+              alignItems: 'center',
+              marginTop: 24,
+            }}
+          >
             <Passcode.Error />
           </View>
-        </Passcode.Container>
+        </View>
         <Passcode.Container>
           <Passcode.Forgot />
           <Passcode.Keyboard
