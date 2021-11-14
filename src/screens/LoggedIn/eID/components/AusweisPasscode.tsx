@@ -504,17 +504,23 @@ export const AusweisPasscode = () => {
             marginTop: BP({ default: 0, medium: 8, large: 36 }),
           }}
         >
-          <View style={{ justifyContent: 'center', flex: 1 }}>
+          <View
+            style={{ paddingHorizontal: 8, flex: 1, justifyContent: 'center' }}
+          >
             <Passcode.Header title={title} errorTitle={title} />
-          </View>
-          <View style={{ paddingHorizontal: 8 }}>
             <Passcode.Input
               cellColor={Colors.chisinauGrey}
               numberOfLines={getPasscodeNrLines()}
             />
-          </View>
-          <View style={{ position: 'relative', alignItems: 'center' }}>
-            <Passcode.Error />
+            <View
+              style={{
+                position: 'relative',
+                alignItems: 'center',
+                marginTop: 24,
+              }}
+            >
+              <Passcode.Error />
+            </View>
           </View>
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'center' }}>
