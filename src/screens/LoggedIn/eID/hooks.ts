@@ -177,8 +177,9 @@ export const useAusweisInteraction = () => {
     return fetch(url)
       .then((res) => {
         if (!res['ok']) {
-          scheduleErrorWarning(new Error(message))
-          console.warn(`could not send the request to the url: ${url}`)
+          throw new Error(
+            `could not send the request to the url: ${url}, ${message}`,
+          )
         }
         if (!message) {
           scheduleInfo({
