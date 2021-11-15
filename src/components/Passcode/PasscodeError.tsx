@@ -11,21 +11,22 @@ const PasscodeError = () => {
   return (
     <View
       style={{
-        position: 'absolute',
-        top: BP({ default: 20, small: 12 }),
+        alignItems: 'center',
       }}
     >
-      <JoloText
-        size={JoloTextSizes.mini}
-        color={Colors.error}
-        style={{
-          lineHeight: BP({ default: 18, xsmall: 14 }),
-          fontFamily: Fonts.Regular,
-          letterSpacing: 0.09,
-        }}
-      >
-        {pinErrorText}
-      </JoloText>
+      <View style={{ position: 'absolute', top: 24, alignItems: 'center' }}>
+        <JoloText
+          size={JoloTextSizes.mini}
+          color={Colors.error}
+          style={{
+            lineHeight: BP({ default: 18, xsmall: 14 }),
+            fontFamily: Fonts.Regular,
+            letterSpacing: 0.09,
+          }}
+        >
+          {pinErrorText}
+        </JoloText>
+      </View>
     </View>
   )
 }
