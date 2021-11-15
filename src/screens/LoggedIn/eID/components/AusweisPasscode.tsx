@@ -512,15 +512,7 @@ export const AusweisPasscode = () => {
               cellColor={Colors.chisinauGrey}
               numberOfLines={getPasscodeNrLines()}
             />
-            <View
-              style={{
-                position: 'relative',
-                alignItems: 'center',
-                marginTop: 24,
-              }}
-            >
-              <Passcode.Error />
-            </View>
+            <Passcode.Error />
           </View>
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'center' }}>

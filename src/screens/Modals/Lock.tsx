@@ -116,15 +116,7 @@ const Lock = () => {
             errorTitle={t('ChangePasscode.wrongCodeHeader')}
           />
           <Passcode.Input />
-          <View
-            style={{
-              position: 'relative',
-              alignItems: 'center',
-              marginTop: 24,
-            }}
-          >
-            <Passcode.Error />
-          </View>
+          <Passcode.Error />
         </View>
         <Passcode.Container>
           <Passcode.Forgot />
