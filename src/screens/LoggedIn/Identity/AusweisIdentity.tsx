@@ -68,7 +68,16 @@ export const AusweisIdentity = () => {
         mode: AusweisPasscodeMode.PUK,
         handlers: {
           handlePinRequest: () => {
-            handleShowCardLockResult(CardInfoMode.unblocked)
+            if (IS_ANDROID) {
+              updateScanner({
+                state: AusweisScannerState.success,
+                onDone: () => {
+                  handleShowCardLockResult(CardInfoMode.unblocked)
+                },
+              })
+            } else {
+              handleShowCardLockResult(CardInfoMode.unblocked)
+            }
           },
         },
       },
