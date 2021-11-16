@@ -364,10 +364,10 @@ export const useAusweisScanner = () => {
     setScannerParams(defaultState)
   }
 
-  const showScanner = (onDismiss?: () => void) => {
+  const showScanner = (onDismiss?: () => void, ignoreNativeCancel = false) => {
     navigation.navigate(ScreenNames.eId, {
       screen: eIDScreens.AusweisScanner,
-      params: { ...scannerParams, onDismiss },
+      params: { ...scannerParams, onDismiss, ignoreNativeCancel },
     })
   }
 
@@ -388,17 +388,20 @@ export const useAusweisScanner = () => {
       updateScanner({
         state: AusweisScannerState.failure,
         onDone: () => {
-          scheduleWarning({
-            title: t('Toasts.ausweisFailedCheckTitle'),
-            message: t('Toasts.ausweisFailedCheckMsg'),
-            interact: {
-              label: t('Toasts.ausweisFailedCheckBtn'),
-              onInteract: () => {
-                cancelFlow()
-                navigation.navigate(ScreenNames.Identity)
+          cancelFlow()
+          setTimeout(() => {
+            scheduleWarning({
+              title: t('Toasts.ausweisFailedCheckTitle'),
+              message: t('Toasts.ausweisFailedCheckMsg'),
+              interact: {
+                label: t('Toasts.ausweisFailedCheckBtn'),
+                onInteract: () => {
+                  cancelFlow()
+                  navigation.navigate(ScreenNames.Identity)
+                },
               },
-            },
-          })
+            })
+          }, 1000)
         },
       })
     } else {
@@ -406,11 +409,14 @@ export const useAusweisScanner = () => {
        * TODO: find a good copy to convey the information
        * about "deactivated" card
        */
-      scheduleWarning({
-        title: 'Your card is deactivated',
-        message:
-          "Seems like your card doesn't support eID functionality, which is necessary to continue",
-      })
+      cancelFlow()
+      setTimeout(() => {
+        scheduleWarning({
+          title: 'Your card is deactivated',
+          message:
+            "Seems like your card doesn't support eID functionality, which is necessary to continue",
+        })
+      }, 2000)
     }
   }
 

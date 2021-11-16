@@ -24,7 +24,6 @@ import {
 import { IS_ANDROID } from '~/utils/generic'
 import { setPopup } from '~/modules/appState/actions'
 import { useDispatch } from 'react-redux'
-import { useToasts } from '~/hooks/toasts'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -87,6 +86,11 @@ export const AusweisIdentity = () => {
   const setupUnlockCardHandlers = () => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
+      handleChangePinCancel: () => {
+        if (IS_ANDROID) {
+          navigation.goBack()
+        }
+      },
       handleCardInfo: (card) => {
         if (card?.deactivated) {
           handleDeactivatedCard()
@@ -94,7 +98,7 @@ export const AusweisIdentity = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelFlow)
+          showScanner(cancelFlow, true)
         }
       },
       handlePinRequest: () => {

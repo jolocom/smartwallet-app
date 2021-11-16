@@ -31,6 +31,7 @@ export const AusweisScanner = () => {
     onDone = () => {},
     state = AusweisScannerState.idle,
     onDismiss,
+    ignoreNativeCancel = false,
   } = route.params
   const goBack = useGoBack()
   const iconOpacityValue = useRef(new Animated.Value(0)).current
@@ -107,7 +108,7 @@ export const AusweisScanner = () => {
      * onDismiss should contain logic without closing
      * the AusweisScanner screen
      */
-    goBack()
+    !ignoreNativeCancel && goBack()
     onDismiss && onDismiss()
   }
 

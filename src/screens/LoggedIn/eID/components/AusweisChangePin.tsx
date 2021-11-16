@@ -130,7 +130,7 @@ const AusweisChangePin = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelFlow)
+          showScanner(cancelFlow, true)
         }
       },
       handlePinRequest: (card) => {
@@ -169,7 +169,11 @@ const AusweisChangePin = () => {
           canHandler(card)
         }
       },
-      handleChangePinCancel: () => {},
+      handleChangePinCancel: () => {
+        if (IS_ANDROID) {
+          navigation.goBack()
+        }
+      },
       ...handlers,
     })
   }
