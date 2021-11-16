@@ -36,33 +36,31 @@ const TitleDescAction: React.FC<WhateverProps> = ({
   hasInlineBtn = false,
   btnText,
   onPress,
-}) => {
-  return (
-    <View style={{ marginBottom: BP({ default: 30, xsmall: 20 }) }}>
-      <ScreenContainer.Padding distance={BP({ default: 27, xsmall: 20 })}>
-        <JoloText
-          kind={JoloTextKind.title}
-          customStyles={{ marginBottom: BP({ large: 12, default: 8 }) }}
-        >
-          {headerText}
-        </JoloText>
-        <JoloText color={Colors.osloGray}>
-          {descriptionText}
-          {hasInlineBtn && (
-            <JoloText onPress={onPress} color={Colors.activity}>
-              ...{btnText}
-            </JoloText>
-          )}
-        </JoloText>
-        {!hasInlineBtn && (
-          <Btn onPress={onPress} type={BtnTypes.quaternary}>
-            {btnText}
-          </Btn>
+}) => (
+  <View style={{ marginBottom: BP({ default: 30, xsmall: 20 }) }}>
+    <ScreenContainer.Padding distance={BP({ default: 27, xsmall: 20 })}>
+      <JoloText
+        kind={JoloTextKind.title}
+        customStyles={{ marginBottom: BP({ large: 12, default: 8 }) }}
+      >
+        {headerText}
+      </JoloText>
+      <JoloText color={Colors.osloGray}>
+        {descriptionText}
+        {hasInlineBtn && (
+          <JoloText onPress={onPress} color={Colors.activity}>
+            ...{btnText}
+          </JoloText>
         )}
-      </ScreenContainer.Padding>
-    </View>
-  )
-}
+      </JoloText>
+      {!hasInlineBtn && (
+        <Btn onPress={onPress} type={BtnTypes.quaternary}>
+          {btnText}
+        </Btn>
+      )}
+    </ScreenContainer.Padding>
+  </View>
+)
 
 const AusweisChangePin = () => {
   const { t } = useTranslation()
@@ -126,7 +124,7 @@ const AusweisChangePin = () => {
 
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (card?.deactivated && IS_ANDROID) {
+        if (card?.deactivated) {
           handleDeactivatedCard()
         }
       },

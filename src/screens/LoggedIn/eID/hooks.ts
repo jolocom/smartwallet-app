@@ -2,9 +2,12 @@ import { CommonActions, useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
+import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
+import { useSelector, useDispatch } from 'react-redux'
+
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect, usePopStack, usePop } from '~/hooks/navigation'
+import { useRedirect, usePopStack } from '~/hooks/navigation'
 import useSettings, { SettingKeys } from '~/hooks/settings'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
@@ -18,11 +21,9 @@ import {
   AusweisCardResult,
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
-import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
+import { IS_ANDROID } from '~/utils/generic'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -45,8 +46,8 @@ export const useCheckNFC = () => {
     }
   }
 
-  const checkNfcSupport = (onSuccess: () => void | PromiseLike<void>) => {
-    return nfcCheck()
+  const checkNfcSupport = (onSuccess: () => void | PromiseLike<void>) =>
+    nfcCheck()
       .then(onSuccess)
       .catch((e) => {
         if (e.message === SWErrorCodes.SWNfcNotSupported) {
@@ -69,7 +70,6 @@ export const useCheckNFC = () => {
           scheduleErrorWarning(e)
         }
       })
-  }
 
   const goToNfcSettings = () => {
     NfcManager.goToNfcSetting()
@@ -163,9 +163,7 @@ export const useAusweisInteraction = () => {
     sendCancel()
   }
 
-  const checkIfScanned = async () => {
-    return aa2Module.checkIfCardWasRead()
-  }
+  const checkIfScanned = async () => aa2Module.checkIfCardWasRead()
 
   const passcodeCommands = {
     setPin: (pin: string) => aa2Module.enterPin(pin),
@@ -173,8 +171,8 @@ export const useAusweisInteraction = () => {
     setCan: (can: string) => aa2Module.enterCan(can),
   }
 
-  const finishFlow = (url: string, message?: string) => {
-    return fetch(url)
+  const finishFlow = (url: string, message?: string) =>
+    fetch(url)
       .then((res) => {
         if (!res['ok']) {
           throw new Error(
@@ -189,7 +187,6 @@ export const useAusweisInteraction = () => {
         }
       })
       .catch(scheduleErrorWarning)
-  }
 
   const checkIfCardValid = (card: CardInfo) => {
     if (card.deactivated || card.inoperative) {
@@ -234,7 +231,6 @@ export const useAusweisInteraction = () => {
 
 export const useAusweisCompatibilityCheck = () => {
   const redirect = useRedirect()
-  const pop = usePop()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
 
@@ -334,9 +330,7 @@ export const useTranslatedAusweisFields = () => {
     [AusweisFields.PinManagement]: t('Ausweis.pinManagement'),
   }
 
-  return (field: AusweisFields) => {
-    return fieldsMapping[field]
-  }
+  return (field: AusweisFields) => fieldsMapping[field]
 }
 
 export const useAusweisScanner = () => {
@@ -378,9 +372,7 @@ export const useAusweisScanner = () => {
   }
 
   const updateScanner = (params: Partial<AusweisScannerParams>) => {
-    setScannerParams((prevParams) => {
-      return { ...prevParams, ...params }
-    })
+    setScannerParams((prevParams) => ({ ...prevParams, ...params }))
     if (
       params.state === AusweisScannerState.failure ||
       params.state === AusweisScannerState.success
@@ -392,22 +384,34 @@ export const useAusweisScanner = () => {
   }
 
   const handleDeactivatedCard = () => {
-    updateScanner({
-      state: AusweisScannerState.failure,
-      onDone: () => {
-        scheduleWarning({
-          title: t('Toasts.ausweisFailedCheckTitle'),
-          message: t('Toasts.ausweisFailedCheckMsg'),
-          interact: {
-            label: t('Toasts.ausweisFailedCheckBtn'),
-            onInteract: () => {
-              cancelFlow()
-              navigation.navigate(ScreenNames.Identity)
+    if (IS_ANDROID) {
+      updateScanner({
+        state: AusweisScannerState.failure,
+        onDone: () => {
+          scheduleWarning({
+            title: t('Toasts.ausweisFailedCheckTitle'),
+            message: t('Toasts.ausweisFailedCheckMsg'),
+            interact: {
+              label: t('Toasts.ausweisFailedCheckBtn'),
+              onInteract: () => {
+                cancelFlow()
+                navigation.navigate(ScreenNames.Identity)
+              },
             },
-          },
-        })
-      },
-    })
+          })
+        },
+      })
+    } else {
+      /**
+       * TODO: find a good copy to convey the information
+       * about "deactivated" card
+       */
+      scheduleWarning({
+        title: 'Your card is deactivated',
+        message:
+          "Seems like your card doesn't support eID functionality, which is necessary to continue",
+      })
+    }
   }
 
   return { showScanner, updateScanner, scannerParams, handleDeactivatedCard }

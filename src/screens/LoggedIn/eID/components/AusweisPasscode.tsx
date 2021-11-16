@@ -178,18 +178,20 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (IS_ANDROID) {
-          if (card) {
-            if (card?.deactivated) {
-              handleDeactivatedCard()
-            } else {
+        if (card !== null) {
+          if (card?.deactivated) {
+            handleDeactivatedCard()
+          } else {
+            if (IS_ANDROID) {
               updateScanner({ state: AusweisScannerState.loading })
             }
-          } else {
-            /**
-             * When connection to the NFC tag was interrupted
-             * stop the loading
-             */
+          }
+        } else {
+          /**
+           * When connection to the NFC tag was interrupted
+           * stop the loading
+           */
+          if (IS_ANDROID) {
             updateScanner({ state: AusweisScannerState.idle })
           }
         }
@@ -347,8 +349,8 @@ export const AusweisPasscode = () => {
     )
   }
 
-  const sendPasscodeCommand = (passcode: string) => {
-    return checkNfcSupport(async () => {
+  const sendPasscodeCommand = (passcode: string) =>
+    checkNfcSupport(async () => {
       if (Platform.OS === 'ios') {
         dispatch(setPopup(true))
       }
@@ -389,7 +391,6 @@ export const AusweisPasscode = () => {
         }
       }
     })
-  }
 
   const getPasscodeLength = () => {
     switch (pinVariant) {
@@ -415,7 +416,7 @@ export const AusweisPasscode = () => {
   }
 
   const renderAccessoryBtn = () => {
-    let props: IAccessoryBtnProps = {
+    const props: IAccessoryBtnProps = {
       title: '',
       onPress: () => {},
     }
@@ -458,8 +459,8 @@ export const AusweisPasscode = () => {
     return null
   }
 
-  const checkIsEmptyContext = () => {
-    return !Object.keys(ausweisContext).some((k) => {
+  const checkIsEmptyContext = () =>
+    !Object.keys(ausweisContext).some((k) => {
       const key = k as keyof IAusweisRequest
       if (Array.isArray(k)) {
         return ausweisContext[key].length
@@ -467,7 +468,6 @@ export const AusweisPasscode = () => {
         return Boolean(key)
       }
     })
-  }
 
   const handleClosePasscode = () => {
     cancelFlow()

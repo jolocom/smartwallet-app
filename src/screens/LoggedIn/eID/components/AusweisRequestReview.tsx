@@ -104,7 +104,7 @@ export const AusweisRequestReview = () => {
     //TODO: add badState handler and cancel
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (card?.deactivated && IS_ANDROID) {
+        if (card?.deactivated) {
           handleDeactivatedCard()
         }
       },
