@@ -366,14 +366,11 @@ export const useDeactivatedCard = () => {
        * TODO: find a good copy to convey the information
        * about "deactivated" card
        */
-      cancelFlow()
-      setTimeout(() => {
-        scheduleWarning({
-          title: 'Your card is deactivated',
-          message:
-            "Seems like your card doesn't support eID functionality, which is necessary to continue",
-        })
-      }, 2000)
+      scheduleWarning({
+        title: 'Your card is deactivated',
+        message:
+          "Seems like your card doesn't support eID functionality, which is necessary to continue",
+      })
     }
   }
   return { handleDeactivatedCard }
