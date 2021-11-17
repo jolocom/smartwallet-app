@@ -36,6 +36,7 @@ import {
   useAusweisInteraction,
   useAusweisScanner,
   useCheckNFC,
+  useDeactivatedCard,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 
@@ -97,8 +98,8 @@ export const AusweisPasscode = () => {
 
   const { passcodeCommands, finishFlow, closeAusweis, cancelFlow } =
     useAusweisInteraction()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
   const { checkNfcSupport } = useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)

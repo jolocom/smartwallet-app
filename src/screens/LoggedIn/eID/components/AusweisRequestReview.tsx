@@ -3,6 +3,10 @@ import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
+import moment from 'moment'
+import { useNavigation } from '@react-navigation/core'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
@@ -26,6 +30,7 @@ import {
   useCheckNFC,
   useTranslatedAusweisFields,
   useAusweisScanner,
+  useDeactivatedCard,
 } from '../hooks'
 import {
   AusweisButtons,
@@ -34,15 +39,10 @@ import {
   AusweisLogo,
 } from '../styled'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
-import { useNavigation } from '@react-navigation/core'
-import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '..'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
-import moment from 'moment'
 import { IS_ANDROID } from '~/utils/generic'
-import { useToasts } from '~/hooks/toasts'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
@@ -71,9 +71,8 @@ export const AusweisRequestReview = () => {
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const dispatch = useDispatch()
   const translateField = useTranslatedAusweisFields()
-  const { scheduleWarning } = useToasts()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {

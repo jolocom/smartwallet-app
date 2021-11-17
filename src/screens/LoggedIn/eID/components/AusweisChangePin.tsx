@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import { useToasts } from '~/hooks/toasts'
 import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import { setPopup } from '~/modules/appState/actions'
@@ -19,7 +18,12 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { IS_ANDROID } from '~/utils/generic'
 
-import { useAusweisInteraction, useAusweisScanner, useCheckNFC } from '../hooks'
+import {
+  useAusweisInteraction,
+  useAusweisScanner,
+  useCheckNFC,
+  useDeactivatedCard,
+} from '../hooks'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 
 interface WhateverProps {
@@ -66,9 +70,8 @@ const AusweisChangePin = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
-  const { scheduleWarning } = useToasts()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
   const dispatch = useDispatch()
   const isTransportPin = useRef(false)
   const goBack = useGoBack()

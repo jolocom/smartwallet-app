@@ -333,6 +333,52 @@ export const useTranslatedAusweisFields = () => {
   return (field: AusweisFields) => fieldsMapping[field]
 }
 
+export const useDeactivatedCard = () => {
+  const { updateScanner } = useAusweisScanner()
+  const { cancelFlow } = useAusweisInteraction()
+  const { scheduleWarning } = useToasts()
+  const navigation = useNavigation()
+  const { t } = useTranslation()
+
+  const handleDeactivatedCard = () => {
+    if (IS_ANDROID) {
+      updateScanner({
+        state: AusweisScannerState.failure,
+        onDone: () => {
+          cancelFlow()
+          setTimeout(() => {
+            scheduleWarning({
+              title: t('Toasts.ausweisFailedCheckTitle'),
+              message: t('Toasts.ausweisFailedCheckMsg'),
+              interact: {
+                label: t('Toasts.ausweisFailedCheckBtn'),
+                onInteract: () => {
+                  cancelFlow()
+                  navigation.navigate(ScreenNames.Identity)
+                },
+              },
+            })
+          }, 1000)
+        },
+      })
+    } else {
+      /**
+       * TODO: find a good copy to convey the information
+       * about "deactivated" card
+       */
+      cancelFlow()
+      setTimeout(() => {
+        scheduleWarning({
+          title: 'Your card is deactivated',
+          message:
+            "Seems like your card doesn't support eID functionality, which is necessary to continue",
+        })
+      }, 2000)
+    }
+  }
+  return { handleDeactivatedCard }
+}
+
 export const useAusweisScanner = () => {
   const { scheduleWarning } = useToasts()
   const { cancelFlow } = useAusweisInteraction()
@@ -383,42 +429,5 @@ export const useAusweisScanner = () => {
     }
   }
 
-  const handleDeactivatedCard = () => {
-    if (IS_ANDROID) {
-      updateScanner({
-        state: AusweisScannerState.failure,
-        onDone: () => {
-          cancelFlow()
-          setTimeout(() => {
-            scheduleWarning({
-              title: t('Toasts.ausweisFailedCheckTitle'),
-              message: t('Toasts.ausweisFailedCheckMsg'),
-              interact: {
-                label: t('Toasts.ausweisFailedCheckBtn'),
-                onInteract: () => {
-                  cancelFlow()
-                  navigation.navigate(ScreenNames.Identity)
-                },
-              },
-            })
-          }, 1000)
-        },
-      })
-    } else {
-      /**
-       * TODO: find a good copy to convey the information
-       * about "deactivated" card
-       */
-      cancelFlow()
-      setTimeout(() => {
-        scheduleWarning({
-          title: 'Your card is deactivated',
-          message:
-            "Seems like your card doesn't support eID functionality, which is necessary to continue",
-        })
-      }, 2000)
-    }
-  }
-
-  return { showScanner, updateScanner, scannerParams, handleDeactivatedCard }
+  return { showScanner, updateScanner, scannerParams }
 }

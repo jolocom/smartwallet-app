@@ -12,6 +12,7 @@ import {
   useAusweisInteraction,
   useAusweisScanner,
   useCheckNFC,
+  useDeactivatedCard,
 } from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import { aa2Module } from 'react-native-aa2-sdk'
@@ -32,8 +33,8 @@ export const AusweisIdentity = () => {
   const navigation = useNavigation()
   const { cancelFlow } = useAusweisInteraction()
   const dispatch = useDispatch()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
