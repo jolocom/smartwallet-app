@@ -1,3 +1,4 @@
+import { useBackHandler } from '@react-native-community/hooks'
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { Image, View } from 'react-native'
@@ -25,6 +26,11 @@ const AusweisLockPukInfo: React.FC = () => {
    */
   const { cancelInteraction } = useAusweisInteraction()
   const navigation = useNavigation()
+
+  useBackHandler(() => {
+    cancelInteraction()
+    return true
+  })
 
   const handleContinueWithPuk = () => {
     navigation.navigate(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })

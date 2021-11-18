@@ -20,6 +20,7 @@ import BtnGroup from '~/components/BtnGroup'
 import { CheckboxOption } from '~/components/CheckboxOption'
 import useTranslation from '~/hooks/useTranslation'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
+import { useBackHandler } from '@react-native-community/hooks'
 
 const Header: React.FC = ({ children }) => (
   <JoloText
@@ -40,6 +41,11 @@ export const CompatibilityCheck = () => {
   const { cancelInteraction, cancelFlow } = useAusweisInteraction()
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
   const { setShouldSkip } = useAusweisSkipCompatibility()
+
+  useBackHandler(() => {
+    cancelInteraction()
+    return true
+  })
 
   const handleCheckCompatibility = () => {
     startCheck()

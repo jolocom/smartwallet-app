@@ -43,6 +43,7 @@ import { IField } from '~/types/props'
 import moment from 'moment'
 import { IS_ANDROID } from '~/utils/generic'
 import { useToasts } from '~/hooks/toasts'
+import { useBackHandler } from '@react-native-community/hooks'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
@@ -71,9 +72,13 @@ export const AusweisRequestReview = () => {
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const dispatch = useDispatch()
   const translateField = useTranslatedAusweisFields()
-  const { scheduleWarning } = useToasts()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
+
+  useBackHandler(() => {
+    cancelInteraction()
+    return true
+  })
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
