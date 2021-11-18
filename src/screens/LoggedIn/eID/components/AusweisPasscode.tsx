@@ -38,6 +38,7 @@ import {
   useCheckNFC,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
+import useConnection from '~/hooks/connection'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -55,6 +56,19 @@ const PasscodeGlue: React.FC<PasscodeErrorSetterProps> = ({
   runInputReset,
 }) => {
   const { setPinError, setPinErrorText, setPin } = usePasscode()
+  const { connected: isConnectedToTheInternet } = useConnection()
+
+  useEffect(() => {
+    if (!isConnectedToTheInternet) {
+      /**
+       * TODO:
+       * copy is needed
+       */
+      setPinErrorText('Internet connection is required to proceed')
+    } else {
+      setPinErrorText(null)
+    }
+  }, [isConnectedToTheInternet])
 
   useEffect(() => {
     if (Boolean(errorText)) {
@@ -82,7 +96,8 @@ export const AusweisPasscode = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const { scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { scheduleInfo } = useToasts()
+  const { connected: isConnectedToTheInternet } = useConnection()
 
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
@@ -347,8 +362,8 @@ export const AusweisPasscode = () => {
     )
   }
 
-  const sendPasscodeCommand = (passcode: string) => {
-    return checkNfcSupport(async () => {
+  const sendPasscodeCommand = (passcode: string) =>
+    checkNfcSupport(async () => {
       if (Platform.OS === 'ios') {
         dispatch(setPopup(true))
       }
@@ -389,7 +404,6 @@ export const AusweisPasscode = () => {
         }
       }
     })
-  }
 
   const getPasscodeLength = () => {
     switch (pinVariant) {
@@ -415,7 +429,7 @@ export const AusweisPasscode = () => {
   }
 
   const renderAccessoryBtn = () => {
-    let props: IAccessoryBtnProps = {
+    const props: IAccessoryBtnProps = {
       title: '',
       onPress: () => {},
     }
@@ -458,8 +472,8 @@ export const AusweisPasscode = () => {
     return null
   }
 
-  const checkIsEmptyContext = () => {
-    return !Object.keys(ausweisContext).some((k) => {
+  const checkIsEmptyContext = () =>
+    !Object.keys(ausweisContext).some((k) => {
       const key = k as keyof IAusweisRequest
       if (Array.isArray(k)) {
         return ausweisContext[key].length
@@ -467,7 +481,6 @@ export const AusweisPasscode = () => {
         return Boolean(key)
       }
     })
-  }
 
   const handleClosePasscode = () => {
     cancelFlow()
@@ -517,7 +530,7 @@ export const AusweisPasscode = () => {
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'center' }}>
           {renderAccessoryBtn()}
-          <Passcode.Keyboard />
+          <Passcode.Keyboard disabled={!isConnectedToTheInternet} />
         </Passcode.Container>
       </Passcode>
     </ScreenContainer>
