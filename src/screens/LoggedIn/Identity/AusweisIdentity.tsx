@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Platform, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
@@ -22,9 +22,6 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { setPopup } from '~/modules/appState/actions'
-import { useDispatch } from 'react-redux'
-import { useToasts } from '~/hooks/toasts'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -32,7 +29,6 @@ export const AusweisIdentity = () => {
   const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow } = useAusweisInteraction()
-  const dispatch = useDispatch()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
 
@@ -84,7 +80,7 @@ export const AusweisIdentity = () => {
     })
   }
 
-  const setUpUnlockCardHandlers = () => {
+  const setupUnlockCardHandlers = () => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
@@ -138,10 +134,7 @@ export const AusweisIdentity = () => {
 
   const handleUnlockCard = () => {
     checkNfcSupport(() => {
-      if (Platform.OS === 'ios') {
-        dispatch(setPopup(true))
-      }
-      setUpUnlockCardHandlers()
+      setupUnlockCardHandlers()
       aa2Module.changePin()
     })
   }

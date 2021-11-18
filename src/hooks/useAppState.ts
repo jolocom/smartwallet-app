@@ -29,12 +29,14 @@ export const useAppBackgroundChange = (handler: () => void) => {
 
   const goingToBackground =
     prevAppState &&
-    prevAppState.match(/active/) &&
-    currentAppState.match(/inactive|background/)
+    prevAppState.match(
+      Platform.select({ ios: 'inactive', android: 'active' }),
+    ) &&
+    currentAppState.match(/background/)
 
   const comingFromBackground =
     prevAppState &&
-    prevAppState.match(/inactive|background/) &&
+    prevAppState.match(/background/) &&
     currentAppState.match(/active/)
 
   /**
@@ -51,10 +53,10 @@ export const useAppBackgroundChange = (handler: () => void) => {
   // NOTE: Checks if the duration of state change was long enough. Mostly useful when
   // interacting with NFC, which causes very quick state changes, causing the Lock to
   // appear
-  const shouldIgnoreStateChange = () => {
+  const shouldIgnoreStateChange = (allowedTime: number) => {
     const foregroundTimer = new Date().getTime()
     if (backgroundTimer.current && !isNaN(backgroundTimer.current)) {
-      if (foregroundTimer - backgroundTimer.current < 1000) {
+      if (foregroundTimer - backgroundTimer.current < allowedTime) {
         backgroundTimer.current = undefined
         return true
       }
@@ -87,7 +89,7 @@ export const useAppBackgroundChange = (handler: () => void) => {
         ios: goingToBackground,
       })
     ) {
-      const ignoreStateChange = IS_ANDROID && shouldIgnoreStateChange()
+      const ignoreStateChange = IS_ANDROID && shouldIgnoreStateChange(1000)
       if (!ignoreStateChange && !isPopup) handler()
     }
   }, [currentAppState, isPopup])
