@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/core'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -44,37 +44,40 @@ export const AusweisCompatibilityResult: React.FC = () => {
   }, [])
 
   return (
-    <ScreenContainer
-      backgroundColor={Colors.black}
-      customStyles={{ justifyContent: 'flex-end' }}
-    >
-      <View style={styles.headerContainer}>
-        <JoloText kind={JoloTextKind.title}>
-          {t('AusweisCompatibilityStatus.header')}
-        </JoloText>
-      </View>
-      <View style={styles.resultContainer}>
-        {isFailed ? (
-          <JoloText size={JoloTextSizes.big} color={Colors.error}>
-            {t('AusweisCompatibilityStatus.error')}
+    <ScreenContainer backgroundColor={Colors.black}>
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={goBack}
+        style={{ justifyContent: 'flex-end', alignItems: 'center' }}
+      >
+        <View style={styles.headerContainer}>
+          <JoloText kind={JoloTextKind.title}>
+            {t('AusweisCompatibilityStatus.header')}
           </JoloText>
-        ) : (
-          <>
-            <SuccessResult title={t('AusweisCompatibilityStatus.status1')} />
-            <SuccessResult title={t('AusweisCompatibilityStatus.status2')} />
-            <SuccessResult title={t('AusweisCompatibilityStatus.status3')} />
-          </>
-        )}
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={styles.iconContainer}>
+        </View>
+        <View style={styles.resultContainer}>
           {isFailed ? (
-            <ErrorIcon color={Colors.white90} />
+            <JoloText size={JoloTextSizes.big} color={Colors.error}>
+              {t('AusweisCompatibilityStatus.error')}
+            </JoloText>
           ) : (
-            <SuccessTick color={Colors.white90} />
+            <>
+              <SuccessResult title={t('AusweisCompatibilityStatus.status1')} />
+              <SuccessResult title={t('AusweisCompatibilityStatus.status2')} />
+              <SuccessResult title={t('AusweisCompatibilityStatus.status3')} />
+            </>
           )}
         </View>
-      </View>
+        <View style={{ flex: 1 }}>
+          <View style={styles.iconContainer}>
+            {isFailed ? (
+              <ErrorIcon color={Colors.white90} />
+            ) : (
+              <SuccessTick color={Colors.white90} />
+            )}
+          </View>
+        </View>
+      </TouchableOpacity>
     </ScreenContainer>
   )
 }
