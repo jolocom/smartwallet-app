@@ -1,10 +1,14 @@
-import { CommonActions, useNavigation } from '@react-navigation/native'
+import {
+  CommonActions,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect, usePopStack, usePop } from '~/hooks/navigation'
+import { useRedirect, usePopStack, usePop, useGoBack } from '~/hooks/navigation'
 import useSettings, { SettingKeys } from '~/hooks/settings'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
@@ -415,16 +419,15 @@ export const useAusweisScanner = () => {
 }
 
 export const useAusweisCancelBackHandler = () => {
+  const isFocused = useIsFocused()
   const { cancelInteraction } = useAusweisInteraction()
 
   useBackHandler(() => {
-    cancelInteraction()
-    return true
-  })
-}
+    if (isFocused) {
+      cancelInteraction()
+      return true
+    }
 
-export const useAusweisDefaultBackHandler = () => {
-  useBackHandler(() => {
     return false
   })
 }
