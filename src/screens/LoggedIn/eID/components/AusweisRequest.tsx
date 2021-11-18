@@ -16,6 +16,10 @@ import {
   useAusweisSkipCompatibility,
 } from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
+import useConnection from '~/hooks/connection'
+import Btn, { BtnTypes } from '~/components/Btn'
+import BP from '~/utils/breakpoints'
+import Space from '~/components/Space'
 
 export const AusweisRequest = () => {
   const { t } = useTranslation()
@@ -25,6 +29,7 @@ export const AusweisRequest = () => {
   const { providerUrl, providerName } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
   const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
+  const { connected: isConnectedToTheInternet } = useConnection()
 
   const handleProceed = async () => {
     checkNfcSupport(() => {
@@ -57,18 +62,17 @@ export const AusweisRequest = () => {
           },
         })}
       </JoloText>
-      <JoloText
-        kind={JoloTextKind.subtitle}
-        size={JoloTextSizes.mini}
-        color={Colors.success}
-        customStyles={{
-          marginTop: 16,
-          marginBottom: 32,
-        }}
+      <Btn
+        type={BtnTypes.quinary}
+        size={BP({ default: 16, xsmall: 14 })}
+        customTextStyles={{ opacity: 1 }}
+        noBackground
+        disabled={!isConnectedToTheInternet}
         onPress={() => Linking.openURL(providerUrl)}
       >
         {providerUrl}
-      </JoloText>
+      </Btn>
+      <Space height={BP({ default: 20, xsmall: 14 })} />
       <AusweisButtons
         submitLabel={t('AusweisRequest.proceedBtn')}
         cancelLabel={t('Interaction.cancelBtn')}

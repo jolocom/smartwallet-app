@@ -34,7 +34,7 @@ export enum BtnSize {
 interface BtnPropsI extends TouchableOpacityProps {
   type?: BtnTypes
   customTextStyles?: TextStyle
-  size?: BtnSize
+  size?: BtnSize | number
 }
 
 interface PropsI extends BtnPropsI {
@@ -43,9 +43,10 @@ interface PropsI extends BtnPropsI {
   withoutMargins?: boolean
   customContainerStyles?: ViewStyle
   testID?: string
+  noBackground?: boolean
 }
 
-interface IBtnComposition {
+interface BtnComposition {
   Online: React.FC<PropsI>
 }
 
@@ -59,15 +60,19 @@ const ButtonText: React.FC<BtnPropsI> = ({
   customTextStyles = {},
 }) => {
   const getTextSize = () => {
-    switch (size) {
-      case BtnSize.large:
-        return 20
-      case BtnSize.medium:
-        return 18
-      case BtnSize.small:
-        return 12
-      default:
-        return 18
+    if (Object.values(BtnSize).includes(size)) {
+      switch (size) {
+        case BtnSize.large:
+          return 20
+        case BtnSize.medium:
+          return 18
+        case BtnSize.small:
+          return 12
+        default:
+          return 18
+      }
+    } else {
+      return size
     }
   }
 
@@ -103,7 +108,7 @@ const ButtonText: React.FC<BtnPropsI> = ({
   )
 }
 
-const Btn: React.FC<PropsI> & IBtnComposition = ({
+const Btn: React.FC<PropsI> & BtnComposition = ({
   disabled,
   withoutMargins,
   size,
@@ -112,6 +117,7 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
   customContainerStyles,
   testID,
   children,
+  noBackground = false,
   ...btnProps
 }) => {
   const containerStyles = [
@@ -158,7 +164,11 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
           <View
             style={[
               containerStyles,
-              { backgroundColor: Colors.matterhorn18 },
+              {
+                ...(!noBackground && {
+                  backgroundColor: Colors.matterhorn18,
+                }),
+              },
               customContainerStyles,
               btnStyle,
             ]}
@@ -172,7 +182,9 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
             style={[
               containerStyles,
               {
-                backgroundColor: Colors.white06,
+                ...(!noBackground && {
+                  backgroundColor: Colors.white06,
+                }),
                 borderStyle: 'solid',
                 borderWidth: 0.8,
                 borderColor: Colors.silverChalice,
@@ -184,6 +196,8 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
             <ButtonText {...btnTextProps} />
           </View>
         )
+      default:
+        return null
     }
   }
 
