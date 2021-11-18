@@ -41,6 +41,11 @@ export const AusweisScanner = () => {
 
   const isScreenFocused = useIsFocused()
 
+  useBackHandler(() => {
+    handleDismiss()
+    return true
+  })
+
   useEffect(() => {
     dispatch(setAusweisScannerKey(isScreenFocused ? route.key : null))
   }, [isScreenFocused])

@@ -67,13 +67,6 @@ const AusweisInteraction = () => {
     }
   }, [])
 
-  /**
-   * NOTE:
-   * all the screens in this stack inherit
-   * this logic
-   */
-  useBackHandler(() => true)
-
   return (
     <eIDStack.Navigator
       headerMode="none"
