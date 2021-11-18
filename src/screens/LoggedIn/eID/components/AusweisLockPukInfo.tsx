@@ -1,6 +1,5 @@
-import { useBackHandler } from '@react-native-community/hooks'
-import { useNavigation } from '@react-navigation/core'
 import React from 'react'
+import { useNavigation } from '@react-navigation/core'
 import { Image, View } from 'react-native'
 
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -9,7 +8,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useAusweisInteraction } from '../hooks'
+import { useAusweisCancelBackHandler, useAusweisInteraction } from '../hooks'
 import { AusweisPasscodeMode, eIDScreens } from '../types'
 
 /**
@@ -27,10 +26,7 @@ const AusweisLockPukInfo: React.FC = () => {
   const { cancelInteraction } = useAusweisInteraction()
   const navigation = useNavigation()
 
-  useBackHandler(() => {
-    cancelInteraction()
-    return true
-  })
+  useAusweisCancelBackHandler()
 
   const handleContinueWithPuk = () => {
     navigation.navigate(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })

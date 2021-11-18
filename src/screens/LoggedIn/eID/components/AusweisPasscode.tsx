@@ -32,13 +32,13 @@ import {
   IAusweisRequest,
 } from '../types'
 import {
+  useAusweisCancelBackHandler,
   useAusweisContext,
   useAusweisInteraction,
   useAusweisScanner,
   useCheckNFC,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
-import { useBackHandler } from '@react-native-community/hooks'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -79,7 +79,6 @@ export const AusweisPasscode = () => {
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
   const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
   const ausweisContext = useAusweisContext()
-  const { cancelInteraction } = useAusweisInteraction()
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -90,10 +89,7 @@ export const AusweisPasscode = () => {
   const [errorText, setErrorText] = useState<string | null>(null)
   const [runInputReset, resetInput] = useState(false) // value to reset verification pin
 
-  useBackHandler(() => {
-    cancelInteraction()
-    return true
-  })
+  useAusweisCancelBackHandler()
 
   /**
    * Reverts back flag for resetting verification pin to make sure,

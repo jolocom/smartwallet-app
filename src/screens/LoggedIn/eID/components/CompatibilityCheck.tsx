@@ -8,6 +8,7 @@ import { Colors } from '~/utils/colors'
 import { eIDScreens } from '../types'
 import { useRedirect } from '~/hooks/navigation'
 import {
+  useAusweisCancelBackHandler,
   useAusweisCompatibilityCheck,
   useAusweisInteraction,
   useAusweisSkipCompatibility,
@@ -20,7 +21,6 @@ import BtnGroup from '~/components/BtnGroup'
 import { CheckboxOption } from '~/components/CheckboxOption'
 import useTranslation from '~/hooks/useTranslation'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
-import { useBackHandler } from '@react-native-community/hooks'
 
 const Header: React.FC = ({ children }) => (
   <JoloText
@@ -42,10 +42,7 @@ export const CompatibilityCheck = () => {
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
   const { setShouldSkip } = useAusweisSkipCompatibility()
 
-  useBackHandler(() => {
-    cancelInteraction()
-    return true
-  })
+  useAusweisCancelBackHandler()
 
   const handleCheckCompatibility = () => {
     startCheck()

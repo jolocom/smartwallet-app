@@ -14,9 +14,9 @@ import {
   useAusweisContext,
   useAusweisInteraction,
   useAusweisSkipCompatibility,
+  useAusweisCancelBackHandler,
 } from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
-import { useBackHandler } from '@react-native-community/hooks'
 
 export const AusweisRequest = () => {
   const { t } = useTranslation()
@@ -27,10 +27,7 @@ export const AusweisRequest = () => {
   const { cancelInteraction } = useAusweisInteraction()
   const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
 
-  useBackHandler(() => {
-    cancelInteraction()
-    return true
-  })
+  useAusweisCancelBackHandler()
 
   const handleProceed = async () => {
     checkNfcSupport(() => {

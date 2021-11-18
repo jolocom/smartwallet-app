@@ -23,6 +23,7 @@ import { useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
+import { useBackHandler } from '@react-native-community/hooks'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -411,4 +412,19 @@ export const useAusweisScanner = () => {
   }
 
   return { showScanner, updateScanner, scannerParams, handleDeactivatedCard }
+}
+
+export const useAusweisCancelBackHandler = () => {
+  const { cancelInteraction } = useAusweisInteraction()
+
+  useBackHandler(() => {
+    cancelInteraction()
+    return true
+  })
+}
+
+export const useAusweisDefaultBackHandler = () => {
+  useBackHandler(() => {
+    return false
+  })
 }

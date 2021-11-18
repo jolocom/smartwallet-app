@@ -26,6 +26,7 @@ import {
   useCheckNFC,
   useTranslatedAusweisFields,
   useAusweisScanner,
+  useAusweisCancelBackHandler,
 } from '../hooks'
 import {
   AusweisButtons,
@@ -75,10 +76,7 @@ export const AusweisRequestReview = () => {
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
 
-  useBackHandler(() => {
-    cancelInteraction()
-    return true
-  })
+  useAusweisCancelBackHandler()
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
