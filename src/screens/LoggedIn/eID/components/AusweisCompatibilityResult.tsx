@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/core'
 import { StyleSheet, View } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
@@ -34,9 +34,13 @@ export const AusweisCompatibilityResult: React.FC = () => {
   const isFailed = inoperative || deactivated
 
   useEffect(() => {
-    setTimeout(() => {
+    const id = setTimeout(() => {
       goBack()
     }, 5000)
+
+    return () => {
+      clearTimeout(id)
+    }
   }, [])
 
   return (
