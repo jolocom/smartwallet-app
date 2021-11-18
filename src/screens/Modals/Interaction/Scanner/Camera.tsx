@@ -40,6 +40,7 @@ import {
   getAusweisScannerKey,
   getIsAusweisInteractionProcessed,
 } from '~/modules/ausweis/selectors'
+import useConnection from '~/hooks/connection'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -50,6 +51,7 @@ const Camera = () => {
   const { processInteraction } = useInteractionStart()
   const dispatch = useDispatch()
   const isScreenFocused = useIsFocused()
+  const { connected: isConnectedToTheInternet } = useConnection()
 
   const ausweisScannerKey = useSelector(getAusweisScannerKey)
 
@@ -67,7 +69,7 @@ const Camera = () => {
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
 
-  const [isError, setError] = useState(false)
+  const [isError, setError] = useState<boolean | undefined>(undefined)
   const [errorText, setErrorText] = useState('')
   const colorAnimationValue = useRef(new Animated.Value(0)).current
   const textAnimationValue = useRef(new Animated.Value(0)).current
@@ -122,6 +124,15 @@ const Camera = () => {
   }, [isAuseisInteractionProcessed])
 
   const handleScan = async (e: { data: string }) => {
+    if (!isConnectedToTheInternet) {
+      setError(true)
+      /**
+       * TODO:
+       * add copy/translation
+       */
+      setErrorText('Internet connection is required to proceed')
+      return
+    }
     try {
       // FIXME: Ideally we should use the value from the .env config, but there
       const isUrl = await Linking.canOpenURL(e.data)
@@ -133,14 +144,18 @@ const Camera = () => {
       }
     } catch (err) {
       console.log({ err })
-
       setError(true)
       setErrorText(t('Camera.errorMsg'))
+    }
+  }
+
+  useEffect(() => {
+    if (isError === true) {
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
       })
     }
-  }
+  }, [isError])
 
   const { top } = useSafeArea()
 
