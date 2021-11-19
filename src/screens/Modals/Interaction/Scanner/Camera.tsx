@@ -104,17 +104,27 @@ const Camera = () => {
     }, 300)
   }, [])
 
+  const openURL = async (url: string) => {
+    let canOpen: boolean | undefined
+    try {
+      canOpen = await Linking.canOpenURL(url)
+    } catch (e) {
+      canOpen = false
+    }
+    return canOpen
+  }
+
   const handleScan = async (e: { data: string }) => {
     try {
-      // FIXME: Ideally we should use the value from the .env config, but there
-      // seems to be an issue with reading it.
-      if (Linking.canOpenURL(e.data) && e.data.includes('jolocom.app.link')) {
+      const canOpen = await openURL(e.data)
+      console.log({ canOpen })
+      if (canOpen && e.data.includes('jolocom.app.link')) {
         branch.openURL(e.data)
       } else {
         await processInteraction(e.data)
       }
     } catch (err) {
-      console.log({ err })
+      console.log('handleScan error', { err })
 
       setError(true)
       setErrorText(t('Camera.errorMsg'))
