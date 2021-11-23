@@ -124,8 +124,7 @@ const Camera = () => {
   const openURL = async (url: string) => {
     let canOpen: boolean | undefined
     try {
-      await Linking.canOpenURL(url)
-      canOpen = true
+      canOpen = await Linking.canOpenURL(url)
     } catch (e) {
       canOpen = false
     }
