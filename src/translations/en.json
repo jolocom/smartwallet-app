@@ -572,5 +572,8 @@
         "closeBtn": "Close",
         "pukExhaustedHeader": "You used all allowed PUK attempts. Your card is locked now",
         "unlockedHeader": "Your card is unlocked and ready to use!"
+    },
+    "Details": {
+        "expandBtn": "See more"
     }
 }

@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  LayoutAnimation,
+} from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useClipboard } from '@react-native-community/hooks'
@@ -17,39 +23,25 @@ import { useToggleExpand } from '~/hooks/ui'
 import Collapsible from '~/components/Collapsible'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
+import { TextLayoutEvent } from '~/types/props'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
-const FieldDetails = () => {
-  const route =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-  const {
-    title,
-    photo,
-    fields,
-    backgroundColor = Colors.mainBlack,
-  } = route.params
+type FieldValueProps = { value: string }
+const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
+  const [clipboardText, setClipboardData] = useClipboard()
 
-  const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
-  const { isExpanded, onToggleExpand } = useToggleExpand()
   const { scheduleInfo } = useToasts()
   const { t } = useTranslation()
 
-  const [clipboardText, setClipboardData] = useClipboard()
-
-  const handleToggleExpand = (idx: number) => {
-    setExpandedFieldIdx(idx)
-    onToggleExpand()
-  }
-
-  useEffect(() => {
-    if (!isExpanded) {
-      setExpandedFieldIdx(-1)
-    }
-  }, [isExpanded])
-
-  const handleCopyToClipboard = setClipboardData
-
+  const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(0)
+  const { isExpanded, onToggleExpand } = useToggleExpand()
+  const [shouldAppendDots, setAppendDots] = useState(false)
+  const wasCalculated = useRef(false)
+  /**
+   * As soon as the text is available
+   * in the clipboard show the notification
+   */
   useEffect(() => {
     if (clipboardText) {
       scheduleInfo({
@@ -63,6 +55,71 @@ const FieldDetails = () => {
   }, [clipboardText])
 
   useEffect(() => () => setClipboardData(''))
+
+  const handleTextLayout = (e: TextLayoutEvent) => {
+    const numberOfLines = e.nativeEvent.lines.length
+    if (numberOfLines > 4 && !wasCalculated.current) {
+      setAppendDots(true)
+      setNumberOfVisibleLines(4)
+    }
+    wasCalculated.current = true
+  }
+
+  useEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 200,
+    })
+    if (isExpanded) {
+      setNumberOfVisibleLines(0)
+    } else {
+      setNumberOfVisibleLines(4)
+    }
+  }, [isExpanded])
+
+  return (
+    <>
+      <TouchableOpacity
+        onPress={onToggleExpand}
+        onLongPress={() => setClipboardData(value as string)}
+        activeOpacity={0.6}
+      >
+        <JoloText
+          // @ts-expect-error
+          onTextLayout={handleTextLayout}
+          color={Colors.black95}
+          numberOfLines={numberOfVisibleLines}
+          customStyles={[
+            styles.fieldText,
+            { marginTop: BP({ default: 8, xsmall: 4 }) },
+            !isExpanded && shouldAppendDots && { marginBottom: 15 },
+          ]}
+        >
+          {value}
+        </JoloText>
+      </TouchableOpacity>
+      {!isExpanded && shouldAppendDots && (
+        <JoloText
+          color={Colors.black95}
+          customStyles={{ position: 'absolute', bottom: 10, right: 10 }}
+          onPress={onToggleExpand}
+        >
+          {t('Details.expandBtn')}
+        </JoloText>
+      )}
+    </>
+  )
+}
+
+const FieldDetails = () => {
+  const route =
+    useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
+  const {
+    title,
+    photo,
+    fields,
+    backgroundColor = Colors.mainBlack,
+  } = route.params
 
   const { top } = useSafeArea()
   return (
@@ -125,26 +182,7 @@ const FieldDetails = () => {
                       >
                         {field.label}
                       </JoloText>
-                      <TouchableOpacity
-                        onPress={() => handleToggleExpand(i)}
-                        onLongPress={() =>
-                          handleCopyToClipboard(field.value as string)
-                        }
-                        activeOpacity={0.6}
-                      >
-                        <JoloText
-                          color={Colors.black95}
-                          numberOfLines={
-                            isExpanded && expandedFieldIdx === i ? 0 : 4
-                          }
-                          customStyles={[
-                            styles.fieldText,
-                            { marginTop: BP({ default: 8, xsmall: 4 }) },
-                          ]}
-                        >
-                          {field.value}
-                        </JoloText>
-                      </TouchableOpacity>
+                      <FieldValue value={field.value as string} />
                     </View>
                     {i !== Object.keys(fields).length - 1 && (
                       <View style={styles.divider} />
@@ -184,6 +222,7 @@ const styles = StyleSheet.create({
     }),
     paddingHorizontal: 16,
     alignItems: 'flex-start',
+    position: 'relative',
   },
   fieldText: {
     textAlign: 'left',
