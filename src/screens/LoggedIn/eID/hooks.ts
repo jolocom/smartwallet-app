@@ -23,6 +23,7 @@ import { useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
+import { Platform } from 'react-native'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -238,8 +239,7 @@ export const useAusweisCompatibilityCheck = () => {
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
 
-  const startCheck = () => {
-    setCompatibility(undefined)
+  const checkAndroidCompatibility = () => {
     showScanner()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
@@ -255,6 +255,29 @@ export const useAusweisCompatibilityCheck = () => {
         }
       },
     })
+  }
+
+  const checkIosCompatibility = () => {
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers({
+      handleCardInfo: (info) => {
+        if (info) {
+          const { inoperative, deactivated } = info
+          setCompatibility({ inoperative, deactivated })
+        }
+      },
+    })
+
+    aa2Module.changePin()
+  }
+
+  const startCheck = () => {
+    setCompatibility(undefined)
+    Platform.select({
+      ios: checkIosCompatibility,
+      android: checkAndroidCompatibility,
+      default: checkAndroidCompatibility,
+    })()
   }
 
   useEffect(() => {
