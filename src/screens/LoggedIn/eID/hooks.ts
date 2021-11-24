@@ -1,5 +1,6 @@
 import { CommonActions, useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
@@ -18,12 +19,11 @@ import {
   AusweisCardResult,
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
-import { Platform } from 'react-native'
+import { setPopup } from '~/modules/appState/actions'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -234,10 +234,12 @@ export const useAusweisInteraction = () => {
 }
 
 export const useAusweisCompatibilityCheck = () => {
+  const dispatch = useDispatch()
   const redirect = useRedirect()
   const pop = usePop()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
+  const { cancelFlow } = useAusweisInteraction()
 
   const checkAndroidCompatibility = () => {
     showScanner()
@@ -258,12 +260,18 @@ export const useAusweisCompatibilityCheck = () => {
   }
 
   const checkIosCompatibility = () => {
+    dispatch(setPopup(true))
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
         if (info) {
           const { inoperative, deactivated } = info
-          setCompatibility({ inoperative, deactivated })
+          // NOTE: The timeout is here to assure the compatibility screen appears after the native
+          // scanner was hidden.
+          setTimeout(() => {
+            setCompatibility({ inoperative, deactivated })
+            cancelFlow()
+          }, 3000)
         }
       },
     })
