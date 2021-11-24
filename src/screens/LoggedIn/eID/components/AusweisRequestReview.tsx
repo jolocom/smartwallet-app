@@ -196,6 +196,7 @@ export const AusweisRequestReview = () => {
       fields,
       title: providerName,
       backgroundColor: Colors.mainDark,
+      photo: undefined,
     })
   }
 

@@ -87,6 +87,7 @@ const useHandleMorePress = () => {
             fields,
             photo,
             title: displayDocumentName,
+            backgroundColor: undefined,
           },
         },
       },
