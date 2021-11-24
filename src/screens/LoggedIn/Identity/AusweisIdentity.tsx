@@ -56,12 +56,6 @@ export const AusweisIdentity = () => {
         },
       })
     }
-    /**
-     * NOTE: replacing for now until fixing issue with getting active route,
-     * which is happening when we updating params of the Scanner screen
-     * @AusweisScanner
-     */
-
     if (IS_ANDROID) {
       updateScanner({
         state: AusweisScannerState.success,
