@@ -34,9 +34,13 @@ export const AusweisCompatibilityResult: React.FC = () => {
   const isFailed = inoperative || deactivated
 
   useEffect(() => {
-    setTimeout(() => {
+    const id = setTimeout(() => {
       goBack()
     }, 5000)
+
+    return () => {
+      clearTimeout(id)
+    }
   }, [])
 
   return (
@@ -44,31 +48,33 @@ export const AusweisCompatibilityResult: React.FC = () => {
       backgroundColor={Colors.black}
       customStyles={{ justifyContent: 'flex-end' }}
     >
-      <View style={styles.headerContainer}>
-        <JoloText kind={JoloTextKind.title}>
-          {t('AusweisCompatibilityStatus.header')}
-        </JoloText>
-      </View>
-      <View style={styles.resultContainer}>
-        {isFailed ? (
-          <JoloText size={JoloTextSizes.big} color={Colors.error}>
-            {t('AusweisCompatibilityStatus.error')}
+      <View onTouchStart={goBack}>
+        <View style={styles.headerContainer}>
+          <JoloText kind={JoloTextKind.title}>
+            {t('AusweisCompatibilityStatus.header')}
           </JoloText>
-        ) : (
-          <>
-            <SuccessResult title={t('AusweisCompatibilityStatus.status1')} />
-            <SuccessResult title={t('AusweisCompatibilityStatus.status2')} />
-            <SuccessResult title={t('AusweisCompatibilityStatus.status3')} />
-          </>
-        )}
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={styles.iconContainer}>
+        </View>
+        <View style={styles.resultContainer}>
           {isFailed ? (
-            <ErrorIcon color={Colors.white90} />
+            <JoloText size={JoloTextSizes.big} color={Colors.error}>
+              {t('AusweisCompatibilityStatus.error')}
+            </JoloText>
           ) : (
-            <SuccessTick color={Colors.white90} />
+            <>
+              <SuccessResult title={t('AusweisCompatibilityStatus.status1')} />
+              <SuccessResult title={t('AusweisCompatibilityStatus.status2')} />
+              <SuccessResult title={t('AusweisCompatibilityStatus.status3')} />
+            </>
           )}
+        </View>
+        <View style={{ flex: 1 }}>
+          <View style={styles.iconContainer}>
+            {isFailed ? (
+              <ErrorIcon color={Colors.white90} />
+            ) : (
+              <SuccessTick color={Colors.white90} />
+            )}
+          </View>
         </View>
       </View>
     </ScreenContainer>
