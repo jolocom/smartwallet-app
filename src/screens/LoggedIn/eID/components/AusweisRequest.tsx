@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
-import { Linking } from 'react-native'
+import { Linking, Platform } from 'react-native'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import useTranslation from '~/hooks/useTranslation'
@@ -28,7 +28,7 @@ export const AusweisRequest = () => {
 
   const handleProceed = async () => {
     checkNfcSupport(() => {
-      if (shouldSkipCompatibility) {
+      if (shouldSkipCompatibility || Platform.OS === 'ios') {
         navigation.navigate(eIDScreens.RequestDetails)
       } else {
         navigation.navigate(eIDScreens.ReadinessCheck)
