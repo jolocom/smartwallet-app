@@ -121,7 +121,7 @@ const Camera = () => {
     }
   }, [isAuseisInteractionProcessed])
 
-  const openURL = async (url: string) => {
+  const getCanOpenURL = async (url: string) => {
     let canOpen: boolean | undefined
     try {
       canOpen = await Linking.canOpenURL(url)
@@ -133,7 +133,7 @@ const Camera = () => {
 
   const handleScan = async (e: { data: string }) => {
     try {
-      const canOpen = await openURL(e.data)
+      const canOpen = await getCanOpenURL(e.data)
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
       if (canOpen && e.data.includes('jolocom.app.link')) {
