@@ -208,7 +208,8 @@
         "ausweisFailedCheckMsg": "Not the first time failing? \nStart compatibility diagnostics to be sure",
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Action Completed",
-        "ausweisChangePinSuccessMsg": "You can use your new PIN now"
+        "ausweisChangePinSuccessMsg": "You can use your new PIN now",
+        "copied": "Copied"
     },
     "Interaction": {
         "cancelBtn": "Ignore",

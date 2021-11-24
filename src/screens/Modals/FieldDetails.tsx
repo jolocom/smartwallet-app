@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import { useSafeArea } from 'react-native-safe-area-context'
+import { useClipboard } from '@react-native-community/hooks'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -13,7 +15,8 @@ import { MainStackParamList } from '../LoggedIn/Main'
 import { ScreenNames } from '~/types/screens'
 import { useToggleExpand } from '~/hooks/ui'
 import Collapsible from '~/components/Collapsible'
-import { useSafeArea } from 'react-native-safe-area-context'
+import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
@@ -29,6 +32,10 @@ const FieldDetails = () => {
 
   const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
   const { isExpanded, onToggleExpand } = useToggleExpand()
+  const { scheduleInfo } = useToasts()
+  const { t } = useTranslation()
+
+  const [clipboardText, setClipboardData] = useClipboard()
 
   const handleToggleExpand = (idx: number) => {
     setExpandedFieldIdx(idx)
@@ -41,9 +48,30 @@ const FieldDetails = () => {
     }
   }, [isExpanded])
 
+  const handleCopyToClipboard = setClipboardData
+
+  useEffect(() => {
+    if (clipboardText) {
+      scheduleInfo({
+        title: t('Toasts.copied'),
+        message: ``,
+        dismiss: {
+          timeout: 1500,
+        },
+      })
+    }
+  }, [clipboardText])
+
+  useEffect(() => () => setClipboardData(''))
+
   const { top } = useSafeArea()
   return (
-    <View style={{ paddingTop: top, backgroundColor }}>
+    <View
+      style={{
+        paddingTop: top,
+        backgroundColor,
+      }}
+    >
       <Collapsible
         renderHeader={() => (
           <Collapsible.Header
@@ -53,7 +81,10 @@ const FieldDetails = () => {
         )}
         renderScroll={() => (
           <ScreenContainer.Padding>
-            <Collapsible.Scroll>
+            <Collapsible.Scroll
+              disableScrollViewPanResponder
+              containerStyles={{ height: '100%' }}
+            >
               <Collapsible.Title
                 text={title ?? ''}
                 customContainerStyles={{
@@ -96,7 +127,10 @@ const FieldDetails = () => {
                       </JoloText>
                       <TouchableOpacity
                         onPress={() => handleToggleExpand(i)}
-                        activeOpacity={1}
+                        onLongPress={() =>
+                          handleCopyToClipboard(field.value as string)
+                        }
+                        activeOpacity={0.6}
                       >
                         <JoloText
                           color={Colors.black95}
