@@ -56,6 +56,7 @@ export const AusweisScanner = () => {
       checkNfcSupport(() => {})
     }, 10000)
     return () => {
+      dispatch(setAusweisScannerKey(null))
       clearInterval(id)
     }
   }, [])

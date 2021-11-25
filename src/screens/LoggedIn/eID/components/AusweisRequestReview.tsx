@@ -42,17 +42,11 @@ import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import moment from 'moment'
 import { IS_ANDROID } from '~/utils/generic'
-import { useToasts } from '~/hooks/toasts'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
-  const {
-    acceptRequest,
-    cancelInteraction,
-    checkCardValidity,
-    finishFlow,
-    closeAusweis,
-  } = useAusweisInteraction()
+  const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
+    useAusweisInteraction()
   const {
     providerName,
     requiredFields,
@@ -71,7 +65,6 @@ export const AusweisRequestReview = () => {
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const dispatch = useDispatch()
   const translateField = useTranslatedAusweisFields()
-  const { scheduleWarning } = useToasts()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
 
@@ -156,7 +149,6 @@ export const AusweisRequestReview = () => {
         if (Platform.OS === 'ios') {
           closeAusweis()
         }
-        finishFlow(url, message)
       },
     })
   }, [])

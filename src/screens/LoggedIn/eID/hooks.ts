@@ -23,6 +23,7 @@ import { useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
+import useConnection from '~/hooks/connection'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -83,6 +84,7 @@ export const useAusweisInteraction = () => {
   const { scheduleInfo, scheduleErrorWarning, scheduleWarning } = useToasts()
   const popStack = usePopStack()
   const dispatch = useDispatch()
+  const { connected: isConnectedToTheInternet } = useConnection()
 
   // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
   // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
@@ -174,6 +176,9 @@ export const useAusweisInteraction = () => {
   }
 
   const finishFlow = (url: string, message?: string) => {
+    if (isConnectedToTheInternet === false) {
+      return Promise.reject('No internet connection')
+    }
     return fetch(url)
       .then((res) => {
         if (!res['ok']) {
