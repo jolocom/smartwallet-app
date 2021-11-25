@@ -43,7 +43,6 @@ interface PropsI extends BtnPropsI {
   withoutMargins?: boolean
   customContainerStyles?: ViewStyle
   testID?: string
-  noBackground?: boolean
 }
 
 interface BtnComposition {
@@ -117,7 +116,6 @@ const Btn: React.FC<PropsI> & BtnComposition = ({
   customContainerStyles,
   testID,
   children,
-  noBackground = false,
   ...btnProps
 }) => {
   const containerStyles = [
@@ -165,9 +163,7 @@ const Btn: React.FC<PropsI> & BtnComposition = ({
             style={[
               containerStyles,
               {
-                ...(!noBackground && {
-                  backgroundColor: Colors.matterhorn18,
-                }),
+                backgroundColor: Colors.matterhorn18,
               },
               customContainerStyles,
               btnStyle,
@@ -182,9 +178,7 @@ const Btn: React.FC<PropsI> & BtnComposition = ({
             style={[
               containerStyles,
               {
-                ...(!noBackground && {
-                  backgroundColor: Colors.white06,
-                }),
+                backgroundColor: Colors.white06,
                 borderStyle: 'solid',
                 borderWidth: 0.8,
                 borderColor: Colors.silverChalice,
