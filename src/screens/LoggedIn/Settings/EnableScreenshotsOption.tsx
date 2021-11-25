@@ -4,7 +4,7 @@ import { StorageKeys, useAgent } from '~/hooks/sdk'
 import FlagSecure from 'react-native-flag-secure-android'
 import Section from './components/Section'
 import Option from './components/Option'
-import { Platform, View } from 'react-native'
+import { Alert, Platform, View } from 'react-native'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
 
@@ -28,6 +28,7 @@ const EnableScreenshotsOption = () => {
   }, [])
 
   const disableScreenshots = () => {
+    setEnabled(false)
     FlagSecure.activate()
     agent.storage.store
       .setting(StorageKeys.screenshotsEnabled, {
@@ -36,35 +37,48 @@ const EnableScreenshotsOption = () => {
       .catch(scheduleErrorWarning)
   }
 
+  // TODO add terms
   const enableScreenshots = () => {
-    FlagSecure.deactivate()
-    agent.storage.store
-      .setting(StorageKeys.screenshotsEnabled, {
-        isEnabled: true,
-      })
-      .catch(scheduleErrorWarning)
+    Alert.alert(
+      'Pay attention',
+      'All content will be visible when switching between apps running in the background',
+      [
+        { text: 'Cancel' },
+        {
+          text: 'Turn on',
+          onPress: () => {
+            setEnabled(true)
+            FlagSecure.deactivate()
+            agent.storage.store
+              .setting(StorageKeys.screenshotsEnabled, {
+                isEnabled: true,
+              })
+              .catch(scheduleErrorWarning)
+          },
+        },
+      ],
+      { cancelable: true },
+    )
   }
 
   const handleDisableScreenshots = () => {
-    setEnabled((prev) => {
-      prev ? disableScreenshots() : enableScreenshots()
-      return !prev
-    })
+    if (isEnabled) {
+      disableScreenshots()
+    } else {
+      enableScreenshots()
+    }
   }
 
-  return Platform.OS === 'android' ? (
-    <Section>
-      <Section.Title>Privacy</Section.Title>
-      <Section.Block>
-        <Option>
-          <Option.Title title="Enabled screenshots" />
-          <View style={{ position: 'absolute', right: 16 }}>
-            <ToggleSwitch on={isEnabled} onToggle={handleDisableScreenshots} />
-          </View>
-        </Option>
-      </Section.Block>
-    </Section>
-  ) : null
+  return (
+    <Section.Block>
+      <Option>
+        <Option.Title title="Allow screenshots" />
+        <View style={{ position: 'absolute', right: 16 }}>
+          <ToggleSwitch on={isEnabled} onToggle={handleDisableScreenshots} />
+        </View>
+      </Option>
+    </Section.Block>
+  )
 }
 
 export default EnableScreenshotsOption
