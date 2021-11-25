@@ -9,7 +9,6 @@ import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 
-//TODO: disable screenshots on the Seedphrase screen
 const EnableScreenshotsOption = () => {
   const { t } = useTranslation()
   const agent = useAgent()
