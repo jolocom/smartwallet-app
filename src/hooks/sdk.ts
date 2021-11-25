@@ -12,7 +12,7 @@ import useTermsConsent from './consent'
 import { makeInitializeCredentials, useCredentials } from './signedCredentials'
 import useTranslation from './useTranslation'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
-import { useDisableScreenshots } from './screenshots'
+import { useInitDisableScreenshots } from './screenshots'
 import { Platform } from 'react-native'
 
 // TODO: add a hook which manages setting/getting properties from storage
@@ -49,7 +49,7 @@ export const useWalletInit = () => {
   const dispatch = useDispatch()
   const { checkConsent } = useTermsConsent()
   const secureStorage = useSecureStorage()
-  const initDisableScreenshots = useDisableScreenshots()
+  const initDisableScreenshots = useInitDisableScreenshots()
 
   return async (agent: Agent) => {
     // NOTE: Checking whether the user accepted the newest Terms of Service conditions
