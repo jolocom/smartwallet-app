@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 
 import Section from '../components/Section'
 import Option from '../components/Option'
@@ -10,11 +10,8 @@ import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import { usePopupMenu } from '~/hooks/popupMenu'
-import { StorageKeys, useAgent } from '~/hooks/sdk'
-import EnableScreenshotsOption from '../EnableScreenshotsOption'
 
 const DevelopmentSection = () => {
-  const agent = useAgent()
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
@@ -33,7 +30,6 @@ const DevelopmentSection = () => {
 
   return (
     <>
-      <EnableScreenshotsOption />
       <Section>
         <Section.Title>[DEV] Interactions</Section.Title>
         <Section.Block>
