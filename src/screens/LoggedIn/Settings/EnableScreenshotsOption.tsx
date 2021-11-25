@@ -4,23 +4,23 @@ import { StorageKeys, useAgent } from '~/hooks/sdk'
 import FlagSecure from 'react-native-flag-secure-android'
 import Section from './components/Section'
 import Option from './components/Option'
-import { Alert, Platform, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
 
 //TODO: disable screenshots on the Seedphrase screen
 const EnableScreenshotsOption = () => {
+  const { t } = useTranslation()
   const agent = useAgent()
   const [isEnabled, setEnabled] = useState(false)
   const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
-    //TODO: this has to happen somewhere during wallet init, and dispatch the value to redux
     agent.storage.get
       .setting(StorageKeys.screenshotsEnabled)
       .then((value) => {
         const { isEnabled } = value
-        console.log({ isEnabled })
         isEnabled ? enableScreenshots() : disableScreenshots()
         setEnabled(!!isEnabled)
       })
@@ -37,15 +37,14 @@ const EnableScreenshotsOption = () => {
       .catch(scheduleErrorWarning)
   }
 
-  // TODO add terms
   const enableScreenshots = () => {
     Alert.alert(
-      'Pay attention',
-      'All content will be visible when switching between apps running in the background',
+      t('Settings.screenshotAlertTitle'),
+      t('Settings.screenshotAlertMsg'),
       [
-        { text: 'Cancel' },
+        { text: t('Settings.screenshotAlertCancel') },
         {
-          text: 'Turn on',
+          text: t('Settings.screenshotAlertCta'),
           onPress: () => {
             setEnabled(true)
             FlagSecure.deactivate()
@@ -72,7 +71,7 @@ const EnableScreenshotsOption = () => {
   return (
     <Section.Block>
       <Option>
-        <Option.Title title="Allow screenshots" />
+        <Option.Title title={t('Settings.screenshotBlock')} />
         <View style={{ position: 'absolute', right: 16 }}>
           <ToggleSwitch on={isEnabled} onToggle={handleDisableScreenshots} />
         </View>
