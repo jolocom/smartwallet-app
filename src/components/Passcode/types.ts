@@ -17,7 +17,6 @@ export interface IPasscodeHeaderProps extends IJoloTextProps {
 export interface IPasscodeKeyboardProps {
   biometryType?: BiometryType
   onBiometryPress?: () => void
-  disabled?: boolean
 }
 
 export interface IPasscodeInputProps {

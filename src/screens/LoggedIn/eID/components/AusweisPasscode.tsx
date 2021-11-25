@@ -530,7 +530,7 @@ export const AusweisPasscode = () => {
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'center' }}>
           {renderAccessoryBtn()}
-          <Passcode.Keyboard disabled={!isConnectedToTheInternet} />
+          <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
     </ScreenContainer>
