@@ -5,6 +5,7 @@
  * with module caching, that appeared after upgrading to RN63.
  */
 
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useLoader } from '../loader'
@@ -20,6 +21,9 @@ import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
+import { Interaction, TransportAPI } from 'react-native-jolocom'
+import branch from 'react-native-branch'
+import { SWErrorCodes } from '~/errors/codes'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -27,6 +31,37 @@ export const useInteraction = () => {
   if (!interactionId) throw new Error('Interaction not found')
 
   return () => agent.interactionManager.getInteraction(interactionId)
+}
+
+// NOTE: This should be called only in one place!
+export const useDeeplinkInteractions = () => {
+  const { processInteraction } = useInteractionStart()
+  const { scheduleErrorWarning } = useToasts()
+
+  useEffect(() => {
+    // TODO move somewhere
+    branch.disableTracking(true)
+    branch.subscribe(({ error, params }) => {
+      if (error) {
+        console.warn('Error processing DeepLink: ', error)
+        return
+      }
+
+      if (params) {
+        if (params['token'] && typeof params['token'] === 'string') {
+          processInteraction(params['token'])
+          return
+        } else if (
+          !params['+clicked_branch_link'] ||
+          JSON.stringify(params) === '{}'
+        ) {
+          return
+        }
+
+        scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
+      }
+    })
+  }, [])
 }
 
 export const useInteractionStart = () => {
@@ -37,31 +72,48 @@ export const useInteractionStart = () => {
   const { connected, showDisconnectedToast } = useConnection()
   const { scheduleErrorWarning } = useToasts()
 
-  return async (jwt: string) => {
+  const processInteraction = async (
+    jwt: string,
+    transportAPI?: TransportAPI,
+  ) => {
+    try {
+      parseJWT(jwt)
+      const interaction = await agent.processJWT(jwt, transportAPI)
+
+      return interaction
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
+  }
+
+  const showInteraction = async (interaction: Interaction) => {
     // NOTE: not continuing the interaction if there is no network connection
-    if (connected === false) return showDisconnectedToast()
+    try {
+      if (connected === false) return showDisconnectedToast()
 
-    // NOTE: we're parsing the jwt here, even though it will be parsed in `agent.processJWT`
-    // below. This is to assure the error is caught before the loading screen, so that it can
-    // be handled by the scanner component.
-    parseJWT(jwt)
+      const counterparty = interaction.getSummary().initiator
+      const interactionData = await interactionHandler(interaction)
 
+      if (interactionData) {
+        dispatch(
+          setInteractionDetails({
+            id: interaction.id,
+            flowType: interaction.flow.type,
+            counterparty,
+            ...interactionData,
+          }),
+        )
+      }
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
+  }
+
+  const startInteraction = async (jwt: string) => {
     return loader(
       async () => {
-        const interaction = await agent.processJWT(jwt)
-        const counterparty = interaction.getSummary().initiator
-        const interactionData = await interactionHandler(interaction)
-
-        if (interactionData) {
-          dispatch(
-            setInteractionDetails({
-              id: interaction.id,
-              flowType: interaction.flow.type,
-              counterparty,
-              ...interactionData,
-            }),
-          )
-        }
+        const interaction = await processInteraction(jwt)
+        await showInteraction(interaction)
       },
       { showSuccess: false, showFailed: false },
       (error) => {
@@ -69,6 +121,8 @@ export const useInteractionStart = () => {
       },
     )
   }
+
+  return { processInteraction, showInteraction, startInteraction }
 }
 
 export const useFinishInteraction = () => {

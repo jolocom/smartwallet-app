@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import com.facebook.react.ReactActivity;
 import com.zoontek.rnbootsplash.RNBootSplash;
+import io.branch.rnbranch.*;
+import android.content.Intent;
 
 public class MainActivity extends ReactActivity {
 
@@ -14,6 +16,19 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "SmartWallet";
+  }
+
+  @Override
+  protected void onStart() {
+      super.onStart();
+      RNBranchModule.initSession(getIntent().getData(), this);
+  }
+
+  @Override
+  public void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    intent.putExtra("branch_force_new_session", true);
+    RNBranchModule.onNewIntent(intent);
   }
 
   @Override

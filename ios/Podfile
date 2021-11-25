@@ -18,6 +18,8 @@ target 'SmartWallet' do
   config = use_native_modules!
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-branch', :path => '../node_modules/react-native-branch'
+
   target 'SmartWalletTests' do
     inherit! :complete
     # Pods for testing
