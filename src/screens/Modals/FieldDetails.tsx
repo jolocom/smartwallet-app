@@ -127,6 +127,7 @@ const FieldDetails = () => {
       style={{
         paddingTop: top,
         backgroundColor,
+        height: '100%',
       }}
     >
       <Collapsible
@@ -138,10 +139,7 @@ const FieldDetails = () => {
         )}
         renderScroll={() => (
           <ScreenContainer.Padding>
-            <Collapsible.Scroll
-              disableScrollViewPanResponder
-              containerStyles={{ height: '100%' }}
-            >
+            <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
                 text={title ?? ''}
                 customContainerStyles={{
