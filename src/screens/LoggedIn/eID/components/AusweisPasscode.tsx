@@ -38,7 +38,6 @@ import {
   useCheckNFC,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
-import useConnection from '~/hooks/connection'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -56,19 +55,6 @@ const PasscodeGlue: React.FC<PasscodeErrorSetterProps> = ({
   runInputReset,
 }) => {
   const { setPinError, setPinErrorText, setPin } = usePasscode()
-  const { connected: isConnectedToTheInternet } = useConnection()
-
-  useEffect(() => {
-    if (!isConnectedToTheInternet) {
-      /**
-       * TODO:
-       * copy is needed
-       */
-      setPinErrorText('Internet connection is required to proceed')
-    } else {
-      setPinErrorText(null)
-    }
-  }, [isConnectedToTheInternet])
 
   useEffect(() => {
     if (Boolean(errorText)) {
@@ -97,7 +83,6 @@ export const AusweisPasscode = () => {
   const dispatch = useDispatch()
 
   const { scheduleInfo } = useToasts()
-  const { connected: isConnectedToTheInternet } = useConnection()
 
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
