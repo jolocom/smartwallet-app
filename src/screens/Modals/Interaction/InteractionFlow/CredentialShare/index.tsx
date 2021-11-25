@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { TouchableWithoutFeedback, View } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
@@ -34,13 +35,12 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
-import ShareAttributeWidget from './ShareAttributeWidget'
 import Collapsible from '~/components/Collapsible'
+import ShareAttributeWidget from './ShareAttributeWidget'
 import BP from '~/utils/breakpoints'
 import AdoptedCarousel from '~/components/AdoptedCarousel'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import Space from '~/components/Space'
-import ScreenContainer from '~/components/ScreenContainer'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
@@ -49,6 +49,8 @@ import {
   InteractionShareOtherCard,
 } from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
+import ScreenContainer from '~/components/ScreenContainer'
+import { Colors } from '~/utils/colors'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -227,47 +229,47 @@ const CredentialShareFAS = () => {
       />
     ))
 
+  const { top } = useSafeArea()
   return (
-    <Collapsible>
-      <Collapsible.AnimatedHeader height={62}>
-        <Collapsible.HeaderText>
-          {t('CredentialRequest.header')}
-        </Collapsible.HeaderText>
-      </Collapsible.AnimatedHeader>
-      <ContainerFAS>
-        <Collapsible.ScrollView withoutHeaderPadding>
-          <Collapsible.HidingScale>
-            <LogoContainerFAS>
-              <InteractionLogo />
-            </LogoContainerFAS>
-          </Collapsible.HidingScale>
-          <Collapsible.HidingTextContainer>
-            <ScreenContainer.Padding>
-              <InteractionTitle label={t('CredentialRequest.header')} />
-            </ScreenContainer.Padding>
-          </Collapsible.HidingTextContainer>
-          <ScreenContainer.Padding>
-            <InteractionDescription
-              label={t('CredentialRequest.subheader', { serviceName })}
-            />
-          </ScreenContainer.Padding>
-          <Space />
-          <ScreenContainer.Padding>
-            <ShareAttributeWidget withContainer />
-          </ScreenContainer.Padding>
-          <InteractionSection
-            title={t('Documents.documentsTab')}
-            isPaddedTitle={true}
-          >
-            {handleRenderCredentials(documents)}
-          </InteractionSection>
-          <InteractionSection
-            title={t('Documents.othersTab')}
-            isPaddedTitle={true}
-          >
-            {handleRenderCredentials(other)}
-          </InteractionSection>
-        </Collapsible.ScrollView>
+    <View style={{ paddingTop: top, backgroundColor: Colors.mainBlack }}>
+      <Collapsible
+        renderHeader={() => <Collapsible.Header />}
+        renderScroll={() => (
+          <ContainerFAS>
+            <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
+              <Collapsible.Scale>
+                <LogoContainerFAS>
+                  <InteractionLogo />
+                </LogoContainerFAS>
+              </Collapsible.Scale>
+              <Collapsible.Title text={t('CredentialRequest.header')}>
+                <InteractionTitle label={t('CredentialRequest.header')} />
+              </Collapsible.Title>
+              <InteractionDescription
+                label={t('CredentialRequest.subheader', {
+                  serviceName,
+                })}
+              />
+              <Space />
+              <ScreenContainer.Padding>
+                <ShareAttributeWidget withContainer />
+              </ScreenContainer.Padding>
+              <InteractionSection
+                title={t('Documents.documentsTab')}
+                isPaddedTitle={true}
+              >
+                {handleRenderCredentials(documents)}
+              </InteractionSection>
+              <InteractionSection
+                title={t('Documents.othersTab')}
+                isPaddedTitle={true}
+              >
+                {handleRenderCredentials(other)}
+              </InteractionSection>
+            </Collapsible.Scroll>
+          </ContainerFAS>
+        )}
+      >
         <FooterContainerFAS>
           <InteractionFooter
             disabled={!isReadyToSubmit}
@@ -275,8 +277,8 @@ const CredentialShareFAS = () => {
             submitLabel={t('CredentialRequest.acceptBtn')}
           />
         </FooterContainerFAS>
-      </ContainerFAS>
-    </Collapsible>
+      </Collapsible>
+    </View>
   )
 }
 

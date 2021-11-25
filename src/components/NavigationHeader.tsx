@@ -13,7 +13,7 @@ export enum NavHeaderType {
 }
 
 interface Props extends IWithCustomStyle {
-  type: NavHeaderType
+  type?: NavHeaderType
   onPress?: () => void
 }
 
@@ -29,13 +29,13 @@ const NavigationHeader: React.FC<Props> = ({
     <View
       style={[
         styles.navContainer,
-        customStyles,
         {
           justifyContent: 'space-between',
         },
+        customStyles,
       ]}
     >
-      <View style={{ opacity: type === NavHeaderType.Back ? 1 : 0 }}>
+      {type === NavHeaderType.Back && (
         <IconBtn
           disabled={type !== NavHeaderType.Back}
           onPress={navigateBack}
@@ -43,9 +43,9 @@ const NavigationHeader: React.FC<Props> = ({
         >
           <BackArrowIcon />
         </IconBtn>
-      </View>
+      )}
       <View style={styles.centerComponent}>{children}</View>
-      <View style={{ opacity: type === NavHeaderType.Close ? 1 : 0 }}>
+      {type === NavHeaderType.Close && (
         <IconBtn
           disabled={type !== NavHeaderType.Close}
           onPress={navigateBack}
@@ -53,7 +53,7 @@ const NavigationHeader: React.FC<Props> = ({
         >
           <CloseIcon />
         </IconBtn>
-      </View>
+      )}
     </View>
   )
 }
@@ -61,6 +61,7 @@ const NavigationHeader: React.FC<Props> = ({
 const styles = StyleSheet.create({
   navContainer: {
     width: '100%',
+    // TODO: should be exported: used in Collapsible too
     height: 50,
     flexDirection: 'row',
     alignItems: 'center',
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
   centerComponent: {
     flex: 1,
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
   },
 })
 

@@ -26,7 +26,7 @@ const InteractionDescription: React.FC<IInteractionDescriptionProps> = ({
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.mini}
       color={isAnonymous ? Colors.error : Colors.white70}
-      customStyles={{ paddingHorizontal: 10, paddingTop: 15 }}
+      customStyles={{ paddingHorizontal: 10 }}
     >
       {desc}
     </JoloText>

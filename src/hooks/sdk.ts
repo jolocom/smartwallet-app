@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
-import Keychain from 'react-native-keychain'
 
 import { SDKError, Agent } from 'react-native-jolocom'
 
@@ -9,10 +8,10 @@ import { AgentContext } from '~/utils/sdk/context'
 import { useLoader } from './loader'
 import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
-import { PIN_SERVICE } from '~/utils/keychainConsts'
 import useTermsConsent from './consent'
 import { makeInitializeCredentials, useCredentials } from './signedCredentials'
 import useTranslation from './useTranslation'
+import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -47,14 +46,12 @@ export const useAgent = () => {
 export const useWalletInit = () => {
   const dispatch = useDispatch()
   const { checkConsent } = useTermsConsent()
+  const secureStorage = useSecureStorage()
 
   return async (agent: Agent) => {
     // NOTE: Checking whether the user accepted the newest Terms of Service conditions
     await checkConsent(agent)
 
-    const pin = await Keychain.getGenericPassword({
-      service: PIN_SERVICE,
-    })
     const onboardingSetting = await agent.storage.get.setting(
       StorageKeys.isOnboardingDone,
     )
@@ -67,6 +64,7 @@ export const useWalletInit = () => {
       dispatch(setDid(idw.did))
       dispatch(setLogged(true))
 
+      const pin = await secureStorage.getItem(SecureStorageKeys.passcode)
       if (pin) {
         dispatch(setLocalAuth(true))
       }

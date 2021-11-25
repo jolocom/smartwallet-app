@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
-
 import { FlowType } from 'react-native-jolocom'
+import { useBackHandler } from '@react-native-community/hooks'
+import { useIsFocused } from '@react-navigation/core'
 
 import Authentication from './Authentication'
 import Authorization from './Authorization'
@@ -13,9 +14,6 @@ import { getInteractionType } from '~/modules/interaction/selectors'
 
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
-import { useBackHandler } from '@react-native-community/hooks'
-import { useIsFocused } from '@react-navigation/core'
-import { Colors } from '~/utils/colors'
 
 const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)

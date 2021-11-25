@@ -11,10 +11,15 @@ export const showTermsConsent = createAction<boolean>(
 )
 export const setAppLocked = createAction<boolean>(AccountActions.setAppLocked)
 
+export const setCurrentLanguage = createAction<Locales>(
+  AccountActions.setCurrentLanguage,
+)
+
+export const setAppDisabled = createAction<boolean>(
+  AccountActions.setAppDisabled,
+)
+
 // UI
 export const setScreenHeight = createAction<number>(
   AccountActions.setScreenHeight,
-)
-export const setCurrentLanguage = createAction<Locales>(
-  AccountActions.setCurrentLanguage,
 )

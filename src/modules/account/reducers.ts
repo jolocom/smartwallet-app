@@ -10,6 +10,7 @@ const initialState: AccountState = {
   isAppLocked: true,
   screenHeight: 0,
   currentLanguage: Locales.en,
+  isAppDisabled: false,
 }
 
 const reducer = (
@@ -33,6 +34,9 @@ const reducer = (
       return { ...state, screenHeight: action.payload }
     case AccountActions.setCurrentLanguage:
       return { ...state, currentLanguage: action.payload }
+    case AccountActions.setAppDisabled:
+      return { ...state, isAppDisabled: action.payload }
+
     default:
       return state
   }

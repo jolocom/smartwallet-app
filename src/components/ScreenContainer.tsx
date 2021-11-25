@@ -4,7 +4,6 @@ import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
 
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
-import { useHideStatusBar } from '~/hooks/generic'
 import JoloText, {
   JoloTextKind,
   JoloTextWeight,
@@ -13,6 +12,7 @@ import JoloText, {
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
+import { Dimensions } from 'react-native'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -22,7 +22,6 @@ interface ScreenContainerI {
   backgroundColor?: Colors
   hasHeaderBack?: boolean
   hasHeaderClose?: boolean
-  hideStatusBar?: boolean
   onClose?: () => void
   testID?: string
 }
@@ -42,12 +41,9 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
     backgroundColor = Colors.mainBlack,
     hasHeaderBack = false,
     hasHeaderClose = false,
-    hideStatusBar = false,
     onClose,
     testID,
   }) => {
-    hideStatusBar && useHideStatusBar()
-
     const { top, bottom } = useSafeArea()
 
     return (
@@ -61,7 +57,7 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
         <View
           style={[styles.navContainer, isTransparent && styles.transparent]}
         >
-          {!isFullscreen && !hideStatusBar && (
+          {!isFullscreen && (
             <View
               style={{
                 height: top,
@@ -87,10 +83,10 @@ const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
                     marginTop: SCREEN_HEADER_HEIGHT,
                   }),
                 paddingBottom: isFullscreen ? 0 : bottom,
+                marginBottom: -bottom,
               },
               {
                 ...(isFullscreen && {
-                  marginBottom: -bottom,
                   ...styles.fullscreen,
                 }),
               },
@@ -159,7 +155,8 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   padding: {
-    width: '100%',
+    // TODO: double check in places that use ScreenContainer.Padding
+    width: Dimensions.get('window').width,
     paddingHorizontal: 16,
   },
 })

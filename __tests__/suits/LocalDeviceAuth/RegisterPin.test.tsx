@@ -1,11 +1,11 @@
 import React from 'react'
 import { waitFor } from '@testing-library/react-native'
-import { setGenericPassword, STORAGE_TYPE } from 'react-native-keychain'
+import { SecureStorage } from 'react-native-jolocom'
 
 import RegisterPin from '~/screens/Modals/DeviceAuthentication/RegisterPin'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { PIN_USERNAME, PIN_SERVICE } from '~/utils/keychainConsts'
 import { inputPasscode } from '../../utils/inputPasscode'
+import { SecureStorageKeys } from '~/hooks/secureStorage'
 
 const mockNavigation = jest.fn()
 const mockNavigationBack = jest.fn()
@@ -27,16 +27,30 @@ jest.mock('react-redux', () => ({
   useDispatch: () => mockedDispatch,
 }))
 
-jest.mock('react-native-keychain', () => ({
-  STORAGE_TYPE: {
-    AES: 'aes',
+jest.mock('react-native-jolocom', () => ({
+  SecureStorage: {
+    storeValue: jest.fn(),
+    getValue: jest.fn().mockResolvedValue(null),
+    removeValue: jest.fn(),
   },
-  setGenericPassword: jest.fn(() => Promise.resolve(true)),
-  resetGenericPassword: jest.fn(() => Promise.resolve(true)),
+}))
+
+jest.mock('@react-navigation/native', () => ({
+  useIsFocused: jest.fn().mockReturnValue(true),
+  useNavigation: () => ({
+    navigate: jest.fn(),
+  }),
+  createNavigatorFactory: jest.fn(),
+}))
+
+jest.mock('../../../src/hooks/settings', () => () => ({
+  get: jest.fn(),
+  set: jest.fn(),
 }))
 
 describe('Register Passcode', () => {
   it('User is able to set up pin', async () => {
+    const setEncryptedPasswordSpy = jest.spyOn(SecureStorage, 'storeValue')
     const { getByText, getByTestId, queryByText } = renderWithSafeArea(
       <RegisterPin />,
     )
@@ -59,10 +73,10 @@ describe('Register Passcode', () => {
 
     inputPasscode(getByTestId, [1, 1, 1, 1])
 
-    expect(setGenericPassword).toHaveBeenCalledTimes(1)
-    expect(setGenericPassword).toHaveBeenCalledWith(PIN_USERNAME, '1111', {
-      service: PIN_SERVICE,
-      storage: STORAGE_TYPE.AES,
-    })
+    expect(setEncryptedPasswordSpy).toHaveBeenCalledTimes(1)
+    expect(setEncryptedPasswordSpy).toHaveBeenCalledWith(
+      SecureStorageKeys.passcode,
+      '1111',
+    )
   })
 })

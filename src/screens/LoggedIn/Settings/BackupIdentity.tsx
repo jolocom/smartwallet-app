@@ -9,9 +9,9 @@ import Block from '~/components/Block'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
-import Collapsible from '~/components/Collapsible'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
+import Collapsible from '~/components/Collapsible'
 
 const BackupBlock: React.FC<{
   title: string
@@ -53,54 +53,44 @@ const BackupIdentity = () => {
   const lastBackup = '18.07.2020'
 
   return (
-    <Collapsible>
-      <Collapsible.Header>
-        <NavigationHeader type={NavHeaderType.Back}>
-          <Collapsible.HeaderText>
-            {t('BackupOptions.header')}
-          </Collapsible.HeaderText>
-        </NavigationHeader>
-      </Collapsible.Header>
-      <ScreenContainer customStyles={{ justifyContent: 'space-between' }}>
-        <Collapsible.ScrollView
-          customStyles={{
-            flexGrow: 1,
-            justifyContent: 'space-between',
-            paddingBottom: 0,
-          }}
-        >
-          <Collapsible.HidingTextContainer>
-            <Section.Title>{t('BackupOptions.header')}</Section.Title>
-          </Collapsible.HidingTextContainer>
-          <View>
-            <BackupBlock
-              title={t('BackupOptions.exportHeader')}
-              description={t('BackupOptions.exportSubheader')}
-              btnText={t('BackupOptions.exportBtn')}
-              onPress={() => {}}
-            />
-            <BackupBlock
-              title={t('BackupOptions.importHeader')}
-              description={t('BackupOptions.importSubheader')}
-              btnText={t('BackupOptions.importBtn')}
-              onPress={() => {}}
-            />
-          </View>
-          <View
-            style={{
-              width: '100%',
-              paddingBottom: 32,
-              paddingTop: 20,
-            }}
-          >
-            <JoloText color={Colors.white30}>
-              {t('BackupOptions.lastBackupInfo')}
-            </JoloText>
-            <JoloText color={Colors.white30}>{lastBackup}</JoloText>
-          </View>
-        </Collapsible.ScrollView>
-      </ScreenContainer>
-    </Collapsible>
+    <Collapsible
+      renderHeader={() => <Collapsible.Header type={NavHeaderType.Back} />}
+      renderScroll={() => (
+        <ScreenContainer.Padding>
+          <Collapsible.Scroll>
+            <Collapsible.Title text={t('BackupOptions.header')}>
+              <Section.Title>{t('BackupOptions.header')}</Section.Title>
+            </Collapsible.Title>
+            <View>
+              <BackupBlock
+                title={t('BackupOptions.exportHeader')}
+                description={t('BackupOptions.exportSubheader')}
+                btnText={t('BackupOptions.exportBtn')}
+                onPress={() => {}}
+              />
+              <BackupBlock
+                title={t('BackupOptions.importHeader')}
+                description={t('BackupOptions.importSubheader')}
+                btnText={t('BackupOptions.importBtn')}
+                onPress={() => {}}
+              />
+            </View>
+            <View
+              style={{
+                width: '100%',
+                paddingBottom: 32,
+                paddingTop: 20,
+              }}
+            >
+              <JoloText color={Colors.white30}>
+                {t('BackupOptions.lastBackupInfo')}
+              </JoloText>
+              <JoloText color={Colors.white30}>{lastBackup}</JoloText>
+            </View>
+          </Collapsible.Scroll>
+        </ScreenContainer.Padding>
+      )}
+    />
   )
 }
 

@@ -40,7 +40,7 @@ module.exports = {
     'prefer-const': ['error'],
     semi: ['error', 'never'],
     'use-isnan': ['error'],
-    '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
+    '@typescript-eslint/array-type': ['error', 'array-simple'],
     '@typescript-eslint/ban-types': [
       'error',
       {
@@ -54,11 +54,11 @@ module.exports = {
     ],
     'react/jsx-uses-vars': ['warn'],
     // PascalCase for classes
-    '@typescript-eslint/class-name-casing': ['off'],
+    '@typescript-eslint/class-name-casing': ['error'],
     // don't prefix interface names with 'I'
-    '@typescript-eslint/interface-name-prefix': ['off'],
+    '@typescript-eslint/interface-name-prefix': ['error', 'never'],
     // don't conflict <Types> and JSX
-    '@typescript-eslint/no-angle-bracket-type-assertion': ['off'],
+    '@typescript-eslint/no-angle-bracket-type-assertion': ['error'],
     // lose out on typing benefits with any
     '@typescript-eslint/no-explicit-any': ['error'],
     '@typescript-eslint/no-empty-interface': ['off'],
@@ -66,15 +66,11 @@ module.exports = {
     // namespaces and modules are outdated, use ES6 style
     '@typescript-eslint/no-namespace': ['error'],
     // use ES6-style imports instead
-    '@typescript-eslint/no-triple-slash-reference': ['off'],
+    '@typescript-eslint/no-triple-slash-reference': ['error'],
     '@typescript-eslint/no-var-requires': ['off'],
     '@typescript-eslint/no-use-before-define': ['off'],
     '@typescript-eslint/explicit-function-return-type': ['off'],
-    'import/no-duplicates': ['off'],
+    'import/no-duplicates': ['error'],
   },
-  ignorePatterns: [
-    'package.json',
-    'jest.config.js',
-    'app.json',
-  ],
+  ignorePatterns: ['package.json', 'jest.config.js', 'app.json'],
 }

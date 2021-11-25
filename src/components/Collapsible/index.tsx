@@ -1,92 +1,184 @@
-import React, { useRef, useState, useMemo } from 'react'
-import { Animated } from 'react-native'
+import React, { useRef, useState, useMemo, useCallback } from 'react'
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Animated,
+  ScrollView,
+  FlatList,
+  View,
+  LayoutChangeEvent,
+} from 'react-native'
 
+import Title from './Title'
+import {
+  ICollapsibleComposite,
+  ICollapsibleContext,
+  isFlatList,
+  isKeyboardAwareScroll,
+  isScrollView,
+  TTitle,
+} from './types'
+import { compare } from './utils'
+import Header from './Header'
 import { CollapsibleContext } from './context'
-import { Header, AnimatedHeader } from './components/CollapsibleHeader'
-import { CollapsibleScrollView } from './components/ScrollView'
-import { HidingScale } from './components/HidingScale'
-import { HidingTextContainer } from './components/HidingTextContainer'
-import { HeaderText } from './components/HeaderText'
-import { ICollapsibleComposite } from './types'
-import { CollapsibleFlatList } from './components/FlatList'
-import { withListError } from './utils'
-import { CollapsibleKeyboardAwareScrollView } from './components/KeyboardAwareScrollView'
+import Scroll from './Scroll'
+import Scale from './Scale'
+import KeyboardAwareScrollView from './KeyboardAwareScroll'
 
-/***
- * NOTE:
- * A basic structure of a Collapsible screen would look like this:
- * <Collapsible>
- *    <Collapsible.Header>
- *      <Collapsible.HeaderText>{...}</Collapsible.HeaderText>
- *    </Collapsible.Header>
- *    <ScreenContainer>
- *      <Collapsible.ScrollView>
- *        <Collapsible.HidingTextContainer>
- *          {...}
- *        </Collapsible.HidingTextContainer>
- *        {...}
- *      </Collapsible.ScrollView>
- *    </ScreenContainer>
- * </Collapsible>
- ***/
-
-const Collapsible: React.FC & ICollapsibleComposite = ({ children }) => {
-  const yValue = useRef(new Animated.Value(0)).current
-  const [distanceToText, setDistanceToText] = useState(50)
-  const [headerHeight, setHeaderHeight] = useState(75)
-  const [hidingTextHeight, setHidingTextHeight] = useState(80)
-
-  const handleDistanceToText = (distance: number) => setDistanceToText(distance)
-  const handleHeaderHeight = (height: number) => setHeaderHeight(height)
-  const handleHidingTextHeight = (height: number) => setHidingTextHeight(height)
-
-  const distanceToTop = distanceToText + hidingTextHeight
-  const distanceToHeader = distanceToTop - headerHeight
-
-  const handleScroll = Animated.event(
-    [
-      {
-        nativeEvent: { contentOffset: { y: yValue } },
-      },
-    ],
-    { useNativeDriver: true },
-  )
-
-  const interpolateYValue = (inputRange: number[], outputRange: number[]) => {
-    return yValue.interpolate({
-      inputRange,
-      outputRange,
-      extrapolate: 'clamp',
-    })
-  }
-
-  const context = useMemo(
-    () => ({
-      setDistanceToText: handleDistanceToText,
-      setHeaderHeight: handleHeaderHeight,
-      setHidingTextHeight: handleHidingTextHeight,
-      distanceToTop,
-      distanceToHeader,
-      headerHeight,
-      hidingTextHeight,
-      interpolateYValue,
-      handleScroll,
-    }),
-    [distanceToText],
-  )
-
-  return <CollapsibleContext.Provider value={context} children={children} />
+interface ICollapsible {
+  renderHeader: (context: ICollapsibleContext) => React.ReactElement | null
+  renderScroll: (context: ICollapsibleContext) => React.ReactElement | null
 }
 
+const Collapsible: React.FC<ICollapsible> & ICollapsibleComposite = ({
+  renderHeader,
+  renderScroll,
+  children,
+}) => {
+  /**
+   * A support of multiple titles
+   */
+  const [currentTitleIdx, setCurrentTitleIdx] = useState(0)
+  const [titles, setTitles] = useState<TTitle[]>([])
+  const currentTitleText = titles.length ? titles[currentTitleIdx].label : ''
+
+  const [headerHeight, setHeaderHeight] = useState(0)
+
+  const ref = useRef<ScrollView>(null)
+  const prevScrollPosition = useRef(0)
+  const scrollY = useRef(new Animated.Value(0)).current
+
+  const collapsibleRef = useRef<View>(null)
+
+  const handleScroll = useCallback(
+    Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+      useNativeDriver: true,
+      listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const { y } = event.nativeEvent.contentOffset
+        if (y !== prevScrollPosition.current) {
+          if (titles.length) {
+            // if scrolling down
+            if (y > prevScrollPosition.current) {
+              if (currentTitleIdx !== titles.length - 1) {
+                if (y >= titles[currentTitleIdx + 1].startY) {
+                  setCurrentTitleIdx((prev) => ++prev)
+                }
+              }
+            } else {
+              // if scrolling up
+              if (currentTitleIdx !== 0) {
+                if (y < titles[currentTitleIdx].startY) {
+                  setCurrentTitleIdx((prev) => --prev)
+                }
+              }
+            }
+            prevScrollPosition.current = y
+
+            // TODO: add functionality of handleSnap id the scroll stops somewhere
+            // in the middle of title container.
+          }
+        }
+      },
+    }),
+    [JSON.stringify(titles), currentTitleIdx],
+  )
+
+  const handleSnap = <T extends ScrollView | FlatList>(
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+    passedRef?: React.RefObject<T>,
+  ) => {
+    /**
+     * if reference to another scroll component was passed - using it instead,
+     * to control snap from outside of Collapsible component
+     */
+    const list = passedRef?.current ? passedRef : ref
+
+    const offsetY = event.nativeEvent.contentOffset.y
+    if (titles.length) {
+      const { startY, endY } = titles[currentTitleIdx]
+      if (offsetY >= startY && offsetY <= endY) {
+        if (list.current) {
+          const moveToY = offsetY < (startY + endY) / 2 ? startY : endY
+          if (isFlatList(list)) {
+            list.current.scrollToOffset({
+              offset: moveToY,
+            })
+          } else if (isKeyboardAwareScroll(list)) {
+            list.current.scrollToPosition(
+              list.current.position.x,
+              moveToY,
+              true,
+            )
+          } else if (isScrollView(list)) {
+            list.current.scrollTo({
+              y: moveToY,
+            })
+          }
+        }
+      }
+    }
+  }
+
+  const handleAddTitle = useCallback((title: TTitle) => {
+    setTitles((prev) => [...prev, title].sort(compare))
+  }, [])
+
+  const handleHeaderContainerLayout = (e: LayoutChangeEvent) => {
+    const { height } = e.nativeEvent.layout
+    setHeaderHeight(height)
+  }
+
+  const contextValue = useMemo(
+    () => ({
+      // TODO: remove currentTitleText
+      currentTitleText, // for Header
+      scrollY, // for Title
+      headerHeight, // for Title, Scroll
+      onAddTitle: handleAddTitle, // for Title
+      scrollRef: ref, // for Scroll,
+      onScroll: handleScroll, // for Scroll,
+      onSnap: handleSnap, // for Scroll,
+      currentTitle: titles.length ? titles[currentTitleIdx] : undefined,
+      collapsibleRef,
+    }),
+    [currentTitleText, headerHeight, currentTitleIdx, JSON.stringify(titles)],
+  )
+
+  return (
+    <CollapsibleContext.Provider value={contextValue}>
+      {/* NOTE: `collapsible` props makes sure that view is being drawn
+       * https://reactnative.dev/docs/view#collapsable
+       */}
+      <View ref={collapsibleRef} collapsable={false}>
+        <View
+          testID="collapsable-header-container"
+          onLayout={handleHeaderContainerLayout}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            zIndex: 10,
+            // borderColor: 'yellow',
+            // borderWidth: 2,
+          }}
+        >
+          {renderHeader(contextValue)}
+        </View>
+        {headerHeight !== 0 && (
+          <>
+            {renderScroll(contextValue)}
+            {children}
+          </>
+        )}
+      </View>
+    </CollapsibleContext.Provider>
+  )
+}
+
+Collapsible.Title = Title
 Collapsible.Header = Header
-Collapsible.HeaderText = HeaderText
-Collapsible.AnimatedHeader = AnimatedHeader
-Collapsible.FlatList = CollapsibleFlatList
-Collapsible.KeyboardAwareScrollView = withListError(
-  CollapsibleKeyboardAwareScrollView,
-)
-Collapsible.ScrollView = withListError(CollapsibleScrollView)
-Collapsible.HidingScale = HidingScale
-Collapsible.HidingTextContainer = HidingTextContainer
+Collapsible.Scroll = Scroll
+Collapsible.KeyboardAwareScroll = KeyboardAwareScrollView
+Collapsible.Scale = Scale
 
 export default Collapsible

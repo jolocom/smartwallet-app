@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { View, StyleSheet, Animated, Platform } from 'react-native'
-// @ts-expect-error no typescript support as of yet
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import Btn, { BtnTypes } from '~/components/Btn'

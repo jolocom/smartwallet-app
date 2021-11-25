@@ -16,9 +16,15 @@ jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   // eslint-disable-next-line
   useFocusEffect: jest.fn().mockImplementation(() => {}),
+  useIsFocused: jest.fn(() => true),
   useNavigation: () => ({
     navigate: mockNavigate,
   }),
+}))
+
+jest.mock('../../../src/hooks/settings', () => () => ({
+  get: jest.fn(),
+  set: jest.fn(),
 }))
 
 describe('Passcode', () => {
@@ -48,7 +54,7 @@ describe('Passcode', () => {
 
     await waitFor(() => {
       expect(mockSubmit).toHaveBeenCalledTimes(1)
-      expect(mockSubmit).toHaveBeenCalledWith('1111')
+      expect(mockSubmit).toHaveBeenCalledWith('1111', expect.anything())
     })
   })
 

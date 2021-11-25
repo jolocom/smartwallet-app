@@ -9261,6 +9261,11 @@ react-native-flag-secure-android@^1.0.2:
   resolved "https://registry.yarnpkg.com/react-native-flag-secure-android/-/react-native-flag-secure-android-1.0.2.tgz#acc295a9766f43f8776a03af5986b204342919f7"
   integrity sha512-H++s5TGsXMMj24QpEKQ0gdf4UBpa6gQuanML2Q/gIqsIOLZh7gHK95Rh8rT5522mmOVIiIfZwxJXiBlNqAztKQ==
 
+react-native-encrypted-storage@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.2.tgz#c7d59b1d3ff2f80d572be3e85aaab3fdee16744a"
+  integrity sha512-vneDkHGDuTvLQjUBztqb2YI8QoH1zxdJonPGTS+g57lfJZff9fAjoLSSb6NgMBebpXFcK3I3sEresGyL+3AArw==
+
 react-native-formik@^1.7.8:
   version "1.7.8"
   resolved "https://registry.yarnpkg.com/react-native-formik/-/react-native-formik-1.7.8.tgz#dc82b735dc104cb048dc127c6d154abe8aea3cb2"
@@ -9312,10 +9317,10 @@ react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-react-native-jolocom@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.5.0.tgz#4833ae2eb272edab8f9da03e15b77b7a846086e3"
-  integrity sha512-932ZBRWSTWMg9O3RhviiuuehGqHO2A+qR2BM2tdtuvpfFq3pvtTNtTApzT7WGoFEIUw2ykREYg/Vs1WkhafRoQ==
+react-native-jolocom@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.6.0.tgz#a7b69cee91f689cbf379aca3c5a9907e653403d3"
+  integrity sha512-AYfsEdtvlMp0uV2GyZ3j11u9xpDU0LYDnv8c6osnoNNHAiWCO8wtxYENcn8edIIDTseiw1DpV0gnB8K8+0ryIw==
   dependencies:
     "@jolocom/sdk" "^1.3.0"
     "@jolocom/sdk-storage-typeorm" "^4.3.0-rc0"
@@ -9323,7 +9328,8 @@ react-native-jolocom@^2.5.0:
     jolocom-lib "^5.2.1"
     object.assign "^4.1.0"
     react-native-crypto "^2.2.0"
-    react-native-keychain "^6.0.0"
+    react-native-encrypted-storage "^4.0.2"
+    react-native-keychain "6.0.0"
     react-native-randombytes "^3.5.3"
     stream-browserify "^3.0.0"
     tslib "^1.7.1"
@@ -9338,10 +9344,15 @@ react-native-keyboard-aware-scroll-view@^0.9.3:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-react-native-keychain@^6.0.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-6.2.0.tgz#8f4cff503aad367141db5aea0189ead9240c28ff"
-  integrity sha512-U6fnOQRJPq+c0Abl+FoYy9v0H3kQU587tMamU/o+MoBSUScFLE3DQpkyT1PW4NF5IObgiGuqQdmjC2KgtBpjGA==
+react-native-keychain@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-6.0.0.tgz#687379dd8468e8c37caa3c4d1c91393c6e04cb1d"
+  integrity sha512-5jt2oS9WNBT/GXBRdb+9KHTQokI1eMRDa50aQFR1koXqUpkULhvxItgQ2CKTd+ZchZQK/hn85qHQOs/gWgUGYA==
+
+react-native-keychain@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-7.0.0.tgz#11fd559fe86ae89f934b8c75ae228247deed5494"
+  integrity sha512-tH26sgW4OxB/llXmhO+DajFISEUoF1Ip2+WSDMIgCt8SP1xRE81m2qFzgIOc/7StYsUERxHhDPkxvq2H0/Goig==
 
 react-native-level-fs@^3.0.0:
   version "3.0.1"

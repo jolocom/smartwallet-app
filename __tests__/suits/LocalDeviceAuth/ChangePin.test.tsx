@@ -1,11 +1,11 @@
 import { waitFor } from '@testing-library/react-native'
 import React from 'react'
-import * as keychain from 'react-native-keychain'
+import { SecureStorage } from 'react-native-jolocom'
 import ChangePin from '~/screens/LoggedIn/Settings/ChangePin'
 import { strings } from '~/translations'
-import { PIN_SERVICE, PIN_USERNAME } from '~/utils/keychainConsts'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { inputPasscode } from '../../utils/inputPasscode'
+import { SecureStorageKeys } from '~/hooks/secureStorage'
 
 const mockNavigation = jest.fn()
 const mockNavigationBack = jest.fn()
@@ -19,12 +19,12 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }))
 
-jest.mock('react-native-keychain', () => ({
-  STORAGE_TYPE: {
-    AES: 'aes',
+jest.mock('react-native-jolocom', () => ({
+  SecureStorage: {
+    storeValue: jest.fn(),
+    getValue: jest.fn().mockResolvedValue(null),
+    removeValue: jest.fn(),
   },
-  setGenericPassword: jest.fn(),
-  getGenericPassword: jest.fn().mockResolvedValue({ password: '5555' }),
 }))
 
 jest.mock('../../../src/hooks/sdk', () => ({
@@ -47,14 +47,11 @@ jest.mock('../../../src/hooks/loader', () => ({
   useLoader: jest
     .fn()
     .mockImplementation(
-      () => async (
-        cb: () => Promise<void>,
-        _: object,
-        onSuccess: () => void,
-      ) => {
-        await cb()
-        onSuccess()
-      },
+      () =>
+        async (cb: () => Promise<void>, _: object, onSuccess: () => void) => {
+          await cb()
+          onSuccess()
+        },
     ),
 }))
 
@@ -65,7 +62,7 @@ jest.mock('../../../src/hooks/navigation', () => ({
 
 xdescribe('Change passcode', () => {
   it('should successfully change the passcode', async () => {
-    const setGenericPasswordSpy = jest.spyOn(keychain, 'setGenericPassword')
+    const setEncryptedPasswordSpy = jest.spyOn(SecureStorage, 'storeValue')
 
     const { getByText, getByTestId } = await waitFor(() =>
       renderWithSafeArea(<ChangePin />),
@@ -88,11 +85,11 @@ xdescribe('Change passcode', () => {
     inputPasscode(getByTestId, [3, 3, 3, 3])
 
     await waitFor(() => {
-      expect(setGenericPasswordSpy).toHaveBeenCalledTimes(1)
-      expect(setGenericPasswordSpy).toHaveBeenCalledWith(PIN_USERNAME, '3333', {
-        service: PIN_SERVICE,
-        storage: keychain.STORAGE_TYPE.AES,
-      })
+      expect(setEncryptedPasswordSpy).toHaveBeenCalledTimes(1)
+      expect(setEncryptedPasswordSpy).toHaveBeenCalledWith(
+        SecureStorageKeys.passcode,
+        '3333',
+      )
     })
   })
 

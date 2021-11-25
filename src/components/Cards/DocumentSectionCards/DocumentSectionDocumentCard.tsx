@@ -14,9 +14,10 @@ import {
 import { CardMoreBtn } from './components'
 import { DocumentCardProps } from './types'
 import { FieldsCalculator } from '../InteractionShare/components'
+import { TextLayoutEvent } from '~/types/props'
+import { useState } from 'react'
 
 const MAX_FIELDS = 3
-const MAX_FIELD_LINES = 5
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
@@ -29,11 +30,20 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   const { isCredentialNameScaled, handleCredentialNameTextLayout } =
     useCredentialNameScale()
 
+  const [holderNameLines, setHolderNameLines] = useState(0)
+  const handleHolderNameTextLayout = (e: TextLayoutEvent) => {
+    setHolderNameLines(e.nativeEvent.lines.length)
+  }
+
   const {
     displayedFields,
     handleFieldValueLayout,
     handleFieldValuesVisibility,
-  } = usePruneFields(fields, MAX_FIELDS, MAX_FIELD_LINES)
+  } = usePruneFields(
+    fields,
+    MAX_FIELDS,
+    isCredentialNameScaled && holderNameLines === 2 ? 4 : 5,
+  )
 
   return (
     <ScaledCard
@@ -70,6 +80,8 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             }}
           >
             <ScaledText
+              // @ts-expect-error
+              onTextLayout={handleHolderNameTextLayout}
               numberOfLines={2}
               style={styles.mediumText}
               scaleStyle={styles.holderName}
