@@ -31,7 +31,6 @@ export const AusweisScanner = () => {
     onDone = () => {},
     state = AusweisScannerState.idle,
     onDismiss,
-    ignoreNativeCancel = false,
   } = route.params
   const goBack = useGoBack()
   const iconOpacityValue = useRef(new Animated.Value(0)).current
@@ -57,6 +56,7 @@ export const AusweisScanner = () => {
       checkNfcSupport(() => {})
     }, 10000)
     return () => {
+      dispatch(setAusweisScannerKey(null))
       clearInterval(id)
     }
   }, [])
@@ -108,7 +108,7 @@ export const AusweisScanner = () => {
      * onDismiss should contain logic without closing
      * the AusweisScanner screen
      */
-    !ignoreNativeCancel && goBack()
+    goBack()
     onDismiss && onDismiss()
   }
 

@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
+import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
 import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
@@ -128,12 +129,12 @@ const AusweisChangePin = () => {
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
         if (card?.deactivated) {
-          handleDeactivatedCard()
+          handleDeactivatedCard(navigation.goBack)
         }
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelFlow, true)
+          showScanner(cancelFlow)
         }
       },
       handlePinRequest: (card) => {
@@ -172,11 +173,6 @@ const AusweisChangePin = () => {
           canHandler(card)
         }
       },
-      handleChangePinCancel: () => {
-        if (IS_ANDROID) {
-          navigation.goBack()
-        }
-      },
       ...handlers,
     })
   }
@@ -185,12 +181,16 @@ const AusweisChangePin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = true
       setupHandlers({
-        handleCardRequest: () => {
-          if (IS_ANDROID) {
-            showScanner(() => {
-              cancelFlow()
-              goBack()
+        handleCardInfo: (card) => {
+          if (card?.deactivated) {
+            handleDeactivatedCard(() => {
+              navigation.dispatch(StackActions.pop())
             })
+          }
+        },
+        handleChangePinCancel: () => {
+          if (IS_ANDROID) {
+            navigation.goBack()
           }
         },
       })

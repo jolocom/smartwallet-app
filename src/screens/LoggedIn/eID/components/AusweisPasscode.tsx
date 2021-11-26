@@ -203,10 +203,7 @@ export const AusweisPasscode = () => {
         }
       },
       handleAuthFailed: (url: string, message: string) => {
-        if (Platform.OS === 'ios') {
-          closeAusweis()
-        }
-        finishFlow(url, message)
+        finishFlow(url, message).then(closeAusweis)
       },
       handleAuthSuccess: (url: string) => {
         if (IS_ANDROID) {

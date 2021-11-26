@@ -198,7 +198,6 @@ export const useAusweisInteraction = () => {
 
   const checkCardValidity = (card: CardInfo, onValidCard: () => void) => {
     if (checkIfCardValid(card)) {
-      console.log('calling onvalid card')
       onValidCard()
     } else {
       cancelInteraction()
@@ -337,28 +336,25 @@ export const useDeactivatedCard = () => {
   const { updateScanner } = useAusweisScanner()
   const { cancelFlow } = useAusweisInteraction()
   const { scheduleWarning } = useToasts()
-  const navigation = useNavigation()
   const { t } = useTranslation()
 
-  const handleDeactivatedCard = () => {
+  const handleDeactivatedCard = (onDismiss?: () => void) => {
     if (IS_ANDROID) {
       updateScanner({
         state: AusweisScannerState.failure,
         onDone: () => {
           cancelFlow()
+          onDismiss && onDismiss()
           setTimeout(() => {
             scheduleWarning({
               title: t('Toasts.ausweisFailedCheckTitle'),
               message: t('Toasts.ausweisFailedCheckMsg'),
               interact: {
                 label: t('Toasts.ausweisFailedCheckBtn'),
-                onInteract: () => {
-                  cancelFlow()
-                  navigation.navigate(ScreenNames.Identity)
-                },
+                onInteract: () => {},
               },
             })
-          }, 1000)
+          }, 500)
         },
       })
     } else {
@@ -407,10 +403,10 @@ export const useAusweisScanner = () => {
     setScannerParams(defaultState)
   }
 
-  const showScanner = (onDismiss?: () => void, ignoreNativeCancel = false) => {
+  const showScanner = (onDismiss?: () => void) => {
     navigation.navigate(ScreenNames.eId, {
       screen: eIDScreens.AusweisScanner,
-      params: { ...scannerParams, onDismiss, ignoreNativeCancel },
+      params: { ...scannerParams, onDismiss },
     })
   }
 

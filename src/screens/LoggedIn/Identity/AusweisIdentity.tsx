@@ -87,19 +87,14 @@ export const AusweisIdentity = () => {
   const setupUnlockCardHandlers = () => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
-      handleChangePinCancel: () => {
-        if (IS_ANDROID) {
-          navigation.goBack()
-        }
-      },
       handleCardInfo: (card) => {
         if (card?.deactivated) {
-          handleDeactivatedCard()
+          handleDeactivatedCard(navigation.goBack)
         }
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelFlow, true)
+          showScanner(cancelFlow)
         }
       },
       handlePinRequest: () => {

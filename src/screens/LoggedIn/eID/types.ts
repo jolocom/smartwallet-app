@@ -117,7 +117,6 @@ export interface AusweisScannerParams {
   onDone?: () => void
   onDismiss?: () => void
   state?: AusweisScannerState
-  ignoreNativeCancel?: boolean
 }
 
 export interface AusweisCardResult {
