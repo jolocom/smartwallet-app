@@ -1,11 +1,11 @@
 {
     "Walkthrough": {
-        "titleOne": "Control your data",
-        "descriptionOne": "Manage your digital identity to stay safe online and off",
+        "titleOne": "Use your identity",
+        "descriptionOne": "Get where you need to go with convenient access to apps & services",
         "registrationBtn": "Get started",
         "recoveryBtn": "Import identity",
-        "titleTwo": "Use your identity",
-        "descriptionTwo": "Get where you need to go with convenient access to apps & services",
+        "titleTwo": "Control your data",
+        "descriptionTwo": "Manage your digital identity to stay safe online and off",
         "titleThree": "Easy backup",
         "descriptionThree": "Keep all your info backed up and in the right hands - a.k.a. yours"
     },
