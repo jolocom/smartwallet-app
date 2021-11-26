@@ -45,7 +45,13 @@ export const AusweisPasscodeDetails = () => {
                 {t('AusweisPinInfo.header')}
               </JoloText>
             </Collapsible.Title>
-            <JoloText customStyles={{ textAlign: 'left', marginTop: 28 }}>
+            <JoloText
+              customStyles={{
+                textAlign: 'left',
+                marginTop: 28,
+                paddingTop: 400,
+              }}
+            >
               {t('AusweisPinInfo.description')}
             </JoloText>
           </Collapsible.Scroll>
@@ -60,7 +66,8 @@ export const AusweisPasscodeDetails = () => {
         <View
           style={{
             position: 'absolute',
-            bottom: 16,
+            bottom: 0,
+            paddingBottom: 16,
             width: '100%',
             paddingVertical: 10,
             paddingHorizontal: 20,
