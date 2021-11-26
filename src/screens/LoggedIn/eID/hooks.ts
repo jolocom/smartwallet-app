@@ -23,7 +23,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
-import { setPopup } from '~/modules/appState/actions'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -260,7 +259,6 @@ export const useAusweisCompatibilityCheck = () => {
   }
 
   const checkIosCompatibility = () => {
-    dispatch(setPopup(true))
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
