@@ -18,6 +18,7 @@ import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
 import useTranslation from '~/hooks/useTranslation'
 import { useCheckNFC } from '../hooks'
+import BP from '~/utils/breakpoints'
 
 /**
  * TODO:
@@ -155,9 +156,12 @@ export const AusweisScanner = () => {
   }
 
   return (
-    <AusweisBottomSheet backgroundColor={Colors.badGrey}>
+    <AusweisBottomSheet
+      backgroundColor={Colors.badGrey}
+      customContainerStyles={styles.sheetContainer}
+    >
       <View style={styles.container}>
-        <JoloText kind={JoloTextKind.title} customStyles={{ marginBottom: 32 }}>
+        <JoloText kind={JoloTextKind.title} customStyles={styles.header}>
           {t('AusweisScanner.header')}
         </JoloText>
         <View
@@ -187,6 +191,13 @@ export const AusweisScanner = () => {
 }
 
 const styles = StyleSheet.create({
+  sheetContainer: {
+    paddingTop: BP({ large: 32, medium: 28, default: 24 }),
+    paddingBottom: BP({ default: 22, small: 18, xsmall: 18 }),
+  },
+  header: {
+    marginBottom: BP({ large: 32, medium: 28, default: 24 }),
+  },
   statusBorder: {
     borderWidth: 2,
     borderColor: Colors.white90,
@@ -205,8 +216,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -20,
-    paddingBottom: 32,
+    paddingBottom: BP({ default: 22, small: 20, xsmall: 18 }),
   },
   iconContainer: {
     width: 156,
@@ -216,6 +226,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 10,
-    marginTop: 36,
+    marginTop: BP({ large: 36, medium: 24, default: 16 }),
   },
 })

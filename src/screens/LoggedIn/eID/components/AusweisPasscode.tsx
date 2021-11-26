@@ -339,7 +339,6 @@ export const AusweisPasscode = () => {
   }, [pinVariant])
 
   const handleCardIsBlocked = () => {
-    navigation.goBack()
     navigation.dispatch(
       StackActions.replace(ScreenNames.TransparentModals, {
         screen: ScreenNames.AusweisCardInfo,
