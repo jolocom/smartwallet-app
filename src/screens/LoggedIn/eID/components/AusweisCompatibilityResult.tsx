@@ -44,11 +44,11 @@ export const AusweisCompatibilityResult: React.FC = () => {
   }, [])
 
   return (
-    <ScreenContainer
-      backgroundColor={Colors.black}
-      customStyles={{ justifyContent: 'flex-end' }}
-    >
-      <View onTouchStart={goBack}>
+    <ScreenContainer backgroundColor={Colors.black}>
+      <View
+        style={{ justifyContent: 'flex-end', alignItems: 'center' }}
+        onTouchStart={goBack}
+      >
         <View style={styles.headerContainer}>
           <JoloText kind={JoloTextKind.title}>
             {t('AusweisCompatibilityStatus.header')}
