@@ -84,7 +84,7 @@
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
         "headerAusweis": "Your Identity",
-        "headerCredentials": "Credentials"
+        "headerCredentials": "Personal Info"
     },
     "BottomBar": {
         "identity": "Identity",

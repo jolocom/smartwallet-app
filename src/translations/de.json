@@ -84,7 +84,7 @@
         "addClaimBtn": "Hinzufügen",
         "attributesMissingInfo": "Deine Infos sehen ziemlich leer aus\nErgänze sie für die zukünftigen Anwendungen",
         "headerAusweis": "Deine Identität",
-        "headerCredentials": "Nachweise"
+        "headerCredentials": ""
     },
     "BottomBar": {
         "identity": "Identität",
