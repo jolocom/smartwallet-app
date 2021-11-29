@@ -1,13 +1,13 @@
 {
     "Walkthrough": {
-        "titleOne": "Kontrolliere deine Daten",
-        "descriptionOne": "Verwalte deine digitale Identität, um online und offline sicher zu bleiben",
+        "titleOne": "Verwende deine Identität",
+        "descriptionOne": "Erreiche dein Ziel mit einfachem Zugriff auf online-Dienste & Apps",
         "registrationBtn": "Los geht's",
         "recoveryBtn": "Identität importieren",
-        "titleTwo": "Verwende deine Identität",
-        "descriptionTwo": "Erreiche dein Ziel mit einfachem Zugriff auf Apps und Dienste",
+        "titleTwo": "Kontrolliere deine Daten",
+        "descriptionTwo": "Verwalte deine digitale Identität, um online und offline sicher zu bleiben",
         "titleThree": "Einfaches Backup",
-        "descriptionThree": "Halte alle deine Informationen gesichert und in den richtigen Händen - also in deinen"
+        "descriptionThree": "Bewahre alle Deine Daten am sichersten Ort von allen - in Deinen eigenen Händen"
     },
     "TermsConsent": {
         "header": "SmartWallet Vorstellung der AGBs und Datenschutz",
