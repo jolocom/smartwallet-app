@@ -1,11 +1,15 @@
-import { CommonActions, useNavigation } from '@react-navigation/native'
+import {
+  CommonActions,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect, usePopStack, usePop } from '~/hooks/navigation'
+import { useRedirect, usePopStack, usePop, useGoBack } from '~/hooks/navigation'
 import useSettings, { SettingKeys } from '~/hooks/settings'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
@@ -23,6 +27,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
+import { useBackHandler } from '@react-native-community/hooks'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -440,4 +445,18 @@ export const useAusweisScanner = () => {
   }
 
   return { showScanner, updateScanner, scannerParams, handleDeactivatedCard }
+}
+
+export const useAusweisCancelBackHandler = () => {
+  const isFocused = useIsFocused()
+  const { cancelInteraction } = useAusweisInteraction()
+
+  useBackHandler(() => {
+    if (isFocused) {
+      cancelInteraction()
+      return true
+    }
+
+    return false
+  })
 }

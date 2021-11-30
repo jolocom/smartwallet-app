@@ -32,6 +32,7 @@ import {
   IAusweisRequest,
 } from '../types'
 import {
+  useAusweisCancelBackHandler,
   useAusweisContext,
   useAusweisInteraction,
   useAusweisScanner,
@@ -82,11 +83,13 @@ export const AusweisPasscode = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const { scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { scheduleInfo } = useToasts()
 
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [runInputReset, resetInput] = useState(false) // value to reset verification pin
+
+  useAusweisCancelBackHandler()
 
   /**
    * Reverts back flag for resetting verification pin to make sure,

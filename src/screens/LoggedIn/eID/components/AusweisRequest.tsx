@@ -14,6 +14,7 @@ import {
   useAusweisContext,
   useAusweisInteraction,
   useAusweisSkipCompatibility,
+  useAusweisCancelBackHandler,
 } from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
 
@@ -24,6 +25,8 @@ export const AusweisRequest = () => {
   const { providerUrl, providerName } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
   const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
+
+  useAusweisCancelBackHandler()
 
   const handleProceed = async () => {
     checkNfcSupport(() => {

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/core'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -45,9 +45,10 @@ export const AusweisCompatibilityResult: React.FC = () => {
 
   return (
     <ScreenContainer backgroundColor={Colors.black}>
-      <View
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={goBack}
         style={{ justifyContent: 'flex-end', alignItems: 'center' }}
-        onTouchStart={goBack}
       >
         <View style={styles.container}>
           <View style={styles.headerContainer}>
@@ -89,7 +90,7 @@ export const AusweisCompatibilityResult: React.FC = () => {
               : t('AusweisCompatibilityStatus.success')}
           </JoloText>
         </View>
-      </View>
+      </TouchableOpacity>
     </ScreenContainer>
   )
 }
