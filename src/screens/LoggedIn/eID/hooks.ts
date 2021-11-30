@@ -4,6 +4,7 @@ import {
   useNavigation,
 } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
@@ -22,8 +23,7 @@ import {
   AusweisCardResult,
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
@@ -238,13 +238,14 @@ export const useAusweisInteraction = () => {
 }
 
 export const useAusweisCompatibilityCheck = () => {
+  const dispatch = useDispatch()
   const redirect = useRedirect()
   const pop = usePop()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
+  const { cancelFlow } = useAusweisInteraction()
 
-  const startCheck = () => {
-    setCompatibility(undefined)
+  const checkAndroidCompatibility = () => {
     showScanner()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
@@ -260,6 +261,34 @@ export const useAusweisCompatibilityCheck = () => {
         }
       },
     })
+  }
+
+  const checkIosCompatibility = () => {
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers({
+      handleCardInfo: (info) => {
+        if (info) {
+          const { inoperative, deactivated } = info
+          // NOTE: The timeout is here to assure the compatibility screen appears after the native
+          // scanner was hidden.
+          setTimeout(() => {
+            setCompatibility({ inoperative, deactivated })
+            cancelFlow()
+          }, 3000)
+        }
+      },
+    })
+
+    aa2Module.changePin()
+  }
+
+  const startCheck = () => {
+    setCompatibility(undefined)
+    Platform.select({
+      ios: checkIosCompatibility,
+      android: checkAndroidCompatibility,
+      default: checkAndroidCompatibility,
+    })()
   }
 
   useEffect(() => {
