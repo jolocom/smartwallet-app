@@ -363,9 +363,8 @@ export const useDeactivatedCard = () => {
        * about "deactivated" card
        */
       scheduleWarning({
-        title: 'Your card is deactivated',
-        message:
-          "Seems like your card doesn't support eID functionality, which is necessary to continue",
+        title: t('Toasts.ausweisDeactivatedCardTitle'),
+        message: t('Toasts.ausweisDeactivatedCardMsg'),
       })
     }
   }
