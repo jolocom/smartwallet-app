@@ -84,6 +84,7 @@
     "react-native-localize": "^1.4.3",
     "react-native-nfc-manager": "^3.10.1",
     "react-native-permissions": "^2.1.5",
+    "react-native-privacy-snapshot": "https://github.com/jolocom/react-native-privacy-snapshot.git#develop",
     "react-native-qrcode-scanner": "^1.4.1",
     "react-native-radial-gradient": "^1.0.7",
     "react-native-randombytes": "^3.5.3",
