@@ -24,6 +24,7 @@ import { Interaction, TransportAPI } from 'react-native-jolocom'
 import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
 import { useAusweisInteraction } from '~/screens/LoggedIn/eID/hooks'
+import useConnection from '../connection'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -90,6 +91,7 @@ export const useInteractionStart = () => {
   const loader = useLoader()
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
+  const { connected, showDisconnectedToast } = useConnection()
 
   const processInteraction = async (
     jwt: string,
@@ -103,6 +105,7 @@ export const useInteractionStart = () => {
 
   const showInteraction = async (interaction: Interaction) => {
     // NOTE: not continuing the interaction if there is no network connection
+    if (connected === false) return showDisconnectedToast()
     try {
       const counterparty = interaction.getSummary().initiator
       const interactionData = await interactionHandler(interaction)
