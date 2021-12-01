@@ -14,6 +14,7 @@ import {
   useAusweisInteraction,
   useAusweisScanner,
   useCheckNFC,
+  useDeactivatedCard,
 } from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
@@ -30,8 +31,8 @@ export const AusweisIdentity = () => {
   const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow } = useAusweisInteraction()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
@@ -81,8 +82,8 @@ export const AusweisIdentity = () => {
     aa2Module.resetHandlers()
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (card?.deactivated && IS_ANDROID) {
-          handleDeactivatedCard()
+        if (card?.deactivated) {
+          handleDeactivatedCard(navigation.goBack)
         }
       },
       handleCardRequest: () => {

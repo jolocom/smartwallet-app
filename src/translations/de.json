@@ -1,11 +1,11 @@
 {
     "Walkthrough": {
-        "titleOne": "Kontrolliere deine Daten",
-        "descriptionOne": "Verwalte deine digitale Identität, um online und offline sicher zu bleiben",
+        "titleOne": "Verwende deine Identität",
+        "descriptionOne": "Erreiche dein Ziel mit einfachem Zugriff auf online-Dienste & Apps",
         "registrationBtn": "Los geht's",
         "recoveryBtn": "Identität importieren",
-        "titleTwo": "Verwende deine Identität",
-        "descriptionTwo": "Erreiche dein Ziel mit einfachem Zugriff auf online-Dienste & Apps",
+        "titleTwo": "Kontrolliere deine Daten",
+        "descriptionTwo": "Verwalte deine digitale Identität, um online und offline sicher zu bleiben",
         "titleThree": "Einfaches Backup",
         "descriptionThree": "Bewahre alle Deine Daten am sichersten Ort von allen - in Deinen eigenen Händen"
     },
@@ -208,7 +208,10 @@
         "ausweisFailedCheckMsg": "Nicht das erste Mal gescheitert?\nStarten Sie die Kompatibilitätsdiagnose, um es erneut zu probieren",
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Fertig",
-        "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen"
+        "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
+        "copied": "",
+        "ausweisDeactivatedCardTitle": "",
+        "ausweisDeactivatedCardMsg": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -300,7 +303,12 @@
         "aboutBlock": "Über uns",
         "imprintBlock": "Impressum",
         "deleteDataInfo": "Wenn du neu anfangen und alle Daten löschen willst, die mit der Identität dieser Wallet zusammenhängen, ",
-        "deleteDataBtn": "klicke hier"
+        "deleteDataBtn": "klicke hier",
+        "screenshotBlock": "",
+        "screenshotAlertTitle": "",
+        "screenshotAlertMsg": "",
+        "screenshotAlertCta": "",
+        "screenshotAlertCancel": ""
     },
     "Language": {
         "english": "Englisch",
@@ -571,5 +579,8 @@
         "closeBtn": "Schließen",
         "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
         "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!"
+    },
+    "Details": {
+        "expandBtn": ""
     }
 }

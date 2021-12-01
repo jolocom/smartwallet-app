@@ -35,6 +35,7 @@ import {
   useAusweisInteraction,
   useAusweisScanner,
   useCheckNFC,
+  useDeactivatedCard,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 
@@ -97,8 +98,8 @@ export const AusweisPasscode = () => {
 
   const { passcodeCommands, finishFlow, closeAusweis, cancelFlow } =
     useAusweisInteraction()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
   const { checkNfcSupport } = useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
@@ -178,18 +179,20 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (IS_ANDROID) {
-          if (card) {
-            if (card?.deactivated) {
-              handleDeactivatedCard()
-            } else {
+        if (card !== null) {
+          if (card?.deactivated) {
+            handleDeactivatedCard()
+          } else {
+            if (IS_ANDROID) {
               updateScanner({ state: AusweisScannerState.loading })
             }
-          } else {
-            /**
-             * When connection to the NFC tag was interrupted
-             * stop the loading
-             */
+          }
+        } else {
+          /**
+           * When connection to the NFC tag was interrupted
+           * stop the loading
+           */
+          if (IS_ANDROID) {
             updateScanner({ state: AusweisScannerState.idle })
           }
         }
@@ -200,10 +203,7 @@ export const AusweisPasscode = () => {
         }
       },
       handleAuthFailed: (url: string, message: string) => {
-        if (Platform.OS === 'ios') {
-          closeAusweis()
-        }
-        finishFlow(url, message)
+        finishFlow(url, message).then(closeAusweis)
       },
       handleAuthSuccess: (url: string) => {
         if (IS_ANDROID) {

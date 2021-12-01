@@ -1,11 +1,11 @@
 {
     "Walkthrough": {
-        "titleOne": "Control your data",
-        "descriptionOne": "Manage your digital identity to stay safe online and off",
+        "titleOne": "Use your identity",
+        "descriptionOne": "Get where you need to go with convenient access to apps & services",
         "registrationBtn": "Get started",
         "recoveryBtn": "Import identity",
-        "titleTwo": "Use your identity",
-        "descriptionTwo": "Get where you need to go with convenient access to apps & services",
+        "titleTwo": "Control your data",
+        "descriptionTwo": "Manage your digital identity to stay safe online and off",
         "titleThree": "Easy backup",
         "descriptionThree": "Keep all your info backed up and in the right hands - a.k.a. yours"
     },
@@ -208,7 +208,10 @@
         "ausweisFailedCheckMsg": "Not the first time failing? \nStart compatibility diagnostics to be sure",
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Action Completed",
-        "ausweisChangePinSuccessMsg": "You can use your new PIN now"
+        "ausweisChangePinSuccessMsg": "You can use your new PIN now",
+        "copied": "Copied",
+        "ausweisDeactivatedCardTitle": "Your card is deactivated",
+        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -300,7 +303,12 @@
         "aboutBlock": "About",
         "imprintBlock": "Imprint",
         "deleteDataInfo": "If you want to start fresh and erase all data related to this wallet’s identity ",
-        "deleteDataBtn": "click here"
+        "deleteDataBtn": "click here",
+        "screenshotBlock": "Allow screenshots",
+        "screenshotAlertTitle": "Pay attention",
+        "screenshotAlertMsg": "All content will be visible when switching between apps running in the background",
+        "screenshotAlertCta": "Turn on",
+        "screenshotAlertCancel": "Cancel"
     },
     "Language": {
         "english": "English",
@@ -571,5 +579,8 @@
         "closeBtn": "Close",
         "pukExhaustedHeader": "You used all allowed PUK attempts. Your card is locked now",
         "unlockedHeader": "Your card is unlocked and ready to use!"
+    },
+    "Details": {
+        "expandBtn": "See more"
     }
 }
