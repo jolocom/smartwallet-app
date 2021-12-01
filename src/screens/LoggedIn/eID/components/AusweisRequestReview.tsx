@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
+import moment from 'moment'
+import { useNavigation } from '@react-navigation/core'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
@@ -12,7 +15,6 @@ import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
 import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
-import { setPopup } from '~/modules/appState/actions'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
   ContainerFAS,
@@ -26,6 +28,8 @@ import {
   useCheckNFC,
   useTranslatedAusweisFields,
   useAusweisScanner,
+  useDeactivatedCard,
+  useAusweisCancelBackHandler,
 } from '../hooks'
 import {
   AusweisButtons,
@@ -34,15 +38,10 @@ import {
   AusweisLogo,
 } from '../styled'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
-import { useNavigation } from '@react-navigation/core'
-import { StackNavigationProp } from '@react-navigation/stack'
 import { AusweisStackParamList } from '..'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
-import moment from 'moment'
 import { IS_ANDROID } from '~/utils/generic'
-import { useToasts } from '~/hooks/toasts'
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
@@ -69,11 +68,11 @@ export const AusweisRequestReview = () => {
   const { top } = useSafeArea()
   const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
-  const dispatch = useDispatch()
   const translateField = useTranslatedAusweisFields()
-  const { scheduleWarning } = useToasts()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
+
+  useAusweisCancelBackHandler()
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
@@ -104,7 +103,7 @@ export const AusweisRequestReview = () => {
     //TODO: add badState handler and cancel
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (card?.deactivated && IS_ANDROID) {
+        if (card?.deactivated) {
           handleDeactivatedCard()
         }
       },
@@ -150,21 +149,13 @@ export const AusweisRequestReview = () => {
         }
       },
       handleAuthFailed: (url: string, message: string) => {
-        /**
-         * NOTE: AUTH msg is sent by AA2 if user has cancelled the NFC popup on ios
-         */
-        if (Platform.OS === 'ios') {
-          closeAusweis()
-        }
+        closeAusweis()
         finishFlow(url, message)
       },
     })
   }, [])
 
   const handleProceed = async () => {
-    if (Platform.OS === 'ios') {
-      dispatch(setPopup(true))
-    }
     checkNfcSupport(() => {
       acceptRequest(selectedOptional)
     })

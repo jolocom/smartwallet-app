@@ -1,8 +1,10 @@
 import { RouteProp, useIsFocused, useRoute } from '@react-navigation/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
-import { setAusweisScannerKey } from '~/modules/ausweis/actions'
+import { useBackHandler } from '@react-native-community/hooks'
+import { useDispatch } from 'react-redux'
 
+import { setAusweisScannerKey } from '~/modules/ausweis/actions'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Ripple from '~/components/Ripple'
@@ -14,9 +16,9 @@ import { Colors } from '~/utils/colors'
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
-import { useDispatch } from 'react-redux'
 import useTranslation from '~/hooks/useTranslation'
 import { useCheckNFC } from '../hooks'
+import BP from '~/utils/breakpoints'
 
 /**
  * TODO:
@@ -41,6 +43,11 @@ export const AusweisScanner = () => {
 
   const isScreenFocused = useIsFocused()
 
+  useBackHandler(() => {
+    handleDismiss()
+    return true
+  })
+
   useEffect(() => {
     dispatch(setAusweisScannerKey(isScreenFocused ? route.key : null))
   }, [isScreenFocused])
@@ -56,6 +63,7 @@ export const AusweisScanner = () => {
       checkNfcSupport(() => {})
     }, 10000)
     return () => {
+      dispatch(setAusweisScannerKey(null))
       clearInterval(id)
     }
   }, [])
@@ -149,9 +157,12 @@ export const AusweisScanner = () => {
   }
 
   return (
-    <AusweisBottomSheet backgroundColor={Colors.badGrey}>
+    <AusweisBottomSheet
+      backgroundColor={Colors.badGrey}
+      customContainerStyles={styles.sheetContainer}
+    >
       <View style={styles.container}>
-        <JoloText kind={JoloTextKind.title} customStyles={{ marginBottom: 32 }}>
+        <JoloText kind={JoloTextKind.title} customStyles={styles.header}>
           {t('AusweisScanner.header')}
         </JoloText>
         <View
@@ -181,6 +192,13 @@ export const AusweisScanner = () => {
 }
 
 const styles = StyleSheet.create({
+  sheetContainer: {
+    paddingTop: BP({ large: 32, medium: 28, default: 24 }),
+    paddingBottom: BP({ default: 22, small: 18, xsmall: 18 }),
+  },
+  header: {
+    marginBottom: BP({ large: 32, medium: 28, default: 24 }),
+  },
   statusBorder: {
     borderWidth: 2,
     borderColor: Colors.white90,
@@ -199,8 +217,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -20,
-    paddingBottom: 32,
+    paddingBottom: BP({ default: 22, small: 20, xsmall: 18 }),
   },
   iconContainer: {
     width: 156,
@@ -210,6 +227,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 10,
-    marginTop: 36,
+    marginTop: BP({ large: 36, medium: 24, default: 16 }),
   },
 })

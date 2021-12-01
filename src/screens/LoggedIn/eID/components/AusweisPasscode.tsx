@@ -10,7 +10,6 @@ import { aa2Module } from 'react-native-aa2-sdk'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
@@ -20,7 +19,6 @@ import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
-import { setPopup } from '~/modules/appState/actions'
 import { useRevertToInitialState } from '~/hooks/generic'
 
 import { AusweisStackParamList } from '..'
@@ -32,10 +30,12 @@ import {
   IAusweisRequest,
 } from '../types'
 import {
+  useAusweisCancelBackHandler,
   useAusweisContext,
   useAusweisInteraction,
   useAusweisScanner,
   useCheckNFC,
+  useDeactivatedCard,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 
@@ -80,13 +80,14 @@ export const AusweisPasscode = () => {
   const ausweisContext = useAusweisContext()
 
   const navigation = useNavigation()
-  const dispatch = useDispatch()
 
-  const { scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { scheduleInfo } = useToasts()
 
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [runInputReset, resetInput] = useState(false) // value to reset verification pin
+
+  useAusweisCancelBackHandler()
 
   /**
    * Reverts back flag for resetting verification pin to make sure,
@@ -97,8 +98,8 @@ export const AusweisPasscode = () => {
 
   const { passcodeCommands, finishFlow, closeAusweis, cancelFlow } =
     useAusweisInteraction()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
   const { checkNfcSupport } = useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
@@ -178,18 +179,20 @@ export const AusweisPasscode = () => {
     //TODO: add badState handler
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (IS_ANDROID) {
-          if (card) {
-            if (card?.deactivated) {
-              handleDeactivatedCard()
-            } else {
+        if (card !== null) {
+          if (card?.deactivated) {
+            handleDeactivatedCard()
+          } else {
+            if (IS_ANDROID) {
               updateScanner({ state: AusweisScannerState.loading })
             }
-          } else {
-            /**
-             * When connection to the NFC tag was interrupted
-             * stop the loading
-             */
+          }
+        } else {
+          /**
+           * When connection to the NFC tag was interrupted
+           * stop the loading
+           */
+          if (IS_ANDROID) {
             updateScanner({ state: AusweisScannerState.idle })
           }
         }
@@ -200,10 +203,7 @@ export const AusweisPasscode = () => {
         }
       },
       handleAuthFailed: (url: string, message: string) => {
-        if (Platform.OS === 'ios') {
-          closeAusweis()
-        }
-        finishFlow(url, message)
+        finishFlow(url, message).then(closeAusweis)
       },
       handleAuthSuccess: (url: string) => {
         if (IS_ANDROID) {
@@ -336,7 +336,6 @@ export const AusweisPasscode = () => {
   }, [pinVariant])
 
   const handleCardIsBlocked = () => {
-    navigation.goBack()
     navigation.dispatch(
       StackActions.replace(ScreenNames.TransparentModals, {
         screen: ScreenNames.AusweisCardInfo,
@@ -347,11 +346,8 @@ export const AusweisPasscode = () => {
     )
   }
 
-  const sendPasscodeCommand = (passcode: string) => {
-    return checkNfcSupport(async () => {
-      if (Platform.OS === 'ios') {
-        dispatch(setPopup(true))
-      }
+  const sendPasscodeCommand = (passcode: string) =>
+    checkNfcSupport(async () => {
       setErrorText(null)
       if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
         passcodeCommands.setPin(passcode)
@@ -389,7 +385,6 @@ export const AusweisPasscode = () => {
         }
       }
     })
-  }
 
   const getPasscodeLength = () => {
     switch (pinVariant) {
@@ -402,6 +397,8 @@ export const AusweisPasscode = () => {
         return 6
       case AusweisPasscodeMode.PUK:
         return 10
+      default:
+        return 4
     }
   }
 
@@ -415,7 +412,7 @@ export const AusweisPasscode = () => {
   }
 
   const renderAccessoryBtn = () => {
-    let props: IAccessoryBtnProps = {
+    const props: IAccessoryBtnProps = {
       title: '',
       onPress: () => {},
     }
@@ -458,8 +455,8 @@ export const AusweisPasscode = () => {
     return null
   }
 
-  const checkIsEmptyContext = () => {
-    return !Object.keys(ausweisContext).some((k) => {
+  const checkIsEmptyContext = () =>
+    !Object.keys(ausweisContext).some((k) => {
       const key = k as keyof IAusweisRequest
       if (Array.isArray(k)) {
         return ausweisContext[key].length
@@ -467,7 +464,6 @@ export const AusweisPasscode = () => {
         return Boolean(key)
       }
     })
-  }
 
   const handleClosePasscode = () => {
     cancelFlow()
