@@ -43,7 +43,7 @@ const FieldDetails = () => {
 
   const { top } = useSafeArea()
   return (
-    <View style={{ paddingTop: top, backgroundColor }}>
+    <View style={{ paddingTop: top, backgroundColor, height: '100%' }}>
       <Collapsible
         renderHeader={() => (
           <Collapsible.Header

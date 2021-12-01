@@ -1,8 +1,10 @@
 import { RouteProp, useIsFocused, useRoute } from '@react-navigation/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
-import { setAusweisScannerKey } from '~/modules/ausweis/actions'
+import { useBackHandler } from '@react-native-community/hooks'
+import { useDispatch } from 'react-redux'
 
+import { setAusweisScannerKey } from '~/modules/ausweis/actions'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Ripple from '~/components/Ripple'
@@ -14,7 +16,6 @@ import { Colors } from '~/utils/colors'
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
-import { useDispatch } from 'react-redux'
 import useTranslation from '~/hooks/useTranslation'
 import { useCheckNFC } from '../hooks'
 import BP from '~/utils/breakpoints'
@@ -41,6 +42,11 @@ export const AusweisScanner = () => {
   const { checkNfcSupport } = useCheckNFC()
 
   const isScreenFocused = useIsFocused()
+
+  useBackHandler(() => {
+    handleDismiss()
+    return true
+  })
 
   useEffect(() => {
     dispatch(setAusweisScannerKey(isScreenFocused ? route.key : null))

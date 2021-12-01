@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
-import { Linking, TouchableOpacity } from 'react-native'
+import { Linking, Platform, TouchableOpacity } from 'react-native'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import useTranslation from '~/hooks/useTranslation'
@@ -14,6 +14,7 @@ import {
   useAusweisContext,
   useAusweisInteraction,
   useAusweisSkipCompatibility,
+  useAusweisCancelBackHandler,
 } from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
 
@@ -25,9 +26,11 @@ export const AusweisRequest = () => {
   const { cancelInteraction } = useAusweisInteraction()
   const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
 
+  useAusweisCancelBackHandler()
+
   const handleProceed = async () => {
     checkNfcSupport(() => {
-      if (shouldSkipCompatibility) {
+      if (shouldSkipCompatibility || Platform.OS === 'ios') {
         navigation.navigate(eIDScreens.RequestDetails)
       } else {
         navigation.navigate(eIDScreens.ReadinessCheck)
