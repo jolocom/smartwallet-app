@@ -29,7 +29,7 @@ const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 type FieldValueProps = { value: string }
 const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
-  const [clipboardText, setClipboardData] = useClipboard()
+  const [_, setClipboardData] = useClipboard()
 
   const { scheduleInfo } = useToasts()
   const { t } = useTranslation()
@@ -38,23 +38,17 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
   const { isExpanded, onToggleExpand } = useToggleExpand()
   const [shouldAppendDots, setAppendDots] = useState(false)
   const wasCalculated = useRef(false)
-  /**
-   * As soon as the text is available
-   * in the clipboard show the notification
-   */
-  useEffect(() => {
-    if (clipboardText) {
-      scheduleInfo({
-        title: t('Toasts.copied'),
-        message: ``,
-        dismiss: {
-          timeout: 1500,
-        },
-      })
-    }
-  }, [clipboardText])
 
-  useEffect(() => () => setClipboardData(''))
+  const handleLongPress = (value: string) => {
+    setClipboardData(value as string)
+    scheduleInfo({
+      title: t('Toasts.copied'),
+      message: ``,
+      dismiss: {
+        timeout: 1500,
+      },
+    })
+  }
 
   const handleTextLayout = (e: TextLayoutEvent) => {
     const numberOfLines = e.nativeEvent.lines.length
@@ -81,7 +75,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
     <>
       <TouchableOpacity
         onPress={onToggleExpand}
-        onLongPress={() => setClipboardData(value as string)}
+        onLongPress={() => handleLongPress(value as string)}
         activeOpacity={0.6}
       >
         <JoloText
