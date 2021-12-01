@@ -8,6 +8,7 @@ import { Colors } from '~/utils/colors'
 import { eIDScreens } from '../types'
 import { useRedirect } from '~/hooks/navigation'
 import {
+  useAusweisCancelBackHandler,
   useAusweisCompatibilityCheck,
   useAusweisInteraction,
   useAusweisSkipCompatibility,
@@ -40,6 +41,8 @@ export const CompatibilityCheck = () => {
   const { cancelInteraction, cancelFlow } = useAusweisInteraction()
   const { startCheck, compatibility } = useAusweisCompatibilityCheck()
   const { setShouldSkip } = useAusweisSkipCompatibility()
+
+  useAusweisCancelBackHandler()
 
   const handleCheckCompatibility = () => {
     startCheck()

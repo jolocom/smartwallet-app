@@ -1,18 +1,15 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useCallback, useRef } from 'react'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
-import { useDispatch } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import { useToasts } from '~/hooks/toasts'
 import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
-import { setPopup } from '~/modules/appState/actions'
 
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
@@ -36,33 +33,31 @@ const TitleDescAction: React.FC<WhateverProps> = ({
   hasInlineBtn = false,
   btnText,
   onPress,
-}) => {
-  return (
-    <View style={{ marginBottom: BP({ default: 30, xsmall: 20 }) }}>
-      <ScreenContainer.Padding distance={BP({ default: 27, xsmall: 20 })}>
-        <JoloText
-          kind={JoloTextKind.title}
-          customStyles={{ marginBottom: BP({ large: 12, default: 8 }) }}
-        >
-          {headerText}
-        </JoloText>
-        <JoloText color={Colors.osloGray}>
-          {descriptionText}
-          {hasInlineBtn && (
-            <JoloText onPress={onPress} color={Colors.activity}>
-              ...{btnText}
-            </JoloText>
-          )}
-        </JoloText>
-        {!hasInlineBtn && (
-          <Btn onPress={onPress} type={BtnTypes.quaternary}>
-            {btnText}
-          </Btn>
+}) => (
+  <View style={{ marginBottom: BP({ default: 30, xsmall: 20 }) }}>
+    <ScreenContainer.Padding distance={BP({ default: 27, xsmall: 20 })}>
+      <JoloText
+        kind={JoloTextKind.title}
+        customStyles={{ marginBottom: BP({ large: 12, default: 8 }) }}
+      >
+        {headerText}
+      </JoloText>
+      <JoloText color={Colors.osloGray}>
+        {descriptionText}
+        {hasInlineBtn && (
+          <JoloText onPress={onPress} color={Colors.activity}>
+            ...{btnText}
+          </JoloText>
         )}
-      </ScreenContainer.Padding>
-    </View>
-  )
-}
+      </JoloText>
+      {!hasInlineBtn && (
+        <Btn onPress={onPress} type={BtnTypes.quaternary}>
+          {btnText}
+        </Btn>
+      )}
+    </ScreenContainer.Padding>
+  </View>
+)
 
 const AusweisChangePin = () => {
   const { t } = useTranslation()
@@ -70,8 +65,6 @@ const AusweisChangePin = () => {
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
-  const { scheduleWarning } = useToasts()
-  const dispatch = useDispatch()
   const isTransportPin = useRef(false)
   const goBack = useGoBack()
   const { checkNfcSupport } = useCheckNFC()
@@ -198,9 +191,6 @@ const AusweisChangePin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = false
       setupHandlers()
-      if (Platform.OS === 'ios') {
-        dispatch(setPopup(true))
-      }
       aa2Module.changePin()
     })
   }

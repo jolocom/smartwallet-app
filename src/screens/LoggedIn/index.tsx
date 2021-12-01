@@ -1,6 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+// @ts-expect-error
+import { enabled as enablePrivacyOverlay } from 'react-native-privacy-snapshot'
 
 import { useAppBackgroundChange } from '~/hooks/useAppState'
 import { setAppLocked } from '~/modules/account/actions'
@@ -40,6 +42,10 @@ const LoggedIn = () => {
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
+  }, [])
+
+  useEffect(() => {
+    enablePrivacyOverlay(true)
   }, [])
 
   useAppBackgroundChange(() => {

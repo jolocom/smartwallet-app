@@ -10,7 +10,6 @@ import { aa2Module } from 'react-native-aa2-sdk'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
-import { useDispatch } from 'react-redux'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
@@ -20,7 +19,6 @@ import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
-import { setPopup } from '~/modules/appState/actions'
 import { useRevertToInitialState } from '~/hooks/generic'
 
 import { AusweisStackParamList } from '..'
@@ -32,6 +30,7 @@ import {
   IAusweisRequest,
 } from '../types'
 import {
+  useAusweisCancelBackHandler,
   useAusweisContext,
   useAusweisInteraction,
   useAusweisScanner,
@@ -82,13 +81,14 @@ export const AusweisPasscode = () => {
   const isScanner = useRef(false)
 
   const navigation = useNavigation()
-  const dispatch = useDispatch()
 
   const { scheduleInfo } = useToasts()
 
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
   const [runInputReset, resetInput] = useState(false) // value to reset verification pin
+
+  useAusweisCancelBackHandler()
 
   /**
    * Reverts back flag for resetting verification pin to make sure,
@@ -402,7 +402,6 @@ export const AusweisPasscode = () => {
   }, [pinVariant])
 
   const handleCardIsBlocked = () => {
-    navigation.goBack()
     navigation.dispatch(
       StackActions.replace(ScreenNames.TransparentModals, {
         screen: ScreenNames.AusweisCardInfo,
@@ -415,9 +414,6 @@ export const AusweisPasscode = () => {
 
   const sendPasscodeCommand = (passcode: string) =>
     checkNfcSupport(async () => {
-      if (Platform.OS === 'ios') {
-        dispatch(setPopup(true))
-      }
       setErrorText(null)
       if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
         passcodeCommands.setPin(passcode)
@@ -467,6 +463,8 @@ export const AusweisPasscode = () => {
         return 6
       case AusweisPasscodeMode.PUK:
         return 10
+      default:
+        return 4
     }
   }
 

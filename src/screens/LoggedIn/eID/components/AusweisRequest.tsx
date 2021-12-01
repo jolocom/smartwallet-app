@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
-import { Linking } from 'react-native'
+import { Linking, Platform, TouchableOpacity } from 'react-native'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import useTranslation from '~/hooks/useTranslation'
@@ -14,6 +14,7 @@ import {
   useAusweisContext,
   useAusweisInteraction,
   useAusweisSkipCompatibility,
+  useAusweisCancelBackHandler,
 } from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
 
@@ -21,14 +22,15 @@ export const AusweisRequest = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
   const { checkNfcSupport } = useCheckNFC()
-  //TODO: not sure whether we need the provider or certificate issuer's URL/name
   const { providerUrl, providerName } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
   const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
 
+  useAusweisCancelBackHandler()
+
   const handleProceed = async () => {
     checkNfcSupport(() => {
-      if (shouldSkipCompatibility) {
+      if (shouldSkipCompatibility || Platform.OS === 'ios') {
         navigation.navigate(eIDScreens.RequestDetails)
       } else {
         navigation.navigate(eIDScreens.ReadinessCheck)
@@ -57,18 +59,19 @@ export const AusweisRequest = () => {
           },
         })}
       </JoloText>
-      <JoloText
-        kind={JoloTextKind.subtitle}
-        size={JoloTextSizes.mini}
-        color={Colors.success}
-        customStyles={{
-          marginTop: 16,
-          marginBottom: 32,
-        }}
-        onPress={() => Linking.openURL(providerUrl)}
-      >
-        {providerUrl}
-      </JoloText>
+      <TouchableOpacity onPress={() => Linking.openURL(providerUrl)}>
+        <JoloText
+          kind={JoloTextKind.subtitle}
+          size={JoloTextSizes.mini}
+          color={Colors.success}
+          customStyles={{
+            marginTop: 16,
+            marginBottom: 32,
+          }}
+        >
+          {providerUrl}
+        </JoloText>
+      </TouchableOpacity>
       <AusweisButtons
         submitLabel={t('AusweisRequest.proceedBtn')}
         cancelLabel={t('Interaction.cancelBtn')}

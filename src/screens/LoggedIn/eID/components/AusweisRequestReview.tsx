@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Platform, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
 
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
@@ -12,7 +11,6 @@ import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
 import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
-import { setPopup } from '~/modules/appState/actions'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
   ContainerFAS,
@@ -26,6 +24,7 @@ import {
   useCheckNFC,
   useTranslatedAusweisFields,
   useAusweisScanner,
+  useAusweisCancelBackHandler,
 } from '../hooks'
 import {
   AusweisButtons,
@@ -63,10 +62,11 @@ export const AusweisRequestReview = () => {
   const { top } = useSafeArea()
   const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
-  const dispatch = useDispatch()
   const translateField = useTranslatedAusweisFields()
   const { showScanner, updateScanner, handleDeactivatedCard } =
     useAusweisScanner()
+
+  useAusweisCancelBackHandler()
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
@@ -154,9 +154,6 @@ export const AusweisRequestReview = () => {
   }, [])
 
   const handleProceed = async () => {
-    if (Platform.OS === 'ios') {
-      dispatch(setPopup(true))
-    }
     checkNfcSupport(() => {
       acceptRequest(selectedOptional)
     })
