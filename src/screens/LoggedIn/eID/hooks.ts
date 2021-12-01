@@ -1,9 +1,15 @@
-import { CommonActions, useNavigation } from '@react-navigation/native'
+import {
+  CommonActions,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native'
 import { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
 import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
 import { useSelector, useDispatch } from 'react-redux'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
@@ -229,12 +235,13 @@ export const useAusweisInteraction = () => {
 }
 
 export const useAusweisCompatibilityCheck = () => {
+  const dispatch = useDispatch()
   const redirect = useRedirect()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
+  const { cancelFlow } = useAusweisInteraction()
 
-  const startCheck = () => {
-    setCompatibility(undefined)
+  const checkAndroidCompatibility = () => {
     showScanner()
     aa2Module.setHandlers({
       handleCardInfo: (info) => {
@@ -250,6 +257,34 @@ export const useAusweisCompatibilityCheck = () => {
         }
       },
     })
+  }
+
+  const checkIosCompatibility = () => {
+    aa2Module.resetHandlers()
+    aa2Module.setHandlers({
+      handleCardInfo: (info) => {
+        if (info) {
+          const { inoperative, deactivated } = info
+          // NOTE: The timeout is here to assure the compatibility screen appears after the native
+          // scanner was hidden.
+          setTimeout(() => {
+            setCompatibility({ inoperative, deactivated })
+            cancelFlow()
+          }, 3000)
+        }
+      },
+    })
+
+    aa2Module.changePin()
+  }
+
+  const startCheck = () => {
+    setCompatibility(undefined)
+    Platform.select({
+      ios: checkIosCompatibility,
+      android: checkAndroidCompatibility,
+      default: checkAndroidCompatibility,
+    })()
   }
 
   useEffect(() => {
@@ -422,4 +457,18 @@ export const useAusweisScanner = () => {
   }
 
   return { showScanner, updateScanner, scannerParams }
+}
+
+export const useAusweisCancelBackHandler = () => {
+  const isFocused = useIsFocused()
+  const { cancelInteraction } = useAusweisInteraction()
+
+  useBackHandler(() => {
+    if (isFocused) {
+      cancelInteraction()
+      return true
+    }
+
+    return false
+  })
 }

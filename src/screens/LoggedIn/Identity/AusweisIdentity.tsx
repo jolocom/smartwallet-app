@@ -1,11 +1,13 @@
 import React from 'react'
-import { Image, Platform, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
+import { aa2Module } from 'react-native-aa2-sdk'
+import { useNavigation } from '@react-navigation/core'
+
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useNavigation } from '@react-navigation/core'
 import { ScreenNames } from '~/types/screens'
 import {
   useAusweisCompatibilityCheck,
@@ -15,7 +17,6 @@ import {
   useDeactivatedCard,
 } from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
-import { aa2Module } from 'react-native-aa2-sdk'
 import {
   AusweisPasscodeMode,
   AusweisScannerState,
@@ -23,8 +24,6 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { setPopup } from '~/modules/appState/actions'
-import { useDispatch } from 'react-redux'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -32,7 +31,6 @@ export const AusweisIdentity = () => {
   const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow } = useAusweisInteraction()
-  const dispatch = useDispatch()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { handleDeactivatedCard } = useDeactivatedCard()
 
@@ -47,18 +45,23 @@ export const AusweisIdentity = () => {
   }
 
   const handleShowCardLockResult = (mode: CardInfoMode) => {
-    /**
-     * NOTE: replacing for now until fixing issue with getting active route,
-     * which is happening when we updating params of the Scanner screen
-     * @AusweisScanner
-     */
-    navigation.navigate(ScreenNames.TransparentModals, {
-      screen: ScreenNames.AusweisCardInfo,
-      params: {
-        mode,
-        onDismiss: cancelFlow,
-      },
-    })
+    const navigateToCardInfo = () => {
+      navigation.navigate(ScreenNames.TransparentModals, {
+        screen: ScreenNames.AusweisCardInfo,
+        params: {
+          mode,
+          onDismiss: cancelFlow,
+        },
+      })
+    }
+    if (IS_ANDROID) {
+      updateScanner({
+        state: AusweisScannerState.success,
+        onDone: navigateToCardInfo,
+      })
+    } else {
+      navigateToCardInfo()
+    }
   }
 
   const handleShowPuk = () => {
@@ -68,16 +71,7 @@ export const AusweisIdentity = () => {
         mode: AusweisPasscodeMode.PUK,
         handlers: {
           handlePinRequest: () => {
-            if (IS_ANDROID) {
-              updateScanner({
-                state: AusweisScannerState.success,
-                onDone: () => {
-                  handleShowCardLockResult(CardInfoMode.unblocked)
-                },
-              })
-            } else {
-              handleShowCardLockResult(CardInfoMode.unblocked)
-            }
+            handleShowCardLockResult(CardInfoMode.unblocked)
           },
         },
       },
@@ -98,28 +92,10 @@ export const AusweisIdentity = () => {
         }
       },
       handlePinRequest: () => {
-        if (IS_ANDROID) {
-          updateScanner({
-            state: AusweisScannerState.success,
-            onDone: () => {
-              handleShowCardLockResult(CardInfoMode.notBlocked)
-            },
-          })
-        } else {
-          handleShowCardLockResult(CardInfoMode.notBlocked)
-        }
+        handleShowCardLockResult(CardInfoMode.notBlocked)
       },
       handleCanRequest: () => {
-        if (IS_ANDROID) {
-          updateScanner({
-            state: AusweisScannerState.success,
-            onDone: () => {
-              handleShowCardLockResult(CardInfoMode.notBlocked)
-            },
-          })
-        } else {
-          handleShowCardLockResult(CardInfoMode.notBlocked)
-        }
+        handleShowCardLockResult(CardInfoMode.notBlocked)
       },
       handlePukRequest: () => {
         if (IS_ANDROID) {
@@ -138,9 +114,6 @@ export const AusweisIdentity = () => {
 
   const handleUnlockCard = () => {
     checkNfcSupport(() => {
-      if (Platform.OS === 'ios') {
-        dispatch(setPopup(true))
-      }
       setupUnlockCardHandlers()
       aa2Module.changePin()
     })

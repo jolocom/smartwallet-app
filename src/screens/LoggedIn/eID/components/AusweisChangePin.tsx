@@ -1,18 +1,15 @@
 import { useNavigation } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
 import { CardInfo } from 'react-native-aa2-sdk/js/types'
-import { useDispatch } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
-import { setPopup } from '~/modules/appState/actions'
 
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
@@ -73,9 +70,7 @@ const AusweisChangePin = () => {
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { handleDeactivatedCard } = useDeactivatedCard()
-  const dispatch = useDispatch()
   const isTransportPin = useRef(false)
-  const goBack = useGoBack()
   const { checkNfcSupport } = useCheckNFC()
 
   const pinHandler = useCallback((card: CardInfo) => {
@@ -203,9 +198,6 @@ const AusweisChangePin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = false
       setupHandlers()
-      if (Platform.OS === 'ios') {
-        dispatch(setPopup(true))
-      }
       aa2Module.changePin()
     })
   }

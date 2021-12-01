@@ -9,8 +9,8 @@ export const Page: ITabsComposition['Page'] = ({
   id,
   customStyles = {},
 }) => {
-  const { activeTab } = useTabs()
-  const isActive = id === activeTab?.id
+  const { activeTab, activeSubtab } = useTabs()
+  const isActive = id === activeTab?.id || id === activeSubtab?.id
 
   return (
     <View

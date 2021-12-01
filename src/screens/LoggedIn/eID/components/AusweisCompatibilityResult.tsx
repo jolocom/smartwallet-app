@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/core'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -34,57 +34,81 @@ export const AusweisCompatibilityResult: React.FC = () => {
   const isFailed = inoperative || deactivated
 
   useEffect(() => {
-    setTimeout(() => {
+    const id = setTimeout(() => {
       goBack()
     }, 5000)
+
+    return () => {
+      clearTimeout(id)
+    }
   }, [])
 
   return (
-    <ScreenContainer
-      backgroundColor={Colors.black}
-      customStyles={{ justifyContent: 'flex-end' }}
-    >
-      <View style={styles.headerContainer}>
-        <JoloText kind={JoloTextKind.title}>
-          {t('AusweisCompatibilityStatus.header')}
-        </JoloText>
-      </View>
-      <View style={styles.resultContainer}>
-        {isFailed ? (
-          <JoloText size={JoloTextSizes.big} color={Colors.error}>
-            {t('AusweisCompatibilityStatus.error')}
-          </JoloText>
-        ) : (
-          <>
-            <SuccessResult title={t('AusweisCompatibilityStatus.status1')} />
-            <SuccessResult title={t('AusweisCompatibilityStatus.status2')} />
-            <SuccessResult title={t('AusweisCompatibilityStatus.status3')} />
-          </>
-        )}
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={styles.iconContainer}>
-          {isFailed ? (
-            <ErrorIcon color={Colors.white90} />
-          ) : (
-            <SuccessTick color={Colors.white90} />
-          )}
+    <ScreenContainer backgroundColor={Colors.black}>
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={goBack}
+        style={{ justifyContent: 'flex-end', alignItems: 'center' }}
+      >
+        <View style={styles.container}>
+          <View style={styles.headerContainer}>
+            <JoloText kind={JoloTextKind.title}>
+              {t('AusweisCompatibilityStatus.header')}
+            </JoloText>
+          </View>
+          <View style={styles.resultContainer}>
+            {isFailed ? (
+              <JoloText size={JoloTextSizes.big} color={Colors.error}>
+                {t('AusweisCompatibilityStatus.error')}
+              </JoloText>
+            ) : (
+              <>
+                <SuccessResult
+                  title={t('AusweisCompatibilityStatus.status1')}
+                />
+                <SuccessResult
+                  title={t('AusweisCompatibilityStatus.status2')}
+                />
+                <SuccessResult
+                  title={t('AusweisCompatibilityStatus.status3')}
+                />
+              </>
+            )}
+          </View>
         </View>
-      </View>
+        <View style={styles.footerContainer}>
+          <View style={styles.iconContainer}>
+            {isFailed ? (
+              <ErrorIcon color={Colors.white90} />
+            ) : (
+              <SuccessTick color={Colors.white90} />
+            )}
+          </View>
+          <JoloText color={Colors.white80} size={JoloTextSizes.big}>
+            {isFailed
+              ? t('AusweisCompatibilityStatus.error')
+              : t('AusweisCompatibilityStatus.success')}
+          </JoloText>
+        </View>
+      </TouchableOpacity>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: BP({ default: 64, small: 44, xsmall: 44 }),
+  },
   headerContainer: {
-    flex: 1,
     justifyContent: 'flex-end',
+    marginBottom: BP({ default: 36, large: 72 }),
   },
   resultContainer: {
-    flex: 2,
-    paddingTop: BP({ default: 32, large: 52 }),
     justifyContent: 'flex-start',
-    paddingHorizontal: BP({ default: 32, large: 52 }),
+    paddingHorizontal: 52,
   },
   iconContainer: {
     borderRadius: 34,
@@ -95,6 +119,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.white90,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 20,
   },
   successContainer: {
     alignItems: 'center',
@@ -105,5 +130,9 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginTop: 16,
+  },
+  footerContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
 })

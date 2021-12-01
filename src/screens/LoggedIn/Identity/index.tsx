@@ -10,7 +10,7 @@ import useTranslation from '~/hooks/useTranslation'
 
 const Identity = () => {
   const { t } = useTranslation()
-  const tabs = [
+  const subtabs = [
     { id: 'identity', value: t('Identity.headerAusweis') },
     { id: 'credentials', value: t('Identity.headerCredentials') },
   ]
@@ -23,11 +23,14 @@ const Identity = () => {
         paddingHorizontal: 0,
       }}
     >
-      <Tabs tabs={tabs} initialActiveTab={tabs[0]}>
+      <Tabs subtabs={subtabs} initialActiveSubtab={subtabs[0]}>
         <ScreenContainer.Padding>
+          <ScreenContainer.Header customStyles={{ marginBottom: 18 }}>
+            {t('BottomBar.identity')}
+          </ScreenContainer.Header>
           <TabsContainer customStyles={{ marginBottom: 12 }}>
-            {tabs.map((t) => (
-              <Tabs.Tab key={t.id} tab={t} />
+            {subtabs.map((st) => (
+              <Tabs.Subtab key={st.id} tab={st} />
             ))}
           </TabsContainer>
         </ScreenContainer.Padding>

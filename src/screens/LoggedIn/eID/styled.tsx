@@ -1,5 +1,5 @@
 import React, { Children } from 'react'
-import { Linking, StyleSheet, View } from 'react-native'
+import { Linking, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import JoloText, {
@@ -15,12 +15,20 @@ import { Colors } from '~/utils/colors'
 export const AusweisBottomSheet: React.FC<{
   onDismiss?: () => void
   backgroundColor?: Colors
-}> = ({ children, onDismiss = () => {}, backgroundColor = Colors.codGrey }) => {
+  customContainerStyles?: StyleProp<ViewStyle>
+}> = ({
+  children,
+  onDismiss = () => {},
+  backgroundColor = Colors.codGrey,
+  customContainerStyles = {},
+}) => {
   return (
     <View style={styles.fullScreen}>
       <ScreenDismissArea onDismiss={onDismiss} />
       <View style={styles.interactionBody}>
-        <ContainerBAS customStyles={{ backgroundColor }}>
+        <ContainerBAS
+          customStyles={[customContainerStyles, { backgroundColor }]}
+        >
           {children}
         </ContainerBAS>
       </View>
