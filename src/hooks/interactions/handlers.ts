@@ -20,11 +20,11 @@ import { ScreenNames } from '~/types/screens'
 import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
-import useConnection from '../connection'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
 import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
 import { useAusweisInteraction } from '~/screens/LoggedIn/eID/hooks'
+import useConnection from '../connection'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -67,12 +67,10 @@ export const useDeeplinkInteractions = () => {
           processInteraction(tokenValue)
           return
         } else if (eidValue) {
-          loader(
-            () => {
-              return processAusweisToken(eidValue)
-            },
-            { showSuccess: false, showFailed: false },
-          )
+          loader(() => processAusweisToken(eidValue), {
+            showSuccess: false,
+            showFailed: false,
+          })
           return
         } else if (
           !params['+clicked_branch_link'] ||
@@ -92,8 +90,8 @@ export const useInteractionStart = () => {
   const dispatch = useDispatch()
   const loader = useLoader()
   const interactionHandler = useInteractionHandler()
-  const { connected, showDisconnectedToast } = useConnection()
   const { scheduleErrorWarning } = useToasts()
+  const { connected, showDisconnectedToast } = useConnection()
 
   const processInteraction = async (
     jwt: string,
@@ -107,9 +105,8 @@ export const useInteractionStart = () => {
 
   const showInteraction = async (interaction: Interaction) => {
     // NOTE: not continuing the interaction if there is no network connection
+    if (connected === false) return showDisconnectedToast()
     try {
-      if (connected === false) return showDisconnectedToast()
-
       const counterparty = interaction.getSummary().initiator
       const interactionData = await interactionHandler(interaction)
 
@@ -128,8 +125,8 @@ export const useInteractionStart = () => {
     }
   }
 
-  const startInteraction = async (jwt: string) => {
-    return loader(
+  const startInteraction = async (jwt: string) =>
+    loader(
       async () => {
         const interaction = await processInteraction(jwt)
         await showInteraction(interaction)
@@ -139,7 +136,6 @@ export const useInteractionStart = () => {
         if (error) scheduleErrorWarning(error)
       },
     )
-  }
 
   return { processInteraction, showInteraction, startInteraction }
 }

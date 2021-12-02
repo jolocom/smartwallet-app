@@ -34,7 +34,7 @@ export enum BtnSize {
 interface BtnPropsI extends TouchableOpacityProps {
   type?: BtnTypes
   customTextStyles?: TextStyle
-  size?: BtnSize
+  size?: BtnSize | number
 }
 
 interface PropsI extends BtnPropsI {
@@ -45,7 +45,7 @@ interface PropsI extends BtnPropsI {
   testID?: string
 }
 
-interface IBtnComposition {
+interface BtnComposition {
   Online: React.FC<PropsI>
 }
 
@@ -59,15 +59,19 @@ const ButtonText: React.FC<BtnPropsI> = ({
   customTextStyles = {},
 }) => {
   const getTextSize = () => {
-    switch (size) {
-      case BtnSize.large:
-        return 20
-      case BtnSize.medium:
-        return 18
-      case BtnSize.small:
-        return 12
-      default:
-        return 18
+    if (Object.values(BtnSize).includes(size)) {
+      switch (size) {
+        case BtnSize.large:
+          return 20
+        case BtnSize.medium:
+          return 18
+        case BtnSize.small:
+          return 12
+        default:
+          return 18
+      }
+    } else {
+      return size
     }
   }
 
@@ -103,7 +107,7 @@ const ButtonText: React.FC<BtnPropsI> = ({
   )
 }
 
-const Btn: React.FC<PropsI> & IBtnComposition = ({
+const Btn: React.FC<PropsI> & BtnComposition = ({
   disabled,
   withoutMargins,
   size,
@@ -158,7 +162,9 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
           <View
             style={[
               containerStyles,
-              { backgroundColor: Colors.matterhorn18 },
+              {
+                backgroundColor: Colors.matterhorn18,
+              },
               customContainerStyles,
               btnStyle,
             ]}
@@ -184,6 +190,8 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
             <ButtonText {...btnTextProps} />
           </View>
         )
+      default:
+        return null
     }
   }
 

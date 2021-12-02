@@ -79,6 +79,8 @@ export const AusweisPasscode = () => {
   const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
   const ausweisContext = useAusweisContext()
 
+  const isScanner = useRef(false)
+
   const navigation = useNavigation()
 
   const { scheduleInfo } = useToasts()
@@ -96,8 +98,13 @@ export const AusweisPasscode = () => {
    */
   useRevertToInitialState(runInputReset, resetInput)
 
-  const { passcodeCommands, finishFlow, closeAusweis, cancelFlow } =
-    useAusweisInteraction()
+  const {
+    passcodeCommands,
+    finishFlow,
+    closeAusweis,
+    cancelFlow,
+    cancelInteraction,
+  } = useAusweisInteraction()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { handleDeactivatedCard } = useDeactivatedCard()
   const { checkNfcSupport } = useCheckNFC()
@@ -129,6 +136,7 @@ export const AusweisPasscode = () => {
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
+      isScanner.current = false
       if (isTransportPin.current === true) {
         setPinVariant(AusweisPasscodeMode.TRANSPORT_PIN)
       } else {
@@ -145,6 +153,7 @@ export const AusweisPasscode = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
+      isScanner.current = false
       if (pukCounterRef.current > 0) {
         setErrorText(
           t('AusweisPasscode.pinWrongError', {
@@ -161,6 +170,7 @@ export const AusweisPasscode = () => {
     }
 
     const canHandler = () => {
+      isScanner.current = false
       if (canCounterRef.current > 0) {
         setErrorText(
           t('AusweisPasscode.pinWrongError', {
@@ -198,26 +208,85 @@ export const AusweisPasscode = () => {
         }
       },
       handleCardRequest: () => {
+        isScanner.current = true
         if (IS_ANDROID) {
-          showScanner(cancelFlow)
+          showScanner(cancelInteraction)
         }
       },
       handleAuthFailed: (url: string, message: string) => {
-        finishFlow(url, message).then(closeAusweis)
-      },
-      handleAuthSuccess: (url: string) => {
         if (IS_ANDROID) {
-          finishFlow(url).then(() => {
+          if (isScanner.current) {
+            /**
+             * This happens if i.e. network error comes back
+             */
             updateScanner({
-              state: AusweisScannerState.success,
+              state: AusweisScannerState.failure,
               onDone: () => {
+                /**
+                 * QUESTION:
+                 * shall we show toast here, something like:
+                 * we were unable to finish interaction because
+                 * you were not connected to the internet
+                 */
                 closeAusweis()
               },
             })
-          })
+          } else {
+            /**
+             * This happens when we cancel by pressing
+             * cancel btn in the AusweisScanner component
+             */
+          }
         } else {
           closeAusweis()
+        }
+      },
+      handleAuthSuccess: (url: string) => {
+        if (IS_ANDROID) {
           finishFlow(url)
+            .then(() => {
+              updateScanner({
+                state: AusweisScannerState.success,
+                onDone: () => {
+                  closeAusweis()
+                },
+              })
+            })
+            .catch(() => {
+              /**
+               * An error is thrown and unhandled in finishFlow
+               * only if device is not connected to the internet
+               */
+              updateScanner({
+                state: AusweisScannerState.failure,
+                onDone: () => {
+                  /**
+                   * QUESTION:
+                   * shall we show toast here, something like:
+                   * we were unable to finish interaction because
+                   * you were not connected to the internet
+                   */
+                  closeAusweis()
+                },
+              })
+            })
+        } else {
+          /**
+           * An error is thrown and unhandled in finishFlow
+           * only if device is not connected to the internet
+           */
+          finishFlow(url)
+            .then(() => {
+              closeAusweis()
+            })
+            .catch(() => {
+              /**
+               * QUESTION:
+               * shall we show toast here, something like:
+               * we were unable to finish interaction because
+               * you were not connected to the internet
+               */
+            })
         }
       },
       handlePinRequest: (card) => {
