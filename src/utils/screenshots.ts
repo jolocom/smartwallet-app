@@ -16,15 +16,15 @@ export class ScreenshotManager {
 
   async getDisabledStatus() {
     return this.agent.storage.get
-      .setting(StorageKeys.screenshotsEnabled)
+      .setting(StorageKeys.screenshotsDisabled)
       .then((value) => {
-        return value.isEnabled
+        return value ? value.isDisabled : true
       })
   }
 
   async storeDisabledStatus(status: boolean) {
-    return this.agent.storage.store.setting(StorageKeys.screenshotsEnabled, {
-      isEnabled: !status,
+    return this.agent.storage.store.setting(StorageKeys.screenshotsDisabled, {
+      isDisabled: status,
     })
   }
 }

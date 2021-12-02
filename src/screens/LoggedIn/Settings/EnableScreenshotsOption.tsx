@@ -11,7 +11,7 @@ import { ScreenshotManager } from '~/utils/screenshots'
 const EnableScreenshotsOption = () => {
   const { t } = useTranslation()
   const agent = useAgent()
-  const [isEnabled, setEnabled] = useState(false)
+  const [isDisabled, setDisabled] = useState(true)
   const { scheduleErrorWarning } = useToasts()
   const screenshotManager = useRef(new ScreenshotManager(agent)).current
 
@@ -19,20 +19,20 @@ const EnableScreenshotsOption = () => {
     screenshotManager
       .getDisabledStatus()
       .then((isDisabled) => {
-        setEnabled(isDisabled)
+        setDisabled(isDisabled)
       })
       .catch(scheduleErrorWarning)
   }, [])
 
   const disableScreenshots = () => {
-    setEnabled(false)
+    setDisabled(true)
     screenshotManager
       .storeDisabledStatus(true)
       .then(() => {
         ScreenshotManager.disable()
       })
       .catch((e) => {
-        setEnabled(true)
+        setDisabled(false)
         scheduleErrorWarning(e)
       })
   }
@@ -46,14 +46,14 @@ const EnableScreenshotsOption = () => {
         {
           text: t('Settings.screenshotAlertCta'),
           onPress: () => {
-            setEnabled(true)
+            setDisabled(false)
             screenshotManager
               .storeDisabledStatus(false)
               .then(() => {
                 ScreenshotManager.enable()
               })
               .catch((e) => {
-                setEnabled(false)
+                setDisabled(true)
                 scheduleErrorWarning(e)
               })
           },
@@ -64,10 +64,10 @@ const EnableScreenshotsOption = () => {
   }
 
   const handleDisableScreenshots = () => {
-    if (isEnabled) {
-      disableScreenshots()
-    } else {
+    if (isDisabled) {
       enableScreenshots()
+    } else {
+      disableScreenshots()
     }
   }
 
@@ -76,7 +76,7 @@ const EnableScreenshotsOption = () => {
       <Option>
         <Option.Title title={t('Settings.screenshotBlock')} />
         <View style={{ position: 'absolute', right: 16 }}>
-          <ToggleSwitch on={isEnabled} onToggle={handleDisableScreenshots} />
+          <ToggleSwitch on={!isDisabled} onToggle={handleDisableScreenshots} />
         </View>
       </Option>
     </Section.Block>

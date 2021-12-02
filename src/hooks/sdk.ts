@@ -23,7 +23,7 @@ export enum StorageKeys {
   termsConsent = 'termsConsent',
   biometry = 'biometry',
   language = 'language',
-  screenshotsEnabled = 'screenshotsEnabled',
+  screenshotsDisabled = 'screenshotsDisabled',
 }
 
 /**
