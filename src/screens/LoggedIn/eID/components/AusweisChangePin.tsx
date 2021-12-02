@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
+import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
 import { View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
@@ -8,7 +9,6 @@ import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 
 import { ScreenNames } from '~/types/screens'
@@ -16,7 +16,12 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { IS_ANDROID } from '~/utils/generic'
 
-import { useAusweisInteraction, useAusweisScanner, useCheckNFC } from '../hooks'
+import {
+  useAusweisInteraction,
+  useAusweisScanner,
+  useCheckNFC,
+  useDeactivatedCard,
+} from '../hooks'
 import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
 
 interface WhateverProps {
@@ -63,10 +68,9 @@ const AusweisChangePin = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
   const { checkCardValidity, cancelFlow } = useAusweisInteraction()
-  const { showScanner, updateScanner, handleDeactivatedCard } =
-    useAusweisScanner()
+  const { showScanner, updateScanner } = useAusweisScanner()
+  const { handleDeactivatedCard } = useDeactivatedCard()
   const isTransportPin = useRef(false)
-  const goBack = useGoBack()
   const { checkNfcSupport } = useCheckNFC()
 
   const pinHandler = useCallback((card: CardInfo) => {
@@ -119,8 +123,8 @@ const AusweisChangePin = () => {
 
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
-        if (card?.deactivated && IS_ANDROID) {
-          handleDeactivatedCard()
+        if (card?.deactivated) {
+          handleDeactivatedCard(navigation.goBack)
         }
       },
       handleCardRequest: () => {
@@ -164,7 +168,6 @@ const AusweisChangePin = () => {
           canHandler(card)
         }
       },
-      handleChangePinCancel: () => {},
       ...handlers,
     })
   }
@@ -173,12 +176,16 @@ const AusweisChangePin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = true
       setupHandlers({
-        handleCardRequest: () => {
-          if (IS_ANDROID) {
-            showScanner(() => {
-              cancelFlow()
-              goBack()
+        handleCardInfo: (card) => {
+          if (card?.deactivated) {
+            handleDeactivatedCard(() => {
+              navigation.dispatch(StackActions.pop())
             })
+          }
+        },
+        handleChangePinCancel: () => {
+          if (IS_ANDROID) {
+            navigation.goBack()
           }
         },
       })
