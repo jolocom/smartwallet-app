@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  LayoutAnimation,
+} from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import { useSafeArea } from 'react-native-safe-area-context'
+import { useClipboard } from '@react-native-community/hooks'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -13,9 +21,89 @@ import { MainStackParamList } from '../LoggedIn/Main'
 import { ScreenNames } from '~/types/screens'
 import { useToggleExpand } from '~/hooks/ui'
 import Collapsible from '~/components/Collapsible'
-import { useSafeArea } from 'react-native-safe-area-context'
+import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
+import { TextLayoutEvent } from '~/types/props'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
+
+type FieldValueProps = { value: string }
+const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
+  const [_, setClipboardData] = useClipboard()
+
+  const { scheduleInfo } = useToasts()
+  const { t } = useTranslation()
+
+  const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(0)
+  const { isExpanded, onToggleExpand } = useToggleExpand()
+  const [shouldAppendDots, setAppendDots] = useState(false)
+  const wasCalculated = useRef(false)
+
+  const handleLongPress = (value: string) => {
+    setClipboardData(value as string)
+    scheduleInfo({
+      title: t('Toasts.copied'),
+      message: ``,
+      dismiss: {
+        timeout: 1500,
+      },
+    })
+  }
+
+  const handleTextLayout = (e: TextLayoutEvent) => {
+    const numberOfLines = e.nativeEvent.lines.length
+    if (numberOfLines > 4 && !wasCalculated.current) {
+      setAppendDots(true)
+      setNumberOfVisibleLines(4)
+    }
+    wasCalculated.current = true
+  }
+
+  useEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 200,
+    })
+    if (isExpanded) {
+      setNumberOfVisibleLines(0)
+    } else {
+      setNumberOfVisibleLines(4)
+    }
+  }, [isExpanded])
+
+  return (
+    <>
+      <TouchableOpacity
+        onPress={onToggleExpand}
+        onLongPress={() => handleLongPress(value as string)}
+        activeOpacity={0.6}
+      >
+        <JoloText
+          // @ts-expect-error
+          onTextLayout={handleTextLayout}
+          color={Colors.black95}
+          numberOfLines={numberOfVisibleLines}
+          customStyles={[
+            styles.fieldText,
+            { marginTop: BP({ default: 8, xsmall: 4 }) },
+            !isExpanded && shouldAppendDots && { marginBottom: 15 },
+          ]}
+        >
+          {value}
+        </JoloText>
+      </TouchableOpacity>
+      {!isExpanded && shouldAppendDots && (
+        <JoloText
+          color={Colors.black95}
+          customStyles={{ position: 'absolute', bottom: 10, right: 10 }}
+          onPress={onToggleExpand}
+        >
+          {t('Details.expandBtn')}
+        </JoloText>
+      )}
+    </>
+  )
+}
 
 const FieldDetails = () => {
   const route =
@@ -27,23 +115,15 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
-  const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
-  const { isExpanded, onToggleExpand } = useToggleExpand()
-
-  const handleToggleExpand = (idx: number) => {
-    setExpandedFieldIdx(idx)
-    onToggleExpand()
-  }
-
-  useEffect(() => {
-    if (!isExpanded) {
-      setExpandedFieldIdx(-1)
-    }
-  }, [isExpanded])
-
   const { top } = useSafeArea()
   return (
-    <View style={{ paddingTop: top, backgroundColor, height: '100%' }}>
+    <View
+      style={{
+        paddingTop: top,
+        backgroundColor,
+        height: '100%',
+      }}
+    >
       <Collapsible
         renderHeader={() => (
           <Collapsible.Header
@@ -53,7 +133,7 @@ const FieldDetails = () => {
         )}
         renderScroll={() => (
           <ScreenContainer.Padding>
-            <Collapsible.Scroll>
+            <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
                 text={title ?? ''}
                 customContainerStyles={{
@@ -94,23 +174,7 @@ const FieldDetails = () => {
                       >
                         {field.label}
                       </JoloText>
-                      <TouchableOpacity
-                        onPress={() => handleToggleExpand(i)}
-                        activeOpacity={1}
-                      >
-                        <JoloText
-                          color={Colors.black95}
-                          numberOfLines={
-                            isExpanded && expandedFieldIdx === i ? 0 : 4
-                          }
-                          customStyles={[
-                            styles.fieldText,
-                            { marginTop: BP({ default: 8, xsmall: 4 }) },
-                          ]}
-                        >
-                          {field.value}
-                        </JoloText>
-                      </TouchableOpacity>
+                      <FieldValue value={field.value as string} />
                     </View>
                     {i !== Object.keys(fields).length - 1 && (
                       <View style={styles.divider} />
@@ -150,6 +214,7 @@ const styles = StyleSheet.create({
     }),
     paddingHorizontal: 16,
     alignItems: 'flex-start',
+    position: 'relative',
   },
   fieldText: {
     textAlign: 'left',
