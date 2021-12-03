@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   description: {
     textAlign: 'left',
     marginTop: 28,
-    paddingTop: 400,
   },
   buttonContainer: {
     position: 'absolute',
