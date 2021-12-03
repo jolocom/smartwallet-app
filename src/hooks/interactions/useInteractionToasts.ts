@@ -17,10 +17,10 @@ const useInteractionToasts = () => {
     if (shouldRedirect) {
       // TODO: should the config overwrite the redirect toast?
       scheduleInfo({
-        title: t('Toasts.successfulInteractionTitle'),
-        message: 'You should return back to the service',
+        title: t('Toasts.interactionSuccessRedirectTitle'),
+        message: t('Toasts.interactionSuccessRedirectMsg'),
         interact: {
-          label: 'Return',
+          label: 'Toasts.interactionSuccessRedirectBtn',
           onInteract: () => {
             Linking.openURL(redirectUrl!)
           },
