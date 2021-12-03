@@ -10,18 +10,19 @@ const useInteractionToasts = () => {
   const { scheduleInfo } = useToasts()
   const redirectUrl = useSelector(getRedirectUrl)
 
-  const scheduleSuccessInteraction = (config?: Partial<ToastBody>) => {
-    if (redirectUrl) {
+  const scheduleSuccessInteraction = async (config?: Partial<ToastBody>) => {
+    const shouldRedirect =
+      !!redirectUrl && (await Linking.canOpenURL(redirectUrl))
+
+    if (shouldRedirect) {
       // TODO: should the config overwrite the redirect toast?
       scheduleInfo({
         title: t('Toasts.successfulInteractionTitle'),
-        message: 'You should return to back to the requester',
+        message: 'You should return back to the service',
         interact: {
           label: 'Return',
           onInteract: () => {
-            Linking.canOpenURL(redirectUrl).then((can) => {
-              if (can) Linking.openURL(redirectUrl)
-            })
+            Linking.openURL(redirectUrl!)
           },
         },
       })
