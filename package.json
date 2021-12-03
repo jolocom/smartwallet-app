@@ -60,7 +60,6 @@
     "react": "16.13.1",
     "react-i18next": "^11.7.3",
     "react-native": "0.63.4",
-    "react-native-aa2-sdk": "../react-native-ausweis-app/react-native-aa2-sdk-v1.0.2.tgz",
     "react-native-biometrics": "^2.1.4",
     "react-native-bootsplash": "^3.2.0",
     "react-native-branch": "^5.0.4",
