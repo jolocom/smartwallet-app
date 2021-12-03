@@ -134,6 +134,15 @@ export const AusweisPasscode = () => {
     setPinVariant(mode)
   }, [route])
 
+  const showPinError = (card: CardInfo) => {
+    const errorText = t('Lock.errorMsg', {
+      attempts: `${
+        ALL_EID_PIN_ATTEMPTS - card.retryCounter
+      }∕${ALL_EID_PIN_ATTEMPTS}`,
+    })
+    setErrorText(errorText)
+  }
+
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
       isScanner.current = false
@@ -142,13 +151,11 @@ export const AusweisPasscode = () => {
       } else {
         setPinVariant(AusweisPasscodeMode.PIN)
       }
-      if (card.retryCounter !== ALL_EID_PIN_ATTEMPTS) {
-        const errorText = t('Lock.errorMsg', {
-          attempts: `${
-            ALL_EID_PIN_ATTEMPTS - card.retryCounter
-          }∕${ALL_EID_PIN_ATTEMPTS}`,
-        })
-        setErrorText(errorText)
+      if (
+        card.retryCounter !== ALL_EID_PIN_ATTEMPTS &&
+        pinVariantRef.current !== AusweisPasscodeMode.CAN
+      ) {
+        showPinError(card)
       }
     }
 
@@ -169,7 +176,7 @@ export const AusweisPasscode = () => {
       }
     }
 
-    const canHandler = () => {
+    const canHandler = (card: CardInfo) => {
       isScanner.current = false
       if (canCounterRef.current > 0) {
         setErrorText(
@@ -177,6 +184,8 @@ export const AusweisPasscode = () => {
             pinVariant: 'CAN',
           }),
         )
+      } else {
+        showPinError(card)
       }
       setPinVariant(AusweisPasscodeMode.CAN)
     }
@@ -316,14 +325,14 @@ export const AusweisPasscode = () => {
           pukHandler(card)
         }
       },
-      handleCanRequest: () => {
+      handleCanRequest: (card) => {
         if (IS_ANDROID) {
           updateScanner({
             state: AusweisScannerState.success,
-            onDone: canHandler,
+            onDone: () => canHandler(card),
           })
         } else {
-          canHandler()
+          canHandler(card)
         }
       },
       /**
