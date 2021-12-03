@@ -5,6 +5,7 @@ import { AttrActions, AttributePayload } from '../attributes/types'
 
 const initialState: InteractionState = {
   details: { flowType: null, id: null, counterparty: null },
+  redirectUrl: null,
 }
 
 const reducer = (
@@ -84,6 +85,8 @@ const reducer = (
       }
       return state
     }
+    case InteractionActions.setRedirectUrl:
+      return { ...state, redirectUrl: action.payload }
     default:
       return state
   }
