@@ -35,16 +35,10 @@ export const AusweisForgotPin = () => {
       >
         {t('AusweisLostPin.title')}
       </JoloText>
-      <JoloText
-        color={Colors.osloGray}
-        customStyles={{ marginTop: 24, paddingHorizontal: 18 }}
-      >
+      <JoloText color={Colors.osloGray} customStyles={{ marginTop: 24 }}>
         {t('AusweisLostPin.description')}
       </JoloText>
-      <JoloText
-        color={Colors.osloGray}
-        customStyles={{ marginTop: 32, paddingHorizontal: 18 }}
-      >
+      <JoloText color={Colors.osloGray} customStyles={{ marginTop: 32 }}>
         {t('AusweisLostPin.contact')}
       </JoloText>
       <TouchableOpacity onPress={handleSendEmail}>
