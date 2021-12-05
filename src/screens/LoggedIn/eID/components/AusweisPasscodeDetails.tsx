@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import React from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Btn, { BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
@@ -29,14 +29,10 @@ export const AusweisPasscodeDetails = () => {
   }
 
   return (
-    <View
-      style={{ flex: 1, paddingTop: top, backgroundColor: Colors.mainDark }}
-    >
+    <View style={[styles.container, { paddingTop: top }]}>
       <Collapsible
         renderScroll={() => (
-          <Collapsible.Scroll
-            containerStyles={{ paddingHorizontal: 20, paddingBottom: '30%' }}
-          >
+          <Collapsible.Scroll containerStyles={styles.scrollContainer}>
             <Collapsible.Title text={t('AusweisPinInfo.header')}>
               <JoloText
                 kind={JoloTextKind.title}
@@ -45,7 +41,7 @@ export const AusweisPasscodeDetails = () => {
                 {t('AusweisPinInfo.header')}
               </JoloText>
             </Collapsible.Title>
-            <JoloText customStyles={{ textAlign: 'left', marginTop: 28 }}>
+            <JoloText customStyles={styles.description}>
               {t('AusweisPinInfo.description')}
             </JoloText>
           </Collapsible.Scroll>
@@ -57,16 +53,7 @@ export const AusweisPasscodeDetails = () => {
           />
         )}
       >
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 16,
-            width: '100%',
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            backgroundColor: Colors.mainDark,
-          }}
-        >
+        <View style={styles.buttonContainer}>
           <Btn onPress={handlePasscodeSettings} type={BtnTypes.quaternary}>
             {t('AusweisPinInfo.btn')}
           </Btn>
@@ -75,3 +62,27 @@ export const AusweisPasscodeDetails = () => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.mainDark,
+  },
+  scrollContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: '30%',
+  },
+  description: {
+    textAlign: 'left',
+    marginTop: 28,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    paddingBottom: 16,
+    width: '100%',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.mainDark,
+  },
+})
