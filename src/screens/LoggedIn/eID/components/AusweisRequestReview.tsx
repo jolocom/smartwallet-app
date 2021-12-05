@@ -210,7 +210,7 @@ export const AusweisRequestReview = () => {
         )}
         renderScroll={() => (
           <ContainerFAS>
-            <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
+            <Collapsible.Scroll containerStyles={{ paddingBottom: '15%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
                   <AusweisLogo />
