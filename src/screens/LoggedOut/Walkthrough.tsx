@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ImageBackground, StyleSheet, View } from 'react-native'
+import { ImageBackground, StyleSheet, View, Platform } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
 
@@ -16,6 +16,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
+import BP from '~/utils/breakpoints'
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
   <View style={styles.dot}>
@@ -90,7 +91,10 @@ const Walkthrough: React.FC = () => {
             <AbsoluteBottom
               customStyles={{
                 ...styles.consistentContainer,
-                bottom: 235,
+                bottom: Platform.select({
+                  ios: BP({ default: 235, medium: 250, large: 250 }),
+                  android: 235,
+                }),
               }}
             >
               <JoloText
@@ -158,7 +162,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 185,
+    bottom: Platform.select({
+      ios: BP({ default: 185, medium: 210, large: 210 }),
+      android: 185,
+    }),
   },
   dot: {
     width: 3,
