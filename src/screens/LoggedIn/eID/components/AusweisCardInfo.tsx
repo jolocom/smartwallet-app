@@ -24,11 +24,19 @@ const AusweisCardInfo = () => {
 
   const title = useMemo(() => {
     if (mode === CardInfoMode.blocked) {
+      /**
+       * TODO: amend the copy
+       */
       return t('AusweisUnlock.pukExhaustedHeader')
     } else if (mode === CardInfoMode.notBlocked) {
       return t('AusweisUnlock.notLockedHeader')
     } else if (mode === CardInfoMode.unblocked) {
       return t('AusweisUnlock.unlockedHeader')
+    } else if (mode === CardInfoMode.standaloneUnblock) {
+      /**
+       * TODO: add the copy
+       */
+      return 'Unlock the card from the Identity screen'
     }
   }, [mode])
 

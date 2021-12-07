@@ -106,6 +106,7 @@ export enum CardInfoMode {
   notBlocked = 'notBlocked',
   blocked = 'blocked',
   unblocked = 'unblocked',
+  standaloneUnblock = 'standaloneUnblock',
 }
 
 export type AusweisCardInfoParams = {
