@@ -29,6 +29,11 @@ const AusweisLockPukInfo: React.FC = () => {
   useAusweisCancelBackHandler()
 
   const handleContinueWithPuk = () => {
+    /**
+     * NOTE: we are not passing the `flow` param here,
+     * because parameters merge, it (`flow` param) will be taken from
+     * previous navigation step to eIDScreens.EnterPIN
+     */
     navigation.navigate(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
   }
 

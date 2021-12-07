@@ -22,7 +22,12 @@ import {
   useCheckNFC,
   useDeactivatedCard,
 } from '../hooks'
-import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import {
+  AusweisFlow,
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  eIDScreens,
+} from '../types'
 
 interface WhateverProps {
   headerText: string
@@ -78,6 +83,7 @@ const AusweisChangePin = () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
+          flow: AusweisFlow.changePin,
           mode:
             isTransportPin.current === true
               ? AusweisPasscodeMode.TRANSPORT_PIN
@@ -85,6 +91,7 @@ const AusweisChangePin = () => {
           pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
             : undefined,
+          isUnlocking: false,
         },
       })
     })
@@ -95,10 +102,12 @@ const AusweisChangePin = () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
+          flow: AusweisFlow.changePin,
           mode: AusweisPasscodeMode.CAN,
           pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
             : undefined,
+          isUnlocking: false,
         },
       })
     })

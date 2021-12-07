@@ -23,6 +23,7 @@ import { useRevertToInitialState } from '~/hooks/generic'
 
 import { AusweisStackParamList } from '..'
 import {
+  AusweisFlow,
   AusweisPasscodeMode,
   AusweisScannerState,
   CardInfoMode,
@@ -76,7 +77,13 @@ export const AusweisPasscode = () => {
   const { t } = useTranslation()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
-  const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
+  const {
+    mode,
+    handlers,
+    pinContext = AusweisPasscodeMode.PIN,
+    flow,
+    isUnlocking,
+  } = route.params
   const ausweisContext = useAusweisContext()
 
   const isScanner = useRef(false)

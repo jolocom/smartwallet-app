@@ -18,6 +18,7 @@ import {
 } from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
+  AusweisFlow,
   AusweisPasscodeMode,
   AusweisScannerState,
   CardInfoMode,
@@ -69,11 +70,13 @@ export const AusweisIdentity = () => {
       screen: eIDScreens.EnterPIN,
       params: {
         mode: AusweisPasscodeMode.PUK,
+        flow: AusweisFlow.changePin,
         handlers: {
           handlePinRequest: () => {
             handleShowCardLockResult(CardInfoMode.unblocked)
           },
         },
+        isUnlocking: true,
       },
     })
   }
