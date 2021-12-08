@@ -580,7 +580,7 @@
     "AusweisUnlock": {
         "notLockedHeader": "System did not detect your card being blocked",
         "closeBtn": "Close",
-        "pukExhaustedHeader": "You used all allowed PUK attempts. Your card is locked now",
+        "pukExhaustedHeader": "We didn't manage to unlock your card",
         "unlockedHeader": "Your card is unlocked and ready to use!",
         "standaloneUnblockHeader": "Unlock the card from the \"Identity screen\""
     },

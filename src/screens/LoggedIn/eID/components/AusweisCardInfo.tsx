@@ -25,9 +25,6 @@ const AusweisCardInfo = () => {
 
   const title = useMemo(() => {
     if (mode === CardInfoMode.blocked) {
-      /**
-       * TODO: amend the copy
-       */
       return t('AusweisUnlock.pukExhaustedHeader')
     } else if (mode === CardInfoMode.notBlocked) {
       return t('AusweisUnlock.notLockedHeader')
