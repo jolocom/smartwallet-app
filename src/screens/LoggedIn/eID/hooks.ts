@@ -246,6 +246,7 @@ export const useAusweisCompatibilityCheck = () => {
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { cancelFlow } = useAusweisInteraction()
+  const { checkNfcSupport } = useCheckNFC()
 
   const checkAndroidCompatibility = () => {
     showScanner()
@@ -283,14 +284,15 @@ export const useAusweisCompatibilityCheck = () => {
 
     aa2Module.changePin()
   }
-
   const startCheck = () => {
     setCompatibility(undefined)
-    Platform.select({
-      ios: checkIosCompatibility,
-      android: checkAndroidCompatibility,
-      default: checkAndroidCompatibility,
-    })()
+    checkNfcSupport(
+      Platform.select({
+        ios: checkIosCompatibility,
+        android: checkAndroidCompatibility,
+        default: checkAndroidCompatibility,
+      }),
+    )
   }
 
   useEffect(() => {
