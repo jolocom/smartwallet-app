@@ -1,6 +1,6 @@
 import React from 'react'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text } from 'react-native'
 import { act } from '@testing-library/react-hooks'
 
 import Collapsible from '~/components/Collapsible'
@@ -25,6 +25,49 @@ jest.mock('@react-navigation/native', () => ({
 }))
 
 describe('Collapsible', () => {
+  it('renders custom header', () => {
+    // setting up measurements for the first title
+    mockMeasureLayout(100, 100, 100, 100)
+
+    const collapsibleSetup = new CollapsibleBuilder()
+      .renderHeader(({ currentTitleText }) => (
+        <View style={{ height: HEADER_HIGHT }}>
+          <Text testID="collapsible-custom-header-text">
+            {currentTitleText}
+          </Text>
+        </View>
+      ))
+      .renderScroll(() => (
+        <Collapsible.Scroll>
+          <Collapsible.Title text={TITLE1}>
+            <Text>{TITLE1}</Text>
+          </Collapsible.Title>
+        </Collapsible.Scroll>
+      ))
+      .build()
+
+    const { getByTestId } = render(<Collapsible {...collapsibleSetup} />)
+    triggerHeaderLayout(getByTestId('collapsible-header-container'))
+
+    /**
+     * triggering title's on layout event
+     */
+    const title1 = getByTestId('collapsible-title')
+    act(() => {
+      fireEvent(title1, 'onLayout')
+    })
+
+    /**
+     * scrolling for the title to appear in the header
+     */
+    const scrollEl = getByTestId('collapsible-scroll')
+    scrollCollapsible(scrollEl, 60)
+
+    const headerText = getByTestId('collapsible-custom-header-text')
+    expect(headerText).toBeDefined()
+    expect(headerText.props.children).toBe(TITLE1)
+  })
+
   it('renders custom header and observers header title change with multiple titles', async () => {
     /**
      * mocking measure layout which is being invoked
@@ -37,15 +80,7 @@ describe('Collapsible', () => {
     // title 2
     mockMeasureLayout(200, 200, 200, 200)
 
-    const collapsibleSetup = new CollapsibleBuilder()
-      .renderHeader(({ currentTitleText }) => (
-        <View style={{ height: HEADER_HIGHT }}>
-          <Text testID="collapsible-custom-header-text">
-            {currentTitleText}
-          </Text>
-        </View>
-      ))
-      .build()
+    const collapsibleSetup = new CollapsibleBuilder().build()
     const { getByTestId, getAllByTestId, getByText } = render(
       <Collapsible {...collapsibleSetup}>
         <Text>{CHILDREN_TEXT}</Text>
@@ -74,7 +109,7 @@ describe('Collapsible', () => {
     expect(scrollEl.props.contentContainerStyle[0].paddingTop).toBe(
       HEADER_HIGHT,
     )
-    const headerText = getByTestId('collapsible-custom-header-text')
+    const headerText = getByTestId('collapsible-header-text')
     expect(headerText).toBeDefined()
     expect(headerText.props.children).toBe(TITLE1)
     expect(getByText(CHILDREN_TEXT)).toBeDefined()
