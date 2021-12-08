@@ -2,6 +2,7 @@ import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useNavigation } from '@react-navigation/core'
+import { StackActions } from '@react-navigation/routers'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -47,13 +48,15 @@ export const AusweisIdentity = () => {
 
   const handleShowCardLockResult = (mode: CardInfoMode) => {
     const navigateToCardInfo = () => {
-      navigation.navigate(ScreenNames.TransparentModals, {
-        screen: ScreenNames.AusweisCardInfo,
-        params: {
-          mode,
-          onDismiss: cancelFlow,
-        },
-      })
+      navigation.dispatch(
+        StackActions.replace(ScreenNames.TransparentModals, {
+          screen: ScreenNames.AusweisCardInfo,
+          params: {
+            mode,
+            onDismiss: cancelFlow,
+          },
+        }),
+      )
     }
     if (IS_ANDROID) {
       updateScanner({
