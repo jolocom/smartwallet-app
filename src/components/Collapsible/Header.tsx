@@ -1,6 +1,7 @@
 import React from 'react'
 import { useMemo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
+
 import NavigationHeader from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
 import { useCollapsible } from './context'
@@ -43,6 +44,7 @@ const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
       type={type}
       customStyles={styles.container}
       onPress={onPress}
+      testID="collapsible-header"
     >
       <Animated.Text
         numberOfLines={1}
@@ -58,6 +60,7 @@ const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
             ],
           },
         ]}
+        testID="collapsible-header-text"
       >
         {currentTitleText}
       </Animated.Text>
