@@ -321,15 +321,41 @@ export const AusweisPasscode = () => {
        * ENTER_PUK
        */
       handlePukRequest: (card) => {
+        const pukRequestHandler = () => {
+          if (
+            flow === AusweisFlow.auth ||
+            (flow === AusweisFlow.changePin && isUnlocking)
+          ) {
+            // continue with puk
+            pukHandler(card)
+          } else if (flow === AusweisFlow.changePin && !isUnlocking) {
+            /**
+             * User should be able to set PUK only with 'Unlock
+             * blocked card' within ChangePin flow, all other use cases
+             * of ChangePin flow should redirect to AusweisIdentity to
+             * "Unlock blocked card"
+             */
+            navigation.dispatch(
+              StackActions.replace(ScreenNames.TransparentModals, {
+                screen: ScreenNames.AusweisCardInfo,
+                params: {
+                  mode: CardInfoMode.standaloneUnblock,
+                  onDismiss: () => {
+                    aa2Module.resetHandlers()
+                    cancelFlow()
+                  },
+                },
+              }),
+            )
+          }
+        }
         if (IS_ANDROID) {
           updateScanner({
             state: AusweisScannerState.success,
-            onDone: () => {
-              pukHandler(card)
-            },
+            onDone: pukRequestHandler,
           })
         } else {
-          pukHandler(card)
+          pukRequestHandler()
         }
       },
       handleCanRequest: (card) => {
