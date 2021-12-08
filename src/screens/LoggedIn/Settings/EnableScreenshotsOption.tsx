@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAgent } from '~/hooks/sdk'
 import Section from './components/Section'
 import Option from './components/Option'
@@ -13,21 +13,16 @@ const EnableScreenshotsOption = () => {
   const agent = useAgent()
   const [isDisabled, setDisabled] = useState(true)
   const { scheduleErrorWarning } = useToasts()
-  const screenshotManager = useRef(new ScreenshotManager(agent)).current
 
   useEffect(() => {
-    screenshotManager
-      .getDisabledStatus()
-      .then((isDisabled) => {
-        setDisabled(isDisabled)
-      })
+    ScreenshotManager.getDisabledStatus(agent)
+      .then(setDisabled)
       .catch(scheduleErrorWarning)
   }, [])
 
   const disableScreenshots = () => {
     setDisabled(true)
-    screenshotManager
-      .storeDisabledStatus(true)
+    ScreenshotManager.storeDisabledStatus(true, agent)
       .then(() => {
         ScreenshotManager.disable()
       })
@@ -47,8 +42,7 @@ const EnableScreenshotsOption = () => {
           text: t('Settings.screenshotAlertCta'),
           onPress: () => {
             setDisabled(false)
-            screenshotManager
-              .storeDisabledStatus(false)
+            ScreenshotManager.storeDisabledStatus(false, agent)
               .then(() => {
                 ScreenshotManager.enable()
               })

@@ -56,8 +56,7 @@ export const useWalletInit = () => {
 
     // NOTE: Setting the secure flag if screenshots are disabled in settings
     if (Platform.OS === 'android') {
-      const screenshotManager = new ScreenshotManager(agent)
-      const isDisabled = await screenshotManager.getDisabledStatus()
+      const isDisabled = await ScreenshotManager.getDisabledStatus(agent)
       isDisabled ? ScreenshotManager.disable() : ScreenshotManager.enable()
     }
 
