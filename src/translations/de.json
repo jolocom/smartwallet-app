@@ -211,7 +211,10 @@
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
         "copied": "",
         "ausweisDeactivatedCardTitle": "",
-        "ausweisDeactivatedCardMsg": ""
+        "ausweisDeactivatedCardMsg": "",
+        "interactionSuccessRedirectTitle": "",
+        "interactionSuccessRedirectMsg": "",
+        "interactionSuccessRedirectBtn": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -578,7 +581,8 @@
         "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",
         "closeBtn": "Schließen",
         "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
-        "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!"
+        "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!",
+        "standaloneUnblockHeader": ""
     },
     "Details": {
         "expandBtn": ""

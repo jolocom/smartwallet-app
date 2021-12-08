@@ -1,5 +1,5 @@
 import { useBackHandler } from '@react-native-community/hooks'
-import { RouteProp, useRoute } from '@react-navigation/core'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -21,6 +21,7 @@ const AusweisCardInfo = () => {
     >().params
   const { t } = useTranslation()
   const goBack = useGoBack()
+  const navigation = useNavigation()
 
   const title = useMemo(() => {
     if (mode === CardInfoMode.blocked) {
@@ -33,16 +34,18 @@ const AusweisCardInfo = () => {
     } else if (mode === CardInfoMode.unblocked) {
       return t('AusweisUnlock.unlockedHeader')
     } else if (mode === CardInfoMode.standaloneUnblock) {
-      /**
-       * TODO: add the copy
-       */
-      return 'Unlock the card from the Identity screen'
+      return t('AusweisUnlock.standaloneUnblockHeader')
     }
   }, [mode])
 
   const handleDismiss = () => {
     onDismiss && onDismiss()
     goBack()
+  }
+
+  const handleRedirectToIdentity = () => {
+    onDismiss && onDismiss()
+    navigation.navigate(ScreenNames.Identity)
   }
 
   useBackHandler(() => true)
@@ -54,12 +57,31 @@ const AusweisCardInfo = () => {
     >
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <ScreenContainer.Padding>
-          <JoloText
-            kind={JoloTextKind.title}
-            customStyles={{ alignSelf: 'center' }}
-          >
-            {title}
-          </JoloText>
+          {mode !== CardInfoMode.standaloneUnblock ? (
+            <JoloText
+              kind={JoloTextKind.title}
+              customStyles={{ alignSelf: 'center' }}
+            >
+              {title}
+            </JoloText>
+          ) : (
+            <JoloText
+              kind={JoloTextKind.title}
+              customStyles={{ alignSelf: 'center' }}
+            >
+              {title?.split('"')[0]}
+              <JoloText
+                kind={JoloTextKind.title}
+                customStyles={{
+                  alignSelf: 'center',
+                  textDecorationLine: 'underline',
+                }}
+                onPress={handleRedirectToIdentity}
+              >
+                {title?.split('"')[1]}
+              </JoloText>
+            </JoloText>
+          )}
         </ScreenContainer.Padding>
       </View>
       <BtnGroup>
