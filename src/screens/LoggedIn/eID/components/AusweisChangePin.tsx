@@ -26,6 +26,7 @@ import {
   AusweisFlow,
   AusweisPasscodeMode,
   AusweisScannerState,
+  CardInfoMode,
   eIDScreens,
 } from '../types'
 
@@ -114,16 +115,18 @@ const AusweisChangePin = () => {
   }, [])
 
   const pukHandler = useCallback((card: CardInfo) => {
-    checkCardValidity(card, () => {
-      navigation.navigate(ScreenNames.eId, {
-        screen: eIDScreens.EnterPIN,
-        params: {
-          mode: AusweisPasscodeMode.PUK,
-          pinContext: isTransportPin.current
-            ? AusweisPasscodeMode.TRANSPORT_PIN
-            : undefined,
-        },
-      })
+    /**
+     * User should be able to set PUK only with 'Unlock
+     * blocked card' within ChangePin flow, all other use cases
+     * of ChangePin flow should redirect to AusweisIdentity to
+     * "Unlock blocked card"
+     */
+    navigation.navigate(ScreenNames.TransparentModals, {
+      screen: ScreenNames.AusweisCardInfo,
+      params: {
+        mode: CardInfoMode.standaloneUnblock,
+        onDismiss: cancelFlow,
+      },
     })
   }, [])
 
