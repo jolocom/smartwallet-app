@@ -140,7 +140,7 @@
         "cancelBtn": "Cancel"
     },
     "Lock": {
-        "header": "Enter your passcode",
+        "header": "Enter wallet PIN",
         "forgotBtn": "Forgot your passcode?",
         "errorMsg": "You have used ${attempts} attempts"
     },
@@ -211,7 +211,10 @@
         "ausweisChangePinSuccessMsg": "You can use your new PIN now",
         "copied": "Copied",
         "ausweisDeactivatedCardTitle": "Your card is deactivated",
-        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue"
+        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
+        "interactionSuccessRedirectTitle": "Great success!",
+        "interactionSuccessRedirectMsg": "You should return back to the service",
+        "interactionSuccessRedirectBtn": "Return"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -510,13 +513,13 @@
         "validityLabel": "Validity"
     },
     "AusweisPasscode": {
-        "authPinHeader": "Enter your PIN",
+        "authPinHeader": "Enter eID PIN",
         "pinForgotBtn": "Forgot your PIN?",
         "transportPinHeader": "Enter your 5-digit PIN",
         "transportPinBtn": "Where can I find this?",
-        "canHeader": "Enter your CAN",
+        "canHeader": "Enter CAN",
         "canBtn": "Where to find CAN?",
-        "pukHeader": "Enter your PUK",
+        "pukHeader": "Enter PUK",
         "pukBtn": "Where to find the PUK?",
         "newPinHeader": "Enter your new eID PIN",
         "repeatNewPinHeader": "Repeat your new eID PIN",

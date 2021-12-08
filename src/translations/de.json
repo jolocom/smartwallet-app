@@ -211,7 +211,10 @@
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
         "copied": "",
         "ausweisDeactivatedCardTitle": "",
-        "ausweisDeactivatedCardMsg": ""
+        "ausweisDeactivatedCardMsg": "",
+        "interactionSuccessRedirectTitle": "",
+        "interactionSuccessRedirectMsg": "",
+        "interactionSuccessRedirectBtn": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
