@@ -48,15 +48,13 @@ export const AusweisIdentity = () => {
 
   const handleShowCardLockResult = (mode: CardInfoMode) => {
     const navigateToCardInfo = () => {
-      navigation.dispatch(
-        StackActions.replace(ScreenNames.TransparentModals, {
-          screen: ScreenNames.AusweisCardInfo,
-          params: {
-            mode,
-            onDismiss: cancelFlow,
-          },
-        }),
-      )
+      navigation.navigate(ScreenNames.TransparentModals, {
+        screen: ScreenNames.AusweisCardInfo,
+        params: {
+          mode,
+          onDismiss: cancelFlow,
+        },
+      })
     }
     if (IS_ANDROID) {
       updateScanner({
