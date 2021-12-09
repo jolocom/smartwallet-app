@@ -12,8 +12,6 @@ import useTermsConsent from './consent'
 import { makeInitializeCredentials, useCredentials } from './signedCredentials'
 import useTranslation from './useTranslation'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
-import { Platform } from 'react-native'
-import { ScreenshotManager } from '~/utils/screenshots'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -53,12 +51,6 @@ export const useWalletInit = () => {
   return async (agent: Agent) => {
     // NOTE: Checking whether the user accepted the newest Terms of Service conditions
     await checkConsent(agent)
-
-    // NOTE: Setting the secure flag if screenshots are disabled in settings
-    if (Platform.OS === 'android') {
-      const isDisabled = await ScreenshotManager.getDisabledStatus(agent)
-      isDisabled ? ScreenshotManager.disable() : ScreenshotManager.enable()
-    }
 
     const onboardingSetting = await agent.storage.get.setting(
       StorageKeys.isOnboardingDone,
