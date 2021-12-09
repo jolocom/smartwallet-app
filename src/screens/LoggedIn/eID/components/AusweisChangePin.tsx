@@ -79,12 +79,17 @@ const AusweisChangePin = () => {
   const isTransportPin = useRef(false)
   const { checkNfcSupport } = useCheckNFC()
 
+  const changePinFlow =
+    isTransportPin.current === true
+      ? AusweisFlow.changeTransportPin
+      : AusweisFlow.changePin
+
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
-          flow: AusweisFlow.changePin,
+          flow: changePinFlow,
           mode:
             isTransportPin.current === true
               ? AusweisPasscodeMode.TRANSPORT_PIN
@@ -92,7 +97,6 @@ const AusweisChangePin = () => {
           pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
             : undefined,
-          isUnlocking: false,
         },
       })
     })
@@ -103,12 +107,11 @@ const AusweisChangePin = () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
-          flow: AusweisFlow.changePin,
+          flow: changePinFlow,
           mode: AusweisPasscodeMode.CAN,
           pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
             : undefined,
-          isUnlocking: false,
         },
       })
     })

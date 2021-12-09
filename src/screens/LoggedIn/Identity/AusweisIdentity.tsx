@@ -71,7 +71,7 @@ export const AusweisIdentity = () => {
       screen: eIDScreens.EnterPIN,
       params: {
         mode: AusweisPasscodeMode.PUK,
-        flow: AusweisFlow.changePin,
+        flow: AusweisFlow.unlock,
         handlers: {
           handlePinRequest: () => {
             handleShowCardLockResult(CardInfoMode.unblocked)

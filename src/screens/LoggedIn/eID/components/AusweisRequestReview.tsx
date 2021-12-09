@@ -80,7 +80,6 @@ export const AusweisRequestReview = () => {
         navigation.navigate(eIDScreens.EnterPIN, {
           flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.PIN,
-          isUnlocking: false,
         })
       })
     }
@@ -90,7 +89,6 @@ export const AusweisRequestReview = () => {
         navigation.navigate(eIDScreens.EnterPIN, {
           flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.PUK,
-          isUnlocking: false,
         })
       })
     }
@@ -100,7 +98,6 @@ export const AusweisRequestReview = () => {
         navigation.navigate(eIDScreens.EnterPIN, {
           flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.CAN,
-          isUnlocking: false,
         })
       })
     }

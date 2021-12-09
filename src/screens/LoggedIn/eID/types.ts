@@ -46,17 +46,13 @@ export interface AusweisPasscodeProps {
   pinContext?: AusweisPasscodeMode.TRANSPORT_PIN | AusweisPasscodeMode.PIN
   handlers?: Partial<EventHandlers>
   flow: AusweisFlow
-  /**
-   * NOTE: it will be true only when user presses "Unlock blocked card";
-   * setting it is a required parameter, otherwise react-navigation will
-   * perform parameters merge
-   */
-  isUnlocking: boolean
 }
 
 export enum AusweisFlow {
   auth = 'auth',
   changePin = 'changePin',
+  changeTransportPin = 'changeTransportPin',
+  unlock = 'unlock',
 }
 
 export interface AusweisPasscodeDetailsParams {

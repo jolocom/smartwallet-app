@@ -82,7 +82,6 @@ export const AusweisPasscode = () => {
     handlers,
     pinContext = AusweisPasscodeMode.PIN,
     flow,
-    isUnlocking,
   } = route.params
   const ausweisContext = useAusweisContext()
 
@@ -322,13 +321,10 @@ export const AusweisPasscode = () => {
        */
       handlePukRequest: (card) => {
         const pukRequestHandler = () => {
-          if (
-            flow === AusweisFlow.auth ||
-            (flow === AusweisFlow.changePin && isUnlocking)
-          ) {
+          if (flow === AusweisFlow.auth || flow === AusweisFlow.unlock) {
             // continue with puk
             pukHandler(card)
-          } else if (flow === AusweisFlow.changePin && !isUnlocking) {
+          } else {
             /**
              * User should be able to set PUK only with 'Unlock
              * blocked card' within ChangePin flow, all other use cases
