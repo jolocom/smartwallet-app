@@ -31,7 +31,10 @@ const AusweisCardInfo = () => {
     } else if (mode === CardInfoMode.unblocked) {
       return t('AusweisUnlock.unlockedHeader')
     } else if (mode === CardInfoMode.standaloneUnblock) {
-      return t('AusweisUnlock.standaloneUnblockHeader')
+      return `${t('AusweisUnlock.standaloneUnblockHeader')},${t(
+        'AusweisUnlock.identityScreen',
+      )}
+      `
     }
   }, [mode])
 
@@ -66,7 +69,7 @@ const AusweisCardInfo = () => {
               kind={JoloTextKind.title}
               customStyles={{ alignSelf: 'center' }}
             >
-              {title?.split('"')[0]}
+              {title?.split(',')[0]}
               <JoloText
                 kind={JoloTextKind.title}
                 customStyles={{
@@ -75,7 +78,8 @@ const AusweisCardInfo = () => {
                 }}
                 onPress={handleRedirectToIdentity}
               >
-                {title?.split('"')[1]}
+                {' '}
+                {title?.split(',')[1]}
               </JoloText>
             </JoloText>
           )}

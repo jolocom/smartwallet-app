@@ -582,7 +582,8 @@
         "closeBtn": "Schließen",
         "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
         "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!",
-        "standaloneUnblockHeader": ""
+        "standaloneUnblockHeader": "",
+        "identityScreen": ""
     },
     "Details": {
         "expandBtn": ""
