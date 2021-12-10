@@ -1,5 +1,6 @@
 module.exports = {
   preset: 'react-native',
+  testRegex: '(.test).(tsx|ts)$',
   setupFiles: [
     './__tests__/utils/setup.ts',
     './node_modules/react-native-gesture-handler/jestSetup.js',

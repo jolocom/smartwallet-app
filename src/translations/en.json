@@ -1,11 +1,11 @@
 {
     "Walkthrough": {
-        "titleOne": "Control your data",
-        "descriptionOne": "Manage your digital identity to stay safe online and off",
+        "titleOne": "Use your identity",
+        "descriptionOne": "Get where you need to go with convenient access to apps & services",
         "registrationBtn": "Get started",
         "recoveryBtn": "Import identity",
-        "titleTwo": "Use your identity",
-        "descriptionTwo": "Get where you need to go with convenient access to apps & services",
+        "titleTwo": "Control your data",
+        "descriptionTwo": "Manage your digital identity to stay safe online and off",
         "titleThree": "Easy backup",
         "descriptionThree": "Keep all your info backed up and in the right hands - a.k.a. yours"
     },
@@ -84,7 +84,7 @@
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
         "headerAusweis": "Your Identity",
-        "headerCredentials": "Credentials"
+        "headerCredentials": "Personal Info"
     },
     "BottomBar": {
         "identity": "Identity",
@@ -140,7 +140,7 @@
         "cancelBtn": "Cancel"
     },
     "Lock": {
-        "header": "Enter your passcode",
+        "header": "Enter wallet PIN",
         "forgotBtn": "Forgot your passcode?",
         "errorMsg": "You have used ${attempts} attempts"
     },
@@ -209,7 +209,12 @@
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Action Completed",
         "ausweisChangePinSuccessMsg": "You can use your new PIN now",
-        "copied": "Copied"
+        "copied": "Copied",
+        "ausweisDeactivatedCardTitle": "Your card is deactivated",
+        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
+        "interactionSuccessRedirectTitle": "Great success!",
+        "interactionSuccessRedirectMsg": "You should return back to the service",
+        "interactionSuccessRedirectBtn": "Return"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -508,13 +513,13 @@
         "validityLabel": "Validity"
     },
     "AusweisPasscode": {
-        "authPinHeader": "Enter your PIN",
+        "authPinHeader": "Enter eID PIN",
         "pinForgotBtn": "Forgot your PIN?",
         "transportPinHeader": "Enter your 5-digit PIN",
         "transportPinBtn": "Where can I find this?",
-        "canHeader": "Enter your CAN",
+        "canHeader": "Enter CAN",
         "canBtn": "Where to find CAN?",
-        "pukHeader": "Enter your PUK",
+        "pukHeader": "Enter PUK",
         "pukBtn": "Where to find the PUK?",
         "newPinHeader": "Enter your new eID PIN",
         "repeatNewPinHeader": "Repeat your new eID PIN",
@@ -575,8 +580,10 @@
     "AusweisUnlock": {
         "notLockedHeader": "System did not detect your card being blocked",
         "closeBtn": "Close",
-        "pukExhaustedHeader": "You used all allowed PUK attempts. Your card is locked now",
-        "unlockedHeader": "Your card is unlocked and ready to use!"
+        "pukExhaustedHeader": "We didn't manage to unlock your card",
+        "unlockedHeader": "Your card is unlocked and ready to use!",
+        "standaloneUnblockHeader": "Unlock the card from the",
+        "identityScreen": "Identity screen"
     },
     "Details": {
         "expandBtn": "See more"
