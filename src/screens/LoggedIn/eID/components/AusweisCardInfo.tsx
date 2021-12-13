@@ -1,7 +1,9 @@
 import { useBackHandler } from '@react-native-community/hooks'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import React, { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { View } from 'react-native'
+
 import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -31,10 +33,15 @@ const AusweisCardInfo = () => {
     } else if (mode === CardInfoMode.unblocked) {
       return t('AusweisUnlock.unlockedHeader')
     } else if (mode === CardInfoMode.standaloneUnblock) {
-      return `${t('AusweisUnlock.standaloneUnblockHeader')},${t(
-        'AusweisUnlock.identityScreen',
-      )}
-      `
+      /**
+       * Note: translation is unusual here in {en,de}.json files.
+       * <1>${screen}</1> means that input `screen` variable as a
+       * child of 1st node: 0 node is the text `AusweisUnlock.standaloneUnblockHeader`,
+       * 1 node is clickable text with variable `screen` as a child
+       */
+      return t('AusweisUnlock.standaloneUnblockHeader', {
+        screen: t('AusweisUnlock.identityScreen'),
+      })
     }
   }, [mode])
 
@@ -65,23 +72,22 @@ const AusweisCardInfo = () => {
               {title}
             </JoloText>
           ) : (
-            <JoloText
-              kind={JoloTextKind.title}
-              customStyles={{ alignSelf: 'center' }}
-            >
-              {title?.split(',')[0]}
+            <Trans>
               <JoloText
                 kind={JoloTextKind.title}
-                customStyles={{
-                  alignSelf: 'center',
-                  textDecorationLine: 'underline',
-                }}
-                onPress={handleRedirectToIdentity}
+                customStyles={{ alignSelf: 'center' }}
               >
-                {' '}
-                {title?.split(',')[1]}
+                {title}
+                <JoloText
+                  kind={JoloTextKind.title}
+                  customStyles={{
+                    alignSelf: 'center',
+                    textDecorationLine: 'underline',
+                  }}
+                  onPress={handleRedirectToIdentity}
+                />
               </JoloText>
-            </JoloText>
+            </Trans>
           )}
         </ScreenContainer.Padding>
       </View>
