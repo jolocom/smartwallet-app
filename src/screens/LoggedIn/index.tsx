@@ -15,6 +15,9 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
 import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
+import { Platform } from 'react-native'
+import { useAgent } from '~/hooks/sdk'
+import { ScreenshotManager } from '~/utils/screenshots'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -33,12 +36,22 @@ const LoggedIn = () => {
   const isAppLocked = useSelector(getIsAppLocked)
   const redirect = useRedirect()
   const replace = useReplaceWith()
+  const agent = useAgent()
 
   const showLock = isAppLocked && isAuthSet
   const showRegisterPin = !isAuthSet
   const showTabs = !isAppLocked && isAuthSet
 
   const renderedMainTimes = useRef(0)
+
+  useEffect(() => {
+    // NOTE: Setting the secure flag if screenshots are disabled in settings
+    if (Platform.OS === 'android') {
+      ScreenshotManager.getDisabledStatus(agent).then((isDisabled) => {
+        isDisabled ? ScreenshotManager.disable() : ScreenshotManager.enable()
+      })
+    }
+  }, [])
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())

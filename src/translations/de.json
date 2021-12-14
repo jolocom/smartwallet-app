@@ -581,7 +581,9 @@
         "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",
         "closeBtn": "Schließen",
         "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
-        "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!"
+        "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!",
+        "standaloneUnblockHeader": "",
+        "identityScreen": ""
     },
     "Details": {
         "expandBtn": ""

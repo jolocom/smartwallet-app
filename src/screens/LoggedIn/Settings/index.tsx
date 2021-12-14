@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
@@ -24,6 +24,7 @@ import { useAgent } from '~/hooks/sdk'
 import ClearIdentityBtn from './components/ClearIdentityBtn'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useTranslation from '~/hooks/useTranslation'
+import EnableScreenshotsOption from './EnableScreenshotsOption'
 
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
@@ -86,6 +87,7 @@ const SettingsGeneral: React.FC = () => {
               <Option.RightIcon />
             </Option>
             <EnableBiometryOption />
+            {Platform.OS === 'android' && <EnableScreenshotsOption />}
             {/* NOTE: commenting out till backup feature is ready  */}
             {/* <Option
               onPress={() => handleNavigateToScreen(ScreenNames.BackupIdentity)}
