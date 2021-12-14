@@ -9295,10 +9295,6 @@ react-lifecycles-compat@^3.0.2:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-native-aa2-sdk@../react-native-ausweis-app/react-native-aa2-sdk-v1.0.10.tgz:
-  version "1.0.10"
-  resolved "../react-native-ausweis-app/react-native-aa2-sdk-v1.0.10.tgz#fc720a70c3770c764237c33d7425c349db147d9b"
-
 react-native-biometrics@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/react-native-biometrics/-/react-native-biometrics-2.1.4.tgz#e201e9f18baeb560eeaba8d41fbd4f90d04152fe"
@@ -9415,10 +9411,10 @@ react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-react-native-jolocom@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.7.0.tgz#d45b826a9f689d814820244923060586fdfcb607"
-  integrity sha512-VEDnEXwpuXkNij88UNxu0UWYJ+d+JLHKv73DtxUNzQ1U+XFKuYumAwVisi1lY2Vseoob2Hv/tvT8eed1bctB3A==
+react-native-jolocom@^2.7.1:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.7.2.tgz#0d2f5fb342a8eb13fd2261c590af6059e3f97bfa"
+  integrity sha512-YLv3WN7QVRyj/3hwZEClOflcdR2iZIB4E4E+XSskczUWujc99v3eKt5Aj2L5ezks0OJOjoJCcMdlKLjYDI1Zfg==
   dependencies:
     "@jolocom/sdk" "^1.3.2"
     "@jolocom/sdk-storage-typeorm" "^4.3.0-rc0"
