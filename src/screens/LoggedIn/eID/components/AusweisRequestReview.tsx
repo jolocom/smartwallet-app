@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { View, Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useSafeArea } from 'react-native-safe-area-context'
 import moment from 'moment'
