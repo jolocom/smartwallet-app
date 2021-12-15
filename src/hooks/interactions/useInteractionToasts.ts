@@ -15,12 +15,11 @@ const useInteractionToasts = () => {
       !!redirectUrl && (await Linking.canOpenURL(redirectUrl))
 
     if (shouldRedirect) {
-      // TODO: should the config overwrite the redirect toast?
       scheduleInfo({
         title: t('Toasts.interactionSuccessRedirectTitle'),
         message: t('Toasts.interactionSuccessRedirectMsg'),
         interact: {
-          label: 'Toasts.interactionSuccessRedirectBtn',
+          label: t('Toasts.interactionSuccessRedirectBtn'),
           onInteract: () => {
             Linking.openURL(redirectUrl!)
           },
