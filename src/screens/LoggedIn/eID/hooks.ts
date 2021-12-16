@@ -27,10 +27,23 @@ import {
   AusweisCardResult,
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
-import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
-import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
+import {
+  setAusweisInteractionDetails,
+  setAusweisReaderState,
+} from '~/modules/ausweis/actions'
+import {
+  getAusweisReaderState,
+  getAusweisScannerKey,
+} from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
+import {
+  Message,
+  Messages,
+  ReaderMessage,
+} from 'react-native-aa2-sdk/js/messageTypes'
+import { dismissLoader, setLoader } from '~/modules/loader/actions'
+import { LoaderTypes } from '~/modules/loader/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -415,9 +428,8 @@ export const useDeactivatedCard = () => {
 }
 
 export const useAusweisScanner = () => {
-  const { scheduleWarning } = useToasts()
-  const { cancelFlow } = useAusweisInteraction()
   const { t } = useTranslation()
+  const dispatch = useDispatch()
   const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
@@ -425,6 +437,7 @@ export const useAusweisScanner = () => {
   }
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
+  const isCardTouched = useSelector(getAusweisReaderState)
 
   const scannerKey = useSelector(getAusweisScannerKey)
 
@@ -479,4 +492,22 @@ export const useAusweisCancelBackHandler = () => {
 
     return false
   })
+}
+
+export const useAusweisReaderEvents = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const listener = (message: Message) => {
+      const isCardTouched = !!(message as ReaderMessage).card
+      console.log({ isCardTouched })
+      dispatch(setAusweisReaderState(isCardTouched))
+    }
+
+    aa2Module.messageEmitter.addListener(Messages.reader, listener)
+
+    return () => {
+      aa2Module.messageEmitter.removeListener(Messages.reader, listener)
+    }
+  }, [])
 }
