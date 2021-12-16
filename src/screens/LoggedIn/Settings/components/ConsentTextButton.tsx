@@ -12,7 +12,7 @@ interface Props {
 }
 
 //TODO: very similar to ConsentText. Could be abstracted
-const ConsentButton: React.FC<Props> = ({ onPress, text }) => {
+const ConsentButton: React.FC<Props> = ({ onPress, text, children }) => {
   return (
     <TouchableOpacity style={styles.consentButton} onPress={onPress}>
       <JoloText
@@ -22,6 +22,7 @@ const ConsentButton: React.FC<Props> = ({ onPress, text }) => {
       >
         {text}
       </JoloText>
+      {children && children}
     </TouchableOpacity>
   )
 }
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   consentButton: {
     width: '100%',
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    flexDirection: 'row',
     marginVertical: BP({ xsmall: 6, small: 6, default: 10 }),
   },
 })
