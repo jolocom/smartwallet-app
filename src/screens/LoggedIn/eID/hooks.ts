@@ -3,7 +3,7 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import NfcManager from 'react-native-nfc-manager'
@@ -42,8 +42,7 @@ import {
   Messages,
   ReaderMessage,
 } from 'react-native-aa2-sdk/js/messageTypes'
-import { dismissLoader, setLoader } from '~/modules/loader/actions'
-import { LoaderTypes } from '~/modules/loader/types'
+import { usePrevious } from '~/hooks/generic'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -442,8 +441,6 @@ export const useDeactivatedCard = () => {
 }
 
 export const useAusweisScanner = () => {
-  const { t } = useTranslation()
-  const dispatch = useDispatch()
   const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
@@ -451,36 +448,46 @@ export const useAusweisScanner = () => {
   }
   const [scannerParams, setScannerParams] =
     useState<AusweisScannerParams>(defaultState)
-  const isCardTouched = useSelector(getAusweisReaderState)
 
   const scannerKey = useSelector(getAusweisScannerKey)
+  const scannerKeyRef = useRef(scannerKey)
 
   useEffect(() => {
-    if (scannerKey) {
+    scannerKeyRef.current = scannerKey
+  }, [scannerKey])
+
+  const dispatchScannerParams = (params: AusweisScannerParams) => {
+    if (scannerKeyRef.current) {
       try {
         navigation.dispatch({
-          ...CommonActions.setParams(scannerParams),
-          source: scannerKey,
+          ...CommonActions.setParams({ ...scannerParams, ...params }),
+          source: scannerKeyRef.current,
         })
       } catch (e) {
         console.warn(e)
       }
     }
-  }, [JSON.stringify(scannerParams), scannerKey])
+  }
 
   const resetScanner = () => {
     setScannerParams(defaultState)
+    dispatchScannerParams(defaultState)
   }
 
-  const showScanner = (onDismiss?: () => void) => {
+  const showScanner = (
+    onDismiss?: () => void,
+    params?: AusweisScannerParams,
+  ) => {
+    setScannerParams({ ...scannerParams, ...params })
     navigation.navigate(ScreenNames.eId, {
       screen: eIDScreens.AusweisScanner,
-      params: { ...scannerParams, onDismiss },
+      params: { ...scannerParams, ...params, onDismiss },
     })
   }
 
   const updateScanner = (params: Partial<AusweisScannerParams>) => {
     setScannerParams((prevParams) => ({ ...prevParams, ...params }))
+    dispatchScannerParams({ ...scannerParams, ...params })
     if (
       params.state === AusweisScannerState.failure ||
       params.state === AusweisScannerState.success
@@ -514,7 +521,6 @@ export const useAusweisReaderEvents = () => {
   useEffect(() => {
     const listener = (message: Message) => {
       const isCardTouched = !!(message as ReaderMessage).card
-      console.log({ isCardTouched })
       dispatch(setAusweisReaderState(isCardTouched))
     }
 
