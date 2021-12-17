@@ -22,7 +22,13 @@ import {
   useCheckNFC,
   useDeactivatedCard,
 } from '../hooks'
-import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import {
+  AusweisFlow,
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  CardInfoMode,
+  eIDScreens,
+} from '../types'
 
 interface WhateverProps {
   headerText: string
@@ -73,11 +79,17 @@ const AusweisChangePin = () => {
   const isTransportPin = useRef(false)
   const { checkNfcSupport } = useCheckNFC()
 
+  const changePinFlow =
+    isTransportPin.current === true
+      ? AusweisFlow.changeTransportPin
+      : AusweisFlow.changePin
+
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
+          flow: changePinFlow,
           mode:
             isTransportPin.current === true
               ? AusweisPasscodeMode.TRANSPORT_PIN
@@ -95,6 +107,7 @@ const AusweisChangePin = () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
+          flow: changePinFlow,
           mode: AusweisPasscodeMode.CAN,
           pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
@@ -105,16 +118,18 @@ const AusweisChangePin = () => {
   }, [])
 
   const pukHandler = useCallback((card: CardInfo) => {
-    checkCardValidity(card, () => {
-      navigation.navigate(ScreenNames.eId, {
-        screen: eIDScreens.EnterPIN,
-        params: {
-          mode: AusweisPasscodeMode.PUK,
-          pinContext: isTransportPin.current
-            ? AusweisPasscodeMode.TRANSPORT_PIN
-            : undefined,
-        },
-      })
+    /**
+     * User should be able to set PUK only with 'Unlock
+     * blocked card' within ChangePin flow, all other use cases
+     * of ChangePin flow should redirect to AusweisIdentity to
+     * "Unlock blocked card"
+     */
+    navigation.navigate(ScreenNames.TransparentModals, {
+      screen: ScreenNames.AusweisCardInfo,
+      params: {
+        mode: CardInfoMode.standaloneUnblock,
+        onDismiss: cancelFlow,
+      },
     })
   }, [])
 

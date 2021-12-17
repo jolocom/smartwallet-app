@@ -23,6 +23,7 @@ import { useRevertToInitialState } from '~/hooks/generic'
 
 import { AusweisStackParamList } from '..'
 import {
+  AusweisFlow,
   AusweisPasscodeMode,
   AusweisScannerState,
   CardInfoMode,
@@ -76,7 +77,12 @@ export const AusweisPasscode = () => {
   const { t } = useTranslation()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
-  const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
+  const {
+    mode,
+    handlers,
+    pinContext = AusweisPasscodeMode.PIN,
+    flow,
+  } = route.params
   const ausweisContext = useAusweisContext()
 
   const isScanner = useRef(false)
@@ -314,15 +320,38 @@ export const AusweisPasscode = () => {
        * ENTER_PUK
        */
       handlePukRequest: (card) => {
+        const pukRequestHandler = () => {
+          if (flow === AusweisFlow.auth || flow === AusweisFlow.unlock) {
+            // continue with puk
+            pukHandler(card)
+          } else {
+            /**
+             * User should be able to set PUK only with 'Unlock
+             * blocked card' within ChangePin flow, all other use cases
+             * of ChangePin flow should redirect to AusweisIdentity to
+             * "Unlock blocked card"
+             */
+            navigation.dispatch(
+              StackActions.replace(ScreenNames.TransparentModals, {
+                screen: ScreenNames.AusweisCardInfo,
+                params: {
+                  mode: CardInfoMode.standaloneUnblock,
+                  onDismiss: () => {
+                    aa2Module.resetHandlers()
+                    cancelFlow()
+                  },
+                },
+              }),
+            )
+          }
+        }
         if (IS_ANDROID) {
           updateScanner({
             state: AusweisScannerState.success,
-            onDone: () => {
-              pukHandler(card)
-            },
+            onDone: pukRequestHandler,
           })
         } else {
-          pukHandler(card)
+          pukRequestHandler()
         }
       },
       handleCanRequest: (card) => {

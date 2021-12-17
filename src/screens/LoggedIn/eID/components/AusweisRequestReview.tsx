@@ -37,7 +37,12 @@ import {
   AusweisListSection,
   AusweisLogo,
 } from '../styled'
-import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import {
+  AusweisFlow,
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  eIDScreens,
+} from '../types'
 import { AusweisStackParamList } from '..'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
@@ -73,6 +78,7 @@ export const AusweisRequestReview = () => {
     const pinHandler = (card: CardInfo) => {
       checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
+          flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.PIN,
         })
       })
@@ -81,6 +87,7 @@ export const AusweisRequestReview = () => {
     const pukHandler = (card: CardInfo) => {
       checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
+          flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.PUK,
         })
       })
@@ -89,6 +96,7 @@ export const AusweisRequestReview = () => {
     const canHandler = (card: CardInfo) => {
       checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
+          flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.CAN,
         })
       })

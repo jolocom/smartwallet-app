@@ -582,7 +582,7 @@
         "closeBtn": "Close",
         "pukExhaustedHeader": "We didn't manage to unlock your card",
         "unlockedHeader": "Your card is unlocked and ready to use!",
-        "standaloneUnblockHeader": "Unlock the card from the",
+        "standaloneUnblockHeader": "Unlock the card from the <1>${screen}</1>",
         "identityScreen": "Identity screen"
     },
     "Details": {
