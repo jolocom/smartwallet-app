@@ -20,24 +20,45 @@ import useTranslation from '~/hooks/useTranslation'
 import { useCheckNFC } from '../hooks'
 import BP from '~/utils/breakpoints'
 
-/**
- * TODO:
- * Scanner on Android needs a message with a big letters
- * saying "dont remove the card until the scanner popup is gone"
- */
+const AnimatedStatus: React.FC<{
+  isVisible: boolean
+  onAnimationDone?: () => void
+}> = ({ isVisible, children, onAnimationDone = () => {} }) => {
+  const opacityValue = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    Animated.timing(opacityValue, {
+      duration: 100,
+      useNativeDriver: true,
+      toValue: isVisible ? 1 : 0,
+    }).start(() => {
+      isVisible && onAnimationDone()
+    })
+  }, [isVisible])
+
+  return (
+    <Animated.View
+      style={[
+        StyleSheet.absoluteFill,
+        { alignItems: 'center', justifyContent: 'center' },
+        { opacity: opacityValue },
+      ]}
+    >
+      {children}
+    </Animated.View>
+  )
+}
+
 export const AusweisScanner = () => {
   const { t } = useTranslation()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
   const {
     onDone = () => {},
-    state = AusweisScannerState.idle,
+    state: scannerState = AusweisScannerState.idle,
     onDismiss,
   } = route.params
   const goBack = useGoBack()
-  const iconOpacityValue = useRef(new Animated.Value(0)).current
-  const loadingOpacityValue = useRef(new Animated.Value(0)).current
-  const [animationState, setAnimationState] = useState(state)
   const dispatch = useDispatch()
   const { checkNfcSupport } = useCheckNFC()
 
@@ -69,14 +90,7 @@ export const AusweisScanner = () => {
     }
   }, [])
 
-  const showAnimation = (value: Animated.Value) =>
-    Animated.timing(value, {
-      duration: 500,
-      useNativeDriver: true,
-      toValue: 1,
-    })
-
-  const handleComplete = () => {
+  const handleSuccess = () => {
     setTimeout(() => {
       goBack()
       handleDone()
@@ -88,33 +102,6 @@ export const AusweisScanner = () => {
       onDone()
     }, 200)
   }
-
-  const handleAnimations = () => {
-    switch (state) {
-      case AusweisScannerState.loading:
-        setAnimationState(AusweisScannerState.loading)
-        return showAnimation(loadingOpacityValue).start()
-      case AusweisScannerState.failure:
-        setAnimationState(AusweisScannerState.failure)
-        return showAnimation(iconOpacityValue).start(handleDone)
-      case AusweisScannerState.success:
-        setAnimationState(AusweisScannerState.success)
-        return showAnimation(iconOpacityValue).start(handleComplete)
-      default:
-        setAnimationState(AusweisScannerState.idle)
-        return
-    }
-  }
-
-  useEffect(() => {
-    handleAnimations()
-  }, [])
-
-  useEffect(() => {
-    if (state !== animationState) {
-      handleAnimations()
-    }
-  }, [route, animationState])
 
   const handleDismiss = () => {
     /**
@@ -128,23 +115,21 @@ export const AusweisScanner = () => {
     onDismiss && onDismiss()
   }
 
-  const renderScannerIcon = () => {
-    switch (state) {
-      case AusweisScannerState.idle:
-        return <NfcScannerAndroid />
-      case AusweisScannerState.failure:
-        return (
-          <Animated.View
-            style={[{ opacity: iconOpacityValue }, styles.successContainer]}
-          >
-            <ErrorIcon color={Colors.white} />
-          </Animated.View>
-        )
-      case AusweisScannerState.loading:
-        return (
-          <Animated.View
-            style={[{ opacity: loadingOpacityValue }, styles.failedContainer]}
-          >
+  const renderScannerStatus = () => {
+    return (
+      <View
+        style={{
+          ...styles.iconContainer,
+          ...(scannerState !== AusweisScannerState.idle && styles.statusBorder),
+        }}
+      >
+        <AnimatedStatus isVisible={scannerState === AusweisScannerState.idle}>
+          <NfcScannerAndroid />
+        </AnimatedStatus>
+        <AnimatedStatus
+          isVisible={scannerState === AusweisScannerState.loading}
+        >
+          <View style={styles.failedContainer}>
             <Ripple
               color={Colors.white}
               initialValue1={1}
@@ -152,17 +137,26 @@ export const AusweisScanner = () => {
               maxValue2={5}
               thickness={1}
             />
-          </Animated.View>
-        )
-      case AusweisScannerState.success:
-        return (
-          <Animated.View
-            style={[{ opacity: iconOpacityValue }, styles.failedContainer]}
-          >
+          </View>
+        </AnimatedStatus>
+        <AnimatedStatus
+          isVisible={scannerState === AusweisScannerState.success}
+          onAnimationDone={handleSuccess}
+        >
+          <View style={styles.failedContainer}>
             <SuccessTick color={Colors.white} />
-          </Animated.View>
-        )
-    }
+          </View>
+        </AnimatedStatus>
+        <AnimatedStatus
+          isVisible={scannerState === AusweisScannerState.failure}
+          onAnimationDone={handleDone}
+        >
+          <View style={styles.failedContainer}>
+            <ErrorIcon color={Colors.white} />
+          </View>
+        </AnimatedStatus>
+      </View>
+    )
   }
 
   return (
@@ -174,22 +168,15 @@ export const AusweisScanner = () => {
         <JoloText kind={JoloTextKind.title} customStyles={styles.header}>
           {t('AusweisScanner.header')}
         </JoloText>
-        <View
-          style={{
-            ...styles.iconContainer,
-            ...(state !== AusweisScannerState.idle && styles.statusBorder),
-          }}
-        >
-          {renderScannerIcon()}
-        </View>
+        {renderScannerStatus()}
         <JoloText color={Colors.white} customStyles={styles.footer}>
           {t('AusweisScanner.startSubheader')}
         </JoloText>
       </View>
       <Btn
         disabled={
-          state === AusweisScannerState.success ||
-          state === AusweisScannerState.failure
+          scannerState === AusweisScannerState.success ||
+          scannerState === AusweisScannerState.failure
         }
         type={BtnTypes.senary}
         onPress={handleDismiss}
