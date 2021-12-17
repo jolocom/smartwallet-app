@@ -104,6 +104,8 @@ export const useAusweisInteraction = () => {
   const popStack = usePopStack()
   const dispatch = useDispatch()
   const { connected: isConnectedToTheInternet } = useConnection()
+  const { showScanner } = useAusweisScanner()
+  const isCardTouched = useSelector(getAusweisReaderState)
 
   // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
   // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
@@ -146,6 +148,10 @@ export const useAusweisInteraction = () => {
   }
 
   const acceptRequest = async (optionalFields: Array<AccessRightsFields>) => {
+    if (IS_ANDROID && isCardTouched) {
+      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+    }
+
     await aa2Module.setAccessRights(optionalFields)
     await aa2Module.acceptAuthRequest()
   }
@@ -238,6 +244,14 @@ export const useAusweisInteraction = () => {
     }
   }
 
+  const startChangePin = () => {
+    if (IS_ANDROID && isCardTouched) {
+      showScanner(cancelFlow, { state: AusweisScannerState.loading })
+    }
+
+    return aa2Module.changePin().catch(scheduleErrorWarning)
+  }
+
   return {
     closeAusweis,
     initAusweis,
@@ -250,15 +264,15 @@ export const useAusweisInteraction = () => {
     passcodeCommands,
     finishFlow,
     checkCardValidity,
+    startChangePin,
   }
 }
 
 export const useAusweisCompatibilityCheck = () => {
-  const dispatch = useDispatch()
   const redirect = useRedirect()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
-  const { cancelFlow } = useAusweisInteraction()
+  const { cancelFlow, startChangePin } = useAusweisInteraction()
   const { checkNfcSupport } = useCheckNFC()
 
   const checkAndroidCompatibility = () => {
@@ -295,7 +309,7 @@ export const useAusweisCompatibilityCheck = () => {
       },
     })
 
-    aa2Module.changePin()
+    startChangePin()
   }
   const startCheck = () => {
     setCompatibility(undefined)

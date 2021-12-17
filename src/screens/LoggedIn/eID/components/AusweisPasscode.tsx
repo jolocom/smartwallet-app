@@ -19,7 +19,7 @@ import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
-import { useRevertToInitialState } from '~/hooks/generic'
+import { usePrevious, useRevertToInitialState } from '~/hooks/generic'
 
 import { AusweisStackParamList } from '..'
 import {
@@ -38,6 +38,8 @@ import {
   useDeactivatedCard,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
+import { useSelector } from 'react-redux'
+import { getAusweisReaderState } from '~/modules/ausweis/selectors'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -78,6 +80,7 @@ export const AusweisPasscode = () => {
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
   const { mode, handlers, pinContext = AusweisPasscodeMode.PIN } = route.params
   const ausweisContext = useAusweisContext()
+  const isCardTouched = useSelector(getAusweisReaderState)
 
   const isScanner = useRef(false)
 
@@ -424,19 +427,31 @@ export const AusweisPasscode = () => {
     )
   }
 
-  const sendPasscodeCommand = (passcode: string) =>
+  const sendPasscodeCommand = async (passcode: string) => {
+    //TODO: @clauxx refactor
+    const showTouchedScanner = () => {
+      if (IS_ANDROID && isCardTouched) {
+        isScanner.current = true
+        showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+      }
+    }
+
     checkNfcSupport(async () => {
       setErrorText(null)
       if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
+        showTouchedScanner()
         passcodeCommands.setPin(passcode)
       } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
+        showTouchedScanner()
         passcodeCommands.setPin(passcode)
       } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
+        showTouchedScanner()
         canCounterRef.current++
         passcodeCommands.setCan(passcode)
       } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
         pukCounterRef.current++
         try {
+          showTouchedScanner()
           await passcodeCommands.setPuk(passcode)
         } catch (e) {
           if (e === CardError.cardIsBlocked) {
@@ -455,6 +470,7 @@ export const AusweisPasscode = () => {
         setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
       } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
         if (passcode === newPasscodeRef?.current) {
+          showTouchedScanner()
           aa2Module.setNewPin(passcode)
         } else {
           setTimeout(() => {
@@ -463,6 +479,7 @@ export const AusweisPasscode = () => {
         }
       }
     })
+  }
 
   const getPasscodeLength = () => {
     switch (pinVariant) {
