@@ -37,7 +37,7 @@ export const AusweisScanner = () => {
   const goBack = useGoBack()
   const iconOpacityValue = useRef(new Animated.Value(0)).current
   const loadingOpacityValue = useRef(new Animated.Value(0)).current
-  const [animationState, setAnimationState] = useState(AusweisScannerState.idle)
+  const [animationState, setAnimationState] = useState(state)
   const dispatch = useDispatch()
   const { checkNfcSupport } = useCheckNFC()
 
@@ -62,6 +62,7 @@ export const AusweisScanner = () => {
     const id = setInterval(() => {
       checkNfcSupport(() => {})
     }, 10000)
+
     return () => {
       dispatch(setAusweisScannerKey(null))
       clearInterval(id)
@@ -88,22 +89,30 @@ export const AusweisScanner = () => {
     }, 200)
   }
 
+  const handleAnimations = () => {
+    switch (state) {
+      case AusweisScannerState.loading:
+        setAnimationState(AusweisScannerState.loading)
+        return showAnimation(loadingOpacityValue).start()
+      case AusweisScannerState.failure:
+        setAnimationState(AusweisScannerState.failure)
+        return showAnimation(iconOpacityValue).start(handleDone)
+      case AusweisScannerState.success:
+        setAnimationState(AusweisScannerState.success)
+        return showAnimation(iconOpacityValue).start(handleComplete)
+      default:
+        setAnimationState(AusweisScannerState.idle)
+        return
+    }
+  }
+
+  useEffect(() => {
+    handleAnimations()
+  }, [])
+
   useEffect(() => {
     if (state !== animationState) {
-      switch (state) {
-        case AusweisScannerState.loading:
-          setAnimationState(AusweisScannerState.loading)
-          return showAnimation(loadingOpacityValue).start()
-        case AusweisScannerState.failure:
-          setAnimationState(AusweisScannerState.failure)
-          return showAnimation(iconOpacityValue).start(handleDone)
-        case AusweisScannerState.success:
-          setAnimationState(AusweisScannerState.success)
-          return showAnimation(iconOpacityValue).start(handleComplete)
-        default:
-          setAnimationState(AusweisScannerState.idle)
-          return
-      }
+      handleAnimations()
     }
   }, [route, animationState])
 
