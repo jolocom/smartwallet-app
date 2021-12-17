@@ -19,6 +19,7 @@ import WordPill from './components/WordPill'
 import SeedPhrase from './components/Styled'
 import { useGetSeedPhrase } from '~/hooks/sdk'
 import useTranslation from '~/hooks/useTranslation'
+import { useDisableScreenshots } from '~/hooks/screenshots'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -40,6 +41,8 @@ const SeedPhraseWrite: React.FC = () => {
   const seedphrase = useGetSeedPhrase()
 
   useDangerouslyDisableGestures()
+
+  useDisableScreenshots()
 
   const infoOpacity = useRef<Animated.Value>(new Animated.Value(1)).current
   const buttonOpacity = useRef<Animated.Value>(new Animated.Value(0)).current

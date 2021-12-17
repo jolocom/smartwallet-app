@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from 'react-native-aa2-sdk'
 import { useNavigation } from '@react-navigation/core'
-import { StackActions } from '@react-navigation/routers'
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -32,7 +32,7 @@ export const AusweisIdentity = () => {
   const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
   const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
-  const { cancelFlow } = useAusweisInteraction()
+  const { cancelFlow, checkCardValidity } = useAusweisInteraction()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { handleDeactivatedCard } = useDeactivatedCard()
 
@@ -95,23 +95,29 @@ export const AusweisIdentity = () => {
           showScanner(cancelFlow)
         }
       },
-      handlePinRequest: () => {
-        handleShowCardLockResult(CardInfoMode.notBlocked)
+      handlePinRequest: (card: CardInfo) => {
+        checkCardValidity(card, () => {
+          handleShowCardLockResult(CardInfoMode.notBlocked)
+        })
       },
-      handleCanRequest: () => {
-        handleShowCardLockResult(CardInfoMode.notBlocked)
+      handleCanRequest: (card: CardInfo) => {
+        checkCardValidity(card, () => {
+          handleShowCardLockResult(CardInfoMode.notBlocked)
+        })
       },
-      handlePukRequest: () => {
-        if (IS_ANDROID) {
-          updateScanner({
-            state: AusweisScannerState.success,
-            onDone: () => {
-              handleShowPuk()
-            },
-          })
-        } else {
-          handleShowPuk()
-        }
+      handlePukRequest: (card: CardInfo) => {
+        checkCardValidity(card, () => {
+          if (IS_ANDROID) {
+            updateScanner({
+              state: AusweisScannerState.success,
+              onDone: () => {
+                handleShowPuk()
+              },
+            })
+          } else {
+            handleShowPuk()
+          }
+        })
       },
     })
   }
