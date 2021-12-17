@@ -40,6 +40,7 @@ import {
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 import { useSelector } from 'react-redux'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
+import { Commands } from 'react-native-aa2-sdk/js/commandTypes'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -427,56 +428,68 @@ export const AusweisPasscode = () => {
     )
   }
 
-  const sendPasscodeCommand = async (passcode: string) => {
-    //TODO: @clauxx refactor
-    const showTouchedScanner = () => {
-      if (IS_ANDROID && isCardTouched) {
-        isScanner.current = true
-        showScanner(cancelInteraction, { state: AusweisScannerState.loading })
-      }
+  const sendPasscodeCommand = async (command: Commands, value: string) => {
+    if (IS_ANDROID && isCardTouched) {
+      isScanner.current = true
+      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
     }
 
+    switch (command) {
+      case Commands.setPin:
+        return passcodeCommands.setPin(value)
+      case Commands.setCan:
+        return passcodeCommands.setCan(value)
+      case Commands.setPuk:
+        return passcodeCommands.setPuk(value)
+      case Commands.setNewPin:
+        return passcodeCommands.setNewPin(value)
+      default:
+        throw new Error('Unsupported command type')
+    }
+  }
+
+  const handleSubmit = async (passcode: string) => {
     checkNfcSupport(async () => {
       setErrorText(null)
-      if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
-        showTouchedScanner()
-        passcodeCommands.setPin(passcode)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
-        showTouchedScanner()
-        passcodeCommands.setPin(passcode)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
-        showTouchedScanner()
-        canCounterRef.current++
-        passcodeCommands.setCan(passcode)
-      } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
-        pukCounterRef.current++
-        try {
-          showTouchedScanner()
-          await passcodeCommands.setPuk(passcode)
-        } catch (e) {
-          if (e === CardError.cardIsBlocked) {
-            if (IS_ANDROID) {
-              updateScanner({
-                state: AusweisScannerState.failure,
-                onDone: handleCardIsBlocked,
-              })
-            } else {
-              handleCardIsBlocked()
+
+      switch (pinVariantRef.current) {
+        case AusweisPasscodeMode.PIN:
+        case AusweisPasscodeMode.TRANSPORT_PIN:
+          sendPasscodeCommand(Commands.setPin, passcode)
+          return
+        case AusweisPasscodeMode.CAN:
+          canCounterRef.current++
+          sendPasscodeCommand(Commands.setCan, passcode)
+          return
+        case AusweisPasscodeMode.PUK:
+          pukCounterRef.current++
+          try {
+            await sendPasscodeCommand(Commands.setPuk, passcode)
+          } catch (e) {
+            if (e === CardError.cardIsBlocked) {
+              if (IS_ANDROID) {
+                updateScanner({
+                  state: AusweisScannerState.failure,
+                  onDone: handleCardIsBlocked,
+                })
+              } else {
+                handleCardIsBlocked()
+              }
             }
           }
-        }
-      } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
-        newPasscodeRef.current = passcode
-        setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-        if (passcode === newPasscodeRef?.current) {
-          showTouchedScanner()
-          aa2Module.setNewPin(passcode)
-        } else {
-          setTimeout(() => {
-            setErrorText(t('AusweisPasscode.pinMatchError'))
-          }, 100)
-        }
+          return
+        case AusweisPasscodeMode.NEW_PIN:
+          newPasscodeRef.current = passcode
+          setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
+          return
+        case AusweisPasscodeMode.VERIFY_NEW_PIN:
+          if (passcode === newPasscodeRef?.current) {
+            await sendPasscodeCommand(Commands.setNewPin, passcode)
+          } else {
+            setTimeout(() => {
+              setErrorText(t('AusweisPasscode.pinMatchError'))
+            }, 100)
+          }
       }
     })
   }
@@ -588,7 +601,7 @@ export const AusweisPasscode = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <Passcode onSubmit={sendPasscodeCommand} length={getPasscodeLength()}>
+      <Passcode onSubmit={handleSubmit} length={getPasscodeLength()}>
         <PasscodeGlue errorText={errorText} runInputReset={runInputReset} />
         <Passcode.Container
           customStyles={{

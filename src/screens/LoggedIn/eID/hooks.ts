@@ -193,6 +193,7 @@ export const useAusweisInteraction = () => {
 
   const passcodeCommands = {
     setPin: (pin: string) => aa2Module.enterPin(pin),
+    setNewPin: (pin: string) => aa2Module.setNewPin(pin),
     setPuk: (puk: string) => aa2Module.enterPUK(puk),
     setCan: (can: string) => aa2Module.enterCan(can),
   }
