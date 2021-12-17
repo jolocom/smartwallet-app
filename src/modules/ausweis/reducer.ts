@@ -9,7 +9,7 @@ import {
 const initialState: AusweisModuleState = {
   details: null,
   scannerKey: null,
-  readerState: false,
+  readerState: null,
 }
 
 const reducer = (

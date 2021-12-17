@@ -273,23 +273,33 @@ export const useAusweisCompatibilityCheck = () => {
   const { showScanner, updateScanner } = useAusweisScanner()
   const { cancelFlow, startChangePin } = useAusweisInteraction()
   const { checkNfcSupport } = useCheckNFC()
+  const readerState = useSelector(getAusweisReaderState)
+
+  const updateCompatibilityResult = (cardInfo: CardInfo) => {
+    const { inoperative, deactivated } = cardInfo
+
+    setCompatibility({ inoperative, deactivated })
+  }
 
   const checkAndroidCompatibility = () => {
-    showScanner()
-    aa2Module.setHandlers({
-      handleCardInfo: (info) => {
-        if (info) {
-          const { inoperative, deactivated } = info
-
-          updateScanner({
-            state: AusweisScannerState.success,
-            onDone: () => {
-              setCompatibility({ inoperative, deactivated })
-            },
-          })
-        }
-      },
-    })
+    if (readerState) {
+      showScanner(undefined, {
+        state: AusweisScannerState.success,
+        onDone: () => updateCompatibilityResult(readerState),
+      })
+    } else {
+      showScanner()
+      aa2Module.setHandlers({
+        handleCardInfo: (info) => {
+          if (info) {
+            updateScanner({
+              state: AusweisScannerState.success,
+              onDone: () => updateCompatibilityResult(info),
+            })
+          }
+        },
+      })
+    }
   }
 
   const checkIosCompatibility = () => {
@@ -520,8 +530,7 @@ export const useAusweisReaderEvents = () => {
 
   useEffect(() => {
     const listener = (message: Message) => {
-      const isCardTouched = !!(message as ReaderMessage).card
-      dispatch(setAusweisReaderState(isCardTouched))
+      dispatch(setAusweisReaderState((message as ReaderMessage).card))
     }
 
     aa2Module.messageEmitter.addListener(Messages.reader, listener)

@@ -1,3 +1,4 @@
+import { CardInfo } from 'react-native-aa2-sdk/js/types'
 import { IAusweisRequest } from '~/screens/LoggedIn/eID/types'
 
 export enum AusweisModuleActions {
@@ -9,7 +10,7 @@ export enum AusweisModuleActions {
 export interface AusweisModuleState {
   details: IAusweisRequest | null
   scannerKey: string | null
-  readerState: boolean
+  readerState: CardInfo | null
 }
 
 export interface SetAusweisDetailsAction {
@@ -24,5 +25,5 @@ export interface SetAusweisScannerKeyAction {
 
 export interface SetAusweisReaderStateAction {
   type: AusweisModuleActions.setReaderState
-  payload: boolean
+  payload: CardInfo | null
 }
