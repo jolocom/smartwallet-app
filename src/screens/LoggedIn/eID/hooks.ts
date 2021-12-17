@@ -530,8 +530,8 @@ export const useAusweisReaderEvents = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const listener = (message: Message) => {
-      dispatch(setAusweisReaderState((message as ReaderMessage).card))
+    const listener = (message: ReaderMessage) => {
+      dispatch(setAusweisReaderState(message.card))
     }
 
     aa2Module.messageEmitter.addListener(Messages.reader, listener)
