@@ -219,9 +219,7 @@ export const AusweisRequestReview = () => {
               <Collapsible.Title text={t('Ausweis.header')}>
                 <InteractionTitle label={t('Ausweis.header')} />
               </Collapsible.Title>
-              <ScreenContainer.Padding
-                distance={BP({ default: 37, small: 16, xsmall: 16 })}
-              >
+              <ScreenContainer.Padding distance={20}>
                 <AusweisHeaderDescription>
                   {t('AusweisReview.subheader', {
                     serviceName: providerName,
@@ -274,7 +272,7 @@ export const AusweisRequestReview = () => {
       >
         <FooterContainerFAS
           customStyles={{
-            paddingHorizontal: BP({ default: 37, small: 16, xsmall: 16 }),
+            paddingHorizontal: 20,
           }}
         >
           <AusweisButtons
