@@ -17,6 +17,8 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
+import { useLoader } from '~/hooks/loader'
+import { useGenerateSeed } from '~/hooks/sdk'
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
   <View style={styles.dot}>
@@ -26,6 +28,8 @@ const Dot: React.FC<{ active: boolean }> = ({ active }) => (
 const Walkthrough: React.FC = () => {
   const redirect = useRedirect()
   const { t } = useTranslation()
+  const loader = useLoader()
+  const generateSeed = useGenerateSeed()
 
   const walkthroughData = [
     {
@@ -68,6 +72,21 @@ const Walkthrough: React.FC = () => {
       clearTimeout(id)
     }
   }, [])
+
+  const handleGetStarted = async () => {
+    const handleDone = (error: any) => {
+      if (!error) {
+        return redirect(ScreenNames.Onboarding, {
+          initialRoute: ScreenNames.Registration,
+        })
+      }
+    }
+    await loader(
+      generateSeed,
+      { showSuccess: false, loading: t('Entropy.loader') },
+      handleDone,
+    )
+  }
 
   return (
     <ScreenContainer
@@ -119,14 +138,7 @@ const Walkthrough: React.FC = () => {
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn
-            size={BtnSize.large}
-            onPress={() =>
-              redirect(ScreenNames.Onboarding, {
-                initialRoute: ScreenNames.Registration,
-              })
-            }
-          >
+          <Btn size={BtnSize.large} onPress={handleGetStarted}>
             {t('Walkthrough.registrationBtn')}
           </Btn>
           <Btn

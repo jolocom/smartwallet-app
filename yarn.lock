@@ -2462,11 +2462,6 @@
   resolved "https://registry.yarnpkg.com/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-6.0.2.tgz#3a84cf5ec3249439015e14049bd3161419bf9eae"
   integrity sha512-dIPoZ3g5gcx9zZEszaxLSVTvMReD3xxyyDnQUjA6IYDG9Ba2AV0otMPs+77sG9ojB4Qr2N2Vk5RnKeuA0X/0bg==
 
-"@types/sjcl@^1.0.29":
-  version "1.0.29"
-  resolved "https://registry.yarnpkg.com/@types/sjcl/-/sjcl-1.0.29.tgz#bd154ee15421fe24be2db4a20322f38069c1ca71"
-  integrity sha512-gP9M7Oq4xAoDpuueWHeOTasccV4K6iFBEBPbR0tXejKT/e/Gkla0XcJ9REmgSCICt6y8/ubcvXFtiZ4ZLQ6BKA==
-
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
@@ -4510,6 +4505,11 @@ dot-prop@^4.2.1:
   integrity sha512-l0p4+mIuJIua0mhxGoh4a+iNL9bmeK5DvnSVQa6T0OhrVmaEa1XScX5Etc673FePCJOArq/4Pa2cLGODUWTPOQ==
   dependencies:
     is-obj "^1.0.0"
+
+dotenv@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
+  integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
 dotenv@^6.2.0:
   version "6.2.0"
@@ -9232,20 +9232,27 @@ react-native-dash@^0.0.11:
     prop-types "^15.5.10"
     react-native-measureme "0.0.2"
 
+react-native-dotenv@^3.3.0:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.3.1.tgz#8f399cf28ca77d860d8e7f7323e439fa60a8ca0b"
+  integrity sha512-gAKXout1XCwCqJ3QPGoQAF2eRzOHgOnwg3x19z+ssow8bDIksJeKBqvoHDyGziVilAIP1J0bEC9Jf+VF8nFang==
+  dependencies:
+    dotenv "^10.0.0"
+
 react-native-draggable-flatlist@^2.5.2:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.6.1.tgz#e48ffef4eec36884a807e70662006506492ef737"
   integrity sha512-r4srSba9zv/xXhjgwffNw+WgrK3LJjJCO1Kv/bFpQj5cBDZ7fr5pBPrHqvKLRFILT7N8eQmCd41PAIb1NADv1w==
 
-react-native-flag-secure-android@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-flag-secure-android/-/react-native-flag-secure-android-1.0.2.tgz#acc295a9766f43f8776a03af5986b204342919f7"
-  integrity sha512-H++s5TGsXMMj24QpEKQ0gdf4UBpa6gQuanML2Q/gIqsIOLZh7gHK95Rh8rT5522mmOVIiIfZwxJXiBlNqAztKQ==
-
 react-native-encrypted-storage@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.2.tgz#c7d59b1d3ff2f80d572be3e85aaab3fdee16744a"
   integrity sha512-vneDkHGDuTvLQjUBztqb2YI8QoH1zxdJonPGTS+g57lfJZff9fAjoLSSb6NgMBebpXFcK3I3sEresGyL+3AArw==
+
+react-native-flag-secure-android@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-flag-secure-android/-/react-native-flag-secure-android-1.0.2.tgz#acc295a9766f43f8776a03af5986b204342919f7"
+  integrity sha512-H++s5TGsXMMj24QpEKQ0gdf4UBpa6gQuanML2Q/gIqsIOLZh7gHK95Rh8rT5522mmOVIiIfZwxJXiBlNqAztKQ==
 
 react-native-formik@^1.7.8:
   version "1.7.8"
@@ -10286,7 +10293,7 @@ sisteransi@^1.0.5:
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==
 
-sjcl@^1.0.3, sjcl@^1.0.7:
+sjcl@^1.0.3:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/sjcl/-/sjcl-1.0.8.tgz#f2ec8d7dc1f0f21b069b8914a41a8f236b0e252a"
   integrity sha512-LzIjEQ0S0DpIgnxMEayM1rq9aGwGRG4OnZhCdjx7glTaJtf4zRfpg87ImfjSJjoW9vKpagd82McDOwbRT5kQKQ==
