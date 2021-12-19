@@ -6,10 +6,10 @@ import React, {
   useState,
 } from 'react'
 import { View, Platform, LayoutAnimation } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
-import { CardError, CardInfo } from 'react-native-aa2-sdk/js/types'
+import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'

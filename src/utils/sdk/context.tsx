@@ -13,7 +13,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useWalletInit } from '~/hooks/sdk'
 import { initAgent } from '.'
 import useTranslation from '~/hooks/useTranslation'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 
 export const AgentContext =
   createContext<MutableRefObject<Agent | null> | null>(null)

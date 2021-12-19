@@ -1,8 +1,8 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/core'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -125,7 +125,7 @@ export const AusweisIdentity = () => {
   const handleUnlockCard = () => {
     checkNfcSupport(() => {
       setupUnlockCardHandlers()
-      aa2Module.changePin()
+      aa2Module.startChangePin()
     })
   }
 

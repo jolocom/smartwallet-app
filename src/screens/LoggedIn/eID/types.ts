@@ -1,4 +1,4 @@
-import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
+import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 
 export enum eIDScreens {
   InteractionSheet = 'InteractionSheet',
