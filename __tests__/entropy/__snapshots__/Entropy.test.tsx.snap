@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Entropy should match snapshot after adding a point to the canvas 1`] = `0.006510416666666667`;
-
-exports[`Entropy should successfully generate the entropy 1`] = `1`;
-
-exports[`Entropy should successfully increment progress after adding a line 1`] = `0.01953125`;

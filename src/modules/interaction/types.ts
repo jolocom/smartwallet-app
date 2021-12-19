@@ -13,6 +13,7 @@ export enum InteractionActions {
   updateOfferValidation = 'updateOfferValidation',
   setIntermediaryState = 'setIntermediaryState',
   setAttributeInputType = 'setAttributeInputType',
+  setRedirectUrl = 'setRedirectUrl',
 }
 
 export type InteractionDetails =
@@ -31,6 +32,7 @@ export type InteractionDetails =
  */
 export interface InteractionState {
   details: InteractionDetails
+  redirectUrl: string | null
 }
 
 /**

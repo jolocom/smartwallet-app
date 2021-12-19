@@ -338,3 +338,6 @@ export const getAuthzUIDetails = createSelector(
     }
   },
 )
+
+export const getRedirectUrl = (state: RootReducerI) =>
+  state.interaction.redirectUrl
