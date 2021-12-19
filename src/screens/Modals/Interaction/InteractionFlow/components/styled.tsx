@@ -55,11 +55,18 @@ export const LogoContainerFAS: React.FC = ({ children }) => {
   return <View style={[styles.logoContainerFAS]}>{children}</View>
 }
 
-export const FooterContainerFAS: React.FC = ({ children }) => {
+export const FooterContainerFAS: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles,
+}) => {
   const { bottom } = useSafeArea()
   return (
     <View
-      style={[styles.footerContainerFAS, { paddingBottom: bottom }]}
+      style={[
+        styles.footerContainerFAS,
+        { paddingBottom: bottom },
+        customStyles,
+      ]}
       children={children}
     />
   )

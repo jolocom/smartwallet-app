@@ -227,31 +227,29 @@ export const AusweisRequestReview = () => {
               <Collapsible.Title text={t('Ausweis.header')}>
                 <InteractionTitle label={t('Ausweis.header')} />
               </Collapsible.Title>
-              <AusweisHeaderDescription>
-                {t('AusweisReview.subheader', {
-                  serviceName: providerName,
-                  interpolation: {
-                    escapeValue: false,
-                  },
-                })}
-              </AusweisHeaderDescription>
-              <Btn
-                type={BtnTypes.septenary}
-                size={BtnSize.small}
-                onPress={handleMoreInfo}
-                customContainerStyles={{
-                  width: 'auto',
-                  paddingHorizontal: 24,
-                  marginBottom: 32,
-                  marginTop: 20,
-                }}
-              >
-                {t('AusweisReview.providerBtn')}
-              </Btn>
+              <ScreenContainer.Padding distance={20}>
+                <AusweisHeaderDescription>
+                  {t('AusweisReview.subheader', {
+                    serviceName: providerName,
+                    interpolation: {
+                      escapeValue: false,
+                    },
+                  })}
+                </AusweisHeaderDescription>
+                <Btn
+                  type={BtnTypes.septenary}
+                  size={BtnSize.small}
+                  onPress={handleMoreInfo}
+                  customContainerStyles={{
+                    width: 'auto',
+                    paddingHorizontal: 24,
+                    marginBottom: 32,
+                    marginTop: 20,
+                  }}
+                >
+                  {t('AusweisReview.providerBtn')}
+                </Btn>
 
-              <ScreenContainer.Padding
-                distance={BP({ large: 36, medium: 28, default: 16 })}
-              >
                 <AusweisListSection title={t('AusweisReview.mandatoryHeader')}>
                   {requiredFields.map((field, i) => (
                     <Field.Selectable
@@ -280,7 +278,11 @@ export const AusweisRequestReview = () => {
           </ContainerFAS>
         )}
       >
-        <FooterContainerFAS>
+        <FooterContainerFAS
+          customStyles={{
+            paddingHorizontal: 20,
+          }}
+        >
           <AusweisButtons
             submitLabel={t('AusweisReview.proceedBtn')}
             cancelLabel={t('Interaction.cancelBtn')}
