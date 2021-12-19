@@ -1,24 +1,24 @@
 {
     "Walkthrough": {
-        "titleOne": "Verwende deine Identität",
-        "descriptionOne": "Erreiche dein Ziel mit einfachem Zugriff auf online-Dienste & Apps",
-        "registrationBtn": "Los geht's",
+        "titleOne": "Verwalten Sie Ihre Identität",
+        "descriptionOne": "Verwalten Sie Ihre Identität, um online und offline sicher zu sein",
+        "registrationBtn": "Wallet einrichten",
         "recoveryBtn": "Identität importieren",
-        "titleTwo": "Kontrolliere deine Daten",
-        "descriptionTwo": "Verwalte deine digitale Identität, um online und offline sicher zu bleiben",
+        "titleTwo": "Kontrollieren Sie Ihre Daten",
+        "descriptionTwo": "Kommen Sie mit bequemem Zugriff auf Apps und Dienste ans Ziel",
         "titleThree": "Einfaches Backup",
-        "descriptionThree": "Bewahre alle Deine Daten am sichersten Ort von allen - in Deinen eigenen Händen"
+        "descriptionThree": "Bewahren Sie alle Ihre Daten am sichersten Ort der Welt  - Ihren eigenen Händen"
     },
     "TermsConsent": {
-        "header": "SmartWallet präsentiert AGBs und Datenschutz",
+        "header": "AGBs & Terms of Services",
         "subheader": "Nachfolgend findest du die deutsche und englische Version der Dokumente. Bitte beachte, dass die deutsche Version rechtsgültig ist",
         "footer": "Ich habe die Nutzungsbedingungen und Datenschutzrichtlinien verstanden und akzeptiere sie",
         "footerBtn": "Neue Bedingungen annehmen"
     },
     "Recovery": {
         "header": "Wiederherstellung",
-        "subheader": "Gib deine geheime Phrase Wort für Wort ein und sie wird hier erscheinen",
-        "forgotBtn": "Ich habe meine Phrase vergessen - was nun?",
+        "subheader": "Geben Sie Ihre geheime Wortkombination hier ein",
+        "forgotBtn": "Ich habe meine geheime Wortkombination vergessen - was nun?",
         "wrongWord": "Dieses Wort passt nicht",
         "confirmBtn": "Bestätigen",
         "exitBtn": "Wiederherstellung beenden",
@@ -26,70 +26,70 @@
     },
     "Loader": {
         "successDefault": "Volltreffer!",
-        "failedDefault": "Fehlgeschlagen",
+        "failedDefault": "Das hat nicht geklappt",
         "loading": "Ladevorgang"
     },
     "OnboardingBackup": {
         "header": "Backup hochladen?",
-        "instruction": "Zieh den weißen Punkt in den Kreis zum Starten",
+        "instruction": "Ziehen Sie den weißen Punkt in den Kreis zum Starten",
         "skipBtn": "Ich hab keins"
     },
     "RecoveryInfo": {
-        "header": "Was du tun kannst, wenn du deine geheimen Phrase vergessen hast",
-        "textPartOne": "Ohne deine geheime Phrase wirst du nicht in der Lage sein, deine Identität zu reaktivieren.",
-        "textPartTwo": "Um deine gesamte Wallet wiederherzustellen, brauchst du die geheime Phrase als auch eine Backup-Datei.",
-        "textPartThree": "Hast du wirklich keine Kopie irgendwo sicher aufbewahrt?",
-        "textPartFour": "Erinnere dich an den Moment, als du deine Identität geschaffen hast",
+        "header": "Geheime Wortkombination vergessen?",
+        "textPartOne": "Ohne Ihre geheime Phrase werden Sie nicht in der Lage sein, Ihre Identität wiederherzustellen.",
+        "textPartTwo": "Um Ihre gesamte Wallet wiederherzustellen, brauchen Sie die geheime Wortkombination und auch eine Backup-Datei.",
+        "textPartThree": "Sind Sie sicher, dass Sie keine Kopie Ihrer geheimen Wortkombination hinterlegt haben?",
+        "textPartFour": "Erinnern Sie sich zurück an den Moment, als Sie Ihre Identität geschaffen haben.",
         "closeBtn": "Weiter"
     },
     "Entropy": {
-        "header": "Mach es einzigartig",
-        "subheader": "Zeichne Irgendwas bis 100% erreicht sind, um deine Identität zu sichern",
+        "header": "Machen Sie es einzigartig",
+        "subheader": "Zeichnen Sie irgendetwas, bis 100% erreicht wurde.",
         "loader": "Fantastisch!\nDie Identität wird gesichert"
     },
     "SeedphraseWrite": {
-        "touchInstructions": "Lege deinen Finger auf den Kreis",
-        "writeInstructions": "Schreibe die Sammlung von Wörtern genau so auf wie oben angezeigt. Bewahre dies sicher auf!",
+        "touchInstructions": "Legen Sie Ihren Finger auf den Kreis.",
+        "writeInstructions": "Schreiben Sie die Sammlung von Wörtern genau so auf wie oben angezeigt. Bewahren Sie diese sicher auf!",
         "confirmBtn": "Fertig",
-        "exitBtn": "Zurück zum Tutorial"
+        "exitBtn": "Zurück zur Funktionsübersicht."
     },
     "SeedphraseInfo": {
-        "header": "Warum diese Worte für dich wichtig sind",
-        "textOne": "Deine Wallet wird sehr sensible Daten über dich speichern. Wir wollen sichergehen, dass du sie von Anfang an sicher aufbewahrst.",
+        "header": "Warum diese Worte für Sie wichtig sind.",
+        "textOne": "Ihre Wallet wird sehr sensible Daten über Sie speichern. Wir wollen sichergehen, dass Sie sie von Anfang an sicher aufbewahren.",
         "textTwoHighlight": "Nur dieses einzigartige Set von Wörtern ",
-        "textTwoDefault": "kann verwendet werden, um deine Identität zu erneuern, wenn dein Telefon verloren oder kaputt ist.",
-        "textThree": "Wir empfehlen dringend, dein Set von Wörtern an einem sicheren Ort aufzubewahren. Am besten schreibst du sie auf oder benutzt einen verschlüsselten Passwortmanager.",
-        "textFour": "Teile deine geheime Phrase mit niemandem.",
+        "textTwoDefault": "kann verwendet werden, um Ihre Identität zu erneuern, wenn Ihr Telefon verloren oder kaputt ist.",
+        "textThree": "Wir empfehlen dringend, Ihre geheime Wortkombination an einem sicheren Ort aufzubewahren. Am besten schreiben Síe sie auf oder benutzen einen verschlüsselten Passwortmanager.",
+        "textFour": "Teilen Sie Ihre geheime Wortombination mit niemandem.",
         "confirmBtn": "Verstanden"
     },
     "SeedphraseRepeat": {
-        "orderInstructions": "Ziehe die Wörter per Drag and Drop, bis sie in der richtigen Reihenfolge sind",
+        "orderInstructions": "Ziehen Sie die Wörter an die richtige Stelle, bis sie in der richtigen Reihenfolge sind",
         "confirmBtn": "Fertig",
-        "confirmLoader": "",
-        "matchingError": "Prüfe sorgfältig auf Fehler und versuche es erneut"
+        "confirmLoader": "Abgleich der Wörter",
+        "matchingError": "Kontrollieren Sie die Wortkombination und versuchen Sie es dann erneut."
     },
     "Identity": {
-        "widgetWelcome": "Es ist Zeit, deine erste Digitale Identität zu erstellen",
+        "widgetWelcome": "Es ist Zeit, Ihre erste Digitale Identität zu erstellen",
         "widgetStartBtn": "Jetzt loslegen",
-        "widgetNameHeader": "Wie heißt du?",
+        "widgetNameHeader": "Wie heißen Sie?",
         "widgetConfirmBtn": "Erstellen",
-        "widgetBusinessCardNameHeader": "Stell dich bitte vor",
+        "widgetBusinessCardNameHeader": "Bitte stellen Sie sich vor",
         "widgetNextBtn": "Weiter",
-        "widgetBusinessCardCompanyHeader": "Welche Firma vertrittst du?",
+        "widgetBusinessCardCompanyHeader": "Welche Firma vertreten Sie?",
         "header": "",
         "nameLabel": "Name",
         "emailLabel": "E-Mail",
         "phoneNumberLabel": "Telefonnummer",
         "addressLabel": "Adresse",
         "addClaimBtn": "Hinzufügen",
-        "attributesMissingInfo": "Deine Infos sehen ziemlich leer aus\nErgänze sie für die zukünftigen Anwendungen",
+        "attributesMissingInfo": "Ihre Infos sehen ziemlich leer aus.\nErgänzen Sie sie für die zukünftigen Anwendungen.",
         "headerAusweis": "Deine Identität",
         "headerCredentials": ""
     },
     "BottomBar": {
         "identity": "Identität",
-        "documents": "Dokumente",
-        "history": "Historie",
+        "documents": "Credentials/Nachweise",
+        "history": "Chronik",
         "settings": "Einstellungen"
     },
     "InputPlaceholder": {
@@ -108,7 +108,7 @@
         "subheader": "Sobald du auf \"Fertig\" klickst, wird es im Bereich \"Persönliche Infos\" angezeigt.",
         "closeBtn": "Abbrechen",
         "confirmBtn": "Fertig",
-        "addHeader": "Füge deinen ${attributeName, smallcase} hinzu",
+        "addHeader": "Fügen Sie Ihren ${attributeName, smallcase} hinzu",
         "errorAttributeExists": "Attribut mit dem gleichen Wert existiert bereits"
     },
     "CreatePasscode": {
@@ -126,12 +126,12 @@
         "subheader": "So musst du deinen Passcode nicht jedes Mal bestätigen, wenn du die App öffnest",
         "activateBtn": "Zum Aktivieren antippen",
         "skipBtn": "Überspringen",
-        "promptFaceId": "Scanne dein Gesicht um fortzufahren",
-        "promptFingerprint": "Scanne deinen Fingerabdruck auf dem Gerätescanner um fortzufahren",
+        "promptFaceId": "Scannen Sie Ihr Gesicht, um fortzufahren",
+        "promptFingerprint": "Scannen Sie Ihren Fingerabdruck auf dem Gerätescanner, um fortzufahren",
         "promptBiometrics": "Biometrische Daten bereitstellen um fortzufahren"
     },
     "PasscodeRecoveryInstructions": {
-        "header": "So änderst du deinen Passcode",
+        "header": "So ändern Sie Ihre WalletPIN",
         "subheader1": "Wir bedauern es sehr, dass du dein Passwort vergessen hast und keinen Zugriff auf deine Wallet hast – aber keine Sorge, es gibt eine Lösung!",
         "subheader2": "Durch Eingabe deiner geheimen Phrase kannst du deinen Passcode ändern. Klicke unten auf Zugang wiederherstellen, um die Änderung vorzunehmen",
         "imageCaption": "Wiederhole deine Phrase Wort für Wort",
@@ -140,28 +140,28 @@
         "cancelBtn": "Abbrechen"
     },
     "Lock": {
-        "header": "Gib deinen Passcode ein",
-        "forgotBtn": "Passcode vergessen?",
+        "header": "Geben Sie Ihre WalletPIN ein",
+        "forgotBtn": "WalletPIN vergessen?",
         "errorMsg": "Du hast ${attempts} Versuche genutzt"
     },
     "CameraPermission": {
         "header": "Kamera Berechtigung",
-        "subheader": "Ohne diese Erlaubnis kannst du nicht scannen. Bitte erlaube dies in deinen Einstellungen.",
+        "subheader": "Ohne diese Erlaubnis können Sie nicht scannen. Bitte erlauben Sie dies in Ihren Einstellungen.",
         "confirmBtn": "Antippen um die Kamera zu aktivieren"
     },
     "Camera": {
-        "details": "Platziere einfach dein Handy über dem Code, der Rest geht ganz automatisch",
+        "details": "Platzieren Sie einfach Ihr Handy über dem Code, der Rest geht automatisch.",
         "errorMsg": "Sieht so aus, als können wir diesen Service nicht anbieten.",
-        "localNetworkMessage": "Um Geräte im lokalen Netzwerk zu aktivieren, erlaube bitte den Zugriff für die SmartWallet",
+        "localNetworkMessage": "Um Geräte im lokalen Netzwerk zu aktivieren, erlauben Sie bitte den Zugriff für die SmartWallet",
         "localNetworkBtn_long": "Zum Verwalten antippen",
         "localNetworkBtn_short": "Verwalten"
     },
     "CredentialShare": {
         "missingDocsToastHeader": "${documentType} fehlt",
-        "missingDocsToastSubheader": "${serviceName} fordert ein Dokument an, das nicht in deiner Wallet vorhanden ist",
+        "missingDocsToastSubheader": "${serviceName} fordert ein Dokument an, das nicht in Ihrer Wallet vorhanden ist",
         "attributeMissingValue": "Fehlende Info",
         "headerSingleMissing": "${serviceName} fordert ${attribute, lowercase}",
-        "singleMissingSubheader": "Es sieht so aus, als würde deiner Wallet etwas Wichtiges für diese Anfrage fehlen",
+        "singleMissingSubheader": "Es sieht so aus, als würde Ihrer Wallet etwas Wichtiges für diese Anfrage fehlen",
         "singleMissingAcceptBtn": "Info hinzufügen",
         "selectInstructions": "Zur Auswahl antippen"
     },
@@ -169,7 +169,7 @@
         "invalidDocsToastHeader": "Ungültige Übertragung",
         "invalidDocsToastSubheader": "Keines der von ${serviceName} gesendeten Dokumente konnte gespeichert werden",
         "header": "Eingehende Übertragung",
-        "subheader": "${serviceName} hat deiner Wallet das/die folgende(n) Dokument(e) geschickt:",
+        "subheader": "${serviceName} hat Ihrer Wallet das/die folgende(n) Dokument(e) geschickt:",
         "cardInfoHeader": "Enthaltene Info",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren",
@@ -218,7 +218,7 @@
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
-        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Gib Acht, bevor du Daten teilst."
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Geben Sie Acht, bevor Sie Dokumente teilen."
     },
     "Documents": {
         "documentsTab": "Dokumente",
@@ -231,13 +231,13 @@
         "infoCardOption": "Info",
         "deleteCardOption": "Löschen",
         "cancelCardOption": "Abbrechen",
-        "deleteDocumentHeader": "Möchtest du ${documentName} löschen?",
+        "deleteDocumentHeader": "Möchten Sie ${documentName} löschen?",
         "deleteCredentialInstruction": "Zum Löschen den Kreis loslassen",
         "cancelBtn": "Abbrechen",
-        "placeholderHeader": "Hier gibt es nix zu sehen",
-        "documentsPlaceholderSubheader": "Du hast noch keine Dokumente gespeichert.\nBesorg dir noch heute eins!",
+        "placeholderHeader": "Hier gibt es nichts zu sehen",
+        "documentsPlaceholderSubheader": "Sie haben noch keine Dokumente gespeichert. Fangen Sie noch heute damit an!",
         "othersPlaceholderHeader": "Gähnende Leere",
-        "othersPlaceholderSubheader": "Du hast noch nichts gespeichert",
+        "othersPlaceholderSubheader": "Sie haben noch nichts gespeichert",
         "unspecifiedField": "Keine Angaben",
         "subjectNameField": "Betreff",
         "issuedFieldLabel": "Ausgestellt",
@@ -246,12 +246,12 @@
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
-        "subheader": "Wähle ein oder mehrere von ${serviceName} angeforderte Dokumente aus, um fortzufahren",
+        "subheader": "Wählen Sie ein oder mehrere von ${serviceName} angeforderte Dokumente aus, um fortzufahren",
         "acceptBtn": "Teilen"
     },
     "Authorization": {
-        "header": "Möchtest du ${authAction}?",
-        "subheader": "${serviceName} ist jetzt bereit, dir Zugang zu gewähren",
+        "header": "Möchten Sie ${authAction}?",
+        "subheader": "${serviceName} ist jetzt bereit, Ihnen Zugang zu gewähren",
         "acceptBtn": "Erlauben"
     },
     "Dates": {
@@ -284,7 +284,7 @@
         "credShareRequestStepHeader": "Angefordert",
         "credShareResponseStepHeader": "Freigegeben",
         "placeholderHeader": "Noch keine Historie vorhanden",
-        "placeholderSubheader": "Du hast noch keine Interaktionen durchgeführt.\nMach noch heute eine!",
+        "placeholderSubheader": "Sie haben noch keine Interaktionen durchgeführt.\nLegen Sie noch heute los!",
         "authzHeader": "Autorisierung",
         "authzRequestStepHeader": "Autorisiert",
         "authzResponseStepHeader": "Bestätigt",
@@ -298,15 +298,15 @@
         "changePasscodeBlock": "Passcode ändern",
         "biometricsBlock": "Biometrie zum Einloggen verwenden",
         "backupBlock": "Backup Identität",
-        "backupBlockWarning": "Deine Dokumente laufen Gefahr, unwiederbringlich verloren zu gehen",
+        "backupBlockWarning": "Ihre Dokumente laufen Gefahr, alle gelöscht zu werden.",
         "generalSection": "Allgemein",
         "faqBlock": "FAQ",
-        "contactUsBlock": "Kontaktiere uns",
-        "rateBlock": "Bewerte uns",
+        "contactUsBlock": "Kontaktieren Sie uns",
+        "rateBlock": "Bewerten Sie uns",
         "aboutBlock": "Über uns",
         "imprintBlock": "Impressum",
-        "deleteDataInfo": "Wenn du neu anfangen und alle Daten löschen willst, die mit der Identität dieser Wallet zusammenhängen, ",
-        "deleteDataBtn": "klicke hier",
+        "deleteDataInfo": "Wenn Sie neu anfangen und alle Daten löschen wollen, die mit der Identität dieser Wallet zusammenhängen,",
+        "deleteDataBtn": "klicken Sie hier",
         "screenshotBlock": "",
         "screenshotAlertTitle": "",
         "screenshotAlertMsg": "",
@@ -320,30 +320,30 @@
     },
     "BackupOptions": {
         "header": "Backup Optionen",
-        "exportHeader": "Sichere deine Daten",
-        "exportSubheader": "Lade eine verschlüsselte Kopie der Daten in deiner SmartWallet auf dein Gerät herunter. Achte darauf, deine Backups aktuell zu halten und an einem sicheren Ort aufzubewahren",
+        "exportHeader": "Sicheren Sie Ihre Daten",
+        "exportSubheader": "Laden Sie eine verschlüsselte Kopie der Daten in Ihrer SmartWallet auf Ihr Gerät herunter. Achten Sie darauf, Ihre Backups aktuell zu halten und an einem sicheren Ort aufzubewahren.",
         "exportBtn": "Backup-Datei exportieren",
         "importHeader": "Daten wiederherstellen",
-        "importSubheader": "Für den Fall, dass du aus Versehen etwas Wichtiges gelöscht hast. Nur möglich, wenn das Backup mit dieser Wallet erstellt wurde",
+        "importSubheader": "Für den Fall, dass Sie aus Versehen etwas Wichtiges gelöscht haben. Nur möglich, wenn das Backup mit dieser Wallet erstellt wurde.",
         "importBtn": "Datei importieren",
         "lastBackupInfo": "Letztes Backup"
     },
     "FAQ": {
         "header": "Beliebte Fragen",
-        "header_q1": "Was passiert, wenn mein Telefon verliere oder es gestohlen wird?",
-        "subheader_q1": "Du kannst die Kontrolle über deine Wallet wiedererlangen, indem du die geheime Phrase verwendest, die du während der Einrichtung deines SmartWallet erstellt hast. Dies wird keine Dokumente oder andere Informationen wiederherstellen, die in einer Wallet auf einem verlorenen Gerät gespeichert sind. Wir empfehlen dir dringend, Backups deiner SmartWallet zu erstellen (über das Einstellungsmenü), um den Inhalt deiner Wallet zu schützen.",
+        "header_q1": "Was passiert, wenn ich mein Telefon verliere oder es gestohlen wird?",
+        "subheader_q1": "Sie können die Kontrolle über Ihre Wallet wiedererlangen, indem Sie die geheime Wortkombination verwenden, die Sie während der Einrichtung Ihrer SmartWallet erstellt haben. Dies wird keine Dokumente oder andere Informationen wiederherstellen, die in einer Wallet auf einem verlorenen Gerät gespeichert sind. Wir empfehlen Ihnen dringend, Backups Ihrer SmartWallet zu erstellen (über das Einstellungsmenü), um den Inhalt Ihrer Wallet zu schützen.",
         "header_q2": "Wer hat Zugriff auf meine Daten?",
-        "subheader_q2": "Alle deine Daten werden auf deinem Gerät gespeichert und verwaltet. Du hast die volle Kontrolle darüber, wer Zugang zu den Informationen erhält. Jolocom hat keinen Zugriff auf die Daten auf deinem Gerät, noch hat irgendjemand anderes ohne deine Erlaubnis Zugriff darauf. Falls du einer anderen Partei Zugriff auf Informationen gewährst, wie z.B. deinen Führerschein in unserem Carsharing-Unternehmensbeispiel, kannst du jederzeit sehen, was du mit ihnen geteilt hast und sie bitten, deine Informationen zu löschen. Tatsächlich kannst du immer schnell und einfach überprüfen, welcher Dienst Zugriff auf welche Daten hat. So erhältst du einen sofortigen Überblick über deine Verbindungen.",
+        "subheader_q2": "Alle Ihre Daten werden auf Ihrem Gerät gespeichert und verwaltet. Sie haben die volle Kontrolle darüber, wer Zugang zu den Informationen erhält. Jolocom hat keinen Zugriff auf die Daten auf Ihrem Gerät, noch hat irgendjemand anderes ohne Ihre Erlaubnis Zugriff darauf. Falls Sie einer anderen Partei Zugriff auf Informationen gewähren, wie z.B. Ihren Führerschein in unserem Carsharing-Unternehmensbeispiel, können Sie jederzeit sehen, was Sie mit ihnen geteilt haben und sie bitten, Ihre Informationen zu löschen. Tatsächlich können Sie immer schnell und einfach überprüfen, welcher Dienst Zugriff auf welche Daten hat. So erhalten Sie einen sofortigen Überblick über Ihre Verbindungen.",
         "header_q3": "Sind die Jolocom Identitäten und das SmartWallet GDPR-konform?",
         "subheader_q3": "JA, absolut. Jolocom Identitäten, die SmartWallet und alle unsere Produkte sind so konzipiert, dass die Integrität, die Privatsphäre und die Sicherheit der Nutzerdaten im Vordergrund stehen. Sowohl die Wallet als auch das Protokoll zur Erstellung von Identitäten und zum Austausch von Identitätsinformationen sind vollständig GDPR-konform.",
         "header_q4": "Was kann das SmartWallet?",
-        "subheader_q4": "Die SmartWallet ist eine von Jolocom entwickelte Anwendung, mit der du Daten verwalten kannst, die mit deiner Identität zusammenhängen - wie deine E-Mail-Adresse, Telefonnummer oder deinen Personalausweis.\nDeine Wallet enthält Dokumente und andere digitale Inhalte, die du per Knopfdruck mit Diensten austauschen und teilen kannst."
+        "subheader_q4": "Die SmartWallet ist eine von Jolocom entwickelte Anwendung, mit der Sie Daten verwalten können, die mit Ihrer Identität zusammenhängen - wie Ihre E-Mail-Adresse, Telefonnummer oder Ihr Personalausweis.\nIhre Wallet enthält Dokumente und andere digitale Inhalte, die Sie per Knopfdruck mit Diensten austauschen und teilen können."
     },
     "About": {
-        "versionInfo": "Du benutzt die Version ${version}"
+        "versionInfo": "Sie benutzen die Version ${version}"
     },
     "Terms of Service": {
-        "header": "AGBs"
+        "header": "AGBs & Terms of Service."
     },
     "ChangePasscode": {
         "wrongCodeHeader": "Falscher Code",
@@ -582,7 +582,7 @@
         "closeBtn": "Schließen",
         "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
         "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!",
-        "standaloneUnblockHeader": "",
+        "standaloneUnblockHeader": "Unlock the card from the <1>${screen}</1>",
         "identityScreen": ""
     },
     "Details": {

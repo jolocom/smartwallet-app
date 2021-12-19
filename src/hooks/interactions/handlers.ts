@@ -12,6 +12,7 @@ import { useLoader } from '../loader'
 import {
   resetInteraction,
   setInteractionDetails,
+  setRedirectUrl,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
@@ -48,8 +49,17 @@ export const useDeeplinkInteractions = () => {
       }
 
       if (params) {
+        let redirectUrl: string | undefined = undefined
+
+        if (
+          params['redirectUrl'] &&
+          typeof params['redirectUrl'] === 'string'
+        ) {
+          redirectUrl = params['redirectUrl']
+        }
+
         if (params['token'] && typeof params['token'] === 'string') {
-          processInteraction(params['token'])
+          processInteraction(params['token'], redirectUrl)
           return
         } else if (
           !params['+clicked_branch_link'] ||
@@ -74,11 +84,16 @@ export const useInteractionStart = () => {
 
   const processInteraction = async (
     jwt: string,
+    redirectUrl?: string,
     transportAPI?: TransportAPI,
   ) => {
     try {
       parseJWT(jwt)
       const interaction = await agent.processJWT(jwt, transportAPI)
+
+      if (redirectUrl) {
+        dispatch(setRedirectUrl(redirectUrl))
+      }
 
       return interaction
     } catch (e) {
@@ -113,7 +128,9 @@ export const useInteractionStart = () => {
     return loader(
       async () => {
         const interaction = await processInteraction(jwt)
-        await showInteraction(interaction)
+        if (interaction) {
+          await showInteraction(interaction)
+        }
       },
       { showSuccess: false, showFailed: false },
       (error) => {
