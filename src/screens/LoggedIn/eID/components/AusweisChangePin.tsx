@@ -62,7 +62,11 @@ const TitleDescAction: React.FC<WhateverProps> = ({
         )}
       </JoloText>
       {!hasInlineBtn && (
-        <Btn onPress={onPress} type={BtnTypes.quaternary}>
+        <Btn
+          onPress={onPress}
+          type={BtnTypes.quaternary}
+          customTextStyles={{ opacity: 1 }}
+        >
           {btnText}
         </Btn>
       )}
