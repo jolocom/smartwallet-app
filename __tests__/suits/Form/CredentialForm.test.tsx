@@ -51,7 +51,7 @@ jest.mock('../../../src/hooks/sdk', () => ({
 
 const renderCredentialForm = () => {
   const queries = renderWithSafeArea(<CredentialForm />)
-  const headerContainer = queries.getByTestId('collapsable-header-container')
+  const headerContainer = queries.getByTestId('collapsible-header-container')
 
   // NOTE: The @Collapsible renders the scroll content only if the header has registered
   // the layout

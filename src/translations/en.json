@@ -140,7 +140,7 @@
         "cancelBtn": "Cancel"
     },
     "Lock": {
-        "header": "Enter your passcode",
+        "header": "Enter wallet PIN",
         "forgotBtn": "Forgot your passcode?",
         "errorMsg": "You have used ${attempts} attempts"
     },
@@ -513,13 +513,13 @@
         "validityLabel": "Validity"
     },
     "AusweisPasscode": {
-        "authPinHeader": "Enter your PIN",
+        "authPinHeader": "Enter eID PIN",
         "pinForgotBtn": "Forgot your PIN?",
         "transportPinHeader": "Enter your 5-digit PIN",
         "transportPinBtn": "Where can I find this?",
-        "canHeader": "Enter your CAN",
+        "canHeader": "Enter CAN",
         "canBtn": "Where to find CAN?",
-        "pukHeader": "Enter your PUK",
+        "pukHeader": "Enter PUK",
         "pukBtn": "Where to find the PUK?",
         "newPinHeader": "Enter your new eID PIN",
         "repeatNewPinHeader": "Repeat your new eID PIN",
@@ -580,8 +580,10 @@
     "AusweisUnlock": {
         "notLockedHeader": "System did not detect your card being blocked",
         "closeBtn": "Close",
-        "pukExhaustedHeader": "You used all allowed PUK attempts. Your card is locked now",
-        "unlockedHeader": "Your card is unlocked and ready to use!"
+        "pukExhaustedHeader": "We didn't manage to unlock your card",
+        "unlockedHeader": "Your card is unlocked and ready to use!",
+        "standaloneUnblockHeader": "Unlock the card from the <1>${screen}</1>",
+        "identityScreen": "Identity screen"
     },
     "Details": {
         "expandBtn": "See more"
