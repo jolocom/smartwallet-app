@@ -45,7 +45,12 @@ export const AusweisButtons: React.FC<{
   return (
     <View style={styles.btnGroupContainer}>
       <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-        <Btn size={BtnSize.medium} onPress={onSubmit} withoutMargins>
+        <Btn
+          size={BtnSize.medium}
+          onPress={onSubmit}
+          withoutMargins
+          testID="ausweis-cta-btn"
+        >
           {submitLabel}
         </Btn>
       </View>
@@ -56,6 +61,7 @@ export const AusweisButtons: React.FC<{
           onPress={onCancel}
           customContainerStyles={styles.cancelBtn}
           withoutMargins
+          testID="ausweis-ignore-btn"
         >
           {cancelLabel}
         </Btn>

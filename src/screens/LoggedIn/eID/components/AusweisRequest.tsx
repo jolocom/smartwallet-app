@@ -1,6 +1,7 @@
-import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { Linking, Platform, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import useTranslation from '~/hooks/useTranslation'
@@ -17,10 +18,16 @@ import {
   useAusweisCancelBackHandler,
 } from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
+import { AusweisStackParamList } from '..'
+
+type AusweisRequestNavigation = StackNavigationProp<
+  AusweisStackParamList,
+  eIDScreens.InteractionSheet
+>
 
 export const AusweisRequest = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation()
+  const navigation = useNavigation<AusweisRequestNavigation>()
   const { checkNfcSupport } = useCheckNFC()
   const { providerUrl, providerName } = useAusweisContext()
   const { cancelInteraction } = useAusweisInteraction()
@@ -51,6 +58,11 @@ export const AusweisRequest = () => {
         size={JoloTextSizes.mini}
         color={Colors.white70}
         customStyles={{ paddingHorizontal: 10 }}
+        /**
+         * TODO:
+         * create reuseable testIDs object
+         */
+        testID="ausweis-interaction-description"
       >
         {t('AusweisRequest.description', {
           serviceName: providerName,
@@ -59,7 +71,10 @@ export const AusweisRequest = () => {
           },
         })}
       </JoloText>
-      <TouchableOpacity onPress={() => Linking.openURL(providerUrl)}>
+      <TouchableOpacity
+        onPress={() => Linking.openURL(providerUrl)}
+        testID="ausweis-requester-link"
+      >
         <JoloText
           kind={JoloTextKind.subtitle}
           size={JoloTextSizes.mini}

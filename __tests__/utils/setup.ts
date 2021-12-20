@@ -86,15 +86,44 @@ jest.mock('../../src/hooks/useTranslation.ts', () => () => ({
 // @ts-expect-error
 global.__reanimatedWorkletInit = jest.fn()
 
-NativeModules.RNCNetInfo = {
-  getCurrentState: jest.fn(() => Promise.resolve()),
-  addListener: jest.fn(),
-  removeListeners: jest.fn(),
-}
+jest.mock('@react-native-community/netinfo', () => ({
+  RNCNetInfo: 'N/A',
+  useNetInfo: jest.fn(),
+}))
 
 jest.mock('react-native-keyboard-aware-scroll-view', () => {
   const KeyboardAwareScrollView = ({ children }: { children: any }) => children
   return { KeyboardAwareScrollView }
 })
+
+// Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
+jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
+
+jest.mock('react-native-nfc-manager', () => ({
+  __esModule: true,
+  default: {
+    isSupported: jest.fn(),
+    isEnabled: jest.fn(),
+    start: jest.fn().mockResolvedValue(true),
+  },
+}))
+
+jest.mock('@jolocom/react-native-ausweis', () => ({
+  aa2Module: {
+    isInitialized: true,
+    initAa2Sdk: jest.fn(),
+    cancelFlow: jest.fn(),
+    setHandlers: jest.fn(),
+    resetHandlers: jest.fn(),
+    setPin: jest.fn(),
+    setCan: jest.fn(),
+    setPuk: jest.fn(),
+  },
+}))
+
+jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+  OS: 'android',
+  select: jest.fn(),
+}))
 
 NativeModules.RNBranch = {}
