@@ -35,7 +35,7 @@ export enum AusweisPasscodeMode {
   VERIFY_NEW_PIN = 'VERIFY_NEW_PIN',
 }
 
-export interface AusweisPasscodeProps {
+export interface AusweisPasscodeParams {
   mode: AusweisPasscodeMode
   /**
    * NOTE:

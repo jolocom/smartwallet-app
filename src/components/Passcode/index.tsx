@@ -10,7 +10,7 @@ import ResetBtn from './ResetBtn'
 import PasscodeError from './PasscodeError'
 import PasscodeDisable from './PasscodeDisable'
 import PasscodeAccessoryBtn from './PasscodeAccessoryBtn'
-import { useIsFocused } from '@react-navigation/core'
+import { useIsFocused } from '@react-navigation/native'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,

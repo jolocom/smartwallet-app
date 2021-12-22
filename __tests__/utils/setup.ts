@@ -79,7 +79,8 @@ jest.mock('../../src/hooks/useTranslation.ts', () => () => ({
   t: jest
     .fn()
     .mockImplementation(
-      (term, interpolationValue) => term + interpolationValue,
+      (term, interpolationValue) =>
+        term + (interpolationValue ? JSON.stringify(interpolationValue) : ''),
     ),
 }))
 
@@ -118,6 +119,7 @@ jest.mock('@jolocom/react-native-ausweis', () => ({
     setPin: jest.fn(),
     setCan: jest.fn(),
     setPuk: jest.fn(),
+    setNewPin: jest.fn(),
   },
 }))
 

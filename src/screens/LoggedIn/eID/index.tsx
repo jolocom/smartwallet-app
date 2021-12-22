@@ -7,7 +7,7 @@ import { useAusweisContext } from './hooks'
 import {
   AusweisCardResult,
   AusweisPasscodeDetailsParams,
-  AusweisPasscodeProps,
+  AusweisPasscodeParams,
   AusweisScannerParams,
   eIDScreens,
 } from './types'
@@ -41,7 +41,7 @@ export type AusweisStackParamList = {
   [eIDScreens.AusweisScanner]: AusweisScannerParams
   [eIDScreens.ReadinessCheck]: undefined
   [eIDScreens.RequestDetails]: undefined
-  [eIDScreens.EnterPIN]: AusweisPasscodeProps
+  [eIDScreens.EnterPIN]: AusweisPasscodeParams
   [eIDScreens.PasscodeDetails]: AusweisPasscodeDetailsParams
   [eIDScreens.ProviderDetails]: undefined
   [eIDScreens.PukInfo]: undefined
