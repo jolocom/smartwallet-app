@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { View, Platform } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useSafeArea } from 'react-native-safe-area-context'
 import moment from 'moment'
 import { useNavigation } from '@react-navigation/core'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'

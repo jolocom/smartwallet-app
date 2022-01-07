@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
 import { View } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
-import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { aa2Module } from '@jolocom/react-native-ausweis'
+import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -217,7 +217,7 @@ const AusweisChangePin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = false
       setupHandlers()
-      aa2Module.changePin()
+      aa2Module.startChangePin()
     })
   }
 
