@@ -548,7 +548,7 @@
         "pinBtn": "Start the process",
         "forgotHeader": "Can’t find any of this?",
         "forgotSubheader": "If you completely forgot your PIN and can not find your PIN letter, please turn to the competent authority",
-        "forgotBtn": "here"
+        "forgotBtn": "find more"
     },
     "AusweisPinInfo": {
         "header": "PIN information",
