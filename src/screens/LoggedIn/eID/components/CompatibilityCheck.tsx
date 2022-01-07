@@ -77,6 +77,7 @@ export const CompatibilityCheck = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode={'never'}
         contentContainerStyle={{
+          paddingTop: 500,
           paddingBottom: 230,
         }}
       >
@@ -133,7 +134,11 @@ export const CompatibilityCheck = () => {
           </View>
         </View>
       </ScrollView>
-      <AbsoluteBottom customStyles={{ backfaceVisibility: 'hidden' }}>
+      <AbsoluteBottom
+        customStyles={{
+          backgroundColor: Colors.mainDark,
+        }}
+      >
         <CheckboxOption
           description={t('AusweisCompatibility.skipBtn')}
           onPress={handleSkip}
