@@ -3,7 +3,7 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import NfcManager from 'react-native-nfc-manager'
@@ -11,6 +11,10 @@ import {
   AccessRightsFields,
   CardInfo,
 } from '@jolocom/react-native-ausweis/js/types'
+import {
+  Messages,
+  ReaderMessage,
+} from '@jolocom/react-native-ausweis/js/messageTypes'
 import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 
@@ -40,12 +44,6 @@ import {
 } from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
-import {
-  Message,
-  Messages,
-  ReaderMessage,
-} from 'react-native-aa2-sdk/js/messageTypes'
-import { usePrevious } from '~/hooks/generic'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 

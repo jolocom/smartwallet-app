@@ -19,7 +19,7 @@ import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
-import { usePrevious, useRevertToInitialState } from '~/hooks/generic'
+import { useRevertToInitialState } from '~/hooks/generic'
 
 import { AusweisStackParamList } from '..'
 import {
@@ -41,7 +41,7 @@ import {
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 import { useSelector } from 'react-redux'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
-import { Commands } from 'react-native-aa2-sdk/js/commandTypes'
+import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'

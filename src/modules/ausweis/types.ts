@@ -1,4 +1,4 @@
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { IAusweisRequest } from '~/screens/LoggedIn/eID/types'
 
 export enum AusweisModuleActions {
