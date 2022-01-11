@@ -9,7 +9,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useAusweisCancelBackHandler, useAusweisInteraction } from '../hooks'
-import { AusweisPasscodeMode, eIDScreens } from '../types'
+import { AusweisFlow, AusweisPasscodeMode, eIDScreens } from '../types'
 
 /**
  * TODO:
@@ -29,7 +29,10 @@ const AusweisLockPukInfo: React.FC = () => {
   useAusweisCancelBackHandler()
 
   const handleContinueWithPuk = () => {
-    navigation.navigate(eIDScreens.EnterPIN, { mode: AusweisPasscodeMode.PUK })
+    navigation.navigate(eIDScreens.EnterPIN, {
+      mode: AusweisPasscodeMode.PUK,
+      flow: AusweisFlow.auth,
+    })
   }
 
   return (

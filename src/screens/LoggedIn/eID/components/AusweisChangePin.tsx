@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
 import { View } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
-import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { aa2Module } from '@jolocom/react-native-ausweis'
+import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -22,7 +22,13 @@ import {
   useCheckNFC,
   useDeactivatedCard,
 } from '../hooks'
-import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import {
+  AusweisFlow,
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  CardInfoMode,
+  eIDScreens,
+} from '../types'
 
 interface WhateverProps {
   headerText: string
@@ -56,7 +62,11 @@ const TitleDescAction: React.FC<WhateverProps> = ({
         )}
       </JoloText>
       {!hasInlineBtn && (
-        <Btn onPress={onPress} type={BtnTypes.quaternary}>
+        <Btn
+          onPress={onPress}
+          type={BtnTypes.quaternary}
+          customTextStyles={{ opacity: 1 }}
+        >
           {btnText}
         </Btn>
       )}
@@ -74,11 +84,17 @@ const AusweisChangePin = () => {
   const isTransportPin = useRef(false)
   const { checkNfcSupport } = useCheckNFC()
 
+  const changePinFlow =
+    isTransportPin.current === true
+      ? AusweisFlow.changeTransportPin
+      : AusweisFlow.changePin
+
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
+          flow: changePinFlow,
           mode:
             isTransportPin.current === true
               ? AusweisPasscodeMode.TRANSPORT_PIN
@@ -96,6 +112,7 @@ const AusweisChangePin = () => {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.EnterPIN,
         params: {
+          flow: changePinFlow,
           mode: AusweisPasscodeMode.CAN,
           pinContext: isTransportPin.current
             ? AusweisPasscodeMode.TRANSPORT_PIN
@@ -106,16 +123,18 @@ const AusweisChangePin = () => {
   }, [])
 
   const pukHandler = useCallback((card: CardInfo) => {
-    checkCardValidity(card, () => {
-      navigation.navigate(ScreenNames.eId, {
-        screen: eIDScreens.EnterPIN,
-        params: {
-          mode: AusweisPasscodeMode.PUK,
-          pinContext: isTransportPin.current
-            ? AusweisPasscodeMode.TRANSPORT_PIN
-            : undefined,
-        },
-      })
+    /**
+     * User should be able to set PUK only with 'Unlock
+     * blocked card' within ChangePin flow, all other use cases
+     * of ChangePin flow should redirect to AusweisIdentity to
+     * "Unlock blocked card"
+     */
+    navigation.navigate(ScreenNames.TransparentModals, {
+      screen: ScreenNames.AusweisCardInfo,
+      params: {
+        mode: CardInfoMode.standaloneUnblock,
+        onDismiss: cancelFlow,
+      },
     })
   }, [])
 

@@ -5,9 +5,12 @@ import {
 } from '@react-navigation/native'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import NfcManager from 'react-native-nfc-manager'
-import { AccessRightsFields, CardInfo } from 'react-native-aa2-sdk/js/types'
+import {
+  AccessRightsFields,
+  CardInfo,
+} from '@jolocom/react-native-ausweis/js/types'
 import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 
@@ -123,7 +126,7 @@ export const useAusweisInteraction = () => {
 
   const processAusweisToken = async (token: string) => {
     try {
-      const request: any = await aa2Module.processRequest(token)
+      const request: any = await aa2Module.startAuth(token)
       const certificate: any = await aa2Module.getCertificate()
 
       const requestData: IAusweisRequest = {
@@ -192,10 +195,10 @@ export const useAusweisInteraction = () => {
   const checkIfScanned = async () => aa2Module.checkIfCardWasRead()
 
   const passcodeCommands = {
-    setPin: (pin: string) => aa2Module.enterPin(pin),
     setNewPin: (pin: string) => aa2Module.setNewPin(pin),
-    setPuk: (puk: string) => aa2Module.enterPUK(puk),
-    setCan: (can: string) => aa2Module.enterCan(can),
+    setPin: (pin: string) => aa2Module.setPin(pin),
+    setPuk: (puk: string) => aa2Module.setPuk(puk),
+    setCan: (can: string) => aa2Module.setCan(can),
   }
 
   const finishFlow = (url: string, message?: string) => {
@@ -249,7 +252,7 @@ export const useAusweisInteraction = () => {
       showScanner(cancelFlow, { state: AusweisScannerState.loading })
     }
 
-    return aa2Module.changePin().catch(scheduleErrorWarning)
+    return aa2Module.startChangePin().catch(scheduleErrorWarning)
   }
 
   return {

@@ -12,6 +12,7 @@ import { useLoader } from '../loader'
 import {
   resetInteraction,
   setInteractionDetails,
+  setRedirectUrl,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
@@ -60,11 +61,12 @@ export const useDeeplinkInteractions = () => {
       }
 
       if (params) {
+        let redirectUrl = getParamValue('redirectUrl', params)
         const tokenValue = getParamValue('token', params)
         const eidValue = getParamValue('tcTokenUrl', params)
 
         if (tokenValue) {
-          processInteraction(tokenValue)
+          processInteraction(tokenValue, redirectUrl)
           return
         } else if (eidValue) {
           loader(() => processAusweisToken(eidValue), {
@@ -95,12 +97,21 @@ export const useInteractionStart = () => {
 
   const processInteraction = async (
     jwt: string,
+    redirectUrl?: string,
     transportAPI?: TransportAPI,
   ) => {
-    parseJWT(jwt)
-    const interaction = await agent.processJWT(jwt, transportAPI)
+    try {
+      parseJWT(jwt)
+      const interaction = await agent.processJWT(jwt, transportAPI)
 
-    return interaction
+      if (redirectUrl) {
+        dispatch(setRedirectUrl(redirectUrl))
+      }
+
+      return interaction
+    } catch (e) {
+      scheduleErrorWarning(e)
+    }
   }
 
   const showInteraction = async (interaction: Interaction) => {
@@ -129,7 +140,9 @@ export const useInteractionStart = () => {
     loader(
       async () => {
         const interaction = await processInteraction(jwt)
-        await showInteraction(interaction)
+        if (interaction) {
+          await showInteraction(interaction)
+        }
       },
       { showSuccess: false, showFailed: false },
       (error) => {

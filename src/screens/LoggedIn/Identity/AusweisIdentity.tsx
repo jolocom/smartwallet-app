@@ -1,8 +1,8 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/core'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -19,6 +19,7 @@ import {
 } from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
+  AusweisFlow,
   AusweisPasscodeMode,
   AusweisScannerState,
   CardInfoMode,
@@ -72,11 +73,13 @@ export const AusweisIdentity = () => {
       screen: eIDScreens.EnterPIN,
       params: {
         mode: AusweisPasscodeMode.PUK,
+        flow: AusweisFlow.unlock,
         handlers: {
           handlePinRequest: () => {
             handleShowCardLockResult(CardInfoMode.unblocked)
           },
         },
+        isUnlocking: true,
       },
     })
   }

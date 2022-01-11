@@ -16,7 +16,7 @@ import { ConsentText } from '~/screens/LoggedIn/Settings/components/ConsentText'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-import { CheckmarkIconSmall } from '~/assets/svg'
+import { CheckmarkIconSmall, ExpandArrow } from '~/assets/svg'
 import useTermsConsent from '~/hooks/consent'
 import { useAgent } from '~/hooks/sdk'
 import { useToggleExpand } from '~/hooks/ui'
@@ -43,7 +43,16 @@ const ExpandingButton: React.FC<{ title: string; content: string }> = ({
 
   return (
     <>
-      <ConsentButton text={title} onPress={onToggleExpand} />
+      <ConsentButton text={title} onPress={onToggleExpand}>
+        <View
+          style={{
+            marginLeft: 5,
+            transform: [{ rotate: isExpanded ? '90deg' : '0deg' }],
+          }}
+        >
+          <ExpandArrow />
+        </View>
+      </ConsentButton>
       {isExpanded && <ConsentText text={content} onPress={onToggleExpand} />}
     </>
   )

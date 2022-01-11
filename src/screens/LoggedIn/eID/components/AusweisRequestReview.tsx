@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, View } from 'react-native'
-import { aa2Module } from 'react-native-aa2-sdk'
+import { View, Platform } from 'react-native'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useSafeArea } from 'react-native-safe-area-context'
 import moment from 'moment'
 import { useNavigation } from '@react-navigation/core'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { CardInfo } from 'react-native-aa2-sdk/js/types'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
@@ -37,7 +37,12 @@ import {
   AusweisListSection,
   AusweisLogo,
 } from '../styled'
-import { AusweisPasscodeMode, AusweisScannerState, eIDScreens } from '../types'
+import {
+  AusweisFlow,
+  AusweisPasscodeMode,
+  AusweisScannerState,
+  eIDScreens,
+} from '../types'
 import { AusweisStackParamList } from '..'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
@@ -73,6 +78,7 @@ export const AusweisRequestReview = () => {
     const pinHandler = (card: CardInfo) => {
       checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
+          flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.PIN,
         })
       })
@@ -81,6 +87,7 @@ export const AusweisRequestReview = () => {
     const pukHandler = (card: CardInfo) => {
       checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
+          flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.PUK,
         })
       })
@@ -89,6 +96,7 @@ export const AusweisRequestReview = () => {
     const canHandler = (card: CardInfo) => {
       checkCardValidity(card, () => {
         navigation.navigate(eIDScreens.EnterPIN, {
+          flow: AusweisFlow.auth,
           mode: AusweisPasscodeMode.CAN,
         })
       })
@@ -219,31 +227,29 @@ export const AusweisRequestReview = () => {
               <Collapsible.Title text={t('Ausweis.header')}>
                 <InteractionTitle label={t('Ausweis.header')} />
               </Collapsible.Title>
-              <AusweisHeaderDescription>
-                {t('AusweisReview.subheader', {
-                  serviceName: providerName,
-                  interpolation: {
-                    escapeValue: false,
-                  },
-                })}
-              </AusweisHeaderDescription>
-              <Btn
-                type={BtnTypes.septenary}
-                size={BtnSize.small}
-                onPress={handleMoreInfo}
-                customContainerStyles={{
-                  width: 'auto',
-                  paddingHorizontal: 24,
-                  marginBottom: 32,
-                  marginTop: 20,
-                }}
-              >
-                {t('AusweisReview.providerBtn')}
-              </Btn>
+              <ScreenContainer.Padding distance={20}>
+                <AusweisHeaderDescription>
+                  {t('AusweisReview.subheader', {
+                    serviceName: providerName,
+                    interpolation: {
+                      escapeValue: false,
+                    },
+                  })}
+                </AusweisHeaderDescription>
+                <Btn
+                  type={BtnTypes.septenary}
+                  size={BtnSize.small}
+                  onPress={handleMoreInfo}
+                  customContainerStyles={{
+                    width: 'auto',
+                    paddingHorizontal: 24,
+                    marginBottom: 32,
+                    marginTop: 20,
+                  }}
+                >
+                  {t('AusweisReview.providerBtn')}
+                </Btn>
 
-              <ScreenContainer.Padding
-                distance={BP({ large: 36, medium: 28, default: 16 })}
-              >
                 <AusweisListSection title={t('AusweisReview.mandatoryHeader')}>
                   {requiredFields.map((field, i) => (
                     <Field.Selectable
@@ -272,7 +278,11 @@ export const AusweisRequestReview = () => {
           </ContainerFAS>
         )}
       >
-        <FooterContainerFAS>
+        <FooterContainerFAS
+          customStyles={{
+            paddingHorizontal: 20,
+          }}
+        >
           <AusweisButtons
             submitLabel={t('AusweisReview.proceedBtn')}
             cancelLabel={t('Interaction.cancelBtn')}

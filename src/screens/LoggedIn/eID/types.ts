@@ -1,4 +1,4 @@
-import { EventHandlers } from 'react-native-aa2-sdk/js/commandTypes'
+import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 
 export enum eIDScreens {
   InteractionSheet = 'InteractionSheet',
@@ -45,6 +45,14 @@ export interface AusweisPasscodeProps {
    */
   pinContext?: AusweisPasscodeMode.TRANSPORT_PIN | AusweisPasscodeMode.PIN
   handlers?: Partial<EventHandlers>
+  flow: AusweisFlow
+}
+
+export enum AusweisFlow {
+  auth = 'auth',
+  changePin = 'changePin',
+  changeTransportPin = 'changeTransportPin',
+  unlock = 'unlock',
 }
 
 export interface AusweisPasscodeDetailsParams {
@@ -94,6 +102,7 @@ export enum CardInfoMode {
   notBlocked = 'notBlocked',
   blocked = 'blocked',
   unblocked = 'unblocked',
+  standaloneUnblock = 'standaloneUnblock',
 }
 
 export type AusweisCardInfoParams = {
