@@ -245,12 +245,12 @@ export const useAusweisInteraction = () => {
     }
   }
 
-  const startChangePin = () => {
+  const startChangePin = async () => {
     if (IS_ANDROID && isCardTouched) {
       showScanner(cancelFlow, { state: AusweisScannerState.loading })
     }
 
-    return aa2Module.startChangePin().catch(scheduleErrorWarning)
+    await aa2Module.startChangePin().catch(scheduleErrorWarning)
   }
 
   return {
@@ -458,8 +458,6 @@ export const useAusweisScanner = () => {
     state: AusweisScannerState.idle,
     onDone: () => {},
   }
-  const [scannerParams, setScannerParams] =
-    useState<AusweisScannerParams>(defaultState)
 
   const scannerKey = useSelector(getAusweisScannerKey)
   const scannerKeyRef = useRef(scannerKey)
@@ -472,7 +470,7 @@ export const useAusweisScanner = () => {
     if (scannerKeyRef.current) {
       try {
         navigation.dispatch({
-          ...CommonActions.setParams({ ...scannerParams, ...params }),
+          ...CommonActions.setParams({ ...params }),
           source: scannerKeyRef.current,
         })
       } catch (e) {
@@ -482,7 +480,6 @@ export const useAusweisScanner = () => {
   }
 
   const resetScanner = () => {
-    setScannerParams(defaultState)
     dispatchScannerParams(defaultState)
   }
 
@@ -490,16 +487,14 @@ export const useAusweisScanner = () => {
     onDismiss?: () => void,
     params?: AusweisScannerParams,
   ) => {
-    setScannerParams({ ...scannerParams, ...params })
     navigation.navigate(ScreenNames.eId, {
       screen: eIDScreens.AusweisScanner,
-      params: { ...scannerParams, ...params, onDismiss },
+      params: { ...params, onDismiss },
     })
   }
 
   const updateScanner = (params: Partial<AusweisScannerParams>) => {
-    setScannerParams((prevParams) => ({ ...prevParams, ...params }))
-    dispatchScannerParams({ ...scannerParams, ...params })
+    dispatchScannerParams({ ...params })
     if (
       params.state === AusweisScannerState.failure ||
       params.state === AusweisScannerState.success
@@ -510,7 +505,7 @@ export const useAusweisScanner = () => {
     }
   }
 
-  return { showScanner, updateScanner, scannerParams }
+  return { showScanner, updateScanner }
 }
 
 export const useAusweisCancelBackHandler = () => {

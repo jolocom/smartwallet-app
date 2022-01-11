@@ -5,11 +5,13 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { useSelector } from 'react-redux'
 import { View, Platform, LayoutAnimation } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
@@ -39,9 +41,7 @@ import {
   useDeactivatedCard,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
-import { useSelector } from 'react-redux'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
-import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -519,6 +519,8 @@ export const AusweisPasscode = () => {
               setErrorText(t('AusweisPasscode.pinMatchError'))
             }, 100)
           }
+
+          return
       }
     })
   }
