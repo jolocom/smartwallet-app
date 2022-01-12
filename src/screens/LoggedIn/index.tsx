@@ -54,6 +54,7 @@ const LoggedIn = () => {
     }
   }, [])
 
+  // NOTE: Used to listen for Ausweis READER messages and update the Redux state
   useAusweisReaderEvents()
 
   const dismissOverlays = useCallback(() => {

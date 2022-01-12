@@ -107,6 +107,13 @@ export const useAusweisInteraction = () => {
   const { showScanner } = useAusweisScanner()
   const isCardTouched = useSelector(getAusweisReaderState)
 
+  /*
+   * NOTE: if the card is touching the reader while sending a command which triggers
+   * the INSERT_CARD message (based on which we usually show the scanner), we should
+   * show the scanner imperatively.
+   */
+  const shouldShowScannerWithoutInsertMessage = IS_ANDROID && isCardTouched
+
   // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
   // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
   // to this, the @initAusweis function is not used for initialization. Instead it's used
@@ -148,7 +155,7 @@ export const useAusweisInteraction = () => {
   }
 
   const acceptRequest = async (optionalFields: Array<AccessRightsFields>) => {
-    if (IS_ANDROID && isCardTouched) {
+    if (shouldShowScannerWithoutInsertMessage) {
       showScanner(cancelInteraction, { state: AusweisScannerState.loading })
     }
 
@@ -246,7 +253,7 @@ export const useAusweisInteraction = () => {
   }
 
   const startChangePin = async () => {
-    if (IS_ANDROID && isCardTouched) {
+    if (shouldShowScannerWithoutInsertMessage) {
       showScanner(cancelFlow, { state: AusweisScannerState.loading })
     }
 
