@@ -5,11 +5,13 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { useSelector } from 'react-redux'
 import { View, Platform, LayoutAnimation } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
@@ -39,6 +41,7 @@ import {
   useDeactivatedCard,
 } from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
+import { getAusweisReaderState } from '~/modules/ausweis/selectors'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -84,8 +87,7 @@ export const AusweisPasscode = () => {
     flow,
   } = route.params
   const ausweisContext = useAusweisContext()
-
-  const isScanner = useRef(false)
+  const isCardTouched = useSelector(getAusweisReaderState)
 
   const navigation = useNavigation()
 
@@ -151,7 +153,6 @@ export const AusweisPasscode = () => {
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
-      isScanner.current = false
       if (isTransportPin.current === true) {
         setPinVariant(AusweisPasscodeMode.TRANSPORT_PIN)
       } else {
@@ -166,7 +167,6 @@ export const AusweisPasscode = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
-      isScanner.current = false
       if (pukCounterRef.current > 0) {
         setErrorText(
           t('AusweisPasscode.pinWrongError', {
@@ -183,7 +183,6 @@ export const AusweisPasscode = () => {
     }
 
     const canHandler = (card: CardInfo) => {
-      isScanner.current = false
       if (canCounterRef.current > 0) {
         setErrorText(
           t('AusweisPasscode.pinWrongError', {
@@ -223,35 +222,29 @@ export const AusweisPasscode = () => {
         }
       },
       handleCardRequest: () => {
-        isScanner.current = true
         if (IS_ANDROID) {
           showScanner(cancelInteraction)
         }
       },
-      handleAuthFailed: (url: string, message: string) => {
+      handleAuthFailed: () => {
         if (IS_ANDROID) {
-          if (isScanner.current) {
-            /**
-             * This happens if i.e. network error comes back
-             */
-            updateScanner({
-              state: AusweisScannerState.failure,
-              onDone: () => {
-                /**
-                 * QUESTION:
-                 * shall we show toast here, something like:
-                 * we were unable to finish interaction because
-                 * you were not connected to the internet
-                 */
-                closeAusweis()
-              },
-            })
-          } else {
-            /**
-             * This happens when we cancel by pressing
-             * cancel btn in the AusweisScanner component
-             */
-          }
+          /*
+           * NOTE: This would happen in the case when there is no internet connection,
+           * or the user pressed the Cancel button. In the latter case, the scanner update
+           * will be ignored internally.
+           */
+          updateScanner({
+            state: AusweisScannerState.failure,
+            onDone: () => {
+              /**
+               * QUESTION:
+               * shall we show toast here, something like:
+               * we were unable to finish interaction because
+               * you were not connected to the internet
+               */
+              closeAusweis()
+            },
+          })
         } else {
           closeAusweis()
         }
@@ -453,45 +446,72 @@ export const AusweisPasscode = () => {
     )
   }
 
-  const sendPasscodeCommand = (passcode: string) =>
+  const sendPasscodeCommand = async (command: Commands, value: string) => {
+    if (IS_ANDROID && isCardTouched) {
+      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+    }
+
+    switch (command) {
+      case Commands.setPin:
+        return passcodeCommands.setPin(value)
+      case Commands.setCan:
+        return passcodeCommands.setCan(value)
+      case Commands.setPuk:
+        return passcodeCommands.setPuk(value)
+      case Commands.setNewPin:
+        return passcodeCommands.setNewPin(value)
+      default:
+        throw new Error('Unsupported command type')
+    }
+  }
+
+  const handleSubmit = async (passcode: string) => {
     checkNfcSupport(async () => {
       setErrorText(null)
-      if (pinVariantRef.current === AusweisPasscodeMode.PIN) {
-        passcodeCommands.setPin(passcode)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.TRANSPORT_PIN) {
-        passcodeCommands.setPin(passcode)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.CAN) {
-        canCounterRef.current++
-        passcodeCommands.setCan(passcode)
-      } else if (pinVariantRef.current == AusweisPasscodeMode.PUK) {
-        pukCounterRef.current++
-        try {
-          await passcodeCommands.setPuk(passcode)
-        } catch (e) {
-          if (e === CardError.cardIsBlocked) {
-            if (IS_ANDROID) {
-              updateScanner({
-                state: AusweisScannerState.failure,
-                onDone: handleCardIsBlocked,
-              })
-            } else {
-              handleCardIsBlocked()
+
+      switch (pinVariantRef.current) {
+        case AusweisPasscodeMode.PIN:
+        case AusweisPasscodeMode.TRANSPORT_PIN:
+          sendPasscodeCommand(Commands.setPin, passcode)
+          return
+        case AusweisPasscodeMode.CAN:
+          canCounterRef.current++
+          sendPasscodeCommand(Commands.setCan, passcode)
+          return
+        case AusweisPasscodeMode.PUK:
+          pukCounterRef.current++
+          try {
+            await sendPasscodeCommand(Commands.setPuk, passcode)
+          } catch (e) {
+            if (e === CardError.cardIsBlocked) {
+              if (IS_ANDROID) {
+                updateScanner({
+                  state: AusweisScannerState.failure,
+                  onDone: handleCardIsBlocked,
+                })
+              } else {
+                handleCardIsBlocked()
+              }
             }
           }
-        }
-      } else if (pinVariantRef.current === AusweisPasscodeMode.NEW_PIN) {
-        newPasscodeRef.current = passcode
-        setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
-      } else if (pinVariantRef.current === AusweisPasscodeMode.VERIFY_NEW_PIN) {
-        if (passcode === newPasscodeRef?.current) {
-          aa2Module.setNewPin(passcode)
-        } else {
-          setTimeout(() => {
-            setErrorText(t('AusweisPasscode.pinMatchError'))
-          }, 100)
-        }
+          return
+        case AusweisPasscodeMode.NEW_PIN:
+          newPasscodeRef.current = passcode
+          setPinVariant(AusweisPasscodeMode.VERIFY_NEW_PIN)
+          return
+        case AusweisPasscodeMode.VERIFY_NEW_PIN:
+          if (passcode === newPasscodeRef?.current) {
+            await sendPasscodeCommand(Commands.setNewPin, passcode)
+          } else {
+            setTimeout(() => {
+              setErrorText(t('AusweisPasscode.pinMatchError'))
+            }, 100)
+          }
+
+          return
       }
     })
+  }
 
   const getPasscodeLength = () => {
     switch (pinVariant) {
@@ -600,7 +620,7 @@ export const AusweisPasscode = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <Passcode onSubmit={sendPasscodeCommand} length={getPasscodeLength()}>
+      <Passcode onSubmit={handleSubmit} length={getPasscodeLength()}>
         <PasscodeGlue errorText={errorText} runInputReset={runInputReset} />
         <Passcode.Container
           customStyles={{

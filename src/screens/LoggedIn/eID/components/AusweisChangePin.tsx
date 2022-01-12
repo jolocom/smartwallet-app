@@ -77,7 +77,8 @@ const TitleDescAction: React.FC<WhateverProps> = ({
 const AusweisChangePin = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
-  const { checkCardValidity, cancelFlow } = useAusweisInteraction()
+  const { checkCardValidity, cancelFlow, startChangePin } =
+    useAusweisInteraction()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { handleDeactivatedCard } = useDeactivatedCard()
   const isTransportPin = useRef(false)
@@ -217,7 +218,7 @@ const AusweisChangePin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = false
       setupHandlers()
-      aa2Module.startChangePin()
+      startChangePin()
     })
   }
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import { View } from 'react-native'
-import { aa2Module } from '@jolocom/react-native-ausweis'
 
 import Btn from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
@@ -10,12 +9,14 @@ import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
+import { useAusweisInteraction } from '../hooks'
 
 const AusweisTarnsportWarning = () => {
   const { t } = useTranslation()
+  const { startChangePin } = useAusweisInteraction()
 
   const handleContinue = () => {
-    aa2Module.startChangePin()
+    startChangePin()
   }
 
   return (

@@ -26,13 +26,15 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
+import { useToasts } from '~/hooks/toasts'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
   const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
   const { checkNfcSupport } = useCheckNFC()
   const navigation = useNavigation()
-  const { cancelFlow, checkCardValidity } = useAusweisInteraction()
+  const { cancelFlow, checkCardValidity, startChangePin } =
+    useAusweisInteraction()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { handleDeactivatedCard } = useDeactivatedCard()
 
@@ -125,7 +127,8 @@ export const AusweisIdentity = () => {
   const handleUnlockCard = () => {
     checkNfcSupport(() => {
       setupUnlockCardHandlers()
-      aa2Module.startChangePin()
+
+      startChangePin()
     })
   }
 

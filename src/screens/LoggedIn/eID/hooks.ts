@@ -3,7 +3,7 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import NfcManager from 'react-native-nfc-manager'
@@ -11,6 +11,10 @@ import {
   AccessRightsFields,
   CardInfo,
 } from '@jolocom/react-native-ausweis/js/types'
+import {
+  Messages,
+  ReaderMessage,
+} from '@jolocom/react-native-ausweis/js/messageTypes'
 import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 
@@ -30,8 +34,14 @@ import {
   AusweisCardResult,
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
-import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
-import { getAusweisScannerKey } from '~/modules/ausweis/selectors'
+import {
+  setAusweisInteractionDetails,
+  setAusweisReaderState,
+} from '~/modules/ausweis/actions'
+import {
+  getAusweisReaderState,
+  getAusweisScannerKey,
+} from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 
@@ -94,6 +104,15 @@ export const useAusweisInteraction = () => {
   const popStack = usePopStack()
   const dispatch = useDispatch()
   const { connected: isConnectedToTheInternet } = useConnection()
+  const { showScanner } = useAusweisScanner()
+  const isCardTouched = useSelector(getAusweisReaderState)
+
+  /*
+   * NOTE: if the card is touching the reader while sending a command which triggers
+   * the INSERT_CARD message (based on which we usually show the scanner), we should
+   * show the scanner imperatively.
+   */
+  const shouldShowScannerWithoutInsertMessage = IS_ANDROID && isCardTouched
 
   // NOTE: Currently the Ausweis SDK is initiated in ~/utils/sdk/context, which doensn't
   // yet have access to the navigation (this hook uses @Toasts, which use navigation). Due
@@ -136,6 +155,10 @@ export const useAusweisInteraction = () => {
   }
 
   const acceptRequest = async (optionalFields: Array<AccessRightsFields>) => {
+    if (shouldShowScannerWithoutInsertMessage) {
+      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+    }
+
     await aa2Module.setAccessRights(optionalFields)
     await aa2Module.acceptAuthRequest()
   }
@@ -177,6 +200,7 @@ export const useAusweisInteraction = () => {
   const checkIfScanned = async () => aa2Module.checkIfCardWasRead()
 
   const passcodeCommands = {
+    setNewPin: (pin: string) => aa2Module.setNewPin(pin),
     setPin: (pin: string) => aa2Module.setPin(pin),
     setPuk: (puk: string) => aa2Module.setPuk(puk),
     setCan: (can: string) => aa2Module.setCan(can),
@@ -228,6 +252,14 @@ export const useAusweisInteraction = () => {
     }
   }
 
+  const startChangePin = async () => {
+    if (shouldShowScannerWithoutInsertMessage) {
+      showScanner(cancelFlow, { state: AusweisScannerState.loading })
+    }
+
+    await aa2Module.startChangePin().catch(scheduleErrorWarning)
+  }
+
   return {
     closeAusweis,
     initAusweis,
@@ -240,33 +272,43 @@ export const useAusweisInteraction = () => {
     passcodeCommands,
     finishFlow,
     checkCardValidity,
+    startChangePin,
   }
 }
 
 export const useAusweisCompatibilityCheck = () => {
-  const dispatch = useDispatch()
   const redirect = useRedirect()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = useAusweisScanner()
-  const { cancelFlow } = useAusweisInteraction()
+  const { cancelFlow, startChangePin } = useAusweisInteraction()
   const { checkNfcSupport } = useCheckNFC()
+  const readerState = useSelector(getAusweisReaderState)
+
+  const updateCompatibilityResult = (cardInfo: CardInfo) => {
+    const { inoperative, deactivated } = cardInfo
+
+    setCompatibility({ inoperative, deactivated })
+  }
 
   const checkAndroidCompatibility = () => {
-    showScanner()
-    aa2Module.setHandlers({
-      handleCardInfo: (info) => {
-        if (info) {
-          const { inoperative, deactivated } = info
-
-          updateScanner({
-            state: AusweisScannerState.success,
-            onDone: () => {
-              setCompatibility({ inoperative, deactivated })
-            },
-          })
-        }
-      },
-    })
+    if (readerState) {
+      showScanner(undefined, {
+        state: AusweisScannerState.success,
+        onDone: () => updateCompatibilityResult(readerState),
+      })
+    } else {
+      showScanner()
+      aa2Module.setHandlers({
+        handleCardInfo: (info) => {
+          if (info) {
+            updateScanner({
+              state: AusweisScannerState.success,
+              onDone: () => updateCompatibilityResult(info),
+            })
+          }
+        },
+      })
+    }
   }
 
   const checkIosCompatibility = () => {
@@ -285,7 +327,7 @@ export const useAusweisCompatibilityCheck = () => {
       },
     })
 
-    aa2Module.startChangePin()
+    startChangePin()
   }
   const startCheck = () => {
     setCompatibility(undefined)
@@ -418,45 +460,48 @@ export const useDeactivatedCard = () => {
 }
 
 export const useAusweisScanner = () => {
-  const { scheduleWarning } = useToasts()
-  const { cancelFlow } = useAusweisInteraction()
-  const { t } = useTranslation()
   const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
     onDone: () => {},
   }
-  const [scannerParams, setScannerParams] =
-    useState<AusweisScannerParams>(defaultState)
 
   const scannerKey = useSelector(getAusweisScannerKey)
+  const scannerKeyRef = useRef(scannerKey)
 
   useEffect(() => {
-    if (scannerKey) {
+    scannerKeyRef.current = scannerKey
+  }, [scannerKey])
+
+  const dispatchScannerParams = (params: AusweisScannerParams) => {
+    if (scannerKeyRef.current) {
       try {
         navigation.dispatch({
-          ...CommonActions.setParams(scannerParams),
-          source: scannerKey,
+          ...CommonActions.setParams({ ...params }),
+          source: scannerKeyRef.current,
         })
       } catch (e) {
         console.warn(e)
       }
     }
-  }, [JSON.stringify(scannerParams), scannerKey])
-
-  const resetScanner = () => {
-    setScannerParams(defaultState)
   }
 
-  const showScanner = (onDismiss?: () => void) => {
+  const resetScanner = () => {
+    dispatchScannerParams(defaultState)
+  }
+
+  const showScanner = (
+    onDismiss?: () => void,
+    params?: AusweisScannerParams,
+  ) => {
     navigation.navigate(ScreenNames.eId, {
       screen: eIDScreens.AusweisScanner,
-      params: { ...scannerParams, onDismiss },
+      params: { ...params, onDismiss },
     })
   }
 
   const updateScanner = (params: Partial<AusweisScannerParams>) => {
-    setScannerParams((prevParams) => ({ ...prevParams, ...params }))
+    dispatchScannerParams({ ...params })
     if (
       params.state === AusweisScannerState.failure ||
       params.state === AusweisScannerState.success
@@ -467,7 +512,7 @@ export const useAusweisScanner = () => {
     }
   }
 
-  return { showScanner, updateScanner, scannerParams }
+  return { showScanner, updateScanner }
 }
 
 export const useAusweisCancelBackHandler = () => {
@@ -482,4 +527,20 @@ export const useAusweisCancelBackHandler = () => {
 
     return false
   })
+}
+
+export const useAusweisReaderEvents = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const listener = (message: ReaderMessage) => {
+      dispatch(setAusweisReaderState(message.card))
+    }
+
+    aa2Module.messageEmitter.addListener(Messages.reader, listener)
+
+    return () => {
+      aa2Module.messageEmitter.removeListener(Messages.reader, listener)
+    }
+  }, [])
 }

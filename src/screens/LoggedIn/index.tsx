@@ -18,6 +18,7 @@ import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettin
 import { Platform } from 'react-native'
 import { useAgent } from '~/hooks/sdk'
 import { ScreenshotManager } from '~/utils/screenshots'
+import { useAusweisReaderEvents } from './eID/hooks'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -52,6 +53,9 @@ const LoggedIn = () => {
       })
     }
   }, [])
+
+  // NOTE: Used to listen for Ausweis READER messages and update the Redux state
+  useAusweisReaderEvents()
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
