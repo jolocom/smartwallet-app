@@ -89,8 +89,6 @@ export const AusweisPasscode = () => {
   const ausweisContext = useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
 
-  const isScanner = useRef(false)
-
   const navigation = useNavigation()
 
   const { scheduleInfo } = useToasts()
@@ -155,7 +153,6 @@ export const AusweisPasscode = () => {
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {
-      isScanner.current = false
       if (isTransportPin.current === true) {
         setPinVariant(AusweisPasscodeMode.TRANSPORT_PIN)
       } else {
@@ -170,7 +167,6 @@ export const AusweisPasscode = () => {
     }
 
     const pukHandler = (card: CardInfo) => {
-      isScanner.current = false
       if (pukCounterRef.current > 0) {
         setErrorText(
           t('AusweisPasscode.pinWrongError', {
@@ -187,7 +183,6 @@ export const AusweisPasscode = () => {
     }
 
     const canHandler = (card: CardInfo) => {
-      isScanner.current = false
       if (canCounterRef.current > 0) {
         setErrorText(
           t('AusweisPasscode.pinWrongError', {
@@ -227,35 +222,29 @@ export const AusweisPasscode = () => {
         }
       },
       handleCardRequest: () => {
-        isScanner.current = true
         if (IS_ANDROID) {
           showScanner(cancelInteraction)
         }
       },
-      handleAuthFailed: (url: string, message: string) => {
+      handleAuthFailed: () => {
         if (IS_ANDROID) {
-          if (isScanner.current) {
-            /**
-             * This happens if i.e. network error comes back
-             */
-            updateScanner({
-              state: AusweisScannerState.failure,
-              onDone: () => {
-                /**
-                 * QUESTION:
-                 * shall we show toast here, something like:
-                 * we were unable to finish interaction because
-                 * you were not connected to the internet
-                 */
-                closeAusweis()
-              },
-            })
-          } else {
-            /**
-             * This happens when we cancel by pressing
-             * cancel btn in the AusweisScanner component
-             */
-          }
+          /*
+           * NOTE: This would happen in the case when there is no internet connection,
+           * or the user pressed the Cancel button. In the latter case, the scanner update
+           * will be ignored internally.
+           */
+          updateScanner({
+            state: AusweisScannerState.failure,
+            onDone: () => {
+              /**
+               * QUESTION:
+               * shall we show toast here, something like:
+               * we were unable to finish interaction because
+               * you were not connected to the internet
+               */
+              closeAusweis()
+            },
+          })
         } else {
           closeAusweis()
         }
@@ -459,7 +448,6 @@ export const AusweisPasscode = () => {
 
   const sendPasscodeCommand = async (command: Commands, value: string) => {
     if (IS_ANDROID && isCardTouched) {
-      isScanner.current = true
       showScanner(cancelInteraction, { state: AusweisScannerState.loading })
     }
 
