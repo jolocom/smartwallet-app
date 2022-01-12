@@ -3,13 +3,12 @@ import { View, Platform } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useSafeArea } from 'react-native-safe-area-context'
 import moment from 'moment'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
-import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
@@ -48,6 +47,11 @@ import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import { IS_ANDROID } from '~/utils/generic'
 
+type AusweisRequestReviewNavigation = StackNavigationProp<
+  AusweisStackParamList,
+  eIDScreens.InteractionSheet
+>
+
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
   const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
@@ -66,7 +70,7 @@ export const AusweisRequestReview = () => {
   const { checkNfcSupport } = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
-  const navigation = useNavigation<StackNavigationProp<AusweisStackParamList>>()
+  const navigation = useNavigation<AusweisRequestReviewNavigation>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const translateField = useTranslatedAusweisFields()
   const { showScanner, updateScanner } = useAusweisScanner()

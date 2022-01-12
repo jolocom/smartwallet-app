@@ -72,7 +72,10 @@ export const AusweisButtons: React.FC<{
 
 export const AusweisLogo: React.FC = () => {
   return (
-    <View style={[styles.image, { backgroundColor: Colors.white }]}>
+    <View
+      testID="ausweis-logo"
+      style={[styles.image, { backgroundColor: Colors.white }]}
+    >
       <InitiatorPlaceholderIcon />
     </View>
   )
@@ -113,7 +116,7 @@ export const AusweisListSection: React.FC<{ title: string }> = ({
 }) => {
   if (!Children.count(children)) return null
   return (
-    <View style={{ marginBottom: 72 }}>
+    <View testID="ausweis-list-section" style={{ marginBottom: 72 }}>
       <View style={{ marginLeft: 8 }}>
         <JoloText
           kind={JoloTextKind.title}

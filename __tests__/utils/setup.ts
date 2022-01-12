@@ -116,6 +116,8 @@ jest.mock('@jolocom/react-native-ausweis', () => ({
     cancelFlow: jest.fn(),
     setHandlers: jest.fn(),
     resetHandlers: jest.fn(),
+    setAccessRights: jest.fn(),
+    acceptAuthRequest: jest.fn(),
     setPin: jest.fn(),
     setCan: jest.fn(),
     setPuk: jest.fn(),
