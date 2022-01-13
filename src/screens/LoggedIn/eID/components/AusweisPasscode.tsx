@@ -64,6 +64,9 @@ const PasscodeGlue: React.FC<PasscodeErrorSetterProps> = ({
     if (Boolean(errorText)) {
       setPinError(true) // color error cells
       setPinErrorText(errorText) // show error text
+    } else {
+      setPinError(false)
+      setPinErrorText(null)
     }
   }, [errorText])
 
@@ -568,6 +571,7 @@ export const AusweisPasscode = () => {
         title = t('VerifyPasscode.resetBtn')
         onPress = () => {
           resetInput(true)
+          setErrorText(null)
           setPinVariant(AusweisPasscodeMode.NEW_PIN)
         }
         break
