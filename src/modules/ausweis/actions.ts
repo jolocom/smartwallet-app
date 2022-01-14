@@ -2,6 +2,7 @@ import createAction from '~/utils/createAction'
 import {
   AusweisModuleActions,
   SetAusweisDetailsAction,
+  SetAusweisFlowTypeAction,
   SetAusweisReaderStateAction,
   SetAusweisScannerKeyAction,
 } from './types'
@@ -17,3 +18,7 @@ export const setAusweisScannerKey = createAction<
 export const setAusweisReaderState = createAction<
   SetAusweisReaderStateAction['payload']
 >(AusweisModuleActions.setReaderState)
+
+export const setAusweisFlowType = createAction<
+  SetAusweisFlowTypeAction['payload']
+>(AusweisModuleActions.setFlowType)

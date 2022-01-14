@@ -5,12 +5,19 @@ export enum AusweisModuleActions {
   setDetails = 'setDetails',
   setScannerKey = 'setScannerKey',
   setReaderState = 'setReaderState',
+  setFlowType = 'setFlowType',
+}
+
+export enum AusweisFlowType {
+  changePin = 'changePin',
+  auth = 'auth',
 }
 
 export interface AusweisModuleState {
   details: IAusweisRequest | null
   scannerKey: string | null
   readerState: CardInfo | null
+  flowType: AusweisFlowType | null
 }
 
 export interface SetAusweisDetailsAction {
@@ -26,4 +33,9 @@ export interface SetAusweisScannerKeyAction {
 export interface SetAusweisReaderStateAction {
   type: AusweisModuleActions.setReaderState
   payload: CardInfo | null
+}
+
+export interface SetAusweisFlowTypeAction {
+  type: AusweisModuleActions.setFlowType
+  payload: AusweisFlowType | null
 }

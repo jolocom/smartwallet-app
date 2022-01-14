@@ -11,3 +11,6 @@ export const getAusweisReaderState = (state: RootReducerI) =>
 
 export const getIsAusweisInteractionProcessed = (state: RootReducerI) =>
   !!state.ausweis.details
+
+export const getAusweisFlowType = (state: RootReducerI) =>
+  state.ausweis.flowType
