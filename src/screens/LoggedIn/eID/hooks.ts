@@ -35,6 +35,7 @@ import {
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
 import {
+  setAusweisFlowType,
   setAusweisInteractionDetails,
   setAusweisReaderState,
 } from '~/modules/ausweis/actions'
@@ -44,6 +45,7 @@ import {
 } from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
+import { AusweisFlowType } from '~/modules/ausweis/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -147,6 +149,7 @@ export const useAusweisInteraction = () => {
       }
 
       dispatch(setAusweisInteractionDetails(requestData))
+      dispatch(setAusweisFlowType(AusweisFlowType.auth))
     } catch (e) {
       cancelFlow()
       console.warn(e)
@@ -163,6 +166,15 @@ export const useAusweisInteraction = () => {
     await aa2Module.acceptAuthRequest()
   }
 
+  const startChangePin = async () => {
+    if (shouldShowScannerWithoutInsertMessage) {
+      showScanner(cancelFlow, { state: AusweisScannerState.loading })
+    }
+
+    await aa2Module.startChangePin().catch(scheduleErrorWarning)
+    dispatch(setAusweisFlowType(AusweisFlowType.changePin))
+  }
+
   const disconnectAusweis = () => {
     aa2Module.disconnectAa2Sdk().catch(scheduleErrorWarning)
   }
@@ -174,6 +186,9 @@ export const useAusweisInteraction = () => {
   const sendCancel = () => {
     aa2Module
       .cancelFlow()
+      .then(() => {
+        dispatch(setAusweisFlowType(null))
+      })
       .catch((e) =>
         console.warn(
           'Ausweis Error: Something happend when canceling interaction',
@@ -250,14 +265,6 @@ export const useAusweisInteraction = () => {
         },
       })
     }
-  }
-
-  const startChangePin = async () => {
-    if (shouldShowScannerWithoutInsertMessage) {
-      showScanner(cancelFlow, { state: AusweisScannerState.loading })
-    }
-
-    await aa2Module.startChangePin().catch(scheduleErrorWarning)
   }
 
   return {

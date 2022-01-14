@@ -29,6 +29,8 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
+import { useSelector } from 'react-redux'
+import { getAusweisFlowType } from '~/modules/ausweis/selectors'
 
 interface WhateverProps {
   headerText: string
@@ -36,6 +38,7 @@ interface WhateverProps {
   hasInlineBtn?: boolean
   btnText: string
   onPress: () => void
+  disabled?: boolean
 }
 
 const TitleDescAction: React.FC<WhateverProps> = ({
@@ -44,6 +47,7 @@ const TitleDescAction: React.FC<WhateverProps> = ({
   hasInlineBtn = false,
   btnText,
   onPress,
+  disabled = false,
 }) => (
   <View style={{ marginBottom: BP({ default: 30, xsmall: 20 }) }}>
     <ScreenContainer.Padding distance={BP({ default: 27, xsmall: 20 })}>
@@ -66,6 +70,7 @@ const TitleDescAction: React.FC<WhateverProps> = ({
           onPress={onPress}
           type={BtnTypes.quaternary}
           customTextStyles={{ opacity: 1 }}
+          disabled={disabled}
         >
           {btnText}
         </Btn>
@@ -83,6 +88,7 @@ const AusweisChangePin = () => {
   const { handleDeactivatedCard } = useDeactivatedCard()
   const isTransportPin = useRef(false)
   const { checkNfcSupport } = useCheckNFC()
+  const shouldDisableBtns = !!useSelector(getAusweisFlowType)
 
   const changePinFlow =
     isTransportPin.current === true
@@ -238,12 +244,14 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.transportPinSubheader')}
           btnText={t('AusweisChangePin.transportPinBtn')}
           onPress={handleChange5DigPin}
+          disabled={shouldDisableBtns}
         />
         <TitleDescAction
           headerText={t('AusweisChangePin.pinHeader')}
           descriptionText={t('AusweisChangePin.pinSubheader')}
           btnText={t('AusweisChangePin.pinBtn')}
           onPress={handleChange6DigPin}
+          disabled={shouldDisableBtns}
         />
       </View>
       <TitleDescAction

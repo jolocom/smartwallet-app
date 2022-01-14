@@ -26,7 +26,8 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { useToasts } from '~/hooks/toasts'
+import { useSelector } from 'react-redux'
+import { getAusweisFlowType } from '~/modules/ausweis/selectors'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -37,6 +38,7 @@ export const AusweisIdentity = () => {
     useAusweisInteraction()
   const { showScanner, updateScanner } = useAusweisScanner()
   const { handleDeactivatedCard } = useDeactivatedCard()
+  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
@@ -174,6 +176,7 @@ export const AusweisIdentity = () => {
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleUnlockCard}
+            disabled={shouldDisableUnlock}
           >
             {t('AusweisIdentity.unlockBtn')}
           </Btn>
