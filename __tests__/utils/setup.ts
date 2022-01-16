@@ -122,6 +122,7 @@ jest.mock('@jolocom/react-native-ausweis', () => ({
     setCan: jest.fn(),
     setPuk: jest.fn(),
     setNewPin: jest.fn(),
+    startChangePin: jest.fn(),
   },
 }))
 

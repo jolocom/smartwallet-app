@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { RouteProp, useRoute } from '@react-navigation/core'
+import React, { useEffect } from 'react'
+import { RouteProp, useRoute } from '@react-navigation/native'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'

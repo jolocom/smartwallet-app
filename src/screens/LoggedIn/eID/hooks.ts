@@ -279,7 +279,13 @@ export const useAusweisInteraction = () => {
 export const useAusweisCompatibilityCheck = () => {
   const redirect = useRedirect()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
-  const { showScanner, updateScanner } = useAusweisScanner()
+  /**
+   * NOTE: calling useAusweisScanner as a property of global object for tests;
+   * since useAusweisScanner is contained within the local scope of useAusweisCompatibilityCheck
+   * the mock to useAusweisScanner doesn't work
+   */
+  // @ts-expect-error
+  const { showScanner, updateScanner } = this.useAusweisScanner.call(global)
   const { cancelFlow, startChangePin } = useAusweisInteraction()
   const { checkNfcSupport } = useCheckNFC()
   const readerState = useSelector(getAusweisReaderState)
