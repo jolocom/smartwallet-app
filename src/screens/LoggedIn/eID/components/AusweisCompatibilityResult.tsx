@@ -25,7 +25,6 @@ const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
 
 export const AusweisCompatibilityResult: React.FC = () => {
   const { t } = useTranslation()
-
   const goBack = useGoBack()
   const { inoperative, deactivated } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.CompatibilityResult>>()
@@ -49,6 +48,7 @@ export const AusweisCompatibilityResult: React.FC = () => {
         activeOpacity={1}
         onPress={goBack}
         style={{ justifyContent: 'flex-end', alignItems: 'center' }}
+        testID="dismissable-background"
       >
         <View style={styles.container}>
           <View style={styles.headerContainer}>
