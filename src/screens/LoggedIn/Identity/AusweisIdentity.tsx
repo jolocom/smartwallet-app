@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -79,7 +79,6 @@ export const AusweisIdentity = () => {
             handleShowCardLockResult(CardInfoMode.unblocked)
           },
         },
-        isUnlocking: true,
       },
     })
   }
