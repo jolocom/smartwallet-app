@@ -43,6 +43,10 @@ export interface AusweisPasscodeParams {
    * normal 6-digit pin (AusweisPasscodeMode.PIN) or
    * 5-digit pin (AusweisPasscodeMode.TRANSPORT_PIN)
    */
+  /**
+   * TODO: pinContext prop seems to be redundant since
+   * we distinguish between PIN and TRANSPORT_PIN in the flow prop
+   */
   pinContext?: AusweisPasscodeMode.TRANSPORT_PIN | AusweisPasscodeMode.PIN
   handlers?: Partial<EventHandlers>
   flow: AusweisFlow

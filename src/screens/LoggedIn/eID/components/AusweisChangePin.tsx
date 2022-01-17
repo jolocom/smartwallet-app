@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
 import { View } from 'react-native'
