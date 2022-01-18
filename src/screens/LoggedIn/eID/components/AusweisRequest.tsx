@@ -10,13 +10,7 @@ import { LogoContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/c
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { eIDScreens } from '../types'
-import {
-  useCheckNFC,
-  useAusweisContext,
-  useAusweisInteraction,
-  useAusweisSkipCompatibility,
-  useAusweisCancelBackHandler,
-} from '../hooks'
+import eIDHooks from '../hooks'
 import { AusweisBottomSheet, AusweisButtons, AusweisLogo } from '../styled'
 import { AusweisStackParamList } from '..'
 
@@ -28,12 +22,13 @@ type AusweisRequestNavigation = StackNavigationProp<
 export const AusweisRequest = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<AusweisRequestNavigation>()
-  const { checkNfcSupport } = useCheckNFC()
-  const { providerUrl, providerName } = useAusweisContext()
-  const { cancelInteraction } = useAusweisInteraction()
-  const { shouldSkip: shouldSkipCompatibility } = useAusweisSkipCompatibility()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const { providerUrl, providerName } = eIDHooks.useAusweisContext()
+  const { cancelInteraction } = eIDHooks.useAusweisInteraction()
+  const { shouldSkip: shouldSkipCompatibility } =
+    eIDHooks.useAusweisSkipCompatibility()
 
-  useAusweisCancelBackHandler()
+  eIDHooks.useAusweisCancelBackHandler()
 
   const handleProceed = async () => {
     checkNfcSupport(() => {

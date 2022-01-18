@@ -6,7 +6,7 @@ import React from 'react'
 import { Platform } from 'react-native'
 import nfcManager from 'react-native-nfc-manager'
 
-import * as eIDHooks from '../../../src/screens/LoggedIn/eID/hooks'
+import eIDHooks from '../../../src/screens/LoggedIn/eID/hooks'
 import { AusweisIdentity } from '~/screens/LoggedIn/Identity/AusweisIdentity'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AusweisScannerParams } from '~/screens/LoggedIn/eID/types'

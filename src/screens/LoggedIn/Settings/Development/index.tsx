@@ -10,10 +10,7 @@ import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import { usePopupMenu } from '~/hooks/popupMenu'
-import {
-  useAusweisInteraction,
-  useAusweisSkipCompatibility,
-} from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import { useLoader } from '~/hooks/loader'
 
 const TC_TOKEN =
@@ -25,9 +22,9 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
-  const { setShouldSkip } = useAusweisSkipCompatibility()
+  const { setShouldSkip } = eIDHooks.useAusweisSkipCompatibility()
 
-  const { processAusweisToken } = useAusweisInteraction()
+  const { processAusweisToken } = eIDHooks.useAusweisInteraction()
   const loader = useLoader()
 
   const redirect = useRedirect()

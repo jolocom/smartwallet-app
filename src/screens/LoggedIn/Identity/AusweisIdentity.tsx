@@ -10,13 +10,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
-import {
-  useAusweisCompatibilityCheck,
-  useAusweisInteraction,
-  useAusweisScanner,
-  useCheckNFC,
-  useDeactivatedCard,
-} from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
   AusweisFlow,
@@ -26,17 +20,17 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { useToasts } from '~/hooks/toasts'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
-  const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
-  const { checkNfcSupport } = useCheckNFC()
+  const { startCheck: startCompatibilityCheck } =
+    eIDHooks.useAusweisCompatibilityCheck()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow, checkCardValidity, startChangePin } =
-    useAusweisInteraction()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { handleDeactivatedCard } = useDeactivatedCard()
+    eIDHooks.useAusweisInteraction()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)

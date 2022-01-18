@@ -11,7 +11,7 @@ import { AusweisScannerState } from '~/screens/LoggedIn/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AusweisScanner } from '~/screens/LoggedIn/eID/components'
 import { useGoBack } from '~/hooks/navigation'
-import * as eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 
 jest.mock('@react-navigation/native')

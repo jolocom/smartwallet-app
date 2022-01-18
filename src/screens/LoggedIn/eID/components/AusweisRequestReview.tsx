@@ -21,15 +21,7 @@ import {
   LogoContainerFAS,
 } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
-import {
-  useAusweisContext,
-  useAusweisInteraction,
-  useCheckNFC,
-  useTranslatedAusweisFields,
-  useAusweisScanner,
-  useDeactivatedCard,
-  useAusweisCancelBackHandler,
-} from '../hooks'
+import eIDHooks from '../hooks'
 import {
   AusweisButtons,
   AusweisHeaderDescription,
@@ -55,7 +47,7 @@ type AusweisRequestReviewNavigation = StackNavigationProp<
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
   const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
-    useAusweisInteraction()
+    eIDHooks.useAusweisInteraction()
   const {
     providerName,
     requiredFields,
@@ -66,17 +58,17 @@ export const AusweisRequestReview = () => {
     providerInfo,
     effectiveValidityDate,
     expirationDate,
-  } = useAusweisContext()
-  const { checkNfcSupport } = useCheckNFC()
+  } = eIDHooks.useAusweisContext()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const navigation = useNavigation<AusweisRequestReviewNavigation>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
-  const translateField = useTranslatedAusweisFields()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { handleDeactivatedCard } = useDeactivatedCard()
+  const translateField = eIDHooks.useTranslatedAusweisFields()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
-  useAusweisCancelBackHandler()
+  eIDHooks.useAusweisCancelBackHandler()
 
   useEffect(() => {
     const pinHandler = (card: CardInfo) => {

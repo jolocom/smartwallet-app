@@ -17,22 +17,9 @@ import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import { inputPasscode } from '../../utils/inputPasscode'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { getMockedDispatch } from '../../mocks/libs/react-redux'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 
 jest.mock('@react-navigation/native')
-jest.mock('../../../src/screens/LoggedIn/eID/hooks', () => ({
-  ...jest.requireActual('../../../src/screens/LoggedIn/eID/hooks'),
-  useAusweisContext: () => ({
-    // ...mocked context
-  }),
-  useAusweisScanner: () => ({
-    updateScanner: jest
-      .fn()
-      .mockImplementation((params: Partial<AusweisScannerParams>) => {
-        params.onDone && params.onDone()
-      }),
-    showScanner: jest.fn(),
-  }),
-}))
 
 describe('Ausweis passcode screen', () => {
   let registeredHandlers: Partial<EventHandlers>
@@ -51,6 +38,15 @@ describe('Ausweis passcode screen', () => {
     ;(useNetInfo as jest.Mock).mockReturnValue({
       isConnected: true,
     })
+    jest.spyOn(eIDHooks, 'useAusweisScanner').mockReturnValue({
+      updateScanner: jest
+        .fn()
+        .mockImplementation((params: Partial<AusweisScannerParams>) => {
+          params.onDone && params.onDone()
+        }),
+      showScanner: jest.fn(),
+    })
+    jest.spyOn(eIDHooks, 'useAusweisCancelBackHandler')
   })
 
   test('message handlers for the Ausweis screen were registered', async () => {
@@ -377,7 +373,7 @@ describe('Ausweis passcode screen', () => {
   })
 
   test('user introduces new eID pin', async () => {
-    const mockDispatchFn = getMockedDispatch()
+    getMockedDispatch()
     ;(useRoute as jest.Mock).mockReturnValue({
       params: {
         mode: AusweisPasscodeMode.PIN,
@@ -386,7 +382,7 @@ describe('Ausweis passcode screen', () => {
       },
     })
 
-    const { debug, findByTestId, getByText, getByTestId } = renderWithSafeArea(
+    const { findByTestId, getByText, getByTestId } = renderWithSafeArea(
       <AusweisPasscode />,
     )
     /**

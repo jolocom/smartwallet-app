@@ -11,6 +11,7 @@ import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AusweisRequest } from '~/screens/LoggedIn/eID/components'
 import { usePopStack } from '~/hooks/navigation'
 import useSettings from '~/hooks/settings'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 
 const { SettingKeys } = jest.requireActual('../../../src/hooks/settings')
 const mockedRequestData = {
@@ -37,11 +38,6 @@ jest.mock('../../../src/hooks/navigation')
 jest.mock('../../../src/hooks/settings')
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   openURL: mockOpenUrl,
-}))
-jest.mock('../../../src/screens/LoggedIn/eID/hooks.ts', () => ({
-  ...jest.requireActual('../../../src/screens/LoggedIn/eID/hooks.ts'),
-  useAusweisContext: () => mockedRequestData,
-  useAusweisCancelBackHandler: jest.fn(),
 }))
 jest.mock('../../../src/hooks/connection', () => ({
   __esModule: true,
@@ -75,6 +71,8 @@ describe('Ausweis review sceen', () => {
       set: jest.fn(),
       get: mockSettingsGet,
     }))
+    jest.spyOn(eIDHooks, 'useAusweisContext').mockReturnValue(mockedRequestData)
+    jest.spyOn(eIDHooks, 'useAusweisCancelBackHandler')
   })
   afterEach(() => {
     mockNavigate.mockClear()

@@ -10,7 +10,7 @@ import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import { usePopStack, useRedirect } from '../../../src/hooks/navigation'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { CompatibilityCheck } from '~/screens/LoggedIn/eID/components/CompatibilityCheck'
-import * as eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import { AusweisScannerParams } from '~/screens/LoggedIn/eID/types'
 import useSettings from '~/hooks/settings'
 

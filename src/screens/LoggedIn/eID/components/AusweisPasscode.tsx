@@ -32,14 +32,7 @@ import {
   eIDScreens,
   IAusweisRequest,
 } from '../types'
-import {
-  useAusweisCancelBackHandler,
-  useAusweisContext,
-  useAusweisInteraction,
-  useAusweisScanner,
-  useCheckNFC,
-  useDeactivatedCard,
-} from '../hooks'
+import eIDHooks from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -101,7 +94,7 @@ export const AusweisPasscode = () => {
     pinContext = AusweisPasscodeMode.PIN,
     flow,
   } = route.params
-  const ausweisContext = useAusweisContext()
+  const ausweisContext = eIDHooks.useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
 
   const { scheduleInfo } = useToasts()
@@ -110,7 +103,7 @@ export const AusweisPasscode = () => {
   const [errorText, setErrorText] = useState<string | null>(null)
   const [runInputReset, resetInput] = useState(false) // value to reset verification pin
 
-  useAusweisCancelBackHandler()
+  eIDHooks.useAusweisCancelBackHandler()
 
   /**
    * Reverts back flag for resetting verification pin to make sure,
@@ -125,10 +118,10 @@ export const AusweisPasscode = () => {
     closeAusweis,
     cancelFlow,
     cancelInteraction,
-  } = useAusweisInteraction()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { handleDeactivatedCard } = useDeactivatedCard()
-  const { checkNfcSupport } = useCheckNFC()
+  } = eIDHooks.useAusweisInteraction()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')

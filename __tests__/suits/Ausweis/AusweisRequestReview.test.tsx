@@ -11,7 +11,7 @@ import { AusweisRequestReview } from '~/screens/LoggedIn/eID/components'
 import { AusweisFields } from '~/screens/LoggedIn/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { triggerHeaderLayout } from '../components/Collapsible/collapsible-utils'
-import * as eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import { AusweisScannerParams } from '~/screens/LoggedIn/eID/types'
 
 const mockedRequestData = {

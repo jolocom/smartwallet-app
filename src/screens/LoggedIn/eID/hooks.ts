@@ -45,9 +45,9 @@ import {
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 
-export const useAusweisContext = useCustomContext(AusweisContext)
+const useAusweisContext = useCustomContext(AusweisContext)
 
-export const useCheckNFC = () => {
+const useCheckNFC = () => {
   const { t } = useTranslation()
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
 
@@ -98,13 +98,13 @@ export const useCheckNFC = () => {
   return { checkNfcSupport }
 }
 
-export const useAusweisInteraction = () => {
+const useAusweisInteraction = () => {
   const { t } = useTranslation()
   const { scheduleInfo, scheduleErrorWarning, scheduleWarning } = useToasts()
   const popStack = usePopStack()
   const dispatch = useDispatch()
   const { connected: isConnectedToTheInternet } = useConnection()
-  const { showScanner } = useAusweisScanner()
+  const { showScanner } = eIDHooks.useAusweisScanner()
   const isCardTouched = useSelector(getAusweisReaderState)
 
   /*
@@ -276,18 +276,12 @@ export const useAusweisInteraction = () => {
   }
 }
 
-export const useAusweisCompatibilityCheck = () => {
+const useAusweisCompatibilityCheck = () => {
   const redirect = useRedirect()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
-  /**
-   * NOTE: calling useAusweisScanner as a property of global object for tests;
-   * since useAusweisScanner is contained within the local scope of useAusweisCompatibilityCheck
-   * the mock to useAusweisScanner doesn't work
-   */
-  // @ts-expect-error
-  const { showScanner, updateScanner } = this.useAusweisScanner.call(global)
-  const { cancelFlow, startChangePin } = useAusweisInteraction()
-  const { checkNfcSupport } = useCheckNFC()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { cancelFlow, startChangePin } = eIDHooks.useAusweisInteraction()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
   const readerState = useSelector(getAusweisReaderState)
 
   const updateCompatibilityResult = (cardInfo: CardInfo) => {
@@ -360,7 +354,7 @@ export const useAusweisCompatibilityCheck = () => {
   return { startCheck, compatibility }
 }
 
-export const useAusweisSkipCompatibility = () => {
+const useAusweisSkipCompatibility = () => {
   const settings = useSettings()
   const { scheduleErrorWarning } = useToasts()
   const [shouldSkip, setShouldSkipValue] = useState(false)
@@ -393,7 +387,7 @@ export const useAusweisSkipCompatibility = () => {
   return { shouldSkip, setShouldSkip }
 }
 
-export const useTranslatedAusweisFields = () => {
+const useTranslatedAusweisFields = () => {
   const { t } = useTranslation()
 
   const fieldsMapping: { [x in AusweisFields]: string } = {
@@ -426,9 +420,9 @@ export const useTranslatedAusweisFields = () => {
   return (field: AusweisFields) => fieldsMapping[field]
 }
 
-export const useDeactivatedCard = () => {
-  const { updateScanner } = useAusweisScanner()
-  const { cancelFlow } = useAusweisInteraction()
+const useDeactivatedCard = () => {
+  const { updateScanner } = eIDHooks.useAusweisScanner()
+  const { cancelFlow } = eIDHooks.useAusweisInteraction()
   const { scheduleWarning } = useToasts()
   const { t } = useTranslation()
 
@@ -521,9 +515,9 @@ export const useAusweisScanner = () => {
   return { showScanner, updateScanner }
 }
 
-export const useAusweisCancelBackHandler = () => {
+const useAusweisCancelBackHandler = () => {
   const isFocused = useIsFocused()
-  const { cancelInteraction } = useAusweisInteraction()
+  const { cancelInteraction } = eIDHooks.useAusweisInteraction()
 
   useBackHandler(() => {
     if (isFocused) {
@@ -535,7 +529,7 @@ export const useAusweisCancelBackHandler = () => {
   })
 }
 
-export const useAusweisReaderEvents = () => {
+const useAusweisReaderEvents = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -550,3 +544,17 @@ export const useAusweisReaderEvents = () => {
     }
   }, [])
 }
+
+const eIDHooks = {
+  useAusweisReaderEvents,
+  useAusweisCancelBackHandler,
+  useAusweisScanner,
+  useDeactivatedCard,
+  useTranslatedAusweisFields,
+  useAusweisSkipCompatibility,
+  useAusweisCompatibilityCheck,
+  useAusweisInteraction,
+  useCheckNFC,
+  useAusweisContext,
+}
+export default eIDHooks

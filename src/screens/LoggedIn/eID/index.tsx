@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { useBackHandler } from '@react-native-community/hooks'
 
 import { AusweisProvider } from './context'
-import { useAusweisContext } from './hooks'
+import eIDHooks from './hooks'
 import {
   AusweisCardResult,
   AusweisPasscodeDetailsParams,
@@ -56,7 +55,7 @@ export type AusweisStackParamList = {
 const eIDStack = createStackNavigator<AusweisStackParamList>()
 
 const AusweisInteraction = () => {
-  const { setRequest } = useAusweisContext()
+  const { setRequest } = eIDHooks.useAusweisContext()
   const ausweisDetails = useSelector(getAusweisInteractionDetails)
   const dispatch = useDispatch()
 
