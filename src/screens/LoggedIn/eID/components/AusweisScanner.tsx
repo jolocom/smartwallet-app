@@ -1,5 +1,5 @@
-import { RouteProp, useIsFocused, useRoute } from '@react-navigation/core'
-import React, { useEffect, useRef, useState } from 'react'
+import { RouteProp, useIsFocused, useRoute } from '@react-navigation/native'
+import React, { useEffect, useRef } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useDispatch } from 'react-redux'
