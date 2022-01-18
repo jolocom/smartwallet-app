@@ -37,6 +37,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NFCReaderUsageDescription</key>
+	<string>We need NFC to access the ID card</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -52,13 +54,6 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To scan QR codes to interact with other services</string>
-	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
-	<array>
-		<string>E80704007F00070302</string>
-	</array>
-
-	<key>NFCReaderUsageDescription</key>
-	<string>We need NFC to access the ID card</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires FaceID access to allow you quick and secure access</string>
 	<key>UIAppFonts</key>
@@ -84,6 +79,10 @@
 	<key>branch_universal_link_domains</key>
 	<array>
 		<string>$(BRANCH_URL)</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>E80704007F00070302</string>
 	</array>
 </dict>
 </plist>
