@@ -435,21 +435,13 @@ export const useDeactivatedCard = () => {
           onDismiss && onDismiss()
           setTimeout(() => {
             scheduleWarning({
-              title: t('Toasts.ausweisFailedCheckTitle'),
-              message: t('Toasts.ausweisFailedCheckMsg'),
-              interact: {
-                label: t('Toasts.ausweisFailedCheckBtn'),
-                onInteract: () => {},
-              },
+              title: t('Toasts.ausweisDeactivatedCardTitle'),
+              message: t('Toasts.ausweisDeactivatedCardMsg'),
             })
           }, 500)
         },
       })
     } else {
-      /**
-       * TODO: find a good copy to convey the information
-       * about "deactivated" card
-       */
       scheduleWarning({
         title: t('Toasts.ausweisDeactivatedCardTitle'),
         message: t('Toasts.ausweisDeactivatedCardMsg'),
