@@ -5,6 +5,7 @@ import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { FlowType } from 'react-native-jolocom'
 import { setInteractionDetails } from '~/modules/interaction/actions'
+import { useNetInfo } from '@react-native-community/netinfo'
 
 const INTERACTION_NONCE = 'interaction-nonce'
 const mockedToken = 'token'
@@ -59,6 +60,11 @@ const arrangeActHook = async () => {
 
 describe('Correct data was set in the store for ', () => {
   let mockDispatchFn: jest.Mock
+  beforeAll(() => {
+    ;(useNetInfo as jest.Mock).mockReturnValue({
+      isConnected: true,
+    })
+  })
   beforeEach(() => {
     mockDispatchFn = getMockedDispatch()
   })
