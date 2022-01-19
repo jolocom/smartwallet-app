@@ -144,7 +144,7 @@ const AusweisChangePin = () => {
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
         if (card?.deactivated) {
-          handleDeactivatedCard(navigation.goBack)
+          handleDeactivatedCard()
         }
       },
       handleCardRequest: () => {
@@ -198,9 +198,7 @@ const AusweisChangePin = () => {
       setupHandlers({
         handleCardInfo: (card) => {
           if (card?.deactivated) {
-            handleDeactivatedCard(() => {
-              navigation.dispatch(StackActions.pop())
-            })
+            handleDeactivatedCard()
           }
         },
         handleChangePinCancel: () => {

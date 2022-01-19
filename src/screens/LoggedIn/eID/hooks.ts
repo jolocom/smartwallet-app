@@ -422,23 +422,18 @@ export const useTranslatedAusweisFields = () => {
 
 export const useDeactivatedCard = () => {
   const { updateScanner } = useAusweisScanner()
-  const { cancelFlow } = useAusweisInteraction()
   const { scheduleWarning } = useToasts()
   const { t } = useTranslation()
 
-  const handleDeactivatedCard = (onDismiss?: () => void) => {
+  const handleDeactivatedCard = () => {
     if (IS_ANDROID) {
       updateScanner({
         state: AusweisScannerState.failure,
         onDone: () => {
-          cancelFlow()
-          onDismiss && onDismiss()
-          setTimeout(() => {
-            scheduleWarning({
-              title: t('Toasts.ausweisDeactivatedCardTitle'),
-              message: t('Toasts.ausweisDeactivatedCardMsg'),
-            })
-          }, 500)
+          scheduleWarning({
+            title: t('Toasts.ausweisDeactivatedCardTitle'),
+            message: t('Toasts.ausweisDeactivatedCardMsg'),
+          })
         },
       })
     } else {
