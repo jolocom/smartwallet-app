@@ -46,9 +46,7 @@ const SettingsGeneral: React.FC = () => {
     }
   }, [dispatch])
 
-  const handleNavigateToScreen = (screenName: ScreenNames) => {
-    navigation.navigate(screenName)
-  }
+  const handleNavigateToScreen = navigation.navigate
 
   return (
     <ScreenContainer
@@ -80,6 +78,12 @@ const SettingsGeneral: React.FC = () => {
         <Section>
           <Section.Title>{t('Settings.securitySection')}</Section.Title>
           <Section.Block>
+            <Option
+              onPress={() => handleNavigateToScreen(ScreenNames.MnemonicPhrase)}
+            >
+              <Option.Title title="Write down your seed phrase" />
+              <Option.RightIcon />
+            </Option>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
             >
