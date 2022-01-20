@@ -17,7 +17,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
 import SeedPhrase from './components/Styled'
-import { useGetSeedPhrase } from '~/hooks/sdk'
+import { useGetMnemonicPhrase } from '~/hooks/sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useDisableScreenshots } from '~/hooks/screenshots'
 
@@ -38,7 +38,7 @@ const SeedPhraseWrite: React.FC = () => {
   } = useCircleHoldAnimation(1200)
 
   const [showInfo, setShowInfo] = useState(true)
-  const seedphrase = useGetSeedPhrase()
+  const mnemonicPhrase = useGetMnemonicPhrase()
 
   useDangerouslyDisableGestures()
 
@@ -122,7 +122,7 @@ const SeedPhraseWrite: React.FC = () => {
         opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
       }}
     >
-      {seedphrase.split(' ').map((w) => (
+      {mnemonicPhrase.split(' ').map((w) => (
         <WordPill.Write key={w}>{w}</WordPill.Write>
       ))}
     </Animated.View>

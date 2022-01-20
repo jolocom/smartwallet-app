@@ -1,23 +1,30 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
 
 import { useFailed } from '~/hooks/loader'
-import { useSubmitIdentity } from '~/hooks/sdk'
 import { BackArrowIcon } from '~/assets/svg'
-import { useDangerouslyDisableGestures, useGoBack } from '~/hooks/navigation'
+import {
+  useDangerouslyDisableGestures,
+  useGoBack,
+  usePopStack,
+} from '~/hooks/navigation'
 
 import SeedPhrase from './components/Styled'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
-import { useGetSeedPhrase } from '~/hooks/sdk'
+import {
+  useGetMnemonicPhrase,
+  useRecordUserHasWrittenSeedPhrase,
+} from '~/hooks/sdk'
 import shuffleArray from '~/utils/arrayUtils'
 import Dnd from './Dnd'
 import useTranslation from '~/hooks/useTranslation'
 
 const SeedPhraseRepeat: React.FC = () => {
   const goBack = useGoBack()
-  const submitIdentity = useSubmitIdentity()
-  const seedphrase = useGetSeedPhrase()
+  const recordUserHasWrittenSeedPhrase = useRecordUserHasWrittenSeedPhrase()
+  const mnemonicPhrase = useGetMnemonicPhrase()
   const showFailedLoader = useFailed()
+  const popStack = usePopStack()
   const { t } = useTranslation()
 
   useDangerouslyDisableGestures()
@@ -29,7 +36,7 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const isFirstFragment = useRef(Boolean(Math.round(Math.random())))
 
-  const phraseArr = seedphrase.split(' ')
+  const phraseArr = mnemonicPhrase.split(' ')
   const phraseFragmentFirst = phraseArr.slice(0, 6)
   const phraseFragmentLast = phraseArr.slice(6, 12)
 
@@ -40,7 +47,7 @@ const SeedPhraseRepeat: React.FC = () => {
   useEffect(() => {
     const shuffled = shuffleArray(usedFragment)
     setShuffledSeedphrase(shuffled)
-  }, [seedphrase])
+  }, [mnemonicPhrase])
 
   const handlePhraseUpdate = (phrase: string[]) => {
     if (JSON.stringify(phrase) !== JSON.stringify(shuffledSeedphrase)) {
@@ -52,7 +59,7 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const onSubmit = async () => {
     if (isPhraseValid) {
-      await submitIdentity()
+      await recordUserHasWrittenSeedPhrase(popStack)
     } else {
       showFailedLoader()
       setTimeout(() => {
@@ -65,7 +72,7 @@ const SeedPhraseRepeat: React.FC = () => {
     if (!shuffledSeedphrase) return false
 
     return shuffledSeedphrase.join(' ') === usedFragment.join(' ')
-  }, [JSON.stringify(shuffledSeedphrase), seedphrase])
+  }, [JSON.stringify(shuffledSeedphrase), mnemonicPhrase])
 
   return (
     <SeedPhrase.Styled.ScreenContainer bgColor={Colors.mainBlack}>

@@ -17,7 +17,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { useLoader } from '~/hooks/loader'
-import { useGenerateSeed } from '~/hooks/sdk'
+import { useCreateIdentity } from '~/hooks/sdk'
 import { setLogged } from '~/modules/account/actions'
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
@@ -29,7 +29,7 @@ const Walkthrough: React.FC = () => {
   const redirect = useRedirect()
   const { t } = useTranslation()
   const loader = useLoader()
-  const generateSeed = useGenerateSeed()
+  const createIdentity = useCreateIdentity()
   const dispatch = useDispatch()
 
   const walkthroughData = [
@@ -81,7 +81,7 @@ const Walkthrough: React.FC = () => {
       }
     }
     await loader(
-      generateSeed,
+      createIdentity,
       { showSuccess: false, loading: t('Entropy.loader') },
       handleDone,
     )

@@ -83,9 +83,6 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
       await resetCountdownValues()
     } else {
       const idw = await agent.loadFromMnemonic(phrase.join(' '))
-      await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
-        finished: true,
-      })
       dispatch(setDid(idw.did))
     }
   }
