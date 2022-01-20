@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { ImageBackground, StyleSheet, View, Platform } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
 
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
-
 import { ScreenNames } from '~/types/screens'
-
 import { useRedirect } from '~/hooks/navigation'
 import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
 import { Colors } from '~/utils/colors'
@@ -19,6 +18,7 @@ import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { useLoader } from '~/hooks/loader'
 import { useGenerateSeed } from '~/hooks/sdk'
+import { setLogged } from '~/modules/account/actions'
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
   <View style={styles.dot}>
@@ -30,6 +30,7 @@ const Walkthrough: React.FC = () => {
   const { t } = useTranslation()
   const loader = useLoader()
   const generateSeed = useGenerateSeed()
+  const dispatch = useDispatch()
 
   const walkthroughData = [
     {
@@ -76,7 +77,7 @@ const Walkthrough: React.FC = () => {
   const handleGetStarted = async () => {
     const handleDone = (error: any) => {
       if (!error) {
-        // TODO: this should redirect to the Passcode registration screen
+        dispatch(setLogged(true))
       }
     }
     await loader(
