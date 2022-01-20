@@ -76,9 +76,7 @@ const Walkthrough: React.FC = () => {
   const handleGetStarted = async () => {
     const handleDone = (error: any) => {
       if (!error) {
-        return redirect(ScreenNames.Onboarding, {
-          initialRoute: ScreenNames.Registration,
-        })
+        // TODO: this should redirect to the Passcode registration screen
       }
     }
     await loader(
@@ -144,11 +142,7 @@ const Walkthrough: React.FC = () => {
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={() =>
-              redirect(ScreenNames.Onboarding, {
-                initialRoute: ScreenNames.IdentityRecovery,
-              })
-            }
+            onPress={() => redirect(ScreenNames.Onboarding)}
           >
             {t('Walkthrough.recoveryBtn')}
           </Btn>
