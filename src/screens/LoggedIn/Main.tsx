@@ -139,6 +139,7 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.MnemonicPhrase}
             component={Registration}
+            options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
             name={ScreenNames.ChangePin}
