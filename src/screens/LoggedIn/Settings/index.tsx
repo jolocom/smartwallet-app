@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react'
-import { Platform, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
@@ -8,7 +8,7 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 
 import { ScreenNames } from '~/types/screens'
-import { JoloTextSizes } from '~/utils/fonts'
+import { Fonts, JoloTextSizes } from '~/utils/fonts'
 import { resetAccount } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
@@ -20,12 +20,77 @@ import EnableBiometryOption from './EnableBiometryOption'
 import { useBiometry } from '~/hooks/biometry'
 import useBackup from '~/hooks/backup'
 import useMarketRating from '~/hooks/rateus'
-import { useAgent } from '~/hooks/sdk'
+import { StorageKeys, useAgent } from '~/hooks/sdk'
 import ClearIdentityBtn from './components/ClearIdentityBtn'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useTranslation from '~/hooks/useTranslation'
 import EnableScreenshotsOption from './EnableScreenshotsOption'
+import { CaretRight, WarningIcon } from '~/assets/svg'
+import Space from '~/components/Space'
+import BP from '~/utils/breakpoints'
+import useSettings from '~/hooks/settings'
 
+const MnemonicPhraseWarning = () => {
+  const [isMnemonicWritten, setIsMnemonicWritten] =
+    useState<boolean | undefined>(undefined)
+  const { get: getFromStorage } = useSettings()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    getFromStorage(StorageKeys.mnemonicPhrase).then((res) => {
+      LayoutAnimation.configureNext({
+        ...LayoutAnimation.Presets.easeInEaseOut,
+        duration: 200,
+      })
+      setIsMnemonicWritten(res?.isWritten ? true : false)
+    })
+  }, [])
+
+  const handleNavigateToMnemonicPhrase = () => {
+    navigation.navigate(ScreenNames.MnemonicPhrase)
+  }
+
+  if (isMnemonicWritten === true || isMnemonicWritten === undefined) return null
+  return (
+    <TouchableOpacity
+      onPress={handleNavigateToMnemonicPhrase}
+      activeOpacity={0.9}
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: Colors.corn,
+        borderRadius: 9,
+        width: '100%',
+        paddingTop: 14,
+        paddingBottom: 11,
+        paddingLeft: 14,
+        paddingRight: 16,
+      }}
+    >
+      <View style={{ width: 40, height: 35 }}>
+        <WarningIcon />
+      </View>
+      <JoloText
+        customStyles={{
+          fontSize: BP({ large: 16, default: 14 }),
+          lineHeight: BP({ large: 16, default: 14 }),
+          fontFamily: Fonts.Medium,
+          textAlign: 'left',
+          marginLeft: 14,
+          marginRight: 7,
+          flex: 1,
+          flexWrap: 'wrap',
+        }}
+        color={Colors.black}
+      >
+        Your data run the risk of being irreversibly lost, please proceeed with
+        the seedphrase
+      </JoloText>
+      <CaretRight fillColor={Colors.black} />
+    </TouchableOpacity>
+  )
+}
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
   const resetServiceValuesInKeychain = useResetKeychainValues()
@@ -77,13 +142,9 @@ const SettingsGeneral: React.FC = () => {
 
         <Section>
           <Section.Title>{t('Settings.securitySection')}</Section.Title>
+          <MnemonicPhraseWarning />
+          <Space height={17} />
           <Section.Block>
-            <Option
-              onPress={() => handleNavigateToScreen(ScreenNames.MnemonicPhrase)}
-            >
-              <Option.Title title="Write down your seed phrase" />
-              <Option.RightIcon />
-            </Option>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
             >
