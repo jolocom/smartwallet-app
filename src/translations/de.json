@@ -1,6 +1,6 @@
 {
     "Walkthrough": {
-        "titleOne": "Verwalten Sie Ihre Identität",
+        "titleOne": "Online-Ausweis",
         "descriptionOne": "Verwalten Sie Ihre Identität, um online und offline sicher zu sein",
         "registrationBtn": "Wallet einrichten",
         "recoveryBtn": "Identität importieren",
@@ -32,7 +32,7 @@
     "OnboardingBackup": {
         "header": "Backup hochladen?",
         "instruction": "Ziehen Sie den weißen Punkt in den Kreis zum Starten",
-        "skipBtn": "Ich hab keins"
+        "skipBtn": "Ich habe keins"
     },
     "RecoveryInfo": {
         "header": "Geheime Wortkombination vergessen?",
@@ -48,7 +48,7 @@
         "loader": "Fantastisch!\nDie Identität wird gesichert"
     },
     "SeedphraseWrite": {
-        "touchInstructions": "Legen Sie Ihren Finger auf den Kreis.",
+        "touchInstructions": "Halten Sie Ihren Finger auf den Kreis.",
         "writeInstructions": "Schreiben Sie die Sammlung von Wörtern genau so auf wie oben angezeigt. Bewahren Sie diese sicher auf!",
         "confirmBtn": "Fertig",
         "exitBtn": "Zurück zur Funktionsübersicht."
@@ -82,9 +82,9 @@
         "phoneNumberLabel": "Telefonnummer",
         "addressLabel": "Adresse",
         "addClaimBtn": "Hinzufügen",
-        "attributesMissingInfo": "Ihre Infos sehen ziemlich leer aus.\nErgänzen Sie sie für die zukünftigen Anwendungen.",
+        "attributesMissingInfo": "Ihre Infos sehen ziemlich leer aus.\nErgänzen Sie diese für die zukünftigen Anwendungen.",
         "headerAusweis": "Deine Identität",
-        "headerCredentials": ""
+        "headerCredentials": "Nachweise"
     },
     "BottomBar": {
         "identity": "Identität",
@@ -105,7 +105,7 @@
     },
     "CredentialForm": {
         "editHeader": "${attributeName} bearbeiten",
-        "subheader": "Sobald du auf \"Fertig\" klickst, wird es im Bereich \"Persönliche Infos\" angezeigt.",
+        "subheader": "Sobald Sie auf \"Fertig\" klicken, wird es im Bereich \"Persönliche Infos\" angezeigt.",
         "closeBtn": "Abbrechen",
         "confirmBtn": "Fertig",
         "addHeader": "Fügen Sie Ihren ${attributeName, smallcase} hinzu",
@@ -113,17 +113,17 @@
     },
     "CreatePasscode": {
         "createHeader": "Passcode erstellen",
-        "createSubheader": "Eine zusätzliche Sicherheitsebene hilft, unerlaubten Zugriff auf deine Wallet zu verhindern",
-        "helperText": "Du kannst den Passcode später ändern, indem du deine geheime Phrase verwendest"
+        "createSubheader": "Eine zusätzliche Sicherheitsebene hilft, unerlaubten Zugriff auf Ihre Wallet zu verhindern",
+        "helperText": "Sie können den Passcode später ändern, indem Sie Ihre geheime Phrase verwenden."
     },
     "VerifyPasscode": {
         "verifyHeader": "Passcode bestätigen",
-        "verifySubheader": "Eine zusätzliche Sicherheitsebene hilft, unerlaubten Zugriff auf deine Wallet zu verhindern",
+        "verifySubheader": "Eine zusätzliche Sicherheitsebene hilft, unerlaubten Zugriff auf Ihre Wallet zu verhindern",
         "resetBtn": "Zurücksetzen"
     },
     "Biometry": {
         "header": "Verwende ${biometryType} um die Wallet zu autorisieren",
-        "subheader": "So musst du deinen Passcode nicht jedes Mal bestätigen, wenn du die App öffnest",
+        "subheader": "So müssen Sie Ihren Passcode nicht jedes Mal bestätigen, wenn Sie die App öffnen",
         "activateBtn": "Zum Aktivieren antippen",
         "skipBtn": "Überspringen",
         "promptFaceId": "Scannen Sie Ihr Gesicht, um fortzufahren",
@@ -200,7 +200,7 @@
         "nfcCompatibilityTitle": "NFC Kompabilitätsproblem",
         "nfcCompatibilityMsg": "Leider unterstützt Ihr Telefon die erforderliche NFC-Funktionalität nicht",
         "nfcOffTitle": "NFC inaktiv",
-        "nfcOffMsg": "Um die Online-Ausweisfunktion zu nutzen müssen Sie NFC aktivieren",
+        "nfcOffMsg": "Um die Online-Ausweisfunktion zu nutzen, müssen Sie NFC aktivieren",
         "nfcOffBtn": "Einstellungen",
         "ausweisSuccessTitle": "Vorgang abgeschlossen",
         "ausweisSuccessMsg": "Identifikation war erfolgreich",
@@ -210,11 +210,11 @@
         "ausweisChangePinSuccessHeader": "Fertig",
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
         "copied": "",
-        "ausweisDeactivatedCardTitle": "",
-        "ausweisDeactivatedCardMsg": "",
-        "interactionSuccessRedirectTitle": "",
-        "interactionSuccessRedirectMsg": "",
-        "interactionSuccessRedirectBtn": ""
+        "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
+        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
+        "interactionSuccessRedirectTitle": "Erfolg",
+        "interactionSuccessRedirectMsg": "Kehren Sie hier zurück",
+        "interactionSuccessRedirectBtn": "Zurückkehren"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -307,11 +307,11 @@
         "imprintBlock": "Impressum",
         "deleteDataInfo": "Wenn Sie neu anfangen und alle Daten löschen wollen, die mit der Identität dieser Wallet zusammenhängen,",
         "deleteDataBtn": "klicken Sie hier",
-        "screenshotBlock": "",
-        "screenshotAlertTitle": "",
-        "screenshotAlertMsg": "",
-        "screenshotAlertCta": "",
-        "screenshotAlertCancel": ""
+        "screenshotBlock": "Screenshots erlauben",
+        "screenshotAlertTitle": "Achtung",
+        "screenshotAlertMsg": "Der Inhalt bleibt sichtbar, auch wenn Sie zu anderen Apps wechseln",
+        "screenshotAlertCta": "Aktivieren",
+        "screenshotAlertCancel": "Abbrechen"
     },
     "Language": {
         "english": "Englisch",
@@ -582,10 +582,14 @@
         "closeBtn": "Schließen",
         "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
         "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!",
-        "standaloneUnblockHeader": "Unlock the card from the <1>${screen}</1>",
-        "identityScreen": ""
+        "standaloneUnblockHeader": "Entsperren Sie Ihre Karte  <1>${screen}</1>",
+        "identityScreen": "Identität Bildschirm"
     },
     "Details": {
-        "expandBtn": ""
+        "expandBtn": "Mehr"
+    },
+    "I36:8226;0:900;0:954": "",
+    "Wallet": {
+        "prepareWallet": ""
     }
 }

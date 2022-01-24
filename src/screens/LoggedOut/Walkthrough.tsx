@@ -82,7 +82,7 @@ const Walkthrough: React.FC = () => {
     }
     await loader(
       createIdentity,
-      { showSuccess: false, loading: t('Entropy.loader') },
+      { showSuccess: false, loading: t('Wallet.prepareWallet') },
       handleDone,
     )
   }

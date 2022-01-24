@@ -48,8 +48,8 @@
         "loader": "Awesome!\nIdentity is being secured"
     },
     "SeedphraseWrite": {
-        "touchInstructions": "Place your finger on the circle",
-        "writeInstructions": "Write down the collection of words exactly as shown above. Keep this safe!",
+        "touchInstructions": "Hold your finger on the circle",
+        "writeInstructions": "Write down the collection of words exactly as shown below. Keep this safe!",
         "confirmBtn": "Done",
         "exitBtn": "Back to walkthrough"
     },
@@ -114,7 +114,7 @@
     "CreatePasscode": {
         "createHeader": "Create passcode",
         "createSubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
-        "helperText": "You can change the passcode later by using your secret phrase"
+        "helperText": "The passcode can be recovered later by using your secret phrase."
     },
     "VerifyPasscode": {
         "verifyHeader": "Verify passcode",
@@ -203,7 +203,7 @@
         "nfcOffMsg": "You need to enable NFC to use the online eID function",
         "nfcOffBtn": "Settings",
         "ausweisSuccessTitle": "Process completed",
-        "ausweisSuccessMsg": "Identificatiuon Data was shared successfully",
+        "ausweisSuccessMsg": "Identification Data was shared successfully",
         "ausweisFailedCheckTitle": "Check compatibility",
         "ausweisFailedCheckMsg": "Not the first time failing? \nStart compatibility diagnostics to be sure",
         "ausweisFailedCheckBtn": "Start",
@@ -548,7 +548,7 @@
         "pinBtn": "Start the process",
         "forgotHeader": "Can’t find any of this?",
         "forgotSubheader": "If you completely forgot your PIN and can not find your PIN letter, please turn to the competent authority",
-        "forgotBtn": "here"
+        "forgotBtn": "find more"
     },
     "AusweisPinInfo": {
         "header": "PIN information",
@@ -587,5 +587,9 @@
     },
     "Details": {
         "expandBtn": "See more"
+    },
+    "I36:8226;0:900;0:954": "Shared ",
+    "Wallet": {
+        "prepareWallet": "Preparing your wallet"
     }
 }

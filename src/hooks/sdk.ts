@@ -156,7 +156,7 @@ export const useRecordUserHasWrittenSeedPhrase = () => {
         })
       },
       {
-        loading: t('SeedphraseRepeat.confirmLoader'),
+        loading: t('Recovery.confirmLoader'),
         showFailed: false,
       },
       (error) => {
