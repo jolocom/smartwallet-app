@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { View, StyleSheet, Animated, Platform } from 'react-native'
+import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import { useRedirect } from '~/hooks/navigation'
@@ -16,7 +17,6 @@ import { useGetMnemonicPhrase } from '~/hooks/sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useDisableScreenshots } from '~/hooks/screenshots'
 import ScreenContainer from '~/components/ScreenContainer'
-import { debugView } from '~/utils/dev'
 import BP from '~/utils/breakpoints'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
@@ -28,6 +28,7 @@ const vibrationOptions = {
 
 const SeedPhraseWrite: React.FC = () => {
   const { t } = useTranslation()
+  const { top } = useSafeArea()
   const redirect = useRedirect()
   const {
     gestureState,
@@ -57,7 +58,6 @@ const SeedPhraseWrite: React.FC = () => {
         setShowInfo(true)
         break
       case GestureState.Success:
-        console.log('gesture is success')
         ReactNativeHapticFeedback.trigger('impactLight', vibrationOptions)
         Animated.parallel([
           hideMagicBtn,
@@ -137,6 +137,11 @@ const SeedPhraseWrite: React.FC = () => {
     </Animated.View>
   )
 
+  const handleClarifySeedPhrase = () => {
+    redirect(ScreenNames.GlobalModals, {
+      screen: ScreenNames.SeedPhraseInfo,
+    })
+  }
   return (
     <>
       {/*This is an overlay screen*/}
@@ -163,36 +168,44 @@ const SeedPhraseWrite: React.FC = () => {
         </View>
       </Animated.View>
       {/*This is actual screen with the mnemonicPhrase*/}
-      <ScreenContainer
-        hasHeaderBack
-        navigationStyles={{
-          backgroundColor: Colors.mainBlack,
-        }}
-        customStyles={{
-          justifyContent: 'flex-start',
-          backgroundColor: Colors.mainBlack,
-        }}
-      >
-        <JoloText
-          weight={JoloTextWeight.medium}
-          customStyles={{ marginTop: 8, paddingHorizontal: 36 }}
-        >
-          {t('SeedphraseWrite.writeInstructions')}
-        </JoloText>
-        <JoloText
-          weight={JoloTextWeight.medium}
-          customStyles={{
-            color: Colors.success,
-            marginTop: 8,
-            paddingHorizontal: 36,
+      <>
+        {/* TODO: ScreenContainer header should support custom left/right headers*/}
+        <View style={[styles.floatingQuestion, { top: top + 5 }]}>
+          <TouchableOpacity onPress={handleClarifySeedPhrase}>
+            <InfoIcon />
+          </TouchableOpacity>
+        </View>
+        <ScreenContainer
+          hasHeaderBack
+          navigationStyles={{
+            backgroundColor: Colors.mainBlack,
           }}
-          color={Colors.success}
+          customStyles={{
+            justifyContent: 'flex-start',
+            backgroundColor: Colors.mainBlack,
+          }}
         >
-          {'You will not be able to view this again'}
-        </JoloText>
-        <View style={styles.phraseContainer}>{renderSeedphrase()}</View>
-        <AbsoluteBottom>{renderCTABtn()}</AbsoluteBottom>
-      </ScreenContainer>
+          <JoloText
+            weight={JoloTextWeight.medium}
+            customStyles={{ marginTop: 8, paddingHorizontal: 36 }}
+          >
+            {t('SeedphraseWrite.writeInstructions')}
+          </JoloText>
+          <JoloText
+            weight={JoloTextWeight.medium}
+            customStyles={{
+              color: Colors.success,
+              marginTop: 8,
+              paddingHorizontal: 36,
+            }}
+            color={Colors.success}
+          >
+            {'You will not be able to view this again'}
+          </JoloText>
+          <View style={styles.phraseContainer}>{renderSeedphrase()}</View>
+          <AbsoluteBottom>{renderCTABtn()}</AbsoluteBottom>
+        </ScreenContainer>
+      </>
     </>
   )
 }
@@ -204,6 +217,15 @@ const styles = StyleSheet.create({
   info: {
     width: '40%',
     marginTop: 20,
+  },
+  floatingQuestion: {
+    position: 'absolute',
+    right: 12,
+    zIndex: 10,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 
