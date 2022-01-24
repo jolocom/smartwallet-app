@@ -2,14 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 
 import { ScreenNames } from '~/types/screens'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
-import { resetAccount } from '~/modules/account/actions'
+import {
+  resetAccount,
+  setMnemonicWarningVisibility,
+} from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 
 import Section from './components/Section'
@@ -29,73 +32,85 @@ import { CaretRight, WarningIcon } from '~/assets/svg'
 import Space from '~/components/Space'
 import BP from '~/utils/breakpoints'
 import useSettings from '~/hooks/settings'
+import { getMnemonicWarningVisibility } from '~/modules/account/selectors'
 
 const MnemonicPhraseWarning = () => {
   const [isMnemonicWritten, setIsMnemonicWritten] =
     useState<boolean | undefined>(undefined)
   const { get: getFromStorage } = useSettings()
   const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const isMnemonicWarningVisible = useSelector(getMnemonicWarningVisibility)
 
   useEffect(() => {
     getFromStorage(StorageKeys.mnemonicPhrase).then((res) => {
+      setIsMnemonicWritten(res?.isWritten ? true : false)
       LayoutAnimation.configureNext({
         ...LayoutAnimation.Presets.easeInEaseOut,
         duration: 200,
       })
-      setIsMnemonicWritten(res?.isWritten ? true : false)
     })
   }, [])
+
+  useEffect(() => {
+    dispatch(setMnemonicWarningVisibility(!isMnemonicWritten))
+  }, [isMnemonicWritten])
 
   const handleNavigateToMnemonicPhrase = () => {
     navigation.navigate(ScreenNames.MnemonicPhrase)
   }
 
-  if (isMnemonicWritten === true || isMnemonicWritten === undefined) return null
-  return (
-    <TouchableOpacity
-      onPress={handleNavigateToMnemonicPhrase}
-      activeOpacity={0.9}
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: Colors.corn,
-        borderRadius: 9,
-        width: '100%',
-        paddingTop: 14,
-        paddingBottom: 11,
-        paddingLeft: 14,
-        paddingRight: 16,
-      }}
-    >
-      <View style={{ width: 40, height: 35 }}>
-        <WarningIcon />
-      </View>
-      <JoloText
-        customStyles={{
-          fontSize: BP({ large: 16, default: 14 }),
-          lineHeight: BP({ large: 16, default: 14 }),
-          fontFamily: Fonts.Medium,
-          textAlign: 'left',
-          marginLeft: 14,
-          marginRight: 7,
-          flex: 1,
-          flexWrap: 'wrap',
-        }}
-        color={Colors.black}
-      >
-        Your data run the risk of being irreversibly lost, please proceeed with
-        the seedphrase
-      </JoloText>
-      <CaretRight fillColor={Colors.black} />
-    </TouchableOpacity>
-  )
+  if (isMnemonicWarningVisible === true)
+    return (
+      <>
+        <TouchableOpacity
+          onPress={handleNavigateToMnemonicPhrase}
+          activeOpacity={0.9}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: Colors.corn,
+            borderRadius: 9,
+            width: '100%',
+            paddingTop: 14,
+            paddingBottom: 11,
+            paddingLeft: 14,
+            paddingRight: 16,
+          }}
+        >
+          <View style={{ width: 40, height: 35 }}>
+            <WarningIcon />
+          </View>
+          <JoloText
+            customStyles={{
+              fontSize: BP({ large: 16, default: 14 }),
+              lineHeight: BP({ large: 16, default: 14 }),
+              fontFamily: Fonts.Medium,
+              textAlign: 'left',
+              marginLeft: 14,
+              marginRight: 7,
+              flex: 1,
+              flexWrap: 'wrap',
+            }}
+            color={Colors.black}
+          >
+            Your data run the risk of being irreversibly lost, please proceeed
+            with the seedphrase
+          </JoloText>
+          <CaretRight fillColor={Colors.black} />
+        </TouchableOpacity>
+        <Space height={17} />
+      </>
+    )
+  return null
 }
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
   const resetServiceValuesInKeychain = useResetKeychainValues()
   const { resetBiometry } = useBiometry()
   const { shouldWarnBackup } = useBackup()
+  const { set: setStorageValue } = useSettings()
   const { rateApp } = useMarketRating()
 
   const dispatch = useDispatch()
@@ -104,6 +119,10 @@ const SettingsGeneral: React.FC = () => {
     try {
       await resetBiometry()
       await resetServiceValuesInKeychain()
+      // @ts-expect-error TODO: we should unite StorageKeys and SettingKeys
+      await setStorageValue(StorageKeys.mnemonicPhrase, {
+        isWritten: false,
+      })
       dispatch(resetAccount())
     } catch (err) {
       console.log('Error occured while logging out')
@@ -143,7 +162,6 @@ const SettingsGeneral: React.FC = () => {
         <Section>
           <Section.Title>{t('Settings.securitySection')}</Section.Title>
           <MnemonicPhraseWarning />
-          <Space height={17} />
           <Section.Block>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}

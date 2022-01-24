@@ -10,6 +10,7 @@ export enum AccountActions {
   setScreenHeight = 'setScreenHeight',
   setCurrentLanguage = 'setCurrentLanguage',
   setAppDisabled = 'setAppDisabled',
+  setMnemonicWarningVisibility = 'setMnemonicWarningVisibility',
 }
 
 export interface AccountState {
@@ -21,4 +22,5 @@ export interface AccountState {
   screenHeight: number
   currentLanguage: Locales
   isAppDisabled: boolean
+  isMnemonicWarningVisible: boolean | undefined
 }

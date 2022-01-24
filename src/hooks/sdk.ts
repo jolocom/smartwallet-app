@@ -6,7 +6,12 @@ import { Agent } from 'react-native-jolocom'
 
 import { AgentContext } from '~/utils/sdk/context'
 import { useLoader } from './loader'
-import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
+import {
+  setDid,
+  setLogged,
+  setLocalAuth,
+  setMnemonicWarningVisibility,
+} from '~/modules/account/actions'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import useTermsConsent from './consent'
 import { makeInitializeCredentials, useCredentials } from './signedCredentials'
@@ -133,6 +138,7 @@ export const useRecordUserHasWrittenSeedPhrase = () => {
   const loader = useLoader()
   const { scheduleErrorWarning } = useToasts()
   const { t } = useTranslation()
+  const dispatch = useDispatch()
 
   return async (onSuccess: () => void) => {
     await loader(
@@ -157,6 +163,7 @@ export const useRecordUserHasWrittenSeedPhrase = () => {
         if (error) {
           scheduleErrorWarning(error)
         } else {
+          dispatch(setMnemonicWarningVisibility(false))
           onSuccess()
         }
       },
