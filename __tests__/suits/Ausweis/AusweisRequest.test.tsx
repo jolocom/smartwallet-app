@@ -48,7 +48,7 @@ jest.mock('../../../src/hooks/connection', () => ({
   }),
 }))
 
-describe('Ausweis review sceen', () => {
+describe('Ausweis request screen', () => {
   const mockSettingsGet = jest.fn()
   const mockPopStack = jest.fn()
   const mockNavigate = jest.fn()
