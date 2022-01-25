@@ -89,7 +89,9 @@ global.__reanimatedWorkletInit = jest.fn()
 
 jest.mock('@react-native-community/netinfo', () => ({
   RNCNetInfo: 'N/A',
-  useNetInfo: jest.fn(),
+  useNetInfo: jest.fn().mockReturnValue({
+    isConnected: true,
+  }),
 }))
 
 jest.mock('react-native-keyboard-aware-scroll-view', () => {
@@ -103,8 +105,8 @@ jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 jest.mock('react-native-nfc-manager', () => ({
   __esModule: true,
   default: {
-    isSupported: jest.fn(),
-    isEnabled: jest.fn(),
+    isSupported: jest.fn().mockReturnValue(true),
+    isEnabled: jest.fn().mockReturnValue(true),
     start: jest.fn().mockResolvedValue(true),
   },
 }))

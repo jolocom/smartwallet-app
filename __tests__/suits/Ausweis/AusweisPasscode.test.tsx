@@ -1,11 +1,9 @@
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
-import { useNetInfo } from '@react-native-community/netinfo'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 
 import React from 'react'
-import nfcManager from 'react-native-nfc-manager'
 import { AusweisPasscode } from '~/screens/LoggedIn/eID/components'
 import {
   AusweisFlow,
@@ -26,17 +24,12 @@ describe('Ausweis passcode screen', () => {
   let mockedNavigation = jest.fn()
   let mockedNavigationDispatch = jest.fn()
   beforeAll(() => {
-    ;(nfcManager.isSupported as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.isEnabled as jest.Mock).mockReturnValue(true)
     ;(aa2Module.setHandlers as jest.Mock).mockImplementation((handlers) => {
       registeredHandlers = handlers
     })
     ;(useNavigation as jest.Mock).mockReturnValue({
       navigate: mockedNavigation,
       dispatch: mockedNavigationDispatch,
-    })
-    ;(useNetInfo as jest.Mock).mockReturnValue({
-      isConnected: true,
     })
     jest.spyOn(eIDHooks, 'useAusweisScanner').mockReturnValue({
       updateScanner: jest

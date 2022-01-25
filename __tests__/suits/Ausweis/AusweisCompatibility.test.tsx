@@ -2,7 +2,6 @@ import React from 'react'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
-import nfcManager from 'react-native-nfc-manager'
 import { Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -70,10 +69,6 @@ describe('Ausweis compatibility check screen', () => {
     // mock navigation related hooks (defined in the app)
     ;(useRedirect as jest.Mock).mockReturnValue(mockRedirect)
     ;(usePopStack as jest.Mock).mockReturnValue(jest.fn)
-    // mock react-native-nfc-manager used properties
-    ;(nfcManager.isSupported as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.isEnabled as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.start as jest.Mock).mockResolvedValue(true)
     /**
      * TODO: this is a repetition
      * (declaration of registeredHandlers var)
@@ -91,7 +86,6 @@ describe('Ausweis compatibility check screen', () => {
           params.onDone && params.onDone()
         }),
       showScanner: mockShowScanner,
-      scannerParams: {},
     })
   })
   afterEach(() => {

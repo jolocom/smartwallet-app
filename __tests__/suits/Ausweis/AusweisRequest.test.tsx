@@ -1,7 +1,6 @@
 import React from 'react'
 import { act } from '@testing-library/react-hooks'
 import { fireEvent, waitFor } from '@testing-library/react-native'
-import nfcManager from 'react-native-nfc-manager'
 import { useNavigation } from '@react-navigation/native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 
@@ -61,8 +60,6 @@ describe('Ausweis request screen', () => {
         scannerKey: null,
       },
     })
-    ;(nfcManager.isSupported as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.isEnabled as jest.Mock).mockReturnValue(true)
     ;(useNavigation as jest.Mock).mockReturnValue({
       navigate: mockNavigate,
     })

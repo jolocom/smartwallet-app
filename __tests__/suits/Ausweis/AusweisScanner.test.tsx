@@ -1,7 +1,5 @@
 import React from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import nfcManager from 'react-native-nfc-manager'
-import { useNetInfo } from '@react-native-community/netinfo'
 
 import {
   getMockedDispatch,
@@ -25,11 +23,6 @@ describe('Ausweis scanner screen', () => {
   const mockCheckNfcSupport = jest.fn()
   const mockDispatchFn = getMockedDispatch()
   beforeAll(() => {
-    ;(nfcManager.isSupported as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.isEnabled as jest.Mock).mockReturnValue(true)
-    ;(useNetInfo as jest.Mock).mockReturnValue({
-      isConnected: true,
-    })
     mockSelectorReturn({
       toasts: {
         active: null,

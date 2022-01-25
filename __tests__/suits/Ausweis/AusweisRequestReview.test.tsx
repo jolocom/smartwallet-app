@@ -3,7 +3,6 @@ import { within } from '@testing-library/react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation } from '@react-navigation/native'
-import nfcManager from 'react-native-nfc-manager'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 
 import { usePopStack, useRedirect } from '../../../src/hooks/navigation'
@@ -48,8 +47,6 @@ describe('Ausweis request review screen', () => {
   const mockShowScanner = jest.fn()
   let registeredHandlers: Partial<EventHandlers>
   beforeAll(() => {
-    ;(nfcManager.isSupported as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.isEnabled as jest.Mock).mockReturnValue(true)
     ;(useNavigation as jest.Mock).mockReturnValue({
       navigate: mockedNavigation,
     })

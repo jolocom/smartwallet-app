@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import React from 'react'
 import { Platform } from 'react-native'
-import nfcManager from 'react-native-nfc-manager'
 
 import eIDHooks from '../../../src/screens/LoggedIn/eID/hooks'
 import { AusweisIdentity } from '~/screens/LoggedIn/Identity/AusweisIdentity'
@@ -46,11 +45,6 @@ describe('Ausweis identity screen', () => {
       goBack: jest.fn(),
     })
     ;(useRedirect as jest.Mock).mockReturnValue(mockRedirect)
-    // mock react-native-nfc-manager used properties
-    ;(nfcManager.isSupported as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.isEnabled as jest.Mock).mockReturnValue(true)
-    // mock react-native-ausweis used properties
-    ;(nfcManager.start as jest.Mock).mockResolvedValue(true)
 
     jest.spyOn(eIDHooks, 'useAusweisScanner').mockReturnValue({
       updateScanner: jest

@@ -7,7 +7,6 @@ import AusweisChangePin from '~/screens/LoggedIn/eID/components/AusweisChangePin
 import { AusweisScannerParams } from '~/screens/LoggedIn/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import eIDHooks from '~/screens/LoggedIn/eID/hooks'
-import nfcManager from 'react-native-nfc-manager'
 import { useGoBack, usePopStack } from '~/hooks/navigation'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import { mockSelectorReturn } from '../../mocks/libs/react-redux'
@@ -37,9 +36,6 @@ describe('Ausweis change pin screen', () => {
         scannerKey: '123',
       },
     })
-    ;(nfcManager.isSupported as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.isEnabled as jest.Mock).mockReturnValue(true)
-    ;(nfcManager.start as jest.Mock).mockResolvedValue(true)
     ;(useNavigation as jest.Mock).mockReturnValue({
       navigate: mockNavigate,
       goBack: jest.fn(),
@@ -64,7 +60,6 @@ describe('Ausweis change pin screen', () => {
           params.onDone && params.onDone()
         }),
       showScanner: mockShowScanner,
-      scannerParams: {},
     })
   })
   afterEach(() => {
