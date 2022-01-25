@@ -176,7 +176,12 @@ describe('Ausweis compatibility check screen', () => {
     })
     await findByText('AusweisCompatibility.checkSuccess')
   })
-  test('user is able to initiate compatibility check on iOS', async () => {
+  /**
+   * NOTE: Compatibility check wouldn't work in the run_auth
+   * flow on iOS; there is no way as of now how to receive READER msg;
+   * the test case below is a hypothetical happy path
+   */
+  test.skip('user is able to initiate compatibility check on iOS', async () => {
     ;(Platform.select as jest.Mock).mockImplementation((implObj) => {
       implObj['ios']()
     })
