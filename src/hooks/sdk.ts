@@ -205,8 +205,8 @@ export const useShouldRecoverFromSeed = (phrase: string[]) => {
   }
 }
 
-export const useGetMnemonicPhrase = () => {
-  const [mnemonicPhrase, setMnemonicPhrase] = useState('')
+export const useGetSeedPhrase = () => {
+  const [seedphrase, setSeedphrase] = useState('')
   const agent = useAgent()
 
   const getMnemonic = async () => {
@@ -229,8 +229,8 @@ export const useGetMnemonicPhrase = () => {
   useEffect(() => {
     // TODO: we need to handle errors in a way that will
     // allow devs to track it back
-    getMnemonic().then(setMnemonicPhrase).catch(console.warn)
+    getMnemonic().then(setSeedphrase).catch(console.warn)
   }, [])
 
-  return mnemonicPhrase
+  return seedphrase
 }

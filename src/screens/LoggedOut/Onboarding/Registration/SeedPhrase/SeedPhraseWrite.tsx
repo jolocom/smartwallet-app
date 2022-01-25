@@ -13,7 +13,7 @@ import { InfoIcon } from '~/assets/svg'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
-import { useGetMnemonicPhrase } from '~/hooks/sdk'
+import { useGetSeedPhrase } from '~/hooks/sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useDisableScreenshots } from '~/hooks/screenshots'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -37,7 +37,7 @@ const SeedPhraseWrite: React.FC = () => {
     gestureHandlers,
   } = useCircleHoldAnimation(1200)
   const [showInfo, setShowInfo] = useState(true)
-  const mnemonicPhrase = useGetMnemonicPhrase()
+  const seedPhrase = useGetSeedPhrase()
 
   useDisableScreenshots()
 
@@ -95,7 +95,7 @@ const SeedPhraseWrite: React.FC = () => {
         opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
       }}
     >
-      {mnemonicPhrase.split(' ').map((w) => (
+      {seedPhrase.split(' ').map((w) => (
         <WordPill.Write key={w}>{w}</WordPill.Write>
       ))}
     </Animated.View>
@@ -167,7 +167,7 @@ const SeedPhraseWrite: React.FC = () => {
           {renderMagicInfo()}
         </View>
       </Animated.View>
-      {/*This is actual screen with the mnemonicPhrase*/}
+      {/*This is actual screen with the seedPhrase*/}
       <>
         {/* TODO: ScreenContainer header should support custom left/right headers*/}
         <View style={[styles.floatingQuestion, { top: top + 5 }]}>

@@ -6,7 +6,7 @@ import { usePopStack } from '~/hooks/navigation'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 import {
-  useGetMnemonicPhrase,
+  useGetSeedPhrase,
   useRecordUserHasWrittenSeedPhrase,
 } from '~/hooks/sdk'
 import shuffleArray from '~/utils/arrayUtils'
@@ -20,7 +20,7 @@ import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 const SeedPhraseRepeat: React.FC = () => {
   const recordUserHasWrittenSeedPhrase = useRecordUserHasWrittenSeedPhrase()
-  const mnemonicPhrase = useGetMnemonicPhrase()
+  const seedPhrase = useGetSeedPhrase()
   const showFailedLoader = useFailed()
   const popStack = usePopStack()
   const { t } = useTranslation()
@@ -32,7 +32,7 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const isFirstFragment = useRef(Boolean(Math.round(Math.random())))
 
-  const phraseArr = mnemonicPhrase.split(' ')
+  const phraseArr = seedPhrase.split(' ')
   const phraseFragmentFirst = phraseArr.slice(0, 6)
   const phraseFragmentLast = phraseArr.slice(6, 12)
 
@@ -43,7 +43,7 @@ const SeedPhraseRepeat: React.FC = () => {
   useEffect(() => {
     const shuffled = shuffleArray(usedFragment)
     setShuffledSeedphrase(shuffled)
-  }, [mnemonicPhrase])
+  }, [seedPhrase])
 
   const handlePhraseUpdate = (phrase: string[]) => {
     if (JSON.stringify(phrase) !== JSON.stringify(shuffledSeedphrase)) {
@@ -68,7 +68,7 @@ const SeedPhraseRepeat: React.FC = () => {
     if (!shuffledSeedphrase) return false
 
     return shuffledSeedphrase.join(' ') === usedFragment.join(' ')
-  }, [JSON.stringify(shuffledSeedphrase), mnemonicPhrase])
+  }, [JSON.stringify(shuffledSeedphrase), seedPhrase])
 
   return (
     <ScreenContainer
