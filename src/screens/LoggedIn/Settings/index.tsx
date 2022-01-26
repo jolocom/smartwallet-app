@@ -1,115 +1,31 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native'
+import React, { useCallback } from 'react'
+import { Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-
 import { ScreenNames } from '~/types/screens'
-import { Fonts, JoloTextSizes } from '~/utils/fonts'
-import {
-  resetAccount,
-  setMnemonicWarningVisibility,
-} from '~/modules/account/actions'
+import { resetAccount } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
-
 import Section from './components/Section'
-import { Colors } from '~/utils/colors'
 import Option from './components/Option'
 import DevelopmentSection from './Development'
 import EnableBiometryOption from './EnableBiometryOption'
 import { useBiometry } from '~/hooks/biometry'
-import useBackup from '~/hooks/backup'
 import useMarketRating from '~/hooks/rateus'
-import { StorageKeys, useAgent } from '~/hooks/sdk'
+import { StorageKeys } from '~/hooks/sdk'
 import ClearIdentityBtn from './components/ClearIdentityBtn'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useTranslation from '~/hooks/useTranslation'
 import EnableScreenshotsOption from './EnableScreenshotsOption'
-import { CaretRight, WarningIcon } from '~/assets/svg'
-import Space from '~/components/Space'
-import BP from '~/utils/breakpoints'
 import useSettings from '~/hooks/settings'
-import { getMnemonicWarningVisibility } from '~/modules/account/selectors'
+import MnemonicPhraseWarning from './MnemonicPhraseWarning'
 
-const MnemonicPhraseWarning = () => {
-  const [isMnemonicWritten, setIsMnemonicWritten] =
-    useState<boolean | undefined>(undefined)
-  const { get: getFromStorage } = useSettings()
-  const navigation = useNavigation()
-  const dispatch = useDispatch()
-  const isMnemonicWarningVisible = useSelector(getMnemonicWarningVisibility)
-
-  useEffect(() => {
-    getFromStorage(StorageKeys.mnemonicPhrase).then((res) => {
-      setIsMnemonicWritten(res?.isWritten ? true : false)
-      LayoutAnimation.configureNext({
-        ...LayoutAnimation.Presets.easeInEaseOut,
-        duration: 200,
-      })
-    })
-  }, [])
-
-  useEffect(() => {
-    dispatch(setMnemonicWarningVisibility(!isMnemonicWritten))
-  }, [isMnemonicWritten])
-
-  const handleNavigateToMnemonicPhrase = () => {
-    navigation.navigate(ScreenNames.MnemonicPhrase)
-  }
-
-  if (isMnemonicWarningVisible === true)
-    return (
-      <>
-        <TouchableOpacity
-          onPress={handleNavigateToMnemonicPhrase}
-          activeOpacity={0.9}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: Colors.corn,
-            borderRadius: 9,
-            width: '100%',
-            paddingTop: 14,
-            paddingBottom: 11,
-            paddingLeft: 14,
-            paddingRight: 16,
-          }}
-        >
-          <View style={{ width: 40, height: 35 }}>
-            <WarningIcon />
-          </View>
-          <JoloText
-            customStyles={{
-              fontSize: BP({ large: 16, default: 14 }),
-              lineHeight: BP({ large: 16, default: 14 }),
-              fontFamily: Fonts.Medium,
-              textAlign: 'left',
-              marginLeft: 14,
-              marginRight: 7,
-              flex: 1,
-              flexWrap: 'wrap',
-            }}
-            color={Colors.black}
-          >
-            Your data run the risk of being irreversibly lost, please proceeed
-            with the seedphrase
-          </JoloText>
-          <CaretRight fillColor={Colors.black} />
-        </TouchableOpacity>
-        <Space height={17} />
-      </>
-    )
-  return null
-}
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
   const resetServiceValuesInKeychain = useResetKeychainValues()
   const { resetBiometry } = useBiometry()
-  const { shouldWarnBackup } = useBackup()
   const { set: setStorageValue } = useSettings()
   const { rateApp } = useMarketRating()
 
