@@ -311,7 +311,8 @@
         "screenshotAlertTitle": "Pay attention",
         "screenshotAlertMsg": "All content will be visible when switching between apps running in the background",
         "screenshotAlertCta": "Turn on",
-        "screenshotAlertCancel": "Cancel"
+        "screenshotAlertCancel": "Cancel",
+        "mnemonicPhraseWarning": "Your data run the risk of being irreversibly lost, please proceed with the seedphrase"
     },
     "Language": {
         "english": "English",
@@ -588,7 +589,6 @@
     "Details": {
         "expandBtn": "See more"
     },
-    "I36:8226;0:900;0:954": "Shared ",
     "Wallet": {
         "prepareWallet": "Preparing your wallet"
     }

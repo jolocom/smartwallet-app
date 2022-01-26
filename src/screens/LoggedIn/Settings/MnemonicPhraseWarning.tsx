@@ -13,6 +13,7 @@ import JoloText from '~/components/JoloText'
 import Space from '~/components/Space'
 import { StorageKeys } from '~/hooks/sdk'
 import useSettings from '~/hooks/settings'
+import useTranslation from '~/hooks/useTranslation'
 import { setMnemonicWarningVisibility } from '~/modules/account/actions'
 import { getMnemonicWarningVisibility } from '~/modules/account/selectors'
 import { ScreenNames } from '~/types/screens'
@@ -27,6 +28,7 @@ const MnemonicPhraseWarning = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const isMnemonicWarningVisible = useSelector(getMnemonicWarningVisibility)
+  const { t } = useTranslation()
 
   useEffect(() => {
     getFromStorage(StorageKeys.mnemonicPhrase).then((res) => {
@@ -58,8 +60,7 @@ const MnemonicPhraseWarning = () => {
             <WarningIcon />
           </View>
           <JoloText customStyles={styles.warningText} color={Colors.black}>
-            Your data run the risk of being irreversibly lost, please proceeed
-            with the seedphrase
+            {t('Settings.mnemonicPhraseWarning')}
           </JoloText>
           <CaretRight fillColor={Colors.black} />
         </TouchableOpacity>

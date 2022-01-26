@@ -311,7 +311,8 @@
         "screenshotAlertTitle": "Achtung",
         "screenshotAlertMsg": "Der Inhalt bleibt sichtbar, auch wenn Sie zu anderen Apps wechseln",
         "screenshotAlertCta": "Aktivieren",
-        "screenshotAlertCancel": "Abbrechen"
+        "screenshotAlertCancel": "Abbrechen",
+        "mnemonicPhraseWarning": ""
     },
     "Language": {
         "english": "Englisch",
@@ -588,7 +589,6 @@
     "Details": {
         "expandBtn": "Mehr"
     },
-    "I36:8226;0:900;0:954": "",
     "Wallet": {
         "prepareWallet": ""
     }
