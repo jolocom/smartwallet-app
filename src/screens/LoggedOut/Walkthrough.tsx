@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ImageBackground, StyleSheet, View, Platform } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
@@ -18,19 +18,70 @@ import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { useLoader } from '~/hooks/loader'
 import { useCreateIdentity } from '~/hooks/sdk'
-import { setLogged } from '~/modules/account/actions'
+import { setLogged, setTermsConsentVisibility } from '~/modules/account/actions'
+import {
+  getIsTermsConsentOutdated,
+  getIsTermsConsentVisible,
+} from '~/modules/account/selectors'
+import { usePrevious } from '~/hooks/generic'
+
+const useWalkthroughProceed = () => {
+  const loader = useLoader()
+  const createIdentity = useCreateIdentity()
+  const dispatch = useDispatch()
+  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
+  const isTermsConsentVisible = useSelector(getIsTermsConsentVisible)
+  const redirect = useRedirect()
+  const { t } = useTranslation()
+  const pendingActionRef = useRef(() => {})
+  const prevTermsConsetVisibility = usePrevious(isTermsConsentVisible)
+
+  useEffect(() => {
+    if (isTermsConsentVisible === false && prevTermsConsetVisibility === true) {
+      setTimeout(() => {
+        pendingActionRef.current()
+      }, 100)
+    }
+  }, [isTermsConsentVisible])
+
+  const registerUser = async () => {
+    const handleDone = (error: any) => {
+      if (!error) {
+        dispatch(setLogged(true))
+      }
+    }
+    await loader(
+      createIdentity,
+      { showSuccess: false, loading: t('Wallet.prepareWallet') },
+      handleDone,
+    )
+  }
+  const handleProceed = (cb: () => Promise<void>) => {
+    return () => {
+      if (isTermsConsentOutdated) {
+        dispatch(setTermsConsentVisibility(true))
+        pendingActionRef.current = cb
+      } else {
+        cb()
+      }
+    }
+  }
+  const handleRegistration = handleProceed(registerUser)
+  const handleRecovery = handleProceed(async () => {
+    redirect(ScreenNames.IdentityRecovery)
+  })
+  return { handleRegistration, handleRecovery }
+}
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
   <View style={styles.dot}>
     <View style={active ? styles.activeDot : styles.inactiveDot} />
   </View>
 )
+
 const Walkthrough: React.FC = () => {
-  const redirect = useRedirect()
   const { t } = useTranslation()
-  const loader = useLoader()
-  const createIdentity = useCreateIdentity()
-  const dispatch = useDispatch()
+  const { handleRegistration, handleRecovery } = useWalkthroughProceed()
 
   const walkthroughData = [
     {
@@ -73,19 +124,6 @@ const Walkthrough: React.FC = () => {
       clearTimeout(id)
     }
   }, [])
-
-  const handleGetStarted = async () => {
-    const handleDone = (error: any) => {
-      if (!error) {
-        dispatch(setLogged(true))
-      }
-    }
-    await loader(
-      createIdentity,
-      { showSuccess: false, loading: t('Wallet.prepareWallet') },
-      handleDone,
-    )
-  }
 
   return (
     <ScreenContainer
@@ -137,13 +175,13 @@ const Walkthrough: React.FC = () => {
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn size={BtnSize.large} onPress={handleGetStarted}>
+          <Btn size={BtnSize.large} onPress={handleRegistration}>
             {t('Walkthrough.registrationBtn')}
           </Btn>
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={() => redirect(ScreenNames.Onboarding)}
+            onPress={handleRecovery}
           >
             {t('Walkthrough.recoveryBtn')}
           </Btn>

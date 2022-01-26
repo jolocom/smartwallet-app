@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+} from 'react-native'
+import { useSelector } from 'react-redux'
 
 import {
   termsOfServiceEN,
@@ -21,6 +28,7 @@ import useTermsConsent from '~/hooks/consent'
 import { useAgent } from '~/hooks/sdk'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
+import { getIsTermsConsentVisible } from '~/modules/account/selectors'
 
 const legalTextConfig = [
   { title: 'Terms of Service', content: termsOfServiceEN },
@@ -66,74 +74,81 @@ const TermsConsent: React.FC = () => {
   const [accepted, setAccepted] = useState(false)
 
   return (
-    <ScreenContainer customStyles={{ paddingHorizontal: 0, paddingTop: 20 }}>
-      <View style={styles.header}>
-        <JoloText
-          kind={JoloTextKind.title}
-          size={JoloTextSizes.middle}
-          color={Colors.white85}
-          customStyles={{ textAlign: 'left' }}
-        >
-          {t('TermsConsent.header')}
-        </JoloText>
-      </View>
-      <View style={styles.termsWrapper}>
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 200 }}
-          showsVerticalScrollIndicator={false}
-          overScrollMode={'never'}
-        >
+    <Modal
+      visible
+      statusBarTranslucent
+      animationType="fade"
+      presentationStyle="overFullScreen"
+    >
+      <ScreenContainer customStyles={{ paddingHorizontal: 0, paddingTop: 20 }}>
+        <View style={styles.header}>
           <JoloText
-            kind={JoloTextKind.subtitle}
+            kind={JoloTextKind.title}
             size={JoloTextSizes.middle}
-            color={Colors.white80}
-            customStyles={{
-              textAlign: 'left',
-              marginBottom: BP({ default: 32, medium: 54, large: 54 }),
-            }}
+            color={Colors.white85}
+            customStyles={{ textAlign: 'left' }}
           >
-            {t('TermsConsent.subheader')}
+            {t('TermsConsent.header')}
           </JoloText>
-          {legalTextConfig.map(({ title, content }) => (
-            <ExpandingButton title={title} content={content} />
-          ))}
-        </ScrollView>
-      </View>
-      <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
-        <TouchableOpacity
-          onPress={() => setAccepted(!accepted)}
-          style={styles.acceptWrapper}
-        >
-          <View style={{ flex: 0.1 }}>
-            <View
-              style={[
-                styles.checkboxBase,
-                accepted ? styles.checkboxActive : styles.checkboxInactive,
-              ]}
-            >
-              {accepted && <CheckmarkIconSmall />}
-            </View>
-          </View>
-          <View style={{ paddingLeft: 20, flex: 0.9 }}>
+        </View>
+        <View style={styles.termsWrapper}>
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 200 }}
+            showsVerticalScrollIndicator={false}
+            overScrollMode={'never'}
+          >
             <JoloText
               kind={JoloTextKind.subtitle}
-              size={JoloTextSizes.mini}
-              color={Colors.white90}
-              customStyles={{ textAlign: 'left' }}
+              size={JoloTextSizes.middle}
+              color={Colors.white80}
+              customStyles={{
+                textAlign: 'left',
+                marginBottom: BP({ default: 32, medium: 54, large: 54 }),
+              }}
             >
-              {t('TermsConsent.footer')}
+              {t('TermsConsent.subheader')}
             </JoloText>
-          </View>
-        </TouchableOpacity>
-        <Btn
-          customContainerStyles={{ width: '100%' }}
-          onPress={() => acceptConsent(agent)}
-          disabled={!accepted}
-        >
-          {t('TermsConsent.footerBtn')}
-        </Btn>
-      </BottomSheet>
-    </ScreenContainer>
+            {legalTextConfig.map(({ title, content }) => (
+              <ExpandingButton title={title} content={content} />
+            ))}
+          </ScrollView>
+        </View>
+        <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
+          <TouchableOpacity
+            onPress={() => setAccepted(!accepted)}
+            style={styles.acceptWrapper}
+          >
+            <View style={{ flex: 0.1 }}>
+              <View
+                style={[
+                  styles.checkboxBase,
+                  accepted ? styles.checkboxActive : styles.checkboxInactive,
+                ]}
+              >
+                {accepted && <CheckmarkIconSmall />}
+              </View>
+            </View>
+            <View style={{ paddingLeft: 20, flex: 0.9 }}>
+              <JoloText
+                kind={JoloTextKind.subtitle}
+                size={JoloTextSizes.mini}
+                color={Colors.white90}
+                customStyles={{ textAlign: 'left' }}
+              >
+                {t('TermsConsent.footer')}
+              </JoloText>
+            </View>
+          </TouchableOpacity>
+          <Btn
+            customContainerStyles={{ width: '100%' }}
+            onPress={() => acceptConsent(agent)}
+            disabled={!accepted}
+          >
+            {t('TermsConsent.footerBtn')}
+          </Btn>
+        </BottomSheet>
+      </ScreenContainer>
+    </Modal>
   )
 }
 
@@ -177,4 +192,8 @@ const styles = StyleSheet.create({
   },
 })
 
-export default TermsConsent
+export default () => {
+  const isTermsConsentVisible = useSelector(getIsTermsConsentVisible)
+  if (isTermsConsentVisible) return <TermsConsent />
+  return null
+}
