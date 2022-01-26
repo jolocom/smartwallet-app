@@ -1,5 +1,6 @@
 import React from 'react'
 import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ArrowDown } from '~/assets/svg'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
@@ -90,6 +91,24 @@ const StyledErrorText: React.FC = ({ children }) => (
   </JoloText>
 )
 
+const StyledDirectionArrow: React.FC = () => (
+  <View
+    style={{
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <View
+      style={{
+        position: 'absolute',
+        right: 40,
+      }}
+    >
+      <ArrowDown />
+    </View>
+  </View>
+)
+
 StyledHeader.Left = StyledHeaderLeft
 StyledHeader.Right = StyledHeaderRight
 
@@ -101,6 +120,7 @@ const SeedPhrase = {
     ErrorText: StyledErrorText,
     ActiveArea: StyledActiveArea,
     CTA: StyledCTA,
+    DirectionArrow: StyledDirectionArrow,
   },
 }
 
