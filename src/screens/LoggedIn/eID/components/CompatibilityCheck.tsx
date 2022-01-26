@@ -77,7 +77,6 @@ export const CompatibilityCheck = () => {
         showsVerticalScrollIndicator={false}
         overScrollMode={'never'}
         contentContainerStyle={{
-          paddingTop: 500,
           paddingBottom: 230,
         }}
       >
