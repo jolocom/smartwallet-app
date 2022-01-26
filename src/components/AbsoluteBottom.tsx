@@ -9,7 +9,9 @@ interface PropsI {
 const AbsoluteBottom: React.FC<PropsI> = ({ children, customStyles }) => {
   const { bottom } = useSafeArea()
   return (
-    <View style={[styles.container, { bottom: bottom + 16 }, customStyles]}>
+    <View
+      style={[styles.container, { paddingBottom: bottom + 16 }, customStyles]}
+    >
       {children}
     </View>
   )
@@ -19,6 +21,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     position: 'absolute',
+    bottom: 0,
     justifyContent: 'flex-end',
   },
 })
