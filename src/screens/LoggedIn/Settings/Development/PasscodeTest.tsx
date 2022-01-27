@@ -19,9 +19,15 @@ const PasscodeTest = () => {
       customStyles={{ justifyContent: 'flex-start' }}
     >
       <Passcode onSubmit={handleSubmit}>
-        <Passcode.Header title={strings.ENTER_YOUR_PASSCODE} />
+        <Passcode.Header
+          title={strings.ENTER_YOUR_PASSCODE}
+          errorTitle={'Wrong'}
+        />
         <Passcode.Input />
-        <Passcode.Forgot />
+        <Passcode.ExtraAction
+          title="Passcode extra action"
+          onPress={() => {}}
+        />
       </Passcode>
     </ScreenContainer>
   )

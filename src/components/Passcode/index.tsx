@@ -10,6 +10,7 @@ import ResetBtn from './ResetBtn'
 import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
 import { useDisableApp, useGetResetStoredCountdownValues } from './hooks'
+import PasscodeExtraAction from './PasscodeExtraAction'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -106,10 +107,9 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
 Passcode.Input = PasscodeInput
 Passcode.Header = PasscodeHeader
-Passcode.Forgot = PasscodeForgot
+Passcode.ExtraAction = PasscodeExtraAction
 Passcode.Keyboard = PasscodeKeyboard
 Passcode.Container = PasscodeContainer
-Passcode.ResetBtn = ResetBtn
 Passcode.Error = PasscodeError
 
 export default Passcode

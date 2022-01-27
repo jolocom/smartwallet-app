@@ -5,7 +5,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { sleep } from '~/utils/generic'
 
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
-import { useGoBack } from '~/hooks/navigation'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
 import { useLoader } from '~/hooks/loader'
 import { useEffect } from 'react'
@@ -13,6 +13,8 @@ import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '~/hooks/toasts'
 import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
 import { promisifySubmit } from '~/components/Passcode/utils'
+import { ScreenNames } from '~/types/screens'
+import { IPasscodeContext } from '~/components/Passcode/types'
 
 enum PasscodeState {
   verify = 'verify',
@@ -27,6 +29,7 @@ const ChangePin: React.FC = () => {
   const goBack = useGoBack()
   const { scheduleErrorWarning } = useToasts()
   const secureStorage = useSecureStorage()
+  const redirect = useRedirect()
 
   const [passcodeState, setPasscodeState] = useState<PasscodeState>(
     PasscodeState.verify,
@@ -108,11 +111,41 @@ const ChangePin: React.FC = () => {
         } else throw new Error("Pins don't match")
         break
       default:
-        console.warn('Warning: Wrong passcodeState in ChangePin!')
+        console.warn(
+          `Warning: passcode state ${passcodeState} is not supported`,
+        )
         break
     }
   }
 
+  const handleExtraAction = ({ setPin }: IPasscodeContext) => {
+    switch (passcodeState) {
+      case PasscodeState.verify:
+        redirect(ScreenNames.PinRecoveryInstructions)
+        return
+      case PasscodeState.create:
+        return
+      case PasscodeState.repeat:
+        setPin('')
+        setPasscodeState(PasscodeState.create)
+        return
+      default:
+        console.warn(
+          `Warning: passcode state ${passcodeState} is not supported`,
+        )
+        break
+    }
+  }
+  const getExtraActionTitle = () => {
+    switch (passcodeState) {
+      case PasscodeState.verify:
+        return t('Lock.forgotBtn')
+      case PasscodeState.repeat:
+        return t('VerifyPasscode.resetBtn')
+      default:
+        return undefined
+    }
+  }
   return (
     <ScreenContainer
       customStyles={{
@@ -125,8 +158,11 @@ const ChangePin: React.FC = () => {
           <Passcode.Header title={headerTitle()} errorTitle={errorTitle} />
           <Passcode.Input />
         </Passcode.Container>
-        <Passcode.Container>
-          <Passcode.Forgot />
+        <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
+          <Passcode.ExtraAction
+            onPress={handleExtraAction}
+            title={getExtraActionTitle()}
+          />
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>

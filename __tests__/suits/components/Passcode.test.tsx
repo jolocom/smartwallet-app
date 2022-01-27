@@ -80,24 +80,4 @@ describe('Passcode', () => {
       expect(getByText(/ChangePasscode.wrongCodeHeader/)).toBeDefined()
     })
   })
-
-  test('Passcode Forgot navigates to an instruction screen', () => {
-    const { getByText, getByTestId } = render(
-      <Passcode onSubmit={mockSubmit}>
-        <Passcode.Forgot />
-        <Passcode.Keyboard />
-      </Passcode>,
-    )
-
-    expect(getByText(/Lock.forgotBtn/)).toBeDefined()
-
-    const forgotBtn = getByTestId('button')
-    fireEvent.press(forgotBtn)
-
-    expect(mockNavigate).toHaveBeenCalledTimes(1)
-    expect(mockNavigate).toHaveBeenCalledWith(
-      ScreenNames.PinRecoveryInstructions,
-      {},
-    )
-  })
 })
