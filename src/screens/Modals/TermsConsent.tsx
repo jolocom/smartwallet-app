@@ -110,7 +110,7 @@ const TermsConsent: React.FC = () => {
               {t('TermsConsent.subheader')}
             </JoloText>
             {legalTextConfig.map(({ title, content }) => (
-              <ExpandingButton title={title} content={content} />
+              <ExpandingButton key={title} title={title} content={content} />
             ))}
           </ScrollView>
         </View>
