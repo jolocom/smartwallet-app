@@ -23,6 +23,8 @@ export interface AccountState {
   currentLanguage: Locales
   isAppDisabled: boolean
   isMnemonicWarningVisible: boolean | undefined
-  isTermsConsentVisible: boolean
-  isTermsConsentOutdated: boolean
+  termsConsent: {
+    isVisible: boolean
+    isOutdated: boolean
+  }
 }

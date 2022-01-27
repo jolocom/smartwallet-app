@@ -6,13 +6,15 @@ const initialState: AccountState = {
   did: '',
   loggedIn: false,
   isLocalAuthSet: false, // this value indicates where user went through local auth registration
-  isTermsConsentVisible: false,
-  isTermsConsentOutdated: false,
   isAppLocked: true,
   screenHeight: 0,
   currentLanguage: Locales.en,
   isAppDisabled: false,
   isMnemonicWarningVisible: undefined,
+  termsConsent: {
+    isVisible: false,
+    isOutdated: false,
+  },
 }
 
 const reducer = (
@@ -28,18 +30,30 @@ const reducer = (
       return { ...state, isLocalAuthSet: action.payload }
     case AccountActions.resetAccount:
       return initialState
-    case AccountActions.setTermsConsentVisibility:
+    case AccountActions.setTermsConsentVisibility: {
+      const { termsConsent } = state
       if (action.payload === true) {
-        return { ...state, isTermsConsentVisible: action.payload }
+        return {
+          ...state,
+          termsConsent: { ...termsConsent, isVisible: action.payload },
+        }
       } else {
         return {
           ...state,
-          isTermsConsentVisible: action.payload,
-          isTermsConsentOutdated: false,
+          termsConsent: {
+            isVisible: false,
+            isOutdated: false,
+          },
         }
       }
-    case AccountActions.setTermsConsentOutdatedness:
-      return { ...state, isTermsConsentOutdated: action.payload }
+    }
+    case AccountActions.setTermsConsentOutdatedness: {
+      const { termsConsent } = state
+      return {
+        ...state,
+        termsConsent: { ...termsConsent, isOutdated: action.payload },
+      }
+    }
     case AccountActions.setAppLocked:
       return { ...state, isAppLocked: action.payload }
     case AccountActions.setScreenHeight:
