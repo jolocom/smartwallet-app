@@ -12,6 +12,7 @@ import {
   CardInfo,
 } from '@jolocom/react-native-ausweis/js/types'
 import {
+  ChangePinMessage,
   Messages,
   ReaderMessage,
 } from '@jolocom/react-native-ausweis/js/messageTypes'
@@ -548,6 +549,22 @@ export const useAusweisReaderEvents = () => {
 
     return () => {
       aa2Module.messageEmitter.removeListener(Messages.reader, listener)
+    }
+  }, [])
+}
+
+export const useAusweisFinishedChangePinEvent = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const listener = () => {
+      dispatch(setAusweisFlowType(null))
+    }
+
+    aa2Module.messageEmitter.addListener(Messages.changePin, listener)
+
+    return () => {
+      aa2Module.messageEmitter.removeListener(Messages.changePin, listener)
     }
   }, [])
 }
