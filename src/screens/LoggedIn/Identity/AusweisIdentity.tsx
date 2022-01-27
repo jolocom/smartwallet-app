@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, Platform, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/core'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
@@ -162,6 +162,7 @@ export const AusweisIdentity = () => {
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleCompatibilityCheck}
+            disabled={Platform.OS === 'ios' && shouldDisableUnlock}
           >
             {t('AusweisIdentity.compatibilityBtn')}
           </Btn>
