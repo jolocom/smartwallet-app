@@ -70,12 +70,13 @@ const TermsConsent: React.FC = () => {
   const { t } = useTranslation()
   const agent = useAgent()
   const { acceptConsent } = useTermsConsent()
+  const isTermsConsentVisible = useSelector(getIsTermsConsentVisible)
 
   const [accepted, setAccepted] = useState(false)
 
   return (
     <Modal
-      visible
+      visible={isTermsConsentVisible}
       statusBarTranslucent
       animationType="fade"
       presentationStyle="overFullScreen"
@@ -192,8 +193,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default () => {
-  const isTermsConsentVisible = useSelector(getIsTermsConsentVisible)
-  if (isTermsConsentVisible) return <TermsConsent />
-  return null
-}
+export default TermsConsent
