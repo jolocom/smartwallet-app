@@ -42,14 +42,12 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
     }
   }
 
-  // submit when full pin is provided
   useEffect(() => {
-    ;(async () => {
-      if (pin.length === 4) {
-        await handleSubmit()
+    if (pin.length === 4) {
+      handleSubmit().then(() => {
         setPin('')
-      }
-    })()
+      })
+    }
   }, [pin])
 
   // this will remove the error after 1000 ms
