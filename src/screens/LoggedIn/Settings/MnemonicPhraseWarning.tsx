@@ -31,8 +31,21 @@ const MnemonicPhraseWarning = () => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    getFromStorage(StorageKeys.mnemonicPhrase).then((res) => {
-      setIsMnemonicWritten(res?.isWritten ? true : false)
+    /**
+     * NOTE: getting `isOnboardingDone` value from the settings storage happens
+     * because initially going through seedphrase screens was part of the
+     * onboarding process and could not be skipped. We were recording if a user
+     * has written a seed phrase with the value `isOnboardingDone`. Therefore,
+     * checking this value is a part of the migration strategy to verify if
+     * users of previos app rollout "wrote down" a seed phrase. For those
+     * who have "written" seed phrase we won't show the worning
+     * Date: 1643373457433 || Fri Jan 28 2022 13:38:08 GMT+0100 (Central European Standard Time)
+     */
+    Promise.all([
+      getFromStorage(StorageKeys.mnemonicPhrase),
+      getFromStorage(StorageKeys.isOnboardingDone),
+    ]).then((res) => {
+      setIsMnemonicWritten(res[0]?.isWritten || res[1]?.finished ? true : false)
       LayoutAnimation.configureNext({
         ...LayoutAnimation.Presets.easeInEaseOut,
         duration: 200,
