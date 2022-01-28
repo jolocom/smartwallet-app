@@ -16,20 +16,27 @@ export interface IPasscodeKeyboardProps {
   onBiometryPress?: () => void
 }
 
+interface ExtraActionProps {
+  onPress?: (context: IPasscodeContext) => void
+  title?: string
+}
+
 export interface IPasscodeComposition {
   Input: React.FC
   Header: React.FC<IPasscodeHeaderProps>
-  Forgot: React.FC
+  ExtraAction: React.FC<ExtraActionProps>
   Keyboard: React.FC<IPasscodeKeyboardProps>
   Container: React.FC<IWithCustomStyle>
-  ResetBtn: React.FC<{ onPress: () => void }>
   Error: React.FC
+  Disable: React.FC
 }
 
 export interface IPasscodeContext {
   pin: string
   setPin: React.Dispatch<SetStateAction<string>>
   pinError: boolean
+  setPinError: React.Dispatch<SetStateAction<boolean>>
   pinSuccess: boolean
-  pinAttemptsLeft: number
+  pinErrorText: string | null
+  setPinErrorText: React.Dispatch<SetStateAction<string | null>>
 }

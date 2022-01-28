@@ -16,6 +16,8 @@ import { useDisableLock } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
 import { getIsAppDisabled } from '~/modules/account/selectors'
 import { promisifySubmit } from '~/components/Passcode/utils'
+import { ScreenNames } from '~/types/screens'
+import { useRedirect } from '~/hooks/navigation'
 
 const Lock = () => {
   const { t } = useTranslation()
@@ -25,6 +27,7 @@ const Lock = () => {
   const [biometryType, setBiometryType] = useState<BiometryType>()
   const [biometryAvailable, setBiometryAvailable] = useState(false)
   const disableLock = useDisableLock()
+  const redirect = useRedirect()
 
   const { currentAppState, prevAppState } = useGetAppStates()
 
@@ -96,7 +99,6 @@ const Lock = () => {
       throw new Error("Pins don't match")
     }
   }
-
   return (
     <ScreenContainer
       customStyles={{
@@ -115,7 +117,10 @@ const Lock = () => {
           </View>
         </Passcode.Container>
         <Passcode.Container>
-          <Passcode.Forgot />
+          <Passcode.ExtraAction
+            title={t('Lock.forgotBtn')}
+            onPress={() => redirect(ScreenNames.PinRecoveryInstructions)}
+          />
           <Passcode.Keyboard
             biometryType={isBiometrySelected ? biometryType : undefined}
             onBiometryPress={
@@ -123,6 +128,7 @@ const Lock = () => {
             }
           />
         </Passcode.Container>
+        <Passcode.Disable />
       </Passcode>
     </ScreenContainer>
   )
