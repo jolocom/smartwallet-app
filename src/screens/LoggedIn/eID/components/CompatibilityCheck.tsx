@@ -7,12 +7,7 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
 import { eIDScreens } from '../types'
 import { useRedirect } from '~/hooks/navigation'
-import {
-  useAusweisCancelBackHandler,
-  useAusweisCompatibilityCheck,
-  useAusweisInteraction,
-  useAusweisSkipCompatibility,
-} from '../hooks'
+import eIDHooks from '../hooks'
 import { JoloTextSizes } from '~/utils/fonts'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { AusweisButtons } from '../styled'
@@ -38,11 +33,11 @@ const Description: React.FC = ({ children }) => (
 export const CompatibilityCheck = () => {
   const { t } = useTranslation()
   const redirect = useRedirect()
-  const { cancelInteraction, cancelFlow } = useAusweisInteraction()
-  const { startCheck, compatibility } = useAusweisCompatibilityCheck()
-  const { setShouldSkip } = useAusweisSkipCompatibility()
+  const { cancelInteraction, cancelFlow } = eIDHooks.useAusweisInteraction()
+  const { startCheck, compatibility } = eIDHooks.useAusweisCompatibilityCheck()
+  const { setShouldSkip } = eIDHooks.useAusweisSkipCompatibility()
 
-  useAusweisCancelBackHandler()
+  eIDHooks.useAusweisCancelBackHandler()
 
   const handleCheckCompatibility = () => {
     startCheck()

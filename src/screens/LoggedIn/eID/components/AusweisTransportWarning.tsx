@@ -9,11 +9,11 @@ import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { useAusweisInteraction } from '../hooks'
+import eIDHooks from '../hooks'
 
 const AusweisTarnsportWarning = () => {
   const { t } = useTranslation()
-  const { startChangePin } = useAusweisInteraction()
+  const { startChangePin } = eIDHooks.useAusweisInteraction()
 
   const handleContinue = () => {
     startChangePin()

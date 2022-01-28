@@ -48,6 +48,10 @@ jest.mock('../../../src/hooks/sdk', () => ({
     },
   }),
 }))
+jest.mock('../../../src/hooks/generic', () => ({
+  ...jest.requireActual('../../../src/hooks/generic'),
+  useAdjustResizeInputMode: jest.fn(),
+}))
 
 const renderCredentialForm = () => {
   const queries = renderWithSafeArea(<CredentialForm />)

@@ -23,6 +23,7 @@ const PasscodeError = () => {
             fontFamily: Fonts.Regular,
             letterSpacing: 0.09,
           }}
+          testID="passcode-error"
         >
           {pinErrorText}
         </JoloText>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 
 import Btn, { BtnTypes } from '~/components/Btn'
@@ -10,13 +10,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
-import {
-  useAusweisCompatibilityCheck,
-  useAusweisInteraction,
-  useAusweisScanner,
-  useCheckNFC,
-  useDeactivatedCard,
-} from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
   AusweisFlow,
@@ -26,17 +20,17 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { useToasts } from '~/hooks/toasts'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
-  const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
-  const { checkNfcSupport } = useCheckNFC()
+  const { startCheck: startCompatibilityCheck } =
+    eIDHooks.useAusweisCompatibilityCheck()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow, checkCardValidity, startChangePin } =
-    useAusweisInteraction()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { handleDeactivatedCard } = useDeactivatedCard()
+    eIDHooks.useAusweisInteraction()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
@@ -79,7 +73,6 @@ export const AusweisIdentity = () => {
             handleShowCardLockResult(CardInfoMode.unblocked)
           },
         },
-        isUnlocking: true,
       },
     })
   }

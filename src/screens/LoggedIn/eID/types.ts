@@ -35,13 +35,17 @@ export enum AusweisPasscodeMode {
   VERIFY_NEW_PIN = 'VERIFY_NEW_PIN',
 }
 
-export interface AusweisPasscodeProps {
+export interface AusweisPasscodeParams {
   mode: AusweisPasscodeMode
   /**
    * NOTE:
    * "pinContext" indicates whether passcode screens deal with
    * normal 6-digit pin (AusweisPasscodeMode.PIN) or
    * 5-digit pin (AusweisPasscodeMode.TRANSPORT_PIN)
+   */
+  /**
+   * TODO: pinContext prop seems to be redundant since
+   * we distinguish between PIN and TRANSPORT_PIN in the flow prop
    */
   pinContext?: AusweisPasscodeMode.TRANSPORT_PIN | AusweisPasscodeMode.PIN
   handlers?: Partial<EventHandlers>
