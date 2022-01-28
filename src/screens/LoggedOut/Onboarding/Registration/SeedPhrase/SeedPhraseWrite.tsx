@@ -200,7 +200,7 @@ const SeedPhraseWrite: React.FC = () => {
             }}
             color={Colors.success}
           >
-            {'You will not be able to view this again'}
+            {t('SeedphraseWrite.writeInstructionsWarning')}
           </JoloText>
           <View style={styles.phraseContainer}>{renderSeedphrase()}</View>
           <AbsoluteBottom>{renderCTABtn()}</AbsoluteBottom>
