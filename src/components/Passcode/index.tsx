@@ -1,15 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import PasscodeForgot from './PasscodeForgot'
 import PasscodeHeader from './PasscodeHeader'
 import PasscodeInput from './PasscodeInput'
 import { IPasscodeProps, IPasscodeComposition } from './types'
 import { PasscodeContext } from './context'
 import PasscodeKeyboard from './PasscodeKeyboard'
 import PasscodeContainer from './PasscodeContainer'
-import ResetBtn from './ResetBtn'
 import PasscodeError from './PasscodeError'
 import PasscodeDisable from './PasscodeDisable'
-import PasscodeAccessoryBtn from './PasscodeAccessoryBtn'
+import PasscodeExtraAction from './PasscodeExtraAction'
 import { useIsFocused } from '@react-navigation/native'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
@@ -46,12 +44,11 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   // submit when full pin is provided
   useEffect(() => {
-    ;(async () => {
-      if (pin.length === length) {
-        await handleSubmit()
+    if (pin.length === length) {
+      handleSubmit().then(() => {
         setPin('')
-      }
-    })()
+      })
+    }
   }, [pin, length])
 
   /**
@@ -99,12 +96,10 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
 Passcode.Input = PasscodeInput
 Passcode.Header = PasscodeHeader
-Passcode.Forgot = PasscodeForgot
+Passcode.ExtraAction = PasscodeExtraAction
 Passcode.Keyboard = PasscodeKeyboard
 Passcode.Container = PasscodeContainer
-Passcode.ResetBtn = ResetBtn
 Passcode.Error = PasscodeError
 Passcode.Disable = PasscodeDisable
-Passcode.AccessoryBtn = PasscodeAccessoryBtn
 
 export default Passcode

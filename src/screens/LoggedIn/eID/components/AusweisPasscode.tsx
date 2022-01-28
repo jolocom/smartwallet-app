@@ -12,6 +12,7 @@ import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
@@ -33,9 +34,8 @@ import {
   IAusweisRequest,
 } from '../types'
 import eIDHooks from '../hooks'
-import { IAccessoryBtnProps } from '~/components/Passcode/types'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
-import { StackNavigationProp } from '@react-navigation/stack'
+import { ExtraActionProps } from '~/components/Passcode/types'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -544,8 +544,8 @@ export const AusweisPasscode = () => {
     }
   }
 
-  const renderAccessoryBtn = () => {
-    const props: IAccessoryBtnProps = {
+  const renderExtraActionBtn = () => {
+    const props: ExtraActionProps = {
       title: '',
       onPress: () => {},
     }
@@ -584,7 +584,7 @@ export const AusweisPasscode = () => {
     }
 
     if (title) {
-      return <Passcode.AccessoryBtn title={title} onPress={onPress} />
+      return <Passcode.ExtraAction title={title} onPress={onPress} />
     }
 
     return null
@@ -647,7 +647,7 @@ export const AusweisPasscode = () => {
           </View>
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
-          {renderAccessoryBtn()}
+          {renderExtraActionBtn()}
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>
