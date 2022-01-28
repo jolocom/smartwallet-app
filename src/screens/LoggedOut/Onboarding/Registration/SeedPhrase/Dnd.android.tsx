@@ -4,10 +4,11 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 
 import { IDndProps } from './types'
 import WordPill from './components/WordPill'
+import Seedphrase from './components/Styled'
 
 const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
   return (
-    <View style={{ flex: 1, alignItems: 'center' }}>
+    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
       <DraggableFlatList
         data={tags}
         // NOTE: allows the pill size to be based on the content, as opposed
@@ -24,6 +25,7 @@ const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
         keyExtractor={(item, index) => `pill-${item}-${index}`}
         onDragEnd={({ data }) => updateTags(data)}
       />
+      <Seedphrase.Styled.DirectionArrow />
     </View>
   )
 }

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
 import { View } from 'react-native'
@@ -16,12 +16,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { IS_ANDROID } from '~/utils/generic'
 
-import {
-  useAusweisInteraction,
-  useAusweisScanner,
-  useCheckNFC,
-  useDeactivatedCard,
-} from '../hooks'
+import eIDHooks from '../hooks'
 import {
   AusweisFlow,
   AusweisPasscodeMode,
@@ -78,11 +73,11 @@ const AusweisChangePin = () => {
   const { t } = useTranslation()
   const navigation = useNavigation()
   const { checkCardValidity, cancelFlow, startChangePin } =
-    useAusweisInteraction()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { handleDeactivatedCard } = useDeactivatedCard()
+    eIDHooks.useAusweisInteraction()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
-  const { checkNfcSupport } = useCheckNFC()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
 
   const changePinFlow =
     isTransportPin.current === true

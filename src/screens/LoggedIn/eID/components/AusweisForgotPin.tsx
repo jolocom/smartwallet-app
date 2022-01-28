@@ -5,8 +5,8 @@ import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 
-const AUSWEIS_SUPPORT_EMAIL = 'support@ausweissapp.de'
-const AUSWEIS_SUPPORT_PHONE = '0421 204 95 995'
+export const AUSWEIS_SUPPORT_EMAIL = 'support@ausweissapp.de'
+export const AUSWEIS_SUPPORT_PHONE = '0421 204 95 995'
 
 export const AusweisForgotPin = () => {
   const { t } = useTranslation()

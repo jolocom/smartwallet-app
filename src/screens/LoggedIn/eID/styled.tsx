@@ -45,7 +45,12 @@ export const AusweisButtons: React.FC<{
   return (
     <View style={styles.btnGroupContainer}>
       <View style={[styles.btnContainer, { flex: 0.7, marginRight: 12 }]}>
-        <Btn size={BtnSize.medium} onPress={onSubmit} withoutMargins>
+        <Btn
+          size={BtnSize.medium}
+          onPress={onSubmit}
+          withoutMargins
+          testID="ausweis-cta-btn"
+        >
           {submitLabel}
         </Btn>
       </View>
@@ -56,6 +61,7 @@ export const AusweisButtons: React.FC<{
           onPress={onCancel}
           customContainerStyles={styles.cancelBtn}
           withoutMargins
+          testID="ausweis-ignore-btn"
         >
           {cancelLabel}
         </Btn>
@@ -66,7 +72,10 @@ export const AusweisButtons: React.FC<{
 
 export const AusweisLogo: React.FC = () => {
   return (
-    <View style={[styles.image, { backgroundColor: Colors.white }]}>
+    <View
+      testID="ausweis-logo"
+      style={[styles.image, { backgroundColor: Colors.white }]}
+    >
       <InitiatorPlaceholderIcon />
     </View>
   )
@@ -107,7 +116,7 @@ export const AusweisListSection: React.FC<{ title: string }> = ({
 }) => {
   if (!Children.count(children)) return null
   return (
-    <View style={{ marginBottom: 72 }}>
+    <View testID="ausweis-list-section" style={{ marginBottom: 72 }}>
       <View style={{ marginLeft: 8 }}>
         <JoloText
           kind={JoloTextKind.title}

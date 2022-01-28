@@ -8,7 +8,7 @@ import React, {
 import { useSelector } from 'react-redux'
 import { View, Platform, LayoutAnimation } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
@@ -32,16 +32,10 @@ import {
   eIDScreens,
   IAusweisRequest,
 } from '../types'
-import {
-  useAusweisCancelBackHandler,
-  useAusweisContext,
-  useAusweisInteraction,
-  useAusweisScanner,
-  useCheckNFC,
-  useDeactivatedCard,
-} from '../hooks'
+import eIDHooks from '../hooks'
 import { IAccessoryBtnProps } from '~/components/Passcode/types'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -79,8 +73,19 @@ const PasscodeGlue: React.FC<PasscodeErrorSetterProps> = ({
   return null
 }
 
+/**
+ * TODO: create generic type
+ * for props to extends with navigation
+ * property
+ */
+type AusweisPasscodeProps = StackNavigationProp<
+  AusweisStackParamList,
+  eIDScreens.EnterPIN
+>
+
 export const AusweisPasscode = () => {
   const { t } = useTranslation()
+  const navigation = useNavigation<AusweisPasscodeProps>()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.EnterPIN>>()
   const {
@@ -89,10 +94,8 @@ export const AusweisPasscode = () => {
     pinContext = AusweisPasscodeMode.PIN,
     flow,
   } = route.params
-  const ausweisContext = useAusweisContext()
+  const ausweisContext = eIDHooks.useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
-
-  const navigation = useNavigation()
 
   const { scheduleInfo } = useToasts()
 
@@ -100,7 +103,7 @@ export const AusweisPasscode = () => {
   const [errorText, setErrorText] = useState<string | null>(null)
   const [runInputReset, resetInput] = useState(false) // value to reset verification pin
 
-  useAusweisCancelBackHandler()
+  eIDHooks.useAusweisCancelBackHandler()
 
   /**
    * Reverts back flag for resetting verification pin to make sure,
@@ -115,10 +118,10 @@ export const AusweisPasscode = () => {
     closeAusweis,
     cancelFlow,
     cancelInteraction,
-  } = useAusweisInteraction()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { handleDeactivatedCard } = useDeactivatedCard()
-  const { checkNfcSupport } = useCheckNFC()
+  } = eIDHooks.useAusweisInteraction()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')
@@ -573,6 +576,7 @@ export const AusweisPasscode = () => {
           resetInput(true)
           setErrorText(null)
           setPinVariant(AusweisPasscodeMode.NEW_PIN)
+          setErrorText(null)
         }
         break
       default:

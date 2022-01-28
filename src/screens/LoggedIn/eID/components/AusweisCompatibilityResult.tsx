@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { RouteProp, useRoute } from '@react-navigation/core'
+import React, { useEffect } from 'react'
+import { RouteProp, useRoute } from '@react-navigation/native'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -25,7 +25,6 @@ const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
 
 export const AusweisCompatibilityResult: React.FC = () => {
   const { t } = useTranslation()
-
   const goBack = useGoBack()
   const { inoperative, deactivated } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.CompatibilityResult>>()
@@ -49,6 +48,7 @@ export const AusweisCompatibilityResult: React.FC = () => {
         activeOpacity={1}
         onPress={goBack}
         style={{ justifyContent: 'flex-end', alignItems: 'center' }}
+        testID="dismissable-background"
       >
         <View style={styles.container}>
           <View style={styles.headerContainer}>
