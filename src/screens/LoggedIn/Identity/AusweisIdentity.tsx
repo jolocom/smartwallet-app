@@ -82,7 +82,7 @@ export const AusweisIdentity = () => {
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
         if (card?.deactivated) {
-          handleDeactivatedCard(navigation.goBack)
+          handleDeactivatedCard()
         }
       },
       handleCardRequest: () => {

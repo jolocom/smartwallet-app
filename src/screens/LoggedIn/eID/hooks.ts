@@ -420,36 +420,23 @@ const useTranslatedAusweisFields = () => {
   return (field: AusweisFields) => fieldsMapping[field]
 }
 
-const useDeactivatedCard = () => {
-  const { updateScanner } = eIDHooks.useAusweisScanner()
-  const { cancelFlow } = eIDHooks.useAusweisInteraction()
+export const useDeactivatedCard = () => {
+  const { updateScanner } = useAusweisScanner()
   const { scheduleWarning } = useToasts()
   const { t } = useTranslation()
 
-  const handleDeactivatedCard = (onDismiss?: () => void) => {
+  const handleDeactivatedCard = () => {
     if (IS_ANDROID) {
       updateScanner({
         state: AusweisScannerState.failure,
         onDone: () => {
-          cancelFlow()
-          onDismiss && onDismiss()
-          setTimeout(() => {
-            scheduleWarning({
-              title: t('Toasts.ausweisFailedCheckTitle'),
-              message: t('Toasts.ausweisFailedCheckMsg'),
-              interact: {
-                label: t('Toasts.ausweisFailedCheckBtn'),
-                onInteract: () => {},
-              },
-            })
-          }, 500)
+          scheduleWarning({
+            title: t('Toasts.ausweisDeactivatedCardTitle'),
+            message: t('Toasts.ausweisDeactivatedCardMsg'),
+          })
         },
       })
     } else {
-      /**
-       * TODO: find a good copy to convey the information
-       * about "deactivated" card
-       */
       scheduleWarning({
         title: t('Toasts.ausweisDeactivatedCardTitle'),
         message: t('Toasts.ausweisDeactivatedCardMsg'),
