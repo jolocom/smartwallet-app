@@ -2,26 +2,32 @@ import { useState, useEffect, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
 
-import { SDKError, Agent } from 'react-native-jolocom'
+import { Agent } from 'react-native-jolocom'
 
 import { AgentContext } from '~/utils/sdk/context'
 import { useLoader } from './loader'
-import { setDid, setLogged, setLocalAuth } from '~/modules/account/actions'
+import {
+  setDid,
+  setLogged,
+  setLocalAuth,
+  setMnemonicWarningVisibility,
+} from '~/modules/account/actions'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import useTermsConsent from './consent'
 import { makeInitializeCredentials, useCredentials } from './signedCredentials'
 import useTranslation from './useTranslation'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
+import { useToasts } from './toasts'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
 export enum StorageKeys {
-  isOnboardingDone = 'isOnboardingDone',
   encryptedSeed = 'encryptedSeed',
   termsConsent = 'termsConsent',
   biometry = 'biometry',
   language = 'language',
   screenshotsDisabled = 'screenshotsDisabled',
+  mnemonicPhrase = 'mnemonicPhrase',
 }
 
 /**
@@ -40,8 +46,9 @@ export const useAgent = () => {
  * Returns a function that takes an @Agent and tries to load a stored identity.
  * If there is an identity found (agent.loadIdentity doesn't throw), the user is
  * logged in. Otherwise, the user stays logged out.
+ * Can throw ErrorCode.NoWallet || ErrorCode.NoPassword || ...
  *
- * @returns () => Promise<void>
+ * @returns () => Promise<void | never>
  */
 export const useWalletInit = () => {
   const dispatch = useDispatch()
@@ -51,11 +58,6 @@ export const useWalletInit = () => {
   return async (agent: Agent) => {
     // NOTE: Checking whether the user accepted the newest Terms of Service conditions
     await checkConsent(agent)
-
-    const onboardingSetting = await agent.storage.get.setting(
-      StorageKeys.isOnboardingDone,
-    )
-    if (!onboardingSetting?.finished) return
 
     try {
       const idw = await agent.loadIdentity()
@@ -69,10 +71,7 @@ export const useWalletInit = () => {
         dispatch(setLocalAuth(true))
       }
     } catch (err) {
-      if (err.code !== SDKError.codes.NoWallet) {
-        console.warn(err)
-        throw new Error('Failed loading identity')
-      }
+      console.warn(err)
     }
   }
 }
@@ -100,75 +99,74 @@ export const useWalletReset = () => {
  *
  * @returns () => Promise<Buffer>
  */
-export const useGenerateSeed = () => {
+export const useCreateIdentity = () => {
   const agent = useAgent()
+  const dispatch = useDispatch()
 
   return async () => {
-    // FIXME use the seed generated on the entropy screen. Currently the entropy
-    // seed generates 24 word seedphrases
-    const seed = await generateSecureRandomBytes(16)
-
-    const identity = await agent.loadFromMnemonic(entropyToMnemonic(seed))
-    const encryptedSeed = await identity.asymEncryptToDid(
-      Buffer.from(seed),
+    // 1. Generate entropy
+    const entropy = await generateSecureRandomBytes(16)
+    // 2. Create identity: IdentityWallet
+    const identity = await agent.loadFromMnemonic(entropyToMnemonic(entropy))
+    // 3. Encrypt generated entropy
+    const encryptedEntropy = await identity.asymEncryptToDid(
+      entropy,
       identity.did,
       {
         prefix: '',
         resolve: async (_) => identity.identity,
       },
     )
-
+    // 4. Store encrypted entropy: this is needed to be able to get mnemonic phrase
     await agent.storage.store.setting(StorageKeys.encryptedSeed, {
-      b64Encoded: encryptedSeed.toString('base64'),
+      b64Encoded: encryptedEntropy.toString('base64'),
     })
 
-    return seed
-  }
-}
-
-/**
- * Returns a function that creates an identity using the stored encrypted seed and logs
- * the user in. If identity creation failed, will return @false.
- *
- * @returns () => Promise<boolean>
- */
-export const useIdentityCreate = () => {
-  const agent = useAgent()
-  const dispatch = useDispatch()
-  const seedphrase = useGetSeedPhrase()
-
-  return async () => {
-    const identity = await agent.loadFromMnemonic(seedphrase)
-    await agent.storage.store.setting(StorageKeys.isOnboardingDone, {
-      finished: true,
-    })
     dispatch(setDid(identity.did))
+    return
   }
 }
 
 /**
- * Returns a function that handles the last step of the onboarding flow, which is
- * creating an identity and clearing up @encryptedSeed from the storage.
- *
- * @returns () => Promise<void>
+ * Record when the seed phrase was "remembered" by a user.
+ * Used to remind and block a user from completing
+ * certain actions if the seed phrase was not "remembered"
+ * by a user
  */
-export const useSubmitIdentity = () => {
+export const useRecordUserHasWrittenSeedPhrase = () => {
   const agent = useAgent()
-  const dispatch = useDispatch()
-  const createIdentity = useIdentityCreate()
   const loader = useLoader()
+  const { scheduleErrorWarning } = useToasts()
   const { t } = useTranslation()
+  const dispatch = useDispatch()
 
-  return async () => {
+  return async (onSuccess: () => void) => {
     await loader(
       async () => {
-        await createIdentity()
-        await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
+        /**
+         * Note we shouldn't reset encrypted entropy;
+         * it is used to generate a mnemonic phrase with bip39;
+         * in the future if we would like to make available
+         * an option for a user to preview the mnemonic phrase
+         * we won't be able to do so
+         */
+        //await agent.storage.store.setting(StorageKeys.encryptedSeed, {})
+        await agent.storage.store.setting(StorageKeys.mnemonicPhrase, {
+          isWritten: true,
+        })
       },
       {
-        loading: t('SeedphraseRepeat.confirmLoader'),
+        loading: t('Recovery.confirmLoader'),
+        showFailed: false,
       },
-      (error) => dispatch(setLogged(!Boolean(error))),
+      (error) => {
+        if (error) {
+          scheduleErrorWarning(error)
+        } else {
+          dispatch(setMnemonicWarningVisibility(false))
+          onSuccess()
+        }
+      },
     )
   }
 }
@@ -229,7 +227,9 @@ export const useGetSeedPhrase = () => {
   }
 
   useEffect(() => {
-    getMnemonic().then(setSeedphrase)
+    // TODO: we need to handle errors in a way that will
+    // allow devs to track it back
+    getMnemonic().then(setSeedphrase).catch(console.warn)
   }, [])
 
   return seedphrase

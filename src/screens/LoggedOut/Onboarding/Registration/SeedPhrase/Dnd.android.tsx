@@ -4,7 +4,25 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 
 import { IDndProps } from './types'
 import WordPill from './components/WordPill'
-import Seedphrase from './components/Styled'
+import { ArrowDown } from '~/assets/svg'
+
+const DirectionArrow: React.FC = () => (
+  <View
+    style={{
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <View
+      style={{
+        position: 'absolute',
+        right: 40,
+      }}
+    >
+      <ArrowDown />
+    </View>
+  </View>
+)
 
 const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
   return (
@@ -25,7 +43,7 @@ const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
         keyExtractor={(item, index) => `pill-${item}-${index}`}
         onDragEnd={({ data }) => updateTags(data)}
       />
-      <Seedphrase.Styled.DirectionArrow />
+      <DirectionArrow />
     </View>
   )
 }

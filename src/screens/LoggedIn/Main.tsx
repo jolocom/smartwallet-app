@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
-  CardStyleInterpolators,
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack'
@@ -42,6 +41,7 @@ import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
 import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
+import Registration from '../LoggedOut/Onboarding/Registration'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -66,6 +66,7 @@ export type MainStackParamList = {
   [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
+  [ScreenNames.MnemonicPhrase]: undefined
   [ScreenNames.ChangePin]: undefined
   [ScreenNames.BackupIdentity]: undefined
   [ScreenNames.FAQ]: undefined
@@ -133,6 +134,11 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.Language}
             component={Language}
+            options={screenTransitionSlideFromRight}
+          />
+          <MainStack.Screen
+            name={ScreenNames.MnemonicPhrase}
+            component={Registration}
             options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen

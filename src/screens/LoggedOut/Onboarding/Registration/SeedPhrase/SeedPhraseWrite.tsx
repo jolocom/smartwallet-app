@@ -1,25 +1,25 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { View, StyleSheet, Animated, Platform } from 'react-native'
+import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import Btn, { BtnTypes } from '~/components/Btn'
-import {
-  useDangerouslyDisableGestures,
-  useGoBack,
-  useRedirect,
-} from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import useCircleHoldAnimation, { GestureState } from './useCircleHoldAnimation'
 import { InfoIcon } from '~/assets/svg'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import MagicButton from '~/components/MagicButton'
 import WordPill from './components/WordPill'
-import SeedPhrase from './components/Styled'
 import { useGetSeedPhrase } from '~/hooks/sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useDisableScreenshots } from '~/hooks/screenshots'
+import ScreenContainer from '~/components/ScreenContainer'
+import BP from '~/utils/breakpoints'
+import { SCREEN_HEIGHT } from '~/utils/dimensions'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 const vibrationOptions = {
   enableVibrateFallback: true,
@@ -28,19 +28,16 @@ const vibrationOptions = {
 
 const SeedPhraseWrite: React.FC = () => {
   const { t } = useTranslation()
+  const { top } = useSafeArea()
   const redirect = useRedirect()
-  const goBack = useGoBack()
   const {
     gestureState,
     animationValues: { shadowScale, circleScale, magicOpacity },
     animateVaues: { hideMagicBtn },
     gestureHandlers,
   } = useCircleHoldAnimation(1200)
-
   const [showInfo, setShowInfo] = useState(true)
-  const seedphrase = useGetSeedPhrase()
-
-  useDangerouslyDisableGestures()
+  const seedPhrase = useGetSeedPhrase()
 
   useDisableScreenshots()
 
@@ -89,30 +86,6 @@ const SeedPhraseWrite: React.FC = () => {
     outputRange: [1, 0],
   })
 
-  const renderBackgroundCrossfade = () => (
-    <>
-      <View
-        style={[
-          styles.wrapper,
-          {
-            backgroundColor: Colors.mainBlack,
-          },
-        ]}
-      />
-      {gestureState !== GestureState.Success && (
-        <Animated.View
-          style={[
-            styles.wrapper,
-            {
-              backgroundColor: Colors.black,
-              opacity: initialBackgroundOpacity,
-            },
-          ]}
-        />
-      )}
-    </>
-  )
-
   const renderSeedphrase = () => (
     <Animated.View
       style={{
@@ -122,7 +95,7 @@ const SeedPhraseWrite: React.FC = () => {
         opacity: gestureState === GestureState.Success ? 1 : phraseOpacity,
       }}
     >
-      {seedphrase.split(' ').map((w) => (
+      {seedPhrase.split(' ').map((w) => (
         <WordPill.Write key={w}>{w}</WordPill.Write>
       ))}
     </Animated.View>
@@ -161,105 +134,98 @@ const SeedPhraseWrite: React.FC = () => {
       >
         {t('SeedphraseWrite.confirmBtn')}
       </Btn>
-      <Btn
-        type={BtnTypes.secondary}
-        onPress={goBack}
-        disabled={gestureState !== GestureState.Success}
-      >
-        {t('SeedphraseWrite.exitBtn')}
-      </Btn>
     </Animated.View>
   )
 
+  const handleClarifySeedPhrase = () => {
+    redirect(ScreenNames.GlobalModals, {
+      screen: ScreenNames.SeedPhraseInfo,
+    })
+  }
   return (
     <>
-      {renderBackgroundCrossfade()}
-      <SeedPhrase.Styled.ScreenContainer>
-        <Animated.View style={{ opacity: buttonOpacity }}>
-          <SeedPhrase.Styled.Header>
-            <SeedPhrase.Styled.Header.Right
-              onPress={() =>
-                redirect(ScreenNames.GlobalModals, {
-                  screen: ScreenNames.SeedPhraseInfo,
-                })
-              }
-            >
-              <InfoIcon />
-            </SeedPhrase.Styled.Header.Right>
-          </SeedPhrase.Styled.Header>
-        </Animated.View>
-        <Animated.View style={{ opacity: buttonOpacity }}>
-          <SeedPhrase.Styled.HelperText>
+      {/*This is an overlay screen*/}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          justifyContent: 'flex-end',
+          width: '100%',
+          height: SCREEN_HEIGHT,
+          zIndex: gestureState !== GestureState.Success ? 100 : 0,
+          backgroundColor: Colors.black,
+          opacity: initialBackgroundOpacity,
+        }}
+      >
+        <View
+          style={{
+            alignSelf: 'flex-end',
+            marginBottom: 150,
+            marginRight: 20,
+          }}
+        >
+          {renderMagicButton()}
+          {renderMagicInfo()}
+        </View>
+      </Animated.View>
+      {/*This is actual screen with the seedPhrase*/}
+      <>
+        {/* TODO: ScreenContainer header should support custom left/right headers*/}
+        <View style={[styles.floatingQuestion, { top: top + 5 }]}>
+          <TouchableOpacity onPress={handleClarifySeedPhrase}>
+            <InfoIcon />
+          </TouchableOpacity>
+        </View>
+        <ScreenContainer
+          hasHeaderBack
+          navigationStyles={{
+            backgroundColor: Colors.mainBlack,
+          }}
+          customStyles={{
+            justifyContent: 'flex-start',
+            backgroundColor: Colors.mainBlack,
+          }}
+        >
+          <JoloText
+            weight={JoloTextWeight.medium}
+            customStyles={{ marginTop: 8, paddingHorizontal: 36 }}
+          >
             {t('SeedphraseWrite.writeInstructions')}
-          </SeedPhrase.Styled.HelperText>
-        </Animated.View>
-        <SeedPhrase.Styled.ActiveArea>
-          {/* this should take 3/5 of a screen; justify-content: space-between */}
+          </JoloText>
+          <JoloText
+            weight={JoloTextWeight.medium}
+            customStyles={{
+              color: Colors.success,
+              marginTop: 8,
+              paddingHorizontal: 36,
+            }}
+            color={Colors.success}
+          >
+            {t('SeedphraseWrite.writeInstructionsWarning')}
+          </JoloText>
           <View style={styles.phraseContainer}>{renderSeedphrase()}</View>
-          {/* this should take 2/5 of a screen */}
-          <View style={styles.helpersContainer}>
-            <View style={styles.bottomContainer}>
-              <View style={styles.nestedInBottomContainer}>
-                {renderMagicButton()}
-                {renderMagicInfo()}
-              </View>
-            </View>
-          </View>
-        </SeedPhrase.Styled.ActiveArea>
-        <SeedPhrase.Styled.CTA>{renderCTABtn()}</SeedPhrase.Styled.CTA>
-      </SeedPhrase.Styled.ScreenContainer>
+          <AbsoluteBottom>{renderCTABtn()}</AbsoluteBottom>
+        </ScreenContainer>
+      </>
     </>
   )
 }
 
 const styles = StyleSheet.create({
   phraseContainer: {
-    flex: 0.6,
-    width: '100%',
-  },
-  helpersContainer: {
-    flex: 0.4,
-    width: '100%',
-    justifyContent: 'flex-start',
-  },
-  iconContainer: {
-    alignSelf: 'flex-end',
+    marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
   },
   info: {
     width: '40%',
     marginTop: 20,
   },
-  wrapper: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
+  floatingQuestion: {
     position: 'absolute',
-  },
-  bottomContainer: {
-    alignItems: 'flex-end',
-    paddingRight: 10,
-  },
-  nestedInBottomContainer: {
-    alignItems: 'center',
-  },
-  gradient: {
-    width: 160,
-    height: 160,
-    position: 'absolute',
+    right: 12,
     zIndex: 10,
-    alignSelf: 'center',
-  },
-  button: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: Colors.black,
-    borderColor: Colors.success,
-    borderWidth: Platform.select({
-      ios: 1,
-      android: 0.5,
-    }),
-    zIndex: 20,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 

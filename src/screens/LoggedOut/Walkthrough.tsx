@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { ImageBackground, StyleSheet, View, Platform } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
 
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
-
 import { ScreenNames } from '~/types/screens'
-
 import { useRedirect } from '~/hooks/navigation'
 import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
 import { Colors } from '~/utils/colors'
@@ -18,7 +17,8 @@ import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { useLoader } from '~/hooks/loader'
-import { useGenerateSeed } from '~/hooks/sdk'
+import { useCreateIdentity } from '~/hooks/sdk'
+import { setLogged } from '~/modules/account/actions'
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
   <View style={styles.dot}>
@@ -29,7 +29,8 @@ const Walkthrough: React.FC = () => {
   const redirect = useRedirect()
   const { t } = useTranslation()
   const loader = useLoader()
-  const generateSeed = useGenerateSeed()
+  const createIdentity = useCreateIdentity()
+  const dispatch = useDispatch()
 
   const walkthroughData = [
     {
@@ -76,14 +77,12 @@ const Walkthrough: React.FC = () => {
   const handleGetStarted = async () => {
     const handleDone = (error: any) => {
       if (!error) {
-        return redirect(ScreenNames.Onboarding, {
-          initialRoute: ScreenNames.Registration,
-        })
+        dispatch(setLogged(true))
       }
     }
     await loader(
-      generateSeed,
-      { showSuccess: false, loading: t('Entropy.loader') },
+      createIdentity,
+      { showSuccess: false, loading: t('Wallet.prepareWallet') },
       handleDone,
     )
   }
@@ -144,11 +143,7 @@ const Walkthrough: React.FC = () => {
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={() =>
-              redirect(ScreenNames.Onboarding, {
-                initialRoute: ScreenNames.IdentityRecovery,
-              })
-            }
+            onPress={() => redirect(ScreenNames.Onboarding)}
           >
             {t('Walkthrough.recoveryBtn')}
           </Btn>

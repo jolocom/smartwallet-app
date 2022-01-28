@@ -11,6 +11,7 @@ const initialState: AccountState = {
   screenHeight: 0,
   currentLanguage: Locales.en,
   isAppDisabled: false,
+  isMnemonicWarningVisible: undefined,
 }
 
 const reducer = (
@@ -36,7 +37,11 @@ const reducer = (
       return { ...state, currentLanguage: action.payload }
     case AccountActions.setAppDisabled:
       return { ...state, isAppDisabled: action.payload }
-
+    case AccountActions.setMnemonicWarningVisibility:
+      return {
+        ...state,
+        isMnemonicWarningVisible: action.payload,
+      }
     default:
       return state
   }
