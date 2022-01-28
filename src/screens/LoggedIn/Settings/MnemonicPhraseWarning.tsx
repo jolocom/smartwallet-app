@@ -31,8 +31,11 @@ const MnemonicPhraseWarning = () => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    getFromStorage(StorageKeys.mnemonicPhrase).then((res) => {
-      setIsMnemonicWritten(res?.isWritten ? true : false)
+    Promise.all([
+      getFromStorage(StorageKeys.mnemonicPhrase),
+      getFromStorage(StorageKeys.isOnboardingDone),
+    ]).then((res) => {
+      setIsMnemonicWritten(res[0]?.isWritten || res[1]?.finished ? true : false)
       LayoutAnimation.configureNext({
         ...LayoutAnimation.Presets.easeInEaseOut,
         duration: 200,

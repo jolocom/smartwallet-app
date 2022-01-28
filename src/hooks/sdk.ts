@@ -22,6 +22,7 @@ import { useToasts } from './toasts'
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
 export enum StorageKeys {
+  isOnboardingDone = 'isOnboardingDone',
   encryptedSeed = 'encryptedSeed',
   termsConsent = 'termsConsent',
   biometry = 'biometry',
