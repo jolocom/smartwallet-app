@@ -173,7 +173,6 @@ export const useAusweisInteraction = () => {
     }
 
     await aa2Module.startChangePin().catch(scheduleErrorWarning)
-    dispatch(setAusweisFlowType(AusweisFlow.changePin))
   }
 
   const disconnectAusweis = () => {
@@ -187,9 +186,6 @@ export const useAusweisInteraction = () => {
   const sendCancel = () => {
     aa2Module
       .cancelFlow()
-      .then(() => {
-        dispatch(setAusweisFlowType(null))
-      })
       .catch((e) =>
         console.warn(
           'Ausweis Error: Something happend when canceling interaction',
@@ -553,12 +549,25 @@ export const useAusweisReaderEvents = () => {
   }, [])
 }
 
+// NOTE: This hook is used to update the state of the Ausweis flow type that is currently running.
+// Furthermore, it allows to disable certain buttons that start a flow in case the previous flow was
+// finished, which otherwise might result in unexpected behavior (the buttons being locked out).
 export const useObserveAusweisChangePinFlow = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const listener = () => {
-      dispatch(setAusweisFlowType(null))
+    const listener = (msg: ChangePinMessage) => {
+      if (msg.hasOwnProperty('success')) {
+        // NOTE: We're using a timeout because even though we received the CHANGE_PIN message, which
+        // signifies the ending of the flow, sending the RUN_CHANGE_PIN command right away will will
+        // not prompt the native scanner. This is an issue on the AA2's side. Finally, 1500 ms seems to
+        // be more or less enough time to be able to start the flow again successfully.
+        setTimeout(() => {
+          dispatch(setAusweisFlowType(null))
+        }, 1500)
+      } else {
+        dispatch(setAusweisFlowType(AusweisFlow.changePin))
+      }
     }
 
     aa2Module.messageEmitter.addListener(Messages.changePin, listener)
