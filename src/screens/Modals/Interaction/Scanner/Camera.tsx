@@ -6,12 +6,14 @@ import {
   TouchableHighlight,
   Animated,
   Platform,
+  Linking,
 } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import Permissions from 'react-native-permissions'
 import { useSelector } from 'react-redux'
 import { useIsFocused } from '@react-navigation/core'
+import branch from 'react-native-branch'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
@@ -102,11 +104,27 @@ const Camera = () => {
     }, 300)
   }, [])
 
+  const openURL = async (url: string) => {
+    let canOpen: boolean | undefined
+    try {
+      canOpen = await Linking.canOpenURL(url)
+    } catch (e) {
+      canOpen = false
+    }
+    return canOpen
+  }
+
   const handleScan = async (e: { data: string }) => {
     try {
-      await processInteraction(e.data)
+      const canOpen = await openURL(e.data)
+      console.log({ canOpen })
+      if (canOpen && e.data.includes('jolocom.app.link')) {
+        branch.openURL(e.data)
+      } else {
+        await processInteraction(e.data)
+      }
     } catch (err) {
-      console.log({ err })
+      console.log('handleScan error', { err })
 
       setError(true)
       setErrorText(t('Camera.errorMsg'))
