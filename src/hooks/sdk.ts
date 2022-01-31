@@ -128,6 +128,17 @@ export const useCreateIdentity = () => {
   }
 }
 
+export const useRecoverIdentity = () => {
+  const agent = useAgent()
+  const dispatch = useDispatch()
+  return async (phrase: string[]) => {
+    const idw = await agent.loadFromMnemonic(phrase.join(' '))
+    await agent.storage.store.setting(StorageKeys.mnemonicPhrase, {
+      isWritten: true,
+    })
+    dispatch(setDid(idw.did))
+  }
+}
 /**
  * Record when the seed phrase was "remembered" by a user.
  * Used to remind and block a user from completing
@@ -178,10 +189,10 @@ export const useRecordUserHasWrittenSeedPhrase = () => {
  *
  * @returns () => Promise<boolean>
  */
-export const useShouldRecoverFromSeed = (phrase: string[]) => {
+export const useShouldRecoverFromSeed = () => {
   const agent = useAgent()
 
-  return async () => {
+  return async (phrase: string[]) => {
     let recovered = false
 
     try {
