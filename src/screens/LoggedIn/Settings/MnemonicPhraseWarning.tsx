@@ -54,7 +54,9 @@ const MnemonicPhraseWarning = () => {
   }, [])
 
   useEffect(() => {
-    dispatch(setMnemonicWarningVisibility(!isMnemonicWritten))
+    if (isMnemonicWritten !== undefined) {
+      dispatch(setMnemonicWarningVisibility(!isMnemonicWritten))
+    }
   }, [isMnemonicWritten])
 
   const handleNavigateToMnemonicPhrase = () => {
