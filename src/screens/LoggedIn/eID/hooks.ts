@@ -553,7 +553,7 @@ export const useAusweisReaderEvents = () => {
   }, [])
 }
 
-export const useAusweisFinishedChangePinEvent = () => {
+export const useObserveAusweisChangePinFlow = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {

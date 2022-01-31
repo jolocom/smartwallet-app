@@ -19,7 +19,7 @@ import { Platform } from 'react-native'
 import { useAgent } from '~/hooks/sdk'
 import { ScreenshotManager } from '~/utils/screenshots'
 import {
-  useAusweisFinishedChangePinEvent,
+  useObserveAusweisChangePinFlow,
   useAusweisReaderEvents,
 } from './eID/hooks'
 
@@ -59,7 +59,7 @@ const LoggedIn = () => {
 
   // NOTE: Used to listen for Ausweis READER messages and update the Redux state
   useAusweisReaderEvents()
-  useAusweisFinishedChangePinEvent()
+  useObserveAusweisChangePinFlow()
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())

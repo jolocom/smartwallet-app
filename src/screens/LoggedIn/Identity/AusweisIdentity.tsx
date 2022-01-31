@@ -3,6 +3,7 @@ import { Image, Platform, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/core'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -26,7 +27,6 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { useSelector } from 'react-redux'
 import { getAusweisFlowType } from '~/modules/ausweis/selectors'
 
 export const AusweisIdentity = () => {

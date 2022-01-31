@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -29,7 +30,6 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
-import { useSelector } from 'react-redux'
 import { getAusweisFlowType } from '~/modules/ausweis/selectors'
 
 interface WhateverProps {
