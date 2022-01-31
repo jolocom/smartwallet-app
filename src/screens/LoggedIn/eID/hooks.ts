@@ -33,6 +33,7 @@ import {
   AusweisScannerState,
   AusweisScannerParams,
   AusweisCardResult,
+  AusweisFlow,
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
 import {
@@ -46,7 +47,6 @@ import {
 } from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
-import { AusweisFlowType } from '~/modules/ausweis/types'
 
 export const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -150,7 +150,7 @@ export const useAusweisInteraction = () => {
       }
 
       dispatch(setAusweisInteractionDetails(requestData))
-      dispatch(setAusweisFlowType(AusweisFlowType.auth))
+      dispatch(setAusweisFlowType(AusweisFlow.auth))
     } catch (e) {
       cancelFlow()
       console.warn(e)
@@ -173,7 +173,7 @@ export const useAusweisInteraction = () => {
     }
 
     await aa2Module.startChangePin().catch(scheduleErrorWarning)
-    dispatch(setAusweisFlowType(AusweisFlowType.changePin))
+    dispatch(setAusweisFlowType(AusweisFlow.changePin))
   }
 
   const disconnectAusweis = () => {

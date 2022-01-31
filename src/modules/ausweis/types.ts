@@ -1,5 +1,5 @@
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import { IAusweisRequest } from '~/screens/LoggedIn/eID/types'
+import { AusweisFlow, IAusweisRequest } from '~/screens/LoggedIn/eID/types'
 
 export enum AusweisModuleActions {
   setDetails = 'setDetails',
@@ -13,11 +13,13 @@ export enum AusweisFlowType {
   auth = 'auth',
 }
 
+type AusweisFlowTypePayload = AusweisFlow.auth | AusweisFlow.changePin | null
+
 export interface AusweisModuleState {
   details: IAusweisRequest | null
   scannerKey: string | null
   readerState: CardInfo | null
-  flowType: AusweisFlowType | null
+  flowType: AusweisFlowTypePayload
 }
 
 export interface SetAusweisDetailsAction {
@@ -37,5 +39,5 @@ export interface SetAusweisReaderStateAction {
 
 export interface SetAusweisFlowTypeAction {
   type: AusweisModuleActions.setFlowType
-  payload: AusweisFlowType | null
+  payload: AusweisFlowTypePayload
 }
