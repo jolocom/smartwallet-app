@@ -13,7 +13,7 @@ const initConnection = async () => {
   try {
     // *** this will clear the database
     // *** used for resetting the did
-    await getConnection().synchronize(true)
+    //await getConnection().synchronize(true)
     // console.log('DB was cleaned')
 
     connection = getConnection()
