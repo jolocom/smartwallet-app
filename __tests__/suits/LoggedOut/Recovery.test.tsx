@@ -52,6 +52,7 @@ jest.mock('@react-navigation/native', () => ({
 
 jest.mock('../../../src/hooks/sdk.ts', () => ({
   useShouldRecoverFromSeed: jest.fn(() => Promise.resolve(true)),
+  useRecoverIdentity: jest.fn(),
   useAgent: () => ({
     loadFromMnemonic: (_: string) => Promise.resolve('did:jun:test'),
   }),
