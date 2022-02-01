@@ -73,9 +73,7 @@
         "widgetStartBtn": "Start now",
         "widgetNameHeader": "What is your name?",
         "widgetConfirmBtn": "Create",
-        "widgetBusinessCardNameHeader": "Please, introduce yourself",
         "widgetNextBtn": "Next",
-        "widgetBusinessCardCompanyHeader": "What company do you represent?",
         "header": "Credentials",
         "nameLabel": "Name",
         "emailLabel": "Email",
@@ -590,6 +588,5 @@
     },
     "Wallet": {
         "prepareWallet": "Preparing your wallet"
-    },
-    "I265:24496;37:18188": "Documents"
+    }
 }

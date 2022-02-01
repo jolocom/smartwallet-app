@@ -52,7 +52,7 @@
         "writeInstructions": "Notieren Sie sich die geheime Wortkombination in der angegebenen Reihenfolge. Bewahren Sie diese zur Wiederherstellung Ihrer Identität sicher auf!",
         "confirmBtn": "Fertig",
         "exitBtn": "Zurück zur Funktionsübersicht",
-        "writeInstructionsWarning": ""
+        "writeInstructionsWarning": "Sie werden nicht mehr in der Lage sein, dies zu sehen"
     },
     "SeedphraseInfo": {
         "header": "Warum diese geheime Wortkombination für Sie wichtig ist",
@@ -73,10 +73,8 @@
         "widgetStartBtn": "Jetzt beginnen",
         "widgetNameHeader": "Wie heißen Sie?",
         "widgetConfirmBtn": "Erstellen",
-        "widgetBusinessCardNameHeader": "Bitte stellen Sie sich vor",
         "widgetNextBtn": "Weiter",
-        "widgetBusinessCardCompanyHeader": "Welche Firma vertreten Sie?",
-        "header": "Credentials/Nachweise",
+        "header": "Nachweise",
         "nameLabel": "Name",
         "emailLabel": "E-Mail",
         "phoneNumberLabel": "Telefonnummer",
@@ -88,7 +86,7 @@
     },
     "BottomBar": {
         "identity": "Identität",
-        "documents": "Credentials/Nachweise",
+        "documents": "Dokumente",
         "history": "Verlauf",
         "settings": "Einstellungen"
     },
@@ -134,7 +132,7 @@
         "header": "So ändern Sie Ihre Wallet PIN",
         "subheader1": "Wir bedauern es sehr, dass Sie ihre Wallet PIN vergessen haben. Aber keine Sorge, es gibt eine Lösung!",
         "subheader2": "Durch Eingabe Ihrer geheimen Wortkombination können Sie ihren Wallet PIN  ändern. Klicken Sie unten auf Zugang wiederherstellen, um die Änderung vorzunehmen.",
-        "imageCaption": "Wiederholen Sie Ihre geheime Wortkombination Wort für Wort",
+        "imageCaption": "Wort für Wort wiederholen",
         "submitBtn": "Zugang wiederherstellen",
         "footer": "Ein neuer Wallet PIN hat das keinen Einfluss auf Ihre gespeicherten Daten",
         "cancelBtn": "Abbrechen"
@@ -234,9 +232,9 @@
         "deleteDocumentHeader": "Möchten Sie ${documentName} löschen?",
         "deleteCredentialInstruction": "Lassen Sie den Kreis zum löschen los",
         "cancelBtn": "Abbrechen",
-        "placeholderHeader": "Noch sind keine Nachweise/Dokumente vorhanden",
+        "placeholderHeader": "Noch sind keine Dokumente vorhanden",
         "documentsPlaceholderSubheader": "Fügen Sie doch noch heute welche hinzu!",
-        "othersPlaceholderHeader": "Noch sind keine Nachweise/Dokumente vorhanden",
+        "othersPlaceholderHeader": "Noch sind keine Dokumente vorhanden",
         "othersPlaceholderSubheader": "Fügen Sie doch noch heute welche hinzu!",
         "unspecifiedField": "Keine Angaben",
         "subjectNameField": "Betreff",
@@ -312,7 +310,7 @@
         "screenshotAlertMsg": "Der Inhalt bleibt sichtbar, auch wenn Sie zu anderen Apps wechseln",
         "screenshotAlertCta": "Aktivieren",
         "screenshotAlertCancel": "Abbrechen",
-        "mnemonicPhraseWarning": "Es besteht die Gefahr, dass Ihre Daten unwiederbringlich verloren zu gehen. Fahren Sie mit Ihrer geheimen Wortkombination fort. "
+        "mnemonicPhraseWarning": "Es besteht die Gefahr, dass Ihre Daten unwiederbringlich verloren zu gehen. Fahren Sie mit Ihrer geheimen Wortkombination fort."
     },
     "Language": {
         "english": "Englisch",
@@ -590,6 +588,5 @@
     },
     "Wallet": {
         "prepareWallet": "Ihr Wallet wird vorbereitet"
-    },
-    "I265:24496;37:18188": "Test Figma"
+    }
 }
