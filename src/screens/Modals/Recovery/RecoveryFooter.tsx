@@ -10,7 +10,11 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { useLoader } from '~/hooks/loader'
-import { StorageKeys, useAgent, useShouldRecoverFromSeed } from '~/hooks/sdk'
+import {
+  useAgent,
+  useRecoverIdentity,
+  useShouldRecoverFromSeed,
+} from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
@@ -39,9 +43,9 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const dispatch = useDispatch()
   const pop = usePop()
   const goBack = useGoBack()
+  const recoveryIdentity = useRecoverIdentity()
 
-  const agent = useAgent()
-  const shouldRecoverFromSeed = useShouldRecoverFromSeed(phrase)
+  const shouldRecoverFromSeed = useShouldRecoverFromSeed()
   const resetPin = useResetKeychainValues()
 
   const resetCountdownValues = useGetResetStoredCountdownValues()
@@ -68,7 +72,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   }, [phrase])
 
   const restoreEntropy = async () => {
-    const shouldRecover = await shouldRecoverFromSeed()
+    const shouldRecover = await shouldRecoverFromSeed(phrase)
 
     if (shouldRecover) {
       await resetPin()
@@ -82,8 +86,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
       await restoreEntropy()
       await resetCountdownValues()
     } else {
-      const idw = await agent.loadFromMnemonic(phrase.join(' '))
-      dispatch(setDid(idw.did))
+      await recoveryIdentity(phrase)
     }
   }
 
