@@ -212,7 +212,7 @@ const SeedPhraseWrite: React.FC = () => {
 
 const styles = StyleSheet.create({
   phraseContainer: {
-    marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
+    marginTop: BP({ default: 20, small: 10, xsmall: 10 }),
   },
   info: {
     width: '40%',

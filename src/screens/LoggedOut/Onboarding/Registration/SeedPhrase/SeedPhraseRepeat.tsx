@@ -117,7 +117,6 @@ const SeedPhraseRepeat: React.FC = () => {
 const styles = StyleSheet.create({
   phraseContainer: {
     marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
-    width: '100%',
     flex: 1,
   },
   info: {
