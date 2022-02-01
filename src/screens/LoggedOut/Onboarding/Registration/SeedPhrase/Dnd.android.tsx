@@ -34,8 +34,7 @@ const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
           justifyContent: 'center',
           position: 'absolute',
           right: BP({ default: -60, small: -40, xsmall: -40 }),
-          top: 0,
-          bottom: 0,
+          top: 100,
         }}
       >
         <ArrowDown />

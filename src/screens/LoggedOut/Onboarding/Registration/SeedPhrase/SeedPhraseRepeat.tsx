@@ -102,7 +102,6 @@ const SeedPhraseRepeat: React.FC = () => {
           <Dnd tags={shuffledSeedphrase} updateTags={handlePhraseUpdate} />
         ) : null}
       </View>
-      <View style={{ flex: 0.7 }} />
       <AbsoluteBottom>
         <Btn
           disabled={!readyToSubmit || wrongOrder}
