@@ -102,6 +102,7 @@ const SeedPhraseRepeat: React.FC = () => {
           <Dnd tags={shuffledSeedphrase} updateTags={handlePhraseUpdate} />
         ) : null}
       </View>
+      <View style={{ flex: 0.7 }} />
       <AbsoluteBottom>
         <Btn
           disabled={!readyToSubmit || wrongOrder}
@@ -117,6 +118,7 @@ const SeedPhraseRepeat: React.FC = () => {
 const styles = StyleSheet.create({
   phraseContainer: {
     marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
+    flex: 1,
   },
   info: {
     width: '40%',
