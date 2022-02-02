@@ -7,17 +7,15 @@ import { NavigationContextProvider } from './NavigationProvider'
 import { NavigationContainerRef } from '@react-navigation/native'
 import { usePrevious } from './hooks/generic'
 import useConnection from './hooks/connection'
+import TermsConsent from './screens/Modals/TermsConsent'
 
 interface Props {
   navRef: RefObject<NavigationContainerRef>
 }
 
 const Overlays: React.FC<Props> = ({ navRef }) => {
-  const {
-    connected,
-    showConnectedToast,
-    showDisconnectedToast,
-  } = useConnection()
+  const { connected, showConnectedToast, showDisconnectedToast } =
+    useConnection()
   const prevConnected = usePrevious(connected)
 
   useEffect(() => {
@@ -39,6 +37,7 @@ const Overlays: React.FC<Props> = ({ navRef }) => {
       />
       <Toasts />
       <Loader />
+      <TermsConsent />
     </NavigationContextProvider>
   )
 }

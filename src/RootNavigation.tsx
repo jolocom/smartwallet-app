@@ -20,7 +20,6 @@ import { Colors } from './utils/colors'
 import SeedPhraseInfo from './screens/LoggedOut/Onboarding/Registration/SeedPhrase/SeedPhraseInfo'
 import {
   screenDisableGestures,
-  screenTransitionSlideFromBottom,
   transparentModalOptions,
 } from './utils/screenSettings'
 import AppDisabled from './screens/Modals/AppDisabled'
