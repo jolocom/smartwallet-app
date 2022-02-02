@@ -14,7 +14,7 @@ import Dnd from './Dnd'
 import useTranslation from '~/hooks/useTranslation'
 import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
-import { StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import BP from '~/utils/breakpoints'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
@@ -116,8 +116,16 @@ const SeedPhraseRepeat: React.FC = () => {
 }
 const styles = StyleSheet.create({
   phraseContainer: {
-    marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
     flex: 1,
+    ...Platform.select({
+      ios: {
+        justifyContent: 'flex-start',
+        marginTop: '40%',
+      },
+      android: {
+        marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
+      },
+    }),
   },
   info: {
     width: '40%',
