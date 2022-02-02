@@ -36,6 +36,7 @@ import { getIsAppLocked } from '~/modules/account/selectors'
 import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
+import { useDisableLock } from '~/hooks/generic'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -44,6 +45,7 @@ const Camera = () => {
   const { t } = useTranslation()
   const { errorScreen } = useErrors()
   const { processInteraction } = useInteractionStart()
+  const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
 
   const isAppLocked = useSelector(getIsAppLocked)
@@ -117,9 +119,17 @@ const Camera = () => {
   const handleScan = async (e: { data: string }) => {
     try {
       const canOpen = await openURL(e.data)
-      console.log({ canOpen })
       if (canOpen && e.data.includes('jolocom.app.link')) {
-        branch.openURL(e.data)
+        disableLock(() => {
+          // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
+          // when the app goes into background when the deeplink is opened
+          return new Promise<void>((res) => {
+            branch.openURL(e.data)
+            setTimeout(() => {
+              res()
+            }, 1000)
+          })
+        })
       } else {
         await processInteraction(e.data)
       }
