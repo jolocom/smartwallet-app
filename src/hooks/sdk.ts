@@ -73,8 +73,13 @@ export const useWalletInit = () => {
       if (pin) {
         dispatch(setLocalAuth(true))
       }
+
       const isMakingScreenshotDisabled =
         await ScreenshotManager.getDisabledStatus(agent)
+
+      isMakingScreenshotDisabled
+        ? ScreenshotManager.enable()
+        : ScreenshotManager.disable()
       dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
     } catch (err) {
       console.warn(err)
