@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
-
+import { Platform } from 'react-native'
 import { Agent } from 'react-native-jolocom'
 
 import { AgentContext } from '~/utils/sdk/context'
@@ -63,6 +63,21 @@ export const useWalletInit = () => {
     await checkConsent(agent)
 
     try {
+      if (Platform.OS === 'android') {
+        /**
+         * Setting up secure flag value before loading the identity
+         * otherwise, the valuees in store, system and storage
+         * can diverge
+         */
+        const isMakingScreenshotDisabled =
+          await ScreenshotManager.getDisabledStatus(agent)
+
+        isMakingScreenshotDisabled
+          ? ScreenshotManager.disable()
+          : ScreenshotManager.enable()
+        dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
+      }
+
       const idw = await agent.loadIdentity()
 
       await makeInitializeCredentials(agent, idw.did, dispatch)()
@@ -73,9 +88,6 @@ export const useWalletInit = () => {
       if (pin) {
         dispatch(setLocalAuth(true))
       }
-      const isMakingScreenshotDisabled =
-        await ScreenshotManager.getDisabledStatus(agent)
-      dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
     } catch (err) {
       console.warn(err)
     }
