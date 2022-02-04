@@ -17,3 +17,5 @@ export const getIsAppDisabled = (state: RootReducerI) =>
   state.account.isAppDisabled
 export const getMnemonicWarningVisibility = (state: RootReducerI) =>
   state.account.isMnemonicWarningVisible
+export const getIsMakingScreenshotDisabled = (state: RootReducerI) =>
+  state.account.isMakingScreenshotDisabled

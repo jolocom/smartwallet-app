@@ -11,6 +11,7 @@ import {
   setLogged,
   setLocalAuth,
   setMnemonicWarningVisibility,
+  setMakingScreenshotDisability,
 } from '~/modules/account/actions'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import useTermsConsent from './consent'
@@ -18,6 +19,7 @@ import { makeInitializeCredentials, useCredentials } from './signedCredentials'
 import useTranslation from './useTranslation'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 import { useToasts } from './toasts'
+import { ScreenshotManager } from '~/utils/screenshots'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -71,6 +73,9 @@ export const useWalletInit = () => {
       if (pin) {
         dispatch(setLocalAuth(true))
       }
+      const isMakingScreenshotDisabled =
+        await ScreenshotManager.getDisabledStatus(agent)
+      dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
     } catch (err) {
       console.warn(err)
     }

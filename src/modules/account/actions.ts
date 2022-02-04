@@ -25,6 +25,10 @@ export const setAppDisabled = createAction<boolean>(
 export const setMnemonicWarningVisibility = createAction<boolean>(
   AccountActions.setMnemonicWarningVisibility,
 )
+
+export const setMakingScreenshotDisability = createAction<boolean>(
+  AccountActions.setMakingScreenshotDisability,
+)
 // UI
 export const setScreenHeight = createAction<number>(
   AccountActions.setScreenHeight,
