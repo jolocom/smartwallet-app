@@ -1,14 +1,11 @@
 import { AppStateActions, AppStatusState } from './types'
-import { Action } from '~/types/actions'
+import { setPopup } from './actions'
 
 const initialState: AppStatusState = {
   isPopup: false,
 }
 
-const reducer = (
-  state = initialState,
-  action: Action<AppStateActions, boolean>,
-) => {
+const reducer = (state = initialState, action: ReturnType<typeof setPopup>) => {
   switch (action.type) {
     case AppStateActions.setPopup:
       return { ...initialState, isPopup: action.payload }

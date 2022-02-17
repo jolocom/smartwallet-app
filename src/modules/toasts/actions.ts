@@ -4,14 +4,23 @@ import { Toast, ToastFilter } from '~/types/toasts'
 import { ThunkAction, RootReducerI } from '~/types/reducer'
 import { toastMatchesFilter } from './utils'
 
-const addToQueue = createAction<Toast>(ToastsActions.addToQueue)
-const removeFromQueue = createAction<Toast>(ToastsActions.removeFromQueue)
-const setActiveToast = createAction<{ toast: Toast | null; expiry: number }>(
-  ToastsActions.setActiveToast,
+export const addToQueue = createAction<ToastsActions.addToQueue, Toast>(
+  ToastsActions.addToQueue,
 )
-const setActiveFilter = createAction<ToastFilter>(ToastsActions.setActiveFilter)
+export const removeFromQueue = createAction<
+  ToastsActions.removeFromQueue,
+  Toast
+>(ToastsActions.removeFromQueue)
+export const setActiveToast = createAction<
+  ToastsActions.setActiveToast,
+  { toast: Toast | null; expiry: number }
+>(ToastsActions.setActiveToast)
+export const setActiveFilter = createAction<
+  ToastsActions.setActiveFilter,
+  ToastFilter
+>(ToastsActions.setActiveFilter)
 
-const clearActiveToast = setActiveToast({ toast: null, expiry: 0 })
+export const clearActiveToast = setActiveToast({ toast: null, expiry: 0 })
 
 export const scheduleToast =
   (toast: Toast): ThunkAction =>

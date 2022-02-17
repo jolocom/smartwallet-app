@@ -1,7 +1,13 @@
 import { InteractionActions, InteractionState } from './types'
-import { Action } from '~/types/actions'
 import { isCredShareDetails, isCredOfferDetails } from './guards'
 import { AttrActions, AttributePayload } from '../attributes/types'
+import {
+  setInteractionDetails,
+  resetInteraction,
+  selectShareCredential,
+  updateOfferValidation,
+  setRedirectUrl,
+} from './actions'
 
 const initialState: InteractionState = {
   details: { flowType: null, id: null, counterparty: null },
@@ -10,7 +16,13 @@ const initialState: InteractionState = {
 
 const reducer = (
   state = initialState,
-  action: Action<InteractionActions | AttrActions.updateAttrs, any>,
+  action: ReturnType<
+    | typeof setInteractionDetails
+    | typeof resetInteraction
+    | typeof selectShareCredential
+    | typeof updateOfferValidation
+    | typeof setRedirectUrl
+  >,
 ) => {
   switch (action.type) {
     case InteractionActions.setInteractionDetails:

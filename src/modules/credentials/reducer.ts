@@ -1,14 +1,15 @@
-import { ActionI } from '~/types/action'
 import { CredentialActions, CredentialsState } from './types'
+import { setCredentials, addCredentials, deleteCredential } from './actions'
 
 //TODO: check if additional nesting is required
 const initialState: CredentialsState = {
   all: [],
 }
-
 const credentialsReducer = (
   state = initialState,
-  action: ActionI<CredentialActions>,
+  action: ReturnType<
+    typeof setCredentials | typeof addCredentials | typeof deleteCredential
+  >,
 ) => {
   switch (action.type) {
     case CredentialActions.setCredentials:

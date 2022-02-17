@@ -1,3 +1,4 @@
+import { AttributeTypes } from '~/types/credentials'
 import createAction from '~/utils/createAction'
 import {
   AttrActions,
@@ -7,13 +8,21 @@ import {
   AttributePayloadEdit,
 } from './types'
 
-export const initAttrs = createAction<AttrsState<AttributeI>>(
+export const initAttrs = createAction<
   AttrActions.initAttrs,
-)
-export const updateAttrs = createAction<AttributePayload>(
+  AttrsState<AttributeI>
+>(AttrActions.initAttrs)
+export const updateAttrs = createAction<
   AttrActions.updateAttrs,
-)
+  AttributePayload
+>(AttrActions.updateAttrs)
 
-export const editAttr = createAction<AttributePayloadEdit>(AttrActions.editAttr)
+export const editAttr = createAction<
+  AttrActions.editAttr,
+  AttributePayloadEdit
+>(AttrActions.editAttr)
 
-export const deleteAttr = createAction(AttrActions.deleteAttr)
+export const deleteAttr = createAction<
+  AttrActions.deleteAttr,
+  { type: AttributeTypes; id: string }
+>(AttrActions.deleteAttr)

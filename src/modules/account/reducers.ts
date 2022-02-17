@@ -1,6 +1,17 @@
 import { AccountState, AccountActions } from './types'
-import { Action } from '~/types/actions'
 import { Locales } from '~/translations'
+import {
+  setDid,
+  setLogged,
+  setLocalAuth,
+  resetAccount,
+  setTermsConsentVisibility,
+  setTermsConsentOutdatedness,
+  setCurrentLanguage,
+  setAppDisabled,
+  setMnemonicWarningVisibility,
+  setMakingScreenshotDisability,
+} from './actions'
 
 const initialState: AccountState = {
   did: '',
@@ -20,8 +31,19 @@ const initialState: AccountState = {
 
 const reducer = (
   state = initialState,
-  action: Action<AccountActions, any>,
-): AccountState => {
+  action: ReturnType<
+    | typeof setDid
+    | typeof setLogged
+    | typeof setLocalAuth
+    | typeof resetAccount
+    | typeof setTermsConsentVisibility
+    | typeof setTermsConsentOutdatedness
+    | typeof setCurrentLanguage
+    | typeof setAppDisabled
+    | typeof setMnemonicWarningVisibility
+    | typeof setMakingScreenshotDisability
+  >,
+) => {
   switch (action.type) {
     case AccountActions.setDid:
       return { ...state, did: action.payload }
