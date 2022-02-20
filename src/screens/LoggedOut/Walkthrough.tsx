@@ -3,6 +3,7 @@ import { ImageBackground, StyleSheet, View, Platform } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
+import { StackActions, useNavigation } from '@react-navigation/core'
 
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
@@ -32,6 +33,7 @@ const useWalkthroughProceed = () => {
   const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
   const isTermsConsentVisible = useSelector(getIsTermsConsentVisible)
   const redirect = useRedirect()
+  const navigation = useNavigation()
   const { t } = useTranslation()
   const pendingActionRef = useRef(() => {})
   const prevTermsConsetVisibility = usePrevious(isTermsConsentVisible)
@@ -48,6 +50,8 @@ const useWalkthroughProceed = () => {
     const handleDone = (error: any) => {
       if (!error) {
         dispatch(setLogged(true))
+      } else {
+        navigation.dispatch(StackActions.replace(ScreenNames.Walkthrough))
       }
     }
     await loader(
@@ -60,6 +64,8 @@ const useWalkthroughProceed = () => {
     return () => {
       if (isTermsConsentOutdated) {
         dispatch(setTermsConsentVisibility(true))
+        // Idle screen serves as a background when terms consent is hiding, so we don't see for a fraction of a second the Walkthrough screen
+        navigation.navigate(ScreenNames.Idle)
         pendingActionRef.current = cb
       } else {
         cb()
