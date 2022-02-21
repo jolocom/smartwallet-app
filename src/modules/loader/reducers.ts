@@ -1,4 +1,4 @@
-import { LoaderActions, LoaderState, LoaderTypes } from './types'
+import { LoaderActionType, LoaderState, LoaderTypes } from './types'
 import { dismissLoader, setLoader } from './actions'
 
 const initialState: LoaderState = {
@@ -12,9 +12,9 @@ const reducer = (
   action: ReturnType<typeof dismissLoader | typeof setLoader>,
 ) => {
   switch (action.type) {
-    case LoaderActions.set:
+    case LoaderActionType.set:
       return { ...action.payload, isVisible: true }
-    case LoaderActions.dismiss:
+    case LoaderActionType.dismiss:
       return initialState
     default:
       return state

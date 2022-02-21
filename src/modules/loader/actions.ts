@@ -1,10 +1,12 @@
 import createAction from '~/utils/createAction'
-import { LoaderActions, LoaderState } from './types'
+import { LoaderAction, LoaderActions, LoaderActionType } from './types'
 
-export const dismissLoader = createAction<LoaderActions.dismiss, undefined>(
-  LoaderActions.dismiss,
-)
-export const setLoader = createAction<
-  LoaderActions.set,
-  Pick<LoaderState, 'type' | 'msg'>
->(LoaderActions.set)
+// To avoid manually passing a generic type every time we call `createAction`
+// redeclaring createAction fn with types specific to the `loader` module
+function createLoaderAction<K extends keyof LoaderActions>(type: K) {
+  return createAction<LoaderAction<K>>(type)
+}
+
+export const dismissLoader = createLoaderAction(LoaderActionType.dismiss)
+
+export const setLoader = createLoaderAction(LoaderActionType.set)
