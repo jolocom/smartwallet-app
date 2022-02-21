@@ -1,4 +1,4 @@
-import { AppStateActions, AppStatusState } from './types'
+import { AppStateActionType, AppStatusState } from './types'
 import { setPopup } from './actions'
 
 const initialState: AppStatusState = {
@@ -7,7 +7,7 @@ const initialState: AppStatusState = {
 
 const reducer = (state = initialState, action: ReturnType<typeof setPopup>) => {
   switch (action.type) {
-    case AppStateActions.setPopup:
+    case AppStateActionType.setPopup:
       return { ...initialState, isPopup: action.payload }
     default:
       return state
