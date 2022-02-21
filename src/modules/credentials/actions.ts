@@ -1,18 +1,24 @@
-import { DisplayCredential } from '~/types/credentials'
 import createAction from '~/utils/createAction'
-import { CredentialActions } from './types'
+import {
+  CredentialsAction,
+  CredentialsActions,
+  CredentialsActionType,
+} from './types'
 
-export const setCredentials = createAction<
-  CredentialActions.setCredentials,
-  DisplayCredential[]
->(CredentialActions.setCredentials)
+// To avoid manually passing a generic type every time we call `createAction`
+// redeclaring createAction fn with types specific to the `credentials` module
+function createCredentialsAction<K extends keyof CredentialsActions>(type: K) {
+  return createAction<CredentialsAction<K>>(type)
+}
 
-export const addCredentials = createAction<
-  CredentialActions.addCredentials,
-  DisplayCredential[]
->(CredentialActions.addCredentials)
+export const setCredentials = createCredentialsAction(
+  CredentialsActionType.setCredentials,
+)
 
-export const deleteCredential = createAction<
-  CredentialActions.deleteCredential,
-  string
->(CredentialActions.deleteCredential)
+export const addCredentials = createCredentialsAction(
+  CredentialsActionType.addCredentials,
+)
+
+export const deleteCredential = createCredentialsAction(
+  CredentialsActionType.deleteCredential,
+)
