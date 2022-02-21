@@ -1,8 +1,8 @@
 import {
   AttributesState,
-  AttrActions,
   AttributePayloadEdit,
   AttributePayload,
+  AttrActionType,
 } from './types'
 import { initAttrs, updateAttrs, editAttr, deleteAttr } from './actions'
 
@@ -15,10 +15,10 @@ const reducer = (
   >,
 ) => {
   switch (action.type) {
-    case AttrActions.initAttrs: {
+    case AttrActionType.initAttrs: {
       return { ...state, all: action.payload }
     }
-    case AttrActions.updateAttrs: {
+    case AttrActionType.updateAttrs: {
       const { type, attribute } = action.payload as AttributePayload
       const availableAttr = state.all[type]
       return {
@@ -29,7 +29,7 @@ const reducer = (
         },
       }
     }
-    case AttrActions.editAttr: {
+    case AttrActionType.editAttr: {
       const {
         type,
         attribute: editedAttribute,
@@ -45,7 +45,7 @@ const reducer = (
         },
       }
     }
-    case AttrActions.deleteAttr: {
+    case AttrActionType.deleteAttr: {
       const { type, id } = action.payload
       const typeAttrs = state.all[type]
 
