@@ -6,10 +6,10 @@ const LOGS_DIR = 'logs'
 const STALE_TERMS_FILE = 'stale-terms.txt'
 
 const args = minimist(process.argv.slice(2), {
-  string: ['translationFilePath'],
+  string: ['path'],
   boolean: ['help', 'write'],
 })
-let translationFilePath = args.translationFilePath,
+let path = args.path,
   write = args.write,
   help = args.help
 
@@ -22,19 +22,17 @@ function printHelp() {
   console.log('\x1b[4;95m%s\x1b[0m', 'Script usage:')
   console.log(
     '\x1b[0;95m%s\x1b[0m',
-    'yarn terms:stale --translationFilePath=/path/to/translation.json',
+    'yarn terms:stale --path=/path/to/translation.json',
   )
   console.log('')
   console.log('--help                          prints help')
-  console.log(
-    '--translationFilePath           (required) file to read terms from',
-  )
+  console.log('--path           (required) file path to read terms from')
   console.log(
     `--write                         (optional) will write stale term to ${LOGS_DIR}/${STALE_TERMS_FILE}`,
   )
 }
 try {
-  fs.readFile(translationFilePath, { encoding: 'utf8' }, (err, data) => {
+  fs.readFile(path, { encoding: 'utf8' }, (err, data) => {
     if (err) {
       throw err
     }
