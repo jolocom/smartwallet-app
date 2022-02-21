@@ -54,7 +54,7 @@ export const readEnv = async (path: string) => {
 
 // Script usage
 type Documentation = [arg: string, isRequired: string | boolean, desc: string]
-export function printHelp(documentation: Documentation[]) {
+export function printHelp(gist: string, documentation: Documentation[]) {
   const helpEnhancedDocs = [...documentation, ['help', '--', 'prints help']]
   const t = new Table({
     columns: [
@@ -77,6 +77,7 @@ export function printHelp(documentation: Documentation[]) {
   })
 
   purpleLog('Script usage:')
+  console.log(`$ ${gist}`)
   helpEnhancedDocs.forEach((a) => {
     t.addRow({
       arg: `--${a[0]}`,
