@@ -1,4 +1,4 @@
-import { ToastsState, ToastsActions } from './types'
+import { ToastsState, ToastsActionType } from './types'
 import { ToastFilter } from '~/types/toasts'
 import {
   addToQueue,
@@ -24,9 +24,9 @@ const toastsReducer = (
   >,
 ) => {
   switch (action.type) {
-    case ToastsActions.addToQueue:
+    case ToastsActionType.addToQueue:
       return { ...state, queue: [...state.queue, action.payload] }
-    case ToastsActions.removeFromQueue:
+    case ToastsActionType.removeFromQueue:
       const queue = state.queue.filter(
         (toast) => toast.id !== action.payload.id,
       )
@@ -34,13 +34,13 @@ const toastsReducer = (
         ...state,
         queue,
       }
-    case ToastsActions.setActiveToast:
+    case ToastsActionType.setActiveToast:
       return {
         ...state,
         active: action.payload.toast,
         activeExpiryTs: action.payload.expiry,
       }
-    case ToastsActions.setActiveFilter:
+    case ToastsActionType.setActiveFilter:
       if (state.activeFilter === action.payload) return state
       return {
         ...state,
