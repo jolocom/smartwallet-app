@@ -2,7 +2,7 @@ import minimist from 'minimist'
 import fs from 'fs'
 import shell from 'shelljs'
 
-const LOGS_DIR = 'logs'
+const LOGS_DIR = '.tmp'
 const STALE_TERMS_FILE = 'stale-terms.txt'
 
 const args = minimist(process.argv.slice(2), {

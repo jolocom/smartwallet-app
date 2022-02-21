@@ -89,4 +89,4 @@ buck-out/
 
 # other
 coverage/
-logs/
+.tmp/
