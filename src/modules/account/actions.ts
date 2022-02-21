@@ -1,50 +1,46 @@
-import { Locales } from '~/translations'
 import createAction from '~/utils/createAction'
-import { AccountActions } from './types'
+import { AccountActionType, AccountActions, AccountAction } from './types'
 
-export const setDid = createAction<AccountActions.setDid, string>(
-  AccountActions.setDid,
-)
-export const setLogged = createAction<AccountActions.setLogged, boolean>(
-  AccountActions.setLogged,
-)
-export const setLocalAuth = createAction<AccountActions.setLocalAuth, boolean>(
-  AccountActions.setLocalAuth,
-)
-export const resetAccount = createAction(AccountActions.resetAccount)
-export const setTermsConsentVisibility = createAction<
-  AccountActions.setTermsConsentVisibility,
-  boolean
->(AccountActions.setTermsConsentVisibility)
-export const setTermsConsentOutdatedness = createAction<
-  AccountActions.setTermsConsentOutdatedness,
-  boolean
->(AccountActions.setTermsConsentOutdatedness)
-export const setAppLocked = createAction<AccountActions.setAppLocked, boolean>(
-  AccountActions.setAppLocked,
+// To avoid manually passing a generic type every time we call `createAction`
+// redeclaring createAction fn with types specific to the `account` module
+function createAccountAction<K extends keyof AccountActions>(type: K) {
+  return createAction<AccountAction<K>>(type)
+}
+
+export const setDid = createAccountAction(AccountActionType.setDid)
+
+export const setLogged = createAccountAction(AccountActionType.setLogged)
+
+export const setLocalAuth = createAccountAction(AccountActionType.setLocalAuth)
+
+export const resetAccount = createAccountAction(AccountActionType.resetAccount)
+
+export const setTermsConsentVisibility = createAccountAction(
+  AccountActionType.setTermsConsentVisibility,
 )
 
-export const setCurrentLanguage = createAction<
-  AccountActions.setCurrentLanguage,
-  Locales
->(AccountActions.setCurrentLanguage)
+export const setTermsConsentOutdatedness = createAccountAction(
+  AccountActionType.setTermsConsentOutdatedness,
+)
+export const setAppLocked = createAccountAction(AccountActionType.setAppLocked)
 
-export const setAppDisabled = createAction<
-  AccountActions.setAppDisabled,
-  boolean
->(AccountActions.setAppDisabled)
+export const setCurrentLanguage = createAccountAction(
+  AccountActionType.setCurrentLanguage,
+)
 
-export const setMnemonicWarningVisibility = createAction<
-  AccountActions.setMnemonicWarningVisibility,
-  boolean
->(AccountActions.setMnemonicWarningVisibility)
+export const setAppDisabled = createAccountAction(
+  AccountActionType.setAppDisabled,
+)
 
-export const setMakingScreenshotDisability = createAction<
-  AccountActions.setMakingScreenshotDisability,
-  boolean
->(AccountActions.setMakingScreenshotDisability)
+export const setMnemonicWarningVisibility = createAccountAction(
+  AccountActionType.setMnemonicWarningVisibility,
+)
+
+export const setMakingScreenshotDisability = createAccountAction(
+  AccountActionType.setMakingScreenshotDisability,
+)
+
 // UI
-export const setScreenHeight = createAction<
-  AccountActions.setScreenHeight,
-  number
->(AccountActions.setScreenHeight)
+export const setScreenHeight = createAccountAction(
+  AccountActionType.setScreenHeight,
+)
