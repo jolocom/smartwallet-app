@@ -54,6 +54,7 @@ export const readEnv = async (path: string) => {
 
 // Script usage
 type Documentation = [arg: string, isRequired: string | boolean, desc: string]
+
 export function printHelp(gist: string, documentation: Documentation[]) {
   const helpEnhancedDocs = [...documentation, ['help', '--', 'prints help']]
   const t = new Table({
@@ -88,6 +89,7 @@ export function printHelp(gist: string, documentation: Documentation[]) {
   })
   t.printTable()
 }
+
 // Color the output
 const coloredLog = (escapeSequence: string) => (message: string) =>
   console.log(escapeSequence, message)
