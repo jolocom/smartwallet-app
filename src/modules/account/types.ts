@@ -12,6 +12,7 @@ export enum AccountActions {
   setMnemonicWarningVisibility = 'setMnemonicWarningVisibility',
   setTermsConsentVisibility = 'setTermsConsentVisibility',
   setTermsConsentOutdatedness = 'setTermsConsentOutdatedness',
+  setMakingScreenshotDisability = 'setMakingScreenshotDisability',
 }
 
 export interface AccountState {
@@ -27,4 +28,5 @@ export interface AccountState {
     isVisible: boolean
     isOutdated: boolean
   }
+  isMakingScreenshotDisabled: boolean
 }

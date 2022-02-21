@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "2.2.0-037",
+  "version": "2.2.0-040",
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
@@ -71,7 +71,7 @@
     "react-native-dotenv": "^3.3.0",
     "react-native-draggable-flatlist": "^2.5.2",
     "react-native-encrypted-storage": "^4.0.2",
-    "react-native-flag-secure-android": "^1.0.2",
+    "react-native-flag-secure-android": "https://github.com/jolocom/react-native-flag-secure-android",
     "react-native-formik": "^1.7.8",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-haptic-feedback": "^1.10.0",

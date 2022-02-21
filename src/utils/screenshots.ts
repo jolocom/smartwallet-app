@@ -12,6 +12,7 @@ export class ScreenshotManager {
     return FlagSecure.deactivate()
   }
 
+  // TODO: we have a hook useSettings to get values from the settings table
   static async getDisabledStatus(agent: Agent) {
     return agent.storage.get
       .setting(StorageKeys.screenshotsDisabled)
@@ -20,6 +21,7 @@ export class ScreenshotManager {
       })
   }
 
+  // TODO: we have a hook useSettings to set values to the settings table
   static async storeDisabledStatus(status: boolean, agent: Agent) {
     return agent.storage.store.setting(StorageKeys.screenshotsDisabled, {
       isDisabled: status,

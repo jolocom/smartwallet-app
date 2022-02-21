@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
-
+import { Platform } from 'react-native'
 import { Agent } from 'react-native-jolocom'
 
 import { AgentContext } from '~/utils/sdk/context'
@@ -11,6 +11,7 @@ import {
   setLogged,
   setLocalAuth,
   setMnemonicWarningVisibility,
+  setMakingScreenshotDisability,
 } from '~/modules/account/actions'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import useTermsConsent from './consent'
@@ -18,6 +19,7 @@ import { makeInitializeCredentials, useCredentials } from './signedCredentials'
 import useTranslation from './useTranslation'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 import { useToasts } from './toasts'
+import { ScreenshotManager } from '~/utils/screenshots'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -61,6 +63,21 @@ export const useWalletInit = () => {
     await checkConsent(agent)
 
     try {
+      if (Platform.OS === 'android') {
+        /**
+         * Setting up secure flag value before loading the identity
+         * otherwise, the valuees in store, system and storage
+         * can diverge
+         */
+        const isMakingScreenshotDisabled =
+          await ScreenshotManager.getDisabledStatus(agent)
+
+        isMakingScreenshotDisabled
+          ? ScreenshotManager.disable()
+          : ScreenshotManager.enable()
+        dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
+      }
+
       const idw = await agent.loadIdentity()
 
       await makeInitializeCredentials(agent, idw.did, dispatch)()

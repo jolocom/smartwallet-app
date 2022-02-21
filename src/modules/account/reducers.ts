@@ -15,6 +15,7 @@ const initialState: AccountState = {
     isVisible: false,
     isOutdated: false,
   },
+  isMakingScreenshotDisabled: true,
 }
 
 const reducer = (
@@ -66,6 +67,11 @@ const reducer = (
       return {
         ...state,
         isMnemonicWarningVisible: action.payload,
+      }
+    case AccountActions.setMakingScreenshotDisability:
+      return {
+        ...state,
+        isMakingScreenshotDisabled: action.payload,
       }
     default:
       return state
