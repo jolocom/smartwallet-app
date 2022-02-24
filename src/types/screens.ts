@@ -13,6 +13,9 @@ export enum ScreenNames {
 
   PasscodeRecovery = 'PasscodeRecovery',
 
+  // Driving License
+  DrivingLicenseForm = 'DrivingLicenseForm',
+
   // Logged In
   LoggedIn = 'LoggedIn',
   LockStack = 'LockStack',
