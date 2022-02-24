@@ -39,6 +39,9 @@ import { usePopupMenu } from '~/hooks/popupMenu'
 import DocumentSectionDocumentCard from '~/components/Cards/DocumentSectionCards/DocumentSectionDocumentCard'
 import DocumentSectionOtherCard from '~/components/Cards/DocumentSectionCards/DocumentSectionOtherCard'
 import { truncateString } from '~/utils/stringUtils'
+import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
+import { DrivingLicenseCard } from './DrivingLicenseDemo'
+import { DrivingLicensePersonalization } from './DrivingLicenseDemo/DrivingLicensePersonalization'
 
 const getCredentialDisplayType = (displayType: string, t: TFunction) => {
   /**
@@ -174,6 +177,8 @@ export const DocumentList = () => {
     [JSON.stringify(categories)],
   )
 
+  const {drivingLicense} = useDrivingLicense()
+
   const onHandleMore = useHandleMorePress()
 
   if (categories === null) return null
@@ -187,13 +192,34 @@ export const DocumentList = () => {
         }}
         testID="document-cards-container"
       >
-        {!documents.length ? (
+        {!documents.length && !drivingLicense ? (
           <ScreenPlaceholder
             title={t('Documents.placeholderHeader')}
             description={t('Documents.documentsPlaceholderSubheader')}
           />
         ) : (
           <CardList>
+              <View style={[styles.sectionContainer, {width: '100%', alignItems: 'center'}]}>
+                <ScreenContainer.Padding>
+                  <JoloText
+                    size={JoloTextSizes.mini}
+                    color={Colors.white90}
+                    customStyles={{
+                      textAlign: 'left',
+                      marginBottom: BP({ default: 30, xsmall: 16 }),
+                    }}
+                  >
+                    {"Driving License"}
+                  </JoloText>
+                </ScreenContainer.Padding>
+                <View style={{marginLeft: -12}}>
+                  {drivingLicense ? (
+                    <DrivingLicenseCard drivingLicense={drivingLicense} />
+                  ) : (
+                    <DrivingLicensePersonalization />
+                  )}
+                </View>
+              </View>
             {documents.map((d) => {
               const { credentials, value } = d as
                 | CredentialsByType<DisplayCredentialDocument>
