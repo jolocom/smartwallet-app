@@ -20,6 +20,8 @@ import useTranslation from './useTranslation'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 import { useToasts } from './toasts'
 import { ScreenshotManager } from '~/utils/screenshots'
+import DrivingLicenseSDK from 'react-native-mdl'
+import { setMdlDisplayData } from '~/modules/mdl/actions'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -77,6 +79,13 @@ export const useWalletInit = () => {
           : ScreenshotManager.enable()
         dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
       }
+
+      const mdlSdk = new DrivingLicenseSDK()
+      const mdlDisplayData = await mdlSdk.getPersonalizationStatus().then(isPersonalized => {
+        if(isPersonalized) return mdlSdk.getDisplayData()
+        return null
+      })
+      dispatch(setMdlDisplayData(mdlDisplayData))
 
       const idw = await agent.loadIdentity()
 
