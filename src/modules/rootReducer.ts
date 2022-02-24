@@ -21,6 +21,9 @@ import { CredentialActions } from './credentials/types'
 import toastsReducer from './toasts/reducer'
 import { ToastsActions } from './toasts/types'
 
+import mdlReducer from './mdl/reducer'
+import { MdlActions } from './mdl/types'
+
 const rootReducer = combineReducers({
   loader: loaderReducer,
   account: accountReducer,
@@ -29,6 +32,7 @@ const rootReducer = combineReducers({
   appState: appStateReducer,
   credentials: credentialsReducer,
   toasts: toastsReducer,
+  mdl: mdlReducer
 })
 
 export type RootActions =
@@ -39,5 +43,6 @@ export type RootActions =
   | AppStateActions
   | CredentialActions
   | ToastsActions
+  | MdlActions
 
 export default rootReducer
