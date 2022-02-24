@@ -222,6 +222,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				1B90EA9C5ED1C33ACE618B45 /* [CP] Copy Pods Resources */,
+				252C97D5BB7D45ECB4F133D9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -245,6 +246,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				87E1411C184043BEB1DDAB27 /* Upload Debug Symbols to Sentry */,
 				461D7F85ED56AAB4BF89A5B9 /* [CP] Copy Pods Resources */,
+				7B3333957B8CA1A35E8D3A54 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -413,6 +415,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		252C97D5BB7D45ECB4F133D9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-mdl/BDRDrivingLicense.framework/BDRDrivingLicense",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BDRDrivingLicense.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -443,6 +463,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartWallet/Pods-SmartWallet-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7B3333957B8CA1A35E8D3A54 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartWallet/Pods-SmartWallet-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-mdl/BDRDrivingLicense.framework/BDRDrivingLicense",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BDRDrivingLicense.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartWallet/Pods-SmartWallet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		82C7F293BE24CCA09240384A /* [CP] Check Pods Manifest.lock */ = {
