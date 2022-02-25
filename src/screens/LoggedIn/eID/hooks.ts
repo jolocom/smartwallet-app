@@ -186,6 +186,9 @@ const useAusweisInteraction = () => {
   const sendCancel = () => {
     aa2Module
       .cancelFlow()
+      .then(() => {
+        dispatch(setAusweisFlowType(null))
+      })
       .catch((e) =>
         console.warn(
           'Ausweis Error: Something happend when canceling interaction',
@@ -219,6 +222,7 @@ const useAusweisInteraction = () => {
   }
 
   const finishFlow = (url: string, message?: string) => {
+    dispatch(setAusweisFlowType(null))
     if (isConnectedToTheInternet === false) {
       return Promise.reject('No internet connection')
     }
