@@ -221,6 +221,7 @@ const useAusweisInteraction = () => {
           scheduleInfo({
             title: t('Toasts.ausweisSuccessTitle'),
             message: t('Toasts.ausweisSuccessMsg'),
+            dismiss: 10000,
           })
         }
       })
