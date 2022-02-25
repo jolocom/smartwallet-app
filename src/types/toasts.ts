@@ -12,13 +12,7 @@ interface ToastMessage {
  */
 
 interface ToastDismiss {
-  dismiss?:
-    | false
-    | {
-        label?: string
-        timeout?: number
-        onDismiss?: (...args: any) => void
-      }
+  dismiss?: false | number
 }
 
 /**
@@ -73,16 +67,12 @@ export enum ToastType {
 
 export const createInfoToast = createToastFactory({
   type: ToastType.info,
-  dismiss: {
-    timeout: 6000,
-  },
+  dismiss: 8000,
 })
 
 export const createWarningToast = createToastFactory({
   type: ToastType.warning,
-  dismiss: {
-    timeout: 6000,
-  },
+  dismiss: 8000,
 })
 
 export const createStickyToast = createToastFactory({

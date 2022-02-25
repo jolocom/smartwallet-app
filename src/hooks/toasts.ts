@@ -74,19 +74,6 @@ export const useToasts = () => {
     !keepToast && removeToast(activeToast)
   }
 
-  const invokeDismiss = () => {
-    if (!activeToast) {
-      throw new Error('No toast to invoke!')
-    }
-
-    const { dismiss } = activeToast
-    if (typeof dismiss === 'object' && dismiss.onDismiss) {
-      dismiss.onDismiss()
-    }
-
-    return dispatch(removeToast(activeToast))
-  }
-
   return {
     scheduleInfo,
     scheduleWarning,
@@ -95,7 +82,6 @@ export const useToasts = () => {
     scheduleErrorInfo,
     removeToast,
     invokeInteract,
-    invokeDismiss,
     activeToast,
   }
 }

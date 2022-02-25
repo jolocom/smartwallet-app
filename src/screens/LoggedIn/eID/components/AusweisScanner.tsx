@@ -1,5 +1,5 @@
-import { RouteProp, useIsFocused, useRoute } from '@react-navigation/core'
-import React, { useEffect, useRef, useState } from 'react'
+import { RouteProp, useIsFocused, useRoute } from '@react-navigation/native'
+import React, { useEffect, useRef } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useDispatch } from 'react-redux'
@@ -17,7 +17,7 @@ import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
 import useTranslation from '~/hooks/useTranslation'
-import { useCheckNFC } from '../hooks'
+import eIDHooks from '../hooks'
 import BP from '~/utils/breakpoints'
 
 const AnimatedStatus: React.FC<{
@@ -60,7 +60,7 @@ export const AusweisScanner = () => {
   } = route.params
   const goBack = useGoBack()
   const dispatch = useDispatch()
-  const { checkNfcSupport } = useCheckNFC()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
 
   const isScreenFocused = useIsFocused()
 

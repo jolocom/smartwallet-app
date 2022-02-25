@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'

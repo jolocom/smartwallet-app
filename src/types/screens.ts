@@ -10,13 +10,11 @@ export enum ScreenNames {
   SeedPhraseWrite = 'SeedPhraseWrite',
   SeedPhraseInfo = 'SeedPhraseInfo',
   SeedPhraseRepeat = 'SeedPhraseRepeat',
-  LoggedOutTermsConsent = 'LoggedOutTermsConsent',
 
   PasscodeRecovery = 'PasscodeRecovery',
 
   // Logged In
   LoggedIn = 'LoggedIn',
-  LoggedInTermsConsent = 'LoggedInTermsConsent',
   LockStack = 'LockStack',
   Lock = 'Lock',
   DeviceAuth = 'DeviceAuth',
@@ -51,6 +49,7 @@ export enum ScreenNames {
   //Settings
   SettingsGeneral = 'SettingsGeneral',
   Language = 'Language',
+  MnemonicPhrase = 'MnemonicPhrase',
   ChangePin = 'ChangePin',
   BackupIdentity = 'BackupIdentity',
   FAQ = 'FAQ',

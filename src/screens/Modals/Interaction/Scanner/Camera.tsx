@@ -41,6 +41,7 @@ import {
   getIsAusweisInteractionProcessed,
 } from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
+import { useDisableLock } from '~/hooks/generic'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -50,6 +51,7 @@ const Camera = () => {
   const { errorScreen } = useErrors()
   const { processInteraction } = useInteractionStart()
   const dispatch = useDispatch()
+  const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
   const { connected: isConnectedToTheInternet } = useConnection()
 
@@ -123,7 +125,7 @@ const Camera = () => {
     }
   }, [isAuseisInteractionProcessed])
 
-  const getCanOpenURL = async (url: string) => {
+  const openURL = async (url: string) => {
     let canOpen: boolean | undefined
     try {
       canOpen = await Linking.canOpenURL(url)
@@ -144,11 +146,20 @@ const Camera = () => {
       return
     }
     try {
-      const canOpen = await getCanOpenURL(e.data)
+      const canOpen = await openURL(e.data)
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
       if (canOpen && e.data.includes('jolocom.app.link')) {
-        branch.openURL(e.data)
+        disableLock(() => {
+          // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
+          // when the app goes into background when the deeplink is opened
+          return new Promise<void>((res) => {
+            branch.openURL(e.data)
+            setTimeout(() => {
+              res()
+            }, 1000)
+          })
+        })
       } else {
         await processInteraction(e.data)
       }

@@ -1,36 +1,32 @@
 import React, { useCallback } from 'react'
-import { Platform, View } from 'react-native'
+import { Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
-import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-
 import { ScreenNames } from '~/types/screens'
-import { JoloTextSizes } from '~/utils/fonts'
 import { resetAccount } from '~/modules/account/actions'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
-
 import Section from './components/Section'
-import { Colors } from '~/utils/colors'
 import Option from './components/Option'
 import DevelopmentSection from './Development'
 import EnableBiometryOption from './EnableBiometryOption'
 import { useBiometry } from '~/hooks/biometry'
-import useBackup from '~/hooks/backup'
 import useMarketRating from '~/hooks/rateus'
-import { useAgent } from '~/hooks/sdk'
+import { StorageKeys } from '~/hooks/sdk'
 import ClearIdentityBtn from './components/ClearIdentityBtn'
 import Btn, { BtnTypes } from '~/components/Btn'
 import useTranslation from '~/hooks/useTranslation'
 import EnableScreenshotsOption from './EnableScreenshotsOption'
+import useSettings from '~/hooks/settings'
+import MnemonicPhraseWarning from './MnemonicPhraseWarning'
 
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
   const resetServiceValuesInKeychain = useResetKeychainValues()
   const { resetBiometry } = useBiometry()
-  const { shouldWarnBackup } = useBackup()
+  const { set: setStorageValue } = useSettings()
   const { rateApp } = useMarketRating()
 
   const dispatch = useDispatch()
@@ -39,6 +35,10 @@ const SettingsGeneral: React.FC = () => {
     try {
       await resetBiometry()
       await resetServiceValuesInKeychain()
+      // @ts-expect-error TODO: we should unite StorageKeys and SettingKeys
+      await setStorageValue(StorageKeys.mnemonicPhrase, {
+        isWritten: false,
+      })
       dispatch(resetAccount())
     } catch (err) {
       console.log('Error occured while logging out')
@@ -46,9 +46,7 @@ const SettingsGeneral: React.FC = () => {
     }
   }, [dispatch])
 
-  const handleNavigateToScreen = (screenName: ScreenNames) => {
-    navigation.navigate(screenName)
-  }
+  const handleNavigateToScreen = navigation.navigate
 
   return (
     <ScreenContainer
@@ -79,6 +77,7 @@ const SettingsGeneral: React.FC = () => {
 
         <Section>
           <Section.Title>{t('Settings.securitySection')}</Section.Title>
+          <MnemonicPhraseWarning />
           <Section.Block>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}

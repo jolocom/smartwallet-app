@@ -8,7 +8,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useAusweisCancelBackHandler, useAusweisInteraction } from '../hooks'
+import eIDHooks from '../hooks'
 import { AusweisFlow, AusweisPasscodeMode, eIDScreens } from '../types'
 
 /**
@@ -23,10 +23,10 @@ const AusweisLockPukInfo: React.FC = () => {
    * TODO: this has changed in cancelling workflow PR,
    * this should be updated to 'cancelInteraction'
    */
-  const { cancelInteraction } = useAusweisInteraction()
+  const { cancelInteraction } = eIDHooks.useAusweisInteraction()
   const navigation = useNavigation()
 
-  useAusweisCancelBackHandler()
+  eIDHooks.useAusweisCancelBackHandler()
 
   const handleContinueWithPuk = () => {
     navigation.navigate(eIDScreens.EnterPIN, {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, Platform, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { useSelector } from 'react-redux'
 
@@ -11,13 +11,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
-import {
-  useAusweisCompatibilityCheck,
-  useAusweisInteraction,
-  useAusweisScanner,
-  useCheckNFC,
-  useDeactivatedCard,
-} from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
   AusweisFlow,
@@ -31,13 +25,14 @@ import { getAusweisFlowType } from '~/modules/ausweis/selectors'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
-  const { startCheck: startCompatibilityCheck } = useAusweisCompatibilityCheck()
-  const { checkNfcSupport } = useCheckNFC()
+  const { startCheck: startCompatibilityCheck } =
+    eIDHooks.useAusweisCompatibilityCheck()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow, checkCardValidity, startChangePin } =
-    useAusweisInteraction()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { handleDeactivatedCard } = useDeactivatedCard()
+    eIDHooks.useAusweisInteraction()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
 
   const handleCompatibilityCheck = () => {
@@ -81,7 +76,6 @@ export const AusweisIdentity = () => {
             handleShowCardLockResult(CardInfoMode.unblocked)
           },
         },
-        isUnlocking: true,
       },
     })
   }
@@ -91,7 +85,7 @@ export const AusweisIdentity = () => {
     aa2Module.setHandlers({
       handleCardInfo: (card) => {
         if (card?.deactivated) {
-          handleDeactivatedCard(navigation.goBack)
+          handleDeactivatedCard()
         }
       },
       handleCardRequest: () => {

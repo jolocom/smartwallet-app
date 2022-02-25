@@ -24,7 +24,7 @@ import { parseJWT } from '~/utils/parseJWT'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
 import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
-import { useAusweisInteraction } from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import useConnection from '../connection'
 
 export const useInteraction = () => {
@@ -37,7 +37,7 @@ export const useInteraction = () => {
 
 // NOTE: This should be called only in one place!
 export const useDeeplinkInteractions = () => {
-  const { processAusweisToken } = useAusweisInteraction()
+  const { processAusweisToken } = eIDHooks.useAusweisInteraction()
   const { processInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
   const loader = useLoader()

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ImageBackground, StyleSheet, View, Platform } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
-
 import { ScreenNames } from '~/types/screens'
-
 import { useRedirect } from '~/hooks/navigation'
 import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
 import { Colors } from '~/utils/colors'
@@ -18,18 +17,71 @@ import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { useLoader } from '~/hooks/loader'
-import { useGenerateSeed } from '~/hooks/sdk'
+import { useCreateIdentity } from '~/hooks/sdk'
+import { setLogged, setTermsConsentVisibility } from '~/modules/account/actions'
+import {
+  getIsTermsConsentOutdated,
+  getIsTermsConsentVisible,
+} from '~/modules/account/selectors'
+import { usePrevious } from '~/hooks/generic'
+
+const useWalkthroughProceed = () => {
+  const loader = useLoader()
+  const createIdentity = useCreateIdentity()
+  const dispatch = useDispatch()
+  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
+  const isTermsConsentVisible = useSelector(getIsTermsConsentVisible)
+  const redirect = useRedirect()
+  const { t } = useTranslation()
+  const pendingActionRef = useRef(() => {})
+  const prevTermsConsetVisibility = usePrevious(isTermsConsentVisible)
+
+  useEffect(() => {
+    if (isTermsConsentVisible === false && prevTermsConsetVisibility === true) {
+      setTimeout(() => {
+        pendingActionRef.current()
+      }, 100)
+    }
+  }, [isTermsConsentVisible])
+
+  const registerUser = async () => {
+    const handleDone = (error: any) => {
+      if (!error) {
+        dispatch(setLogged(true))
+      }
+    }
+    await loader(
+      createIdentity,
+      { showSuccess: false, loading: t('Wallet.prepareWallet') },
+      handleDone,
+    )
+  }
+  const handleProceed = (cb: () => Promise<void>) => {
+    return () => {
+      if (isTermsConsentOutdated) {
+        dispatch(setTermsConsentVisibility(true))
+        pendingActionRef.current = cb
+      } else {
+        cb()
+      }
+    }
+  }
+  const handleRegistration = handleProceed(registerUser)
+  const handleRecovery = handleProceed(async () => {
+    redirect(ScreenNames.IdentityRecovery)
+  })
+  return { handleRegistration, handleRecovery }
+}
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
   <View style={styles.dot}>
     <View style={active ? styles.activeDot : styles.inactiveDot} />
   </View>
 )
+
 const Walkthrough: React.FC = () => {
-  const redirect = useRedirect()
   const { t } = useTranslation()
-  const loader = useLoader()
-  const generateSeed = useGenerateSeed()
+  const { handleRegistration, handleRecovery } = useWalkthroughProceed()
 
   const walkthroughData = [
     {
@@ -72,21 +124,6 @@ const Walkthrough: React.FC = () => {
       clearTimeout(id)
     }
   }, [])
-
-  const handleGetStarted = async () => {
-    const handleDone = (error: any) => {
-      if (!error) {
-        return redirect(ScreenNames.Onboarding, {
-          initialRoute: ScreenNames.Registration,
-        })
-      }
-    }
-    await loader(
-      generateSeed,
-      { showSuccess: false, loading: t('Entropy.loader') },
-      handleDone,
-    )
-  }
 
   return (
     <ScreenContainer
@@ -138,17 +175,13 @@ const Walkthrough: React.FC = () => {
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn size={BtnSize.large} onPress={handleGetStarted}>
+          <Btn size={BtnSize.large} onPress={handleRegistration}>
             {t('Walkthrough.registrationBtn')}
           </Btn>
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={() =>
-              redirect(ScreenNames.Onboarding, {
-                initialRoute: ScreenNames.IdentityRecovery,
-              })
-            }
+            onPress={handleRecovery}
           >
             {t('Walkthrough.recoveryBtn')}
           </Btn>

@@ -9372,10 +9372,9 @@ react-native-encrypted-storage@^4.0.2:
   resolved "https://registry.yarnpkg.com/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.2.tgz#c7d59b1d3ff2f80d572be3e85aaab3fdee16744a"
   integrity sha512-vneDkHGDuTvLQjUBztqb2YI8QoH1zxdJonPGTS+g57lfJZff9fAjoLSSb6NgMBebpXFcK3I3sEresGyL+3AArw==
 
-react-native-flag-secure-android@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-flag-secure-android/-/react-native-flag-secure-android-1.0.2.tgz#acc295a9766f43f8776a03af5986b204342919f7"
-  integrity sha512-H++s5TGsXMMj24QpEKQ0gdf4UBpa6gQuanML2Q/gIqsIOLZh7gHK95Rh8rT5522mmOVIiIfZwxJXiBlNqAztKQ==
+"react-native-flag-secure-android@https://github.com/jolocom/react-native-flag-secure-android":
+  version "1.0.0"
+  resolved "https://github.com/jolocom/react-native-flag-secure-android#163e470c1e1dbfb6d763e09946b2ebc34e89bb18"
 
 react-native-formik@^1.7.8:
   version "1.7.8"

@@ -5,6 +5,7 @@ import { ScreenNames } from '~/types/screens'
 
 import SeedPhraseRepeat from './SeedPhrase/SeedPhraseRepeat'
 import SeedPhraseWrite from './SeedPhrase/SeedPhraseWrite'
+import { screenTransitionSlideFromRight } from '~/utils/screenSettings'
 
 const Stack = createStackNavigator()
 
@@ -13,6 +14,7 @@ const Registration: React.FC = () => {
     <Stack.Navigator
       headerMode="none"
       initialRouteName={ScreenNames.SeedPhraseWrite}
+      screenOptions={screenTransitionSlideFromRight}
     >
       <Stack.Screen
         name={ScreenNames.SeedPhraseWrite}

@@ -1,7 +1,6 @@
 import {
   useNavigation,
   StackActions,
-  useRoute,
   useNavigationState,
 } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'

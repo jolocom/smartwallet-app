@@ -24,6 +24,7 @@ export const CheckboxOption: React.FC<Props> = ({ onPress, description }) => {
       style={styles.container}
       activeOpacity={0.8}
       onPress={handlePress}
+      testID="checkbox-option"
     >
       <View style={styles.radio}>{selected && <PurpleTickSuccess />}</View>
       <JoloText

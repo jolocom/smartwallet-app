@@ -1,8 +1,8 @@
 import { useBackHandler } from '@react-native-community/hooks'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
@@ -72,22 +72,7 @@ const AusweisCardInfo = () => {
               {title}
             </JoloText>
           ) : (
-            <Trans>
-              <JoloText
-                kind={JoloTextKind.title}
-                customStyles={{ alignSelf: 'center' }}
-              >
-                {title}
-                <JoloText
-                  kind={JoloTextKind.title}
-                  customStyles={{
-                    alignSelf: 'center',
-                    textDecorationLine: 'underline',
-                  }}
-                  onPress={handleRedirectToIdentity}
-                />
-              </JoloText>
-            </Trans>
+            <Trans />
           )}
         </ScreenContainer.Padding>
       </View>

@@ -48,9 +48,9 @@ import {
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 
-export const useAusweisContext = useCustomContext(AusweisContext)
+const useAusweisContext = useCustomContext(AusweisContext)
 
-export const useCheckNFC = () => {
+const useCheckNFC = () => {
   const { t } = useTranslation()
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
 
@@ -101,13 +101,13 @@ export const useCheckNFC = () => {
   return { checkNfcSupport }
 }
 
-export const useAusweisInteraction = () => {
+const useAusweisInteraction = () => {
   const { t } = useTranslation()
   const { scheduleInfo, scheduleErrorWarning, scheduleWarning } = useToasts()
   const popStack = usePopStack()
   const dispatch = useDispatch()
   const { connected: isConnectedToTheInternet } = useConnection()
-  const { showScanner } = useAusweisScanner()
+  const { showScanner } = eIDHooks.useAusweisScanner()
   const isCardTouched = useSelector(getAusweisReaderState)
 
   /*
@@ -233,6 +233,7 @@ export const useAusweisInteraction = () => {
           scheduleInfo({
             title: t('Toasts.ausweisSuccessTitle'),
             message: t('Toasts.ausweisSuccessMsg'),
+            dismiss: 10000,
           })
         }
       })
@@ -280,12 +281,12 @@ export const useAusweisInteraction = () => {
   }
 }
 
-export const useAusweisCompatibilityCheck = () => {
+const useAusweisCompatibilityCheck = () => {
   const redirect = useRedirect()
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
-  const { showScanner, updateScanner } = useAusweisScanner()
-  const { cancelFlow, startChangePin } = useAusweisInteraction()
-  const { checkNfcSupport } = useCheckNFC()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { cancelFlow, startChangePin } = eIDHooks.useAusweisInteraction()
+  const { checkNfcSupport } = eIDHooks.useCheckNFC()
   const readerState = useSelector(getAusweisReaderState)
 
   const updateCompatibilityResult = (cardInfo: CardInfo) => {
@@ -358,7 +359,7 @@ export const useAusweisCompatibilityCheck = () => {
   return { startCheck, compatibility }
 }
 
-export const useAusweisSkipCompatibility = () => {
+const useAusweisSkipCompatibility = () => {
   const settings = useSettings()
   const { scheduleErrorWarning } = useToasts()
   const [shouldSkip, setShouldSkipValue] = useState(false)
@@ -391,7 +392,7 @@ export const useAusweisSkipCompatibility = () => {
   return { shouldSkip, setShouldSkip }
 }
 
-export const useTranslatedAusweisFields = () => {
+const useTranslatedAusweisFields = () => {
   const { t } = useTranslation()
 
   const fieldsMapping: { [x in AusweisFields]: string } = {
@@ -426,34 +427,21 @@ export const useTranslatedAusweisFields = () => {
 
 export const useDeactivatedCard = () => {
   const { updateScanner } = useAusweisScanner()
-  const { cancelFlow } = useAusweisInteraction()
   const { scheduleWarning } = useToasts()
   const { t } = useTranslation()
 
-  const handleDeactivatedCard = (onDismiss?: () => void) => {
+  const handleDeactivatedCard = () => {
     if (IS_ANDROID) {
       updateScanner({
         state: AusweisScannerState.failure,
         onDone: () => {
-          cancelFlow()
-          onDismiss && onDismiss()
-          setTimeout(() => {
-            scheduleWarning({
-              title: t('Toasts.ausweisFailedCheckTitle'),
-              message: t('Toasts.ausweisFailedCheckMsg'),
-              interact: {
-                label: t('Toasts.ausweisFailedCheckBtn'),
-                onInteract: () => {},
-              },
-            })
-          }, 500)
+          scheduleWarning({
+            title: t('Toasts.ausweisDeactivatedCardTitle'),
+            message: t('Toasts.ausweisDeactivatedCardMsg'),
+          })
         },
       })
     } else {
-      /**
-       * TODO: find a good copy to convey the information
-       * about "deactivated" card
-       */
       scheduleWarning({
         title: t('Toasts.ausweisDeactivatedCardTitle'),
         message: t('Toasts.ausweisDeactivatedCardMsg'),
@@ -519,9 +507,9 @@ export const useAusweisScanner = () => {
   return { showScanner, updateScanner }
 }
 
-export const useAusweisCancelBackHandler = () => {
+const useAusweisCancelBackHandler = () => {
   const isFocused = useIsFocused()
-  const { cancelInteraction } = useAusweisInteraction()
+  const { cancelInteraction } = eIDHooks.useAusweisInteraction()
 
   useBackHandler(() => {
     if (isFocused) {
@@ -533,7 +521,7 @@ export const useAusweisCancelBackHandler = () => {
   })
 }
 
-export const useAusweisReaderEvents = () => {
+const useAusweisReaderEvents = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -577,3 +565,19 @@ export const useObserveAusweisChangePinFlow = () => {
     }
   }, [])
 }
+
+const eIDHooks = {
+  useAusweisReaderEvents,
+  useAusweisCancelBackHandler,
+  useAusweisScanner,
+  useDeactivatedCard,
+  useTranslatedAusweisFields,
+  useAusweisSkipCompatibility,
+  useAusweisCompatibilityCheck,
+  useAusweisInteraction,
+  useCheckNFC,
+  useAusweisContext,
+  useObserveAusweisChangePinFlow,
+}
+
+export default eIDHooks

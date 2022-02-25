@@ -43,7 +43,7 @@ export const setActiveFilterAndUpdate =
   }
 
 const updateToastState = (() => {
-  let nextUpdateTimeout: NodeJS.Timeout | null = null
+  let nextUpdateTimeout: number | null = null
   let updateInProgress = false
 
   let activeState: {
@@ -126,7 +126,7 @@ const updateToastState = (() => {
     // if there's a next and it is not the already active toast
     if (next && next !== activeState.active) {
       // if next should be automatically dismissed, setup a timeout for it
-      if (next.dismiss && next.dismiss.timeout) {
+      if (next.dismiss) {
         if (nextUpdateTimeout) {
           // this should normally never be the case.... but
           clearTimeout(nextUpdateTimeout)
@@ -135,9 +135,9 @@ const updateToastState = (() => {
           nextUpdateTimeout = null
           dispatch(update)
           // +5 for good taste
-        }, next.dismiss.timeout + 5)
+        }, next.dismiss + 5)
 
-        nextExpiry = activeState.curTs + next.dismiss.timeout
+        nextExpiry = activeState.curTs + next.dismiss
       }
       ret = dispatch(setActiveToast({ toast: next, expiry: nextExpiry }))
     }

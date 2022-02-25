@@ -45,7 +45,7 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
   cellColor = Colors.black30,
   numberOfLines = 1,
 }) => {
-  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const { pin, pinError, pinSuccess, passcodeLength: length } = usePasscode()
   const digits = pin.split('')
 
@@ -70,7 +70,11 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
         }
       }, 100)
     }
-    updateSelectedIndex()
+
+    if (pin.length > 1) {
+      updateSelectedIndex()
+    }
+
     return () => {
       isCurrent = false
     }
@@ -83,6 +87,7 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
         const nextBaseIndex = (length / numberOfLines) * (line + 1)
         return (
           <View
+            key={line}
             style={[
               styles.inputContainer,
               {
@@ -96,6 +101,7 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
               const isSelected = digits.length === index
               return index >= baseIndex && index < nextBaseIndex ? (
                 <PasscodeCell
+                  key={index}
                   error={pinError}
                   success={pinSuccess}
                   selected={isSelected}

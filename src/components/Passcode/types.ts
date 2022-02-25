@@ -24,19 +24,17 @@ export interface IPasscodeInputProps {
   numberOfLines?: number
 }
 
-export interface IAccessoryBtnProps {
-  title: string
-  onPress: () => void
+export interface ExtraActionProps {
+  onPress?: (context: IPasscodeContext) => void
+  title?: string
 }
 
 export interface IPasscodeComposition {
   Input: React.FC<IPasscodeInputProps>
   Header: React.FC<IPasscodeHeaderProps>
-  AccessoryBtn: React.FC<IAccessoryBtnProps>
-  Forgot: React.FC
+  ExtraAction: React.FC<ExtraActionProps>
   Keyboard: React.FC<IPasscodeKeyboardProps>
   Container: React.FC<IWithCustomStyle>
-  ResetBtn: React.FC<{ onPress: () => void }>
   Error: React.FC
   Disable: React.FC
 }
