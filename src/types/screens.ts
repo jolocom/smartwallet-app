@@ -5,7 +5,7 @@ export enum ScreenNames {
   IdentityRecovery = 'IdentityRecovery',
   Registration = 'Registration',
   Walkthrough = 'Walkthrough',
-  Entropy = 'Entropy',
+  Idle = 'Idle',
   LostSeedPhraseInfo = 'LostSeedPhraseInfo',
   SeedPhraseWrite = 'SeedPhraseWrite',
   SeedPhraseInfo = 'SeedPhraseInfo',

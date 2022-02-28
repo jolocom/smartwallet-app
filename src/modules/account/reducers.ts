@@ -1,6 +1,19 @@
-import { AccountState, AccountActions } from './types'
-import { Action } from '~/types/actions'
 import { Locales } from '~/translations'
+import { AccountState, AccountActionType } from './types'
+import {
+  setDid,
+  setLogged,
+  setLocalAuth,
+  resetAccount,
+  setTermsConsentVisibility,
+  setTermsConsentOutdatedness,
+  setCurrentLanguage,
+  setAppDisabled,
+  setMnemonicWarningVisibility,
+  setMakingScreenshotDisability,
+  setScreenHeight,
+  setAppLocked,
+} from './actions'
 
 const initialState: AccountState = {
   did: '',
@@ -20,18 +33,31 @@ const initialState: AccountState = {
 
 const reducer = (
   state = initialState,
-  action: Action<AccountActions, any>,
-): AccountState => {
+  action: ReturnType<
+    | typeof setDid
+    | typeof setLogged
+    | typeof setLocalAuth
+    | typeof resetAccount
+    | typeof setTermsConsentVisibility
+    | typeof setTermsConsentOutdatedness
+    | typeof setCurrentLanguage
+    | typeof setAppDisabled
+    | typeof setMnemonicWarningVisibility
+    | typeof setMakingScreenshotDisability
+    | typeof setScreenHeight
+    | typeof setAppLocked
+  >,
+) => {
   switch (action.type) {
-    case AccountActions.setDid:
+    case AccountActionType.setDid:
       return { ...state, did: action.payload }
-    case AccountActions.setLogged:
+    case AccountActionType.setLogged:
       return { ...state, loggedIn: action.payload }
-    case AccountActions.setLocalAuth:
+    case AccountActionType.setLocalAuth:
       return { ...state, isLocalAuthSet: action.payload }
-    case AccountActions.resetAccount:
+    case AccountActionType.resetAccount:
       return initialState
-    case AccountActions.setTermsConsentVisibility: {
+    case AccountActionType.setTermsConsentVisibility: {
       const { termsConsent } = state
       if (action.payload === true) {
         return {
@@ -48,27 +74,27 @@ const reducer = (
         }
       }
     }
-    case AccountActions.setTermsConsentOutdatedness: {
+    case AccountActionType.setTermsConsentOutdatedness: {
       const { termsConsent } = state
       return {
         ...state,
         termsConsent: { ...termsConsent, isOutdated: action.payload },
       }
     }
-    case AccountActions.setAppLocked:
+    case AccountActionType.setAppLocked:
       return { ...state, isAppLocked: action.payload }
-    case AccountActions.setScreenHeight:
+    case AccountActionType.setScreenHeight:
       return { ...state, screenHeight: action.payload }
-    case AccountActions.setCurrentLanguage:
+    case AccountActionType.setCurrentLanguage:
       return { ...state, currentLanguage: action.payload }
-    case AccountActions.setAppDisabled:
+    case AccountActionType.setAppDisabled:
       return { ...state, isAppDisabled: action.payload }
-    case AccountActions.setMnemonicWarningVisibility:
+    case AccountActionType.setMnemonicWarningVisibility:
       return {
         ...state,
         isMnemonicWarningVisible: action.payload,
       }
-    case AccountActions.setMakingScreenshotDisability:
+    case AccountActionType.setMakingScreenshotDisability:
       return {
         ...state,
         isMakingScreenshotDisabled: action.payload,
