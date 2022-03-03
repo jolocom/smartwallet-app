@@ -337,7 +337,7 @@ export const AusweisPasscode = () => {
                   mode: CardInfoMode.standaloneUnblock,
                   onDismiss: () => {
                     aa2Module.resetHandlers()
-                    cancelFlow()
+                    cancelInteraction()
                   },
                 },
               }),
@@ -447,6 +447,7 @@ export const AusweisPasscode = () => {
         screen: ScreenNames.AusweisCardInfo,
         params: {
           mode: CardInfoMode.blocked,
+          onDismiss: cancelInteraction,
         },
       }),
     )

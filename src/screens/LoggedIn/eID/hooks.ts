@@ -180,15 +180,13 @@ const useAusweisInteraction = () => {
   }
 
   const closeAusweis = () => {
+    dispatch(setAusweisFlowType(null))
     popStack()
   }
 
   const sendCancel = () => {
     aa2Module
       .cancelFlow()
-      .then(() => {
-        dispatch(setAusweisFlowType(null))
-      })
       .catch((e) =>
         console.warn(
           'Ausweis Error: Something happend when canceling interaction',
