@@ -53,7 +53,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>To scan QR codes to interact with other services</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) requires FaceID access to allow you quick and secure access</string>
+	<string>We require FaceID access to allow you quick and secure access</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>TTCommons-Light.otf</string>

@@ -1,0 +1,9 @@
+/*
+  InfoPlist.strings
+  SmartWallet
+
+  Created by SBub on 3/10/22.
+  
+*/
+NSCameraUsageDescription = "de NSCameraUsageDescription";
+NSFaceIDUsageDescription = "de NSFaceIDUsageDescription";
