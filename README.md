@@ -42,6 +42,15 @@ Interested in our vision? Take a look at our [whitepaper](https://jolocom.io/wp-
 
 Running a build on a physical device requires the appropriate code signing certificates.
 
+## Deeplinks
+The application supports deeplinks with this syntax 
+
+`https://jolocom.app.link/interact?token={jwt}&redirectUrl={redirect_url}`
+
+where `jwt` is a jwt containing a valid interaction token and `redirect_url` (NOTE: url is an optional parameter) is an address a user will be redirected to (upon her confirmation) after an interaction has been completed (full cycle of tokens exchange has happened and no exceptions were encountered on the way). Note `redirect_url` should be “url encoded”. You can do so programaticily, i.e. in JS `encodeURIComponent(redirect_url)`
+
+A QR code containing a deeplink can be scanned by both the wallet camera and the device camera
+
 ## Testing
 We use Jest + [React Native Testing Library](https://testing-library.com/docs/react-native-testing-library/intro/) for unit testing.
 
