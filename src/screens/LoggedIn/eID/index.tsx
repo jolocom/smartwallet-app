@@ -17,8 +17,6 @@ import {
 } from '~/utils/screenSettings'
 import {
   AusweisRequestReview,
-  AusweisRequest,
-  CompatibilityCheck,
   AusweisPasscode,
   AusweisPasscodeDetails,
   AusweisScanner,
@@ -36,9 +34,7 @@ import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import AusweisChangePin from './components/AusweisChangePin'
 
 export type AusweisStackParamList = {
-  [eIDScreens.InteractionSheet]: undefined
   [eIDScreens.AusweisScanner]: AusweisScannerParams
-  [eIDScreens.ReadinessCheck]: undefined
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeParams
   [eIDScreens.PasscodeDetails]: AusweisPasscodeDetailsParams
@@ -70,22 +66,13 @@ const AusweisInteraction = () => {
     <eIDStack.Navigator
       headerMode="none"
       mode="modal"
-      initialRouteName={eIDScreens.InteractionSheet}
+      initialRouteName={eIDScreens.RequestDetails}
       screenOptions={transparentModalOptions}
     >
-      <eIDStack.Screen
-        name={eIDScreens.InteractionSheet}
-        component={AusweisRequest}
-      />
       <eIDStack.Screen
         name={eIDScreens.AusweisScanner}
         component={AusweisScanner}
         options={transparentModalFadeOptions}
-      />
-      <eIDStack.Screen
-        name={eIDScreens.ReadinessCheck}
-        component={CompatibilityCheck}
-        options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
         name={eIDScreens.RequestDetails}

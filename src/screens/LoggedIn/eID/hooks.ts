@@ -21,7 +21,6 @@ import { useBackHandler } from '@react-native-community/hooks'
 import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
 import { useRedirect, usePopStack } from '~/hooks/navigation'
-import useSettings, { SettingKeys } from '~/hooks/settings'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
@@ -355,39 +354,6 @@ const useAusweisCompatibilityCheck = () => {
   return { startCheck, compatibility }
 }
 
-const useAusweisSkipCompatibility = () => {
-  const settings = useSettings()
-  const { scheduleErrorWarning } = useToasts()
-  const [shouldSkip, setShouldSkipValue] = useState(false)
-
-  useEffect(() => {
-    getShouldSkip().then(setShouldSkipValue)
-  }, [])
-
-  const getShouldSkip = async () => {
-    try {
-      const result = await settings.get(SettingKeys.ausweisSkipCompatibility)
-      if (!result?.value) return false
-      else return result.value as boolean
-    } catch (e) {
-      console.warn('Failed to get value from storage', e)
-      return false
-    }
-  }
-
-  const setShouldSkip = async (value: boolean) => {
-    try {
-      await settings.set(SettingKeys.ausweisSkipCompatibility, { value })
-      setShouldSkipValue(value)
-    } catch (e) {
-      console.warn('Failed to get value from storage', e)
-      scheduleErrorWarning(e)
-    }
-  }
-
-  return { shouldSkip, setShouldSkip }
-}
-
 const useTranslatedAusweisFields = () => {
   const { t } = useTranslation()
 
@@ -539,7 +505,6 @@ const eIDHooks = {
   useAusweisScanner,
   useDeactivatedCard,
   useTranslatedAusweisFields,
-  useAusweisSkipCompatibility,
   useAusweisCompatibilityCheck,
   useAusweisInteraction,
   useCheckNFC,
