@@ -36,6 +36,9 @@ import {
 import eIDHooks from '../hooks'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
 import { ExtraActionProps } from '~/components/Passcode/types'
+import JoloText from '~/components/JoloText'
+import { Trans } from 'react-i18next'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -562,11 +565,6 @@ export const AusweisPasscode = () => {
         title = t('AusweisPasscode.canBtn')
         onPress = () => handleNavigate(eIDScreens.CanInfo)
         break
-      case AusweisPasscodeMode.PIN:
-        title = t('AusweisPasscode.pinForgotBtn')
-        onPress = () =>
-          handleNavigate(eIDScreens.PinInfo, { onDismiss: cancelFlow })
-        break
       case AusweisPasscodeMode.TRANSPORT_PIN:
         title = t('AusweisPasscode.transportPinBtn')
         onPress = () => handleNavigate(eIDScreens.AusweisTransportPinInfo)
@@ -580,12 +578,33 @@ export const AusweisPasscode = () => {
           setErrorText(null)
         }
         break
+      case AusweisPasscodeMode.PIN:
+        title = t('AusweisPasscode.pinForgotBtn')
+        onPress = () =>
+          handleNavigate(eIDScreens.PinInfo, { onDismiss: cancelFlow })
+        break
       default:
         break
     }
 
     if (title) {
-      return <Passcode.ExtraAction title={title} onPress={onPress} />
+      return (
+        <Passcode.ExtraAction onPress={onPress}>
+          {pinVariant === AusweisPasscodeMode.PIN ? (
+            <Trans>
+              <JoloText
+                size={JoloTextSizes.mini}
+                customStyles={{ textAlign: 'center' }}
+              >
+                {title}
+                <JoloText size={JoloTextSizes.mini} color={Colors.activity} />
+              </JoloText>
+            </Trans>
+          ) : (
+            title
+          )}
+        </Passcode.ExtraAction>
+      )
     }
 
     return null
