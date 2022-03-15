@@ -87,7 +87,7 @@ const useCheckNFC = () => {
             },
           })
         } else {
-          scheduleErrorWarning(e)
+          throw new Error(e)
         }
       })
 }
