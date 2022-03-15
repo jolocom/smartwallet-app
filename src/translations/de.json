@@ -464,29 +464,11 @@
         "pinManagement": "PIN verwalten",
         "header": ""
     },
-    "AusweisRequest": {
-        "description": "Überprüfen Sie bitte die Anfrage, um die Interaktion mit ${serviceName} abzuschließen",
-        "proceedBtn": "Überprüfung"
-    },
     "AusweisLostPin": {
         "title": "Wie kann ich den Kartenzugriff wiederherstellen?",
         "description": "Sie können Ihren PIN-Brief nicht finden? Sie haben beim Abholen des Ausweises oder später eine PIN festgelegt, an die Sie sich jetzt nicht mehr erinnern können? Bitte wenden Sie sich in diesem Fall an die zuständige Behörde und legen Sie dort eine neue PIN fest.",
         "contact": "Sie können sich auch per Email an den Kundendienst wenden",
         "phoneRate": "Ortstarif"
-    },
-    "AusweisCompatibility": {
-        "header": "Bevor Sie fortfahren, muss Ihr Gerät auf technische Kompatibilität geprüft werden",
-        "checkHeader": "Kompatibilitätsprüfung",
-        "checkSubtitle": "Schalten Sie Ihren Ausweis durch einen einfachen Scan frei",
-        "checkSuccess": "Vorgang Erfolgreich",
-        "checkStart": "Start",
-        "checkTryAgain": "Erneut versuchen",
-        "pinTitle": "6-stelliger PIN Status",
-        "pinSubtitle": "Haben Sie zuvor die eID-Funktionalität der Karte aktiviert? Wenn nicht, informieren Sie sich hier",
-        "pinBtn": "mehr Info",
-        "proceedBtn": "Fertig",
-        "skipBtn": "Überspringen Sie diesen Schritt, wenn Sie in Zukunft eine ähnliche Interaktion ausführen",
-        "ignoreBtn": "Ignorieren"
     },
     "AusweisCompatibilityStatus": {
         "header": "Kompatibilitätsprüfung",

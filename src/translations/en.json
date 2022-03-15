@@ -464,29 +464,11 @@
         "pinManagement": "PIN management",
         "header": "Incoming eID request"
     },
-    "AusweisRequest": {
-        "description": "To complete the interaction with ${serviceName} please review the request",
-        "proceedBtn": "Review"
-    },
     "AusweisLostPin": {
         "title": "How to restore access to my card?",
         "description": "You can not find your PIN letter? You have set a PIN when picking up the ID card or later that you cannot recall now? If this is the case please turn to the competent authority and set a new PIN there.",
         "contact": "You can also contact the support by email",
         "phoneRate": "local rate"
-    },
-    "AusweisCompatibility": {
-        "header": "Before you proceed your device must meet certain technical requirements",
-        "checkHeader": "Compatibility check",
-        "checkSubtitle": "Make your ID-card ready for use with a simple scan",
-        "checkSuccess": "Successfully passed",
-        "checkStart": "Start",
-        "checkTryAgain": "Try again",
-        "pinTitle": "6-digit PIN status",
-        "pinSubtitle": "Did you previously activate the card’s eID functionality?  If not, read about it here",
-        "pinBtn": "more info",
-        "proceedBtn": "Done",
-        "skipBtn": "Skip this step when performing a similar interaction again",
-        "ignoreBtn": "Ignore"
     },
     "AusweisCompatibilityStatus": {
         "header": "Compatibility check",
@@ -512,7 +494,7 @@
     },
     "AusweisPasscode": {
         "authPinHeader": "Enter eID PIN",
-        "pinForgotBtn": "If you forgot your pin or haven’t activated it yet, <1>click here</1>.",
+        "pinForgotBtn": "If you forgot your pin or haven’t activated it yet, <1>click here.</1>",
         "transportPinHeader": "Enter your 5-digit PIN",
         "transportPinBtn": "Where can I find this?",
         "canHeader": "Enter CAN",
