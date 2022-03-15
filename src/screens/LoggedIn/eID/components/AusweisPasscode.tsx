@@ -121,7 +121,7 @@ export const AusweisPasscode = () => {
   } = eIDHooks.useAusweisInteraction()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = eIDHooks.useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')

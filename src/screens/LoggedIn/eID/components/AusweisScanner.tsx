@@ -60,7 +60,7 @@ export const AusweisScanner = () => {
   } = route.params
   const goBack = useGoBack()
   const dispatch = useDispatch()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = eIDHooks.useCheckNFC()
 
   const isScreenFocused = useIsFocused()
 

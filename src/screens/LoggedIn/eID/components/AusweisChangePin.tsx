@@ -77,7 +77,7 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = eIDHooks.useCheckNFC()
 
   const changePinFlow =
     isTransportPin.current === true

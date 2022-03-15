@@ -284,7 +284,7 @@ const useAusweisCompatibilityCheck = () => {
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { cancelFlow, startChangePin } = eIDHooks.useAusweisInteraction()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = eIDHooks.useCheckNFC()
   const readerState = useSelector(getAusweisReaderState)
 
   const updateCompatibilityResult = (cardInfo: CardInfo) => {

@@ -25,7 +25,7 @@ export const AusweisIdentity = () => {
   const { t } = useTranslation()
   const { startCheck: startCompatibilityCheck } =
     eIDHooks.useAusweisCompatibilityCheck()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = eIDHooks.useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow, checkCardValidity, startChangePin } =
     eIDHooks.useAusweisInteraction()

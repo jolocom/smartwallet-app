@@ -59,7 +59,7 @@ export const AusweisRequestReview = () => {
     effectiveValidityDate,
     expirationDate,
   } = eIDHooks.useAusweisContext()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = eIDHooks.useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const navigation = useNavigation<AusweisRequestReviewNavigation>()
