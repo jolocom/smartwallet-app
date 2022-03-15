@@ -135,10 +135,9 @@ const RegisterPin = () => {
           customStyles={{ justifyContent: 'flex-end', paddingBottom: 20 }}
         >
           {!isCreating && (
-            <Passcode.ExtraAction
-              title={t('VerifyPasscode.resetBtn')}
-              onPress={resetPasscode}
-            />
+            <Passcode.ExtraAction onPress={resetPasscode}>
+              {t('VerifyPasscode.resetBtn')}
+            </Passcode.ExtraAction>
           )}
           <Passcode.Keyboard />
         </Passcode.Container>
