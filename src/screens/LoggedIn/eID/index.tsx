@@ -5,8 +5,8 @@ import { AusweisProvider } from './context'
 import eIDHooks from './hooks'
 import {
   AusweisCardResult,
-  AusweisPasscodeDetailsParams,
   AusweisPasscodeParams,
+  AusweisPinInfoParams,
   AusweisScannerParams,
   eIDScreens,
 } from './types'
@@ -18,7 +18,7 @@ import {
 import {
   AusweisRequestReview,
   AusweisPasscode,
-  AusweisPasscodeDetails,
+  AusweisPinInfo,
   AusweisScanner,
   AusweisCompatibilityResult,
   AusweisPukInfo,
@@ -37,7 +37,7 @@ export type AusweisStackParamList = {
   [eIDScreens.AusweisScanner]: AusweisScannerParams
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeParams
-  [eIDScreens.PasscodeDetails]: AusweisPasscodeDetailsParams
+  [eIDScreens.PinInfo]: AusweisPinInfoParams
   [eIDScreens.ProviderDetails]: undefined
   [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
@@ -85,8 +85,8 @@ const AusweisInteraction = () => {
         options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
-        name={eIDScreens.PasscodeDetails}
-        component={AusweisPasscodeDetails}
+        name={eIDScreens.PinInfo}
+        component={AusweisPinInfo}
         options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen

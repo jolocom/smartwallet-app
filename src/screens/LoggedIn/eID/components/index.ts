@@ -1,7 +1,7 @@
 export { AusweisRequestReview } from './AusweisRequestReview'
 export { AusweisPasscode } from './AusweisPasscode'
 export { AusweisScanner } from './AusweisScanner'
-export { AusweisPasscodeDetails } from './AusweisPasscodeDetails'
+export { AusweisPinInfo } from './AusweisPinInfo'
 export { AusweisCompatibilityResult } from './AusweisCompatibilityResult'
 export { AusweisPukInfo } from './AusweisPukInfo'
 export { AusweisTransportPinInfo } from './AusweisTransportPinInfo'

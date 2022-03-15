@@ -12,12 +12,12 @@ import { Colors } from '~/utils/colors'
 import { AusweisStackParamList } from '..'
 import { eIDScreens } from '../types'
 
-export const AusweisPasscodeDetails = () => {
+export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
   const { t } = useTranslation()
   const navigation = useNavigation()
   const { params } =
-    useRoute<RouteProp<AusweisStackParamList, eIDScreens.PasscodeDetails>>()
+    useRoute<RouteProp<AusweisStackParamList, eIDScreens.PinInfo>>()
   const { onDismiss } = params
 
   const handlePasscodeSettings = () => {

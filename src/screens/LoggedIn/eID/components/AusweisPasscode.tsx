@@ -564,7 +564,8 @@ export const AusweisPasscode = () => {
         break
       case AusweisPasscodeMode.PIN:
         title = t('AusweisPasscode.pinForgotBtn')
-        onPress = () => handleNavigate(eIDScreens.ForgotPin)
+        onPress = () =>
+          handleNavigate(eIDScreens.PinInfo, { onDismiss: cancelFlow })
         break
       case AusweisPasscodeMode.TRANSPORT_PIN:
         title = t('AusweisPasscode.transportPinBtn')

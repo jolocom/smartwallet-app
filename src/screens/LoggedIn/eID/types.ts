@@ -3,7 +3,7 @@ import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 export enum eIDScreens {
   RequestDetails = 'RequestDetails',
   EnterPIN = 'EnterPIN',
-  PasscodeDetails = 'PasscodeDetails',
+  PinInfo = 'PinInfo',
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
   PukLock = 'PukLock',
@@ -49,7 +49,7 @@ export enum AusweisFlow {
   unlock = 'unlock',
 }
 
-export interface AusweisPasscodeDetailsParams {
+export interface AusweisPinInfoParams {
   onDismiss?: () => void
 }
 
