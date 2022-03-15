@@ -41,7 +41,7 @@ import { IS_ANDROID } from '~/utils/generic'
 
 type AusweisRequestReviewNavigation = StackNavigationProp<
   AusweisStackParamList,
-  eIDScreens.InteractionSheet
+  eIDScreens.RequestDetails
 >
 
 export const AusweisRequestReview = () => {

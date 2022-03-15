@@ -46,6 +46,7 @@ import { IS_ANDROID } from '~/utils/generic'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
+//NOTE: Does this fit here, or in the general hooks directory?
 const useCheckNFC = () => {
   const { t } = useTranslation()
   const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
@@ -65,7 +66,7 @@ const useCheckNFC = () => {
     }
   }
 
-  const checkNfcSupport = (onSuccess: () => void | PromiseLike<void>) =>
+  return (onSuccess: () => void | PromiseLike<void>) =>
     nfcCheck()
       .then(onSuccess)
       .catch((e) => {
@@ -81,7 +82,7 @@ const useCheckNFC = () => {
             interact: {
               label: t('Toasts.nfcOffBtn'),
               onInteract: () => {
-                goToNfcSettings()
+                NfcManager.goToNfcSetting()
               },
             },
           })
@@ -89,12 +90,6 @@ const useCheckNFC = () => {
           scheduleErrorWarning(e)
         }
       })
-
-  const goToNfcSettings = () => {
-    NfcManager.goToNfcSetting()
-  }
-
-  return { checkNfcSupport }
 }
 
 const useAusweisInteraction = () => {
@@ -105,6 +100,7 @@ const useAusweisInteraction = () => {
   const { connected: isConnectedToTheInternet } = useConnection()
   const { showScanner } = eIDHooks.useAusweisScanner()
   const isCardTouched = useSelector(getAusweisReaderState)
+  const checkNfc = useCheckNFC()
 
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers
@@ -130,22 +126,29 @@ const useAusweisInteraction = () => {
 
   const processAusweisToken = async (token: string) => {
     try {
-      const request: any = await aa2Module.startAuth(token)
-      const certificate: any = await aa2Module.getCertificate()
+      await checkNfc(async () => {
+        // NOTE: The types in react-native-ausweis are not entirely accurate, since they
+        // set as the return type all the messages that can be handled by the command,
+        // even though there are specific messages that will be resolved i.e. startAuth will only
+        // resolve only to the AccessRightsMessage, even though it handles both the AuthMessage and Access
+        // RightsMessage, which are reflected in the current types.
+        const request: any = await aa2Module.startAuth(token)
+        const certificate: any = await aa2Module.getCertificate()
 
-      const requestData: IAusweisRequest = {
-        requiredFields: request.chat.required,
-        optionalFields: request.chat.optional,
-        certificateIssuerName: certificate.description.issuerName,
-        certificateIssuerUrl: certificate.description.issuerUrl,
-        providerName: certificate.description.subjectName,
-        providerUrl: certificate.description.subjectUrl,
-        providerInfo: certificate.description.termsOfUsage,
-        effectiveValidityDate: certificate.validity.effectiveDate,
-        expirationDate: certificate.validity.expirationDate,
-      }
+        const requestData: IAusweisRequest = {
+          requiredFields: request.chat.required,
+          optionalFields: request.chat.optional,
+          certificateIssuerName: certificate.description.issuerName,
+          certificateIssuerUrl: certificate.description.issuerUrl,
+          providerName: certificate.description.subjectName,
+          providerUrl: certificate.description.subjectUrl,
+          providerInfo: certificate.description.termsOfUsage,
+          effectiveValidityDate: certificate.validity.effectiveDate,
+          expirationDate: certificate.validity.expirationDate,
+        }
 
-      dispatch(setAusweisInteractionDetails(requestData))
+        dispatch(setAusweisInteractionDetails(requestData))
+      })
     } catch (e) {
       cancelFlow()
       console.warn(e)
