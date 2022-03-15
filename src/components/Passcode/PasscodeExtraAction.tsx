@@ -19,7 +19,7 @@ const PasscodeExtraAction: IPasscodeComposition['ExtraAction'] = ({
   return (
     <TouchableOpacity
       onPress={handlePress}
-      style={{ paddingHorizontal: 40, marginBottom: 24 }}
+      style={{ paddingHorizontal: 20, marginBottom: 24 }}
     >
       <JoloText
         size={JoloTextSizes.mini}

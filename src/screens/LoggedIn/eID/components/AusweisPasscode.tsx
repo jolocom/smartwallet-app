@@ -592,12 +592,9 @@ export const AusweisPasscode = () => {
         <Passcode.ExtraAction onPress={onPress}>
           {pinVariant === AusweisPasscodeMode.PIN ? (
             <Trans>
-              <JoloText
-                size={JoloTextSizes.mini}
-                customStyles={{ textAlign: 'center' }}
-              >
+              <JoloText customStyles={{ textAlign: 'center' }}>
                 {title}
-                <JoloText size={JoloTextSizes.mini} color={Colors.activity} />
+                <JoloText color={Colors.activity} />
               </JoloText>
             </Trans>
           ) : (
