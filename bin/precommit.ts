@@ -9,17 +9,12 @@ import {
 import EventEmitter from 'events'
 import { Table } from 'console-table-printer'
 
-type ChildProcessVariants = 'local.properties' | 'prettier' | 'linter'
+type ChildProcessVariants = 'local.properties' | 'linter'
 type ResultOption = { isFinished: boolean; passed: boolean; cmd: string }
 type Result = Record<ChildProcessVariants, ResultOption>
 
 const result: Result = {
   ['local.properties']: {
-    isFinished: false,
-    passed: false,
-    cmd: '',
-  },
-  ['prettier']: {
     isFinished: false,
     passed: false,
     cmd: '',
@@ -97,38 +92,8 @@ const checkStagedLocalProp = (files: string[]) => {
   )
 }
 
-const prettifyFiles = (files: string[]) => {
-  const handleProcessClose = (
-    code: number | null,
-    dataOutput: string,
-    errorOutput: string,
-  ) => {
-    if (code === 1) {
-      const erroredFiles = formatOutput(errorOutput)
-        .slice(0, -1)
-        .map((o) => o.replace(/^\[warn]/, '').trim())
-        .join(' ')
-      eventEmmiter.emit(
-        'process-finished',
-        'prettier',
-        false,
-        `yarn prettier:format ${erroredFiles}`,
-      )
-    } else if (code === 2) {
-      abortScript('Prettier check failed. Something is wrong with prettier')
-    } else {
-      eventEmmiter.emit('process-finished', 'prettier', true, '')
-    }
-  }
-  spawnProcess(handleProcessClose, 'npm', ['run', 'prettier:check', ...files])
-}
-
 const lintFiles = (files: string[]) => {
-  const handleProcessClose = (
-    code: number | null,
-    dataOutput: string,
-    errorOutput: string,
-  ) => {
+  const handleProcessClose = (code: number | null, dataOutput: string) => {
     const output = formatOutput(dataOutput)
     let erroredFiles: string
     if (output.length > 2) {
@@ -168,7 +133,6 @@ const main = () => {
     const onlyJSTSFiles = formattedStagedFiles.filter((f) =>
       /\.(ts|tsx|js|jsx)$/g.exec(f),
     )
-    prettifyFiles(onlyJSTSFiles)
     lintFiles(onlyJSTSFiles)
   } catch (e: unknown) {
     if (e instanceof Error) {
