@@ -72,7 +72,22 @@ const AusweisCardInfo = () => {
               {title}
             </JoloText>
           ) : (
-            <Trans />
+            <Trans>
+              <JoloText
+                kind={JoloTextKind.title}
+                customStyles={{ alignSelf: 'center' }}
+              >
+                {title}
+                <JoloText
+                  kind={JoloTextKind.title}
+                  customStyles={{
+                    alignSelf: 'center',
+                    textDecorationLine: 'underline',
+                  }}
+                  onPress={handleRedirectToIdentity}
+                />
+              </JoloText>
+            </Trans>
           )}
         </ScreenContainer.Padding>
       </View>
