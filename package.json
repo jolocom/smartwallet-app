@@ -114,7 +114,6 @@
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/runtime": "^7.8.4",
-    "@react-native-community/eslint-config": "^1.1.0",
     "@testing-library/jest-native": "^3.3.0",
     "@testing-library/react-native": "^7.0.2",
     "@types/inquirer": "^7.3.3",
@@ -127,16 +126,22 @@
     "@types/react-test-renderer": "16.9.2",
     "@types/redux-mock-store": "^1.0.2",
     "@types/shelljs": "^0.8.9",
-    "@typescript-eslint/eslint-plugin": "^2.27.0",
-    "@typescript-eslint/parser": "^2.27.0",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
     "babel-jest": "^25.1.0",
     "babel-plugin-root-import": "^6.5.0",
     "commitizen": "^4.0.4",
     "cz-conventional-changelog": "^3.1.0",
     "envfile": "^6.17.0",
-    "eslint": "^6.5.1",
+    "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-formatter-table": "^7.32.1",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-native": "^4.0.0",
     "husky": "^4.2.5",
     "inquirer": "^8.1.2",
     "jest": "^24.9.0",
@@ -176,7 +181,7 @@
     }
   },
   "volta": {
-    "node": "12.14.1",
+    "node": "12.22.0",
     "yarn": "1.22.10"
   }
 }
