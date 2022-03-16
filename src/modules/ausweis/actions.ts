@@ -1,19 +1,20 @@
 import createAction from '~/utils/createAction'
-import {
-  AusweisModuleActions,
-  SetAusweisDetailsAction,
-  SetAusweisReaderStateAction,
-  SetAusweisScannerKeyAction,
-} from './types'
+import { AusweisAction, AusweisActions, AusweisActionType } from './types'
 
-export const setAusweisInteractionDetails = createAction<
-  SetAusweisDetailsAction['payload']
->(AusweisModuleActions.setDetails)
+// To avoid manually passing a generic type every time we call `createAction`
+// redeclaring createAction fn with types specific to the `ausweis` module
+function createAusweisAction<K extends keyof AusweisActions>(type: K) {
+  return createAction<AusweisAction<K>>(type)
+}
 
-export const setAusweisScannerKey = createAction<
-  SetAusweisScannerKeyAction['payload']
->(AusweisModuleActions.setScannerKey)
+export const setAusweisInteractionDetails = createAusweisAction(
+  AusweisActionType.setDetails,
+)
 
-export const setAusweisReaderState = createAction<
-  SetAusweisReaderStateAction['payload']
->(AusweisModuleActions.setReaderState)
+export const setAusweisScannerKey = createAusweisAction(
+  AusweisActionType.setScannerKey,
+)
+
+export const setAusweisReaderState = createAusweisAction(
+  AusweisActionType.setReaderState,
+)
