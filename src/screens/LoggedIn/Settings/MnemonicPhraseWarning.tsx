@@ -22,8 +22,9 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 
 const MnemonicPhraseWarning = () => {
-  const [isMnemonicWritten, setIsMnemonicWritten] =
-    useState<boolean | undefined>(undefined)
+  const [isMnemonicWritten, setIsMnemonicWritten] = useState<
+    boolean | undefined
+  >(undefined)
   const { get: getFromStorage } = useSettings()
   const navigation = useNavigation()
   const dispatch = useDispatch()

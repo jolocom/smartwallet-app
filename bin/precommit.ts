@@ -168,8 +168,10 @@ const main = () => {
     const onlyJSTSFiles = formattedStagedFiles.filter((f) =>
       /\.(ts|tsx|js|jsx)$/g.exec(f),
     )
-    prettifyFiles(onlyJSTSFiles)
-    lintFiles(onlyJSTSFiles)
+    if (onlyJSTSFiles.length) {
+      prettifyFiles(onlyJSTSFiles)
+      lintFiles(onlyJSTSFiles)
+    }
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)
