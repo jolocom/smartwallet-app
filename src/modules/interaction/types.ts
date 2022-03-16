@@ -6,13 +6,31 @@ import {
 } from '~/types/credentials'
 import { AttributeI } from '../attributes/types'
 
-export enum InteractionActions {
+export enum InteractionActionType {
   setInteractionDetails = 'setInteractionDetails',
   resetInteraction = 'resetInteraction',
   selectShareCredential = 'selectShareCredential',
   updateOfferValidation = 'updateOfferValidation',
-  setIntermediaryState = 'setIntermediaryState',
-  setAttributeInputType = 'setAttributeInputType',
+  setRedirectUrl = 'setRedirectUrl',
+}
+
+// Expressing dependency between action type and action payload;
+// key: action type, value: action payload
+export interface InteractionActions {
+  [InteractionActionType.setInteractionDetails]: Omit<
+    InteractionDetails,
+    'flowType'
+  > & { flowType?: FlowType | null }
+  [InteractionActionType.resetInteraction]: undefined
+  [InteractionActionType.selectShareCredential]: Record<string, string>
+  [InteractionActionType.updateOfferValidation]: OfferedCredential[]
+  [InteractionActionType.setRedirectUrl]: string | null
+}
+
+// Dependency between action type and its payload following Action type signature
+export type InteractionAction<A extends keyof InteractionActions> = {
+  type: A
+  payload: InteractionActions[A]
 }
 
 export type InteractionDetails =
@@ -31,6 +49,7 @@ export type InteractionDetails =
  */
 export interface InteractionState {
   details: InteractionDetails
+  redirectUrl: string | null
 }
 
 /**

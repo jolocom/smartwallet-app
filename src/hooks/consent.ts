@@ -1,26 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { Agent } from '@jolocom/sdk'
+import { useDispatch } from 'react-redux'
+import { Agent } from 'react-native-jolocom'
 
 import { StorageKeys } from './sdk'
 import { termsOfServiceDE } from '~/translations/terms'
-import { showTermsConsent } from '~/modules/account/actions'
-import { shouldShowTermsConsent } from '~/modules/account/selectors'
+import {
+  setTermsConsentOutdatedness,
+  setTermsConsentVisibility,
+} from '~/modules/account/actions'
 import { hashString } from '~/utils/crypto'
 
 const useTermsConsent = () => {
   const dispatch = useDispatch()
-  const shouldShowConsent = useSelector(shouldShowTermsConsent)
 
   const checkConsent = async (agent: Agent) => {
     const storedConsent = (await agent.storage.get.setting(
       StorageKeys.termsConsent,
     )) as { hash: string }
-
-    if (!storedConsent) return dispatch(showTermsConsent(true))
+    if (!storedConsent) return dispatch(setTermsConsentOutdatedness(true))
 
     const storedHash = storedConsent.hash
     const currentHash = hashString(termsOfServiceDE)
-    if (currentHash !== storedHash) return dispatch(showTermsConsent(true))
+    if (currentHash !== storedHash)
+      return dispatch(setTermsConsentOutdatedness(true))
   }
 
   const acceptConsent = async (agent: Agent) => {
@@ -29,10 +30,10 @@ const useTermsConsent = () => {
     await agent.storage.store.setting(StorageKeys.termsConsent, {
       hash: termsHash,
     })
-    dispatch(showTermsConsent(false))
+    dispatch(setTermsConsentVisibility(false))
   }
 
-  return { checkConsent, acceptConsent, shouldShowConsent }
+  return { checkConsent, acceptConsent }
 }
 
 export default useTermsConsent

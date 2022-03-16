@@ -40,6 +40,7 @@ const Title: ICollapsibleComposite['Title'] = ({
       ref={titleRef}
       renderToHardwareTextureAndroid
       onLayout={handleLayout}
+      testID="collapsible-title"
     >
       {children}
     </View>

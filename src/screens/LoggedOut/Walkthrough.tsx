@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { ImageBackground, StyleSheet, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { ImageBackground, StyleSheet, View, Platform } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useDispatch, useSelector } from 'react-redux'
+import { StackActions, useNavigation } from '@react-navigation/core'
 
 import Btn, { BtnTypes, BtnSize } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import BtnGroup from '~/components/BtnGroup'
-
 import { ScreenNames } from '~/types/screens'
-
 import { useRedirect } from '~/hooks/navigation'
 import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
 import { Colors } from '~/utils/colors'
@@ -16,15 +16,78 @@ import ScreenContainer from '~/components/ScreenContainer'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import useTranslation from '~/hooks/useTranslation'
+import BP from '~/utils/breakpoints'
+import { useLoader } from '~/hooks/loader'
+import { useCreateIdentity } from '~/hooks/sdk'
+import { setLogged, setTermsConsentVisibility } from '~/modules/account/actions'
+import {
+  getIsTermsConsentOutdated,
+  getIsTermsConsentVisible,
+} from '~/modules/account/selectors'
+import { usePrevious } from '~/hooks/generic'
+
+const useWalkthroughProceed = () => {
+  const loader = useLoader()
+  const createIdentity = useCreateIdentity()
+  const dispatch = useDispatch()
+  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
+  const isTermsConsentVisible = useSelector(getIsTermsConsentVisible)
+  const redirect = useRedirect()
+  const navigation = useNavigation()
+  const { t } = useTranslation()
+  const pendingActionRef = useRef(() => {})
+  const prevTermsConsetVisibility = usePrevious(isTermsConsentVisible)
+
+  useEffect(() => {
+    if (isTermsConsentVisible === false && prevTermsConsetVisibility === true) {
+      setTimeout(() => {
+        pendingActionRef.current()
+      }, 100)
+    }
+  }, [isTermsConsentVisible])
+
+  const registerUser = async () => {
+    const handleDone = (error: any) => {
+      if (!error) {
+        dispatch(setLogged(true))
+      } else {
+        navigation.dispatch(StackActions.replace(ScreenNames.Walkthrough))
+      }
+    }
+    await loader(
+      createIdentity,
+      { showSuccess: false, loading: t('Wallet.prepareWallet') },
+      handleDone,
+    )
+  }
+  const handleProceed = (cb: () => Promise<void>) => {
+    return () => {
+      if (isTermsConsentOutdated) {
+        dispatch(setTermsConsentVisibility(true))
+        // Idle screen serves as a background when terms consent is hiding, so we don't see for a fraction of a second the Walkthrough screen
+        navigation.navigate(ScreenNames.Idle)
+        pendingActionRef.current = cb
+      } else {
+        cb()
+      }
+    }
+  }
+  const handleRegistration = handleProceed(registerUser)
+  const handleRecovery = handleProceed(async () => {
+    redirect(ScreenNames.IdentityRecovery)
+  })
+  return { handleRegistration, handleRecovery }
+}
 
 const Dot: React.FC<{ active: boolean }> = ({ active }) => (
   <View style={styles.dot}>
     <View style={active ? styles.activeDot : styles.inactiveDot} />
   </View>
 )
+
 const Walkthrough: React.FC = () => {
-  const redirect = useRedirect()
   const { t } = useTranslation()
+  const { handleRegistration, handleRecovery } = useWalkthroughProceed()
 
   const walkthroughData = [
     {
@@ -90,7 +153,10 @@ const Walkthrough: React.FC = () => {
             <AbsoluteBottom
               customStyles={{
                 ...styles.consistentContainer,
-                bottom: 235,
+                bottom: Platform.select({
+                  ios: BP({ default: 235, medium: 250, large: 250 }),
+                  android: 235,
+                }),
               }}
             >
               <JoloText
@@ -115,24 +181,13 @@ const Walkthrough: React.FC = () => {
       </Swiper>
       <AbsoluteBottom customStyles={styles.consistentContainer}>
         <BtnGroup>
-          <Btn
-            size={BtnSize.large}
-            onPress={() =>
-              redirect(ScreenNames.Onboarding, {
-                initialRoute: ScreenNames.Registration,
-              })
-            }
-          >
+          <Btn size={BtnSize.large} onPress={handleRegistration}>
             {t('Walkthrough.registrationBtn')}
           </Btn>
           <Btn
             size={BtnSize.large}
             type={BtnTypes.secondary}
-            onPress={() =>
-              redirect(ScreenNames.Onboarding, {
-                initialRoute: ScreenNames.IdentityRecovery,
-              })
-            }
+            onPress={handleRecovery}
           >
             {t('Walkthrough.recoveryBtn')}
           </Btn>
@@ -158,7 +213,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 185,
+    bottom: Platform.select({
+      ios: BP({ default: 185, medium: 210, large: 210 }),
+      android: 185,
+    }),
   },
   dot: {
     width: 3,

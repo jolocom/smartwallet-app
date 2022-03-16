@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ViewProps } from 'react-native'
 
 import CloseIcon from '~/assets/svg/CloseIcon'
 import { useGoBack } from '~/hooks/navigation'
@@ -12,7 +12,7 @@ export enum NavHeaderType {
   Close = 'close',
 }
 
-interface Props extends IWithCustomStyle {
+interface Props extends IWithCustomStyle, ViewProps {
   type?: NavHeaderType
   onPress?: () => void
 }
@@ -22,6 +22,7 @@ const NavigationHeader: React.FC<Props> = ({
   onPress,
   customStyles,
   children,
+  ...rest
 }) => {
   const navigateBack = onPress ?? useGoBack()
 
@@ -34,6 +35,7 @@ const NavigationHeader: React.FC<Props> = ({
         },
         customStyles,
       ]}
+      {...rest}
     >
       {type === NavHeaderType.Back && (
         <IconBtn

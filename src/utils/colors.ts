@@ -66,4 +66,5 @@ export enum Colors {
   zincDust = 'rgb(62,62,62)',
   mainPink = '#c52969',
   blue = '#0084ff',
+  corn = '#E3B705',
 }

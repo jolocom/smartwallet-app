@@ -4,15 +4,19 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 
 import { IDndProps } from './types'
 import WordPill from './components/WordPill'
+import { ArrowDown } from '~/assets/svg'
+import BP from '~/utils/breakpoints'
 
 const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
   return (
-    <View style={{ flex: 1, alignItems: 'center' }}>
+    <>
       <DraggableFlatList
         data={tags}
         // NOTE: allows the pill size to be based on the content, as opposed
         // to being of fixed size
-        contentContainerStyle={{ alignItems: 'center' }}
+        contentContainerStyle={{
+          alignItems: 'center',
+        }}
         renderItem={({ item, index, drag, isActive }) => (
           <TouchableOpacity activeOpacity={1} onPressIn={drag}>
             <WordPill.Repeat key={index} active={isActive}>
@@ -24,7 +28,18 @@ const Dnd: React.FC<IDndProps> = ({ tags, updateTags }) => {
         keyExtractor={(item, index) => `pill-${item}-${index}`}
         onDragEnd={({ data }) => updateTags(data)}
       />
-    </View>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'absolute',
+          right: BP({ default: -60, small: -40, xsmall: -40 }),
+          top: 100,
+        }}
+      >
+        <ArrowDown />
+      </View>
+    </>
   )
 }
 

@@ -1,22 +1,37 @@
-import { InteractionActions, InteractionState } from './types'
-import { Action } from '~/types/actions'
+import { InteractionActionType, InteractionState } from './types'
 import { isCredShareDetails, isCredOfferDetails } from './guards'
-import { AttrActions, AttributePayload } from '../attributes/types'
+import { AttrActionType, AttributePayload } from '../attributes/types'
+import {
+  setInteractionDetails,
+  resetInteraction,
+  selectShareCredential,
+  updateOfferValidation,
+  setRedirectUrl,
+} from './actions'
+import { updateAttrs } from '../attributes/actions'
 
 const initialState: InteractionState = {
   details: { flowType: null, id: null, counterparty: null },
+  redirectUrl: null,
 }
 
 const reducer = (
   state = initialState,
-  action: Action<InteractionActions | AttrActions.updateAttrs, any>,
+  action: ReturnType<
+    | typeof setInteractionDetails
+    | typeof resetInteraction
+    | typeof selectShareCredential
+    | typeof updateOfferValidation
+    | typeof setRedirectUrl
+    | typeof updateAttrs
+  >,
 ) => {
   switch (action.type) {
-    case InteractionActions.setInteractionDetails:
+    case InteractionActionType.setInteractionDetails:
       return { ...state, details: action.payload }
-    case InteractionActions.resetInteraction:
+    case InteractionActionType.resetInteraction:
       return initialState
-    case InteractionActions.updateOfferValidation:
+    case InteractionActionType.updateOfferValidation:
       return isCredOfferDetails(state.details)
         ? {
             ...state,
@@ -29,7 +44,7 @@ const reducer = (
             },
           }
         : state
-    case InteractionActions.selectShareCredential:
+    case InteractionActionType.selectShareCredential:
       if (isCredShareDetails(state.details)) {
         return {
           ...state,
@@ -43,7 +58,7 @@ const reducer = (
         }
       }
       return state
-    case AttrActions.updateAttrs: {
+    case AttrActionType.updateAttrs: {
       const { flowType } = state.details
       const { type, attribute } = action.payload as AttributePayload
       if (flowType === null) {
@@ -84,6 +99,8 @@ const reducer = (
       }
       return state
     }
+    case InteractionActionType.setRedirectUrl:
+      return { ...state, redirectUrl: action.payload }
     default:
       return state
   }

@@ -1,17 +1,27 @@
 import createAction from '~/utils/createAction'
-import { ToastsActions } from './types'
+import { ToastsAction, ToastsActions, ToastsActionType } from './types'
 import { Toast, ToastFilter } from '~/types/toasts'
 import { ThunkAction, RootReducerI } from '~/types/reducer'
 import { toastMatchesFilter } from './utils'
 
-const addToQueue = createAction<Toast>(ToastsActions.addToQueue)
-const removeFromQueue = createAction<Toast>(ToastsActions.removeFromQueue)
-const setActiveToast = createAction<{ toast: Toast | null; expiry: number }>(
-  ToastsActions.setActiveToast,
-)
-const setActiveFilter = createAction<ToastFilter>(ToastsActions.setActiveFilter)
+// To avoid manually passing a generic type every time we call `createAction`
+// redeclaring createAction fn with types specific to the `toasts` module
+function createToastsAction<K extends keyof ToastsActions>(type: K) {
+  return createAction<ToastsAction<K>>(type)
+}
 
-const clearActiveToast = setActiveToast({ toast: null, expiry: 0 })
+export const addToQueue = createToastsAction(ToastsActionType.addToQueue)
+export const removeFromQueue = createToastsAction(
+  ToastsActionType.removeFromQueue,
+)
+export const setActiveToast = createToastsAction(
+  ToastsActionType.setActiveToast,
+)
+export const setActiveFilter = createToastsAction(
+  ToastsActionType.setActiveFilter,
+)
+
+export const clearActiveToast = setActiveToast({ toast: null, expiry: 0 })
 
 export const scheduleToast =
   (toast: Toast): ThunkAction =>
@@ -43,7 +53,7 @@ export const setActiveFilterAndUpdate =
   }
 
 const updateToastState = (() => {
-  let nextUpdateTimeout: NodeJS.Timeout | null = null
+  let nextUpdateTimeout: number | null = null
   let updateInProgress = false
 
   let activeState: {
@@ -126,7 +136,7 @@ const updateToastState = (() => {
     // if there's a next and it is not the already active toast
     if (next && next !== activeState.active) {
       // if next should be automatically dismissed, setup a timeout for it
-      if (next.dismiss && next.dismiss.timeout) {
+      if (next.dismiss) {
         if (nextUpdateTimeout) {
           // this should normally never be the case.... but
           clearTimeout(nextUpdateTimeout)
@@ -135,9 +145,9 @@ const updateToastState = (() => {
           nextUpdateTimeout = null
           dispatch(update)
           // +5 for good taste
-        }, next.dismiss.timeout + 5)
+        }, next.dismiss + 5)
 
-        nextExpiry = activeState.curTs + next.dismiss.timeout
+        nextExpiry = activeState.curTs + next.dismiss
       }
       ret = dispatch(setActiveToast({ toast: next, expiry: nextExpiry }))
     }

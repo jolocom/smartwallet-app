@@ -2,8 +2,6 @@ import { createConnection, getConnection } from 'typeorm'
 import {
   JolocomKeychainPasswordStore,
   Agent,
-  JolocomLinking,
-  JolocomWebSockets,
   JolocomTypeormStorage,
   JolocomSDK,
 } from 'react-native-jolocom'
@@ -15,7 +13,7 @@ const initConnection = async () => {
   try {
     // *** this will clear the database
     // *** used for resetting the did
-    // await getConnection().synchronize(true)
+    //await getConnection().synchronize(true)
     // console.log('DB was cleaned')
 
     connection = getConnection()
@@ -34,11 +32,8 @@ export const initSDK = async () => {
 
 export const initAgent = async (): Promise<Agent> => {
   const sdk = await initSDK()
-
-  await sdk.usePlugins(new JolocomLinking(), new JolocomWebSockets())
   sdk.setDefaultDidMethod('jun')
 
   const passwordStore = new JolocomKeychainPasswordStore()
-
   return new Agent({ passwordStore, sdk })
 }

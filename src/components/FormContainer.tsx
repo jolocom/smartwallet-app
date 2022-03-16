@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, View, Animated } from 'react-native'
+import { TouchableOpacity, View, Animated, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import ScreenContainer from './ScreenContainer'
@@ -66,7 +66,6 @@ const FormContainer: React.FC<Props> = ({
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
               alignItems: 'center',
               backgroundColor: Colors.codGrey,
               paddingHorizontal: 24,
@@ -78,17 +77,19 @@ const FormContainer: React.FC<Props> = ({
                 kind={JoloTextKind.title}
                 size={JoloTextSizes.mini}
                 color={Colors.white90}
-                customStyles={{ fontFamily: Fonts.Medium }}
+                customStyles={{ fontFamily: Fonts.Medium, textAlign: 'left' }}
               >
                 {t('CredentialForm.closeBtn')}
               </JoloText>
             </TouchableOpacity>
-            <View style={{ paddingHorizontal: 8 }}>
+            <View style={{ paddingHorizontal: 8, flex: 1 }}>
               <Animated.Text
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
                   color: 'white',
+                  marginTop: Platform.OS === 'ios' ? 3 : 0,
                 }}
+                numberOfLines={1}
               >
                 {currentTitleText}
               </Animated.Text>
@@ -103,6 +104,7 @@ const FormContainer: React.FC<Props> = ({
                 size={JoloTextSizes.mini}
                 color={Colors.activity}
                 customStyles={{
+                  textAlign: 'right',
                   fontFamily: Fonts.Medium,
                   ...(isSubmitDisabled && { opacity: 0.5 }),
                 }}

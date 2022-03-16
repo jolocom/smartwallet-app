@@ -1,20 +1,32 @@
 import createAction from '~/utils/createAction'
-import { InteractionActions, InteractionDetails } from './types'
-import { FlowType } from '@jolocom/sdk'
-import { OfferedCredential } from '~/types/credentials'
+import {
+  InteractionAction,
+  InteractionActions,
+  InteractionActionType,
+} from './types'
 
-export const setInteractionDetails = createAction<
-  Omit<InteractionDetails, 'flowType'> & { flowType?: FlowType | null }
->(InteractionActions.setInteractionDetails)
+// To avoid manually passing a generic type every time we call `createAccountAction`
+// redeclaring createAccountAction fn with types specific to the `interaction` module
+function createAccountAction<K extends keyof InteractionActions>(type: K) {
+  return createAction<InteractionAction<K>>(type)
+}
 
-export const resetInteraction = createAction(
-  InteractionActions.resetInteraction,
+export const setInteractionDetails = createAccountAction(
+  InteractionActionType.setInteractionDetails,
 )
 
-export const selectShareCredential = createAction<Record<string, string>>(
-  InteractionActions.selectShareCredential,
+export const resetInteraction = createAccountAction(
+  InteractionActionType.resetInteraction,
 )
 
-export const updateOfferValidation = createAction<OfferedCredential[]>(
-  InteractionActions.updateOfferValidation,
+export const selectShareCredential = createAccountAction(
+  InteractionActionType.selectShareCredential,
+)
+
+export const updateOfferValidation = createAccountAction(
+  InteractionActionType.updateOfferValidation,
+)
+
+export const setRedirectUrl = createAccountAction(
+  InteractionActionType.setRedirectUrl,
 )

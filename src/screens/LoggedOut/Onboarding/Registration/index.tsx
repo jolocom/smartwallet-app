@@ -3,16 +3,19 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { ScreenNames } from '~/types/screens'
 
-import Entropy from './Entropy'
 import SeedPhraseRepeat from './SeedPhrase/SeedPhraseRepeat'
 import SeedPhraseWrite from './SeedPhrase/SeedPhraseWrite'
+import { screenTransitionSlideFromRight } from '~/utils/screenSettings'
 
 const Stack = createStackNavigator()
 
 const Registration: React.FC = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName={ScreenNames.Entropy}>
-      <Stack.Screen name={ScreenNames.Entropy} component={Entropy} />
+    <Stack.Navigator
+      headerMode="none"
+      initialRouteName={ScreenNames.SeedPhraseWrite}
+      screenOptions={screenTransitionSlideFromRight}
+    >
       <Stack.Screen
         name={ScreenNames.SeedPhraseWrite}
         component={SeedPhraseWrite}
