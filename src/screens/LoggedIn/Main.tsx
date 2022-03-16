@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import {
-  CardStyleInterpolators,
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { ScreenNames } from '~/types/screens'
 import Language from './Settings/Language'
@@ -22,8 +21,7 @@ import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import LoaderTest from './Settings/Development/DevLoaders'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
-import { shouldShowTermsConsent } from '~/modules/account/selectors'
-import TermsConsent from '~/screens/Modals/TermsConsent'
+import { getIsTermsConsentOutdated } from '~/modules/account/selectors'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
@@ -42,6 +40,8 @@ import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
 import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
+import Registration from '../LoggedOut/Onboarding/Registration'
+import { setTermsConsentVisibility } from '~/modules/account/actions'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -63,9 +63,9 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
-  [ScreenNames.LoggedInTermsConsent]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
+  [ScreenNames.MnemonicPhrase]: undefined
   [ScreenNames.ChangePin]: undefined
   [ScreenNames.BackupIdentity]: undefined
   [ScreenNames.FAQ]: undefined
@@ -108,169 +108,167 @@ const modalStyleOptions = {
 const MainStack = createStackNavigator<MainStackParamList>()
 
 const Main: React.FC = () => {
-  const shouldShowConsent = useSelector(shouldShowTermsConsent)
+  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isTermsConsentOutdated) {
+      dispatch(setTermsConsentVisibility(true))
+    }
+  }, [isTermsConsentOutdated])
 
   return (
     <MainStack.Navigator
       headerMode="none"
       mode="modal"
-      initialRouteName={
-        shouldShowConsent
-          ? ScreenNames.LoggedInTermsConsent
-          : ScreenNames.MainTabs
-      }
+      initialRouteName={ScreenNames.MainTabs}
     >
-      {shouldShowConsent ? (
-        <MainStack.Screen
-          name={ScreenNames.LoggedInTermsConsent}
-          component={TermsConsent}
-          options={screenTransitionSlideFromRight}
-        />
-      ) : (
+      <MainStack.Screen name={ScreenNames.MainTabs} component={MainTabs} />
+      {/* Settings Screens -> Start   */}
+      <MainStack.Screen
+        name={ScreenNames.Language}
+        component={Language}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.MnemonicPhrase}
+        component={Registration}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.ChangePin}
+        component={ChangePin}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.BackupIdentity}
+        component={BackupIdentity}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.FAQ}
+        component={FAQ}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.ContactUs}
+        component={ContactUs}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.About}
+        component={About}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.Imprint}
+        component={Imprint}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.PrivacyPolicy}
+        component={PrivacyPolicy}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.TermsOfService}
+        component={TermsOfService}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.DragToConfirm}
+        component={DragToConfirm}
+      />
+
+      {__DEV__ && (
         <>
-          <MainStack.Screen name={ScreenNames.MainTabs} component={MainTabs} />
-          {/* Settings Screens -> Start   */}
           <MainStack.Screen
-            name={ScreenNames.Language}
-            component={Language}
+            name={ScreenNames.InteractionPasteTest}
+            component={InteractionPasteTest}
             options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
-            name={ScreenNames.ChangePin}
-            component={ChangePin}
+            name={ScreenNames.ButtonsTest}
+            component={ButtonsTest}
             options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
-            name={ScreenNames.BackupIdentity}
-            component={BackupIdentity}
+            name={ScreenNames.CollapsibleTest}
+            component={CollapsibleTest}
             options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
-            name={ScreenNames.FAQ}
-            component={FAQ}
+            name={ScreenNames.LoaderTest}
+            component={LoaderTest}
+          />
+          <MainStack.Screen
+            name={ScreenNames.NotificationsTest}
+            component={NotificationsTest}
             options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
-            name={ScreenNames.ContactUs}
-            component={ContactUs}
+            name={ScreenNames.InputTest}
+            component={InputTest}
             options={screenTransitionSlideFromRight}
           />
           <MainStack.Screen
-            name={ScreenNames.About}
-            component={About}
+            name={ScreenNames.PasscodeTest}
+            component={PasscodeTest}
             options={screenTransitionSlideFromRight}
           />
-          <MainStack.Screen
-            name={ScreenNames.Imprint}
-            component={Imprint}
-            options={screenTransitionSlideFromRight}
-          />
-          <MainStack.Screen
-            name={ScreenNames.PrivacyPolicy}
-            component={PrivacyPolicy}
-            options={screenTransitionSlideFromRight}
-          />
-          <MainStack.Screen
-            name={ScreenNames.TermsOfService}
-            component={TermsOfService}
-            options={screenTransitionSlideFromRight}
-          />
-          <MainStack.Screen
-            name={ScreenNames.DragToConfirm}
-            component={DragToConfirm}
-          />
-
-          {__DEV__ && (
-            <>
-              <MainStack.Screen
-                name={ScreenNames.InteractionPasteTest}
-                component={InteractionPasteTest}
-                options={screenTransitionSlideFromRight}
-              />
-              <MainStack.Screen
-                name={ScreenNames.ButtonsTest}
-                component={ButtonsTest}
-                options={screenTransitionSlideFromRight}
-              />
-              <MainStack.Screen
-                name={ScreenNames.CollapsibleTest}
-                component={CollapsibleTest}
-                options={screenTransitionSlideFromRight}
-              />
-              <MainStack.Screen
-                name={ScreenNames.LoaderTest}
-                component={LoaderTest}
-              />
-              <MainStack.Screen
-                name={ScreenNames.NotificationsTest}
-                component={NotificationsTest}
-                options={screenTransitionSlideFromRight}
-              />
-              <MainStack.Screen
-                name={ScreenNames.InputTest}
-                component={InputTest}
-                options={screenTransitionSlideFromRight}
-              />
-              <MainStack.Screen
-                name={ScreenNames.PasscodeTest}
-                component={PasscodeTest}
-                options={screenTransitionSlideFromRight}
-              />
-            </>
-          )}
-          {/* Settings Screens -> End   */}
-
-          {/* Modals -> Start */}
-          <MainStack.Screen
-            options={modalStyleOptions}
-            name={ScreenNames.InteractionFlow}
-            component={InteractionFlow}
-          />
-          <MainStack.Screen
-            name={ScreenNames.Scanner}
-            component={Scanner}
-            options={{
-              ...screenTransitionSlideFromBottom,
-            }}
-          />
-
-          <MainStack.Screen
-            name={ScreenNames.CredentialDetails}
-            component={CredentialDetails}
-            options={screenTransitionFromBottomDisabledGestures}
-          />
-          <MainStack.Screen
-            name={ScreenNames.CredentialForm}
-            component={CredentialForm}
-            options={screenTransitionFromBottomDisabledGestures}
-          />
-
-          {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
-          <MainStack.Screen
-            name={ScreenNames.PinRecoveryInstructions}
-            component={PinRecoveryInstructions}
-            options={screenTransitionFromBottomDisabledGestures}
-          />
-          <MainStack.Screen
-            name={ScreenNames.PasscodeRecovery}
-            component={Recovery}
-            options={screenTransitionFromBottomDisabledGestures}
-          />
-          {/* END NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
-
-          <MainStack.Screen
-            name={ScreenNames.TransparentModals}
-            component={TransparentModals}
-            options={{
-              cardStyle: {
-                backgroundColor: 'transparent',
-              },
-              ...screenTransitionSlideFromBottom,
-            }}
-          />
-          {/* Modals -> End */}
         </>
       )}
+      {/* Settings Screens -> End   */}
+
+      {/* Modals -> Start */}
+      <MainStack.Screen
+        options={modalStyleOptions}
+        name={ScreenNames.InteractionFlow}
+        component={InteractionFlow}
+      />
+      <MainStack.Screen
+        name={ScreenNames.Scanner}
+        component={Scanner}
+        options={{
+          ...screenTransitionSlideFromBottom,
+        }}
+      />
+
+      <MainStack.Screen
+        name={ScreenNames.CredentialDetails}
+        component={CredentialDetails}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      <MainStack.Screen
+        name={ScreenNames.CredentialForm}
+        component={CredentialForm}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+
+      {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
+      <MainStack.Screen
+        name={ScreenNames.PinRecoveryInstructions}
+        component={PinRecoveryInstructions}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      <MainStack.Screen
+        name={ScreenNames.PasscodeRecovery}
+        component={Recovery}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      {/* END NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
+
+      <MainStack.Screen
+        name={ScreenNames.TransparentModals}
+        component={TransparentModals}
+        options={{
+          cardStyle: {
+            backgroundColor: 'transparent',
+          },
+          ...screenTransitionSlideFromBottom,
+        }}
+      />
+      {/* Modals -> End */}
     </MainStack.Navigator>
   )
 }

@@ -1,35 +1,39 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
 
 import { useFailed } from '~/hooks/loader'
-import { useSubmitIdentity } from '~/hooks/sdk'
-import { BackArrowIcon } from '~/assets/svg'
-import { useDangerouslyDisableGestures, useGoBack } from '~/hooks/navigation'
+import { usePopStack } from '~/hooks/navigation'
 
-import SeedPhrase from './components/Styled'
 import Btn, { BtnTypes } from '~/components/Btn'
 import { Colors } from '~/utils/colors'
-import { useGetSeedPhrase } from '~/hooks/sdk'
+import {
+  useGetSeedPhrase,
+  useRecordUserHasWrittenSeedPhrase,
+} from '~/hooks/sdk'
 import shuffleArray from '~/utils/arrayUtils'
 import Dnd from './Dnd'
 import useTranslation from '~/hooks/useTranslation'
+import ScreenContainer from '~/components/ScreenContainer'
+import JoloText, { JoloTextWeight } from '~/components/JoloText'
+import { Platform, StyleSheet, View } from 'react-native'
+import BP from '~/utils/breakpoints'
+import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 const SeedPhraseRepeat: React.FC = () => {
-  const goBack = useGoBack()
-  const submitIdentity = useSubmitIdentity()
-  const seedphrase = useGetSeedPhrase()
+  const recordUserHasWrittenSeedPhrase = useRecordUserHasWrittenSeedPhrase()
+  const seedPhrase = useGetSeedPhrase()
   const showFailedLoader = useFailed()
+  const popStack = usePopStack()
   const { t } = useTranslation()
-
-  useDangerouslyDisableGestures()
 
   const [wrongOrder, setWrongOrder] = useState(false)
   const [readyToSubmit, setReadyToSubmit] = useState(false)
-  const [shuffledSeedphrase, setShuffledSeedphrase] =
-    useState<string[] | null>(null)
+  const [shuffledSeedphrase, setShuffledSeedphrase] = useState<string[] | null>(
+    null,
+  )
 
   const isFirstFragment = useRef(Boolean(Math.round(Math.random())))
 
-  const phraseArr = seedphrase.split(' ')
+  const phraseArr = seedPhrase.split(' ')
   const phraseFragmentFirst = phraseArr.slice(0, 6)
   const phraseFragmentLast = phraseArr.slice(6, 12)
 
@@ -40,7 +44,7 @@ const SeedPhraseRepeat: React.FC = () => {
   useEffect(() => {
     const shuffled = shuffleArray(usedFragment)
     setShuffledSeedphrase(shuffled)
-  }, [seedphrase])
+  }, [seedPhrase])
 
   const handlePhraseUpdate = (phrase: string[]) => {
     if (JSON.stringify(phrase) !== JSON.stringify(shuffledSeedphrase)) {
@@ -52,7 +56,7 @@ const SeedPhraseRepeat: React.FC = () => {
 
   const onSubmit = async () => {
     if (isPhraseValid) {
-      await submitIdentity()
+      await recordUserHasWrittenSeedPhrase(popStack)
     } else {
       showFailedLoader()
       setTimeout(() => {
@@ -65,30 +69,41 @@ const SeedPhraseRepeat: React.FC = () => {
     if (!shuffledSeedphrase) return false
 
     return shuffledSeedphrase.join(' ') === usedFragment.join(' ')
-  }, [JSON.stringify(shuffledSeedphrase), seedphrase])
+  }, [JSON.stringify(shuffledSeedphrase), seedPhrase])
 
   return (
-    <SeedPhrase.Styled.ScreenContainer bgColor={Colors.mainBlack}>
-      <SeedPhrase.Styled.Header>
-        <SeedPhrase.Styled.Header.Left onPress={goBack}>
-          <BackArrowIcon />
-        </SeedPhrase.Styled.Header.Left>
-      </SeedPhrase.Styled.Header>
+    <ScreenContainer
+      hasHeaderBack
+      navigationStyles={{
+        backgroundColor: Colors.mainBlack,
+      }}
+      customStyles={{
+        justifyContent: 'flex-start',
+        backgroundColor: Colors.mainBlack,
+      }}
+    >
       {wrongOrder ? (
-        <SeedPhrase.Styled.ErrorText>
+        <JoloText
+          weight={JoloTextWeight.medium}
+          customStyles={{ marginTop: 8, paddingHorizontal: 36 }}
+          color={Colors.error}
+        >
           {t('SeedphraseRepeat.matchingError')}
-        </SeedPhrase.Styled.ErrorText>
+        </JoloText>
       ) : (
-        <SeedPhrase.Styled.HelperText>
+        <JoloText
+          weight={JoloTextWeight.medium}
+          customStyles={{ marginTop: 8, paddingHorizontal: 36 }}
+        >
           {t('SeedphraseRepeat.orderInstructions')}
-        </SeedPhrase.Styled.HelperText>
+        </JoloText>
       )}
-      <SeedPhrase.Styled.ActiveArea>
+      <View style={styles.phraseContainer}>
         {shuffledSeedphrase && shuffledSeedphrase.length > 1 ? (
           <Dnd tags={shuffledSeedphrase} updateTags={handlePhraseUpdate} />
         ) : null}
-      </SeedPhrase.Styled.ActiveArea>
-      <SeedPhrase.Styled.CTA>
+      </View>
+      <AbsoluteBottom>
         <Btn
           disabled={!readyToSubmit || wrongOrder}
           onPress={onSubmit}
@@ -96,9 +111,27 @@ const SeedPhraseRepeat: React.FC = () => {
         >
           {t('SeedphraseRepeat.confirmBtn')}
         </Btn>
-      </SeedPhrase.Styled.CTA>
-    </SeedPhrase.Styled.ScreenContainer>
+      </AbsoluteBottom>
+    </ScreenContainer>
   )
 }
+const styles = StyleSheet.create({
+  phraseContainer: {
+    flex: 1,
+    ...Platform.select({
+      ios: {
+        justifyContent: 'flex-start',
+        marginTop: '40%',
+      },
+      android: {
+        marginTop: BP({ default: 60, small: 24, xsmall: 16 }),
+      },
+    }),
+  },
+  info: {
+    width: '40%',
+    marginTop: 20,
+  },
+})
 
 export default SeedPhraseRepeat

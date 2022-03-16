@@ -9,7 +9,7 @@ const LostSeedPhraseInfo = () => {
   const { t } = useTranslation()
 
   return (
-    <ScreenContainer backgroundColor={Colors.black65}>
+    <ScreenContainer backgroundColor={Colors.black80}>
       <Info.Content>
         <Info.Title>{t('RecoveryInfo.header')}</Info.Title>
         <Info.Description>

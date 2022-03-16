@@ -125,18 +125,15 @@ const CardList: React.FC = ({ children }) => (
 
 export const DocumentList = () => {
   const { t } = useTranslation()
-  const [categories, setCategories] =
-    useState<
-      | CredentialsByCategory<
-          CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
-        >
-      | CredentialsByCategory<
-          CredentialsByIssuer<
-            DisplayCredentialDocument | DisplayCredentialOther
-          >
-        >
-      | null
-    >(null)
+  const [categories, setCategories] = useState<
+    | CredentialsByCategory<
+        CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
+      >
+    | CredentialsByCategory<
+        CredentialsByIssuer<DisplayCredentialDocument | DisplayCredentialOther>
+      >
+    | null
+  >(null)
   const { activeTab, activeSubtab, setActiveTab, tabs } = useTabs()
   const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
   const { getOptionalFields } = useCredentialOptionalFields()

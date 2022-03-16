@@ -6,7 +6,6 @@ export type OnboardingStackScreens =
 
 export type LoggedOutParamList = {
   [ScreenNames.Walkthrough]: undefined
-  [ScreenNames.Onboarding]: {
-    initialRoute: OnboardingStackScreens
-  }
+  [ScreenNames.IdentityRecovery]: undefined
+  [ScreenNames.Idle]: undefined
 }

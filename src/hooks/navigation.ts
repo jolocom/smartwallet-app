@@ -1,4 +1,8 @@
-import { useNavigation, StackActions } from '@react-navigation/native'
+import {
+  useNavigation,
+  StackActions,
+  useNavigationState,
+} from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
 import { useDispatch } from 'react-redux'
 import { setAppLocked, setLocalAuth } from '~/modules/account/actions'
@@ -23,6 +27,19 @@ export const usePop = () => {
 
   return (n: number) => {
     navigation.dispatch(StackActions.pop(n))
+  }
+}
+
+export const usePopStack = () => {
+  const navigation = useNavigation()
+  const stackSize = useNavigationState((state) => state.index)
+
+  return () => {
+    //NOTE: pops to the first screen of the stack, if not already there
+    if (stackSize !== 0) navigation.dispatch(StackActions.popToTop())
+    if (navigation.canGoBack()) {
+      navigation.goBack()
+    }
   }
 }
 

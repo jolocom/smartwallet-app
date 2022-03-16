@@ -36,8 +36,8 @@ yup.addMethod(yup.string, 'customEmail', function () {
 export const nameValidation = yup
   .object()
   .shape({
-    [ClaimKeys.givenName]: yup.string(),
-    [ClaimKeys.familyName]: yup.string(),
+    [ClaimKeys.givenName]: yup.string().max(100, 'Validations.tooMany'),
+    [ClaimKeys.familyName]: yup.string().max(100, 'Validations.tooMany'),
   })
   .atLeastOneOf(
     [ClaimKeys.givenName, ClaimKeys.familyName],
@@ -53,10 +53,22 @@ export const emailValidation = yup.object().shape({
 })
 
 export const postalAddressValidation = yup.object().shape({
-  [ClaimKeys.addressLine]: yup.string().required('Validations.missingValue'),
-  [ClaimKeys.postalCode]: yup.string().required('Validations.missingValue'),
-  [ClaimKeys.city]: yup.string().required('Validations.missingValue'),
-  [ClaimKeys.country]: yup.string().required('Validations.missingValue'),
+  [ClaimKeys.addressLine]: yup
+    .string()
+    .max(100, 'Validations.tooMany')
+    .required('Validations.missingValue'),
+  [ClaimKeys.postalCode]: yup
+    .string()
+    .max(100, 'Validations.tooMany')
+    .required('Validations.missingValue'),
+  [ClaimKeys.city]: yup
+    .string()
+    .max(100, 'Validations.tooMany')
+    .required('Validations.missingValue'),
+  [ClaimKeys.country]: yup
+    .string()
+    .max(100, 'Validations.tooMany')
+    .required('Validations.missingValue'),
 })
 
 export const mobileNumberValidation = yup.object().shape({
@@ -65,7 +77,7 @@ export const mobileNumberValidation = yup.object().shape({
     .phone()
     .required('Validations.missingValue')
     .min(7, 'Validations.tooFew')
-    .max(17, 'Validations.tooMany'),
+    .max(30, 'Validations.tooMany'),
 })
 
 export const contactValidation = yup

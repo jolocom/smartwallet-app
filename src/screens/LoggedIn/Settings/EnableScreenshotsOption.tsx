@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useAgent } from '~/hooks/sdk'
 import Section from './components/Section'
 import Option from './components/Option'
@@ -7,29 +7,24 @@ import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenshotManager } from '~/utils/screenshots'
+import { getIsMakingScreenshotDisabled } from '~/modules/account/selectors'
+import { useDispatch, useSelector } from 'react-redux'
+import { setMakingScreenshotDisability } from '~/modules/account/actions'
 
 const EnableScreenshotsOption = () => {
   const { t } = useTranslation()
   const agent = useAgent()
-  const [isDisabled, setDisabled] = useState(true)
+  const dispatch = useDispatch()
+  const isMakingScreenshotDisabled = useSelector(getIsMakingScreenshotDisabled)
   const { scheduleErrorWarning } = useToasts()
 
-  useEffect(() => {
-    ScreenshotManager.getDisabledStatus(agent)
-      .then(setDisabled)
-      .catch(scheduleErrorWarning)
-  }, [])
-
   const disableScreenshots = () => {
-    setDisabled(true)
     ScreenshotManager.storeDisabledStatus(true, agent)
       .then(() => {
         ScreenshotManager.disable()
+        dispatch(setMakingScreenshotDisability(true))
       })
-      .catch((e) => {
-        setDisabled(false)
-        scheduleErrorWarning(e)
-      })
+      .catch(scheduleErrorWarning)
   }
 
   const enableScreenshots = () => {
@@ -41,15 +36,12 @@ const EnableScreenshotsOption = () => {
         {
           text: t('Settings.screenshotAlertCta'),
           onPress: () => {
-            setDisabled(false)
             ScreenshotManager.storeDisabledStatus(false, agent)
               .then(() => {
                 ScreenshotManager.enable()
+                dispatch(setMakingScreenshotDisability(false))
               })
-              .catch((e) => {
-                setDisabled(true)
-                scheduleErrorWarning(e)
-              })
+              .catch(scheduleErrorWarning)
           },
         },
       ],
@@ -57,8 +49,8 @@ const EnableScreenshotsOption = () => {
     )
   }
 
-  const handleDisableScreenshots = () => {
-    if (isDisabled) {
+  const handleToggleMakingScreenshotDisability = () => {
+    if (isMakingScreenshotDisabled) {
       enableScreenshots()
     } else {
       disableScreenshots()
@@ -70,7 +62,10 @@ const EnableScreenshotsOption = () => {
       <Option>
         <Option.Title title={t('Settings.screenshotBlock')} />
         <View style={{ position: 'absolute', right: 16 }}>
-          <ToggleSwitch on={!isDisabled} onToggle={handleDisableScreenshots} />
+          <ToggleSwitch
+            on={!isMakingScreenshotDisabled}
+            onToggle={handleToggleMakingScreenshotDisability}
+          />
         </View>
       </Option>
     </Section.Block>

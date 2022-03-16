@@ -133,7 +133,9 @@ const main = () => {
     const onlyJSTSFiles = formattedStagedFiles.filter((f) =>
       /\.(ts|tsx|js|jsx)$/g.exec(f),
     )
-    lintFiles(onlyJSTSFiles)
+    if (onlyJSTSFiles.length) {
+      lintFiles(onlyJSTSFiles)
+    }
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)

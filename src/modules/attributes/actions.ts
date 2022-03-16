@@ -1,19 +1,16 @@
 import createAction from '~/utils/createAction'
-import {
-  AttrActions,
-  AttributePayload,
-  AttrsState,
-  AttributeI,
-  AttributePayloadEdit,
-} from './types'
+import { AttrActions, AttrAction, AttrActionType } from './types'
 
-export const initAttrs = createAction<AttrsState<AttributeI>>(
-  AttrActions.initAttrs,
-)
-export const updateAttrs = createAction<AttributePayload>(
-  AttrActions.updateAttrs,
-)
+// To avoid manually passing a generic type every time we call `createAction`
+// redeclaring createAction fn with types specific to the `account` module
+function createAttrAction<K extends keyof AttrActions>(type: K) {
+  return createAction<AttrAction<K>>(type)
+}
 
-export const editAttr = createAction<AttributePayloadEdit>(AttrActions.editAttr)
+export const initAttrs = createAttrAction(AttrActionType.initAttrs)
 
-export const deleteAttr = createAction(AttrActions.deleteAttr)
+export const updateAttrs = createAttrAction(AttrActionType.updateAttrs)
+
+export const editAttr = createAttrAction(AttrActionType.editAttr)
+
+export const deleteAttr = createAttrAction(AttrActionType.deleteAttr)
