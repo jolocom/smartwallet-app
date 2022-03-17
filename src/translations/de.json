@@ -535,7 +535,8 @@
         "subheader": "Nutzen Sie ihre Online-Ausweisfunktion um sich bei Online Diensten auszuweisen.",
         "compatibilityBtn": "Kompabilitätstest",
         "changePinBtn": "PIN ändern",
-        "unlockBtn": "Karte entsperren"
+        "unlockBtn": "Karte entsperren",
+        "ausweisBadge": "Online-Ausweisfunktion"
     },
     "AusweisChangePin": {
         "transportPinHeader": "Haben Sie eine 5-stellige PIN?",
