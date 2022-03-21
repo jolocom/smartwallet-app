@@ -162,15 +162,4 @@ describe('Ausweis change pin screen', () => {
       )
     })
   })
-  test('user can find information what to do if he forgot his pin', () => {
-    const { getByText } = renderWithSafeArea(<AusweisChangePin />)
-    const forgotPinBtn = getByText('...AusweisChangePin.forgotBtn')
-    fireEvent.press(forgotPinBtn)
-    expect(mockNavigate).toHaveBeenCalledWith(
-      'eID',
-      expect.objectContaining({
-        screen: 'ForgotPin',
-      }),
-    )
-  })
 })
