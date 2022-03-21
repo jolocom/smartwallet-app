@@ -1,12 +1,12 @@
 import React from 'react'
-import {
-  AusweisForgotPin,
-  AUSWEIS_SUPPORT_EMAIL,
-  AUSWEIS_SUPPORT_PHONE,
-} from '~/screens/LoggedIn/eID/components/AusweisForgotPin'
+import { AusweisForgotPin } from '~/screens/LoggedIn/eID/components/AusweisForgotPin'
 import { useGoBack } from '~/hooks/navigation'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { fireEvent } from '@testing-library/react-native'
+import {
+  AUSWEIS_SUPPORT_EMAIL,
+  AUSWEIS_SUPPORT_PHONE,
+} from '~/screens/LoggedIn/eID/constants'
 
 const mockOpenUrl = jest.fn()
 jest.mock('../../../src/hooks/navigation')
