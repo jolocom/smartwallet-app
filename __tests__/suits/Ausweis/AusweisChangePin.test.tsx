@@ -10,6 +10,16 @@ import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import { useGoBack, usePopStack } from '~/hooks/navigation'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import { mockSelectorReturn } from '../../mocks/libs/react-redux'
+import {
+  AUSWEIS_SUPPORT_EMAIL,
+  AUSWEIS_SUPPORT_PHONE,
+} from '~/screens/LoggedIn/eID/constants'
+
+const mockOpenUrl = jest.fn()
+jest.mock('react-native/Libraries/Linking/Linking', () => ({
+  openURL: mockOpenUrl,
+  canOpenURL: jest.fn().mockResolvedValue(true),
+}))
 
 jest.mock('@react-navigation/native')
 jest.mock('../../../src/hooks/navigation')
@@ -161,5 +171,32 @@ describe('Ausweis change pin screen', () => {
         }),
       )
     })
+  })
+  test('user is able to navigate to email app', async () => {
+    const { getByText } = renderWithSafeArea(<AusweisChangePin />)
+    const contactLink = getByText(AUSWEIS_SUPPORT_EMAIL)
+    fireEvent.press(contactLink)
+
+    await waitFor(() => {
+      expect(mockOpenUrl).toHaveBeenCalledTimes(1)
+      expect(mockOpenUrl).toHaveBeenCalledWith(
+        `mailto:${AUSWEIS_SUPPORT_EMAIL}`,
+      )
+    })
+
+    mockOpenUrl.mockClear()
+  })
+
+  test('user is able to navigate to telephone app', async () => {
+    const { getByText } = renderWithSafeArea(<AusweisChangePin />)
+    const phoneLink = getByText(new RegExp(AUSWEIS_SUPPORT_PHONE))
+    fireEvent.press(phoneLink)
+
+    await waitFor(() => {
+      expect(mockOpenUrl).toHaveBeenCalledTimes(1)
+      expect(mockOpenUrl).toHaveBeenCalledWith(`tel:${AUSWEIS_SUPPORT_PHONE}`)
+    })
+
+    mockOpenUrl.mockClear()
   })
 })
