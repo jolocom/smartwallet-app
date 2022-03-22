@@ -49,10 +49,6 @@ export enum AusweisFlow {
   unlock = 'unlock',
 }
 
-export interface AusweisPinInfoParams {
-  onDismiss?: () => void
-}
-
 export enum AusweisFields {
   Address = 'Address',
   BirthName = 'BirthName',

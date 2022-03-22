@@ -6,7 +6,6 @@ import eIDHooks from './hooks'
 import {
   AusweisCardResult,
   AusweisPasscodeParams,
-  AusweisPinInfoParams,
   AusweisScannerParams,
   eIDScreens,
 } from './types'
@@ -37,7 +36,7 @@ export type AusweisStackParamList = {
   [eIDScreens.AusweisScanner]: AusweisScannerParams
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeParams
-  [eIDScreens.PinInfo]: AusweisPinInfoParams
+  [eIDScreens.PinInfo]: undefined
   [eIDScreens.ProviderDetails]: undefined
   [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
