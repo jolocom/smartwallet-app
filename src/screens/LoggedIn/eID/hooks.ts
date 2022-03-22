@@ -6,7 +6,6 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
-import NfcManager from 'react-native-nfc-manager'
 import {
   AccessRightsFields,
   CardInfo,
@@ -18,7 +17,6 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 
-import { SWErrorCodes } from '~/errors/codes'
 import { useCustomContext } from '~/hooks/context'
 import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
@@ -43,54 +41,9 @@ import {
 } from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
+import { useCheckNFC } from '~/hooks/nfc'
 
 const useAusweisContext = useCustomContext(AusweisContext)
-
-//NOTE: Does this fit here, or in the general hooks directory?
-const useCheckNFC = () => {
-  const { t } = useTranslation()
-  const { scheduleErrorInfo, scheduleInfo, scheduleErrorWarning } = useToasts()
-
-  const nfcCheck = async () => {
-    const supported = await NfcManager.isSupported()
-
-    if (!supported) {
-      throw new Error(SWErrorCodes.SWNfcNotSupported)
-    }
-
-    await NfcManager.start()
-    const isEnabled = await NfcManager.isEnabled()
-
-    if (!isEnabled) {
-      throw new Error(SWErrorCodes.SWNfcNotEnabled)
-    }
-  }
-
-  return (onSuccess: () => void | PromiseLike<void>) =>
-    nfcCheck()
-      .then(onSuccess)
-      .catch((e) => {
-        if (e.message === SWErrorCodes.SWNfcNotSupported) {
-          scheduleErrorInfo(e, {
-            title: t('Toasts.nfcCompatibilityTitle'),
-            message: t('Toasts.nfcCompatibilityMsg'),
-          })
-        } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
-          scheduleInfo({
-            title: t('Toasts.nfcOffTitle'),
-            message: t('Toasts.nfcOffMsg'),
-            interact: {
-              label: t('Toasts.nfcOffBtn'),
-              onInteract: () => {
-                NfcManager.goToNfcSetting()
-              },
-            },
-          })
-        } else {
-          throw new Error(e)
-        }
-      })
-}
 
 const useAusweisInteraction = () => {
   const { t } = useTranslation()
@@ -284,7 +237,7 @@ const useAusweisCompatibilityCheck = () => {
   const [compatibility, setCompatibility] = useState<AusweisCardResult>()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { cancelFlow, startChangePin } = eIDHooks.useAusweisInteraction()
-  const checkNfcSupport = eIDHooks.useCheckNFC()
+  const checkNfcSupport = useCheckNFC()
   const readerState = useSelector(getAusweisReaderState)
 
   const updateCompatibilityResult = (cardInfo: CardInfo) => {
@@ -510,7 +463,6 @@ const eIDHooks = {
   useTranslatedAusweisFields,
   useAusweisCompatibilityCheck,
   useAusweisInteraction,
-  useCheckNFC,
   useAusweisContext,
 }
 export default eIDHooks

@@ -39,6 +39,7 @@ import { ExtraActionProps } from '~/components/Passcode/types'
 import JoloText from '~/components/JoloText'
 import { Trans } from 'react-i18next'
 import { JoloTextSizes } from '~/utils/fonts'
+import { useCheckNFC } from '~/hooks/nfc'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -124,7 +125,7 @@ export const AusweisPasscode = () => {
   } = eIDHooks.useAusweisInteraction()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
-  const checkNfcSupport = eIDHooks.useCheckNFC()
+  const checkNfcSupport = useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')
