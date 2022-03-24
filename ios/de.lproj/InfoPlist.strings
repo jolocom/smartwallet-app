@@ -5,5 +5,5 @@
   Created by SBub on 3/10/22.
   
 */
-NSCameraUsageDescription = "de NSCameraUsageDescription";
-NSFaceIDUsageDescription = "de NSFaceIDUsageDescription";
+NSCameraUsageDescription = "Um QR codes zu scannen und mit Diensten zu interagieren, wird die Kamera benötigt";
+NSFaceIDUsageDescription = "Um deine Wallet abzusichern, benötigen wir FaceID";

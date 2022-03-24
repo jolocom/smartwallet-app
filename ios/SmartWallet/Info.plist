@@ -51,9 +51,9 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>To scan QR codes to interact with other services</string>
+	<string>Your camera will be used to scan QR Codes and interact with services</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>We require FaceID access to allow you quick and secure access</string>
+	<string>We need FaceID to secure your wallet against misuse</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>TTCommons-Light.otf</string>

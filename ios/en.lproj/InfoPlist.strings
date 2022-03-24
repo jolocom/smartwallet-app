@@ -5,5 +5,5 @@
   Created by SBub on 3/10/22.
   
 */
-NSCameraUsageDescription = "To scan QR codes to interact with other services";
-NSFaceIDUsageDescription = "We require FaceID access to allow you quick and secure access";
+NSCameraUsageDescription = "Your camera will be used to scan QR Codes and interact with services";
+NSFaceIDUsageDescription = "We need FaceID to secure your wallet against misuse";
