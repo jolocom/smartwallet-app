@@ -10,14 +10,17 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
+import eIDHooks from '../hooks'
 import { eIDScreens } from '../types'
 
 export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
   const { t } = useTranslation()
   const navigation = useNavigation()
+  const { cancelFlow } = eIDHooks.useAusweisInteraction()
 
-  const handlePasscodeSettings = () => {
+  const handleChangePinRedirect = () => {
+    cancelFlow()
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
     // Replace InteractionSheet with AusweisChangePin
@@ -52,7 +55,7 @@ export const AusweisPinInfo = () => {
         <View style={styles.buttonContainer}>
           <Btn
             testID={'ausweis-pass-info-change-btn'}
-            onPress={handlePasscodeSettings}
+            onPress={handleChangePinRedirect}
             type={BtnTypes.quaternary}
           >
             {t('AusweisPinInfo.btn')}
