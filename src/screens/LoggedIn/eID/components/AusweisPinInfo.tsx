@@ -50,7 +50,11 @@ export const AusweisPinInfo = () => {
         )}
       >
         <View style={styles.buttonContainer}>
-          <Btn onPress={handlePasscodeSettings} type={BtnTypes.quaternary}>
+          <Btn
+            testID={'ausweis-pass-info-change-btn'}
+            onPress={handlePasscodeSettings}
+            type={BtnTypes.quaternary}
+          >
             {t('AusweisPinInfo.btn')}
           </Btn>
         </View>
