@@ -521,15 +521,14 @@
         "ausweisBadge": "Online-Ausweisfunktion"
     },
     "AusweisChangePin": {
-        "transportPinHeader": "Haben Sie eine 5-stellige PIN?",
-        "transportPinSubheader": "Sie sollten diese im Brief gemeinsam mit Ihrer Ausweis-Karte erhalten haben",
-        "transportPinBtn": "Prozess beginnen",
-        "pinHeader": "Ändern Sie hren 6-stelligen PIN Code",
-        "pinSubheader": "Sie finden die CAN unten rechts auf der Vorderseite Ihres Ausweises",
-        "pinBtn": "Prozess beginnen",
-        "forgotHeader": "Sie finden nichts davon?",
-        "forgotSubheader": "Wenn Sie Ihre Ausweis PIN ganz vergessen haben und Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde",
-        "forgotBtn": "mehr Informationen"
+        "transportPinHeader": "",
+        "transportPinSubheader": "",
+        "transportPinBtn": "",
+        "pinHeader": "",
+        "pinSubheader": "",
+        "pinBtn": "",
+        "forgotHeader": "",
+        "forgotSubheader": ""
     },
     "AusweisPinInfo": {
         "header": "PIN Informationen",

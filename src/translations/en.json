@@ -521,15 +521,14 @@
         "ausweisBadge": "Online-Ausweisfunktion"
     },
     "AusweisChangePin": {
-        "transportPinHeader": "Do you have a 5-digit PIN?",
-        "transportPinSubheader": "You should have received it in the letter together with your card",
-        "transportPinBtn": "Start the process",
-        "pinHeader": "Change your 6-digit PIN code",
-        "pinSubheader": "You can find it in the bottom right corner on the front side of your ID card",
-        "pinBtn": "Start the process",
-        "forgotHeader": "Can’t find any of this?",
-        "forgotSubheader": "If you completely forgot your PIN and can not find your PIN letter, please turn to the competent authority",
-        "forgotBtn": "find more"
+        "transportPinHeader": "Set up your eID PIN",
+        "transportPinSubheader": "To set up your PIN, you will need to enter the 5 digit transport PIN that came in a letter alongside your ID card.",
+        "transportPinBtn": "Set up eID PIN",
+        "pinHeader": "Change 6-digit eID PIN",
+        "pinSubheader": "If you have already set a 6 digit PIN before, you can change it here.",
+        "pinBtn": "Change PIN",
+        "forgotHeader": "Forgot eID PIN?",
+        "forgotSubheader": "If you forgot your eID PIN or cannot find your transport PIN letter, please turn to the competent authority to set a new PIN. You can also contact the support at:"
     },
     "AusweisPinInfo": {
         "header": "PIN information",

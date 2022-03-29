@@ -27,7 +27,6 @@ import {
 import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import { AusweisCanInfo } from './components/AusweisCanInfo'
 import AusweisTarnsportWarning from './components/AusweisTransportWarning'
-import { AusweisForgotPin } from './components/AusweisForgotPin'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
 import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
@@ -102,11 +101,6 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.CanInfo}
         component={AusweisCanInfo}
-        options={screenTransitionSlideFromRight}
-      />
-      <eIDStack.Screen
-        name={eIDScreens.ForgotPin}
-        component={AusweisForgotPin}
         options={screenTransitionSlideFromRight}
       />
       <eIDStack.Screen
