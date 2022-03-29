@@ -26,6 +26,7 @@ import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
 import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import useConnection from '../connection'
+import { getCurrentLanguage } from '~/modules/account/selectors'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -41,6 +42,7 @@ export const useDeeplinkInteractions = () => {
   const { processInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
   const loader = useLoader()
+  const currentLanguage = useSelector(getCurrentLanguage)
 
   // NOTE: for now we assume all the params come in as strings
   const getParamValue = (name: string, params: BranchParams) => {
@@ -84,7 +86,7 @@ export const useDeeplinkInteractions = () => {
         scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
       }
     })
-  }, [])
+  }, [currentLanguage])
 }
 
 export const useInteractionStart = () => {

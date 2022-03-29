@@ -1,11 +1,10 @@
 import {
-  AusweisModuleActions,
-  AusweisModuleState,
-  SetAusweisDetailsAction,
-  SetAusweisReaderStateAction,
-  SetAusweisScannerKeyAction,
-  SetAusweisFlowTypeAction,
-} from './types'
+  setAusweisInteractionDetails,
+  setAusweisReaderState,
+  setAusweisScannerKey,
+  setAusweisFlowType,
+} from './actions'
+import { AusweisActionType, AusweisModuleState } from './types'
 
 const initialState: AusweisModuleState = {
   details: null,
@@ -16,20 +15,21 @@ const initialState: AusweisModuleState = {
 
 const reducer = (
   state = initialState,
-  action:
-    | SetAusweisDetailsAction
-    | SetAusweisScannerKeyAction
-    | SetAusweisReaderStateAction
-    | SetAusweisFlowTypeAction,
-): AusweisModuleState => {
+  action: ReturnType<
+    | typeof setAusweisInteractionDetails
+    | typeof setAusweisScannerKey
+    | typeof setAusweisReaderState
+    | typeof setAusweisFlowType
+  >,
+) => {
   switch (action.type) {
-    case AusweisModuleActions.setDetails:
+    case AusweisActionType.setDetails:
       return { ...state, details: action.payload }
-    case AusweisModuleActions.setScannerKey:
+    case AusweisActionType.setScannerKey:
       return { ...state, scannerKey: action.payload }
-    case AusweisModuleActions.setReaderState:
+    case AusweisActionType.setReaderState:
       return { ...state, readerState: action.payload }
-    case AusweisModuleActions.setFlowType:
+    case AusweisActionType.setFlowType:
       return { ...state, flowType: action.payload }
     default:
       return state

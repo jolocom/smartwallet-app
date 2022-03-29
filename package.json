@@ -15,6 +15,7 @@
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "term:add": "ts-node ./bin/terms/add-term.ts",
     "terms:import": "ts-node ./bin/terms/import-terms.ts",
+    "terms:stale": "ts-node ./bin/terms/find-stale-terms.ts",
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts? --coverageDirectory=coverage",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

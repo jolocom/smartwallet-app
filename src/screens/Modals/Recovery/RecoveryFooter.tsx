@@ -1,20 +1,21 @@
 import React, { useCallback, memo } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
-import { useRoute, RouteProp } from '@react-navigation/native'
+import {
+  useRoute,
+  RouteProp,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
-import { setLogged, setDid } from '~/modules/account/actions'
+import { setLogged } from '~/modules/account/actions'
 
 import BtnGroup from '~/components/BtnGroup'
 import Btn, { BtnTypes } from '~/components/Btn'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 
 import { useLoader } from '~/hooks/loader'
-import {
-  useAgent,
-  useRecoverIdentity,
-  useShouldRecoverFromSeed,
-} from '~/hooks/sdk'
+import { useRecoverIdentity, useShouldRecoverFromSeed } from '~/hooks/sdk'
 
 import Suggestions from './SeedKeySuggestions'
 import useAnimateRecoveryFooter from './useAnimateRecoveryFooter'
@@ -23,7 +24,7 @@ import { resetPhrase } from './module/recoveryActions'
 import { useKeyboard } from './useKeyboard'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import { ScreenNames } from '~/types/screens'
-import { useReplaceWith, usePop, useGoBack } from '~/hooks/navigation'
+import { useReplaceWith, usePop } from '~/hooks/navigation'
 import { LockStackParamList } from '~/screens/LoggedIn/LockStack'
 import useTranslation from '~/hooks/useTranslation'
 import { useGetResetStoredCountdownValues } from '~/components/Passcode/hooks'
@@ -42,7 +43,6 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
   const replaceWith = useReplaceWith()
   const dispatch = useDispatch()
   const pop = usePop()
-  const goBack = useGoBack()
   const recoveryIdentity = useRecoverIdentity()
 
   const shouldRecoverFromSeed = useShouldRecoverFromSeed()
@@ -52,6 +52,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
 
   const route =
     useRoute<RouteProp<LockStackParamList, ScreenNames.PasscodeRecovery>>()
+  const navigation = useNavigation()
 
   const isAccessRestore = route?.params?.isAccessRestore ?? false
 
@@ -96,7 +97,7 @@ const useRecoveryPhraseUtils = (phrase: string[]) => {
     if (isAccessRestore) {
       pop(2)
     } else {
-      goBack()
+      navigation.dispatch(StackActions.replace(ScreenNames.Walkthrough))
     }
   }
 

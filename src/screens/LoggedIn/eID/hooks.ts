@@ -48,7 +48,6 @@ import {
 } from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
-import { AusweisFlowType } from '~/modules/ausweis/types'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 

@@ -1,16 +1,11 @@
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { AusweisFlow, IAusweisRequest } from '~/screens/LoggedIn/eID/types'
 
-export enum AusweisModuleActions {
+export enum AusweisActionType {
   setDetails = 'setDetails',
   setScannerKey = 'setScannerKey',
   setReaderState = 'setReaderState',
   setFlowType = 'setFlowType',
-}
-
-export enum AusweisFlowType {
-  changePin = 'changePin',
-  auth = 'auth',
 }
 
 type AusweisFlowTypePayload = AusweisFlow.auth | AusweisFlow.changePin | null
@@ -22,22 +17,17 @@ export interface AusweisModuleState {
   flowType: AusweisFlowTypePayload
 }
 
-export interface SetAusweisDetailsAction {
-  type: AusweisModuleActions.setDetails
-  payload: IAusweisRequest | null
+// Expressing dependency between action type and action payload;
+// key: action type, value: action payload
+export interface AusweisActions {
+  [AusweisActionType.setDetails]: IAusweisRequest | null
+  [AusweisActionType.setScannerKey]: string | null
+  [AusweisActionType.setReaderState]: CardInfo | null
+  [AusweisActionType.setFlowType]: AusweisFlowTypePayload
 }
 
-export interface SetAusweisScannerKeyAction {
-  type: AusweisModuleActions.setScannerKey
-  payload: string | null
-}
-
-export interface SetAusweisReaderStateAction {
-  type: AusweisModuleActions.setReaderState
-  payload: CardInfo | null
-}
-
-export interface SetAusweisFlowTypeAction {
-  type: AusweisModuleActions.setFlowType
-  payload: AusweisFlowTypePayload
+// Dependency between action type and its payload following Action type signature
+export type AusweisAction<A extends keyof AusweisActions> = {
+  type: A
+  payload: AusweisActions[A]
 }

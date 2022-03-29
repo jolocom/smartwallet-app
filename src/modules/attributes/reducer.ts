@@ -1,22 +1,26 @@
-import { ActionI } from '~/types/action'
-import { AttributeTypes } from '~/types/credentials'
 import {
   AttributesState,
-  AttrActions,
   AttributePayloadEdit,
   AttributePayload,
+  AttrActionType,
 } from './types'
+import { initAttrs, updateAttrs, editAttr, deleteAttr } from './actions'
 
 export const initialState: AttributesState = { all: {} }
 
-const reducer = (state = initialState, action: ActionI<AttrActions>) => {
+const reducer = (
+  state = initialState,
+  action: ReturnType<
+    typeof initAttrs | typeof updateAttrs | typeof editAttr | typeof deleteAttr
+  >,
+) => {
   switch (action.type) {
-    case AttrActions.initAttrs: {
+    case AttrActionType.initAttrs: {
       return { ...state, all: action.payload }
     }
-    case AttrActions.updateAttrs: {
+    case AttrActionType.updateAttrs: {
       const { type, attribute } = action.payload as AttributePayload
-      const availableAttr = state.all[type];
+      const availableAttr = state.all[type]
       return {
         ...state,
         all: {
@@ -25,18 +29,24 @@ const reducer = (state = initialState, action: ActionI<AttrActions>) => {
         },
       }
     }
-    case AttrActions.editAttr: {
-      const { type, attribute: editedAttribute, id } = action.payload as AttributePayloadEdit
+    case AttrActionType.editAttr: {
+      const {
+        type,
+        attribute: editedAttribute,
+        id,
+      } = action.payload as AttributePayloadEdit
       return {
         ...state,
         all: {
           ...state.all,
-          [type]: state.all[type]?.map(stateAttribute => stateAttribute.id === id ? editedAttribute : stateAttribute),
+          [type]: state.all[type]?.map((stateAttribute) =>
+            stateAttribute.id === id ? editedAttribute : stateAttribute,
+          ),
         },
       }
     }
-    case AttrActions.deleteAttr: {
-      const { type, id }: { type: AttributeTypes; id: string } = action.payload
+    case AttrActionType.deleteAttr: {
+      const { type, id } = action.payload
       const typeAttrs = state.all[type]
 
       if (typeAttrs) {
