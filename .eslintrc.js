@@ -16,14 +16,23 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    // ESLint recommended
+    'no-unused-vars': 'warn',
+
     // React
     'react/prop-types': 'off',
+    'react/display-name': 'warn', // TODO: make it an "error"
+    'react/no-children-prop': 'off',
 
     // React-Native
     'react-native/no-raw-text': 'off',
+    'react-native/no-inline-styles': 'off',
+    'react-native/sort-styles': 'off',
+    'react-native/no-color-literals': 'warn',
 
     // Typescript
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/require-await': 'warn',
   },
   reportUnusedDisableDirectives: true,
   settings: {
