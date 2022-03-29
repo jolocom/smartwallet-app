@@ -11,6 +11,7 @@ import {
 } from './types'
 import {
   screenTransitionFromBottomDisabledGestures,
+  screenTransitionSlideFromRight,
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
@@ -98,15 +99,20 @@ const AusweisInteraction = () => {
         component={AusweisCompatibilityResult}
         options={transparentModalFadeOptions}
       />
-      <eIDStack.Screen name={eIDScreens.CanInfo} component={AusweisCanInfo} />
+      <eIDStack.Screen
+        name={eIDScreens.CanInfo}
+        component={AusweisCanInfo}
+        options={screenTransitionSlideFromRight}
+      />
       <eIDStack.Screen
         name={eIDScreens.ForgotPin}
         component={AusweisForgotPin}
+        options={screenTransitionSlideFromRight}
       />
       <eIDStack.Screen
         name={eIDScreens.PukInfo}
         component={AusweisPukInfo}
-        options={transparentModalFadeOptions}
+        options={screenTransitionSlideFromRight}
       />
       <eIDStack.Screen
         name={eIDScreens.AusweisTransportWarning}
@@ -116,11 +122,12 @@ const AusweisInteraction = () => {
       <eIDStack.Screen
         name={eIDScreens.AusweisTransportPinInfo}
         component={AusweisTransportPinInfo}
+        options={screenTransitionSlideFromRight}
       />
       <eIDStack.Screen
         name={eIDScreens.AusweisChangePin}
         component={AusweisChangePin}
-        options={screenTransitionFromBottomDisabledGestures}
+        options={screenTransitionSlideFromRight}
       />
     </eIDStack.Navigator>
   )

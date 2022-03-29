@@ -517,7 +517,8 @@
         "subheader": "Use your digital identity to  identify yourself with various online servicess",
         "compatibilityBtn": "Compatibility check",
         "changePinBtn": "Change your PIN",
-        "unlockBtn": "Unlock blocked card"
+        "unlockBtn": "Unlock blocked card",
+        "ausweisBadge": "Online-Ausweisfunktion"
     },
     "AusweisChangePin": {
         "transportPinHeader": "Do you have a 5-digit PIN?",
