@@ -12,6 +12,7 @@ import {
   CardInfo,
 } from '@jolocom/react-native-ausweis/js/types'
 import {
+  AuthMessage,
   ChangePinMessage,
   Messages,
   ReaderMessage,
@@ -47,6 +48,7 @@ import {
 } from '~/modules/ausweis/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
+import { AusweisFlowType } from '~/modules/ausweis/types'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -150,7 +152,6 @@ const useAusweisInteraction = () => {
       }
 
       dispatch(setAusweisInteractionDetails(requestData))
-      dispatch(setAusweisFlowType(AusweisFlow.auth))
     } catch (e) {
       cancelFlow()
       console.warn(e)
@@ -180,7 +181,6 @@ const useAusweisInteraction = () => {
   }
 
   const closeAusweis = () => {
-    dispatch(setAusweisFlowType(null))
     popStack()
   }
 
@@ -220,7 +220,6 @@ const useAusweisInteraction = () => {
   }
 
   const finishFlow = (url: string, message?: string) => {
-    dispatch(setAusweisFlowType(null))
     if (isConnectedToTheInternet === false) {
       return Promise.reject('No internet connection')
     }
@@ -546,7 +545,7 @@ export const useObserveAusweisChangePinFlow = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const listener = (msg: ChangePinMessage) => {
+    const changePinListener = (msg: ChangePinMessage) => {
       if (msg.hasOwnProperty('success')) {
         // NOTE: We're using a timeout because even though we received the CHANGE_PIN message, which
         // signifies the ending of the flow, sending the RUN_CHANGE_PIN command right away will will
@@ -560,10 +559,26 @@ export const useObserveAusweisChangePinFlow = () => {
       }
     }
 
-    aa2Module.messageEmitter.addListener(Messages.changePin, listener)
+    const authListener = (msg: AuthMessage) => {
+      const isFlowFinished = !!(msg.result && !msg.result.message) ?? false
+      const isFlowFailed = !!msg.error || (msg.result && msg.result.message)
+
+      if (isFlowFailed || isFlowFinished) {
+        dispatch(setAusweisFlowType(null))
+      } else {
+        dispatch(setAusweisFlowType(AusweisFlow.auth))
+      }
+    }
+
+    aa2Module.messageEmitter.addListener(Messages.changePin, changePinListener)
+    aa2Module.messageEmitter.addListener(Messages.auth, authListener)
 
     return () => {
-      aa2Module.messageEmitter.removeListener(Messages.changePin, listener)
+      aa2Module.messageEmitter.removeListener(
+        Messages.changePin,
+        changePinListener,
+      )
+      aa2Module.messageEmitter.removeListener(Messages.auth, authListener)
     }
   }, [])
 }
