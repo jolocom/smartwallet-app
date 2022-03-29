@@ -136,6 +136,13 @@ export const AusweisIdentity = () => {
           source={require('~/assets/images/updatedCard.png')}
           style={styles.card}
         />
+        <JoloText
+          color={Colors.black}
+          weight={JoloTextWeight.medium}
+          customStyles={styles.ausweisBadge}
+        >
+          {t('AusweisIdentity.ausweisBadge')}
+        </JoloText>
       </View>
       <View>
         <JoloText kind={JoloTextKind.title} weight={JoloTextWeight.regular}>
@@ -181,6 +188,15 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1.55,
     marginBottom: 8,
+    position: 'relative',
+  },
+  ausweisBadge: {
+    position: 'absolute',
+    bottom: 23,
+    left: 18,
+    fontSize: 16,
+    lineHeight: 18.4,
+    letterSpacing: 0.15,
   },
   card: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   Image,
@@ -28,48 +28,52 @@ import { TextLayoutEvent } from '~/types/props'
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 type FieldValueProps = { value: string }
+
 const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
   const [_, setClipboardData] = useClipboard()
 
   const { scheduleInfo } = useToasts()
   const { t } = useTranslation()
 
-  const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(0)
-  const { isExpanded, onToggleExpand } = useToggleExpand()
-  const [shouldAppendDots, setAppendDots] = useState(false)
-  const wasCalculated = useRef(false)
+  const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(5)
+  const [seeMoreBtnVisible, setSeeMoreBtnVisibility] = useState(false)
+
+  const { isExpanded, onToggleExpand } = useToggleExpand({
+    onExpand: () => {
+      setNumberOfVisibleLines(0)
+    },
+    onCollapse: () => {
+      setNumberOfVisibleLines(4)
+    },
+  })
 
   const handleLongPress = (value: string) => {
     setClipboardData(value as string)
     scheduleInfo({
       title: t('Toasts.copied'),
       message: ``,
-      dismiss: {
-        timeout: 1500,
-      },
+      dismiss: 1500,
     })
   }
 
+  const originalNrLines = useRef<number | null>(null)
+
+  /**
+   * Decide whether to render 'Show more' btn to expand a
+   * field content
+   */
   const handleTextLayout = (e: TextLayoutEvent) => {
-    const numberOfLines = e.nativeEvent.lines.length
-    if (numberOfLines > 4 && !wasCalculated.current) {
-      setAppendDots(true)
-      setNumberOfVisibleLines(4)
+    if (originalNrLines.current === null) {
+      originalNrLines.current = e.nativeEvent.lines.length
+      if (originalNrLines.current > 4) {
+        LayoutAnimation.configureNext({
+          ...LayoutAnimation.Presets.easeInEaseOut,
+          duration: 300,
+        })
+        setSeeMoreBtnVisibility(true)
+      }
     }
-    wasCalculated.current = true
   }
-
-  useEffect(() => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: 200,
-    })
-    if (isExpanded) {
-      setNumberOfVisibleLines(0)
-    } else {
-      setNumberOfVisibleLines(4)
-    }
-  }, [isExpanded])
 
   return (
     <>
@@ -86,21 +90,20 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
           customStyles={[
             styles.fieldText,
             { marginTop: BP({ default: 8, xsmall: 4 }) },
-            !isExpanded && shouldAppendDots && { marginBottom: 15 },
           ]}
         >
           {value}
         </JoloText>
+        {seeMoreBtnVisible && !isExpanded && (
+          <JoloText
+            size={JoloTextSizes.mini}
+            color={Colors.osloGray}
+            customStyles={{ textAlign: 'right', marginTop: 5 }}
+          >
+            {t('Details.expandBtn')}
+          </JoloText>
+        )}
       </TouchableOpacity>
-      {!isExpanded && shouldAppendDots && (
-        <JoloText
-          color={Colors.black95}
-          customStyles={{ position: 'absolute', bottom: 10, right: 10 }}
-          onPress={onToggleExpand}
-        >
-          {t('Details.expandBtn')}
-        </JoloText>
-      )}
     </>
   )
 }
@@ -114,6 +117,13 @@ const FieldDetails = () => {
     fields,
     backgroundColor = Colors.mainBlack,
   } = route.params
+
+  const handleLayout = () => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.linear,
+      duration: 200,
+    })
+  }
 
   const { top } = useSafeArea()
   return (
@@ -166,7 +176,7 @@ const FieldDetails = () => {
                 )}
                 {fields.map((field, i) => (
                   <React.Fragment key={i}>
-                    <View style={styles.fieldContainer}>
+                    <View style={styles.fieldContainer} onLayout={handleLayout}>
                       <JoloText
                         customStyles={styles.fieldText}
                         size={JoloTextSizes.mini}
