@@ -22,7 +22,6 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
-  const { setShouldSkip } = eIDHooks.useAusweisSkipCompatibility()
 
   const { processAusweisToken } = eIDHooks.useAusweisInteraction()
   const loader = useLoader()
@@ -35,14 +34,6 @@ const DevelopmentSection = () => {
       title: 'ToggleSwitch',
       message: `I am ${toggled ? 'toggled' : 'not toggled'}!`,
     })
-  }
-
-  const handleSkipCompatibility = () => {
-    scheduleInfo({
-      title: 'Success',
-      message: 'The Ausweis Compatibility Check flag was reset',
-    })
-    setShouldSkip(false)
   }
 
   return (
@@ -77,14 +68,6 @@ const DevelopmentSection = () => {
         </Section.Block>
       </Section>
 
-      <Section>
-        <Section.Title>[DEV] Stored settings</Section.Title>
-        <Section.Block>
-          <Option onPress={handleSkipCompatibility}>
-            <Option.Title title="Reset Ausweis compatibility flag" />
-          </Option>
-        </Section.Block>
-      </Section>
       <Section>
         <Section.Title>[DEV] UI component</Section.Title>
         <Section.Block>

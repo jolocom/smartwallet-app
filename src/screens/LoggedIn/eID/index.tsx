@@ -5,7 +5,6 @@ import { AusweisProvider } from './context'
 import eIDHooks from './hooks'
 import {
   AusweisCardResult,
-  AusweisPasscodeDetailsParams,
   AusweisPasscodeParams,
   AusweisScannerParams,
   eIDScreens,
@@ -18,10 +17,8 @@ import {
 } from '~/utils/screenSettings'
 import {
   AusweisRequestReview,
-  AusweisRequest,
-  CompatibilityCheck,
   AusweisPasscode,
-  AusweisPasscodeDetails,
+  AusweisPinInfo,
   AusweisScanner,
   AusweisCompatibilityResult,
   AusweisPukInfo,
@@ -36,12 +33,10 @@ import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
 import AusweisChangePin from './components/AusweisChangePin'
 
 export type AusweisStackParamList = {
-  [eIDScreens.InteractionSheet]: undefined
   [eIDScreens.AusweisScanner]: AusweisScannerParams
-  [eIDScreens.ReadinessCheck]: undefined
   [eIDScreens.RequestDetails]: undefined
   [eIDScreens.EnterPIN]: AusweisPasscodeParams
-  [eIDScreens.PasscodeDetails]: AusweisPasscodeDetailsParams
+  [eIDScreens.PinInfo]: undefined
   [eIDScreens.ProviderDetails]: undefined
   [eIDScreens.PukInfo]: undefined
   [eIDScreens.PukLock]: undefined
@@ -70,23 +65,13 @@ const AusweisInteraction = () => {
     <eIDStack.Navigator
       headerMode="none"
       mode="modal"
-      initialRouteName={eIDScreens.InteractionSheet}
+      initialRouteName={eIDScreens.RequestDetails}
       screenOptions={transparentModalOptions}
     >
-      <eIDStack.Screen
-        name={eIDScreens.InteractionSheet}
-        component={AusweisRequest}
-        options={screenTransitionFromBottomDisabledGestures}
-      />
       <eIDStack.Screen
         name={eIDScreens.AusweisScanner}
         component={AusweisScanner}
         options={transparentModalFadeOptions}
-      />
-      <eIDStack.Screen
-        name={eIDScreens.ReadinessCheck}
-        component={CompatibilityCheck}
-        options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
         name={eIDScreens.RequestDetails}
@@ -99,9 +84,9 @@ const AusweisInteraction = () => {
         options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
-        name={eIDScreens.PasscodeDetails}
-        component={AusweisPasscodeDetails}
-        options={screenTransitionSlideFromRight}
+        name={eIDScreens.PinInfo}
+        component={AusweisPinInfo}
+        options={screenTransitionFromBottomDisabledGestures}
       />
       <eIDStack.Screen
         name={eIDScreens.PukLock}

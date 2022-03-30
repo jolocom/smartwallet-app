@@ -9,7 +9,7 @@ import { AusweisScannerState } from '~/screens/LoggedIn/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AusweisScanner } from '~/screens/LoggedIn/eID/components'
 import { useGoBack } from '~/hooks/navigation'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import * as nfcHooks from '~/hooks/nfc'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 
 jest.mock('@react-navigation/native')
@@ -42,9 +42,7 @@ describe('Ausweis scanner screen', () => {
       },
     })
     ;(useGoBack as jest.Mock).mockReturnValue(mockGoBack)
-    jest.spyOn(eIDHooks, 'useCheckNFC').mockReturnValue({
-      checkNfcSupport: mockCheckNfcSupport,
-    })
+    jest.spyOn(nfcHooks, 'useCheckNFC').mockReturnValue(mockCheckNfcSupport)
   })
   afterEach(() => {
     mockDispatchFn.mockClear()

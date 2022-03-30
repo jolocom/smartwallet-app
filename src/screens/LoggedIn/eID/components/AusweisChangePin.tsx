@@ -24,6 +24,7 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
+import { useCheckNFC } from '~/hooks/nfc'
 import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
 import Link from '~/components/Link'
 
@@ -59,7 +60,7 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = useCheckNFC()
 
   const changePinFlow =
     isTransportPin.current === true

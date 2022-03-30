@@ -1,27 +1,26 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
+
 import Btn, { BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
-import { AusweisStackParamList } from '..'
+import eIDHooks from '../hooks'
 import { eIDScreens } from '../types'
 
-export const AusweisPasscodeDetails = () => {
+export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
   const { t } = useTranslation()
   const navigation = useNavigation()
-  const { params } =
-    useRoute<RouteProp<AusweisStackParamList, eIDScreens.PasscodeDetails>>()
-  const { onDismiss } = params
+  const { cancelFlow } = eIDHooks.useAusweisInteraction()
 
-  const handlePasscodeSettings = () => {
-    onDismiss && onDismiss()
+  const handleChangePinRedirect = () => {
+    cancelFlow()
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
     // Replace InteractionSheet with AusweisChangePin
@@ -54,7 +53,11 @@ export const AusweisPasscodeDetails = () => {
         )}
       >
         <View style={styles.buttonContainer}>
-          <Btn onPress={handlePasscodeSettings} type={BtnTypes.quaternary}>
+          <Btn
+            testID={'ausweis-pass-info-change-btn'}
+            onPress={handleChangePinRedirect}
+            type={BtnTypes.quaternary}
+          >
             {t('AusweisPinInfo.btn')}
           </Btn>
         </View>

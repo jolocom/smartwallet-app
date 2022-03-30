@@ -122,9 +122,10 @@ const Lock = () => {
         </View>
         <Passcode.Container>
           <Passcode.ExtraAction
-            title={t('Lock.forgotBtn')}
             onPress={() => redirect(ScreenNames.PinRecoveryInstructions)}
-          />
+          >
+            {t('Lock.forgotBtn')}
+          </Passcode.ExtraAction>
           <Passcode.Keyboard
             biometryType={isBiometrySelected ? biometryType : undefined}
             onBiometryPress={

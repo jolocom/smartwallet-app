@@ -38,10 +38,11 @@ import { AusweisStackParamList } from '..'
 import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import { IS_ANDROID } from '~/utils/generic'
+import { useCheckNFC } from '~/hooks/nfc'
 
 type AusweisRequestReviewNavigation = StackNavigationProp<
   AusweisStackParamList,
-  eIDScreens.InteractionSheet
+  eIDScreens.RequestDetails
 >
 
 export const AusweisRequestReview = () => {
@@ -59,7 +60,7 @@ export const AusweisRequestReview = () => {
     effectiveValidityDate,
     expirationDate,
   } = eIDHooks.useAusweisContext()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = useCheckNFC()
   const { t } = useTranslation()
   const { top } = useSafeArea()
   const navigation = useNavigation<AusweisRequestReviewNavigation>()
