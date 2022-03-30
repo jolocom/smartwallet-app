@@ -18,11 +18,11 @@ const InteractionFlow: React.FC = () => {
   const interactionType = useSelector(getInteractionType)
   const isFocused = useIsFocused()
 
-  const finishInteraction = useFinishInteraction()
+  const { clearInteraction, closeInteraction } = useFinishInteraction()
 
   useBackHandler(() => {
     if (isFocused) {
-      finishInteraction()
+      handleDismissInteraction()
       return true
     } else {
       return false
@@ -45,7 +45,8 @@ const InteractionFlow: React.FC = () => {
   }
 
   const handleDismissInteraction = () => {
-    finishInteraction()
+    clearInteraction()
+    closeInteraction()
   }
 
   // TODO: we are rendering the bottom sheet also for the full

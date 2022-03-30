@@ -24,7 +24,7 @@ const InteractionFooter: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation()
   const loader = useLoader()
-  const finishInteraction = useFinishInteraction()
+  const { clearInteraction, closeInteraction } = useFinishInteraction()
   const { connected } = useConnection()
 
   const handleSubmit = async () => {
@@ -38,7 +38,8 @@ const InteractionFooter: React.FC<Props> = ({
   }
 
   const handleCancel = () => {
-    finishInteraction()
+    clearInteraction()
+    closeInteraction()
   }
 
   return (
