@@ -31,7 +31,7 @@
     },
     "OnboardingBackup": {
         "header": "Möchten Sie ein Backup wiederherstellen?",
-        "instruction": "Ziehen Sie zum starten den Punkt in den Kreis",
+        "instruction": "Ziehen Sie zum Starten den Punkt in den Kreis",
         "skipBtn": "Ich habe kein Backup"
     },
     "RecoveryInfo": {
@@ -81,7 +81,7 @@
         "addressLabel": "Anschrift \n",
         "addClaimBtn": "Neu Hinzufügen",
         "attributesMissingInfo": "Ihre Daten sind noch nicht vollständig.\nErgänzen Sie diese für die zukünftigen Anwendungen.",
-        "headerAusweis": "Ihre Identität",
+        "headerAusweis": "Ihre eID",
         "headerCredentials": "Nachweise"
     },
     "BottomBar": {
@@ -130,11 +130,11 @@
     },
     "PasscodeRecoveryInstructions": {
         "header": "So ändern Sie Ihre Wallet PIN",
-        "subheader1": "Wir bedauern es sehr, dass Sie ihre Wallet PIN vergessen haben. Aber keine Sorge, es gibt eine Lösung!",
-        "subheader2": "Durch Eingabe Ihrer geheimen Wortkombination können Sie ihren Wallet PIN  ändern. Klicken Sie unten auf Zugang wiederherstellen, um die Änderung vorzunehmen.",
+        "subheader1": "Es tut uns Leid, dass Sie Ihre Wallet PIN vergessen haben. Aber keine Sorge, es gibt eine Lösung!",
+        "subheader2": "Durch Eingabe Ihrer geheimen Wortkombination können Sie Ihre Wallet PIN  ändern. Klicken Sie unten auf Zugang wiederherstellen, um die Änderung vorzunehmen.",
         "imageCaption": "Wort für Wort wiederholen",
         "submitBtn": "Zugang wiederherstellen",
-        "footer": "Ein neuer Wallet PIN hat das keinen Einfluss auf Ihre gespeicherten Daten",
+        "footer": "Ein neuer Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten",
         "cancelBtn": "Abbrechen"
     },
     "Lock": {
@@ -179,7 +179,7 @@
         "noInternetMsg": "Zum Fortfahren ist eine Internetverbindung erforderlich.",
         "errorWarningTitle": "Hoppla ...",
         "errorWarningMsg": "Damit haben wir auch nicht gerechnet. Bitte helfen Sie uns, indem Sie uns den Fehler mitteilen, auf den Sie gestoßen sind.",
-        "successfulInteractionTitle": "Super, dass hat geklappt!",
+        "successfulInteractionTitle": "Ausstellung erfolgreich!",
         "successfulInternetMsg": "Sie sollten jetzt alles haben, was Sie benötigen, um Ihre Interaktion fortzusetzen",
         "successfulOfferInteractionBtn": "Überprüfung",
         "offerDuplicateTitle": "Duplikat gefunden",
@@ -188,13 +188,13 @@
         "offerInvalidDocsTitle": "Kann nicht gespeichert werden",
         "offerInvalidDocsMsg": "Anscheinend gibt es ein Problem mit den Dokumenten, die von ${serviceName} gesendet werden.",
         "offerRenegotiationTitle": "Sei aufmerksam",
-        "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden",
+        "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden.",
         "shareMissingDocsTitle": "Fehlende Dokumente",
         "shareMissingDocsMsg": "${serviceName} fordert ein Dokument an, das sich nicht in Ihrer Wallet befindet. \nEs fehlt: ${documentType}",
         "failedStoreMsg": "Leider konnten wir Ihre Wallet PIN nicht speichern. Bitte versuchen Sie es erneut.",
-        "reconnectedInternetTitle": "Sie sind wieder online",
+        "reconnectedInternetTitle": "Sie sind wieder online.",
         "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
-        "successfulInteractionMsg": "Sie solltesn jetzt alles haben, was Sie brauchst, um Ihre Interaktion fortzusetzen",
+        "successfulInteractionMsg": "Ihre Interaktion war erfolgreich. Details dazu finden Sie hier",
         "nfcCompatibilityTitle": "NFC Kompabilitätsproblem",
         "nfcCompatibilityMsg": "Leider unterstützt Ihr Telefon die erforderliche NFC-Funktionalität nicht",
         "nfcOffTitle": "NFC inaktiv",
@@ -216,7 +216,10 @@
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
-        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?"
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
+        "redirectTitle": "",
+        "redirectDescription": "",
+        "redirectBtn": ""
     },
     "Documents": {
         "documentsTab": "Dokumente",
@@ -230,7 +233,7 @@
         "deleteCardOption": "Löschen",
         "cancelCardOption": "Abbrechen",
         "deleteDocumentHeader": "Möchten Sie ${documentName} löschen?",
-        "deleteCredentialInstruction": "Lassen Sie den Kreis zum löschen los",
+        "deleteCredentialInstruction": "Lassen Sie den Kreis zum Löschen los",
         "cancelBtn": "Abbrechen",
         "placeholderHeader": "Noch sind keine Dokumente vorhanden",
         "documentsPlaceholderSubheader": "Fügen Sie doch noch heute welche hinzu!",
@@ -345,7 +348,7 @@
     },
     "ChangePasscode": {
         "wrongCodeHeader": "Falscher Wallet PIN",
-        "currentHeader": "Aktuelle Wallet PIN",
+        "currentHeader": "Aktueller Wallet PIN",
         "successHeader": "Wallet PIN geändert!",
         "sameCodeHeader": "Sie haben die bisherige Wallet PIN eingegeben"
     },
@@ -359,7 +362,7 @@
         "issuePlaceholder": "Wählen Sie eine Option aus",
         "suggestionHeader": "Gibt es etwas Konkretes zu sagen?",
         "suggestionSubheader": "Trau dich uns zu sagen, was du auf dem Herzen hast – damit sind wir für die zukünftigen Gespräche vorbereitet",
-        "suggestionPlaceholder": "Zum schreiben antippen ...",
+        "suggestionPlaceholder": "Zum Schreiben antippen ...",
         "contactHeader": "Willst du Kontakt aufnehmen?",
         "contactPlaceholder": "Tragen Sie Ihre E-Mail Adresse hier ein ...",
         "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam",
@@ -388,9 +391,9 @@
         "detailsHeader": "Gibt es etwas Konkretes zu sagen?",
         "detailsSubheader": "Wenn das Problem nicht aufgelistet ist - das Textfeld unten ist der beste Platz, um es zu beschreiben",
         "logsHeader": "Ihre Logs einbeziehen",
-        "logsSubheader": "Dies beinhaltet bestimmte private Metadaten (wie z.B. Dateigrößen - aber keine persönlichen Informationen) und wird den Entwicklern helfen, Fehler schneller zu beheben",
+        "logsSubheader": "Dies beinhaltet bestimmte private Metadaten (wie z.B. Dateigrößen - aber keine persönlichen Informationen) und wird den Entwicklern helfen, Fehler schneller zu beheben.",
         "contactHeader": "Möchten Sie Kontakt aufnehmen?",
-        "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam. Jegliche Benutzerinformationen werden sofort nach Lösung des Problems gelöscht",
+        "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam. Jegliche Benutzerinformationen werden sofort nach Lösung des Problems gelöscht.",
         "rateHeader": "Bewerten Sie diesen Vorfall",
         "submitBtn": "Bericht senden",
         "contactInputError": "Bitte geben Sie eine gültige E-Mail ein",
@@ -462,31 +465,13 @@
         "addressVerification": "Adressnachweis",
         "canAllowed": "CAN erlaubt",
         "pinManagement": "PIN verwalten",
-        "header": "Eingehende Anfrage"
-    },
-    "AusweisRequest": {
-        "description": "Überprüfen Sie bitte die Anfrage, um die Interaktion mit ${serviceName} abzuschließen",
-        "proceedBtn": "Überprüfung"
+        "header": ""
     },
     "AusweisLostPin": {
         "title": "Wie kann ich den Kartenzugriff wiederherstellen?",
         "description": "Sie können Ihren PIN-Brief nicht finden? Sie haben beim Abholen des Ausweises oder später eine PIN festgelegt, an die Sie sich jetzt nicht mehr erinnern können? Bitte wenden Sie sich in diesem Fall an die zuständige Behörde und legen Sie dort eine neue PIN fest.",
         "contact": "Sie können sich auch per Email an den Kundendienst wenden",
         "phoneRate": "Ortstarif"
-    },
-    "AusweisCompatibility": {
-        "header": "Bevor Sie fortfahren, muss Ihr Gerät auf technische Kompatibilität geprüft werden",
-        "checkHeader": "Kompatibilitätsprüfung",
-        "checkSubtitle": "Schalten Sie Ihren Ausweis durch einen einfachen Scan frei",
-        "checkSuccess": "Vorgang Erfolgreich",
-        "checkStart": "Start",
-        "checkTryAgain": "Erneut versuchen",
-        "pinTitle": "6-stelliger PIN Status",
-        "pinSubtitle": "Haben Sie zuvor die eID-Funktionalität der Karte aktiviert? Wenn nicht, informieren Sie sich hier",
-        "pinBtn": "mehr Info",
-        "proceedBtn": "Fertig",
-        "skipBtn": "Überspringen Sie diesen Schritt, wenn Sie in Zukunft eine ähnliche Interaktion ausführen",
-        "ignoreBtn": "Ignorieren"
     },
     "AusweisCompatibilityStatus": {
         "header": "Kompatibilitätsprüfung",
@@ -498,7 +483,7 @@
         "error": "Gescheitert"
     },
     "AusweisReview": {
-        "subheader": "Wählen Sie zum fortfahren die von ${serviceName} angeforderten Attribute aus",
+        "subheader": "Wählen Sie zum Fortfahren die von ${serviceName} angeforderten Attribute aus",
         "providerBtn": "Anbieter Info",
         "mandatoryHeader": "Pflichtfelder",
         "optionalHeader": "Freiwillige Angabe",
@@ -512,7 +497,7 @@
     },
     "AusweisPasscode": {
         "authPinHeader": "PIN eingeben",
-        "pinForgotBtn": "PIN vergessen?",
+        "pinForgotBtn": "",
         "transportPinHeader": "5-stelllige PIN eingeben",
         "transportPinBtn": "Wo kann ich das finden?",
         "canHeader": "CAN eingeben",
@@ -525,33 +510,33 @@
         "pinWrongError": "Falsche ${pinVariant}"
     },
     "AusweisPukLock": {
-        "header": "Ihre Karte ist gesperrt und Sie müssen zum entsperren den PUK-Code eingeben",
+        "header": "Ihre Karte ist gesperrt und Sie müssen zum Entsperren den PUK-Code eingeben",
         "subtitle": "Sie können Ihre Karte im Menü \"Identität\" entsperren, indem Sie \"Meine Karte entsperren\" klicken",
         "proceedBtn": "Weiter mit dem PUK-Code",
         "closeBtn": "Interaktion beenden"
     },
     "AusweisIdentity": {
-        "header": "Verwalten Sie Ihre digitale Identität",
+        "header": "Online-Ausweisfunktion",
         "subheader": "Nutzen Sie ihre Online-Ausweisfunktion um sich bei Online Diensten auszuweisen.",
         "compatibilityBtn": "Kompabilitätstest",
         "changePinBtn": "PIN ändern",
-        "unlockBtn": "Karte entsperren"
+        "unlockBtn": "Karte entsperren",
+        "ausweisBadge": "Online-Ausweisfunktion"
     },
     "AusweisChangePin": {
-        "transportPinHeader": "Haben Sie eine 5-stellige PIN?",
-        "transportPinSubheader": "Sie sollten diese im Brief gemeinsam mit Ihrer Ausweis-Karte erhalten haben",
-        "transportPinBtn": "Prozess beginnen",
-        "pinHeader": "Ändern Sie hren 6-stelligen PIN Code",
-        "pinSubheader": "Sie finden die CAN unten rechts auf der Vorderseite Ihres Ausweises",
-        "pinBtn": "Prozess beginnen",
-        "forgotHeader": "Sie finden nichts davon?",
-        "forgotSubheader": "Wenn Sie Ihre Ausweis PIN ganz vergessen haben und Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde",
-        "forgotBtn": "mehr Informationen"
+        "transportPinHeader": "",
+        "transportPinSubheader": "",
+        "transportPinBtn": "",
+        "pinHeader": "",
+        "pinSubheader": "",
+        "pinBtn": "",
+        "forgotHeader": "",
+        "forgotSubheader": ""
     },
     "AusweisPinInfo": {
         "header": "PIN Informationen",
-        "description": "Die persönliche Identifikationsnummer (PIN) wird von Ihnen gewählt und ist für jede Nutzung der Online-Ausweisfunktion erforderlich.\nSie können diese jederzeit und auf unbestimmte Zeit ändern, wenn Sie Ihre gültige PIN kennen. Wählen Sie für Ihre sechsstellige PIN eine Zahlenkombination, die nicht leicht zu erraten ist, weder „123456“ noch Ihr Geburtsdatum oder andere auf dem Ausweis aufgedruckte Zahlen. Wenn Ihnen Ihre gültige PIN nicht mehr bekannt ist, müssen Sie sich an Ihre zuständige Behörde wenden, um Ihre PIN zu erneuern.\n\nBeim erstmaligen Ändern der PIN verwenden Sie bitte die fünfstellige Transport-PIN. Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises.\n\nBitte beachten Sie, dass Sie mit der fünfstelligen Transport-PIN die Online-Ausweisfunktion nicht nutzen können. Eine Änderung auf eine sechsstellige PIN ist zwingend erforderlich.",
-        "btn": "Ausweis PIN ändern"
+        "description": "",
+        "btn": ""
     },
     "AusweisScanner": {
         "header": "Bereit zu scannen",

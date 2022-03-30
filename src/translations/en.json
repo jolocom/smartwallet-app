@@ -81,7 +81,7 @@
         "addressLabel": "Address",
         "addClaimBtn": "Add new one",
         "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
-        "headerAusweis": "Your Identity",
+        "headerAusweis": "Your eID",
         "headerCredentials": "Personal Info"
     },
     "BottomBar": {
@@ -179,7 +179,7 @@
         "noInternetMsg": "An internet connection is required to proceed.",
         "errorWarningTitle": "Whoops...",
         "errorWarningMsg": "We weren't expecting that to happen either. Help us help everyone by sharing the error you encountered",
-        "successfulInteractionTitle": "Great success!",
+        "successfulInteractionTitle": "Success!",
         "successfulInternetMsg": "You should have all you need to continue your interaction now",
         "successfulOfferInteractionBtn": "Review",
         "offerDuplicateTitle": "Duplicate detected",
@@ -194,7 +194,7 @@
         "failedStoreMsg": "We could not store your passcode. Please try again",
         "reconnectedInternetTitle": "You're back online",
         "reconnectedInternetMsg": "All wallet functionalities are back again",
-        "successfulInteractionMsg": "You should have all you need to continue your interaction now",
+        "successfulInteractionMsg": "Your interaction was successful. You can find the details here",
         "nfcCompatibilityTitle": "NFC Compatibilty problem",
         "nfcCompatibilityMsg": "Unfortunately your phone does not support the required NFC functionality",
         "nfcOffTitle": "NFC is off",
@@ -210,13 +210,16 @@
         "copied": "Copied",
         "ausweisDeactivatedCardTitle": "Your card is deactivated",
         "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
-        "interactionSuccessRedirectTitle": "Great success!",
-        "interactionSuccessRedirectMsg": "You should return back to the service",
-        "interactionSuccessRedirectBtn": "Return"
+        "interactionSuccessRedirectTitle": "",
+        "interactionSuccessRedirectMsg": "",
+        "interactionSuccessRedirectBtn": ""
     },
     "Interaction": {
         "cancelBtn": "Ignore",
-        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data."
+        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
+        "redirectTitle": "The document(s) have been added to your wallet",
+        "redirectDescription": "${serviceName} is redirecting you to a service or application outside of the SmartWallet",
+        "redirectBtn": "Follow link"
     },
     "Documents": {
         "documentsTab": "Documents",
@@ -462,31 +465,13 @@
         "addressVerification": "Address verification",
         "canAllowed": "CAN allowed",
         "pinManagement": "PIN management",
-        "header": "Incoming request"
-    },
-    "AusweisRequest": {
-        "description": "To complete the interaction with ${serviceName} please review the request",
-        "proceedBtn": "Review"
+        "header": "Incoming eID request"
     },
     "AusweisLostPin": {
         "title": "How to restore access to my card?",
         "description": "You can not find your PIN letter? You have set a PIN when picking up the ID card or later that you cannot recall now? If this is the case please turn to the competent authority and set a new PIN there.",
         "contact": "You can also contact the support by email",
         "phoneRate": "local rate"
-    },
-    "AusweisCompatibility": {
-        "header": "Before you proceed your device must meet certain technical requirements",
-        "checkHeader": "Compatibility check",
-        "checkSubtitle": "Make your ID-card ready for use with a simple scan",
-        "checkSuccess": "Successfully passed",
-        "checkStart": "Start",
-        "checkTryAgain": "Try again",
-        "pinTitle": "6-digit PIN status",
-        "pinSubtitle": "Did you previously activate the card’s eID functionality?  If not, read about it here",
-        "pinBtn": "more info",
-        "proceedBtn": "Done",
-        "skipBtn": "Skip this step when performing a similar interaction again",
-        "ignoreBtn": "Ignore"
     },
     "AusweisCompatibilityStatus": {
         "header": "Compatibility check",
@@ -512,7 +497,7 @@
     },
     "AusweisPasscode": {
         "authPinHeader": "Enter eID PIN",
-        "pinForgotBtn": "Forgot your PIN?",
+        "pinForgotBtn": "If you forgot your pin or haven’t activated it yet, <1>click here.</1>",
         "transportPinHeader": "Enter your 5-digit PIN",
         "transportPinBtn": "Where can I find this?",
         "canHeader": "Enter CAN",
@@ -531,27 +516,27 @@
         "closeBtn": "Close interaction"
     },
     "AusweisIdentity": {
-        "header": "Manage your digital identity",
-        "subheader": "Use your digital identity to  identify yourself with various online servicess",
+        "header": "German eID",
+        "subheader": "Use your digital identity to identify yourself with various online services",
         "compatibilityBtn": "Compatibility check",
         "changePinBtn": "Change your PIN",
-        "unlockBtn": "Unlock blocked card"
+        "unlockBtn": "Unlock blocked card",
+        "ausweisBadge": "Online-Ausweisfunktion"
     },
     "AusweisChangePin": {
-        "transportPinHeader": "Do you have a 5-digit PIN?",
-        "transportPinSubheader": "You should have received it in the letter together with your card",
-        "transportPinBtn": "Start the process",
-        "pinHeader": "Change your 6-digit PIN code",
-        "pinSubheader": "You can find it in the bottom right corner on the front side of your ID card",
-        "pinBtn": "Start the process",
-        "forgotHeader": "Can’t find any of this?",
-        "forgotSubheader": "If you completely forgot your PIN and can not find your PIN letter, please turn to the competent authority",
-        "forgotBtn": "find more"
+        "transportPinHeader": "Set up your eID PIN",
+        "transportPinSubheader": "To set up your PIN, you will need to enter the 5 digit transport PIN that came in a letter alongside your ID card.",
+        "transportPinBtn": "Set up eID PIN",
+        "pinHeader": "Change 6-digit eID PIN",
+        "pinSubheader": "If you have already set a 6 digit PIN before, you can change it here.",
+        "pinBtn": "Change PIN",
+        "forgotHeader": "Forgot eID PIN?",
+        "forgotSubheader": "If you forgot your eID PIN or cannot find your transport PIN letter, please turn to the competent authority to set a new PIN. You can also contact the support at:"
     },
     "AusweisPinInfo": {
         "header": "PIN information",
-        "description": "The Personal Identification Number (PIN) is chosen by you and is required for every use of the online elD function. \nYou can change it anytime and indefinitely if you know your valid PIN. For your six-digit PIN choose a combination of numbers, that is not easy to guess, neither \"123456\" nor your birth date, or any other numbers printed on the ID card. If you are no longer aware of your valid PIN, you will need to contact your responsible authority to renew your PIN.\n\nWhen changing the PIN for the first time, please use the five-digit Transport PIN. You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory",
-        "btn": "Change my pin"
+        "description": "For the 6-digit eID PIN, choose a combination of numbers that’s not easy to guess\n\nWhen changing the PIN for the first time, please use the five-digit Transport PIN. You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a 6-digit PIN is mandatory\n",
+        "btn": "Go to eID PIN Settings"
     },
     "AusweisScanner": {
         "header": "Ready to scan",
