@@ -29,7 +29,10 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
-import { uiTypesTerms } from '~/hooks/signedCredentials/utils'
+import {
+  getCredentialUIType,
+  uiTypesTerms,
+} from '~/hooks/signedCredentials/utils'
 import {
   useCredentialOptionalFields,
   useDeleteCredential,
@@ -125,15 +128,18 @@ const CardList: React.FC = ({ children }) => (
 
 export const DocumentList = () => {
   const { t } = useTranslation()
-  const [categories, setCategories] = useState<
-    | CredentialsByCategory<
-        CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
-      >
-    | CredentialsByCategory<
-        CredentialsByIssuer<DisplayCredentialDocument | DisplayCredentialOther>
-      >
-    | null
-  >(null)
+  const [categories, setCategories] =
+    useState<
+      | CredentialsByCategory<
+          CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
+        >
+      | CredentialsByCategory<
+          CredentialsByIssuer<
+            DisplayCredentialDocument | DisplayCredentialOther
+          >
+        >
+      | null
+    >(null)
   const { activeTab, activeSubtab, setActiveTab, tabs } = useTabs()
   const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
   const { getOptionalFields } = useCredentialOptionalFields()
@@ -292,7 +298,10 @@ export const DocumentList = () => {
                         <DocumentSectionOtherCard
                           key={`${index}-${c.id}`}
                           credentialName={c.name || t('General.unknown')}
-                          credentialType={credentialUIType}
+                          credentialType={getCredentialDisplayType(
+                            getCredentialUIType(c.type),
+                            t,
+                          )}
                           fields={fields}
                           logo={c.photo}
                           onHandleMore={() =>
