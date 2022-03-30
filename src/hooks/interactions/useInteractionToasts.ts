@@ -11,40 +11,6 @@ import { getCounterpartyName } from '~/utils/dataMapping'
 import useTranslation from '../useTranslation'
 import { useFinishInteraction } from './handlers'
 
-const useInteractionToasts = () => {
-  const { t } = useTranslation()
-  const { scheduleInfo } = useToasts()
-  const redirectUrl = useSelector(getRedirectUrl)
-
-  const scheduleSuccessInteraction = async (config?: Partial<ToastBody>) => {
-    const shouldRedirect =
-      !!redirectUrl && (await Linking.canOpenURL(redirectUrl))
-
-    if (shouldRedirect) {
-      scheduleInfo({
-        title: t('Toasts.interactionSuccessRedirectTitle'),
-        message: t('Toasts.interactionSuccessRedirectMsg'),
-        interact: {
-          label: t('Toasts.interactionSuccessRedirectBtn'),
-          onInteract: () => {
-            Linking.openURL(redirectUrl!)
-          },
-        },
-      })
-    } else {
-      scheduleInfo({
-        title: t('Toasts.successfulInteractionTitle'),
-        message: t('Toasts.successfulInteractionMsg'),
-        ...config,
-      })
-    }
-  }
-
-  return {
-    scheduleSuccessInteraction,
-  }
-}
-
 interface Config {
   successToast?: Partial<ToastBody>
   terminate?: boolean
@@ -90,7 +56,6 @@ export const useCompleteInteraction = (
 
       clearInteraction()
 
-      console.log({ redirectUrl })
       //if (!!redirectUrl && (await Linking.canOpenURL(redirectUrl))) {
       yield navigation.dispatch(
         StackActions.replace(ScreenNames.InteractionRedirect, {
@@ -130,5 +95,3 @@ export const useCompleteInteraction = (
 
   return { completeInteraction }
 }
-
-export default useInteractionToasts
