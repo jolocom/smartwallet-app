@@ -30,7 +30,7 @@ const useCredentialOfferSubmit = () => {
     if (await credentialsAlreadyIssued()) {
       await handleStoreIssuedCredentials()
       const initialTab = await getInitialDocumentsTab()
-      return scheduleSuccess(initialTab)
+      return getSuccessToast(initialTab)
     }
 
     await assembleOfferResponseToken()
@@ -55,7 +55,7 @@ const useCredentialOfferSubmit = () => {
     if (allValid) {
       await handleStoreIssuedCredentials()
       const initialtab = await getInitialDocumentsTab()
-      return scheduleSuccess(initialtab)
+      return getSuccessToast(initialtab)
     } else if (allInvalid) {
       throw new Error(SWErrorCodes.SWInteractionOfferAllInvalid)
     } else {
@@ -76,8 +76,7 @@ const useCredentialOfferSubmit = () => {
   })
   const { signedCredentialToUI } = useCredentials()
 
-  // util TODO: rename
-  const scheduleSuccess = (initialTab: CredentialCategories) => ({
+  const getSuccessToast = (initialTab: CredentialCategories) => ({
     successToast: {
       interact: {
         label: t('Toasts.successfulOfferInteractionBtn'),
