@@ -9,18 +9,20 @@ import useConnection from '~/hooks/connection'
 import useTranslation from '~/hooks/useTranslation'
 
 interface Props {
+  submitLabel: string
   onSubmit: () => Promise<void> | void
+  onCancel?: () => void
   disabled?: boolean
   disableLoader?: boolean
-  submitLabel: string
 }
 
 // TODO: add logic for disabling buttons
 const InteractionFooter: React.FC<Props> = ({
+  submitLabel,
   onSubmit,
+  onCancel,
   disabled = false,
   disableLoader = false,
-  submitLabel,
 }) => {
   const { t } = useTranslation()
   const loader = useLoader()
@@ -59,7 +61,7 @@ const InteractionFooter: React.FC<Props> = ({
           <Btn
             size={BtnSize.medium}
             type={BtnTypes.secondary}
-            onPress={handleCancel}
+            onPress={onCancel ? onCancel : handleCancel}
             customContainerStyles={styles.cancelBtn}
             withoutMargins
           >
