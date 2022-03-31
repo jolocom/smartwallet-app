@@ -17,11 +17,11 @@ module.exports = {
   ],
   rules: {
     // ESLint recommended
-    'no-unused-vars': 'warn',
+    //'no-unused-vars': 'warn',
 
     // React
     'react/prop-types': 'off',
-    'react/display-name': 'warn', // TODO: make it an "error"
+    //'react/display-name': 'warn', // TODO: make it an "error"
     'react/no-children-prop': 'off',
 
     // React-Native
@@ -33,6 +33,21 @@ module.exports = {
     // Typescript
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/require-await': 'warn',
+
+    // Tentative
+    '@typescript-eslint/no-misused-promises': 'off',
+    '@typescript-eslint/unbound-method': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
+    '@typescript-eslint/restrict-template-expressions': 'off',
+    'no-unused-vars': 'off',
+    'import/no-unresolved': 'off',
+    'import/no-duplicates': 'off',
+    'prettier/prettier': 'off',
+    'react/display-name': 'off',
+    'react/jsx-key': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
   },
   reportUnusedDisableDirectives: true,
   settings: {
