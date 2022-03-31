@@ -60,13 +60,17 @@ const useCredentialOfferSubmit = () => {
       throw new Error(SWErrorCodes.SWInteractionOfferAllInvalid)
     } else {
       dispatch(updateOfferValidation(validatedCredentials))
+
+      /**
+       * Pausing an interaction complete flow, becuase user should stay on the same screen and see the toast
+       */
       return {
-        terminateHandler: () =>
+        pauseHandler: () =>
           scheduleInfo({
             title: t('Toasts.offerRenegotiationTitle'),
             message: t('Toasts.offerRenegotiationMsg'),
           }),
-        terminate: true,
+        pause: true,
       }
     }
   })
