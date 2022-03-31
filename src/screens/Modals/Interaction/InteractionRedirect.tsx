@@ -8,7 +8,7 @@ import Space from '~/components/Space'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
+import { getCounterpartyName } from '~/utils/dataMapping'
 import { JoloTextSizes } from '~/utils/fonts'
 import { InteractionStackParamList } from '.'
 import InteractionFooter from './InteractionFlow/components/InteractionFooter'
@@ -21,21 +21,24 @@ import {
 
 const InteractionRedirect = () => {
   const { t } = useTranslation()
+
   const { params } =
     useRoute<
       RouteProp<InteractionStackParamList, ScreenNames.InteractionRedirect>
     >()
-  const { serviceName, serviceLogo, redirectUrl, completeRedirect } = params
+  const { counterparty, redirectUrl, completeRedirect } = params
 
   const handleSubmit = async () => {
-    //await Linking.openURL(redirectUrl!)
+    await Linking.openURL(redirectUrl!)
     completeRedirect()
   }
 
   return (
     <BottomSheet>
       <ContainerBAS>
-        <LogoContainerBAS>{/*<InteractionLogo />*/}</LogoContainerBAS>
+        <LogoContainerBAS>
+          <InteractionLogo logo={counterparty?.publicProfile?.image} />
+        </LogoContainerBAS>
         <InteractionTitle label={t('Interaction.redirectTitle')} />
         <Space height={48} />
         <View style={styles.container}>
@@ -44,13 +47,22 @@ const InteractionRedirect = () => {
           </View>
         </View>
         <Space height={42} />
-        <JoloText size={JoloTextSizes.big}>
-          {t('Interaction.redirectDescription', { serviceName })}
+        <JoloText
+          size={JoloTextSizes.big}
+          color={
+            !counterparty?.publicProfile?.name ? Colors.error : Colors.white90
+          }
+        >
+          {t('Interaction.redirectDescription', {
+            serviceName: getCounterpartyName(counterparty),
+          })}
         </JoloText>
         <Space height={20} />
         <InteractionFooter
           onSubmit={handleSubmit}
           submitLabel={t('Interaction.redirectBtn')}
+          onCancel={completeRedirect}
+          disableLoader
         />
       </ContainerBAS>
     </BottomSheet>

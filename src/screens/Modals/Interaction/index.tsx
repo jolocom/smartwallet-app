@@ -12,13 +12,13 @@ import { useNavigation } from '@react-navigation/native'
 import InteractionFlow from '~/screens/Modals/Interaction/InteractionFlow'
 import InteractionRedirect from './InteractionRedirect'
 import { screenTransitionSlideFromBottom } from '~/utils/screenSettings'
+import { IdentitySummary } from 'react-native-jolocom'
 
 export type InteractionStackParamList = {
   [ScreenNames.Scanner]: undefined
   [ScreenNames.InteractionFlow]: undefined
   [ScreenNames.InteractionRedirect]: {
-    serviceName: string
-    serviceLogo: string
+    counterparty: IdentitySummary
     redirectUrl: string
     completeRedirect: () => void
   }
