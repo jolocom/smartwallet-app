@@ -5,8 +5,12 @@ import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import { getServiceImage } from '~/modules/interaction/selectors'
 import { Colors } from '~/utils/colors'
 
-const InteractionLogo: React.FC = () => {
-  const source = useSelector(getServiceImage)
+interface InteractionLogoProps {
+  logo?: string
+}
+
+const InteractionLogo: React.FC<InteractionLogoProps> = ({ logo }) => {
+  const source = logo ?? useSelector(getServiceImage)
   if (source) {
     return <Image style={styles.image} source={{ uri: source }} />
   }
