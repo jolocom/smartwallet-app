@@ -1,5 +1,5 @@
 import { useInteraction } from './handlers'
-import { useCompleteInteraction } from './useInteractionToasts'
+import { useCompleteInteraction } from './useCompleteInteraction'
 import { useAgent } from '../sdk'
 
 const useAuthSubmit = () => {

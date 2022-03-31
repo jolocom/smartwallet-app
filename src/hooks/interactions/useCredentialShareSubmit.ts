@@ -1,5 +1,5 @@
 import { useCredentialShareFlow } from './useCredentialShareFlow'
-import { useCompleteInteraction } from './useInteractionToasts'
+import { useCompleteInteraction } from './useCompleteInteraction'
 
 const useCredentialShareSubmit = () => {
   const { assembleShareResponseToken } = useCredentialShareFlow()
