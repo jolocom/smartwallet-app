@@ -81,7 +81,7 @@ export class CredentialRequestHandler {
       }
     })
 
-    if (!!missingServiceIssuedCredentials.length) {
+    if (missingServiceIssuedCredentials.length) {
       this.missingCredentialTypes = missingServiceIssuedCredentials
     }
 
