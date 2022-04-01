@@ -128,10 +128,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  info: {
-    width: '40%',
-    marginTop: 20,
-  },
 })
 
 export default SeedPhraseRepeat
