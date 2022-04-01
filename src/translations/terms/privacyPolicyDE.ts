@@ -20,7 +20,7 @@ II. Art der verarbeiteten Daten und Rechtsgrundlage
 Jolocom erhält zu keinem Zeitpunkt Kenntnis über und Zugriff zu Ihren personenbezogenen Daten, es sei denn Sie kontaktieren Jolocom über das bereitgestellte Formular oder über der in der SmartWallet App zur Verfügung gestellten E- Mail-Adresse.
 
 Beim Herunterladen der SmartWallet App werden die hierzu erforderlichen Informationen an den Apple AppStore und an GooglePlay Store (die „App Stores“) übertragen, also insbesondere Nutzername, E-Mail-Adresse und Kundennummer Ihres Accounts, Zeitpunkt des Downloads und die individuelle Gerätekennziffer. Auf diese Datenerhebung hat Jolocom keinen Einfluss und ist nicht dafür verantwortlich. Für nähere Informationenhinsichtlich der Zweck und Umfang der Datenverarbeitung der App Stores verweisen wir auf die entsprechenden Datenschutzerklärungen der App Stores.
- 
+
 Nachdem die SmartWallet App erfolgreich auf Ihr mobiles Endgerät geladen wurde, kann diese ohne Zugriff auf das Internet verwendet werden. Bei der Nutzung der SmartWallet App werden keine personenbezogenen Daten von Jolocom erhoben. Die Daten zur Identitätsinformation, die Sie der SmartWallet App zwecks Nutzung zur Verfügung stellen (z.B. Name, Adresse, Führerschein, Personalausweis), werden ausschließlich lokal und verschlüsselt auf Ihrem mobilen Endgerät gespeichert. Stellen Sie diese Informationen teilnehmenden Partnern („Issuern“) zur Verifizierung zur Verfügung, gilt im Hinblick auf Zweck und Umfang der Datenverarbeitung die Datenschutzerklärung der Issuer. Jolocom hat auch hier keinen Zugriff auf die Daten oder den Datenfluss
 Jolocom übernimmt keine Prüfung der Daten. Ebenso obliegt es allein Ihnen, die abgelegten Inhalte zu speichern und Datensicherungen vorzunehmen.
 
@@ -54,7 +54,7 @@ Die genannten Daten sind erforderlich, um das Herunterladen der App aus den App 
 Sofern Sie über die von uns angegebene E-Mail-Adresse mit uns in Kontakt treten, ist die Verarbeitung der von Ihnen verwendeten Kontaktdaten unerlässlich, um Ihr Anliegen zu beantworten. Sofern darüber hinaus Daten verarbeitet werden, etwa Name, Adresse oder Ähnliches, dient eine Verarbeitung dazu, bestmöglich auf sein Anliegen eingehen zu können.
 
 IV. Dauer der Speicherung
-Ihre Daten werden so lange gespeichert, wie dies zur Erfüllung der oben genannten Zwecke jeweils erforderlich ist.  
+Ihre Daten werden so lange gespeichert, wie dies zur Erfüllung der oben genannten Zwecke jeweils erforderlich ist.
 Sobald dies nicht mehr der Fall ist, z.B. nach vollständiger Beantwortung Ihres Anliegens, werden sie gelöscht bzw. gesperrt, wenn und solange handels- oder steuerrechtliche Aufbewahrungspflichten dies verlangen (Art. 6 Abs. 1 S. 1 c) DSGVO). Ab dem Zeitpunkt, ab dem gesetzliche Aufbewahrungspflichten nicht mehr entgegenstehen, werden die Daten gelöscht, sofern Sie nicht ausdrücklich einer weiteren Verwendung zugestimmt haben (Art. 6 Abs. 1 S. 1 a) DSGVO).
 
 V. Weitergabe von Daten an Dritte/ Übermittlung in Drittländer
@@ -67,7 +67,7 @@ Sofern Sie zu denen von einer Verarbeitung personenbezogener Daten betroffenen P
 1. Recht auf Widerruf der Einwilligungserklärung
 Sie haben gem. Art. 7 Abs. 3 DSGVO das Recht, Ihre Einwilligung in die Verarbeitung jederzeit zu widerrufen. Die Rechtmäßigkeit der aufgrund der Einwilligung bis zu Widerruf erfolgten Verarbeitung wird nicht berührt. Das Widerrufsrecht kann durch eine formlose Erklärung ausgeübt werden. Es genügt eine schriftliche Erklärung oder wahlweise eine E-Mail an die oben genannte Kontaktadresse.
 
-Auskunftsrecht  
+Auskunftsrecht
  Sie haben gem. Art. 15 DSGVO das Recht, von uns eine Bestätigung darüber zu verlangen, ob Sie betreffende personenbezogene Daten verarbeitet werden. Ist dies der Fall, so haben Sie ein Recht auf Auskunft über diese personenbezogenen Daten und die in Art. 15 Abs. 1 Hs. 2 DSGVO genannten Informationen. Dazu zählen insbesondere der Zweck der Verarbeitung, die Kategorien der verarbeiteten Daten, die Empfänger, gegenüber denen Daten offengelegt worden sind oder noch werden, soweit möglich die geplante Dauer der Speicherung oder die Kriterien für die Dauer der Speicherung.
 
 Recht auf Berichtigung
@@ -114,11 +114,11 @@ Sie haben gem. Art. 77 DSGVO unbeschadet eines anderweitigen verwaltungsrechtlic
 
 Im vorliegenden Fall ist die zuständige Aufsichtsbehörde:
 
-Berliner Beauftragte für Datenschutz und Informationsfreiheit Friedrichstraße 219 
- 10969 Berlin 
- Telefon: 030/13 889-0 
+Berliner Beauftragte für Datenschutz und Informationsfreiheit Friedrichstraße 219
+ 10969 Berlin
+ Telefon: 030/13 889-0
 
-Telefax: 030/215-5050 
+Telefax: 030/215-5050
  E-Mail: mailbox@datenschutz-berlin.de http://www.datenschutz-berlin.de
 
 
