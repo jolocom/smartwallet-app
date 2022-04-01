@@ -36,7 +36,7 @@ export const concatValuesIdentity = concat((attributeValue: AttributeI<Map<Claim
     return Array.from(attributeValue.values()).map(v => (v ? v.toString() : ''));
   } else {
     return Array.from(attributeValue.values()).reduce((acc, v) => {
-      acc += v + ' '
+      acc += `${v} `
       return acc;
     }, '')
   }
@@ -45,9 +45,9 @@ export const concatValuesIdentity = concat((attributeValue: AttributeI<Map<Claim
 export const concatValuesShare = concat((attributeValue: AttributeI<Map<ClaimKeys, ClaimEntry>>['value'], type: AttributeTypes) => {
   return Array.from(attributeValue.values()).reduce((acc, v, idx, array) => {
     if(type === AttributeTypes.name) {
-      acc += v + ' '
+      acc += `${v} `
     } else {
-      acc += v + `${array.length - 1 === idx ? '' : ', '}`
+      acc += `${v}${array.length - 1 === idx ? '' : ', '}`
     }
     return acc;
   }, '')
