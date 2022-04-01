@@ -112,10 +112,6 @@ const CredentialDetails = () => {
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    paddingLeft: 6,
-    paddingBottom: BP({ default: 12, xsmall: 8 }),
-  },
   photo: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
