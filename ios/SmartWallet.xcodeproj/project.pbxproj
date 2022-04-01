@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2995141A2625DD2A0035F7B9 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 299514192625DD2A0035F7B9 /* BootSplash.storyboard */; };
+		29BB5C9227D9AB5300AD1BE5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 29BB5C9427D9AB5300AD1BE5 /* InfoPlist.strings */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -56,6 +57,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SmartWallet/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SmartWallet/main.m; sourceTree = "<group>"; };
 		299514192625DD2A0035F7B9 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = SmartWallet/BootSplash.storyboard; sourceTree = "<group>"; };
+		29BB5C9327D9AB5300AD1BE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		29BB5C9527D9ABA300AD1BE5 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* SmartWallet-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SmartWallet-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* SmartWallet-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SmartWallet-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40AF886527046AFA00A8A4BB /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -175,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				40AF886527046AFA00A8A4BB /* Config.xcconfig */,
+				29BB5C9427D9AB5300AD1BE5 /* InfoPlist.strings */,
 				13B07FAE1A68108700A75B9A /* SmartWallet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SmartWalletTests */,
@@ -326,6 +330,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -359,6 +364,7 @@
 				40AF886627046AFA00A8A4BB /* Config.xcconfig in Resources */,
 				2995141A2625DD2A0035F7B9 /* BootSplash.storyboard in Resources */,
 				FD9E51B725DEB88C0023D93F /* LaunchScreen.storyboard in Resources */,
+				29BB5C9227D9AB5300AD1BE5 /* InfoPlist.strings in Resources */,
 				A7DF8B8760CD4B4FAFF81C91 /* TTCommons-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -593,6 +599,18 @@
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		29BB5C9427D9AB5300AD1BE5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29BB5C9327D9AB5300AD1BE5 /* en */,
+				29BB5C9527D9ABA300AD1BE5 /* de */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
