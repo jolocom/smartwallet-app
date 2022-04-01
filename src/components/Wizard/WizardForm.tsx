@@ -60,7 +60,7 @@ const WizardForm: React.FC<IWizardFormProps> = ({ step, onSubmit }) => {
                     placeholder={t(field.label)}
                     autoFocus={idx === 0}
                     withHighlight={
-                      !Boolean(errors[field.key]) && Boolean(values[field.key])
+                      errors[field.key] && values[field.key]
                     }
                     placeholderTextColor={Colors.white30}
                     // TODO: remove if not used here
