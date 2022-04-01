@@ -307,11 +307,6 @@ const styles = StyleSheet.create({
     width: (SCREEN_WIDTH - MARKER_SIZE) / 2,
     backgroundColor: Colors.black65,
   },
-  torchWrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   torch: {
     width: 69,
     height: 69,
