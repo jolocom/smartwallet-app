@@ -70,7 +70,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
   }
 
   return (
-    <TouchableOpacity onPress={redirect(route as ScreenNames)}>
+    <TouchableOpacity onPress={() => redirect(route as ScreenNames)}>
       <View style={styles.iconContainer}>
         <View style={{ transform: [{ scale: SCALE_BY }] }}>{renderIcon()}</View>
         <JoloText
@@ -91,11 +91,11 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
 }
 
 const ScannerButton = () => {
-  const redirectToScanner = useRedirectTo(ScreenNames.Scanner)
+  const redirect = useRedirect()
   const insets = useSafeArea()
   return (
     <TouchableOpacity
-      onPress={redirectToScanner}
+      onPress={() => redirect(ScreenNames.Scanner)}
       style={[
         styles.scannerBtn,
         styles.scannerFrame,
@@ -123,7 +123,7 @@ const ScannerButton = () => {
 
 const BottomBar = (props: BottomTabBarProps) => {
   const { descriptors } = props
-  const { history, routeNames, routes } = props.state
+  const { history, routes } = props.state
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
 
