@@ -144,7 +144,7 @@ const Walkthrough: React.FC = () => {
         renderPagination={renderPagination}
       >
         {walkthroughData.map((slide, idx) => (
-          <React.Fragment key={slide.header + idx}>
+          <React.Fragment key={`${slide.header}${idx}`}>
             <ImageBackground
               key={idx}
               style={styles.background}
