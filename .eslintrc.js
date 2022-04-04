@@ -27,6 +27,7 @@ module.exports = {
     // React
     'react/prop-types': 'off',
     //'react/display-name': 'warn', // TODO: make it an "error"
+    'react/display-name': 'off',
     'react/no-children-prop': 'off',
 
     // React-Native
