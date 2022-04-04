@@ -1,6 +1,7 @@
 import { useInteraction } from './handlers'
 import { useCompleteInteraction } from './useCompleteInteraction'
 import { useAgent } from '../sdk'
+import { ScreenNames } from '~/types/screens'
 
 const useAuthzSubmit = () => {
   const getInteraction = useInteraction()
@@ -11,17 +12,9 @@ const useAuthzSubmit = () => {
     await agent.processJWT(authzResponse)
     await interaction.send(authzResponse)
 
-    /*
-     * NOTE:
-     * 1. in case you want to override a general
-     * interaction success toast, return an object
-     * with `successToast` property.
-     * 2. in case you choose to pause an execution of
-     * the interaction flow and inject custom logic
-     * to be run meanwhile return an object
-     * `{pause: true, pauseFn: () => void}`
-     */
-    return undefined
+    return {
+      screenToNavigate: ScreenNames.History,
+    }
   })
 
   return completeInteraction
