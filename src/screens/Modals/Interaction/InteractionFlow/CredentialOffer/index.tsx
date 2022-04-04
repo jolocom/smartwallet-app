@@ -97,7 +97,7 @@ const CredentialOfferFAS = () => {
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
     credentials.map(({ invalid, category, properties, name, type }, idx) => (
       <View
-        key={type + idx}
+        key={`${type}${idx}`}
         style={{
           marginBottom: idx === credentials.length - 1 ? 0 : 30,
           opacity: invalid ? 0.5 : 1,

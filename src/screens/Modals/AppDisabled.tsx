@@ -126,8 +126,8 @@ const AppDisabled = ({ navigation }) => {
     const seconds = duration.seconds()
     const lengthMins = minutes.toString().length
     const lengthSecs = seconds.toString().length
-    return `${lengthMins > 1 ? minutes : '0' + minutes}:${
-      lengthSecs > 1 ? seconds : '0' + seconds
+    return `${lengthMins > 1 ? minutes : `0${minutes}`}:${
+      lengthSecs > 1 ? seconds : `0${seconds}`
     }`
   }, [countdown])
 

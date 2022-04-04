@@ -204,7 +204,7 @@ const CredentialForm = () => {
                         - value is truthy
                       */
                     withHighlight={
-                      !Boolean(errors[field.key]) && Boolean(values[field.key])
+                      !errors[field.key] && values[field.key]
                     }
                     /* NOTE: all these conditions is an ugly workaround when errors are displayed in postal address.
                          We need to check if a field was touched and only then show an error,

@@ -56,8 +56,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
             damping: 8,
             velocity: 30,
           })
-        } else {
-        }
+        } 
       } else if (shouldUnselect) {
         x.value = withTiming(0)
         selected.value = false
