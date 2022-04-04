@@ -53,11 +53,6 @@ const styles = StyleSheet.create({
     // borderColor: 'green',
     // borderWidth: 2,
   },
-  titleText: {
-    color: 'white',
-    fontSize: 20,
-    paddingHorizontal: 10,
-  },
 })
 
 export default Title

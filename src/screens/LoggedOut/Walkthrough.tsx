@@ -202,10 +202,6 @@ const styles = StyleSheet.create({
   consistentContainer: {
     paddingHorizontal: '5%',
   },
-  contentContainer: {
-    alignItems: 'center',
-    paddingHorizontal: '5%',
-  },
   dotContainer: {
     height: 40,
     flexDirection: 'row',
