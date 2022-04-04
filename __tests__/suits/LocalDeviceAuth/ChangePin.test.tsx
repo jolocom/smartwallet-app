@@ -57,7 +57,7 @@ jest.mock('../../../src/hooks/loader', () => ({
 
 jest.mock('../../../src/hooks/navigation', () => ({
   useGoBack: jest.fn().mockReturnValue(true),
-  useRedirectTo: jest.fn,
+  useRedirect: jest.fn,
 }))
 
 xdescribe('Change passcode', () => {
