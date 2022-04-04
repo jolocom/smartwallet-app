@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   interactionBody: {
     flex: 0,
     alignItems: 'center',
-    backgroundColor: Colors.activity,
+    backgroundColor: 'transparent',
   },
 })
 
