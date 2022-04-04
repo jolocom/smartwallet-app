@@ -16,7 +16,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import BP from '~/utils/breakpoints'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 
@@ -46,7 +46,7 @@ const TABS_POSITION_BOTTOM = BP({
 const INVISIBLE_BOTTOM_MARGIN = 1
 
 const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
-  const redirectToTab = useRedirectTo(route as ScreenNames)
+  const redirect = useRedirect()
   const renderIcon = () => {
     const color = isActive ? Colors.white : Colors.white40
 
@@ -70,7 +70,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
   }
 
   return (
-    <TouchableOpacity onPress={redirectToTab}>
+    <TouchableOpacity onPress={redirect(route as ScreenNames)}>
       <View style={styles.iconContainer}>
         <View style={{ transform: [{ scale: SCALE_BY }] }}>{renderIcon()}</View>
         <JoloText
