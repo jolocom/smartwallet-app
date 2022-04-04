@@ -1,5 +1,4 @@
 import { StackActions, useNavigation } from '@react-navigation/native'
-import { useEffect, useRef } from 'react'
 import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 import { SWErrorCodes } from '~/errors/codes'
@@ -14,20 +13,14 @@ import { getCounterpartyName } from '~/utils/dataMapping'
 import useTranslation from '../useTranslation'
 import { useFinishInteraction } from './handlers'
 
-/**
- * interaction handler can return this object:
- * @return { successToast: Partial<ToastBody> } will override defaule success interaction toast
- * @return { pause: true, pauseHandler: () => void } will pause interaction complete execution and call your custom logic contained within pauseHandler
- */
 interface Config {
-  successToast?: Partial<ToastBody>
+  toastConfig?: Partial<ToastBody>
   screenToNavigate?: ScreenNames
 }
 
 /**
  * when using `useCompleteInteraction` hook you have to define
  * @param handleInteraction - interaction handler, i.e. assemble response token, send response token, etc.
- * @param screenNavigateToAfterInteraction - after an interaction has completed user will be navigated to this screen is provided
  */
 interface CompleteInteraction {
   handleInteraction: () => Promise<Config | void>
@@ -55,7 +48,7 @@ export const useCompleteInteraction = (
         scheduleInfo({
           title: t('Toasts.successfulInteractionTitle'),
           message: t('Toasts.successfulInteractionMsg'),
-          ...config?.successToast,
+          ...config?.toastConfig,
         })
       }
 
