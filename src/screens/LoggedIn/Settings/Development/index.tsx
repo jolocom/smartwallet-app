@@ -5,7 +5,7 @@ import Section from '../components/Section'
 import Option from '../components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
 import { useToasts } from '~/hooks/toasts'
-import { useRedirect, useRedirectTo } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
@@ -14,10 +14,6 @@ import { usePopupMenu } from '~/hooks/popupMenu'
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
-  const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
-  const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
-  const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
-
   const redirect = useRedirect()
   const { showPopup } = usePopupMenu()
 
@@ -75,13 +71,13 @@ const DevelopmentSection = () => {
           >
             <Option.Title title="Popup menu" />
           </Option>
-          <Option onPress={redirectToNotifications}>
+          <Option onPress={() => redirect(ScreenNames.NotificationsTest)}>
             <Option.Title title="Notifications" />
           </Option>
-          <Option onPress={redirectToInputs}>
+          <Option onPress={() => redirect(ScreenNames.InputTest)}>
             <Option.Title title="Inputs" />
           </Option>
-          <Option onPress={redirectToPasscode}>
+          <Option onPress={() => redirect(ScreenNames.PasscodeTest)}>
             <Option.Title title="Passcode" />
           </Option>
           <Option onPress={() => redirect(ScreenNames.CollapsibleTest)}>
