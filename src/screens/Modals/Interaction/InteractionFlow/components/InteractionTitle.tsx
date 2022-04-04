@@ -1,5 +1,5 @@
 import React from 'react'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
