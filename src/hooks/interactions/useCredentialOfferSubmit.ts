@@ -59,7 +59,7 @@ const useCredentialOfferSubmit = () => {
       if (await credentialsAlreadyIssued()) {
         await handleStoreIssuedCredentials()
         const initialTab = await getInitialDocumentsTab()
-        scheduleSuccess(initialTab)
+        scheduleSuccess(initialTab).catch(scheduleErrorWarning)
         return finishInteraction()
       }
 
@@ -83,7 +83,7 @@ const useCredentialOfferSubmit = () => {
       if (allValid) {
         await handleStoreIssuedCredentials()
         const initialTab = await getInitialDocumentsTab()
-        scheduleSuccess(initialTab)
+        scheduleSuccess(initialTab).catch(scheduleErrorWarning)
         finishInteraction()
       } else if (allInvalid) {
         //TODO: add translation interpolation to the toast message
