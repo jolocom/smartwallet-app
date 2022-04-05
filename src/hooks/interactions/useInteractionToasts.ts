@@ -7,7 +7,7 @@ import useTranslation from '../useTranslation'
 
 const useInteractionToasts = () => {
   const { t } = useTranslation()
-  const { scheduleInfo } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
   const redirectUrl = useSelector(getRedirectUrl)
 
   const scheduleSuccessInteraction = async (config?: Partial<ToastBody>) => {
@@ -21,7 +21,7 @@ const useInteractionToasts = () => {
         interact: {
           label: t('Toasts.interactionSuccessRedirectBtn'),
           onInteract: () => {
-            Linking.openURL(redirectUrl!)
+            Linking.openURL(redirectUrl).catch(scheduleErrorWarning)
           },
         },
       })
