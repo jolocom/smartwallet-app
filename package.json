@@ -83,6 +83,7 @@
     "react-native-level-fs": "^3.0.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^1.4.3",
+    "react-native-mdl": "../native/react-native-mdl/react-native-mdl-v1.0.23.tgz",
     "react-native-permissions": "^2.1.5",
     "react-native-qrcode-scanner": "^1.4.1",
     "react-native-radial-gradient": "^1.0.7",
@@ -98,6 +99,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-swiper": "^1.6.0",
     "react-native-version-number": "^0.3.6",
+    "react-qr-code": "^2.0.3",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
@@ -149,7 +151,8 @@
     "redux-mock-store": "^1.5.4",
     "shelljs": "^0.8.4",
     "ts-node": "^10.1.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "typescript-eslint": "^0.0.1-alpha.0"
   },
   "jest": {
     "preset": "react-native",

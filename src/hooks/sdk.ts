@@ -22,6 +22,7 @@ import { useToasts } from './toasts'
 import { ScreenshotManager } from '~/utils/screenshots'
 import DrivingLicenseSDK from 'react-native-mdl'
 import { setMdlDisplayData } from '~/modules/mdl/actions'
+import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -59,6 +60,7 @@ export const useWalletInit = () => {
   const dispatch = useDispatch()
   const { checkConsent } = useTermsConsent()
   const secureStorage = useSecureStorage()
+  const { initDrivingLicense } = useDrivingLicense()
 
   return async (agent: Agent) => {
     // NOTE: Checking whether the user accepted the newest Terms of Service conditions
@@ -80,12 +82,7 @@ export const useWalletInit = () => {
         dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
       }
 
-      const mdlSdk = new DrivingLicenseSDK()
-      const mdlDisplayData = await mdlSdk.getPersonalizationStatus().then(isPersonalized => {
-        if(isPersonalized) return mdlSdk.getDisplayData()
-        return null
-      })
-      dispatch(setMdlDisplayData(mdlDisplayData))
+      await initDrivingLicense()
 
       const idw = await agent.loadIdentity()
 

@@ -13,6 +13,15 @@ export const useDrivingLicense = () => {
     const dispatch = useDispatch()
     const drivingLicense = useSelector(getMdlDisplayData)
 
+    const initDrivingLicense = async () => {
+      const mdlDisplayData = await sdk.getPersonalizationStatus().then(isPersonalized => {
+        if(isPersonalized) return sdk.getDisplayData()
+        return null
+      })
+      console.log(JSON.stringify(mdlDisplayData, null, 2))
+      dispatch(setMdlDisplayData(mdlDisplayData))
+    }
+
     const personalizeLicense = (onRequests: (requests: PersonalizationInputRequest[]) => void) => {
         const requestHandler = (requests: string) => {
             const jsonRequests = JSON.parse(requests) as PersonalizationInputRequest[]
@@ -60,5 +69,9 @@ export const useDrivingLicense = () => {
         }).catch(scheduleErrorWarning)
     }
 
-    return { drivingLicenseSDK: sdk, drivingLicense, personalizeLicense, deleteDrivingLicense, finishPersonalization }
+    const startSharing = async () => {
+        return sdk.prepareDeviceEngagement()
+    }
+
+    return { drivingLicenseSDK: sdk, drivingLicense, personalizeLicense, deleteDrivingLicense, finishPersonalization, initDrivingLicense, startSharing }
 }

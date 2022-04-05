@@ -178,6 +178,7 @@ export const DocumentList = () => {
   )
 
   const {drivingLicense} = useDrivingLicense()
+  console.log(JSON.stringify(drivingLicense, null, 2))
 
   const onHandleMore = useHandleMorePress()
 

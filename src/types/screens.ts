@@ -15,6 +15,7 @@ export enum ScreenNames {
 
   // Driving License
   DrivingLicenseForm = 'DrivingLicenseForm',
+  DrivingLicenseShare = 'DrivingLicenseShare',
 
   // Logged In
   LoggedIn = 'LoggedIn',

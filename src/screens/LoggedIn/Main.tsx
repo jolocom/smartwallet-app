@@ -44,6 +44,7 @@ import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
 import { PersonalizationInputRequest } from 'react-native-mdl'
 import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
+import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -103,6 +104,7 @@ export type MainStackParamList = {
   [ScreenNames.DrivingLicenseForm]: {
     requests: PersonalizationInputRequest[]
   }
+  [ScreenNames.DrivingLicenseShare]: undefined
 }
 
 const modalStyleOptions = {
@@ -256,6 +258,12 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.DrivingLicenseForm}
         component={DrivingLicenseForm}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+
+      <MainStack.Screen
+        name={ScreenNames.DrivingLicenseShare}
+        component={DrivingLicenseShare}
         options={screenTransitionFromBottomDisabledGestures}
       />
 

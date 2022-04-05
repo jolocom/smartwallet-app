@@ -7,6 +7,7 @@ import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import { useDrivingLicense } from './hooks'
+import { utf8ToBase64Image } from './utils'
 
 const formatLabel = (key: string) => {
     return key.split("_").map((word, i) => {
@@ -41,7 +42,7 @@ export const DrivingLicenseCard: React.FC<{drivingLicense: DrivingLicenseData}> 
     const previewFieldsList = ['driving_privileges', "issuing_country", "birth_date"]
     const previewFields = fields.filter(field => previewFieldsList.includes(field.key))
 
-    const photo = `data:image/png;base64,${Buffer.from(drivingLicense.portrait).toString('base64')}`
+    const photo = utf8ToBase64Image(drivingLicense.portrait)
     const credentialName = "Driving License"
 
     const handleMorePress = () => {
@@ -55,6 +56,12 @@ export const DrivingLicenseCard: React.FC<{drivingLicense: DrivingLicenseData}> 
                         photo,
                         title: credentialName
                     }
+                }
+            },
+            {
+                title: "Share",
+                navigation: {
+                    screen: ScreenNames.DrivingLicenseShare,
                 }
             },
             {
