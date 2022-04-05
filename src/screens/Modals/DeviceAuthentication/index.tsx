@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import Biometry from 'react-native-biometrics'
 
 import { ScreenNames } from '~/types/screens'
 
@@ -12,13 +11,15 @@ import { setBiometryType } from './module/deviceAuthActions'
 import RegisterPin from './RegisterPin'
 import RegisterBiometry from './RegisterBiometry'
 import { useBiometry } from '~/hooks/biometry'
+import { useToasts } from '~/hooks/toasts'
 
 const Stack = createStackNavigator()
 
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
   const { isPasscodeView } = useDeviceAuthState()
-  const {getEnrolledBiometry} = useBiometry();
+  const { getEnrolledBiometry } = useBiometry()
+  const { scheduleErrorWarning } = useToasts()
 
   // on this step we check wether user device supports biometrics
   useEffect(() => {
@@ -35,7 +36,7 @@ const DeviceAuthentication: React.FC = () => {
       }
     }
 
-    getAuthenticationType()
+    getAuthenticationType().catch(scheduleErrorWarning)
   }, [])
 
   return (
