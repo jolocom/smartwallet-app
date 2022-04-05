@@ -9,6 +9,7 @@ import {
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 import BP from '~/utils/breakpoints'
+import { useToasts } from '~/hooks/toasts'
 
 const PASSCODE_LENGTH = new Array(4).fill(0)
 const DIGIT_CELL_WIDTH = BP({ default: 65, xsmall: 56 })
@@ -22,6 +23,7 @@ const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const { pin, pinError, pinSuccess } = usePasscode()
   const digits = pin.split('')
+  const { scheduleErrorWarning } = useToasts()
 
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
@@ -42,7 +44,7 @@ const PasscodeInput: React.FC = () => {
         }
       }, 100)
     }
-    updateSelectedIndex()
+    updateSelectedIndex().catch(scheduleErrorWarning)
     return () => {
       isCurrent = false
     }
