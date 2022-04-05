@@ -18,7 +18,7 @@ export const scaleStyleObject = <T extends TSupportedComponentProps['style']>(
   return Object.entries(style ?? {}).reduce<ViewStyle | TextStyle>(
     (acc, [key, value]) => ({
       ...acc,
-      [key]: Number.isInteger(value) ? value * scaleBy : value,
+      [key]: (Number.isInteger(value) ? value * scaleBy : value) as string,
     }),
     {},
   )
