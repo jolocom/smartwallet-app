@@ -20,6 +20,7 @@ import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import { useToasts } from '~/hooks/toasts'
 
 const MnemonicPhraseWarning = () => {
   const [isMnemonicWritten, setIsMnemonicWritten] = useState<
@@ -51,7 +52,7 @@ const MnemonicPhraseWarning = () => {
         ...LayoutAnimation.Presets.easeInEaseOut,
         duration: 200,
       })
-    })
+    }).catch(schedul)
   }, [])
 
   useEffect(() => {
