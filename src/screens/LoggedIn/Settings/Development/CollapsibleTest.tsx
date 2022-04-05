@@ -21,11 +21,11 @@ const CollapsibleTest = () => {
           <Collapsible.Scroll>
             <Collapsible.Title text="ONE" />
             {[...Array(5).keys()].map((i) => (
-              <View style={styles.rect} />
+              <View key={Math.random()} style={styles.rect} />
             ))}
             <Collapsible.Title text="TWO" />
             {[...Array(20).keys()].map((i) => (
-              <View style={styles.rect} />
+              <View key={Math.random()} style={styles.rect} />
             ))}
           </Collapsible.Scroll>
         )}
