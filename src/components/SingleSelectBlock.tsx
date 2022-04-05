@@ -33,7 +33,11 @@ const SingleSelectBlock: React.FC<Props> = ({
   return (
     <Block>
       {selection.map((item) => (
-        <Option disabled={item.disabled} onPress={() => handleSelect(item)}>
+        <Option
+          key={item.value}
+          disabled={item.disabled}
+          onPress={() => handleSelect(item)}
+        >
           <Option.Title title={item.value} />
           {item.id === selected.id && !item.disabled ? (
             <SuccessTickToggleIcon />
