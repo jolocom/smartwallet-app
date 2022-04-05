@@ -9,6 +9,7 @@ import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
 import PasscodeExtraAction from './PasscodeExtraAction'
 import PasscodeDisable from './PasscodeDisable'
+import { useToasts } from '~/hooks/toasts'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -20,6 +21,8 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinErrorText, setPinErrorText] = useState<string | null>(null)
 
   const isFocused = useIsFocused()
+
+  const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
     if (isFocused) {
@@ -44,9 +47,11 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   useEffect(() => {
     if (pin.length === 4) {
-      handleSubmit().then(() => {
-        setPin('')
-      })
+      handleSubmit()
+        .then(() => {
+          setPin('')
+        })
+        .catch(scheduleErrorWarning)
     }
   }, [pin])
 
