@@ -17,7 +17,7 @@ const useAuthSubmit = () => {
       await agent.processJWT(authResponse)
       await interaction.send(authResponse)
 
-      scheduleSuccessInteraction()
+      scheduleSuccessInteraction().catch(scheduleErrorWarning)
     } catch (e) {
       scheduleErrorWarning(e)
     } finally {
