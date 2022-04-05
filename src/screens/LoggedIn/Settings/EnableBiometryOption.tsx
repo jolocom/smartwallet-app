@@ -16,8 +16,9 @@ const EnableBiometryOption = () => {
   /* On state that is controlled and passed to ToggleSwitch */
   const [isOn, setIsOn] = useState(false)
   /* State represent what biometrics were enrolled */
-  const [enrolledBiometry, setEnrolledBiometry] =
-    useState<BiometryType | undefined>(undefined)
+  const [enrolledBiometry, setEnrolledBiometry] = useState<
+    BiometryType | undefined
+  >(undefined)
 
   const {
     resetBiometry,
@@ -46,8 +47,8 @@ const EnableBiometryOption = () => {
   }
 
   useEffect(() => {
-    checkIfBiometryIsEnrolled()
-    getStoredBiometry()
+    checkIfBiometryIsEnrolled().catch(scheduleErrorWarning)
+    getStoredBiometry().catch(scheduleErrorWarning)
   }, [])
 
   /* check what has been stored biometry related in settings */
@@ -95,7 +96,7 @@ const EnableBiometryOption = () => {
         customStyles={{ marginRight: 60 }}
       />
       <View style={{ position: 'absolute', right: 16 }}>
-        <ToggleSwitch on={isOn} onToggle={handleToggle} />
+        <ToggleSwitch on={isOn} onToggle={() => handleToggle} />
       </View>
     </Option>
   )
