@@ -21,7 +21,7 @@ const EnableScreenshotsOption = () => {
   const disableScreenshots = () => {
     ScreenshotManager.storeDisabledStatus(true, agent)
       .then(() => {
-        ScreenshotManager.disable()
+        ScreenshotManager.disable().catch(scheduleErrorWarning)
         dispatch(setMakingScreenshotDisability(true))
       })
       .catch(scheduleErrorWarning)
@@ -38,7 +38,7 @@ const EnableScreenshotsOption = () => {
           onPress: () => {
             ScreenshotManager.storeDisabledStatus(false, agent)
               .then(() => {
-                ScreenshotManager.enable()
+                ScreenshotManager.enable().catch(scheduleErrorWarning)
                 dispatch(setMakingScreenshotDisability(false))
               })
               .catch(scheduleErrorWarning)
