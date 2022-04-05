@@ -5,6 +5,7 @@ import { setLocalAuth } from '~/modules/account/actions'
 import { useBiometry } from './biometry'
 import { BiometryType } from 'react-native-biometrics'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
+import { useToasts } from './toasts'
 
 export const useResetKeychainValues = () => {
   const dispatch = useDispatch()
@@ -22,13 +23,15 @@ export const useResetKeychainValues = () => {
 
 export const useGetStoredAuthValues = () => {
   const [isLoadingStorage, setIsLoadingStorage] = useState(false)
-  const [biometryType, setBiometryType] =
-    useState<BiometryType | undefined>(undefined)
+  const [biometryType, setBiometryType] = useState<BiometryType | undefined>(
+    undefined,
+  )
   const [keychainPin, setKeychainPin] = useState('')
   const [isBiometrySelected, setIsBiometrySelected] = useState(false)
 
   const { getBiometry } = useBiometry()
   const secureStorage = useSecureStorage()
+  const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
     let isCurrent = true
@@ -57,7 +60,7 @@ export const useGetStoredAuthValues = () => {
         isCurrent && setIsLoadingStorage(false)
       }
     }
-    getStoredPin()
+    getStoredPin().catch(scheduleErrorWarning)
     return () => {
       isCurrent = false
     }
