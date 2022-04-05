@@ -13,6 +13,8 @@ const ButtonsTest = () => {
     setLarge((prev) => !prev)
   }
 
+  const randomNumber = Math.random()
+
   return (
     <ScreenContainer
       hasHeaderBack
@@ -42,6 +44,7 @@ const ButtonsTest = () => {
         </View>
         {Object.values(BtnTypes).map((btn) => (
           <Btn
+            key={randomNumber}
             type={btn}
             size={isLarge ? BtnSize.large : BtnSize.medium}
             onPress={() => {}}
