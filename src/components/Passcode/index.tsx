@@ -32,26 +32,23 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   }, [isFocused])
 
   const handleSubmit = async () => {
-    try {
-      await onSubmit(pin, () => {
-        setPinSuccess(true)
-        setTimeout(() => {
-          setPin('')
-          setPinSuccess(false)
-        }, 500)
-      })
-    } catch (e) {
-      setPinError(true)
-    }
+    return onSubmit(pin, () => {
+      setPinSuccess(true)
+      setTimeout(() => {
+        setPin('')
+        setPinSuccess(false)
+      }, 500)
+    })
   }
 
   useEffect(() => {
     if (pin.length === 4) {
       handleSubmit()
         .then(() => {
+          // FIXME resetting pin twice
           setPin('')
         })
-        .catch(scheduleErrorWarning)
+        .catch(() => setPinError(true))
     }
   }, [pin])
 
