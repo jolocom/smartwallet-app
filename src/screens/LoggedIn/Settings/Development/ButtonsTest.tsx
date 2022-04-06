@@ -13,8 +13,6 @@ const ButtonsTest = () => {
     setLarge((prev) => !prev)
   }
 
-  const randomNumber = Math.random()
-
   return (
     <ScreenContainer
       hasHeaderBack
