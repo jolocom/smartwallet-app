@@ -41,7 +41,10 @@ const DeviceAuthentication: React.FC = () => {
   return (
     <Stack.Navigator headerMode="none">
       {isPasscodeView ? (
-        <Stack.Screen name={ScreenNames.RegisterPin} component={RegisterPin} />
+        <Stack.Screen
+          name={ScreenNames.CreateWalletPin}
+          component={CreateWalletPin}
+        />
       ) : (
         <Stack.Screen
           name={ScreenNames.RegisterBiometry}
