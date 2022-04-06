@@ -27,7 +27,7 @@ export enum ScreenNames {
   History = 'History',
   Settings = 'Settings',
   // Device Authentication
-  RegisterPin = 'RegisterPin',
+  CreateWalletPin = 'CreateWalletPin',
   RegisterBiometry = 'RegisterBiometry',
   // Interactions
   Interaction = 'Interaction', // root screen
