@@ -47,8 +47,9 @@ const EnableBiometryOption = () => {
   }
 
   useEffect(() => {
-    checkIfBiometryIsEnrolled().catch(scheduleErrorWarning)
-    getStoredBiometry().catch(scheduleErrorWarning)
+    Promise.all([checkIfBiometryIsEnrolled(), getStoredBiometry()]).catch(
+      scheduleErrorWarning,
+    )
   }, [])
 
   /* check what has been stored biometry related in settings */
