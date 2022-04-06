@@ -9,7 +9,7 @@ import DeviceAuthContextProvider, {
   useDeviceAuthState,
 } from './module/deviceAuthContext'
 import { setBiometryType } from './module/deviceAuthActions'
-import RegisterPin from './RegisterPin'
+import CreateWalletPin from './CreateWalletPin'
 import RegisterBiometry from './RegisterBiometry'
 import { useBiometry } from '~/hooks/biometry'
 
