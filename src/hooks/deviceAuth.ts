@@ -36,14 +36,12 @@ export const useGetStoredAuthValues = () => {
   useEffect(() => {
     let isCurrent = true
 
-    const getStoredPin = async () => {
-      setIsLoadingStorage(true)
-      try {
-        const [storedBiometry, storedPin] = await Promise.all([
-          getBiometry(),
-          secureStorage.getItem(SecureStorageKeys.passcode),
-        ])
-
+    setIsLoadingStorage(true)
+    Promise.all([
+      getBiometry(),
+      secureStorage.getItem(SecureStorageKeys.passcode),
+    ])
+      .then(([storedBiometry, storedPin]) => {
         isCurrent && setBiometryType(storedBiometry?.type)
         if (storedPin) {
           isCurrent && setKeychainPin(storedPin)
@@ -53,14 +51,10 @@ export const useGetStoredAuthValues = () => {
         if (isCurrent) {
           setIsBiometrySelected(!!storedBiometry?.type)
         }
-      } catch (err) {
-        // ✍🏼 todo: how should we handle this hasError ?
-        console.log({ err })
-      } finally {
-        isCurrent && setIsLoadingStorage(false)
-      }
-    }
-    getStoredPin().catch(scheduleErrorWarning)
+      })
+      .catch(scheduleErrorWarning)
+      .finally(() => isCurrent && setIsLoadingStorage(false))
+
     return () => {
       isCurrent = false
     }
