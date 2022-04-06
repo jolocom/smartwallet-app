@@ -34,7 +34,7 @@ const SingleSelectBlock: React.FC<Props> = ({
     <Block>
       {selection.map((item) => (
         <Option
-          key={item.value}
+          key={item.id}
           disabled={item.disabled}
           onPress={() => handleSelect(item)}
         >
