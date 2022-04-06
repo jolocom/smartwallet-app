@@ -52,7 +52,7 @@ describe('Register Passcode', () => {
   it('User is able to set up pin', async () => {
     const setEncryptedPasswordSpy = jest.spyOn(SecureStorage, 'storeValue')
     const { getByText, getByTestId, queryByText } = renderWithSafeArea(
-      <RegisterPin />,
+      <CreateWalletPin />,
     )
 
     expect(getByText(/CreatePasscode.createHeader/)).toBeDefined()
