@@ -23,28 +23,25 @@ const PasscodeInput: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const { pin, pinError, pinSuccess } = usePasscode()
   const digits = pin.split('')
-  const { scheduleErrorWarning } = useToasts()
 
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
     let isCurrent = true
-    const updateSelectedIndex = async () => {
-      // it is implemented with delay to be able to preview digits and not seeing asterics straight away
-      setTimeout(() => {
-        if (isCurrent) {
-          setSelectedIndex(() => {
-            if (digits.length < PASSCODE_LENGTH.length) {
-              return digits.length
-            } else if (digits.length === 4) {
-              return -1
-            } else {
-              return PASSCODE_LENGTH.length - 1
-            }
-          })
-        }
-      }, 100)
-    }
-    updateSelectedIndex().catch(scheduleErrorWarning)
+
+    // it is implemented with delay to be able to preview digits and not seeing asterics straight away
+    setTimeout(() => {
+      if (isCurrent) {
+        setSelectedIndex(() => {
+          if (digits.length < PASSCODE_LENGTH.length) {
+            return digits.length
+          } else if (digits.length === 4) {
+            return -1
+          } else {
+            return PASSCODE_LENGTH.length - 1
+          }
+        })
+      }
+    }, 100)
     return () => {
       isCurrent = false
     }
