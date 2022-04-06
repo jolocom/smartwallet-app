@@ -24,7 +24,7 @@ import { promisifySubmit } from '~/components/Passcode/utils'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const RegisterPin = () => {
+const CreateWalletPin = () => {
   const { t } = useTranslation()
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [selectedPasscode, setSelectedPasscode] = useState('')
@@ -154,4 +154,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RegisterPin
+export default CreateWalletPin
