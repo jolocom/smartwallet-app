@@ -18,7 +18,7 @@ const Stack = createStackNavigator()
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
   const { isPasscodeView } = useDeviceAuthState()
-  const {getEnrolledBiometry} = useBiometry();
+  const { getEnrolledBiometry } = useBiometry()
 
   // on this step we check wether user device supports biometrics
   useEffect(() => {
