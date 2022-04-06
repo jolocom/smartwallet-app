@@ -17,7 +17,7 @@ const useAuthzSubmit = () => {
       await agent.processJWT(authzResponse)
       await interaction.send(authzResponse)
 
-      scheduleSuccessInteraction().catch(scheduleErrorWarning)
+      scheduleSuccessInteraction()
     } catch (e) {
       scheduleErrorWarning(e)
     } finally {
