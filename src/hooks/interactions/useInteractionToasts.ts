@@ -11,7 +11,9 @@ const useInteractionToasts = () => {
   const redirectUrl = useSelector(getRedirectUrl)
 
   const scheduleSuccessInteraction = (config?: Partial<ToastBody>) => {
-    Linking.canOpenURL(redirectUrl ?? '')
+    // NOTE: The `_` symbol is a placeholder for a missing redirectUrl, since
+    // `Linking.canOpenURL` doesn't accept empty strings
+    Linking.canOpenURL(redirectUrl ?? '_')
       .then((canOpen) => {
         if (canOpen && redirectUrl) {
           scheduleInfo({
