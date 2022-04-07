@@ -21,7 +21,7 @@ import { useDisableLock } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '~/hooks/toasts'
 
-const RegisterBiometry: React.FC = () => {
+const WalletBiometry: React.FC = () => {
   const { t } = useTranslation()
   const { biometryType } = useDeviceAuthState()
   const { authenticate, setBiometry } = useBiometry()
@@ -76,4 +76,4 @@ const RegisterBiometry: React.FC = () => {
   )
 }
 
-export default RegisterBiometry
+export default WalletBiometry
