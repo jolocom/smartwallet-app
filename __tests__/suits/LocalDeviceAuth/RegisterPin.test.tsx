@@ -2,7 +2,7 @@ import React from 'react'
 import { waitFor } from '@testing-library/react-native'
 import { SecureStorage } from 'react-native-jolocom'
 
-import CreateWalletPin from '~/screens/Modals/DeviceAuthentication/CreateWalletPin'
+import CreateWalletPin from '~/screens/Modals/WalletAuthentication/CreateWalletPin'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { inputPasscode } from '../../utils/inputPasscode'
 import { SecureStorageKeys } from '~/hooks/secureStorage'

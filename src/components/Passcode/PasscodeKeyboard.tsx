@@ -13,7 +13,7 @@ import {
 } from '~/assets/svg'
 import BP from '~/utils/breakpoints'
 import { IPasscodeKeyboardProps } from './types'
-import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
+import { BiometryTypes } from '~/screens/Modals/WalletAuthentication/module/deviceAuthTypes'
 
 interface NumberButtonProps {
   value: number
