@@ -17,7 +17,7 @@ export enum ScreenNames {
   LoggedIn = 'LoggedIn',
   LockStack = 'LockStack',
   Lock = 'Lock',
-  DeviceAuth = 'DeviceAuth',
+  WalletAuthentication = 'WalletAuthentication',
 
   // Main
   Main = 'Main',

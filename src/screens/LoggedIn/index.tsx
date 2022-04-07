@@ -20,7 +20,7 @@ export type LoggedInStackParamList = {
   Idle: undefined
   [ScreenNames.Main]: undefined
   [ScreenNames.LockStack]: undefined
-  [ScreenNames.DeviceAuth]: undefined
+  [ScreenNames.WalletAuthentication]: undefined
 }
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
@@ -90,7 +90,7 @@ const LoggedIn = () => {
     <LoggedInStack.Navigator headerMode="none">
       {showRegisterPin ? (
         <LoggedInStack.Screen
-          name={ScreenNames.DeviceAuth}
+          name={ScreenNames.WalletAuthentication}
           component={DeviceAuthentication}
           options={screenTransitionFromBottomDisabledGestures}
         />

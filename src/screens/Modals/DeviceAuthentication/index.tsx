@@ -13,7 +13,7 @@ import CreateWalletPin from './CreateWalletPin'
 import WalletBiometry from './WalletBiometry'
 import { useBiometry } from '~/hooks/biometry'
 
-const Stack = createStackNavigator()
+const WalletAuthenticationStack = createStackNavigator()
 
 const DeviceAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
@@ -39,19 +39,19 @@ const DeviceAuthentication: React.FC = () => {
   }, [])
 
   return (
-    <Stack.Navigator headerMode="none">
+    <WalletAuthenticationStack.Navigator headerMode="none">
       {isPasscodeView ? (
-        <Stack.Screen
+        <WalletAuthenticationStack.Screen
           name={ScreenNames.CreateWalletPin}
           component={CreateWalletPin}
         />
       ) : (
-        <Stack.Screen
+        <WalletAuthenticationStack.Screen
           name={ScreenNames.WalletBiometry}
           component={WalletBiometry}
         />
       )}
-    </Stack.Navigator>
+    </WalletAuthenticationStack.Navigator>
   )
 }
 
