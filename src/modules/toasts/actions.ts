@@ -4,7 +4,6 @@ import { Toast, ToastFilter } from '~/types/toasts'
 import { ThunkAction, RootReducerI } from '~/types/reducer'
 import { toastMatchesFilter } from './utils'
 
-
 // To avoid manually passing a generic type every time we call `createAction`
 // redeclaring createAction fn with types specific to the `toasts` module
 function createToastsAction<K extends keyof ToastsActions>(type: K) {
