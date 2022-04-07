@@ -106,7 +106,7 @@ const seedphrase = {
   SEEDPHRASE_GO_BACK: 'Back to walkthrough',
 }
 
-const deviceAuthentication = {
+const walletAuthentication = {
   USE_TOUCH_ID_TO_AUTHORIZE: 'Use Touch ID to authorise wallet',
   USE_FACE_ID_TO_AUTHORIZE: 'Use Face ID to authorise wallet',
   USE_BIOMETRICS_TO_AUTHORIZE: 'Use Biometrics to authorise wallet',
@@ -411,7 +411,7 @@ export const strings = {
   ...entropy,
   ...recovery,
   ...seedphrase,
-  ...deviceAuthentication,
+  ...walletAuthentication,
   ...scanner,
   ...settings,
   ...lock,

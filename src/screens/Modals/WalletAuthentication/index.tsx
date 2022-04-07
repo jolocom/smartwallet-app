@@ -15,7 +15,7 @@ import { useBiometry } from '~/hooks/biometry'
 
 const WalletAuthenticationStack = createStackNavigator()
 
-const DeviceAuthentication: React.FC = () => {
+const WalletAuthentication: React.FC = () => {
   const dispatch = useDeviceAuthDispatch()
   const { isPasscodeView } = useDeviceAuthState()
   const { getEnrolledBiometry } = useBiometry()
@@ -58,7 +58,7 @@ const DeviceAuthentication: React.FC = () => {
 export default function () {
   return (
     <DeviceAuthContextProvider>
-      <DeviceAuthentication />
+      <WalletAuthentication />
     </DeviceAuthContextProvider>
   )
 }
