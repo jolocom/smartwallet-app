@@ -41,7 +41,7 @@ const InputsCollector: IMoveToNextComposition['InputsCollector'] = ({
         onSubmit()
       }
     },
-    blurOnSubmit: !Boolean(inputs.current[elIdx + 1]),
+    blurOnSubmit: !inputs.current[elIdx + 1],
     // because belows in an inline function, it will get called twice during updates, therefore limiting it to one call only
     ref: (ref: TextInput) => {
       ++count.current
@@ -51,7 +51,7 @@ const InputsCollector: IMoveToNextComposition['InputsCollector'] = ({
       }
     },
     returnKeyType:
-      inputs.current.length && !Boolean(inputs.current[elIdx + 1])
+      inputs.current.length && !inputs.current[elIdx + 1]
         ? 'done'
         : 'next',
   }

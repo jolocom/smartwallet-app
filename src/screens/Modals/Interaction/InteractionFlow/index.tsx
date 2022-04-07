@@ -64,9 +64,6 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.black65,
   },
-  tapArea: {
-    flex: 1,
-  },
   interactionBody: {
     flex: 0,
     alignItems: 'center',

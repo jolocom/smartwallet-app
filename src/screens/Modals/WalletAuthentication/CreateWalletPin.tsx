@@ -46,7 +46,7 @@ const CreateWalletPin = () => {
    * the register pin screen.
    */
   useEffect(() => {
-    resetKeychainPasscode()
+    resetKeychainPasscode().catch(scheduleErrorWarning)
   }, [])
 
   const promisifyPasscodeSubmit = promisifySubmit((pin) => {

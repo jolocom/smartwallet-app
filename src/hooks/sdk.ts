@@ -57,6 +57,7 @@ export const useWalletInit = () => {
   const dispatch = useDispatch()
   const { checkConsent } = useTermsConsent()
   const secureStorage = useSecureStorage()
+  const { scheduleErrorWarning } = useToasts()
 
   return async (agent: Agent) => {
     // NOTE: Checking whether the user accepted the newest Terms of Service conditions
@@ -73,8 +74,8 @@ export const useWalletInit = () => {
           await ScreenshotManager.getDisabledStatus(agent)
 
         isMakingScreenshotDisabled
-          ? ScreenshotManager.disable()
-          : ScreenshotManager.enable()
+          ? ScreenshotManager.disable().catch(scheduleErrorWarning)
+          : ScreenshotManager.enable().catch(scheduleErrorWarning)
         dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
       }
 

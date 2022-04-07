@@ -1,4 +1,5 @@
 import { cloneRepo, catFile, readEnv, writeEnv } from './utils'
+import { useToasts } from '~/hooks/toasts'
 
 const configureEnv = async () => {
   const path = await cloneRepo('dev@hetz1.jolocom.io', 'common-secrets')
@@ -49,4 +50,4 @@ const main = async () => {
   }
 }
 
-main()
+main().catch((err) => console.log(err))

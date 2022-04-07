@@ -40,8 +40,9 @@ const ButtonsTest = () => {
           <ToggleSwitch on={isLarge} onToggle={handleToggle} />
           <JoloText>Large</JoloText>
         </View>
-        {Object.values(BtnTypes).map((btn) => (
+        {Object.values(BtnTypes).map((btn, idx) => (
           <Btn
+            key={idx}
             type={btn}
             size={isLarge ? BtnSize.large : BtnSize.medium}
             onPress={() => {}}

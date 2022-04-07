@@ -21,20 +21,18 @@ const WalletAuthentication: React.FC = () => {
 
   // on this step we check wether user device supports biometrics
   useEffect(() => {
-    const getAuthenticationType = async () => {
-      try {
-        const { available, biometryType } = await getEnrolledBiometry()
+    getEnrolledBiometry()
+      .then(({ available, biometryType }) => {
         if (available) {
           dispatch(setBiometryType(biometryType))
         } else {
           setBiometryType(null)
         }
-      } catch (e) {
+      })
+      .catch((e) => {
+        console.warn(e)
         dispatch(setBiometryType(null))
-      }
-    }
-
-    getAuthenticationType()
+      })
   }, [])
 
   return (
