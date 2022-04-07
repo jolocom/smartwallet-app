@@ -1,4 +1,4 @@
-import { StateI, ActionI, DeviceAuthActions } from './deviceAuthTypes'
+import { StateI, ActionI, WalletAuthActions } from './walletAuthTypes'
 
 export const initialState = {
   biometryType: undefined,
@@ -7,9 +7,9 @@ export const initialState = {
 
 const reducer = (state: StateI, action: ActionI) => {
   switch (action.type) {
-    case DeviceAuthActions.setBiometryType:
+    case WalletAuthActions.setBiometryType:
       return { ...state, biometryType: action.payload }
-    case DeviceAuthActions.showBiometry:
+    case WalletAuthActions.showBiometry:
       return { ...state, isPasscodeView: false }
     default:
       return initialState

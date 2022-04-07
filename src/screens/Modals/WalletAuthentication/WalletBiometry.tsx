@@ -8,7 +8,7 @@ import BiometryAnimation from '~/components/BiometryAnimation'
 
 import { useSuccess } from '~/hooks/loader'
 
-import { useDeviceAuthState } from './module/deviceAuthContext'
+import { useWalletAuthState } from './module/walletAuthContext'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
 
 import BP from '~/utils/breakpoints'
@@ -21,9 +21,9 @@ import { useDisableLock } from '~/hooks/generic'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '~/hooks/toasts'
 
-const RegisterBiometry: React.FC = () => {
+const WalletBiometry: React.FC = () => {
   const { t } = useTranslation()
-  const { biometryType } = useDeviceAuthState()
+  const { biometryType } = useWalletAuthState()
   const { authenticate, setBiometry } = useBiometry()
   const { scheduleErrorWarning } = useToasts()
   const disableLock = useDisableLock()
@@ -76,4 +76,4 @@ const RegisterBiometry: React.FC = () => {
   )
 }
 
-export default RegisterBiometry
+export default WalletBiometry
