@@ -91,7 +91,7 @@ const LoggedIn = () => {
       {showRegisterPin ? (
         <LoggedInStack.Screen
           name={ScreenNames.WalletAuthentication}
-          component={DeviceAuthentication}
+          component={WalletAuthentication}
           options={screenTransitionFromBottomDisabledGestures}
         />
       ) : (
