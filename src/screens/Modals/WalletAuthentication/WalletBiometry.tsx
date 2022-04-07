@@ -8,7 +8,7 @@ import BiometryAnimation from '~/components/BiometryAnimation'
 
 import { useSuccess } from '~/hooks/loader'
 
-import { useDeviceAuthState } from './module/deviceAuthContext'
+import { useWalletAuthState } from './module/walletAuthContext'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
 
 import BP from '~/utils/breakpoints'
@@ -23,7 +23,7 @@ import { useToasts } from '~/hooks/toasts'
 
 const WalletBiometry: React.FC = () => {
   const { t } = useTranslation()
-  const { biometryType } = useDeviceAuthState()
+  const { biometryType } = useWalletAuthState()
   const { authenticate, setBiometry } = useBiometry()
   const { scheduleErrorWarning } = useToasts()
   const disableLock = useDisableLock()

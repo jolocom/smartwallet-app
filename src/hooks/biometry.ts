@@ -1,5 +1,5 @@
 import Biometry, { BiometryType } from 'react-native-biometrics'
-import { BiometryTypes } from '~/screens/Modals/WalletAuthentication/module/deviceAuthTypes'
+import { BiometryTypes } from '~/screens/Modals/WalletAuthentication/module/walletAuthTypes'
 import { StorageKeys, useAgent } from './sdk'
 import useTranslation from './useTranslation'
 

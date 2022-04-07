@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import Biometry from 'react-native-biometrics'
 
 import { ScreenNames } from '~/types/screens'
 
-import DeviceAuthContextProvider, {
-  useDeviceAuthDispatch,
-  useDeviceAuthState,
-} from './module/deviceAuthContext'
-import { setBiometryType } from './module/deviceAuthActions'
+import WalletAuthContextProvider, {
+  useWalletAuthDispatch,
+  useWalletAuthState,
+} from './module/walletAuthContext'
+import { setBiometryType } from './module/walletAuthActions'
 import CreateWalletPin from './CreateWalletPin'
 import WalletBiometry from './WalletBiometry'
 import { useBiometry } from '~/hooks/biometry'
@@ -16,8 +15,8 @@ import { useBiometry } from '~/hooks/biometry'
 const WalletAuthenticationStack = createStackNavigator()
 
 const WalletAuthentication: React.FC = () => {
-  const dispatch = useDeviceAuthDispatch()
-  const { isPasscodeView } = useDeviceAuthState()
+  const dispatch = useWalletAuthDispatch()
+  const { isPasscodeView } = useWalletAuthState()
   const { getEnrolledBiometry } = useBiometry()
 
   // on this step we check wether user device supports biometrics
@@ -57,8 +56,8 @@ const WalletAuthentication: React.FC = () => {
 
 export default function () {
   return (
-    <DeviceAuthContextProvider>
+    <WalletAuthContextProvider>
       <WalletAuthentication />
-    </DeviceAuthContextProvider>
+    </WalletAuthContextProvider>
   )
 }

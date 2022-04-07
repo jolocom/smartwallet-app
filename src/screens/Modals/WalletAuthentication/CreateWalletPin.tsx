@@ -12,10 +12,10 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
 import {
-  useDeviceAuthDispatch,
-  useDeviceAuthState,
-} from './module/deviceAuthContext'
-import { showBiometry } from './module/deviceAuthActions'
+  useWalletAuthDispatch,
+  useWalletAuthState,
+} from './module/walletAuthContext'
+import { showBiometry } from './module/walletAuthActions'
 import Passcode from '~/components/Passcode'
 import { useToasts } from '~/hooks/toasts'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
@@ -32,8 +32,8 @@ const CreateWalletPin = () => {
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
   const resetKeychainPasscode = useResetKeychainValues()
 
-  const { biometryType } = useDeviceAuthState()
-  const dispatchToLocalAuth = useDeviceAuthDispatch()
+  const { biometryType } = useWalletAuthState()
+  const dispatchToLocalAuth = useWalletAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
   const { scheduleErrorWarning } = useToasts()
