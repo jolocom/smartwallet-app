@@ -16,8 +16,9 @@ const EnableBiometryOption = () => {
   /* On state that is controlled and passed to ToggleSwitch */
   const [isOn, setIsOn] = useState(false)
   /* State represent what biometrics were enrolled */
-  const [enrolledBiometry, setEnrolledBiometry] =
-    useState<BiometryType | undefined>(undefined)
+  const [enrolledBiometry, setEnrolledBiometry] = useState<
+    BiometryType | undefined
+  >(undefined)
 
   const {
     resetBiometry,
@@ -46,8 +47,9 @@ const EnableBiometryOption = () => {
   }
 
   useEffect(() => {
-    checkIfBiometryIsEnrolled()
-    getStoredBiometry()
+    Promise.all([checkIfBiometryIsEnrolled(), getStoredBiometry()]).catch(
+      scheduleErrorWarning,
+    )
   }, [])
 
   /* check what has been stored biometry related in settings */

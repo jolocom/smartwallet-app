@@ -18,6 +18,7 @@ import { getIsAppDisabled } from '~/modules/account/selectors'
 import { promisifySubmit } from '~/components/Passcode/utils'
 import { ScreenNames } from '~/types/screens'
 import { useRedirect } from '~/hooks/navigation'
+import { useToasts } from '~/hooks/toasts'
 
 const Lock = () => {
   const { t } = useTranslation()
@@ -28,6 +29,7 @@ const Lock = () => {
   const [biometryAvailable, setBiometryAvailable] = useState(false)
   const disableLock = useDisableLock()
   const redirect = useRedirect()
+  const { scheduleErrorWarning } = useToasts()
 
   const { currentAppState, prevAppState } = useGetAppStates()
 
@@ -41,13 +43,15 @@ const Lock = () => {
   })
 
   useEffect(() => {
-    getEnrolledBiometry().then(({ available, biometryType }) => {
-      setBiometryType(biometryType)
-      setBiometryAvailable(available)
-      if (available) {
-        handleBiometryAuthentication()
-      }
-    })
+    getEnrolledBiometry()
+      .then(({ available, biometryType }) => {
+        setBiometryType(biometryType)
+        setBiometryAvailable(available)
+        if (available) {
+          handleBiometryAuthentication().catch(scheduleErrorWarning)
+        }
+      })
+      .catch(scheduleErrorWarning)
   }, [])
 
   useEffect(() => {

@@ -7,31 +7,32 @@ import useTranslation from '../useTranslation'
 
 const useInteractionToasts = () => {
   const { t } = useTranslation()
-  const { scheduleInfo } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
   const redirectUrl = useSelector(getRedirectUrl)
 
-  const scheduleSuccessInteraction = async (config?: Partial<ToastBody>) => {
-    const shouldRedirect =
-      !!redirectUrl && (await Linking.canOpenURL(redirectUrl))
-
-    if (shouldRedirect) {
-      scheduleInfo({
-        title: t('Toasts.interactionSuccessRedirectTitle'),
-        message: t('Toasts.interactionSuccessRedirectMsg'),
-        interact: {
-          label: t('Toasts.interactionSuccessRedirectBtn'),
-          onInteract: () => {
-            Linking.openURL(redirectUrl!)
-          },
-        },
+  const scheduleSuccessInteraction = (config?: Partial<ToastBody>) => {
+    Linking.canOpenURL(redirectUrl ?? '')
+      .then((canOpen) => {
+        if (canOpen && redirectUrl) {
+          scheduleInfo({
+            title: t('Toasts.interactionSuccessRedirectTitle'),
+            message: t('Toasts.interactionSuccessRedirectMsg'),
+            interact: {
+              label: t('Toasts.interactionSuccessRedirectBtn'),
+              onInteract: () => {
+                Linking.openURL(redirectUrl).catch(scheduleErrorWarning)
+              },
+            },
+          })
+        } else {
+          scheduleInfo({
+            title: t('Toasts.successfulInteractionTitle'),
+            message: t('Toasts.successfulInteractionMsg'),
+            ...config,
+          })
+        }
       })
-    } else {
-      scheduleInfo({
-        title: t('Toasts.successfulInteractionTitle'),
-        message: t('Toasts.successfulInteractionMsg'),
-        ...config,
-      })
-    }
+      .catch(scheduleErrorWarning)
   }
 
   return {

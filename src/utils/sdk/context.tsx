@@ -13,6 +13,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useWalletInit } from '~/hooks/sdk'
 import { initAgent } from '.'
 import useTranslation from '~/hooks/useTranslation'
+import { useToasts } from '~/hooks/toasts'
 
 export const AgentContext =
   createContext<MutableRefObject<Agent | null> | null>(null)
@@ -22,6 +23,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
   const initWallet = useWalletInit()
   const { initStoredLanguage } = useTranslation()
+  const { scheduleErrorWarning } = useToasts()
 
   const initializeAll = async () => {
     try {
@@ -38,7 +40,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   }
 
   useEffect(() => {
-    initializeAll()
+    initializeAll().catch(scheduleErrorWarning)
     return () => {
       setIsLoading(false)
       agentRef.current = null
@@ -49,7 +51,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
     const hideSplash = async () => {
       await RNBootSplash.hide({ fade: true })
     }
-    if (!isLoading) hideSplash()
+    if (!isLoading) hideSplash().catch(scheduleErrorWarning)
   }, [isLoading])
 
   if (isLoading) {
