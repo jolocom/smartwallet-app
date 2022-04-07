@@ -2,7 +2,7 @@ import React from 'react'
 import { waitFor } from '@testing-library/react-native'
 import { SecureStorage } from 'react-native-jolocom'
 
-import RegisterPin from '~/screens/Modals/DeviceAuthentication/RegisterPin'
+import CreateWalletPin from '~/screens/Modals/WalletAuthentication/CreateWalletPin'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { inputPasscode } from '../../utils/inputPasscode'
 import { SecureStorageKeys } from '~/hooks/secureStorage'
@@ -52,7 +52,7 @@ describe('Register Passcode', () => {
   it('User is able to set up pin', async () => {
     const setEncryptedPasswordSpy = jest.spyOn(SecureStorage, 'storeValue')
     const { getByText, getByTestId, queryByText } = renderWithSafeArea(
-      <RegisterPin />,
+      <CreateWalletPin />,
     )
 
     expect(getByText(/CreatePasscode.createHeader/)).toBeDefined()

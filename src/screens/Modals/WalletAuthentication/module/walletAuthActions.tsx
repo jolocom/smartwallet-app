@@ -1,9 +1,9 @@
 import partiallyAppliedAction from '~/utils/partiallyAppliedActions'
-import { DeviceAuthActions } from './deviceAuthTypes'
+import { WalletAuthActions } from './walletAuthTypes'
 
 export const setBiometryType = partiallyAppliedAction(
-  DeviceAuthActions.setBiometryType,
+  WalletAuthActions.setBiometryType,
 )
 export const showBiometry = partiallyAppliedAction(
-  DeviceAuthActions.showBiometry,
+  WalletAuthActions.showBiometry,
 )

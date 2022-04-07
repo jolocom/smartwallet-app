@@ -17,7 +17,7 @@ export enum ScreenNames {
   LoggedIn = 'LoggedIn',
   LockStack = 'LockStack',
   Lock = 'Lock',
-  DeviceAuth = 'DeviceAuth',
+  WalletAuthentication = 'WalletAuthentication',
 
   // Main
   Main = 'Main',
@@ -27,8 +27,8 @@ export enum ScreenNames {
   History = 'History',
   Settings = 'Settings',
   // Device Authentication
-  RegisterPin = 'RegisterPin',
-  RegisterBiometry = 'RegisterBiometry',
+  CreateWalletPin = 'CreateWalletPin',
+  WalletBiometry = 'WalletBiometry',
   // Interactions
   Interaction = 'Interaction', // root screen
   Scanner = 'Scanner',
