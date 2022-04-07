@@ -28,7 +28,7 @@ export enum ScreenNames {
   Settings = 'Settings',
   // Device Authentication
   CreateWalletPin = 'CreateWalletPin',
-  RegisterBiometry = 'RegisterBiometry',
+  WalletBiometry = 'WalletBiometry',
   // Interactions
   Interaction = 'Interaction', // root screen
   Scanner = 'Scanner',

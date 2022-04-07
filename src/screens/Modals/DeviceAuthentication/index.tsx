@@ -10,7 +10,7 @@ import DeviceAuthContextProvider, {
 } from './module/deviceAuthContext'
 import { setBiometryType } from './module/deviceAuthActions'
 import CreateWalletPin from './CreateWalletPin'
-import RegisterBiometry from './RegisterBiometry'
+import WalletBiometry from './WalletBiometry'
 import { useBiometry } from '~/hooks/biometry'
 
 const Stack = createStackNavigator()
@@ -47,8 +47,8 @@ const DeviceAuthentication: React.FC = () => {
         />
       ) : (
         <Stack.Screen
-          name={ScreenNames.RegisterBiometry}
-          component={RegisterBiometry}
+          name={ScreenNames.WalletBiometry}
+          component={WalletBiometry}
         />
       )}
     </Stack.Navigator>
