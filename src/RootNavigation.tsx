@@ -22,7 +22,8 @@ import {
   screenDisableGestures,
   transparentModalOptions,
 } from './utils/screenSettings'
-import AppDisabled from './screens/Modals/AppDisabled'
+// import AppDisabled from './screens/Modals/AppDisabled' --> this can be removed
+import GlobalModals from './screens/Globals'
 
 export type RootStackParamList = {
   [ScreenNames.DragToConfirm]: {
@@ -58,31 +59,6 @@ export type GlobalModalsParamsList = {
     attemptCyclesLeft: number
     countdown: number
   }
-}
-
-const ModalStack = createStackNavigator()
-
-const GlobalModals = () => {
-  return (
-    <ModalStack.Navigator
-      headerMode="none"
-      mode="modal"
-      screenOptions={transparentModalOptions}
-    >
-      <ModalStack.Screen
-        name={ScreenNames.LostSeedPhraseInfo}
-        component={LostSeedPhraseInfo}
-      />
-      <ModalStack.Screen
-        name={ScreenNames.SeedPhraseInfo}
-        component={SeedPhraseInfo}
-      />
-      <ModalStack.Screen
-        name={ScreenNames.AppDisabled}
-        component={AppDisabled}
-      />
-    </ModalStack.Navigator>
-  )
 }
 
 const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
