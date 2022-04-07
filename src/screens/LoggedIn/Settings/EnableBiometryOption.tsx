@@ -97,7 +97,7 @@ const EnableBiometryOption = () => {
         customStyles={{ marginRight: 60 }}
       />
       <View style={{ position: 'absolute', right: 16 }}>
-        <ToggleSwitch on={isOn} onToggle={() => handleToggle} />
+        <ToggleSwitch on={isOn} onToggle={handleToggle} />
       </View>
     </Option>
   )
