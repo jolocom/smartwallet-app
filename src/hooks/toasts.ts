@@ -31,8 +31,9 @@ export const useToasts = () => {
   }
 
   //TODO: don't pass title and message, but rather get them based on the SW error code
-  const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) =>
-    scheduleWarning({
+  const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) => {
+    console.warn(error)
+    return scheduleWarning({
       title: t('Toasts.errorWarningTitle'),
       message: t('Toasts.errorWarningMsg'),
       interact: {
@@ -43,6 +44,7 @@ export const useToasts = () => {
       },
       ...config,
     })
+  }
 
   const removeToast = (toast: Toast) => {
     dispatch(removeToastAndUpdate(toast))
