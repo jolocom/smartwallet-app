@@ -1,10 +1,16 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { useGetAppStates } from '~/hooks/useAppState'
-import { setAppLocked } from '~/modules/account/actions'
-import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
+import {
+  setAppLocked,
+  setTermsConsentVisibility,
+} from '~/modules/account/actions'
+import {
+  getIsAppLocked,
+  isLocalAuthSet,
+  getIsTermsConsentOutdated,
+} from '~/modules/account/selectors'
 import { setPopup } from '~/modules/appState/actions'
 import { getIsPopup } from '~/modules/appState/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
