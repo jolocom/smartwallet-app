@@ -76,7 +76,8 @@ const TermsConsent: React.FC = () => {
 
   return (
     <Modal
-      visible={isTermsConsentVisible}
+      //NOTE: adjusted by Thomas. replaced isTermsConsentVisible by false below
+      visible={false}
       statusBarTranslucent
       animationType="fade"
       presentationStyle="overFullScreen"
