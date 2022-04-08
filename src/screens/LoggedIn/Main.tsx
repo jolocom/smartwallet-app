@@ -42,6 +42,7 @@ import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
+import { useRedirect } from '~/hooks/navigation'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -110,12 +111,13 @@ const MainStack = createStackNavigator<MainStackParamList>()
 const Main: React.FC = () => {
   const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
   const dispatch = useDispatch()
+  const redirect = useRedirect()
 
   useEffect(() => {
     if (isTermsConsentOutdated) {
-      dispatch(setTermsConsentVisibility(true))
+      redirect(ScreenNames.GlobalModals, { screen: ScreenNames.TermsConsent })
     }
-  }, [isTermsConsentOutdated])
+  }, [])
 
   return (
     <MainStack.Navigator
