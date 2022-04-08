@@ -14,7 +14,7 @@ import LoggedOut from '~/screens/LoggedOut'
 import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
-import LostSeedPhraseInfo from './screens/Modals/LostSeedPhraseInfo'
+import LostSeedPhraseInfo from './screens/Globals/LostSeedPhraseInfo'
 import LoggedIn from './screens/LoggedIn'
 import { Colors } from './utils/colors'
 import SeedPhraseInfo from './screens/LoggedOut/Onboarding/Registration/SeedPhrase/SeedPhraseInfo'
