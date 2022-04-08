@@ -6,8 +6,6 @@ import LostSeedPhraseInfo from './LostSeedPhraseInfo'
 import AppDisabled from './AppDisabled'
 import TermsConsent from './TermsConsent'
 
-// move all imported above files in the Globals folder
-
 const ModalStack = createStackNavigator()
 
 const GlobalModals = () => {
@@ -18,8 +16,8 @@ const GlobalModals = () => {
       screenOptions={transparentModalOptions}
     >
       <ModalStack.Screen
-        name={ScreenNames.LostSeedPhraseInfo}
-        component={LostSeedPhraseInfo}
+        name={ScreenNames.TermsConsent}
+        component={TermsConsent}
       />
       <ModalStack.Screen
         name={ScreenNames.LostSeedPhraseInfo}
