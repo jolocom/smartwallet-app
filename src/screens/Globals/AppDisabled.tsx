@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { useBackHandler } from '@react-native-community/hooks'
 import moment from 'moment'
-
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
