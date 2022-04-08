@@ -65,7 +65,9 @@ const useWalkthroughProceed = () => {
       if (isTermsConsentOutdated) {
         dispatch(setTermsConsentVisibility(true))
         // Idle screen serves as a background when terms consent is hiding, so we don't see for a fraction of a second the Walkthrough screen
-        navigation.navigate(ScreenNames.Idle)
+        navigation.navigate(ScreenNames.GlobalModals, {
+          screen: ScreenNames.TermsConsent,
+        })
         pendingActionRef.current = cb
       } else {
         cb()
