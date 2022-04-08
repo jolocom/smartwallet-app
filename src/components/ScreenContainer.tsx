@@ -31,74 +31,72 @@ interface IScreenContainerCompound {
   Padding: React.FC
 }
 
-const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
-  ({
-    children,
-    isTransparent = false,
-    isFullscreen = false,
-    customStyles = {},
-    navigationStyles = {},
-    backgroundColor = Colors.mainBlack,
-    hasHeaderBack = false,
-    hasHeaderClose = false,
-    onClose,
-    testID,
-  }) => {
-    const { top, bottom } = useSafeArea()
+const ScreenContainer: React.FC<ScreenContainerI> &
+  IScreenContainerCompound = ({
+  children,
+  isTransparent = false,
+  isFullscreen = false,
+  customStyles = {},
+  navigationStyles = {},
+  backgroundColor = Colors.mainBlack,
+  hasHeaderBack = false,
+  hasHeaderClose = false,
+  onClose,
+  testID,
+}) => {
+  const { top, bottom } = useSafeArea()
 
-    return (
-      <SafeAreaView
-        testID={testID}
-        style={{
-          flex: 1,
-          paddingTop: 0,
-        }}
-      >
-        <View
-          style={[styles.navContainer, isTransparent && styles.transparent]}
-        >
-          {!isFullscreen && (
-            <View
-              style={{
-                height: top,
-                width: '100%',
-                backgroundColor,
-              }}
-            />
-          )}
-          {(hasHeaderClose || hasHeaderBack) && (
-            <NavigationHeader
-              customStyles={navigationStyles}
-              onPress={onClose}
-              type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
-            />
-          )}
+  return (
+    <SafeAreaView
+      testID={testID}
+      style={{
+        flex: 1,
+        paddingTop: 0,
+      }}
+    >
+      <View style={[styles.navContainer, isTransparent && styles.transparent]}>
+        {!isFullscreen && (
           <View
-            style={[
-              styles.container,
-              {
-                backgroundColor,
-                ...((hasHeaderClose || hasHeaderBack) &&
-                  navigationStyles.position === 'absolute' && {
-                    marginTop: SCREEN_HEADER_HEIGHT,
-                  }),
-                paddingBottom: isFullscreen ? 0 : bottom,
-                marginBottom: -bottom,
-              },
-              {
-                ...(isFullscreen && {
-                  ...styles.fullscreen,
+            style={{
+              height: top,
+              width: '100%',
+              backgroundColor,
+            }}
+          />
+        )}
+        {(hasHeaderClose || hasHeaderBack) && (
+          <NavigationHeader
+            customStyles={navigationStyles}
+            onPress={onClose}
+            type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
+          />
+        )}
+        <View
+          style={[
+            styles.container,
+            {
+              backgroundColor,
+              ...((hasHeaderClose || hasHeaderBack) &&
+                navigationStyles.position === 'absolute' && {
+                  marginTop: SCREEN_HEADER_HEIGHT,
                 }),
-              },
-              customStyles,
-            ]}
-          >
-            {children}
-          </View>
+              paddingBottom: isFullscreen ? 0 : bottom,
+              marginBottom: -bottom,
+            },
+            {
+              ...(isFullscreen && {
+                ...styles.fullscreen,
+              }),
+            },
+            customStyles,
+          ]}
+        >
+          {children}
         </View>
-      </SafeAreaView>
-    )
-  }
+      </View>
+    </SafeAreaView>
+  )
+}
 
 const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
   children,
