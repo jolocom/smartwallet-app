@@ -65,6 +65,7 @@ export enum ScreenNames {
   CollapsibleTest = 'CollapsibleTest',
   InteractionPasteTest = 'InteractionPasteTest',
 
-  //Modals
+  //Global Screens
   GlobalModals = 'GlobalModals',
+  TermsConsent = 'TermsConsent',
 }
