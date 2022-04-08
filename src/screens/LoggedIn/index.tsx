@@ -58,6 +58,13 @@ const LoggedIn = () => {
 
   const isPopupRef = useRef<boolean>(isPopup)
 
+  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
+  useEffect(() => {
+    if (isTermsConsentOutdated) {
+      dispatch(setTermsConsentVisibility(true))
+    }
+  }, [])
+
   useEffect(() => {
     isPopupRef.current = isPopup
   }, [isPopup])
