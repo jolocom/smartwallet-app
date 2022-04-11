@@ -16,7 +16,7 @@ import { CheckmarkIconSmall } from '~/assets/svg'
 import { useAgent } from '~/hooks/sdk'
 import { useGoBack } from '~/hooks/navigation'
 
-const legalTextConfig = ['Terms of Service', 'Privacy Policy']
+const legalTextConfig = ['TermsOfService', 'PrivacyPolicy']
 
 const MainContent: React.FC = () => {
   const [accepted, setAccepted] = useState(false)
@@ -66,41 +66,41 @@ const MainContent: React.FC = () => {
             </Section.Block>
           </Section>
         </Section>
-        <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
-          <TouchableOpacity
-            onPress={() => setAccepted(!accepted)}
-            style={styles.acceptWrapper}
-          >
-            <View style={{ flex: 0.1 }}>
-              <View
-                style={[
-                  styles.checkboxBase,
-                  accepted ? styles.checkboxActive : styles.checkboxInactive,
-                ]}
-              >
-                {accepted && <CheckmarkIconSmall />}
-              </View>
-            </View>
-            <View style={{ paddingLeft: 20, flex: 0.9 }}>
-              <JoloText
-                kind={JoloTextKind.subtitle}
-                size={JoloTextSizes.mini}
-                color={Colors.white90}
-                customStyles={{ textAlign: 'left' }}
-              >
-                {t('TermsConsent.footer')}
-              </JoloText>
-            </View>
-          </TouchableOpacity>
-          <Btn
-            customContainerStyles={{ width: '100%' }}
-            onPress={handleAccept}
-            disabled={!accepted}
-          >
-            {t('TermsConsent.footerBtn')}
-          </Btn>
-        </BottomSheet>
       </ScrollView>
+      <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
+        <TouchableOpacity
+          onPress={() => setAccepted(!accepted)}
+          style={styles.acceptWrapper}
+        >
+          <View style={{ flex: 0.1 }}>
+            <View
+              style={[
+                styles.checkboxBase,
+                accepted ? styles.checkboxActive : styles.checkboxInactive,
+              ]}
+            >
+              {accepted && <CheckmarkIconSmall />}
+            </View>
+          </View>
+          <View style={{ paddingLeft: 20, flex: 0.9 }}>
+            <JoloText
+              kind={JoloTextKind.subtitle}
+              size={JoloTextSizes.mini}
+              color={Colors.white90}
+              customStyles={{ textAlign: 'left' }}
+            >
+              {t('TermsConsent.footer')}
+            </JoloText>
+          </View>
+        </TouchableOpacity>
+        <Btn
+          customContainerStyles={{ width: '100%' }}
+          onPress={handleAccept}
+          disabled={!accepted}
+        >
+          {t('TermsConsent.footerBtn')}
+        </Btn>
+      </BottomSheet>
     </ScreenContainer>
   )
 }
