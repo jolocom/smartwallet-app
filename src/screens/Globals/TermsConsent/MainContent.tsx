@@ -16,7 +16,13 @@ import { CheckmarkIconSmall } from '~/assets/svg'
 import { useAgent } from '~/hooks/sdk'
 import { useGoBack } from '~/hooks/navigation'
 
-const legalTextConfig = ['TermsOfService', 'PrivacyPolicy']
+const legalTextConfig = [
+  { key: 'TermsOfService', title: 'Terms of Service' },
+  {
+    key: 'PrivacyPolicy',
+    title: 'Privacy Policy',
+  },
+]
 
 const MainContent: React.FC = () => {
   const [accepted, setAccepted] = useState(false)
@@ -35,14 +41,7 @@ const MainContent: React.FC = () => {
 
   return (
     <ScreenContainer customStyles={{ paddingHorizontal: 0, paddingTop: 0 }}>
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: 150,
-        }}
-        style={{ width: '100%' }}
-        showsVerticalScrollIndicator={false}
-        overScrollMode="never"
-      >
+      <View style={{ width: '100%', flex: 1 }}>
         <Section customStyles={{ paddingHorizontal: 20, paddingTop: 0 }}>
           <Section.Title>Terms of Service and Privacy Policy</Section.Title>
           <Section>
@@ -55,10 +54,10 @@ const MainContent: React.FC = () => {
               {legalTextConfig.map((legalText) => {
                 return (
                   <Option
-                    key={legalText}
-                    onPress={() => handleNavigateToScreen(legalText)}
+                    key={legalText.key}
+                    onPress={() => handleNavigateToScreen(legalText.key)}
                   >
-                    <Option.Title title={legalText} />
+                    <Option.Title title={legalText.title} />
                     <Option.RightIcon />
                   </Option>
                 )
@@ -66,7 +65,7 @@ const MainContent: React.FC = () => {
             </Section.Block>
           </Section>
         </Section>
-      </ScrollView>
+      </View>
       <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
         <TouchableOpacity
           onPress={() => setAccepted(!accepted)}
