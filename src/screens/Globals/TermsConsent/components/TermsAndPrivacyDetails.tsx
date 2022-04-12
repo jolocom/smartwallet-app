@@ -3,25 +3,54 @@ import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 import { View, StyleSheet, Text, ScrollView, Share, Modal } from 'react-native'
 import { useGoBack } from '~/hooks/navigation'
-import JoloText from '~/components/JoloText'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import IconBtn from '~/components/IconBtn'
 import { ShareIcon, LanguageIcon } from '~/assets/svg'
+import BottomSheet from '~/components/BottomSheet'
+import ModalScreen from '../../../../modals/Modal'
+import SingleSelectBlock from '~/components/SingleSelectBlock'
+import useTranslation from '~/hooks/useTranslation'
+import { Locales } from '~/translations'
+import ScreenDismissArea from '~/components/ScreenDismissArea'
 
-const TermsTemplate: React.FC = ({ title, text }) => {
+interface ITermsTemplate {
+  title: string
+  enText: string
+  deText: string
+}
+
+const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
   const goBack = useGoBack()
+  const { t, currentLanguage } = useTranslation()
 
-  const [language, setLanguage] = useState('EN')
+  const [language, setLanguage] = useState(currentLanguage)
+  const [visibility, setVisibility] = useState(false)
 
-  const handleLanguage = () => {}
+  const languages = [
+    { id: Locales.en, value: t('Language.english'), disabled: false },
+    { id: Locales.de, value: t('Language.german'), disabled: false },
+  ]
+
+  const storedLanguage = languages.find((l) => l.id === language)
+
+  const handleLanguage = ({ value }) => {
+    value === 'English' || value === 'Englisch'
+      ? setLanguage('en')
+      : setLanguage('de')
+    setVisibility(false)
+  }
+
+  const handlePress = () => {
+    setVisibility(!visibility)
+  }
 
   const handleShare = async () => {
-    console.log('Hello')
     try {
-      const result = await Share.share({ message: 'Jolo' })
-      console.log('result: ', result)
+      const result = await Share.share({ message: `Jolocom ${title}` })
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
           // shared with activity type of result.activityType
+          console.log('result: ', result.action, result.activityType)
         } else {
           // shared
         }
@@ -62,7 +91,7 @@ const TermsTemplate: React.FC = ({ title, text }) => {
               width: '20%',
             }}
           >
-            <IconBtn onPress={handleLanguage}>
+            <IconBtn onPress={handlePress}>
               <LanguageIcon />
             </IconBtn>
             <IconBtn onPress={handleShare}>
