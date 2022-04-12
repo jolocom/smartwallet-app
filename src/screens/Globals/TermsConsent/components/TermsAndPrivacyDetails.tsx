@@ -45,18 +45,15 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
   }
 
   const handleShare = async () => {
+    const shareOptions = {
+      title: 'Share via',
+      message: title,
+      url: enText,
+    }
+
     try {
-      const result = await Share.share({ message: `Jolocom ${title}` })
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-          console.log('result: ', result.action, result.activityType)
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
+      const ShareResponse = await Share.open(shareOptions)
+      console.log(JSON.stringify(ShareResponse))
     } catch (e) {
       console.log(e)
     }
