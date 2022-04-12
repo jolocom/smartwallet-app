@@ -53,7 +53,7 @@ const TermsTemplate: React.FC = ({ title, text }) => {
             paddingLeft: 10,
           }}
         >
-          <JoloText kind={'title'}>{title}</JoloText>
+          <JoloText kind={JoloTextKind.title}>{title}</JoloText>
           <View
             style={{
               flexDirection: 'row',
