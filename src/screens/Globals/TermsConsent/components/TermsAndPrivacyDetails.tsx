@@ -72,15 +72,26 @@ const TermsTemplate: React.FC = ({ title, text }) => {
         </View>
       </NavigationHeader>
       <View style={styles.contentContainer}>
-        <View>
+        <ScrollView indicatorStyle={'white'}>
           <Text style={styles.heading}>
+            {/* NOTE: make text dynamic*/}
             Please note that the German version is legally binding
           </Text>
-        </View>
-        <ScrollView indicatorStyle={'white'}>
-          <Text style={styles.text}>{text}</Text>
+          <Text style={styles.text}>{language === 'en' ? enText : deText}</Text>
         </ScrollView>
       </View>
+      {visibility && (
+        <View style={styles.overlay}>
+          <ScreenDismissArea onDismiss={handlePress}></ScreenDismissArea>
+          <BottomSheet showSlide={true}>
+            <SingleSelectBlock
+              initialSelect={storedLanguage}
+              selection={languages}
+              onSelect={handleLanguage}
+            />
+          </BottomSheet>
+        </View>
+      )}
     </ScreenContainer>
   )
 }
@@ -98,6 +109,15 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: 16,
+    paddingBottom: 50,
+  },
+  overlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    top: 0,
   },
 })
 
