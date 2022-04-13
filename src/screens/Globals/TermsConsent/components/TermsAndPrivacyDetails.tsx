@@ -11,6 +11,7 @@ import SingleSelectBlock from '~/components/SingleSelectBlock'
 import useTranslation from '~/hooks/useTranslation'
 import { Locales } from '~/translations'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
+import { LanguageIcon, SendEmailIcon } from '~/assets/svg'
 
 interface ITermsTemplate {
   title: string
@@ -88,7 +89,9 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
             <IconBtn onPress={handlePress}>
               <LanguageIcon />
             </IconBtn>
-            <IconBtn onPress={handleShare}>{/* <ShareIcon /> */}</IconBtn>
+            <IconBtn onPress={handleShare}>
+              <SendEmailIcon />
+            </IconBtn>
           </View>
         </View>
       </NavigationHeader>
