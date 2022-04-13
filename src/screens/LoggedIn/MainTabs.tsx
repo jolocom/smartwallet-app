@@ -21,6 +21,7 @@ import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import { getInteractionType } from '~/modules/interaction/selectors'
+import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
@@ -35,6 +36,7 @@ const MainTabs = () => {
   const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
   const isInteracting = useSelector(getInteractionType)
+  const isAusweisInteracting = useSelector(getAusweisInteractionDetails)
 
   const { showInteraction } = useInteractionStart()
   const navigation = useNavigation()
@@ -52,9 +54,15 @@ const MainTabs = () => {
     }
   }, [isInteracting, isAppLocked])
 
+  useEffect(() => {
+    if (!isAppLocked && isAusweisInteracting) {
+      navigation.navigate(ScreenNames.eId)
+    }
+  }, [JSON.stringify(isAusweisInteracting), isAppLocked])
+
   return (
     <MainTabsNavigator.Navigator
-      initialRouteName={ScreenNames.Documents}
+      initialRouteName={ScreenNames.Identity}
       tabBar={(props: BottomTabBarProps) => {
         return <BottomBar {...props} />
       }}

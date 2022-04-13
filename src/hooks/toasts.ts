@@ -30,7 +30,21 @@ export const useToasts = () => {
     dispatch(scheduleToast(createStickyToast(toast)))
   }
 
-  //TODO: don't pass title and message, but rather get them based on the SW error code
+  const scheduleErrorInfo = (error: Error, config?: Partial<ToastBody>) => {
+    console.warn(error)
+    scheduleWarning({
+      title: t('Toasts.errorWarningTitle'),
+      message: t('Toasts.errorWarningMsg'),
+      interact: {
+        label: t('Toasts.reportBtn'),
+        onInteract: () => {
+          showErrorReporting(error)
+        },
+      },
+      ...config,
+    })
+  }
+
   const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) => {
     console.warn(error)
     return scheduleWarning({
@@ -69,6 +83,7 @@ export const useToasts = () => {
     scheduleWarning,
     scheduleSticky,
     scheduleErrorWarning,
+    scheduleErrorInfo,
     removeToast,
     invokeInteract,
     activeToast,

@@ -1,3 +1,5 @@
+import { IWithCustomStyle } from '~/types/props'
+
 export interface ITabsContext {
   activeTab: ITabProps | undefined
   activeSubtab: ITabProps | undefined
@@ -27,11 +29,16 @@ export type TFunctionalChildren<T> = React.FC<{
   ) => JSX.Element | JSX.Element[] | React.ReactNode | React.ReactNode[]
 }>
 
+export interface IPageProps extends IWithCustomStyle {
+  id: string
+}
+
 export interface ITabsComposition {
   Tab: React.FC<ITab>
   Subtab: React.FC<ITab>
   Panel: TFunctionalChildren<Pick<ITabsContext, 'activeTab' | 'activeSubtab'>>
   PersistChildren: React.FC<ITabPersistChildren>
+  Page: React.FC<IPageProps>
 }
 
 export interface ITabs {

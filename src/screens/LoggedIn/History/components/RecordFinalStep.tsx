@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.mainBlack,
   },
   iconContainer: {
-    transform: [{ scale: 0.6 }],
-    width: 26,
-    height: 26,
+    width: 18,
+    height: 18,
+    transform: [{ scale: 0.9 }],
   },
   textContainer: {
     flex: 0.75,

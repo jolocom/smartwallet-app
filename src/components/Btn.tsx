@@ -22,17 +22,19 @@ export enum BtnTypes {
   quaternary = 'quaternary',
   quinary = 'quinary',
   senary = 'senary',
+  septenary = 'septenary',
 }
 
 export enum BtnSize {
   large,
   medium,
+  small,
 }
 
 interface BtnPropsI extends TouchableOpacityProps {
   type?: BtnTypes
   customTextStyles?: TextStyle
-  size?: BtnSize
+  size?: BtnSize | number
 }
 
 interface PropsI extends BtnPropsI {
@@ -43,7 +45,7 @@ interface PropsI extends BtnPropsI {
   testID?: string
 }
 
-interface IBtnComposition {
+interface BtnComposition {
   Online: React.FC<PropsI>
 }
 
@@ -56,6 +58,23 @@ const ButtonText: React.FC<BtnPropsI> = ({
   children,
   customTextStyles = {},
 }) => {
+  const getTextSize = () => {
+    if (Object.values(BtnSize).includes(size)) {
+      switch (size) {
+        case BtnSize.large:
+          return 20
+        case BtnSize.medium:
+          return 18
+        case BtnSize.small:
+          return 12
+        default:
+          return 18
+      }
+    } else {
+      return size
+    }
+  }
+
   const getTextStyle = () => {
     switch (type) {
       case BtnTypes.primary:
@@ -79,7 +98,7 @@ const ButtonText: React.FC<BtnPropsI> = ({
       style={[
         styles.text,
         getTextStyle(),
-        { fontSize: size === BtnSize.medium ? 18 : 20 },
+        { fontSize: getTextSize() },
         customTextStyles,
       ]}
     >
@@ -88,7 +107,7 @@ const ButtonText: React.FC<BtnPropsI> = ({
   )
 }
 
-const Btn: React.FC<PropsI> & IBtnComposition = ({
+const Btn: React.FC<PropsI> & BtnComposition = ({
   disabled,
   withoutMargins,
   size,
@@ -104,7 +123,12 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
     disabled && styles.disabled,
     { marginVertical: withoutMargins ? 0 : 5 },
   ]
-  const btnStyle = size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
+  const btnStyle =
+    size === BtnSize.large
+      ? styles.largeBtn
+      : size === BtnSize.small
+      ? styles.smallBtn
+      : styles.mediumBtn
 
   const renderButton = () => {
     const btnTextProps = { size, type, customTextStyles, children }
@@ -138,7 +162,9 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
           <View
             style={[
               containerStyles,
-              { backgroundColor: Colors.matterhorn18 },
+              {
+                backgroundColor: Colors.matterhorn18,
+              },
               customContainerStyles,
               btnStyle,
             ]}
@@ -146,6 +172,26 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
             <ButtonText {...btnTextProps} />
           </View>
         )
+      case BtnTypes.septenary:
+        return (
+          <View
+            style={[
+              containerStyles,
+              {
+                backgroundColor: Colors.white06,
+                borderStyle: 'solid',
+                borderWidth: 0.8,
+                borderColor: Colors.silverChalice,
+              },
+              customContainerStyles,
+              btnStyle,
+            ]}
+          >
+            <ButtonText {...btnTextProps} />
+          </View>
+        )
+      default:
+        return null
     }
   }
 
@@ -192,6 +238,12 @@ const styles = StyleSheet.create({
   mediumBtn: {
     height: 45,
   },
+  smallBtn: {
+    height: 26,
+  },
+  btn: {
+    backgroundColor: 'transparent',
+  },
   disabled: {
     opacity: 0.5,
   },
@@ -226,6 +278,10 @@ const styles = StyleSheet.create({
   textSenary: {
     fontFamily: Fonts.Medium,
     opacity: 0.8,
+    color: Colors.white,
+  },
+  textSeptenary: {
+    fontFamily: Fonts.Regular,
     color: Colors.white,
   },
 })

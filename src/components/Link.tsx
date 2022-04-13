@@ -1,43 +1,33 @@
 import React from 'react'
-import { Linking } from 'react-native'
-import Hyperlink from 'react-native-hyperlink'
+import { Linking, TouchableOpacity } from 'react-native'
+import { IWithCustomStyle } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
-import { JoloTextSizes } from '~/utils/fonts'
-import JoloText, { JoloTextKind } from './JoloText'
+import JoloText from './JoloText'
 
-interface LinkPropsI {
-  text: string
+interface LinkPropsI extends IWithCustomStyle {
+  url: string
 }
 
-const Link: React.FC<LinkPropsI> = ({ text }) => {
-  const handleLinkClick = async (url: string) => {
+const Link: React.FC<LinkPropsI> = ({ url, children, customStyles }) => {
+  const handleLinkClick = async () => {
     try {
       const isSupported = await Linking.canOpenURL(url)
       if (isSupported) {
         await Linking.openURL(url)
       } else {
-        // TODO: show toast here
+        // TODO: show toast here?
         console.warn('Unable to open url', url)
       }
     } catch (err) {
-      // TODO: show toast here
+      // TODO: show toast here?
       console.warn('Unable to open url', url)
     }
   }
   return (
-    <Hyperlink
-      onPress={handleLinkClick}
-      linkStyle={{ textDecorationLine: 'underline' }}
-    >
-      <JoloText
-        kind={JoloTextKind.subtitle}
-        size={JoloTextSizes.mini}
-        color={Colors.white70}
-      >
-        {text}
-      </JoloText>
-    </Hyperlink>
+    <TouchableOpacity onPress={handleLinkClick} style={customStyles}>
+      <JoloText color={Colors.success}>{children}</JoloText>
+    </TouchableOpacity>
   )
 }
 

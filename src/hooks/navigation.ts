@@ -37,11 +37,17 @@ export const usePopStack = () => {
   const stackSize = useNavigationState((state) => state.index)
 
   return () => {
+    /**
+     * TODO: this is not a reliable way to pop eid stack;
+     * because on different eID screens the state is different:
+     * i.e. on Interaction Sheet the state contains MainTabs and eID as
+     * routes, thus poping to the top (to the MainTabs) and then
+     * pop (at this point there is only one route MainTabs) results in an error
+     * becuase popu clears the route state
+     */
     //NOTE: pops to the first screen of the stack, if not already there
     if (stackSize !== 0) navigation.dispatch(StackActions.popToTop())
-    if (navigation.canGoBack()) {
-      navigation.goBack()
-    }
+    navigation.dispatch(StackActions.pop())
   }
 }
 

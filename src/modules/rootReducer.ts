@@ -7,6 +7,8 @@ import appStateReducer from './appState/reducer'
 import credentialsReducer from './credentials/reducer'
 import toastsReducer from './toasts/reducer'
 
+import ausweisReducer from './ausweis/reducer'
+
 const rootReducer = combineReducers({
   loader: loaderReducer,
   account: accountReducer,
@@ -15,6 +17,7 @@ const rootReducer = combineReducers({
   appState: appStateReducer,
   credentials: credentialsReducer,
   toasts: toastsReducer,
+  ausweis: ausweisReducer,
 })
 
 export default rootReducer

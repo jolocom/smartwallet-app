@@ -1,0 +1,595 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ausweis change pin screen is displayed according to the designs 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+        },
+        Object {
+          "flex": 1,
+          "paddingTop": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "flex-start",
+            "flex": 1,
+            "justifyContent": "center",
+          },
+          false,
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "#101010",
+            "height": 0,
+            "width": "100%",
+          }
+        }
+      />
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "height": 50,
+              "paddingHorizontal": 12,
+              "width": "100%",
+            },
+            Object {
+              "justifyContent": "space-between",
+            },
+            Array [
+              Object {
+                "backgroundColor": "#101010",
+              },
+              Object {},
+            ],
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "height": 40,
+              "justifyContent": "center",
+              "opacity": 1,
+              "width": 40,
+            }
+          }
+        >
+          <RNSVGSvgView
+            align="xMidYMid"
+            bbHeight={17}
+            bbWidth={25}
+            focusable={false}
+            height={17}
+            meetOrSlice={0}
+            minX={0}
+            minY={0}
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "borderWidth": 0,
+                },
+                Object {
+                  "flex": 0,
+                  "height": 17,
+                  "width": 25,
+                },
+              ]
+            }
+            vbHeight={17}
+            vbWidth={25}
+            width={25}
+          >
+            <RNSVGGroup>
+              <RNSVGPath
+                d="M24.48 7.438H3.34l5.362-5.469a.536.536 0 00.152-.375V.53A.53.53 0 008.334 0a.516.516 0 00-.369.156L.153 8.124a.539.539 0 000 .752l7.812 7.968c.15.152.372.198.568.116a.53.53 0 00.321-.491v-1.063a.536.536 0 00-.152-.375L3.34 9.562h21.138c.288 0 .521-.237.521-.53V7.968a.526.526 0 00-.52-.531z"
+                fill={-855310}
+                fillRule={1}
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGSvgView>
+        </View>
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "paddingHorizontal": 10,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+              "paddingHorizontal": 16,
+              "width": "100%",
+            },
+            Object {
+              "backgroundColor": "#101010",
+              "marginBottom": -0,
+              "paddingBottom": 0,
+            },
+            Object {},
+            Object {
+              "justifyContent": "space-around",
+            },
+          ]
+        }
+      >
+        <RCTScrollView
+          contentContainerStyle={
+            Object {
+              "alignItems": "center",
+            }
+          }
+          overScrollMode="never"
+          showsVerticalScrollIndicator={false}
+          style={
+            Object {
+              "width": "100%",
+            }
+          }
+        >
+          <View>
+            <View
+              style={
+                Object {
+                  "marginBottom": 64,
+                }
+              }
+            >
+              <View
+                style={
+                  Array [
+                    Object {
+                      "width": 750,
+                    },
+                    Object {
+                      "paddingHorizontal": 27,
+                    },
+                  ]
+                }
+              >
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "paddingTop": undefined,
+                        "textAlign": "center",
+                      },
+                      Object {
+                        "color": "rgba(255,255,255,0.85)",
+                        "fontFamily": "TTCommons-Medium",
+                        "fontSize": 28,
+                        "letterSpacing": 0,
+                        "lineHeight": 32,
+                      },
+                      Object {
+                        "marginBottom": 12,
+                      },
+                    ]
+                  }
+                >
+                  AusweisChangePin.transportPinHeader
+                </Text>
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "paddingTop": undefined,
+                        "textAlign": "center",
+                      },
+                      Object {
+                        "color": "rgb(138, 138, 145)",
+                        "fontFamily": "TTCommons-Regular",
+                        "fontSize": 20,
+                        "letterSpacing": 0.14,
+                        "lineHeight": 22,
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  AusweisChangePin.transportPinSubheader
+                </Text>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "marginVertical": 5,
+                      "opacity": 1,
+                      "width": "100%",
+                    }
+                  }
+                  testID="button"
+                >
+                  <View
+                    style={
+                      Array [
+                        Array [
+                          Object {
+                            "alignItems": "center",
+                            "borderRadius": 8,
+                            "justifyContent": "center",
+                            "width": "100%",
+                          },
+                          false,
+                          Object {
+                            "marginVertical": 5,
+                          },
+                        ],
+                        Object {
+                          "backgroundColor": "rgba(81, 81, 81, 0.18)",
+                        },
+                        undefined,
+                        Object {
+                          "height": 45,
+                        },
+                      ]
+                    }
+                  >
+                    <Text
+                      style={
+                        Array [
+                          Object {
+                            "color": "#ffffff",
+                            "paddingTop": undefined,
+                            "textAlignVertical": "center",
+                          },
+                          Object {
+                            "color": "#fa3384",
+                            "fontFamily": "TTCommons-Regular",
+                            "opacity": 0.8,
+                          },
+                          Object {
+                            "fontSize": 18,
+                          },
+                          Object {
+                            "opacity": 1,
+                          },
+                        ]
+                      }
+                    >
+                      AusweisChangePin.transportPinBtn
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={
+                Object {
+                  "marginBottom": 64,
+                }
+              }
+            >
+              <View
+                style={
+                  Array [
+                    Object {
+                      "width": 750,
+                    },
+                    Object {
+                      "paddingHorizontal": 27,
+                    },
+                  ]
+                }
+              >
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "paddingTop": undefined,
+                        "textAlign": "center",
+                      },
+                      Object {
+                        "color": "rgba(255,255,255,0.85)",
+                        "fontFamily": "TTCommons-Medium",
+                        "fontSize": 28,
+                        "letterSpacing": 0,
+                        "lineHeight": 32,
+                      },
+                      Object {
+                        "marginBottom": 12,
+                      },
+                    ]
+                  }
+                >
+                  AusweisChangePin.pinHeader
+                </Text>
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "paddingTop": undefined,
+                        "textAlign": "center",
+                      },
+                      Object {
+                        "color": "rgb(138, 138, 145)",
+                        "fontFamily": "TTCommons-Regular",
+                        "fontSize": 20,
+                        "letterSpacing": 0.14,
+                        "lineHeight": 22,
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  AusweisChangePin.pinSubheader
+                </Text>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "marginVertical": 5,
+                      "opacity": 1,
+                      "width": "100%",
+                    }
+                  }
+                  testID="button"
+                >
+                  <View
+                    style={
+                      Array [
+                        Array [
+                          Object {
+                            "alignItems": "center",
+                            "borderRadius": 8,
+                            "justifyContent": "center",
+                            "width": "100%",
+                          },
+                          false,
+                          Object {
+                            "marginVertical": 5,
+                          },
+                        ],
+                        Object {
+                          "backgroundColor": "rgba(81, 81, 81, 0.18)",
+                        },
+                        undefined,
+                        Object {
+                          "height": 45,
+                        },
+                      ]
+                    }
+                  >
+                    <Text
+                      style={
+                        Array [
+                          Object {
+                            "color": "#ffffff",
+                            "paddingTop": undefined,
+                            "textAlignVertical": "center",
+                          },
+                          Object {
+                            "color": "#fa3384",
+                            "fontFamily": "TTCommons-Regular",
+                            "opacity": 0.8,
+                          },
+                          Object {
+                            "fontSize": 18,
+                          },
+                          Object {
+                            "opacity": 1,
+                          },
+                        ]
+                      }
+                    >
+                      AusweisChangePin.pinBtn
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={
+                Object {
+                  "marginBottom": 64,
+                }
+              }
+            >
+              <View
+                style={
+                  Array [
+                    Object {
+                      "width": 750,
+                    },
+                    Object {
+                      "paddingHorizontal": 27,
+                    },
+                  ]
+                }
+              >
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "paddingTop": undefined,
+                        "textAlign": "center",
+                      },
+                      Object {
+                        "color": "rgba(255,255,255,0.85)",
+                        "fontFamily": "TTCommons-Medium",
+                        "fontSize": 28,
+                        "letterSpacing": 0,
+                        "lineHeight": 32,
+                      },
+                      Object {
+                        "marginBottom": 12,
+                      },
+                    ]
+                  }
+                >
+                  AusweisChangePin.forgotHeader
+                </Text>
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "paddingTop": undefined,
+                        "textAlign": "center",
+                      },
+                      Object {
+                        "color": "rgb(138, 138, 145)",
+                        "fontFamily": "TTCommons-Regular",
+                        "fontSize": 20,
+                        "letterSpacing": 0.14,
+                        "lineHeight": 22,
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  AusweisChangePin.forgotSubheader
+                </Text>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "marginTop": 32,
+                      "opacity": 1,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      Array [
+                        Object {
+                          "paddingTop": undefined,
+                          "textAlign": "center",
+                        },
+                        Object {
+                          "color": "#5251c1",
+                          "fontFamily": "TTCommons-Regular",
+                          "fontSize": 20,
+                          "letterSpacing": 0.14,
+                          "lineHeight": 22,
+                        },
+                        undefined,
+                      ]
+                    }
+                  >
+                    support@ausweissapp.de
+                  </Text>
+                </View>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "marginTop": 32,
+                      "opacity": 1,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      Array [
+                        Object {
+                          "paddingTop": undefined,
+                          "textAlign": "center",
+                        },
+                        Object {
+                          "color": "#5251c1",
+                          "fontFamily": "TTCommons-Regular",
+                          "fontSize": 20,
+                          "letterSpacing": 0.14,
+                          "lineHeight": 22,
+                        },
+                        undefined,
+                      ]
+                    }
+                  >
+                    0421 204 95 995
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </RCTScrollView>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;

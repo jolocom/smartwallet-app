@@ -156,10 +156,9 @@ const ChangePin: React.FC = () => {
           <Passcode.Input />
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
-          <Passcode.ExtraAction
-            onPress={handleExtraAction}
-            title={getExtraActionTitle()}
-          />
+          <Passcode.ExtraAction onPress={handleExtraAction}>
+            {getExtraActionTitle()}
+          </Passcode.ExtraAction>
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>

@@ -21,10 +21,12 @@ import { ScreenNames } from '~/types/screens'
 import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
-import useConnection from '../connection'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
-import branch from 'react-native-branch'
+import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import useConnection from '../connection'
+import { getCurrentLanguage } from '~/modules/account/selectors'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -36,8 +38,20 @@ export const useInteraction = () => {
 
 // NOTE: This should be called only in one place!
 export const useDeeplinkInteractions = () => {
+  const { processAusweisToken } = eIDHooks.useAusweisInteraction()
   const { processInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
+  const loader = useLoader()
+  const currentLanguage = useSelector(getCurrentLanguage)
+
+  // NOTE: for now we assume all the params come in as strings
+  const getParamValue = (name: string, params: BranchParams) => {
+    if (params[name] && typeof params[name] === 'string') {
+      return params[name] as string
+    }
+
+    return
+  }
 
   useEffect(() => {
     // TODO move somewhere
@@ -49,19 +63,20 @@ export const useDeeplinkInteractions = () => {
       }
 
       if (params) {
-        let redirectUrl: string | undefined = undefined
+        let redirectUrl = getParamValue('redirectUrl', params)
+        const tokenValue = getParamValue('token', params)
+        const eidValue = getParamValue('tcTokenUrl', params)
 
-        if (
-          params['redirectUrl'] &&
-          typeof params['redirectUrl'] === 'string'
-        ) {
-          redirectUrl = params['redirectUrl']
-        }
-
-        if (params['token'] && typeof params['token'] === 'string') {
-          processInteraction(params['token'], redirectUrl).catch(
+        if (tokenValue) {
+          processInteraction(tokenValue, redirectUrl).catch(
             scheduleErrorWarning,
           )
+          return
+        } else if (eidValue) {
+          loader(() => processAusweisToken(eidValue), {
+            showSuccess: false,
+            showFailed: false,
+          })
           return
         } else if (
           !params['+clicked_branch_link'] ||
@@ -73,7 +88,7 @@ export const useDeeplinkInteractions = () => {
         scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
       }
     })
-  }, [])
+  }, [currentLanguage])
 }
 
 export const useInteractionStart = () => {
@@ -81,8 +96,8 @@ export const useInteractionStart = () => {
   const dispatch = useDispatch()
   const loader = useLoader()
   const interactionHandler = useInteractionHandler()
-  const { connected, showDisconnectedToast } = useConnection()
   const { scheduleErrorWarning } = useToasts()
+  const { connected, showDisconnectedToast } = useConnection()
 
   const processInteraction = async (
     jwt: string,
@@ -105,9 +120,8 @@ export const useInteractionStart = () => {
 
   const showInteraction = async (interaction: Interaction) => {
     // NOTE: not continuing the interaction if there is no network connection
+    if (connected === false) return showDisconnectedToast()
     try {
-      if (connected === false) return showDisconnectedToast()
-
       const counterparty = interaction.getSummary().initiator
       const interactionData = await interactionHandler(interaction)
 
@@ -126,8 +140,8 @@ export const useInteractionStart = () => {
     }
   }
 
-  const startInteraction = async (jwt: string) => {
-    return loader(
+  const startInteraction = async (jwt: string) =>
+    loader(
       async () => {
         const interaction = await processInteraction(jwt)
         if (interaction) {
@@ -139,7 +153,6 @@ export const useInteractionStart = () => {
         if (error) scheduleErrorWarning(error)
       },
     )
-  }
 
   return { processInteraction, showInteraction, startInteraction }
 }

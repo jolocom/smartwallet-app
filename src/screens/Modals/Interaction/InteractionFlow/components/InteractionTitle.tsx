@@ -15,6 +15,7 @@ const InteractionTitle: React.FC<IInteractionText> = ({ label }) => {
       size={JoloTextSizes.middle}
       weight={JoloTextWeight.regular}
       color={Colors.white90}
+      testID="interaction-title"
       customStyles={{
         lineHeight: BP({ xsmall: 24, default: 28 }),
         marginTop: BP({ default: 10, medium: 14, large: 14 }),

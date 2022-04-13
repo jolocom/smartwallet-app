@@ -52,6 +52,13 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera will be used to scan QR Codes and interact with services</string>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>E80704007F00070302</string>
+	</array>
+
+	<key>NFCReaderUsageDescription</key>
+	<string>We need NFC to access the ID card</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>We need FaceID to secure your wallet against misuse</string>
 	<key>UIAppFonts</key>
