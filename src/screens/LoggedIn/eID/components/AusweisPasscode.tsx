@@ -447,7 +447,7 @@ export const AusweisPasscode = () => {
         screen: ScreenNames.AusweisCardInfo,
         params: {
           mode: CardInfoMode.blocked,
-          onDismiss: cancelFlow,
+          onDismiss: closeAusweis,
         },
       }),
     )
