@@ -6,7 +6,6 @@ import Share from 'react-native-share'
 import { useGoBack } from '~/hooks/navigation'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import IconBtn from '~/components/IconBtn'
-import { ShareIcon, LanguageIcon } from '~/assets/svg'
 import BottomSheet from '~/components/BottomSheet'
 import SingleSelectBlock from '~/components/SingleSelectBlock'
 import useTranslation from '~/hooks/useTranslation'
@@ -89,9 +88,7 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
             <IconBtn onPress={handlePress}>
               <LanguageIcon />
             </IconBtn>
-            <IconBtn onPress={handleShare}>
-              <ShareIcon />
-            </IconBtn>
+            <IconBtn onPress={handleShare}>{/* <ShareIcon /> */}</IconBtn>
           </View>
         </View>
       </NavigationHeader>
