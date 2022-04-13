@@ -11,6 +11,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { Locales } from '~/translations'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
 import { LanguageIcon, SendEmailIcon } from '~/assets/svg'
+import { Colors } from '~/utils/colors'
 
 interface ITermsTemplate {
   title: string
@@ -120,18 +121,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   heading: {
-    color: '#ffcc01',
+    color: Colors.error,
     fontSize: 16,
     paddingBottom: 10,
   },
   text: {
-    color: '#fff',
+    color: Colors.white,
     fontSize: 16,
     paddingBottom: 50,
   },
   overlay: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: Colors.black36,
     left: 0,
     right: 0,
     bottom: 0,
