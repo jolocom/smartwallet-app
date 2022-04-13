@@ -80,7 +80,7 @@
         "phoneNumberLabel": "Telefonnummer",
         "addressLabel": "Anschrift \n",
         "addClaimBtn": "Neu Hinzufügen",
-        "attributesMissingInfo": "Ihre Daten sind noch nicht vollständig.\nErgänzen Sie diese für die zukünftigen Anwendungen.",
+        "credentialsDescription": "",
         "headerAusweis": "Ihre eID",
         "headerCredentials": "Nachweise"
     },
