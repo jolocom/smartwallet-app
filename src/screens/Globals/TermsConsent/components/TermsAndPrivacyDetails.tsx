@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
-import { View, StyleSheet, Text, ScrollView } from 'react-native'
-import Share from 'react-native-share'
+import { View, StyleSheet, Text, ScrollView, Linking } from 'react-native'
 import { useGoBack } from '~/hooks/navigation'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import IconBtn from '~/components/IconBtn'
@@ -45,16 +44,9 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
   }
 
   const handleShare = async () => {
-    const shareOptions = {
-      message: `Jolocom ${title}`,
-    }
-
-    try {
-      const ShareResponse = await Share.open(shareOptions)
-      console.log('ShareResponse', ShareResponse)
-    } catch (e) {
-      console.log(e)
-    }
+    await Linking.openURL(
+      `mailto:?subject=${title}&body=${language === 'en' ? enText : deText}`,
+    )
   }
 
   return (

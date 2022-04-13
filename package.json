@@ -95,7 +95,6 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.17.1",
     "react-native-set-soft-input-mode": "^1.1.0",
-    "react-native-share": "^7.3.7",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-sqlite-storage": "^5.0.0",
     "react-native-svg": "^12.1.0",
