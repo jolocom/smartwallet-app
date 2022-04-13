@@ -5,6 +5,7 @@ import { Linking, ScrollView, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -24,6 +25,7 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
+import { getAusweisFlowType } from '~/modules/ausweis/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
 import Link from '~/components/Link'
@@ -60,6 +62,7 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
+  const shouldDisableBtns = !!useSelector(getAusweisFlowType)
   const checkNfcSupport = useCheckNFC()
 
   const changePinFlow =
@@ -221,6 +224,7 @@ const AusweisChangePin = () => {
             onPress={handleChange5DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
+            disabled={shouldDisableBtns}
           >
             {t('AusweisChangePin.transportPinBtn')}
           </Btn>
@@ -233,6 +237,7 @@ const AusweisChangePin = () => {
             onPress={handleChange6DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
+            disabled={shouldDisableBtns}
           >
             {t('AusweisChangePin.pinBtn')}
           </Btn>

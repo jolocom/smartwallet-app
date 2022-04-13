@@ -15,6 +15,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
 import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
+import eIDHooks from './eID/hooks'
 
 export type LoggedInStackParamList = {
   Idle: undefined
@@ -39,6 +40,10 @@ const LoggedIn = () => {
   const showTabs = !isAppLocked && isAuthSet
 
   const renderedMainTimes = useRef(0)
+
+  // NOTE: Used to listen for Ausweis READER messages and update the Redux state
+  eIDHooks.useAusweisReaderEvents()
+  eIDHooks.useObserveAusweisFlow()
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())

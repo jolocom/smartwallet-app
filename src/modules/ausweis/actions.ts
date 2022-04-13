@@ -18,3 +18,7 @@ export const setAusweisScannerKey = createAusweisAction(
 export const setAusweisReaderState = createAusweisAction(
   AusweisActionType.setReaderState,
 )
+
+export const setAusweisFlowType = createAusweisAction(
+  AusweisActionType.setFlowType,
+)

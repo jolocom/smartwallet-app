@@ -11,6 +11,8 @@ import {
   CardInfo,
 } from '@jolocom/react-native-ausweis/js/types'
 import {
+  AuthMessage,
+  ChangePinMessage,
   Messages,
   ReaderMessage,
 } from '@jolocom/react-native-ausweis/js/messageTypes'
@@ -29,9 +31,11 @@ import {
   AusweisScannerState,
   AusweisScannerParams,
   AusweisCardResult,
+  AusweisFlow,
 } from './types'
 import useTranslation from '~/hooks/useTranslation'
 import {
+  setAusweisFlowType,
   setAusweisInteractionDetails,
   setAusweisReaderState,
 } from '~/modules/ausweis/actions'
@@ -116,6 +120,14 @@ const useAusweisInteraction = () => {
 
     await aa2Module.setAccessRights(optionalFields)
     await aa2Module.acceptAuthRequest()
+  }
+
+  const startChangePin = async () => {
+    if (shouldShowScannerWithoutInsertMessage) {
+      showScanner(cancelFlow, { state: AusweisScannerState.loading })
+    }
+
+    await aa2Module.startChangePin().catch(scheduleErrorWarning)
   }
 
   const disconnectAusweis = () => {
@@ -206,14 +218,6 @@ const useAusweisInteraction = () => {
         },
       })
     }
-  }
-
-  const startChangePin = async () => {
-    if (shouldShowScannerWithoutInsertMessage) {
-      showScanner(cancelFlow, { state: AusweisScannerState.loading })
-    }
-
-    await aa2Module.startChangePin().catch(scheduleErrorWarning)
   }
 
   return {
@@ -455,6 +459,51 @@ const useAusweisReaderEvents = () => {
   }, [])
 }
 
+// NOTE: This hook is used to update the state of the Ausweis flow type that is currently running.
+// Furthermore, it allows to disable certain buttons that start a flow in case the previous flow was
+// finished, which otherwise might result in unexpected behavior (the buttons being locked out).
+export const useObserveAusweisFlow = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const changePinListener = (msg: ChangePinMessage) => {
+      if (msg.hasOwnProperty('success')) {
+        // NOTE: We're using a timeout because even though we received the CHANGE_PIN message, which
+        // signifies the ending of the flow, sending the RUN_CHANGE_PIN command right away will will
+        // not prompt the native scanner. This is an issue on the AA2's side. Finally, 1500 ms seems to
+        // be more or less enough time to be able to start the flow again successfully.
+        setTimeout(() => {
+          dispatch(setAusweisFlowType(null))
+        }, 1500)
+      } else {
+        dispatch(setAusweisFlowType(AusweisFlow.changePin))
+      }
+    }
+
+    const authListener = (msg: AuthMessage) => {
+      const isFlowFinished = !!(msg.result && !msg.result.message) ?? false
+      const isFlowFailed = !!msg.error || (msg.result && msg.result.message)
+
+      if (isFlowFailed || isFlowFinished) {
+        dispatch(setAusweisFlowType(null))
+      } else {
+        dispatch(setAusweisFlowType(AusweisFlow.auth))
+      }
+    }
+
+    aa2Module.messageEmitter.addListener(Messages.changePin, changePinListener)
+    aa2Module.messageEmitter.addListener(Messages.auth, authListener)
+
+    return () => {
+      aa2Module.messageEmitter.removeListener(
+        Messages.changePin,
+        changePinListener,
+      )
+      aa2Module.messageEmitter.removeListener(Messages.auth, authListener)
+    }
+  }, [])
+}
+
 const eIDHooks = {
   useAusweisReaderEvents,
   useAusweisCancelBackHandler,
@@ -464,5 +513,7 @@ const eIDHooks = {
   useAusweisCompatibilityCheck,
   useAusweisInteraction,
   useAusweisContext,
+  useObserveAusweisFlow,
 }
+
 export default eIDHooks
