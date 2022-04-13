@@ -4,6 +4,7 @@ export enum Colors {
   electricViolet = '#6027ef',
   ceriseRed = '#d22d69',
   disco = '#911942',
+  red = '#FF0000',
   error = '#ffcc01',
   error40 = 'rgba(255, 204, 1, 0.4)',
   mainBlack = '#201a21',
