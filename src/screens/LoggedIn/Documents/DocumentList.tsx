@@ -29,7 +29,10 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
-import { uiTypesTerms } from '~/hooks/signedCredentials/utils'
+import {
+  getCredentialUIType,
+  uiTypesTerms,
+} from '~/hooks/signedCredentials/utils'
 import {
   useCredentialOptionalFields,
   useDeleteCredential,
@@ -296,7 +299,10 @@ export const DocumentList = () => {
                         <DocumentSectionOtherCard
                           key={`${index}-${c.id}`}
                           credentialName={c.name || t('General.unknown')}
-                          credentialType={credentialUIType}
+                          credentialType={getCredentialDisplayType(
+                            getCredentialUIType(c.type),
+                            t,
+                          )}
                           fields={fields}
                           logo={c.photo}
                           onHandleMore={() =>

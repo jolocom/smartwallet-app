@@ -68,7 +68,9 @@ export const useDeeplinkInteractions = () => {
         const eidValue = getParamValue('tcTokenUrl', params)
 
         if (tokenValue) {
-          processInteraction(tokenValue, redirectUrl)
+          processInteraction(tokenValue, redirectUrl).catch(
+            scheduleErrorWarning,
+          )
           return
         } else if (eidValue) {
           loader(() => processAusweisToken(eidValue), {

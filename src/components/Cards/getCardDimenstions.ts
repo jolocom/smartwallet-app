@@ -54,7 +54,7 @@ export const getCardDimensions = (
   // when originalScreenWidth should define scaleBy property
   const baseAspectRation = originalCardWidth / originalCardHeight
 
-  let scaleBy: number, cardWidth: number, cardHeight: number
+  let scaleBy: number, cardWidth: number
 
   if (isOriginalScreenWidthDefining(definingOption)) {
     scaleBy =
@@ -78,7 +78,7 @@ export const getCardDimensions = (
    * in case screen is larger than originalScreenWidth
    * limit card width to originalCardWidth value
    */
-  cardHeight = (1 / baseAspectRation) * cardWidth!
+  const cardHeight = (1 / baseAspectRation) * cardWidth!
 
   return {
     scaledWidth: cardWidth,

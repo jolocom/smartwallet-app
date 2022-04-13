@@ -9,7 +9,7 @@ import { setAppLocked } from '~/modules/account/actions'
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import { ScreenNames } from '~/types/screens'
-import DeviceAuthentication from '../Modals/DeviceAuthentication'
+import WalletAuthentication from '../Modals/WalletAuthentication'
 import Main from './Main'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
@@ -21,7 +21,7 @@ export type LoggedInStackParamList = {
   Idle: undefined
   [ScreenNames.Main]: undefined
   [ScreenNames.LockStack]: undefined
-  [ScreenNames.DeviceAuth]: undefined
+  [ScreenNames.WalletAuthentication]: undefined
 }
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
@@ -76,8 +76,8 @@ const LoggedIn = () => {
     <LoggedInStack.Navigator headerMode="none">
       {showRegisterPin ? (
         <LoggedInStack.Screen
-          name={ScreenNames.DeviceAuth}
-          component={DeviceAuthentication}
+          name={ScreenNames.WalletAuthentication}
+          component={WalletAuthentication}
           options={screenTransitionFromBottomDisabledGestures}
         />
       ) : (

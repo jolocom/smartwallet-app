@@ -12,10 +12,10 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useRedirectToLoggedIn } from '~/hooks/navigation'
 import {
-  useDeviceAuthDispatch,
-  useDeviceAuthState,
-} from './module/deviceAuthContext'
-import { showBiometry } from './module/deviceAuthActions'
+  useWalletAuthDispatch,
+  useWalletAuthState,
+} from './module/walletAuthContext'
+import { showBiometry } from './module/walletAuthActions'
 import Passcode from '~/components/Passcode'
 import { useToasts } from '~/hooks/toasts'
 import { useResetKeychainValues } from '~/hooks/deviceAuth'
@@ -24,7 +24,7 @@ import { promisifySubmit } from '~/components/Passcode/utils'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const RegisterPin = () => {
+const CreateWalletPin = () => {
   const { t } = useTranslation()
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [selectedPasscode, setSelectedPasscode] = useState('')
@@ -32,8 +32,8 @@ const RegisterPin = () => {
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
   const resetKeychainPasscode = useResetKeychainValues()
 
-  const { biometryType } = useDeviceAuthState()
-  const dispatchToLocalAuth = useDeviceAuthDispatch()
+  const { biometryType } = useWalletAuthState()
+  const dispatchToLocalAuth = useWalletAuthDispatch()
 
   const displaySuccessLoader = useSuccess()
   const { scheduleErrorWarning } = useToasts()
@@ -46,7 +46,7 @@ const RegisterPin = () => {
    * the register pin screen.
    */
   useEffect(() => {
-    resetKeychainPasscode()
+    resetKeychainPasscode().catch(scheduleErrorWarning)
   }, [])
 
   const promisifyPasscodeSubmit = promisifySubmit((pin) => {
@@ -153,4 +153,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RegisterPin
+export default CreateWalletPin

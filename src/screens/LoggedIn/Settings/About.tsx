@@ -6,7 +6,7 @@ import { JolocomLogoBig } from '~/assets/svg'
 import { View, StyleSheet } from 'react-native'
 import BtnGroup from '~/components/BtnGroup'
 import Btn, { BtnTypes } from '~/components/Btn'
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 // @ts-ignore
 import packageJson from '~/../package.json'
@@ -14,8 +14,7 @@ import useTranslation from '~/hooks/useTranslation'
 
 const About = () => {
   const { t } = useTranslation()
-  const redirectToTerms = useRedirectTo(ScreenNames.TermsOfService)
-  const redirectToPrivacyPolicy = useRedirectTo(ScreenNames.PrivacyPolicy)
+  const redirect = useRedirect()
 
   const version = packageJson.version
 
@@ -41,10 +40,16 @@ const About = () => {
       </View>
       <View style={styles.container}>
         <BtnGroup>
-          <Btn onPress={redirectToTerms} type={BtnTypes.secondary}>
+          <Btn
+            onPress={() => redirect(ScreenNames.TermsOfService)}
+            type={BtnTypes.secondary}
+          >
             {t('Terms of Service.header')}
           </Btn>
-          <Btn onPress={redirectToPrivacyPolicy} type={BtnTypes.secondary}>
+          <Btn
+            onPress={() => redirect(ScreenNames.PrivacyPolicy)}
+            type={BtnTypes.secondary}
+          >
             {t('PrivacyPolicy.header')}
           </Btn>
         </BtnGroup>

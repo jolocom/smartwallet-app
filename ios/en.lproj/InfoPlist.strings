@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  SmartWallet
+
+  Created by SBub on 3/10/22.
+  
+*/
+NSCameraUsageDescription = "Your camera will be used to scan QR Codes and interact with services";
+NSFaceIDUsageDescription = "We need FaceID to secure your wallet against misuse";

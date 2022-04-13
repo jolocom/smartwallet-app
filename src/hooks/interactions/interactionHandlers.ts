@@ -86,7 +86,7 @@ export const useInteractionHandler = () => {
           .checkForMissingServiceIssuedCredentials()
           .prepareCredentialsForUI(did)
 
-        if (!!handler.missingCredentialTypes.length) {
+        if (handler.missingCredentialTypes.length) {
           flowSpecificData = undefined
           // FIXME: there is an issue with the strings here, will be fixed when the
           // i18n and PoEditor are properly set up.

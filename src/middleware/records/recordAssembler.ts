@@ -187,7 +187,7 @@ export class RecordAssembler {
         const displayCreds = areCredsSupplied
           ? state.providedCredentials[0].suppliedCredentials
               .map((c) =>
-                !!c.name.length ? c.name : this.statusConfig.unknown,
+                c.name.length ? c.name : this.statusConfig.unknown,
               )
               .join(', ')
           : requestedCreds

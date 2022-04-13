@@ -77,11 +77,11 @@ export class CredentialRequestHandler {
         /**
          * credential is a service issued credential -> check its presence in validated credentials
          */
-        return !Boolean(this.#validatedCredentials.find((c) => c.type[1] === t))
+        return !this.#validatedCredentials.find((c) => c.type[1] === t)
       }
     })
 
-    if (!!missingServiceIssuedCredentials.length) {
+    if (missingServiceIssuedCredentials.length) {
       this.missingCredentialTypes = missingServiceIssuedCredentials
     }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { Colors } from '~/utils/colors'
 
 export const BOTTOM_PADDING = 20
 
