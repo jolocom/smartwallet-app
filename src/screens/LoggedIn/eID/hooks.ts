@@ -540,7 +540,7 @@ const useAusweisReaderEvents = () => {
 // NOTE: This hook is used to update the state of the Ausweis flow type that is currently running.
 // Furthermore, it allows to disable certain buttons that start a flow in case the previous flow was
 // finished, which otherwise might result in unexpected behavior (the buttons being locked out).
-export const useObserveAusweisChangePinFlow = () => {
+export const useObserveAusweisFlow = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -593,7 +593,7 @@ const eIDHooks = {
   useAusweisInteraction,
   useCheckNFC,
   useAusweisContext,
-  useObserveAusweisChangePinFlow,
+  useObserveAusweisFlow,
 }
 
 export default eIDHooks

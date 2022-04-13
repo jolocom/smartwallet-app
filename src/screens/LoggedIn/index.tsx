@@ -43,7 +43,7 @@ const LoggedIn = () => {
 
   // NOTE: Used to listen for Ausweis READER messages and update the Redux state
   eIDHooks.useAusweisReaderEvents()
-  eIDHooks.useObserveAusweisChangePinFlow()
+  eIDHooks.useObserveAusweisFlow()
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
