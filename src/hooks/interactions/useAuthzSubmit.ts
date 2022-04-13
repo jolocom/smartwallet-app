@@ -1,29 +1,23 @@
-import { useFinishInteraction, useInteraction } from './handlers'
-import useInteractionToasts from './useInteractionToasts'
+import { useInteraction } from './handlers'
+import { useCompleteInteraction } from './useCompleteInteraction'
 import { useAgent } from '../sdk'
-import { useToasts } from '../toasts'
+import { ScreenNames } from '~/types/screens'
 
 const useAuthzSubmit = () => {
   const getInteraction = useInteraction()
   const agent = useAgent()
-  const { scheduleSuccessInteraction } = useInteractionToasts()
-  const { scheduleErrorWarning } = useToasts()
-  const finishInteraction = useFinishInteraction()
+  const { completeInteraction } = useCompleteInteraction(async () => {
+    const interaction = await getInteraction()
+    const authzResponse = await interaction.createAuthorizationResponse()
+    await agent.processJWT(authzResponse)
+    await interaction.send(authzResponse)
 
-  return async () => {
-    try {
-      const interaction = await getInteraction()
-      const authzResponse = await interaction.createAuthorizationResponse()
-      await agent.processJWT(authzResponse)
-      await interaction.send(authzResponse)
-
-      scheduleSuccessInteraction()
-    } catch (e) {
-      scheduleErrorWarning(e)
-    } finally {
-      finishInteraction()
+    return {
+      screenToNavigate: ScreenNames.History,
     }
-  }
+  })
+
+  return completeInteraction
 }
 
 export default useAuthzSubmit

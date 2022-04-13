@@ -45,6 +45,7 @@ import { Colors } from '~/utils/colors'
 import AusweisCardInfo from './eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
+import Interaction from '../Modals/Interaction'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -104,8 +105,6 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
-  [ScreenNames.Scanner]: undefined
-  [ScreenNames.InteractionFlow]: undefined
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -225,18 +224,6 @@ const Main: React.FC = () => {
 
       {/* Modals -> Start */}
       <MainStack.Screen
-        options={transparentModalFadeOptions}
-        name={ScreenNames.InteractionFlow}
-        component={InteractionFlow}
-      />
-      <MainStack.Screen
-        name={ScreenNames.Scanner}
-        component={Scanner}
-        options={{
-          ...screenTransitionSlideFromBottom,
-        }}
-      />
-      <MainStack.Screen
         name={ScreenNames.eId}
         component={eID}
         options={{
@@ -247,6 +234,10 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
+      />
+      <MainStack.Screen
+        name={ScreenNames.Interaction}
+        component={Interaction}
         options={screenTransitionFromBottomDisabledGestures}
       />
       <MainStack.Screen

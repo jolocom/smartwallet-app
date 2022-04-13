@@ -209,14 +209,14 @@
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
         "copied": "",
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
-        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
-        "interactionSuccessRedirectTitle": "Erfolg",
-        "interactionSuccessRedirectMsg": "Kehren Sie hier zurück",
-        "interactionSuccessRedirectBtn": "Zurückkehren"
+        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
-        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?"
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
+        "redirectTitle": "",
+        "redirectDescription": "",
+        "redirectBtn": ""
     },
     "Documents": {
         "documentsTab": "Dokumente",

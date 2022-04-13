@@ -209,14 +209,14 @@
         "ausweisChangePinSuccessMsg": "You can use your new PIN now",
         "copied": "Copied",
         "ausweisDeactivatedCardTitle": "Your card is deactivated",
-        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
-        "interactionSuccessRedirectTitle": "Great success!",
-        "interactionSuccessRedirectMsg": "You should return back to the service",
-        "interactionSuccessRedirectBtn": "Return"
+        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
-        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data."
+        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
+        "redirectTitle": "We're all done!",
+        "redirectDescription": "${serviceName} is redirecting you to a service or application outside of the SmartWallet",
+        "redirectBtn": "Follow link"
     },
     "Documents": {
         "documentsTab": "Documents",
@@ -514,7 +514,7 @@
     },
     "AusweisIdentity": {
         "header": "German eID",
-        "subheader": "Use your digital identity to  identify yourself with various online servicess",
+        "subheader": "Use your digital identity to identify yourself with various online services",
         "compatibilityBtn": "Compatibility check",
         "changePinBtn": "Change your PIN",
         "unlockBtn": "Unlock blocked card",

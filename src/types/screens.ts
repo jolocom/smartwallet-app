@@ -37,6 +37,7 @@ export enum ScreenNames {
   eId = 'eID',
   AusweisChangePin = 'AusweisChangePin',
   AusweisCardInfo = 'AusweisCardInfo',
+  InteractionRedirect = 'InteractionRedirect',
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',

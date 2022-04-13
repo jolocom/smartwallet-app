@@ -3,12 +3,15 @@ import { StyleSheet } from 'react-native'
 import { TouchableWithoutFeedback, View } from 'react-native'
 
 interface IScreenDismissArea {
-  onDismiss: () => void
+  onDismiss?: () => void
 }
 
 const ScreenDismissArea: React.FC<IScreenDismissArea> = ({ onDismiss }) => {
+  const handleDismiss = () => {
+    onDismiss && onDismiss()
+  }
   return (
-    <TouchableWithoutFeedback onPress={onDismiss}>
+    <TouchableWithoutFeedback onPress={handleDismiss}>
       <View style={styles.tapArea} />
     </TouchableWithoutFeedback>
   )

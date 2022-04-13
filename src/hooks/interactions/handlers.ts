@@ -161,7 +161,7 @@ export const useFinishInteraction = () => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
 
-  return (screen?: ScreenNames) => {
+  const closeInteraction = (screen?: ScreenNames) => {
     if (screen) {
       navigation.navigate(screen)
     } else {
@@ -171,8 +171,11 @@ export const useFinishInteraction = () => {
         navigation.navigate(ScreenNames.Main)
       }
     }
-    setTimeout(() => {
-      dispatch(resetInteraction())
-    }, 500)
   }
+
+  const clearInteraction = () => {
+    dispatch(resetInteraction(undefined))
+  }
+
+  return { closeInteraction, clearInteraction }
 }
