@@ -19,6 +19,7 @@ import { eIDScreens, AusweisScannerState } from '../types'
 import useTranslation from '~/hooks/useTranslation'
 import eIDHooks from '../hooks'
 import BP from '~/utils/breakpoints'
+import { useCheckNFC } from '~/hooks/nfc'
 
 const AnimatedStatus: React.FC<{
   isVisible: boolean
@@ -60,7 +61,7 @@ export const AusweisScanner = () => {
   } = route.params
   const goBack = useGoBack()
   const dispatch = useDispatch()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = useCheckNFC()
 
   const isScreenFocused = useIsFocused()
 

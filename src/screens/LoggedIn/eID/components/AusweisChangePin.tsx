@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
-import { View } from 'react-native'
+import { Linking, ScrollView, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
@@ -26,25 +26,21 @@ import {
   eIDScreens,
 } from '../types'
 import { getAusweisFlowType } from '~/modules/ausweis/selectors'
+import { useCheckNFC } from '~/hooks/nfc'
+import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
+import Link from '~/components/Link'
 
-interface WhateverProps {
+interface LocalSectionProps {
   headerText: string
   descriptionText: string
-  hasInlineBtn?: boolean
-  btnText: string
-  onPress: () => void
-  disabled?: boolean
 }
 
-const TitleDescAction: React.FC<WhateverProps> = ({
+const LocalSection: React.FC<LocalSectionProps> = ({
   headerText,
   descriptionText,
-  hasInlineBtn = false,
-  btnText,
-  onPress,
-  disabled = false,
+  children,
 }) => (
-  <View style={{ marginBottom: BP({ default: 30, xsmall: 20 }) }}>
+  <View style={{ marginBottom: BP({ default: 64, xsmall: 20 }) }}>
     <ScreenContainer.Padding distance={BP({ default: 27, xsmall: 20 })}>
       <JoloText
         kind={JoloTextKind.title}
@@ -52,24 +48,8 @@ const TitleDescAction: React.FC<WhateverProps> = ({
       >
         {headerText}
       </JoloText>
-      <JoloText color={Colors.osloGray}>
-        {descriptionText}
-        {hasInlineBtn && (
-          <JoloText onPress={onPress} color={Colors.activity}>
-            ...{btnText}
-          </JoloText>
-        )}
-      </JoloText>
-      {!hasInlineBtn && (
-        <Btn
-          onPress={onPress}
-          type={BtnTypes.quaternary}
-          customTextStyles={{ opacity: 1 }}
-          disabled={disabled}
-        >
-          {btnText}
-        </Btn>
-      )}
+      <JoloText color={Colors.osloGray}>{descriptionText}</JoloText>
+      {children}
     </ScreenContainer.Padding>
   </View>
 )
@@ -82,8 +62,8 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
   const shouldDisableBtns = !!useSelector(getAusweisFlowType)
+  const checkNfcSupport = useCheckNFC()
 
   const changePinFlow =
     isTransportPin.current === true
@@ -213,6 +193,7 @@ const AusweisChangePin = () => {
       })
     })
   }
+
   const handleChange6DigPin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = false
@@ -221,39 +202,64 @@ const AusweisChangePin = () => {
     })
   }
 
-  const handlePreviewAuthorityInfo = () => {
-    navigation.navigate(ScreenNames.eId, { screen: eIDScreens.ForgotPin })
-  }
-
   return (
     <ScreenContainer
       hasHeaderBack
       customStyles={{ justifyContent: 'space-around' }}
       backgroundColor={Colors.mainDark}
     >
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <TitleDescAction
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        overScrollMode={'never'}
+        contentContainerStyle={{
+          alignItems: 'center',
+        }}
+        style={{ width: '100%' }}
+      >
+        <LocalSection
           headerText={t('AusweisChangePin.transportPinHeader')}
           descriptionText={t('AusweisChangePin.transportPinSubheader')}
-          btnText={t('AusweisChangePin.transportPinBtn')}
-          onPress={handleChange5DigPin}
-          disabled={shouldDisableBtns}
-        />
-        <TitleDescAction
+        >
+          <Btn
+            onPress={handleChange5DigPin}
+            type={BtnTypes.quaternary}
+            customTextStyles={{ opacity: 1 }}
+            disabled={shouldDisableBtns}
+          >
+            {t('AusweisChangePin.transportPinBtn')}
+          </Btn>
+        </LocalSection>
+        <LocalSection
           headerText={t('AusweisChangePin.pinHeader')}
           descriptionText={t('AusweisChangePin.pinSubheader')}
-          btnText={t('AusweisChangePin.pinBtn')}
-          onPress={handleChange6DigPin}
-          disabled={shouldDisableBtns}
-        />
-      </View>
-      <TitleDescAction
-        hasInlineBtn
-        headerText={t('AusweisChangePin.forgotHeader')}
-        descriptionText={t('AusweisChangePin.forgotSubheader')}
-        btnText={t('AusweisChangePin.forgotBtn')}
-        onPress={handlePreviewAuthorityInfo}
-      />
+        >
+          <Btn
+            onPress={handleChange6DigPin}
+            type={BtnTypes.quaternary}
+            customTextStyles={{ opacity: 1 }}
+            disabled={shouldDisableBtns}
+          >
+            {t('AusweisChangePin.pinBtn')}
+          </Btn>
+        </LocalSection>
+        <LocalSection
+          headerText={t('AusweisChangePin.forgotHeader')}
+          descriptionText={t('AusweisChangePin.forgotSubheader')}
+        >
+          <Link
+            url={`mailto:${AUSWEIS_SUPPORT_EMAIL}`}
+            customStyles={{ marginTop: 32 }}
+          >
+            {AUSWEIS_SUPPORT_EMAIL}
+          </Link>
+          <Link
+            url={`tel:${AUSWEIS_SUPPORT_PHONE}`}
+            customStyles={{ marginTop: 32 }}
+          >
+            {AUSWEIS_SUPPORT_PHONE}
+          </Link>
+        </LocalSection>
+      </ScrollView>
     </ScreenContainer>
   )
 }

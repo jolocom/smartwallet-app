@@ -36,6 +36,10 @@ import {
 import eIDHooks from '../hooks'
 import { getAusweisReaderState } from '~/modules/ausweis/selectors'
 import { ExtraActionProps } from '~/components/Passcode/types'
+import JoloText from '~/components/JoloText'
+import { Trans } from 'react-i18next'
+import { JoloTextSizes } from '~/utils/fonts'
+import { useCheckNFC } from '~/hooks/nfc'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -121,7 +125,7 @@ export const AusweisPasscode = () => {
   } = eIDHooks.useAusweisInteraction()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = useCheckNFC()
 
   const pinVariantRef = useRef(pinVariant)
   const newPasscodeRef = useRef('')
@@ -563,10 +567,6 @@ export const AusweisPasscode = () => {
         title = t('AusweisPasscode.canBtn')
         onPress = () => handleNavigate(eIDScreens.CanInfo)
         break
-      case AusweisPasscodeMode.PIN:
-        title = t('AusweisPasscode.pinForgotBtn')
-        onPress = () => handleNavigate(eIDScreens.ForgotPin)
-        break
       case AusweisPasscodeMode.TRANSPORT_PIN:
         title = t('AusweisPasscode.transportPinBtn')
         onPress = () => handleNavigate(eIDScreens.AusweisTransportPinInfo)
@@ -580,12 +580,29 @@ export const AusweisPasscode = () => {
           setErrorText(null)
         }
         break
+      case AusweisPasscodeMode.PIN:
+        title = t('AusweisPasscode.pinForgotBtn')
+        onPress = () => handleNavigate(eIDScreens.PinInfo)
+        break
       default:
         break
     }
 
     if (title) {
-      return <Passcode.ExtraAction title={title} onPress={onPress} />
+      return (
+        <Passcode.ExtraAction onPress={onPress}>
+          {pinVariant === AusweisPasscodeMode.PIN ? (
+            <Trans>
+              <JoloText customStyles={{ textAlign: 'center' }}>
+                {title}
+                <JoloText color={Colors.activity} />
+              </JoloText>
+            </Trans>
+          ) : (
+            title
+          )}
+        </Passcode.ExtraAction>
+      )
     }
 
     return null

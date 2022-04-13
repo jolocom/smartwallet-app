@@ -1,11 +1,9 @@
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 
 export enum eIDScreens {
-  InteractionSheet = 'InteractionSheet',
-  ReadinessCheck = 'ReadinessCheck',
   RequestDetails = 'RequestDetails',
   EnterPIN = 'EnterPIN',
-  PasscodeDetails = 'PasscodeDetails',
+  PinInfo = 'PinInfo',
   AusweisScanner = 'AusweisScanner',
   ProviderDetails = 'ProviderDetails',
   PukLock = 'PukLock',
@@ -16,14 +14,6 @@ export enum eIDScreens {
   AusweisTransportWarning = 'AusweisTransportWarning',
   AusweisTransportPinInfo = 'AusweisTransportPinInfo',
   AusweisChangePin = 'AusweisChangePin',
-}
-
-export enum AA2Messages {
-  EnterPin = 'ENTER_PIN',
-  EnterCan = 'ENTER_CAN',
-  EnterPuk = 'ENTER_PUK',
-  SetPin = 'SET_PIN',
-  Reader = 'READER',
 }
 
 export enum AusweisPasscodeMode {
@@ -57,10 +47,6 @@ export enum AusweisFlow {
   changePin = 'changePin',
   changeTransportPin = 'changeTransportPin',
   unlock = 'unlock',
-}
-
-export interface AusweisPasscodeDetailsParams {
-  onDismiss?: () => void
 }
 
 export enum AusweisFields {

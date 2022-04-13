@@ -22,12 +22,13 @@ import {
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
 import { getAusweisFlowType } from '~/modules/ausweis/selectors'
+import { useCheckNFC } from '~/hooks/nfc'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
   const { startCheck: startCompatibilityCheck } =
     eIDHooks.useAusweisCompatibilityCheck()
-  const { checkNfcSupport } = eIDHooks.useCheckNFC()
+  const checkNfcSupport = useCheckNFC()
   const navigation = useNavigation()
   const { cancelFlow, checkCardValidity, startChangePin } =
     eIDHooks.useAusweisInteraction()
