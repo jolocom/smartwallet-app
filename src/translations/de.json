@@ -209,10 +209,7 @@
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
         "copied": "",
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
-        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
-        "interactionSuccessRedirectTitle": "Erfolg",
-        "interactionSuccessRedirectMsg": "Kehren Sie hier zurück",
-        "interactionSuccessRedirectBtn": "Zurückkehren"
+        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
