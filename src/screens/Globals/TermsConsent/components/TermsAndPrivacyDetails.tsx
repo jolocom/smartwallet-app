@@ -46,14 +46,12 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
 
   const handleShare = async () => {
     const shareOptions = {
-      title: 'Share via',
-      message: title,
-      url: enText,
+      message: `Jolocom ${title}`,
     }
 
     try {
       const ShareResponse = await Share.open(shareOptions)
-      console.log(JSON.stringify(ShareResponse))
+      console.log('ShareResponse', ShareResponse)
     } catch (e) {
       console.log(e)
     }
