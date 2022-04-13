@@ -80,8 +80,8 @@
         "phoneNumberLabel": "Phone number",
         "addressLabel": "Address",
         "addClaimBtn": "Add new one",
-        "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
         "headerAusweis": "Your Identity",
+        "credentialsDescription": "Manage your most important contact data in one place. Later on, you will be able to share this data in one click and fill in forms with no extra effort.",
         "headerCredentials": "Personal Info"
     },
     "BottomBar": {
