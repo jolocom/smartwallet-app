@@ -89,10 +89,12 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
       </NavigationHeader>
       <View style={styles.contentContainer}>
         <ScrollView indicatorStyle={'white'}>
-          <Text style={styles.heading}>
-            {/* NOTE: make text dynamic*/}
-            Please note that the German version is legally binding
-          </Text>
+          {language === 'en' && (
+            <Text style={styles.heading}>
+              {/* NOTE: make text dynamic*/}
+              Please note that the German version is legally binding
+            </Text>
+          )}
           <Text style={styles.text}>{language === 'en' ? enText : deText}</Text>
         </ScrollView>
       </View>
