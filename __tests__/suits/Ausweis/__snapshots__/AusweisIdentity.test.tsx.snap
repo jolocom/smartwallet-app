@@ -1,0 +1,323 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "marginBottom": 0,
+      }
+    }
+    testID="home-ausweis-identity"
+  >
+    <View
+      style={
+        Object {
+          "aspectRatio": 1.55,
+          "marginBottom": 8,
+          "width": "100%",
+        }
+      }
+    >
+      <Image
+        resizeMode="contain"
+        source={
+          Object {
+            "testUri": "../../../src/assets/images/updatedCard.png",
+          }
+        }
+        style={
+          Object {
+            "flex": 1,
+            "height": "100%",
+            "resizeMode": "contain",
+            "transform": Array [
+              Object {
+                "scale": 1.1,
+              },
+            ],
+            "width": "100%",
+          }
+        }
+      />
+    </View>
+    <View>
+      <Text
+        style={
+          Array [
+            Object {
+              "paddingTop": undefined,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "rgba(255,255,255,0.85)",
+              "fontFamily": "TTCommons-Regular",
+              "fontSize": 28,
+              "letterSpacing": 0,
+              "lineHeight": 32,
+            },
+            undefined,
+          ]
+        }
+      >
+        AusweisIdentity.header
+      </Text>
+      <Text
+        style={
+          Array [
+            Object {
+              "paddingTop": undefined,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "rgba(255, 255, 255, 0.4)",
+              "fontFamily": "TTCommons-Regular",
+              "fontSize": 16,
+              "letterSpacing": 0,
+              "lineHeight": 18,
+            },
+            Object {
+              "marginHorizontal": 16,
+              "marginTop": 8,
+            },
+          ]
+        }
+      >
+        AusweisIdentity.subheader
+      </Text>
+      <View
+        style={
+          Object {
+            "marginTop": 84,
+            "paddingVertical": 8,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "borderRadius": 8,
+              "justifyContent": "center",
+              "marginVertical": 5,
+              "opacity": 1,
+              "width": "100%",
+            }
+          }
+          testID="button"
+        >
+          <View
+            style={
+              Array [
+                Array [
+                  Object {
+                    "alignItems": "center",
+                    "borderRadius": 8,
+                    "justifyContent": "center",
+                    "width": "100%",
+                  },
+                  false,
+                  Object {
+                    "marginVertical": 5,
+                  },
+                ],
+                Object {
+                  "height": 45,
+                },
+                Object {
+                  "borderColor": "rgba(143, 146, 161, 0.2)",
+                  "borderWidth": 1,
+                  "marginVertical": 1,
+                },
+              ]
+            }
+            testID="non-gradient"
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "color": "#ffffff",
+                    "paddingTop": undefined,
+                    "textAlignVertical": "center",
+                  },
+                  Object {
+                    "fontFamily": "TTCommons-Regular",
+                    "opacity": 0.8,
+                  },
+                  Object {
+                    "fontSize": 18,
+                  },
+                  Object {},
+                ]
+              }
+            >
+              AusweisIdentity.compatibilityBtn
+            </Text>
+          </View>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "borderRadius": 8,
+              "justifyContent": "center",
+              "marginVertical": 5,
+              "opacity": 1,
+              "width": "100%",
+            }
+          }
+          testID="button"
+        >
+          <View
+            style={
+              Array [
+                Array [
+                  Object {
+                    "alignItems": "center",
+                    "borderRadius": 8,
+                    "justifyContent": "center",
+                    "width": "100%",
+                  },
+                  false,
+                  Object {
+                    "marginVertical": 5,
+                  },
+                ],
+                Object {
+                  "height": 45,
+                },
+                Object {
+                  "borderColor": "rgba(143, 146, 161, 0.2)",
+                  "borderWidth": 1,
+                  "marginVertical": 1,
+                },
+              ]
+            }
+            testID="non-gradient"
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "color": "#ffffff",
+                    "paddingTop": undefined,
+                    "textAlignVertical": "center",
+                  },
+                  Object {
+                    "fontFamily": "TTCommons-Regular",
+                    "opacity": 0.8,
+                  },
+                  Object {
+                    "fontSize": 18,
+                  },
+                  Object {},
+                ]
+              }
+            >
+              AusweisIdentity.changePinBtn
+            </Text>
+          </View>
+        </View>
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "borderRadius": 8,
+              "justifyContent": "center",
+              "marginVertical": 5,
+              "opacity": 1,
+              "width": "100%",
+            }
+          }
+          testID="button"
+        >
+          <View
+            style={
+              Array [
+                Array [
+                  Object {
+                    "alignItems": "center",
+                    "borderRadius": 8,
+                    "justifyContent": "center",
+                    "width": "100%",
+                  },
+                  false,
+                  Object {
+                    "marginVertical": 5,
+                  },
+                ],
+                Object {
+                  "height": 45,
+                },
+                Object {
+                  "borderColor": "rgba(143, 146, 161, 0.2)",
+                  "borderWidth": 1,
+                  "marginVertical": 1,
+                },
+              ]
+            }
+            testID="non-gradient"
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "color": "#ffffff",
+                    "paddingTop": undefined,
+                    "textAlignVertical": "center",
+                  },
+                  Object {
+                    "fontFamily": "TTCommons-Regular",
+                    "opacity": 0.8,
+                  },
+                  Object {
+                    "fontSize": 18,
+                  },
+                  Object {},
+                ]
+              }
+            >
+              AusweisIdentity.unlockBtn
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;

@@ -29,14 +29,16 @@ const PasscodeDisable = () => {
   )
 
   useEffect(() => {
-    const attemptsLeft = ALL_PIN_ATTEMPTS - pinAttemptsLeft + 1 || 1
-    setPinErrorText(
-      t('Lock.errorMsg', {
-        attempts: `${attemptsLeft}∕${ALL_PIN_ATTEMPTS}`,
-        escapeValue: false,
-      }),
-    )
-  }, [pinAttemptsLeft])
+    const attemptsLeft = ALL_PIN_ATTEMPTS - pinAttemptsLeft || 1
+    if (pinError) {
+      setPinErrorText(
+        t('Lock.errorMsg', {
+          attempts: `${attemptsLeft}∕${ALL_PIN_ATTEMPTS}`,
+          escapeValue: false,
+        }),
+      )
+    }
+  }, [pinAttemptsLeft, pinError])
 
   return null
 }

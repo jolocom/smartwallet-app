@@ -7,7 +7,7 @@ import { useToastToShow } from './context'
 
 const ToastDescription = ({ customStyles = {} }) => {
   const { toastToShow } = useToastToShow()
-  if (!toastToShow) return null
+  if (!toastToShow || !toastToShow.message) return null
   return (
     <JoloText
       kind={JoloTextKind.subtitle}

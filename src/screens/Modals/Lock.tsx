@@ -110,21 +110,26 @@ const Lock = () => {
       }}
     >
       <Passcode onSubmit={handlePINSubmit}>
-        <Passcode.Container>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            width: '100%',
+          }}
+        >
           <Passcode.Header
             title={t('Lock.header')}
             errorTitle={t('ChangePasscode.wrongCodeHeader')}
           />
           <Passcode.Input />
-          <View style={{ position: 'relative', alignItems: 'center' }}>
-            <Passcode.Error />
-          </View>
-        </Passcode.Container>
+          <Passcode.Error />
+        </View>
         <Passcode.Container>
           <Passcode.ExtraAction
-            title={t('Lock.forgotBtn')}
             onPress={() => redirect(ScreenNames.PinRecoveryInstructions)}
-          />
+          >
+            {t('Lock.forgotBtn')}
+          </Passcode.ExtraAction>
           <Passcode.Keyboard
             biometryType={isBiometrySelected ? biometryType : undefined}
             onBiometryPress={
