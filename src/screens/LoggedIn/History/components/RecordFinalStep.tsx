@@ -73,6 +73,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     transform: [{ scale: 0.6 }],
+    width: 26,
+    height: 26,
   },
   textContainer: {
     flex: 0.75,
