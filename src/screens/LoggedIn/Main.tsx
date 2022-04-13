@@ -42,6 +42,7 @@ import InteractionFlow from '../Modals/Interaction/InteractionFlow'
 import Scanner from '../Modals/Interaction/Scanner'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
+import Interaction from '../Modals/Interaction'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -94,8 +95,6 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
-  [ScreenNames.Scanner]: undefined
-  [ScreenNames.InteractionFlow]: undefined
 }
 
 const modalStyleOptions = {
@@ -223,17 +222,9 @@ const Main: React.FC = () => {
       {/* Modals -> Start */}
       <MainStack.Screen
         options={modalStyleOptions}
-        name={ScreenNames.InteractionFlow}
-        component={InteractionFlow}
+        name={ScreenNames.Interaction}
+        component={Interaction}
       />
-      <MainStack.Screen
-        name={ScreenNames.Scanner}
-        component={Scanner}
-        options={{
-          ...screenTransitionSlideFromBottom,
-        }}
-      />
-
       <MainStack.Screen
         name={ScreenNames.CredentialDetails}
         component={CredentialDetails}

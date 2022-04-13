@@ -42,9 +42,13 @@ const MainTabs = () => {
   useDeeplinkInteractions()
   useInteractionEvents(showInteraction)
 
+  // Show an interaction sheet declaratively by
+  // observing store changes
   useEffect(() => {
     if (!isAppLocked && isInteracting) {
-      navigation.navigate(ScreenNames.InteractionFlow)
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.InteractionFlow,
+      })
     }
   }, [isInteracting, isAppLocked])
 

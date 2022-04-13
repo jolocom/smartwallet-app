@@ -95,7 +95,11 @@ const ScannerButton = () => {
   const insets = useSafeArea()
   return (
     <TouchableOpacity
-      onPress={() => redirect(ScreenNames.Scanner)}
+      onPress={() =>
+        redirect(ScreenNames.Interaction, {
+          screen: ScreenNames.Scanner,
+        })
+      }
       style={[
         styles.scannerBtn,
         styles.scannerFrame,
