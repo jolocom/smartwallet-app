@@ -59,7 +59,9 @@ export const useDeeplinkInteractions = () => {
         }
 
         if (params['token'] && typeof params['token'] === 'string') {
-          processInteraction(params['token'], redirectUrl)
+          processInteraction(params['token'], redirectUrl).catch(
+            scheduleErrorWarning,
+          )
           return
         } else if (
           !params['+clicked_branch_link'] ||

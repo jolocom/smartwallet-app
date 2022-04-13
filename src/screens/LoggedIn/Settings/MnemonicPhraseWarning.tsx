@@ -20,6 +20,7 @@ import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import { useToasts } from '~/hooks/toasts'
 
 const MnemonicPhraseWarning = () => {
   const [isMnemonicWritten, setIsMnemonicWritten] = useState<
@@ -30,6 +31,7 @@ const MnemonicPhraseWarning = () => {
   const dispatch = useDispatch()
   const isMnemonicWarningVisible = useSelector(getMnemonicWarningVisibility)
   const { t } = useTranslation()
+  const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
     /**
@@ -45,13 +47,17 @@ const MnemonicPhraseWarning = () => {
     Promise.all([
       getFromStorage(StorageKeys.mnemonicPhrase),
       getFromStorage(StorageKeys.isOnboardingDone),
-    ]).then((res) => {
-      setIsMnemonicWritten(res[0]?.isWritten || res[1]?.finished ? true : false)
-      LayoutAnimation.configureNext({
-        ...LayoutAnimation.Presets.easeInEaseOut,
-        duration: 200,
+    ])
+      .then((res) => {
+        setIsMnemonicWritten(
+          res[0]?.isWritten || res[1]?.finished ? true : false,
+        )
+        LayoutAnimation.configureNext({
+          ...LayoutAnimation.Presets.easeInEaseOut,
+          duration: 200,
+        })
       })
-    })
+      .catch(scheduleErrorWarning)
   }, [])
 
   useEffect(() => {

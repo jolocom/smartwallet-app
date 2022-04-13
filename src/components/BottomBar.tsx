@@ -16,7 +16,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import JoloText, { JoloTextKind } from './JoloText'
 import { ScreenNames } from '~/types/screens'
-import { useRedirectTo } from '~/hooks/navigation'
+import { useRedirect } from '~/hooks/navigation'
 import BP from '~/utils/breakpoints'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 
@@ -46,7 +46,7 @@ const TABS_POSITION_BOTTOM = BP({
 const INVISIBLE_BOTTOM_MARGIN = 1
 
 const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
-  const redirectToTab = useRedirectTo(route as ScreenNames)
+  const redirect = useRedirect()
   const renderIcon = () => {
     const color = isActive ? Colors.white : Colors.white40
 
@@ -70,7 +70,7 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
   }
 
   return (
-    <TouchableOpacity onPress={redirectToTab}>
+    <TouchableOpacity onPress={() => redirect(route as ScreenNames)}>
       <View style={styles.iconContainer}>
         <View style={{ transform: [{ scale: SCALE_BY }] }}>{renderIcon()}</View>
         <JoloText
@@ -91,13 +91,15 @@ const Tab: React.FC<IconPropsI> = ({ label, isActive, route }) => {
 }
 
 const ScannerButton = () => {
-  const redirectToScanner = useRedirectTo(ScreenNames.Interaction, {
-    screen: ScreenNames.Scanner,
-  })
+  const redirect = useRedirect()
   const insets = useSafeArea()
   return (
     <TouchableOpacity
-      onPress={redirectToScanner}
+      onPress={() =>
+        redirect(ScreenNames.Interaction, {
+          screen: ScreenNames.Scanner,
+        })
+      }
       style={[
         styles.scannerBtn,
         styles.scannerFrame,
@@ -125,7 +127,7 @@ const ScannerButton = () => {
 
 const BottomBar = (props: BottomTabBarProps) => {
   const { descriptors } = props
-  const { history, routeNames, routes } = props.state
+  const { history, routes } = props.state
   const getSelectedRoute = (label: string) =>
     routes.find((el) => el.name === label) || { key: '' }
 

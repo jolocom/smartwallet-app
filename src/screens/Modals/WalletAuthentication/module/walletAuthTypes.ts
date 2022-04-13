@@ -1,4 +1,4 @@
-export enum DeviceAuthActions {
+export enum WalletAuthActions {
   setBiometryType = 'setBiometryType',
   showBiometry = 'showBiometry',
 }
@@ -16,6 +16,6 @@ export interface StateI {
 }
 
 export interface ActionI {
-  type: DeviceAuthActions
+  type: WalletAuthActions
   payload?: any
 }

@@ -9,6 +9,7 @@ import { useIsFocused } from '@react-navigation/native'
 import PasscodeError from './PasscodeError'
 import PasscodeExtraAction from './PasscodeExtraAction'
 import PasscodeDisable from './PasscodeDisable'
+import { useToasts } from '~/hooks/toasts'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   children,
@@ -21,6 +22,8 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
 
   const isFocused = useIsFocused()
 
+  const { scheduleErrorWarning } = useToasts()
+
   useEffect(() => {
     if (isFocused) {
       setPinError(false)
@@ -29,24 +32,23 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   }, [isFocused])
 
   const handleSubmit = async () => {
-    try {
-      await onSubmit(pin, () => {
-        setPinSuccess(true)
-        setTimeout(() => {
-          setPin('')
-          setPinSuccess(false)
-        }, 500)
-      })
-    } catch (e) {
-      setPinError(true)
-    }
+    return onSubmit(pin, () => {
+      setPinSuccess(true)
+      setTimeout(() => {
+        setPin('')
+        setPinSuccess(false)
+      }, 500)
+    })
   }
 
   useEffect(() => {
     if (pin.length === 4) {
-      handleSubmit().then(() => {
-        setPin('')
-      })
+      handleSubmit()
+        .then(() => {
+          // FIXME resetting pin twice
+          setPin('')
+        })
+        .catch(() => setPinError(true))
     }
   }, [pin])
 

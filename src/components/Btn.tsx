@@ -192,9 +192,6 @@ const styles = StyleSheet.create({
   mediumBtn: {
     height: 45,
   },
-  btn: {
-    backgroundColor: 'transparent',
-  },
   disabled: {
     opacity: 0.5,
   },
