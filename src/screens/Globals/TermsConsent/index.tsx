@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import MainContent from './MainContent'
 import PrivacyPolicy from './PrivacyPolicy'
 import TermsOfService from './TermsOfService'
+import { ScreenNames } from '~/types/screens'
 
 const TermsConsentStack = createStackNavigator()
 
@@ -11,11 +12,11 @@ const TermsConsent: React.FC = () => {
     <TermsConsentStack.Navigator headerMode="none">
       <TermsConsentStack.Screen name={'MainContent'} component={MainContent} />
       <TermsConsentStack.Screen
-        name={'PrivacyPolicy'}
+        name={ScreenNames.PrivacyPolicy}
         component={PrivacyPolicy}
       />
       <TermsConsentStack.Screen
-        name={'TermsOfService'}
+        name={ScreenNames.TermsOfService}
         component={TermsOfService}
       />
     </TermsConsentStack.Navigator>
