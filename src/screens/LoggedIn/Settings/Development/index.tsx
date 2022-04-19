@@ -10,8 +10,6 @@ import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import { usePopupMenu } from '~/hooks/popupMenu'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
-import { useLoader } from '~/hooks/loader'
 
 const TC_TOKEN =
   'https://servicekonto.test.governikus-eid.de/AutentIDConnect/npa/authorize?scope=openid&response_type=code&redirect_uri=https%3A%2F%2Fservicekonto.test.governikus-eid.de%2Ftest-client%2Fopenid-connect%2Fauthcode&state=1&nonce=nonce&client_id=tNwyiRVez8xM8t1YZ9YnaMXd2tviISKw&acr_values=integrated'
@@ -24,8 +22,6 @@ console.log({ EID_DEEPLINK })
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
-  const { processAusweisToken } = eIDHooks.useAusweisInteraction()
-  const loader = useLoader()
 
   const redirect = useRedirect()
   const { showPopup } = usePopupMenu()
