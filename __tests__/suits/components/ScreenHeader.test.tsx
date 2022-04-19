@@ -1,11 +1,7 @@
 import React from 'react'
 import ScreenHeader from '~/components/ScreenHeader'
 import renderer from 'react-test-renderer'
-import { render } from '@testing-library/react-native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import JoloText from '../../../src/components/JoloText'
-import { View } from 'react-native'
-// import { render } from '@testing-library/react-native'
 
 describe('ScreenHeader', () => {
   const defaultProps = {
