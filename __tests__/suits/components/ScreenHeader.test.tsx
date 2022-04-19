@@ -10,7 +10,7 @@ describe('ScreenHeader', () => {
   }
 
   it('renders correctly', () => {
-    const { toJSON } = renderer.create(<ScreenHeader />)
+    const { toJSON } = renderer.create(<ScreenHeader {...defaultProps} />)
     expect(toJSON()).toMatchSnapshot()
   })
 

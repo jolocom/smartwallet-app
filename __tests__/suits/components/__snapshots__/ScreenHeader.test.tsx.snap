@@ -20,7 +20,9 @@ exports[`ScreenHeader renders correctly 1`] = `
       ]
     }
     testID="title"
-  />
+  >
+    title text
+  </Text>
   <Text
     style={
       Array [
@@ -42,6 +44,8 @@ exports[`ScreenHeader renders correctly 1`] = `
       ]
     }
     testID="subtitle"
-  />
+  >
+    subtitle text
+  </Text>
 </View>
 `;
