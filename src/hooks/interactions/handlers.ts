@@ -43,6 +43,7 @@ export const useDeeplinkInteractions = () => {
   const { scheduleErrorWarning } = useToasts()
   const loader = useLoader()
   const currentLanguage = useSelector(getCurrentLanguage)
+  const dispatch = useDispatch()
 
   // NOTE: for now we assume all the params come in as strings
   const getParamValue = (name: string, params: BranchParams) => {
@@ -73,6 +74,9 @@ export const useDeeplinkInteractions = () => {
           )
           return
         } else if (eidValue) {
+          if (redirectUrl) {
+            dispatch(setRedirectUrl(redirectUrl))
+          }
           loader(() => processAusweisToken(eidValue), {
             showSuccess: false,
             showFailed: false,
