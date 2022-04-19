@@ -29,7 +29,10 @@ const BlockExpanded: React.FC<Props> = ({
         marginBottom: BP({ default: 16, xsmall: 12 }),
       }}
     >
-      <TouchableWithoutFeedback onPress={onToggleExpand}>
+      <TouchableWithoutFeedback
+        testID="blockExpandedButton"
+        onPress={onToggleExpand}
+      >
         <View style={styles.container}>
           <JoloText
             testID="title"
@@ -42,7 +45,6 @@ const BlockExpanded: React.FC<Props> = ({
           {isExpanded && (
             <View>
               <JoloText
-                testID="text"
                 size={JoloTextSizes.mini}
                 customStyles={{
                   marginTop: BP({ default: 12, xsmall: 12 }),
