@@ -5,16 +5,15 @@ import { Colors } from '~/utils/colors'
 
 interface Props {
   source?: string
-  renderPlaceholder?: () => JSX.Element
 }
 
-export const ServiceLogo: React.FC<Props> = ({ source, renderPlaceholder }) => {
+export const ServiceLogo: React.FC<Props> = ({ source }) => {
   if (source) {
     return <Image style={styles.image} source={{ uri: source }} />
   }
   return (
     <View style={[styles.image, { backgroundColor: Colors.white }]}>
-      {renderPlaceholder ? renderPlaceholder() : <InitiatorPlaceholderIcon />}
+      <InitiatorPlaceholderIcon />
     </View>
   )
 }

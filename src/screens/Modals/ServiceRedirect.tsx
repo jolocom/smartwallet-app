@@ -1,6 +1,7 @@
 import { RouteProp, useRoute } from '@react-navigation/core'
 import React from 'react'
 import { Linking, StyleSheet, View } from 'react-native'
+
 import { SuccessTick } from '~/assets/svg'
 import { BottomButtons } from '~/components/BottomButtons'
 import BottomSheet from '~/components/BottomSheet'
@@ -14,11 +15,11 @@ import { MainStackParamList } from '~/screens/LoggedIn/Main'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import InteractionTitle from './InteractionFlow/components/InteractionTitle'
+import InteractionTitle from './Interaction/InteractionFlow/components/InteractionTitle'
 import {
   ContainerBAS,
   LogoContainerBAS,
-} from './InteractionFlow/components/styled'
+} from './Interaction/InteractionFlow/components/styled'
 
 const ServiceRedirect = () => {
   const { t } = useTranslation()

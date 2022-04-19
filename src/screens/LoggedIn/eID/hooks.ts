@@ -63,7 +63,6 @@ const useAusweisInteraction = () => {
   const isCardTouched = useSelector(getAusweisReaderState)
   const checkNfc = useCheckNFC()
   const redirectUrl = useSelector(getRedirectUrl)
-  const goBack = useGoBack()
 
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers

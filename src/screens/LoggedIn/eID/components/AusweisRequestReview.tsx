@@ -26,7 +26,6 @@ import {
   AusweisButtons,
   AusweisHeaderDescription,
   AusweisListSection,
-  AusweisLogo,
 } from '../styled'
 import {
   AusweisFlow,
@@ -39,6 +38,7 @@ import { ScreenNames } from '~/types/screens'
 import { IField } from '~/types/props'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
+import { ServiceLogo } from '~/components/ServiceLogo'
 
 type AusweisRequestReviewNavigation = StackNavigationProp<
   AusweisStackParamList,
@@ -218,7 +218,7 @@ export const AusweisRequestReview = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '15%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
-                  <AusweisLogo />
+                  <ServiceLogo />
                 </LogoContainerFAS>
               </Collapsible.Scale>
               <Collapsible.Title text={t('Ausweis.header')}>
