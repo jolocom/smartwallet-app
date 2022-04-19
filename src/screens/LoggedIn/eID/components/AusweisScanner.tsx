@@ -4,7 +4,7 @@ import { StyleSheet, View, Animated } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useDispatch } from 'react-redux'
 
-import { setAusweisScannerKey } from '~/modules/ausweis/actions'
+import { setAusweisScannerKey } from '~/modules/interaction/actions'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Ripple from '~/components/Ripple'

@@ -1,18 +1,18 @@
 import { InteractionActionType } from '../types'
-import { createAccountAction } from '../utils'
+import { createInteractionAction } from '../utils'
 
-export const setInteractionDetails = createAccountAction(
+export const setInteractionDetails = createInteractionAction(
   InteractionActionType.setInteractionDetails,
 )
 
-export const resetInteraction = createAccountAction(
+export const resetInteraction = createInteractionAction(
   InteractionActionType.resetInteraction,
 )
 
-export const selectShareCredential = createAccountAction(
+export const selectShareCredential = createInteractionAction(
   InteractionActionType.selectShareCredential,
 )
 
-export const updateOfferValidation = createAccountAction(
+export const updateOfferValidation = createInteractionAction(
   InteractionActionType.updateOfferValidation,
 )

@@ -9,9 +9,21 @@ import {
   setRedirectUrl,
 } from './actions'
 import { updateAttrs } from '../attributes/actions'
+import {
+  setAusweisFlowType,
+  setAusweisInteractionDetails,
+  setAusweisReaderState,
+  setAusweisScannerKey,
+} from './ausweis/actions'
 
 const initialState: InteractionState = {
   ssi: { flowType: null, id: null, counterparty: null },
+  ausweis: {
+    details: null,
+    scannerKey: null,
+    readerState: null,
+    flowType: null,
+  },
   redirectUrl: null,
 }
 
@@ -24,9 +36,20 @@ const reducer = (
     | typeof updateOfferValidation
     | typeof setRedirectUrl
     | typeof updateAttrs
+    | typeof setAusweisInteractionDetails
+    | typeof setAusweisScannerKey
+    | typeof setAusweisReaderState
+    | typeof setAusweisFlowType
   >,
 ) => {
   switch (action.type) {
+    // NOTE: Generic handlers
+
+    case InteractionActionType.setRedirectUrl:
+      return { ...state, redirectUrl: action.payload }
+
+    // NOTE: SSI handlers
+
     case InteractionActionType.setInteractionDetails:
       return { ...state, ssi: action.payload }
     case InteractionActionType.resetInteraction:
@@ -99,8 +122,29 @@ const reducer = (
       }
       return state
     }
-    case InteractionActionType.setRedirectUrl:
-      return { ...state, redirectUrl: action.payload }
+
+    // NOTE: Ausweis handlers
+
+    case InteractionActionType.setDetails:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, details: action.payload },
+      }
+    case InteractionActionType.setScannerKey:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, scannerKey: action.payload },
+      }
+    case InteractionActionType.setReaderState:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, readerState: action.payload },
+      }
+    case InteractionActionType.setFlowType:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, flowType: action.payload },
+      }
     default:
       return state
   }

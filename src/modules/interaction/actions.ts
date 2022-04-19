@@ -1,8 +1,9 @@
 import { InteractionActionType } from './types'
-import { createAccountAction } from './utils'
+import { createInteractionAction } from './utils'
 
 export * from './ssi/actions'
+export * from './ausweis/actions'
 
-export const setRedirectUrl = createAccountAction(
+export const setRedirectUrl = createInteractionAction(
   InteractionActionType.setRedirectUrl,
 )

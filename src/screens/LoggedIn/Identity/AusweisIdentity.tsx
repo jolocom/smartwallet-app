@@ -21,7 +21,7 @@ import {
   eIDScreens,
 } from '../eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { getAusweisFlowType } from '~/modules/ausweis/selectors'
+import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 
 export const AusweisIdentity = () => {

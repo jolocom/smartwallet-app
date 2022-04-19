@@ -34,7 +34,7 @@ import {
   IAusweisRequest,
 } from '../types'
 import eIDHooks from '../hooks'
-import { getAusweisReaderState } from '~/modules/ausweis/selectors'
+import { getAusweisReaderState } from '~/modules/interaction/selectors'
 import { ExtraActionProps } from '~/components/Passcode/types'
 import JoloText from '~/components/JoloText'
 import { Trans } from 'react-i18next'

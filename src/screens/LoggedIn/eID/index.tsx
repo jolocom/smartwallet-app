@@ -28,8 +28,8 @@ import AusweisLockPukInfo from './components/AusweisLockPukInfo'
 import { AusweisCanInfo } from './components/AusweisCanInfo'
 import AusweisTarnsportWarning from './components/AusweisTransportWarning'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
-import { setAusweisInteractionDetails } from '~/modules/ausweis/actions'
+import { getAusweisInteractionDetails } from '~/modules/interaction/selectors'
+import { setAusweisInteractionDetails } from '~/modules/interaction/actions'
 import AusweisChangePin from './components/AusweisChangePin'
 
 export type AusweisStackParamList = {

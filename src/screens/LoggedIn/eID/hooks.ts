@@ -39,11 +39,11 @@ import {
   setAusweisFlowType,
   setAusweisInteractionDetails,
   setAusweisReaderState,
-} from '~/modules/ausweis/actions'
+} from '~/modules/interaction/actions'
 import {
   getAusweisReaderState,
   getAusweisScannerKey,
-} from '~/modules/ausweis/selectors'
+} from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
