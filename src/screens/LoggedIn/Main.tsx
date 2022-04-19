@@ -46,7 +46,7 @@ import AusweisCardInfo from './eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
-import ServiceRedirect from '../Modals/Interaction/ServiceRedirect'
+import ServiceRedirect from '../Modals/ServiceRedirect'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
