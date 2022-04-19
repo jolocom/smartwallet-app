@@ -13,7 +13,7 @@ import {
   getIsReadyToSubmitRequest,
   getCustomRequestedCredentialsByCategoryByType,
   getSelectedShareCredentials,
-  getInteractionCounterpartyName,
+  getServiceDescription,
 } from '~/modules/interaction/selectors'
 import {
   isDocument,
@@ -25,7 +25,6 @@ import {
 import { ScreenNames } from '~/types/screens'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
-import InteractionLogo from '../components/InteractionLogo'
 import InteractionSection from '../components/InteractionSection'
 import InteractionTitle from '../components/InteractionTitle'
 import {
@@ -51,6 +50,7 @@ import {
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
+import { ServiceLogo } from '~/components/ServiceLogo'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -58,7 +58,7 @@ export const CredentialShareBAS = () => {
   )
 
   const { t } = useTranslation()
-  const serviceName = useSelector(getInteractionCounterpartyName)
+  const { name: serviceName, image } = useSelector(getServiceDescription)
 
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const singleMissingAttribute =
@@ -81,7 +81,7 @@ export const CredentialShareBAS = () => {
     }
   }, [JSON.stringify(singleRequestedCredential)])
 
-  const handleSubmit = () =>
+  const handleSubmit = async () =>
     singleMissingAttribute
       ? redirect(ScreenNames.CredentialForm, {
           type: singleMissingAttribute,
@@ -132,7 +132,7 @@ export const CredentialShareBAS = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <InteractionLogo />
+        <ServiceLogo source={image} />
       </LogoContainerBAS>
       <InteractionTitle
         label={
@@ -173,7 +173,7 @@ const CredentialShareFAS = () => {
   const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const { getOptionalFields } = useCredentialOptionalFields()
-  const serviceName = useSelector(getInteractionCounterpartyName)
+  const { name: serviceName, image } = useSelector(getServiceDescription)
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
@@ -239,7 +239,7 @@ const CredentialShareFAS = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
-                  <InteractionLogo />
+                  <ServiceLogo source={image} />
                 </LogoContainerFAS>
               </Collapsible.Scale>
               <Collapsible.Title text={t('CredentialRequest.header')}>

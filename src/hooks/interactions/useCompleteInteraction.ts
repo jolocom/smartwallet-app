@@ -54,10 +54,14 @@ export const useCompleteInteraction = (
 
       if (redirectUrl && (await Linking.canOpenURL(redirectUrl))) {
         navigation.dispatch(
-          StackActions.replace(ScreenNames.InteractionRedirect, {
+          StackActions.replace(ScreenNames.ServiceRedirect, {
             redirectUrl,
-            counterparty,
             completeRedirect: cleanInteraction,
+            counterparty: {
+              logo: counterparty?.publicProfile?.image,
+              isAnonymous: !getCounterpartyName(counterparty),
+              serviceName: getCounterpartyName(counterparty),
+            },
           }),
         )
       } else {

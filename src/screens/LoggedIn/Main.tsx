@@ -46,6 +46,7 @@ import AusweisCardInfo from './eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
+import ServiceRedirect from '../Modals/Interaction/ServiceRedirect'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -105,6 +106,16 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
+  [ScreenNames.ServiceRedirect]: {
+    counterparty: {
+      logo?: string
+      serviceName: string
+      isAnonymous: boolean
+    }
+    redirectUrl: string
+    completeRedirect: () => void
+    closeOnComplete?: boolean
+  }
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -244,6 +255,11 @@ const Main: React.FC = () => {
         name={ScreenNames.CredentialForm}
         component={CredentialForm}
         options={screenTransitionFromBottomDisabledGestures}
+      />
+      <MainStack.Screen
+        options={transparentModalOptions}
+        name={ScreenNames.ServiceRedirect}
+        component={ServiceRedirect}
       />
 
       {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
