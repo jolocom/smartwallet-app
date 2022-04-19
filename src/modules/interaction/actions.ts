@@ -1,31 +1,7 @@
-import createAction from '~/utils/createAction'
-import {
-  InteractionAction,
-  InteractionActions,
-  InteractionActionType,
-} from './types'
+import { InteractionActionType } from './types'
+import { createAccountAction } from './utils'
 
-// To avoid manually passing a generic type every time we call `createAccountAction`
-// redeclaring createAccountAction fn with types specific to the `interaction` module
-function createAccountAction<K extends keyof InteractionActions>(type: K) {
-  return createAction<InteractionAction<K>>(type)
-}
-
-export const setInteractionDetails = createAccountAction(
-  InteractionActionType.setInteractionDetails,
-)
-
-export const resetInteraction = createAccountAction(
-  InteractionActionType.resetInteraction,
-)
-
-export const selectShareCredential = createAccountAction(
-  InteractionActionType.selectShareCredential,
-)
-
-export const updateOfferValidation = createAccountAction(
-  InteractionActionType.updateOfferValidation,
-)
+export * from './ssi/actions'
 
 export const setRedirectUrl = createAccountAction(
   InteractionActionType.setRedirectUrl,
