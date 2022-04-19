@@ -1,6 +1,6 @@
 import React from 'react'
 import NavigationHeader from '~/components/NavigationHeader'
-import { render } from '@testing-library/react-native'
+import { fireEvent, render } from '@testing-library/react-native'
 import { Text } from 'react-native'
 
 describe('Navigation Header', () => {
@@ -44,5 +44,38 @@ describe('Navigation Header', () => {
     )
     expect(toJSON()).toMatchSnapshot()
     expect(getByTestId('heading').props.children).toBe(defaultProps.children)
+  })
+
+  it('should fire onPress function when mocking iconBtn press containing closeIcon', async () => {
+    const defaultProps = {
+      type: 'close',
+    }
+
+    const mockFn = jest.fn()
+
+    const { findByTestId } = render(
+      <NavigationHeader {...defaultProps} onPress={mockFn} />,
+    )
+    const component = await findByTestId('closeIcon')
+    fireEvent(component, 'onPress')
+
+    expect(mockFn).toHaveBeenCalledTimes(1)
+  })
+
+  it('should fire onPress function when mocking IconBtn press containing backArrowIcon', async () => {
+    const defaultProps = {
+      type: 'back',
+    }
+
+    const mockFn = jest.fn()
+
+    const { findByTestId } = render(
+      <NavigationHeader {...defaultProps} onPress={mockFn} />,
+    )
+
+    const component = await findByTestId('backArrow')
+    fireEvent(component, 'onPress')
+
+    expect(mockFn).toHaveBeenCalledTimes(1)
   })
 })
