@@ -4,10 +4,11 @@ import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
 import useConnection from '~/hooks/connection'
 import { BottomButtons } from '~/components/BottomButtons'
+import { useToasts } from '~/hooks/toasts'
 
 interface Props {
   submitLabel: string
-  onSubmit: () => Promise<void> | void
+  onSubmit: () => Promise<void>
   onCancel?: () => void
   disabled?: boolean
   disableLoader?: boolean
@@ -23,15 +24,16 @@ const InteractionFooter: React.FC<Props> = ({
   const loader = useLoader()
   const { clearInteraction, closeInteraction } = useFinishInteraction()
   const { connected } = useConnection()
+  const { scheduleErrorWarning } = useToasts()
 
   const handleSubmit = () => {
-    if (disableLoader) return onSubmit()
+    if (disableLoader) onSubmit().catch(scheduleErrorWarning)
     loader(
       async () => {
         await onSubmit()
       },
       { showSuccess: false, showFailed: false },
-    ).catch(console.warn)
+    ).catch(scheduleErrorWarning)
   }
 
   const handleCancel = () => {

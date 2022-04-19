@@ -2,6 +2,7 @@ import { RouteProp, useRoute } from '@react-navigation/core'
 import React from 'react'
 import { Linking, StyleSheet, View } from 'react-native'
 import { SuccessTick } from '~/assets/svg'
+import { BottomButtons } from '~/components/BottomButtons'
 import BottomSheet from '~/components/BottomSheet'
 import JoloText from '~/components/JoloText'
 import Space from '~/components/Space'
@@ -49,20 +50,17 @@ const InteractionRedirect = () => {
         <Space height={42} />
         <JoloText
           size={JoloTextSizes.big}
-          color={
-            !counterparty?.publicProfile?.name ? Colors.error : Colors.white90
-          }
+          color={counterparty.isAnonymous ? Colors.error : Colors.white90}
         >
           {t('Interaction.redirectDescription', {
-            serviceName: getCounterpartyName(counterparty),
+            serviceName: counterparty.serviceName,
           })}
         </JoloText>
         <Space height={20} />
-        <InteractionFooter
+        <BottomButtons
           onSubmit={handleSubmit}
           submitLabel={t('Interaction.redirectBtn')}
           onCancel={completeRedirect}
-          disableLoader
         />
       </ContainerBAS>
     </BottomSheet>
