@@ -11,21 +11,23 @@ import Space from '~/components/Space'
 import { useGoBack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
-import { MainStackParamList } from '~/screens/LoggedIn/Main'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import InteractionTitle from './Interaction/InteractionFlow/components/InteractionTitle'
+import { InteractionStackParamList } from '.'
+import InteractionTitle from './InteractionFlow/components/InteractionTitle'
 import {
   ContainerBAS,
   LogoContainerBAS,
-} from './Interaction/InteractionFlow/components/styled'
+} from './InteractionFlow/components/styled'
 
 const ServiceRedirect = () => {
   const { t } = useTranslation()
 
   const { params } =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.ServiceRedirect>>()
+    useRoute<
+      RouteProp<InteractionStackParamList, ScreenNames.ServiceRedirect>
+    >()
   const {
     counterparty,
     redirectUrl,

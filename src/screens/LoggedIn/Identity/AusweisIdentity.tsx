@@ -41,8 +41,11 @@ export const AusweisIdentity = () => {
   }
 
   const handleChangePin = () => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: ScreenNames.AusweisChangePin,
+    navigation.navigate(ScreenNames.Interaction, {
+      screen: ScreenNames.eId,
+      params: {
+        screen: ScreenNames.AusweisChangePin,
+      },
     })
   }
 

@@ -30,23 +30,17 @@ import {
   screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalOptions,
-  transparentModalFadeOptions,
-  screenDisableGestures,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
-import eID from './eID'
 import { AusweisCardInfoParams } from './eID/types'
-import InteractionFlow from '../Modals/Interaction/InteractionFlow'
-import Scanner from '../Modals/Interaction/Scanner'
 import { Colors } from '~/utils/colors'
 import AusweisCardInfo from './eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
-import ServiceRedirect from '../Modals/ServiceRedirect'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -73,7 +67,6 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
-  [ScreenNames.eId]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
   [ScreenNames.MnemonicPhrase]: undefined
@@ -106,16 +99,6 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
-  [ScreenNames.ServiceRedirect]: {
-    counterparty: {
-      logo?: string
-      serviceName: string
-      isAnonymous: boolean
-    }
-    redirectUrl: string
-    completeRedirect: () => void
-    closeOnComplete?: boolean
-  }
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -235,31 +218,21 @@ const Main: React.FC = () => {
 
       {/* Modals -> Start */}
       <MainStack.Screen
-        name={ScreenNames.eId}
-        component={eID}
-        options={{
-          ...transparentModalFadeOptions,
-          ...screenDisableGestures,
-        }}
-      />
-      <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
       />
       <MainStack.Screen
         name={ScreenNames.Interaction}
         component={Interaction}
-        options={screenTransitionFromBottomDisabledGestures}
+        options={{
+          ...screenTransitionFromBottomDisabledGestures,
+          ...transparentModalOptions,
+        }}
       />
       <MainStack.Screen
         name={ScreenNames.CredentialForm}
         component={CredentialForm}
         options={screenTransitionFromBottomDisabledGestures}
-      />
-      <MainStack.Screen
-        options={transparentModalOptions}
-        name={ScreenNames.ServiceRedirect}
-        component={ServiceRedirect}
       />
 
       {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}

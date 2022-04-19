@@ -10,11 +10,27 @@ import { useSelector } from 'react-redux'
 import { getInteractionType } from '~/modules/interaction/selectors'
 import { useNavigation } from '@react-navigation/native'
 import InteractionFlow from '~/screens/Modals/Interaction/InteractionFlow'
-import { screenTransitionSlideFromBottom } from '~/utils/screenSettings'
+import {
+  screenTransitionSlideFromBottom,
+  screenDisableGestures,
+} from '~/utils/screenSettings'
+import ServiceRedirect from './ServiceRedirect'
+import eID from '~/screens/LoggedIn/eID'
 
 export type InteractionStackParamList = {
   [ScreenNames.Scanner]: undefined
   [ScreenNames.InteractionFlow]: undefined
+  [ScreenNames.eId]: undefined
+  [ScreenNames.ServiceRedirect]: {
+    counterparty: {
+      logo?: string
+      serviceName: string
+      isAnonymous: boolean
+    }
+    redirectUrl: string
+    completeRedirect: () => void
+    closeOnComplete?: boolean
+  }
 }
 
 const Stack = createStackNavigator<InteractionStackParamList>()
@@ -49,6 +65,19 @@ const Interaction: React.FC = () => {
         options={{
           ...screenTransitionSlideFromBottom,
         }}
+      />
+      <Stack.Screen
+        name={ScreenNames.eId}
+        component={eID}
+        options={{
+          ...modalStyleOptions,
+          ...screenDisableGestures,
+        }}
+      />
+      <Stack.Screen
+        options={modalStyleOptions}
+        name={ScreenNames.ServiceRedirect}
+        component={ServiceRedirect}
       />
     </Stack.Navigator>
   )

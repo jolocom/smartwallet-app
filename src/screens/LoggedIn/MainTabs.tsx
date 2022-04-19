@@ -56,7 +56,9 @@ const MainTabs = () => {
 
   useEffect(() => {
     if (!isAppLocked && isAusweisInteracting) {
-      navigation.navigate(ScreenNames.eId)
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+      })
     }
   }, [JSON.stringify(isAusweisInteracting), isAppLocked])
 

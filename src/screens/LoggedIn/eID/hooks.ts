@@ -324,10 +324,12 @@ const useAusweisCompatibilityCheck = () => {
   useEffect(() => {
     if (compatibility) {
       aa2Module.resetHandlers()
-      redirect(ScreenNames.eId, {
-        // @ts-expect-error
-        screen: eIDScreens.CompatibilityResult,
-        params: compatibility,
+      redirect(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+        params: {
+          screen: eIDScreens.CompatibilityResult,
+          params: compatibility,
+        },
       })
     }
   }, [JSON.stringify(compatibility)])
@@ -429,9 +431,12 @@ export const useAusweisScanner = () => {
     onDismiss?: () => void,
     params?: AusweisScannerParams,
   ) => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: eIDScreens.AusweisScanner,
-      params: { ...params, onDismiss },
+    navigation.navigate(ScreenNames.Interaction, {
+      screen: ScreenNames.eId,
+      params: {
+        screen: eIDScreens.AusweisScanner,
+        params: { ...params, onDismiss },
+      },
     })
   }
 
