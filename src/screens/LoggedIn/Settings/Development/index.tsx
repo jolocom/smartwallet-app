@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Linking, View } from 'react-native'
 
 import Section from '../components/Section'
 import Option from '../components/Option'
@@ -14,7 +14,12 @@ import eIDHooks from '~/screens/LoggedIn/eID/hooks'
 import { useLoader } from '~/hooks/loader'
 
 const TC_TOKEN =
-  'https://test.governikus-eid.de/Autent-DemoApplication/RequestServlet?provider=demo_epa_20&redirect=true'
+  'https://servicekonto.test.governikus-eid.de/AutentIDConnect/npa/authorize?scope=openid&response_type=code&redirect_uri=https%3A%2F%2Fservicekonto.test.governikus-eid.de%2Ftest-client%2Fopenid-connect%2Fauthcode&state=1&nonce=nonce&client_id=tNwyiRVez8xM8t1YZ9YnaMXd2tviISKw&acr_values=integrated'
+
+const EID_DEEPLINK = `https://jolocom.app.link/eid?tcTokenUrl=${encodeURIComponent(
+  TC_TOKEN,
+)}&redirectUrl=${encodeURIComponent('https://google.com')}`
+console.log({ EID_DEEPLINK })
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
@@ -42,13 +47,7 @@ const DevelopmentSection = () => {
           </Option>
         </Section.Block>
         <Section.Block>
-          <Option
-            onPress={() =>
-              loader(() => processAusweisToken(TC_TOKEN), {
-                showSuccess: false,
-              })
-            }
-          >
+          <Option onPress={() => Linking.openURL(EID_DEEPLINK)}>
             <Option.Title title="Initiate eID flow" />
           </Option>
         </Section.Block>
