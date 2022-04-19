@@ -10,7 +10,7 @@ describe('BlockExpanded', () => {
   }
   it('should match the initial snapshot', () => {
     const { toJSON } = renderWithSafeArea(<BlockExpanded {...defaultProps} />) // eslint-disable-line
-    expect(toJSON).toMatchSnapshot()
+    expect(toJSON()).toMatchSnapshot()
   })
 
   it('should render props correctly', () => {
