@@ -30,6 +30,8 @@ import {
   screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalOptions,
+  screenDisableGestures,
+  transparentModalFadeOptions,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
@@ -225,8 +227,8 @@ const Main: React.FC = () => {
         name={ScreenNames.Interaction}
         component={Interaction}
         options={{
-          ...screenTransitionFromBottomDisabledGestures,
-          ...transparentModalOptions,
+          ...screenDisableGestures,
+          ...transparentModalFadeOptions,
         }}
       />
       <MainStack.Screen

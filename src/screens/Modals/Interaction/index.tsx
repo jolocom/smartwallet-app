@@ -13,6 +13,7 @@ import InteractionFlow from '~/screens/Modals/Interaction/InteractionFlow'
 import {
   screenTransitionSlideFromBottom,
   screenDisableGestures,
+  transparentModalFadeOptions,
 } from '~/utils/screenSettings'
 import ServiceRedirect from './ServiceRedirect'
 import eID from '~/screens/LoggedIn/eID'
@@ -35,13 +36,6 @@ export type InteractionStackParamList = {
 
 const Stack = createStackNavigator<InteractionStackParamList>()
 
-const modalStyleOptions = {
-  headerShown: false,
-  cardStyle: { backgroundColor: 'transparent' },
-  cardOverlayEnabled: true,
-  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-}
-
 const Interaction: React.FC = () => {
   const isInteracting = useSelector(getInteractionType)
   const navigation = useNavigation()
@@ -55,27 +49,25 @@ const Interaction: React.FC = () => {
   return (
     <Stack.Navigator headerMode="none" mode="modal">
       <Stack.Screen
-        options={modalStyleOptions}
+        options={{ ...transparentModalFadeOptions, ...screenDisableGestures }}
         name={ScreenNames.InteractionFlow}
         component={InteractionFlow}
       />
       <Stack.Screen
         name={ScreenNames.Scanner}
         component={Scanner}
-        options={{
-          ...screenTransitionSlideFromBottom,
-        }}
+        options={screenTransitionSlideFromBottom}
       />
       <Stack.Screen
         name={ScreenNames.eId}
         component={eID}
         options={{
-          ...modalStyleOptions,
+          ...transparentModalFadeOptions,
           ...screenDisableGestures,
         }}
       />
       <Stack.Screen
-        options={modalStyleOptions}
+        options={{ ...transparentModalFadeOptions, ...screenDisableGestures }}
         name={ScreenNames.ServiceRedirect}
         component={ServiceRedirect}
       />
