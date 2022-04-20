@@ -16,7 +16,6 @@ import {
 } from '~/translations/terms'
 import BP from '~/utils/breakpoints'
 import ScreenContainer from '~/components/ScreenContainer'
-import BottomSheet from '~/components/BottomSheet'
 import Btn from '~/components/Btn'
 import ConsentButton from '~/screens/LoggedIn/Settings/components/ConsentTextButton'
 import { ConsentText } from '~/screens/LoggedIn/Settings/components/ConsentText'
@@ -29,6 +28,7 @@ import { useAgent } from '~/hooks/sdk'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { getIsTermsConsentVisible } from '~/modules/account/selectors'
+import BottomPopup from '~/components/BottomPopup'
 
 const legalTextConfig = [
   { title: 'Terms of Service', content: termsOfServiceEN },
@@ -114,7 +114,7 @@ const TermsConsent: React.FC = () => {
             ))}
           </ScrollView>
         </View>
-        <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
+        <BottomPopup showSlide={true} customStyles={styles.bottomBar}>
           <TouchableOpacity
             onPress={() => setAccepted(!accepted)}
             style={styles.acceptWrapper}
@@ -147,7 +147,7 @@ const TermsConsent: React.FC = () => {
           >
             {t('TermsConsent.footerBtn')}
           </Btn>
-        </BottomSheet>
+        </BottomPopup>
       </ScreenContainer>
     </Modal>
   )
