@@ -247,7 +247,10 @@ export const AusweisRequestReview = () => {
                   {t('AusweisReview.providerBtn')}
                 </Btn>
 
-                <AusweisListSection title={t('AusweisReview.mandatoryHeader')}>
+                <AusweisListSection
+                  isVisible={!!requiredFields.length}
+                  title={t('AusweisReview.mandatoryHeader')}
+                >
                   {requiredFields.map((field, i) => (
                     <Field.Selectable
                       value={translateField(field)}
@@ -258,7 +261,10 @@ export const AusweisRequestReview = () => {
                   ))}
                 </AusweisListSection>
 
-                <AusweisListSection title={t('AusweisReview.optionalHeader')}>
+                <AusweisListSection
+                  isVisible={!!optionalFields.length}
+                  title={t('AusweisReview.optionalHeader')}
+                >
                   <Widget>
                     {optionalFields.map((field, i) => (
                       <Field.Selectable

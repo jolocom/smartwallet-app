@@ -99,12 +99,11 @@ export const AusweisTextLink: React.FC<{ url: string } & IJoloTextProps> = ({
   )
 }
 
-export const AusweisListSection: React.FC<{ title: string }> = ({
-  title,
-  children,
-}) => {
-  if (!Children.count(children)) return null
-  return (
+export const AusweisListSection: React.FC<{
+  title: string
+  isVisible?: boolean
+}> = ({ title, children, isVisible = true }) => {
+  return !isVisible ? null : (
     <View testID="ausweis-list-section" style={{ marginBottom: 72 }}>
       <View style={{ marginLeft: 8 }}>
         <JoloText
