@@ -33,11 +33,13 @@ export enum ScreenNames {
   Interaction = 'Interaction', // root screen
   Scanner = 'Scanner',
   InteractionFlow = 'InteractionFlow',
+  InteractionRedirect = 'InteractionRedirect',
   // eId
   eId = 'eID',
   AusweisChangePin = 'AusweisChangePin',
   AusweisCardInfo = 'AusweisCardInfo',
   ServiceRedirect = 'ServiceRedirect',
+  AusweisMoreInfo = 'AusweisMoreInfo',
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',
