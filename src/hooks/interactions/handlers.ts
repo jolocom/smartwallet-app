@@ -24,7 +24,7 @@ import { parseJWT } from '~/utils/parseJWT'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
 import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import useConnection from '../connection'
 import { getCurrentLanguage } from '~/modules/account/selectors'
 

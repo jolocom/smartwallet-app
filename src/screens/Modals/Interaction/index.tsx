@@ -15,7 +15,7 @@ import {
   screenDisableGestures,
 } from '~/utils/screenSettings'
 import ServiceRedirect from './ServiceRedirect'
-import eID from '~/screens/LoggedIn/eID'
+import eID from './eID'
 
 export type InteractionStackParamList = {
   [ScreenNames.Scanner]: undefined
