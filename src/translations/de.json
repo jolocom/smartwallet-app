@@ -207,16 +207,16 @@
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Fertig",
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
-        "copied": "",
+        "copied": "Einfügen",
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
         "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
         "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
-        "redirectTitle": "",
-        "redirectDescription": "",
-        "redirectBtn": ""
+        "redirectTitle": "Fertig!",
+        "redirectDescription": "${serviceName} leitet Sie zu einem Dienst oder einer Anwendung außerhalb von SmartWallet weiter.",
+        "redirectBtn": "Weiter"
     },
     "Documents": {
         "documentsTab": "Dokumente",
@@ -405,7 +405,8 @@
     },
     "General": {
         "unknown": "Unbekannt",
-        "anonymous": "Anonym"
+        "anonymous": "Anonym",
+        "moreInfo": ""
     },
     "Authentication": {
         "header": "Bist du es wirklich?",
@@ -462,7 +463,7 @@
         "addressVerification": "Adressnachweis",
         "canAllowed": "CAN erlaubt",
         "pinManagement": "PIN verwalten",
-        "header": ""
+        "header": "Eingehende eID Anfrage"
     },
     "AusweisLostPin": {
         "title": "Wie kann ich den Kartenzugriff wiederherstellen?",
@@ -494,7 +495,7 @@
     },
     "AusweisPasscode": {
         "authPinHeader": "PIN eingeben",
-        "pinForgotBtn": "",
+        "pinForgotBtn": "Wenn Sie Ihre PIN vergessen oder noch nicht aktiviert haben, <1>klicken Sie hier.</1>",
         "transportPinHeader": "5-stelllige PIN eingeben",
         "transportPinBtn": "Wo kann ich das finden?",
         "canHeader": "CAN eingeben",
@@ -514,25 +515,27 @@
     },
     "AusweisIdentity": {
         "header": "Online-Ausweisfunktion",
-        "subheader": "Nutzen Sie ihre Online-Ausweisfunktion um sich bei Online Diensten auszuweisen.",
+        "subheader": "",
         "compatibilityBtn": "Kompabilitätstest",
         "changePinBtn": "PIN ändern",
         "unlockBtn": "Karte entsperren",
-        "ausweisBadge": "Online-Ausweisfunktion"
+        "ausweisBadge": "Online-Ausweisfunktion",
+        "moreInfoDescription": "",
+        "moreInfoHeader": ""
     },
     "AusweisChangePin": {
-        "transportPinHeader": "",
-        "transportPinSubheader": "",
-        "transportPinBtn": "",
-        "pinHeader": "",
-        "pinSubheader": "",
-        "pinBtn": "",
-        "forgotHeader": "",
-        "forgotSubheader": ""
+        "transportPinHeader": "eID PIN einrichten",
+        "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport-PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
+        "transportPinBtn": "eID PIN einrichten",
+        "pinHeader": "6stellige eID PIN ändern",
+        "pinSubheader": "Wenn Sie bereits eine 6-stellige PIN festgelegt haben, können Sie diese hier ändern.",
+        "pinBtn": "PIN ändern",
+        "forgotHeader": "Haben Sie Ihre eID PIN vergessen?",
+        "forgotSubheader": "Wenn Sie Ihre eID-PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
     },
     "AusweisPinInfo": {
         "header": "PIN Informationen",
-        "description": "",
+        "description": "Wählen Sie für die 6-stellige eID-PIN eine Zahlenkombination, die nicht leicht zu erraten ist.\n\nBei erstmaliger PIN-Änderung verwenden Sie bitte die fünfstellige Transport-PIN. Die Transport-PIN finden Sie im Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie mit der fünfstelligen Transport-PIN die Online-eID-Funktion nicht nutzen können. Eine Änderung auf eine 6-stellige PIN ist zwingend erforderlich.",
         "btn": ""
     },
     "AusweisScanner": {
