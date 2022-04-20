@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   fullScreen: {
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.black65,
   },
   tapArea: {
     flex: 1,
