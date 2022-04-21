@@ -2,7 +2,7 @@ import React from 'react'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { render } from '@testing-library/react-native'
 
-describe('<ScreenPlaceholder />', () => {
+describe('ScreenPlaceholder', () => {
   const defaultProps = {
     title: 'test title',
     description: 'test description',
