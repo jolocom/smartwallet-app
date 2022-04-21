@@ -39,7 +39,7 @@ import { dismissLoader } from '~/modules/loader/actions'
 import {
   getAusweisScannerKey,
   getIsAusweisInteractionProcessed,
-} from '~/modules/ausweis/selectors'
+} from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { useDisableLock } from '~/hooks/generic'
 import { useToasts } from '~/hooks/toasts'

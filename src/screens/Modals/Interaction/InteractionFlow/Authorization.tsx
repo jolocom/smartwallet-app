@@ -1,7 +1,6 @@
 import React from 'react'
 import InteractionFooter from './components/InteractionFooter'
 import InteractionDescription from './components/InteractionDescription'
-import InteractionLogo from './components/InteractionLogo'
 import InteractionTitle from './components/InteractionTitle'
 import { ContainerBAS, LogoContainerBAS } from './components/styled'
 import InteractionImage from './components/InteractionAuthzImage'
@@ -14,14 +13,15 @@ import {
 import { truncateFirstWord, capitalizeWord } from '~/utils/stringUtils'
 import useTranslation from '~/hooks/useTranslation'
 import Space from '~/components/Space'
+import { ServiceLogo } from '~/components/ServiceLogo'
 
 const Authorization = () => {
   const {
     action,
-    imageURL: image,
+    imageURL: authzImage,
     description,
   } = useSelector(getAuthzUIDetails)
-  const { name } = useSelector(getServiceDescription)
+  const { name, image } = useSelector(getServiceDescription)
 
   const { t } = useTranslation()
 
@@ -34,7 +34,7 @@ const Authorization = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <InteractionLogo />
+        <ServiceLogo source={image} />
       </LogoContainerBAS>
       <InteractionTitle
         label={t('Authorization.header', { authAction: action })}
@@ -47,7 +47,7 @@ const Authorization = () => {
         }
       />
       <Space />
-      <InteractionImage source={image} />
+      <InteractionImage source={authzImage} />
       <InteractionFooter onSubmit={handleSubmit} submitLabel={cta} />
     </ContainerBAS>
   )

@@ -1,5 +1,6 @@
 import {
   CommonActions,
+  StackActions,
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native'
@@ -20,7 +21,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect, usePopStack } from '~/hooks/navigation'
+import { useRedirect, usePopStack, useGoBack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
@@ -38,14 +39,15 @@ import {
   setAusweisFlowType,
   setAusweisInteractionDetails,
   setAusweisReaderState,
-} from '~/modules/ausweis/actions'
+} from '~/modules/interaction/actions'
 import {
   getAusweisReaderState,
   getAusweisScannerKey,
-} from '~/modules/ausweis/selectors'
+} from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
+import { getRedirectUrl } from '~/modules/interaction/selectors'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -53,11 +55,14 @@ const useAusweisInteraction = () => {
   const { t } = useTranslation()
   const { scheduleInfo, scheduleErrorWarning, scheduleWarning } = useToasts()
   const popStack = usePopStack()
+  const navigation = useNavigation()
   const dispatch = useDispatch()
   const { connected: isConnectedToTheInternet } = useConnection()
   const { showScanner } = eIDHooks.useAusweisScanner()
+  const { providerName } = eIDHooks.useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
   const checkNfc = useCheckNFC()
+  const redirectUrl = useSelector(getRedirectUrl)
 
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers
@@ -153,8 +158,8 @@ const useAusweisInteraction = () => {
    * sends CANCEL cmd and pops the stack (too many times though!!!)
    */
   const cancelInteraction = () => {
-    sendCancel()
     closeAusweis()
+    sendCancel()
   }
 
   /**
@@ -173,23 +178,40 @@ const useAusweisInteraction = () => {
     setCan: (can: string) => aa2Module.setCan(can),
   }
 
-  const finishFlow = (url: string, message?: string) => {
+  const finishFlow = async (url: string) => {
     if (isConnectedToTheInternet === false) {
-      return Promise.reject('No internet connection')
+      throw new Error('No internet connection')
     }
+
+    const handleCompleteFlow = () => {
+      closeAusweis()
+      navigation.navigate(ScreenNames.Identity)
+      scheduleInfo({
+        title: t('Toasts.ausweisSuccessTitle'),
+        message: t('Toasts.ausweisSuccessMsg'),
+        dismiss: 10000,
+      })
+    }
+
     return fetch(url)
       .then((res) => {
-        if (!res['ok']) {
-          throw new Error(
-            `could not send the request to the url: ${url}, ${message}`,
+        if (!redirectUrl) {
+          handleCompleteFlow()
+        } else {
+          const url = new URL(redirectUrl)
+          url.searchParams.append('redirectUrl', encodeURIComponent(res.url))
+
+          navigation.dispatch(
+            StackActions.replace(ScreenNames.ServiceRedirect, {
+              redirectUrl: url.href,
+              counterparty: {
+                serviceName: providerName,
+                isAnonymous: false,
+              },
+              completeRedirect: handleCompleteFlow,
+              closeOnComplete: true,
+            }),
           )
-        }
-        if (!message) {
-          scheduleInfo({
-            title: t('Toasts.ausweisSuccessTitle'),
-            message: t('Toasts.ausweisSuccessMsg'),
-            dismiss: 10000,
-          })
         }
       })
       .catch(scheduleErrorWarning)
@@ -303,10 +325,12 @@ const useAusweisCompatibilityCheck = () => {
   useEffect(() => {
     if (compatibility) {
       aa2Module.resetHandlers()
-      redirect(ScreenNames.eId, {
-        // @ts-expect-error
-        screen: eIDScreens.CompatibilityResult,
-        params: compatibility,
+      redirect(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+        params: {
+          screen: eIDScreens.CompatibilityResult,
+          params: compatibility,
+        },
       })
     }
   }, [JSON.stringify(compatibility)])
@@ -408,9 +432,12 @@ export const useAusweisScanner = () => {
     onDismiss?: () => void,
     params?: AusweisScannerParams,
   ) => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: eIDScreens.AusweisScanner,
-      params: { ...params, onDismiss },
+    navigation.navigate(ScreenNames.Interaction, {
+      screen: ScreenNames.eId,
+      params: {
+        screen: eIDScreens.AusweisScanner,
+        params: { ...params, onDismiss },
+      },
     })
   }
 

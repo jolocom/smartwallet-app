@@ -1,43 +1,61 @@
 import { RouteProp, useRoute } from '@react-navigation/core'
 import React from 'react'
 import { Linking, StyleSheet, View } from 'react-native'
+
 import { SuccessTick } from '~/assets/svg'
+import { BottomButtons } from '~/components/BottomButtons'
 import BottomSheet from '~/components/BottomSheet'
 import JoloText from '~/components/JoloText'
+import { ServiceLogo } from '~/components/ServiceLogo'
 import Space from '~/components/Space'
+import { useGoBack } from '~/hooks/navigation'
+import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
-import { getCounterpartyName } from '~/utils/dataMapping'
 import { JoloTextSizes } from '~/utils/fonts'
 import { InteractionStackParamList } from '.'
-import InteractionFooter from './InteractionFlow/components/InteractionFooter'
-import InteractionLogo from './InteractionFlow/components/InteractionLogo'
 import InteractionTitle from './InteractionFlow/components/InteractionTitle'
 import {
   ContainerBAS,
   LogoContainerBAS,
 } from './InteractionFlow/components/styled'
 
-const InteractionRedirect = () => {
+const ServiceRedirect = () => {
   const { t } = useTranslation()
 
   const { params } =
     useRoute<
-      RouteProp<InteractionStackParamList, ScreenNames.InteractionRedirect>
+      RouteProp<InteractionStackParamList, ScreenNames.ServiceRedirect>
     >()
-  const { counterparty, redirectUrl, completeRedirect } = params
+  const {
+    counterparty,
+    redirectUrl,
+    completeRedirect,
+    closeOnComplete = false,
+  } = params
+  const { scheduleErrorWarning } = useToasts()
+  const goBack = useGoBack()
+
+  const handleComplete = () => {
+    closeOnComplete && goBack()
+    completeRedirect()
+  }
 
   const handleSubmit = async () => {
-    await Linking.openURL(redirectUrl!)
-    completeRedirect()
+    try {
+      await Linking.openURL(redirectUrl!)
+      handleComplete()
+    } catch (e) {
+      scheduleErrorWarning(e as Error)
+    }
   }
 
   return (
     <BottomSheet>
       <ContainerBAS>
         <LogoContainerBAS>
-          <InteractionLogo logo={counterparty?.publicProfile?.image} />
+          <ServiceLogo source={counterparty.logo} />
         </LogoContainerBAS>
         <InteractionTitle label={t('Interaction.redirectTitle')} />
         <Space height={48} />
@@ -49,20 +67,17 @@ const InteractionRedirect = () => {
         <Space height={42} />
         <JoloText
           size={JoloTextSizes.big}
-          color={
-            !counterparty?.publicProfile?.name ? Colors.error : Colors.white90
-          }
+          color={counterparty.isAnonymous ? Colors.error : Colors.white90}
         >
           {t('Interaction.redirectDescription', {
-            serviceName: getCounterpartyName(counterparty),
+            serviceName: counterparty.serviceName,
           })}
         </JoloText>
         <Space height={20} />
-        <InteractionFooter
+        <BottomButtons
           onSubmit={handleSubmit}
           submitLabel={t('Interaction.redirectBtn')}
-          onCancel={completeRedirect}
-          disableLoader
+          onCancel={handleComplete}
         />
       </ContainerBAS>
     </BottomSheet>
@@ -86,4 +101,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default InteractionRedirect
+export default ServiceRedirect

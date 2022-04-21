@@ -11,7 +11,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
   AusweisFlow,
@@ -19,9 +19,9 @@ import {
   AusweisScannerState,
   CardInfoMode,
   eIDScreens,
-} from '../eID/types'
+} from '~/screens/Modals/Interaction/eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { getAusweisFlowType } from '~/modules/ausweis/selectors'
+import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 
 export const AusweisIdentity = () => {
@@ -41,8 +41,11 @@ export const AusweisIdentity = () => {
   }
 
   const handleChangePin = () => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: ScreenNames.AusweisChangePin,
+    navigation.navigate(ScreenNames.Interaction, {
+      screen: ScreenNames.eId,
+      params: {
+        screen: ScreenNames.AusweisChangePin,
+      },
     })
   }
 

@@ -30,19 +30,14 @@ import {
   screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalOptions,
-  transparentModalFadeOptions,
-  screenDisableGestures,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
-import eID from './eID'
-import { AusweisCardInfoParams } from './eID/types'
-import InteractionFlow from '../Modals/Interaction/InteractionFlow'
-import Scanner from '../Modals/Interaction/Scanner'
+import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { Colors } from '~/utils/colors'
-import AusweisCardInfo from './eID/components/AusweisCardInfo'
+import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
@@ -72,7 +67,6 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
-  [ScreenNames.eId]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
   [ScreenNames.MnemonicPhrase]: undefined
@@ -224,21 +218,16 @@ const Main: React.FC = () => {
 
       {/* Modals -> Start */}
       <MainStack.Screen
-        name={ScreenNames.eId}
-        component={eID}
-        options={{
-          ...transparentModalFadeOptions,
-          ...screenDisableGestures,
-        }}
-      />
-      <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
       />
       <MainStack.Screen
         name={ScreenNames.Interaction}
         component={Interaction}
-        options={screenTransitionFromBottomDisabledGestures}
+        options={{
+          ...screenTransitionFromBottomDisabledGestures,
+          ...transparentModalOptions,
+        }}
       />
       <MainStack.Screen
         name={ScreenNames.CredentialForm}

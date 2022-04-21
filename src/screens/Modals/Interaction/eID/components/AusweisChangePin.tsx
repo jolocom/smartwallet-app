@@ -25,7 +25,7 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
-import { getAusweisFlowType } from '~/modules/ausweis/selectors'
+import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
 import Link from '~/components/Link'

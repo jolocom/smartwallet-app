@@ -24,7 +24,7 @@ import { parseJWT } from '~/utils/parseJWT'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
 import branch, { BranchParams } from 'react-native-branch'
 import { SWErrorCodes } from '~/errors/codes'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import useConnection from '../connection'
 import { getCurrentLanguage } from '~/modules/account/selectors'
 
@@ -43,6 +43,7 @@ export const useDeeplinkInteractions = () => {
   const { scheduleErrorWarning } = useToasts()
   const loader = useLoader()
   const currentLanguage = useSelector(getCurrentLanguage)
+  const dispatch = useDispatch()
 
   // NOTE: for now we assume all the params come in as strings
   const getParamValue = (name: string, params: BranchParams) => {
@@ -73,6 +74,9 @@ export const useDeeplinkInteractions = () => {
           )
           return
         } else if (eidValue) {
+          if (redirectUrl) {
+            dispatch(setRedirectUrl(redirectUrl))
+          }
           loader(() => processAusweisToken(eidValue), {
             showSuccess: false,
             showFailed: false,

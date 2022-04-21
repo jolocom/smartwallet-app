@@ -15,7 +15,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
 import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
-import eIDHooks from './eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 
 export type LoggedInStackParamList = {
   Idle: undefined
