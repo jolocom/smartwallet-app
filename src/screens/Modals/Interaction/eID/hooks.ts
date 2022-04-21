@@ -185,6 +185,7 @@ const useAusweisInteraction = () => {
 
     const handleCompleteFlow = () => {
       closeAusweis()
+      navigation.navigate(ScreenNames.Identity)
       scheduleInfo({
         title: t('Toasts.ausweisSuccessTitle'),
         message: t('Toasts.ausweisSuccessMsg'),
