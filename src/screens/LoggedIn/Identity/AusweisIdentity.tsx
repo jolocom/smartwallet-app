@@ -132,6 +132,15 @@ export const AusweisIdentity = () => {
     })
   }
 
+  const handleMoreInfo = () => {
+    navigation.navigate(ScreenNames.Interaction, {
+      screen: ScreenNames.eId,
+      params: {
+        screen: ScreenNames.AusweisMoreInfo,
+      },
+    })
+  }
+
   return (
     <View
       style={{ marginBottom: BP({ large: 0, default: 40 }) }}
@@ -155,11 +164,15 @@ export const AusweisIdentity = () => {
         <JoloText kind={JoloTextKind.title} weight={JoloTextWeight.regular}>
           {t('AusweisIdentity.header')}
         </JoloText>
-        <JoloText
-          size={JoloTextSizes.mini}
-          customStyles={{ marginTop: 8, marginHorizontal: 16 }}
-        >
+        <JoloText size={JoloTextSizes.mini} customStyles={{ marginTop: 8 }}>
           {t('AusweisIdentity.subheader')}
+          <JoloText
+            onPress={handleMoreInfo}
+            size={JoloTextSizes.mini}
+            color={Colors.activity}
+          >
+            {` ${t('General.moreInfo')}...`}
+          </JoloText>
         </JoloText>
 
         <View style={styles.btnContainer}>
@@ -220,7 +233,7 @@ const styles = StyleSheet.create({
     marginVertical: 1,
   },
   btnContainer: {
-    marginTop: BP({ default: 28, large: 84 }),
+    marginTop: BP({ default: 28, large: 42 }),
     paddingVertical: 8,
   },
 })
