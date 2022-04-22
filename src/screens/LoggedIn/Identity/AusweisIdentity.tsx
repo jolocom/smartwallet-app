@@ -70,14 +70,17 @@ export const AusweisIdentity = () => {
   }
 
   const handleShowPuk = () => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: eIDScreens.EnterPIN,
+    navigation.navigate(ScreenNames.Interaction, {
+      screen: ScreenNames.eId,
       params: {
-        mode: AusweisPasscodeMode.PUK,
-        flow: AusweisFlow.unlock,
-        handlers: {
-          handlePinRequest: () => {
-            handleShowCardLockResult(CardInfoMode.unblocked)
+        screen: eIDScreens.EnterPIN,
+        params: {
+          mode: AusweisPasscodeMode.PUK,
+          flow: AusweisFlow.unlock,
+          handlers: {
+            handlePinRequest: () => {
+              handleShowCardLockResult(CardInfoMode.unblocked)
+            },
           },
         },
       },
