@@ -20,6 +20,7 @@ export const AusweisPinInfo = () => {
   const { cancelFlow } = eIDHooks.useAusweisInteraction()
 
   const handleChangePinRedirect = () => {
+    // Bug must be related to cancelFlow() since navigation otherwise works
     cancelFlow()
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
