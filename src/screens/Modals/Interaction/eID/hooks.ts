@@ -43,11 +43,13 @@ import {
 import {
   getAusweisReaderState,
   getAusweisScannerKey,
+  getRefreshUrl,
 } from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
 import { getRedirectUrl } from '~/modules/interaction/selectors'
+import { SWErrorCodes } from '~/errors/codes'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -63,6 +65,7 @@ const useAusweisInteraction = () => {
   const isCardTouched = useSelector(getAusweisReaderState)
   const checkNfc = useCheckNFC()
   const redirectUrl = useSelector(getRedirectUrl)
+  const refreshUrl = useSelector(getRefreshUrl)
 
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers
@@ -195,6 +198,13 @@ const useAusweisInteraction = () => {
 
     return fetch(url)
       .then((res) => {
+        // NOTE: if there is a `refreshUrl`, update the service's UI by calling it
+        if (refreshUrl) {
+          fetch(refreshUrl).catch((e) => {
+            e.name = SWErrorCodes.SWRefreshUrlInvalid
+            scheduleErrorWarning(e)
+          })
+        }
         if (!redirectUrl) {
           handleCompleteFlow()
         } else {
