@@ -12,6 +12,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import eIDHooks from '../hooks'
 import { eIDScreens } from '../types'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 
 export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
@@ -20,7 +21,7 @@ export const AusweisPinInfo = () => {
   const { cancelFlow } = eIDHooks.useAusweisInteraction()
 
   const handleChangePinRedirect = () => {
-    // Bug must be related to cancelFlow() since navigation otherwise works
+    aa2Module.resetHandlers()
     cancelFlow()
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
