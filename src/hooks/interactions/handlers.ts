@@ -13,6 +13,7 @@ import {
   resetInteraction,
   setInteractionDetails,
   setRedirectUrl,
+  setRefreshUrl,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
@@ -36,65 +37,6 @@ export const useInteraction = () => {
   return () => agent.interactionManager.getInteraction(interactionId)
 }
 
-// NOTE: This should be called only in one place!
-export const useDeeplinkInteractions = () => {
-  const { processAusweisToken } = eIDHooks.useAusweisInteraction()
-  const { processInteraction } = useInteractionStart()
-  const { scheduleErrorWarning } = useToasts()
-  const loader = useLoader()
-  const currentLanguage = useSelector(getCurrentLanguage)
-  const dispatch = useDispatch()
-
-  // NOTE: for now we assume all the params come in as strings
-  const getParamValue = (name: string, params: BranchParams) => {
-    if (params[name] && typeof params[name] === 'string') {
-      return params[name] as string
-    }
-
-    return
-  }
-
-  useEffect(() => {
-    // TODO move somewhere
-    branch.disableTracking(true)
-    branch.subscribe(({ error, params }) => {
-      if (error) {
-        console.warn('Error processing DeepLink: ', error)
-        return
-      }
-
-      if (params) {
-        let redirectUrl = getParamValue('redirectUrl', params)
-        const tokenValue = getParamValue('token', params)
-        const eidValue = getParamValue('tcTokenUrl', params)
-
-        if (tokenValue) {
-          processInteraction(tokenValue, redirectUrl).catch(
-            scheduleErrorWarning,
-          )
-          return
-        } else if (eidValue) {
-          if (redirectUrl) {
-            dispatch(setRedirectUrl(redirectUrl))
-          }
-          loader(() => processAusweisToken(eidValue), {
-            showSuccess: false,
-            showFailed: false,
-          })
-          return
-        } else if (
-          !params['+clicked_branch_link'] ||
-          JSON.stringify(params) === '{}'
-        ) {
-          return
-        }
-
-        scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
-      }
-    })
-  }, [currentLanguage])
-}
-
 export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
@@ -105,16 +47,11 @@ export const useInteractionStart = () => {
 
   const processInteraction = async (
     jwt: string,
-    redirectUrl?: string,
     transportAPI?: TransportAPI,
   ) => {
     try {
       parseJWT(jwt)
       const interaction = await agent.processJWT(jwt, transportAPI)
-
-      if (redirectUrl) {
-        dispatch(setRedirectUrl(redirectUrl))
-      }
 
       return interaction
     } catch (e) {
