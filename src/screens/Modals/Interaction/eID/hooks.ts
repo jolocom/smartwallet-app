@@ -158,6 +158,7 @@ const useAusweisInteraction = () => {
    * sends CANCEL cmd and pops the stack (too many times though!!!)
    */
   const cancelInteraction = () => {
+    closeAusweis()
     sendCancel()
   }
 
@@ -243,6 +244,7 @@ const useAusweisInteraction = () => {
 
   return {
     closeAusweis,
+    sendCancel,
     initAusweis,
     disconnectAusweis,
     processAusweisToken,

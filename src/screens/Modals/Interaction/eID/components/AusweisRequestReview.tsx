@@ -47,8 +47,13 @@ type AusweisRequestReviewNavigation = StackNavigationProp<
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
-  const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
-    eIDHooks.useAusweisInteraction()
+  const {
+    acceptRequest,
+    cancelInteraction,
+    checkCardValidity,
+    closeAusweis,
+    sendCancel,
+  } = eIDHooks.useAusweisInteraction()
   const {
     providerName,
     requiredFields,
@@ -165,7 +170,7 @@ export const AusweisRequestReview = () => {
     })
   }
 
-  const handleIgnore = cancelInteraction
+  const handleIgnore = sendCancel
 
   const handleMoreInfo = () => {
     const fields: IField[] = [
