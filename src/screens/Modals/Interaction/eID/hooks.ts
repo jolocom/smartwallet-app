@@ -50,6 +50,7 @@ import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
 import { getRedirectUrl } from '~/modules/interaction/selectors'
 import { SWErrorCodes } from '~/errors/codes'
+import { attachRedirectUrl } from './utils'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -115,9 +116,8 @@ const useAusweisInteraction = () => {
         dispatch(setAusweisInteractionDetails(requestData))
       })
     } catch (e) {
-      cancelFlow()
-      console.warn(e)
       scheduleErrorWarning(e)
+      cancelFlow()
     }
   }
 
@@ -213,7 +213,7 @@ const useAusweisInteraction = () => {
       .then((res) => {
         // NOTE: if there is a `refreshUrl`, update the service's UI by calling it
         if (refreshUrl) {
-          fetch(refreshUrl).catch((e) => {
+          fetch(attachRedirectUrl(refreshUrl, res.url)).catch((e) => {
             e.name = SWErrorCodes.SWRefreshUrlInvalid
             scheduleErrorWarning(e)
           })
@@ -221,12 +221,9 @@ const useAusweisInteraction = () => {
         if (!redirectUrl) {
           handleCompleteFlow()
         } else {
-          const url = new URL(redirectUrl)
-          url.searchParams.append('redirectUrl', encodeURIComponent(res.url))
-
           navigation.dispatch(
             StackActions.replace(ScreenNames.ServiceRedirect, {
-              redirectUrl: url.href,
+              redirectUrl: attachRedirectUrl(redirectUrl, res.url),
               counterparty: {
                 serviceName: providerName,
                 isAnonymous: false,
