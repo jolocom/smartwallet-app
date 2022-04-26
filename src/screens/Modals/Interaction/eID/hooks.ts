@@ -189,11 +189,24 @@ const useAusweisInteraction = () => {
     const handleCompleteFlow = () => {
       closeAusweis()
       navigation.navigate(ScreenNames.Identity)
-      scheduleInfo({
-        title: t('Toasts.ausweisSuccessTitle'),
-        message: t('Toasts.ausweisSuccessMsg'),
-        dismiss: 10000,
-      })
+      if (refreshUrl) {
+        scheduleInfo({
+          title: t('Toasts.refreshTitle'),
+          message: t('Toasts.refreshMsg', {
+            serviceName: providerName,
+            interpolation: {
+              escapeValue: false,
+            },
+          }),
+          dismiss: 10000,
+        })
+      } else {
+        scheduleInfo({
+          title: t('Toasts.ausweisSuccessTitle'),
+          message: t('Toasts.ausweisSuccessMsg'),
+          dismiss: 10000,
+        })
+      }
     }
 
     return fetch(url)

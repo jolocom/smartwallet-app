@@ -209,7 +209,9 @@
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
         "copied": "Einfügen",
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
-        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht"
+        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
+        "refreshTitle": "",
+        "refreshMsg": ""
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -527,7 +529,7 @@
         "transportPinHeader": "eID PIN einrichten",
         "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport-PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
         "transportPinBtn": "eID PIN einrichten",
-        "pinHeader": "6stellige eID PIN ändern",
+        "pinHeader": "6-stellige eID PIN ändern",
         "pinSubheader": "Wenn Sie bereits eine 6-stellige PIN festgelegt haben, können Sie diese hier ändern.",
         "pinBtn": "PIN ändern",
         "forgotHeader": "Haben Sie Ihre eID PIN vergessen?",
@@ -558,7 +560,7 @@
     },
     "AusweisPukInfo": {
         "header": "PUK Nummer Info",
-        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstelligev Ausweis PIN ist zwingend erforderlich."
+        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige Ausweis PIN ist zwingend erforderlich."
     },
     "AusweisUnlock": {
         "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",
@@ -573,5 +575,8 @@
     },
     "Wallet": {
         "prepareWallet": "Ihr Wallet wird vorbereitet"
+    },
+    "Dashboard": {
+        "header": ""
     }
 }
