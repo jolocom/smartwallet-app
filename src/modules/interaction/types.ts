@@ -19,7 +19,11 @@ export * from './ausweis/types'
 export interface InteractionState {
   ssi: InteractionDetails
   ausweis: AusweisDetails
+  // NOTE: Shows the user the `ServiceRedirect` screen, which allows the user to
+  // get redirected to another application or browser
   redirectUrl: string | null
+  // NOTE: Updates the service's UI that the interaction has finished successfully
+  refreshUrl: string | null
 }
 
 export enum InteractionActionType {
@@ -28,6 +32,7 @@ export enum InteractionActionType {
   selectShareCredential = 'selectShareCredential',
   updateOfferValidation = 'updateOfferValidation',
   setRedirectUrl = 'setRedirectUrl',
+  setRefreshUrl = 'setRefreshUrl',
   setDetails = 'setDetails',
   setScannerKey = 'setScannerKey',
   setReaderState = 'setReaderState',
@@ -45,6 +50,7 @@ export interface InteractionActions {
   [InteractionActionType.selectShareCredential]: Record<string, string>
   [InteractionActionType.updateOfferValidation]: OfferedCredential[]
   [InteractionActionType.setRedirectUrl]: string | null
+  [InteractionActionType.setRefreshUrl]: string | null
   [InteractionActionType.setDetails]: IAusweisRequest | null
   [InteractionActionType.setScannerKey]: string | null
   [InteractionActionType.setReaderState]: CardInfo | null
