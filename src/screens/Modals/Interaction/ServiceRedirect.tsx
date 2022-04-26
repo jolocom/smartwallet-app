@@ -71,6 +71,9 @@ const ServiceRedirect = () => {
         >
           {t('Interaction.redirectDescription', {
             serviceName: counterparty.serviceName,
+            interpolation: {
+              escapeValue: false,
+            },
           })}
         </JoloText>
         <Space height={20} />
