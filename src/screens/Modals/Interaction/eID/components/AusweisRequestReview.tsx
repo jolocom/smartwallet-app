@@ -170,7 +170,7 @@ export const AusweisRequestReview = () => {
     })
   }
 
-  const handleIgnore = sendCancel
+  const handleIgnore = IS_ANDROID ? cancelInteraction : sendCancel
 
   const handleMoreInfo = () => {
     const fields: IField[] = [
