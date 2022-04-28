@@ -3,7 +3,6 @@ import { ScrollView } from 'react-native'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
-import { debugView } from '~/utils/dev'
 
 export const AusweisMoreInfo = () => {
   const { t } = useTranslation()
@@ -17,7 +16,12 @@ export const AusweisMoreInfo = () => {
         <JoloText kind={JoloTextKind.title} customStyles={{ marginBottom: 24 }}>
           {t('AusweisIdentity.moreInfoHeader')}
         </JoloText>
-        <JoloText customStyles={{ textAlign: 'left' }}>
+        <JoloText
+          customStyles={{
+            textAlign: 'left',
+            paddingBottom: 24,
+          }}
+        >
           {t('AusweisIdentity.moreInfoDescription')}
         </JoloText>
       </ScrollView>
