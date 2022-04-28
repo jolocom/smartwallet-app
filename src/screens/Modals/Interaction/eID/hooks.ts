@@ -436,7 +436,13 @@ export const useAusweisScanner = () => {
       screen: ScreenNames.eId,
       params: {
         screen: eIDScreens.AusweisScanner,
-        params: { ...params, onDismiss },
+        params: {
+          ...params,
+          onDismiss: () => {
+            resetScanner()
+            onDismiss && onDismiss()
+          },
+        },
       },
     })
   }
