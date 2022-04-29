@@ -1,27 +1,55 @@
-import React, { useEffect, useState } from 'react'
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import React, { useEffect, useMemo, useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { Colors } from '~/utils/colors'
 import { usePasscode } from './context'
 import BP from '~/utils/breakpoints'
+import { Fonts } from '~/utils/fonts'
+import { IPasscodeComposition } from './types'
 
-const PASSCODE_LENGTH = new Array(4).fill(0)
-const DIGIT_CELL_WIDTH = BP({ default: 65, xsmall: 56 })
-const DIGIT_CELL_HEIGHT = BP({ default: 87, xsmall: 74 })
-const DIGIT_MARGIN_RIGHT = Platform.select({
-  ios: BP({ default: 7, xsmall: 6 }),
-  android: 2,
-})
+const CELL_ASPECT_RATIO = 0.75
 
-const PasscodeInput: React.FC = () => {
-  const [selectedIndex, setSelectedIndex] = useState(-1)
-  const { pin, pinError, pinSuccess } = usePasscode()
+const PasscodeCell: React.FC<{
+  selected: boolean
+  success: boolean
+  error: boolean
+  color: Colors
+  value: string | undefined
+  showValue: boolean
+  showAsterix: boolean
+}> = ({ selected, success, error, color, value, showValue, showAsterix }) => {
+  return (
+    <View
+      style={[
+        styles.display,
+        selected && styles.active,
+        error && styles.error,
+        success && styles.success,
+        {
+          backgroundColor: color,
+          maxWidth: BP({ default: 65, xsmall: 56 }),
+        },
+      ]}
+    >
+      {selected && !value ? (
+        <View style={styles.caret} />
+      ) : (
+        <Text adjustsFontSizeToFit style={styles.text} testID="passcode-cell">
+          {showValue ? value : showAsterix ? '*' : ''}
+        </Text>
+      )}
+    </View>
+  )
+}
+
+const PasscodeInput: IPasscodeComposition['Input'] = ({
+  cellColor = Colors.black30,
+  numberOfLines = 1,
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const { pin, pinError, pinSuccess, passcodeLength: length } = usePasscode()
   const digits = pin.split('')
+
+  const passcodeCells = useMemo(() => new Array(length).fill(0), [length])
 
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
@@ -31,60 +59,63 @@ const PasscodeInput: React.FC = () => {
       setTimeout(() => {
         if (isCurrent) {
           setSelectedIndex(() => {
-            if (digits.length < PASSCODE_LENGTH.length) {
+            if (digits.length < passcodeCells.length) {
               return digits.length
-            } else if (digits.length === 4) {
+            } else if (digits.length === length) {
               return -1
             } else {
-              return PASSCODE_LENGTH.length - 1
+              return passcodeCells.length - 1
             }
           })
         }
       }, 100)
     }
-    updateSelectedIndex()
+
+    if (pin.length > 1) {
+      updateSelectedIndex()
+    }
+
     return () => {
       isCurrent = false
     }
   }, [pin])
 
   return (
-    <TouchableWithoutFeedback>
-      <View style={styles.inputContainer}>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}
-        >
-          {PASSCODE_LENGTH.map((v, index) => {
-            const isSelected = digits.length === index
-            return (
-              <View
-                style={[
-                  styles.display,
-                  isSelected && styles.active,
-                  pinError && styles.error,
-                  pinSuccess && styles.success,
-                ]}
-                key={index}
-              >
-                {isSelected && !digits[index] ? (
-                  <View style={styles.caret} />
-                ) : (
-                  <Text style={styles.text} testID="passcode-cell">
-                    {index === selectedIndex
-                      ? digits[index]
-                      : index < digits.length
-                      ? '*'
-                      : ''}
-                  </Text>
-                )}
-              </View>
-            )
-          })}
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+    <View>
+      {Array.from(Array(numberOfLines)).map((_, line) => {
+        const baseIndex = (length / numberOfLines) * line
+        const nextBaseIndex = (length / numberOfLines) * (line + 1)
+        return (
+          <View
+            key={line}
+            style={[
+              styles.inputContainer,
+              {
+                ...(line !== 0 && {
+                  marginTop: 3,
+                }),
+              },
+            ]}
+          >
+            {passcodeCells.map((_, index) => {
+              const isSelected = digits.length === index
+              return index >= baseIndex && index < nextBaseIndex ? (
+                <PasscodeCell
+                  key={index}
+                  error={pinError}
+                  success={pinSuccess}
+                  selected={isSelected}
+                  value={digits[index]}
+                  showValue={index === selectedIndex}
+                  showAsterix={index < digits.length}
+                  color={cellColor}
+                />
+              ) : null
+            })}
+          </View>
+        )
+      })}
+    </View>
   )
 }
 
@@ -98,15 +129,14 @@ const styles = StyleSheet.create({
   display: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: DIGIT_CELL_WIDTH,
-    height: DIGIT_CELL_HEIGHT,
+    marginHorizontal: 1.5,
+    flex: 1,
+    aspectRatio: CELL_ASPECT_RATIO,
     borderRadius: 11,
-    marginRight: DIGIT_MARGIN_RIGHT,
-    backgroundColor: Colors.black30,
-    overflow: 'visible',
-    borderWidth: 3,
+    overflow: 'hidden',
+    borderWidth: 2.4,
     borderColor: 'transparent',
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
   active: {
     borderColor: Colors.activity,
@@ -120,10 +150,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 43,
     color: Colors.white,
+    fontFamily: Fonts.Regular,
   },
   caret: {
     width: 1,
-    height: '100%',
+    height: '80%',
     backgroundColor: Colors.success,
   },
 })

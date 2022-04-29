@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 export const truncateFirstWord = (text: string) => text.split(' ')[0]
 
 export const capitalizeWord = (word: string) =>
@@ -30,4 +32,8 @@ export const regexValidations = {
   [InputValidation.email]:
     /^(?!\.|_|-{1})+(\d*?[a-z]+\d*)+(([_\.\-])?((?!_)\w))+@([a-z0-9])+([\.\-])?((?!_)\w)+(\.)([a-z][a-z\d]{1,4})+$/,
   [InputValidation.phone]: /^\+{1}\d+$|^\+$/,
+}
+
+export const generateRandomString = (length: number) => {
+  return crypto.randomBytes(length).toString('hex')
 }

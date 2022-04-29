@@ -17,7 +17,7 @@ import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'
 import { LoaderTypes } from '~/modules/loader/types'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { isLocalAuthSet } from '~/modules/account/selectors'
+import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const colors = {
@@ -220,6 +220,8 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
                   position: 'absolute',
                   transform: [{ scale: errorScale }],
                   opacity: errorOpacity,
+                  width: 18,
+                  height: 18,
                 }}
               >
                 <ErrorIcon color={colors.default} />
@@ -227,7 +229,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
             )}
             {type === LoaderTypes.success && (
               <View style={styles.tickContainer}>
-                <View style={{ position: 'absolute' }}>
+                <View style={{ position: 'absolute', width: 26, height: 20 }}>
                   <SuccessTick color={colors.default} />
                 </View>
                 <Animated.View
@@ -282,9 +284,10 @@ const styles = StyleSheet.create({
 export default function () {
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
   const isAuthSet = useSelector(isLocalAuthSet)
+  const isAppLocked = useSelector(getIsAppLocked)
 
   // isVisible && isLocked && !isAuthSet => Logged out section
-  if (isLoaderVisible || (isLoaderVisible && !isAuthSet)) {
+  if ((isLoaderVisible && !isAppLocked) || (isLoaderVisible && !isAuthSet)) {
     return <Loader />
   }
   return null

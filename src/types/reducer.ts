@@ -12,6 +12,7 @@ import { CredentialsState } from '~/modules/credentials/types'
 import { ToastsState } from '~/modules/toasts/types'
 import { AnyAction } from 'redux'
 import { MdlState } from '~/modules/mdl/types'
+import { AusweisModuleState } from '~/modules/ausweis/types'
 
 export interface RootReducerI {
   loader: LoaderState
@@ -22,6 +23,7 @@ export interface RootReducerI {
   credentials: CredentialsState
   toasts: ToastsState
   mdl: MdlState
+  ausweis: AusweisModuleState
 }
 
 export type ThunkDispatch = OriginalThunkDispatch<RootReducerI, null, AnyAction>

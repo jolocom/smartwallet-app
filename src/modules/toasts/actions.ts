@@ -1,17 +1,27 @@
 import createAction from '~/utils/createAction'
-import { ToastsActions } from './types'
+import { ToastsAction, ToastsActions, ToastsActionType } from './types'
 import { Toast, ToastFilter } from '~/types/toasts'
 import { ThunkAction, RootReducerI } from '~/types/reducer'
 import { toastMatchesFilter } from './utils'
 
-const addToQueue = createAction<Toast>(ToastsActions.addToQueue)
-const removeFromQueue = createAction<Toast>(ToastsActions.removeFromQueue)
-const setActiveToast = createAction<{ toast: Toast | null; expiry: number }>(
-  ToastsActions.setActiveToast,
-)
-const setActiveFilter = createAction<ToastFilter>(ToastsActions.setActiveFilter)
+// To avoid manually passing a generic type every time we call `createAction`
+// redeclaring createAction fn with types specific to the `toasts` module
+function createToastsAction<K extends keyof ToastsActions>(type: K) {
+  return createAction<ToastsAction<K>>(type)
+}
 
-const clearActiveToast = setActiveToast({ toast: null, expiry: 0 })
+export const addToQueue = createToastsAction(ToastsActionType.addToQueue)
+export const removeFromQueue = createToastsAction(
+  ToastsActionType.removeFromQueue,
+)
+export const setActiveToast = createToastsAction(
+  ToastsActionType.setActiveToast,
+)
+export const setActiveFilter = createToastsAction(
+  ToastsActionType.setActiveFilter,
+)
+
+export const clearActiveToast = setActiveToast({ toast: null, expiry: 0 })
 
 export const scheduleToast =
   (toast: Toast): ThunkAction =>

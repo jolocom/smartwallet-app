@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { stringify as stringifyEnv, parse as parseEnv, Data } from 'envfile'
 import shell from 'shelljs'
+import { Table } from 'console-table-printer'
 
 export const TMP_DIR = `${process.cwd()}/.tmp`
 
@@ -50,3 +51,47 @@ export const readEnv = async (path: string) => {
     })
   })
 }
+
+// Script usage
+type Documentation = [arg: string, isRequired: string | boolean, desc: string]
+
+export function printHelp(gist: string, documentation: Documentation[]) {
+  const helpEnhancedDocs = [...documentation, ['help', '--', 'prints help']]
+  const t = new Table({
+    columns: [
+      {
+        name: 'arg',
+        title: 'Argument',
+        alignment: 'right',
+      },
+      {
+        name: 'isRequired',
+        title: '*',
+        alignment: 'right',
+      },
+      {
+        name: 'desc',
+        title: 'Description',
+        alignment: 'left',
+      },
+    ],
+  })
+
+  purpleLog('Script usage:')
+  console.log(`$ ${gist}`)
+  helpEnhancedDocs.forEach((a) => {
+    t.addRow({
+      arg: `--${a[0]}`,
+      isRequired:
+        typeof a[1] === 'boolean' ? (a[1] ? '(required)' : '(optional)') : a[1],
+      desc: a[2],
+    })
+  })
+  t.printTable()
+}
+
+// Color the output
+const coloredLog = (escapeSequence: string) => (message: string) =>
+  console.log(escapeSequence, message)
+export const purpleUnderlineLog = coloredLog('\x1b[4;95m%s\x1b[0m')
+export const purpleLog = coloredLog('\x1b[0;95m%s\x1b[0m')

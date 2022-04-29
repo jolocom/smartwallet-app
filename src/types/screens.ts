@@ -5,7 +5,7 @@ export enum ScreenNames {
   IdentityRecovery = 'IdentityRecovery',
   Registration = 'Registration',
   Walkthrough = 'Walkthrough',
-  Entropy = 'Entropy',
+  Idle = 'Idle',
   LostSeedPhraseInfo = 'LostSeedPhraseInfo',
   SeedPhraseWrite = 'SeedPhraseWrite',
   SeedPhraseInfo = 'SeedPhraseInfo',
@@ -37,10 +37,14 @@ export enum ScreenNames {
   Interaction = 'Interaction', // root screen
   Scanner = 'Scanner',
   InteractionFlow = 'InteractionFlow',
+  // eId
+  eId = 'eID',
+  AusweisChangePin = 'AusweisChangePin',
+  AusweisCardInfo = 'AusweisCardInfo',
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',
-  CredentialDetails = 'CredentialDetails',
+  FieldDetails = 'FieldDetails',
   PopupMenu = 'PopupMenu',
   TransparentModals = 'TransparentModals',
   AppDisabled = 'AppDisabled',

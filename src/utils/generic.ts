@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 export const sleep = <T>(timeout: number, callback?: () => T) => {
   return new Promise((res) => {
     setTimeout(() => {
@@ -6,3 +8,5 @@ export const sleep = <T>(timeout: number, callback?: () => T) => {
     }, timeout)
   }) as Promise<T | undefined>
 }
+
+export const IS_ANDROID = Platform.OS === 'android'

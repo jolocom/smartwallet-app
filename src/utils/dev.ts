@@ -20,3 +20,12 @@ export const debugView = () =>
  * Finds whether the app is in the Jest testing environment
  */
 export const isJestTesting = () => process.env.JEST_WORKER_ID !== undefined
+
+/*
+ * Logs structured JSON data
+ */
+export const LOG = (data: any) => {
+  if (__DEV__) {
+    console.log(JSON.stringify(data, null, 2))
+  }
+}

@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ausweis request review screen is displayed according to the designs 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#101010",
+        "paddingTop": 0,
+      }
+    }
+  >
+    <View
+      collapsable={false}
+    >
+      <View
+        onLayout={[Function]}
+        style={
+          Object {
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "zIndex": 10,
+          }
+        }
+        testID="collapsible-header-container"
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "height": 50,
+                "paddingHorizontal": 12,
+                "width": "100%",
+              },
+              Object {
+                "justifyContent": "space-between",
+              },
+              Array [
+                Object {
+                  "backgroundColor": "#201a21",
+                },
+                Object {
+                  "backgroundColor": "#101010",
+                },
+              ],
+            ]
+          }
+          testID="collapsible-header"
+        >
+          <View
+            style={
+              Object {
+                "flex": 1,
+                "paddingHorizontal": 10,
+              }
+            }
+          >
+            <Text
+              numberOfLines={1}
+              style={
+                Object {
+                  "color": "white",
+                  "fontSize": 20,
+                  "opacity": 0,
+                  "textAlign": "center",
+                  "transform": Array [
+                    Object {
+                      "translateY": 0,
+                    },
+                  ],
+                }
+              }
+              testID="collapsible-header-text"
+            >
+              
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;

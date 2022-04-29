@@ -15,6 +15,7 @@ export const PasscodeContext = React.createContext<
   pinSuccess: false,
   pinErrorText: '',
   setPinErrorText: () => {},
+  passcodeLength: 4,
 })
 PasscodeContext.displayName = 'PasscodeContext'
 

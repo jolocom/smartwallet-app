@@ -11,7 +11,7 @@ import {
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from 'react-native-camera'
 import Permissions from 'react-native-permissions'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useIsFocused } from '@react-navigation/core'
 import branch from 'react-native-branch'
 
@@ -19,7 +19,6 @@ import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
 
 import { getLoaderState } from '~/modules/loader/selectors'
-import { getInteractionType } from '~/modules/interaction/selectors'
 
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
@@ -36,6 +35,12 @@ import { getIsAppLocked } from '~/modules/account/selectors'
 import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
+import { dismissLoader } from '~/modules/loader/actions'
+import {
+  getAusweisScannerKey,
+  getIsAusweisInteractionProcessed,
+} from '~/modules/ausweis/selectors'
+import useConnection from '~/hooks/connection'
 import { useDisableLock } from '~/hooks/generic'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
@@ -45,20 +50,28 @@ const Camera = () => {
   const { t } = useTranslation()
   const { errorScreen } = useErrors()
   const { processInteraction } = useInteractionStart()
+  const dispatch = useDispatch()
   const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
+  const { connected: isConnectedToTheInternet } = useConnection()
+
+  const ausweisScannerKey = useSelector(getAusweisScannerKey)
 
   const isAppLocked = useSelector(getIsAppLocked)
-  const interactionType = useSelector(getInteractionType)
+  const isAuseisInteractionProcessed = useSelector(
+    getIsAusweisInteractionProcessed,
+  )
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
+  const isFocused = useIsFocused()
+
   const shouldScan =
-    !interactionType && !isLoaderVisible && !isAppLocked && !errorScreen
+    isFocused && !isLoaderVisible && !isAppLocked && !errorScreen
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
 
-  const [isError, setError] = useState(false)
+  const [isError, setError] = useState<boolean | undefined>(undefined)
   const [errorText, setErrorText] = useState('')
   const colorAnimationValue = useRef(new Animated.Value(0)).current
   const textAnimationValue = useRef(new Animated.Value(0)).current
@@ -106,6 +119,12 @@ const Camera = () => {
     }, 300)
   }, [])
 
+  useEffect(() => {
+    if (isAuseisInteractionProcessed) {
+      dispatch(dismissLoader())
+    }
+  }, [isAuseisInteractionProcessed])
+
   const openURL = async (url: string) => {
     let canOpen: boolean | undefined
     try {
@@ -117,8 +136,19 @@ const Camera = () => {
   }
 
   const handleScan = async (e: { data: string }) => {
+    if (!isConnectedToTheInternet) {
+      setError(true)
+      /**
+       * TODO:
+       * add copy/translation
+       */
+      setErrorText('Internet connection is required to proceed')
+      return
+    }
     try {
       const canOpen = await openURL(e.data)
+      // FIXME: Ideally we should use the value from the .env config, but there
+      // seems to be an issue with reading it.
       if (canOpen && e.data.includes('jolocom.app.link')) {
         disableLock(() => {
           // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
@@ -138,17 +168,28 @@ const Camera = () => {
 
       setError(true)
       setErrorText(t('Camera.errorMsg'))
+    }
+  }
+
+  useEffect(() => {
+    if (isError === true) {
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
       })
     }
-  }
+  }, [isError])
 
   const { top } = useSafeArea()
 
   const handleLocalPermissionPress = () => {
     Permissions.openSettings()
   }
+
+  /**
+   * NOTE:
+   * when the camera is on NFC scanner doesn't work;
+   */
+  if (ausweisScannerKey) return null
 
   return (
     <ScreenContainer isFullscreen backgroundColor={Colors.black}>

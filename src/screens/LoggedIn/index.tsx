@@ -1,12 +1,12 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+// @ts-expect-error
+import { enabled as enablePrivacyOverlay } from 'react-native-privacy-snapshot'
 
-import { useGetAppStates } from '~/hooks/useAppState'
+import { useAppBackgroundChange } from '~/hooks/useAppState'
 import { setAppLocked } from '~/modules/account/actions'
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
-import { setPopup } from '~/modules/appState/actions'
-import { getIsPopup } from '~/modules/appState/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import { ScreenNames } from '~/types/screens'
 import DeviceAuthentication from '../Modals/DeviceAuthentication'
@@ -44,35 +44,16 @@ const LoggedIn = () => {
     dispatch(dismissLoader())
   }, [])
 
-  /* All about when lock screen comes up - START */
-  const isPopup =
-    useSelector(
-      getIsPopup,
-    ) /* isPopup is used as a workaround for Android app state change */
-
-  const isPopupRef = useRef<boolean>(isPopup)
-
   useEffect(() => {
-    isPopupRef.current = isPopup
-  }, [isPopup])
+    enablePrivacyOverlay(true)
+  }, [])
 
-  const { currentAppState, prevAppState } = useGetAppStates()
-
-  useEffect(() => {
-    if (
-      prevAppState &&
-      prevAppState.match(/active/) &&
-      currentAppState.match(/inactive|background/)
-    ) {
-      if (isAuthSet) {
-        if (!isPopupRef.current) {
-          dispatch(setAppLocked(true))
-          dismissOverlays()
-        } else dispatch(setPopup(false))
-      }
+  useAppBackgroundChange(() => {
+    if (isAuthSet) {
+      dispatch(setAppLocked(true))
+      dismissOverlays()
     }
-  }, [currentAppState])
-  /* All about when lock screen comes up - END */
+  })
 
   useEffect(() => {
     if (showLock) redirect(ScreenNames.LockStack)

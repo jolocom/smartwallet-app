@@ -10,6 +10,11 @@ import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import { usePopupMenu } from '~/hooks/popupMenu'
+import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import { useLoader } from '~/hooks/loader'
+
+const TC_TOKEN =
+  'https://test.governikus-eid.de/Autent-DemoApplication/RequestServlet?provider=demo_epa_20&redirect=true'
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
@@ -17,6 +22,9 @@ const DevelopmentSection = () => {
   const redirectToNotifications = useRedirectTo(ScreenNames.NotificationsTest)
   const redirectToInputs = useRedirectTo(ScreenNames.InputTest)
   const redirectToPasscode = useRedirectTo(ScreenNames.PasscodeTest)
+
+  const { processAusweisToken } = eIDHooks.useAusweisInteraction()
+  const loader = useLoader()
 
   const redirect = useRedirect()
   const { showPopup } = usePopupMenu()
@@ -35,6 +43,17 @@ const DevelopmentSection = () => {
         <Section.Block>
           <Option onPress={() => redirect(ScreenNames.InteractionPasteTest)}>
             <Option.Title title="Paste interaction token" />
+          </Option>
+        </Section.Block>
+        <Section.Block>
+          <Option
+            onPress={() =>
+              loader(() => processAusweisToken(TC_TOKEN), {
+                showSuccess: false,
+              })
+            }
+          >
+            <Option.Title title="Initiate eID flow" />
           </Option>
         </Section.Block>
       </Section>

@@ -194,6 +194,8 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
+  - react-native-aa2-sdk (1.1.0):
+    - React
   - react-native-biometrics (2.1.4):
     - React
   - react-native-branch (5.0.4):
@@ -213,10 +215,12 @@ PODS:
     - React-Core
   - react-native-encrypted-storage (4.0.2):
     - React-Core
-  - react-native-mdl (1.0.21):
+  - react-native-mdl (1.0.29):
     - React
   - react-native-netinfo (6.0.0):
     - React-Core
+  - react-native-nfc-manager (3.11.0):
+    - React
   - react-native-randombytes (3.6.1):
     - React-Core
   - react-native-restart (0.0.17):
@@ -297,7 +301,7 @@ PODS:
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJolocom (2.7.0):
+  - RNJolocom (2.7.2):
     - React
   - RNKeychain (7.0.0):
     - React-Core
@@ -305,6 +309,8 @@ PODS:
     - React-Core
   - RNPermissions (2.2.2):
     - React-Core
+  - RNPrivacySnapshot (1.0.0):
+    - React
   - RNRate (1.2.6):
     - React-Core
   - RNReactNativeHapticFeedback (1.11.0):
@@ -374,6 +380,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - "react-native-aa2-sdk (from `../node_modules/@jolocom/react-native-ausweis`)"
   - react-native-biometrics (from `../node_modules/react-native-biometrics`)
   - react-native-branch (from `../node_modules/react-native-branch`)
   - react-native-camera (from `../node_modules/react-native-camera`)
@@ -381,6 +388,7 @@ DEPENDENCIES:
   - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
   - react-native-mdl (from `../node_modules/react-native-mdl`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-nfc-manager (from `../node_modules/react-native-nfc-manager`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -405,6 +413,7 @@ DEPENDENCIES:
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNPrivacySnapshot (from `../node_modules/react-native-privacy-snapshot`)
   - RNRate (from `../node_modules/react-native-rate`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -459,6 +468,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-aa2-sdk:
+    :path: "../node_modules/@jolocom/react-native-ausweis"
   react-native-biometrics:
     :path: "../node_modules/react-native-biometrics"
   react-native-branch:
@@ -473,6 +484,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-mdl"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-nfc-manager:
+    :path: "../node_modules/react-native-nfc-manager"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-restart:
@@ -521,6 +534,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localize"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNPrivacySnapshot:
+    :path: "../node_modules/react-native-privacy-snapshot"
   RNRate:
     :path: "../node_modules/react-native-rate"
   RNReactNativeHapticFeedback:
@@ -560,13 +575,15 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+  react-native-aa2-sdk: f8160afa21d881990f19e7b2edc34116ca08dcc1
   react-native-biometrics: 9d3306e5d29c3bc4e6a3c912d759a94e76a2f683
   react-native-branch: ac93090da23d4df1335764ce714310f93afdc9a3
   react-native-camera: eeb5b5f4ba4c1365fed3563af8a72007cbad7aab
   react-native-config: 72d948053a442779b3178fddd571e37f118ef606
   react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
-  react-native-mdl: 26598b15e5c1451e64b5c6ba372cc620e75c85bb
+  react-native-mdl: 71a3cea5e4ffc26940b43973942cfda445b08940
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
+  react-native-nfc-manager: e74f24f05274fbfdfe51e46e72d62d5ae460c724
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-restart: d19a0f8d053d065fe64cd2baebb6487111c77149
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
@@ -587,10 +604,11 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJolocom: adaea6fb6c7c7b33ec18505b3c49a6b076015bd7
+  RNJolocom: 25aefff39deb9c3e8c3aa207511ed92bcdf56dbc
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+  RNPrivacySnapshot: 71919dde3c6a29dd332115409c2aec564afee8f4
   RNRate: cb88d5a0aa7be8bfae67dafbbbba2c9cd5e6faf2
   RNReactNativeHapticFeedback: 653a8c126a0f5e88ce15ffe280b3ff37e1fbb285
   RNReanimated: 70f662b5232dd5d19ccff581e919a54ea73df51c

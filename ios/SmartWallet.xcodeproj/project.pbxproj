@@ -246,7 +246,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				87E1411C184043BEB1DDAB27 /* Upload Debug Symbols to Sentry */,
 				461D7F85ED56AAB4BF89A5B9 /* [CP] Copy Pods Resources */,
-				7B3333957B8CA1A35E8D3A54 /* [CP] Embed Pods Frameworks */,
+				47108DBB843836CD18DB419F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -422,10 +422,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-aa2-sdk/AusweisApp2.framework/AusweisApp2",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-mdl/BDRDrivingLicense.framework/BDRDrivingLicense",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AusweisApp2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BDRDrivingLicense.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -465,17 +467,19 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartWallet/Pods-SmartWallet-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7B3333957B8CA1A35E8D3A54 /* [CP] Embed Pods Frameworks */ = {
+		47108DBB843836CD18DB419F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SmartWallet/Pods-SmartWallet-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-aa2-sdk/AusweisApp2.framework/AusweisApp2",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-mdl/BDRDrivingLicense.framework/BDRDrivingLicense",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AusweisApp2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BDRDrivingLicense.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
