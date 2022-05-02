@@ -201,10 +201,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.white90,
     borderRadius: 156 / 2,
   },
-  successContainer: {
-    width: 56,
-    height: 56,
-  },
   failedContainer: {
     width: 74,
     height: 74,
