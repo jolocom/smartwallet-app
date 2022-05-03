@@ -6,7 +6,6 @@ import moment from 'moment'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -66,7 +65,7 @@ export const AusweisRequestReview = () => {
   const navigation = useNavigation<AusweisRequestReviewNavigation>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const translateField = eIDHooks.useTranslatedAusweisFields()
-  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { updateScanner, showScannerEid } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
   eIDHooks.useAusweisCancelBackHandler()
@@ -109,7 +108,7 @@ export const AusweisRequestReview = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelInteraction)
+          showScannerEid(cancelInteraction)
         }
       },
       handlePinRequest: (card) => {

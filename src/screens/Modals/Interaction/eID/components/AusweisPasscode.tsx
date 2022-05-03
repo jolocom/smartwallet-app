@@ -13,7 +13,6 @@ import { StackActions } from '@react-navigation/routers'
 import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { StackNavigationProp } from '@react-navigation/stack'
-
 import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { usePasscode } from '~/components/Passcode/context'
@@ -23,7 +22,6 @@ import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { useRevertToInitialState } from '~/hooks/generic'
-
 import { AusweisStackParamList } from '..'
 import {
   AusweisFlow,
@@ -38,7 +36,6 @@ import { getAusweisReaderState } from '~/modules/interaction/selectors'
 import { ExtraActionProps } from '~/components/Passcode/types'
 import JoloText from '~/components/JoloText'
 import { Trans } from 'react-i18next'
-import { JoloTextSizes } from '~/utils/fonts'
 import { useCheckNFC } from '~/hooks/nfc'
 
 const ALL_EID_PIN_ATTEMPTS = 3
@@ -123,7 +120,8 @@ export const AusweisPasscode = () => {
     cancelFlow,
     cancelInteraction,
   } = eIDHooks.useAusweisInteraction()
-  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { showScanner, updateScanner, showScannerEid } =
+    eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const checkNfcSupport = useCheckNFC()
 
@@ -233,7 +231,7 @@ export const AusweisPasscode = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelInteraction)
+          showScannerEid(cancelInteraction)
         }
       },
       handleAuthFailed: () => {

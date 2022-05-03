@@ -3,21 +3,17 @@ import React, { useEffect, useRef } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useDispatch } from 'react-redux'
-
 import { setAusweisScannerKey } from '~/modules/interaction/actions'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Ripple from '~/components/Ripple'
-
 import { useGoBack } from '~/hooks/navigation'
 import { ErrorIcon, NfcScannerAndroid, SuccessTick } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
-
 import { AusweisStackParamList } from '..'
 import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
 import useTranslation from '~/hooks/useTranslation'
-import eIDHooks from '../hooks'
 import BP from '~/utils/breakpoints'
 import { useCheckNFC } from '~/hooks/nfc'
 

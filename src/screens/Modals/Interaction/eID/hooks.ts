@@ -19,9 +19,8 @@ import {
 } from '@jolocom/react-native-ausweis/js/messageTypes'
 import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
-
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect, usePopStack, useGoBack } from '~/hooks/navigation'
+import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
@@ -436,12 +435,22 @@ export const useAusweisScanner = () => {
       screen: ScreenNames.eId,
       params: {
         screen: eIDScreens.AusweisScanner,
-        params: {
-          ...params,
-          onDismiss: () => {
-            resetScanner()
-            onDismiss && onDismiss()
-          },
+        params: { ...params, onDismiss },
+      },
+    })
+  }
+
+  const showScannerEid = (
+    onDismiss?: () => void,
+    params?: AusweisScannerParams,
+  ) => {
+    navigation.navigate(ScreenNames.eId, {
+      screen: eIDScreens.AusweisScanner,
+      initial: false,
+      params: {
+        ...params,
+        onDismiss: () => {
+          onDismiss && onDismiss()
         },
       },
     })
@@ -459,7 +468,7 @@ export const useAusweisScanner = () => {
     }
   }
 
-  return { showScanner, updateScanner }
+  return { showScanner, updateScanner, showScannerEid }
 }
 
 const useAusweisCancelBackHandler = () => {
