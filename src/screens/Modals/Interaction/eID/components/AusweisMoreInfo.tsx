@@ -3,7 +3,6 @@ import { ScrollView } from 'react-native'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
-import { debugView } from '~/utils/dev'
 
 export const AusweisMoreInfo = () => {
   const { t } = useTranslation()

@@ -1,22 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
-import { StackActions } from '@react-navigation/routers'
 import React, { useCallback, useRef } from 'react'
-import { Linking, ScrollView, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { useSelector } from 'react-redux'
-
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
-
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { IS_ANDROID } from '~/utils/generic'
-
 import eIDHooks from '../hooks'
 import {
   AusweisFlow,

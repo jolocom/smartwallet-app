@@ -3,7 +3,6 @@ import { StackActions } from '@react-navigation/routers'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
-
 import Btn, { BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
