@@ -11,7 +11,7 @@ import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import eIDHooks from '../hooks'
-import { eIDScreens } from '../types'
+import { ScreenNames } from '~/types/screens'
 
 export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
@@ -24,7 +24,12 @@ export const AusweisPinInfo = () => {
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
     // Replace InteractionSheet with AusweisChangePin
-    navigation.dispatch(StackActions.replace(eIDScreens.AusweisChangePin))
+    navigation.dispatch(
+      StackActions.replace(ScreenNames.Main, {
+        screen: ScreenNames.AusweisChangePin,
+        initial: false,
+      }),
+    )
   }
 
   return (

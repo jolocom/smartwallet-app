@@ -72,17 +72,20 @@ const AusweisChangePin = () => {
 
   const pinHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
-      navigation.navigate(ScreenNames.eId, {
-        screen: eIDScreens.EnterPIN,
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
         params: {
-          flow: changePinFlow,
-          mode:
-            isTransportPin.current === true
+          screen: eIDScreens.EnterPIN,
+          params: {
+            flow: changePinFlow,
+            mode:
+              isTransportPin.current === true
+                ? AusweisPasscodeMode.TRANSPORT_PIN
+                : AusweisPasscodeMode.PIN,
+            pinContext: isTransportPin.current
               ? AusweisPasscodeMode.TRANSPORT_PIN
-              : AusweisPasscodeMode.PIN,
-          pinContext: isTransportPin.current
-            ? AusweisPasscodeMode.TRANSPORT_PIN
-            : undefined,
+              : undefined,
+          },
         },
       })
     })
@@ -90,14 +93,17 @@ const AusweisChangePin = () => {
 
   const canHandler = useCallback((card: CardInfo) => {
     checkCardValidity(card, () => {
-      navigation.navigate(ScreenNames.eId, {
-        screen: eIDScreens.EnterPIN,
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
         params: {
-          flow: changePinFlow,
-          mode: AusweisPasscodeMode.CAN,
-          pinContext: isTransportPin.current
-            ? AusweisPasscodeMode.TRANSPORT_PIN
-            : undefined,
+          screen: eIDScreens.EnterPIN,
+          params: {
+            flow: changePinFlow,
+            mode: AusweisPasscodeMode.CAN,
+            pinContext: isTransportPin.current
+              ? AusweisPasscodeMode.TRANSPORT_PIN
+              : undefined,
+          },
         },
       })
     })
@@ -188,8 +194,11 @@ const AusweisChangePin = () => {
           }
         },
       })
-      navigation.navigate(ScreenNames.eId, {
-        screen: eIDScreens.AusweisTransportWarning,
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+        params: {
+          screen: eIDScreens.AusweisTransportWarning,
+        },
       })
     })
   }
