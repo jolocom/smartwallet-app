@@ -170,6 +170,8 @@ export const AusweisRequestReview = () => {
     })
   }
 
+  // FIXME: weird navigation behavior for iOS. popStack() in cancelInteraction takes user
+  // back to home screen instead of scanner. The ternary below fixes the issue.
   const handleIgnore = IS_ANDROID ? cancelInteraction : sendCancel
 
   const handleMoreInfo = () => {
