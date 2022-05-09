@@ -446,7 +446,6 @@ export const useAusweisScanner = () => {
   ) => {
     navigation.navigate(ScreenNames.eId, {
       screen: eIDScreens.AusweisScanner,
-      initial: false,
       params: {
         ...params,
         onDismiss: () => {
