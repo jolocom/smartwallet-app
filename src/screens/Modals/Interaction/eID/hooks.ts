@@ -429,16 +429,16 @@ export const useAusweisScanner = () => {
     dispatchScannerParams(defaultState)
   }
 
-  const showScanner = (
-    onDismiss?: () => void,
-    params?: AusweisScannerParams,
-  ) => {
-    if (
-      (navState.index === 0 &&
-        navState.routeNames[0] === eIDScreens.AusweisScanner) ||
-      (navState.index === 1 &&
-        navState.routeNames[1] === eIDScreens.RequestDetails)
-    ) {
+  const showScanner = ({
+    onDismiss,
+    params,
+    isInsideEidStack = false,
+  }: {
+    onDismiss?: () => void
+    params?: AusweisScannerParams
+    isInsideEidStack?: boolean
+  }) => {
+    if (isInsideEidStack) {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.AusweisScanner,
         params: {

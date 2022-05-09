@@ -230,7 +230,7 @@ export const AusweisPasscode = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelInteraction)
+          showScanner({ onDismiss: cancelInteraction, isInsideEidStack: true })
         }
       },
       handleAuthFailed: () => {

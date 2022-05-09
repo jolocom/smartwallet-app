@@ -108,7 +108,7 @@ export const AusweisRequestReview = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelInteraction)
+          showScanner({ onDismiss: cancelInteraction, isInsideEidStack: true })
         }
       },
       handlePinRequest: (card) => {
