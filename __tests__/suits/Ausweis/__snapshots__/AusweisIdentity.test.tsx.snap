@@ -22,6 +22,7 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
         Object {
           "aspectRatio": 1.55,
           "marginBottom": 8,
+          "position": "relative",
           "width": "100%",
         }
       }
@@ -47,6 +48,33 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
           }
         }
       />
+      <Text
+        style={
+          Array [
+            Object {
+              "paddingTop": undefined,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "#000",
+              "fontFamily": "TTCommons-Medium",
+              "fontSize": 20,
+              "letterSpacing": 0.14,
+              "lineHeight": 22,
+            },
+            Object {
+              "bottom": 23,
+              "fontSize": 16,
+              "left": 18,
+              "letterSpacing": 0.15,
+              "lineHeight": 18.4,
+              "position": "absolute",
+            },
+          ]
+        }
+      >
+        AusweisIdentity.ausweisBadge
+      </Text>
     </View>
     <View>
       <Text
@@ -84,18 +112,38 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
               "lineHeight": 18,
             },
             Object {
-              "marginHorizontal": 16,
               "marginTop": 8,
             },
           ]
         }
       >
         AusweisIdentity.subheader
+        <Text
+          onPress={[Function]}
+          style={
+            Array [
+              Object {
+                "paddingTop": undefined,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "#fa3384",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 16,
+                "letterSpacing": 0,
+                "lineHeight": 18,
+              },
+              undefined,
+            ]
+          }
+        >
+           General.moreInfo...
+        </Text>
       </Text>
       <View
         style={
           Object {
-            "marginTop": 84,
+            "marginTop": 42,
             "paddingVertical": 8,
           }
         }
