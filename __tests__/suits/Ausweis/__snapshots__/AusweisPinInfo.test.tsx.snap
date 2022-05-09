@@ -81,6 +81,7 @@ exports[`Ausweis passcode details screen is displayed according to the designs 1
                 "width": 40,
               }
             }
+            testID="backArrow"
           >
             <RNSVGSvgView
               align="xMidYMid"
@@ -130,6 +131,7 @@ exports[`Ausweis passcode details screen is displayed according to the designs 1
                 "paddingHorizontal": 10,
               }
             }
+            testID="heading"
           >
             <Text
               numberOfLines={1}

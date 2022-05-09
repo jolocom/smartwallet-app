@@ -1,0 +1,161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BlockExpanded should match the initial snapshot 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#0b030d",
+          "borderRadius": 8,
+          "elevation": 15,
+          "width": "100%",
+        },
+        Object {
+          "marginBottom": 16,
+        },
+      ]
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "flex-start",
+          "paddingHorizontal": 24,
+          "paddingVertical": 24,
+          "width": "100%",
+        }
+      }
+      testID="blockExpandedButton"
+    >
+      <Text
+        style={
+          Array [
+            Object {
+              "paddingTop": undefined,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "rgba(255,255,255,0.9)",
+              "fontFamily": "TTCommons-Regular",
+              "fontSize": 20,
+              "letterSpacing": 0.14,
+              "lineHeight": 22,
+            },
+            Object {
+              "textAlign": "left",
+            },
+          ]
+        }
+        testID="title"
+      >
+        Test title
+      </Text>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`BlockExpanded should render props correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#0b030d",
+        "borderRadius": 8,
+        "elevation": 15,
+        "width": "100%",
+      },
+      Object {
+        "marginBottom": 16,
+      },
+    ]
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "flex-start",
+        "paddingHorizontal": 24,
+        "paddingVertical": 24,
+        "width": "100%",
+      }
+    }
+    testID="blockExpandedButton"
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "paddingTop": undefined,
+            "textAlign": "center",
+          },
+          Object {
+            "color": "rgba(255,255,255,0.9)",
+            "fontFamily": "TTCommons-Regular",
+            "fontSize": 20,
+            "letterSpacing": 0.14,
+            "lineHeight": 22,
+          },
+          Object {
+            "textAlign": "left",
+          },
+        ]
+      }
+      testID="title"
+    >
+      Test title
+    </Text>
+    <View>
+      <Text
+        style={
+          Array [
+            Object {
+              "paddingTop": undefined,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "rgba(255, 255, 255, 0.4)",
+              "fontFamily": "TTCommons-Regular",
+              "fontSize": 16,
+              "letterSpacing": 0,
+              "lineHeight": 18,
+            },
+            Object {
+              "marginTop": 12,
+              "textAlign": "left",
+            },
+          ]
+        }
+      >
+        Test expanded text
+      </Text>
+    </View>
+  </View>
+</View>
+`;

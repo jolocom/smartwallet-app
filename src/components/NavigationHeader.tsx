@@ -39,6 +39,7 @@ const NavigationHeader: React.FC<Props> = ({
     >
       {type === NavHeaderType.Back && (
         <IconBtn
+          testID="backArrow"
           disabled={type !== NavHeaderType.Back}
           onPress={navigateBack}
           style={styles.button}
@@ -46,9 +47,12 @@ const NavigationHeader: React.FC<Props> = ({
           <BackArrowIcon />
         </IconBtn>
       )}
-      <View style={styles.centerComponent}>{children}</View>
+      <View testID="heading" style={styles.centerComponent}>
+        {children}
+      </View>
       {type === NavHeaderType.Close && (
         <IconBtn
+          testID="closeIcon"
           disabled={type !== NavHeaderType.Close}
           onPress={navigateBack}
           style={styles.button}
