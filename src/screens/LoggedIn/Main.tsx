@@ -33,6 +33,7 @@ import {
   screenDisableGestures,
   transparentModalFadeOptions,
 } from '~/utils/screenSettings'
+import { useDeeplinkInteractions } from '~/hooks/interactions/handlers'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
@@ -112,6 +113,7 @@ const MainStack = createStackNavigator<MainStackParamList>()
 const Main: React.FC = () => {
   const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
   const dispatch = useDispatch()
+  useDeeplinkInteractions()
 
   useEffect(() => {
     if (isTermsConsentOutdated) {

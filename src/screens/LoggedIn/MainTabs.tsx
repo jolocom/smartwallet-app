@@ -12,10 +12,7 @@ import Settings from './Settings'
 import Identity from './Identity'
 import { CredentialCategories } from '~/types/credentials'
 import useTranslation from '~/hooks/useTranslation'
-import {
-  useDeeplinkInteractions,
-  useInteractionStart,
-} from '~/hooks/interactions/handlers'
+import { useInteractionStart } from '~/hooks/interactions/handlers'
 import { useNavigation } from '@react-navigation/core'
 import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
@@ -41,7 +38,6 @@ const MainTabs = () => {
   const { showInteraction } = useInteractionStart()
   const navigation = useNavigation()
 
-  useDeeplinkInteractions()
   useInteractionEvents(showInteraction)
 
   // Show an interaction sheet declaratively by
