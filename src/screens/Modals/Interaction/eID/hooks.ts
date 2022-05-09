@@ -43,11 +43,11 @@ import {
 import {
   getAusweisReaderState,
   getAusweisScannerKey,
+  getRedirectUrl,
 } from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
-import { getRedirectUrl } from '~/modules/interaction/selectors'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -244,6 +244,7 @@ const useAusweisInteraction = () => {
 
   return {
     closeAusweis,
+    sendCancel,
     initAusweis,
     disconnectAusweis,
     processAusweisToken,

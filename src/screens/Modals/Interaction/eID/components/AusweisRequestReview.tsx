@@ -46,8 +46,13 @@ type AusweisRequestReviewNavigation = StackNavigationProp<
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
-  const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
-    eIDHooks.useAusweisInteraction()
+  const {
+    acceptRequest,
+    cancelInteraction,
+    checkCardValidity,
+    closeAusweis,
+    sendCancel,
+  } = eIDHooks.useAusweisInteraction()
   const {
     providerName,
     requiredFields,
@@ -164,7 +169,9 @@ export const AusweisRequestReview = () => {
     })
   }
 
-  const handleIgnore = cancelInteraction
+  // FIXME: weird navigation behavior for iOS. popStack() in cancelInteraction takes user
+  // back to home screen instead of scanner. The ternary below fixes the issue.
+  const handleIgnore = IS_ANDROID ? cancelInteraction : sendCancel
 
   const handleMoreInfo = () => {
     const fields: IField[] = [
