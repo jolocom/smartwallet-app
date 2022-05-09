@@ -3,6 +3,7 @@ import {
   StackActions,
   useIsFocused,
   useNavigation,
+  useNavigationState,
 } from '@react-navigation/native'
 import { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
@@ -397,6 +398,7 @@ export const useDeactivatedCard = () => {
 }
 
 export const useAusweisScanner = () => {
+  const navState = useNavigationState((state) => state)
   const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
