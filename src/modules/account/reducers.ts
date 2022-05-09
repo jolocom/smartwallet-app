@@ -13,6 +13,7 @@ import {
   setMakingScreenshotDisability,
   setScreenHeight,
   setAppLocked,
+  setIsBranchSubscribed,
 } from './actions'
 
 const initialState: AccountState = {
@@ -29,6 +30,7 @@ const initialState: AccountState = {
     isOutdated: false,
   },
   isMakingScreenshotDisabled: true,
+  setIsBranchSubscribed: false,
 }
 
 const reducer = (
@@ -46,6 +48,7 @@ const reducer = (
     | typeof setMakingScreenshotDisability
     | typeof setScreenHeight
     | typeof setAppLocked
+    | typeof setIsBranchSubscribed
   >,
 ) => {
   switch (action.type) {
@@ -99,6 +102,12 @@ const reducer = (
         ...state,
         isMakingScreenshotDisabled: action.payload,
       }
+    case AccountActionType.setIsBranchSubscribed: {
+      return {
+        ...state,
+        isBranchSubscribed: action.payload,
+      }
+    }
     default:
       return state
   }
