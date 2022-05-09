@@ -43,6 +43,8 @@ import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/Ausweis
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
+import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
+import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -69,6 +71,8 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
+  [ScreenNames.AusweisChangePin]: undefined
+  [ScreenNames.AusweisMoreInfo]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
   [ScreenNames.MnemonicPhrase]: undefined
@@ -232,11 +236,20 @@ const Main: React.FC = () => {
         }}
       />
       <MainStack.Screen
+        name={ScreenNames.AusweisChangePin}
+        component={AusweisChangePin}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.AusweisMoreInfo}
+        component={AusweisMoreInfo}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
         name={ScreenNames.CredentialForm}
         component={CredentialForm}
         options={screenTransitionFromBottomDisabledGestures}
       />
-
       {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
       <MainStack.Screen
         name={ScreenNames.PinRecoveryInstructions}
