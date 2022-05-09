@@ -87,6 +87,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
               "width": 40,
             }
           }
+          testID="backArrow"
         >
           <RNSVGSvgView
             align="xMidYMid"
@@ -136,6 +137,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
               "paddingHorizontal": 10,
             }
           }
+          testID="heading"
         />
       </View>
       <View
