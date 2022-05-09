@@ -10,6 +10,8 @@ import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import eIDHooks from '../hooks'
+import { eIDScreens } from '../types'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { ScreenNames } from '~/types/screens'
 
 export const AusweisPinInfo = () => {
@@ -19,6 +21,7 @@ export const AusweisPinInfo = () => {
   const { cancelFlow } = eIDHooks.useAusweisInteraction()
 
   const handleChangePinRedirect = () => {
+    aa2Module.resetHandlers()
     cancelFlow()
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
