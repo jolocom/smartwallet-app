@@ -23,7 +23,7 @@ export interface InteractionState {
   // get redirected to another application or browser
   redirectUrl: string | null
   // NOTE: Updates the service's UI that the interaction has finished successfully
-  refreshUrl: string | null
+  postRedirect: boolean
 }
 
 export enum InteractionActionType {
@@ -32,7 +32,7 @@ export enum InteractionActionType {
   selectShareCredential = 'selectShareCredential',
   updateOfferValidation = 'updateOfferValidation',
   setRedirectUrl = 'setRedirectUrl',
-  setRefreshUrl = 'setRefreshUrl',
+  setPostRedirect = 'setPostRedirect',
   setDetails = 'setDetails',
   setScannerKey = 'setScannerKey',
   setReaderState = 'setReaderState',
@@ -50,7 +50,7 @@ export interface InteractionActions {
   [InteractionActionType.selectShareCredential]: Record<string, string>
   [InteractionActionType.updateOfferValidation]: OfferedCredential[]
   [InteractionActionType.setRedirectUrl]: string | null
-  [InteractionActionType.setRefreshUrl]: string | null
+  [InteractionActionType.setPostRedirect]: boolean
   [InteractionActionType.setDetails]: IAusweisRequest | null
   [InteractionActionType.setScannerKey]: string | null
   [InteractionActionType.setReaderState]: CardInfo | null

@@ -7,7 +7,7 @@ import {
   selectShareCredential,
   updateOfferValidation,
   setRedirectUrl,
-  setRefreshUrl,
+  setPostRedirect,
 } from './actions'
 import { updateAttrs } from '../attributes/actions'
 import {
@@ -26,7 +26,7 @@ const initialState: InteractionState = {
     flowType: null,
   },
   redirectUrl: null,
-  refreshUrl: null,
+  postRedirect: false,
 }
 
 const reducer = (
@@ -37,7 +37,7 @@ const reducer = (
     | typeof selectShareCredential
     | typeof updateOfferValidation
     | typeof setRedirectUrl
-    | typeof setRefreshUrl
+    | typeof setPostRedirect
     | typeof updateAttrs
     | typeof setAusweisInteractionDetails
     | typeof setAusweisScannerKey
@@ -51,8 +51,8 @@ const reducer = (
     case InteractionActionType.setRedirectUrl:
       return { ...state, redirectUrl: action.payload }
 
-    case InteractionActionType.setRefreshUrl:
-      return { ...state, refreshUrl: action.payload }
+    case InteractionActionType.setPostRedirect:
+      return { ...state, postRedirect: action.payload }
 
     // NOTE: SSI handlers
 

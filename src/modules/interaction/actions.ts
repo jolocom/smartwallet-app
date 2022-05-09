@@ -8,6 +8,6 @@ export const setRedirectUrl = createInteractionAction(
   InteractionActionType.setRedirectUrl,
 )
 
-export const setRefreshUrl = createInteractionAction(
-  InteractionActionType.setRefreshUrl,
+export const setPostRedirect = createInteractionAction(
+  InteractionActionType.setPostRedirect,
 )
