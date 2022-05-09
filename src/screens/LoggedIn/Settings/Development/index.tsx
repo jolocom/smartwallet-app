@@ -15,7 +15,7 @@ import { DeeplinkParams } from '~/hooks/deeplinks'
 const TC_TOKEN =
   'https://servicekonto.test.governikus-eid.de/AutentIDConnect/npa/authorize?scope=openid&response_type=code&redirect_uri=https%3A%2F%2Fservicekonto.test.governikus-eid.de%2Ftest-client%2Fopenid-connect%2Fauthcode&state=1&nonce=nonce&client_id=tNwyiRVez8xM8t1YZ9YnaMXd2tviISKw&acr_values=integrated'
 
-const TEST_URL = encodeURIComponent('https://example.com')
+const TEST_URL = encodeURIComponent('https://smartwallet.free.beeceptor.com')
 
 const EID_DEEPLINK = new URL('https://jolocom.app.link/eid')
 EID_DEEPLINK.searchParams.append(
@@ -23,7 +23,7 @@ EID_DEEPLINK.searchParams.append(
   encodeURIComponent(TC_TOKEN),
 )
 EID_DEEPLINK.searchParams.append(DeeplinkParams.redirectUrl, TEST_URL)
-EID_DEEPLINK.searchParams.append(DeeplinkParams.refreshUrl, TEST_URL)
+EID_DEEPLINK.searchParams.append(DeeplinkParams.postRedirect, 'true')
 
 console.log({ EID_DEEPLINK })
 
