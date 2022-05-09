@@ -244,6 +244,7 @@ const useAusweisInteraction = () => {
 
   return {
     closeAusweis,
+    sendCancel,
     initAusweis,
     disconnectAusweis,
     processAusweisToken,
