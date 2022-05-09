@@ -431,28 +431,30 @@ export const useAusweisScanner = () => {
     onDismiss?: () => void,
     params?: AusweisScannerParams,
   ) => {
-    navigation.navigate(ScreenNames.Interaction, {
-      screen: ScreenNames.eId,
-      params: {
+    if (
+      (navState.index === 0 &&
+        navState.routeNames[0] === eIDScreens.AusweisScanner) ||
+      (navState.index === 1 &&
+        navState.routeNames[1] === eIDScreens.RequestDetails)
+    ) {
+      navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.AusweisScanner,
-        params: { ...params, onDismiss },
-      },
-    })
-  }
-
-  const showScannerEid = (
-    onDismiss?: () => void,
-    params?: AusweisScannerParams,
-  ) => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: eIDScreens.AusweisScanner,
-      params: {
-        ...params,
-        onDismiss: () => {
-          onDismiss && onDismiss()
+        params: {
+          ...params,
+          onDismiss: () => {
+            onDismiss && onDismiss()
+          },
         },
-      },
-    })
+      })
+    } else {
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+        params: {
+          screen: eIDScreens.AusweisScanner,
+          params: { ...params, onDismiss },
+        },
+      })
+    }
   }
 
   const updateScanner = (params: Partial<AusweisScannerParams>) => {
@@ -467,7 +469,7 @@ export const useAusweisScanner = () => {
     }
   }
 
-  return { showScanner, updateScanner, showScannerEid }
+  return { showScanner, updateScanner }
 }
 
 const useAusweisCancelBackHandler = () => {

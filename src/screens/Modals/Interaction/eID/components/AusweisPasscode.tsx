@@ -120,8 +120,7 @@ export const AusweisPasscode = () => {
     cancelFlow,
     cancelInteraction,
   } = eIDHooks.useAusweisInteraction()
-  const { showScanner, updateScanner, showScannerEid } =
-    eIDHooks.useAusweisScanner()
+  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const checkNfcSupport = useCheckNFC()
 
@@ -231,7 +230,7 @@ export const AusweisPasscode = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScannerEid(cancelInteraction)
+          showScanner(cancelInteraction)
         }
       },
       handleAuthFailed: () => {

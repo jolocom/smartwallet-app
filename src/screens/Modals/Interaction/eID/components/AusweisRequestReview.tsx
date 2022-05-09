@@ -65,7 +65,7 @@ export const AusweisRequestReview = () => {
   const navigation = useNavigation<AusweisRequestReviewNavigation>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const translateField = eIDHooks.useTranslatedAusweisFields()
-  const { updateScanner, showScannerEid } = eIDHooks.useAusweisScanner()
+  const { updateScanner, showScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
   eIDHooks.useAusweisCancelBackHandler()
@@ -108,7 +108,7 @@ export const AusweisRequestReview = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScannerEid(cancelInteraction)
+          showScanner(cancelInteraction)
         }
       },
       handlePinRequest: (card) => {
