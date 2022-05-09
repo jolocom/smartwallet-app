@@ -79,6 +79,7 @@ const useAusweisInteraction = () => {
   const initAusweis = async () => {
     if (!aa2Module.isInitialized) {
       try {
+        aa2Module.enableLogger(true)
         await aa2Module.initAa2Sdk()
       } catch (e) {
         scheduleErrorWarning(e)
