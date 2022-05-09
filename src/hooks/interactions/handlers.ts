@@ -60,7 +60,6 @@ export const useDeeplinkInteractions = () => {
   }
 
   useEffect(() => {
-    console.log('deeplink useEffect')
     // TODO move somewhere
     branch.disableTracking(true)
     if (!isBranchSubscribed) {
@@ -85,7 +84,6 @@ export const useDeeplinkInteractions = () => {
             if (redirectUrl) {
               dispatch(setRedirectUrl(redirectUrl))
             }
-            console.log('deeplink hook')
             loader(() => processAusweisToken(eidValue), {
               showSuccess: false,
               showFailed: false,
