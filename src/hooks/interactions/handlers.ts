@@ -5,15 +5,12 @@
  * with module caching, that appeared after upgrading to RN63.
  */
 
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useLoader } from '../loader'
 import {
   resetInteraction,
   setInteractionDetails,
-  setRedirectUrl,
-  setRefreshUrl,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
@@ -23,11 +20,7 @@ import { useInteractionHandler } from './interactionHandlers'
 import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
-import branch, { BranchParams } from 'react-native-branch'
-import { SWErrorCodes } from '~/errors/codes'
-import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import useConnection from '../connection'
-import { getCurrentLanguage } from '~/modules/account/selectors'
 
 export const useInteraction = () => {
   const agent = useAgent()

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { SWErrorCodes } from '~/errors/codes'
 import { getCurrentLanguage } from '~/modules/account/selectors'
-import { setRedirectUrl, setRefreshUrl } from '~/modules/interaction/actions'
+import { setRedirectUrl, setPostRedirect } from '~/modules/interaction/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { useInteractionStart } from './interactions/handlers'
 import { useLoader } from './loader'
@@ -12,7 +12,7 @@ import { useToasts } from './toasts'
 
 export enum DeeplinkParams {
   redirectUrl = 'redirectUrl',
-  refreshUrl = 'refreshUrl',
+  postRedirect = 'postRedirect',
   token = 'token',
   tcTokenUrl = 'tcTokenUrl',
 }
@@ -47,9 +47,9 @@ export const useDeeplinkInteractions = () => {
       if (params) {
         // NOTE: Shows the user the `ServiceRedirect` screen, which allows the user to
         // get redirected to another application or browser
-        let redirectUrl = getParamValue(DeeplinkParams.redirectUrl, params)
+        const redirectUrl = getParamValue(DeeplinkParams.redirectUrl, params)
         // NOTE: Updates the service's UI that the interaction has finished successfully
-        const refreshUrl = getParamValue(DeeplinkParams.refreshUrl, params)
+        const postRedirect = getParamValue(DeeplinkParams.postRedirect, params)
         // NOTE: SSI token
         const tokenValue = getParamValue(DeeplinkParams.token, params)
         // NOTE: eID token
@@ -63,9 +63,17 @@ export const useDeeplinkInteractions = () => {
           processInteraction(tokenValue).catch(scheduleErrorWarning)
           return
         } else if (eidValue) {
-          if (refreshUrl) {
-            dispatch(setRefreshUrl(refreshUrl))
+          if (postRedirect) {
+            try {
+              dispatch(setPostRedirect(JSON.parse(postRedirect) as boolean))
+            } catch (e) {
+              if (e instanceof Error) {
+                e.name = SWErrorCodes.SWPostRedirectQueryInvalid
+                return scheduleErrorWarning(e)
+              }
+            }
           }
+
           loader(() => processAusweisToken(eidValue), {
             showSuccess: false,
             showFailed: false,
