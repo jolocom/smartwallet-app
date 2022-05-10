@@ -17,16 +17,6 @@ const TC_TOKEN =
 
 const TEST_URL = encodeURIComponent('https://smartwallet.free.beeceptor.com')
 
-const EID_DEEPLINK = new URL('https://jolocom.app.link/eid')
-EID_DEEPLINK.searchParams.append(
-  DeeplinkParams.tcTokenUrl,
-  encodeURIComponent(TC_TOKEN),
-)
-EID_DEEPLINK.searchParams.append(DeeplinkParams.redirectUrl, TEST_URL)
-EID_DEEPLINK.searchParams.append(DeeplinkParams.postRedirect, 'true')
-
-console.log({ EID_DEEPLINK })
-
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
@@ -40,6 +30,14 @@ const DevelopmentSection = () => {
       message: `I am ${toggled ? 'toggled' : 'not toggled'}!`,
     })
   }
+
+  const EID_DEEPLINK = new URL('https://jolocom.app.link/eid')
+  EID_DEEPLINK.searchParams.append(
+    DeeplinkParams.tcTokenUrl,
+    encodeURIComponent(TC_TOKEN),
+  )
+  EID_DEEPLINK.searchParams.append(DeeplinkParams.redirectUrl, TEST_URL)
+  EID_DEEPLINK.searchParams.append(DeeplinkParams.postRedirect, 'true')
 
   return (
     <>
