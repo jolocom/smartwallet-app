@@ -3,6 +3,7 @@ import {
   StackActions,
   useIsFocused,
   useNavigation,
+  useNavigationState,
 } from '@react-navigation/native'
 import { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
@@ -19,7 +20,6 @@ import {
 } from '@jolocom/react-native-ausweis/js/messageTypes'
 import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
-
 import { useCustomContext } from '~/hooks/context'
 import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
@@ -399,6 +399,7 @@ export const useDeactivatedCard = () => {
 }
 
 export const useAusweisScanner = () => {
+  const navState = useNavigationState((state) => state)
   const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
@@ -429,17 +430,34 @@ export const useAusweisScanner = () => {
     dispatchScannerParams(defaultState)
   }
 
-  const showScanner = (
-    onDismiss?: () => void,
-    params?: AusweisScannerParams,
-  ) => {
-    navigation.navigate(ScreenNames.Interaction, {
-      screen: ScreenNames.eId,
-      params: {
+  const showScanner = ({
+    onDismiss,
+    params,
+    isInsideEidStack = false,
+  }: {
+    onDismiss?: () => void
+    params?: AusweisScannerParams
+    isInsideEidStack?: boolean
+  }) => {
+    if (isInsideEidStack) {
+      navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.AusweisScanner,
-        params: { ...params, onDismiss },
-      },
-    })
+        params: {
+          ...params,
+          onDismiss: () => {
+            onDismiss && onDismiss()
+          },
+        },
+      })
+    } else {
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+        params: {
+          screen: eIDScreens.AusweisScanner,
+          params: { ...params, onDismiss },
+        },
+      })
+    }
   }
 
   const updateScanner = (params: Partial<AusweisScannerParams>) => {

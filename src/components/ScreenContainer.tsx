@@ -1,7 +1,6 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, Dimensions } from 'react-native'
 import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
-
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
 import JoloText, {
@@ -12,7 +11,6 @@ import JoloText, {
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
-import { Dimensions } from 'react-native'
 
 interface ScreenContainerI {
   isTransparent?: boolean
@@ -31,74 +29,72 @@ interface IScreenContainerCompound {
   Padding: React.FC<{ distance?: number }>
 }
 
-const ScreenContainer: React.FC<ScreenContainerI> & IScreenContainerCompound =
-  ({
-    children,
-    isTransparent = false,
-    isFullscreen = false,
-    customStyles = {},
-    navigationStyles = {},
-    backgroundColor = Colors.mainBlack,
-    hasHeaderBack = false,
-    hasHeaderClose = false,
-    onClose,
-    testID,
-  }) => {
-    const { top, bottom } = useSafeArea()
+const ScreenContainer: React.FC<ScreenContainerI> &
+  IScreenContainerCompound = ({
+  children,
+  isTransparent = false,
+  isFullscreen = false,
+  customStyles = {},
+  navigationStyles = {},
+  backgroundColor = Colors.mainBlack,
+  hasHeaderBack = false,
+  hasHeaderClose = false,
+  onClose,
+  testID,
+}) => {
+  const { top, bottom } = useSafeArea()
 
-    return (
-      <SafeAreaView
-        testID={testID}
-        style={{
-          flex: 1,
-          paddingTop: 0,
-        }}
-      >
-        <View
-          style={[styles.navContainer, isTransparent && styles.transparent]}
-        >
-          {!isFullscreen && (
-            <View
-              style={{
-                height: top,
-                width: '100%',
-                backgroundColor,
-              }}
-            />
-          )}
-          {(hasHeaderClose || hasHeaderBack) && (
-            <NavigationHeader
-              customStyles={[{ backgroundColor }, navigationStyles]}
-              onPress={onClose}
-              type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
-            />
-          )}
+  return (
+    <SafeAreaView
+      testID={testID}
+      style={{
+        flex: 1,
+        paddingTop: 0,
+      }}
+    >
+      <View style={[styles.navContainer, isTransparent && styles.transparent]}>
+        {!isFullscreen && (
           <View
-            style={[
-              styles.container,
-              {
-                backgroundColor,
-                ...((hasHeaderClose || hasHeaderBack) &&
-                  navigationStyles.position === 'absolute' && {
-                    marginTop: SCREEN_HEADER_HEIGHT,
-                  }),
-                paddingBottom: isFullscreen ? 0 : bottom,
-                marginBottom: -bottom,
-              },
-              {
-                ...(isFullscreen && {
-                  ...styles.fullscreen,
+            style={{
+              height: top,
+              width: '100%',
+              backgroundColor,
+            }}
+          />
+        )}
+        {(hasHeaderClose || hasHeaderBack) && (
+          <NavigationHeader
+            customStyles={[{ backgroundColor }, navigationStyles]}
+            onPress={onClose}
+            type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
+          />
+        )}
+        <View
+          style={[
+            styles.container,
+            {
+              backgroundColor,
+              ...((hasHeaderClose || hasHeaderBack) &&
+                navigationStyles.position === 'absolute' && {
+                  marginTop: SCREEN_HEADER_HEIGHT,
                 }),
-              },
-              customStyles,
-            ]}
-          >
-            {children}
-          </View>
+              paddingBottom: isFullscreen ? 0 : bottom,
+              marginBottom: -bottom,
+            },
+            {
+              ...(isFullscreen && {
+                ...styles.fullscreen,
+              }),
+            },
+            customStyles,
+          ]}
+        >
+          {children}
         </View>
-      </SafeAreaView>
-    )
-  }
+      </View>
+    </SafeAreaView>
+  )
+}
 
 const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
   children,
@@ -154,7 +150,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   transparent: {
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.transparent,
   },
   fullscreen: {
     paddingHorizontal: 0,

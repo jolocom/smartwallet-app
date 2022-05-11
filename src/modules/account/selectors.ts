@@ -19,3 +19,5 @@ export const getMnemonicWarningVisibility = (state: RootReducerI) =>
   state.account.isMnemonicWarningVisible
 export const getIsMakingScreenshotDisabled = (state: RootReducerI) =>
   state.account.isMakingScreenshotDisabled
+export const getIsBranchSubscribed = (state: RootReducerI) =>
+  state.account.isBranchSubscribed

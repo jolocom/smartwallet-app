@@ -13,6 +13,7 @@ export enum AccountActionType {
   setTermsConsentVisibility = 'setTermsConsentVisibility',
   setTermsConsentOutdatedness = 'setTermsConsentOutdatedness',
   setMakingScreenshotDisability = 'setMakingScreenshotDisability',
+  setIsBranchSubscribed = 'setIsBranchSubscribed',
 }
 
 // Expressing dependency between action type and action payload;
@@ -30,6 +31,7 @@ export interface AccountActions {
   [AccountActionType.setTermsConsentVisibility]: boolean
   [AccountActionType.setTermsConsentOutdatedness]: boolean
   [AccountActionType.setMakingScreenshotDisability]: boolean
+  [AccountActionType.setIsBranchSubscribed]: boolean
 }
 
 // Dependency between action type and its payload following Action type signature
@@ -52,4 +54,5 @@ export interface AccountState {
     isOutdated: boolean
   }
   isMakingScreenshotDisabled: boolean
+  isBranchSubscribed: boolean
 }

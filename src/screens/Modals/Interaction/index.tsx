@@ -1,9 +1,5 @@
 import React, { useEffect } from 'react'
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-} from '@react-navigation/stack'
-
+import { createStackNavigator } from '@react-navigation/stack'
 import { ScreenNames } from '~/types/screens'
 import Scanner from '~/screens/Modals/Interaction/Scanner'
 import { useSelector } from 'react-redux'
@@ -34,7 +30,7 @@ export type InteractionStackParamList = {
   }
 }
 
-const Stack = createStackNavigator<InteractionStackParamList>()
+const InteractionStack = createStackNavigator<InteractionStackParamList>()
 
 const Interaction: React.FC = () => {
   const isInteracting = useSelector(getInteractionType)
@@ -47,18 +43,18 @@ const Interaction: React.FC = () => {
   }, [isInteracting])
 
   return (
-    <Stack.Navigator headerMode="none" mode="modal">
-      <Stack.Screen
+    <InteractionStack.Navigator headerMode="none" mode="modal">
+      <InteractionStack.Screen
         options={{ ...transparentModalFadeOptions, ...screenDisableGestures }}
         name={ScreenNames.InteractionFlow}
         component={InteractionFlow}
       />
-      <Stack.Screen
+      <InteractionStack.Screen
         name={ScreenNames.Scanner}
         component={Scanner}
         options={screenTransitionSlideFromBottom}
       />
-      <Stack.Screen
+      <InteractionStack.Screen
         name={ScreenNames.eId}
         component={eID}
         options={{
@@ -66,12 +62,12 @@ const Interaction: React.FC = () => {
           ...screenDisableGestures,
         }}
       />
-      <Stack.Screen
+      <InteractionStack.Screen
         options={{ ...transparentModalFadeOptions, ...screenDisableGestures }}
         name={ScreenNames.ServiceRedirect}
         component={ServiceRedirect}
       />
-    </Stack.Navigator>
+    </InteractionStack.Navigator>
   )
 }
 
