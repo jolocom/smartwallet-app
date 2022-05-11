@@ -100,7 +100,7 @@ export const useDeeplinkInteractions = () => {
         }
       })
     }
-  }, [])
+  }, [currentLanguage])
 }
 
 export const useInteractionStart = () => {
