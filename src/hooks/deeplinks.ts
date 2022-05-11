@@ -3,7 +3,11 @@ import branch, { BranchParams } from 'react-native-branch'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { SWErrorCodes } from '~/errors/codes'
-import { getCurrentLanguage } from '~/modules/account/selectors'
+import {
+  getCurrentLanguage,
+  getIsBranchSubscribed,
+} from '~/modules/account/selectors'
+import { setIsBranchSubscribed } from '~/modules/account/actions'
 import { setDeeplinkConfig } from '~/modules/interaction/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { useInteractionStart } from './interactions/handlers'
@@ -32,6 +36,7 @@ export const useDeeplinkInteractions = () => {
   const loader = useLoader()
   const currentLanguage = useSelector(getCurrentLanguage)
   const dispatch = useDispatch()
+  const isBranchSubscribed = useSelector(getIsBranchSubscribed)
 
   // NOTE: for now we assume all the params come in as strings
   const getParamValue = (name: DeeplinkParams, params: BranchParams) => {
@@ -79,41 +84,44 @@ export const useDeeplinkInteractions = () => {
   useEffect(() => {
     // TODO move somewhere
     branch.disableTracking(true)
-    branch.subscribe(({ error, params }) => {
-      if (error) {
-        console.warn('Error processing DeepLink: ', error)
-        return
-      }
-
-      if (params) {
-        const { tcTokenUrl, token, redirectUrl, postRedirect } =
-          parseParameters(params)
-
-        dispatch(
-          setDeeplinkConfig({
-            redirectUrl,
-            postRedirect,
-          }),
-        )
-
-        if (token) {
-          processInteraction(token).catch(scheduleErrorWarning)
-          return
-        } else if (tcTokenUrl) {
-          loader(() => processAusweisToken(tcTokenUrl), {
-            showSuccess: false,
-            showFailed: false,
-          })
-          return
-        } else if (
-          !params['+clicked_branch_link'] ||
-          JSON.stringify(params) === '{}'
-        ) {
+    if (!isBranchSubscribed) {
+      branch.subscribe(({ error, params }) => {
+        dispatch(setIsBranchSubscribed(true))
+        if (error) {
+          console.warn('Error processing DeepLink: ', error)
           return
         }
 
-        scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
-      }
-    })
+        if (params) {
+          const { tcTokenUrl, token, redirectUrl, postRedirect } =
+            parseParameters(params)
+
+          dispatch(
+            setDeeplinkConfig({
+              redirectUrl,
+              postRedirect,
+            }),
+          )
+
+          if (token) {
+            processInteraction(token).catch(scheduleErrorWarning)
+            return
+          } else if (tcTokenUrl) {
+            loader(() => processAusweisToken(tcTokenUrl), {
+              showSuccess: false,
+              showFailed: false,
+            })
+            return
+          } else if (
+            !params['+clicked_branch_link'] ||
+            JSON.stringify(params) === '{}'
+          ) {
+            return
+          }
+
+          scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
+        }
+      })
+    }
   }, [currentLanguage])
 }
