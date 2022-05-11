@@ -30,7 +30,7 @@ const initialState: AccountState = {
     isOutdated: false,
   },
   isMakingScreenshotDisabled: true,
-  setIsBranchSubscribed: false,
+  isBranchSubscribed: false,
 }
 
 const reducer = (
