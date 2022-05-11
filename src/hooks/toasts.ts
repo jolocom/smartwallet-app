@@ -32,7 +32,7 @@ export const useToasts = () => {
 
   const scheduleErrorInfo = (error: Error, config?: Partial<ToastBody>) => {
     console.warn(error)
-    scheduleWarning({
+    scheduleInfo({
       title: t('Toasts.errorWarningTitle'),
       message: t('Toasts.errorWarningMsg'),
       interact: {

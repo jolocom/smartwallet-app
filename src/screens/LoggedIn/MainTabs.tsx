@@ -3,7 +3,6 @@ import {
   createBottomTabNavigator,
   BottomTabBarProps,
 } from '@react-navigation/bottom-tabs'
-
 import { ScreenNames } from '~/types/screens'
 import History from './History'
 import Documents from './Documents'
@@ -17,9 +16,11 @@ import { useNavigation } from '@react-navigation/core'
 import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
-import { getInteractionType } from '~/modules/interaction/selectors'
-import { getAusweisInteractionDetails } from '~/modules/interaction/selectors'
 import { useDeeplinkInteractions } from '~/hooks/deeplinks'
+import {
+  getInteractionType,
+  getAusweisInteractionDetails,
+} from '~/modules/interaction/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined

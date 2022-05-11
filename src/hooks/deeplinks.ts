@@ -4,11 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { SWErrorCodes } from '~/errors/codes'
 import { getCurrentLanguage } from '~/modules/account/selectors'
-import {
-  setRedirectUrl,
-  setPostRedirect,
-  setDeeplinkConfig,
-} from '~/modules/interaction/actions'
+import { setDeeplinkConfig } from '~/modules/interaction/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { useInteractionStart } from './interactions/handlers'
 import { useLoader } from './loader'

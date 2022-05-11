@@ -10,7 +10,6 @@ import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import eIDHooks from '../hooks'
-import { eIDScreens } from '../types'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { ScreenNames } from '~/types/screens'
 

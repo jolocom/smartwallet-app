@@ -40,6 +40,10 @@ export const setMakingScreenshotDisability = createAccountAction(
   AccountActionType.setMakingScreenshotDisability,
 )
 
+export const setIsBranchSubscribed = createAccountAction(
+  AccountActionType.setIsBranchSubscribed,
+)
+
 // UI
 export const setScreenHeight = createAccountAction(
   AccountActionType.setScreenHeight,
