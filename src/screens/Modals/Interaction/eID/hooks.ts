@@ -43,11 +43,13 @@ import {
 import {
   getAusweisReaderState,
   getAusweisScannerKey,
-  getRedirectUrl,
+  getDeeplinkConfig,
 } from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
+import { SWErrorCodes } from '~/errors/codes'
+import { attachRedirectUrl } from './utils'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -62,7 +64,7 @@ const useAusweisInteraction = () => {
   const { providerName } = eIDHooks.useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
   const checkNfc = useCheckNFC()
-  const redirectUrl = useSelector(getRedirectUrl)
+  const { redirectUrl, postRedirect } = useSelector(getDeeplinkConfig)
 
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers
@@ -112,9 +114,8 @@ const useAusweisInteraction = () => {
         dispatch(setAusweisInteractionDetails(requestData))
       })
     } catch (e) {
-      cancelFlow()
-      console.warn(e)
       scheduleErrorWarning(e)
+      cancelFlow()
     }
   }
 
@@ -186,24 +187,51 @@ const useAusweisInteraction = () => {
     const handleCompleteFlow = () => {
       closeAusweis()
       navigation.navigate(ScreenNames.Identity)
-      scheduleInfo({
-        title: t('Toasts.ausweisSuccessTitle'),
-        message: t('Toasts.ausweisSuccessMsg'),
-        dismiss: 10000,
-      })
+      if (postRedirect) {
+        scheduleInfo({
+          title: t('Toasts.refreshTitle'),
+          message: t('Toasts.refreshMsg', {
+            serviceName: providerName,
+            interpolation: {
+              escapeValue: false,
+            },
+          }),
+          dismiss: 10000,
+        })
+      } else {
+        scheduleInfo({
+          title: t('Toasts.ausweisSuccessTitle'),
+          message: t('Toasts.ausweisSuccessMsg'),
+          dismiss: 10000,
+        })
+      }
     }
 
     return fetch(url)
       .then((res) => {
-        if (!redirectUrl) {
-          handleCompleteFlow()
-        } else {
-          const url = new URL(redirectUrl)
-          url.searchParams.append('redirectUrl', encodeURIComponent(res.url))
+        // NOTE: if there is a `postRedirect`, update the service's UI by calling it
+        if (postRedirect && redirectUrl) {
+          fetch(redirectUrl, {
+            method: 'POST',
+            headers: new Headers({
+              'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify({
+              callbackUrl: res.url,
+            }),
+          }).catch((e: Error) => {
+            e.name = SWErrorCodes.SWRedirectUrlInvalid
+            scheduleErrorWarning(e)
+          })
+        }
 
+        return res.url
+      })
+      .then((url) => {
+        if (redirectUrl && !postRedirect) {
           navigation.dispatch(
             StackActions.replace(ScreenNames.ServiceRedirect, {
-              redirectUrl: url.href,
+              redirectUrl: attachRedirectUrl(redirectUrl, url),
               counterparty: {
                 serviceName: providerName,
                 isAnonymous: false,
@@ -212,6 +240,8 @@ const useAusweisInteraction = () => {
               closeOnComplete: true,
             }),
           )
+        } else {
+          handleCompleteFlow()
         }
       })
       .catch(scheduleErrorWarning)

@@ -5,7 +5,7 @@ import { SWErrorCodes } from '~/errors/codes'
 import { useToasts } from '~/hooks/toasts'
 import {
   getInteractionCounterparty,
-  getRedirectUrl,
+  getDeeplinkConfig,
 } from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import { ToastBody } from '~/types/toasts'
@@ -34,7 +34,7 @@ export const useCompleteInteraction = (
   const { closeInteraction, clearInteraction } = useFinishInteraction()
   const navigation = useNavigation()
 
-  const redirectUrl = useSelector(getRedirectUrl)
+  const { redirectUrl } = useSelector(getDeeplinkConfig)
   const counterparty = useSelector(getInteractionCounterparty)
 
   const completeInteraction = async () => {

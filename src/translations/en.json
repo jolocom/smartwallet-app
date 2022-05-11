@@ -209,7 +209,9 @@
         "ausweisChangePinSuccessMsg": "You can use your new PIN now",
         "copied": "Copied",
         "ausweisDeactivatedCardTitle": "Your card is deactivated",
-        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue"
+        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
+        "refreshTitle": "All done here!",
+        "refreshMsg": "Please return to ${serviceName} to proceed."
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -573,5 +575,8 @@
     },
     "Wallet": {
         "prepareWallet": "Preparing your wallet"
+    },
+    "Dashboard": {
+        "header": "Jolocom WebAgent"
     }
 }
