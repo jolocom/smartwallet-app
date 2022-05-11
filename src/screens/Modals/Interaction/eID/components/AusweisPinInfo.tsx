@@ -17,11 +17,11 @@ export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
   const { t } = useTranslation()
   const navigation = useNavigation()
-  const { cancelInteraction } = eIDHooks.useAusweisInteraction()
+  const { cancelFlow } = eIDHooks.useAusweisInteraction()
 
   const handleChangePinRedirect = () => {
     aa2Module.resetHandlers()
-    cancelInteraction()
+    cancelFlow()
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
     // Replace InteractionSheet with AusweisChangePin
