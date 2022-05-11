@@ -310,7 +310,7 @@ const useAusweisCompatibilityCheck = () => {
         onDone: () => updateCompatibilityResult(readerState),
       })
     } else {
-      showScanner()
+      showScanner({})
       aa2Module.setHandlers({
         handleCardInfo: (info) => {
           if (info) {
