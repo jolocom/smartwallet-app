@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { SWErrorCodes } from '~/errors/codes'
 import { getCurrentLanguage } from '~/modules/account/selectors'
-import { setRedirectUrl, setPostRedirect } from '~/modules/interaction/actions'
+import {
+  setRedirectUrl,
+  setPostRedirect,
+  setDeeplinkConfig,
+} from '~/modules/interaction/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { useInteractionStart } from './interactions/handlers'
 import { useLoader } from './loader'
@@ -15,6 +19,13 @@ export enum DeeplinkParams {
   postRedirect = 'postRedirect',
   token = 'token',
   tcTokenUrl = 'tcTokenUrl',
+}
+
+interface DeeplinkParamsValues {
+  [DeeplinkParams.redirectUrl]?: string
+  [DeeplinkParams.token]?: string
+  [DeeplinkParams.tcTokenUrl]?: string
+  [DeeplinkParams.postRedirect]: boolean
 }
 
 // NOTE: This should be called only in one place!
@@ -35,6 +46,40 @@ export const useDeeplinkInteractions = () => {
     return
   }
 
+  const parseParameters = (params: BranchParams): DeeplinkParamsValues => {
+    // NOTE: Shows the user the `ServiceRedirect` screen, which allows the user to
+    // get redirected to another application or browser
+    const redirectUrl = getParamValue(DeeplinkParams.redirectUrl, params)
+    // NOTE: SSI token
+    const token = getParamValue(DeeplinkParams.token, params)
+    // NOTE: eID token
+    const tcTokenUrl = getParamValue(DeeplinkParams.tcTokenUrl, params)
+    // NOTE: Updates the service's UI that the interaction has finished successfully
+    const postRedirectString = getParamValue(
+      DeeplinkParams.postRedirect,
+      params,
+    )
+    let postRedirect = false
+
+    if (postRedirectString) {
+      try {
+        postRedirect = JSON.parse(postRedirectString) as boolean
+      } catch (e) {
+        console.warn(
+          'The postRedirect query parameter is not a boolean: ',
+          postRedirectString,
+        )
+      }
+    }
+
+    return {
+      postRedirect,
+      redirectUrl,
+      tcTokenUrl,
+      token,
+    }
+  }
+
   useEffect(() => {
     // TODO move somewhere
     branch.disableTracking(true)
@@ -45,36 +90,21 @@ export const useDeeplinkInteractions = () => {
       }
 
       if (params) {
-        // NOTE: Shows the user the `ServiceRedirect` screen, which allows the user to
-        // get redirected to another application or browser
-        const redirectUrl = getParamValue(DeeplinkParams.redirectUrl, params)
-        // NOTE: Updates the service's UI that the interaction has finished successfully
-        const postRedirect = getParamValue(DeeplinkParams.postRedirect, params)
-        // NOTE: SSI token
-        const tokenValue = getParamValue(DeeplinkParams.token, params)
-        // NOTE: eID token
-        const eidValue = getParamValue(DeeplinkParams.tcTokenUrl, params)
+        const { tcTokenUrl, token, redirectUrl, postRedirect } =
+          parseParameters(params)
 
-        if (redirectUrl) {
-          dispatch(setRedirectUrl(redirectUrl))
-        }
+        dispatch(
+          setDeeplinkConfig({
+            redirectUrl,
+            postRedirect,
+          }),
+        )
 
-        if (tokenValue) {
-          processInteraction(tokenValue).catch(scheduleErrorWarning)
+        if (token) {
+          processInteraction(token).catch(scheduleErrorWarning)
           return
-        } else if (eidValue) {
-          if (postRedirect) {
-            try {
-              dispatch(setPostRedirect(JSON.parse(postRedirect) as boolean))
-            } catch (e) {
-              if (e instanceof Error) {
-                e.name = SWErrorCodes.SWPostRedirectQueryInvalid
-                return scheduleErrorWarning(e)
-              }
-            }
-          }
-
-          loader(() => processAusweisToken(eidValue), {
+        } else if (tcTokenUrl) {
+          loader(() => processAusweisToken(tcTokenUrl), {
             showSuccess: false,
             showFailed: false,
           })

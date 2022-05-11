@@ -4,10 +4,6 @@ import { createInteractionAction } from './utils'
 export * from './ssi/actions'
 export * from './ausweis/actions'
 
-export const setRedirectUrl = createInteractionAction(
-  InteractionActionType.setRedirectUrl,
-)
-
-export const setPostRedirect = createInteractionAction(
-  InteractionActionType.setPostRedirect,
+export const setDeeplinkConfig = createInteractionAction(
+  InteractionActionType.setDeeplinkConfig,
 )

@@ -39,6 +39,7 @@ const DevelopmentSection = () => {
   EID_DEEPLINK.searchParams.append(DeeplinkParams.redirectUrl, TEST_URL)
   EID_DEEPLINK.searchParams.append(DeeplinkParams.postRedirect, 'true')
 
+  console.log({ EID_DEEPLINK })
   return (
     <>
       <Section>

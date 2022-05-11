@@ -1,6 +1,6 @@
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { FlowType } from 'react-native-jolocom'
-import { IAusweisRequest } from '~/screens/LoggedIn/eID/types'
+import { IAusweisRequest } from '~/screens/Modals/Interaction/eID/types'
 
 import { OfferedCredential } from '~/types/credentials'
 import { AusweisDetails, AusweisFlowTypePayload } from './ausweis/types'
@@ -19,9 +19,13 @@ export * from './ausweis/types'
 export interface InteractionState {
   ssi: InteractionDetails
   ausweis: AusweisDetails
+  deeplinkConfig: DeeplinkConfig
+}
+
+export interface DeeplinkConfig {
   // NOTE: Shows the user the `ServiceRedirect` screen, which allows the user to
   // get redirected to another application or browser
-  redirectUrl: string | null
+  redirectUrl?: string
   // NOTE: Updates the service's UI that the interaction has finished successfully
   postRedirect: boolean
 }
@@ -31,8 +35,7 @@ export enum InteractionActionType {
   resetInteraction = 'resetInteraction',
   selectShareCredential = 'selectShareCredential',
   updateOfferValidation = 'updateOfferValidation',
-  setRedirectUrl = 'setRedirectUrl',
-  setPostRedirect = 'setPostRedirect',
+  setDeeplinkConfig = 'setDeeplinkConfig',
   setDetails = 'setDetails',
   setScannerKey = 'setScannerKey',
   setReaderState = 'setReaderState',
@@ -49,8 +52,7 @@ export interface InteractionActions {
   [InteractionActionType.resetInteraction]: undefined
   [InteractionActionType.selectShareCredential]: Record<string, string>
   [InteractionActionType.updateOfferValidation]: OfferedCredential[]
-  [InteractionActionType.setRedirectUrl]: string | null
-  [InteractionActionType.setPostRedirect]: boolean
+  [InteractionActionType.setDeeplinkConfig]: DeeplinkConfig
   [InteractionActionType.setDetails]: IAusweisRequest | null
   [InteractionActionType.setScannerKey]: string | null
   [InteractionActionType.setReaderState]: CardInfo | null

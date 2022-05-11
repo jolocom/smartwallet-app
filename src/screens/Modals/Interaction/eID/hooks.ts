@@ -43,8 +43,7 @@ import {
 import {
   getAusweisReaderState,
   getAusweisScannerKey,
-  getPostRedirect,
-  getRedirectUrl,
+  getDeeplinkConfig,
 } from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
@@ -65,8 +64,7 @@ const useAusweisInteraction = () => {
   const { providerName } = eIDHooks.useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
   const checkNfc = useCheckNFC()
-  const redirectUrl = useSelector(getRedirectUrl)
-  const postRedirect = useSelector(getPostRedirect)
+  const { redirectUrl, postRedirect } = useSelector(getDeeplinkConfig)
 
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers
