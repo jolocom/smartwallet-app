@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect, usePopStack, useGoBack } from '~/hooks/navigation'
+import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
@@ -44,14 +44,13 @@ import {
   getAusweisReaderState,
   getAusweisScannerKey,
   getPostRedirect,
+  getRedirectUrl,
 } from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
-import { getRedirectUrl } from '~/modules/interaction/selectors'
 import { SWErrorCodes } from '~/errors/codes'
 import { attachRedirectUrl } from './utils'
-import { Body } from 'node-fetch'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -277,6 +276,7 @@ const useAusweisInteraction = () => {
 
   return {
     closeAusweis,
+    sendCancel,
     initAusweis,
     disconnectAusweis,
     processAusweisToken,

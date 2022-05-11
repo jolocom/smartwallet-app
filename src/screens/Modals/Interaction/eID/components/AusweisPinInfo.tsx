@@ -3,7 +3,6 @@ import { StackActions } from '@react-navigation/routers'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
-
 import Btn, { BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -12,6 +11,8 @@ import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import eIDHooks from '../hooks'
 import { eIDScreens } from '../types'
+import { aa2Module } from '@jolocom/react-native-ausweis'
+import { ScreenNames } from '~/types/screens'
 
 export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
@@ -20,11 +21,17 @@ export const AusweisPinInfo = () => {
   const { cancelFlow } = eIDHooks.useAusweisInteraction()
 
   const handleChangePinRedirect = () => {
+    aa2Module.resetHandlers()
     cancelFlow()
     // Navigate to the InteractionSheet
     navigation.dispatch(StackActions.popToTop())
     // Replace InteractionSheet with AusweisChangePin
-    navigation.dispatch(StackActions.replace(eIDScreens.AusweisChangePin))
+    navigation.dispatch(
+      StackActions.replace(ScreenNames.Main, {
+        screen: ScreenNames.AusweisChangePin,
+        initial: false,
+      }),
+    )
   }
 
   return (

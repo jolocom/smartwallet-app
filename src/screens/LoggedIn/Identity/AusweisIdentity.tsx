@@ -40,14 +40,8 @@ export const AusweisIdentity = () => {
     checkNfcSupport(startCompatibilityCheck)
   }
 
-  const handleChangePin = () => {
-    navigation.navigate(ScreenNames.Interaction, {
-      screen: ScreenNames.eId,
-      params: {
-        screen: ScreenNames.AusweisChangePin,
-      },
-    })
-  }
+  const handleChangePin = () =>
+    navigation.navigate(ScreenNames.AusweisChangePin)
 
   const handleShowCardLockResult = (mode: CardInfoMode) => {
     const navigateToCardInfo = () => {
@@ -135,14 +129,7 @@ export const AusweisIdentity = () => {
     })
   }
 
-  const handleMoreInfo = () => {
-    navigation.navigate(ScreenNames.Interaction, {
-      screen: ScreenNames.eId,
-      params: {
-        screen: ScreenNames.AusweisMoreInfo,
-      },
-    })
-  }
+  const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
 
   return (
     <View
