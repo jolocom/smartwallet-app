@@ -25,26 +25,38 @@ lane :get_appstoreconnect_api_key do
     )
 end
 
-desc 'Get API token for MS AppCenter'
-lane :get_appcenter_token do
+desc 'Cloning common secrets for MS AppCenter'
+lane :clone_common_secrets_appcenter do
   begin
-    sh("git clone git@infra.jolocom.io:appcenter-secrets")
-  rescue
+    sh("git clone dev@hetz1.jolocom.io:appcenter-secrets")
+  rescue  
     # handle error
     puts "appcenter auth already present"
   end
-  File.read("appcenter-secrets/api_key.txt")
 end
 
-desc  'Get Sentry Auth Token'
+desc 'Get API token for MS AppCenter'
+lane :get_appcenter_token do
+  begin
+    File.read("common-secrets/appcenter/api_key.txt")
+  end  
+end
+
+desc 'Cloning common secrets for Sentry'
+lane :clone_common_secrets_sentry do
+  begin
+    sh("git clone dev@hetz1.jolocom.io:sentry-auth")
+  rescue
+    puts "sentry token already present"
+  end
+end
+
+desc 'Copy Sentry Auth Token to iOS and Android'
 lane :sentry_auth do
   begin
-      sh("git clone git@infra.jolocom.io:sentry-auth")
-  rescue
-      puts "sentry token already present"
+    sh("cp ./sentry-auth/sentry.properties ../ios/sentry.properties")
+    sh("cp ./sentry-auth/sentry.properties ../android/sentry.properties")
   end
-  sh("cp ./sentry-auth/sentry.properties ../ios/sentry.properties")
-  sh("cp ./sentry-auth/sentry.properties ../android/sentry.properties")
 end
 
 desc "Release the app to the Test Flight or the App Store"
@@ -65,7 +77,6 @@ lane :release do |options|
     upload_to_testflight
   end
 end
-
 
 # lanes for ios building, signing and deployment
 platform :ios do 
@@ -112,7 +123,6 @@ platform :ios do
     #ensure_git_status_clean
     release(target: "release")
   end
-
 end
 
 
@@ -130,7 +140,7 @@ platform :android do
   desc "Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password"
   lane :get_secrets do
     begin
-      sh("git clone git@infra.jolocom.io:android-secrets")
+      sh("git clone dev@hetz1.jolocom.io:android-secrets")
     rescue
       puts "secrets already present"
     end
@@ -198,5 +208,4 @@ platform :android do
     build
     upload(target: 'release')
   end
-
 end
