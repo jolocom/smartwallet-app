@@ -30,16 +30,11 @@ Cloning common secrets for MS AppCenter
 fastlane get_appcenter_token
 ```
 Get API token for MS AppCenter
-### clone_common_secrets_sentry
-```
-fastlane clone_common_secrets_sentry
-```
-Cloning common secrets for Sentry
 ### sentry_auth
 ```
 fastlane sentry_auth
 ```
-Copy Sentry Auth Token to iOS and Android
+Get Sentry Auth Token for iOS and Android
 ### release
 ```
 fastlane release
