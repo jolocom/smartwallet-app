@@ -29,7 +29,7 @@ desc 'Cloning common secrets for MS AppCenter'
 lane :clone_common_secrets_appcenter do
   begin
     sh("git clone dev@hetz1.jolocom.io:appcenter-secrets")
-  rescue  
+  rescue
     # handle error
     puts "appcenter auth already present"
   end
@@ -39,7 +39,7 @@ desc 'Get API token for MS AppCenter'
 lane :get_appcenter_token do
   begin
     File.read("common-secrets/appcenter/api_key.txt")
-  end  
+  end
 end
 
 desc 'Cloning common secrets for Sentry'
