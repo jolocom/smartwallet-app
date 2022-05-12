@@ -310,7 +310,7 @@ const useAusweisCompatibilityCheck = () => {
         onDone: () => updateCompatibilityResult(readerState),
       })
     } else {
-      showScanner({})
+      showScanner()
       aa2Module.setHandlers({
         handleCardInfo: (info) => {
           if (info) {
@@ -460,15 +460,14 @@ export const useAusweisScanner = () => {
     dispatchScannerParams(defaultState)
   }
 
-  const showScanner = ({
-    onDismiss,
-    params,
-    isInsideEidStack = false,
-  }: {
+  interface ShowScannerConfig {
     onDismiss?: () => void
     params?: AusweisScannerParams
     isInsideEidStack?: boolean
-  }) => {
+  }
+
+  const showScanner = (config: ShowScannerConfig = {}) => {
+    const { onDismiss, params, isInsideEidStack = false } = config
     if (isInsideEidStack) {
       navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.AusweisScanner,
