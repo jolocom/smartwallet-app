@@ -121,7 +121,12 @@ const useAusweisInteraction = () => {
 
   const acceptRequest = async (optionalFields: Array<AccessRightsFields>) => {
     if (shouldShowScannerWithoutInsertMessage) {
-      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+      showScanner({
+        onDismiss: cancelInteraction,
+        params: {
+          state: AusweisScannerState.loading,
+        },
+      })
     }
 
     await aa2Module.setAccessRights(optionalFields)
@@ -130,7 +135,12 @@ const useAusweisInteraction = () => {
 
   const startChangePin = async () => {
     if (shouldShowScannerWithoutInsertMessage) {
-      showScanner(cancelFlow, { state: AusweisScannerState.loading })
+      showScanner({
+        onDismiss: cancelFlow,
+        params: {
+          state: AusweisScannerState.loading,
+        },
+      })
     }
 
     await aa2Module.startChangePin().catch(scheduleErrorWarning)
@@ -305,9 +315,11 @@ const useAusweisCompatibilityCheck = () => {
 
   const checkAndroidCompatibility = () => {
     if (readerState) {
-      showScanner(undefined, {
-        state: AusweisScannerState.success,
-        onDone: () => updateCompatibilityResult(readerState),
+      showScanner({
+        params: {
+          state: AusweisScannerState.success,
+          onDone: () => updateCompatibilityResult(readerState),
+        },
       })
     } else {
       showScanner()

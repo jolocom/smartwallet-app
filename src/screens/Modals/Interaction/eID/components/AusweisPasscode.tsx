@@ -456,7 +456,13 @@ export const AusweisPasscode = () => {
 
   const sendPasscodeCommand = async (command: Commands, value: string) => {
     if (IS_ANDROID && isCardTouched) {
-      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+      showScanner({
+        onDismiss: cancelInteraction,
+        params: {
+          state: AusweisScannerState.loading,
+        },
+        isInsideEidStack: true,
+      })
     }
 
     switch (command) {
