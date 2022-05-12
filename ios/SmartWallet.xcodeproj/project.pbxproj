@@ -460,7 +460,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SmartWallet/Pods-SmartWallet-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/AusweisApp2/AusweisApp2.framework/AusweisApp2",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-aa2-sdk/AusweisApp2.framework/AusweisApp2",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -536,7 +536,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SmartWallet-SmartWalletTests/Pods-SmartWallet-SmartWalletTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/AusweisApp2/AusweisApp2.framework/AusweisApp2",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-aa2-sdk/AusweisApp2.framework/AusweisApp2",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -704,7 +704,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartWallet/SmartWallet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -739,7 +739,7 @@
 				CODE_SIGN_ENTITLEMENTS = SmartWallet/SmartWallet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartWallet/Info.plist;
