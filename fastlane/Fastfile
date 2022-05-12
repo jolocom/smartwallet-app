@@ -25,16 +25,6 @@ lane :get_appstoreconnect_api_key do
     )
 end
 
-desc 'Cloning common secrets for MS AppCenter'
-lane :clone_common_secrets_appcenter do
-  begin
-    sh("git clone dev@hetz1.jolocom.io:appcenter-secrets")
-  rescue
-    # handle error
-    puts "appcenter auth already present"
-  end
-end
-
 desc 'Get API token for MS AppCenter'
 lane :get_appcenter_token do
   begin
