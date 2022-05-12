@@ -80,7 +80,7 @@
         "phoneNumberLabel": "Telefonnummer",
         "addressLabel": "Anschrift \n",
         "addClaimBtn": "Neu Hinzufügen",
-        "credentialsDescription": "",
+        "credentialsDescription": "Verwalten Sie ihre wichtigsten Kontaktinformationen an einem Ort. Zu einem späteren Zeitpunkt können Sie diese Daten mit einem Klick teilen und Formulare ohne zusätzlichem Aufwand ausfüllen.",
         "headerAusweis": "Ihre eID",
         "headerCredentials": "Nachweise"
     },
@@ -210,8 +210,8 @@
         "copied": "Einfügen",
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
         "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
-        "refreshTitle": "",
-        "refreshMsg": ""
+        "refreshTitle": "Fertig!",
+        "refreshMsg": "Bitte kehren Sie zu ${serviceName} zurück, um fortzufahren."
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -408,7 +408,7 @@
     "General": {
         "unknown": "Unbekannt",
         "anonymous": "Anonym",
-        "moreInfo": ""
+        "moreInfo": "Mehr Informationen"
     },
     "Authentication": {
         "header": "Bist du es wirklich?",
@@ -517,13 +517,13 @@
     },
     "AusweisIdentity": {
         "header": "Online-Ausweisfunktion",
-        "subheader": "",
+        "subheader": "Dies ist ein Early-Access-Zugang zur online Version der Deutschen Digitalen Identität. Es ist ausschließlich Nutzern zugänglich, die am Pilotprojekt \"Schaufenster Sichere Digitale Identitäten\" teilnehmen.",
         "compatibilityBtn": "Kompabilitätstest",
         "changePinBtn": "PIN ändern",
         "unlockBtn": "Karte entsperren",
         "ausweisBadge": "Online-Ausweisfunktion",
-        "moreInfoDescription": "",
-        "moreInfoHeader": ""
+        "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID-PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
+        "moreInfoHeader": "Mehr Informationen"
     },
     "AusweisChangePin": {
         "transportPinHeader": "eID PIN einrichten",
@@ -538,7 +538,7 @@
     "AusweisPinInfo": {
         "header": "PIN Informationen",
         "description": "Wählen Sie für die 6-stellige eID-PIN eine Zahlenkombination, die nicht leicht zu erraten ist.\n\nBei erstmaliger PIN-Änderung verwenden Sie bitte die fünfstellige Transport-PIN. Die Transport-PIN finden Sie im Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie mit der fünfstelligen Transport-PIN die Online-eID-Funktion nicht nutzen können. Eine Änderung auf eine 6-stellige PIN ist zwingend erforderlich.",
-        "btn": ""
+        "btn": "Zu den eID PIN Einstellungen"
     },
     "AusweisScanner": {
         "header": "Bereit zu scannen",
@@ -577,6 +577,6 @@
         "prepareWallet": "Ihr Wallet wird vorbereitet"
     },
     "Dashboard": {
-        "header": ""
+        "header": "Jolocom WebAgent"
     }
 }
