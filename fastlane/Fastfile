@@ -42,21 +42,15 @@ lane :get_appcenter_token do
   end
 end
 
-desc 'Cloning common secrets for Sentry'
-lane :clone_common_secrets_sentry do
+desc 'Get Sentry Auth Token for iOS and Android'
+lane :sentry_auth do
   begin
     sh("git clone dev@hetz1.jolocom.io:sentry-auth")
   rescue
     puts "sentry token already present"
   end
-end
-
-desc 'Copy Sentry Auth Token to iOS and Android'
-lane :sentry_auth do
-  begin
-    sh("cp ./sentry-auth/sentry.properties ../ios/sentry.properties")
-    sh("cp ./sentry-auth/sentry.properties ../android/sentry.properties")
-  end
+  sh("cp ./sentry-auth/sentry.properties ../ios/sentry.properties")
+  sh("cp ./sentry-auth/sentry.properties ../android/sentry.properties")
 end
 
 desc "Release the app to the Test Flight or the App Store"
