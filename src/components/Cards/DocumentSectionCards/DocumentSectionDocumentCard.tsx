@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { View } from 'react-native'
 
 import ScaledCard, { ScaledView } from '../ScaledCard'
 import { useCredentialNameScale } from '../hooks'
@@ -9,7 +9,8 @@ import {
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from './consts'
 import {
-  CardMoreBtn,
+  DocumentBackgroundColor,
+  DocumentBackgroundImage,
   DocumentFields,
   DocumentFooter,
   DocumentHeader,
@@ -18,13 +19,18 @@ import {
 } from './components'
 import { DocumentCardProps } from './types'
 import { TextLayoutEvent } from '~/types/props'
+import { Colors } from '~/utils/colors'
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
-  holderName,
   fields,
   photo,
   onHandleMore,
+  // TODO @clauxx remove placeholders
+  holderName = 'Cristian Lungu Vladislav Veronica',
+  backgroundColor = '#970009',
+  backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
+  issuerIcon = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
 }) => {
   const { isCredentialNameScaled } = useCredentialNameScale()
 
@@ -33,9 +39,21 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     setHolderNameLines(e.nativeEvent.lines.length)
   }
 
+  const calculateMaxFields = useCallback(() => {
+    let maxFields = holderName ? 3 : 4
+    if (backgroundImage || backgroundColor) {
+      maxFields--
+    }
+    if (holderNameLines > 1) {
+      maxFields--
+    }
+
+    return maxFields
+  }, [holderName, backgroundColor, backgroundImage, holderNameLines])
+
+  const maxFields = calculateMaxFields()
   const maxLinesPerField =
     isCredentialNameScaled && holderNameLines === 2 ? 4 : 5
-  const maxFields = 4
 
   const scalingConfig = {
     originalHeight: ORIGINAL_DOCUMENT_CARD_HEIGHT,
@@ -43,9 +61,15 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH,
   }
 
-  const MOCK_STYLES = {
-    icon: 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
-  }
+  const renderBackground = useCallback(() => {
+    if (backgroundImage) {
+      return <DocumentBackgroundImage image={backgroundImage} />
+    } else if (backgroundColor) {
+      return <DocumentBackgroundColor color={backgroundColor} />
+    } else {
+      return <ScaledView scaleStyle={{ height: 20 }} />
+    }
+  }, [backgroundColor, backgroundImage])
 
   return (
     <ScaledCard
@@ -55,25 +79,25 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
       style={{
         overflow: 'hidden',
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: Colors.white,
       }}
       scaleStyle={{ borderRadius: 15 }}
       testID="documentCard"
     >
       <View style={{ flex: 1 }}>
-        <ScaledView
+        <View
           style={{
             flex: 1,
             flexDirection: 'column',
             width: '100%',
           }}
-          scaleStyle={styles.bodyContainer}
         >
           <DocumentHeader
             name={credentialName}
-            icon={MOCK_STYLES.icon}
+            icon={issuerIcon}
             onPressMenu={onHandleMore}
           />
+          {renderBackground()}
           {holderName && (
             <DocumentHolderName
               name={holderName}
@@ -86,18 +110,12 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             maxLines={maxLinesPerField}
             maxFields={maxFields}
           />
-        </ScaledView>
+        </View>
         <DocumentFooter />
       </View>
       {photo && <DocumentPhoto photo={photo} />}
     </ScaledCard>
   )
 }
-
-const styles = StyleSheet.create({
-  bodyContainer: {
-    paddingHorizontal: 16,
-  },
-})
 
 export default DocumentSectionDocumentCard

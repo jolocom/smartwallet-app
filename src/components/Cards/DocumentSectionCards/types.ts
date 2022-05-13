@@ -9,4 +9,6 @@ export interface DocumentCardProps {
   issuerIcon?: string
   icons?: string[]
   hasImageFields?: boolean
+  backgroundImage?: string
+  backgroundColor?: string
 }

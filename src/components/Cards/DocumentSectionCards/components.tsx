@@ -2,12 +2,14 @@ import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React from 'react'
 import {
   Image,
+  ImageBackground,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
 import { TextLayoutEvent } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
@@ -108,28 +110,22 @@ export const DocumentHolderName: React.FC<{
   name: string
   onLayout: (e: TextLayoutEvent) => void
 }> = ({ name, onLayout }) => {
-  const { isCredentialNameScaled } = useCredentialNameScale()
   return (
-    <>
-      <ScaledView
-        scaleStyle={{ paddingBottom: isCredentialNameScaled ? 22 : 16 }}
-      />
-      <ScaledView
-        scaleStyle={{
-          paddingHorizontal: 10,
-        }}
+    <ScaledView
+      scaleStyle={{
+        paddingLeft: 24,
+      }}
+    >
+      <ScaledText
+        // @ts-expect-error
+        onTextLayout={onLayout}
+        numberOfLines={2}
+        style={styles.mediumText}
+        scaleStyle={styles.holderName}
       >
-        <ScaledText
-          // @ts-expect-error
-          onTextLayout={onLayout}
-          numberOfLines={2}
-          style={styles.mediumText}
-          scaleStyle={styles.holderName}
-        >
-          {name}
-        </ScaledText>
-      </ScaledView>
-    </>
+        {name}
+      </ScaledText>
+    </ScaledView>
   )
 }
 
@@ -145,44 +141,80 @@ export const DocumentFields: React.FC<{
   } = usePruneFields(fields, maxFields, maxLines)
 
   return (
-    <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
-      {displayedFields.map((f, idx) => (
-        <React.Fragment key={f.key}>
-          {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
-          <ScaledText
-            numberOfLines={1}
-            style={[
-              styles.regularText,
-              {
-                width: '100%',
-              },
-            ]}
-            scaleStyle={styles.fieldLabel}
-          >
-            {f.label.trim()}:
-          </ScaledText>
-          <ScaledView scaleStyle={{ paddingBottom: 9 }} />
-          <ScaledText
-            numberOfLines={2}
-            //@ts-expect-error
-            onTextLayout={(e: TextLayoutEvent) =>
-              handleFieldValueLayout(e, idx)
-            }
-            scaleStyle={styles.fieldText}
-            style={[
-              styles.mediumText,
-              {
-                width: '100%',
-              },
-            ]}
-          >
-            {f.value}
-          </ScaledText>
-        </React.Fragment>
-      ))}
-    </FieldsCalculator>
+    <View style={{ paddingLeft: 24 }}>
+      <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
+        {displayedFields.map((f, idx) => (
+          <React.Fragment key={f.key}>
+            {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
+            <ScaledText
+              numberOfLines={1}
+              style={[
+                styles.regularText,
+                {
+                  width: '100%',
+                },
+              ]}
+              scaleStyle={styles.fieldLabel}
+            >
+              {f.label.trim()}:
+            </ScaledText>
+            <ScaledView scaleStyle={{ paddingBottom: 6 }} />
+            <ScaledText
+              numberOfLines={2}
+              //@ts-expect-error
+              onTextLayout={(e: TextLayoutEvent) =>
+                handleFieldValueLayout(e, idx)
+              }
+              scaleStyle={styles.fieldText}
+              style={[
+                styles.mediumText,
+                {
+                  width: '100%',
+                },
+              ]}
+            >
+              {f.value}
+            </ScaledText>
+          </React.Fragment>
+        ))}
+      </FieldsCalculator>
+    </View>
   )
 }
+
+const BackgroundOpacity = () => (
+  <LinearGradient
+    colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
+    style={{ flex: 1 }}
+  />
+)
+
+export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
+  image,
+}) => (
+  <ScaledView scaleStyle={{ height: 112 }} style={{ width: '100%' }}>
+    <ImageBackground
+      style={{ width: '100%', height: '100%' }}
+      source={{ uri: image }}
+    >
+      <LinearGradient
+        colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
+        style={{ flex: 1 }}
+      />
+    </ImageBackground>
+  </ScaledView>
+)
+
+export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
+  color,
+}) => (
+  <View style={{ height: 84, width: '100%', backgroundColor: color }}>
+    <LinearGradient
+      colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
+      style={{ flex: 1 }}
+    />
+  </View>
+)
 
 const styles = StyleSheet.create({
   dotsContainerScaled: {
@@ -215,8 +247,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   holderName: {
-    fontSize: 20,
-    lineHeight: 20,
+    fontSize: 24,
+    lineHeight: 28,
   },
   photoContainer: {
     position: 'absolute',
@@ -235,7 +267,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: 16,
+    padding: 16,
   },
   photo: {
     width: '100%',
