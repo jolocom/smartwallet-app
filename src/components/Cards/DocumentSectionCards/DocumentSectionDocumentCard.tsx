@@ -29,8 +29,8 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   onHandleMore,
   // TODO @clauxx remove placeholders
   holderName = 'Cristian Lungu Vladislav',
-  backgroundColor = '#970009',
-  //backgroundColor,
+  //backgroundColor = '#970009',
+  backgroundColor,
   backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
   //backgroundImage,
   issuerIcon = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
@@ -48,20 +48,20 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   }
 
   const calculateMaxFields = useCallback(() => {
-    let maxFields = 4
+    let maxFields = 6
     if (backgroundImage) {
       maxFields = maxFields - 2
     } else if (backgroundColor) {
-      if (!holderName) maxFields--
-      else maxFields = maxFields - 2
+      if (!holderName) maxFields = maxFields - 2
+      else maxFields = maxFields - 4
     }
 
     if (holderNameLines > 1) {
-      maxFields--
+      maxFields = maxFields - 2
     }
 
     if (!holderName && !backgroundImage) {
-      maxFields++
+      maxFields = maxFields + 2
     }
 
     return maxFields
@@ -86,6 +86,8 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
       return <ScaledView scaleStyle={{ height: 24 }} />
     }
   }, [backgroundColor, backgroundImage])
+
+  const isBackground = backgroundImage || backgroundColor
 
   return (
     <ScaledCard
@@ -114,7 +116,12 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             onPressMenu={onHandleMore}
           />
           {renderBackground()}
-          {photo && <DocumentPhoto photo={photo} />}
+          {photo && (
+            <DocumentPhoto
+              photo={photo}
+              verticalPosition={!isBackground ? -50 : undefined}
+            />
+          )}
           {holderName && (
             <DocumentHolderName
               name={holderName}
