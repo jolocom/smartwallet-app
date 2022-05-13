@@ -6,13 +6,8 @@ interface CommonDocumentsProps {
   onHandleMore: () => void
 }
 
-export interface OtherCardProps extends CommonDocumentsProps {
-  credentialType: string
-  logo?: string
-}
-
 export interface DocumentCardProps extends CommonDocumentsProps {
-  holderName: string
+  holderName?: string
   highlight?: string
   photo?: string
 }

@@ -84,6 +84,7 @@ export const useInteractionStart = () => {
       },
       { showSuccess: false, showFailed: false },
       (error) => {
+        console.log(error)
         if (error) scheduleErrorWarning(error)
       },
     )

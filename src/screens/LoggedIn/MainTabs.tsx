@@ -9,7 +9,6 @@ import Documents from './Documents'
 import BottomBar from '~/components/BottomBar'
 import Settings from './Settings'
 import Identity from './Identity'
-import { CredentialCategories } from '~/types/credentials'
 import useTranslation from '~/hooks/useTranslation'
 import { useInteractionStart } from '~/hooks/interactions/handlers'
 import { useNavigation } from '@react-navigation/core'
@@ -24,7 +23,7 @@ import {
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
-  [ScreenNames.Documents]: { initialTab?: CredentialCategories }
+  [ScreenNames.Documents]: undefined
   [ScreenNames.History]: undefined
   [ScreenNames.Settings]: undefined
 }

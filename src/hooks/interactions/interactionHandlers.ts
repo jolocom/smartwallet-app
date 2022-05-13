@@ -5,7 +5,6 @@ import {
 } from '@jolocom/sdk/js/interactionManager/types'
 
 import { FlowType, Interaction } from 'react-native-jolocom'
-import { getCredentialCategory } from '../signedCredentials/utils'
 import { useAgent } from '../sdk'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '../toasts'
@@ -24,16 +23,11 @@ const authorizationHandler = (state: AuthorizationFlowState) => ({
 
 const credentialOfferHandler = (state: CredentialOfferFlowState) => ({
   credentials: {
-    // eslint-disable-next-line
-    service_issued: state.offerSummary.map(
-      ({ renderInfo, type, credential }) => ({
-        type,
-        category: getCredentialCategory(renderInfo),
-        invalid: false,
-        name: credential?.name ?? '',
-        properties: credential?.display?.properties || [],
-      }),
-    ),
+    service_issued: state.offerSummary.map(({ type, credential }) => ({
+      type,
+      name: credential?.name ?? '',
+      properties: credential?.display?.properties || [],
+    })),
   },
 })
 

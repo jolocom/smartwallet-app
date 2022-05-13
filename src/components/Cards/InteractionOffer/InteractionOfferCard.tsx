@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 
 import InteractionCardDoc from '~/assets/svg/InteractionCardDoc'
-import InteractionCardOther from '~/assets/svg/InteractionCardOther'
 import useTranslation from '~/hooks/useTranslation'
 import { Colors } from '~/utils/colors'
 import { commonStyles } from '../commonStyles'
@@ -11,27 +10,21 @@ import {
   ORIGINAL_DOCUMENT_OFFER_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_OFFER_CARD_WIDTH,
 } from './consts'
-import { CardType, InteractionOfferCardProps } from './types'
+import { InteractionOfferCardProps } from './types'
 
-export const InteractionOfferCard: React.FC<
-  InteractionOfferCardProps & CardType
-> = ({ cardType, credentialName, fields }) => {
+export const InteractionOfferCard: React.FC<InteractionOfferCardProps> = ({
+  credentialName,
+  fields,
+}) => {
   const { t } = useTranslation()
-  const Card =
-    cardType === 'document' ? InteractionCardDoc : InteractionCardOther
   return (
     <ScaledCard
       originalWidth={ORIGINAL_DOCUMENT_OFFER_CARD_WIDTH}
       originalHeight={ORIGINAL_DOCUMENT_OFFER_CARD_HEIGHT}
       scaleToFit
     >
-      <Card>
-        <ScaledView
-          scaleStyle={[
-            styles.bodyContainer,
-            { ...(cardType === 'other' && { width: '73%' }) },
-          ]}
-        >
+      <InteractionCardDoc>
+        <ScaledView scaleStyle={styles.bodyContainer}>
           <ScaledText
             numberOfLines={1}
             scaleStyle={styles.credentialName}
@@ -49,7 +42,7 @@ export const InteractionOfferCard: React.FC<
           <ScaledView scaleStyle={{ paddingBottom: 11 }} />
           {fields.length ? (
             fields.slice(0, 3).map((f, idx) => (
-              <>
+              <React.Fragment key={`key-${f.label}`}>
                 {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 10 }} />}
                 <ScaledText
                   numberOfLines={1}
@@ -63,7 +56,7 @@ export const InteractionOfferCard: React.FC<
                   scaleStyle={styles.valuePlaceholder}
                   style={{ opacity: 0.57 }}
                 />
-              </>
+              </React.Fragment>
             ))
           ) : (
             <ScaledText
@@ -74,7 +67,7 @@ export const InteractionOfferCard: React.FC<
             </ScaledText>
           )}
         </ScaledView>
-      </Card>
+      </InteractionCardDoc>
     </ScaledCard>
   )
 }

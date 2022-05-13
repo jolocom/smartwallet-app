@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 
 import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
@@ -15,7 +15,6 @@ import { CardMoreBtn } from './components'
 import { DocumentCardProps } from './types'
 import { FieldsCalculator } from '../InteractionShare/components'
 import { TextLayoutEvent } from '~/types/props'
-import { useState } from 'react'
 
 const MAX_FIELDS = 3
 
@@ -92,7 +91,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
           <ScaledView scaleStyle={{ paddingBottom: 16 }} />
           <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
             {displayedFields.map((f, idx) => (
-              <>
+              <React.Fragment key={f.key}>
                 {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
                 <ScaledText
                   numberOfLines={1}
@@ -129,7 +128,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
                 >
                   {f.value}
                 </ScaledText>
-              </>
+              </React.Fragment>
             ))}
           </FieldsCalculator>
         </ScaledView>

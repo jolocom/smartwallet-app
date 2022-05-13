@@ -10,9 +10,7 @@ type TCommonCardProps = {
 }
 
 export type InteractionShareDocumentCardProps = {
-  holderName: string
+  holderName?: string
   highlight?: string
   photo?: string
 } & TCommonCardProps
-
-export type InteractionShareOtherCardProps = TCommonCardProps
