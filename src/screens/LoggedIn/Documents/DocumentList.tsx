@@ -1,38 +1,12 @@
-import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { useRoute, RouteProp } from '@react-navigation/native'
-import { TFunction } from 'i18next'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
-import ScreenContainer from '~/components/ScreenContainer'
-import { useTabs } from '~/components/Tabs/context'
-import {
-  getCustomCredentialsByCategoriesByType,
-  getCustomCredentialsByCategoriesByIssuer,
-} from '~/modules/credentials/selectors'
-import {
-  CredentialCategories,
-  DisplayCredentialDocument,
-  DisplayCredentialOther,
-  CredentialsByType,
-  CredentialsByIssuer,
-  CredentialsByCategory,
-  CredentialUITypes,
-} from '~/types/credentials'
+import { getAllDocuments } from '~/modules/credentials/selectors'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
-import AdoptedCarousel from '~/components/AdoptedCarousel'
-import { MainTabsParamList } from '../MainTabs'
 import { ScreenNames } from '~/types/screens'
-import JoloText from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
-import { Colors } from '~/utils/colors'
-import BP from '~/utils/breakpoints'
 import useTranslation from '~/hooks/useTranslation'
-import {
-  getCredentialUIType,
-  uiTypesTerms,
-} from '~/hooks/signedCredentials/utils'
 import {
   useCredentialOptionalFields,
   useDeleteCredential,
@@ -40,25 +14,8 @@ import {
 import { useToasts } from '~/hooks/toasts'
 import { usePopupMenu } from '~/hooks/popupMenu'
 import DocumentSectionDocumentCard from '~/components/Cards/DocumentSectionCards/DocumentSectionDocumentCard'
-import DocumentSectionOtherCard from '~/components/Cards/DocumentSectionCards/DocumentSectionOtherCard'
 import { truncateString } from '~/utils/stringUtils'
-
-const getCredentialDisplayType = (displayType: string, t: TFunction) => {
-  /**
-   * - if value is defined
-   *   and it isn't not a <context.term> pattern: use it as a type;
-   * - if value is empty make it unknown
-   */
-  const uiType: string | undefined =
-    uiTypesTerms[displayType as CredentialUITypes]
-
-  const credentialUIType = uiType
-    ? t(uiType)
-    : displayType === ''
-    ? t(uiTypesTerms[CredentialUITypes.unknown])
-    : displayType
-  return credentialUIType
-}
+import ScreenContainer from '~/components/ScreenContainer'
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()
@@ -66,12 +23,9 @@ const useHandleMorePress = () => {
 
   const { showPopup } = usePopupMenu()
   const deleteCredential = useDeleteCredential()
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteCredential(id)
-    } catch (e) {
-      scheduleErrorWarning(e)
-    }
+
+  const handleDelete = (id: string) => {
+    deleteCredential(id).catch(scheduleErrorWarning)
   }
 
   return (
@@ -129,64 +83,16 @@ const CardList: React.FC = ({ children }) => (
 
 export const DocumentList = () => {
   const { t } = useTranslation()
-  const [categories, setCategories] =
-    useState<
-      | CredentialsByCategory<
-          CredentialsByType<DisplayCredentialDocument | DisplayCredentialOther>
-        >
-      | CredentialsByCategory<
-          CredentialsByIssuer<
-            DisplayCredentialDocument | DisplayCredentialOther
-          >
-        >
-      | null
-    >(null)
-  const { activeTab, activeSubtab, setActiveTab, tabs } = useTabs()
-  const route = useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
   const { getOptionalFields } = useCredentialOptionalFields()
-
-  const categoriesByType = useSelector(getCustomCredentialsByCategoriesByType)
-  const categoriesByIssuer = useSelector(
-    getCustomCredentialsByCategoriesByIssuer,
-  )
-
-  // NOTE: changing the active tab when the navigation params changed
-  useLayoutEffect(() => {
-    const newTabId = route?.params?.initialTab ?? CredentialCategories.document
-    setActiveTab(tabs?.find((t) => t.id === newTabId)!)
-  }, [route])
-
-  useEffect(() => {
-    if (activeSubtab?.id === 'type') {
-      setCategories(categoriesByType)
-    } else if (activeSubtab?.id === 'issuer') {
-      setCategories(categoriesByIssuer)
-    }
-  }, [
-    activeSubtab?.id,
-    JSON.stringify(categoriesByType),
-    JSON.stringify(categoriesByIssuer),
-  ])
-
-  const documents = useMemo(
-    () =>
-      categories !== null ? categories[CredentialCategories.document] : [],
-    [JSON.stringify(categories)],
-  )
-  const other = useMemo(
-    () => (categories !== null ? categories[CredentialCategories.other] : []),
-    [JSON.stringify(categories)],
-  )
+  const documents = useSelector(getAllDocuments)
 
   const onHandleMore = useHandleMorePress()
 
-  if (categories === null) return null
+  if (!documents) return null
   return (
     <>
       <View
         style={{
-          display:
-            activeTab?.id === CredentialCategories.document ? 'flex' : 'none',
           flex: 1,
         }}
         testID="document-cards-container"
@@ -198,120 +104,33 @@ export const DocumentList = () => {
           />
         ) : (
           <CardList>
-            {documents.map((d) => {
-              const { credentials, value } = d as
-                | CredentialsByType<DisplayCredentialDocument>
-                | CredentialsByIssuer<DisplayCredentialDocument>
-
-              const credentialUIType = getCredentialDisplayType(value, t)
+            {documents.map((c, index) => {
               return (
-                <View style={styles.sectionContainer}>
+                <View key={`${index}-${c.id}`} style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
-                    <JoloText
-                      size={JoloTextSizes.mini}
-                      color={Colors.white90}
-                      customStyles={{
-                        textAlign: 'left',
-                        marginBottom: BP({ default: 30, xsmall: 16 }),
-                      }}
-                    >
-                      {`${credentialUIType}  • ${credentials.length}`}
-                    </JoloText>
+                    <DocumentSectionDocumentCard
+                      credentialName={c.name || t('General.unknown')}
+                      holderName={c.holderName || t('General.anonymous')}
+                      fields={getOptionalFields(c)}
+                      highlight={c.id}
+                      photo={c.photo}
+                      onHandleMore={() =>
+                        onHandleMore(
+                          c.id,
+                          c.name,
+                          [
+                            {
+                              key: 'subjectName',
+                              label: t('Documents.subjectNameField'),
+                              value: c.holderName || t('General.anonymous'),
+                            },
+                            ...getOptionalFields(c),
+                          ],
+                          c.photo,
+                        )
+                      }
+                    />
                   </ScreenContainer.Padding>
-                  <AdoptedCarousel
-                    activeSlideAlignment="center"
-                    customStyles={{ marginLeft: -12 }}
-                    data={credentials}
-                    renderItem={({ item: c, index }) => (
-                      <DocumentSectionDocumentCard
-                        key={`${index}-${c.id}`}
-                        credentialName={c.name || t('General.unknown')}
-                        holderName={c.holderName || t('General.anonymous')}
-                        fields={getOptionalFields(c)}
-                        highlight={c.id}
-                        photo={c.photo}
-                        onHandleMore={() =>
-                          onHandleMore(
-                            c.id,
-                            c.name,
-                            [
-                              {
-                                key: 'subjectName',
-                                label: t('Documents.subjectNameField'),
-                                value: c.holderName || t('General.anonymous'),
-                              },
-                              ...getOptionalFields(c),
-                            ],
-                            c.photo,
-                          )
-                        }
-                      />
-                    )}
-                  />
-                </View>
-              )
-            })}
-          </CardList>
-        )}
-      </View>
-      <View
-        style={{
-          display:
-            activeTab?.id === CredentialCategories.document ? 'none' : 'flex',
-          flex: 1,
-        }}
-        testID="other-cards-container"
-      >
-        {!other.length ? (
-          <ScreenPlaceholder
-            title={t('Documents.othersPlaceholderHeader')}
-            description={t('Documents.othersPlaceholderSubheader')}
-          />
-        ) : (
-          <CardList>
-            {other.map((o) => {
-              const { credentials, value } = o as
-                | CredentialsByType<DisplayCredentialOther>
-                | CredentialsByIssuer<DisplayCredentialOther>
-              const credentialUIType = getCredentialDisplayType(value, t)
-
-              return (
-                <View style={styles.sectionContainer}>
-                  <ScreenContainer.Padding>
-                    <JoloText
-                      size={JoloTextSizes.mini}
-                      color={Colors.white90}
-                      customStyles={{
-                        textAlign: 'left',
-                        marginBottom: BP({ default: 30, xsmall: 16 }),
-                      }}
-                    >
-                      {`${credentialUIType}  • ${credentials.length}`}
-                    </JoloText>
-                  </ScreenContainer.Padding>
-
-                  <AdoptedCarousel
-                    data={credentials}
-                    customStyles={{ marginLeft: -12 }}
-                    renderItem={({ item: c, index }) => {
-                      const fields = getOptionalFields(c)
-                      return (
-                        <DocumentSectionOtherCard
-                          key={`${index}-${c.id}`}
-                          credentialName={c.name || t('General.unknown')}
-                          credentialType={getCredentialDisplayType(
-                            getCredentialUIType(c.type),
-                            t,
-                          )}
-                          fields={fields}
-                          logo={c.photo}
-                          onHandleMore={() =>
-                            onHandleMore(c.id, c.name, fields, c.photo)
-                          }
-                        />
-                      )
-                    }}
-                  />
                 </View>
               )
             })}

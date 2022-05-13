@@ -6,26 +6,23 @@ import { useSafeArea } from 'react-native-safe-area-context'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useRedirect } from '~/hooks/navigation'
-import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
+import { mapDisplayToDocument } from '~/hooks/signedCredentials/utils'
 import {
   getRequestedCredentialDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
-  getCustomRequestedCredentialsByCategoryByType,
   getSelectedShareCredentials,
   getServiceDescription,
+  getRequestedDocumentsByType,
 } from '~/modules/interaction/selectors'
 import {
-  isDocument,
   CredentialsByType,
-  DisplayCredential,
-  CredentialCategories,
   AttributeTypes,
+  DisplayCredentialDocument,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
-import InteractionSection from '../components/InteractionSection'
 import InteractionTitle from '../components/InteractionTitle'
 import {
   ContainerBAS,
@@ -43,10 +40,7 @@ import Space from '~/components/Space'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
-import {
-  InteractionShareDocumentCard,
-  InteractionShareOtherCard,
-} from '~/components/Cards/InteractionShare'
+import { InteractionShareDocumentCard } from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
@@ -91,31 +85,23 @@ export const CredentialShareBAS = () => {
   const renderBody = () => {
     if (singleMissingAttribute) return null
     else if (singleRequestedCredential !== undefined) {
-      const displaySingleCredential = mapDisplayToCustomDisplay(
+      const displaySingleCredential = mapDisplayToDocument(
         singleRequestedCredential,
       )
-
       const { name } = displaySingleCredential
       const claimFields = getOptionalFields(displaySingleCredential)
 
       return (
         <>
-          {isDocument(displaySingleCredential) ? (
-            <InteractionShareDocumentCard
-              credentialName={name}
-              holderName={
-                displaySingleCredential.holderName || t('General.anonymous')
-              }
-              fields={claimFields}
-              highlight={displaySingleCredential.highlight}
-              photo={displaySingleCredential.photo}
-            />
-          ) : (
-            <InteractionShareOtherCard
-              credentialName={name}
-              fields={claimFields}
-            />
-          )}
+          <InteractionShareDocumentCard
+            credentialName={name}
+            holderName={
+              displaySingleCredential.holderName || t('General.anonymous')
+            }
+            fields={claimFields}
+            highlight={displaySingleCredential.highlight}
+            photo={displaySingleCredential.photo}
+          />
           <Space />
         </>
       )
@@ -170,7 +156,6 @@ export const CredentialShareBAS = () => {
 
 const CredentialShareFAS = () => {
   const { t } = useTranslation()
-  const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const { getOptionalFields } = useCredentialOptionalFields()
   const { name: serviceName, image } = useSelector(getServiceDescription)
@@ -180,15 +165,14 @@ const CredentialShareFAS = () => {
 
   const handleSubmit = useCredentialShareSubmit()
 
-  const documents = categories[CredentialCategories.document]
-  const other = categories[CredentialCategories.other]
+  const documentsByType = useSelector(getRequestedDocumentsByType)
 
   const handleRenderCredentials = (
-    credCollections: Array<CredentialsByType<DisplayCredential>>,
+    credCollections: Array<CredentialsByType<DisplayCredentialDocument>>,
   ) =>
-    credCollections.map(({ key, value, credentials }) => (
-      <AdoptedCarousel
-        key={key}
+    credCollections.map(({ value, credentials }) => (
+      <AdoptedCarousel<DisplayCredentialDocument>
+        key={value}
         activeSlideAlignment="center"
         data={credentials}
         itemWidth={SCREEN_WIDTH - 48}
@@ -206,22 +190,14 @@ const CredentialShareFAS = () => {
                   marginBottom: BP({ default: 24, xsmall: 16 }),
                 }}
               >
-                {isDocument(cred) ? (
-                  <InteractionShareDocumentCard
-                    credentialName={name ?? type}
-                    fields={claimFields}
-                    holderName={cred.holderName || t('General.anonymous')}
-                    highlight={cred.highlight}
-                    photo={cred.photo}
-                    selected={selectedCredentials[type] === id}
-                  />
-                ) : (
-                  <InteractionShareOtherCard
-                    credentialName={name ?? type}
-                    fields={claimFields}
-                    selected={selectedCredentials[type] === id}
-                  />
-                )}
+                <InteractionShareDocumentCard
+                  credentialName={name ?? type}
+                  fields={claimFields}
+                  holderName={cred.holderName}
+                  highlight={cred.highlight}
+                  photo={cred.photo}
+                  selected={selectedCredentials[type] === id}
+                />
               </View>
             </TouchableWithoutFeedback>
           )
@@ -254,18 +230,7 @@ const CredentialShareFAS = () => {
               <ScreenContainer.Padding>
                 <ShareAttributeWidget withContainer />
               </ScreenContainer.Padding>
-              <InteractionSection
-                title={t('Documents.documentsTab')}
-                isPaddedTitle={true}
-              >
-                {handleRenderCredentials(documents)}
-              </InteractionSection>
-              <InteractionSection
-                title={t('Documents.othersTab')}
-                isPaddedTitle={true}
-              >
-                {handleRenderCredentials(other)}
-              </InteractionSection>
+              {handleRenderCredentials(documentsByType)}
             </Collapsible.Scroll>
           </ContainerFAS>
         )}

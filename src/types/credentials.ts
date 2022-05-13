@@ -33,23 +33,6 @@ export enum AttributeTypes {
   postalAddress = 'ProofOfPostalAddressCredential',
 }
 
-export enum CredentialUITypes {
-  identification = 'identification',
-  tickets = 'tickets',
-  unknown = 'unknown',
-}
-/**
- * #### NOTE/FIXME
- * > every time offered credential types changes we need to update this value
- */
-export enum IdentificationTypes {
-  ProofOfIdCredentialDemo = 'ProofOfIdCredentialDemo',
-  ProofOfDriverLicenceDemo = 'ProofOfDriverLicenceDemo',
-}
-export enum TicketTypes {
-  ProofOfTicketDemo = 'ProofOfTicketDemo',
-}
-
 interface AttributeKeyboardOptions {
   keyboardType: KeyboardTypeOptions
   autoCapitalize: 'none' | 'words' | 'sentences' | 'characters'
@@ -82,33 +65,21 @@ export type BaseUICredential = Pick<
 > & { type: string }
 
 export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
-  category: CredentialCategories
-  invalid: boolean
   properties: DisplayVal[]
 }
 
 export type OfferedCredentialDisplay = OfferedCredential &
   Pick<CredentialDisplay['display'], 'properties'>
 
-export enum CredentialCategories {
-  document = 'document',
-  other = 'other',
-}
-
-export enum DocumentFields {
-  DocumentName = 'Document Name',
-}
-
 export type DisplayCredential = { issuer: IdentitySummary | undefined } & {
-  category: CredentialCategories
-} & { properties: Array<Required<DisplayVal>> } & BaseUICredential
+  properties: Array<Required<DisplayVal>>
+} & BaseUICredential
 
 export type DisplayCredentialDocument = DisplayCredential & {
-  holderName: string
+  holderName?: string
   photo?: string
   highlight?: string
 }
-export type DisplayCredentialOther = DisplayCredential & { photo?: string }
 
 export type CredentialsBy<BT, CT> = {
   key: BT
@@ -116,19 +87,6 @@ export type CredentialsBy<BT, CT> = {
   credentials: CT[]
 }
 export type CredentialsByType<T> = CredentialsBy<'type', T>
-export type CredentialsByIssuer<T> = CredentialsBy<'issuer', T>
-
-export type CredentialsByCategory<T> = Record<CredentialCategories, T[]>
-
-export type RequestedCredentialsByCategoryByType<T> = CredentialsByCategory<
-  CredentialsByType<T>
->
-
-export function isDocument(
-  credential: DisplayCredentialDocument | DisplayCredentialOther,
-): credential is DisplayCredentialDocument {
-  return credential.category === CredentialCategories.document
-}
 
 export type TPrimitiveAttributesConfig = Record<
   AttributeTypes,
