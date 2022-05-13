@@ -4,4 +4,4 @@ import { InteractionOfferCardProps } from './types'
 
 export const InteractionOfferDocumentCard: React.FC<
   InteractionOfferCardProps
-> = (props) => <InteractionOfferCard {...props} cardType="document" />
+> = (props) => <InteractionOfferCard {...props} />
