@@ -7,7 +7,7 @@ interface CommonDocumentsProps {
 }
 
 export interface DocumentCardProps extends CommonDocumentsProps {
-  holderName: string
+  holderName?: string
   highlight?: string
   photo?: string
 }
