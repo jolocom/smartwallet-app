@@ -37,10 +37,10 @@ export const CardMoreBtn: React.FC<Props> = ({ onPress }) => (
 )
 
 export const DocumentFooter: React.FC<{
-  rightIcons?: string[]
   leftIcons?: string[]
+  renderRightIcon?: () => JSX.Element
   style?: StyleProp<ViewStyle>
-}> = ({ rightIcons, leftIcons, style = {} }) => {
+}> = ({ renderRightIcon, leftIcons, style = {} }) => {
   //TODO use icons
   return (
     <ScaledView
@@ -48,6 +48,32 @@ export const DocumentFooter: React.FC<{
       scaleStyle={styles.footerContainerScaled}
     >
       <View style={styles.footerBorder} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+          {leftIcons &&
+            leftIcons.map((icon, i) => (
+              <ScaledView
+                key={i}
+                scaleStyle={{ width: 40, height: 30 }}
+                style={{ marginRight: 10 }}
+              >
+                <Image
+                  source={{ uri: icon }}
+                  resizeMode="cover"
+                  style={{ width: '100%', height: '100%', borderRadius: 4.2 }}
+                />
+              </ScaledView>
+            ))}
+        </View>
+        <View>{renderRightIcon && renderRightIcon()}</View>
+      </View>
     </ScaledView>
   )
 }

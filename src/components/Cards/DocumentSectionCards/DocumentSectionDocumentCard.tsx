@@ -20,6 +20,7 @@ import {
 import { DocumentCardProps } from './types'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
+import { ScanDocumentIcon } from '~/assets/svg'
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
@@ -33,6 +34,11 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
   //backgroundImage,
   issuerIcon = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
+  hasImageFields = true,
+  icons = [
+    'https://cdn.countryflags.com/thumbs/germany/flag-400.png',
+    'https://w7.pngwing.com/pngs/525/382/png-transparent-european-union-flag-of-europe-flags-graphics-blue-flag-computer-wallpaper.png',
+  ],
 }) => {
   const { isCredentialNameScaled } = useCredentialNameScale()
 
@@ -53,7 +59,8 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     if (holderNameLines > 1) {
       maxFields--
     }
-    if (!holderName) {
+
+    if (!holderName && !backgroundImage) {
       maxFields++
     }
 
@@ -121,7 +128,10 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             maxFields={maxFields}
           />
         </View>
-        <DocumentFooter />
+        <DocumentFooter
+          leftIcons={icons}
+          renderRightIcon={() => <ScanDocumentIcon />}
+        />
       </View>
     </ScaledCard>
   )
