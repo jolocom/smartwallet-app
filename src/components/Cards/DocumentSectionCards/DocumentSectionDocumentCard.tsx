@@ -27,9 +27,11 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   photo,
   onHandleMore,
   // TODO @clauxx remove placeholders
-  holderName = 'Cristian Lungu Vladislav Veronica',
+  holderName,
   backgroundColor = '#970009',
+  //backgroundColor,
   backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
+  //backgroundImage,
   issuerIcon = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
 }) => {
   const { isCredentialNameScaled } = useCredentialNameScale()
@@ -40,12 +42,19 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   }
 
   const calculateMaxFields = useCallback(() => {
-    let maxFields = holderName ? 3 : 4
-    if (backgroundImage || backgroundColor) {
-      maxFields--
+    let maxFields = 4
+    if (backgroundImage) {
+      maxFields = maxFields - 2
+    } else if (backgroundColor) {
+      if (!holderName) maxFields--
+      else maxFields = maxFields - 2
     }
+
     if (holderNameLines > 1) {
       maxFields--
+    }
+    if (!holderName) {
+      maxFields++
     }
 
     return maxFields
@@ -67,7 +76,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     } else if (backgroundColor) {
       return <DocumentBackgroundColor color={backgroundColor} />
     } else {
-      return <ScaledView scaleStyle={{ height: 20 }} />
+      return <ScaledView scaleStyle={{ height: 24 }} />
     }
   }, [backgroundColor, backgroundImage])
 
@@ -98,6 +107,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             onPressMenu={onHandleMore}
           />
           {renderBackground()}
+          {photo && <DocumentPhoto photo={photo} />}
           {holderName && (
             <DocumentHolderName
               name={holderName}
@@ -113,7 +123,6 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
         </View>
         <DocumentFooter />
       </View>
-      {photo && <DocumentPhoto photo={photo} />}
     </ScaledCard>
   )
 }

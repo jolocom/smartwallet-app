@@ -13,7 +13,6 @@ import LinearGradient from 'react-native-linear-gradient'
 import { TextLayoutEvent } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from '../hooks'
 import { FieldsCalculator } from '../InteractionShare/components'
@@ -54,12 +53,14 @@ export const DocumentFooter: React.FC<{
 }
 
 export const DocumentPhoto: React.FC<{ photo: string }> = ({ photo }) => (
-  <ScaledView
-    scaleStyle={styles.photoContainerScaled}
-    style={styles.photoContainer}
-  >
-    <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
-  </ScaledView>
+  <View>
+    <ScaledView
+      scaleStyle={styles.photoContainerScaled}
+      style={styles.photoContainer}
+    >
+      <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
+    </ScaledView>
+  </View>
 )
 
 export const DocumentHeader: React.FC<{
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   photoContainerScaled: {
-    bottom: 27,
+    bottom: -55,
     right: 14,
     width: 82,
     height: 82,
