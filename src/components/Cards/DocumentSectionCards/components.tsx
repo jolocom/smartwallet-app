@@ -136,11 +136,13 @@ export const DocumentHeader: React.FC<{
 export const DocumentHolderName: React.FC<{
   name: string
   onLayout: (e: TextLayoutEvent) => void
-}> = ({ name, onLayout }) => {
+  cropName?: boolean
+}> = ({ name, onLayout, cropName = false }) => {
   return (
     <ScaledView
       scaleStyle={{
         paddingLeft: 24,
+        marginRight: cropName ? 116 : 0,
       }}
     >
       <ScaledText

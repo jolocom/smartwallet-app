@@ -25,10 +25,10 @@ import { ScanDocumentIcon } from '~/assets/svg'
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
   fields,
-  photo,
+  photo = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
   onHandleMore,
   // TODO @clauxx remove placeholders
-  holderName,
+  holderName = 'Cristian Lungu Vladislav',
   backgroundColor = '#970009',
   //backgroundColor,
   backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
@@ -118,6 +118,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
           {holderName && (
             <DocumentHolderName
               name={holderName}
+              cropName={!!photo}
               onLayout={handleHolderNameTextLayout}
             />
           )}
