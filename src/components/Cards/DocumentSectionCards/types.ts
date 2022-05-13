@@ -1,13 +1,12 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
-interface CommonDocumentsProps {
+export interface DocumentCardProps {
   credentialName: string
   fields: Array<Required<DisplayVal>>
   onHandleMore: () => void
-}
-
-export interface DocumentCardProps extends CommonDocumentsProps {
   holderName?: string
-  highlight?: string
   photo?: string
+  issuerIcon?: string
+  icons?: string[]
+  hasImageFields?: boolean
 }
