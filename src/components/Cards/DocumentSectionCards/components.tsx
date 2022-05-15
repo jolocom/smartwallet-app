@@ -1,4 +1,5 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import _ from 'lodash'
 import React from 'react'
 import {
   Image,
@@ -18,7 +19,7 @@ import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from '../hooks'
 import { FieldsCalculator } from '../InteractionShare/components'
 import { ScaledText, ScaledView } from '../ScaledCard'
-import { splitFields } from './utils'
+import { splitFields, splitIntoRows } from './utils'
 
 export const CardMoreBtn: React.FC<{
   onPress: () => void
@@ -162,9 +163,10 @@ export const DocumentHolderName: React.FC<{
 
 export const DocumentFields: React.FC<{
   fields: Required<DisplayVal>[]
-  maxFields: number
   maxLines: number
-}> = ({ fields, maxLines, maxFields }) => {
+  maxRows: number
+}> = ({ fields, maxLines, maxRows }) => {
+  const maxFields = maxRows * 2
   const {
     displayedFields,
     handleFieldValueLayout,
@@ -173,8 +175,7 @@ export const DocumentFields: React.FC<{
 
   const renderField = (field: Required<DisplayVal>, idx: number) => {
     return (
-      <React.Fragment key={field.key}>
-        {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
+      <View key={field.key} style={{ flex: 1 }}>
         <ScaledText
           numberOfLines={1}
           style={[
@@ -202,32 +203,33 @@ export const DocumentFields: React.FC<{
         >
           {field.value}
         </ScaledText>
-      </React.Fragment>
+      </View>
     )
   }
 
-  const columns = splitFields(displayedFields)
+  let rows = splitIntoRows(displayedFields)
+  // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
+  // we have to cut it to the max nr of rows.
+  rows = rows.splice(0, maxRows)
 
   return (
     <ScaledView
       scaleStyle={{
         paddingHorizontal: 24,
-        paddingTop: 8,
       }}
       style={{
         flex: 1,
         justifyContent: 'center',
-        paddingBottom: '10%',
       }}
     >
       <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
-        <View style={{ flexDirection: 'row' }}>
-          {columns.map((col, idx) => (
+        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+          {rows.map((row, idx) => (
             <View
               key={idx}
-              style={{ flex: 1, height: '100%', paddingRight: 12 }}
+              style={{ flexDirection: 'row', marginTop: idx === 0 ? 0 : 14 }}
             >
-              {col.map((field, idx) => renderField(field, idx))}
+              {row.map((field, idx) => renderField(field, idx))}
             </View>
           ))}
         </View>

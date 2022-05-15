@@ -29,8 +29,8 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   onHandleMore,
   // TODO @clauxx remove placeholders
   holderName = 'Cristian Lungu Vladislav',
-  //backgroundColor = '#970009',
-  backgroundColor,
+  backgroundColor = '#970009',
+  //backgroundColor,
   backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
   //backgroundImage,
   issuerIcon = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
@@ -47,27 +47,27 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     setHolderNameLines(e.nativeEvent.lines.length)
   }
 
-  const calculateMaxFields = useCallback(() => {
-    let maxFields = 6
+  const calculateMaxRows = useCallback(() => {
+    let maxFields = 4
     if (backgroundImage) {
       maxFields = maxFields - 2
     } else if (backgroundColor) {
-      if (!holderName) maxFields = maxFields - 2
-      else maxFields = maxFields - 4
+      if (!holderName) maxFields = maxFields - 1
+      else maxFields = maxFields - 2
     }
 
-    if (holderNameLines > 1) {
-      maxFields = maxFields - 2
+    if (holderNameLines > 1 && backgroundImage) {
+      maxFields = maxFields - 1
     }
 
     if (!holderName && !backgroundImage) {
-      maxFields = maxFields + 2
+      maxFields = maxFields + 1
     }
 
     return maxFields
   }, [holderName, backgroundColor, backgroundImage, holderNameLines])
 
-  const maxFields = calculateMaxFields()
+  const maxRows = calculateMaxRows()
   const maxLinesPerField =
     isCredentialNameScaled && holderNameLines === 2 ? 4 : 5
 
@@ -88,6 +88,14 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   }, [backgroundColor, backgroundImage])
 
   const isBackground = backgroundImage || backgroundColor
+
+  // NOTE: sorting the fields from shortest value to longest to fit more fields in the card.
+  // Nevertheless, this leads to the "metadata" fields (i.e. issuer, expires, etc.) to be prioritized,
+  // which is not desireable.
+
+  //fields = fields.sort((prev, next) =>
+  //  prev.value.length > next.value.length ? 1 : -1,
+  //)
 
   return (
     <ScaledCard
@@ -133,12 +141,14 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
           <DocumentFields
             fields={fields}
             maxLines={maxLinesPerField}
-            maxFields={maxFields}
+            maxRows={maxRows}
           />
         </View>
         <DocumentFooter
           leftIcons={icons}
-          renderRightIcon={() => <ScanDocumentIcon />}
+          renderRightIcon={
+            hasImageFields ? () => <ScanDocumentIcon /> : undefined
+          }
         />
       </View>
     </ScaledCard>
