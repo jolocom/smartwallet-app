@@ -45,6 +45,7 @@ import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
+import { CardTest } from './Settings/Development/CardsTest'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -93,6 +94,7 @@ export type MainStackParamList = {
     backgroundColor?: Colors
   }
   // DEV
+  [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
   [ScreenNames.ButtonsTest]: undefined
   [ScreenNames.CollapsibleTest]: undefined
@@ -203,6 +205,7 @@ const Main: React.FC = () => {
             name={ScreenNames.LoaderTest}
             component={LoaderTest}
           />
+          <MainStack.Screen name={ScreenNames.CardsTest} component={CardTest} />
           <MainStack.Screen
             name={ScreenNames.NotificationsTest}
             component={NotificationsTest}
