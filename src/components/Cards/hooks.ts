@@ -98,7 +98,7 @@ export const useCalculateFieldLines = (maxLinesPerField = 2) => {
  * and how many field lines in field value are displayed. Should it thould beused in FieldCalculator component
  */
 export const usePruneFields = (
-  fields: Array<Required<DisplayVal>>,
+  fields: Array<DisplayVal>,
   maxNrFields: number,
   maxNrFieldLines: number,
 ) => {

@@ -1,9 +1,12 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import ScaledCard from '../ScaledCard'
+import { debugView } from '~/utils/dev'
+import { Fonts } from '~/utils/fonts'
+import ScaledCard, { ScaledText } from '../ScaledCard'
 
 import { DocumentFields, DocumentHeader } from './components'
 import {
@@ -26,7 +29,15 @@ const OfferCard: React.FC<Props> = ({
   issuerIcon,
   style = {},
 }) => {
+  const { t } = useTranslation()
   const maxRows = 3
+  const [nrDisplayedFields, setNrDisplayFields] = useState(fields.length)
+
+  const handleDisplayedFields = (fields: DisplayVal[]) => {
+    setNrDisplayFields(fields.length)
+  }
+
+  const nrLeftFields = fields.length - nrDisplayedFields
 
   return (
     <ScaledCard
@@ -50,22 +61,44 @@ const OfferCard: React.FC<Props> = ({
         />
         <View style={{ flexDirection: 'row', flex: 1 }}>
           <View style={{ flex: 1 }}>
-            <DocumentFields
-              fields={fields}
-              maxRows={maxRows}
-              maxLines={1}
-              rowDistance={8}
-              fieldCharacterLimit={12}
-              labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
-              valueScaledStyle={{
-                fontSize: 18,
-                lineHeight: 20,
-                height: 20,
-                borderRadius: 5,
-                backgroundColor: Colors.alto,
-                width: '80%',
-              }}
-            />
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <DocumentFields
+                fields={fields}
+                maxRows={maxRows}
+                maxLines={1}
+                rowDistance={8}
+                fieldCharacterLimit={12}
+                labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
+                valueScaledStyle={{
+                  fontSize: 18,
+                  lineHeight: 20,
+                  height: 20,
+                  borderRadius: 5,
+                  backgroundColor: Colors.alto,
+                  width: '80%',
+                }}
+                nrOfColumns={2}
+                onFinishCalculation={handleDisplayedFields}
+              />
+            </View>
+          </View>
+          <View style={{ flex: 0.3, justifyContent: 'flex-start' }}>
+            {!!nrLeftFields && (
+              <ScaledText
+                style={{
+                  fontFamily: Fonts.Regular,
+                  color: Colors.slateGray,
+                }}
+                scaleStyle={{
+                  fontSize: 14,
+                  lineHeight: 18,
+                  marginTop: 18,
+                  marginLeft: -16,
+                }}
+              >
+                {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
+              </ScaledText>
+            )}
           </View>
         </View>
       </View>

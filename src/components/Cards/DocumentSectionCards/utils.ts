@@ -8,7 +8,11 @@ export const splitFields = <T>(fields: Array<T>) => {
   return [first, last]
 }
 
-export const splitIntoRows = (fields: DisplayVal[], oneLineLimit: number) => {
+export const splitIntoRows = (
+  fields: DisplayVal[],
+  oneLineLimit: number,
+  fieldsPerRow: number,
+) => {
   let lastPushedIdx = -1
 
   const rows = fields.reduce<DisplayVal[][]>((acc, field, i, array) => {
@@ -20,7 +24,7 @@ export const splitIntoRows = (fields: DisplayVal[], oneLineLimit: number) => {
         acc.push([field])
         lastPushedIdx = i
       } else {
-        acc.push([field, array[i + 1]])
+        acc.push(array.slice(i, i + fieldsPerRow))
         lastPushedIdx = i + 1
       }
     }

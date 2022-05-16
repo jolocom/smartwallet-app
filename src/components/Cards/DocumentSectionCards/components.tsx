@@ -1,5 +1,5 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Image,
   ImageBackground,
@@ -183,6 +183,8 @@ export const DocumentFields: React.FC<{
   maxRows: number
   rowDistance?: number
   fieldCharacterLimit?: number
+  nrOfColumns?: number
+  onFinishCalculation?: (displayedFields: DisplayVal[]) => void
 }> = ({
   fields,
   maxLines,
@@ -191,6 +193,8 @@ export const DocumentFields: React.FC<{
   fieldCharacterLimit = 14,
   valueScaledStyle,
   labelScaledStyle,
+  nrOfColumns = 2,
+  onFinishCalculation,
 }) => {
   const maxFields = maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
@@ -199,10 +203,20 @@ export const DocumentFields: React.FC<{
     maxLines,
   )
 
-  let rows = splitIntoRows(displayedFields, fieldCharacterLimit)
+  let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
   // we have to cut it to the max nr of rows.
   rows = rows.splice(0, maxRows)
+
+  useEffect(() => {
+    const fields = rows.reduce<DisplayVal[]>((acc, row) => {
+      acc = [...acc, ...row]
+
+      return acc
+    }, [])
+
+    onFinishCalculation && onFinishCalculation(fields)
+  }, [rows])
 
   const renderField = (field: Required<DisplayVal>) => {
     return (
@@ -261,6 +275,7 @@ export const DocumentFields: React.FC<{
               key={idx}
               style={{
                 flexDirection: 'row',
+                alignItems: 'flex-start',
               }}
               scaleStyle={{
                 marginTop: idx === 0 ? 0 : rowDistance,
