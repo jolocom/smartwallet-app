@@ -163,7 +163,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             rowDistance={14}
             labelScaledStyle={{
               fontSize: 16,
-              lineHeight: 20,
+              lineHeight: 16,
               marginBottom: 6,
             }}
             valueScaledStyle={{
