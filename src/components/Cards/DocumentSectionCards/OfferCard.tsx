@@ -92,7 +92,7 @@ const OfferCard: React.FC<Props> = ({
                   fontSize: 14,
                   lineHeight: 18,
                   marginBottom: 32,
-                  //marginLeft: -16,
+                  bordereRadius: 5,
                 }}
               >
                 {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
