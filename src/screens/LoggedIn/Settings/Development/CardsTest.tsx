@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native'
 import {
   DocumentCard,
   ShareCard,
+  OfferCard,
 } from '~/components/Cards/DocumentSectionCards'
 import ScreenContainer from '~/components/ScreenContainer'
 import Section from '../components/Section'
@@ -71,6 +72,14 @@ const credentialShareProps = [
 ]
 
 export const CardTest = () => {
+  const offerProps = credentialShareProps.map((card) => {
+    const fields = card.fields.map((field) => {
+      return { ...field, value: undefined }
+    })
+
+    return { ...card, fields }
+  })
+
   return (
     <ScreenContainer hasHeaderBack>
       <ScrollView style={{ width: '100%' }}>
@@ -97,6 +106,12 @@ export const CardTest = () => {
           <View style={{ flex: 1, width: '100%', paddingHorizontal: 16 }}>
             {credentialShareProps.map((cred, i) => (
               <ShareCard key={i} {...cred} style={{ marginTop: 12 }} />
+            ))}
+          </View>
+          <Section.Title>Credenital Offer Cards</Section.Title>
+          <View style={{ flex: 1, width: '100%', paddingHorizontal: 16 }}>
+            {offerProps.map((cred, i) => (
+              <OfferCard key={i} {...cred} style={{ marginTop: 12 }} />
             ))}
           </View>
         </Section>
