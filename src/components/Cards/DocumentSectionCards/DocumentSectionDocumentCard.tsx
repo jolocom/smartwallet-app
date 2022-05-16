@@ -50,23 +50,23 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   }
 
   const calculateMaxRows = useCallback(() => {
-    let maxFields = 4
+    let maxRows = 4
     if (backgroundImage) {
-      maxFields = maxFields - 2
+      maxRows = maxRows - 2
     } else if (backgroundColor) {
-      if (!holderName) maxFields = maxFields - 1
-      else maxFields = maxFields - 2
+      if (!holderName) maxRows--
+      else maxRows = maxRows - 2
     }
 
     if (holderNameLines > 1 && backgroundImage) {
-      maxFields = maxFields - 1
+      maxRows--
     }
 
     if (!holderName && !backgroundImage) {
-      maxFields = maxFields + 1
+      maxRows++
     }
 
-    return maxFields
+    return maxRows
   }, [holderName, backgroundColor, backgroundImage, holderNameLines])
 
   const maxRows = calculateMaxRows()
@@ -149,6 +149,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             maxLines={maxLinesPerField}
             maxRows={maxRows}
             renderField={renderField}
+            rowDistance={14}
           />
         </View>
         <DocumentFooter

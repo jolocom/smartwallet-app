@@ -146,7 +146,8 @@ export const DocumentHolderName: React.FC<{
   name: string
   onLayout: (e: TextLayoutEvent) => void
   cropName?: boolean
-}> = ({ name, onLayout, cropName = false }) => {
+  numberOfLines?: number
+}> = ({ name, onLayout, cropName = false, numberOfLines = 2 }) => {
   return (
     <ScaledView
       scaleStyle={{
@@ -157,7 +158,7 @@ export const DocumentHolderName: React.FC<{
       <ScaledText
         // @ts-expect-error
         onTextLayout={onLayout}
-        numberOfLines={2}
+        numberOfLines={numberOfLines}
         style={styles.mediumText}
         scaleStyle={styles.holderName}
       >
@@ -167,11 +168,47 @@ export const DocumentHolderName: React.FC<{
   )
 }
 
-export const DocumentField: React.FC<{
+export const DocumentShareField: React.FC<{
   field: Required<DisplayVal>
   idx: number
 }> = ({ field, idx }) => (
   <View key={field.key} style={{ flex: 1 }}>
+    <ScaledText
+      numberOfLines={1}
+      style={[
+        styles.regularText,
+        {
+          width: '100%',
+        },
+      ]}
+      scaleStyle={{ fontSize: 12, lineHeight: 16 }}
+    >
+      {field.label.trim()}:
+    </ScaledText>
+    <ScaledText
+      numberOfLines={1}
+      scaleStyle={{ fontSize: 18, lineHeight: 20 }}
+      style={[
+        styles.mediumText,
+        {
+          width: '100%',
+        },
+      ]}
+    >
+      {field.value}
+    </ScaledText>
+  </View>
+)
+
+export const DocumentField: React.FC<{
+  field: Required<DisplayVal>
+  idx: number
+}> = ({ field, idx }) => (
+  <ScaledView
+    key={field.key}
+    style={{ flex: 1 }}
+    scaleStyle={{ paddingRight: 12 }}
+  >
     <ScaledText
       numberOfLines={1}
       style={[
@@ -197,7 +234,7 @@ export const DocumentField: React.FC<{
     >
       {field.value}
     </ScaledText>
-  </View>
+  </ScaledView>
 )
 
 export const DocumentFields: React.FC<{
@@ -205,7 +242,16 @@ export const DocumentFields: React.FC<{
   renderField: (field: Required<DisplayVal>, idx: number) => JSX.Element
   maxLines: number
   maxRows: number
-}> = ({ fields, maxLines, maxRows, renderField }) => {
+  rowDistance?: number
+  fieldCharacterLimit?: number
+}> = ({
+  fields,
+  maxLines,
+  maxRows,
+  renderField,
+  rowDistance = 0,
+  fieldCharacterLimit = 14,
+}) => {
   const maxFields = maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
     fields,
@@ -213,7 +259,7 @@ export const DocumentFields: React.FC<{
     maxLines,
   )
 
-  let rows = splitIntoRows(displayedFields)
+  let rows = splitIntoRows(displayedFields, fieldCharacterLimit)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
   // we have to cut it to the max nr of rows.
   rows = rows.splice(0, maxRows)
@@ -221,7 +267,7 @@ export const DocumentFields: React.FC<{
   return (
     <ScaledView
       scaleStyle={{
-        paddingHorizontal: 24,
+        paddingLeft: 24,
       }}
       style={{
         flex: 1,
@@ -229,14 +275,24 @@ export const DocumentFields: React.FC<{
       }}
     >
       <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
-        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'flex-start',
+          }}
+        >
           {rows.map((row, idx) => (
-            <View
+            <ScaledView
               key={idx}
-              style={{ flexDirection: 'row', marginTop: idx === 0 ? 0 : 14 }}
+              style={{
+                flexDirection: 'row',
+              }}
+              scaleStyle={{
+                marginTop: idx === 0 ? 0 : rowDistance,
+              }}
             >
               {row.map(renderField)}
-            </View>
+            </ScaledView>
           ))}
         </View>
       </FieldsCalculator>
