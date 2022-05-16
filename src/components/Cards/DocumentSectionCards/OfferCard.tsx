@@ -74,6 +74,8 @@ const OfferCard: React.FC<Props> = ({
                   height: 20,
                   borderRadius: 5,
                   backgroundColor: Colors.alto,
+                  // NOTE: without this iOS doesn't apply the borderRadius (for text)
+                  overflow: 'hidden',
                 }}
                 nrOfColumns={2}
                 onFinishCalculation={handleDisplayedFields}
@@ -92,7 +94,6 @@ const OfferCard: React.FC<Props> = ({
                   fontSize: 14,
                   lineHeight: 18,
                   marginBottom: 32,
-                  bordereRadius: 5,
                 }}
               >
                 {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
