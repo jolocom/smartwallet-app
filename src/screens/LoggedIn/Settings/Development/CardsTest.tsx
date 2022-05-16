@@ -1,12 +1,15 @@
 import React from 'react'
 import { ScrollView, View } from 'react-native'
-import { SharePreviewCard } from '~/components/Cards/DocumentSectionCards/SharePreviewCard'
+import {
+  DocumentCard,
+  ShareCard,
+} from '~/components/Cards/DocumentSectionCards'
 import ScreenContainer from '~/components/ScreenContainer'
 import Section from '../components/Section'
 
 const credentialShareProps = [
   {
-    credentialName: 'Solaris Ticket',
+    credentialName: 'Ivan Tichii',
     fields: [
       { key: 'one', label: 'Birth Date', value: '12.11.1943' },
       { key: 'two', label: 'Books', value: '44' },
@@ -32,8 +35,6 @@ const credentialShareProps = [
     selected: false,
     photo:
       'https://www.sueddeutsche.de/image/sz.1.1197317/640x360?v=1523580533',
-    issuerIcon:
-      'https://images-na.ssl-images-amazon.com/images/I/71YpunDnbwL.jpg',
   },
   {
     credentialName: 'Solaris Ticket',
@@ -74,10 +75,28 @@ export const CardTest = () => {
     <ScreenContainer hasHeaderBack>
       <ScrollView style={{ width: '100%' }}>
         <Section>
-          <Section.Title>Credenital Share Cards</Section.Title>
-          <View style={{ flex: 1, width: '100%' }}>
+          <Section.Title>Document Cards</Section.Title>
+          <View
+            style={{
+              flex: 1,
+              width: '100%',
+              marginBottom: 12,
+              alignItems: 'center',
+            }}
+          >
             {credentialShareProps.map((cred, i) => (
-              <SharePreviewCard key={i} {...cred} style={{ marginTop: 12 }} />
+              <DocumentCard
+                key={i}
+                {...cred}
+                style={{ marginTop: 12 }}
+                onHandleMore={() => {}}
+              />
+            ))}
+          </View>
+          <Section.Title>Credenital Share Cards</Section.Title>
+          <View style={{ flex: 1, width: '100%', paddingHorizontal: 16 }}>
+            {credentialShareProps.map((cred, i) => (
+              <ShareCard key={i} {...cred} style={{ marginTop: 12 }} />
             ))}
           </View>
         </Section>

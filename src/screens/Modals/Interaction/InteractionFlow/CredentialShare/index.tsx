@@ -40,11 +40,11 @@ import Space from '~/components/Space'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
-import { InteractionShareDocumentCard } from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
 import { ServiceLogo } from '~/components/ServiceLogo'
+import { ShareCard } from '~/components/Cards/DocumentSectionCards'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -93,13 +93,10 @@ export const CredentialShareBAS = () => {
 
       return (
         <>
-          <InteractionShareDocumentCard
+          <ShareCard
             credentialName={name}
-            holderName={
-              displaySingleCredential.holderName || t('General.anonymous')
-            }
+            holderName={displaySingleCredential.holderName}
             fields={claimFields}
-            highlight={displaySingleCredential.highlight}
             photo={displaySingleCredential.photo}
           />
           <Space />
@@ -190,11 +187,10 @@ const CredentialShareFAS = () => {
                   marginBottom: BP({ default: 24, xsmall: 16 }),
                 }}
               >
-                <InteractionShareDocumentCard
+                <ShareCard
                   credentialName={name ?? type}
                   fields={claimFields}
                   holderName={cred.holderName}
-                  highlight={cred.highlight}
                   photo={cred.photo}
                   selected={selectedCredentials[type] === id}
                 />
