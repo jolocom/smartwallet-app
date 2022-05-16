@@ -171,7 +171,8 @@
         "cardInfoHeader": "Enthaltene Information",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren",
-        "cardNoPreview": "Es können keine Informationen angezeigt werden"
+        "cardNoPreview": "Es können keine Informationen angezeigt werden",
+        "nrOfFieldsLeft": "+${nr} mehr"
     },
     "Toasts": {
         "reportBtn": "Fehler Melden",
