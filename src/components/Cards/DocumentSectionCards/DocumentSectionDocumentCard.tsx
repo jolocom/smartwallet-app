@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react'
-import { View } from 'react-native'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
-import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
+import ScaledCard, { ScaledView } from '../ScaledCard'
 import { useCredentialNameScale } from '../hooks'
 import {
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
@@ -12,17 +12,29 @@ import {
 import {
   DocumentBackgroundColor,
   DocumentBackgroundImage,
-  DocumentField,
   DocumentFields,
   DocumentFooter,
   DocumentHeader,
   DocumentHolderName,
   DocumentPhoto,
 } from './components'
-import { DocumentCardProps } from './types'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { ScanDocumentIcon } from '~/assets/svg'
+
+interface DocumentCardProps {
+  credentialName: string
+  fields: Array<Required<DisplayVal>>
+  onHandleMore: () => void
+  holderName?: string
+  photo?: string
+  issuerIcon?: string
+  icons?: string[]
+  hasImageFields?: boolean
+  backgroundImage?: string
+  backgroundColor?: string
+  style?: StyleProp<ViewStyle>
+}
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
@@ -41,6 +53,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     'https://cdn.countryflags.com/thumbs/germany/flag-400.png',
     'https://w7.pngwing.com/pngs/525/382/png-transparent-european-union-flag-of-europe-flags-graphics-blue-flag-computer-wallpaper.png',
   ],
+  style = {},
 }) => {
   const { isCredentialNameScaled } = useCredentialNameScale()
 
@@ -99,20 +112,19 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   //  prev.value.length > next.value.length ? 1 : -1,
   //)
 
-  const renderField = (field: Required<DisplayVal>, idx: number) => {
-    return <DocumentField field={field} idx={idx} />
-  }
-
   return (
     <ScaledCard
       originalHeight={scalingConfig.originalHeight}
       originalWidth={scalingConfig.originalWidth}
       originalScreenWidth={scalingConfig.originalScreenWidth}
-      style={{
-        overflow: 'hidden',
-        flex: 1,
-        backgroundColor: Colors.white,
-      }}
+      style={[
+        {
+          overflow: 'hidden',
+          flex: 1,
+          backgroundColor: Colors.white,
+        },
+        style,
+      ]}
       scaleStyle={{ borderRadius: 15 }}
       testID="documentCard"
     >
@@ -148,8 +160,16 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             fields={fields}
             maxLines={maxLinesPerField}
             maxRows={maxRows}
-            renderField={renderField}
             rowDistance={14}
+            labelScaledStyle={{
+              fontSize: 16,
+              lineHeight: 20,
+              marginBottom: 6,
+            }}
+            valueScaledStyle={{
+              fontSize: 20,
+              lineHeight: 20,
+            }}
           />
         </View>
         <DocumentFooter
