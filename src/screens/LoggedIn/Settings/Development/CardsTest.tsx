@@ -30,7 +30,6 @@ const credentialShareProps = [
       { key: 'one', label: 'Birth Date', value: '12.11.1943' },
       { key: 'two', label: 'Books', value: '44' },
       { key: 'three', label: 'Editor', value: 'Books & Noble' },
-      { key: 'four', label: 'Four', value: 'Four' },
     ],
     holderName: 'Stanislaw Lem and a longer name',
     selected: false,

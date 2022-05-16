@@ -1,10 +1,9 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import { Fonts } from '~/utils/fonts'
 import ScaledCard, { ScaledText } from '../ScaledCard'
 
@@ -75,14 +74,14 @@ const OfferCard: React.FC<Props> = ({
                   height: 20,
                   borderRadius: 5,
                   backgroundColor: Colors.alto,
-                  width: '80%',
                 }}
                 nrOfColumns={2}
                 onFinishCalculation={handleDisplayedFields}
+                allowOverflowingFields={false}
               />
             </View>
           </View>
-          <View style={{ flex: 0.3, justifyContent: 'flex-start' }}>
+          <View style={{ flex: 0.3, justifyContent: 'flex-end' }}>
             {!!nrLeftFields && (
               <ScaledText
                 style={{
@@ -92,8 +91,8 @@ const OfferCard: React.FC<Props> = ({
                 scaleStyle={{
                   fontSize: 14,
                   lineHeight: 18,
-                  marginTop: 18,
-                  marginLeft: -16,
+                  marginBottom: 32,
+                  //marginLeft: -16,
                 }}
               >
                 {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
