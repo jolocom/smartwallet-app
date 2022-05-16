@@ -176,7 +176,7 @@ export const DocumentHolderName: React.FC<{
 }
 
 export const DocumentFields: React.FC<{
-  fields: Required<DisplayVal>[]
+  fields: DisplayVal[]
   labelScaledStyle: TextStyle
   valueScaledStyle: TextStyle
   maxLines: number
@@ -218,7 +218,7 @@ export const DocumentFields: React.FC<{
     onFinishCalculation && onFinishCalculation(fields)
   }, [rows])
 
-  const renderField = (field: Required<DisplayVal>) => {
+  const renderField = (field: DisplayVal) => {
     return (
       <ScaledView
         key={field.key}
@@ -235,7 +235,7 @@ export const DocumentFields: React.FC<{
           ]}
           scaleStyle={[styles.fieldLabel, labelScaledStyle]}
         >
-          {field.label.trim()}:
+          {field?.label?.trim()}:
         </ScaledText>
         <ScaledText
           numberOfLines={1}
@@ -247,7 +247,7 @@ export const DocumentFields: React.FC<{
             },
           ]}
         >
-          {field.value}
+          {field?.value}
         </ScaledText>
       </ScaledView>
     )

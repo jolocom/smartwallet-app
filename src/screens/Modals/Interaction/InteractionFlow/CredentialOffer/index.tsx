@@ -28,6 +28,7 @@ import { Colors } from '~/utils/colors'
 import { ServiceLogo } from '~/components/ServiceLogo'
 import { getAllDocuments } from '~/modules/credentials/selectors'
 import { OfferedCredentialDisplay } from '~/types/credentials'
+import { OfferCard } from '~/components/Cards/DocumentSectionCards'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -47,12 +48,13 @@ const CredentialOfferBAS = () => {
       <Space />
       {offeredCredentials.map((d) => {
         return (
-          <InteractionOfferDocumentCard
+          <OfferCard
             key={d.name}
             credentialName={d.name || t('General.unknown')}
             fields={d.properties.map((p) => ({
               label: p.label || t('Documents.unspecifiedField'),
             }))}
+            issuerIcon={image}
           />
         )
       })}
@@ -82,12 +84,13 @@ const CredentialOfferFAS = () => {
           marginBottom: idx === credentials.length - 1 ? 0 : 30,
         }}
       >
-        <InteractionOfferDocumentCard
+        <OfferCard
           key={name + type}
           credentialName={name || t('General.unknown')}
           fields={properties.map((p) => ({
             label: p.label || t('Documents.unspecifiedField'),
           }))}
+          issuerIcon={image}
         />
       </View>
     ))

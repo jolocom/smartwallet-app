@@ -17,7 +17,7 @@ import {
 interface Props {
   credentialName: string
   issuerIcon?: string
-  fields: Array<Required<DisplayVal>>
+  fields: Array<DisplayVal>
   selected?: boolean
   style?: StyleProp<ViewStyle>
 }
