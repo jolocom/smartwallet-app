@@ -5,12 +5,7 @@ import { StyleProp, View, ViewStyle } from 'react-native'
 import { Colors } from '~/utils/colors'
 import ScaledCard from '../ScaledCard'
 
-import {
-  DocumentFields,
-  DocumentHeader,
-  DocumentHolderName,
-  DocumentPhoto,
-} from './components'
+import { DocumentFields, DocumentHeader } from './components'
 import {
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH,
@@ -21,28 +16,17 @@ interface Props {
   issuerIcon?: string
   fields: Array<Required<DisplayVal>>
   selected?: boolean
-  holderName?: string
-  photo?: string
   style?: StyleProp<ViewStyle>
 }
 
 const OfferCard: React.FC<Props> = ({
   credentialName,
-  holderName,
   fields,
-  photo,
   selected,
   issuerIcon,
   style = {},
 }) => {
-  const calculateMaxRows = useCallback(() => {
-    let maxRows = 3
-    if (holderName) maxRows--
-
-    return maxRows
-  }, [holderName])
-
-  const maxRows = calculateMaxRows()
+  const maxRows = 3
 
   return (
     <ScaledCard
