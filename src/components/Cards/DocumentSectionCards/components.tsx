@@ -15,12 +15,18 @@ import { PurpleTickSuccess } from '~/assets/svg'
 import { TextLayoutEvent } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from '../hooks'
-import { FieldsCalculator } from '../InteractionShare/components'
 import { ScaledText, ScaledView } from '../ScaledCard'
 import { splitIntoRows } from './utils'
+
+export const FieldsCalculator: React.FC<{
+  cbFieldsVisibility: FieldsCalculatorProps
+}> = ({ children, cbFieldsVisibility }) =>
+  React.Children.map(children, cbFieldsVisibility) as React.ReactElement<
+    unknown,
+    string
+  > | null
 
 export const CardMoreBtn: React.FC<{
   onPress: () => void
