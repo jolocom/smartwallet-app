@@ -167,51 +167,51 @@ export const DocumentHolderName: React.FC<{
   )
 }
 
+export const DocumentField: React.FC<{
+  field: Required<DisplayVal>
+  idx: number
+}> = ({ field, idx }) => (
+  <View key={field.key} style={{ flex: 1 }}>
+    <ScaledText
+      numberOfLines={1}
+      style={[
+        styles.regularText,
+        {
+          width: '100%',
+        },
+      ]}
+      scaleStyle={styles.fieldLabel}
+    >
+      {field.label.trim()}:
+    </ScaledText>
+    <ScaledView scaleStyle={{ paddingBottom: 6 }} />
+    <ScaledText
+      numberOfLines={1}
+      scaleStyle={styles.fieldText}
+      style={[
+        styles.mediumText,
+        {
+          width: '100%',
+        },
+      ]}
+    >
+      {field.value}
+    </ScaledText>
+  </View>
+)
+
 export const DocumentFields: React.FC<{
   fields: Required<DisplayVal>[]
+  renderField: (field: Required<DisplayVal>, idx: number) => JSX.Element
   maxLines: number
   maxRows: number
-}> = ({ fields, maxLines, maxRows }) => {
+}> = ({ fields, maxLines, maxRows, renderField }) => {
   const maxFields = maxRows * 2
-  const {
-    displayedFields,
-    handleFieldValueLayout,
-    handleFieldValuesVisibility,
-  } = usePruneFields(fields, maxFields, maxLines)
-
-  const renderField = (field: Required<DisplayVal>, idx: number) => {
-    return (
-      <View key={field.key} style={{ flex: 1 }}>
-        <ScaledText
-          numberOfLines={1}
-          style={[
-            styles.regularText,
-            {
-              width: '100%',
-            },
-          ]}
-          scaleStyle={styles.fieldLabel}
-        >
-          {field.label.trim()}:
-        </ScaledText>
-        <ScaledView scaleStyle={{ paddingBottom: 6 }} />
-        <ScaledText
-          numberOfLines={1}
-          //@ts-expect-error
-          onTextLayout={(e: TextLayoutEvent) => handleFieldValueLayout(e, idx)}
-          scaleStyle={styles.fieldText}
-          style={[
-            styles.mediumText,
-            {
-              width: '100%',
-            },
-          ]}
-        >
-          {field.value}
-        </ScaledText>
-      </View>
-    )
-  }
+  const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
+    fields,
+    maxFields,
+    maxLines,
+  )
 
   let rows = splitIntoRows(displayedFields)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
@@ -235,7 +235,7 @@ export const DocumentFields: React.FC<{
               key={idx}
               style={{ flexDirection: 'row', marginTop: idx === 0 ? 0 : 14 }}
             >
-              {row.map((field, idx) => renderField(field, idx))}
+              {row.map(renderField)}
             </View>
           ))}
         </View>

@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { View } from 'react-native'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
-import ScaledCard, { ScaledView } from '../ScaledCard'
+import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
 import { useCredentialNameScale } from '../hooks'
 import {
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
@@ -11,6 +12,7 @@ import {
 import {
   DocumentBackgroundColor,
   DocumentBackgroundImage,
+  DocumentField,
   DocumentFields,
   DocumentFooter,
   DocumentHeader,
@@ -89,13 +91,17 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
 
   const isBackground = backgroundImage || backgroundColor
 
-  // NOTE: sorting the fields from shortest value to longest to fit more fields in the card.
+  // NOTE: sor/ting the fields from shortest value to longest to fit more fields in the card.
   // Nevertheless, this leads to the "metadata" fields (i.e. issuer, expires, etc.) to be prioritized,
   // which is not desireable.
 
   //fields = fields.sort((prev, next) =>
   //  prev.value.length > next.value.length ? 1 : -1,
   //)
+
+  const renderField = (field: Required<DisplayVal>, idx: number) => {
+    return <DocumentField field={field} idx={idx} />
+  }
 
   return (
     <ScaledCard
@@ -142,6 +148,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             fields={fields}
             maxLines={maxLinesPerField}
             maxRows={maxRows}
+            renderField={renderField}
           />
         </View>
         <DocumentFooter
