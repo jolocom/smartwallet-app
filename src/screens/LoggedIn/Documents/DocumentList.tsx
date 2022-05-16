@@ -110,9 +110,8 @@ export const DocumentList = () => {
                   <ScreenContainer.Padding>
                     <DocumentSectionDocumentCard
                       credentialName={c.name || t('General.unknown')}
-                      holderName={c.holderName || t('General.anonymous')}
+                      holderName={c.holderName}
                       fields={getOptionalFields(c)}
-                      highlight={c.id}
                       photo={c.photo}
                       onHandleMore={() =>
                         onHandleMore(

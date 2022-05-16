@@ -88,7 +88,7 @@ export function mapDisplayToDocument(
         .split(' ')
         .filter((e) => Boolean(e))
         .join(' ')
-    : ''
+    : undefined
 
   updatedProperties = updatedProperties.filter(
     (p) =>

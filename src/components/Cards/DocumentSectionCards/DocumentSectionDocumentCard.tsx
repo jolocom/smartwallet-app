@@ -1,250 +1,158 @@
-import React, { useState } from 'react'
-import { View, Image, StyleSheet } from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { View } from 'react-native'
 
-import DocumentCardMedium from '~/assets/svg/DocumentCardMedium'
-import ScaledCard, { ScaledText, ScaledView } from '../ScaledCard'
-import { useCredentialNameScale, usePruneFields } from '../hooks'
-import { Colors } from '~/utils/colors'
-import { Fonts } from '~/utils/fonts'
+import ScaledCard, { ScaledView } from '../ScaledCard'
+import { useCredentialNameScale } from '../hooks'
 import {
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_WIDTH,
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from './consts'
-import { CardMoreBtn } from './components'
+import {
+  DocumentBackgroundColor,
+  DocumentBackgroundImage,
+  DocumentFields,
+  DocumentFooter,
+  DocumentHeader,
+  DocumentHolderName,
+  DocumentPhoto,
+} from './components'
 import { DocumentCardProps } from './types'
-import { FieldsCalculator } from '../InteractionShare/components'
 import { TextLayoutEvent } from '~/types/props'
-
-const MAX_FIELDS = 3
+import { Colors } from '~/utils/colors'
+import { ScanDocumentIcon } from '~/assets/svg'
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
-  holderName,
   fields,
-  photo,
-  highlight,
+  photo = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
   onHandleMore,
+  // TODO @clauxx remove placeholders
+  holderName = 'Cristian Lungu Vladislav',
+  backgroundColor = '#970009',
+  //backgroundColor,
+  backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
+  //backgroundImage,
+  issuerIcon = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
+  hasImageFields = true,
+  icons = [
+    'https://cdn.countryflags.com/thumbs/germany/flag-400.png',
+    'https://w7.pngwing.com/pngs/525/382/png-transparent-european-union-flag-of-europe-flags-graphics-blue-flag-computer-wallpaper.png',
+  ],
 }) => {
-  const { isCredentialNameScaled, handleCredentialNameTextLayout } =
-    useCredentialNameScale()
+  const { isCredentialNameScaled } = useCredentialNameScale()
 
   const [holderNameLines, setHolderNameLines] = useState(0)
   const handleHolderNameTextLayout = (e: TextLayoutEvent) => {
     setHolderNameLines(e.nativeEvent.lines.length)
   }
 
-  const {
-    displayedFields,
-    handleFieldValueLayout,
-    handleFieldValuesVisibility,
-  } = usePruneFields(
-    fields,
-    MAX_FIELDS,
-    isCredentialNameScaled && holderNameLines === 2 ? 4 : 5,
-  )
+  const calculateMaxRows = useCallback(() => {
+    let maxFields = 4
+    if (backgroundImage) {
+      maxFields = maxFields - 2
+    } else if (backgroundColor) {
+      if (!holderName) maxFields = maxFields - 1
+      else maxFields = maxFields - 2
+    }
+
+    if (holderNameLines > 1 && backgroundImage) {
+      maxFields = maxFields - 1
+    }
+
+    if (!holderName && !backgroundImage) {
+      maxFields = maxFields + 1
+    }
+
+    return maxFields
+  }, [holderName, backgroundColor, backgroundImage, holderNameLines])
+
+  const maxRows = calculateMaxRows()
+  const maxLinesPerField =
+    isCredentialNameScaled && holderNameLines === 2 ? 4 : 5
+
+  const scalingConfig = {
+    originalHeight: ORIGINAL_DOCUMENT_CARD_HEIGHT,
+    originalWidth: ORIGINAL_DOCUMENT_CARD_WIDTH,
+    originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH,
+  }
+
+  const renderBackground = useCallback(() => {
+    if (backgroundImage) {
+      return <DocumentBackgroundImage image={backgroundImage} />
+    } else if (backgroundColor) {
+      return <DocumentBackgroundColor color={backgroundColor} />
+    } else {
+      return <ScaledView scaleStyle={{ height: 24 }} />
+    }
+  }, [backgroundColor, backgroundImage])
+
+  const isBackground = backgroundImage || backgroundColor
+
+  // NOTE: sorting the fields from shortest value to longest to fit more fields in the card.
+  // Nevertheless, this leads to the "metadata" fields (i.e. issuer, expires, etc.) to be prioritized,
+  // which is not desireable.
+
+  //fields = fields.sort((prev, next) =>
+  //  prev.value.length > next.value.length ? 1 : -1,
+  //)
 
   return (
     <ScaledCard
-      originalHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
-      originalWidth={ORIGINAL_DOCUMENT_CARD_WIDTH}
-      originalScreenWidth={ORIGINAL_DOCUMENT_SCREEN_WIDTH}
-      style={{ position: 'relative', overflow: 'hidden' }}
+      originalHeight={scalingConfig.originalHeight}
+      originalWidth={scalingConfig.originalWidth}
+      originalScreenWidth={scalingConfig.originalScreenWidth}
+      style={{
+        overflow: 'hidden',
+        flex: 1,
+        backgroundColor: Colors.white,
+      }}
       scaleStyle={{ borderRadius: 15 }}
       testID="documentCard"
     >
-      <DocumentCardMedium>
-        <ScaledView scaleStyle={styles.bodyContainer}>
-          <View style={{ flexDirection: 'row' }}>
-            <ScaledText
-              // @ts-expect-error
-              onTextLayout={handleCredentialNameTextLayout}
-              numberOfLines={isCredentialNameScaled ? 2 : undefined}
-              scaleStyle={
-                isCredentialNameScaled
-                  ? styles.credentialNameScaled
-                  : styles.credentialName
-              }
-              style={[styles.regularText, { flex: 0.863 }]}
-            >
-              {credentialName}
-            </ScaledText>
-          </View>
-          <ScaledView
-            scaleStyle={{ paddingBottom: isCredentialNameScaled ? 22 : 16 }}
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            width: '100%',
+          }}
+        >
+          <DocumentHeader
+            name={credentialName}
+            icon={issuerIcon}
+            onPressMenu={onHandleMore}
           />
-          <ScaledView
-            scaleStyle={{
-              paddingHorizontal: 10,
-            }}
-          >
-            <ScaledText
-              // @ts-expect-error
-              onTextLayout={handleHolderNameTextLayout}
-              numberOfLines={2}
-              style={styles.mediumText}
-              scaleStyle={styles.holderName}
-            >
-              {holderName}
-            </ScaledText>
-          </ScaledView>
+          {renderBackground()}
+          {photo && (
+            <DocumentPhoto
+              photo={photo}
+              verticalPosition={!isBackground ? -50 : undefined}
+            />
+          )}
+          {holderName && (
+            <DocumentHolderName
+              name={holderName}
+              cropName={!!photo}
+              onLayout={handleHolderNameTextLayout}
+            />
+          )}
           <ScaledView scaleStyle={{ paddingBottom: 16 }} />
-          <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
-            {displayedFields.map((f, idx) => (
-              <React.Fragment key={f.key}>
-                {idx !== 0 && <ScaledView scaleStyle={{ paddingBottom: 14 }} />}
-                <ScaledText
-                  numberOfLines={1}
-                  style={[
-                    styles.regularText,
-                    {
-                      width:
-                        photo && idx === displayedFields.length - 1
-                          ? '66.4%'
-                          : '100%',
-                    },
-                  ]}
-                  scaleStyle={styles.fieldLabel}
-                >
-                  {f.label.trim()}:
-                </ScaledText>
-                <ScaledView scaleStyle={{ paddingBottom: 9 }} />
-                <ScaledText
-                  numberOfLines={2}
-                  //@ts-expect-error
-                  onTextLayout={(e: TextLayoutEvent) =>
-                    handleFieldValueLayout(e, idx)
-                  }
-                  scaleStyle={styles.fieldText}
-                  style={[
-                    styles.mediumText,
-                    {
-                      width:
-                        photo && idx === displayedFields.length - 1
-                          ? '66.4%'
-                          : '100%',
-                    },
-                  ]}
-                >
-                  {f.value}
-                </ScaledText>
-              </React.Fragment>
-            ))}
-          </FieldsCalculator>
-        </ScaledView>
-      </DocumentCardMedium>
-      {photo && (
-        <ScaledView
-          scaleStyle={styles.photoContainerScaled}
-          style={styles.photoContainer}
-        >
-          <Image
-            resizeMode="cover"
-            style={styles.photo}
-            source={{ uri: photo }}
+          <DocumentFields
+            fields={fields}
+            maxLines={maxLinesPerField}
+            maxRows={maxRows}
           />
-        </ScaledView>
-      )}
-      {highlight && (
-        <ScaledView
-          style={styles.highlightContainer}
-          scaleStyle={styles.highlightContainerScaled}
-        >
-          <ScaledText
-            numberOfLines={1}
-            scaleStyle={[styles.highlight]}
-            style={[
-              styles.regularText,
-              {
-                width: photo ? '76%' : '100%',
-              },
-            ]}
-          >
-            {highlight.toUpperCase()}
-          </ScaledText>
-        </ScaledView>
-      )}
-      {/* Dots - more action */}
-      <CardMoreBtn
-        onPress={onHandleMore}
-        positionStyles={{
-          top: 18,
-          right: 17,
-        }}
-      />
+        </View>
+        <DocumentFooter
+          leftIcons={icons}
+          renderRightIcon={
+            hasImageFields ? () => <ScanDocumentIcon /> : undefined
+          }
+        />
+      </View>
     </ScaledCard>
   )
 }
-
-const styles = StyleSheet.create({
-  bodyContainer: {
-    paddingTop: 22,
-    paddingHorizontal: 14,
-    paddingBottom: 14,
-  },
-  credentialName: {
-    fontSize: 28,
-    lineHeight: 28,
-  },
-  credentialNameScaled: {
-    fontSize: 22,
-    lineHeight: 22,
-  },
-  holderName: {
-    fontSize: 20,
-    lineHeight: 20,
-  },
-  photoContainer: {
-    position: 'absolute',
-    overflow: 'hidden',
-    zIndex: 10,
-  },
-  photoContainerScaled: {
-    bottom: 27,
-    right: 14,
-    width: 82,
-    height: 82,
-    borderRadius: 41,
-  },
-  photo: {
-    width: '100%',
-    height: '100%',
-  },
-  highlightContainerScaled: {
-    bottom: 0,
-    height: 56,
-    paddingTop: 17,
-    paddingBottom: 13,
-    paddingHorizontal: 23,
-  },
-  highlightContainer: {
-    position: 'absolute',
-    width: '100%',
-    backgroundColor: Colors.black,
-    zIndex: 9,
-  },
-  highlight: {
-    fontSize: 26,
-    color: Colors.white90,
-  },
-  regularText: {
-    fontFamily: Fonts.Regular,
-    color: Colors.black,
-  },
-  mediumText: {
-    fontFamily: Fonts.Medium,
-    color: Colors.black,
-  },
-  fieldLabel: {
-    fontSize: 16,
-    lineHeight: 16,
-    color: Colors.slateGray,
-  },
-  fieldText: {
-    fontSize: 20,
-    lineHeight: 20,
-    letterSpacing: 0.14,
-  },
-})
 
 export default DocumentSectionDocumentCard

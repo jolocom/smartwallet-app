@@ -102,10 +102,7 @@ export const usePruneFields = (
   maxNrFields: number,
   maxNrFieldLines: number,
 ) => {
-  const displayedFields = useMemo(
-    () => fields.slice(0, maxNrFields),
-    [fields.length],
-  )
+  const displayedFields = fields.slice(0, maxNrFields)
   const { fieldLines, handleFieldValueLayout } = useCalculateFieldLines()
 
   const sumFieldLines = useMemo(() => {
