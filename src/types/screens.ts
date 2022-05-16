@@ -64,6 +64,7 @@ export enum ScreenNames {
   PrivacyPolicy = 'PrivacyPolicy',
 
   //Development
+  CardsTest = 'CardsTest',
   ButtonsTest = 'ButtonsTest',
   LoaderTest = 'LoaderTest',
   NotificationsTest = 'NotificationsTest',

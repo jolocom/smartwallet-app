@@ -1,5 +1,4 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import _ from 'lodash'
 import React from 'react'
 import {
   Image,
@@ -11,6 +10,7 @@ import {
   ViewStyle,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import { PurpleTickSuccess } from '~/assets/svg'
 import { TextLayoutEvent } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
@@ -19,7 +19,7 @@ import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from '../hooks'
 import { FieldsCalculator } from '../InteractionShare/components'
 import { ScaledText, ScaledView } from '../ScaledCard'
-import { splitFields, splitIntoRows } from './utils'
+import { splitIntoRows } from './utils'
 
 export const CardMoreBtn: React.FC<{
   onPress: () => void
@@ -95,8 +95,9 @@ export const DocumentPhoto: React.FC<{
 export const DocumentHeader: React.FC<{
   name: string
   icon?: string
-  onPressMenu: () => void
-}> = ({ name, icon, onPressMenu }) => {
+  onPressMenu?: () => void
+  selected?: boolean
+}> = ({ name, icon, onPressMenu, selected }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   return (
@@ -125,13 +126,18 @@ export const DocumentHeader: React.FC<{
       >
         {name}
       </ScaledText>
-      <CardMoreBtn
-        onPress={onPressMenu}
-        positionStyles={{
-          top: 18,
-          right: 17,
-        }}
-      />
+      {typeof selected !== 'undefined' && (
+        <SelectedToggle selected={selected} />
+      )}
+      {onPressMenu && (
+        <CardMoreBtn
+          onPress={onPressMenu}
+          positionStyles={{
+            top: 18,
+            right: 17,
+          }}
+        />
+      )}
     </View>
   )
 }
@@ -266,6 +272,23 @@ export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
   </View>
 )
 
+export const SelectedToggle: React.FC<{ selected: boolean }> = ({
+  selected,
+}) => {
+  return (
+    <ScaledView scaleStyle={styles.selectIndicator}>
+      {selected ? (
+        <PurpleTickSuccess />
+      ) : (
+        <ScaledView
+          scaleStyle={styles.notSelectedScale}
+          style={styles.notSelected}
+        />
+      )}
+    </ScaledView>
+  )
+}
+
 const styles = StyleSheet.create({
   dotsContainerScaled: {
     paddingVertical: 3,
@@ -353,5 +376,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 20,
     letterSpacing: 0.14,
+  },
+  selectIndicator: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+  notSelected: {
+    borderColor: Colors.black,
+    opacity: 0.3,
+  },
+  notSelectedScale: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderRadius: 10,
   },
 })
