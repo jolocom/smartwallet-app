@@ -77,7 +77,7 @@ const SharePreviewCard: React.FC<Props> = ({
               maxLines={1}
               rowDistance={8}
               fieldCharacterLimit={12}
-              labelScaledStyle={{ fontSize: 12, lineHeight: 16 }}
+              labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
               valueScaledStyle={{ fontSize: 18, lineHeight: 20 }}
             />
           </View>
