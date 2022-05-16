@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { View } from 'react-native'
+import { StyleProp, View, ViewStyle } from 'react-native'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 import ScaledCard, { ScaledView } from '../ScaledCard'
 import { useCredentialNameScale } from '../hooks'
@@ -17,10 +18,23 @@ import {
   DocumentHolderName,
   DocumentPhoto,
 } from './components'
-import { DocumentCardProps } from './types'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { ScanDocumentIcon } from '~/assets/svg'
+
+interface DocumentCardProps {
+  credentialName: string
+  fields: Array<Required<DisplayVal>>
+  onHandleMore: () => void
+  holderName?: string
+  photo?: string
+  issuerIcon?: string
+  icons?: string[]
+  hasImageFields?: boolean
+  backgroundImage?: string
+  backgroundColor?: string
+  style?: StyleProp<ViewStyle>
+}
 
 const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
@@ -39,6 +53,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     'https://cdn.countryflags.com/thumbs/germany/flag-400.png',
     'https://w7.pngwing.com/pngs/525/382/png-transparent-european-union-flag-of-europe-flags-graphics-blue-flag-computer-wallpaper.png',
   ],
+  style = {},
 }) => {
   const { isCredentialNameScaled } = useCredentialNameScale()
 
@@ -48,23 +63,23 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   }
 
   const calculateMaxRows = useCallback(() => {
-    let maxFields = 4
+    let maxRows = 4
     if (backgroundImage) {
-      maxFields = maxFields - 2
+      maxRows = maxRows - 2
     } else if (backgroundColor) {
-      if (!holderName) maxFields = maxFields - 1
-      else maxFields = maxFields - 2
+      if (!holderName) maxRows--
+      else maxRows = maxRows - 2
     }
 
     if (holderNameLines > 1 && backgroundImage) {
-      maxFields = maxFields - 1
+      maxRows--
     }
 
     if (!holderName && !backgroundImage) {
-      maxFields = maxFields + 1
+      maxRows++
     }
 
-    return maxFields
+    return maxRows
   }, [holderName, backgroundColor, backgroundImage, holderNameLines])
 
   const maxRows = calculateMaxRows()
@@ -89,7 +104,7 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
 
   const isBackground = backgroundImage || backgroundColor
 
-  // NOTE: sorting the fields from shortest value to longest to fit more fields in the card.
+  // NOTE: sor/ting the fields from shortest value to longest to fit more fields in the card.
   // Nevertheless, this leads to the "metadata" fields (i.e. issuer, expires, etc.) to be prioritized,
   // which is not desireable.
 
@@ -102,11 +117,14 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
       originalHeight={scalingConfig.originalHeight}
       originalWidth={scalingConfig.originalWidth}
       originalScreenWidth={scalingConfig.originalScreenWidth}
-      style={{
-        overflow: 'hidden',
-        flex: 1,
-        backgroundColor: Colors.white,
-      }}
+      style={[
+        {
+          overflow: 'hidden',
+          flex: 1,
+          backgroundColor: Colors.white,
+        },
+        style,
+      ]}
       scaleStyle={{ borderRadius: 15 }}
       testID="documentCard"
     >
@@ -142,6 +160,16 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             fields={fields}
             maxLines={maxLinesPerField}
             maxRows={maxRows}
+            rowDistance={14}
+            labelScaledStyle={{
+              fontSize: 16,
+              lineHeight: 16,
+              marginBottom: 6,
+            }}
+            valueScaledStyle={{
+              fontSize: 20,
+              lineHeight: 20,
+            }}
           />
         </View>
         <DocumentFooter

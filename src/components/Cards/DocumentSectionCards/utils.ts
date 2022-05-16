@@ -8,13 +8,16 @@ export const splitFields = <T>(fields: Array<T>) => {
   return [first, last]
 }
 
-export const splitIntoRows = (fields: Required<DisplayVal>[]) => {
+export const splitIntoRows = (
+  fields: Required<DisplayVal>[],
+  oneLineLimit: number,
+) => {
   let lastPushedIdx = -1
 
   const rows = fields.reduce<Required<DisplayVal>[][]>(
     (acc, field, i, array) => {
       if (i > lastPushedIdx) {
-        if (field.value.length >= 14 || i + 1 >= array.length) {
+        if (field.value.length >= oneLineLimit || i + 1 >= array.length) {
           acc.push([field])
           lastPushedIdx = i
         } else {

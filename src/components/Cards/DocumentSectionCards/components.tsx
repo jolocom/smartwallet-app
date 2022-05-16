@@ -1,25 +1,32 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import _ from 'lodash'
 import React from 'react'
 import {
   Image,
   ImageBackground,
   StyleProp,
   StyleSheet,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import { PurpleTickSuccess } from '~/assets/svg'
 import { TextLayoutEvent } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
-import { debugView } from '~/utils/dev'
 import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from '../hooks'
-import { FieldsCalculator } from '../InteractionShare/components'
 import { ScaledText, ScaledView } from '../ScaledCard'
-import { splitFields, splitIntoRows } from './utils'
+import { splitIntoRows } from './utils'
+
+export const FieldsCalculator: React.FC<{
+  cbFieldsVisibility: FieldsCalculatorProps
+}> = ({ children, cbFieldsVisibility }) =>
+  React.Children.map(children, cbFieldsVisibility) as React.ReactElement<
+    unknown,
+    string
+  > | null
 
 export const CardMoreBtn: React.FC<{
   onPress: () => void
@@ -95,8 +102,9 @@ export const DocumentPhoto: React.FC<{
 export const DocumentHeader: React.FC<{
   name: string
   icon?: string
-  onPressMenu: () => void
-}> = ({ name, icon, onPressMenu }) => {
+  onPressMenu?: () => void
+  selected?: boolean
+}> = ({ name, icon, onPressMenu, selected }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   return (
@@ -125,22 +133,28 @@ export const DocumentHeader: React.FC<{
       >
         {name}
       </ScaledText>
-      <CardMoreBtn
-        onPress={onPressMenu}
-        positionStyles={{
-          top: 18,
-          right: 17,
-        }}
-      />
+      {typeof selected !== 'undefined' && (
+        <SelectedToggle selected={selected} />
+      )}
+      {onPressMenu && (
+        <CardMoreBtn
+          onPress={onPressMenu}
+          positionStyles={{
+            top: 18,
+            right: 17,
+          }}
+        />
+      )}
     </View>
   )
 }
 
 export const DocumentHolderName: React.FC<{
   name: string
-  onLayout: (e: TextLayoutEvent) => void
+  onLayout?: (e: TextLayoutEvent) => void
   cropName?: boolean
-}> = ({ name, onLayout, cropName = false }) => {
+  numberOfLines?: number
+}> = ({ name, onLayout, cropName = false, numberOfLines = 2 }) => {
   return (
     <ScaledView
       scaleStyle={{
@@ -151,7 +165,7 @@ export const DocumentHolderName: React.FC<{
       <ScaledText
         // @ts-expect-error
         onTextLayout={onLayout}
-        numberOfLines={2}
+        numberOfLines={numberOfLines}
         style={styles.mediumText}
         scaleStyle={styles.holderName}
       >
@@ -163,19 +177,40 @@ export const DocumentHolderName: React.FC<{
 
 export const DocumentFields: React.FC<{
   fields: Required<DisplayVal>[]
+  labelScaledStyle: TextStyle
+  valueScaledStyle: TextStyle
   maxLines: number
   maxRows: number
-}> = ({ fields, maxLines, maxRows }) => {
+  rowDistance?: number
+  fieldCharacterLimit?: number
+}> = ({
+  fields,
+  maxLines,
+  maxRows,
+  rowDistance = 0,
+  fieldCharacterLimit = 14,
+  valueScaledStyle,
+  labelScaledStyle,
+}) => {
   const maxFields = maxRows * 2
-  const {
-    displayedFields,
-    handleFieldValueLayout,
-    handleFieldValuesVisibility,
-  } = usePruneFields(fields, maxFields, maxLines)
+  const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
+    fields,
+    maxFields,
+    maxLines,
+  )
 
-  const renderField = (field: Required<DisplayVal>, idx: number) => {
+  let rows = splitIntoRows(displayedFields, fieldCharacterLimit)
+  // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
+  // we have to cut it to the max nr of rows.
+  rows = rows.splice(0, maxRows)
+
+  const renderField = (field: Required<DisplayVal>) => {
     return (
-      <View key={field.key} style={{ flex: 1 }}>
+      <ScaledView
+        key={field.key}
+        style={{ flex: 1 }}
+        scaleStyle={{ paddingRight: 12 }}
+      >
         <ScaledText
           numberOfLines={1}
           style={[
@@ -184,16 +219,13 @@ export const DocumentFields: React.FC<{
               width: '100%',
             },
           ]}
-          scaleStyle={styles.fieldLabel}
+          scaleStyle={[styles.fieldLabel, labelScaledStyle]}
         >
           {field.label.trim()}:
         </ScaledText>
-        <ScaledView scaleStyle={{ paddingBottom: 6 }} />
         <ScaledText
           numberOfLines={1}
-          //@ts-expect-error
-          onTextLayout={(e: TextLayoutEvent) => handleFieldValueLayout(e, idx)}
-          scaleStyle={styles.fieldText}
+          scaleStyle={[styles.fieldText, valueScaledStyle]}
           style={[
             styles.mediumText,
             {
@@ -203,19 +235,14 @@ export const DocumentFields: React.FC<{
         >
           {field.value}
         </ScaledText>
-      </View>
+      </ScaledView>
     )
   }
-
-  let rows = splitIntoRows(displayedFields)
-  // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
-  // we have to cut it to the max nr of rows.
-  rows = rows.splice(0, maxRows)
 
   return (
     <ScaledView
       scaleStyle={{
-        paddingHorizontal: 24,
+        paddingLeft: 24,
       }}
       style={{
         flex: 1,
@@ -223,14 +250,24 @@ export const DocumentFields: React.FC<{
       }}
     >
       <FieldsCalculator cbFieldsVisibility={handleFieldValuesVisibility}>
-        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'flex-start',
+          }}
+        >
           {rows.map((row, idx) => (
-            <View
+            <ScaledView
               key={idx}
-              style={{ flexDirection: 'row', marginTop: idx === 0 ? 0 : 14 }}
+              style={{
+                flexDirection: 'row',
+              }}
+              scaleStyle={{
+                marginTop: idx === 0 ? 0 : rowDistance,
+              }}
             >
-              {row.map((field, idx) => renderField(field, idx))}
-            </View>
+              {row.map(renderField)}
+            </ScaledView>
           ))}
         </View>
       </FieldsCalculator>
@@ -265,6 +302,23 @@ export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
     <BackgroundOpacity />
   </View>
 )
+
+export const SelectedToggle: React.FC<{ selected: boolean }> = ({
+  selected,
+}) => {
+  return (
+    <ScaledView scaleStyle={styles.selectIndicator}>
+      {selected ? (
+        <PurpleTickSuccess />
+      ) : (
+        <ScaledView
+          scaleStyle={styles.notSelectedScale}
+          style={styles.notSelected}
+        />
+      )}
+    </ScaledView>
+  )
+}
 
 const styles = StyleSheet.create({
   dotsContainerScaled: {
@@ -353,5 +407,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 20,
     letterSpacing: 0.14,
+  },
+  selectIndicator: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+  notSelected: {
+    borderColor: Colors.black,
+    opacity: 0.3,
+  },
+  notSelectedScale: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderRadius: 10,
   },
 })
