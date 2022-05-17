@@ -13,7 +13,7 @@ import {
 } from '~/hooks/credentials'
 import { useToasts } from '~/hooks/toasts'
 import { usePopupMenu } from '~/hooks/popupMenu'
-import DocumentSectionDocumentCard from '~/components/Cards/DocumentSectionCards/DocumentSectionDocumentCard'
+import { DocumentCard } from '~/components/Cards'
 import { truncateString } from '~/utils/stringUtils'
 import ScreenContainer from '~/components/ScreenContainer'
 
@@ -108,7 +108,7 @@ export const DocumentList = () => {
               return (
                 <View key={`${index}-${c.id}`} style={styles.sectionContainer}>
                   <ScreenContainer.Padding>
-                    <DocumentSectionDocumentCard
+                    <DocumentCard
                       credentialName={c.name || t('General.unknown')}
                       holderName={c.holderName}
                       fields={getOptionalFields(c)}

@@ -1,5 +1,5 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import {
   Image,
   ImageBackground,
@@ -16,12 +16,12 @@ import { TextLayoutEvent } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
-import { useCredentialNameScale, usePruneFields } from '../hooks'
-import { ScaledText, ScaledView } from '../ScaledCard'
+import { useCredentialNameScale, usePruneFields } from './hooks'
+import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
 
 export const FieldsCalculator: React.FC<{
-  cbFieldsVisibility: FieldsCalculatorProps
+  cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
 }> = ({ children, cbFieldsVisibility }) =>
   React.Children.map(children, cbFieldsVisibility) as React.ReactElement<
     unknown,
@@ -176,13 +176,26 @@ export const DocumentHolderName: React.FC<{
 }
 
 export const DocumentFields: React.FC<{
-  fields: Required<DisplayVal>[]
+  // NOTE: fields to be (potentially) displayed on the card
+  fields: DisplayVal[]
+  // NOTE: (scaled) styles for the field label
   labelScaledStyle: TextStyle
+  // NOTE: (scaled) styles for the field value
   valueScaledStyle: TextStyle
+  // NOTE: max number of lines to be displayed per field
   maxLines: number
+  // NOTE: max number of rows that can be displayed
   maxRows: number
+  // NOTE: distance between lines
   rowDistance?: number
+  // NOTE: number of characters to allow a field value to be displayed in a single line
   fieldCharacterLimit?: number
+  // NOTE: number of columns to render the fields in
+  nrOfColumns?: number
+  // NOTE: allow fields taking up available space if possible
+  allowOverflowingFields?: boolean
+  // NOTE: called after calculating the fields that will be displayed
+  onFinishCalculation?: (displayedFields: DisplayVal[]) => void
 }> = ({
   fields,
   maxLines,
@@ -191,6 +204,9 @@ export const DocumentFields: React.FC<{
   fieldCharacterLimit = 14,
   valueScaledStyle,
   labelScaledStyle,
+  nrOfColumns = 2,
+  onFinishCalculation,
+  allowOverflowingFields = true,
 }) => {
   const maxFields = maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
@@ -199,12 +215,22 @@ export const DocumentFields: React.FC<{
     maxLines,
   )
 
-  let rows = splitIntoRows(displayedFields, fieldCharacterLimit)
+  let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
   // we have to cut it to the max nr of rows.
   rows = rows.splice(0, maxRows)
 
-  const renderField = (field: Required<DisplayVal>) => {
+  useEffect(() => {
+    const fields = rows.reduce<DisplayVal[]>((acc, row) => {
+      acc = [...acc, ...row]
+
+      return acc
+    }, [])
+
+    onFinishCalculation && onFinishCalculation(fields)
+  }, [rows])
+
+  const renderField = (field: DisplayVal) => {
     return (
       <ScaledView
         key={field.key}
@@ -221,7 +247,7 @@ export const DocumentFields: React.FC<{
           ]}
           scaleStyle={[styles.fieldLabel, labelScaledStyle]}
         >
-          {field.label.trim()}:
+          {field?.label?.trim()}:
         </ScaledText>
         <ScaledText
           numberOfLines={1}
@@ -233,7 +259,7 @@ export const DocumentFields: React.FC<{
             },
           ]}
         >
-          {field.value}
+          {field?.value}
         </ScaledText>
       </ScaledView>
     )
@@ -261,12 +287,16 @@ export const DocumentFields: React.FC<{
               key={idx}
               style={{
                 flexDirection: 'row',
+                alignItems: 'flex-start',
               }}
               scaleStyle={{
                 marginTop: idx === 0 ? 0 : rowDistance,
               }}
             >
               {row.map(renderField)}
+              {!allowOverflowingFields && row.length % 2 === 1 && (
+                <View style={{ flex: 1 }} />
+              )}
             </ScaledView>
           ))}
         </View>
@@ -327,8 +357,6 @@ const styles = StyleSheet.create({
     height: 24,
   },
   dotsContainer: {
-    //position: 'absolute',
-    //zIndex: 100,
     height: '100%',
   },
   dotsBtn: {

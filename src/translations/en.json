@@ -171,7 +171,8 @@
         "cardInfoHeader": "Included info",
         "confirmBtn": "Accept",
         "acceptBtn": "Accept",
-        "cardNoPreview": "No info can be previewed"
+        "cardNoPreview": "No info can be previewed",
+        "nrOfFieldsLeft": "+${nr} more"
     },
     "Toasts": {
         "reportBtn": "Report",

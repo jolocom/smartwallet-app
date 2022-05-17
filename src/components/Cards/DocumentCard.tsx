@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
-import ScaledCard, { ScaledView } from '../ScaledCard'
-import { useCredentialNameScale } from '../hooks'
+import ScaledCard, { ScaledView } from './ScaledCard'
+import { useCredentialNameScale } from './hooks'
 import {
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_WIDTH,
