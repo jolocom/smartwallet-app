@@ -106,8 +106,8 @@ export const DocumentList = () => {
           <CardList>
             {documents.map((c, index) => {
               return (
-                <View key={`${index}-${c.id}`} style={styles.sectionContainer}>
-                  <ScreenContainer.Padding>
+                <ScreenContainer.Padding key={`${index}-${c.id}`}>
+                  <View style={styles.sectionContainer}>
                     <DocumentCard
                       credentialName={c.name || t('General.unknown')}
                       holderName={c.holderName}
@@ -129,8 +129,8 @@ export const DocumentList = () => {
                         )
                       }
                     />
-                  </ScreenContainer.Padding>
-                </View>
+                  </View>
+                </ScreenContainer.Padding>
               )
             })}
           </CardList>
@@ -143,5 +143,6 @@ export const DocumentList = () => {
 const styles = StyleSheet.create({
   sectionContainer: {
     paddingBottom: 22,
+    alignItems: 'center',
   },
 })
