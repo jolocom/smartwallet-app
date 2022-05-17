@@ -23,12 +23,11 @@ import Space from '~/components/Space'
 import Collapsible from '~/components/Collapsible'
 import useTranslation from '~/hooks/useTranslation'
 import ScreenContainer from '~/components/ScreenContainer'
-import { InteractionOfferDocumentCard } from '~/components/Cards/InteractionOffer'
 import { Colors } from '~/utils/colors'
 import { ServiceLogo } from '~/components/ServiceLogo'
 import { getAllDocuments } from '~/modules/credentials/selectors'
 import { OfferedCredentialDisplay } from '~/types/credentials'
-import { OfferCard } from '~/components/Cards/DocumentSectionCards'
+import { OfferCard } from '~/components/Cards'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()

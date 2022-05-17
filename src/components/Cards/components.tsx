@@ -16,8 +16,8 @@ import { TextLayoutEvent } from '~/types/props'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
-import { useCredentialNameScale, usePruneFields } from '../hooks'
-import { ScaledText, ScaledView } from '../ScaledCard'
+import { useCredentialNameScale, usePruneFields } from './hooks'
+import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
 
 export const FieldsCalculator: React.FC<{

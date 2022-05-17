@@ -5,7 +5,7 @@ import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
-import ScaledCard, { ScaledText } from '../ScaledCard'
+import ScaledCard, { ScaledText } from './ScaledCard'
 
 import { DocumentFields, DocumentHeader } from './components'
 import {

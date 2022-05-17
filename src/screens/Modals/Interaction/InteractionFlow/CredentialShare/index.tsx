@@ -44,7 +44,7 @@ import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
 import { ServiceLogo } from '~/components/ServiceLogo'
-import { ShareCard } from '~/components/Cards/DocumentSectionCards'
+import { ShareCard } from '~/components/Cards'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(

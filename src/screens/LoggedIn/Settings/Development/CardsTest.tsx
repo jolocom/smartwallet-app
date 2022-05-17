@@ -1,10 +1,6 @@
 import React from 'react'
 import { ScrollView, View } from 'react-native'
-import {
-  DocumentCard,
-  ShareCard,
-  OfferCard,
-} from '~/components/Cards/DocumentSectionCards'
+import { DocumentCard, ShareCard, OfferCard } from '~/components/Cards'
 import ScreenContainer from '~/components/ScreenContainer'
 import Section from '../components/Section'
 

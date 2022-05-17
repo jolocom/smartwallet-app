@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import ScaledCard from '../ScaledCard'
+import ScaledCard from './ScaledCard'
 
 import {
   DocumentFields,
