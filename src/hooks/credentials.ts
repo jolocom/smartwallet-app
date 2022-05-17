@@ -4,6 +4,7 @@ import { deleteCredential } from '~/modules/credentials/actions'
 import { ClaimKeys, DisplayCredential } from '~/types/credentials'
 import { useTranslation } from 'react-i18next'
 import moment from 'moment'
+import { ClaimMimeType } from '@jolocom/protocol-ts'
 
 export const useDeleteCredential = () => {
   const agent = useAgent()
@@ -31,17 +32,23 @@ export const useCredentialOptionalFields = () => {
         key: 'issued',
         label: t('Documents.issuedFieldLabel'),
         value: moment(credential.issued).format('DD.MM.YYYY'),
+        mime_type: ClaimMimeType.text_plain,
+        preview: false,
       },
       {
         key: 'issuer',
         label: t('Documents.issuerFieldLabel'),
         value:
           credential.issuer?.publicProfile?.name ?? credential.issuer?.did!,
+        mime_type: ClaimMimeType.text_plain,
+        preview: false,
       },
       {
         key: 'expire',
         label: t('Documents.expiresFieldLabel'),
         value: moment(credential.expires).format('DD.MM.YYYY'),
+        mime_type: ClaimMimeType.text_plain,
+        preview: true,
       },
     ]
 
@@ -49,10 +56,12 @@ export const useCredentialOptionalFields = () => {
 
     return credential.properties
       .filter((p) => !nonOptionalFields.includes(p.key as ClaimKeys))
-      .map(({ label, value, key }) => ({
-        key,
-        label: label || t('Documents.unspecifiedField'),
-        value: value || t('Documents.unspecifiedField'),
+      .map(({ label, value, key, preview, mime_type }, i) => ({
+        key: key ?? `generatedKey${i}`,
+        label: label ?? t('Documents.unspecifiedField'),
+        value: value ?? t('Documents.unspecifiedField'),
+        mime_type,
+        preview,
       }))
       .concat(additionalFields)
   }

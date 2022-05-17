@@ -32,7 +32,7 @@ import { ScanDocumentIcon } from '~/assets/svg'
 interface DocumentCardProps {
   credentialName: string
   onPress?: () => void
-  fields: Array<Required<DisplayVal>>
+  fields: Array<DisplayVal>
   onHandleMore: () => void
   holderName?: string
   photo?: string
@@ -47,20 +47,14 @@ interface DocumentCardProps {
 const DocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
   fields,
-  photo = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
+  photo,
   onHandleMore,
-  // TODO @clauxx remove placeholders
-  holderName = 'Cristian Lungu Vladislav',
-  backgroundColor = '#970009',
-  //backgroundColor,
-  backgroundImage = 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2004/06/forest/10237716-2-eng-GB/Forest_pillars.jpg',
-  //backgroundImage,
-  issuerIcon = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
-  hasImageFields = true,
-  icons = [
-    'https://cdn.countryflags.com/thumbs/germany/flag-400.png',
-    'https://w7.pngwing.com/pngs/525/382/png-transparent-european-union-flag-of-europe-flags-graphics-blue-flag-computer-wallpaper.png',
-  ],
+  holderName,
+  backgroundColor,
+  backgroundImage,
+  issuerIcon,
+  hasImageFields = false,
+  icons,
   style = {},
   onPress,
 }) => {

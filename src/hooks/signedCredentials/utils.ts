@@ -1,3 +1,4 @@
+import { ClaimMimeType } from '@jolocom/protocol-ts'
 import { CredentialIssuer } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
@@ -46,7 +47,7 @@ export async function mapCredentialsToDisplay(
   c: SignedCredential,
 ): Promise<DisplayCredential> {
   const credentialType = await credentials.types.forCredential(c)
-  const { display } = await credentials.display(c)
+  const { display, styles } = await credentials.display(c)
 
   // NOTE: using the properties from @CredentialType causes the values to be overwritten
   // by the last credential of the same @type & @issuer.
@@ -56,11 +57,14 @@ export async function mapCredentialsToDisplay(
   const uiCredential: DisplayCredential = {
     ...mapToBaseUICredential(c),
     issuer: issuerProfile, // NOTE: credentialType will returned resolved issuer
+    styles: styles,
     properties: properties
       ? properties.map((p, idx) => ({
           key: p.key ? p.key.split('.')[1] : `${Date.now()}${idx}}`,
           label: p.label ?? '',
-          value: p.value || '',
+          value: p.value ?? '',
+          mime_type: p.mime_type ?? ClaimMimeType.text_plain,
+          preview: p.preview ?? false,
         }))
       : [],
   }

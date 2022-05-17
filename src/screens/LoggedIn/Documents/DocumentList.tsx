@@ -18,6 +18,7 @@ import { truncateString } from '~/utils/stringUtils'
 import ScreenContainer from '~/components/ScreenContainer'
 import { DisplayCredentialDocument } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
+import { ClaimMimeType } from '@jolocom/protocol-ts'
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()
@@ -33,7 +34,7 @@ const useHandleMorePress = () => {
   return (
     id: string,
     credentialName: string,
-    fields: Array<Required<DisplayVal>>,
+    fields: Array<DisplayVal>,
     photo?: string,
   ) => {
     const displayDocumentName = truncateString(credentialName, 30)
@@ -92,12 +93,14 @@ export const DocumentList = () => {
   const onHandleMore = useHandleMorePress()
 
   const handlePressDetails = (c: DisplayCredentialDocument) => {
-    const displayDocumentName = truncateString(c.name, 30)
+    const displayDocumentName = c.name
 
     redirect(ScreenNames.FieldDetails, {
       fields: assembleFields(c),
       photo: c.photo,
       title: displayDocumentName,
+      contextIcons: getContextIcons(c),
+      issuerIcon: c.issuer?.publicProfile?.image,
       backgroundColor: undefined,
     })
   }
@@ -108,6 +111,8 @@ export const DocumentList = () => {
         key: 'subjectName',
         label: t('Documents.subjectNameField'),
         value: c.holderName || t('General.anonymous'),
+        mime_type: ClaimMimeType.text_plain,
+        preview: false,
       },
       ...getOptionalFields(c),
     ]
@@ -115,6 +120,21 @@ export const DocumentList = () => {
 
   const handlePressMore = (c: DisplayCredentialDocument) => {
     onHandleMore(c.id, c.name, assembleFields(c), c.photo)
+  }
+
+  const getContextIcons = (c: DisplayCredentialDocument) => {
+    const heroIcon = c.styles?.hero?.uri
+    const thumbnailIcon = c.styles?.thumbnail?.uri
+    const contextIcons: string[] = []
+
+    if (heroIcon) {
+      contextIcons.push(heroIcon)
+    }
+    if (thumbnailIcon) {
+      contextIcons.push(thumbnailIcon)
+    }
+
+    return contextIcons
   }
 
   if (!documents) return null
@@ -134,6 +154,10 @@ export const DocumentList = () => {
         ) : (
           <CardList>
             {documents.map((c, index) => {
+              const hasImageFields = c.properties.some(
+                (prop) => prop.mime_type === ClaimMimeType.image_png,
+              )
+
               return (
                 <ScreenContainer.Padding key={`${index}-${c.id}`}>
                   <View style={styles.sectionContainer}>
@@ -144,6 +168,11 @@ export const DocumentList = () => {
                       fields={getOptionalFields(c)}
                       photo={c.photo}
                       onHandleMore={() => handlePressMore(c)}
+                      backgroundColor={c.styles?.background?.color}
+                      backgroundImage={c.styles?.background?.image_url?.uri}
+                      issuerIcon={c.issuer?.publicProfile?.image}
+                      hasImageFields={hasImageFields}
+                      icons={getContextIcons(c)}
                     />
                   </View>
                 </ScreenContainer.Padding>
