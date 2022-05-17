@@ -229,6 +229,7 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
+        options={screenTransitionSlideFromBottom}
       />
       <MainStack.Screen
         name={ScreenNames.Interaction}
@@ -273,7 +274,7 @@ const Main: React.FC = () => {
           cardStyle: {
             backgroundColor: 'transparent',
           },
-          ...screenTransitionSlideFromBottom,
+          ...transparentModalFadeOptions,
         }}
       />
       {/* Modals -> End */}

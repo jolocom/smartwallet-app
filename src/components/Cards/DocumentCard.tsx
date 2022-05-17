@@ -1,6 +1,13 @@
 import React, { useCallback, useState } from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
+import {
+  StyleProp,
+  TouchableOpacity,
+  Vibration,
+  View,
+  ViewStyle,
+} from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import ScaledCard, { ScaledView } from './ScaledCard'
 import { useCredentialNameScale } from './hooks'
@@ -24,6 +31,7 @@ import { ScanDocumentIcon } from '~/assets/svg'
 
 interface DocumentCardProps {
   credentialName: string
+  onPress?: () => void
   fields: Array<Required<DisplayVal>>
   onHandleMore: () => void
   holderName?: string
@@ -36,7 +44,7 @@ interface DocumentCardProps {
   style?: StyleProp<ViewStyle>
 }
 
-const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
+const DocumentCard: React.FC<DocumentCardProps> = ({
   credentialName,
   fields,
   photo = 'https://play-lh.googleusercontent.com/iPqyCoNDLdqRpykOWskqVynbgjPwcp-n8-HZjirdqq9VB39rCcPBneu3zMHL5Wadgmw',
@@ -54,12 +62,23 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
     'https://w7.pngwing.com/pngs/525/382/png-transparent-european-union-flag-of-europe-flags-graphics-blue-flag-computer-wallpaper.png',
   ],
   style = {},
+  onPress,
 }) => {
   const { isCredentialNameScaled } = useCredentialNameScale()
 
   const [holderNameLines, setHolderNameLines] = useState(0)
   const handleHolderNameTextLayout = (e: TextLayoutEvent) => {
     setHolderNameLines(e.nativeEvent.lines.length)
+  }
+
+  const handlePress = () => {
+    if (onPress) {
+      ReactNativeHapticFeedback.trigger('impactLight', {
+        enableVibrateFallback: true,
+        ignoreAndroidSystemSettings: true,
+      })
+      onPress && onPress()
+    }
   }
 
   const calculateMaxRows = useCallback(() => {
@@ -141,36 +160,42 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
             icon={issuerIcon}
             onPressMenu={onHandleMore}
           />
-          {renderBackground()}
-          {photo && (
-            <DocumentPhoto
-              photo={photo}
-              verticalPosition={!isBackground ? -50 : undefined}
+          <TouchableOpacity
+            onPress={handlePress}
+            activeOpacity={1}
+            style={{ flex: 1 }}
+          >
+            {renderBackground()}
+            {photo && (
+              <DocumentPhoto
+                photo={photo}
+                verticalPosition={!isBackground ? -50 : undefined}
+              />
+            )}
+            {holderName && (
+              <DocumentHolderName
+                name={holderName}
+                cropName={!!photo}
+                onLayout={handleHolderNameTextLayout}
+              />
+            )}
+            <ScaledView scaleStyle={{ paddingBottom: 16 }} />
+            <DocumentFields
+              fields={fields}
+              maxLines={maxLinesPerField}
+              maxRows={maxRows}
+              rowDistance={14}
+              labelScaledStyle={{
+                fontSize: 16,
+                lineHeight: 16,
+                marginBottom: 6,
+              }}
+              valueScaledStyle={{
+                fontSize: 20,
+                lineHeight: 20,
+              }}
             />
-          )}
-          {holderName && (
-            <DocumentHolderName
-              name={holderName}
-              cropName={!!photo}
-              onLayout={handleHolderNameTextLayout}
-            />
-          )}
-          <ScaledView scaleStyle={{ paddingBottom: 16 }} />
-          <DocumentFields
-            fields={fields}
-            maxLines={maxLinesPerField}
-            maxRows={maxRows}
-            rowDistance={14}
-            labelScaledStyle={{
-              fontSize: 16,
-              lineHeight: 16,
-              marginBottom: 6,
-            }}
-            valueScaledStyle={{
-              fontSize: 20,
-              lineHeight: 20,
-            }}
-          />
+          </TouchableOpacity>
         </View>
         <DocumentFooter
           leftIcons={icons}
@@ -183,4 +208,4 @@ const DocumentSectionDocumentCard: React.FC<DocumentCardProps> = ({
   )
 }
 
-export default DocumentSectionDocumentCard
+export default DocumentCard
