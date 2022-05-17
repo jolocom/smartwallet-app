@@ -16,6 +16,8 @@ import { usePopupMenu } from '~/hooks/popupMenu'
 import { DocumentCard } from '~/components/Cards'
 import { truncateString } from '~/utils/stringUtils'
 import ScreenContainer from '~/components/ScreenContainer'
+import { DisplayCredentialDocument } from '~/types/credentials'
+import { useRedirect } from '~/hooks/navigation'
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()
@@ -85,8 +87,35 @@ export const DocumentList = () => {
   const { t } = useTranslation()
   const { getOptionalFields } = useCredentialOptionalFields()
   const documents = useSelector(getAllDocuments)
+  const redirect = useRedirect()
 
   const onHandleMore = useHandleMorePress()
+
+  const handlePressDetails = (c: DisplayCredentialDocument) => {
+    const displayDocumentName = truncateString(c.name, 30)
+
+    redirect(ScreenNames.FieldDetails, {
+      fields: assembleFields(c),
+      photo: c.photo,
+      title: displayDocumentName,
+      backgroundColor: undefined,
+    })
+  }
+
+  const assembleFields = (c: DisplayCredentialDocument) => {
+    return [
+      {
+        key: 'subjectName',
+        label: t('Documents.subjectNameField'),
+        value: c.holderName || t('General.anonymous'),
+      },
+      ...getOptionalFields(c),
+    ]
+  }
+
+  const handlePressMore = (c: DisplayCredentialDocument) => {
+    onHandleMore(c.id, c.name, assembleFields(c), c.photo)
+  }
 
   if (!documents) return null
   return (
@@ -109,25 +138,12 @@ export const DocumentList = () => {
                 <ScreenContainer.Padding key={`${index}-${c.id}`}>
                   <View style={styles.sectionContainer}>
                     <DocumentCard
+                      onPress={() => handlePressDetails(c)}
                       credentialName={c.name || t('General.unknown')}
                       holderName={c.holderName}
                       fields={getOptionalFields(c)}
                       photo={c.photo}
-                      onHandleMore={() =>
-                        onHandleMore(
-                          c.id,
-                          c.name,
-                          [
-                            {
-                              key: 'subjectName',
-                              label: t('Documents.subjectNameField'),
-                              value: c.holderName || t('General.anonymous'),
-                            },
-                            ...getOptionalFields(c),
-                          ],
-                          c.photo,
-                        )
-                      }
+                      onHandleMore={() => handlePressMore(c)}
                     />
                   </View>
                 </ScreenContainer.Padding>
