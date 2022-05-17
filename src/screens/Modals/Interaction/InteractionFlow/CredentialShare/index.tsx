@@ -88,7 +88,7 @@ export const CredentialShareBAS = () => {
       const displaySingleCredential = mapDisplayToDocument(
         singleRequestedCredential,
       )
-      const { name } = displaySingleCredential
+      const { name, issuer } = displaySingleCredential
       const claimFields = getOptionalFields(displaySingleCredential)
 
       return (
@@ -98,6 +98,7 @@ export const CredentialShareBAS = () => {
             holderName={displaySingleCredential.holderName}
             fields={claimFields}
             photo={displaySingleCredential.photo}
+            issuerIcon={issuer?.publicProfile?.image}
           />
           <Space />
         </>
@@ -176,7 +177,7 @@ const CredentialShareFAS = () => {
         customStyles={{ marginLeft: 0 }}
         renderItem={({ item: cred }) => {
           const claimFields = getOptionalFields(cred)
-          const { name, type, id } = cred
+          const { name, type, id, issuer } = cred
           return (
             <TouchableWithoutFeedback
               key={id}
@@ -193,6 +194,7 @@ const CredentialShareFAS = () => {
                   holderName={cred.holderName}
                   photo={cred.photo}
                   selected={selectedCredentials[type] === id}
+                  issuerIcon={issuer?.publicProfile?.image}
                 />
               </View>
             </TouchableWithoutFeedback>

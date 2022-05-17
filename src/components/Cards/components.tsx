@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 26,
     fontWeight: '500',
+    paddingRight: 12,
   },
   holderName: {
     fontSize: 24,
