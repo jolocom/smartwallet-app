@@ -24,12 +24,13 @@ import Collapsible from '~/components/Collapsible'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { TextLayoutEvent } from '~/types/props'
+import { ClaimMimeType } from '@jolocom/protocol-ts'
 
-const IMAGE_SIZE = BP({ large: 100, default: 90 })
+const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
-type FieldValueProps = { value: string }
+type FieldValueProps = { value: string; mime_type: ClaimMimeType }
 
-const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
+const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   const [_, setClipboardData] = useClipboard()
 
   const { scheduleInfo } = useToasts()
@@ -37,6 +38,8 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
 
   const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(5)
   const [seeMoreBtnVisible, setSeeMoreBtnVisibility] = useState(false)
+
+  const isImageField = mime_type === ClaimMimeType.image_png
 
   const { isExpanded, onToggleExpand } = useToggleExpand({
     onExpand: () => {
@@ -48,10 +51,9 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
   })
 
   const handleLongPress = (value: string) => {
-    setClipboardData(value as string)
+    setClipboardData(value)
     scheduleInfo({
       title: t('Toasts.copied'),
-      message: ``,
       dismiss: 1500,
     })
   }
@@ -79,32 +81,69 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
     <>
       <TouchableOpacity
         onPress={onToggleExpand}
-        onLongPress={() => handleLongPress(value as string)}
+        onLongPress={() => handleLongPress(value)}
         activeOpacity={0.6}
+        style={{ width: '100%' }}
       >
-        <JoloText
-          // @ts-expect-error
-          onTextLayout={handleTextLayout}
-          color={Colors.black95}
-          numberOfLines={numberOfVisibleLines}
-          customStyles={[
-            styles.fieldText,
-            { marginTop: BP({ default: 8, xsmall: 4 }) },
-          ]}
-        >
-          {value}
-        </JoloText>
-        {seeMoreBtnVisible && !isExpanded && (
-          <JoloText
-            size={JoloTextSizes.mini}
-            color={Colors.osloGray}
-            customStyles={{ textAlign: 'right', marginTop: 5 }}
+        {isImageField ? (
+          <View
+            style={{
+              width: '100%',
+              height: 200,
+              paddingVertical: 16,
+              paddingHorizontal: 44,
+              alignItems: 'center',
+            }}
           >
-            {t('Details.expandBtn')}
-          </JoloText>
+            <Image
+              source={{ uri: value }}
+              resizeMode="contain"
+              style={{ width: '100%', height: '100%' }}
+            />
+          </View>
+        ) : (
+          <>
+            <JoloText
+              // @ts-expect-error
+              onTextLayout={handleTextLayout}
+              color={Colors.black95}
+              numberOfLines={numberOfVisibleLines}
+              customStyles={[
+                styles.fieldText,
+                { marginTop: BP({ default: 8, xsmall: 4 }) },
+              ]}
+            >
+              {value}
+            </JoloText>
+            {seeMoreBtnVisible && !isExpanded && (
+              <JoloText
+                size={JoloTextSizes.mini}
+                color={Colors.osloGray}
+                customStyles={{ textAlign: 'right', marginTop: 5 }}
+              >
+                {t('Details.expandBtn')}
+              </JoloText>
+            )}
+          </>
         )}
       </TouchableOpacity>
     </>
+  )
+}
+
+const Icon = ({ url }: { url: string }) => {
+  return (
+    <View style={{ width: 40, height: 40, marginRight: 12 }}>
+      <Image
+        source={{ uri: url }}
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: 6,
+          overflow: 'hidden',
+        }}
+      />
+    </View>
   )
 }
 
@@ -115,6 +154,8 @@ const FieldDetails = () => {
     title,
     photo,
     fields,
+    issuerIcon,
+    contextIcons,
     backgroundColor = Colors.mainBlack,
   } = route.params
 
@@ -124,6 +165,8 @@ const FieldDetails = () => {
       duration: 200,
     })
   }
+
+  const showIconContainer = issuerIcon || contextIcons
 
   const { top } = useSafeArea()
   return (
@@ -156,24 +199,42 @@ const FieldDetails = () => {
                   customStyles={{
                     ...styles.fieldText,
                     lineHeight: BP({ xsmall: 24, default: 28 }),
+                    marginLeft: 12,
                   }}
+                  numberOfLines={2}
                   kind={JoloTextKind.title}
                   size={JoloTextSizes.middle}
                   color={Colors.white90}
-                  weight={JoloTextWeight.regular}
+                  weight={JoloTextWeight.medium}
                 >
                   {title}
                 </JoloText>
               </Collapsible.Title>
+              {showIconContainer && (
+                <View
+                  style={{
+                    paddingTop: 18,
+                    paddingBottom: 24,
+                    flexDirection: 'row',
+                    marginLeft: 12,
+                  }}
+                >
+                  {issuerIcon && <Icon url={issuerIcon} />}
+                  {contextIcons &&
+                    contextIcons.map((icon, i) => <Icon key={i} url={icon} />)}
+                </View>
+              )}
+              {photo && (
+                <View>
+                  <Image source={{ uri: photo }} style={styles.photo} />
+                </View>
+              )}
               <Block
                 customStyle={{
                   backgroundColor: Colors.white,
                   marginBottom: 16,
                 }}
               >
-                {photo && (
-                  <Image source={{ uri: photo }} style={styles.photo} />
-                )}
                 {fields.map((field, i) => (
                   <React.Fragment key={i}>
                     <View style={styles.fieldContainer} onLayout={handleLayout}>
@@ -184,7 +245,10 @@ const FieldDetails = () => {
                       >
                         {field.label}
                       </JoloText>
-                      <FieldValue value={field.value as string} />
+                      <FieldValue
+                        value={field.value as string}
+                        mime_type={field.mime_type}
+                      />
                     </View>
                     {i !== Object.keys(fields).length - 1 && (
                       <View style={styles.divider} />
@@ -201,21 +265,13 @@ const FieldDetails = () => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.mainBlack,
-  },
-  titleContainer: {
-    paddingLeft: 6,
-    paddingBottom: BP({ default: 12, xsmall: 8 }),
-  },
   photo: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
     borderRadius: IMAGE_SIZE / 2,
     position: 'absolute',
     right: 12,
-    top: -IMAGE_SIZE + IMAGE_SIZE * 0.3,
+    bottom: 26,
   },
   fieldContainer: {
     paddingVertical: BP({
