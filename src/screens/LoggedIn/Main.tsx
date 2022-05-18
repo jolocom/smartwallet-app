@@ -46,6 +46,7 @@ import Interaction from '../Modals/Interaction'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
 import { CardTest } from './Settings/Development/CardsTest'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -88,10 +89,12 @@ export type MainStackParamList = {
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
   [ScreenNames.FieldDetails]: {
-    fields: IField[]
+    fields: DisplayVal[]
     title?: string
     photo?: string
     backgroundColor?: Colors
+    issuerIcon?: string
+    contextIcons?: string[]
   }
   // DEV
   [ScreenNames.CardsTest]: undefined

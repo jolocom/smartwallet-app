@@ -29,7 +29,7 @@ export type RootStackParamList = {
     title: string
     cancelText: string
     instructionText: string
-    onComplete: () => Promise<void>
+    onComplete: () => void
   }
   [ScreenNames.LoggedIn]: undefined
   [ScreenNames.LoggedOut]: undefined

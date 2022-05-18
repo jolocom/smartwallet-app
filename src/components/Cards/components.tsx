@@ -73,7 +73,7 @@ export const DocumentFooter: React.FC<{
               >
                 <Image
                   source={{ uri: icon }}
-                  resizeMode="cover"
+                  resizeMode="contain"
                   style={{ width: '100%', height: '100%', borderRadius: 4.2 }}
                 />
               </ScaledView>
@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 26,
     fontWeight: '500',
+    paddingRight: 12,
   },
   holderName: {
     fontSize: 24,

@@ -19,14 +19,14 @@ import {
 interface Props {
   credentialName: string
   issuerIcon?: string
-  fields: Array<Required<DisplayVal>>
+  fields: Array<DisplayVal>
   selected?: boolean
   holderName?: string
   photo?: string
   style?: StyleProp<ViewStyle>
 }
 
-const SharePreviewCard: React.FC<Props> = ({
+const ShareCard: React.FC<Props> = ({
   credentialName,
   holderName,
   fields,
@@ -90,4 +90,4 @@ const SharePreviewCard: React.FC<Props> = ({
   )
 }
 
-export default SharePreviewCard
+export default ShareCard
