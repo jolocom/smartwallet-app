@@ -133,7 +133,8 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       easing: Easing.elastic(1),
       useNativeDriver: true,
     }).start(() => {
-      onComplete().catch(scheduleErrorWarning).finally(goBack)
+      onComplete()
+      goBack()
     })
   }
 
