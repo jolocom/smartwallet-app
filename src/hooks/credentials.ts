@@ -5,6 +5,7 @@ import { ClaimKeys, DisplayCredential } from '~/types/credentials'
 import { useTranslation } from 'react-i18next'
 import moment from 'moment'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
+import { useCallback } from 'react'
 
 export const useDeleteCredential = () => {
   const agent = useAgent()
@@ -25,6 +26,12 @@ export const useCredentialOptionalFields = () => {
     ClaimKeys.id,
     ClaimKeys.photo,
   ]
+
+  const getPreviewFields = <T extends DisplayCredential>(credential: T) => {
+    return credential.properties.filter((f) =>
+      credential.previewKeys.includes(f.key!),
+    )
+  }
 
   const getOptionalFields = <T extends DisplayCredential>(credential: T) => {
     const additionalFields = [
@@ -66,5 +73,5 @@ export const useCredentialOptionalFields = () => {
       .concat(additionalFields)
   }
 
-  return { nonOptionalFields, getOptionalFields }
+  return { nonOptionalFields, getOptionalFields, getPreviewFields }
 }

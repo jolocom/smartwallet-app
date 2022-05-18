@@ -46,11 +46,14 @@ const CredentialOfferBAS = () => {
       />
       <Space />
       {offeredCredentials.map((d) => {
+        let previewFields = d.properties.filter((f) => f.preview === true)
+        previewFields = previewFields.length ? previewFields : d.properties
+
         return (
           <OfferCard
             key={d.name}
             credentialName={d.name || t('General.unknown')}
-            fields={d.properties.map((p) => ({
+            fields={previewFields.map((p) => ({
               label: p.label || t('Documents.unspecifiedField'),
             }))}
             issuerIcon={image}
@@ -70,29 +73,33 @@ const CredentialOfferBAS = () => {
 const CredentialOfferFAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
 
-  const documents = useSelector(getAllDocuments)
+  const documents = useSelector(getOfferedCredentials)
 
   const { name, image } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
-    documents.map(({ properties, name, type }, idx) => (
-      <View
-        key={`${type}${idx}`}
-        style={{
-          marginBottom: idx === credentials.length - 1 ? 0 : 30,
-        }}
-      >
-        <OfferCard
-          key={name + type}
-          credentialName={name || t('General.unknown')}
-          fields={properties.map((p) => ({
-            label: p.label || t('Documents.unspecifiedField'),
-          }))}
-          issuerIcon={image}
-        />
-      </View>
-    ))
+    documents.map(({ properties, name, type }, idx) => {
+      let previewFields = properties.filter((f) => f.preview === true)
+      previewFields = previewFields.length ? previewFields : properties
+      return (
+        <View
+          key={`${type}${idx}`}
+          style={{
+            marginBottom: idx === credentials.length - 1 ? 0 : 30,
+          }}
+        >
+          <OfferCard
+            key={name + type}
+            credentialName={name || t('General.unknown')}
+            fields={previewFields.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
+            issuerIcon={image}
+          />
+        </View>
+      )
+    })
 
   const { top } = useSafeArea()
   return (
