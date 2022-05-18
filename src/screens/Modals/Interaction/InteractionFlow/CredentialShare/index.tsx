@@ -64,7 +64,7 @@ export const CredentialShareBAS = () => {
   const handleShare = useCredentialShareSubmit()
   const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
-  const { getOptionalFields } = useCredentialOptionalFields()
+  const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
 
   /* We are preselecting a credential that is requested */
   useEffect(() => {
@@ -89,14 +89,18 @@ export const CredentialShareBAS = () => {
         singleRequestedCredential,
       )
       const { name, issuer } = displaySingleCredential
-      const claimFields = getOptionalFields(displaySingleCredential)
+
+      let previewFields = getPreviewFields(displaySingleCredential)
+      previewFields = previewFields.length
+        ? previewFields
+        : getOptionalFields(displaySingleCredential)
 
       return (
         <>
           <ShareCard
             credentialName={name}
             holderName={displaySingleCredential.holderName}
-            fields={claimFields}
+            fields={previewFields}
             photo={displaySingleCredential.photo}
             issuerIcon={issuer?.publicProfile?.image}
           />
@@ -155,7 +159,7 @@ export const CredentialShareBAS = () => {
 const CredentialShareFAS = () => {
   const { t } = useTranslation()
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
-  const { getOptionalFields } = useCredentialOptionalFields()
+  const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
   const { name: serviceName, image } = useSelector(getServiceDescription)
 
   const { handleSelectCredential } = useCredentialShareFlow()
@@ -176,7 +180,11 @@ const CredentialShareFAS = () => {
         itemWidth={SCREEN_WIDTH - 48}
         customStyles={{ marginLeft: 0 }}
         renderItem={({ item: cred }) => {
-          const claimFields = getOptionalFields(cred)
+          let previewFields = getPreviewFields(cred)
+          previewFields = previewFields.length
+            ? previewFields
+            : getOptionalFields(cred)
+
           const { name, type, id, issuer } = cred
           return (
             <TouchableWithoutFeedback
@@ -190,7 +198,7 @@ const CredentialShareFAS = () => {
               >
                 <ShareCard
                   credentialName={name ?? type}
-                  fields={claimFields}
+                  fields={previewFields}
                   holderName={cred.holderName}
                   photo={cred.photo}
                   selected={selectedCredentials[type] === id}
