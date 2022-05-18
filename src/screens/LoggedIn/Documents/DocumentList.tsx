@@ -31,12 +31,21 @@ const useHandleMorePress = () => {
     deleteCredential(id).catch(scheduleErrorWarning)
   }
 
-  return (
-    id: string,
-    credentialName: string,
-    fields: Array<DisplayVal>,
-    photo?: string,
-  ) => {
+  return ({
+    id,
+    credentialName,
+    fields,
+    issuerIcon,
+    photo,
+    contextIcons,
+  }: {
+    id: string
+    credentialName: string
+    fields: Array<DisplayVal>
+    issuerIcon?: string
+    photo?: string
+    contextIcons?: string[]
+  }) => {
     const displayDocumentName = truncateString(credentialName, 30)
     const popupOptions = [
       {
@@ -48,6 +57,8 @@ const useHandleMorePress = () => {
             photo,
             title: displayDocumentName,
             backgroundColor: undefined,
+            contextIcons,
+            issuerIcon,
           },
         },
       },
@@ -92,19 +103,6 @@ export const DocumentList = () => {
 
   const onHandleMore = useHandleMorePress()
 
-  const handlePressDetails = (c: DisplayCredentialDocument) => {
-    const displayDocumentName = c.name
-
-    redirect(ScreenNames.FieldDetails, {
-      fields: assembleFields(c),
-      photo: c.photo,
-      title: displayDocumentName,
-      contextIcons: getContextIcons(c),
-      issuerIcon: c.issuer?.publicProfile?.image,
-      backgroundColor: undefined,
-    })
-  }
-
   const assembleFields = (c: DisplayCredentialDocument) => {
     return [
       {
@@ -118,8 +116,28 @@ export const DocumentList = () => {
     ]
   }
 
+  // FIXME this has to be abstracted since we're duplicating a lot of things.
+  // The whole credential screen and how we're interacting with it should change
+  const handlePressDetails = (c: DisplayCredentialDocument) => {
+    redirect(ScreenNames.FieldDetails, {
+      fields: assembleFields(c),
+      photo: c.photo,
+      title: c.name,
+      contextIcons: getContextIcons(c),
+      issuerIcon: c.issuer?.publicProfile?.image,
+      backgroundColor: undefined,
+    })
+  }
+
   const handlePressMore = (c: DisplayCredentialDocument) => {
-    onHandleMore(c.id, c.name, assembleFields(c), c.photo)
+    onHandleMore({
+      id: c.id,
+      credentialName: c.name,
+      fields: assembleFields(c),
+      photo: c.photo,
+      contextIcons: getContextIcons(c),
+      issuerIcon: c.issuer?.publicProfile?.image,
+    })
   }
 
   const getContextIcons = (c: DisplayCredentialDocument) => {

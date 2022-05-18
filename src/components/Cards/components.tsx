@@ -37,9 +37,11 @@ export const CardMoreBtn: React.FC<{
     style={styles.dotsContainer}
   >
     <TouchableOpacity onPress={onPress} style={styles.dotsBtn}>
-      {[...Array(3).keys()].map((c) => (
-        <ScaledView key={c} scaleStyle={styles.dot} />
-      ))}
+      <ScaledView scaleStyle={styles.scaledDots}>
+        {[...Array(3).keys()].map((c) => (
+          <ScaledView key={c} scaleStyle={styles.dot} />
+        ))}
+      </ScaledView>
     </TouchableOpacity>
   </ScaledView>
 )
@@ -353,17 +355,23 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
 const styles = StyleSheet.create({
   dotsContainerScaled: {
     paddingVertical: 3,
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
   },
   dotsContainer: {
     height: '100%',
   },
-  dotsBtn: {
-    alignItems: 'stretch',
+  scaledDots: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    paddingVertical: 2,
     justifyContent: 'space-between',
     flexDirection: 'column',
-    paddingHorizontal: 10,
+  },
+  dotsBtn: {
     flex: 1,
   },
   dot: {
