@@ -73,7 +73,7 @@ export const DocumentFooter: React.FC<{
               >
                 <Image
                   source={{ uri: icon }}
-                  resizeMode="cover"
+                  resizeMode="contain"
                   style={{ width: '100%', height: '100%', borderRadius: 4.2 }}
                 />
               </ScaledView>

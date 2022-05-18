@@ -88,7 +88,7 @@ export function mapDisplayToDocument(
   )
   const holderName = holderProperties.length
     ? holderProperties
-        .reduce((acc, v) => `${acc} ${v.value}`, '')
+        .reduce((acc, v) => `${acc} ${v.value ?? ''}`, '')
         .split(' ')
         .filter((e) => Boolean(e))
         .join(' ')
@@ -105,7 +105,7 @@ export function mapDisplayToDocument(
     ...credential,
     properties: updatedProperties,
     holderName,
-    photo,
+    photo: photo?.trim(),
     highlight: credential.id,
   }
 }
