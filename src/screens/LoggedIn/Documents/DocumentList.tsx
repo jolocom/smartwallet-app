@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
@@ -86,7 +86,7 @@ const CardList: React.FC = ({ children }) => (
 
 export const DocumentList = () => {
   const { t } = useTranslation()
-  const { getOptionalFields } = useCredentialOptionalFields()
+  const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
   const documents = useSelector(getAllDocuments)
   const redirect = useRedirect()
 
@@ -157,6 +157,11 @@ export const DocumentList = () => {
               const hasImageFields = c.properties.some(
                 (prop) => prop.mime_type === ClaimMimeType.image_png,
               )
+              const previewFields = getPreviewFields(c)
+
+              const fields = previewFields.length
+                ? previewFields
+                : getOptionalFields(c)
 
               return (
                 <ScreenContainer.Padding key={`${index}-${c.id}`}>
@@ -165,7 +170,7 @@ export const DocumentList = () => {
                       onPress={() => handlePressDetails(c)}
                       credentialName={c.name || t('General.unknown')}
                       holderName={c.holderName}
-                      fields={getOptionalFields(c)}
+                      fields={fields}
                       photo={c.photo}
                       onHandleMore={() => handlePressMore(c)}
                       backgroundColor={c.styles?.background?.color}

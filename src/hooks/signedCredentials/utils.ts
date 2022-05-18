@@ -101,10 +101,15 @@ export function mapDisplayToDocument(
       p.key !== ClaimKeys.photo,
   )
 
+  const previewKeys = updatedProperties
+    .filter((p) => p.preview === true)
+    .map((p) => p.key!)
+
   return {
     ...credential,
     properties: updatedProperties,
     holderName,
+    previewKeys,
     photo: photo?.trim(),
     highlight: credential.id,
   }

@@ -76,6 +76,7 @@ export type OfferedCredentialDisplay = OfferedCredential &
 
 export type DisplayCredential = { issuer: IdentitySummary | undefined } & {
   properties: Array<DisplayVal>
+  previewKeys: Array<string>
   styles?: CredentialDefinition['styles']
 } & BaseUICredential
 
