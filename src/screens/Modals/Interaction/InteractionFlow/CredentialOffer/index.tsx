@@ -76,23 +76,27 @@ const CredentialOfferFAS = () => {
   const { t } = useTranslation()
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
-    documents.map(({ properties, name, type }, idx) => (
-      <View
-        key={`${type}${idx}`}
-        style={{
-          marginBottom: idx === credentials.length - 1 ? 0 : 30,
-        }}
-      >
-        <OfferCard
-          key={name + type}
-          credentialName={name || t('General.unknown')}
-          fields={properties.map((p) => ({
-            label: p.label || t('Documents.unspecifiedField'),
-          }))}
-          issuerIcon={image}
-        />
-      </View>
-    ))
+    documents.map(({ properties, name, type, previewKeys }, idx) => {
+      let previewFields = properties.filter((f) => previewKeys.includes(f.key!))
+      previewFields = previewFields.length ? previewFields : properties
+      return (
+        <View
+          key={`${type}${idx}`}
+          style={{
+            marginBottom: idx === credentials.length - 1 ? 0 : 30,
+          }}
+        >
+          <OfferCard
+            key={name + type}
+            credentialName={name || t('General.unknown')}
+            fields={previewFields.map((p) => ({
+              label: p.label || t('Documents.unspecifiedField'),
+            }))}
+            issuerIcon={image}
+          />
+        </View>
+      )
+    })
 
   const { top } = useSafeArea()
   return (
