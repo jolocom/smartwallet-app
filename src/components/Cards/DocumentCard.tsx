@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import {
+  Platform,
   StyleProp,
   TouchableOpacity,
   Vibration,
@@ -117,6 +118,38 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
   const isBackground = backgroundImage || backgroundColor
 
+  const getPhotoPosition = () => {
+    let verticalPosition = -30
+
+    if (!isBackground) {
+      verticalPosition = verticalPosition - 20
+    }
+
+    return verticalPosition
+  }
+
+  const getFieldsTopDistance = () => {
+    let distance = 0
+
+    if (photo) {
+      distance = distance + 12
+    }
+
+    if (!holderName && photo) {
+      distance = distance + 42
+    } else if (holderName) {
+      distance = distance + 16
+    }
+
+    // FIXME: with backgroundColor, the fields are a bit too low
+    if (isBackground && Platform.OS === 'android') {
+      distance = distance - 12
+    }
+
+    console.log({ distance })
+    return distance
+  }
+
   // NOTE: sor/ting the fields from shortest value to longest to fit more fields in the card.
   // Nevertheless, this leads to the "metadata" fields (i.e. issuer, expires, etc.) to be prioritized,
   // which is not desireable.
@@ -163,7 +196,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
             {photo && (
               <DocumentPhoto
                 photo={photo}
-                verticalPosition={!isBackground ? -50 : undefined}
+                verticalPosition={getPhotoPosition()}
               />
             )}
             {holderName && (
@@ -173,7 +206,9 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
                 onLayout={handleHolderNameTextLayout}
               />
             )}
-            <ScaledView scaleStyle={{ paddingBottom: 16 }} />
+            <ScaledView
+              scaleStyle={{ paddingBottom: getFieldsTopDistance() }}
+            />
             <DocumentFields
               fields={fields}
               maxLines={maxLinesPerField}
