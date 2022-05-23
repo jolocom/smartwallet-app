@@ -117,6 +117,16 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
   const isBackground = backgroundImage || backgroundColor
 
+  const getPhotoPosition = () => {
+    let verticalPosition = -30
+
+    if (!isBackground) {
+      verticalPosition = verticalPosition - 20
+    }
+
+    return verticalPosition
+  }
+
   // NOTE: sor/ting the fields from shortest value to longest to fit more fields in the card.
   // Nevertheless, this leads to the "metadata" fields (i.e. issuer, expires, etc.) to be prioritized,
   // which is not desireable.
@@ -163,7 +173,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
             {photo && (
               <DocumentPhoto
                 photo={photo}
-                verticalPosition={!isBackground ? -50 : undefined}
+                verticalPosition={getPhotoPosition()}
               />
             )}
             {holderName && (
@@ -173,7 +183,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
                 onLayout={handleHolderNameTextLayout}
               />
             )}
-            <ScaledView scaleStyle={{ paddingBottom: 16 }} />
+            <ScaledView scaleStyle={{ paddingBottom: holderName ? 16 : 56 }} />
             <DocumentFields
               fields={fields}
               maxLines={maxLinesPerField}
