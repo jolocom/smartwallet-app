@@ -1,9 +1,7 @@
 import React from 'react'
 import * as redux from 'react-redux'
 import { AppState } from 'react-native'
-
 import { waitFor } from '@testing-library/react-native'
-
 import * as deviceAuthHooks from '~/hooks/deviceAuth'
 import Lock from '~/screens/Modals/Lock'
 import { setAppLocked } from '~/modules/account/actions'
