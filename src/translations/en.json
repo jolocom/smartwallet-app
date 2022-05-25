@@ -171,7 +171,8 @@
         "cardInfoHeader": "Included info",
         "confirmBtn": "Accept",
         "acceptBtn": "Accept",
-        "cardNoPreview": "No info can be previewed"
+        "cardNoPreview": "No info can be previewed",
+        "nrOfFieldsLeft": "+${nr} more"
     },
     "Toasts": {
         "reportBtn": "Report",
@@ -217,7 +218,7 @@
         "cancelBtn": "Ignore",
         "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
         "redirectTitle": "We're all done!",
-        "redirectDescription": "${serviceName} is redirecting you to a service or application outside of the SmartWallet",
+        "redirectDescription": "You are being redirected to ${service-name}.",
         "redirectBtn": "Follow link"
     },
     "Documents": {
