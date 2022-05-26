@@ -162,13 +162,12 @@ export const useDrivingLicense = () => {
           EngagementStateNames.ended,
         ].includes(jsonState.name)
       ) {
+        unsubscribe()
         setTimeout(() => {
           dispatch(dismissLoader())
           goBack()
         }, 2000)
       }
-
-      console.log(JSON.stringify(jsonState, null, 2))
     }
 
     sdk.emitter.addListener(

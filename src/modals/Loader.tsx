@@ -108,10 +108,9 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     animateValueTo(animatedWidth3, SCALE_MAX, 2500),
   ])
 
-  const ripple = Animated.sequence([
-    Animated.parallel([fRipple, sRipple, tRipple]),
-    reset,
-  ])
+  const ripple = Animated.loop(
+    Animated.sequence([Animated.parallel([fRipple, sRipple, tRipple]), reset]),
+  )
 
   const bounceError = () => {
     Animated.parallel([
@@ -145,6 +144,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
   }
 
   const looping = () => {
+    console.log({ type })
     if (type === LoaderTypes.default) {
       ripple.start()
     } else if (type === LoaderTypes.error) {
@@ -158,7 +158,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
 
   useEffect(() => {
     animating && looping()
-  }, [type])
+  })
 
   // NOTE: @StatusBar component is here (aside from the one in @Overlays) b/c there is an issue
   // with translucent status bars and the @Modal component

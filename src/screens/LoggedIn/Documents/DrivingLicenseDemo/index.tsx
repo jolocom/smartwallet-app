@@ -58,9 +58,10 @@ export const DrivingLicenseCard: React.FC<{
     .filter((field) => field.key !== 'portrait')
 
   const previewFieldsList = [
-    'driving_privileges',
-    'issuing_country',
+    'resident_address',
     'birth_date',
+    'expiry_date',
+    'document_number',
   ]
   const previewFields = fields.filter((field) =>
     previewFieldsList.includes(field.key!),

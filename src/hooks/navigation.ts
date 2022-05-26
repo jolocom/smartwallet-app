@@ -16,6 +16,7 @@ export const useGoBack = () => {
   const navigation = useNavigation()
   if (navigation.canGoBack()) {
     return () => {
+      console.log('going back')
       navigation.goBack()
     }
   }
