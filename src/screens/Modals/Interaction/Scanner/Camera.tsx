@@ -43,6 +43,9 @@ import {
 import useConnection from '~/hooks/connection'
 import { useDisableLock } from '~/hooks/generic'
 import { useToasts } from '~/hooks/toasts'
+import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
+import { ScreenNames } from '~/types/screens'
+import { useRedirect } from '~/hooks/navigation'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -55,6 +58,8 @@ const Camera = () => {
   const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
   const { connected: isConnectedToTheInternet } = useConnection()
+  const { personalizeLicense } = useDrivingLicense()
+  const redirect = useRedirect()
 
   const ausweisScannerKey = useSelector(getAusweisScannerKey)
 
@@ -151,7 +156,12 @@ const Camera = () => {
       const canOpen = await openURL(e.data)
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
-      if (canOpen && e.data.includes('jolocom.app.link')) {
+
+      if (e.data.startsWith('iso23220-3-sed:')) {
+        personalizeLicense(e.data, (requests) => {
+          redirect(ScreenNames.DrivingLicenseForm, { requests })
+        })
+      } else if (canOpen && e.data.includes('jolocom.app.link')) {
         disableLock(() => {
           // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
           // when the app goes into background when the deeplink is opened

@@ -9,12 +9,13 @@ import DrivingLicenseSDK, {
   PersonalizationInputResponse,
 } from 'react-native-mdl'
 import { useDispatch, useSelector } from 'react-redux'
-import { useGoBack } from '~/hooks/navigation'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { setMdlDisplayData } from '~/modules/mdl/actions'
 import { getMdlDisplayData } from '~/modules/mdl/selectors'
+import { ScreenNames } from '~/types/screens'
 
 export const useDrivingLicense = () => {
   const sdk = useRef(new DrivingLicenseSDK()).current
@@ -22,6 +23,7 @@ export const useDrivingLicense = () => {
   const dispatch = useDispatch()
   const drivingLicense = useSelector(getMdlDisplayData)
   const goBack = useGoBack()
+  const redirect = useRedirect()
 
   const initDrivingLicense = async () => {
     const mdlDisplayData = await sdk
@@ -34,8 +36,11 @@ export const useDrivingLicense = () => {
   }
 
   const personalizeLicense = (
+    qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
+    sdk.startPersonalization(qrString)
+
     const requestHandler = (requests: string) => {
       const jsonRequests = JSON.parse(requests) as PersonalizationInputRequest[]
 
@@ -44,6 +49,7 @@ export const useDrivingLicense = () => {
     const successHandler = () => {
       unsubscribe()
 
+      redirect(ScreenNames.Documents)
       sdk.getDisplayData().then((displayData) => {
         dispatch(setMdlDisplayData(displayData))
         dispatch(dismissLoader())
@@ -88,11 +94,6 @@ export const useDrivingLicense = () => {
         errorHandler,
       )
     }
-
-    // TODO get this value from scanner
-    sdk.startPersonalization(
-      'iso23220-3-sed:g3NvcmcuaXNvLjIzMjIwLTMtMS4weQKYaEVPaEFTYWhHQ0ZaQVhJd2dnRnVNSUlCRmFBREFnRUNBZ1JpQ2hTL01Bb0dDQ3FHU000OUJBTUNNQzB4Q3pBSkJnTlZCQVlUQWtSRk1SNHdIQVlEVlFRRERCVmlaSElnYlVSTUlGUkZVMVFnY0hKdmRtTnZaR1V3SGhjTk1qSXdNakUwTURnek56RTVXaGNOTWpNd01qRTBNRGd6TnpFNVdqQXRNUXN3Q1FZRFZRUUdFd0pFUlRFZU1Cd0dBMVVFQXd3VlltUnlJRzFFVENCVVJWTlVJSEJ5YjNaamIyUmxNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUV3aUszSi95a0JOR3NCMmpEVlkvUHh6SlpWTU5pYzkrREVLWFpnM05YdFNUb1NoaWVDb2ZNVTRSU1lTaTZXT0hMSS9rWndVdkVkUk9xM2I3Q0hUc1FzcU1qTUNFd0VnWURWUjBsQkFzd0NRWUhLSUdNWFFVQkFqQUxCZ05WSFE4RUJBTUNCNEF3Q2dZSUtvWkl6ajBFQXdJRFJ3QXdSQUlnTWF0WE5MejZSOXNDQ04xZmpZWjBOeEpxTXR4Y2I4dThUM25ZL0t4YUMyWUNJRFEwV1JZRHR2UGpGOTBHYkNEMnZKS1ZDZUtBaHJ1M3MxajlhdE9WWVkzVFdESFlHRmd0b1dsSVlYTm9UV1JzU1dSWUlORmxmS3NxZ3ZnN0lQNk5uV0xmSEN4MGdyNnBGaGE5WjlVSGVWd2U4cG5RV0VBMkdWVWNFS3Npb3h4OUVOcVNZYmRvckpaN0I5OHByNzc5OEZKMHJmeEdlRWpzZ0xhMFJHOThYNFZURk91c0RNL0tLOHkzN2ZoN0xUcEYzaWZMdi84UHhFaHR0cHM6Ly9kZW1vLm1kbC5idW5kZXNkcnVja2VyZWkuZGUvYXBpL2RldmljZWRpc2NvdmVyYWJpbGl0eS9tZXNzYWdl',
-    )
   }
 
   const finishPersonalization = (responses: PersonalizationInputResponse[]) => {

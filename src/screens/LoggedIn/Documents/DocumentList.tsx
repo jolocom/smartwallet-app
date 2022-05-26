@@ -172,14 +172,11 @@ export const DocumentList = () => {
           <ScreenPlaceholder
             title={t('Documents.placeholderHeader')}
             description={t('Documents.documentsPlaceholderSubheader')}
-          >
-            <DrivingLicensePersonalization />
-          </ScreenPlaceholder>
+          />
         ) : (
           <CardList>
             <ScreenContainer.Padding>
               <View style={{ alignItems: 'center' }}>
-                <DrivingLicensePersonalization />
                 {drivingLicense && (
                   <DrivingLicenseCard drivingLicense={drivingLicense} />
                 )}
