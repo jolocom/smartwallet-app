@@ -10,4 +10,6 @@ export enum SWErrorCodes {
   SWUnknownDeepLink = 'SWUnknownDeepLink',
   SWNfcNotSupported = 'SWNfcNotSupported',
   SWNfcNotEnabled = 'SWNfcNotEnabled',
+  SWRedirectUrlInvalid = 'SWRedirectUrlInvalid',
+  SWPostRedirectQueryInvalid = 'SWPostRedirectQueryInvalid',
 }

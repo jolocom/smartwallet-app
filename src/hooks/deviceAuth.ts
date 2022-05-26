@@ -5,6 +5,7 @@ import { setLocalAuth } from '~/modules/account/actions'
 import { useBiometry } from './biometry'
 import { BiometryType } from 'react-native-biometrics'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
+import { useToasts } from './toasts'
 
 export const useResetKeychainValues = () => {
   const dispatch = useDispatch()
@@ -22,25 +23,25 @@ export const useResetKeychainValues = () => {
 
 export const useGetStoredAuthValues = () => {
   const [isLoadingStorage, setIsLoadingStorage] = useState(false)
-  const [biometryType, setBiometryType] =
-    useState<BiometryType | undefined>(undefined)
+  const [biometryType, setBiometryType] = useState<BiometryType | undefined>(
+    undefined,
+  )
   const [keychainPin, setKeychainPin] = useState('')
   const [isBiometrySelected, setIsBiometrySelected] = useState(false)
 
   const { getBiometry } = useBiometry()
   const secureStorage = useSecureStorage()
+  const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
     let isCurrent = true
 
-    const getStoredPin = async () => {
-      setIsLoadingStorage(true)
-      try {
-        const [storedBiometry, storedPin] = await Promise.all([
-          getBiometry(),
-          secureStorage.getItem(SecureStorageKeys.passcode),
-        ])
-
+    setIsLoadingStorage(true)
+    Promise.all([
+      getBiometry(),
+      secureStorage.getItem(SecureStorageKeys.passcode),
+    ])
+      .then(([storedBiometry, storedPin]) => {
         isCurrent && setBiometryType(storedBiometry?.type)
         if (storedPin) {
           isCurrent && setKeychainPin(storedPin)
@@ -50,14 +51,10 @@ export const useGetStoredAuthValues = () => {
         if (isCurrent) {
           setIsBiometrySelected(!!storedBiometry?.type)
         }
-      } catch (err) {
-        // ✍🏼 todo: how should we handle this hasError ?
-        console.log({ err })
-      } finally {
-        isCurrent && setIsLoadingStorage(false)
-      }
-    }
-    getStoredPin()
+      })
+      .catch(scheduleErrorWarning)
+      .finally(() => isCurrent && setIsLoadingStorage(false))
+
     return () => {
       isCurrent = false
     }

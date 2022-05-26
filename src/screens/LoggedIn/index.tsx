@@ -9,18 +9,19 @@ import { setAppLocked } from '~/modules/account/actions'
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import { ScreenNames } from '~/types/screens'
-import DeviceAuthentication from '../Modals/DeviceAuthentication'
+import WalletAuthentication from '../Modals/WalletAuthentication'
 import Main from './Main'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useRedirect, useReplaceWith } from '~/hooks/navigation'
 import LockStack from './LockStack'
 import { screenTransitionFromBottomDisabledGestures } from '~/utils/screenSettings'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 
 export type LoggedInStackParamList = {
   Idle: undefined
   [ScreenNames.Main]: undefined
   [ScreenNames.LockStack]: undefined
-  [ScreenNames.DeviceAuth]: undefined
+  [ScreenNames.WalletAuthentication]: undefined
 }
 
 const LoggedInStack = createStackNavigator<LoggedInStackParamList>()
@@ -39,6 +40,10 @@ const LoggedIn = () => {
   const showTabs = !isAppLocked && isAuthSet
 
   const renderedMainTimes = useRef(0)
+
+  // NOTE: Used to listen for Ausweis READER messages and update the Redux state
+  eIDHooks.useAusweisReaderEvents()
+  eIDHooks.useObserveAusweisFlow()
 
   const dismissOverlays = useCallback(() => {
     dispatch(dismissLoader())
@@ -71,8 +76,8 @@ const LoggedIn = () => {
     <LoggedInStack.Navigator headerMode="none">
       {showRegisterPin ? (
         <LoggedInStack.Screen
-          name={ScreenNames.DeviceAuth}
-          component={DeviceAuthentication}
+          name={ScreenNames.WalletAuthentication}
+          component={WalletAuthentication}
           options={screenTransitionFromBottomDisabledGestures}
         />
       ) : (

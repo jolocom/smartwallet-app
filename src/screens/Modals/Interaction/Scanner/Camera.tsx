@@ -39,9 +39,10 @@ import { dismissLoader } from '~/modules/loader/actions'
 import {
   getAusweisScannerKey,
   getIsAusweisInteractionProcessed,
-} from '~/modules/ausweis/selectors'
+} from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { useDisableLock } from '~/hooks/generic'
+import { useToasts } from '~/hooks/toasts'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -75,6 +76,7 @@ const Camera = () => {
   const [errorText, setErrorText] = useState('')
   const colorAnimationValue = useRef(new Animated.Value(0)).current
   const textAnimationValue = useRef(new Animated.Value(0)).current
+  const { scheduleErrorWarning } = useToasts()
 
   const animateColor = () =>
     Animated.sequence([
@@ -159,7 +161,7 @@ const Camera = () => {
               res()
             }, 1000)
           })
-        })
+        }).catch(scheduleErrorWarning)
       } else {
         await processInteraction(e.data)
       }
@@ -182,7 +184,7 @@ const Camera = () => {
   const { top } = useSafeArea()
 
   const handleLocalPermissionPress = () => {
-    Permissions.openSettings()
+    Permissions.openSettings().catch(scheduleErrorWarning)
   }
 
   /**
@@ -347,11 +349,6 @@ const styles = StyleSheet.create({
     height: MARKER_SIZE,
     width: (SCREEN_WIDTH - MARKER_SIZE) / 2,
     backgroundColor: Colors.black65,
-  },
-  torchWrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   torch: {
     width: 69,

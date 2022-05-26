@@ -49,7 +49,7 @@ export const useHideStatusBar = () => {
   }, [isFocused])
 
   useLayoutEffect(() => {
-    !!errorScreen ? show() : hide()
+    errorScreen ? show() : hide()
   }, [errorScreen])
 
   useLayoutEffect(() => {

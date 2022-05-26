@@ -22,6 +22,7 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
         Object {
           "aspectRatio": 1.55,
           "marginBottom": 8,
+          "position": "relative",
           "width": "100%",
         }
       }
@@ -47,6 +48,33 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
           }
         }
       />
+      <Text
+        style={
+          Array [
+            Object {
+              "paddingTop": undefined,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "#000",
+              "fontFamily": "TTCommons-Medium",
+              "fontSize": 20,
+              "letterSpacing": 0.14,
+              "lineHeight": 22,
+            },
+            Object {
+              "bottom": 23,
+              "fontSize": 16,
+              "left": 18,
+              "letterSpacing": 0.15,
+              "lineHeight": 18.4,
+              "position": "absolute",
+            },
+          ]
+        }
+      >
+        AusweisIdentity.ausweisBadge
+      </Text>
     </View>
     <View>
       <Text

@@ -145,7 +145,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
       ref={sectionListRef}
       sections={sections}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(item, i) => 'id:' + item.lastUpdate + i}
+      keyExtractor={(item, i) => `id:${item.lastUpdate}${i}`}
       overScrollMode={'never'}
       onEndReachedThreshold={0.9}
       onViewableItemsChanged={handleSectionChange}

@@ -13,8 +13,11 @@ interface Props {
 const ScreenPlaceholder: React.FC<Props> = ({ title, description }) => {
   return (
     <View style={styles.container}>
-      <JoloText kind={JoloTextKind.title}>{title}</JoloText>
+      <JoloText testID="title" kind={JoloTextKind.title}>
+        {title}
+      </JoloText>
       <JoloText
+        testID="description"
         size={JoloTextSizes.mini}
         color={Colors.white50}
         weight={JoloTextWeight.regular}

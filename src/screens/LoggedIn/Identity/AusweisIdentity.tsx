@@ -1,8 +1,9 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, Platform, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { useSelector } from 'react-redux'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -10,7 +11,7 @@ import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
 import { JoloTextSizes } from '~/utils/fonts'
 import { ScreenNames } from '~/types/screens'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import useTranslation from '~/hooks/useTranslation'
 import {
   AusweisFlow,
@@ -18,8 +19,9 @@ import {
   AusweisScannerState,
   CardInfoMode,
   eIDScreens,
-} from '../eID/types'
+} from '~/screens/Modals/Interaction/eID/types'
 import { IS_ANDROID } from '~/utils/generic'
+import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 
 export const AusweisIdentity = () => {
@@ -32,16 +34,14 @@ export const AusweisIdentity = () => {
     eIDHooks.useAusweisInteraction()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
+  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
 
   const handleCompatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
   }
 
-  const handleChangePin = () => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: ScreenNames.AusweisChangePin,
-    })
-  }
+  const handleChangePin = () =>
+    navigation.navigate(ScreenNames.AusweisChangePin)
 
   const handleShowCardLockResult = (mode: CardInfoMode) => {
     const navigateToCardInfo = () => {
@@ -64,14 +64,17 @@ export const AusweisIdentity = () => {
   }
 
   const handleShowPuk = () => {
-    navigation.navigate(ScreenNames.eId, {
-      screen: eIDScreens.EnterPIN,
+    navigation.navigate(ScreenNames.Interaction, {
+      screen: ScreenNames.eId,
       params: {
-        mode: AusweisPasscodeMode.PUK,
-        flow: AusweisFlow.unlock,
-        handlers: {
-          handlePinRequest: () => {
-            handleShowCardLockResult(CardInfoMode.unblocked)
+        screen: eIDScreens.EnterPIN,
+        params: {
+          mode: AusweisPasscodeMode.PUK,
+          flow: AusweisFlow.unlock,
+          handlers: {
+            handlePinRequest: () => {
+              handleShowCardLockResult(CardInfoMode.unblocked)
+            },
           },
         },
       },
@@ -88,7 +91,7 @@ export const AusweisIdentity = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelFlow)
+          showScanner({ onDismiss: cancelFlow })
         }
       },
       handlePinRequest: (card: CardInfo) => {
@@ -126,6 +129,8 @@ export const AusweisIdentity = () => {
     })
   }
 
+  const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
+
   return (
     <View
       style={{ marginBottom: BP({ large: 0, default: 40 }) }}
@@ -149,11 +154,15 @@ export const AusweisIdentity = () => {
         <JoloText kind={JoloTextKind.title} weight={JoloTextWeight.regular}>
           {t('AusweisIdentity.header')}
         </JoloText>
-        <JoloText
-          size={JoloTextSizes.mini}
-          customStyles={{ marginTop: 8, marginHorizontal: 16 }}
-        >
+        <JoloText size={JoloTextSizes.mini} customStyles={{ marginTop: 8 }}>
           {t('AusweisIdentity.subheader')}
+          <JoloText
+            onPress={handleMoreInfo}
+            size={JoloTextSizes.mini}
+            color={Colors.activity}
+          >
+            {` ${t('General.moreInfo')}...`}
+          </JoloText>
         </JoloText>
 
         <View style={styles.btnContainer}>
@@ -161,6 +170,7 @@ export const AusweisIdentity = () => {
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleCompatibilityCheck}
+            disabled={Platform.OS === 'ios' && shouldDisableUnlock}
           >
             {t('AusweisIdentity.compatibilityBtn')}
           </Btn>
@@ -175,6 +185,7 @@ export const AusweisIdentity = () => {
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleUnlockCard}
+            disabled={shouldDisableUnlock}
           >
             {t('AusweisIdentity.unlockBtn')}
           </Btn>
@@ -212,7 +223,7 @@ const styles = StyleSheet.create({
     marginVertical: 1,
   },
   btnContainer: {
-    marginTop: BP({ default: 28, large: 84 }),
+    marginTop: BP({ default: 28, large: 42 }),
     paddingVertical: 8,
   },
 })

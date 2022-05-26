@@ -13,6 +13,7 @@ const ScreenHeader: React.FC<PropsI> = ({ title, subtitle }) => {
   return (
     <View>
       <JoloText
+        testID="title"
         kind={JoloTextKind.title}
         size={JoloTextSizes.middle}
         weight={JoloTextWeight.regular}
@@ -21,6 +22,7 @@ const ScreenHeader: React.FC<PropsI> = ({ title, subtitle }) => {
         {title}
       </JoloText>
       <JoloText
+        testID="subtitle"
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.middle}
         color={Colors.white70}

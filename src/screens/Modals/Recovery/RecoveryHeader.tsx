@@ -50,7 +50,7 @@ const RecoveryHeader: React.FC<RecoveryHeaderI> = memo(
                   kind={JoloTextKind.title}
                   size={JoloTextSizes.middle}
                   weight={JoloTextWeight.regular}
-                  key={seedKey + idx}
+                  key={`${seedKey}${idx}`}
                   color={
                     currentWordIdx === 12
                       ? Colors.success

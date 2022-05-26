@@ -80,7 +80,7 @@
         "phoneNumberLabel": "Telefonnummer",
         "addressLabel": "Anschrift \n",
         "addClaimBtn": "Neu Hinzufügen",
-        "attributesMissingInfo": "Ihre Daten sind noch nicht vollständig.\nErgänzen Sie diese für die zukünftigen Anwendungen.",
+        "credentialsDescription": "Verwalten Sie ihre wichtigsten Kontaktinformationen an einem Ort. Zu einem späteren Zeitpunkt können Sie diese Daten mit einem Klick teilen und Formulare ohne zusätzlichem Aufwand ausfüllen.",
         "headerAusweis": "Ihre eID",
         "headerCredentials": "Nachweise"
     },
@@ -171,7 +171,8 @@
         "cardInfoHeader": "Enthaltene Information",
         "confirmBtn": "Akzeptieren",
         "acceptBtn": "Akzeptieren",
-        "cardNoPreview": "Es können keine Informationen angezeigt werden"
+        "cardNoPreview": "Es können keine Informationen angezeigt werden",
+        "nrOfFieldsLeft": "+${nr} mehr"
     },
     "Toasts": {
         "reportBtn": "Fehler Melden",
@@ -207,16 +208,18 @@
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Fertig",
         "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
-        "copied": "",
+        "copied": "Einfügen",
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
         "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
-        "interactionSuccessRedirectTitle": "Erfolg",
-        "interactionSuccessRedirectMsg": "Kehren Sie hier zurück",
-        "interactionSuccessRedirectBtn": "Zurückkehren"
+        "refreshTitle": "Fertig!",
+        "refreshMsg": "Bitte kehren Sie zu ${serviceName} zurück, um fortzufahren."
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
-        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?"
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
+        "redirectTitle": "Fertig!",
+        "redirectDescription": "${serviceName} leitet Sie zu einem Dienst oder einer Anwendung außerhalb von SmartWallet weiter.",
+        "redirectBtn": "Weiter"
     },
     "Documents": {
         "documentsTab": "Dokumente",
@@ -405,7 +408,8 @@
     },
     "General": {
         "unknown": "Unbekannt",
-        "anonymous": "Anonym"
+        "anonymous": "Anonym",
+        "moreInfo": "Mehr Informationen"
     },
     "Authentication": {
         "header": "Bist du es wirklich?",
@@ -462,7 +466,7 @@
         "addressVerification": "Adressnachweis",
         "canAllowed": "CAN erlaubt",
         "pinManagement": "PIN verwalten",
-        "header": ""
+        "header": "Eingehende eID Anfrage"
     },
     "AusweisLostPin": {
         "title": "Wie kann ich den Kartenzugriff wiederherstellen?",
@@ -494,7 +498,7 @@
     },
     "AusweisPasscode": {
         "authPinHeader": "PIN eingeben",
-        "pinForgotBtn": "",
+        "pinForgotBtn": "Wenn Sie Ihre PIN vergessen oder noch nicht aktiviert haben, <1>klicken Sie hier.</1>",
         "transportPinHeader": "5-stelllige PIN eingeben",
         "transportPinBtn": "Wo kann ich das finden?",
         "canHeader": "CAN eingeben",
@@ -514,26 +518,28 @@
     },
     "AusweisIdentity": {
         "header": "Online-Ausweisfunktion",
-        "subheader": "Nutzen Sie ihre Online-Ausweisfunktion um sich bei Online Diensten auszuweisen.",
+        "subheader": "Dies ist ein Early-Access-Zugang zur online Version der Deutschen Digitalen Identität. Es ist ausschließlich Nutzern zugänglich, die am Pilotprojekt \"Schaufenster Sichere Digitale Identitäten\" teilnehmen.",
         "compatibilityBtn": "Kompabilitätstest",
         "changePinBtn": "PIN ändern",
         "unlockBtn": "Karte entsperren",
-        "ausweisBadge": "Online-Ausweisfunktion"
+        "ausweisBadge": "Online-Ausweisfunktion",
+        "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID-PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
+        "moreInfoHeader": "Mehr Informationen"
     },
     "AusweisChangePin": {
-        "transportPinHeader": "",
-        "transportPinSubheader": "",
-        "transportPinBtn": "",
-        "pinHeader": "",
-        "pinSubheader": "",
-        "pinBtn": "",
-        "forgotHeader": "",
-        "forgotSubheader": ""
+        "transportPinHeader": "eID PIN einrichten",
+        "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport-PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
+        "transportPinBtn": "eID PIN einrichten",
+        "pinHeader": "6-stellige eID PIN ändern",
+        "pinSubheader": "Wenn Sie bereits eine 6-stellige PIN festgelegt haben, können Sie diese hier ändern.",
+        "pinBtn": "PIN ändern",
+        "forgotHeader": "Haben Sie Ihre eID PIN vergessen?",
+        "forgotSubheader": "Wenn Sie Ihre eID-PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
     },
     "AusweisPinInfo": {
         "header": "PIN Informationen",
-        "description": "",
-        "btn": ""
+        "description": "Wählen Sie für die 6-stellige eID-PIN eine Zahlenkombination, die nicht leicht zu erraten ist.\n\nBei erstmaliger PIN-Änderung verwenden Sie bitte die fünfstellige Transport-PIN. Die Transport-PIN finden Sie im Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie mit der fünfstelligen Transport-PIN die Online-eID-Funktion nicht nutzen können. Eine Änderung auf eine 6-stellige PIN ist zwingend erforderlich.",
+        "btn": "Zu den eID PIN Einstellungen"
     },
     "AusweisScanner": {
         "header": "Bereit zu scannen",
@@ -555,7 +561,7 @@
     },
     "AusweisPukInfo": {
         "header": "PUK Nummer Info",
-        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstelligev Ausweis PIN ist zwingend erforderlich."
+        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige Ausweis PIN ist zwingend erforderlich."
     },
     "AusweisUnlock": {
         "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",
@@ -570,5 +576,8 @@
     },
     "Wallet": {
         "prepareWallet": "Ihr Wallet wird vorbereitet"
+    },
+    "Dashboard": {
+        "header": "Jolocom WebAgent"
     }
 }

@@ -80,7 +80,7 @@
         "phoneNumberLabel": "Phone number",
         "addressLabel": "Address",
         "addClaimBtn": "Add new one",
-        "attributesMissingInfo": "Your info is quite empty\nFill it in for the future cases",
+        "credentialsDescription": "Manage your most important contact data in one place. Later on, you will be able to share this data in one click and fill in forms with no extra effort.",
         "headerAusweis": "Your eID",
         "headerCredentials": "Personal Info"
     },
@@ -171,7 +171,8 @@
         "cardInfoHeader": "Included info",
         "confirmBtn": "Accept",
         "acceptBtn": "Accept",
-        "cardNoPreview": "No info can be previewed"
+        "cardNoPreview": "No info can be previewed",
+        "nrOfFieldsLeft": "+${nr} more"
     },
     "Toasts": {
         "reportBtn": "Report",
@@ -210,13 +211,15 @@
         "copied": "Copied",
         "ausweisDeactivatedCardTitle": "Your card is deactivated",
         "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
-        "interactionSuccessRedirectTitle": "Great success!",
-        "interactionSuccessRedirectMsg": "You should return back to the service",
-        "interactionSuccessRedirectBtn": "Return"
+        "refreshTitle": "All done here!",
+        "refreshMsg": "Please return to ${serviceName} to proceed."
     },
     "Interaction": {
         "cancelBtn": "Ignore",
-        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data."
+        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
+        "redirectTitle": "We're all done!",
+        "redirectDescription": "${serviceName} is redirecting you to a service or application outside of the SmartWallet",
+        "redirectBtn": "Follow link"
     },
     "Documents": {
         "documentsTab": "Documents",
@@ -405,7 +408,8 @@
     },
     "General": {
         "unknown": "Unknown",
-        "anonymous": "Anonymous"
+        "anonymous": "Anonymous",
+        "moreInfo": "More info"
     },
     "Authentication": {
         "header": "Is it really you?",
@@ -514,11 +518,13 @@
     },
     "AusweisIdentity": {
         "header": "German eID",
-        "subheader": "Use your digital identity to  identify yourself with various online servicess",
+        "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in Pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\".",
         "compatibilityBtn": "Compatibility check",
         "changePinBtn": "Change your PIN",
         "unlockBtn": "Unlock blocked card",
-        "ausweisBadge": "Online-Ausweisfunktion"
+        "ausweisBadge": "Online-Ausweisfunktion",
+        "moreInfoDescription": "SmartWallet allows you to use the German eID function (e.g. with the german electronic residence permit) without having to go through other apps. \n\nIf the German eID function is required during a registration process, the SmartWallet will prompt you to hold your eID card up to the NFC reader on your smartphone and enter your 6-digit eID PIN. You also have the option to specify which data you want to share and to check with whom you share it. In addition, you can change your transport PIN to unlock the eID card, change your eID card PIN and unlock the eID card if necessary.\n\nFor the time being, the German eID function is only available to participants of the pilot applications from the research program \"Secure Digital Identities\" of the federal Ministry of Economic Affairs and Climate Action. Furthermore, Jolocom is involved in the ONCE, ID-Ideal and SDIKA projects. The German eID function was implemented on the basis of the AusweisApp2 SDK and uses its existing infrastructure (Online-Ausweisfunktion).",
+        "moreInfoHeader": "German eID Info"
     },
     "AusweisChangePin": {
         "transportPinHeader": "Set up your eID PIN",
@@ -570,5 +576,8 @@
     },
     "Wallet": {
         "prepareWallet": "Preparing your wallet"
+    },
+    "Dashboard": {
+        "header": "Jolocom WebAgent"
     }
 }

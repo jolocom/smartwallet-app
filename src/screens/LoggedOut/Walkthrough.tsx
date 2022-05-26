@@ -144,7 +144,7 @@ const Walkthrough: React.FC = () => {
         renderPagination={renderPagination}
       >
         {walkthroughData.map((slide, idx) => (
-          <React.Fragment key={slide.header + idx}>
+          <React.Fragment key={`${slide.header}${idx}`}>
             <ImageBackground
               key={idx}
               style={styles.background}
@@ -200,10 +200,6 @@ const Walkthrough: React.FC = () => {
 const styles = StyleSheet.create({
   background: { ...(StyleSheet.absoluteFill as {}), top: -20 },
   consistentContainer: {
-    paddingHorizontal: '5%',
-  },
-  contentContainer: {
-    alignItems: 'center',
     paddingHorizontal: '5%',
   },
   dotContainer: {

@@ -5,7 +5,7 @@ import { FingerprintIcon, FaceIdIcon } from '~/assets/svg'
 import Ripple from '~/components/Ripple'
 
 import { Colors } from '~/utils/colors'
-import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
+import { BiometryTypes } from '~/screens/Modals/WalletAuthentication/module/walletAuthTypes'
 import LinearGradient from 'react-native-linear-gradient'
 
 interface PropsI {

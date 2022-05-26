@@ -109,45 +109,28 @@ exports[`Ausweis card info screen is dsplayed according to the designs card can 
               }
             >
               AusweisUnlock.standaloneUnblockHeader{"screen":"AusweisUnlock.identityScreen"}
-              <View
-                accessible={true}
-                focusable={true}
-                onClick={[Function]}
-                onResponderGrant={[Function]}
-                onResponderMove={[Function]}
-                onResponderRelease={[Function]}
-                onResponderTerminate={[Function]}
-                onResponderTerminationRequest={[Function]}
-                onStartShouldSetResponder={[Function]}
+              <Text
+                onPress={[Function]}
                 style={
-                  Object {
-                    "opacity": 1,
-                  }
+                  Array [
+                    Object {
+                      "paddingTop": undefined,
+                      "textAlign": "center",
+                    },
+                    Object {
+                      "color": "rgba(255,255,255,0.85)",
+                      "fontFamily": "TTCommons-Medium",
+                      "fontSize": 28,
+                      "letterSpacing": 0,
+                      "lineHeight": 32,
+                    },
+                    Object {
+                      "alignSelf": "center",
+                      "textDecorationLine": "underline",
+                    },
+                  ]
                 }
-                testID="identity-screen-link"
-              >
-                <Text
-                  style={
-                    Array [
-                      Object {
-                        "paddingTop": undefined,
-                        "textAlign": "center",
-                      },
-                      Object {
-                        "color": "rgba(255,255,255,0.85)",
-                        "fontFamily": "TTCommons-Medium",
-                        "fontSize": 28,
-                        "letterSpacing": 0,
-                        "lineHeight": 32,
-                      },
-                      Object {
-                        "alignSelf": "center",
-                        "textDecorationLine": "underline",
-                      },
-                    ]
-                  }
-                />
-              </View>
+              />
             </Text>
           </View>
         </View>

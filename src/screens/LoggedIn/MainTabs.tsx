@@ -3,29 +3,27 @@ import {
   createBottomTabNavigator,
   BottomTabBarProps,
 } from '@react-navigation/bottom-tabs'
-
 import { ScreenNames } from '~/types/screens'
 import History from './History'
 import Documents from './Documents'
 import BottomBar from '~/components/BottomBar'
 import Settings from './Settings'
 import Identity from './Identity'
-import { CredentialCategories } from '~/types/credentials'
 import useTranslation from '~/hooks/useTranslation'
-import {
-  useDeeplinkInteractions,
-  useInteractionStart,
-} from '~/hooks/interactions/handlers'
+import { useInteractionStart } from '~/hooks/interactions/handlers'
 import { useNavigation } from '@react-navigation/core'
 import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
-import { getInteractionType } from '~/modules/interaction/selectors'
-import { getAusweisInteractionDetails } from '~/modules/ausweis/selectors'
+import { useDeeplinkInteractions } from '~/hooks/deeplinks'
+import {
+  getInteractionType,
+  getAusweisInteractionDetails,
+} from '~/modules/interaction/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
-  [ScreenNames.Documents]: { initialTab?: CredentialCategories }
+  [ScreenNames.Documents]: undefined
   [ScreenNames.History]: undefined
   [ScreenNames.Settings]: undefined
 }
@@ -44,15 +42,21 @@ const MainTabs = () => {
   useDeeplinkInteractions()
   useInteractionEvents(showInteraction)
 
+  // Show an interaction sheet declaratively by
+  // observing store changes
   useEffect(() => {
     if (!isAppLocked && isInteracting) {
-      navigation.navigate(ScreenNames.InteractionFlow)
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.InteractionFlow,
+      })
     }
   }, [isInteracting, isAppLocked])
 
   useEffect(() => {
     if (!isAppLocked && isAusweisInteracting) {
-      navigation.navigate(ScreenNames.eId)
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+      })
     }
   }, [JSON.stringify(isAusweisInteracting), isAppLocked])
 

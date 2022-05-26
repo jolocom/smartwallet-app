@@ -54,14 +54,15 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
   // this will make a delay so it will be possible to see digits and not only asterics
   useEffect(() => {
     let isCurrent = true
-    const updateSelectedIndex = async () => {
+
+    if (pin.length > 1) {
       // it is implemented with delay to be able to preview digits and not seeing asterics straight away
       setTimeout(() => {
         if (isCurrent) {
           setSelectedIndex(() => {
             if (digits.length < passcodeCells.length) {
               return digits.length
-            } else if (digits.length === length) {
+            } else if (digits.length === 4) {
               return -1
             } else {
               return passcodeCells.length - 1
@@ -70,11 +71,6 @@ const PasscodeInput: IPasscodeComposition['Input'] = ({
         }
       }, 100)
     }
-
-    if (pin.length > 1) {
-      updateSelectedIndex()
-    }
-
     return () => {
       isCurrent = false
     }

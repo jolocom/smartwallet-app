@@ -23,7 +23,7 @@ export const useCheckNFC = () => {
     }
   }
 
-  return (onSuccess: () => void | PromiseLike<void>) =>
+  return (onSuccess: () => void | Promise<void>) =>
     nfcCheck()
       .then(onSuccess)
       .catch((e) => {

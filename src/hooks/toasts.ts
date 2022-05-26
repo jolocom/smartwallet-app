@@ -30,8 +30,9 @@ export const useToasts = () => {
     dispatch(scheduleToast(createStickyToast(toast)))
   }
 
-  const scheduleErrorInfo = (error: Error, config?: Partial<ToastBody>) =>
-    scheduleWarning({
+  const scheduleErrorInfo = (error: Error, config?: Partial<ToastBody>) => {
+    console.warn(error)
+    scheduleInfo({
       title: t('Toasts.errorWarningTitle'),
       message: t('Toasts.errorWarningMsg'),
       interact: {
@@ -42,9 +43,11 @@ export const useToasts = () => {
       },
       ...config,
     })
+  }
 
-  const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) =>
-    scheduleWarning({
+  const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) => {
+    console.warn(error)
+    return scheduleWarning({
       title: t('Toasts.errorWarningTitle'),
       message: t('Toasts.errorWarningMsg'),
       interact: {
@@ -55,6 +58,7 @@ export const useToasts = () => {
       },
       ...config,
     })
+  }
 
   const removeToast = (toast: Toast) => {
     dispatch(removeToastAndUpdate(toast))

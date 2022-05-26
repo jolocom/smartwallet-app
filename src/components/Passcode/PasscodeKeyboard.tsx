@@ -5,15 +5,10 @@ import { usePasscode } from './context'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind } from '../JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import {
-  BackArrowIcon,
-  FaceIdIcon,
-  FingerprintIcon,
-  KeyboardEraseIcon,
-} from '~/assets/svg'
+import { FaceIdIcon, FingerprintIcon, KeyboardEraseIcon } from '~/assets/svg'
 import BP from '~/utils/breakpoints'
 import { IPasscodeKeyboardProps } from './types'
-import { BiometryTypes } from '~/screens/Modals/DeviceAuthentication/module/deviceAuthTypes'
+import { BiometryTypes } from '~/screens/Modals/WalletAuthentication/module/walletAuthTypes'
 
 interface NumberButtonProps {
   value: number

@@ -30,7 +30,7 @@ export const getAllValuesForType = (type: AttributeTypes) =>
     return attributes[type]
       ? attributes[type]?.reduce<{ id: string; value: string }[]>((acc, v) => {
           const value = Object.keys(v.value).reduce(
-            (concatValue, e) => concatValue + v.value[e as ClaimKeys],
+            (concatValue, e) => `${concatValue}${v.value[e as ClaimKeys]}`,
             '',
           )
           acc = [...acc, { id: v.id, value }]

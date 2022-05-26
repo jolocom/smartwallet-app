@@ -30,27 +30,23 @@ import {
   screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalOptions,
-  transparentModalFadeOptions,
   screenDisableGestures,
+  transparentModalFadeOptions,
 } from '~/utils/screenSettings'
 import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
-import eID from './eID'
-import { AusweisCardInfoParams } from './eID/types'
-import InteractionFlow from '../Modals/Interaction/InteractionFlow'
-import Scanner from '../Modals/Interaction/Scanner'
+import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { Colors } from '~/utils/colors'
-import AusweisCardInfo from './eID/components/AusweisCardInfo'
+import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import { setTermsConsentVisibility } from '~/modules/account/actions'
-import { PersonalizationInputRequest } from 'react-native-mdl'
-import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
-import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
-import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
-import useErrors from '~/hooks/useErrors'
-import { useToasts } from '~/hooks/toasts'
+import Interaction from '../Modals/Interaction'
+import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
+import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
+import { CardTest } from './Settings/Development/CardsTest'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -77,7 +73,8 @@ const TransparentModals = () => (
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
-  [ScreenNames.eId]: undefined
+  [ScreenNames.AusweisChangePin]: undefined
+  [ScreenNames.AusweisMoreInfo]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
   [ScreenNames.MnemonicPhrase]: undefined
@@ -92,12 +89,15 @@ export type MainStackParamList = {
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
   [ScreenNames.FieldDetails]: {
-    fields: IField[]
+    fields: DisplayVal[]
     title?: string
     photo?: string
     backgroundColor?: Colors
+    issuerIcon?: string
+    contextIcons?: string[]
   }
   // DEV
+  [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
   [ScreenNames.ButtonsTest]: undefined
   [ScreenNames.CollapsibleTest]: undefined
@@ -110,14 +110,6 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
-  [ScreenNames.Scanner]: undefined
-  [ScreenNames.InteractionFlow]: undefined
-
-  // Driving License
-  [ScreenNames.DrivingLicenseForm]: {
-    requests: PersonalizationInputRequest[]
-  }
-  [ScreenNames.DrivingLicenseShare]: undefined
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -222,6 +214,7 @@ const Main: React.FC = () => {
             name={ScreenNames.LoaderTest}
             component={LoaderTest}
           />
+          <MainStack.Screen name={ScreenNames.CardsTest} component={CardTest} />
           <MainStack.Screen
             name={ScreenNames.NotificationsTest}
             component={NotificationsTest}
@@ -243,49 +236,33 @@ const Main: React.FC = () => {
 
       {/* Modals -> Start */}
       <MainStack.Screen
-        options={transparentModalFadeOptions}
-        name={ScreenNames.InteractionFlow}
-        component={InteractionFlow}
-      />
-      <MainStack.Screen
-        name={ScreenNames.Scanner}
-        component={Scanner}
-        options={{
-          ...screenTransitionSlideFromBottom,
-        }}
-      />
-      <MainStack.Screen
-        name={ScreenNames.eId}
-        component={eID}
-        options={{
-          ...transparentModalFadeOptions,
-          ...screenDisableGestures,
-        }}
-      />
-      <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
-        options={screenTransitionFromBottomDisabledGestures}
+        options={screenTransitionSlideFromBottom}
+      />
+      <MainStack.Screen
+        name={ScreenNames.Interaction}
+        component={Interaction}
+        options={{
+          ...screenDisableGestures,
+          ...transparentModalFadeOptions,
+        }}
+      />
+      <MainStack.Screen
+        name={ScreenNames.AusweisChangePin}
+        component={AusweisChangePin}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.AusweisMoreInfo}
+        component={AusweisMoreInfo}
+        options={screenTransitionSlideFromRight}
       />
       <MainStack.Screen
         name={ScreenNames.CredentialForm}
         component={CredentialForm}
         options={screenTransitionFromBottomDisabledGestures}
       />
-
-      {/* Driving License */}
-      <MainStack.Screen
-        name={ScreenNames.DrivingLicenseForm}
-        component={DrivingLicenseForm}
-        options={screenTransitionFromBottomDisabledGestures}
-      />
-
-      <MainStack.Screen
-        name={ScreenNames.DrivingLicenseShare}
-        component={DrivingLicenseShare}
-        options={screenTransitionFromBottomDisabledGestures}
-      />
-
       {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
       <MainStack.Screen
         name={ScreenNames.PinRecoveryInstructions}
@@ -306,7 +283,7 @@ const Main: React.FC = () => {
           cardStyle: {
             backgroundColor: 'transparent',
           },
-          ...screenTransitionSlideFromBottom,
+          ...transparentModalFadeOptions,
         }}
       />
       {/* Modals -> End */}

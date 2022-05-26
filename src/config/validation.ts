@@ -6,7 +6,7 @@ import { InputValidation, regexValidations } from '~/utils/stringUtils'
 yup.addMethod<ObjectSchema<any>>(
   yup.object,
   'atLeastOneOf',
-  function (list: string[], message) {
+  function (list: string[], message: string) {
     return this.test({
       message,
       test: function (values) {

@@ -5,14 +5,7 @@ export const debugView = () =>
   __DEV__
     ? {
         borderWidth: 1,
-        borderColor:
-          'rgb(' +
-          Math.floor(Math.random() * 256) +
-          ',' +
-          Math.floor(Math.random() * 256) +
-          ',' +
-          Math.floor(Math.random() * 256) +
-          ')',
+        borderColor: `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
       }
     : {}
 
