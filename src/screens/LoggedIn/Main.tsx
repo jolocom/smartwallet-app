@@ -48,6 +48,9 @@ import { setTermsConsentVisibility } from '~/modules/account/actions'
 import { PersonalizationInputRequest } from 'react-native-mdl'
 import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
 import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
+import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
+import useErrors from '~/hooks/useErrors'
+import { useToasts } from '~/hooks/toasts'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -122,6 +125,12 @@ const MainStack = createStackNavigator<MainStackParamList>()
 const Main: React.FC = () => {
   const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
   const dispatch = useDispatch()
+  const { initDrivingLicense } = useDrivingLicense()
+  const { scheduleErrorWarning } = useToasts()
+
+  useEffect(() => {
+    initDrivingLicense().catch(scheduleErrorWarning)
+  }, [])
 
   useEffect(() => {
     if (isTermsConsentOutdated) {

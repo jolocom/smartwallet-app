@@ -60,7 +60,6 @@ export const useWalletInit = () => {
   const dispatch = useDispatch()
   const { checkConsent } = useTermsConsent()
   const secureStorage = useSecureStorage()
-  const { initDrivingLicense } = useDrivingLicense()
 
   return async (agent: Agent) => {
     // NOTE: Checking whether the user accepted the newest Terms of Service conditions
@@ -81,8 +80,6 @@ export const useWalletInit = () => {
           : ScreenshotManager.enable()
         dispatch(setMakingScreenshotDisability(isMakingScreenshotDisabled))
       }
-
-      await initDrivingLicense()
 
       const idw = await agent.loadIdentity()
 

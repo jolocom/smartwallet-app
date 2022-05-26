@@ -178,7 +178,7 @@ export const DocumentList = () => {
     [JSON.stringify(categories)],
   )
 
-  const {drivingLicense} = useDrivingLicense()
+  const { drivingLicense } = useDrivingLicense()
   console.log(JSON.stringify(drivingLicense, null, 2))
 
   const onHandleMore = useHandleMorePress()
@@ -194,14 +194,41 @@ export const DocumentList = () => {
         }}
         testID="document-cards-container"
       >
-        {!documents.length && !drivingLicense ? (
-          <ScreenPlaceholder
-            title={t('Documents.placeholderHeader')}
-            description={t('Documents.documentsPlaceholderSubheader')}
-          />
-        ) : (
-          <CardList>
-              <View style={[styles.sectionContainer, {width: '100%', alignItems: 'center'}]}>
+        <CardList>
+          <View
+            style={[
+              styles.sectionContainer,
+              { width: '100%', alignItems: 'center' },
+            ]}
+          >
+            <ScreenContainer.Padding>
+              <JoloText
+                size={JoloTextSizes.mini}
+                color={Colors.white90}
+                customStyles={{
+                  textAlign: 'left',
+                  marginBottom: BP({ default: 30, xsmall: 16 }),
+                }}
+              >
+                {'Driving License'}
+              </JoloText>
+            </ScreenContainer.Padding>
+            <View style={{ marginLeft: -12 }}>
+              {drivingLicense ? (
+                <DrivingLicenseCard drivingLicense={drivingLicense} />
+              ) : (
+                <DrivingLicensePersonalization />
+              )}
+            </View>
+          </View>
+          {documents.map((d) => {
+            const { credentials, value } = d as
+              | CredentialsByType<DisplayCredentialDocument>
+              | CredentialsByIssuer<DisplayCredentialDocument>
+
+            const credentialUIType = getCredentialDisplayType(value, t)
+            return (
+              <View style={styles.sectionContainer}>
                 <ScreenContainer.Padding>
                   <JoloText
                     size={JoloTextSizes.mini}
@@ -211,72 +238,43 @@ export const DocumentList = () => {
                       marginBottom: BP({ default: 30, xsmall: 16 }),
                     }}
                   >
-                    {"Driving License"}
+                    {`${credentialUIType}  • ${credentials.length}`}
                   </JoloText>
                 </ScreenContainer.Padding>
-                <View style={{marginLeft: -12}}>
-                  {drivingLicense ? (
-                    <DrivingLicenseCard drivingLicense={drivingLicense} />
-                  ) : (
-                    <DrivingLicensePersonalization />
+                <AdoptedCarousel
+                  activeSlideAlignment="center"
+                  customStyles={{ marginLeft: -12 }}
+                  data={credentials}
+                  renderItem={({ item: c, index }) => (
+                    <DocumentSectionDocumentCard
+                      key={`${index}-${c.id}`}
+                      credentialName={c.name || t('General.unknown')}
+                      holderName={c.holderName || t('General.anonymous')}
+                      fields={getOptionalFields(c)}
+                      highlight={c.id}
+                      photo={c.photo}
+                      onHandleMore={() =>
+                        onHandleMore(
+                          c.id,
+                          c.name,
+                          [
+                            {
+                              key: 'subjectName',
+                              label: t('Documents.subjectNameField'),
+                              value: c.holderName || t('General.anonymous'),
+                            },
+                            ...getOptionalFields(c),
+                          ],
+                          c.photo,
+                        )
+                      }
+                    />
                   )}
-                </View>
+                />
               </View>
-            {documents.map((d) => {
-              const { credentials, value } = d as
-                | CredentialsByType<DisplayCredentialDocument>
-                | CredentialsByIssuer<DisplayCredentialDocument>
-
-              const credentialUIType = getCredentialDisplayType(value, t)
-              return (
-                <View style={styles.sectionContainer}>
-                  <ScreenContainer.Padding>
-                    <JoloText
-                      size={JoloTextSizes.mini}
-                      color={Colors.white90}
-                      customStyles={{
-                        textAlign: 'left',
-                        marginBottom: BP({ default: 30, xsmall: 16 }),
-                      }}
-                    >
-                      {`${credentialUIType}  • ${credentials.length}`}
-                    </JoloText>
-                  </ScreenContainer.Padding>
-                  <AdoptedCarousel
-                    activeSlideAlignment="center"
-                    customStyles={{ marginLeft: -12 }}
-                    data={credentials}
-                    renderItem={({ item: c, index }) => (
-                      <DocumentSectionDocumentCard
-                        key={`${index}-${c.id}`}
-                        credentialName={c.name || t('General.unknown')}
-                        holderName={c.holderName || t('General.anonymous')}
-                        fields={getOptionalFields(c)}
-                        highlight={c.id}
-                        photo={c.photo}
-                        onHandleMore={() =>
-                          onHandleMore(
-                            c.id,
-                            c.name,
-                            [
-                              {
-                                key: 'subjectName',
-                                label: t('Documents.subjectNameField'),
-                                value: c.holderName || t('General.anonymous'),
-                              },
-                              ...getOptionalFields(c),
-                            ],
-                            c.photo,
-                          )
-                        }
-                      />
-                    )}
-                  />
-                </View>
-              )
-            })}
-          </CardList>
-        )}
+            )
+          })}
+        </CardList>
       </View>
       <View
         style={{
