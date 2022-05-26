@@ -215,6 +215,8 @@ PODS:
     - React-Core
   - react-native-encrypted-storage (4.0.2):
     - React-Core
+  - react-native-mdl (1.0.35):
+    - React
   - react-native-netinfo (6.2.1):
     - React-Core
   - react-native-nfc-manager (3.11.0):
@@ -579,6 +581,7 @@ SPEC CHECKSUMS:
   react-native-camera: eeb5b5f4ba4c1365fed3563af8a72007cbad7aab
   react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
   react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
+  react-native-mdl: 381ea30dc3320a3dd3a188b14a4ce25e69f76f42
   react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
   react-native-nfc-manager: e74f24f05274fbfdfe51e46e72d62d5ae460c724
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846

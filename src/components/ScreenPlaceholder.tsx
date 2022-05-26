@@ -10,21 +10,28 @@ interface Props {
   description: string
 }
 
-const ScreenPlaceholder: React.FC<Props> = ({ title, description }) => {
+const ScreenPlaceholder: React.FC<Props> = ({
+  title,
+  description,
+  children,
+}) => {
   return (
     <View style={styles.container}>
-      <JoloText testID="title" kind={JoloTextKind.title}>
-        {title}
-      </JoloText>
-      <JoloText
-        testID="description"
-        size={JoloTextSizes.mini}
-        color={Colors.white50}
-        weight={JoloTextWeight.regular}
-        customStyles={{ marginTop: 12, paddingHorizontal: 32 }}
-      >
-        {description}
-      </JoloText>
+      <View style={{ width: '100%' }}>
+        <JoloText testID="title" kind={JoloTextKind.title}>
+          {title}
+        </JoloText>
+        <JoloText
+          testID="description"
+          size={JoloTextSizes.mini}
+          color={Colors.white50}
+          weight={JoloTextWeight.regular}
+          customStyles={{ marginVertical: 12, paddingHorizontal: 32 }}
+        >
+          {description}
+        </JoloText>
+      </View>
+      {children}
     </View>
   )
 }

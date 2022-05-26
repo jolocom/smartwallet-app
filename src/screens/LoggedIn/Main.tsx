@@ -47,6 +47,11 @@ import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChange
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
 import { CardTest } from './Settings/Development/CardsTest'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
+import { useToasts } from '~/hooks/toasts'
+import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
+import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
+import { PersonalizationInputRequest } from 'react-native-mdl'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -110,6 +115,11 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
+
+  // Driving License
+
+  [ScreenNames.DrivingLicenseForm]: { requests: PersonalizationInputRequest[] }
+  [ScreenNames.DrivingLicenseShare]: undefined
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -193,6 +203,16 @@ const Main: React.FC = () => {
         component={DragToConfirm}
       />
 
+      {/* Driving License screens */}
+
+      <MainStack.Screen
+        name={ScreenNames.DrivingLicenseForm}
+        component={DrivingLicenseForm}
+      />
+      <MainStack.Screen
+        name={ScreenNames.DrivingLicenseShare}
+        component={DrivingLicenseShare}
+      />
       {__DEV__ && (
         <>
           <MainStack.Screen

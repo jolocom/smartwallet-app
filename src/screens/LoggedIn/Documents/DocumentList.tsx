@@ -19,6 +19,9 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { DisplayCredentialDocument } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
+import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
+import { DrivingLicensePersonalization } from './DrivingLicenseDemo/DrivingLicensePersonalization'
+import { DrivingLicenseCard } from './DrivingLicenseDemo'
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()
@@ -100,6 +103,7 @@ export const DocumentList = () => {
   const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
   const documents = useSelector(getAllDocuments)
   const redirect = useRedirect()
+  const { drivingLicense } = useDrivingLicense()
 
   const onHandleMore = useHandleMorePress()
 
@@ -164,13 +168,23 @@ export const DocumentList = () => {
         }}
         testID="document-cards-container"
       >
-        {!documents.length ? (
+        {!documents.length && !drivingLicense ? (
           <ScreenPlaceholder
             title={t('Documents.placeholderHeader')}
             description={t('Documents.documentsPlaceholderSubheader')}
-          />
+          >
+            <DrivingLicensePersonalization />
+          </ScreenPlaceholder>
         ) : (
           <CardList>
+            <ScreenContainer.Padding>
+              <View style={{ alignItems: 'center' }}>
+                <DrivingLicensePersonalization />
+                {drivingLicense && (
+                  <DrivingLicenseCard drivingLicense={drivingLicense} />
+                )}
+              </View>
+            </ScreenContainer.Padding>
             {documents.map((c, index) => {
               const hasImageFields = c.properties.some(
                 (prop) => prop.mime_type === ClaimMimeType.image_png,
