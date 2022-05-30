@@ -32,6 +32,16 @@
 				<string>jolocomwallet</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.jolocom.wallet</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>iso23220-3-sed</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -52,6 +62,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>The SmartWallet will use Bluetooth to allow sharing the Driving License</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera will be used to scan QR Codes and interact with services</string>
 	<key>NSFaceIDUsageDescription</key>
@@ -76,8 +88,6 @@
 	<false/>
 	<key>branch_key</key>
 	<string>$(BRANCH_LIVE_KEY)</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>The SmartWallet will use Bluetooth to allow sharing the Driving License</string>
 	<key>branch_universal_link_domains</key>
 	<array>
 		<string>$(BRANCH_URL)</string>

@@ -1,3 +1,4 @@
+import { LogBox } from 'react-native'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React from 'react'
@@ -24,6 +25,7 @@ const formatLabel = (key: string) => {
     .join(' ')
 }
 
+LogBox.ignoreAllLogs()
 export const DrivingLicenseCard: React.FC<{
   drivingLicense: DrivingLicenseData
 }> = ({ drivingLicense }) => {
@@ -76,6 +78,7 @@ export const DrivingLicenseCard: React.FC<{
     'https://media.istockphoto.com/vectors/guilloche-grid-template-to-protect-securities-certificates-banknotes-vector-id1072694792?k=20&m=1072694792&s=612x612&w=0&h=845q1ZACEp6wTAw7ia0hSsDfJC1cOalrtfBaPP9TwZw='
   const contextIcons = [
     'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2014/11/german_flag/15079489-2-eng-GB/German_flag_pillars.png',
+    'https://cdn.icon-icons.com/icons2/1694/PNG/512/eueuropeanunionflag_111740.png',
   ]
   const detailsParams = {
     fields,

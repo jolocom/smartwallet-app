@@ -13,6 +13,10 @@ import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { useInteractionStart } from './interactions/handlers'
 import { useLoader } from './loader'
 import { useToasts } from './toasts'
+import { Linking } from 'react-native'
+import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
+import { useRedirect } from './navigation'
+import { ScreenNames } from '~/types/screens'
 
 export enum DeeplinkParams {
   redirectUrl = 'redirectUrl',
@@ -37,6 +41,8 @@ export const useDeeplinkInteractions = () => {
   const currentLanguage = useSelector(getCurrentLanguage)
   const dispatch = useDispatch()
   const isBranchSubscribed = useSelector(getIsBranchSubscribed)
+  const { personalizeLicense } = useDrivingLicense()
+  const redirect = useRedirect()
 
   // NOTE: for now we assume all the params come in as strings
   const getParamValue = (name: DeeplinkParams, params: BranchParams) => {
@@ -81,7 +87,28 @@ export const useDeeplinkInteractions = () => {
     }
   }
 
+  const handleDrivingLicensePersonalization = (qrCodeString: string) => {
+    if (qrCodeString.startsWith('iso23220-3-sed:')) {
+      personalizeLicense(qrCodeString, (requests) => {
+        redirect(ScreenNames.DrivingLicenseForm, { requests })
+      })
+    }
+  }
   useEffect(() => {
+    //NOTE: used for Driving Licenses
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDrivingLicensePersonalization(url)
+      }
+    })
+
+    Linking.addListener('url', (e) => {
+      console.log({ e })
+      if (e.data) {
+        handleDrivingLicensePersonalization(e.data)
+      }
+    })
+
     // TODO move somewhere
     branch.disableTracking(true)
     if (!isBranchSubscribed) {
@@ -123,5 +150,5 @@ export const useDeeplinkInteractions = () => {
         }
       })
     }
-  }, [currentLanguage])
+  }, [])
 }
