@@ -40,7 +40,7 @@ export enum Colors {
   bastille1 = '#161217',
   gravel = '#454146',
   jumbo = '#8a8a91',
-  success = '#5251c1',
+  success = '#7172FE',
   serenade = '#fff1e3',
   white = '#ffffff',
   white06 = 'rgba(255, 255, 255, 0.06)',
