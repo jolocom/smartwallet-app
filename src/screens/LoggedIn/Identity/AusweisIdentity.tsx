@@ -37,7 +37,9 @@ export const AusweisIdentity = () => {
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
 
   const handleCompatibilityCheck = () => {
-    checkNfcSupport(startCompatibilityCheck)
+    if (!shouldDisableUnlock) {
+      checkNfcSupport(startCompatibilityCheck)
+    }
   }
 
   const handleChangePin = () =>
@@ -122,11 +124,12 @@ export const AusweisIdentity = () => {
   }
 
   const handleUnlockCard = () => {
-    checkNfcSupport(() => {
-      setupUnlockCardHandlers()
-
-      startChangePin()
-    })
+    if (!shouldDisableUnlock) {
+      checkNfcSupport(() => {
+        setupUnlockCardHandlers()
+        startChangePin()
+      })
+    }
   }
 
   const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
@@ -170,7 +173,6 @@ export const AusweisIdentity = () => {
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleCompatibilityCheck}
-            disabled={Platform.OS === 'ios' && shouldDisableUnlock}
           >
             {t('AusweisIdentity.compatibilityBtn')}
           </Btn>
@@ -185,7 +187,6 @@ export const AusweisIdentity = () => {
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
             onPress={handleUnlockCard}
-            disabled={shouldDisableUnlock}
           >
             {t('AusweisIdentity.unlockBtn')}
           </Btn>
