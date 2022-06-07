@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View, TextStyle } from 'react-native'
-
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'

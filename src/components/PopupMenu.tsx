@@ -1,7 +1,6 @@
 import React from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
-
 import Block from './Block'
 import { Colors } from '~/utils/colors'
 import JoloText from './JoloText'
