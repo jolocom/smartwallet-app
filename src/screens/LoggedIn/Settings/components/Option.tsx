@@ -4,24 +4,19 @@ import {
   View,
   Platform,
   TouchableOpacity,
-  TextProps,
   TextStyle,
 } from 'react-native'
 import { CaretRight } from '~/assets/svg'
-import { IWithCustomStyle } from '~/components/Card/types'
+import { IWithCustomStyle } from '~/types/props'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-interface TitlePropsI {
+interface TitlePropsI extends IWithCustomStyle<TextStyle> {
   title: string | number
   color?: Colors
 }
-const Title: React.FC<TitlePropsI & IWithCustomStyle<TextStyle>> = ({
-  title,
-  color,
-  customStyles,
-}) => (
+const Title: React.FC<TitlePropsI> = ({ title, color, customStyles }) => (
   <JoloText
     kind={JoloTextKind.subtitle}
     size={JoloTextSizes.middle}
@@ -49,7 +44,7 @@ interface PropsI {
 }
 
 const Option: React.FC<PropsI> & {
-  Title: React.FC<TitlePropsI & IWithCustomStyle<TextStyle>>
+  Title: React.FC<TitlePropsI>
   RightIcon: React.FC
   IconContainer: React.FC
 } = ({ onPress, hasBorder = true, disabled = false, children }) => {
