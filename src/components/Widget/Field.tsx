@@ -28,7 +28,7 @@ export interface IWidgetField {
 }
 
 const FieldText: React.FC<
-  Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
+  Pick<IWidgetField, 'value' | 'color'> & IWithCustomStyle<TextStyle>
 > = ({ value, color = Colors.white90, customStyles = {} }) => {
   const renderText = (value: string) => (
     <JoloText
