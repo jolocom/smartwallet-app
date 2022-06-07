@@ -1,16 +1,24 @@
 import React from 'react'
-import { TouchableOpacityProps } from 'react-native'
-import { StyleSheet, ViewStyle, TouchableOpacity } from 'react-native'
+import { IWithCustomStyle } from '~/types/props'
+import {
+  TouchableOpacityProps,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 
-interface Props extends TouchableOpacityProps {
+interface Props extends TouchableOpacityProps, IWithCustomStyle {
   onPress: () => void
-  style?: ViewStyle
 }
 
-const IconBtn: React.FC<Props> = ({ style, onPress, children, ...props }) => {
+const IconBtn: React.FC<Props> = ({
+  customStyles,
+  onPress,
+  children,
+  ...props
+}) => {
   return (
     <TouchableOpacity
-      style={[styles.button, style]}
+      style={[styles.button, customStyles]}
       onPress={onPress}
       {...props}
     >
