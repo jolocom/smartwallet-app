@@ -8,7 +8,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 interface IWordPill {
-  customContainerStyles?: IWithCustomStyle
+  customContainerStyles?: IWithCustomStyle['customStyles']
   customTextStyles?: TextStyle
 }
 
