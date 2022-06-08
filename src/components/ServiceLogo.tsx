@@ -12,18 +12,20 @@ import { Colors } from '~/utils/colors'
 
 interface Props {
   source?: string
+  serviceUrl?: string
 }
 
-export const ServiceLogo: React.FC<Props> = ({ source }) => {
+export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
   const { scheduleErrorWarning } = useToasts()
 
   const handleRedirectToCounterparty = async () => {
     if (
       source &&
-      (source.startsWith('http://') || source.startsWith('https://'))
+      serviceUrl &&
+      (serviceUrl.startsWith('http://') || serviceUrl.startsWith('https://'))
     ) {
       try {
-        await Linking.openURL(source)
+        await Linking.openURL(serviceUrl)
       } catch (e) {
         scheduleErrorWarning(e as Error)
       }
