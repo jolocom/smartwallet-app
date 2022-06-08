@@ -45,7 +45,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
           }, 3000)
         })
       },
-      { showFailed: false, showSuccess: false },
+      { showFailed: false, showSuccess: false, loading: 'Fetching history' },
     )
 
   const {
