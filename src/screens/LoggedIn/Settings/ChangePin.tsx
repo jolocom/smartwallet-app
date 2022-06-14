@@ -1,14 +1,10 @@
-import React, { useState } from 'react'
-
+import React, { useState, useEffect } from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
-
 import { sleep } from '~/utils/generic'
-
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
 import { useLoader } from '~/hooks/loader'
-import { useEffect } from 'react'
 import useTranslation from '~/hooks/useTranslation'
 import { useToasts } from '~/hooks/toasts'
 import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
