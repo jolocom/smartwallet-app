@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
@@ -34,15 +34,21 @@ export const AusweisIdentity = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
+  const [clicked, setClicked] = useState(false)
 
   const handleCompatibilityCheck = () => {
-    if (shouldDisableUnlock) {
-      setTimeout(() => {
+    if (!clicked) {
+      setClicked(true)
+      if (shouldDisableUnlock) {
+        setTimeout(() => {
+          checkNfcSupport(startCompatibilityCheck)
+          setClicked(false)
+        }, 2500)
+      } else {
         checkNfcSupport(startCompatibilityCheck)
-      }, 2500)
-    } else {
-      checkNfcSupport(startCompatibilityCheck)
-    }
+        setClicked(false)
+      }
+    } else return
   }
 
   const handleChangePin = () =>
@@ -127,19 +133,24 @@ export const AusweisIdentity = () => {
   }
 
   const handleUnlockCard = () => {
-    if (shouldDisableUnlock) {
-      setTimeout(() => {
+    if (!clicked) {
+      setClicked(true)
+      if (shouldDisableUnlock) {
+        setTimeout(() => {
+          checkNfcSupport(() => {
+            setupUnlockCardHandlers()
+            startChangePin()
+          })
+          setClicked(false)
+        }, 2500)
+      } else {
         checkNfcSupport(() => {
           setupUnlockCardHandlers()
           startChangePin()
+          setClicked(false)
         })
-      }, 2500)
-    } else {
-      checkNfcSupport(() => {
-        setupUnlockCardHandlers()
-        startChangePin()
-      })
-    }
+      }
+    } else return
   }
 
   const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
