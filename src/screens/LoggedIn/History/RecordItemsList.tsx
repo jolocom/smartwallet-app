@@ -29,24 +29,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
   const loader = useLoader()
-  const [, setLoading] = useState(false)
   const [focusedItem, setFocusedItem] = useState<string | null>(null)
-
-  const showLoader = (config: LoaderConfig = {}) =>
-    loader(
-      async () => {
-        return new Promise((res, rej) => {
-          setTimeout(() => {
-            if (config.showFailed) {
-              rej('oops')
-            } else {
-              res('done')
-            }
-          }, 3000)
-        })
-      },
-      { showFailed: false, showSuccess: false, loading: 'Fetching history' },
-    )
 
   const {
     getInteractions: getInteractionTokens,
@@ -89,12 +72,21 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   }, [])
 
   useEffect(() => {
-    if (!interactions.length) {
-      showLoader()
-        .then(() => setLoading(true))
-        .catch((err) => console.log(err))
-    } else setLoading(false)
-  }, [interactions])
+    loader(
+      () =>
+        getInteractionTokens(ITEMS_PER_PAGE, 0, flows)
+          .then((tokens) => {
+            setInteractions(tokens)
+          })
+          .catch((e) => {
+            console.log('An error occured while fetching Record list items', e)
+            scheduleErrorWarning(e)
+          }),
+      { showFailed: false, showSuccess: false, loading: 'Fetching history' },
+    )
+      .then(() => console.log('History'))
+      .catch((err) => console.error(err))
+  }, [])
 
   useEffect(() => {
     if (page) {
