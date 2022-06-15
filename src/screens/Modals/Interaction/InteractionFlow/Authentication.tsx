@@ -1,5 +1,4 @@
 import React from 'react'
-
 import Space from '~/components/Space'
 import InteractionFooter from './components/InteractionFooter'
 import InteractionDescription from './components/InteractionDescription'
@@ -23,6 +22,17 @@ const Authentication = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
+        {/* There is no serviceUrl avaiable for redirecting when clicking logo 
+        
+        useSelector(getServiceDescription) only returns the following data
+      {
+      did: counterparty.did,
+      name: counterparty.publicProfile?.name,
+      image: counterparty.publicProfile?.image,
+      isAnonymous: counterparty.publicProfile === undefined,
+      }
+        
+        */}
         <ServiceLogo source={image} />
       </LogoContainerBAS>
       <InteractionTitle label={t('Authentication.header')} />

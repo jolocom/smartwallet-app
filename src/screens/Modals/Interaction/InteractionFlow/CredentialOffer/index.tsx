@@ -45,6 +45,17 @@ const CredentialOfferBAS = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
+        {/* There is no serviceUrl avaiable for redirecting when clicking logo 
+        
+        useSelector(getServiceDescription) only returns the following data
+      {
+      did: counterparty.did,
+      name: counterparty.publicProfile?.name,
+      image: counterparty.publicProfile?.image,
+      isAnonymous: counterparty.publicProfile === undefined,
+      }
+        
+        */}
         <ServiceLogo source={image} />
       </LogoContainerBAS>
       <InteractionTitle label={t('CredentialOffer.header')} />
@@ -133,6 +144,17 @@ const CredentialOfferFAS = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
+                  {/* There is no serviceUrl avaiable for redirecting when clicking logo 
+        
+        useSelector(getServiceDescription) only returns the following data
+      {
+      did: counterparty.did,
+      name: counterparty.publicProfile?.name,
+      image: counterparty.publicProfile?.image,
+      isAnonymous: counterparty.publicProfile === undefined,
+      }
+        
+        */}
                   <ServiceLogo source={image} />
                 </LogoContainerFAS>
               </Collapsible.Scale>

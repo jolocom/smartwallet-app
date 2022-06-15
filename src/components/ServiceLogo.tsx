@@ -19,11 +19,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
   const { scheduleErrorWarning } = useToasts()
 
   const handleRedirectToCounterparty = async () => {
-    if (
-      source &&
-      serviceUrl &&
-      (serviceUrl.startsWith('http://') || serviceUrl.startsWith('https://'))
-    ) {
+    if (serviceUrl) {
       try {
         await Linking.openURL(serviceUrl)
       } catch (e) {

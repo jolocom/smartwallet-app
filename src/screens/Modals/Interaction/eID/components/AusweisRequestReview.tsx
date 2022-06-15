@@ -224,7 +224,8 @@ export const AusweisRequestReview = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '15%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
-                  <ServiceLogo serviceUrl={providerUrl} />
+                  {/* There is no serviceUrl avaiable for redirecting when clicking logo */}
+                  <ServiceLogo />
                 </LogoContainerFAS>
               </Collapsible.Scale>
               <Collapsible.Title text={t('Ausweis.header')}>
