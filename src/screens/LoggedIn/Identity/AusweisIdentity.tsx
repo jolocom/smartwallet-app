@@ -1,10 +1,9 @@
 import React from 'react'
-import { Image, Platform, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { useSelector } from 'react-redux'
-
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
@@ -37,7 +36,11 @@ export const AusweisIdentity = () => {
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
 
   const handleCompatibilityCheck = () => {
-    if (!shouldDisableUnlock) {
+    if (shouldDisableUnlock) {
+      setTimeout(() => {
+        checkNfcSupport(startCompatibilityCheck)
+      }, 2500)
+    } else {
       checkNfcSupport(startCompatibilityCheck)
     }
   }
@@ -124,7 +127,14 @@ export const AusweisIdentity = () => {
   }
 
   const handleUnlockCard = () => {
-    if (!shouldDisableUnlock) {
+    if (shouldDisableUnlock) {
+      setTimeout(() => {
+        checkNfcSupport(() => {
+          setupUnlockCardHandlers()
+          startChangePin()
+        })
+      }, 2500)
+    } else {
       checkNfcSupport(() => {
         setupUnlockCardHandlers()
         startChangePin()
