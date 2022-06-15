@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { ScreenNames } from '~/types/screens'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
@@ -33,7 +32,7 @@ import {
   screenDisableGestures,
   transparentModalFadeOptions,
 } from '~/utils/screenSettings'
-import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
+import PopupMenu, { PopupMenuProps } from '~/screens/LoggedIn/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
