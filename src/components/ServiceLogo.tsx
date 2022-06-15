@@ -30,7 +30,10 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
 
   if (source) {
     return (
-      <TouchableOpacity onPress={handleRedirectToCounterparty}>
+      <TouchableOpacity
+        onPress={handleRedirectToCounterparty}
+        activeOpacity={0.9}
+      >
         <Image style={styles.image} source={{ uri: source }} />
       </TouchableOpacity>
     )
