@@ -168,6 +168,9 @@ const FieldDetails = () => {
 
   const showIconContainer = issuerIcon || contextIcons
 
+  const defaultUri =
+    'https://jolocom.io/wp-content/themes/jolocom/images/jolocom-h-black.svg'
+
   const { top } = useSafeArea()
   return (
     <View
@@ -219,7 +222,9 @@ const FieldDetails = () => {
                     marginLeft: 12,
                   }}
                 >
-                  {issuerIcon && <Icon url={issuerIcon} />}
+                  {issuerIcon && issuerIcon !== defaultUri && (
+                    <Icon url={issuerIcon} />
+                  )}
                   {contextIcons &&
                     contextIcons.map((icon, i) => <Icon key={i} url={icon} />)}
                 </View>
