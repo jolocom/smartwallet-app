@@ -109,9 +109,12 @@ export const DocumentHeader: React.FC<{
 }> = ({ name, icon, onPressMenu, selected }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
+  const defaultUri =
+    'https://jolocom.io/wp-content/themes/jolocom/images/jolocom-h-black.svg'
+
   return (
     <View style={styles.headerContainer}>
-      {icon && (
+      {icon && icon !== defaultUri && (
         <ScaledView
           scaleStyle={{
             width: 32,
