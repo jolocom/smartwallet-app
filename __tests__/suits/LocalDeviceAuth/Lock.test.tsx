@@ -69,7 +69,7 @@ describe('Without biometry', () => {
       isBiometrySelected: false,
     })
   })
-  xtest('Lock screen renders all necessary UI details', () => {
+  test('Lock screen renders all necessary UI details', () => {
     const { getByText, getByTestId } = renderWithSafeArea(<Lock />)
 
     mockGetBiometry.mockResolvedValue(undefined)
@@ -79,7 +79,7 @@ describe('Without biometry', () => {
     expect(getByTestId('passcode-keyboard')).toBeDefined()
   })
 
-  xtest("The app is locked if pins don't match", async () => {
+  test("The app is locked if pins don't match", async () => {
     const { getByText, getByTestId } = renderWithSafeArea(<Lock />)
 
     inputPasscode(getByTestId, [3, 3, 3, 3])
@@ -89,7 +89,7 @@ describe('Without biometry', () => {
     })
   })
 
-  xtest('The app is unlocked', () => {
+  test('The app is unlocked', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch')
     const mockDispatchFn = jest.fn()
     useDispatchSpy.mockReturnValue(mockDispatchFn)
@@ -117,7 +117,7 @@ describe('With biometry', () => {
     })
   })
 
-  xtest('unlocks the app', async () => {
+  test('unlocks the app', async () => {
     mockBiometryAuthenticate.mockResolvedValue({
       success: true,
     })
@@ -138,7 +138,7 @@ describe('With biometry', () => {
     })
   })
 
-  xtest('do not unlock the app', async () => {
+  test('do not unlock the app', async () => {
     mockBiometryAuthenticate.mockResolvedValue({
       success: false,
     })
