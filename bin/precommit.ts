@@ -1,25 +1,15 @@
 #!/usr/bin/env node
 
-import {
-  abortScript,
-  formatOutput,
-  listStagedFiles,
-  spawnProcess,
-} from './commit/utils'
+import { abortScript, listStagedFiles } from './commit/utils'
 import EventEmitter from 'events'
 import { Table } from 'console-table-printer'
 
-type ChildProcessVariants = 'local.properties' | 'linter'
+type ChildProcessVariants = 'local.properties'
 type ResultOption = { isFinished: boolean; passed: boolean; cmd: string }
 type Result = Record<ChildProcessVariants, ResultOption>
 
 const result: Result = {
   ['local.properties']: {
-    isFinished: false,
-    passed: false,
-    cmd: '',
-  },
-  ['linter']: {
     isFinished: false,
     passed: false,
     cmd: '',
@@ -92,34 +82,10 @@ const checkStagedLocalProp = (files: string[]) => {
   )
 }
 
-// const lintFiles = (files: string[]) => {
-//   const handleProcessClose = (code: number | null, dataOutput: string) => {
-//     const output = formatOutput(dataOutput)
-//     let erroredFiles: string
-//     if (output.length > 2) {
-//       erroredFiles = output[output.length - 1]
-//         .split(' ')
-//         .filter((f) => Boolean(f))
-//         .join(' ')
-//       eventEmmiter.emit(
-//         'process-finished',
-//         'linter',
-//         false,
-//         `yarn lint:fix ${erroredFiles}`,
-//       )
-//     } else {
-//       eventEmmiter.emit('process-finished', 'linter', true, '')
-//     }
-//   }
-//   spawnProcess(handleProcessClose, 'npm', ['run', 'lint:check', ...files])
-// }
-
 const main = () => {
   try {
     console.log('\x1b[0;34m%s\x1b[0m', 'Running check for:')
     console.log('\x1b[0;34m%s\x1b[0m', '\t - staged local.propeties')
-    // console.log('\x1b[0;34m%s\x1b[0m', '\t - prettier')
-    // console.log('\x1b[0;34m%s\x1b[0m', '\t - linter')
     const stagedFiles = listStagedFiles().toString('utf-8')
     if (stagedFiles === '') {
       throw new Error('No files staged')
@@ -129,13 +95,6 @@ const main = () => {
       .filter((path) => Boolean(path))
 
     checkStagedLocalProp(formattedStagedFiles)
-
-    // const onlyJSTSFiles = formattedStagedFiles.filter((f) =>
-    //   /\.(ts|tsx|js|jsx)$/g.exec(f),
-    // )
-    // if (onlyJSTSFiles.length) {
-    //   lintFiles(onlyJSTSFiles)
-    // }
   } catch (e: unknown) {
     if (e instanceof Error) {
       abortScript(e.message)
