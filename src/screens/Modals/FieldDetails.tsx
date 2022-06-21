@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingBottom: BP({ default: 12, xsmall: 8 }),
   },
+  test: 12,
   photo: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
