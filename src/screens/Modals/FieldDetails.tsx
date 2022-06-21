@@ -201,6 +201,14 @@ const FieldDetails = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.mainBlack,
+  },
+  titleContainer: {
+    paddingLeft: 6,
+    paddingBottom: BP({ default: 12, xsmall: 8 }),
+  },
   photo: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
