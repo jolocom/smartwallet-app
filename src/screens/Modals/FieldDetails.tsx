@@ -166,10 +166,16 @@ const FieldDetails = () => {
     })
   }
 
-  const showIconContainer = issuerIcon || contextIcons
+  const shouldImageRender = (icon: string | undefined) => {
+    const allowedExtensions = ['.jpeg', '.png', '.jpg']
 
-  const defaultUri =
-    'https://jolocom.io/wp-content/themes/jolocom/images/jolocom-h-black.svg'
+    const render =
+      icon && allowedExtensions.some((extension) => icon.includes(extension))
+
+    return render
+  }
+
+  const showIconContainer = issuerIcon || contextIcons
 
   const { top } = useSafeArea()
   return (
@@ -222,7 +228,7 @@ const FieldDetails = () => {
                     marginLeft: 12,
                   }}
                 >
-                  {issuerIcon && issuerIcon !== defaultUri && (
+                  {issuerIcon && shouldImageRender(issuerIcon) && (
                     <Icon url={issuerIcon} />
                   )}
                   {contextIcons &&
