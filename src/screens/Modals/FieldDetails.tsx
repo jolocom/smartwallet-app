@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   View,
   Image,
@@ -9,7 +9,6 @@ import {
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useClipboard } from '@react-native-community/hooks'
-
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
@@ -148,6 +147,7 @@ const Icon = ({ url }: { url: string }) => {
 }
 
 const FieldDetails = () => {
+  const [renderIcon, setRenderIcon] = useState(false)
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
   const {
@@ -159,20 +159,23 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
+  const shoudlRenderIcon = async (icon: string | undefined) => {
+    let result
+    try {
+      result = await Image.prefetch(icon)
+    } catch (e) {
+      console.log(e)
+    }
+    setRenderIcon(result)
+  }
+
+  shoudlRenderIcon(issuerIcon)
+
   const handleLayout = () => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.linear,
       duration: 200,
     })
-  }
-
-  const shouldImageRender = (icon: string | undefined) => {
-    const allowedExtensions = ['.jpeg', '.png', '.jpg']
-
-    const render =
-      icon && allowedExtensions.some((extension) => icon.includes(extension))
-
-    return render
   }
 
   const showIconContainer = issuerIcon || contextIcons
@@ -228,9 +231,7 @@ const FieldDetails = () => {
                     marginLeft: 12,
                   }}
                 >
-                  {issuerIcon && shouldImageRender(issuerIcon) && (
-                    <Icon url={issuerIcon} />
-                  )}
+                  {renderIcon && <Icon url={issuerIcon} />}
                   {contextIcons &&
                     contextIcons.map((icon, i) => <Icon key={i} url={icon} />)}
                 </View>
