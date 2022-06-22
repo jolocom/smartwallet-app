@@ -159,17 +159,19 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
-  const shoudlRenderIcon = async (icon: string | undefined) => {
+  const shouldRenderIcon = async (icon: string) => {
     let result
     try {
-      result = await Image.prefetch(icon)
+      result = (await Image.prefetch(icon)) as boolean
     } catch (e) {
-      console.log(e)
+      setRenderIcon(false)
     }
-    setRenderIcon(result)
+    setRenderIcon(result as boolean)
   }
 
-  shoudlRenderIcon(issuerIcon)
+  useEffect(() => {
+    issuerIcon && shouldRenderIcon(issuerIcon)
+  }, [])
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
