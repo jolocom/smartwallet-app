@@ -106,21 +106,22 @@ export const DocumentHeader: React.FC<{
   onPressMenu?: () => void
   selected?: boolean
 }> = ({ name, icon, onPressMenu, selected }) => {
-  const [renderIcon, setRenderIcon] = useState<boolean | undefined>(false)
+  const [renderIcon, setRenderIcon] = useState(false)
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
-  const shouldRenderIcon = async (icon: string | undefined) => {
+  const shouldRenderIcon = async (icon: string) => {
     let result
     try {
       result = await Image.prefetch(icon)
     } catch (e) {
-      console.log(e)
+      setRenderIcon(false)
     }
-    console.log(result)
     setRenderIcon(result)
   }
 
-  shouldRenderIcon(icon)
+  useEffect(() => {
+    icon && shouldRenderIcon(icon)
+  }, [])
 
   return (
     <View style={styles.headerContainer}>
