@@ -1,5 +1,5 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import {
   Image,
   ImageBackground,
@@ -106,20 +106,25 @@ export const DocumentHeader: React.FC<{
   onPressMenu?: () => void
   selected?: boolean
 }> = ({ name, icon, onPressMenu, selected }) => {
+  const [renderIcon, setRenderIcon] = useState<boolean | undefined>(false)
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
-  const shouldImageRender = (icon: string | undefined) => {
-    const allowedExtensions = ['.jpeg', '.png', '.jpg']
-
-    const render =
-      icon && allowedExtensions.some((extension) => icon.includes(extension))
-
-    return render
+  const shouldRenderIcon = async (icon: string | undefined) => {
+    let result
+    try {
+      result = await Image.prefetch(icon)
+    } catch (e) {
+      console.log(e)
+    }
+    console.log(result)
+    setRenderIcon(result)
   }
+
+  shouldRenderIcon(icon)
 
   return (
     <View style={styles.headerContainer}>
-      {shouldImageRender(icon) && (
+      {renderIcon && (
         <ScaledView
           scaleStyle={{
             width: 32,
