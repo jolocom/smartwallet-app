@@ -13,7 +13,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { TextLayoutEvent } from '~/types/props'
-
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
@@ -109,12 +108,18 @@ export const DocumentHeader: React.FC<{
 }> = ({ name, icon, onPressMenu, selected }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
-  const defaultUri =
-    'https://jolocom.io/wp-content/themes/jolocom/images/jolocom-h-black.svg'
+  const shouldImageRender = (icon: string | undefined) => {
+    const allowedExtensions = ['.jpeg', '.png', '.jpg']
+
+    const render =
+      icon && allowedExtensions.some((extension) => icon.includes(extension))
+
+    return render
+  }
 
   return (
     <View style={styles.headerContainer}>
-      {icon && icon !== defaultUri && (
+      {shouldImageRender(icon) && (
         <ScaledView
           scaleStyle={{
             width: 32,
