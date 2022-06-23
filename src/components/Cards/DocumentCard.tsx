@@ -3,7 +3,6 @@ import {
   Platform,
   StyleProp,
   TouchableOpacity,
-  Vibration,
   View,
   ViewStyle,
 } from 'react-native'
