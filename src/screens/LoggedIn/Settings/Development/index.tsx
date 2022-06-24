@@ -92,6 +92,9 @@ const DevelopmentSection = () => {
           >
             <Option.Title title="Popup menu" />
           </Option>
+          <Option onPress={() => redirect(ScreenNames.CardStack)}>
+            <Option.Title title="Card Stack" />
+          </Option>
           <Option onPress={() => redirect(ScreenNames.NotificationsTest)}>
             <Option.Title title="Notifications" />
           </Option>

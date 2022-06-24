@@ -15,6 +15,7 @@ import ButtonsTest from './Settings/Development/ButtonsTest'
 import NotificationsTest from './Settings/Development/NotificationsTest'
 import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import LoaderTest from './Settings/Development/DevLoaders'
+import CardStack from './Settings/Development/CardStack'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
 import { getIsTermsConsentOutdated } from '~/modules/account/selectors'
@@ -100,6 +101,7 @@ export type MainStackParamList = {
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
   [ScreenNames.PinRecoveryInstructions]: undefined
+  [ScreenNames.CardStack]: undefined
   [ScreenNames.PasscodeRecovery]: {
     isAccessRestore: boolean
   }
@@ -215,6 +217,11 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.PasscodeTest}
             component={PasscodeTest}
+            options={screenTransitionSlideFromRight}
+          />
+          <MainStack.Screen
+            name={ScreenNames.CardStack}
+            component={CardStack}
             options={screenTransitionSlideFromRight}
           />
         </>
