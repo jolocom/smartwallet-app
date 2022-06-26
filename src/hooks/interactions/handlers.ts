@@ -102,7 +102,7 @@ export const useFinishInteraction = () => {
       if (navigation.canGoBack()) {
         if (Platform.OS === 'ios') {
           navigation.goBack()
-        } else {
+        } else if (Platform.OS === 'android') {
           const parent = navigation.getParent()
           parent?.goBack()
         }
