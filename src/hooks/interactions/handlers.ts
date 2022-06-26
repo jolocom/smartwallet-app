@@ -12,6 +12,7 @@ import {
   resetInteraction,
   setInteractionDetails,
 } from '~/modules/interaction/actions'
+import { Platform } from 'react-native'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { useAgent } from '../sdk'
 import { useNavigation } from '@react-navigation/native'
@@ -94,13 +95,17 @@ export const useInteractionStart = () => {
 export const useFinishInteraction = () => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
-
   const closeInteraction = (screen?: ScreenNames) => {
     if (screen) {
       navigation.navigate(screen)
     } else {
       if (navigation.canGoBack()) {
-        navigation.goBack()
+        if (Platform.OS === 'ios') {
+          navigation.goBack()
+        } else {
+          const parent = navigation.getParent()
+          parent?.goBack()
+        }
       } else {
         navigation.navigate(ScreenNames.Main)
       }
