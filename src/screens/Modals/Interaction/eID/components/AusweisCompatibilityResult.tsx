@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Platform } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -11,15 +11,16 @@ import { eIDScreens } from '../types'
 import BP from '~/utils/breakpoints'
 import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
+import Option from '~/screens/LoggedIn/Settings/components/Option'
 
 const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
   return (
-    <View style={styles.successContainer}>
-      <JoloText size={JoloTextSizes.big}>{title}</JoloText>
-      <View style={styles.successTickContainer}>
-        <PurpleTickSuccess />
-      </View>
-    </View>
+    <Option customStyles={{ width: '100%' }}>
+      <Option.Title title={title} customStyles={{ width: '80%' }} />
+      <Option.IconContainer>
+        <PurpleTickSuccess w={20} h={20} />
+      </Option.IconContainer>
+    </Option>
   )
 }
 
@@ -32,18 +33,18 @@ export const AusweisCompatibilityResult: React.FC = () => {
 
   const isFailed = inoperative || deactivated
 
-  useEffect(() => {
-    const id = setTimeout(() => {
-      goBack()
-    }, 5000)
+  // useEffect(() => {
+  //   const id = setTimeout(() => {
+  //     goBack()
+  //   }, 5000)
 
-    return () => {
-      clearTimeout(id)
-    }
-  }, [])
+  //   return () => {
+  //     clearTimeout(id)
+  //   }
+  // }, [])
 
   return (
-    <ScreenContainer backgroundColor={Colors.black}>
+    <ScreenContainer backgroundColor={Colors.black80}>
       <TouchableOpacity
         activeOpacity={1}
         onPress={goBack}
@@ -51,6 +52,13 @@ export const AusweisCompatibilityResult: React.FC = () => {
         testID="dismissable-background"
       >
         <View style={styles.container}>
+          <View style={styles.iconContainer}>
+            {isFailed ? (
+              <ErrorIcon color={Colors.white90} />
+            ) : (
+              <SuccessTick color={Colors.white90} />
+            )}
+          </View>
           <View style={styles.headerContainer}>
             <JoloText kind={JoloTextKind.title}>
               {t('AusweisCompatibilityStatus.header')}
@@ -62,7 +70,7 @@ export const AusweisCompatibilityResult: React.FC = () => {
                 {t('AusweisCompatibilityStatus.error')}
               </JoloText>
             ) : (
-              <>
+              <View styles={{ flexDirection: 'row', width: '100%' }}>
                 <SuccessResult
                   title={t('AusweisCompatibilityStatus.status1')}
                 />
@@ -72,23 +80,9 @@ export const AusweisCompatibilityResult: React.FC = () => {
                 <SuccessResult
                   title={t('AusweisCompatibilityStatus.status3')}
                 />
-              </>
+              </View>
             )}
           </View>
-        </View>
-        <View style={styles.footerContainer}>
-          <View style={styles.iconContainer}>
-            {isFailed ? (
-              <ErrorIcon color={Colors.white90} />
-            ) : (
-              <SuccessTick color={Colors.white90} />
-            )}
-          </View>
-          <JoloText color={Colors.white80} size={JoloTextSizes.big}>
-            {isFailed
-              ? t('AusweisCompatibilityStatus.error')
-              : t('AusweisCompatibilityStatus.success')}
-          </JoloText>
         </View>
       </TouchableOpacity>
     </ScreenContainer>
@@ -108,7 +102,7 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     justifyContent: 'flex-start',
-    paddingHorizontal: 52,
+    width: '100%',
   },
   iconContainer: {
     borderRadius: 34,
@@ -122,17 +116,23 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   successContainer: {
+    justifyContent: 'space-between',
+    paddingHorizontal: 13,
+    paddingVertical: Platform.select({
+      ios: 11,
+      android: 16,
+    }),
+    width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
   },
+
   successTickContainer: {
     width: 20,
     height: 20,
-    marginTop: 16,
   },
-  footerContainer: {
-    flex: 1,
-    alignItems: 'center',
+  joloTextContainer: {
+    backgroundColor: 'blue',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 })
