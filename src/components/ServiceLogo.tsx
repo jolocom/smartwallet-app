@@ -28,7 +28,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
     }
   }
 
-  if (source) {
+  if (source && serviceUrl) {
     return (
       <TouchableOpacity
         onPress={handleRedirectToCounterparty}
@@ -38,6 +38,11 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
       </TouchableOpacity>
     )
   }
+
+  if (source) {
+    return <Image style={styles.image} source={{ uri: source }} />
+  }
+
   return (
     <View style={[styles.image, { backgroundColor: Colors.white }]}>
       <InitiatorPlaceholderIcon />
