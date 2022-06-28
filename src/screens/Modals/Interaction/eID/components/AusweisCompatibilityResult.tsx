@@ -1,24 +1,39 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { StyleSheet, TouchableOpacity, View, Platform } from 'react-native'
+import { StyleSheet, View, Platform } from 'react-native'
 import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
-import { JoloTextSizes } from '~/utils/fonts'
 import { AusweisStackParamList } from '..'
 import { eIDScreens } from '../types'
 import BP from '~/utils/breakpoints'
 import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import Option from '~/screens/LoggedIn/Settings/components/Option'
+import Btn from '~/components/Btn'
+import BottomSheet from '~/components/BottomSheet'
 
 const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
   return (
-    <Option customStyles={{ width: '100%' }}>
+    <Option customStyles={{ width: '100%', backgroundColor: Colors.black }}>
       <Option.Title title={title} customStyles={{ width: '80%' }} />
       <Option.IconContainer>
         <PurpleTickSuccess w={20} h={20} />
+      </Option.IconContainer>
+    </Option>
+  )
+}
+
+const ErrorResult: React.FC<{ title: string }> = ({ title }) => {
+  return (
+    <Option customStyles={{ width: '100%', backgroundColor: Colors.black }}>
+      <Option.Title
+        title={title}
+        customStyles={{ width: '80%', color: Colors.error }}
+      />
+      <Option.IconContainer>
+        <ErrorIcon color={Colors.error} w={20} h={20} />
       </Option.IconContainer>
     </Option>
   )
@@ -33,25 +48,14 @@ export const AusweisCompatibilityResult: React.FC = () => {
 
   const isFailed = inoperative || deactivated
 
-  // useEffect(() => {
-  //   const id = setTimeout(() => {
-  //     goBack()
-  //   }, 5000)
-
-  //   return () => {
-  //     clearTimeout(id)
-  //   }
-  // }, [])
+  const handleGoBack = () => {
+    goBack()
+  }
 
   return (
-    <ScreenContainer backgroundColor={Colors.black80}>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={goBack}
-        style={{ justifyContent: 'flex-end', alignItems: 'center' }}
-        testID="dismissable-background"
-      >
-        <View style={styles.container}>
+    <ScreenContainer backgroundColor={Colors.black65} isFullscreen>
+      <View style={{ width: '90%', paddingBottom: 36 }}>
+        <BottomSheet onDismiss={handleGoBack}>
           <View style={styles.iconContainer}>
             {isFailed ? (
               <ErrorIcon color={Colors.white90} />
@@ -65,37 +69,40 @@ export const AusweisCompatibilityResult: React.FC = () => {
             </JoloText>
           </View>
           <View style={styles.resultContainer}>
-            {isFailed ? (
-              <JoloText size={JoloTextSizes.big} color={Colors.error}>
-                {t('AusweisCompatibilityStatus.error')}
-              </JoloText>
-            ) : (
-              <View styles={{ flexDirection: 'row', width: '100%' }}>
+            <View styles={{ flexDirection: 'row', width: '100%' }}>
+              {isFailed ? (
+                <ErrorResult title={t('AusweisCompatibilityStatus.status1')} />
+              ) : (
                 <SuccessResult
                   title={t('AusweisCompatibilityStatus.status1')}
                 />
+              )}
+              {deactivated ? (
+                <ErrorResult title={t('AusweisCompatibilityStatus.status2')} />
+              ) : (
                 <SuccessResult
                   title={t('AusweisCompatibilityStatus.status2')}
                 />
+              )}
+              {inoperative ? (
+                <ErrorResult title={t('AusweisCompatibilityStatus.status3')} />
+              ) : (
                 <SuccessResult
                   title={t('AusweisCompatibilityStatus.status3')}
                 />
-              </View>
-            )}
+              )}
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+          <View style={styles.btn}>
+            <Btn onPress={handleGoBack}>Done</Btn>
+          </View>
+        </BottomSheet>
+      </View>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: BP({ default: 64, small: 44, xsmall: 44 }),
-  },
   headerContainer: {
     justifyContent: 'flex-end',
     marginBottom: BP({ default: 36, large: 72 }),
@@ -115,24 +122,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 20,
   },
-  successContainer: {
-    justifyContent: 'space-between',
-    paddingHorizontal: 13,
-    paddingVertical: Platform.select({
-      ios: 11,
-      android: 16,
-    }),
+  btn: {
     width: '100%',
-    alignItems: 'center',
-  },
-
-  successTickContainer: {
-    width: 20,
-    height: 20,
-  },
-  joloTextContainer: {
-    backgroundColor: 'blue',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    // justifyContent: 'center',
+    marginBottom: 24,
+    marginTop: 36,
   },
 })
