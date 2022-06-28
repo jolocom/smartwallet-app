@@ -1,7 +1,12 @@
 import React from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { StyleSheet, View, Platform } from 'react-native'
-import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
+import { StyleSheet, View } from 'react-native'
+import {
+  ErrorIcon,
+  PurpleTickSuccess,
+  SuccessTick,
+  ErrorIconYellow,
+} from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
@@ -14,26 +19,25 @@ import Option from '~/screens/LoggedIn/Settings/components/Option'
 import Btn from '~/components/Btn'
 import BottomSheet from '~/components/BottomSheet'
 
-const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
-  return (
-    <Option customStyles={{ width: '100%', backgroundColor: Colors.black }}>
-      <Option.Title title={title} customStyles={{ width: '80%' }} />
-      <Option.IconContainer>
-        <PurpleTickSuccess w={20} h={20} />
-      </Option.IconContainer>
-    </Option>
-  )
+interface ResultProps {
+  result: 'success' | 'error'
+  title: string
+  color?: Colors
 }
 
-const ErrorResult: React.FC<{ title: string }> = ({ title }) => {
+const Result: React.FC<ResultProps> = ({ title, color, result }) => {
   return (
     <Option customStyles={{ width: '100%', backgroundColor: Colors.black }}>
       <Option.Title
         title={title}
-        customStyles={{ width: '80%', color: Colors.error }}
+        customStyles={{ width: '80%', color: color }}
       />
       <Option.IconContainer>
-        <ErrorIcon color={Colors.error} w={20} h={20} />
+        {result === 'success' ? (
+          <PurpleTickSuccess w={20} h={20} />
+        ) : (
+          <ErrorIconYellow />
+        )}
       </Option.IconContainer>
     </Option>
   )
@@ -69,32 +73,50 @@ export const AusweisCompatibilityResult: React.FC = () => {
             </JoloText>
           </View>
           <View style={styles.resultContainer}>
-            <View styles={{ flexDirection: 'row', width: '100%' }}>
+            <View>
               {isFailed ? (
-                <ErrorResult title={t('AusweisCompatibilityStatus.status1')} />
-              ) : (
-                <SuccessResult
+                <Result
+                  result={'error'}
                   title={t('AusweisCompatibilityStatus.status1')}
+                  color={Colors.error}
+                />
+              ) : (
+                <Result
+                  result={'success'}
+                  title={t('AusweisCompatibilityStatus.status1')}
+                  color={Colors.white90}
                 />
               )}
               {deactivated ? (
-                <ErrorResult title={t('AusweisCompatibilityStatus.status2')} />
-              ) : (
-                <SuccessResult
+                <Result
+                  result={'error'}
                   title={t('AusweisCompatibilityStatus.status2')}
+                  color={Colors.error}
+                />
+              ) : (
+                <Result
+                  result={'success'}
+                  title={t('AusweisCompatibilityStatus.status2')}
+                  color={Colors.white90}
                 />
               )}
               {inoperative ? (
-                <ErrorResult title={t('AusweisCompatibilityStatus.status3')} />
-              ) : (
-                <SuccessResult
+                <Result
+                  result={'error'}
                   title={t('AusweisCompatibilityStatus.status3')}
+                  color={Colors.error}
+                />
+              ) : (
+                <Result
+                  result={'success'}
+                  title={t('AusweisCompatibilityStatus.status3')}
+                  color={Colors.white90}
                 />
               )}
             </View>
           </View>
-          <View style={styles.btn}>
-            <Btn onPress={handleGoBack}>Done</Btn>
+          <View style={styles.btnContainer}>
+            <Btn onPress={handleGoBack}>{t('CredentialForm.confirmBtn')}</Btn>
           </View>
         </BottomSheet>
       </View>
@@ -104,11 +126,9 @@ export const AusweisCompatibilityResult: React.FC = () => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    justifyContent: 'flex-end',
     marginBottom: BP({ default: 36, large: 72 }),
   },
   resultContainer: {
-    justifyContent: 'flex-start',
     width: '100%',
   },
   iconContainer: {
@@ -118,13 +138,11 @@ const styles = StyleSheet.create({
     height: 67,
     padding: 17,
     borderColor: Colors.white90,
-    alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
   },
-  btn: {
+  btnContainer: {
     width: '100%',
-    // justifyContent: 'center',
     marginBottom: 24,
     marginTop: 36,
   },
