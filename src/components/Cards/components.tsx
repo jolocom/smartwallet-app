@@ -13,12 +13,12 @@ import {
 import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { TextLayoutEvent } from '~/types/props'
-
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
+import useRenderIcons from '~/hooks/useRenderIcons'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -108,10 +108,11 @@ export const DocumentHeader: React.FC<{
   selected?: boolean
 }> = ({ name, icon, onPressMenu, selected }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
+  const { renderIcon } = useRenderIcons(icon)
 
   return (
     <View style={styles.headerContainer}>
-      {icon && (
+      {renderIcon && (
         <ScaledView
           scaleStyle={{
             width: 32,
