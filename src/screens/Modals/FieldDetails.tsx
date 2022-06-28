@@ -24,6 +24,7 @@ import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { TextLayoutEvent } from '~/types/props'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
+import useRenderIcons from '~/hooks/useRenderIcons'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -147,7 +148,6 @@ const Icon = ({ url }: { url: string }) => {
 }
 
 const FieldDetails = () => {
-  const [renderIcon, setRenderIcon] = useState(false)
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
   const {
@@ -159,19 +159,7 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
-  const shouldRenderIcon = async (icon: string) => {
-    let result
-    try {
-      result = (await Image.prefetch(icon)) as boolean
-    } catch (e) {
-      setRenderIcon(false)
-    }
-    setRenderIcon(result as boolean)
-  }
-
-  useEffect(() => {
-    issuerIcon && shouldRenderIcon(issuerIcon)
-  }, [])
+  const { renderIcon } = useRenderIcons(issuerIcon as string | undefined)
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
