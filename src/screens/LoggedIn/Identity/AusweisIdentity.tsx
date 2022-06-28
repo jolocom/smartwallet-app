@@ -34,21 +34,28 @@ export const AusweisIdentity = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
-  const [clicked, setClicked] = useState(false)
+  const [clickedCompatibilityBtn, setClickedCompatibilityBtn] = useState(false)
+  const [clickedHandleUnlockBtn, setClickedHandleUnlockBtn] = useState(false)
 
-  const handleCompatibilityCheck = () => {
-    if (!clicked) {
-      setClicked(true)
-      if (shouldDisableUnlock) {
-        setTimeout(() => {
-          checkNfcSupport(startCompatibilityCheck)
-          setClicked(false)
-        }, 2500)
-      } else {
-        checkNfcSupport(startCompatibilityCheck)
-        setClicked(false)
-      }
-    } else return
+  useEffect(() => {
+    if (!shouldDisableUnlock && clickedCompatibilityBtn) {
+      checkNfcSupport(startCompatibilityCheck)
+      setClickedCompatibilityBtn(false)
+    }
+  }, [shouldDisableUnlock, clickedCompatibilityBtn])
+
+  useEffect(() => {
+    if (!shouldDisableUnlock && clickedHandleUnlockBtn) {
+      checkNfcSupport(() => {
+        setupUnlockCardHandlers()
+        startChangePin()
+      })
+      setClickedHandleUnlock(false)
+    }
+  }, [shouldDisableUnlock, clickedHandleUnlockBtn])
+
+  function handleCompatibilityCheck() {
+    !clickedCompatibilityBtn && setClickedCompatibilityBtn(true)
   }
 
   const handleChangePin = () =>
@@ -133,24 +140,7 @@ export const AusweisIdentity = () => {
   }
 
   const handleUnlockCard = () => {
-    if (!clicked) {
-      setClicked(true)
-      if (shouldDisableUnlock) {
-        setTimeout(() => {
-          checkNfcSupport(() => {
-            setupUnlockCardHandlers()
-            startChangePin()
-          })
-          setClicked(false)
-        }, 2500)
-      } else {
-        checkNfcSupport(() => {
-          setupUnlockCardHandlers()
-          startChangePin()
-          setClicked(false)
-        })
-      }
-    } else return
+    !clickedHandleUnlockBtn && setClickedHandleUnlockBtn(true)
   }
 
   const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
