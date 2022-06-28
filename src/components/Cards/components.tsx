@@ -18,7 +18,7 @@ import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
-import useRenderIcons from '~/hooks/useRenderIcons'
+import useRenderIcon from '~/hooks/useRenderIcons'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -108,7 +108,7 @@ export const DocumentHeader: React.FC<{
   selected?: boolean
 }> = ({ name, icon, onPressMenu, selected }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
-  const { renderIcon } = useRenderIcons(icon)
+  const { renderIcon } = useRenderIcon(icon)
 
   return (
     <View style={styles.headerContainer}>

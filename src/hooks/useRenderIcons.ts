@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Image } from 'react-native'
 
-const useRenderIcons = (issuerIcon: string | undefined) => {
+const useRenderIcon = (issuerIcon: string | undefined) => {
   const [renderIcon, setRenderIcon] = useState(false)
 
   const shouldRenderIcon = async (icon: string) => {
@@ -21,4 +21,4 @@ const useRenderIcons = (issuerIcon: string | undefined) => {
   return { renderIcon }
 }
 
-export default useRenderIcons
+export default useRenderIcon
