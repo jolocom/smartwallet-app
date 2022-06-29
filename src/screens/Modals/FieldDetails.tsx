@@ -24,7 +24,7 @@ import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { TextLayoutEvent } from '~/types/props'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
-import useRenderIcon from '~/hooks/useRenderIcons'
+import useRenderIcon from '~/hooks/useRenderIcon'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -159,7 +159,7 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
-  const { renderIcon } = useRenderIcon(issuerIcon as string | undefined)
+  const { renderIcon } = useRenderIcon(issuerIcon)
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
