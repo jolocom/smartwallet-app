@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
@@ -23,6 +23,34 @@ import { IS_ANDROID } from '~/utils/generic'
 import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 
+const usePendingEidHandler = () => {
+  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
+  const [shouldDebounce, setShouldDebounce] = useState(false)
+  const debounceHandler = useRef<() => void>()
+
+  useEffect(() => {
+    if (shouldDisableUnlock && shouldDebounce) {
+      setShouldDebounce(false)
+      debounceHandler.current && debounceHandler.current()
+    }
+  }, [shouldDebounce, shouldDisableUnlock])
+
+  const handlePressAction = () => {
+    if (shouldDebounce) setShouldDebounce(false)
+  }
+
+  const handlePress = (handler: () => void) => {
+    if (shouldDisableUnlock) {
+      setShouldDebounce(true)
+      debounceHandler.current = handler
+    } else {
+      handler()
+    }
+  }
+
+  return { handlePress, handlePressAction }
+}
+
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
   const { startCheck: startCompatibilityCheck } =
@@ -33,29 +61,20 @@ export const AusweisIdentity = () => {
     eIDHooks.useAusweisInteraction()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
-  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
-  const [clickedCompatibilityBtn, setClickedCompatibilityBtn] = useState(false)
-  const [clickedHandleUnlockBtn, setClickedHandleUnlockBtn] = useState(false)
 
-  useEffect(() => {
-    if (!shouldDisableUnlock && clickedCompatibilityBtn) {
-      checkNfcSupport(startCompatibilityCheck)
-      setClickedCompatibilityBtn(false)
-    }
-  }, [shouldDisableUnlock, clickedCompatibilityBtn])
+  const { handlePress, handlePressAction } = usePendingEidHandler()
 
-  useEffect(() => {
-    if (!shouldDisableUnlock && clickedHandleUnlockBtn) {
-      checkNfcSupport(() => {
-        setupUnlockCardHandlers()
-        startChangePin()
-      })
-      setClickedHandleUnlock(false)
-    }
-  }, [shouldDisableUnlock, clickedHandleUnlockBtn])
+  const handleCompatibilityCheck = () => {
+    handlePressAction()
+    checkNfcSupport(startCompatibilityCheck)
+  }
 
-  function handleCompatibilityCheck() {
-    !clickedCompatibilityBtn && setClickedCompatibilityBtn(true)
+  const handleUnlockCard = () => {
+    handlePressAction()
+    checkNfcSupport(() => {
+      setupUnlockCardHandlers()
+      startChangePin()
+    })
   }
 
   const handleChangePin = () =>
@@ -139,10 +158,6 @@ export const AusweisIdentity = () => {
     })
   }
 
-  const handleUnlockCard = () => {
-    !clickedHandleUnlockBtn && setClickedHandleUnlockBtn(true)
-  }
-
   const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
 
   return (
@@ -183,7 +198,7 @@ export const AusweisIdentity = () => {
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
-            onPress={handleCompatibilityCheck}
+            onPress={() => handlePress(handleCompatibilityCheck)}
           >
             {t('AusweisIdentity.compatibilityBtn')}
           </Btn>
@@ -197,7 +212,7 @@ export const AusweisIdentity = () => {
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
-            onPress={handleUnlockCard}
+            onPress={() => handlePress(handleUnlockCard)}
           >
             {t('AusweisIdentity.unlockBtn')}
           </Btn>
