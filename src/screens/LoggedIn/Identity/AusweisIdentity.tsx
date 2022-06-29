@@ -29,14 +29,16 @@ const usePendingEidHandler = () => {
   const debounceHandler = useRef<() => void>()
 
   useEffect(() => {
-    if (shouldDisableUnlock && shouldDebounce) {
+    if (!shouldDisableUnlock && shouldDebounce) {
       setShouldDebounce(false)
       debounceHandler.current && debounceHandler.current()
     }
-  }, [shouldDebounce, shouldDisableUnlock])
+  }, [shouldDisableUnlock, shouldDebounce])
 
   const handlePressAction = () => {
-    if (shouldDebounce) setShouldDebounce(false)
+    if (shouldDebounce) {
+      setShouldDebounce(false)
+    }
   }
 
   const handlePress = (handler: () => void) => {
