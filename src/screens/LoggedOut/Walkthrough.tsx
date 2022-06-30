@@ -140,7 +140,7 @@ const Walkthrough: React.FC = () => {
       <Swiper
         loop
         autoplay={isMounted}
-        autoplayTimeout={5}
+        autoplayTimeout={8}
         renderPagination={renderPagination}
       >
         {walkthroughData.map((slide, idx) => (
