@@ -23,7 +23,7 @@ import { IS_ANDROID } from '~/utils/generic'
 import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 
-const usePendingEidHandler = () => {
+export const usePendingEidHandler = () => {
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
   const [shouldDebounce, setShouldDebounce] = useState(false)
   const debounceHandler = useRef<() => void>()
@@ -35,10 +35,8 @@ const usePendingEidHandler = () => {
     }
   }, [shouldDisableUnlock, shouldDebounce])
 
-  const handlePressAction = () => {
-    if (shouldDebounce) {
-      setShouldDebounce(false)
-    }
+  const resetShouldDebounce = () => {
+    if (shouldDebounce) setShouldDebounce(false)
   }
 
   const handlePress = (handler: () => void) => {
@@ -50,7 +48,7 @@ const usePendingEidHandler = () => {
     }
   }
 
-  return { handlePress, handlePressAction }
+  return { handlePress, resetShouldDebounce }
 }
 
 export const AusweisIdentity = () => {
@@ -64,15 +62,15 @@ export const AusweisIdentity = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
-  const { handlePress, handlePressAction } = usePendingEidHandler()
+  const { handlePress, resetShouldDebounce } = usePendingEidHandler()
 
   const handleCompatibilityCheck = () => {
-    handlePressAction()
+    resetShouldDebounce()
     checkNfcSupport(startCompatibilityCheck)
   }
 
   const handleUnlockCard = () => {
-    handlePressAction()
+    resetShouldDebounce()
     checkNfcSupport(() => {
       setupUnlockCardHandlers()
       startChangePin()

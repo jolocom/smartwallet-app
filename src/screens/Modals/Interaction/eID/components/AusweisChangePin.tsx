@@ -21,6 +21,7 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
+import { usePendingEidHandler } from '~/screens/LoggedIn/Identity/AusweisIdentity'
 import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
@@ -58,8 +59,8 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
-  const shouldDisableBtns = !!useSelector(getAusweisFlowType)
   const checkNfcSupport = useCheckNFC()
+  const { handlePress } = usePendingEidHandler()
 
   const changePinFlow =
     isTransportPin.current === true
@@ -222,10 +223,9 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.transportPinSubheader')}
         >
           <Btn
-            onPress={handleChange5DigPin}
+            onPress={() => handlePress(handleChange5DigPin)}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
-            disabled={shouldDisableBtns}
           >
             {t('AusweisChangePin.transportPinBtn')}
           </Btn>
@@ -235,10 +235,9 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.pinSubheader')}
         >
           <Btn
-            onPress={handleChange6DigPin}
+            onPress={() => handlePress(handleChange6DigPin)}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
-            disabled={shouldDisableBtns}
           >
             {t('AusweisChangePin.pinBtn')}
           </Btn>
