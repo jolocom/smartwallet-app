@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Dimensions, ImageBackground } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+  Platform,
+} from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
 import useTranslation from '~/hooks/useTranslation'
@@ -117,7 +123,14 @@ const styles = StyleSheet.create({
   },
   dotsContainer: {
     position: 'relative',
-    bottom: 200,
+    ...Platform.select({
+      android: {
+        bottom: 175,
+      },
+      ios: {
+        bottom: 200,
+      },
+    }),
   },
   activeDotStyle: {
     width: 6,
