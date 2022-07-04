@@ -51,7 +51,7 @@ export const usePendingEidHandler = () => {
     }
   }
 
-  return { handlePress, resetShouldDebounce }
+  return { handlePress, resetShouldDebounce, isLoading: shouldDebounce }
 }
 
 export const AusweisIdentity = () => {
@@ -65,7 +65,7 @@ export const AusweisIdentity = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
-  const { handlePress, resetShouldDebounce } = usePendingEidHandler()
+  const { handlePress, resetShouldDebounce, isLoading } = usePendingEidHandler()
 
   const handleCompatibilityCheck = () => {
     resetShouldDebounce()
@@ -215,6 +215,7 @@ export const AusweisIdentity = () => {
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
+            loading={isLoading}
             onPress={() => handlePress(handleUnlockCard)}
           >
             {t('AusweisIdentity.unlockBtn')}
