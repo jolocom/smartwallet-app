@@ -11,10 +11,10 @@ import JoloText, {
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
+import { IWithCustomStyle } from '~/types/props'
 
-interface ScreenContainerI {
+interface ScreenContainerI extends IWithCustomStyle {
   isTransparent?: boolean
-  customStyles?: ViewStyle
   navigationStyles?: ViewStyle
   isFullscreen?: boolean
   backgroundColor?: Colors

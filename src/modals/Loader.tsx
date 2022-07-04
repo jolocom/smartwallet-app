@@ -80,11 +80,13 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     toValue: number,
     duration: number,
   ) => {
-    return Animated.timing(value, {
-      toValue: toValue,
-      duration: duration,
-      useNativeDriver: true,
-    })
+    return Animated.loop(
+      Animated.timing(value, {
+        toValue: toValue,
+        duration: duration,
+        useNativeDriver: true,
+      }),
+    )
   }
 
   const reset = Animated.parallel([
