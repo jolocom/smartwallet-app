@@ -30,8 +30,10 @@ export const usePendingEidHandler = () => {
 
   useEffect(() => {
     if (!shouldDisableUnlock && shouldDebounce) {
-      setShouldDebounce(false)
-      debounceHandler.current && debounceHandler.current()
+      setTimeout(() => {
+        setShouldDebounce(false)
+        debounceHandler.current && debounceHandler.current()
+      }, 10)
     }
   }, [shouldDisableUnlock, shouldDebounce])
 
@@ -41,6 +43,7 @@ export const usePendingEidHandler = () => {
 
   const handlePress = (handler: () => void) => {
     if (shouldDisableUnlock) {
+      if (shouldDebounce) return
       setShouldDebounce(true)
       debounceHandler.current = handler
     } else {
