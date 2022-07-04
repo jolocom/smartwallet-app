@@ -16,12 +16,13 @@ const colors = {
 const SCALE_MAX = 5
 const CIRCLE_DIAMETER = 18
 
-type HistoryLoaderprops = {
+type Loaderprops = {
   type: LoaderTypes
   bgColor?: Colors
+  msg?: string
 }
-export const HistoryLoader = (props: HistoryLoaderprops) => {
-  const { type, bgColor = Colors.white } = props
+export const LoaderComponent = (props: Loaderprops) => {
+  const { type, msg, bgColor } = props
   const [animating, setAnimating] = useState(true)
 
   useEffect(() => {
@@ -157,7 +158,7 @@ export const HistoryLoader = (props: HistoryLoaderprops) => {
       <View
         style={[
           styles.modalBodyContainer,
-          { backgroundColor: Colors.transparent },
+          { backgroundColor: bgColor || Colors.transparent },
         ]}
       >
         <View
@@ -248,7 +249,7 @@ export const HistoryLoader = (props: HistoryLoaderprops) => {
             color={Colors.white}
             customStyles={{ marginTop: 10 }}
           >
-            Loading
+            {msg || 'Loading'}
           </JoloText>
         </View>
       </View>

@@ -7,7 +7,6 @@ import {
   useInteractionCreate,
   useInteractionUpdate,
 } from '~/hooks/interactions/listeners'
-import { useLoader, LoaderConfig } from '~/hooks/loader'
 import { IPreLoadedInteraction, IHistorySectionData } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
 import { useToasts } from '~/hooks/toasts'
@@ -19,6 +18,7 @@ import RecordHeader from './RecordHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { HistoryLoader } from './components/HistoryLoader'
 import { LoaderTypes } from '~/modules/loader/types'
+import { LoaderComponent } from '~/components/LoaderComp/LoaderComponent'
 
 const ITEMS_PER_PAGE = 5
 
@@ -30,7 +30,6 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   const [activeSection, setActiveSection] = useState('')
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
-  const loader = useLoader()
   const [focusedItem, setFocusedItem] = useState<string | null>(null)
   const [loaderType, setLoaderType] = useState(LoaderTypes.empty)
 
@@ -87,9 +86,6 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
         setLoaderType(LoaderTypes.error)
         scheduleErrorWarning(e)
       })
-
-    // .then(() => console.log('History'))
-    // .catch((err) => console.error(err))
   }, [])
 
   useEffect(() => {
@@ -163,7 +159,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   return (
     <>
       {loaderType ? (
-        <HistoryLoader type={loaderType} />
+        <LoaderComponent type={loaderType} />
       ) : (
         <>
           {sections.length > 0 ? (
