@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import { useSelector } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
@@ -20,39 +19,7 @@ import {
   eIDScreens,
 } from '~/screens/Modals/Interaction/eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
-
-export const usePendingEidHandler = () => {
-  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
-  const [shouldDebounce, setShouldDebounce] = useState(false)
-  const debounceHandler = useRef<() => void>()
-
-  useEffect(() => {
-    if (!shouldDisableUnlock && shouldDebounce) {
-      setTimeout(() => {
-        setShouldDebounce(false)
-        debounceHandler.current && debounceHandler.current()
-      }, 10)
-    }
-  }, [shouldDisableUnlock, shouldDebounce])
-
-  const resetShouldDebounce = () => {
-    if (shouldDebounce) setShouldDebounce(false)
-  }
-
-  const handlePress = (handler: () => void) => {
-    if (shouldDisableUnlock) {
-      if (shouldDebounce) return
-      setShouldDebounce(true)
-      debounceHandler.current = handler
-    } else {
-      handler()
-    }
-  }
-
-  return { handlePress, resetShouldDebounce, isLoading: shouldDebounce }
-}
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -65,7 +32,8 @@ export const AusweisIdentity = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
-  const { handlePress, resetShouldDebounce, isLoading } = usePendingEidHandler()
+  const { handlePress, resetShouldDebounce, isLoading } =
+    eIDHooks.usePendingEidHandler()
 
   const handleCompatibilityCheck = () => {
     resetShouldDebounce()

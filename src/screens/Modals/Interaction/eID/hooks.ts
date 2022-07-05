@@ -44,6 +44,7 @@ import {
   getAusweisReaderState,
   getAusweisScannerKey,
   getDeeplinkConfig,
+  getAusweisFlowType,
 } from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
@@ -591,6 +592,37 @@ export const useObserveAusweisFlow = () => {
   }, [])
 }
 
+const usePendingEidHandler = () => {
+  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
+  const [shouldDebounce, setShouldDebounce] = useState(false)
+  const debounceHandler = useRef<() => void>()
+
+  useEffect(() => {
+    if (!shouldDisableUnlock && shouldDebounce) {
+      setTimeout(() => {
+        setShouldDebounce(false)
+        debounceHandler.current && debounceHandler.current()
+      }, 10)
+    }
+  }, [shouldDisableUnlock, shouldDebounce])
+
+  const resetShouldDebounce = () => {
+    if (shouldDebounce) setShouldDebounce(false)
+  }
+
+  const handlePress = (handler: () => void) => {
+    if (shouldDisableUnlock) {
+      if (shouldDebounce) return
+      setShouldDebounce(true)
+      debounceHandler.current = handler
+    } else {
+      handler()
+    }
+  }
+
+  return { handlePress, resetShouldDebounce, isLoading: shouldDebounce }
+}
+
 const eIDHooks = {
   useAusweisReaderEvents,
   useAusweisCancelBackHandler,
@@ -601,6 +633,7 @@ const eIDHooks = {
   useAusweisInteraction,
   useAusweisContext,
   useObserveAusweisFlow,
+  usePendingEidHandler,
 }
 
 export default eIDHooks
