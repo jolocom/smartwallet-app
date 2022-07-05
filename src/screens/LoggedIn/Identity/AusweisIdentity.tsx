@@ -32,20 +32,21 @@ export const AusweisIdentity = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
-  const { handlePress, isLoading } = eIDHooks.usePendingEidHandler()
+  const { usePendingEidHandler } = eIDHooks
 
-  const handleCompatibilityCheck = (cb: () => void) => {
-    cb()
+  const compatibilityHandler = () => {
     checkNfcSupport(startCompatibilityCheck)
   }
 
-  const handleUnlockCard = (cb: () => void) => {
-    cb()
+  const unlockHandler = () => {
     checkNfcSupport(() => {
       setupUnlockCardHandlers()
       startChangePin()
     })
   }
+
+  const handleCheckCompatibility = usePendingEidHandler(compatibilityHandler)
+  const handleUnlock = usePendingEidHandler(unlockHandler)
 
   const handleChangePin = () =>
     navigation.navigate(ScreenNames.AusweisChangePin)
@@ -168,7 +169,8 @@ export const AusweisIdentity = () => {
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
-            onPress={() => handlePress(handleCompatibilityCheck)}
+            // loading={isLoading}
+            onPress={handleCheckCompatibility}
           >
             {t('AusweisIdentity.compatibilityBtn')}
           </Btn>
@@ -182,8 +184,8 @@ export const AusweisIdentity = () => {
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
-            loading={isLoading}
-            onPress={() => handlePress(handleUnlockCard)}
+            // loading={isLoading}
+            onPress={handleUnlock}
           >
             {t('AusweisIdentity.unlockBtn')}
           </Btn>

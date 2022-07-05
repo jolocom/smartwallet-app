@@ -4,7 +4,6 @@ import { ScrollView, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import { useSelector } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -21,8 +20,6 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
-import { usePendingEidHandler } from '~/screens/LoggedIn/Identity/AusweisIdentity'
-import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
 import Link from '~/components/Link'
@@ -60,7 +57,7 @@ const AusweisChangePin = () => {
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
   const checkNfcSupport = useCheckNFC()
-  const { handlePress } = usePendingEidHandler()
+  const { usePendingEidHandler } = eIDHooks
 
   const changePinFlow =
     isTransportPin.current === true
@@ -204,6 +201,9 @@ const AusweisChangePin = () => {
     })
   }
 
+  const handler5DigPin = usePendingEidHandler(handleChange5DigPin)
+  const handler6DigPin = usePendingEidHandler(handleChange6DigPin)
+
   return (
     <ScreenContainer
       hasHeaderBack
@@ -223,7 +223,7 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.transportPinSubheader')}
         >
           <Btn
-            onPress={() => handlePress(handleChange5DigPin)}
+            onPress={handler5DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
           >
@@ -235,7 +235,7 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.pinSubheader')}
         >
           <Btn
-            onPress={() => handlePress(handleChange6DigPin)}
+            onPress={handler6DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
           >

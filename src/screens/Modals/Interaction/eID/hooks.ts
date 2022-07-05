@@ -592,7 +592,7 @@ export const useObserveAusweisFlow = () => {
   }, [])
 }
 
-const usePendingEidHandler = () => {
+const usePendingEidHandler = (handler: () => void) => {
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
   const [shouldDebounce, setShouldDebounce] = useState(false)
   const debounceHandler = useRef<() => void>()
@@ -614,7 +614,7 @@ const usePendingEidHandler = () => {
     if (shouldDebounce) setShouldDebounce(false)
   }
 
-  const handlePress = (handler: () => void) => {
+  return () => {
     if (shouldDisableUnlock) {
       if (shouldDebounce) return
       setShouldDebounce(true)
@@ -624,8 +624,6 @@ const usePendingEidHandler = () => {
       handler()
     }
   }
-
-  return { handlePress, resetShouldDebounce, isLoading: shouldDebounce }
 }
 
 const eIDHooks = {
