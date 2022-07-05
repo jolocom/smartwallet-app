@@ -32,16 +32,15 @@ export const AusweisIdentity = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
-  const { handlePress, resetShouldDebounce, isLoading } =
-    eIDHooks.usePendingEidHandler()
+  const { handlePress, isLoading } = eIDHooks.usePendingEidHandler()
 
-  const handleCompatibilityCheck = () => {
-    resetShouldDebounce()
+  const handleCompatibilityCheck = (cb: () => void) => {
+    cb()
     checkNfcSupport(startCompatibilityCheck)
   }
 
-  const handleUnlockCard = () => {
-    resetShouldDebounce()
+  const handleUnlockCard = (cb: () => void) => {
+    cb()
     checkNfcSupport(() => {
       setupUnlockCardHandlers()
       startChangePin()

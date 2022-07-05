@@ -595,28 +595,28 @@ export const useObserveAusweisFlow = () => {
 const usePendingEidHandler = () => {
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
   const [shouldDebounce, setShouldDebounce] = useState(false)
-  const debounceHandler = useRef<() => void>()
+  const debounceHandler = useRef<(cb: () => void) => void>()
 
   useEffect(() => {
     if (!shouldDisableUnlock && shouldDebounce) {
       setTimeout(() => {
         setShouldDebounce(false)
-        debounceHandler.current && debounceHandler.current()
+        debounceHandler.current && debounceHandler.current(resetShouldDebounce)
       }, 10)
     }
   }, [shouldDisableUnlock, shouldDebounce])
 
-  const resetShouldDebounce = () => {
+  function resetShouldDebounce() {
     if (shouldDebounce) setShouldDebounce(false)
   }
 
-  const handlePress = (handler: () => void) => {
+  const handlePress = (handler: (cb: () => void) => void) => {
     if (shouldDisableUnlock) {
       if (shouldDebounce) return
       setShouldDebounce(true)
       debounceHandler.current = handler
     } else {
-      handler()
+      handler(resetShouldDebounce)
     }
   }
 
