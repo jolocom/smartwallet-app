@@ -18,7 +18,7 @@ import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
-import useImagePrefetch from '~/hooks/useRenderIcon'
+import useImagePrefetch from '~/hooks/useImagePrefetch'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
