@@ -28,22 +28,14 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
     }
   }
 
-  if (source && serviceUrl) {
-    return (
-      <TouchableOpacity
-        onPress={handleRedirectToCounterparty}
-        activeOpacity={0.9}
-      >
-        <Image style={styles.image} source={{ uri: source }} />
-      </TouchableOpacity>
-    )
-  }
-
-  if (source) {
-    return <Image style={styles.image} source={{ uri: source }} />
-  }
-
-  return (
+  return source ? (
+    <TouchableOpacity
+      onPress={serviceUrl && handleRedirectToCounterparty}
+      activeOpacity={serviceUrl ? 0.9 : 1}
+    >
+      <Image style={styles.image} source={{ uri: source }} />
+    </TouchableOpacity>
+  ) : (
     <View style={[styles.image, { backgroundColor: Colors.white }]}>
       <InitiatorPlaceholderIcon />
     </View>
