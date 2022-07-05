@@ -6,7 +6,7 @@ import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
-import { LoaderComponent } from '~/components/LoaderComp/LoaderComponent'
+import { LoaderComponent } from '~/components/LoaderAnimation/LoaderAnimation'
 
 interface LoaderI {
   bgColor?: Colors

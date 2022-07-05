@@ -17,7 +17,7 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import RecordHeader from './RecordHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { LoaderTypes } from '~/modules/loader/types'
-import { LoaderComponent } from '~/components/LoaderComp/LoaderComponent'
+import { LoaderComponent } from '~/components/LoaderAnimation/LoaderAnimation'
 
 const ITEMS_PER_PAGE = 5
 

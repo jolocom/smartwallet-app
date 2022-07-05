@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-
+import useTranslation from '~/hooks/useTranslation'
 import { View, Animated, StyleSheet, Easing, Dimensions } from 'react-native'
 import { JoloTextSizes } from '~/utils/fonts'
 import Circle from '~/components/Circle'
@@ -25,6 +25,7 @@ type Loaderprops = {
 export const LoaderComponent = (props: Loaderprops) => {
   const { type, msg, bgColor, resetLoader } = props
   const [animating, setAnimating] = useState(true)
+  const { t } = useTranslation()
 
   useEffect(() => {
     return () => setAnimating(false)
@@ -254,7 +255,7 @@ export const LoaderComponent = (props: Loaderprops) => {
             color={Colors.white}
             customStyles={{ marginTop: 10 }}
           >
-            {msg || 'Loading'}
+            {msg || t('Loader.loading')}
           </JoloText>
         </View>
       </View>
