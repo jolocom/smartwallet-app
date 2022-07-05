@@ -3,20 +3,19 @@ import { SectionList, View, ViewToken } from 'react-native'
 import { FlowType, Interaction } from 'react-native-jolocom'
 import { useTabs } from '~/components/Tabs/context'
 import { useHistory } from '~/hooks/history'
+import { useToasts } from '~/hooks/toasts'
 import {
   useInteractionCreate,
   useInteractionUpdate,
 } from '~/hooks/interactions/listeners'
 import { IPreLoadedInteraction, IHistorySectionData } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
-import { useToasts } from '~/hooks/toasts'
 import { IRecordItemsListProps } from './types'
 import { useRecord } from './context'
 import RecordItem from './components/RecordItem'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import RecordHeader from './RecordHeader'
 import useTranslation from '~/hooks/useTranslation'
-import { HistoryLoader } from './components/HistoryLoader'
 import { LoaderTypes } from '~/modules/loader/types'
 import { LoaderComponent } from '~/components/LoaderComp/LoaderComponent'
 
@@ -79,7 +78,6 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
       .then((tokens) => {
         setLoaderType(LoaderTypes.success)
         setInteractions(tokens)
-        setLoaderType(LoaderTypes.empty)
       })
       .catch((e) => {
         console.log('An error occured while fetching Record list items', e)
@@ -159,7 +157,10 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   return (
     <>
       {loaderType ? (
-        <LoaderComponent type={loaderType} />
+        <LoaderComponent
+          type={loaderType}
+          resetLoader={() => setLoaderType(LoaderTypes.empty)}
+        />
       ) : (
         <>
           {sections.length > 0 ? (

@@ -20,9 +20,10 @@ type Loaderprops = {
   type: LoaderTypes
   bgColor?: Colors
   msg?: string
+  resetLoader?: () => void
 }
 export const LoaderComponent = (props: Loaderprops) => {
-  const { type, msg, bgColor } = props
+  const { type, msg, bgColor, resetLoader } = props
   const [animating, setAnimating] = useState(true)
 
   useEffect(() => {
@@ -146,7 +147,11 @@ export const LoaderComponent = (props: Loaderprops) => {
   }
 
   useEffect(() => {
+    const timeOut = setTimeout(() => {
+      if (resetLoader && (type === 'success' || type === 'error')) resetLoader()
+    })
     animating && looping()
+    return () => clearTimeout(timeOut)
   }, [type])
 
   if (!type) {
