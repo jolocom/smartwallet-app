@@ -163,7 +163,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
         />
       ) : (
         <>
-          {interactions.length > 0 ? (
+          {sections.length > 0 ? (
             <SectionList<IHistorySectionData>
               testID={`record-list-${id}`}
               ref={sectionListRef}
@@ -198,12 +198,10 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
               stickySectionHeadersEnabled={false}
             />
           ) : (
-            <>
-              <ScreenPlaceholder
-                title={t('History.placeholderHeader')}
-                description={t('History.placeholderSubheader')}
-              />
-            </>
+            <ScreenPlaceholder
+              title={t('History.placeholderHeader')}
+              description={t('History.placeholderSubheader')}
+            />
           )}
         </>
       )}
