@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
-import { SectionList, View, ViewToken } from 'react-native'
+import { SectionList, View, ViewToken, Text } from 'react-native'
 import { FlowType, Interaction } from 'react-native-jolocom'
 import { useTabs } from '~/components/Tabs/context'
 import { useHistory } from '~/hooks/history'
@@ -30,7 +30,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
   const [focusedItem, setFocusedItem] = useState<string | null>(null)
-  const [loaderType, setLoaderType] = useState(LoaderTypes.empty)
+  const [loaderType, setLoaderType] = useState(LoaderTypes.default)
 
   const {
     getInteractions: getInteractionTokens,
@@ -163,7 +163,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
         />
       ) : (
         <>
-          {sections.length > 0 ? (
+          {interactions.length > 0 ? (
             <SectionList<IHistorySectionData>
               testID={`record-list-${id}`}
               ref={sectionListRef}
@@ -198,10 +198,12 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
               stickySectionHeadersEnabled={false}
             />
           ) : (
-            <ScreenPlaceholder
-              title={t('History.placeholderHeader')}
-              description={t('History.placeholderSubheader')}
-            />
+            <>
+              <ScreenPlaceholder
+                title={t('History.placeholderHeader')}
+                description={t('History.placeholderSubheader')}
+              />
+            </>
           )}
         </>
       )}
