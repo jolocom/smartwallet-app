@@ -73,7 +73,6 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   }, [])
 
   useEffect(() => {
-    setLoaderType(LoaderTypes.default)
     getInteractionTokens(ITEMS_PER_PAGE, 0, flows)
       .then((tokens) => {
         setLoaderType(LoaderTypes.success)
