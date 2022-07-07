@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet, View, Platform } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 import { StackActions, useNavigation } from '@react-navigation/core'
