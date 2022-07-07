@@ -324,6 +324,7 @@ export const getServiceDescription = createSelector(
       did: counterparty.did,
       name: counterparty.publicProfile?.name,
       image: counterparty.publicProfile?.image,
+      serviceUrl: counterparty.publicProfile?.url,
       isAnonymous: counterparty.publicProfile === undefined,
     }
   },

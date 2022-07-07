@@ -16,13 +16,13 @@ import { ServiceLogo } from '~/components/ServiceLogo'
 const Authentication = () => {
   const handleSubmit = useAuthSubmit()
   const { description } = useSelector(getAuthenticationDetails)
-  const { name, image } = useSelector(getServiceDescription)
+  const { name, image, serviceUrl } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <ServiceLogo source={image} />
+        <ServiceLogo source={image} serviceUrl={serviceUrl} />
       </LogoContainerBAS>
       <InteractionTitle label={t('Authentication.header')} />
       <InteractionDescription
