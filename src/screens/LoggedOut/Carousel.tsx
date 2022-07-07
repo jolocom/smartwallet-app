@@ -58,7 +58,7 @@ const CustomCarousel = () => {
                 default: 180,
                 small: 140,
               }),
-              android: BP({ default: 165, small: 0, medium: 180, large: 180 }),
+              android: BP({ default: 165, small: 210 }),
             }),
           }}
         >
@@ -130,18 +130,35 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
       },
     }),
-    // android: BP({ default: 165, small: 0, medium: 180, large: 180 }),
+    android: BP({
+      default: { ...(StyleSheet.absoluteFill as {}), top: -20 },
+      medium: { ...(StyleSheet.absoluteFill as {}), top: -8 },
+      small: {
+        top: 10,
+        flex: 1,
+        resizeMode: 'contain',
+      },
+    }),
   }),
   consistentContainer: {
     paddingHorizontal: '5%',
   },
-  dotsContainer: {
-    position: 'relative',
-    bottom: Platform.select({
-      ios: BP({ default: 200, small: 165 }),
-      android: BP({ default: 175 }),
-    }),
-  },
+  dotsContainer: Platform.select({
+    android: {
+      position: 'absolute',
+      bottom: Platform.select({
+        android: BP({ default: -310 }),
+      }),
+      left: 0,
+      top: 0,
+      right: 0,
+      justifyContent: 'center',
+    },
+    ios: {
+      position: 'relative',
+      bottom: { default: 200, small: 165 },
+    },
+  }),
   activeDotStyle: {
     width: 6,
     height: 6,
