@@ -54,7 +54,7 @@ const CustomCarousel = () => {
           customStyles={{
             ...styles.consistentContainer,
             bottom: Platform.select({
-              ios: BP({ default: 240, large: 280 }),
+              ios: BP({ default: 240, small: 210, large: 280 }),
               android: BP({ default: 240, small: 210 }),
             }),
           }}
