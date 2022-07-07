@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   background: Platform.select({
     ios: BP({
       default: { ...(StyleSheet.absoluteFill as {}), top: -20 },
+      medium: { ...(StyleSheet.absoluteFill as {}), top: -8 },
       small: {
         top: 20,
         flex: 1,
