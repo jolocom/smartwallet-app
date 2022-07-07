@@ -310,13 +310,6 @@ export const getOfferedCredentialsByCategories = createSelector(
   },
 )
 
-export const getServiceImage = createSelector(
-  [getInteractionCounterparty],
-  (counterparty) => {
-    return counterparty.publicProfile?.image
-  },
-)
-
 export const getServiceDescription = createSelector(
   [getInteractionCounterparty],
   (counterparty) => {
