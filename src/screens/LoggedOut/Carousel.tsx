@@ -54,11 +54,8 @@ const CustomCarousel = () => {
           customStyles={{
             ...styles.consistentContainer,
             bottom: Platform.select({
-              ios: BP({
-                default: 180,
-                small: 140,
-              }),
-              android: BP({ default: 165, small: 210 }),
+              ios: BP({ default: 240, large: 280 }),
+              android: BP({ default: 240, small: 210 }),
             }),
           }}
         >
@@ -143,22 +140,18 @@ const styles = StyleSheet.create({
   consistentContainer: {
     paddingHorizontal: '5%',
   },
-  dotsContainer: Platform.select({
-    android: {
-      position: 'absolute',
-      bottom: Platform.select({
-        android: BP({ default: -310 }),
-      }),
-      left: 0,
-      top: 0,
-      right: 0,
-      justifyContent: 'center',
-    },
-    ios: {
-      position: 'relative',
-      bottom: { default: 200, small: 165 },
-    },
-  }),
+  dotsContainer: {
+    height: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: Platform.select({
+      ios: BP({ default: 160, medium: 210, large: 210 }),
+      android: 165,
+    }),
+  },
   activeDotStyle: {
     width: 6,
     height: 6,
