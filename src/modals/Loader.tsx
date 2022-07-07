@@ -230,10 +230,10 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
               </Animated.View>
             )}
             {type === LoaderTypes.success && (
-              <View style={styles.tickContainer}>
-                <View style={{ position: 'absolute', width: 26, height: 26 }}>
-                  <SuccessTick color={colors.default} />
-                </View>
+              // <View style={styles.tickContainer}>
+              <View style={{ position: 'absolute', width: 26, height: 26 }}>
+                <SuccessTick color={colors.default} />
+                {/* </View> */}
                 <Animated.View
                   style={[
                     styles.tickBlocker,
