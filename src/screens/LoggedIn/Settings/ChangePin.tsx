@@ -52,11 +52,11 @@ const ChangePin: React.FC = () => {
   }
 
   const submitNewPin = async () => {
-    loader(
+    await loader(
       async () => {
         await secureStorage.setItem(SecureStorageKeys.passcode, newPin)
       },
-      { success: t('ChangePasscode.successHeader') },
+      { success: t('ChangePasscode.successHeader'), showSuccess: true },
       (error) => {
         if (error) {
           scheduleErrorWarning(error, {
@@ -76,16 +76,10 @@ const ChangePin: React.FC = () => {
     })
   }
 
-  const promisifyCreateNewPin = promisifySubmit((pin) => {
-    if (keychainPin && pin !== keychainPin) {
-      setNewPin(pin)
-      handleStateChange(PasscodeState.repeat)
-    } else {
-      setErrorTitle(t('ChangePasscode.sameCodeHeader'))
-      throw new Error()
-    }
-  })
-  const handleCreateNewPin = promisifyCreateNewPin
+  const handleCreateNewPin = async (pin: string) => {
+    setNewPin(pin)
+    await handleStateChange(PasscodeState.repeat)
+  }
 
   const handleSubmit = async (pin: string, cb: () => void) => {
     switch (passcodeState) {
@@ -99,7 +93,7 @@ const ChangePin: React.FC = () => {
         }
         break
       case PasscodeState.create:
-        await handleCreateNewPin(pin, cb)
+        await handleCreateNewPin(pin)
         break
       case PasscodeState.repeat:
         if (pin === newPin) {
