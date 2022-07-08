@@ -50,7 +50,7 @@ const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 const Camera = () => {
   const { t } = useTranslation()
   const { errorScreen } = useErrors()
-  const { processInteraction } = useInteractionStart()
+  const { startInteraction } = useInteractionStart()
   const dispatch = useDispatch()
   const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
@@ -163,7 +163,7 @@ const Camera = () => {
           })
         }).catch(scheduleErrorWarning)
       } else {
-        await processInteraction(e.data)
+        await startInteraction(e.data)
       }
     } catch (err) {
       console.log('handleScan error', { err })
