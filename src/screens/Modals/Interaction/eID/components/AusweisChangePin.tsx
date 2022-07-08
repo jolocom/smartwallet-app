@@ -57,7 +57,6 @@ const AusweisChangePin = () => {
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
   const checkNfcSupport = useCheckNFC()
-  const { usePendingEidHandler } = eIDHooks
 
   const changePinFlow =
     isTransportPin.current === true
@@ -173,7 +172,7 @@ const AusweisChangePin = () => {
     })
   }
 
-  const handleChange5DigPin = () => {
+  const change5DigPin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = true
       setupHandlers({
@@ -193,7 +192,7 @@ const AusweisChangePin = () => {
     })
   }
 
-  const handleChange6DigPin = () => {
+  const change6DigPin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = false
       setupHandlers()
@@ -201,8 +200,11 @@ const AusweisChangePin = () => {
     })
   }
 
-  const handler5DigPin = usePendingEidHandler(handleChange5DigPin)
-  const handler6DigPin = usePendingEidHandler(handleChange6DigPin)
+  const { handlePress: handle5DigPin, shouldDebounce: isLoading5DigPin } =
+    eIDHooks.usePendingEidHandler(change5DigPin)
+
+  const { handlePress: handle6DigPin, shouldDebounce: isLoading6DigPin } =
+    eIDHooks.usePendingEidHandler(change6DigPin)
 
   return (
     <ScreenContainer
@@ -223,7 +225,8 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.transportPinSubheader')}
         >
           <Btn
-            onPress={handler5DigPin}
+            loading={isLoading5DigPin}
+            onPress={handle5DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
           >
@@ -235,7 +238,8 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.pinSubheader')}
         >
           <Btn
-            onPress={handler6DigPin}
+            loading={isLoading6DigPin}
+            onPress={handle6DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
           >
