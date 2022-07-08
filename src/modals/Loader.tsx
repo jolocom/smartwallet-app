@@ -78,13 +78,11 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     toValue: number,
     duration: number,
   ) => {
-    return Animated.loop(
-      Animated.timing(value, {
-        toValue: toValue,
-        duration: duration,
-        useNativeDriver: true,
-      }),
-    )
+    return Animated.timing(value, {
+      toValue: toValue,
+      duration: duration,
+      useNativeDriver: true,
+    })
   }
 
   const reset = Animated.parallel([
@@ -108,10 +106,9 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
     animateValueTo(animatedWidth3, SCALE_MAX, 2500),
   ])
 
-  const ripple = Animated.sequence([
-    Animated.parallel([fRipple, sRipple, tRipple]),
-    reset,
-  ])
+  const ripple = Animated.loop(
+    Animated.sequence([Animated.parallel([fRipple, sRipple, tRipple]), reset]),
+  )
 
   const bounceError = () => {
     Animated.parallel([
