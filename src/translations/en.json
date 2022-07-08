@@ -110,12 +110,12 @@
         "errorAttributeExists": "Attribute with the same value already exists"
     },
     "CreatePasscode": {
-        "createHeader": "Create passcode",
+        "createHeader": "Create wallet PIN",
         "createSubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
         "helperText": "The passcode can be recovered later by using your secret phrase."
     },
     "VerifyPasscode": {
-        "verifyHeader": "Verify passcode",
+        "verifyHeader": "Verify wallet PIN",
         "verifySubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
         "resetBtn": "Reset"
     },
