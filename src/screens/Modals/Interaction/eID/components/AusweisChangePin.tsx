@@ -56,6 +56,7 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
+  const { usePendingEidHandler } = eIDHooks
   const checkNfcSupport = useCheckNFC()
 
   const changePinFlow =
@@ -201,10 +202,10 @@ const AusweisChangePin = () => {
   }
 
   const { handlePress: handle5DigPin, shouldDebounce: isLoading5DigPin } =
-    eIDHooks.usePendingEidHandler(change5DigPin)
+    usePendingEidHandler(change5DigPin)
 
   const { handlePress: handle6DigPin, shouldDebounce: isLoading6DigPin } =
-    eIDHooks.usePendingEidHandler(change6DigPin)
+    usePendingEidHandler(change6DigPin)
 
   return (
     <ScreenContainer
