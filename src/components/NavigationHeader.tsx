@@ -24,7 +24,9 @@ const NavigationHeader: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const navigateBack = onPress ?? useGoBack()
+  const goBack = useGoBack()
+
+  const navigateBack = onPress ?? goBack
 
   return (
     <View
@@ -42,7 +44,7 @@ const NavigationHeader: React.FC<Props> = ({
           testID="backArrow"
           disabled={type !== NavHeaderType.Back}
           onPress={navigateBack}
-          style={styles.button}
+          customStyles={styles.button}
         >
           <BackArrowIcon />
         </IconBtn>
@@ -55,7 +57,7 @@ const NavigationHeader: React.FC<Props> = ({
           testID="closeIcon"
           disabled={type !== NavHeaderType.Close}
           onPress={navigateBack}
-          style={styles.button}
+          customStyles={styles.button}
         >
           <CloseIcon />
         </IconBtn>
