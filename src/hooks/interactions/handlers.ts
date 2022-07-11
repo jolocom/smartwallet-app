@@ -35,6 +35,7 @@ export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
   const loader = useLoader()
+  const navigation = useNavigation()
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
   const { connected, showDisconnectedToast } = useConnection()
@@ -75,12 +76,17 @@ export const useInteractionStart = () => {
     }
   }
 
+  const navigateInteraction = () => {
+    navigation.navigate(ScreenNames.Interaction)
+  }
+
   const startInteraction = async (jwt: string) =>
     loader(
       async () => {
         const interaction = await processInteraction(jwt)
         if (interaction) {
           await showInteraction(interaction)
+          navigateInteraction()
         }
       },
       { showSuccess: false, showFailed: false },
@@ -89,7 +95,12 @@ export const useInteractionStart = () => {
       },
     )
 
-  return { processInteraction, showInteraction, startInteraction }
+  return {
+    processInteraction,
+    showInteraction,
+    startInteraction,
+    navigateInteraction,
+  }
 }
 
 export const useFinishInteraction = () => {
