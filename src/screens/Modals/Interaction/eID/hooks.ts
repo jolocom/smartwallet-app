@@ -594,13 +594,13 @@ export const useObserveAusweisFlow = () => {
 
 const usePendingEidHandler = (handler: () => void) => {
   const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
-  const [shouldDebounce, setShouldDebounce] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const debounceHandler = useRef<() => void>()
 
   useEffect(() => {
-    if (!shouldDisableUnlock && shouldDebounce) {
+    if (!shouldDisableUnlock && isLoading) {
       setTimeout(() => {
-        setShouldDebounce(false)
+        setIsLoading(false)
         if (debounceHandler.current) {
           resetShouldDebounce()
           debounceHandler.current()
@@ -608,19 +608,19 @@ const usePendingEidHandler = (handler: () => void) => {
         debounceHandler.current = undefined
       }, 1000)
     }
-  }, [shouldDisableUnlock, shouldDebounce])
+  }, [shouldDisableUnlock, isLoading])
 
   function resetShouldDebounce() {
-    if (shouldDebounce) setShouldDebounce(false)
+    if (isLoading) setIsLoading(false)
   }
 
   const handlePress = () => {
-    if (!shouldDisableUnlock && !shouldDebounce) {
+    if (!shouldDisableUnlock && !isLoading) {
       handler()
     } else if (shouldDisableUnlock) {
-      if (shouldDebounce) return
-      else if (!shouldDebounce) {
-        setShouldDebounce(true)
+      if (isLoading) return
+      else if (!isLoading) {
+        setIsLoading(true)
         debounceHandler.current = handler
       }
     }
@@ -628,7 +628,7 @@ const usePendingEidHandler = (handler: () => void) => {
 
   return {
     handlePress,
-    shouldDebounce,
+    isLoading,
   }
 }
 

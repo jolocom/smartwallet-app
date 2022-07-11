@@ -46,10 +46,10 @@ export const AusweisIdentity = () => {
 
   const {
     handlePress: handleCompatibility,
-    shouldDebounce: isLoadingCompatibility,
+    isLoading: isLoadingCompatibility,
   } = usePendingEidHandler(compatibilityCheck)
 
-  const { handlePress: handleUnlockCard, shouldDebounce: isLoadingUnlock } =
+  const { handlePress: handleUnlockCard, isLoading: isLoadingUnlock } =
     usePendingEidHandler(unlockCardCheck)
 
   const handleChangePin = () =>

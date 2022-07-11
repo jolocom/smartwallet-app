@@ -201,10 +201,10 @@ const AusweisChangePin = () => {
     })
   }
 
-  const { handlePress: handle5DigPin, shouldDebounce: isLoading5DigPin } =
+  const { handlePress: handle5DigPin, isLoading: isLoading5DigPin } =
     usePendingEidHandler(change5DigPin)
 
-  const { handlePress: handle6DigPin, shouldDebounce: isLoading6DigPin } =
+  const { handlePress: handle6DigPin, isLoading: isLoading6DigPin } =
     usePendingEidHandler(change6DigPin)
 
   return (
