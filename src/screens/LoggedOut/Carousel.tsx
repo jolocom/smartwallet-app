@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
       default: { ...StyleSheet.absoluteFillObject, top: -20 },
       medium: { ...StyleSheet.absoluteFillObject, top: -8 },
       small: {
-        top: 20,
         flex: 1,
         resizeMode: 'contain',
       },
@@ -131,7 +130,6 @@ const styles = StyleSheet.create({
       default: { ...StyleSheet.absoluteFillObject, top: -20 },
       medium: { ...StyleSheet.absoluteFillObject, top: -8 },
       small: {
-        top: 10,
         flex: 1,
         resizeMode: 'contain',
       },
