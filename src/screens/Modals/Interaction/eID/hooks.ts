@@ -600,19 +600,14 @@ const usePendingEidHandler = (handler: () => void) => {
   useEffect(() => {
     if (!shouldDisableUnlock && isLoading) {
       setTimeout(() => {
-        setIsLoading(false)
         if (debounceHandler.current) {
-          resetShouldDebounce()
+          setIsLoading(false)
           debounceHandler.current()
+          debounceHandler.current = undefined
         }
-        debounceHandler.current = undefined
-      }, 1000)
+      }, 500)
     }
   }, [shouldDisableUnlock, isLoading])
-
-  function resetShouldDebounce() {
-    if (isLoading) setIsLoading(false)
-  }
 
   const handlePress = () => {
     if (!shouldDisableUnlock && !isLoading) {
