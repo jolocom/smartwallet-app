@@ -606,7 +606,7 @@ const usePendingEidHandler = (handler: () => void) => {
           debounceHandler.current()
         }
         debounceHandler.current = undefined
-      }, 10)
+      }, 1000)
     }
   }, [shouldDisableUnlock, shouldDebounce])
 
@@ -615,13 +615,14 @@ const usePendingEidHandler = (handler: () => void) => {
   }
 
   const handlePress = () => {
-    if (shouldDisableUnlock) {
-      if (shouldDebounce) return
-      setShouldDebounce(true)
-      debounceHandler.current = handler
-    } else {
-      resetShouldDebounce()
+    if (!shouldDisableUnlock && !shouldDebounce) {
       handler()
+    } else if (shouldDisableUnlock) {
+      if (shouldDebounce) return
+      else if (!shouldDebounce) {
+        setShouldDebounce(true)
+        debounceHandler.current = handler
+      }
     }
   }
 
