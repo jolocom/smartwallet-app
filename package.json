@@ -51,7 +51,6 @@
     "@sentry/react-native": "^2.6.2",
     "@testing-library/react-hooks": "^3.2.1",
     "D": "^1.0.0",
-    "add": "^2.0.6",
     "assert": "^1.1.1",
     "asyncstorage-down": "^4.2.0",
     "bip39": "^3.0.2",
@@ -115,7 +114,6 @@
     "unorm": "^1.6.0",
     "vm-browserify": "^1.1.2",
     "ws": "^7.3.1",
-    "yarn": "^1.22.19",
     "yup": "^0.32.8"
   },
   "devDependencies": {
