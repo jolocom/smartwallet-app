@@ -619,10 +619,8 @@ const usePendingEidHandler = (handler: () => void) => {
       handler()
     } else if (shouldDisableUnlock) {
       if (isLoading) return
-      else if (!isLoading) {
-        setIsLoading(true)
-        debounceHandler.current = handler
-      }
+      setIsLoading(true)
+      debounceHandler.current = handler
     }
   }
 
