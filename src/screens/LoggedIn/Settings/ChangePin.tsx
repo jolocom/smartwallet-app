@@ -1,20 +1,16 @@
 import React, { useState } from 'react'
 
-import ScreenContainer from '~/components/ScreenContainer'
-
-import { sleep } from '~/utils/generic'
-
-import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
-import { useGoBack, useRedirect } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
-import { useLoader } from '~/hooks/loader'
-import { useEffect } from 'react'
-import useTranslation from '~/hooks/useTranslation'
-import { useToasts } from '~/hooks/toasts'
-import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
-import { promisifySubmit } from '~/components/Passcode/utils'
-import { ScreenNames } from '~/types/screens'
 import { IPasscodeContext } from '~/components/Passcode/types'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
+import { useLoader } from '~/hooks/loader'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
+import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
+import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
+import { ScreenNames } from '~/types/screens'
+import { sleep } from '~/utils/generic'
 
 enum PasscodeState {
   verify = 'verify',
