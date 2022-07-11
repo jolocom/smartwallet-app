@@ -119,8 +119,8 @@ export default CustomCarousel
 const styles = StyleSheet.create({
   background: Platform.select({
     ios: BP({
-      default: { ...(StyleSheet.absoluteFill as {}), top: -20 },
-      medium: { ...(StyleSheet.absoluteFill as {}), top: -8 },
+      default: { ...StyleSheet.absoluteFillObject, top: -20 },
+      medium: { ...StyleSheet.absoluteFillObject, top: -8 },
       small: {
         top: 20,
         flex: 1,
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
       },
     }),
     android: BP({
-      default: { ...(StyleSheet.absoluteFill as {}), top: -20 },
-      medium: { ...(StyleSheet.absoluteFill as {}), top: -8 },
+      default: { ...StyleSheet.absoluteFillObject, top: -20 },
+      medium: { ...StyleSheet.absoluteFillObject, top: -8 },
       small: {
         top: 10,
         flex: 1,
