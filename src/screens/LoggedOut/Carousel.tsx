@@ -54,7 +54,7 @@ const CustomCarousel = () => {
           customStyles={{
             ...styles.consistentContainer,
             bottom: Platform.select({
-              ios: BP({ default: 240, small: 210, large: 280 }),
+              ios: BP({ default: 240, small: 210, large: 260 }),
               android: BP({ default: 240, small: 210 }),
             }),
           }}
@@ -117,23 +117,13 @@ const CustomCarousel = () => {
 export default CustomCarousel
 
 const styles = StyleSheet.create({
-  background: Platform.select({
-    ios: BP({
-      default: { ...StyleSheet.absoluteFillObject, top: -20 },
-      medium: { ...StyleSheet.absoluteFillObject, top: -8 },
-      small: {
-        flex: 1,
-        resizeMode: 'contain',
-      },
-    }),
-    android: BP({
-      default: { ...StyleSheet.absoluteFillObject, top: -20 },
-      medium: { ...StyleSheet.absoluteFillObject, top: -8 },
-      small: {
-        flex: 1,
-        resizeMode: 'contain',
-      },
-    }),
+  background: BP({
+    default: { ...StyleSheet.absoluteFillObject, top: -20 },
+    medium: { ...StyleSheet.absoluteFillObject, top: -8 },
+    small: {
+      flex: 1,
+      resizeMode: 'contain',
+    },
   }),
   consistentContainer: {
     paddingHorizontal: '5%',
@@ -147,7 +137,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: Platform.select({
       ios: BP({ default: 160, medium: 210, large: 210 }),
-      android: 165,
+      android: BP({ default: 165 }),
     }),
   },
   activeDotStyle: {
