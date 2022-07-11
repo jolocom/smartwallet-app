@@ -166,7 +166,7 @@ const FieldDetails = () => {
                 </JoloText>
               </Collapsible.Title>
               <Block
-                customStyle={{
+                customStyles={{
                   backgroundColor: Colors.white,
                   marginBottom: 16,
                 }}
