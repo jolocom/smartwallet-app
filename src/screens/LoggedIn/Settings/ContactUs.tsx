@@ -111,7 +111,7 @@ const ContactUs: React.FC = () => {
               </Section>
               <Section>
                 <Collapsible.Title text={t('ContactUs.suggestionHeader')}>
-                  <Section.Title customStyle={{ marginBottom: 14 }}>
+                  <Section.Title customStyles={{ marginBottom: 14 }}>
                     {t('ContactUs.suggestionHeader')}
                   </Section.Title>
                 </Collapsible.Title>
@@ -135,7 +135,7 @@ const ContactUs: React.FC = () => {
               </Section>
               <Section customStyles={{ marginBottom: 84 }}>
                 <Collapsible.Title text={t('ContactUs.contactHeader')}>
-                  <Section.Title customStyle={{ marginBottom: 0 }}>
+                  <Section.Title customStyles={{ marginBottom: 0 }}>
                     {t('ContactUs.contactHeader')}
                   </Section.Title>
                 </Collapsible.Title>

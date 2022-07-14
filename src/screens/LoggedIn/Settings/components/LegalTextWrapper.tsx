@@ -63,7 +63,7 @@ const LegalTextWrapper: React.FC<Props> = ({
             >
               <Collapsible.Title text={title}>
                 <Section.Title
-                  customStyle={{ marginBottom: 16, marginTop: 16 }}
+                  customStyles={{ marginBottom: 16, marginTop: 16 }}
                 >
                   {title}
                 </Section.Title>

@@ -124,7 +124,7 @@ platform :android do
   desc "Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password"
   lane :get_secrets do
     begin
-      sh("git clone dev@hetz1.jolocom.io:android-secrets")
+      sh("git clone dev@hetz1.jolocom.io:android-secrets -b master")
     rescue
       puts "secrets already present"
     end

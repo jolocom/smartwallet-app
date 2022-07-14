@@ -4,7 +4,6 @@ import { ScrollView, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import { useSelector } from 'react-redux'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -21,7 +20,6 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '../types'
-import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
 import Link from '~/components/Link'
@@ -58,7 +56,7 @@ const AusweisChangePin = () => {
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
   const isTransportPin = useRef(false)
-  const shouldDisableBtns = !!useSelector(getAusweisFlowType)
+  const { usePendingEidHandler } = eIDHooks
   const checkNfcSupport = useCheckNFC()
 
   const changePinFlow =
@@ -175,7 +173,7 @@ const AusweisChangePin = () => {
     })
   }
 
-  const handleChange5DigPin = () => {
+  const change5DigPin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = true
       setupHandlers({
@@ -195,13 +193,19 @@ const AusweisChangePin = () => {
     })
   }
 
-  const handleChange6DigPin = () => {
+  const change6DigPin = () => {
     checkNfcSupport(() => {
       isTransportPin.current = false
       setupHandlers()
       startChangePin()
     })
   }
+
+  const { handlePress: handle5DigPin, isLoading: isLoading5DigPin } =
+    usePendingEidHandler(change5DigPin)
+
+  const { handlePress: handle6DigPin, isLoading: isLoading6DigPin } =
+    usePendingEidHandler(change6DigPin)
 
   return (
     <ScreenContainer
@@ -222,10 +226,10 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.transportPinSubheader')}
         >
           <Btn
-            onPress={handleChange5DigPin}
+            loading={isLoading5DigPin}
+            onPress={handle5DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
-            disabled={shouldDisableBtns}
           >
             {t('AusweisChangePin.transportPinBtn')}
           </Btn>
@@ -235,10 +239,10 @@ const AusweisChangePin = () => {
           descriptionText={t('AusweisChangePin.pinSubheader')}
         >
           <Btn
-            onPress={handleChange6DigPin}
+            loading={isLoading6DigPin}
+            onPress={handle6DigPin}
             type={BtnTypes.quaternary}
             customTextStyles={{ opacity: 1 }}
-            disabled={shouldDisableBtns}
           >
             {t('AusweisChangePin.pinBtn')}
           </Btn>

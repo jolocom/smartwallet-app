@@ -11,16 +11,11 @@ import Settings from './Settings'
 import Identity from './Identity'
 import { CredentialCategories } from '~/types/credentials'
 import useTranslation from '~/hooks/useTranslation'
-import { useInteractionStart } from '~/hooks/interactions/handlers'
 import { useNavigation } from '@react-navigation/core'
-import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import { useDeeplinkInteractions } from '~/hooks/deeplinks'
-import {
-  getInteractionType,
-  getAusweisInteractionDetails,
-} from '~/modules/interaction/selectors'
+import { getAusweisInteractionDetails } from '~/modules/interaction/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
@@ -34,24 +29,11 @@ const MainTabsNavigator = createBottomTabNavigator<MainTabsParamList>()
 const MainTabs = () => {
   const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
-  const isInteracting = useSelector(getInteractionType)
   const isAusweisInteracting = useSelector(getAusweisInteractionDetails)
 
-  const { showInteraction } = useInteractionStart()
   const navigation = useNavigation()
 
   useDeeplinkInteractions()
-  useInteractionEvents(showInteraction)
-
-  // Show an interaction sheet declaratively by
-  // observing store changes
-  useEffect(() => {
-    if (!isAppLocked && isInteracting) {
-      navigation.navigate(ScreenNames.Interaction, {
-        screen: ScreenNames.InteractionFlow,
-      })
-    }
-  }, [isInteracting, isAppLocked])
 
   useEffect(() => {
     if (!isAppLocked && isAusweisInteracting) {
