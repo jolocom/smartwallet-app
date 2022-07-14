@@ -28,7 +28,10 @@ end
 desc 'Get API token for MS AppCenter'
 lane :get_appcenter_token do
   begin
+    sh("git clone dev@hetz1.jolocom.io:common-secrets -b master")
     File.read("common-secrets/appcenter/api_key.txt")
+  rescue
+    puts "common-secrets already exists"
   end
 end
 
