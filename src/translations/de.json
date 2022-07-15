@@ -497,7 +497,7 @@
         "validityLabel": "Gültigkeit"
     },
     "AusweisPasscode": {
-        "authPinHeader": "PIN eingeben",
+        "authPinHeader": "eID PIN eingeben",
         "pinForgotBtn": "Wenn Sie Ihre PIN vergessen oder noch nicht aktiviert haben, <1>klicken Sie hier.</1>",
         "transportPinHeader": "5-stelllige PIN eingeben",
         "transportPinBtn": "Wo kann ich das finden?",
@@ -512,7 +512,7 @@
     },
     "AusweisPukLock": {
         "header": "Ihre Karte ist gesperrt und Sie müssen zum Entsperren den PUK-Code eingeben",
-        "subtitle": "Sie können Ihre Karte im Menü \"Identität\" entsperren, indem Sie \"Meine Karte entsperren\" klicken",
+        "subtitle": "Sie können Ihre Karte im Menü \"Identität\" entsperren, indem Sie \"Karte entsperren\" klicken",
         "proceedBtn": "Weiter mit dem PUK-Code",
         "closeBtn": "Interaktion beenden"
     },
@@ -523,18 +523,18 @@
         "changePinBtn": "PIN ändern",
         "unlockBtn": "Karte entsperren",
         "ausweisBadge": "Online-Ausweisfunktion",
-        "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID-PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
+        "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
         "moreInfoHeader": "Mehr Informationen"
     },
     "AusweisChangePin": {
         "transportPinHeader": "eID PIN einrichten",
-        "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport-PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
+        "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
         "transportPinBtn": "eID PIN einrichten",
         "pinHeader": "6-stellige eID PIN ändern",
         "pinSubheader": "Wenn Sie bereits eine 6-stellige PIN festgelegt haben, können Sie diese hier ändern.",
         "pinBtn": "PIN ändern",
         "forgotHeader": "Haben Sie Ihre eID PIN vergessen?",
-        "forgotSubheader": "Wenn Sie Ihre eID-PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
+        "forgotSubheader": "Wenn Sie Ihre eID PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
     },
     "AusweisPinInfo": {
         "header": "PIN Informationen",
