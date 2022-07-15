@@ -1,28 +1,28 @@
-import { useNavigation } from '@react-navigation/native'
-import React, { useCallback, useRef } from 'react'
-import { ScrollView, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { StackActions, useNavigation } from '@react-navigation/native'
+import React, { useCallback, useRef } from 'react'
+import { ScrollView, View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
+import Link from '~/components/Link'
 import ScreenContainer from '~/components/ScreenContainer'
+import { useCheckNFC } from '~/hooks/nfc'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { IS_ANDROID } from '~/utils/generic'
+import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
 import eIDHooks from '../hooks'
 import {
   AusweisFlow,
   AusweisPasscodeMode,
   AusweisScannerState,
   CardInfoMode,
-  eIDScreens,
+  eIDScreens
 } from '../types'
-import { useCheckNFC } from '~/hooks/nfc'
-import { AUSWEIS_SUPPORT_EMAIL, AUSWEIS_SUPPORT_PHONE } from '../constants'
-import Link from '~/components/Link'
 
 interface LocalSectionProps {
   headerText: string
@@ -65,23 +65,32 @@ const AusweisChangePin = () => {
       : AusweisFlow.changePin
 
   const pinHandler = useCallback((card: CardInfo) => {
-    checkCardValidity(card, () => {
-      navigation.navigate(ScreenNames.Interaction, {
-        screen: ScreenNames.eId,
+    const params = {
+      screen: ScreenNames.eId,
+      params: {
+        screen: eIDScreens.EnterPIN,
         params: {
-          screen: eIDScreens.EnterPIN,
-          params: {
-            flow: changePinFlow,
-            mode:
-              isTransportPin.current === true
-                ? AusweisPasscodeMode.TRANSPORT_PIN
-                : AusweisPasscodeMode.PIN,
-            pinContext: isTransportPin.current
+          flow: changePinFlow,
+          mode:
+            isTransportPin.current === true
               ? AusweisPasscodeMode.TRANSPORT_PIN
-              : undefined,
-          },
+              : AusweisPasscodeMode.PIN,
+          pinContext: isTransportPin.current
+            ? AusweisPasscodeMode.TRANSPORT_PIN
+            : undefined,
         },
-      })
+      },
+    }
+
+    checkCardValidity(card, () => {
+      if (isTransportPin.current) {
+        // NOTE: special behavior for transport PIN due to the intermediary screen
+        navigation.dispatch(
+          StackActions.replace(ScreenNames.Interaction, params),
+        )
+      } else {
+        navigation.navigate(ScreenNames.Interaction, params)
+      }
     })
   }, [])
 
@@ -114,7 +123,10 @@ const AusweisChangePin = () => {
       screen: ScreenNames.AusweisCardInfo,
       params: {
         mode: CardInfoMode.standaloneUnblock,
-        onDismiss: cancelFlow,
+        onDismiss: () => {
+          cancelFlow()
+          navigation.goBack()
+        },
       },
     })
   }, [])
