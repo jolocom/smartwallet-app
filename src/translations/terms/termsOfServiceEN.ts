@@ -1,115 +1,109 @@
-export const termsOfServiceEN = `SmartWallet App - Terms of Use
-Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin, Germany (“Jolocom”)
+export const termsOfServiceEN = `Terms of Use SmartWallet App  
+Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin ("Jolocom")
 
 
-I.     Preamble / Validity and changes to the Terms of Use
+I. Preamble / Validity and Amendment of the Terms of Use
 
-Jolocom GmbH is the provider of a mobile software application, the Jolocom SmartWallet App ("App"), for various operating systems (iOS, Android). The “User” is the person who downloads the app to his, her, or their mobile device (“download”) and / or uses the app installed on a mobile device. Jolocom and the user are hereinafter referred to each individually as "Party" or collectively as "Parties".
+Jolocom is a provider of a mobile software application, the Jolocom SmartWallet App ("App"), for various operating systems (iOS, Android). The "User" is the person who downloads the App to their mobile device ("Download") and/ or starts using the App installed on a mobile device. Jolocom and the User are hereinafter each individually also referred to as a "Party" or jointly as "Parties". 
 
-Jolocom is of the opinion that data protection and data security go hand in hand with transparent technology. Jolocom does not see or have access to the User's data, and guarantees full transparency with regard to the source code of the SmartWallet. The code can be viewed at any time on the GitHub developer platform in order to guarantee the highest level of transparency to the User.
+Providers of external software applications that are made available to the User by Jolocom via interfaces are referred to as "Third-Party Providers". 
 
-Since Jolocom has no access to a User's App, changes to the App will always be accompanied by a new version. Jolocom will keep the source code freely visible even with such new versions.
+The integrated third party providers are listed individually below: 
 
-The download and use of the app are free of charge.
+- As part of the experimental showcase projects "Secure Digital Identities" of the German Federal Ministry of Economic Affairs and Climate Protection ("BMWK"), the AusweisApp2 SDK ("AA2 SDK") of Governikus GmbH ("Third Party Provider") is integrated into the App. 
 
-These Terms of Use regulate the relationship between Jolocom and the Users. By downloading the app and / or using it, the User agrees to the validity of the Terms of Use. They also apply if the User operates according to other (e.g. the User’s own) general terms and conditions and these contain conflicting or deviating regulations. General terms and conditions of the User do not apply, even if Jolocom does not expressly contradict them.
+Jolocom believes that data privacy and data security go hand in hand with transparent technology. Jolocom does not gain insight or access to the user's data at any time and guarantees full transparency regarding the source code of the SmartWallet. The code can be viewed at any time on the developer platform GitHub to ensure the highest level of transparency for the user. 
+Since Jolocom has no access to the user's app, changes to the app will always be accompanied by a new version. Jolocom will keep the source code of such new versions freely accessible. 
 
-The Terms of Use apply as stated to any updates or other changes to the App, unless otherwise notified by Jolocom.
+The download as well as the use of the App are free of charge.
 
-In addition, the statutory provisions apply for the free provision of the software application, in particular §§ 516 ff. BGB (Schenkung / Donation).
+These terms of use regulate the relationship between Jolocom and the users. By downloading the app and / or using it, the user agrees to the validity of the terms of use. They also apply if the user uses his own general terms and conditions and these contain conflicting or deviating provisions. General Terms and Conditions of the User shall not apply, even if Jolocom does not expressly object to them. 
 
-Jolocom reserves the right to change these Terms of Use for objective reasons (e.g. change in jurisdiction or law, change in economic conditions or the business model). In this case, Jolocom provides an updated version of the App for the User to download.
+The Terms of Use apply accordingly to any updates or other changes to the App, unless otherwise notified by Jolocom.
 
+In addition, the statutory provisions apply to the provision of the App free of charge, in particular §§ 516 ff. BGB (German Civil Code) (“Schenkung”).
 
-II.     Purpose of the App / Scope of service
-
-The App enables a decentralized digital identity and authentication management. They allow the User to create, exchange and manage unique identity information.
-The data (e.g. name, address, proof of insurance, identity card information) are exclusively stored locally and in unencrypted form on the User's mobile device. They can be verified through submission to identification and trust services ("Issuers"). The User decides which of the User’s verified data to make available to which company.
-The App is therefore purely a tool for organizing and managing one’s own (personal) data. It is the sole responsibility of the User to save the stored content and make data backups.
-Jolocom has no knowledge of the data and does not have any access to the data input by the User, and therefore does not verify the data independently.
-The App does not provide any storage space. All data inputted into the App are stored exclusively on the respective mobile device of the User.
-The internet connection and the functioning infrastructure of the mobile device involved (e.g. permissible device, version of the operating system, storage space on the mobile device) are not part of Jolocom's services. The User is responsible for these.
+Jolocom reserves the right to change these terms of use for factual reasons (e.g. change of law or jurisdiction, change of economic circumstances or business model). In this case Jolocom will provide an updated version of the app for download to the user.
 
 
-III.     Conclusion of the agreement / Provision of the App
+II Subject of the App / Scope of Services 
+1. The app enables decentralized digital identity and authentication management. Through it, the user can create and manage unique identity information, as well as receive it from issuers or trust services ("Issuer") or present it to acceptance points ("Verifier") in a self-determined manner.
+2. The data (e.g. name, address, proofs) is stored exclusively locally and encrypted on the user's mobile device. Such data sets can be self-issued or received from official authorities acting as trust services ("Issuers"). Verification is carried out by entities, that have an official mandate to verify identity information and which actively request the identity information from the the wallet ("verifiers"). The users themselves decide which data sets they wish to store in their wallets and which of their verifiable data sets they make available to which company. 
+3. The app is thus purely a tool for organizing and managing one's own (personal) data. It is the sole responsibility of the user to save the stored content and to make data backups. 
+4. Jolocom does neither gain knowledge of, nor has access to the user's data and therefore does not assume any independent verification of the data. 
+5. The app does not provide any independent or hosted storage space by itself. All data inserted into the app will be stored exclusively on the user's respective mobile end device.
+6. An internet connection and functioning infrastructure of the mobile device involved (e.g. permissible device, version of the operating system, storage space on the device) are not subject of the services of Jolocom. The users themselves are responsible for this.
+Any third-party providers whose software applications are made available to the User via interfaces in the app of Jolocom shall not become contractual partners of this usage agreement.  Jolocom has no influence on any terms and conditions of third party providers, nor the data being collected by them and therefore bears no responsibility in this respect. The user decides freely and independently if they want to use integrated software applications of third party providers and if they want to agree to the terms of use. 
 
-Jolocom provides the App via the Google Play Store, the Apple App Store, or the Microsoft GitHub platform (jointly "Download Platforms") for download on the User's mobile device free of charge.
-With the download of the App onto a mobile device and / or the use of an already installed App, a usage agreement is concluded between Jolocom and the User. The User must be at least 18 years of age at the time when the agreement is concluded.
-Neither Apple Inc., as the operator of the Apple App Store, nor Google Inc., as the operator of the Google Play Store, nor GitHub Inc., as the operator of the GitHub, become contractual partners of this User agreement. Jolocom has no influence on any terms and conditions of the Download Platforms or the data collection there, and bears no responsibility in this regard.
-There is no right to constant and uninterrupted availability of the App. Temporary service interruptions due to standard maintenance times, network disruptions or in the event of force majeure are possible. However, Jolocom endeavors to achieve the highest possible availability and to rectify disruptions as quickly as possible.
+III Conclusion of Contract / Provision of the App 
+1. Jolocom provides the App via the Google Play Store, via the Apple App Store as well as via Microsoft GitHub (together "Download Platforms") for free download to mobile devices of the User. 
+2. With the download of the App to a mobile device and / or the use of an already installed App a contract of use between Jolocom and the User is concluded. The user must be at least 18 years old at the time of the conclusion of the contract. 
+a.	A use of the App by minors can only take place with the express consent of a legal guardian that is themselves of age.  
+3. Neither Apple Inc. as the operator of the Apple App Store, nor Google Inc. as the operator of the Google Play Store, nor GitHub Inc. as the operator of GitHub shall become contractual partners of this usage agreement.  Jolocom has no influence on possible terms and conditions of the download platforms or data collection there and bears no responsibility in this respect.
+4. There is no claim to a constant and uninterrupted availability of the App. Temporary service interruptions due to standard maintenance, system-immanent disturbances of the internet as well as in case of force majeure are possible. However, Jolocom endeavors to achieve the highest possible availability and to remedy any disruptions as quickly as possible. 
 
-
-IV.    Download / Use
-
-Downloading the App as well as access to notifications, updates, or other changes require a functioning internet connection and a functioning infrastructure of the mobile device involved (e.g. permissible device, version of the operating system, storage space on the device).
-The technical requirements for downloading and using the App are shown in the description in the Download Platforms.
-Functions such as opening and looking through the App after the download / update are also available offline. Internet connection is therefore not required while using these functions. Interactions with Issuers, however, require a working internet connection.
-
-
-V.     Notifications / Updates / Changes
-
-Jolocom reserves the right to change, interrupt, or discontinue the App and its functions at its own discretion.
-In the event of any change, e.g. changes in the service, the functions, the content, or the terms of use, Jolocom will provide a new version of the App. It is the sole responsibility of the User to establish a connection to the internet at regular intervals and to update the App to the latest version in accordance with the terms of use of the respective Download Platform.
-If the updates require further authorizations, the User will be informed of this before the installation. If the User does not agree to these further authorizations, there will be no update and this may affect the operation of the App.
-Additional functions and services within the App may be or become subjects to charge. In this case, Jolocom will notify you of the prices and features in advance. The use of new paid functions and services is at the sole discretion of the User.
-
-
-VI.    Obligations of the User
-
-A registration is not required.
-It is up to the User to ensure the functionality of the working environment of the App (e.g. permissible device, version of the operating system, storage space on the device) and to test usability in the specific situation before starting productive use of the app.
-The User undertakes to provide only correct, complete, and truthful information, in particular with regard to the User’s identity. The User safeguards his, her, or their App-based identity from inspection, access, and use by third parties.
-It is the sole responsibility of the User to save the stored content and to back up data.
-The App may not be used in any way that harms third parties, is improper, or violates legal provisions and regulations of German law.
+IV.	Download / Use
+1. The download of the App as well as access to notifications, updates or other changes require a functioning internet connection and presuppose a functioning infrastructure of the mobile end device involved (e.g. permitted end device, version of the operating system, storage space on the end device). 
+2. The technical requirements for downloading and using the app are shown in the description in the download platforms. 
+3. Functions such as opening and browsing the app after downloading/updating are available offline. Therefore, an Internet connection is not required while using these functions. Interactions with issuers, on the other hand, require a working internet connection. 
+4. The additional function of the AA2 SDK is currently provided exclusively for research purposes and is aimed exclusively at pilot participants and members of the Secure Digital Identity showcase projects of the German Federal Ministry of Economic Affairs and Climate Protection.  
 
 
-VII.    Copyrights, rights of use, and other ancillary copyrights
+V.	Notifications / Updates / Changes 
+1. Jolocom reserves the right to modify, suspend or discontinue the App and its functions at its sole discretion. 
+2. In case of any change, e.g. due to changes in performance, functions, content or terms of use, Jolocom will provide a new version of the App. It is the sole responsibility of the User to connect to the Internet at regular intervals and to update the App to the latest version in accordance with the Terms of Use of the respective download platform.
+3. If the updates require additional authorizations, the User shall be informed thereof prior to installation. If the User does not agree to these additional authorizations, no update will be carried out and it may be that the operation of the App will be impaired as a result.
+4. Additional functions and services within the App may be or become subject to a charge. In this case, Jolocom will communicate the prices and service features in advance. The use of new chargeable functions and services is at the sole discretion of the User.
 
-All copyrights, patents, trademarks, and other ancillary copyrights to the App are exclusively due to Jolocom in the relationship between the Parties. The creation or addition of content in(to) the App does not give rise to any joint copyright of the User.
-The User is granted the simple, non-transferable right to use the App as intended.
-The User is not authorized to edit or change the App in any way (e.g. making changes to the (source) code, software, or documentation, for instance, through reverse engineering, manipulation, decompilation, disassembly; or similar changes).
-Any form of imitation, reproduction, sale, or other distribution of the App or parts of the App by the User is prohibited.
-
-
-VIII.    Guarantee
-
-Jolocom is only liable for material and legal defects in the provided App if Jolocom has fraudulently concealed the defect from the User.
-
-
-IX.    Liability
-
-In addition, Jolocom is only liable for damage caused by itself or its vicarious agents in the event of willful intent and gross negligence.
-The objection of contributory negligence remains open to Jolocom. In particular, the User is obliged to use the App as intended, to back up data, and to ensure a functional working environment.
-Jolocom is expressly not liable for the loss of content and any resulting damage that is based on damage / loss of the mobile device or on improper use of the App caused by the User, or if the User has not made a backup and this has resulted in a loss of data.
-Jolocom has no knowledge of and no access to the content created or added by the User. Jolocom is therefore also not liable for the legality and lawful possession of the content.
+VI. Duties of the users
+1. Registration is not required.
+2. It is the user's responsibility to ensure the operability of the app's working environment (e.g. permissible terminal device, operating system version, storage space on the terminal device) and to test its usability in the specific situation before starting to use the app productively.  
+3. The User undertakes to provide only correct, complete and truthful information, in particular with regard to their identity. They guard the identity information saved in the app from the inspection, access or use by third parties. The user is solely responsible for all activities carried out via their device. They assure that they are authorized to use all content that they put into the app and that no rights of third parties, in particular personal rights, are impaired or violated. 
+4. It is the sole responsibility of the user to save any stored content and to make data backups. 
+5. The app may not be used in any way that serves to harm third parties, is abusive or violates legal provisions and regulations of German law.
+6. The User agrees to use the integration of the AA2 SDK for the use of the online ID card function exclusively for pilot research and development purposes within the Secure Digital Identity showcase projects of the BMWK.  
 
 
-X.    Indemnity agreement
+VII Copyright, rights of use and other ancillary copyrights
 
-The User will indemnify Jolocom from all asserted claims by third parties that relate to the violation of the User’s rights. This does not apply if the User is not responsible for the infringement.
-In disputes with third parties, the User will immediately provide Jolocom with all necessary information and support Jolocom as best as possible in defending against or asserting claims.
-
-
-XI.     Data protection
-
-The User has acknowledged Jolocom's Privacy Policy.
-The User confirms that personal data transmitted to Jolocom by him or by third parties at the User’s request has been collected and processed in accordance with the relevant data protection provisions.
-If the consent of those concerned is required, the User ensures that all persons concerned have taken note of Jolocom's Privacy Policy and have given any necessary declaration of consent.
+1. All copyrights, patent rights, trademark rights and other ancillary copyrights in the app belong exclusively to Jolocom within the relationship between the parties. The placement of content in the app does not constitute a joint copyright of the user. 
+2. All copyrights, patent rights, trademark rights and other ancillary copyrights to the software applications of third party providers shall be the exclusive property of the respective third party provider in the relationship between the parties. The posting of content by the User shall not constitute a joint copyright of the User.
+3. The user is granted the simple, non-transferable right to use the app and integrated software applications as intended.  
+4. The user is not entitled to make any kind of processing or modification to the app and/or the integrated software applications (e.g. to the (source) code, the software, the documentation, e.g. by reverse engineering, manipulation, decompilation, disassembly, etc.).
+5. Any form of imitation, reproduction, sale or other distribution of the app or parts of the app by the user is prohibited. The same applies to the integrated software applications. 
 
 
-XII.    Duration and termination of use
+VIII.	Warranty / Liability
 
-The User agreement runs for an indefinite period and can be terminated by Jolocom and / or the User at any time without notice.
-The User can terminate use at any time by deleting the App from the User’s mobile device.
-Jolocom is entitled at any time to discontinue operation of the App in such a way that the necessary updates are no longer made available. In this case, Jolocom will inform the User in a timely manner by means of a notification via the App.
-
-
-XIII.     Final provisions
-
-The law of the Federal Republic of Germany applies, with exception of the UN Convention on Contracts for the International Sale of Goods (CISG). This applies to consumers only insofar as the protection granted by the mandatory provisions of the law of the state in which the consumer is habitually resident is not withdrawn.
-If the User is an entrepreneur, a legal entity under public law, or a special fund under public law, the place of jurisdiction for all disputes arising from contractual relationships between the Parties is the jurisdiction of Jolocom’s registered office. Jolocom is entitled, but not obliged, to take legal action in the jurisdiction where the User is registered or has residence.
-This text is subject to German law and should be interpreted according to German legal understanding. This English version is for informational purposes only and is not a component of the legal transaction. In the event of discrepancies between the German and English versions, only the German version applies.
+1. Jolocom is liable for material defects and defects of title of the provided App only if Jolocom has fraudulently concealed the defect from the User. 
+2. Otherwise Jolocom is liable for damages caused by it or its proxies only in case of intent and gross negligence. In addition, Jolocom shall only be liable for slight negligence if an obligation is violated that is of particular importance for the achievement of the purpose of the contract (cardinal obligation). Of particular importance are such obligations, that enable the proper execution of the contract in the first place and on the compliance with which the User may rely. This liability is limited to foreseeable or typical damages. 
+3. The limitations of liability do not apply in case of intent or gross negligence of Jolocom or its proxies, as well as for the absence of warranted characteristics, fraudulent intent, injury to life, limb or health or liability under the Product Liability Act.
+4. As far as Jolocom integrates functions of third party providers into the app, Jolocom does not adopt these nor liability for them. In this respect Jolocom is not liable for the legality and lawful acquisition of these functions.  
+5. The objection of contributory negligence remains unaffected by Jolocom. In particular, the user has the duty to use the software as intended, to back up the data and to ensure a functional working environment.
+6. Jolocom is expressly not liable for the loss of content or any possible resulting damage, from the damage or loss of the mobile device or as a result of improper operation of the app by the user, or if the user has not made a backup and this has led to a loss of data. 
+7. Jolocom has no knowledge of and has no access to the posted contents of the User. Jolocom is therefore also not liable for the legality and lawful acquisition of the content. 
 
 
-As of August 2020
-    `
+IX.	Indemnification 
+1. The user will indemnify Jolocom from all asserted claims of third parties, which refer to the violation of their rights. This does not apply if the user is not responsible for the infringement. 
+2. In case of disputes with third parties the user will immediately provide Jolocom with all necessary information and will support Jolocom as best as possible in defending or asserting claims.
+
+X.	Data protection
+1. The user has taken note of Jolocom's privacy policy. 
+2. The user confirms that personal data transmitted to Jolocom by them or at their instigation by third parties have been collected and processed in accordance with the relevant provisions of data protection law.
+3. If the consent of data subjects is required, the User shall ensure that all data subjects have read and understood Jolocom's data protection statement and have submitted any required declaration of consent. 
+
+XI.	Duration and termination of use
+1. The user contract runs for an indefinite period of time and can be terminated by Jolocom and/or the User at any time without notice.
+2. The user can terminate the usage at any time by deleting the app from their mobile device.
+3. Jolocom is entitled at any time to discontinue the operation of the App in the form of required updates no longer being provided. In this case, Jolocom will inform the User in due time by means of a notification via the App.
+
+XII Final Provisions
+1. The law of the Federal Republic of Germany shall apply to the exclusion of the UN Convention on Contracts for the International Sale of Goods. This applies to consumers only insofar as the protection granted by mandatory provisions of the law of the state of the consumer's habitual residence is not withdrawn from the consumer. 
+2. If the user is an entrepreneur, a legal entity under public law or a special fund under public law, the place of jurisdiction for all disputes arising from contractual relationships between the parties is the registered office of Jolocom. Jolocom is entitled, but not obliged, to take legal action at the registered office of the User.
+3. This text is subject to German law and shall be interpreted according to German law. The attached English version is for information only and is not part of the legal transaction. In the event of any discrepancies between the German and English versions, only the German version shall therefore apply. 
+
+
+
+Status as of: July 2022
+`
