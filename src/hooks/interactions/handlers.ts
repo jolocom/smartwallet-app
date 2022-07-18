@@ -7,21 +7,20 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useLoader } from '../loader'
+import { useNavigation } from '@react-navigation/native'
+import { Interaction, TransportAPI } from 'react-native-jolocom'
 import {
   resetInteraction,
-  setInteractionDetails,
+  setInteractionDetails
 } from '~/modules/interaction/actions'
-import { Platform } from 'react-native'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { useAgent } from '../sdk'
-import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { useInteractionHandler } from './interactionHandlers'
-import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
-import { Interaction, TransportAPI } from 'react-native-jolocom'
 import useConnection from '../connection'
+import { useLoader } from '../loader'
+import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
+import { useInteractionHandler } from './interactionHandlers'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -111,12 +110,7 @@ export const useFinishInteraction = () => {
       navigation.navigate(screen)
     } else {
       if (navigation.canGoBack()) {
-        if (Platform.OS === 'ios') {
-          navigation.goBack()
-        } else if (Platform.OS === 'android') {
-          const parent = navigation.getParent()
-          parent?.goBack()
-        }
+        navigation.goBack()
       } else {
         navigation.navigate(ScreenNames.Main)
       }

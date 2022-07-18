@@ -112,7 +112,7 @@
     "CreatePasscode": {
         "createHeader": "Create wallet PIN",
         "createSubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
-        "helperText": "The passcode can be recovered later by using your secret phrase."
+        "helperText": "The wallet PIN can be recovered later by using your secret phrase."
     },
     "VerifyPasscode": {
         "verifyHeader": "Verify wallet PIN",
@@ -121,7 +121,7 @@
     },
     "Biometry": {
         "header": "Use ${biometryType} to authorize wallet",
-        "subheader": "So you don’t need to confirm your passcode every time you open the app",
+        "subheader": "So you don’t need to confirm your wallet PIN every time you open the app",
         "activateBtn": "Tap to activate",
         "skipBtn": "Skip",
         "promptFaceId": "Scan your face to continue",
@@ -129,17 +129,17 @@
         "promptBiometrics": "Provide biometrics to continue"
     },
     "PasscodeRecoveryInstructions": {
-        "header": "How to change your passcode",
+        "header": "How to change your wallet PIN",
         "subheader1": "We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!",
-        "subheader2": "You can change your passcode by entering your secret phrase. Click Restore Access below to make the change",
+        "subheader2": "You can change your wallet PIN by entering your secret phrase. Click Restore Access below to make the change",
         "imageCaption": "Repeat your phrase word by word",
         "submitBtn": "Restore access",
-        "footer": "Setting a new passcode will not affect your stored data",
+        "footer": "Setting a new wallet PIN will not affect your stored data",
         "cancelBtn": "Cancel"
     },
     "Lock": {
         "header": "Enter wallet PIN",
-        "forgotBtn": "Forgot your passcode?",
+        "forgotBtn": "Forgot your wallet PIN?",
         "errorMsg": "You have used ${attempts} attempts"
     },
     "CameraPermission": {
@@ -192,7 +192,7 @@
         "offerRenegotiationMsg": "Some documents didn't pass our security check and cannot be saved or received",
         "shareMissingDocsTitle": "Missing documents",
         "shareMissingDocsMsg": "${serviceName} is requesting a document that can’t be found in your wallet. \nMissing: ${documentType}",
-        "failedStoreMsg": "We could not store your passcode. Please try again",
+        "failedStoreMsg": "We could not store your wallet PIN. Please try again",
         "reconnectedInternetTitle": "You're back online",
         "reconnectedInternetMsg": "All wallet functionalities are back again",
         "successfulInteractionMsg": "Your interaction was successful. You can find the details here",

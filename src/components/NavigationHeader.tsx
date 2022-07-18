@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, StyleSheet, ViewProps } from 'react-native'
+import { StyleSheet, View, ViewProps } from 'react-native'
 
+import { BackArrowIcon } from '~/assets/svg'
 import CloseIcon from '~/assets/svg/CloseIcon'
 import { useGoBack } from '~/hooks/navigation'
-import IconBtn from './IconBtn'
-import { BackArrowIcon } from '~/assets/svg'
 import { IWithCustomStyle } from '~/types/props'
+import IconBtn from './IconBtn'
 
 export enum NavHeaderType {
   Back = 'back',
@@ -24,9 +24,14 @@ const NavigationHeader: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const goBack = useGoBack()
+  // FIXME: This is really bad and has to be fixed. We're doing this
+  // because we're using the NavigationHeader in the ErrorReporting component,
+  // which is outside the navigation provider.
+  const goBack = onPress ?? useGoBack()
 
-  const navigateBack = onPress ?? goBack
+  const navigateBack = () => {
+    goBack()
+  }
 
   return (
     <View
