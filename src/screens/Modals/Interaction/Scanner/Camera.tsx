@@ -79,6 +79,13 @@ const Camera = () => {
   const textAnimationValue = useRef(new Animated.Value(0)).current
   const { scheduleErrorWarning } = useToasts()
 
+  useLayoutEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+  }, [isScreenFocused])
+
   const animateColor = () =>
     Animated.sequence([
       Animated.timing(colorAnimationValue, {
