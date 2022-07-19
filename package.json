@@ -60,7 +60,7 @@
     "formik": "^2.2.6",
     "i18next": "^19.8.3",
     "jolocom-lib": "^5.2.1",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "react": "16.13.1",
     "react-i18next": "^11.7.3",
     "react-native": "0.63.4",
