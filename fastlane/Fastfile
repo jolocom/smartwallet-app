@@ -150,7 +150,12 @@ platform :android do
   # NOTE: you should run build lane from the root dir of the project
   lane :build do
     releaseFilePath = File.join(Dir.pwd, "android-secrets", "JoloSmartWallet.keystore")
-    #build_android_app(task: 'clean')
+    build_android_app(
+      task: 'clean',
+      project_dir: './android',
+      gradle_path: './gradlew',
+      print_command: true
+    )
     sentry_auth
 
     keyPass = get_secrets.strip
