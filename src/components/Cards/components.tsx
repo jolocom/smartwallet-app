@@ -1,5 +1,5 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import {
   Image,
   ImageBackground,
@@ -13,7 +13,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { TextLayoutEvent } from '~/types/props'
-
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
@@ -107,11 +106,26 @@ export const DocumentHeader: React.FC<{
   onPressMenu?: () => void
   selected?: boolean
 }> = ({ name, icon, onPressMenu, selected }) => {
+  const [renderIcon, setRenderIcon] = useState(false)
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
+
+  const shouldRenderIcon = async (icon: string) => {
+    let result
+    try {
+      result = await Image.prefetch(icon)
+    } catch (e) {
+      setRenderIcon(false)
+    }
+    setRenderIcon(result)
+  }
+
+  useEffect(() => {
+    icon && shouldRenderIcon(icon)
+  }, [])
 
   return (
     <View style={styles.headerContainer}>
-      {icon && (
+      {renderIcon && (
         <ScaledView
           scaleStyle={{
             width: 32,

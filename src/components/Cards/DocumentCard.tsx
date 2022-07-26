@@ -3,7 +3,6 @@ import {
   Platform,
   StyleProp,
   TouchableOpacity,
-  Vibration,
   View,
   ViewStyle,
 } from 'react-native'
@@ -81,6 +80,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     if (backgroundImage) {
       maxRows = maxRows - 2
     } else if (backgroundColor) {
+      maxRows--
       if (!holderName) maxRows--
       else maxRows = maxRows - 2
     }
@@ -91,6 +91,10 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
     if (!holderName && !backgroundImage) {
       maxRows++
+    }
+
+    if (!holderName && !backgroundImage && !backgroundColor && photo) {
+      maxRows = maxRows - 2
     }
 
     return maxRows
