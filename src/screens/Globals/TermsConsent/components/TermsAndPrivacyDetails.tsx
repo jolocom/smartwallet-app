@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   bottomSheet: {
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.haiti,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
