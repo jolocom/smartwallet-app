@@ -66,11 +66,14 @@ const LoggedIn = () => {
   const isPopupRef = useRef<boolean>(isPopup)
 
   const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
+
   useEffect(() => {
-    if (isTermsConsentOutdated) {
-      dispatch(setTermsConsentVisibility(true))
+    if (isTermsConsentOutdated && !isAppLocked) {
+      setTimeout(() => {
+        redirect(ScreenNames.GlobalModals, { screen: ScreenNames.TermsConsent })
+      }, 100)
     }
-  }, [])
+  }, [isTermsConsentOutdated, isAppLocked])
 
   useEffect(() => {
     enablePrivacyOverlay(true)
