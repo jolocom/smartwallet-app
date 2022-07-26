@@ -20,6 +20,11 @@ or alternatively using `brew install fastlane`
 fastlane get_appstoreconnect_api_key
 ```
 Load the App Store Connect API token
+### clone_common_secrets_appcenter
+```
+fastlane clone_common_secrets_appcenter
+```
+Cloning common secrets for MS AppCenter
 ### get_appcenter_token
 ```
 fastlane get_appcenter_token
@@ -29,7 +34,7 @@ Get API token for MS AppCenter
 ```
 fastlane sentry_auth
 ```
-Get Sentry Auth Token
+Get Sentry Auth Token for iOS and Android
 ### release
 ```
 fastlane release

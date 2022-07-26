@@ -184,11 +184,7 @@ const AusweisChangePin = () => {
             handleDeactivatedCard()
           }
         },
-        handleChangePinCancel: () => {
-          if (IS_ANDROID) {
-            navigation.goBack()
-          }
-        },
+        handleChangePinCancel: () => navigation.goBack(),
       })
       navigation.navigate(ScreenNames.Interaction, {
         screen: ScreenNames.eId,

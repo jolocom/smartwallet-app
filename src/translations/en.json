@@ -218,7 +218,7 @@
         "cancelBtn": "Ignore",
         "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
         "redirectTitle": "We're all done!",
-        "redirectDescription": "${serviceName} is redirecting you to a service or application outside of the SmartWallet",
+        "redirectDescription": "You are being redirected to ${serviceName} outside of the SmartWallet.",
         "redirectBtn": "Follow link"
     },
     "Documents": {

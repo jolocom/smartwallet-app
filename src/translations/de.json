@@ -218,7 +218,7 @@
         "cancelBtn": "Ignorieren",
         "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
         "redirectTitle": "Fertig!",
-        "redirectDescription": "${serviceName} leitet Sie zu einem Dienst oder einer Anwendung außerhalb von SmartWallet weiter.",
+        "redirectDescription": "Sie werden zu ${serviceName} außerhalb von SmartWallet weitergeleitet.",
         "redirectBtn": "Weiter"
     },
     "Documents": {

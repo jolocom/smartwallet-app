@@ -634,9 +634,7 @@ export const AusweisPasscode = () => {
        * This is different for the RUN_CHANGE_PIN flow, where
        * the handleChangePinCancel navigates back to the AusweisChangePin screen
        */
-      if (IS_ANDROID) {
-        closeAusweis()
-      }
+      closeAusweis()
     }
   }
 
