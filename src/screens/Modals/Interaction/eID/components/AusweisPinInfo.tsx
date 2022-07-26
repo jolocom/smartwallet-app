@@ -1,3 +1,4 @@
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
 import { StackActions } from '@react-navigation/routers'
 import React from 'react'
@@ -8,10 +9,9 @@ import Collapsible from '~/components/Collapsible'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import useTranslation from '~/hooks/useTranslation'
+import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import eIDHooks from '../hooks'
-import { aa2Module } from '@jolocom/react-native-ausweis'
-import { ScreenNames } from '~/types/screens'
 
 export const AusweisPinInfo = () => {
   const { top } = useSafeArea()
@@ -37,7 +37,10 @@ export const AusweisPinInfo = () => {
     <View style={[styles.container, { paddingTop: top }]}>
       <Collapsible
         renderScroll={() => (
-          <Collapsible.Scroll containerStyles={styles.scrollContainer}>
+          <Collapsible.Scroll
+            containerStyles={styles.scrollContainer}
+            style={{ height: '100%' }}
+          >
             <Collapsible.Title text={t('AusweisPinInfo.header')}>
               <JoloText
                 kind={JoloTextKind.title}
