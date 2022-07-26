@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Platform, AppState, AppStateStatus } from 'react-native'
 import Permissions from 'react-native-permissions'
 import { useDisableLock } from '~/hooks/generic'
+import { useToasts } from '~/hooks/toasts'
 
 export enum Results {
   UNAVAILABLE = 'unavailable',
@@ -13,9 +14,10 @@ export enum Results {
 const useCameraPermissions = () => {
   const [permission, setPermission] = useState<Results>(Results.UNAVAILABLE)
   const disableLock = useDisableLock()
+  const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
-    requestPermission()
+    requestPermission().catch(scheduleErrorWarning)
   }, [])
 
   const requestPermission = async () => {
@@ -43,7 +45,7 @@ const useCameraPermissions = () => {
     AppState.addEventListener('change', listener)
 
     try {
-      Permissions.openSettings()
+      Permissions.openSettings().catch(scheduleErrorWarning)
     } catch (e) {
       AppState.removeEventListener('change', listener)
     }
@@ -55,7 +57,7 @@ const useCameraPermissions = () => {
       android: () => {
         if (permission === Results.BLOCKED) {
           openSettings()
-        } else requestPermission()
+        } else requestPermission().catch(scheduleErrorWarning)
       },
       default: () => {},
     })()

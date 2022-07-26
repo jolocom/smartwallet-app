@@ -130,6 +130,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packagingOptions {
+        pickFirst "**/*.so"
+     }
+
     dexOptions {
         javaMaxHeapSize "4g"
     }
@@ -138,8 +142,8 @@ android {
         applicationId "com.jolocomwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 38
-        versionName "2.2.0"
+        versionCode 53
+        versionName "2.4.0"
 		multiDexEnabled true
 		missingDimensionStrategy 'react-native-camera', 'general'
     }

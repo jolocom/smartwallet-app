@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react'
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { ScreenNames } from '~/types/screens'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
@@ -25,7 +21,7 @@ import { getIsTermsConsentOutdated } from '~/modules/account/selectors'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import CredentialDetails from './Documents/CredentialDetails'
+import FieldDetails from '../Modals/FieldDetails'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import {
@@ -33,19 +29,25 @@ import {
   screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalOptions,
+  screenDisableGestures,
+  transparentModalFadeOptions,
 } from '~/utils/screenSettings'
-import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
+import PopupMenu, { PopupMenuProps } from '~/screens/LoggedIn/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import { IField } from '~/types/props'
-import InteractionFlow from '../Modals/Interaction/InteractionFlow'
-import Scanner from '../Modals/Interaction/Scanner'
+import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
+import { Colors } from '~/utils/colors'
+import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
-import { setTermsConsentVisibility } from '~/modules/account/actions'
 import { useRedirect } from '~/hooks/navigation'
+import Interaction from '../Modals/Interaction'
+import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
+import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
+  [ScreenNames.AusweisCardInfo]: AusweisCardInfoParams
 }
 const TransparentModalsStack = createStackNavigator()
 
@@ -59,11 +61,17 @@ const TransparentModals = () => (
       name={ScreenNames.PopupMenu}
       component={PopupMenu}
     />
+    <TransparentModalsStack.Screen
+      name={ScreenNames.AusweisCardInfo}
+      component={AusweisCardInfo}
+    />
   </TransparentModalsStack.Navigator>
 )
 
 export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
+  [ScreenNames.AusweisChangePin]: undefined
+  [ScreenNames.AusweisMoreInfo]: undefined
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
   [ScreenNames.MnemonicPhrase]: undefined
@@ -77,10 +85,11 @@ export type MainStackParamList = {
   [ScreenNames.TermsOfService]: undefined
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
-  [ScreenNames.CredentialDetails]: {
+  [ScreenNames.FieldDetails]: {
     fields: IField[]
     title?: string
     photo?: string
+    backgroundColor?: Colors
   }
   // DEV
   [ScreenNames.InteractionPasteTest]: undefined
@@ -95,15 +104,6 @@ export type MainStackParamList = {
     isAccessRestore: boolean
   }
   [ScreenNames.TransparentModals]: undefined
-  [ScreenNames.Scanner]: undefined
-  [ScreenNames.InteractionFlow]: undefined
-}
-
-const modalStyleOptions = {
-  headerShown: false,
-  cardStyle: { backgroundColor: 'transparent' },
-  cardOverlayEnabled: true,
-  ...TransitionPresets.FadeFromBottomAndroid,
 }
 
 const MainStack = createStackNavigator<MainStackParamList>()
@@ -224,29 +224,32 @@ const Main: React.FC = () => {
 
       {/* Modals -> Start */}
       <MainStack.Screen
-        options={modalStyleOptions}
-        name={ScreenNames.InteractionFlow}
-        component={InteractionFlow}
+        name={ScreenNames.FieldDetails}
+        component={FieldDetails}
       />
       <MainStack.Screen
-        name={ScreenNames.Scanner}
-        component={Scanner}
+        name={ScreenNames.Interaction}
+        component={Interaction}
         options={{
-          ...screenTransitionSlideFromBottom,
+          ...screenDisableGestures,
+          ...transparentModalFadeOptions,
         }}
       />
-
       <MainStack.Screen
-        name={ScreenNames.CredentialDetails}
-        component={CredentialDetails}
-        options={screenTransitionFromBottomDisabledGestures}
+        name={ScreenNames.AusweisChangePin}
+        component={AusweisChangePin}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.AusweisMoreInfo}
+        component={AusweisMoreInfo}
+        options={screenTransitionSlideFromRight}
       />
       <MainStack.Screen
         name={ScreenNames.CredentialForm}
         component={CredentialForm}
         options={screenTransitionFromBottomDisabledGestures}
       />
-
       {/* START NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}
       <MainStack.Screen
         name={ScreenNames.PinRecoveryInstructions}

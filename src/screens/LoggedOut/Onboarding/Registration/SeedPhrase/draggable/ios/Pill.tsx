@@ -54,19 +54,6 @@ const styles = StyleSheet.create({
   container: {
     marginRight: 2,
   },
-  pill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.bastille,
-    borderRadius: 17,
-    borderWidth: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  pillBeingDragged: {
-    backgroundColor: Colors.disco,
-    borderStyle: 'dashed',
-  },
 })
 
 export default Pill

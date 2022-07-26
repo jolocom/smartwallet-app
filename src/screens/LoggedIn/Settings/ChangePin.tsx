@@ -1,20 +1,16 @@
 import React, { useState } from 'react'
 
-import ScreenContainer from '~/components/ScreenContainer'
-
-import { sleep } from '~/utils/generic'
-
-import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
-import { useGoBack, useRedirect } from '~/hooks/navigation'
 import Passcode from '~/components/Passcode'
-import { useLoader } from '~/hooks/loader'
-import { useEffect } from 'react'
-import useTranslation from '~/hooks/useTranslation'
-import { useToasts } from '~/hooks/toasts'
-import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
-import { promisifySubmit } from '~/components/Passcode/utils'
-import { ScreenNames } from '~/types/screens'
 import { IPasscodeContext } from '~/components/Passcode/types'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
+import { useLoader } from '~/hooks/loader'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
+import { SecureStorageKeys, useSecureStorage } from '~/hooks/secureStorage'
+import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
+import { ScreenNames } from '~/types/screens'
+import { sleep } from '~/utils/generic'
 
 enum PasscodeState {
   verify = 'verify',
@@ -52,11 +48,11 @@ const ChangePin: React.FC = () => {
   }
 
   const submitNewPin = async () => {
-    loader(
+    await loader(
       async () => {
         await secureStorage.setItem(SecureStorageKeys.passcode, newPin)
       },
-      { success: t('ChangePasscode.successHeader') },
+      { success: t('ChangePasscode.successHeader'), showSuccess: true },
       (error) => {
         if (error) {
           scheduleErrorWarning(error, {
@@ -76,16 +72,10 @@ const ChangePin: React.FC = () => {
     })
   }
 
-  const promisifyCreateNewPin = promisifySubmit((pin) => {
-    if (keychainPin && pin !== keychainPin) {
-      setNewPin(pin)
-      handleStateChange(PasscodeState.repeat)
-    } else {
-      setErrorTitle(t('ChangePasscode.sameCodeHeader'))
-      throw new Error()
-    }
-  })
-  const handleCreateNewPin = promisifyCreateNewPin
+  const handleCreateNewPin = async (pin: string) => {
+    setNewPin(pin)
+    await handleStateChange(PasscodeState.repeat)
+  }
 
   const handleSubmit = async (pin: string, cb: () => void) => {
     switch (passcodeState) {
@@ -99,7 +89,7 @@ const ChangePin: React.FC = () => {
         }
         break
       case PasscodeState.create:
-        await handleCreateNewPin(pin, cb)
+        await handleCreateNewPin(pin)
         break
       case PasscodeState.repeat:
         if (pin === newPin) {
@@ -156,10 +146,9 @@ const ChangePin: React.FC = () => {
           <Passcode.Input />
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
-          <Passcode.ExtraAction
-            onPress={handleExtraAction}
-            title={getExtraActionTitle()}
-          />
+          <Passcode.ExtraAction onPress={handleExtraAction}>
+            {getExtraActionTitle()}
+          </Passcode.ExtraAction>
           <Passcode.Keyboard />
         </Passcode.Container>
       </Passcode>

@@ -17,7 +17,7 @@ export enum ScreenNames {
   LoggedIn = 'LoggedIn',
   LockStack = 'LockStack',
   Lock = 'Lock',
-  DeviceAuth = 'DeviceAuth',
+  WalletAuthentication = 'WalletAuthentication',
 
   // Main
   Main = 'Main',
@@ -27,16 +27,23 @@ export enum ScreenNames {
   History = 'History',
   Settings = 'Settings',
   // Device Authentication
-  RegisterPin = 'RegisterPin',
-  RegisterBiometry = 'RegisterBiometry',
+  CreateWalletPin = 'CreateWalletPin',
+  WalletBiometry = 'WalletBiometry',
   // Interactions
   Interaction = 'Interaction', // root screen
   Scanner = 'Scanner',
   InteractionFlow = 'InteractionFlow',
+  InteractionRedirect = 'InteractionRedirect',
+  // eId
+  eId = 'eID',
+  AusweisChangePin = 'AusweisChangePin',
+  AusweisCardInfo = 'AusweisCardInfo',
+  ServiceRedirect = 'ServiceRedirect',
+  AusweisMoreInfo = 'AusweisMoreInfo',
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',
-  CredentialDetails = 'CredentialDetails',
+  FieldDetails = 'FieldDetails',
   PopupMenu = 'PopupMenu',
   TransparentModals = 'TransparentModals',
   AppDisabled = 'AppDisabled',

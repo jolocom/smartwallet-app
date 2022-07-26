@@ -35,5 +35,7 @@ export const assembleFormInitialValues = (
     return acc
   }, {})
 
-export const getCounterpartyName = (counterparty: IdentitySummary) =>
-  counterparty.publicProfile?.name ?? truncateDid(counterparty.did)
+export const getCounterpartyName = (counterparty?: IdentitySummary) =>
+  counterparty === undefined
+    ? ''
+    : counterparty?.publicProfile?.name ?? truncateDid(counterparty.did)

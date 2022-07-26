@@ -24,10 +24,9 @@ const PasscodeTest = () => {
           errorTitle={'Wrong'}
         />
         <Passcode.Input />
-        <Passcode.ExtraAction
-          title="Passcode extra action"
-          onPress={() => {}}
-        />
+        <Passcode.ExtraAction onPress={() => {}}>
+          {'Passcode extra action'}
+        </Passcode.ExtraAction>
       </Passcode>
     </ScreenContainer>
   )

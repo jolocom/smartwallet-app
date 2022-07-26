@@ -1,6 +1,6 @@
 interface ToastMessage {
   title: string
-  message: string
+  message?: string
 }
 
 /**

@@ -13,6 +13,8 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useWalletInit } from '~/hooks/sdk'
 import { initAgent } from '.'
 import useTranslation from '~/hooks/useTranslation'
+import { aa2Module } from '@jolocom/react-native-ausweis'
+import { useToasts } from '~/hooks/toasts'
 
 export const AgentContext =
   createContext<MutableRefObject<Agent | null> | null>(null)
@@ -22,6 +24,22 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
   const initWallet = useWalletInit()
   const { initStoredLanguage } = useTranslation()
+  const { scheduleErrorWarning } = useToasts()
+
+  const initAusweis = async () => {
+    //await aa2Module.initAa2Sdk()
+    if (!aa2Module.isInitialized) {
+      try {
+        //await aa2Module.cancelFlow()
+        await aa2Module.initAa2Sdk()
+      } catch (e) {
+        // NOTE: Can't use a toast since the @Toast component uses the navigation,
+        // which is not available here.
+        console.warn(e)
+        console.warn("Oopsie! Couldn't initiate the Ausweis SDK!")
+      }
+    }
+  }
 
   const initializeAll = async () => {
     try {
@@ -30,6 +48,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
 
       await initWallet(agent)
       await initStoredLanguage(agent)
+      await initAusweis()
     } catch (err) {
       console.warn('Error initializing the agent', err)
     } finally {
@@ -38,7 +57,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
   }
 
   useEffect(() => {
-    initializeAll()
+    initializeAll().catch(scheduleErrorWarning)
     return () => {
       setIsLoading(false)
       agentRef.current = null
@@ -49,7 +68,7 @@ export const AgentContextProvider: React.FC = ({ children }) => {
     const hideSplash = async () => {
       await RNBootSplash.hide({ fade: true })
     }
-    if (!isLoading) hideSplash()
+    if (!isLoading) hideSplash().catch(scheduleErrorWarning)
   }, [isLoading])
 
   if (isLoading) {

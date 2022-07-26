@@ -26,7 +26,7 @@ const assembleTermsForLanguage = (language: Languages) =>
     type: 'key_value_json',
   })
     .then((res) => {
-      if (res) return res.result.url as string
+      if (res) return res.result.url
       else throw new Error('Url not found')
     })
     .then(downloadTerms)
@@ -44,4 +44,4 @@ const main = async () => {
   await assembleTermsForLanguage(Languages.de)
 }
 
-main()
+main().catch((err) => console.log(err))

@@ -3,7 +3,6 @@ import React from 'react'
 import Space from '~/components/Space'
 import InteractionFooter from './components/InteractionFooter'
 import InteractionDescription from './components/InteractionDescription'
-import InteractionLogo from './components/InteractionLogo'
 import InteractionTitle from './components/InteractionTitle'
 import { ContainerBAS, LogoContainerBAS } from './components/styled'
 import useAuthSubmit from '~/hooks/interactions/useAuthSubmit'
@@ -13,17 +12,18 @@ import {
   getServiceDescription,
 } from '~/modules/interaction/selectors'
 import useTranslation from '~/hooks/useTranslation'
+import { ServiceLogo } from '~/components/ServiceLogo'
 
 const Authentication = () => {
   const handleSubmit = useAuthSubmit()
   const { description } = useSelector(getAuthenticationDetails)
-  const { name } = useSelector(getServiceDescription)
+  const { name, image } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <InteractionLogo />
+        <ServiceLogo source={image} />
       </LogoContainerBAS>
       <InteractionTitle label={t('Authentication.header')} />
       <InteractionDescription

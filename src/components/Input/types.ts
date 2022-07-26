@@ -1,7 +1,7 @@
 import { TextInputProps, ViewStyle } from 'react-native'
 import { IWithCustomStyle } from '~/types/props'
 
-export interface IInput extends TextInputProps, IWithCustomStyle {
+export interface IInput extends TextInputProps {
   value: string
   updateInput: (val: string) => void
   containerStyle?: ViewStyle
@@ -9,7 +9,7 @@ export interface IInput extends TextInputProps, IWithCustomStyle {
   withHighlight?: boolean
 }
 
-export interface ITextAreaInputProps extends IInput {
+export interface ITextAreaInputProps extends IInput, IWithCustomStyle {
   limit?: number
 }
 

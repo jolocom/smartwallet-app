@@ -10,6 +10,7 @@ import { useAdjustResizeInputMode } from '~/hooks/generic'
 import Collapsible from './Collapsible'
 import useTranslation from '~/hooks/useTranslation'
 import { TTitle } from './Collapsible/types'
+import { useToasts } from '~/hooks/toasts'
 
 interface Props {
   title: string
@@ -27,6 +28,7 @@ const FormContainer: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation()
   const navigation = useNavigation()
+  const { scheduleErrorWarning } = useToasts()
 
   useAdjustResizeInputMode()
 
@@ -35,7 +37,7 @@ const FormContainer: React.FC<Props> = ({
   }
 
   const handleSubmit = () => {
-    onSubmit()
+    onSubmit().catch(scheduleErrorWarning)
   }
 
   const getHeaderTitleOpacity = (
@@ -86,7 +88,7 @@ const FormContainer: React.FC<Props> = ({
               <Animated.Text
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
-                  color: 'white',
+                  color: Colors.white,
                   marginTop: Platform.OS === 'ios' ? 3 : 0,
                 }}
                 numberOfLines={1}

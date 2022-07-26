@@ -1,0 +1,823 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ausweis card info screen is dsplayed according to the designs card can be unblocked from identity tab 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+        },
+        Object {
+          "flex": 1,
+          "paddingTop": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "flex-start",
+            "flex": 1,
+            "justifyContent": "center",
+          },
+          false,
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "rgba(0,0,0,0.95)",
+            "height": 0,
+            "width": "100%",
+          }
+        }
+      />
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+              "paddingHorizontal": 16,
+              "width": "100%",
+            },
+            Object {
+              "backgroundColor": "rgba(0,0,0,0.95)",
+              "marginBottom": -0,
+              "paddingBottom": 0,
+            },
+            Object {},
+            Object {
+              "justifyContent": "flex-end",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "width": 750,
+                },
+                Object {
+                  "paddingHorizontal": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "paddingTop": undefined,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "color": "rgba(255,255,255,0.85)",
+                    "fontFamily": "TTCommons-Medium",
+                    "fontSize": 28,
+                    "letterSpacing": 0,
+                    "lineHeight": 32,
+                  },
+                  Object {
+                    "alignSelf": "center",
+                  },
+                ]
+              }
+            >
+              AusweisUnlock.standaloneUnblockHeader{"screen":"AusweisUnlock.identityScreen"}
+              <Text
+                onPress={[Function]}
+                style={
+                  Array [
+                    Object {
+                      "paddingTop": undefined,
+                      "textAlign": "center",
+                    },
+                    Object {
+                      "color": "rgba(255,255,255,0.85)",
+                      "fontFamily": "TTCommons-Medium",
+                      "fontSize": 28,
+                      "letterSpacing": 0,
+                      "lineHeight": 32,
+                    },
+                    Object {
+                      "alignSelf": "center",
+                      "textDecorationLine": "underline",
+                    },
+                  ]
+                }
+              />
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "marginBottom": 16,
+                "width": "100%",
+              },
+              Object {},
+            ]
+          }
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "borderRadius": 8,
+                "justifyContent": "center",
+                "marginVertical": 5,
+                "opacity": 1,
+                "width": "100%",
+              }
+            }
+            testID="button"
+          >
+            <View
+              style={
+                Array [
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "width": "100%",
+                    },
+                    false,
+                    Object {
+                      "marginVertical": 5,
+                    },
+                  ],
+                  Object {
+                    "height": 45,
+                  },
+                  Object {
+                    "marginBottom": 40,
+                  },
+                ]
+              }
+              testID="non-gradient"
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#ffffff",
+                      "paddingTop": undefined,
+                      "textAlignVertical": "center",
+                    },
+                    Object {
+                      "fontFamily": "TTCommons-Regular",
+                      "opacity": 0.8,
+                    },
+                    Object {
+                      "fontSize": 18,
+                    },
+                    Object {},
+                  ]
+                }
+              >
+                AusweisUnlock.closeBtn
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`Ausweis card info screen is dsplayed according to the designs card in blocked 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+        },
+        Object {
+          "flex": 1,
+          "paddingTop": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "flex-start",
+            "flex": 1,
+            "justifyContent": "center",
+          },
+          false,
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "rgba(0,0,0,0.95)",
+            "height": 0,
+            "width": "100%",
+          }
+        }
+      />
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+              "paddingHorizontal": 16,
+              "width": "100%",
+            },
+            Object {
+              "backgroundColor": "rgba(0,0,0,0.95)",
+              "marginBottom": -0,
+              "paddingBottom": 0,
+            },
+            Object {},
+            Object {
+              "justifyContent": "flex-end",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "width": 750,
+                },
+                Object {
+                  "paddingHorizontal": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "paddingTop": undefined,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "color": "rgba(255,255,255,0.85)",
+                    "fontFamily": "TTCommons-Medium",
+                    "fontSize": 28,
+                    "letterSpacing": 0,
+                    "lineHeight": 32,
+                  },
+                  Object {
+                    "alignSelf": "center",
+                  },
+                ]
+              }
+            >
+              AusweisUnlock.pukExhaustedHeader
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "marginBottom": 16,
+                "width": "100%",
+              },
+              Object {},
+            ]
+          }
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "borderRadius": 8,
+                "justifyContent": "center",
+                "marginVertical": 5,
+                "opacity": 1,
+                "width": "100%",
+              }
+            }
+            testID="button"
+          >
+            <View
+              style={
+                Array [
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "width": "100%",
+                    },
+                    false,
+                    Object {
+                      "marginVertical": 5,
+                    },
+                  ],
+                  Object {
+                    "height": 45,
+                  },
+                  Object {
+                    "marginBottom": 40,
+                  },
+                ]
+              }
+              testID="non-gradient"
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#ffffff",
+                      "paddingTop": undefined,
+                      "textAlignVertical": "center",
+                    },
+                    Object {
+                      "fontFamily": "TTCommons-Regular",
+                      "opacity": 0.8,
+                    },
+                    Object {
+                      "fontSize": 18,
+                    },
+                    Object {},
+                  ]
+                }
+              >
+                AusweisUnlock.closeBtn
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`Ausweis card info screen is dsplayed according to the designs card in not blocked 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+        },
+        Object {
+          "flex": 1,
+          "paddingTop": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "flex-start",
+            "flex": 1,
+            "justifyContent": "center",
+          },
+          false,
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "rgba(0,0,0,0.95)",
+            "height": 0,
+            "width": "100%",
+          }
+        }
+      />
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+              "paddingHorizontal": 16,
+              "width": "100%",
+            },
+            Object {
+              "backgroundColor": "rgba(0,0,0,0.95)",
+              "marginBottom": -0,
+              "paddingBottom": 0,
+            },
+            Object {},
+            Object {
+              "justifyContent": "flex-end",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "width": 750,
+                },
+                Object {
+                  "paddingHorizontal": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "paddingTop": undefined,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "color": "rgba(255,255,255,0.85)",
+                    "fontFamily": "TTCommons-Medium",
+                    "fontSize": 28,
+                    "letterSpacing": 0,
+                    "lineHeight": 32,
+                  },
+                  Object {
+                    "alignSelf": "center",
+                  },
+                ]
+              }
+            >
+              AusweisUnlock.notLockedHeader
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "marginBottom": 16,
+                "width": "100%",
+              },
+              Object {},
+            ]
+          }
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "borderRadius": 8,
+                "justifyContent": "center",
+                "marginVertical": 5,
+                "opacity": 1,
+                "width": "100%",
+              }
+            }
+            testID="button"
+          >
+            <View
+              style={
+                Array [
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "width": "100%",
+                    },
+                    false,
+                    Object {
+                      "marginVertical": 5,
+                    },
+                  ],
+                  Object {
+                    "height": 45,
+                  },
+                  Object {
+                    "marginBottom": 40,
+                  },
+                ]
+              }
+              testID="non-gradient"
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#ffffff",
+                      "paddingTop": undefined,
+                      "textAlignVertical": "center",
+                    },
+                    Object {
+                      "fontFamily": "TTCommons-Regular",
+                      "opacity": 0.8,
+                    },
+                    Object {
+                      "fontSize": 18,
+                    },
+                    Object {},
+                  ]
+                }
+              >
+                AusweisUnlock.closeBtn
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`Ausweis card info screen is dsplayed according to the designs card in unblocked 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+        },
+        Object {
+          "flex": 1,
+          "paddingTop": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "flex-start",
+            "flex": 1,
+            "justifyContent": "center",
+          },
+          false,
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "rgba(0,0,0,0.95)",
+            "height": 0,
+            "width": "100%",
+          }
+        }
+      />
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+              "paddingHorizontal": 16,
+              "width": "100%",
+            },
+            Object {
+              "backgroundColor": "rgba(0,0,0,0.95)",
+              "marginBottom": -0,
+              "paddingBottom": 0,
+            },
+            Object {},
+            Object {
+              "justifyContent": "flex-end",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "width": 750,
+                },
+                Object {
+                  "paddingHorizontal": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "paddingTop": undefined,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "color": "rgba(255,255,255,0.85)",
+                    "fontFamily": "TTCommons-Medium",
+                    "fontSize": 28,
+                    "letterSpacing": 0,
+                    "lineHeight": 32,
+                  },
+                  Object {
+                    "alignSelf": "center",
+                  },
+                ]
+              }
+            >
+              AusweisUnlock.unlockedHeader
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "marginBottom": 16,
+                "width": "100%",
+              },
+              Object {},
+            ]
+          }
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "borderRadius": 8,
+                "justifyContent": "center",
+                "marginVertical": 5,
+                "opacity": 1,
+                "width": "100%",
+              }
+            }
+            testID="button"
+          >
+            <View
+              style={
+                Array [
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "borderRadius": 8,
+                      "justifyContent": "center",
+                      "width": "100%",
+                    },
+                    false,
+                    Object {
+                      "marginVertical": 5,
+                    },
+                  ],
+                  Object {
+                    "height": 45,
+                  },
+                  Object {
+                    "marginBottom": 40,
+                  },
+                ]
+              }
+              testID="non-gradient"
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#ffffff",
+                      "paddingTop": undefined,
+                      "textAlignVertical": "center",
+                    },
+                    Object {
+                      "fontFamily": "TTCommons-Regular",
+                      "opacity": 0.8,
+                    },
+                    Object {
+                      "fontSize": 18,
+                    },
+                    Object {},
+                  ]
+                }
+              >
+                AusweisUnlock.closeBtn
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;

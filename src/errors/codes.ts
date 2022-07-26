@@ -8,4 +8,8 @@ export enum SWErrorCodes {
   SWInteractionUnknownError = 'SWInteractionUnknownError',
   SWInteractionOfferAllInvalid = 'SWInteractionOfferAllInvalid',
   SWUnknownDeepLink = 'SWUnknownDeepLink',
+  SWNfcNotSupported = 'SWNfcNotSupported',
+  SWNfcNotEnabled = 'SWNfcNotEnabled',
+  SWRedirectUrlInvalid = 'SWRedirectUrlInvalid',
+  SWPostRedirectQueryInvalid = 'SWPostRedirectQueryInvalid',
 }

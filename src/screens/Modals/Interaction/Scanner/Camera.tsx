@@ -1,42 +1,49 @@
-import React, { useEffect, useState, useRef } from 'react'
+import { useIsFocused } from '@react-navigation/core'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
-  View,
+  Animated,
   Dimensions,
+  LayoutAnimation,
+  Linking,
+  Platform,
   StyleSheet,
   TouchableHighlight,
-  Animated,
-  Platform,
-  Linking,
+  View
 } from 'react-native'
-import QRCodeScanner from 'react-native-qrcode-scanner'
+import branch from 'react-native-branch'
 import { RNCamera } from 'react-native-camera'
 import Permissions from 'react-native-permissions'
-import { useSelector } from 'react-redux'
-import { useIsFocused } from '@react-navigation/core'
-import branch from 'react-native-branch'
+import QRCodeScanner from 'react-native-qrcode-scanner'
+import { useDispatch, useSelector } from 'react-redux'
 
-import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import ScreenContainer from '~/components/ScreenContainer'
 
 import { getLoaderState } from '~/modules/loader/selectors'
-import { getInteractionType } from '~/modules/interaction/selectors'
 
-import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
 
 import { useInteractionStart } from '~/hooks/interactions/handlers'
 
-import { TorchOnIcon, TorchOffIcon } from '~/assets/svg'
+import { TorchOffIcon, TorchOnIcon } from '~/assets/svg'
 
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Dialog from '~/components/Dialog'
-import { getIsAppLocked } from '~/modules/account/selectors'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import useConnection from '~/hooks/connection'
+import { useDisableLock } from '~/hooks/generic'
+import { useToasts } from '~/hooks/toasts'
 import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
+import { getIsAppLocked } from '~/modules/account/selectors'
+import {
+  getAusweisScannerKey,
+  getIsAusweisInteractionProcessed
+} from '~/modules/interaction/selectors'
+import { dismissLoader } from '~/modules/loader/actions'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
-import { useDisableLock } from '~/hooks/generic'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -44,24 +51,40 @@ const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 const Camera = () => {
   const { t } = useTranslation()
   const { errorScreen } = useErrors()
-  const { processInteraction } = useInteractionStart()
+  const { startInteraction } = useInteractionStart()
+  const dispatch = useDispatch()
   const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
+  const { connected: isConnectedToTheInternet } = useConnection()
+
+  const ausweisScannerKey = useSelector(getAusweisScannerKey)
 
   const isAppLocked = useSelector(getIsAppLocked)
-  const interactionType = useSelector(getInteractionType)
+  const isAuseisInteractionProcessed = useSelector(
+    getIsAusweisInteractionProcessed,
+  )
   const { isVisible: isLoaderVisible } = useSelector(getLoaderState)
 
+  const isFocused = useIsFocused()
+
   const shouldScan =
-    !interactionType && !isLoaderVisible && !isAppLocked && !errorScreen
+    isFocused && !isLoaderVisible && !isAppLocked && !errorScreen
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
 
-  const [isError, setError] = useState(false)
+  const [isError, setError] = useState<boolean | undefined>(undefined)
   const [errorText, setErrorText] = useState('')
   const colorAnimationValue = useRef(new Animated.Value(0)).current
   const textAnimationValue = useRef(new Animated.Value(0)).current
+  const { scheduleErrorWarning } = useToasts()
+
+  useLayoutEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+  }, [isScreenFocused])
 
   const animateColor = () =>
     Animated.sequence([
@@ -106,6 +129,12 @@ const Camera = () => {
     }, 300)
   }, [])
 
+  useEffect(() => {
+    if (isAuseisInteractionProcessed) {
+      dispatch(dismissLoader())
+    }
+  }, [isAuseisInteractionProcessed])
+
   const openURL = async (url: string) => {
     let canOpen: boolean | undefined
     try {
@@ -117,8 +146,19 @@ const Camera = () => {
   }
 
   const handleScan = async (e: { data: string }) => {
+    if (!isConnectedToTheInternet) {
+      setError(true)
+      /**
+       * TODO:
+       * add copy/translation
+       */
+      setErrorText('Internet connection is required to proceed')
+      return
+    }
     try {
       const canOpen = await openURL(e.data)
+      // FIXME: Ideally we should use the value from the .env config, but there
+      // seems to be an issue with reading it.
       if (canOpen && e.data.includes('jolocom.app.link')) {
         disableLock(() => {
           // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
@@ -129,26 +169,37 @@ const Camera = () => {
               res()
             }, 1000)
           })
-        })
+        }).catch(scheduleErrorWarning)
       } else {
-        await processInteraction(e.data)
+        await startInteraction(e.data)
       }
     } catch (err) {
       console.log('handleScan error', { err })
 
       setError(true)
       setErrorText(t('Camera.errorMsg'))
+    }
+  }
+
+  useEffect(() => {
+    if (isError === true) {
       Animated.parallel([animateColor(), animateText()]).start(() => {
         setError(false)
       })
     }
-  }
+  }, [isError])
 
   const { top } = useSafeArea()
 
   const handleLocalPermissionPress = () => {
-    Permissions.openSettings()
+    Permissions.openSettings().catch(scheduleErrorWarning)
   }
+
+  /**
+   * NOTE:
+   * when the camera is on NFC scanner doesn't work;
+   */
+  if (ausweisScannerKey) return null
 
   return (
     <ScreenContainer isFullscreen backgroundColor={Colors.black}>
@@ -306,11 +357,6 @@ const styles = StyleSheet.create({
     height: MARKER_SIZE,
     width: (SCREEN_WIDTH - MARKER_SIZE) / 2,
     backgroundColor: Colors.black65,
-  },
-  torchWrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   torch: {
     width: 69,

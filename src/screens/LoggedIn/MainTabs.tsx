@@ -3,7 +3,6 @@ import {
   createBottomTabNavigator,
   BottomTabBarProps,
 } from '@react-navigation/bottom-tabs'
-
 import { ScreenNames } from '~/types/screens'
 import History from './History'
 import Documents from './Documents'
@@ -12,15 +11,11 @@ import Settings from './Settings'
 import Identity from './Identity'
 import { CredentialCategories } from '~/types/credentials'
 import useTranslation from '~/hooks/useTranslation'
-import {
-  useDeeplinkInteractions,
-  useInteractionStart,
-} from '~/hooks/interactions/handlers'
 import { useNavigation } from '@react-navigation/core'
-import { useInteractionEvents } from '~/hooks/interactions/listeners'
 import { useSelector } from 'react-redux'
 import { getIsAppLocked } from '~/modules/account/selectors'
-import { getInteractionType } from '~/modules/interaction/selectors'
+import { useDeeplinkInteractions } from '~/hooks/deeplinks'
+import { getAusweisInteractionDetails } from '~/modules/interaction/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
@@ -34,23 +29,23 @@ const MainTabsNavigator = createBottomTabNavigator<MainTabsParamList>()
 const MainTabs = () => {
   const { t } = useTranslation()
   const isAppLocked = useSelector(getIsAppLocked)
-  const isInteracting = useSelector(getInteractionType)
+  const isAusweisInteracting = useSelector(getAusweisInteractionDetails)
 
-  const { showInteraction } = useInteractionStart()
   const navigation = useNavigation()
 
   useDeeplinkInteractions()
-  useInteractionEvents(showInteraction)
 
   useEffect(() => {
-    if (!isAppLocked && isInteracting) {
-      navigation.navigate(ScreenNames.InteractionFlow)
+    if (!isAppLocked && isAusweisInteracting) {
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+      })
     }
-  }, [isInteracting, isAppLocked])
+  }, [JSON.stringify(isAusweisInteracting), isAppLocked])
 
   return (
     <MainTabsNavigator.Navigator
-      initialRouteName={ScreenNames.Documents}
+      initialRouteName={ScreenNames.Identity}
       tabBar={(props: BottomTabBarProps) => {
         return <BottomBar {...props} />
       }}

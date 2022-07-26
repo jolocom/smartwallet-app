@@ -2,12 +2,15 @@ import { useEffect } from 'react'
 import useTranslation from '~/hooks/useTranslation'
 import { ALL_PIN_ATTEMPTS, usePasscode } from './context'
 import { useDisableApp, useGetResetStoredCountdownValues } from './hooks'
+import { useToasts } from '~/hooks/toasts'
 
 const PasscodeDisable = () => {
   const { t } = useTranslation()
   const { pinError, pinSuccess, setPinErrorText } = usePasscode()
   const { pinAttemptsLeft } = useDisableApp(pinError, pinSuccess)
   const resetCountdownValues = useGetResetStoredCountdownValues()
+
+  const { scheduleErrorWarning } = useToasts()
 
   /**
    * clearing app stored value
@@ -19,21 +22,23 @@ const PasscodeDisable = () => {
   useEffect(
     () => () => {
       if (pinSuccess) {
-        resetCountdownValues()
+        resetCountdownValues().catch(scheduleErrorWarning)
       }
     },
     [pinSuccess],
   )
 
   useEffect(() => {
-    const attemptsLeft = ALL_PIN_ATTEMPTS - pinAttemptsLeft + 1 || 1
-    setPinErrorText(
-      t('Lock.errorMsg', {
-        attempts: `${attemptsLeft}∕${ALL_PIN_ATTEMPTS}`,
-        escapeValue: false,
-      }),
-    )
-  }, [pinAttemptsLeft])
+    const attemptsLeft = ALL_PIN_ATTEMPTS - pinAttemptsLeft || 1
+    if (pinError) {
+      setPinErrorText(
+        t('Lock.errorMsg', {
+          attempts: `${attemptsLeft}∕${ALL_PIN_ATTEMPTS}`,
+          escapeValue: false,
+        }),
+      )
+    }
+  }, [pinAttemptsLeft, pinError])
 
   return null
 }

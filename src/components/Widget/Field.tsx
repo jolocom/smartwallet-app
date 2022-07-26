@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View, TextStyle } from 'react-native'
-
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -13,7 +12,9 @@ export type TField = IFieldComposition & React.FC
 
 interface IFieldComposition {
   Static: React.FC<Pick<IWidgetField, 'value'>>
-  Selectable: React.FC<Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>>
+  Selectable: React.FC<
+    Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect' | 'disabled'>
+  >
   Empty: React.FC
 }
 
@@ -23,10 +24,11 @@ export interface IWidgetField {
   isSelected?: boolean
   color?: Colors
   onSelect?: () => void
+  disabled?: boolean
 }
 
 const FieldText: React.FC<
-  Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
+  Pick<IWidgetField, 'value' | 'color'> & IWithCustomStyle<TextStyle>
 > = ({ value, color = Colors.white90, customStyles = {} }) => {
   const renderText = (value: string) => (
     <JoloText
@@ -62,13 +64,18 @@ const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => (
 )
 
 const SelectableField: React.FC<
-  Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>
-> = ({ value, isSelected, onSelect }) => (
-  <TouchableOpacity activeOpacity={1} onPress={onSelect}>
+  Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect' | 'disabled'>
+> = ({ value, isSelected, onSelect, disabled = false }) => (
+  <TouchableOpacity
+    testID="selectable-field"
+    activeOpacity={0.7}
+    disabled={disabled}
+    onPress={onSelect}
+  >
     <FieldContainer>
       <FieldText value={value} customStyles={{ width: '85%' }} />
       {isSelected ? (
-        <View style={styles.radio}>
+        <View style={[styles.radio, disabled && { opacity: 0.4 }]}>
           <PurpleTickSuccess />
         </View>
       ) : (

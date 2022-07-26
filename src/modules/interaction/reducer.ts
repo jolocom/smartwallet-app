@@ -1,18 +1,33 @@
 import { InteractionActionType, InteractionState } from './types'
-import { isCredShareDetails, isCredOfferDetails } from './guards'
+import { isCredShareDetails, isCredOfferDetails } from './ssi/guards'
 import { AttrActionType, AttributePayload } from '../attributes/types'
 import {
   setInteractionDetails,
   resetInteraction,
   selectShareCredential,
   updateOfferValidation,
-  setRedirectUrl,
+  setDeeplinkConfig,
 } from './actions'
 import { updateAttrs } from '../attributes/actions'
+import {
+  setAusweisFlowType,
+  setAusweisInteractionDetails,
+  setAusweisReaderState,
+  setAusweisScannerKey,
+} from './ausweis/actions'
 
 const initialState: InteractionState = {
-  details: { flowType: null, id: null, counterparty: null },
-  redirectUrl: null,
+  ssi: { flowType: null, id: null, counterparty: null },
+  ausweis: {
+    details: null,
+    scannerKey: null,
+    readerState: null,
+    flowType: null,
+  },
+  deeplinkConfig: {
+    redirectUrl: null,
+    postRedirect: false,
+  },
 }
 
 const reducer = (
@@ -22,36 +37,47 @@ const reducer = (
     | typeof resetInteraction
     | typeof selectShareCredential
     | typeof updateOfferValidation
-    | typeof setRedirectUrl
+    | typeof setDeeplinkConfig
     | typeof updateAttrs
+    | typeof setAusweisInteractionDetails
+    | typeof setAusweisScannerKey
+    | typeof setAusweisReaderState
+    | typeof setAusweisFlowType
   >,
 ) => {
   switch (action.type) {
+    // NOTE: Generic handlers
+
+    case InteractionActionType.setDeeplinkConfig:
+      return { ...state, deeplinkConfig: action.payload }
+
+    // NOTE: SSI handlers
+
     case InteractionActionType.setInteractionDetails:
-      return { ...state, details: action.payload }
+      return { ...state, ssi: action.payload }
     case InteractionActionType.resetInteraction:
       return initialState
     case InteractionActionType.updateOfferValidation:
-      return isCredOfferDetails(state.details)
+      return isCredOfferDetails(state.ssi)
         ? {
             ...state,
-            details: {
-              ...state.details,
+            ssi: {
+              ...state.ssi,
               credentials: {
-                ...state.details.credentials,
+                ...state.ssi.credentials,
                 service_issued: action.payload,
               },
             },
           }
         : state
     case InteractionActionType.selectShareCredential:
-      if (isCredShareDetails(state.details)) {
+      if (isCredShareDetails(state.ssi)) {
         return {
           ...state,
-          details: {
-            ...state.details,
+          ssi: {
+            ...state.ssi,
             selectedCredentials: {
-              ...state.details.selectedCredentials,
+              ...state.ssi.selectedCredentials,
               ...action.payload,
             },
           },
@@ -59,7 +85,7 @@ const reducer = (
       }
       return state
     case AttrActionType.updateAttrs: {
-      const { flowType } = state.details
+      const { flowType } = state.ssi
       const { type, attribute } = action.payload as AttributePayload
       if (flowType === null) {
         return state
@@ -67,22 +93,22 @@ const reducer = (
       /**
        * Upon interaction request,
        * we should populate with newly created attribute
-       * attribute property of interaction details,
+       * attribute property of interaction ssi,
        * because we store separate instance of
        * service and self issued credentials within
        * interaction state.
        */
-      if (isCredShareDetails(state.details)) {
-        const interactionAttributes = state.details.attributes[type]
+      if (isCredShareDetails(state.ssi)) {
+        const interactionAttributes = state.ssi.attributes[type]
         return {
           ...state,
-          details: {
-            ...state.details,
+          ssi: {
+            ...state.ssi,
             /**
              * Adding newly create attribute
              */
             attributes: {
-              ...state.details.attributes,
+              ...state.ssi.attributes,
               [type]: interactionAttributes
                 ? [...interactionAttributes, attribute]
                 : [attribute],
@@ -91,7 +117,7 @@ const reducer = (
              * Selecting newly create attribute
              */
             selectedCredentials: {
-              ...state.details.selectedCredentials,
+              ...state.ssi.selectedCredentials,
               [type]: attribute.id,
             },
           },
@@ -99,8 +125,29 @@ const reducer = (
       }
       return state
     }
-    case InteractionActionType.setRedirectUrl:
-      return { ...state, redirectUrl: action.payload }
+
+    // NOTE: Ausweis handlers
+
+    case InteractionActionType.setDetails:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, details: action.payload },
+      }
+    case InteractionActionType.setScannerKey:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, scannerKey: action.payload },
+      }
+    case InteractionActionType.setReaderState:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, readerState: action.payload },
+      }
+    case InteractionActionType.setFlowType:
+      return {
+        ...state,
+        ausweis: { ...state.ausweis, flowType: action.payload },
+      }
     default:
       return state
   }

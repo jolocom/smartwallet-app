@@ -8,6 +8,7 @@ import {
   ViewStyle,
   Platform,
   TouchableOpacityProps,
+  ActivityIndicator,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import useConnection from '~/hooks/connection'
@@ -22,17 +23,20 @@ export enum BtnTypes {
   quaternary = 'quaternary',
   quinary = 'quinary',
   senary = 'senary',
+  septenary = 'septenary',
 }
 
 export enum BtnSize {
   large,
   medium,
+  small,
 }
 
 interface BtnPropsI extends TouchableOpacityProps {
   type?: BtnTypes
   customTextStyles?: TextStyle
-  size?: BtnSize
+  size?: BtnSize | number
+  loading?: boolean
 }
 
 interface PropsI extends BtnPropsI {
@@ -43,7 +47,7 @@ interface PropsI extends BtnPropsI {
   testID?: string
 }
 
-interface IBtnComposition {
+interface BtnComposition {
   Online: React.FC<PropsI>
 }
 
@@ -53,9 +57,27 @@ const GRADIENT_END = { x: 1, y: 0 }
 const ButtonText: React.FC<BtnPropsI> = ({
   type = BtnTypes.primary,
   size = BtnSize.medium,
+  loading = false,
   children,
   customTextStyles = {},
 }) => {
+  const getTextSize = () => {
+    if (Object.values(BtnSize).includes(size)) {
+      switch (size) {
+        case BtnSize.large:
+          return 20
+        case BtnSize.medium:
+          return 18
+        case BtnSize.small:
+          return 12
+        default:
+          return 18
+      }
+    } else {
+      return size
+    }
+  }
+
   const getTextStyle = () => {
     switch (type) {
       case BtnTypes.primary:
@@ -74,12 +96,14 @@ const ButtonText: React.FC<BtnPropsI> = ({
         return styles.textPrimary
     }
   }
-  return (
+  return loading ? (
+    <ActivityIndicator color={Colors.white80} />
+  ) : (
     <Text
       style={[
         styles.text,
         getTextStyle(),
-        { fontSize: size === BtnSize.medium ? 18 : 20 },
+        { fontSize: getTextSize() },
         customTextStyles,
       ]}
     >
@@ -88,7 +112,7 @@ const ButtonText: React.FC<BtnPropsI> = ({
   )
 }
 
-const Btn: React.FC<PropsI> & IBtnComposition = ({
+const Btn: React.FC<PropsI> & BtnComposition = ({
   disabled,
   withoutMargins,
   size,
@@ -96,6 +120,7 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
   customTextStyles,
   customContainerStyles,
   testID,
+  loading,
   children,
   ...btnProps
 }) => {
@@ -104,10 +129,15 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
     disabled && styles.disabled,
     { marginVertical: withoutMargins ? 0 : 5 },
   ]
-  const btnStyle = size === BtnSize.large ? styles.largeBtn : styles.mediumBtn
+  const btnStyle =
+    size === BtnSize.large
+      ? styles.largeBtn
+      : size === BtnSize.small
+      ? styles.smallBtn
+      : styles.mediumBtn
 
   const renderButton = () => {
-    const btnTextProps = { size, type, customTextStyles, children }
+    const btnTextProps = { size, type, customTextStyles, children, loading }
     switch (type) {
       case BtnTypes.primary:
         return (
@@ -138,7 +168,9 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
           <View
             style={[
               containerStyles,
-              { backgroundColor: Colors.matterhorn18 },
+              {
+                backgroundColor: Colors.matterhorn18,
+              },
               customContainerStyles,
               btnStyle,
             ]}
@@ -146,6 +178,26 @@ const Btn: React.FC<PropsI> & IBtnComposition = ({
             <ButtonText {...btnTextProps} />
           </View>
         )
+      case BtnTypes.septenary:
+        return (
+          <View
+            style={[
+              containerStyles,
+              {
+                backgroundColor: Colors.white06,
+                borderStyle: 'solid',
+                borderWidth: 0.8,
+                borderColor: Colors.silverChalice,
+              },
+              customContainerStyles,
+              btnStyle,
+            ]}
+          >
+            <ButtonText {...btnTextProps} />
+          </View>
+        )
+      default:
+        return null
     }
   }
 
@@ -192,6 +244,9 @@ const styles = StyleSheet.create({
   mediumBtn: {
     height: 45,
   },
+  smallBtn: {
+    height: 26,
+  },
   btn: {
     backgroundColor: 'transparent',
   },
@@ -229,6 +284,10 @@ const styles = StyleSheet.create({
   textSenary: {
     fontFamily: Fonts.Medium,
     opacity: 0.8,
+    color: Colors.white,
+  },
+  textSeptenary: {
+    fontFamily: Fonts.Regular,
     color: Colors.white,
   },
 })

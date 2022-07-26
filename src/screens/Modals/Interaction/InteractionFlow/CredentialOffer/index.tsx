@@ -16,7 +16,6 @@ import {
 } from '~/types/credentials'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
-import InteractionLogo from '../components/InteractionLogo'
 import InteractionSection from '../components/InteractionSection'
 import InteractionTitle from '../components/InteractionTitle'
 import {
@@ -35,17 +34,18 @@ import {
   InteractionOfferOtherCard,
 } from '~/components/Cards/InteractionOffer'
 import { Colors } from '~/utils/colors'
+import { ServiceLogo } from '~/components/ServiceLogo'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
-  const { name } = useSelector(getServiceDescription)
+  const { name, image } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <InteractionLogo />
+        <ServiceLogo source={image} />
       </LogoContainerBAS>
       <InteractionTitle label={t('CredentialOffer.header')} />
       <InteractionDescription
@@ -91,13 +91,13 @@ const CredentialOfferFAS = () => {
   const documents = categories[CredentialCategories.document]
   const other = categories[CredentialCategories.other]
 
-  const { name } = useSelector(getServiceDescription)
+  const { name, image } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
     credentials.map(({ invalid, category, properties, name, type }, idx) => (
       <View
-        key={type + idx}
+        key={`${type}${idx}`}
         style={{
           marginBottom: idx === credentials.length - 1 ? 0 : 30,
           opacity: invalid ? 0.5 : 1,
@@ -133,7 +133,7 @@ const CredentialOfferFAS = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
-                  <InteractionLogo />
+                  <ServiceLogo source={image} />
                 </LogoContainerFAS>
               </Collapsible.Scale>
               <Collapsible.Title text={t('CredentialOffer.header')}>

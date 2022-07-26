@@ -1,7 +1,5 @@
-import React from 'react'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
-
 import NavigationHeader from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
 import { useCollapsible } from './context'
@@ -14,7 +12,11 @@ import { ICollapsibleComposite } from './types'
  * on scroll
  * -> changing opacity of the header text when scrolling
  */
-const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
+const Header: ICollapsibleComposite['Header'] = ({
+  type,
+  onPress,
+  customStyles,
+}) => {
   const { currentTitleText, scrollY, currentTitle } = useCollapsible()
   const headerTitleOpacity = useMemo(() => {
     if (currentTitle === undefined) return 0
@@ -42,7 +44,7 @@ const Header: ICollapsibleComposite['Header'] = ({ type, onPress }) => {
   return (
     <NavigationHeader
       type={type}
-      customStyles={styles.container}
+      customStyles={[styles.container, customStyles]}
       onPress={onPress}
       testID="collapsible-header"
     >

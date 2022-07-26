@@ -5,26 +5,22 @@
  * with module caching, that appeared after upgrading to RN63.
  */
 
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useLoader } from '../loader'
+import { useNavigation } from '@react-navigation/native'
+import { Interaction, TransportAPI } from 'react-native-jolocom'
 import {
   resetInteraction,
-  setInteractionDetails,
-  setRedirectUrl,
+  setInteractionDetails
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { useAgent } from '../sdk'
-import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { useInteractionHandler } from './interactionHandlers'
-import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
-import { Interaction, TransportAPI } from 'react-native-jolocom'
-import branch from 'react-native-branch'
-import { SWErrorCodes } from '~/errors/codes'
+import { useLoader } from '../loader'
+import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
+import { useInteractionHandler } from './interactionHandlers'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -34,66 +30,22 @@ export const useInteraction = () => {
   return () => agent.interactionManager.getInteraction(interactionId)
 }
 
-// NOTE: This should be called only in one place!
-export const useDeeplinkInteractions = () => {
-  const { processInteraction } = useInteractionStart()
-  const { scheduleErrorWarning } = useToasts()
-
-  useEffect(() => {
-    // TODO move somewhere
-    branch.disableTracking(true)
-    branch.subscribe(({ error, params }) => {
-      if (error) {
-        console.warn('Error processing DeepLink: ', error)
-        return
-      }
-
-      if (params) {
-        let redirectUrl: string | undefined = undefined
-
-        if (
-          params['redirectUrl'] &&
-          typeof params['redirectUrl'] === 'string'
-        ) {
-          redirectUrl = params['redirectUrl']
-        }
-
-        if (params['token'] && typeof params['token'] === 'string') {
-          processInteraction(params['token'], redirectUrl)
-          return
-        } else if (
-          !params['+clicked_branch_link'] ||
-          JSON.stringify(params) === '{}'
-        ) {
-          return
-        }
-
-        scheduleErrorWarning(new Error(SWErrorCodes.SWUnknownDeepLink))
-      }
-    })
-  }, [])
-}
-
 export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
   const loader = useLoader()
+  const navigation = useNavigation()
   const interactionHandler = useInteractionHandler()
-  const { connected, showDisconnectedToast } = useConnection()
   const { scheduleErrorWarning } = useToasts()
+  const { connected, showDisconnectedToast } = useConnection()
 
   const processInteraction = async (
     jwt: string,
-    redirectUrl?: string,
     transportAPI?: TransportAPI,
   ) => {
     try {
       parseJWT(jwt)
       const interaction = await agent.processJWT(jwt, transportAPI)
-
-      if (redirectUrl) {
-        dispatch(setRedirectUrl(redirectUrl))
-      }
 
       return interaction
     } catch (e) {
@@ -103,9 +55,8 @@ export const useInteractionStart = () => {
 
   const showInteraction = async (interaction: Interaction) => {
     // NOTE: not continuing the interaction if there is no network connection
+    if (connected === false) return showDisconnectedToast()
     try {
-      if (connected === false) return showDisconnectedToast()
-
       const counterparty = interaction.getSummary().initiator
       const interactionData = await interactionHandler(interaction)
 
@@ -124,12 +75,17 @@ export const useInteractionStart = () => {
     }
   }
 
-  const startInteraction = async (jwt: string) => {
-    return loader(
+  const navigateInteraction = () => {
+    navigation.navigate(ScreenNames.Interaction)
+  }
+
+  const startInteraction = async (jwt: string) =>
+    loader(
       async () => {
         const interaction = await processInteraction(jwt)
         if (interaction) {
           await showInteraction(interaction)
+          navigateInteraction()
         }
       },
       { showSuccess: false, showFailed: false },
@@ -137,16 +93,19 @@ export const useInteractionStart = () => {
         if (error) scheduleErrorWarning(error)
       },
     )
-  }
 
-  return { processInteraction, showInteraction, startInteraction }
+  return {
+    processInteraction,
+    showInteraction,
+    startInteraction,
+    navigateInteraction,
+  }
 }
 
 export const useFinishInteraction = () => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
-
-  return (screen?: ScreenNames) => {
+  const closeInteraction = (screen?: ScreenNames) => {
     if (screen) {
       navigation.navigate(screen)
     } else {
@@ -156,8 +115,11 @@ export const useFinishInteraction = () => {
         navigation.navigate(ScreenNames.Main)
       }
     }
-    setTimeout(() => {
-      dispatch(resetInteraction())
-    }, 500)
   }
+
+  const clearInteraction = () => {
+    dispatch(resetInteraction(undefined))
+  }
+
+  return { closeInteraction, clearInteraction }
 }

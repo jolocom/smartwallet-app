@@ -1,0 +1,427 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
+<RNCSafeAreaView
+  onInsetsChange={[Function]}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+        },
+        Object {
+          "flex": 1,
+          "paddingTop": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "flex-start",
+            "flex": 1,
+            "justifyContent": "center",
+          },
+          false,
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "#101010",
+            "height": 0,
+            "width": "100%",
+          }
+        }
+      />
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "height": 50,
+              "paddingHorizontal": 12,
+              "width": "100%",
+            },
+            Object {
+              "justifyContent": "space-between",
+            },
+            Array [
+              Object {
+                "backgroundColor": "#101010",
+              },
+              Object {},
+            ],
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "alignItems": "center",
+              "height": 40,
+              "justifyContent": "center",
+              "opacity": 1,
+              "width": 40,
+            }
+          }
+          testID="backArrow"
+        >
+          <RNSVGSvgView
+            align="xMidYMid"
+            bbHeight={17}
+            bbWidth={25}
+            focusable={false}
+            height={17}
+            meetOrSlice={0}
+            minX={0}
+            minY={0}
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "borderWidth": 0,
+                },
+                Object {
+                  "flex": 0,
+                  "height": 17,
+                  "width": 25,
+                },
+              ]
+            }
+            vbHeight={17}
+            vbWidth={25}
+            width={25}
+          >
+            <RNSVGGroup>
+              <RNSVGPath
+                d="M24.48 7.438H3.34l5.362-5.469a.536.536 0 00.152-.375V.53A.53.53 0 008.334 0a.516.516 0 00-.369.156L.153 8.124a.539.539 0 000 .752l7.812 7.968c.15.152.372.198.568.116a.53.53 0 00.321-.491v-1.063a.536.536 0 00-.152-.375L3.34 9.562h21.138c.288 0 .521-.237.521-.53V7.968a.526.526 0 00-.52-.531z"
+                fill={-855310}
+                fillRule={1}
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              />
+            </RNSVGGroup>
+          </RNSVGSvgView>
+        </View>
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "paddingHorizontal": 10,
+            }
+          }
+          testID="heading"
+        />
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+              "paddingHorizontal": 16,
+              "width": "100%",
+            },
+            Object {
+              "backgroundColor": "#101010",
+              "marginBottom": -0,
+              "paddingBottom": 0,
+            },
+            Object {},
+            Object {
+              "justifyContent": "flex-start",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": undefined,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255,255,255,0.85)",
+                "fontFamily": "TTCommons-Medium",
+                "fontSize": 28,
+                "letterSpacing": 0,
+                "lineHeight": 32,
+              },
+              undefined,
+            ]
+          }
+        >
+          AusweisCanInfo.header
+        </Text>
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": undefined,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255, 255, 255, 0.7)",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 20,
+                "letterSpacing": 0.14,
+                "lineHeight": 22,
+              },
+              Object {
+                "marginTop": 24,
+                "textAlign": "left",
+              },
+            ]
+          }
+        >
+          AusweisCanInfo.description
+        </Text>
+        <View
+          style={
+            Object {
+              "aspectRatio": 1.7635467980295567,
+              "marginTop": 36,
+              "width": "100%",
+            }
+          }
+        >
+          <RNSVGSvgView
+            align="xMidYMid"
+            bbHeight="100%"
+            bbWidth="100%"
+            focusable={false}
+            height="100%"
+            meetOrSlice={0}
+            minX={0}
+            minY={0}
+            style={
+              Array [
+                Object {
+                  "backgroundColor": "transparent",
+                  "borderWidth": 0,
+                },
+                Object {
+                  "flex": 0,
+                  "height": "100%",
+                  "width": "100%",
+                },
+              ]
+            }
+            vbHeight={203}
+            vbWidth={358}
+            width="100%"
+          >
+            <RNSVGGroup>
+              <RNSVGDefs>
+                <RNSVGRect
+                  height={203}
+                  name="prefix__a"
+                  rx={5.026}
+                  width={358}
+                  x={0}
+                  y={0}
+                />
+              </RNSVGDefs>
+              <RNSVGGroup
+                fill={null}
+                fillRule={0}
+                propList={
+                  Array [
+                    "fill",
+                    "fillRule",
+                  ]
+                }
+              >
+                <RNSVGMask
+                  fill={-1}
+                  height="100%"
+                  maskContentUnits={1}
+                  maskTransform={
+                    Array [
+                      1,
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                    ]
+                  }
+                  maskUnits={0}
+                  name="prefix__b"
+                  propList={
+                    Array [
+                      "fill",
+                    ]
+                  }
+                  width="100%"
+                  x="0%"
+                  y="0%"
+                >
+                  <RNSVGUse
+                    height={0}
+                    href="prefix__a"
+                    width={0}
+                    x={0}
+                    y={0}
+                  />
+                </RNSVGMask>
+                <RNSVGRect
+                  height={202.5}
+                  propList={
+                    Array [
+                      "stroke",
+                      "strokeWidth",
+                    ]
+                  }
+                  rx={5.026}
+                  stroke={-1}
+                  strokeWidth={0.5}
+                  width={357.5}
+                  x={0.25}
+                  y={0.25}
+                />
+                <RNSVGText
+                  content={null}
+                  dx={Array []}
+                  dy={Array []}
+                  fill={-6710887}
+                  font={
+                    Object {
+                      "fontFamily": "TTCommons-Medium",
+                      "fontSize": 13.922,
+                      "fontWeight": 400,
+                      "letterSpacing": 0.994,
+                    }
+                  }
+                  mask="prefix__b"
+                  propList={
+                    Array [
+                      "fill",
+                    ]
+                  }
+                  rotate={Array []}
+                  x={Array []}
+                  y={Array []}
+                >
+                  <RNSVGTSpan
+                    content="PERSONALAUSWEIS"
+                    dx={Array []}
+                    dy={Array []}
+                    font={Object {}}
+                    rotate={Array []}
+                    x={
+                      Array [
+                        15.906,
+                      ]
+                    }
+                    y={
+                      Array [
+                        24.931,
+                      ]
+                    }
+                  />
+                </RNSVGText>
+                <RNSVGRect
+                  fill={-11645362}
+                  height={25.076}
+                  mask="prefix__b"
+                  propList={
+                    Array [
+                      "fill",
+                    ]
+                  }
+                  rx={2.387}
+                  width={107.4}
+                  x={230.547}
+                  y={135.029}
+                />
+                <RNSVGText
+                  content={null}
+                  dx={Array []}
+                  dy={Array []}
+                  fill={-1}
+                  font={
+                    Object {
+                      "fontFamily": "TTCommons-Regular",
+                      "fontSize": 20.048,
+                      "letterSpacing": 2.864,
+                    }
+                  }
+                  mask="prefix__b"
+                  propList={
+                    Array [
+                      "fill",
+                    ]
+                  }
+                  rotate={Array []}
+                  x={Array []}
+                  y={Array []}
+                >
+                  <RNSVGTSpan
+                    content="XXXXXX"
+                    dx={Array []}
+                    dy={Array []}
+                    font={Object {}}
+                    rotate={Array []}
+                    x={
+                      Array [
+                        244.977,
+                      ]
+                    }
+                    y={
+                      Array [
+                        153.812,
+                      ]
+                    }
+                  />
+                </RNSVGText>
+                <RNSVGPath
+                  d="M164.317 200.705c-8.34-8.346-14.901-13.199-19.681-14.557-13.459-3.825-22.029-14.163-22.029-24.548v-7.553c13.658-13.69 22.47-37.294 22.47-58.537 0-31.157-18.064-50.04-47.142-50.04-29.077 0-46.7 18.883-46.7 50.04 0 21.243 8.811 44.847 22.469 58.537v7.553c0 10.385-8.37 19.827-22.028 24.548-4.732 1.721-11.764 6.644-21.095 14.768l133.736-.21z"
+                  fill={-11645362}
+                  fillRule={1}
+                  mask="prefix__b"
+                  propList={
+                    Array [
+                      "fill",
+                      "fillRule",
+                    ]
+                  }
+                />
+              </RNSVGGroup>
+            </RNSVGGroup>
+          </RNSVGSvgView>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;

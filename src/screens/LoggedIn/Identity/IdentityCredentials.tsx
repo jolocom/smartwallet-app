@@ -53,14 +53,10 @@ const IdentityCredentials = () => {
     values: attributes[type as PrimitiveAttributeTypes] ?? [],
   }))
 
-  const isPrimitiveAttributesEmpty = primitiveAttributesWithValues.every(
-    (a) => !a.values.length,
-  )
-
   return (
     <View testID="identity-credentials-present" style={styles.container}>
-      <IdentityTabs.Styled.Placeholder show={isPrimitiveAttributesEmpty}>
-        {t('Identity.attributesMissingInfo')}
+      <IdentityTabs.Styled.Placeholder show={true}>
+        {t('Identity.credentialsDescription')}
       </IdentityTabs.Styled.Placeholder>
       <View style={styles.credentialsContainer}>
         {primitiveAttributesWithValues.map(({ type, label, values }) => {

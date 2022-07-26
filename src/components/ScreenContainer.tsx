@@ -1,7 +1,6 @@
 import React from 'react'
-import { View, StyleSheet, ViewStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, Dimensions } from 'react-native'
 import { SafeAreaView, useSafeArea } from 'react-native-safe-area-context'
-
 import { Colors } from '~/utils/colors'
 import NavigationHeader, { NavHeaderType } from './NavigationHeader'
 import JoloText, {
@@ -12,11 +11,10 @@ import JoloText, {
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
-import { Dimensions } from 'react-native'
+import { IWithCustomStyle } from '~/types/props'
 
-interface ScreenContainerI {
+interface ScreenContainerI extends IWithCustomStyle {
   isTransparent?: boolean
-  customStyles?: ViewStyle
   navigationStyles?: ViewStyle
   isFullscreen?: boolean
   backgroundColor?: Colors
@@ -28,7 +26,7 @@ interface ScreenContainerI {
 
 interface IScreenContainerCompound {
   Header: React.FC<IJoloTextProps>
-  Padding: React.FC
+  Padding: React.FC<{ distance?: number }>
 }
 
 const ScreenContainer: React.FC<ScreenContainerI> &
@@ -66,7 +64,7 @@ const ScreenContainer: React.FC<ScreenContainerI> &
         )}
         {(hasHeaderClose || hasHeaderBack) && (
           <NavigationHeader
-            customStyles={navigationStyles}
+            customStyles={[{ backgroundColor }, navigationStyles]}
             onPress={onClose}
             type={hasHeaderBack ? NavHeaderType.Back : NavHeaderType.Close}
           />
@@ -125,8 +123,14 @@ const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
   )
 }
 
-const ScreenPadding: IScreenContainerCompound['Padding'] = ({ children }) => (
-  <View style={styles.padding} children={children} />
+const ScreenPadding: IScreenContainerCompound['Padding'] = ({
+  children,
+  distance = 16,
+}) => (
+  <View
+    style={[styles.padding, { paddingHorizontal: distance }]}
+    children={children}
+  />
 )
 
 ScreenContainer.Header = ScreenContainerHeader
@@ -146,7 +150,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   transparent: {
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.transparent,
   },
   fullscreen: {
     paddingHorizontal: 0,
@@ -155,7 +159,6 @@ const styles = StyleSheet.create({
   padding: {
     // TODO: double check in places that use ScreenContainer.Padding
     width: Dimensions.get('window').width,
-    paddingHorizontal: 16,
   },
 })
 

@@ -19,7 +19,7 @@ const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CredentialDetails = () => {
   const route =
-    useRoute<RouteProp<MainStackParamList, ScreenNames.CredentialDetails>>()
+    useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
   const { title, photo, fields } = route.params
 
   const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
@@ -65,7 +65,7 @@ const CredentialDetails = () => {
                   {title}
                 </JoloText>
               </Collapsible.Title>
-              <Block customStyle={{ backgroundColor: Colors.white }}>
+              <Block customStyles={{ backgroundColor: Colors.white }}>
                 {photo && (
                   <Image source={{ uri: photo }} style={styles.photo} />
                 )}
@@ -112,14 +112,6 @@ const CredentialDetails = () => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.mainBlack,
-  },
-  titleContainer: {
-    paddingLeft: 6,
-    paddingBottom: BP({ default: 12, xsmall: 8 }),
-  },
   photo: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,

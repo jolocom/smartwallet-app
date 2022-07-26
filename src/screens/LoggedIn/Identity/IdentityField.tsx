@@ -1,6 +1,10 @@
 import React from 'react'
 import { View, Dimensions, StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import {
+  TouchableOpacity,
+  PanGestureHandlerGestureEvent,
+  PanGestureHandler,
+} from 'react-native-gesture-handler'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,22 +13,19 @@ import Animated, {
   withTiming,
   runOnJS,
 } from 'react-native-reanimated'
-import {
-  PanGestureHandlerGestureEvent,
-  PanGestureHandler,
-} from 'react-native-gesture-handler'
 
 import { AttributeTypes } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
 import Field from '~/components/Widget/Field'
 import { CloseIcon } from '~/assets/svg'
+import { Colors } from '~/utils/colors'
 
 interface Props {
   type: AttributeTypes
   id: string
   value: string | string[]
-  onDelete: () => void
+  onDelete: () => void | Promise<void>
 }
 
 const DELETE_BUTTON_WRAPPER = 400
@@ -56,7 +57,6 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
             damping: 8,
             velocity: 30,
           })
-        } else {
         }
       } else if (shouldUnselect) {
         x.value = withTiming(0)
@@ -73,7 +73,7 @@ const IdentityField: React.FC<Props> = ({ type, id, value, onDelete }) => {
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler} minDeltaX={2}>
-      <Animated.View style={[animatedStyle]}>
+      <Animated.View style={animatedStyle}>
         <TouchableOpacity
           onPress={() => {
             {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: Colors.red,
     borderRadius: 8,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',

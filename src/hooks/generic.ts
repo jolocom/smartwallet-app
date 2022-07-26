@@ -49,7 +49,7 @@ export const useHideStatusBar = () => {
   }, [isFocused])
 
   useLayoutEffect(() => {
-    !!errorScreen ? show() : hide()
+    errorScreen ? show() : hide()
   }, [errorScreen])
 
   useLayoutEffect(() => {
@@ -109,7 +109,16 @@ export const useDisableLock = () => {
   return async <T>(cb: () => Promise<T>) => {
     dispatch(setPopup(true))
     const result = await cb()
-    dispatch(setPopup(false))
+
+    /**
+     * NOTE: deferring setting 'isPopup' to false to give time for a popup to hide
+     * and, therefore, changing app state to 'active';
+     * otherwise, the app is being locked again, because the
+     * state of the app is still in the background
+     */
+    setTimeout(() => {
+      dispatch(setPopup(false))
+    }, 1000)
 
     return result
   }
