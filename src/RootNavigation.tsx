@@ -14,15 +14,9 @@ import LoggedOut from '~/screens/LoggedOut'
 import { ScreenNames } from '~/types/screens'
 
 import { isLogged } from './modules/account/selectors'
-import LostSeedPhraseInfo from './screens/Globals/LostSeedPhraseInfo'
 import LoggedIn from './screens/LoggedIn'
 import { Colors } from './utils/colors'
-import SeedPhraseInfo from './screens/LoggedOut/Onboarding/Registration/SeedPhrase/SeedPhraseInfo'
-import {
-  screenDisableGestures,
-  transparentModalOptions,
-} from './utils/screenSettings'
-// import AppDisabled from './screens/Modals/AppDisabled' --> this can be removed
+import { screenDisableGestures } from './utils/screenSettings'
 import GlobalModals from './screens/Globals'
 
 export type RootStackParamList = {
@@ -52,15 +46,6 @@ const navigationTheme: Theme = {
   },
 }
 
-export type GlobalModalsParamsList = {
-  [ScreenNames.LostSeedPhraseInfo]: undefined
-  [ScreenNames.SeedPhraseInfo]: undefined
-  [ScreenNames.AppDisabled]: {
-    attemptCyclesLeft: number
-    countdown: number
-  }
-}
-
 const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
   const isLoggedIn = useSelector(isLogged)
 
@@ -81,8 +66,6 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
             component={LoggedOut}
           />
         )}
-
-        {/* Global -> Start */}
         <RootStack.Screen
           name={ScreenNames.GlobalModals}
           component={GlobalModals}
@@ -95,7 +78,6 @@ const RootNavigation = React.forwardRef<NavigationContainerRef>((_, ref) => {
             ...screenDisableGestures,
           }}
         />
-        {/* Global -> End */}
       </RootStack.Navigator>
     </NavigationContainer>
   )

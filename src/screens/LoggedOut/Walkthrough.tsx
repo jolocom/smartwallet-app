@@ -55,7 +55,7 @@ const useWalkthroughProceed = () => {
       handleDone,
     )
   }
-  const handleProceed = (cb: () => Promise<void>) => {
+  const handleProceed = (cb: () => void) => {
     return () => {
       if (isTermsConsentOutdated) {
         dispatch(setTermsConsentVisibility(true))
@@ -69,8 +69,10 @@ const useWalkthroughProceed = () => {
       }
     }
   }
-  const handleRegistration = handleProceed(registerUser)
-  const handleRecovery = handleProceed(async () => {
+  const handleRegistration = handleProceed(() => {
+    registerUser().catch(console.warn)
+  })
+  const handleRecovery = handleProceed(() => {
     redirect(ScreenNames.IdentityRecovery)
   })
   return { handleRegistration, handleRecovery }

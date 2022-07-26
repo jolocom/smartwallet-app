@@ -1,26 +1,30 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import Option from '~/screens/LoggedIn/Settings/components/Option'
 import Section from '~/screens/LoggedIn/Settings/components/Section'
-import { useNavigation } from '@react-navigation/native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Btn from '~/components/Btn'
-import BottomSheet from '~/components/BottomSheet'
 import useTermsConsent from '~/hooks/consent'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import { CheckmarkIconSmall } from '~/assets/svg'
 import { useAgent } from '~/hooks/sdk'
-import { useGoBack } from '~/hooks/navigation'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
+import { ScreenNames } from '~/types/screens'
 
 const legalTextConfig = [
-  { key: 'TermsOfService', title: 'Terms of Service' },
   {
-    key: 'PrivacyPolicy',
+    key: 'terms_of_service',
+    title: 'Terms of Service',
+    screen: ScreenNames.ConsentTermsOfService,
+  },
+  {
+    key: 'privacy_policy',
     title: 'Privacy Policy',
+    screen: ScreenNames.ConsentPrivacyPolicy,
   },
 ]
 
@@ -29,8 +33,7 @@ const MainContent: React.FC = () => {
   const { t } = useTranslation()
   const { acceptConsent } = useTermsConsent()
   const agent = useAgent()
-  const navigation = useNavigation()
-  const handleNavigateToScreen = navigation.navigate
+  const redirect = useRedirect()
   const goBack = useGoBack()
 
   const handleAccept = () => {
@@ -41,32 +44,28 @@ const MainContent: React.FC = () => {
 
   return (
     <ScreenContainer customStyles={{ paddingHorizontal: 0, paddingTop: 0 }}>
-      <View style={{ width: '100%', flex: 1 }}>
-        <Section customStyles={{ paddingHorizontal: 20, paddingTop: 0 }}>
-          <Section.Title>Terms of Service and Privacy Policy</Section.Title>
-          <Section>
-            <JoloText customStyles={{ textAlign: 'left' }}>
-              {t('TermsConsent.subheader')}
-            </JoloText>
-          </Section>
-          <Section>
-            <Section.Block>
-              {legalTextConfig.map((legalText) => {
-                return (
-                  <Option
-                    key={legalText.key}
-                    onPress={() => handleNavigateToScreen(legalText.key)}
-                  >
-                    <Option.Title title={legalText.title} />
-                    <Option.RightIcon />
-                  </Option>
-                )
-              })}
-            </Section.Block>
-          </Section>
-        </Section>
+      <View
+        style={{ width: '100%', flex: 1, paddingHorizontal: 20, paddingTop: 0 }}
+      >
+        <Section.Title>Terms of Service and Privacy Policy</Section.Title>
+        <JoloText customStyles={{ textAlign: 'left' }}>
+          {t('TermsConsent.subheader')}
+        </JoloText>
+        <Section.Block customStyles={{ height: 100, marginTop: 24 }}>
+          {legalTextConfig.map((legalText) => {
+            return (
+              <Option
+                key={legalText.key}
+                onPress={() => redirect(legalText.screen)}
+              >
+                <Option.Title title={legalText.title} />
+                <Option.RightIcon />
+              </Option>
+            )
+          })}
+        </Section.Block>
       </View>
-      <BottomSheet showSlide={true} customStyles={styles.bottomBar}>
+      <View style={styles.bottomBar}>
         <TouchableOpacity
           onPress={() => setAccepted(!accepted)}
           style={styles.acceptWrapper}
@@ -99,16 +98,21 @@ const MainContent: React.FC = () => {
         >
           {t('TermsConsent.footerBtn')}
         </Btn>
-      </BottomSheet>
+      </View>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
   bottomBar: {
-    paddingTop: 14,
+    paddingTop: 20,
     paddingBottom: 26,
     paddingHorizontal: 20,
+    backgroundColor: Colors.black,
+    alignItems: 'center',
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   checkboxBase: {
     width: 28,

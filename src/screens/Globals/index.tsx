@@ -6,7 +6,16 @@ import LostSeedPhraseInfo from './LostSeedPhraseInfo'
 import AppDisabled from './AppDisabled'
 import TermsConsent from './TermsConsent'
 
-const ModalStack = createStackNavigator()
+export type GlobalModalsParamsList = {
+  [ScreenNames.LostSeedPhraseInfo]: undefined
+  [ScreenNames.SeedPhraseInfo]: undefined
+  [ScreenNames.AppDisabled]: {
+    attemptCyclesLeft: number
+    countdown: number
+  }
+  [ScreenNames.TermsConsentStack]: undefined
+}
+const ModalStack = createStackNavigator<GlobalModalsParamsList>()
 
 const GlobalModals = () => {
   return (
@@ -16,7 +25,7 @@ const GlobalModals = () => {
       screenOptions={transparentModalOptions}
     >
       <ModalStack.Screen
-        name={ScreenNames.TermsConsent}
+        name={ScreenNames.TermsConsentStack}
         component={TermsConsent}
       />
       <ModalStack.Screen

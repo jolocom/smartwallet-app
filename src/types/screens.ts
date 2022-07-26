@@ -74,5 +74,8 @@ export enum ScreenNames {
 
   //Global Screens
   GlobalModals = 'GlobalModals',
+  TermsConsentStack = 'TermsConsentStack',
   TermsConsent = 'TermsConsent',
+  ConsentTermsOfService = 'ConsentTermsOfService',
+  ConsentPrivacyPolicy = 'ConsentPrivacyPolicy',
 }

@@ -10,13 +10,16 @@ const TermsConsentStack = createStackNavigator()
 const TermsConsent: React.FC = () => {
   return (
     <TermsConsentStack.Navigator headerMode="none">
-      <TermsConsentStack.Screen name={'MainContent'} component={MainContent} />
       <TermsConsentStack.Screen
-        name={ScreenNames.PrivacyPolicy}
+        name={ScreenNames.TermsConsentStack}
+        component={MainContent}
+      />
+      <TermsConsentStack.Screen
+        name={ScreenNames.ConsentPrivacyPolicy}
         component={PrivacyPolicy}
       />
       <TermsConsentStack.Screen
-        name={ScreenNames.TermsOfService}
+        name={ScreenNames.ConsentTermsOfService}
         component={TermsOfService}
       />
     </TermsConsentStack.Navigator>

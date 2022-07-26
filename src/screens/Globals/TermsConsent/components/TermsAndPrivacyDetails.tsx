@@ -6,7 +6,9 @@ import { useGoBack } from '~/hooks/navigation'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import IconBtn from '~/components/IconBtn'
 import BottomSheet from '~/components/BottomSheet'
-import SingleSelectBlock from '~/components/SingleSelectBlock'
+import SingleSelectBlock, {
+  BlockSelection,
+} from '~/components/SingleSelectBlock'
 import useTranslation from '~/hooks/useTranslation'
 import { Locales } from '~/translations'
 import ScreenDismissArea from '~/components/ScreenDismissArea'
@@ -33,10 +35,8 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
 
   const storedLanguage = languages.find((l) => l.id === language)
 
-  const handleLanguage = ({ value }) => {
-    value === 'English' || value === 'Englisch'
-      ? setLanguage('en')
-      : setLanguage('de')
+  const handleLanguage = ({ id }: BlockSelection) => {
+    setLanguage(id)
     setVisibility(false)
   }
 
@@ -44,10 +44,10 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
     setVisibility(!visibility)
   }
 
-  const handleShare = async () => {
-    await Linking.openURL(
+  const handleShare = () => {
+    Linking.openURL(
       `mailto:?subject=${title}&body=${language === 'en' ? enText : deText}`,
-    )
+    ).catch(console.warn)
   }
 
   return (
@@ -102,7 +102,7 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
       {visibility && (
         <View style={styles.overlay}>
           <ScreenDismissArea onDismiss={handlePress}></ScreenDismissArea>
-          <BottomSheet showSlide={true}>
+          <BottomSheet>
             <SingleSelectBlock
               initialSelect={storedLanguage}
               selection={languages}
