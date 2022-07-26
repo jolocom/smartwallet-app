@@ -86,7 +86,9 @@ const styles = StyleSheet.create({
   },
   centerComponent: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 })
 

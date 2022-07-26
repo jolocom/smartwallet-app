@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
-import { View, StyleSheet, Text, ScrollView, Linking } from 'react-native'
+import { StyleSheet, Text, ScrollView } from 'react-native'
 import { useGoBack } from '~/hooks/navigation'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import IconBtn from '~/components/IconBtn'
@@ -11,8 +11,7 @@ import SingleSelectBlock, {
 } from '~/components/SingleSelectBlock'
 import useTranslation from '~/hooks/useTranslation'
 import { Locales } from '~/translations'
-import ScreenDismissArea from '~/components/ScreenDismissArea'
-import { LanguageIcon, SendEmailIcon } from '~/assets/svg'
+import { LanguageIcon } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 
 interface ITermsTemplate {
@@ -41,55 +40,31 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
   }
 
   const handlePress = () => {
-    setVisibility(!visibility)
-  }
-
-  const handleShare = () => {
-    Linking.openURL(
-      `mailto:?subject=${title}&body=${language === 'en' ? enText : deText}`,
-    ).catch(console.warn)
+    setVisibility(true)
   }
 
   return (
-    <ScreenContainer
-      customStyles={{
-        justifyContent: 'flex-start',
-        paddingTop: 0,
-        paddingHorizontal: 0,
-      }}
-    >
-      <NavigationHeader
-        type={NavHeaderType.Back}
-        onPress={goBack}
-        customStyles={{ paddingHorizontal: 5 }}
+    <>
+      <ScreenContainer
+        customStyles={{
+          justifyContent: 'flex-start',
+          paddingHorizontal: 0,
+        }}
       >
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingLeft: 10,
-          }}
+        <NavigationHeader
+          type={NavHeaderType.Back}
+          onPress={goBack}
+          customStyles={{ paddingHorizontal: 5 }}
         >
           <JoloText kind={JoloTextKind.title}>{title}</JoloText>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '20%',
-            }}
-          >
-            <IconBtn onPress={handlePress}>
-              <LanguageIcon />
-            </IconBtn>
-            <IconBtn onPress={handleShare}>
-              <SendEmailIcon />
-            </IconBtn>
-          </View>
-        </View>
-      </NavigationHeader>
-      <View style={styles.contentContainer}>
-        <ScrollView indicatorStyle={'white'}>
+          <IconBtn onPress={handlePress}>
+            <LanguageIcon />
+          </IconBtn>
+        </NavigationHeader>
+        <ScrollView
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
           {language === 'en' && (
             <Text style={styles.heading}>
               {/* NOTE: make text dynamic*/}
@@ -98,27 +73,26 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
           )}
           <Text style={styles.text}>{language === 'en' ? enText : deText}</Text>
         </ScrollView>
-      </View>
-      {visibility && (
-        <View style={styles.overlay}>
-          <ScreenDismissArea onDismiss={handlePress}></ScreenDismissArea>
-          <BottomSheet>
-            <SingleSelectBlock
-              initialSelect={storedLanguage}
-              selection={languages}
-              onSelect={handleLanguage}
-            />
-          </BottomSheet>
-        </View>
-      )}
-    </ScreenContainer>
+      </ScreenContainer>
+      <BottomSheet
+        customStyles={styles.bottomSheet}
+        onDismiss={() => setVisibility(false)}
+        visible={visibility}
+      >
+        <SingleSelectBlock
+          initialSelect={storedLanguage}
+          selection={languages}
+          onSelect={handleLanguage}
+        />
+      </BottomSheet>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
   contentContainer: {
-    marginTop: 25,
     paddingHorizontal: 20,
+    paddingTop: 20,
   },
   heading: {
     color: Colors.error,
@@ -130,13 +104,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingBottom: 50,
   },
-  overlay: {
-    position: 'absolute',
-    backgroundColor: Colors.black36,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    top: 0,
+  bottomSheet: {
+    backgroundColor: Colors.black,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
   },
 })
 

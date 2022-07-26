@@ -1,5 +1,5 @@
 import { RouteProp, useIsFocused, useRoute } from '@react-navigation/native'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { useDispatch } from 'react-redux'
@@ -47,6 +47,7 @@ const AnimatedStatus: React.FC<{
 }
 
 export const AusweisScanner = () => {
+  const [isVisible, setVisible] = useState(true)
   const { t } = useTranslation()
   const route =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.AusweisScanner>>()
@@ -108,8 +109,12 @@ export const AusweisScanner = () => {
      * onDismiss should contain logic without closing
      * the AusweisScanner screen
      */
-    goBack()
-    onDismiss && onDismiss()
+    setVisible(false)
+
+    setTimeout(() => {
+      goBack()
+      onDismiss && onDismiss()
+    }, 200)
   }
 
   const renderScannerStatus = () => {
@@ -158,8 +163,10 @@ export const AusweisScanner = () => {
 
   return (
     <AusweisBottomSheet
+      visible={isVisible}
       backgroundColor={Colors.badGrey}
       customContainerStyles={styles.sheetContainer}
+      onDismiss={handleDismiss}
     >
       <View style={styles.container}>
         <JoloText kind={JoloTextKind.title} customStyles={styles.header}>
