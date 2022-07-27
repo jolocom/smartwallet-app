@@ -15,7 +15,7 @@ import { AusweisBottomSheet } from '../styled'
 import { eIDScreens, AusweisScannerState } from '../types'
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
-import { useCheckNFC } from '~/hooks/nfc'
+import { useCheckNFC, useNFC } from '~/hooks/nfc'
 
 const AnimatedStatus: React.FC<{
   isVisible: boolean
@@ -61,6 +61,8 @@ export const AusweisScanner = () => {
   const checkNfcSupport = useCheckNFC()
 
   const isScreenFocused = useIsFocused()
+
+  useNFC()
 
   useBackHandler(() => {
     handleDismiss()

@@ -1,8 +1,25 @@
-import NfcManager from 'react-native-nfc-manager'
+import { useEffect } from 'react'
+import { Platform } from 'react-native'
+import NfcManager, { NfcTech } from 'react-native-nfc-manager'
 import { SWErrorCodes } from '~/errors/codes'
 
 import { useToasts } from './toasts'
 import useTranslation from './useTranslation'
+
+//NOTE: only works on Android
+export const useNFC = () => {
+  const { scheduleErrorWarning } = useToasts()
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      NfcManager.requestTechnology(NfcTech.Ndef).catch(console.warn)
+
+      return () => {
+        NfcManager.cancelTechnologyRequest().catch(scheduleErrorWarning)
+      }
+    }
+  }, [])
+}
 
 export const useCheckNFC = () => {
   const { t } = useTranslation()
