@@ -92,6 +92,7 @@ export const AusweisScanner = () => {
 
   const handleSuccess = () => {
     setTimeout(() => {
+      setVisible(false)
       goBack()
       onDone()
     }, 500)
