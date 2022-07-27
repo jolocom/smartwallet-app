@@ -5,6 +5,7 @@ import {
   Platform,
   TouchableOpacity,
   TextStyle,
+  ViewStyle,
 } from 'react-native'
 import { CaretRight } from '~/assets/svg'
 import { IWithCustomStyle } from '~/types/props'
@@ -37,7 +38,7 @@ const RightIcon: React.FC = () => (
   </IconContainer>
 )
 
-interface PropsI {
+interface PropsI extends IWithCustomStyle<ViewStyle> {
   onPress?: () => void
   hasBorder?: boolean
   disabled?: boolean
@@ -47,9 +48,15 @@ const Option: React.FC<PropsI> & {
   Title: React.FC<TitlePropsI>
   RightIcon: React.FC
   IconContainer: React.FC
-} = ({ onPress, hasBorder = true, disabled = false, children }) => {
+} = ({
+  onPress,
+  hasBorder = true,
+  disabled = false,
+  customStyles,
+  children,
+}) => {
   return (
-    <View style={[styles.container, hasBorder && styles.border]}>
+    <View style={[styles.container, hasBorder && styles.border, customStyles]}>
       <TouchableOpacity
         activeOpacity={onPress ? 0.2 : 1}
         onPress={onPress}
