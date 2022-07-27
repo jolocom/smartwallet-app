@@ -2,8 +2,8 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 
 import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 
 interface Props {
   text: string
@@ -17,7 +17,7 @@ export const ConsentText: React.FC<Props> = ({ onPress, text }) => {
         color={Colors.purple}
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.middle}
-        customStyles={{ textAlign: 'left' }}
+        customStyles={{ textAlign: 'left', opacity: 0.7 }}
       >
         {text}
       </JoloText>

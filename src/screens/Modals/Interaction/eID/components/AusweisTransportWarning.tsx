@@ -5,7 +5,6 @@ import Btn from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-
 import useTranslation from '~/hooks/useTranslation'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'

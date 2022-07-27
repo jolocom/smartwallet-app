@@ -27,7 +27,7 @@ export interface PopupMenuProps {
 }
 
 const SolidBlock: React.FC<IWithCustomStyle> = ({ children, customStyles }) => (
-  <Block customStyle={[styles.block, customStyles]}>{children}</Block>
+  <Block customStyles={[styles.block, customStyles]}>{children}</Block>
 )
 
 const PopupButton: React.FC<{ onPress: () => void }> = ({

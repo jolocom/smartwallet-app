@@ -1,4 +1,4 @@
-export const privacyPolicyDE = `Datenschutzerklärung SmartWallet App
+Datenschutzerklärung SmartWallet App
 Jolocom GmbH, Waldemarstrasse 37A, 10999 Berlin (“Jolocom”)
 
 
@@ -147,4 +147,3 @@ Dieser Text unterliegt deutschem Recht und soll nach deutschem Rechtsverständni
 
 
 Stand Juli 2022
-`

@@ -20,7 +20,7 @@ const BackupBlock: React.FC<{
   onPress: () => void
 }> = ({ title, description, btnText, onPress }) => (
   <Block
-    customStyle={{
+    customStyles={{
       paddingVertical: BP({ default: 24, xsmall: 20 }),
       paddingHorizontal: BP({ default: 24, xsmall: 12 }),
       marginBottom: BP({ default: 24, xsmall: 16 }),

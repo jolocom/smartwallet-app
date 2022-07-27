@@ -72,6 +72,10 @@ export enum ScreenNames {
   CollapsibleTest = 'CollapsibleTest',
   InteractionPasteTest = 'InteractionPasteTest',
 
-  //Modals
+  //Global Screens
   GlobalModals = 'GlobalModals',
+  TermsConsentStack = 'TermsConsentStack',
+  TermsConsent = 'TermsConsent',
+  ConsentTermsOfService = 'ConsentTermsOfService',
+  ConsentPrivacyPolicy = 'ConsentPrivacyPolicy',
 }
