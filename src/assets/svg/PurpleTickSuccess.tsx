@@ -6,7 +6,7 @@ interface Props {
   h?: number | string
 }
 
-function PurpleTickSuccess<Props>({ w = '100%', h = '100%' }) {
+const PurpleTickSuccess: React.FC<Props> = ({ w = '100%', h = '100%' }) => {
   return (
     <Svg width={w} height={h} viewBox="0 0 20 20">
       <G fillRule="nonzero" fill="none">
