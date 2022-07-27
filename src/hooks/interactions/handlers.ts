@@ -11,13 +11,12 @@ import { useNavigation } from '@react-navigation/native'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
 import {
   resetInteraction,
-  setInteractionDetails
+  setInteractionDetails,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
-import { useLoader } from '../loader'
 import { useAgent } from '../sdk'
 import { useToasts } from '../toasts'
 import { useInteractionHandler } from './interactionHandlers'
@@ -33,7 +32,6 @@ export const useInteraction = () => {
 export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
-  const loader = useLoader()
   const navigation = useNavigation()
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
@@ -49,7 +47,7 @@ export const useInteractionStart = () => {
 
       return interaction
     } catch (e) {
-      scheduleErrorWarning(e)
+      if (e instanceof Error) scheduleErrorWarning(e)
     }
   }
 
@@ -71,7 +69,7 @@ export const useInteractionStart = () => {
         )
       }
     } catch (e) {
-      scheduleErrorWarning(e)
+      if (e instanceof Error) scheduleErrorWarning(e)
     }
   }
 
@@ -79,20 +77,19 @@ export const useInteractionStart = () => {
     navigation.navigate(ScreenNames.Interaction)
   }
 
-  const startInteraction = async (jwt: string) =>
-    loader(
-      async () => {
-        const interaction = await processInteraction(jwt)
-        if (interaction) {
-          await showInteraction(interaction)
-          navigateInteraction()
-        }
-      },
-      { showSuccess: false, showFailed: false },
-      (error) => {
-        if (error) scheduleErrorWarning(error)
-      },
-    )
+  const startInteraction = async (jwt: string) => {
+    try {
+      const interaction = await processInteraction(jwt)
+      if (interaction) {
+        await showInteraction(interaction)
+        navigateInteraction()
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        scheduleErrorWarning(e)
+      }
+    }
+  }
 
   return {
     processInteraction,

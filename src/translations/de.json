@@ -343,9 +343,6 @@
     "About": {
         "versionInfo": "Sie benutzen die Version ${version}"
     },
-    "Terms of Service": {
-        "header": "Nutzungsbedingungen"
-    },
     "ChangePasscode": {
         "wrongCodeHeader": "Falsche Wallet PIN",
         "currentHeader": "Aktuelle Wallet PIN",
@@ -579,5 +576,8 @@
     },
     "Dashboard": {
         "header": "Jolocom WebAgent"
+    },
+    "TermsOfService": {
+        "header": "Nutzungsbedingungen"
     }
 }

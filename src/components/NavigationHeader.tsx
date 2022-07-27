@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, ViewProps } from 'react-native'
+import { StyleSheet, TextProps, View, ViewProps } from 'react-native'
 
 import { BackArrowIcon } from '~/assets/svg'
 import CloseIcon from '~/assets/svg/CloseIcon'
 import { useGoBack } from '~/hooks/navigation'
 import { IWithCustomStyle } from '~/types/props'
 import IconBtn from './IconBtn'
+import JoloText, { JoloTextKind } from './JoloText'
 
 export enum NavHeaderType {
   Back = 'back',
@@ -71,6 +72,22 @@ const NavigationHeader: React.FC<Props> = ({
   )
 }
 
+export const NavigationHeaderText: React.FC<TextProps> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <JoloText
+      kind={JoloTextKind.title}
+      numberOfLines={1}
+      customStyles={styles.text}
+      {...props}
+    >
+      {children}
+    </JoloText>
+  )
+}
+
 const styles = StyleSheet.create({
   navContainer: {
     width: '100%',
@@ -86,7 +103,16 @@ const styles = StyleSheet.create({
   },
   centerComponent: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 24,
+    flexWrap: 'wrap',
+    flexShrink: 1,
+    paddingRight: 12,
   },
 })
 
