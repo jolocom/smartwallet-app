@@ -71,7 +71,6 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({
         >
           {language === 'en' && (
             <Text style={styles.heading}>
-              {/* NOTE: make text dynamic*/}
               Please note that the German version is legally binding
             </Text>
           )}

@@ -14,6 +14,7 @@ import { CheckmarkIconSmall } from '~/assets/svg'
 import { useAgent } from '~/hooks/sdk'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import { useToasts } from '~/hooks/toasts'
 import i18n from '~/translations/i18n'
 
 const legalTextConfig = [
@@ -33,6 +34,7 @@ const MainContent: React.FC = () => {
   const [accepted, setAccepted] = useState(false)
   const { t } = useTranslation()
   const { acceptConsent } = useTermsConsent()
+  const { scheduleErrorWarning } = useToasts()
   const agent = useAgent()
   const redirect = useRedirect()
   const goBack = useGoBack()
@@ -40,7 +42,7 @@ const MainContent: React.FC = () => {
   const handleAccept = () => {
     acceptConsent(agent)
       .then(() => goBack())
-      .catch((e) => console.log(e))
+      .catch(scheduleErrorWarning)
   }
 
   return (
