@@ -12,7 +12,7 @@ export const useNFC = () => {
 
   useEffect(() => {
     if (Platform.OS === 'android') {
-      NfcManager.requestTechnology(NfcTech.Ndef).catch(scheduleErrorWarning)
+      NfcManager.requestTechnology(NfcTech.Ndef).catch(console.warn)
 
       return () => {
         NfcManager.cancelTechnologyRequest().catch(scheduleErrorWarning)
