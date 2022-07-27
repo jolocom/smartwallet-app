@@ -14,16 +14,17 @@ import { CheckmarkIconSmall } from '~/assets/svg'
 import { useAgent } from '~/hooks/sdk'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { ScreenNames } from '~/types/screens'
+import i18n from '~/translations/i18n'
 
 const legalTextConfig = [
   {
     key: 'terms_of_service',
-    title: 'Terms of Service',
+    title: i18n.t('TermsOfService.header'),
     screen: ScreenNames.ConsentTermsOfService,
   },
   {
     key: 'privacy_policy',
-    title: 'Privacy Policy',
+    title: i18n.t('PrivacyPolicy.header'),
     screen: ScreenNames.ConsentPrivacyPolicy,
   },
 ]
@@ -47,7 +48,7 @@ const MainContent: React.FC = () => {
       <View
         style={{ width: '100%', flex: 1, paddingHorizontal: 20, paddingTop: 0 }}
       >
-        <Section.Title>Terms of Service and Privacy Policy</Section.Title>
+        <Section.Title>{t('TermsConsent.header')}</Section.Title>
         <JoloText customStyles={{ textAlign: 'left' }}>
           {t('TermsConsent.subheader')}
         </JoloText>

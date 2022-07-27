@@ -8,7 +8,7 @@ const TermsOfService: React.FC = () => {
 
   return (
     <TermsTemplate
-      title={t('Terms of Service.header')}
+      titleTerm={'TermsOfService.header'}
       deText={termsOfServiceDE}
       enText={termsOfServiceEN}
     />

@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import ScreenContainer from '~/components/ScreenContainer'
-import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
+import NavigationHeader, {
+  NavHeaderType,
+  NavigationHeaderText,
+} from '~/components/NavigationHeader'
 import { StyleSheet, Text, ScrollView } from 'react-native'
 import { useGoBack } from '~/hooks/navigation'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
 import IconBtn from '~/components/IconBtn'
 import BottomSheet from '~/components/BottomSheet'
 import SingleSelectBlock, {
@@ -15,12 +17,16 @@ import { LanguageIcon } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 
 interface ITermsTemplate {
-  title: string
+  titleTerm: 'TermsOfService.header' | 'PrivacyPolicy.header'
   enText: string
   deText: string
 }
 
-const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
+const TermsTemplate: React.FC<ITermsTemplate> = ({
+  titleTerm,
+  enText,
+  deText,
+}) => {
   const goBack = useGoBack()
   const { t, currentLanguage } = useTranslation()
 
@@ -51,12 +57,10 @@ const TermsTemplate: React.FC<ITermsTemplate> = ({ title, enText, deText }) => {
           paddingHorizontal: 0,
         }}
       >
-        <NavigationHeader
-          type={NavHeaderType.Back}
-          onPress={goBack}
-          customStyles={{ paddingHorizontal: 5 }}
-        >
-          <JoloText kind={JoloTextKind.title}>{title}</JoloText>
+        <NavigationHeader type={NavHeaderType.Back} onPress={goBack}>
+          <NavigationHeaderText>
+            {t(titleTerm, { lng: language })}
+          </NavigationHeaderText>
           <IconBtn onPress={handlePress}>
             <LanguageIcon />
           </IconBtn>

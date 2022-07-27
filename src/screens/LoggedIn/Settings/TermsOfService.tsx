@@ -9,7 +9,7 @@ const TermsOfService = () => {
   return (
     <LegalTextWrapper
       locale={currentLanguage}
-      title={t('Terms of Service.header')}
+      title={t('TermsOfService.header')}
       enText={termsOfServiceEN}
       deText={termsOfServiceDE}
     />

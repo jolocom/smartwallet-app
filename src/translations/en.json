@@ -10,7 +10,7 @@
         "descriptionThree": "All digital identities and credentials are stored locally on your device."
     },
     "TermsConsent": {
-        "header": "SmartWallet presenting\nTerms and Conditions and Privacy Policy",
+        "header": "Terms of Service & and Privacy Policy",
         "subheader": "You can find the German and English version of the documents below. Please note that the German version is legally binding",
         "footer": "I understand and accept the Terms of Service and Privacy Policy",
         "footerBtn": "Accept new terms"
@@ -343,9 +343,6 @@
     "About": {
         "versionInfo": "You are running version ${version}"
     },
-    "Terms of Service": {
-        "header": "Terms of Service"
-    },
     "ChangePasscode": {
         "wrongCodeHeader": "Wrong wallet PIN",
         "currentHeader": "Current wallet PIN",
@@ -579,5 +576,8 @@
     },
     "Dashboard": {
         "header": "Jolocom WebAgent"
+    },
+    "TermsOfService": {
+        "header": "Terms of Service"
     }
 }
