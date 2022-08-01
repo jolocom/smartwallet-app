@@ -41,6 +41,8 @@ import Registration from '../LoggedOut/Onboarding/Registration'
 import Interaction from '../Modals/Interaction'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
+import { CardTest } from './Settings/Development/CardsTest'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -83,12 +85,15 @@ export type MainStackParamList = {
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
   [ScreenNames.FieldDetails]: {
-    fields: IField[]
+    fields: DisplayVal[]
     title?: string
     photo?: string
     backgroundColor?: Colors
+    issuerIcon?: string
+    contextIcons?: string[]
   }
   // DEV
+  [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
   [ScreenNames.ButtonsTest]: undefined
   [ScreenNames.CollapsibleTest]: undefined
@@ -190,6 +195,7 @@ const Main: React.FC = () => {
             name={ScreenNames.LoaderTest}
             component={LoaderTest}
           />
+          <MainStack.Screen name={ScreenNames.CardsTest} component={CardTest} />
           <MainStack.Screen
             name={ScreenNames.NotificationsTest}
             component={NotificationsTest}
@@ -213,6 +219,7 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
+        options={screenTransitionSlideFromBottom}
       />
       <MainStack.Screen
         name={ScreenNames.Interaction}
@@ -257,7 +264,7 @@ const Main: React.FC = () => {
           cardStyle: {
             backgroundColor: 'transparent',
           },
-          ...screenTransitionSlideFromBottom,
+          ...transparentModalFadeOptions,
         }}
       />
       {/* Modals -> End */}

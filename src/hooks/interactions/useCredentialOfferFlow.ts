@@ -2,14 +2,11 @@ import {
   CredentialOfferFlowState,
   SignedCredentialWithMetadata,
 } from '@jolocom/sdk/js/interactionManager/types'
-import { CredentialOfferFlow } from '@jolocom/sdk/js/interactionManager/credentialOfferFlow'
 import { InteractionType } from 'jolocom-lib/js/interactionTokens/types'
 
-import { OfferedCredential, CredentialCategories } from '~/types/credentials'
 import { useInteraction } from './handlers'
 import { useAgent } from '../sdk'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { getCredentialCategory } from '../signedCredentials/utils'
 
 /**
  * Custom hook that exposes a collection of utils for the Credential Offer interaction
