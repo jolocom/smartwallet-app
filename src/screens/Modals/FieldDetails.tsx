@@ -9,7 +9,6 @@ import {
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import Clipboard from '@react-native-clipboard/clipboard'
-
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
@@ -25,6 +24,7 @@ import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { TextLayoutEvent } from '~/types/props'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
+import useImagePrefetch from '~/hooks/useImagePrefetch'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -37,6 +37,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(5)
   const [seeMoreBtnVisible, setSeeMoreBtnVisibility] = useState(false)
 
+  // FIXME: Some weird eslint issue here
   const isImageField = mime_type === ClaimMimeType.image_png
 
   const { isExpanded, onToggleExpand } = useToggleExpand({
@@ -157,6 +158,8 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
+  const prefechedIcon = useImagePrefetch(issuerIcon)
+
   const handleLayout = () => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.linear,
@@ -217,7 +220,7 @@ const FieldDetails = () => {
                     marginLeft: 12,
                   }}
                 >
-                  {issuerIcon && <Icon url={issuerIcon} />}
+                  {prefechedIcon && <Icon url={prefechedIcon} />}
                   {contextIcons &&
                     contextIcons.map((icon, i) => <Icon key={i} url={icon} />)}
                 </View>

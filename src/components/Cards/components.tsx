@@ -1,5 +1,5 @@
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import {
   Image,
   ImageBackground,
@@ -18,6 +18,7 @@ import { Fonts } from '~/utils/fonts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
+import useImagePrefetch from '~/hooks/useImagePrefetch'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -106,26 +107,13 @@ export const DocumentHeader: React.FC<{
   onPressMenu?: () => void
   selected?: boolean
 }> = ({ name, icon, onPressMenu, selected }) => {
-  const [renderIcon, setRenderIcon] = useState(false)
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
-  const shouldRenderIcon = async (icon: string) => {
-    let result
-    try {
-      result = await Image.prefetch(icon)
-    } catch (e) {
-      setRenderIcon(false)
-    }
-    setRenderIcon(result)
-  }
-
-  useEffect(() => {
-    icon && shouldRenderIcon(icon)
-  }, [])
+  const prefetchedIcon = useImagePrefetch(icon)
 
   return (
     <View style={styles.headerContainer}>
-      {renderIcon && (
+      {prefetchedIcon && (
         <ScaledView
           scaleStyle={{
             width: 32,
@@ -136,7 +124,7 @@ export const DocumentHeader: React.FC<{
           <Image
             resizeMode="cover"
             style={[styles.photo, { borderRadius: 4.2 }]}
-            source={{ uri: icon }}
+            source={{ uri: prefetchedIcon }}
           />
         </ScaledView>
       )}
