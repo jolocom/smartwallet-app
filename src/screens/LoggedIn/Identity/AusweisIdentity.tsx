@@ -1,10 +1,8 @@
 import React from 'react'
-import { Image, Platform, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import { useSelector } from 'react-redux'
-
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
@@ -21,7 +19,6 @@ import {
   eIDScreens,
 } from '~/screens/Modals/Interaction/eID/types'
 import { IS_ANDROID } from '~/utils/generic'
-import { getAusweisFlowType } from '~/modules/interaction/selectors'
 import { useCheckNFC } from '~/hooks/nfc'
 
 export const AusweisIdentity = () => {
@@ -34,11 +31,26 @@ export const AusweisIdentity = () => {
     eIDHooks.useAusweisInteraction()
   const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
-  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
+  const { usePendingEidHandler } = eIDHooks
 
-  const handleCompatibilityCheck = () => {
+  const compatibilityCheck = () => {
     checkNfcSupport(startCompatibilityCheck)
   }
+
+  const unlockCardCheck = () => {
+    checkNfcSupport(() => {
+      setupUnlockCardHandlers()
+      startChangePin()
+    })
+  }
+
+  const {
+    handlePress: handleCompatibility,
+    isLoading: isLoadingCompatibility,
+  } = usePendingEidHandler(compatibilityCheck)
+
+  const { handlePress: handleUnlockCard, isLoading: isLoadingUnlock } =
+    usePendingEidHandler(unlockCardCheck)
 
   const handleChangePin = () =>
     navigation.navigate(ScreenNames.AusweisChangePin)
@@ -121,14 +133,6 @@ export const AusweisIdentity = () => {
     })
   }
 
-  const handleUnlockCard = () => {
-    checkNfcSupport(() => {
-      setupUnlockCardHandlers()
-
-      startChangePin()
-    })
-  }
-
   const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
 
   return (
@@ -169,8 +173,8 @@ export const AusweisIdentity = () => {
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
-            onPress={handleCompatibilityCheck}
-            disabled={Platform.OS === 'ios' && shouldDisableUnlock}
+            loading={isLoadingCompatibility}
+            onPress={handleCompatibility}
           >
             {t('AusweisIdentity.compatibilityBtn')}
           </Btn>
@@ -184,8 +188,8 @@ export const AusweisIdentity = () => {
           <Btn
             type={BtnTypes.secondary}
             customContainerStyles={styles.btn}
+            loading={isLoadingUnlock}
             onPress={handleUnlockCard}
-            disabled={shouldDisableUnlock}
           >
             {t('AusweisIdentity.unlockBtn')}
           </Btn>

@@ -8,31 +8,28 @@ import JoloText, {
   JoloTextWeight,
 } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
-import ScreenDismissArea from '~/components/ScreenDismissArea'
 import { ContainerBAS } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
 import { Colors } from '~/utils/colors'
+import BottomSheet from '~/components/BottomSheet'
 
 export const AusweisBottomSheet: React.FC<{
   onDismiss?: () => void
+  visible: boolean
   backgroundColor?: Colors
   customContainerStyles?: StyleProp<ViewStyle>
 }> = ({
   children,
+  visible,
   onDismiss = () => {},
   backgroundColor = Colors.codGrey,
   customContainerStyles = {},
 }) => {
   return (
-    <View style={styles.fullScreen}>
-      <ScreenDismissArea onDismiss={onDismiss} />
-      <View style={styles.interactionBody}>
-        <ContainerBAS
-          customStyles={[customContainerStyles, { backgroundColor }]}
-        >
-          {children}
-        </ContainerBAS>
-      </View>
-    </View>
+    <BottomSheet visible={visible} onDismiss={onDismiss}>
+      <ContainerBAS customStyles={[customContainerStyles, { backgroundColor }]}>
+        {children}
+      </ContainerBAS>
+    </BottomSheet>
   )
 }
 

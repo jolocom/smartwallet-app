@@ -156,7 +156,7 @@ const ErrorReporting = () => {
 
                 <Section>
                   <Collapsible.Title text={t('ErrorReporting.detailsHeader')}>
-                    <Section.Title customStyle={{ marginBottom: 14 }}>
+                    <Section.Title customStyles={{ marginBottom: 14 }}>
                       {t('ErrorReporting.detailsHeader')}
                     </Section.Title>
                   </Collapsible.Title>
@@ -210,7 +210,7 @@ const ErrorReporting = () => {
 
                 <Section customStyles={{ marginBottom: 84 }}>
                   <Collapsible.Title text={t('ErrorReporting.contactHeader')}>
-                    <Section.Title customStyle={{ marginBottom: 0 }}>
+                    <Section.Title customStyles={{ marginBottom: 0 }}>
                       {t('ErrorReporting.contactHeader')}
                     </Section.Title>
                   </Collapsible.Title>
@@ -240,7 +240,7 @@ const ErrorReporting = () => {
 
                 <Section>
                   <Collapsible.Title text={t('ErrorReporting.rateHeader')}>
-                    <Section.Title customStyle={{ marginBottom: 24 }}>
+                    <Section.Title customStyles={{ marginBottom: 24 }}>
                       {t('ErrorReporting.rateHeader')}
                     </Section.Title>
                   </Collapsible.Title>

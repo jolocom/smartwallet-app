@@ -25,7 +25,7 @@ const BlockExpanded: React.FC<Props> = ({
 
   return (
     <Block
-      customStyle={{
+      customStyles={{
         marginBottom: BP({ default: 16, xsmall: 12 }),
       }}
     >

@@ -19,7 +19,7 @@ const LoaderTest = () => {
             } else {
               res('done')
             }
-          }, 3000)
+          }, 8000)
         })
       },
       { showSuccess: false, showFailed: false, ...config },

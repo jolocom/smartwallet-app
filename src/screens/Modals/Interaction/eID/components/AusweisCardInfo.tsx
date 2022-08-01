@@ -1,8 +1,9 @@
+import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useBackHandler } from '@react-native-community/hooks'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { TouchableOpacity, View } from 'react-native'
+import { View } from 'react-native'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import BtnGroup from '~/components/BtnGroup'
@@ -10,10 +11,10 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
+import { TransparentModalsParamsList } from '~/screens/LoggedIn/Main'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { TransparentModalsParamsList } from '../../Main'
 import { CardInfoMode } from '../types'
 
 const AusweisCardInfo = () => {
@@ -46,11 +47,13 @@ const AusweisCardInfo = () => {
   }, [mode])
 
   const handleDismiss = () => {
+    aa2Module.resetHandlers()
     onDismiss && onDismiss()
     goBack()
   }
 
   const handleRedirectToIdentity = () => {
+    aa2Module.resetHandlers()
     onDismiss && onDismiss()
     navigation.navigate(ScreenNames.Identity)
   }

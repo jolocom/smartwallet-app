@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
-import { useClipboard } from '@react-native-community/hooks'
+import Clipboard from '@react-native-clipboard/clipboard'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -30,8 +30,6 @@ const IMAGE_SIZE = BP({ large: 100, default: 90 })
 type FieldValueProps = { value: string }
 
 const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
-  const [_, setClipboardData] = useClipboard()
-
   const { scheduleInfo } = useToasts()
   const { t } = useTranslation()
 
@@ -48,7 +46,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
   })
 
   const handleLongPress = (value: string) => {
-    setClipboardData(value as string)
+    Clipboard.setString(value)
     scheduleInfo({
       title: t('Toasts.copied'),
       message: ``,
@@ -166,7 +164,7 @@ const FieldDetails = () => {
                 </JoloText>
               </Collapsible.Title>
               <Block
-                customStyle={{
+                customStyles={{
                   backgroundColor: Colors.white,
                   marginBottom: 16,
                 }}

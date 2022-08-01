@@ -1,7 +1,5 @@
-import React from 'react'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
-
 import NavigationHeader from '~/components/NavigationHeader'
 import { Colors } from '~/utils/colors'
 import { useCollapsible } from './context'
