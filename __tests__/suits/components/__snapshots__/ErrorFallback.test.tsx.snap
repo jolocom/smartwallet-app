@@ -111,7 +111,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "paddingTop": undefined,
+                  "paddingTop": 5,
                   "textAlign": "center",
                 },
                 Object {
@@ -132,7 +132,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "paddingTop": undefined,
+                  "paddingTop": 5,
                   "textAlign": "center",
                 },
                 Object {
@@ -214,7 +214,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
                   Array [
                     Object {
                       "color": "#ffffff",
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlignVertical": "center",
                     },
                     Object {
@@ -281,7 +281,7 @@ exports[`ErrorFallback should match the initial snapshot 1`] = `
                   Array [
                     Object {
                       "color": "#ffffff",
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlignVertical": "center",
                     },
                     Object {

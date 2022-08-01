@@ -117,7 +117,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
             <RNSVGGroup>
               <RNSVGPath
                 d="M24.48 7.438H3.34l5.362-5.469a.536.536 0 00.152-.375V.53A.53.53 0 008.334 0a.516.516 0 00-.369.156L.153 8.124a.539.539 0 000 .752l7.812 7.968c.15.152.372.198.568.116a.53.53 0 00.321-.491v-1.063a.536.536 0 00-.152-.375L3.34 9.562h21.138c.288 0 .521-.237.521-.53V7.968a.526.526 0 00-.52-.531z"
-                fill={-855310}
+                fill={4294111986}
                 fillRule={1}
                 propList={
                   Array [
@@ -164,7 +164,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
           style={
             Array [
               Object {
-                "paddingTop": undefined,
+                "paddingTop": 5,
                 "textAlign": "center",
               },
               Object {
@@ -184,7 +184,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
           style={
             Array [
               Object {
-                "paddingTop": undefined,
+                "paddingTop": 5,
                 "textAlign": "center",
               },
               Object {
@@ -260,7 +260,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
                 }
               >
                 <RNSVGMask
-                  fill={-1}
+                  fill={4294967295}
                   height="100%"
                   maskContentUnits={1}
                   maskTransform={
@@ -301,7 +301,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
                     ]
                   }
                   rx={5.026}
-                  stroke={-1}
+                  stroke={4294967295}
                   strokeWidth={0.5}
                   width={357.5}
                   x={0.25}
@@ -311,7 +311,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
                   content={null}
                   dx={Array []}
                   dy={Array []}
-                  fill={-6710887}
+                  fill={4288256409}
                   font={
                     Object {
                       "fontFamily": "TTCommons-Medium",
@@ -349,7 +349,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
                   />
                 </RNSVGText>
                 <RNSVGRect
-                  fill={-11645362}
+                  fill={4283321934}
                   height={25.076}
                   mask="prefix__b"
                   propList={
@@ -366,7 +366,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
                   content={null}
                   dx={Array []}
                   dy={Array []}
-                  fill={-1}
+                  fill={4294967295}
                   font={
                     Object {
                       "fontFamily": "TTCommons-Regular",
@@ -404,7 +404,7 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
                 </RNSVGText>
                 <RNSVGPath
                   d="M164.317 200.705c-8.34-8.346-14.901-13.199-19.681-14.557-13.459-3.825-22.029-14.163-22.029-24.548v-7.553c13.658-13.69 22.47-37.294 22.47-58.537 0-31.157-18.064-50.04-47.142-50.04-29.077 0-46.7 18.883-46.7 50.04 0 21.243 8.811 44.847 22.469 58.537v7.553c0 10.385-8.37 19.827-22.028 24.548-4.732 1.721-11.764 6.644-21.095 14.768l133.736-.21z"
-                  fill={-11645362}
+                  fill={4283321934}
                   fillRule={1}
                   mask="prefix__b"
                   propList={

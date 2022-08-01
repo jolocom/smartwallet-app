@@ -92,7 +92,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card can 
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -114,7 +114,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card can 
                 style={
                   Array [
                     Object {
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlign": "center",
                     },
                     Object {
@@ -198,7 +198,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card can 
                   Array [
                     Object {
                       "color": "#ffffff",
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlignVertical": "center",
                     },
                     Object {
@@ -315,7 +315,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card in b
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -398,7 +398,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card in b
                   Array [
                     Object {
                       "color": "#ffffff",
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlignVertical": "center",
                     },
                     Object {
@@ -515,7 +515,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card in n
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -598,7 +598,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card in n
                   Array [
                     Object {
                       "color": "#ffffff",
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlignVertical": "center",
                     },
                     Object {
@@ -715,7 +715,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card in u
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -798,7 +798,7 @@ exports[`Ausweis card info screen is dsplayed according to the designs card in u
                   Array [
                     Object {
                       "color": "#ffffff",
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlignVertical": "center",
                     },
                     Object {
