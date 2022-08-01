@@ -6,26 +6,23 @@ import { useSafeArea } from 'react-native-safe-area-context'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useRedirect } from '~/hooks/navigation'
-import { mapDisplayToCustomDisplay } from '~/hooks/signedCredentials/utils'
+import { mapDisplayToDocument } from '~/hooks/signedCredentials/utils'
 import {
   getRequestedCredentialDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
-  getCustomRequestedCredentialsByCategoryByType,
   getSelectedShareCredentials,
   getServiceDescription,
+  getRequestedDocumentsByType,
 } from '~/modules/interaction/selectors'
 import {
-  isDocument,
   CredentialsByType,
-  DisplayCredential,
-  CredentialCategories,
   AttributeTypes,
+  DisplayCredentialDocument,
 } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
-import InteractionSection from '../components/InteractionSection'
 import InteractionTitle from '../components/InteractionTitle'
 import {
   ContainerBAS,
@@ -43,14 +40,11 @@ import Space from '~/components/Space'
 import { SCREEN_WIDTH } from '~/utils/dimensions'
 import useTranslation from '~/hooks/useTranslation'
 import { attributeConfig } from '~/config/claims'
-import {
-  InteractionShareDocumentCard,
-  InteractionShareOtherCard,
-} from '~/components/Cards/InteractionShare'
 import { useCredentialOptionalFields } from '~/hooks/credentials'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
 import { ServiceLogo } from '~/components/ServiceLogo'
+import { ShareCard } from '~/components/Cards'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -74,7 +68,7 @@ export const CredentialShareBAS = () => {
   const handleShare = useCredentialShareSubmit()
   const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
-  const { getOptionalFields } = useCredentialOptionalFields()
+  const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
 
   /* We are preselecting a credential that is requested */
   useEffect(() => {
@@ -95,31 +89,25 @@ export const CredentialShareBAS = () => {
   const renderBody = () => {
     if (singleMissingAttribute) return null
     else if (singleRequestedCredential !== undefined) {
-      const displaySingleCredential = mapDisplayToCustomDisplay(
+      const displaySingleCredential = mapDisplayToDocument(
         singleRequestedCredential,
       )
+      const { name, issuer } = displaySingleCredential
 
-      const { name } = displaySingleCredential
-      const claimFields = getOptionalFields(displaySingleCredential)
+      let previewFields = getPreviewFields(displaySingleCredential)
+      previewFields = previewFields.length
+        ? previewFields
+        : getOptionalFields(displaySingleCredential)
 
       return (
         <>
-          {isDocument(displaySingleCredential) ? (
-            <InteractionShareDocumentCard
-              credentialName={name}
-              holderName={
-                displaySingleCredential.holderName || t('General.anonymous')
-              }
-              fields={claimFields}
-              highlight={displaySingleCredential.highlight}
-              photo={displaySingleCredential.photo}
-            />
-          ) : (
-            <InteractionShareOtherCard
-              credentialName={name}
-              fields={claimFields}
-            />
-          )}
+          <ShareCard
+            credentialName={name}
+            holderName={displaySingleCredential.holderName}
+            fields={previewFields}
+            photo={displaySingleCredential.photo}
+            issuerIcon={issuer?.publicProfile?.image}
+          />
           <Space />
         </>
       )
@@ -174,36 +162,40 @@ export const CredentialShareBAS = () => {
 
 const CredentialShareFAS = () => {
   const { t } = useTranslation()
-  const categories = useSelector(getCustomRequestedCredentialsByCategoryByType)
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
-  const { getOptionalFields } = useCredentialOptionalFields()
+
   const {
     name: serviceName,
     image,
     serviceUrl,
   } = useSelector(getServiceDescription)
 
+  const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
+
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
 
   const handleSubmit = useCredentialShareSubmit()
 
-  const documents = categories[CredentialCategories.document]
-  const other = categories[CredentialCategories.other]
+  const documentsByType = useSelector(getRequestedDocumentsByType)
 
   const handleRenderCredentials = (
-    credCollections: Array<CredentialsByType<DisplayCredential>>,
+    credCollections: Array<CredentialsByType<DisplayCredentialDocument>>,
   ) =>
-    credCollections.map(({ key, value, credentials }) => (
-      <AdoptedCarousel
-        key={key}
+    credCollections.map(({ value, credentials }) => (
+      <AdoptedCarousel<DisplayCredentialDocument>
+        key={value}
         activeSlideAlignment="center"
         data={credentials}
         itemWidth={SCREEN_WIDTH - 48}
         customStyles={{ marginLeft: 0 }}
         renderItem={({ item: cred }) => {
-          const claimFields = getOptionalFields(cred)
-          const { name, type, id } = cred
+          let previewFields = getPreviewFields(cred)
+          previewFields = previewFields.length
+            ? previewFields
+            : getOptionalFields(cred)
+
+          const { name, type, id, issuer } = cred
           return (
             <TouchableWithoutFeedback
               key={id}
@@ -214,22 +206,14 @@ const CredentialShareFAS = () => {
                   marginBottom: BP({ default: 24, xsmall: 16 }),
                 }}
               >
-                {isDocument(cred) ? (
-                  <InteractionShareDocumentCard
-                    credentialName={name ?? type}
-                    fields={claimFields}
-                    holderName={cred.holderName || t('General.anonymous')}
-                    highlight={cred.highlight}
-                    photo={cred.photo}
-                    selected={selectedCredentials[type] === id}
-                  />
-                ) : (
-                  <InteractionShareOtherCard
-                    credentialName={name ?? type}
-                    fields={claimFields}
-                    selected={selectedCredentials[type] === id}
-                  />
-                )}
+                <ShareCard
+                  credentialName={name ?? type}
+                  fields={previewFields}
+                  holderName={cred.holderName}
+                  photo={cred.photo}
+                  selected={selectedCredentials[type] === id}
+                  issuerIcon={issuer?.publicProfile?.image}
+                />
               </View>
             </TouchableWithoutFeedback>
           )
@@ -262,18 +246,7 @@ const CredentialShareFAS = () => {
               <ScreenContainer.Padding>
                 <ShareAttributeWidget withContainer />
               </ScreenContainer.Padding>
-              <InteractionSection
-                title={t('Documents.documentsTab')}
-                isPaddedTitle={true}
-              >
-                {handleRenderCredentials(documents)}
-              </InteractionSection>
-              <InteractionSection
-                title={t('Documents.othersTab')}
-                isPaddedTitle={true}
-              >
-                {handleRenderCredentials(other)}
-              </InteractionSection>
+              {handleRenderCredentials(documentsByType)}
             </Collapsible.Scroll>
           </ContainerFAS>
         )}

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
-import { CredentialCategories } from '~/types/credentials'
 import Tabs from '~/components/Tabs/Tabs'
 import TabsContainer from '~/components/Tabs/Container'
 import { DocumentList } from './DocumentList'
@@ -9,15 +8,7 @@ import useTranslation from '~/hooks/useTranslation'
 
 const Documents: React.FC = () => {
   const { t } = useTranslation()
-  const tabs = [
-    { id: CredentialCategories.document, value: t('Documents.documentsTab') },
-    { id: CredentialCategories.other, value: t('Documents.othersTab') },
-  ]
-
-  const subtabs = [
-    { id: 'type', value: t('Documents.typeSubtab') },
-    { id: 'issuer', value: t('Documents.issuerSubtab') },
-  ]
+  const tabs = [{ id: 'documents', value: t('Documents.documentsTab') }]
 
   return (
     <ScreenContainer
@@ -26,12 +17,7 @@ const Documents: React.FC = () => {
         paddingHorizontal: 0,
       }}
     >
-      <Tabs
-        initialActiveTab={tabs[0]}
-        initialActiveSubtab={subtabs[0]}
-        tabs={tabs}
-        subtabs={subtabs}
-      >
+      <Tabs initialActiveTab={tabs[0]} tabs={tabs}>
         <ScreenContainer.Padding>
           <TabsContainer customStyles={{ marginBottom: 10 }}>
             {tabs.map((t) => (
@@ -39,15 +25,6 @@ const Documents: React.FC = () => {
             ))}
           </TabsContainer>
         </ScreenContainer.Padding>
-
-        <ScreenContainer.Padding>
-          <TabsContainer>
-            {subtabs.map((st) => (
-              <Tabs.Subtab key={st.id} tab={st} />
-            ))}
-          </TabsContainer>
-        </ScreenContainer.Padding>
-
         <Tabs.Panel>{() => <DocumentList />}</Tabs.Panel>
       </Tabs>
     </ScreenContainer>

@@ -6,17 +6,11 @@ import { useSafeArea } from 'react-native-safe-area-context'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
 import {
   getIsFullscreenCredOffer,
-  getOfferedCredentialsByCategories,
   getOfferedCredentials,
   getServiceDescription,
 } from '~/modules/interaction/selectors'
-import {
-  OfferedCredentialDisplay,
-  CredentialCategories,
-} from '~/types/credentials'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
-import InteractionSection from '../components/InteractionSection'
 import InteractionTitle from '../components/InteractionTitle'
 import {
   ContainerBAS,
@@ -29,12 +23,11 @@ import Space from '~/components/Space'
 import Collapsible from '~/components/Collapsible'
 import useTranslation from '~/hooks/useTranslation'
 import ScreenContainer from '~/components/ScreenContainer'
-import {
-  InteractionOfferDocumentCard,
-  InteractionOfferOtherCard,
-} from '~/components/Cards/InteractionOffer'
 import { Colors } from '~/utils/colors'
 import { ServiceLogo } from '~/components/ServiceLogo'
+import { getAllDocuments } from '~/modules/credentials/selectors'
+import { OfferedCredentialDisplay } from '~/types/credentials'
+import { OfferCard } from '~/components/Cards'
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -53,24 +46,17 @@ const CredentialOfferBAS = () => {
       />
       <Space />
       {offeredCredentials.map((d) => {
-        if (d.category === CredentialCategories.document) {
-          return (
-            <InteractionOfferDocumentCard
-              key={d.name}
-              credentialName={d.name || t('General.unknown')}
-              fields={d.properties.map((p) => ({
-                label: p.label || t('Documents.unspecifiedField'),
-              }))}
-            />
-          )
-        }
+        let previewFields = d.properties.filter((f) => f.preview === true)
+        previewFields = previewFields.length ? previewFields : d.properties
+
         return (
-          <InteractionOfferOtherCard
+          <OfferCard
             key={d.name}
             credentialName={d.name || t('General.unknown')}
-            fields={d.properties.map((p) => ({
+            fields={previewFields.map((p) => ({
               label: p.label || t('Documents.unspecifiedField'),
             }))}
+            issuerIcon={image}
           />
         )
       })}
@@ -85,43 +71,35 @@ const CredentialOfferBAS = () => {
 }
 
 const CredentialOfferFAS = () => {
-  const categories = useSelector(getOfferedCredentialsByCategories)
   const handleSubmit = useCredentialOfferSubmit()
 
-  const documents = categories[CredentialCategories.document]
-  const other = categories[CredentialCategories.other]
+  const documents = useSelector(getOfferedCredentials)
 
   const { name, image, serviceUrl } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
-    credentials.map(({ invalid, category, properties, name, type }, idx) => (
-      <View
-        key={`${type}${idx}`}
-        style={{
-          marginBottom: idx === credentials.length - 1 ? 0 : 30,
-          opacity: invalid ? 0.5 : 1,
-        }}
-      >
-        {category === CredentialCategories.document ? (
-          <InteractionOfferDocumentCard
+    documents.map(({ properties, name, type }, idx) => {
+      let previewFields = properties.filter((f) => f.preview === true)
+      previewFields = previewFields.length ? previewFields : properties
+      return (
+        <View
+          key={`${type}${idx}`}
+          style={{
+            marginBottom: idx === credentials.length - 1 ? 0 : 30,
+          }}
+        >
+          <OfferCard
             key={name + type}
             credentialName={name || t('General.unknown')}
-            fields={properties.map((p) => ({
+            fields={previewFields.map((p) => ({
               label: p.label || t('Documents.unspecifiedField'),
             }))}
+            issuerIcon={image}
           />
-        ) : (
-          <InteractionOfferOtherCard
-            key={name + type}
-            credentialName={name || t('General.unknown')}
-            fields={properties.map((p) => ({
-              label: p.label || t('Documents.unspecifiedField'),
-            }))}
-          />
-        )}
-      </View>
-    ))
+        </View>
+      )
+    })
 
   const { top } = useSafeArea()
   return (
@@ -144,12 +122,7 @@ const CredentialOfferFAS = () => {
               />
               <Space />
               <ScreenContainer.Padding>
-                <InteractionSection title={t('Documents.documentsTab')}>
-                  {handleRenderCredentials(documents)}
-                </InteractionSection>
-                <InteractionSection title={t('Documents.othersTab')}>
-                  {handleRenderCredentials(other)}
-                </InteractionSection>
+                {handleRenderCredentials(documents)}
               </ScreenContainer.Padding>
             </Collapsible.Scroll>
           </ContainerFAS>
