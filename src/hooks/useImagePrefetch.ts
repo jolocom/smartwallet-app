@@ -1,24 +1,26 @@
 import { useState, useEffect } from 'react'
 import { Image } from 'react-native'
 
-const useImagePrefetch = (issuerIcon: string | undefined) => {
-  const [renderIcon, setRenderIcon] = useState(false)
+const useImagePrefetch = (imageUrl?: string) => {
+  const [prefetchedIcon, setPrefetchedIcon] = useState<string>()
 
-  const shouldRenderIcon = async (icon: string) => {
-    let result
-    try {
-      result = (await Image.prefetch(icon)) as boolean
-    } catch (e) {
-      setRenderIcon(false)
-    }
-    setRenderIcon(result as boolean)
+  const shouldRenderIcon = (icon: string) => {
+    ;(Image.prefetch(icon) as Promise<boolean>)
+      .then((success) => {
+        if (success) {
+          setPrefetchedIcon(icon)
+        }
+      })
+      .catch((err) => {
+        console.warn(err)
+      })
   }
 
   useEffect(() => {
-    issuerIcon && shouldRenderIcon(issuerIcon)
+    imageUrl && shouldRenderIcon(imageUrl)
   }, [])
 
-  return { renderIcon }
+  return prefetchedIcon
 }
 
 export default useImagePrefetch

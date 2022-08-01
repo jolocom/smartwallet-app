@@ -39,6 +39,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(5)
   const [seeMoreBtnVisible, setSeeMoreBtnVisibility] = useState(false)
 
+  // FIXME: Some weird eslint issue here
   const isImageField = mime_type === ClaimMimeType.image_png
 
   const { isExpanded, onToggleExpand } = useToggleExpand({
@@ -159,7 +160,7 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
-  const { renderIcon } = useImagePrefetch(issuerIcon)
+  const prefechedIcon = useImagePrefetch(issuerIcon)
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
@@ -221,7 +222,7 @@ const FieldDetails = () => {
                     marginLeft: 12,
                   }}
                 >
-                  {renderIcon && <Icon url={issuerIcon!} />}
+                  {prefechedIcon && <Icon url={prefechedIcon} />}
                   {contextIcons &&
                     contextIcons.map((icon, i) => <Icon key={i} url={icon} />)}
                 </View>
