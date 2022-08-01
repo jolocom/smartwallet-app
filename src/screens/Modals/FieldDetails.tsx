@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   Image,
@@ -159,7 +159,7 @@ const FieldDetails = () => {
     backgroundColor = Colors.mainBlack,
   } = route.params
 
-  const { renderIcon } = useImagePrefetch(issuerIcon as string | undefined)
+  const { renderIcon } = useImagePrefetch(issuerIcon)
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
@@ -221,7 +221,7 @@ const FieldDetails = () => {
                     marginLeft: 12,
                   }}
                 >
-                  {renderIcon && <Icon url={issuerIcon} />}
+                  {renderIcon && <Icon url={issuerIcon!} />}
                   {contextIcons &&
                     contextIcons.map((icon, i) => <Icon key={i} url={icon} />)}
                 </View>
