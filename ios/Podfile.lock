@@ -293,6 +293,8 @@ PODS:
     - React-Core
   - RNBootSplash (3.2.7):
     - React-Core
+  - RNCClipboard (1.10.0):
+    - React-Core
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.8.1):
@@ -403,6 +405,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
@@ -515,6 +518,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
@@ -595,6 +600,7 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNBootSplash: f31eba8f6d496e2029859e06e5582cac4607256d
+  RNCClipboard: f1736c75ab85b627a4d57587edb4b60999c4dd80
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211

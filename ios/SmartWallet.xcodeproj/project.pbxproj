@@ -704,7 +704,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartWallet/SmartWallet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -714,7 +714,7 @@
 				INFOPLIST_FILE = SmartWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.4.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -739,13 +739,13 @@
 				CODE_SIGN_ENTITLEMENTS = SmartWallet/SmartWallet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_TEAM = 95S8NJ5S67;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.4.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

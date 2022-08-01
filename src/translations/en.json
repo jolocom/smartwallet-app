@@ -5,9 +5,9 @@
         "registrationBtn": "Get started",
         "recoveryBtn": "Import identity",
         "titleTwo": "Control your data",
-        "descriptionTwo": "Manage your digital identity to stay safe online and off",
-        "titleThree": "Easy backup",
-        "descriptionThree": "Keep all your info backed up and in the right hands - a.k.a. yours"
+        "descriptionTwo": "Your digital identities are securely stored in the Wallet.",
+        "titleThree": "Everything in one place",
+        "descriptionThree": "All digital identities and credentials are stored locally on your device."
     },
     "TermsConsent": {
         "header": "SmartWallet presenting\nTerms and Conditions and Privacy Policy",
@@ -110,18 +110,18 @@
         "errorAttributeExists": "Attribute with the same value already exists"
     },
     "CreatePasscode": {
-        "createHeader": "Create passcode",
+        "createHeader": "Create wallet PIN",
         "createSubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
-        "helperText": "The passcode can be recovered later by using your secret phrase."
+        "helperText": "The wallet PIN can be recovered later by using your secret phrase."
     },
     "VerifyPasscode": {
-        "verifyHeader": "Verify passcode",
+        "verifyHeader": "Verify wallet PIN",
         "verifySubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
         "resetBtn": "Reset"
     },
     "Biometry": {
         "header": "Use ${biometryType} to authorize wallet",
-        "subheader": "So you don’t need to confirm your passcode every time you open the app",
+        "subheader": "So you don’t need to confirm your wallet PIN every time you open the app",
         "activateBtn": "Tap to activate",
         "skipBtn": "Skip",
         "promptFaceId": "Scan your face to continue",
@@ -129,17 +129,17 @@
         "promptBiometrics": "Provide biometrics to continue"
     },
     "PasscodeRecoveryInstructions": {
-        "header": "How to change your passcode",
+        "header": "How to change your wallet PIN",
         "subheader1": "We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!",
-        "subheader2": "You can change your passcode by entering your secret phrase. Click Restore Access below to make the change",
+        "subheader2": "You can change your wallet PIN by entering your secret phrase. Click Restore Access below to make the change",
         "imageCaption": "Repeat your phrase word by word",
         "submitBtn": "Restore access",
-        "footer": "Setting a new passcode will not affect your stored data",
+        "footer": "Setting a new wallet PIN will not affect your stored data",
         "cancelBtn": "Cancel"
     },
     "Lock": {
         "header": "Enter wallet PIN",
-        "forgotBtn": "Forgot your passcode?",
+        "forgotBtn": "Forgot your wallet PIN?",
         "errorMsg": "You have used ${attempts} attempts"
     },
     "CameraPermission": {
@@ -192,7 +192,7 @@
         "offerRenegotiationMsg": "Some documents didn't pass our security check and cannot be saved or received",
         "shareMissingDocsTitle": "Missing documents",
         "shareMissingDocsMsg": "${serviceName} is requesting a document that can’t be found in your wallet. \nMissing: ${documentType}",
-        "failedStoreMsg": "We could not store your passcode. Please try again",
+        "failedStoreMsg": "We could not store your wallet PIN. Please try again",
         "reconnectedInternetTitle": "You're back online",
         "reconnectedInternetMsg": "All wallet functionalities are back again",
         "successfulInteractionMsg": "Your interaction was successful. You can find the details here",
@@ -212,13 +212,13 @@
         "ausweisDeactivatedCardTitle": "Your card is deactivated",
         "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
         "refreshTitle": "All done here!",
-        "refreshMsg": "Please return to ${serviceName} to proceed."
+        "refreshMsg": "Identification data was shared successfully. Please continue the process with ${serviceName} in the initial application outside the Smart Wallet."
     },
     "Interaction": {
         "cancelBtn": "Ignore",
         "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
         "redirectTitle": "We're all done!",
-        "redirectDescription": "${serviceName} is redirecting you to a service or application outside of the SmartWallet",
+        "redirectDescription": "You are being redirected to ${serviceName}.",
         "redirectBtn": "Follow link"
     },
     "Documents": {
@@ -332,8 +332,8 @@
     "FAQ": {
         "header": "Popular questions",
         "header_q1": "What happens if my phone gets lost or stolen?",
-        "subheader_q1": "You can regain control over your wallet using the secret phrase created during setup of your SmartWallet. This will not recover any documents or other information stored in a wallet on a lost device. We highly recommend making backups of your SmartWallet (via the settings menu) in order to safeguard the contents of your wallet.",
-        "header_q2": "Who access to my data?",
+        "subheader_q1": "You can regain control over your wallet using the secret phrase created during setup of your SmartWallet. This will not recover any documents or other information stored in a wallet on a lost device. In the future, we will offer a backup feature to secure all data to a backup file in order to safeguard the contents of your wallet.",
+        "header_q2": "Who has access to my data?",
         "subheader_q2": "All your data is stored and managed on your device. You are in full control over who gets access to information. Jolocom has no access to the data on your device nor does anybody else without your permission. If you give another party access to your information, you can always see what you have shared. In fact, you can always quickly and easily check which service has access to which data. This provides you with an instant overview of your connections.",
         "header_q3": "Are Jolocom identities and the SmartWallet GDPR-compliant?",
         "subheader_q3": "Emphatically, YES. Jolocom identities, the SmartWallet, and all our products are designed to prioritize the integrity, privacy, and security of user data. The wallet as well as the protocol for creating identities and sharing identity information are fully GDPR-compliant.",
@@ -518,12 +518,12 @@
     },
     "AusweisIdentity": {
         "header": "German eID",
-        "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in Pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\".",
+        "subheader": "This is an early access feature for the German eID (Online-Ausweisfunktion) in the Jolocom SmartWallet. For the time being, it is only available to users of the \"Secure Digital Identities\" showcase projects.",
         "compatibilityBtn": "Compatibility check",
         "changePinBtn": "Change your PIN",
         "unlockBtn": "Unlock blocked card",
         "ausweisBadge": "Online-Ausweisfunktion",
-        "moreInfoDescription": "SmartWallet allows you to use the German eID function (e.g. with the german electronic residence permit) without having to go through other apps. \n\nIf the German eID function is required during a registration process, the SmartWallet will prompt you to hold your eID card up to the NFC reader on your smartphone and enter your 6-digit eID PIN. You also have the option to specify which data you want to share and to check with whom you share it. In addition, you can change your transport PIN to unlock the eID card, change your eID card PIN and unlock the eID card if necessary.\n\nFor the time being, the German eID function is only available to participants of the pilot applications from the research program \"Secure Digital Identities\" of the federal Ministry of Economic Affairs and Climate Action. Furthermore, Jolocom is involved in the ONCE, ID-Ideal and SDIKA projects. The German eID function was implemented on the basis of the AusweisApp2 SDK and uses its existing infrastructure (Online-Ausweisfunktion).",
+        "moreInfoDescription": "SmartWallet allows you to use the German eID function (e.g. with the German electronic residence permit) without having to go through other apps. \n\nIf the German eID function is required during a registration process, the SmartWallet will prompt you to hold your eID card up to the NFC reader on your smartphone and enter your 6-digit eID PIN. You also have the option to specify which data you want to share and to check with whom you share it. In addition, you can change your transport PIN to unlock the eID card, change your eID card PIN and unlock the eID card if necessary.\n\nFor the time being, the German eID function is only available to participants of the pilot applications from the research program \"Secure Digital Identities\" of the federal Ministry of Economic Affairs and Climate Action. Furthermore, Jolocom is involved in the ONCE, ID-Ideal and SDIKA projects. The German eID function was implemented on the basis of the AusweisApp2 SDK and uses its existing infrastructure (Online-Ausweisfunktion).",
         "moreInfoHeader": "German eID Info"
     },
     "AusweisChangePin": {

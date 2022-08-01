@@ -109,11 +109,11 @@ export const DocumentHeader: React.FC<{
 }> = ({ name, icon, onPressMenu, selected }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
-  const { renderIcon } = useImagePrefetch(icon)
+  const prefetchedIcon = useImagePrefetch(icon)
 
   return (
     <View style={styles.headerContainer}>
-      {renderIcon && (
+      {prefetchedIcon && (
         <ScaledView
           scaleStyle={{
             width: 32,
@@ -124,7 +124,7 @@ export const DocumentHeader: React.FC<{
           <Image
             resizeMode="cover"
             style={[styles.photo, { borderRadius: 4.2 }]}
-            source={{ uri: icon }}
+            source={{ uri: prefetchedIcon }}
           />
         </ScaledView>
       )}

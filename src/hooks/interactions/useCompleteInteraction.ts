@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux'
 import { SWErrorCodes } from '~/errors/codes'
 import { useToasts } from '~/hooks/toasts'
 import {
-  getInteractionCounterparty,
-  getDeeplinkConfig,
+  getDeeplinkConfig, getInteractionCounterparty
 } from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import { ToastBody } from '~/types/toasts'
@@ -69,6 +68,7 @@ export const useCompleteInteraction = (
       }
     } catch (e) {
       clearInteraction()
+      closeInteraction()
 
       if (e instanceof Error) {
         if (e.message === SWErrorCodes.SWInteractionOfferAllInvalid) {

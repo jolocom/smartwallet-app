@@ -5,7 +5,7 @@ import {
   LayoutChangeEvent,
   StyleSheet,
 } from 'react-native'
-import ScreenDismissArea from '../ScreenDismissArea'
+import ScreenDismissArea from './ScreenDismissArea'
 
 type FallinFrom = 'top' | 'bottom'
 

@@ -23,28 +23,31 @@ export const useCheckNFC = () => {
     }
   }
 
-  return (onSuccess: () => void | Promise<void>) =>
+  return (onSuccess: () => void | Promise<void>) => {
     nfcCheck()
       .then(onSuccess)
       .catch((e) => {
-        if (e.message === SWErrorCodes.SWNfcNotSupported) {
-          scheduleErrorInfo(e, {
-            title: t('Toasts.nfcCompatibilityTitle'),
-            message: t('Toasts.nfcCompatibilityMsg'),
-          })
-        } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
-          scheduleInfo({
-            title: t('Toasts.nfcOffTitle'),
-            message: t('Toasts.nfcOffMsg'),
-            interact: {
-              label: t('Toasts.nfcOffBtn'),
-              onInteract: () => {
-                NfcManager.goToNfcSetting()
+        if (e instanceof Error) {
+          if (e.message === SWErrorCodes.SWNfcNotSupported) {
+            scheduleErrorInfo(e, {
+              title: t('Toasts.nfcCompatibilityTitle'),
+              message: t('Toasts.nfcCompatibilityMsg'),
+            })
+          } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
+            scheduleInfo({
+              title: t('Toasts.nfcOffTitle'),
+              message: t('Toasts.nfcOffMsg'),
+              interact: {
+                label: t('Toasts.nfcOffBtn'),
+                onInteract: () => {
+                  NfcManager.goToNfcSetting()
+                },
               },
-            },
-          })
-        } else {
-          throw new Error(e)
+            })
+          } else {
+            throw new Error(e.message)
+          }
         }
       })
+  }
 }

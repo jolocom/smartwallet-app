@@ -7,20 +7,20 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useLoader } from '../loader'
+import { useNavigation } from '@react-navigation/native'
+import { Interaction, TransportAPI } from 'react-native-jolocom'
 import {
   resetInteraction,
-  setInteractionDetails,
+  setInteractionDetails
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { useAgent } from '../sdk'
-import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { useInteractionHandler } from './interactionHandlers'
-import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
-import { Interaction, TransportAPI } from 'react-native-jolocom'
 import useConnection from '../connection'
+import { useLoader } from '../loader'
+import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
+import { useInteractionHandler } from './interactionHandlers'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -34,6 +34,7 @@ export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
   const loader = useLoader()
+  const navigation = useNavigation()
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
   const { connected, showDisconnectedToast } = useConnection()
@@ -74,12 +75,17 @@ export const useInteractionStart = () => {
     }
   }
 
+  const navigateInteraction = () => {
+    navigation.navigate(ScreenNames.Interaction)
+  }
+
   const startInteraction = async (jwt: string) =>
     loader(
       async () => {
         const interaction = await processInteraction(jwt)
         if (interaction) {
           await showInteraction(interaction)
+          navigateInteraction()
         }
       },
       { showSuccess: false, showFailed: false },
@@ -89,13 +95,17 @@ export const useInteractionStart = () => {
       },
     )
 
-  return { processInteraction, showInteraction, startInteraction }
+  return {
+    processInteraction,
+    showInteraction,
+    startInteraction,
+    navigateInteraction,
+  }
 }
 
 export const useFinishInteraction = () => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
-
   const closeInteraction = (screen?: ScreenNames) => {
     if (screen) {
       navigation.navigate(screen)

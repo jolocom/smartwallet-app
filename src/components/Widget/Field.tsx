@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View, TextStyle } from 'react-native'
-
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -29,7 +28,7 @@ export interface IWidgetField {
 }
 
 const FieldText: React.FC<
-  Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
+  Pick<IWidgetField, 'value' | 'color'> & IWithCustomStyle<TextStyle>
 > = ({ value, color = Colors.white90, customStyles = {} }) => {
   const renderText = (value: string) => (
     <JoloText

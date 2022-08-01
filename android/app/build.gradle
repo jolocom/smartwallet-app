@@ -142,8 +142,8 @@ android {
         applicationId "com.jolocomwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 49
-        versionName "2.2.0"
+        versionCode 53
+        versionName "2.4.0"
 		multiDexEnabled true
 		missingDimensionStrategy 'react-native-camera', 'general'
     }
@@ -188,8 +188,7 @@ android {
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            // For each separate APK per architecture, set a unique version code as described here:
+        variant.outputs.each { output -> // For each separate APK per architecture, set a unique version code as described here:
             // https://developer.android.com/studio/build/configure-apk-splits.html
             def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
