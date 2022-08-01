@@ -21,7 +21,7 @@ const Authorization = () => {
     imageURL: authzImage,
     description,
   } = useSelector(getAuthzUIDetails)
-  const { name, image } = useSelector(getServiceDescription)
+  const { name, image, serviceUrl } = useSelector(getServiceDescription)
 
   const { t } = useTranslation()
 
@@ -34,7 +34,7 @@ const Authorization = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <ServiceLogo source={image} />
+        <ServiceLogo source={image} serviceUrl={serviceUrl} />
       </LogoContainerBAS>
       <InteractionTitle
         label={t('Authorization.header', { authAction: action })}

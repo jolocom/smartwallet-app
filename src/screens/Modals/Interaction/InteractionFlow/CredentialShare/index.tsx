@@ -52,7 +52,11 @@ export const CredentialShareBAS = () => {
   )
 
   const { t } = useTranslation()
-  const { name: serviceName, image } = useSelector(getServiceDescription)
+  const {
+    name: serviceName,
+    image,
+    serviceUrl,
+  } = useSelector(getServiceDescription)
 
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const singleMissingAttribute =
@@ -120,7 +124,7 @@ export const CredentialShareBAS = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <ServiceLogo source={image} />
+        <ServiceLogo source={image} serviceUrl={serviceUrl} />
       </LogoContainerBAS>
       <InteractionTitle
         label={
@@ -159,8 +163,14 @@ export const CredentialShareBAS = () => {
 const CredentialShareFAS = () => {
   const { t } = useTranslation()
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
+
+  const {
+    name: serviceName,
+    image,
+    serviceUrl,
+  } = useSelector(getServiceDescription)
+
   const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
-  const { name: serviceName, image } = useSelector(getServiceDescription)
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
@@ -221,7 +231,7 @@ const CredentialShareFAS = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
-                  <ServiceLogo source={image} />
+                  <ServiceLogo source={image} serviceUrl={serviceUrl} />
                 </LogoContainerFAS>
               </Collapsible.Scale>
               <Collapsible.Title text={t('CredentialRequest.header')}>

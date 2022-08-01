@@ -266,13 +266,6 @@ export const getOfferedCredentials = createSelector(
   (ssi) => ssi.credentials.service_issued,
 )
 
-export const getServiceImage = createSelector(
-  [getInteractionCounterparty],
-  (counterparty) => {
-    return counterparty.publicProfile?.image
-  },
-)
-
 export const getServiceDescription = createSelector(
   [getInteractionCounterparty],
   (counterparty) => {
@@ -280,6 +273,7 @@ export const getServiceDescription = createSelector(
       did: counterparty.did,
       name: counterparty.publicProfile?.name,
       image: counterparty.publicProfile?.image,
+      serviceUrl: counterparty.publicProfile?.url,
       isAnonymous: counterparty.publicProfile === undefined,
     }
   },

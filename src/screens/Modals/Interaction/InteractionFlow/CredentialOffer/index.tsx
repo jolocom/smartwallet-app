@@ -32,13 +32,13 @@ import { OfferCard } from '~/components/Cards'
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
   const offeredCredentials = useSelector(getOfferedCredentials)
-  const { name, image } = useSelector(getServiceDescription)
+  const { name, image, serviceUrl } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <ServiceLogo source={image} />
+        <ServiceLogo source={image} serviceUrl={serviceUrl} />
       </LogoContainerBAS>
       <InteractionTitle label={t('CredentialOffer.header')} />
       <InteractionDescription
@@ -75,7 +75,7 @@ const CredentialOfferFAS = () => {
 
   const documents = useSelector(getOfferedCredentials)
 
-  const { name, image } = useSelector(getServiceDescription)
+  const { name, image, serviceUrl } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
   const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
@@ -111,7 +111,7 @@ const CredentialOfferFAS = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
-                  <ServiceLogo source={image} />
+                  <ServiceLogo source={image} serviceUrl={serviceUrl} />
                 </LogoContainerFAS>
               </Collapsible.Scale>
               <Collapsible.Title text={t('CredentialOffer.header')}>
