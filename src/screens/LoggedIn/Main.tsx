@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
 import { ScreenNames } from '~/types/screens'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
@@ -17,7 +16,6 @@ import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import LoaderTest from './Settings/Development/DevLoaders'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
-import { getIsTermsConsentOutdated } from '~/modules/account/selectors'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
@@ -40,7 +38,6 @@ import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { Colors } from '~/utils/colors'
 import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
-import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
@@ -114,15 +111,6 @@ export type MainStackParamList = {
 const MainStack = createStackNavigator<MainStackParamList>()
 
 const Main: React.FC = () => {
-  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (isTermsConsentOutdated) {
-      dispatch(setTermsConsentVisibility(true))
-    }
-  }, [isTermsConsentOutdated])
-
   return (
     <MainStack.Navigator
       headerMode="none"

@@ -7,7 +7,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 
 interface CompoundSection {
   Title: React.FC<TitleProps>
-  Block: React.FC
+  Block: React.FC<IWithCustomStyle>
 }
 
 interface TitleProps extends IWithCustomStyle<TextStyle> {
@@ -27,8 +27,8 @@ const SectionTitle: React.FC<TitleProps> = ({ children, customStyles }) => (
   </ScreenContainer.Header>
 )
 
-const SectionBlock: React.FC = ({ children }) => {
-  return <Block>{children}</Block>
+const SectionBlock: React.FC = ({ children, ...props }) => {
+  return <Block {...props}>{children}</Block>
 }
 
 const Section: React.FC<IWithCustomStyle> & CompoundSection = ({

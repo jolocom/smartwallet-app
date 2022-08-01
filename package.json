@@ -12,6 +12,7 @@
     "store:ios": "bundle exec fastlane ios store",
     "beta:android": "bundle exec fastlane android beta",
     "release:android": "bundle exec fastlane android release",
+    "release:ios": "bundle exec fastlane ios release",
     "start": "adb reverse tcp:8081 tcp:8081 & react-native start",
     "term:add": "ts-node ./bin/terms/add-term.ts",
     "terms:import": "ts-node ./bin/terms/import-terms.ts",
