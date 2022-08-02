@@ -5,7 +5,7 @@ import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 
 import { getIsAppLocked, isLocalAuthSet } from '~/modules/account/selectors'
-import { LoaderComponent } from '~/components/LoaderAnimation/LoaderAnimation'
+import { LoaderAnimation } from '~/components/LoaderAnimation/LoaderAnimation'
 
 interface LoaderI {
   bgColor?: Colors
@@ -19,7 +19,7 @@ const Loader: React.FC<LoaderI> = ({ bgColor = Colors.black }) => {
   return (
     <Modal animationType="fade" visible presentationStyle="overFullScreen">
       <StatusBar backgroundColor={Colors.black} barStyle="light-content" />
-      <LoaderComponent bgColor={bgColor} type={type} msg={msg} />
+      <LoaderAnimation bgColor={bgColor} type={type} msg={msg} />
     </Modal>
   )
 }

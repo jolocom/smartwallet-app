@@ -16,13 +16,13 @@ const colors = {
 const SCALE_MAX = 5
 const CIRCLE_DIAMETER = 18
 
-type Loaderprops = {
+type LoaderProps = {
   type: LoaderTypes
   bgColor?: Colors
   msg?: string
   resetLoader?: () => void
 }
-export const LoaderComponent = (props: Loaderprops) => {
+export const LoaderAnimation = (props: LoaderProps) => {
   const { type, msg, bgColor, resetLoader } = props
   const [animating, setAnimating] = useState(true)
   const { t } = useTranslation()

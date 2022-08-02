@@ -17,7 +17,7 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import RecordHeader from './RecordHeader'
 import useTranslation from '~/hooks/useTranslation'
 import { LoaderTypes } from '~/modules/loader/types'
-import { LoaderComponent } from '~/components/LoaderAnimation/LoaderAnimation'
+import { LoaderAnimation } from '~/components/LoaderAnimation/LoaderAnimation'
 
 const ITEMS_PER_PAGE = 5
 
@@ -156,7 +156,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   return (
     <>
       {loaderType ? (
-        <LoaderComponent
+        <LoaderAnimation
           type={loaderType}
           resetLoader={() => setLoaderType(LoaderTypes.empty)}
         />
