@@ -89,7 +89,7 @@ const Dropdown: React.FC<{ placeholder: string }> = ({ placeholder }) => {
       </Block>
       {isExpanded ? (
         <Animated.View style={{ opacity: animatedOpacity }}>
-          <Block customStyle={styles.dropdownSpecificOptions}>
+          <Block customStyles={styles.dropdownSpecificOptions}>
             {options.map((option) => (
               <Option
                 key={option.id}

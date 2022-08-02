@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native'
+import * as ReactNative from 'react-native'
 
 jest.mock('react-native-keychain', () => ({
   SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
@@ -55,12 +55,22 @@ jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation', () => ({
   configureNext: jest.fn(),
 }))
 
-jest.mock(
-  'react-native-reanimated',
-  () =>
-    jest.requireActual('../../node_modules/react-native-reanimated/mock')
-      .default,
-)
+// jest.mock(
+//   'react-native-reanimated',
+//   () =>
+//     jest.requireActual('../../node_modules/react-native-reanimated/mock')
+//       .default,
+// )
+
+jest.mock('react-native-reanimated', () => {
+  const Reanimated = require('react-native-reanimated/mock')
+
+  // The mock for `call` immediately calls the callback which is incorrect
+  // So we override it with a no-op
+  Reanimated.default.call = () => {}
+
+  return Reanimated
+})
 
 jest.mock('react-native-gesture-handler', () => {
   const gestureHandlerMocks = jest.requireActual(
@@ -128,9 +138,19 @@ jest.mock('@jolocom/react-native-ausweis', () => ({
   },
 }))
 
-jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-  OS: 'android',
-  select: jest.fn(),
-}))
+ReactNative.NativeModules.RNBranch = {}
 
-NativeModules.RNBranch = {}
+export const Platform = {
+  ...ReactNative.Platform,
+  OS: 'ios',
+  Version: 123,
+  isTesting: true,
+  select: (objs) => objs['ios'],
+}
+
+export default Object.setPrototypeOf(
+  {
+    Platform,
+  },
+  ReactNative,
+)

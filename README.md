@@ -21,30 +21,36 @@ Interested in our vision? Take a look at our [whitepaper](https://jolocom.io/wp-
 #### Android
 
 3. Please set up an Android development environment and install the required SDKs.
-  - The [Getting Started](https://facebook.github.io/react-native/docs/getting-started) guide for React Native may come in handy.
-  - Look for the instructions under React Native CLI Quickstart.
+
+- The [Getting Started](https://facebook.github.io/react-native/docs/getting-started) guide for React Native may come in handy.
+- Look for the instructions under React Native CLI Quickstart.
+
 4. Connect an Android device and enable USB debugging **OR** start an Android AVD emulator
 5. Run `yarn android` to install the application and run it.
-  - NOTE: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
+
+- NOTE: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
 
 ### iOS
 
 3. Please set up an appropriate Xcode development environment.
-  - The [Getting Started](https://facebook.github.io/react-native/docs/getting-started) guide for React Native may come in handy.
-  - Look for the instructions under React Native CLI Quickstart.
+
+- The [Getting Started](https://facebook.github.io/react-native/docs/getting-started) guide for React Native may come in handy.
+- Look for the instructions under React Native CLI Quickstart.
+
 4. `cd` into the `ios` folder, and install the native dependencies using the `pod install` command.
 5. Run `yarn ios` to install and run the application in an emulator.
-  - This will default to an iPhone X emulator.
-  - The device can be specified by adding `--simulator` and the device name.
-    - e.g. `yarn ios --simulator "iPhone SE"`
-  - `NOTE`: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
-  - `NOTE`: A debug build can also be built through Xcode.
+
+- This will default to an iPhone X emulator.
+- The device can be specified by adding `--simulator` and the device name.
+  - e.g. `yarn ios --simulator "iPhone SE"`
+- `NOTE`: this will start a metro bundler server automatically, with stdout/stderr discarded. You can close this and run `yarn start` to manually start the bundler and receive more detailed output.
+- `NOTE`: A debug build can also be built through Xcode.
 
 Running a build on a physical device requires the appropriate code signing certificates.
 
 ## Deeplinks
 
-The application supports deeplinks with this syntax 
+The application supports deeplinks with this syntax
 
 `https://jolocom.app.link/interact?token={jwt}&redirectUrl={redirect_url}`
 
@@ -53,18 +59,19 @@ where `jwt` is a jwt containing a valid interaction token and `redirect_url` (NO
 A QR code containing a deeplink can be scanned by both the wallet camera and the device camera
 
 ## Testing
+
 We use Jest + [React Native Testing Library](https://testing-library.com/docs/react-native-testing-library/intro/) for unit testing.
 
 To run unit tests with watch and testing coverage:
+
 ```bash
 yarn test --watch --coverage
 ```
+
 ## Code Style and Formatting
 
 - We use [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to keep a consistent style across the codebase.
   - There are plugins available for a range of IDEs and text editors; automatic formatting on save is also supported in some editors.
 - Check the `yarn lint:fix` and `yarn prettier:format` scripts.
 
-Copyright (C) 2014-2019 JOLOCOM GmbH
-
-
+Copyright (C) 2014-2022 JOLOCOM GmbH

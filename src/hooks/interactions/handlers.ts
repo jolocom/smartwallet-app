@@ -7,21 +7,19 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useLoader } from '../loader'
+import { useNavigation } from '@react-navigation/native'
+import { Interaction, TransportAPI } from 'react-native-jolocom'
 import {
   resetInteraction,
   setInteractionDetails,
 } from '~/modules/interaction/actions'
-import { Platform } from 'react-native'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { useAgent } from '../sdk'
-import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { useInteractionHandler } from './interactionHandlers'
-import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
-import { Interaction, TransportAPI } from 'react-native-jolocom'
 import useConnection from '../connection'
+import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
+import { useInteractionHandler } from './interactionHandlers'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -34,7 +32,7 @@ export const useInteraction = () => {
 export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
-  const loader = useLoader()
+  const navigation = useNavigation()
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
   const { connected, showDisconnectedToast } = useConnection()
@@ -49,7 +47,7 @@ export const useInteractionStart = () => {
 
       return interaction
     } catch (e) {
-      scheduleErrorWarning(e)
+      if (e instanceof Error) scheduleErrorWarning(e)
     }
   }
 
@@ -71,25 +69,34 @@ export const useInteractionStart = () => {
         )
       }
     } catch (e) {
-      scheduleErrorWarning(e)
+      if (e instanceof Error) scheduleErrorWarning(e)
     }
   }
 
-  const startInteraction = async (jwt: string) =>
-    loader(
-      async () => {
-        const interaction = await processInteraction(jwt)
-        if (interaction) {
-          await showInteraction(interaction)
-        }
-      },
-      { showSuccess: false, showFailed: false },
-      (error) => {
-        if (error) scheduleErrorWarning(error)
-      },
-    )
+  const navigateInteraction = () => {
+    navigation.navigate(ScreenNames.Interaction)
+  }
 
-  return { processInteraction, showInteraction, startInteraction }
+  const startInteraction = async (jwt: string) => {
+    try {
+      const interaction = await processInteraction(jwt)
+      if (interaction) {
+        await showInteraction(interaction)
+        navigateInteraction()
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        scheduleErrorWarning(e)
+      }
+    }
+  }
+
+  return {
+    processInteraction,
+    showInteraction,
+    startInteraction,
+    navigateInteraction,
+  }
 }
 
 export const useFinishInteraction = () => {
@@ -100,12 +107,7 @@ export const useFinishInteraction = () => {
       navigation.navigate(screen)
     } else {
       if (navigation.canGoBack()) {
-        if (Platform.OS === 'ios') {
-          navigation.goBack()
-        } else if (Platform.OS === 'android') {
-          const parent = navigation.getParent()
-          parent?.goBack()
-        }
+        navigation.goBack()
       } else {
         navigation.navigate(ScreenNames.Main)
       }

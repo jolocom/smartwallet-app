@@ -1,9 +1,8 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
-
 import { useGoBack } from '~/hooks/navigation'
-import AusweisCardInfo from '~/screens/LoggedIn/eID/components/AusweisCardInfo'
+import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 jest.mock('@react-navigation/native')
@@ -36,6 +35,7 @@ describe('Ausweis card info screen', () => {
       const { toJSON } = renderWithSafeArea(<AusweisCardInfo />)
       expect(toJSON()).toMatchSnapshot()
     })
+
     test('card in blocked', () => {
       ;(useRoute as jest.Mock).mockReturnValue({
         params: {
@@ -47,6 +47,7 @@ describe('Ausweis card info screen', () => {
       const { toJSON } = renderWithSafeArea(<AusweisCardInfo />)
       expect(toJSON()).toMatchSnapshot()
     })
+
     test('card in unblocked', () => {
       ;(useRoute as jest.Mock).mockReturnValue({
         params: {
@@ -58,6 +59,7 @@ describe('Ausweis card info screen', () => {
       const { toJSON } = renderWithSafeArea(<AusweisCardInfo />)
       expect(toJSON()).toMatchSnapshot()
     })
+
     test('card can be unblocked from identity tab', () => {
       ;(useRoute as jest.Mock).mockReturnValue({
         params: {
@@ -69,6 +71,7 @@ describe('Ausweis card info screen', () => {
       const { toJSON } = renderWithSafeArea(<AusweisCardInfo />)
       expect(toJSON()).toMatchSnapshot()
     })
+
     test('card can be unblocked from identity tab', () => {
       const mockHandleDismiss = jest.fn()
       ;(useRoute as jest.Mock).mockReturnValue({
@@ -84,6 +87,7 @@ describe('Ausweis card info screen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('Identity')
       expect(mockHandleDismiss).toHaveBeenCalledTimes(1)
     })
+
     test('user can close the screen', () => {
       const mockHandleDismiss = jest.fn()
       ;(useRoute as jest.Mock).mockReturnValue({

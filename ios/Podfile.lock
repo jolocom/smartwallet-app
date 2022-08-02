@@ -293,13 +293,15 @@ PODS:
     - React-Core
   - RNBootSplash (3.2.7):
     - React-Core
+  - RNCClipboard (1.10.0):
+    - React-Core
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.8.1):
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJolocom (2.7.2):
+  - RNJolocom (2.7.1):
     - React
   - RNKeychain (7.0.0):
     - React-Core
@@ -403,6 +405,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
@@ -515,6 +518,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
@@ -595,10 +600,11 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNBootSplash: f31eba8f6d496e2029859e06e5582cac4607256d
+  RNCClipboard: f1736c75ab85b627a4d57587edb4b60999c4dd80
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJolocom: 25aefff39deb9c3e8c3aa207511ed92bcdf56dbc
+  RNJolocom: 92977c418f45679b601c6ee0dcfa91d2a0bd3a81
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
@@ -615,4 +621,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: be6df5b246b128c726306d71570b10698c9d5a15
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2

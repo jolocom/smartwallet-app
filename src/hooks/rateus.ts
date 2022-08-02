@@ -1,5 +1,5 @@
-import Rate, { AndroidMarket } from 'react-native-rate'
 import { Platform } from 'react-native'
+import Rate, { AndroidMarket } from 'react-native-rate'
 
 import { useDisableLock } from './generic'
 
@@ -24,7 +24,13 @@ const useMarketRating = () => {
   }
 
   const rateApp = async () => {
-    await disableLock(ratePromise)
+    if (Platform.OS === 'ios') {
+      return disableLock(ratePromise)
+    }
+
+    // NOTE: On Android we're navigating to the app store instead of a rating page. Hence, we shouldn't disable the lock
+    // since that will leave the app unprotected.
+    return ratePromise()
   }
 
   return { rateApp }

@@ -1,28 +1,31 @@
-import { StackActions, useNavigation } from '@react-navigation/native'
 import React from 'react'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { fireEvent, waitFor } from '@testing-library/react-native'
-
-import { AusweisPinInfo } from '~/screens/LoggedIn/eID/components'
+import { AusweisPinInfo } from '~/screens/Modals/Interaction/eID/components'
 import { useGoBack } from '~/hooks/navigation'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { triggerHeaderLayout } from '../components/Collapsible/collapsible-utils'
-import { eIDScreens } from '~/screens/LoggedIn/eID/types'
+import { aa2Module } from '@jolocom/react-native-ausweis'
 
 jest.mock('@react-navigation/native')
 jest.mock('../../../src/hooks/navigation')
 
 describe('Ausweis passcode details screen', () => {
   const mockHandleNavigateChangePin = jest.fn()
+  ;(aa2Module.cancelFlow as jest.Mock).mockResolvedValue(true)
+
   beforeAll(() => {
     ;(useGoBack as jest.Mock).mockReturnValue(jest.fn)
     ;(useNavigation as jest.Mock).mockReturnValue({
       dispatch: mockHandleNavigateChangePin,
     })
   })
+
   test('is displayed according to the designs', () => {
     const { toJSON } = renderWithSafeArea(<AusweisPinInfo />)
     expect(toJSON()).toMatchSnapshot()
   })
+
   test('user can choose to proceed with change pin flow', async () => {
     const { getByTestId } = renderWithSafeArea(<AusweisPinInfo />)
     triggerHeaderLayout(getByTestId('collapsible-header-container'))

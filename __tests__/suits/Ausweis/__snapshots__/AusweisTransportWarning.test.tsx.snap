@@ -92,7 +92,7 @@ exports[`Ausweis transport warning screen is displayed according to designs 1`] 
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -115,7 +115,7 @@ exports[`Ausweis transport warning screen is displayed according to designs 1`] 
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -171,8 +171,8 @@ exports[`Ausweis transport warning screen is displayed according to designs 1`] 
             <BVLinearGradient
               colors={
                 Array [
-                  -7268030,
-                  -3003031,
+                  4287699266,
+                  4291964265,
                 ]
               }
               endPoint={
@@ -208,7 +208,7 @@ exports[`Ausweis transport warning screen is displayed according to designs 1`] 
                   Array [
                     Object {
                       "color": "#ffffff",
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlignVertical": "center",
                     },
                     Object {

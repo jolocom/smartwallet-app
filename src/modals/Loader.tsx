@@ -1,7 +1,6 @@
 import React from 'react'
 import { Modal, StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
-
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 

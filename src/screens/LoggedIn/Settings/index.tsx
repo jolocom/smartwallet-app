@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
+import { useToasts } from '~/hooks/toasts'
 import ScreenContainer from '~/components/ScreenContainer'
 import { ScreenNames } from '~/types/screens'
 import { resetAccount } from '~/modules/account/actions'
@@ -28,9 +29,15 @@ const SettingsGeneral: React.FC = () => {
   const { resetBiometry } = useBiometry()
   const { set: setStorageValue } = useSettings()
   const { rateApp } = useMarketRating()
+  const { scheduleErrorWarning } = useToasts()
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
+
+  const handleRateApp = () => {
+    rateApp().catch(scheduleErrorWarning)
+  }
+
   const handleLogout = useCallback(async () => {
     try {
       await resetBiometry()
@@ -46,7 +53,8 @@ const SettingsGeneral: React.FC = () => {
     }
   }, [dispatch])
 
-  const handleNavigateToScreen = navigation.navigate
+  const handleNavigateToScreen = (screen: ScreenNames) =>
+    navigation.navigate(screen)
 
   return (
     <ScreenContainer
@@ -125,7 +133,7 @@ const SettingsGeneral: React.FC = () => {
               <Option.Title title={t('Settings.contactUsBlock')} />
               <Option.RightIcon />
             </Option>
-            <Option onPress={rateApp}>
+            <Option onPress={handleRateApp}>
               <Option.Title title={t('Settings.rateBlock')} />
             </Option>
             <Option onPress={() => handleNavigateToScreen(ScreenNames.Imprint)}>
@@ -146,7 +154,9 @@ const SettingsGeneral: React.FC = () => {
           <Btn
             type={BtnTypes.quinary}
             customContainerStyles={{ marginTop: 44 }}
-            onPress={handleLogout}
+            onPress={() => {
+              handleLogout().catch(scheduleErrorWarning)
+            }}
           >
             [DEV] Log out
           </Btn>

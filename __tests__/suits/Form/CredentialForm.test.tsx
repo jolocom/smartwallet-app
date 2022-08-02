@@ -3,10 +3,12 @@ import CredentialForm from '~/screens/Modals/Forms/CredentialForm'
 import { useRoute } from '@react-navigation/native'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { AttributeTypes, ClaimKeys } from '~/types/credentials'
-import { mockSelectorReturn } from '../../mocks/libs/react-redux'
+import {
+  mockSelectorReturn,
+  getMockedDispatch,
+} from '../../mocks/libs/react-redux'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import { editAttr, updateAttrs } from '~/modules/attributes/actions'
-import { getMockedDispatch } from '../../mocks/libs/react-redux'
 import { mockedAgent } from '../../mocks/agent'
 import { mockedNoAttributes } from '../../mocks/store/attributes'
 

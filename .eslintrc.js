@@ -7,11 +7,11 @@ module.exports = {
     project: './tsconfig.json',
   },
   extends: [
-    'eslint:recommended',
+    // 'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:react-native/all',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:import/recommended',
     'plugin:prettier/recommended',
   ],
