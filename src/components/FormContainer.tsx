@@ -88,12 +88,21 @@ const FormContainer: React.FC<Props> = ({
               <Animated.Text
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
-                  color: Colors.white,
-                  marginTop: Platform.OS === 'ios' ? 3 : 0,
+                  marginTop: Platform.OS === 'ios' ? 5 : 0,
                 }}
                 numberOfLines={1}
               >
-                {currentTitleText}
+                <JoloText
+                  kind={JoloTextKind.title}
+                  size={JoloTextSizes.mini}
+                  color={Colors.white90}
+                  customStyles={{
+                    fontFamily: Fonts.Medium,
+                    textAlign: 'center',
+                  }}
+                >
+                  {currentTitleText}
+                </JoloText>
               </Animated.Text>
             </View>
             <TouchableOpacity
