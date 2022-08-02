@@ -147,7 +147,7 @@ export const LoaderAnimation = (props: LoaderProps) => {
   useEffect(() => {
     const timeOut = setTimeout(() => {
       if (resetLoader && (type === 'success' || type === 'error')) resetLoader()
-    })
+    }, 1000)
     animating && looping()
     return () => clearTimeout(timeOut)
   }, [type])

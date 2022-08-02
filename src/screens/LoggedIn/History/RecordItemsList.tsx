@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
-import { SectionList, View, ViewToken, Text } from 'react-native'
+import { SectionList, View, ViewToken } from 'react-native'
 import { FlowType, Interaction } from 'react-native-jolocom'
 import { useTabs } from '~/components/Tabs/context'
 import { useHistory } from '~/hooks/history'
