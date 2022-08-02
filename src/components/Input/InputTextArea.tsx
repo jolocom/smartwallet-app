@@ -83,7 +83,7 @@ const InputTextArea = React.forwardRef<TextInput, ITextAreaInputProps>(
             </JoloText>
           </View>
         )}
-        <Block customStyle={{ padding: 13 }}>
+        <Block customStyles={{ padding: 13 }}>
           <CoreInput
             ref={ref}
             placeholder={t('ContactUs.suggestionPlaceholder')}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Image, LayoutAnimation, StyleSheet, View } from 'react-native'
-import Fallin from '~/components/animation/Fallin'
+import Fallin from '~/components/Fallin'
 
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'

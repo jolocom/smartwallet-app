@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ScreenPlaceholder should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "height": "100%",
+      "justifyContent": "center",
+      "paddingBottom": "20%",
+      "width": "100%",
+    }
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "paddingTop": undefined,
+          "textAlign": "center",
+        },
+        Object {
+          "color": "rgba(255,255,255,0.85)",
+          "fontFamily": "TTCommons-Medium",
+          "fontSize": 28,
+          "letterSpacing": 0,
+          "lineHeight": 32,
+        },
+        undefined,
+      ]
+    }
+    testID="title"
+  >
+    test title
+  </Text>
+  <Text
+    style={
+      Array [
+        Object {
+          "paddingTop": undefined,
+          "textAlign": "center",
+        },
+        Object {
+          "color": "rgba(255, 255, 255, 0.50)",
+          "fontFamily": "TTCommons-Regular",
+          "fontSize": 16,
+          "letterSpacing": 0,
+          "lineHeight": 18,
+        },
+        Object {
+          "marginTop": 12,
+          "paddingHorizontal": 32,
+        },
+      ]
+    }
+    testID="description"
+  >
+    test description
+  </Text>
+</View>
+`;

@@ -9,7 +9,11 @@ interface Props {
 
 const Dialog: React.FC<Props> = ({ children, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      testID="dialog"
+      style={styles.container}
+      onPress={onPress}
+    >
       {children}
     </TouchableOpacity>
   )

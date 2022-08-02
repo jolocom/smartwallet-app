@@ -1,5 +1,8 @@
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import { AusweisFlow, IAusweisRequest } from '~/screens/LoggedIn/eID/types'
+import {
+  AusweisFlow,
+  IAusweisRequest,
+} from '~/screens/Modals/Interaction/eID/types'
 
 export type AusweisFlowTypePayload =
   | AusweisFlow.auth

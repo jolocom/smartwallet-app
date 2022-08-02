@@ -1,17 +1,15 @@
 import React from 'react'
-import { TouchableOpacity, View, StyleSheet, ViewStyle } from 'react-native'
+import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { FingerprintIcon, FaceIdIcon } from '~/assets/svg'
-
+import { IWithCustomStyle } from '~/types/props'
 import Ripple from '~/components/Ripple'
-
 import { Colors } from '~/utils/colors'
 import { BiometryTypes } from '~/screens/Modals/WalletAuthentication/module/walletAuthTypes'
 import LinearGradient from 'react-native-linear-gradient'
 
-interface PropsI {
+interface PropsI extends IWithCustomStyle {
   biometryType: BiometryTypes
   handleAuthenticate: () => void
-  customStyles?: ViewStyle
 }
 
 const BiometryAnimation: React.FC<PropsI> = ({

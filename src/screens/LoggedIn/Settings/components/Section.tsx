@@ -1,28 +1,25 @@
 import React from 'react'
 import { StyleSheet, View, ViewStyle, TextStyle } from 'react-native'
-
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { IWithCustomStyle } from '~/types/props'
 import BP from '~/utils/breakpoints'
-import { JoloTextSizes } from '~/utils/fonts'
 import Block from '~/components/Block'
 import ScreenContainer from '~/components/ScreenContainer'
 
 interface CompoundSection {
   Title: React.FC<TitleProps>
-  Block: React.FC
+  Block: React.FC<IWithCustomStyle>
 }
 
-interface TitleProps {
+interface TitleProps extends IWithCustomStyle<TextStyle> {
   marginTop?: number | string
-  customStyle?: TextStyle
 }
 
-const SectionTitle: React.FC<TitleProps> = ({ children, customStyle }) => (
+const SectionTitle: React.FC<TitleProps> = ({ children, customStyles }) => (
   <ScreenContainer.Header
     customStyles={[
       {
         marginBottom: BP({ large: 32, medium: 32, default: 24 }),
-        ...customStyle,
+        customStyles,
       },
     ]}
   >
@@ -30,11 +27,11 @@ const SectionTitle: React.FC<TitleProps> = ({ children, customStyle }) => (
   </ScreenContainer.Header>
 )
 
-const SectionBlock: React.FC = ({ children }) => {
-  return <Block>{children}</Block>
+const SectionBlock: React.FC = ({ children, ...props }) => {
+  return <Block {...props}>{children}</Block>
 }
 
-const Section: React.FC<{ customStyles?: ViewStyle }> & CompoundSection = ({
+const Section: React.FC<IWithCustomStyle> & CompoundSection = ({
   children,
   customStyles = {},
 }) => {

@@ -10,14 +10,12 @@ import { ScreenNames } from '~/types/screens'
 import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 import { usePopupMenu } from '~/hooks/popupMenu'
+import { DeeplinkParams } from '~/hooks/deeplinks'
 
 const TC_TOKEN =
   'https://servicekonto.test.governikus-eid.de/AutentIDConnect/npa/authorize?scope=openid&response_type=code&redirect_uri=https%3A%2F%2Fservicekonto.test.governikus-eid.de%2Ftest-client%2Fopenid-connect%2Fauthcode&state=1&nonce=nonce&client_id=tNwyiRVez8xM8t1YZ9YnaMXd2tviISKw&acr_values=integrated'
 
-const EID_DEEPLINK = `https://jolocom.app.link/eid?tcTokenUrl=${encodeURIComponent(
-  TC_TOKEN,
-)}&redirectUrl=${encodeURIComponent('https://google.com')}`
-console.log({ EID_DEEPLINK })
+const TEST_URL = encodeURIComponent('https://smartwallet.free.beeceptor.com')
 
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
@@ -33,6 +31,15 @@ const DevelopmentSection = () => {
     })
   }
 
+  const EID_DEEPLINK = new URL('https://jolocom.app.link/eid')
+  EID_DEEPLINK.searchParams.append(
+    DeeplinkParams.tcTokenUrl,
+    encodeURIComponent(TC_TOKEN),
+  )
+  EID_DEEPLINK.searchParams.append(DeeplinkParams.redirectUrl, TEST_URL)
+  EID_DEEPLINK.searchParams.append(DeeplinkParams.postRedirect, 'true')
+
+  console.log({ EID_DEEPLINK })
   return (
     <>
       <Section>
@@ -43,7 +50,7 @@ const DevelopmentSection = () => {
           </Option>
         </Section.Block>
         <Section.Block>
-          <Option onPress={() => Linking.openURL(EID_DEEPLINK)}>
+          <Option onPress={() => Linking.openURL(EID_DEEPLINK.href)}>
             <Option.Title title="Initiate eID flow" />
           </Option>
         </Section.Block>
@@ -87,6 +94,9 @@ const DevelopmentSection = () => {
           </Option>
           <Option onPress={() => redirect(ScreenNames.NotificationsTest)}>
             <Option.Title title="Notifications" />
+          </Option>
+          <Option onPress={() => redirect(ScreenNames.CardsTest)}>
+            <Option.Title title="Cards" />
           </Option>
           <Option onPress={() => redirect(ScreenNames.InputTest)}>
             <Option.Title title="Inputs" />

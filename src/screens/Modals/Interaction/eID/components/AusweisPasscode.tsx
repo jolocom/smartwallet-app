@@ -230,7 +230,7 @@ export const AusweisPasscode = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelInteraction)
+          showScanner({ onDismiss: cancelInteraction, isInsideEidStack: true })
         }
       },
       handleAuthFailed: () => {
@@ -456,7 +456,13 @@ export const AusweisPasscode = () => {
 
   const sendPasscodeCommand = async (command: Commands, value: string) => {
     if (IS_ANDROID && isCardTouched) {
-      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+      showScanner({
+        onDismiss: cancelInteraction,
+        params: {
+          state: AusweisScannerState.loading,
+        },
+        isInsideEidStack: true,
+      })
     }
 
     switch (command) {
@@ -628,9 +634,7 @@ export const AusweisPasscode = () => {
        * This is different for the RUN_CHANGE_PIN flow, where
        * the handleChangePinCancel navigates back to the AusweisChangePin screen
        */
-      if (IS_ANDROID) {
-        closeAusweis()
-      }
+      closeAusweis()
     }
   }
 

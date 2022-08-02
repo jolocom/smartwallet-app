@@ -6,7 +6,7 @@ import {
   resetInteraction,
   selectShareCredential,
   updateOfferValidation,
-  setRedirectUrl,
+  setDeeplinkConfig,
 } from './actions'
 import { updateAttrs } from '../attributes/actions'
 import {
@@ -24,7 +24,10 @@ const initialState: InteractionState = {
     readerState: null,
     flowType: null,
   },
-  redirectUrl: null,
+  deeplinkConfig: {
+    redirectUrl: null,
+    postRedirect: false,
+  },
 }
 
 const reducer = (
@@ -34,7 +37,7 @@ const reducer = (
     | typeof resetInteraction
     | typeof selectShareCredential
     | typeof updateOfferValidation
-    | typeof setRedirectUrl
+    | typeof setDeeplinkConfig
     | typeof updateAttrs
     | typeof setAusweisInteractionDetails
     | typeof setAusweisScannerKey
@@ -45,8 +48,8 @@ const reducer = (
   switch (action.type) {
     // NOTE: Generic handlers
 
-    case InteractionActionType.setRedirectUrl:
-      return { ...state, redirectUrl: action.payload }
+    case InteractionActionType.setDeeplinkConfig:
+      return { ...state, deeplinkConfig: action.payload }
 
     // NOTE: SSI handlers
 

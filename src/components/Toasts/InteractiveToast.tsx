@@ -22,12 +22,8 @@ interface IProps {
 
 const InteractiveToast = React.forwardRef<View, IProps>(
   ({ handleInteractionBtnLayout }, ref) => {
-    const {
-      toastToShow,
-      toastColor,
-      invokeInteract,
-      isInteractive,
-    } = useToastToShow()
+    const { toastToShow, toastColor, invokeInteract, isInteractive } =
+      useToastToShow()
     if (isInteractive) {
       return (
         <ToastContainer>

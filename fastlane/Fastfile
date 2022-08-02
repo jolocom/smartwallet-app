@@ -28,20 +28,20 @@ end
 desc 'Get API token for MS AppCenter'
 lane :get_appcenter_token do
   begin
-    sh("git clone git@infra.jolocom.io:appcenter-secrets")
+    sh("git clone dev@hetz1.jolocom.io:common-secrets -b master")
   rescue
-    # handle error
-    puts "appcenter auth already present"
+    puts "common-secrets already exists"
   end
-  File.read("appcenter-secrets/api_key.txt")
+
+  File.read("common-secrets/appcenter/api_key.txt")
 end
 
-desc  'Get Sentry Auth Token'
+desc 'Get Sentry Auth Token for iOS and Android'
 lane :sentry_auth do
   begin
-      sh("git clone git@infra.jolocom.io:sentry-auth")
+    sh("git clone dev@hetz1.jolocom.io:sentry-auth")
   rescue
-      puts "sentry token already present"
+    puts "sentry token already present"
   end
   sh("cp ./sentry-auth/sentry.properties ../ios/sentry.properties")
   sh("cp ./sentry-auth/sentry.properties ../android/sentry.properties")
@@ -65,7 +65,6 @@ lane :release do |options|
     upload_to_testflight
   end
 end
-
 
 # lanes for ios building, signing and deployment
 platform :ios do 
@@ -112,7 +111,6 @@ platform :ios do
     #ensure_git_status_clean
     release(target: "release")
   end
-
 end
 
 
@@ -130,7 +128,7 @@ platform :android do
   desc "Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password"
   lane :get_secrets do
     begin
-      sh("git clone git@infra.jolocom.io:android-secrets")
+      sh("git clone dev@hetz1.jolocom.io:android-secrets -b master")
     rescue
       puts "secrets already present"
     end
@@ -152,7 +150,12 @@ platform :android do
   # NOTE: you should run build lane from the root dir of the project
   lane :build do
     releaseFilePath = File.join(Dir.pwd, "android-secrets", "JoloSmartWallet.keystore")
-    #build_android_app(task: 'clean')
+    build_android_app(
+      task: 'clean',
+      project_dir: './android',
+      gradle_path: './gradlew',
+      print_command: true
+    )
     sentry_auth
 
     keyPass = get_secrets.strip
@@ -198,5 +201,4 @@ platform :android do
     build
     upload(target: 'release')
   end
-
 end

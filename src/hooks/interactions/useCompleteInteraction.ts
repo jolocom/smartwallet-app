@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux'
 import { SWErrorCodes } from '~/errors/codes'
 import { useToasts } from '~/hooks/toasts'
 import {
-  getInteractionCounterparty,
-  getRedirectUrl,
+  getDeeplinkConfig, getInteractionCounterparty
 } from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import { ToastBody } from '~/types/toasts'
@@ -34,7 +33,7 @@ export const useCompleteInteraction = (
   const { closeInteraction, clearInteraction } = useFinishInteraction()
   const navigation = useNavigation()
 
-  const redirectUrl = useSelector(getRedirectUrl)
+  const { redirectUrl } = useSelector(getDeeplinkConfig)
   const counterparty = useSelector(getInteractionCounterparty)
 
   const completeInteraction = async () => {
@@ -69,6 +68,7 @@ export const useCompleteInteraction = (
       }
     } catch (e) {
       clearInteraction()
+      closeInteraction()
 
       if (e instanceof Error) {
         if (e.message === SWErrorCodes.SWInteractionOfferAllInvalid) {

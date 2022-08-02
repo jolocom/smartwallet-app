@@ -1,11 +1,11 @@
 import React from 'react'
-import { StyleSheet, View, ViewStyle } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { IWithCustomStyle } from '~/types/props'
 
-interface IProps {
-  customStyles?: ViewStyle
-}
-
-const TabsContainer: React.FC<IProps> = ({ children, customStyles }) => {
+const TabsContainer: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles,
+}) => {
   return <View style={[styles.container, customStyles]}>{children}</View>
 }
 

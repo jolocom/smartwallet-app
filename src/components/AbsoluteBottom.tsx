@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, StyleSheet, ViewStyle } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { IWithCustomStyle } from '~/types/props'
 
-interface PropsI {
-  customStyles?: ViewStyle
-}
-
-const AbsoluteBottom: React.FC<PropsI> = ({ children, customStyles }) => {
+const AbsoluteBottom: React.FC<IWithCustomStyle> = ({
+  children,
+  customStyles,
+}) => {
   const { bottom } = useSafeArea()
   return (
     <View

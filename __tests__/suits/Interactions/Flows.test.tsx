@@ -100,12 +100,9 @@ describe('Correct data was set in the store for ', () => {
           did: COUNTERPARTY_DID,
         },
         credentials: {
-          // eslint-disable-next-line
           service_issued: [
             {
               type: CREDENTIAL_TYPE,
-              category: 'other',
-              invalid: false,
               name: '',
               properties: [],
             },

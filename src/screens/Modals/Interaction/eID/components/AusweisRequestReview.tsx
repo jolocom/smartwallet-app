@@ -6,7 +6,6 @@ import moment from 'moment'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
 import ScreenContainer from '~/components/ScreenContainer'
@@ -47,8 +46,13 @@ type AusweisRequestReviewNavigation = StackNavigationProp<
 
 export const AusweisRequestReview = () => {
   const redirect = useRedirect()
-  const { acceptRequest, cancelInteraction, checkCardValidity, closeAusweis } =
-    eIDHooks.useAusweisInteraction()
+  const {
+    acceptRequest,
+    cancelInteraction,
+    checkCardValidity,
+    closeAusweis,
+    sendCancel,
+  } = eIDHooks.useAusweisInteraction()
   const {
     providerName,
     requiredFields,
@@ -66,7 +70,7 @@ export const AusweisRequestReview = () => {
   const navigation = useNavigation<AusweisRequestReviewNavigation>()
   const [selectedOptional, setSelectedOptional] = useState<Array<string>>([])
   const translateField = eIDHooks.useTranslatedAusweisFields()
-  const { showScanner, updateScanner } = eIDHooks.useAusweisScanner()
+  const { updateScanner, showScanner } = eIDHooks.useAusweisScanner()
   const { handleDeactivatedCard } = eIDHooks.useDeactivatedCard()
 
   eIDHooks.useAusweisCancelBackHandler()
@@ -109,7 +113,7 @@ export const AusweisRequestReview = () => {
       },
       handleCardRequest: () => {
         if (IS_ANDROID) {
-          showScanner(cancelInteraction)
+          showScanner({ onDismiss: cancelInteraction, isInsideEidStack: true })
         }
       },
       handlePinRequest: (card) => {
@@ -165,7 +169,9 @@ export const AusweisRequestReview = () => {
     })
   }
 
-  const handleIgnore = cancelInteraction
+  // FIXME: weird navigation behavior for iOS. popStack() in cancelInteraction takes user
+  // back to home screen instead of scanner. The ternary below fixes the issue.
+  const handleIgnore = IS_ANDROID ? cancelInteraction : sendCancel
 
   const handleMoreInfo = () => {
     const fields: IField[] = [

@@ -3,6 +3,7 @@ import {
   StackActions,
   useIsFocused,
   useNavigation,
+  useNavigationState,
 } from '@react-navigation/native'
 import { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
@@ -19,9 +20,8 @@ import {
 } from '@jolocom/react-native-ausweis/js/messageTypes'
 import { useSelector, useDispatch } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
-
 import { useCustomContext } from '~/hooks/context'
-import { useRedirect, usePopStack, useGoBack } from '~/hooks/navigation'
+import { useRedirect, usePopStack } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import { ScreenNames } from '~/types/screens'
 import { AusweisContext } from './context'
@@ -43,11 +43,14 @@ import {
 import {
   getAusweisReaderState,
   getAusweisScannerKey,
+  getDeeplinkConfig,
+  getAusweisFlowType,
 } from '~/modules/interaction/selectors'
 import useConnection from '~/hooks/connection'
 import { IS_ANDROID } from '~/utils/generic'
 import { useCheckNFC } from '~/hooks/nfc'
-import { getRedirectUrl } from '~/modules/interaction/selectors'
+import { SWErrorCodes } from '~/errors/codes'
+import { attachRedirectUrl } from './utils'
 
 const useAusweisContext = useCustomContext(AusweisContext)
 
@@ -62,7 +65,7 @@ const useAusweisInteraction = () => {
   const { providerName } = eIDHooks.useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
   const checkNfc = useCheckNFC()
-  const redirectUrl = useSelector(getRedirectUrl)
+  const { redirectUrl, postRedirect } = useSelector(getDeeplinkConfig)
 
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers
@@ -112,15 +115,19 @@ const useAusweisInteraction = () => {
         dispatch(setAusweisInteractionDetails(requestData))
       })
     } catch (e) {
-      cancelFlow()
-      console.warn(e)
       scheduleErrorWarning(e)
+      cancelFlow()
     }
   }
 
   const acceptRequest = async (optionalFields: Array<AccessRightsFields>) => {
     if (shouldShowScannerWithoutInsertMessage) {
-      showScanner(cancelInteraction, { state: AusweisScannerState.loading })
+      showScanner({
+        onDismiss: cancelInteraction,
+        params: {
+          state: AusweisScannerState.loading,
+        },
+      })
     }
 
     await aa2Module.setAccessRights(optionalFields)
@@ -129,7 +136,12 @@ const useAusweisInteraction = () => {
 
   const startChangePin = async () => {
     if (shouldShowScannerWithoutInsertMessage) {
-      showScanner(cancelFlow, { state: AusweisScannerState.loading })
+      showScanner({
+        onDismiss: cancelFlow,
+        params: {
+          state: AusweisScannerState.loading,
+        },
+      })
     }
 
     await aa2Module.startChangePin().catch(scheduleErrorWarning)
@@ -186,24 +198,51 @@ const useAusweisInteraction = () => {
     const handleCompleteFlow = () => {
       closeAusweis()
       navigation.navigate(ScreenNames.Identity)
-      scheduleInfo({
-        title: t('Toasts.ausweisSuccessTitle'),
-        message: t('Toasts.ausweisSuccessMsg'),
-        dismiss: 10000,
-      })
+      if (postRedirect) {
+        scheduleInfo({
+          title: t('Toasts.refreshTitle'),
+          message: t('Toasts.refreshMsg', {
+            serviceName: providerName,
+            interpolation: {
+              escapeValue: false,
+            },
+          }),
+          dismiss: 10000,
+        })
+      } else {
+        scheduleInfo({
+          title: t('Toasts.ausweisSuccessTitle'),
+          message: t('Toasts.ausweisSuccessMsg'),
+          dismiss: 10000,
+        })
+      }
     }
 
     return fetch(url)
       .then((res) => {
-        if (!redirectUrl) {
-          handleCompleteFlow()
-        } else {
-          const url = new URL(redirectUrl)
-          url.searchParams.append('redirectUrl', encodeURIComponent(res.url))
+        // NOTE: if there is a `postRedirect`, update the service's UI by calling it
+        if (postRedirect && redirectUrl) {
+          fetch(redirectUrl, {
+            method: 'POST',
+            headers: new Headers({
+              'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify({
+              callbackUrl: res.url,
+            }),
+          }).catch((e: Error) => {
+            e.name = SWErrorCodes.SWRedirectUrlInvalid
+            scheduleErrorWarning(e)
+          })
+        }
 
+        return res.url
+      })
+      .then((url) => {
+        if (redirectUrl && !postRedirect) {
           navigation.dispatch(
             StackActions.replace(ScreenNames.ServiceRedirect, {
-              redirectUrl: url.href,
+              redirectUrl: attachRedirectUrl(redirectUrl, url),
               counterparty: {
                 serviceName: providerName,
                 isAnonymous: false,
@@ -212,6 +251,8 @@ const useAusweisInteraction = () => {
               closeOnComplete: true,
             }),
           )
+        } else {
+          handleCompleteFlow()
         }
       })
       .catch(scheduleErrorWarning)
@@ -244,6 +285,7 @@ const useAusweisInteraction = () => {
 
   return {
     closeAusweis,
+    sendCancel,
     initAusweis,
     disconnectAusweis,
     processAusweisToken,
@@ -274,9 +316,11 @@ const useAusweisCompatibilityCheck = () => {
 
   const checkAndroidCompatibility = () => {
     if (readerState) {
-      showScanner(undefined, {
-        state: AusweisScannerState.success,
-        onDone: () => updateCompatibilityResult(readerState),
+      showScanner({
+        params: {
+          state: AusweisScannerState.success,
+          onDone: () => updateCompatibilityResult(readerState),
+        },
       })
     } else {
       showScanner()
@@ -398,6 +442,7 @@ export const useDeactivatedCard = () => {
 }
 
 export const useAusweisScanner = () => {
+  const navState = useNavigationState((state) => state)
   const navigation = useNavigation()
   const defaultState = {
     state: AusweisScannerState.idle,
@@ -428,17 +473,33 @@ export const useAusweisScanner = () => {
     dispatchScannerParams(defaultState)
   }
 
-  const showScanner = (
-    onDismiss?: () => void,
-    params?: AusweisScannerParams,
-  ) => {
-    navigation.navigate(ScreenNames.Interaction, {
-      screen: ScreenNames.eId,
-      params: {
+  interface ShowScannerConfig {
+    onDismiss?: () => void
+    params?: AusweisScannerParams
+    isInsideEidStack?: boolean
+  }
+
+  const showScanner = (config: ShowScannerConfig = {}) => {
+    const { onDismiss, params, isInsideEidStack = false } = config
+    if (isInsideEidStack) {
+      navigation.navigate(ScreenNames.eId, {
         screen: eIDScreens.AusweisScanner,
-        params: { ...params, onDismiss },
-      },
-    })
+        params: {
+          ...params,
+          onDismiss: () => {
+            onDismiss && onDismiss()
+          },
+        },
+      })
+    } else {
+      navigation.navigate(ScreenNames.Interaction, {
+        screen: ScreenNames.eId,
+        params: {
+          screen: eIDScreens.AusweisScanner,
+          params: { ...params, onDismiss },
+        },
+      })
+    }
   }
 
   const updateScanner = (params: Partial<AusweisScannerParams>) => {
@@ -531,6 +592,39 @@ export const useObserveAusweisFlow = () => {
   }, [])
 }
 
+const usePendingEidHandler = (handler: () => void) => {
+  const shouldDisableUnlock = !!useSelector(getAusweisFlowType)
+  const [isLoading, setIsLoading] = useState(false)
+  const debounceHandler = useRef<() => void>()
+
+  useEffect(() => {
+    if (!shouldDisableUnlock && isLoading) {
+      setTimeout(() => {
+        if (debounceHandler.current) {
+          setIsLoading(false)
+          debounceHandler.current()
+          debounceHandler.current = undefined
+        }
+      }, 500)
+    }
+  }, [shouldDisableUnlock, isLoading])
+
+  const handlePress = () => {
+    if (!shouldDisableUnlock && !isLoading) {
+      handler()
+    } else if (shouldDisableUnlock) {
+      if (isLoading) return
+      setIsLoading(true)
+      debounceHandler.current = handler
+    }
+  }
+
+  return {
+    handlePress,
+    isLoading,
+  }
+}
+
 const eIDHooks = {
   useAusweisReaderEvents,
   useAusweisCancelBackHandler,
@@ -541,6 +635,7 @@ const eIDHooks = {
   useAusweisInteraction,
   useAusweisContext,
   useObserveAusweisFlow,
+  usePendingEidHandler,
 }
 
 export default eIDHooks

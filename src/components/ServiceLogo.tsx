@@ -1,17 +1,41 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Linking,
+} from 'react-native'
+import { useToasts } from '~/hooks/toasts'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 
 interface Props {
   source?: string
+  serviceUrl?: string
 }
 
-export const ServiceLogo: React.FC<Props> = ({ source }) => {
-  if (source) {
-    return <Image style={styles.image} source={{ uri: source }} />
+export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
+  const { scheduleErrorWarning } = useToasts()
+
+  const handleRedirectToCounterparty = async () => {
+    if (serviceUrl) {
+      try {
+        await Linking.openURL(serviceUrl)
+      } catch (e) {
+        scheduleErrorWarning(e as Error)
+      }
+    }
   }
-  return (
+
+  return source ? (
+    <TouchableOpacity
+      onPress={serviceUrl && handleRedirectToCounterparty}
+      activeOpacity={serviceUrl ? 0.9 : 1}
+    >
+      <Image style={styles.image} source={{ uri: source }} />
+    </TouchableOpacity>
+  ) : (
     <View style={[styles.image, { backgroundColor: Colors.white }]}>
       <InitiatorPlaceholderIcon />
     </View>
