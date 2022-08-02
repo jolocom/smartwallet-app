@@ -89,6 +89,7 @@ const FormContainer: React.FC<Props> = ({
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
                   marginTop: Platform.OS === 'ios' ? 5 : 0,
+                  alignSelf: 'center',
                 }}
                 numberOfLines={1}
               >
@@ -98,7 +99,6 @@ const FormContainer: React.FC<Props> = ({
                   color={Colors.white90}
                   customStyles={{
                     fontFamily: Fonts.Medium,
-                    textAlign: 'center',
                   }}
                 >
                   {currentTitleText}
