@@ -87,6 +87,7 @@ const AusweisCardInfo = () => {
                     alignSelf: 'center',
                     textDecorationLine: 'underline',
                   }}
+                  testID="identity-screen-link"
                   onPress={handleRedirectToIdentity}
                 />
               </JoloText>

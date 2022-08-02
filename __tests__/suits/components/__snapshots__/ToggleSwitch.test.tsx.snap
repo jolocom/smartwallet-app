@@ -51,8 +51,8 @@ exports[`ToggleSwitch should render the switch with disabled initial state 1`] =
     <BVLinearGradient
       colors={
         Array [
-          -16055539,
-          -16055539,
+          4278911757,
+          4278911757,
         ]
       }
       endPoint={
@@ -131,8 +131,8 @@ exports[`ToggleSwitch should render the switch with enabled initial state 1`] = 
     <BVLinearGradient
       colors={
         Array [
-          -7268030,
-          -3003031,
+          4287699266,
+          4291964265,
         ]
       }
       endPoint={

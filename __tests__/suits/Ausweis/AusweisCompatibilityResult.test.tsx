@@ -1,10 +1,9 @@
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import { useRoute } from '@react-navigation/native'
-
 import { useGoBack } from '~/hooks/navigation'
-import { AusweisCompatibilityResult } from '~/screens/LoggedIn/eID/components'
-import { eIDScreens } from '~/screens/LoggedIn/eID/types'
+import { AusweisCompatibilityResult } from '~/screens/Modals/Interaction/eID/components'
+import { eIDScreens } from '~/screens/Modals/Interaction/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 jest.mock('@react-navigation/native')
@@ -22,6 +21,7 @@ describe('Ausweis compatibility result screen', () => {
     afterAll(() => {
       mockGoBack.mockClear()
     })
+
     test('scanned card is fully supported', () => {
       ;(useRoute as jest.Mock).mockReturnValue({
         params: {
@@ -41,6 +41,7 @@ describe('Ausweis compatibility result screen', () => {
       )
       expect(toJSON()).toMatchSnapshot()
     })
+
     test('scanned card is inopeartive', () => {
       ;(useRoute as jest.Mock).mockReturnValue({
         params: {
@@ -51,6 +52,7 @@ describe('Ausweis compatibility result screen', () => {
       const { toJSON } = renderWithSafeArea(<AusweisCompatibilityResult />)
       expect(toJSON()).toMatchSnapshot()
     })
+
     test('scanned card is deactivated', () => {
       ;(useRoute as jest.Mock).mockReturnValue({
         params: {
@@ -62,6 +64,7 @@ describe('Ausweis compatibility result screen', () => {
       expect(toJSON()).toMatchSnapshot()
     })
   })
+
   test('can be dismissed', () => {
     ;(useRoute as jest.Mock).mockReturnValue({
       params: {

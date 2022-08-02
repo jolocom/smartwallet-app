@@ -1,9 +1,9 @@
+import React, { useCallback, useRef } from 'react'
+import { ScrollView, View } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { StackActions, useNavigation } from '@react-navigation/native'
-import React, { useCallback, useRef } from 'react'
-import { ScrollView, View } from 'react-native'
 import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import Link from '~/components/Link'
@@ -21,7 +21,7 @@ import {
   AusweisPasscodeMode,
   AusweisScannerState,
   CardInfoMode,
-  eIDScreens
+  eIDScreens,
 } from '../types'
 
 interface LocalSectionProps {

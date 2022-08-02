@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-
+import ScreenContainer from '~/components/ScreenContainer'
 import Passcode from '~/components/Passcode'
 import { IPasscodeContext } from '~/components/Passcode/types'
-import ScreenContainer from '~/components/ScreenContainer'
 import { useGetStoredAuthValues } from '~/hooks/deviceAuth'
 import { useLoader } from '~/hooks/loader'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
