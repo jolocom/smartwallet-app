@@ -14,7 +14,7 @@ import Animated, {
 import {
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_WIDTH,
-} from '~/components/Cards/DocumentSectionCards/consts'
+} from '~/components/Cards/consts'
 import ScreenContainer from '~/components/ScreenContainer'
 
 const VERTICAL_MARGIN = 12
@@ -24,27 +24,20 @@ interface CardProps {
   idx: number
   onPress: () => void
   isExpanded: boolean
-  expandVelocity?: number
 }
 const Card: React.FC<CardProps> = React.memo(
-  ({ idx, onPress, isExpanded, expandVelocity }) => {
+  ({ idx, onPress, isExpanded }) => {
     const expandedMargin = -(
       ORIGINAL_DOCUMENT_CARD_HEIGHT -
       VERTICAL_MARGIN -
       VISIBLE_HEADER
     )
 
-    useEffect(() => {
-      if (expandVelocity) {
-        console.log({ expandVelocity })
-      }
-    }, [expandVelocity])
-
     const springConfig: Animated.WithSpringConfig = {
       damping: 15,
       mass: 1,
       stiffness: 200,
-      velocity: expandVelocity,
+      velocity: 2,
     }
 
     const timingConfig = {
@@ -89,7 +82,6 @@ const Card: React.FC<CardProps> = React.memo(
 
 const CardStack = () => {
   const [expandedId, setExpandedId] = useState<number | null>(null)
-  const [expandVelocity, setExpandVelocity] = useState<number>()
   //const scrollRef = useAnimatedRef<Animated.ScrollView>()
 
   const handlePress = (id: number) => {
@@ -108,7 +100,7 @@ const CardStack = () => {
         if (expandedId) {
           console.log(JSON.stringify(event, null, 2))
           runOnJS(resetStack)()
-          runOnJS(setExpandVelocity)(event.velocity?.y)
+          //runOnJS(setExpandVelocity)(event.velocity?.y)
         }
       },
     },
@@ -134,7 +126,6 @@ const CardStack = () => {
               idx={n}
               onPress={() => handlePress(n)}
               isExpanded={expandedId !== null ? n === expandedId + 1 : false}
-              expandVelocity={expandVelocity}
             />
           )
         })}
