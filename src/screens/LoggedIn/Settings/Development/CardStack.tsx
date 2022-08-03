@@ -29,7 +29,7 @@ interface CardProps {
   isExpanded: boolean
 }
 const Card: React.FC<CardProps> = React.memo(
-  ({ idx, onPress, isExpanded }) => {
+  ({ idx, onPress, isExpanded, children }) => {
     const expandedMargin = -(
       ORIGINAL_DOCUMENT_CARD_HEIGHT -
       VERTICAL_MARGIN -
@@ -58,7 +58,6 @@ const Card: React.FC<CardProps> = React.memo(
       [isExpanded],
     )
 
-
     return (
       <AnimatedTouchableOpacity
         onPress={onPress}
@@ -69,24 +68,25 @@ const Card: React.FC<CardProps> = React.memo(
             height: ORIGINAL_DOCUMENT_CARD_HEIGHT,
             borderRadius: 14,
             marginBottom: VERTICAL_MARGIN,
-            backgroundColor: `rgb(${Math.floor(
-              Math.random() * 256,
-            )},${Math.floor(Math.random() * 256)},${Math.floor(
-              Math.random() * 256,
-            )})`,
             zIndex: idx,
+            backgroundColor: idx % 2 === 0 ? 'red' : 'blue',
           },
           animatedStyle,
         ]}
-      ></AnimatedTouchableOpacity>
+      >
+        {children}
+      </AnimatedTouchableOpacity>
     )
   },
   (prev, next) => prev.isExpanded === next.isExpanded,
 )
 
-const CardStack = () => {
+interface StackScrollViewProps<T> {
+  data: Array<T>
+}
+
+const StackScrollView: React.FC<StackScrollViewProps<unknown>> = ({ data }) => {
   const [expandedId, setExpandedId] = useState<number | null>(null)
-  //const scrollRef = useAnimatedRef<Animated.ScrollView>()
 
   const handlePress = (id: number) => {
     //scrollTo(scrollRef, 0, ORIGINAL_DOCUMENT_CARD_HEIGHT / 2, true)
@@ -112,28 +112,36 @@ const CardStack = () => {
   )
 
   return (
+    <Animated.ScrollView
+      onScroll={scrollHandler}
+      //ref={scrollRef}
+      scrollEventThrottle={4}
+      contentContainerStyle={{
+        paddingVertical: 40,
+        width: '100%',
+        paddingTop: 80,
+      }}
+    >
+      {data.map((n, i) => {
+        return (
+          <Card
+            key={i}
+            idx={i}
+            onPress={() => handlePress(i)}
+            isExpanded={expandedId !== null ? n === expandedId + 1 : false}
+          />
+        )
+      })}
+    </Animated.ScrollView>
+  )
+}
+
+const CardStack = () => {
+  //const scrollRef = useAnimatedRef<Animated.ScrollView>()
+
+  return (
     <ScreenContainer>
-      <Animated.ScrollView
-        onScroll={scrollHandler}
-        //ref={scrollRef}
-        scrollEventThrottle={4}
-        contentContainerStyle={{
-          paddingVertical: 40,
-          width: '100%',
-          paddingTop: 80,
-        }}
-      >
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => {
-          return (
-            <Card
-              key={n}
-              idx={n}
-              onPress={() => handlePress(n)}
-              isExpanded={expandedId !== null ? n === expandedId + 1 : false}
-            />
-          )
-        })}
-      </Animated.ScrollView>
+      <StackScrollView data={[0, 1, 2, 3, 4, 5]} />
     </ScreenContainer>
   )
 }
