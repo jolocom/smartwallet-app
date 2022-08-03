@@ -17,6 +17,9 @@ import {
 } from '~/components/Cards/consts'
 import ScreenContainer from '~/components/ScreenContainer'
 
+const AnimatedTouchableOpacity =
+  Animated.createAnimatedComponent(TouchableOpacity)
+
 const VERTICAL_MARGIN = 12
 const VISIBLE_HEADER = 40
 
@@ -32,7 +35,6 @@ const Card: React.FC<CardProps> = React.memo(
       VERTICAL_MARGIN -
       VISIBLE_HEADER
     )
-
     const springConfig: Animated.WithSpringConfig = {
       damping: 15,
       mass: 1,
@@ -56,9 +58,11 @@ const Card: React.FC<CardProps> = React.memo(
       [isExpanded],
     )
 
+
     return (
-      <Animated.View
-        onTouchEnd={onPress}
+      <AnimatedTouchableOpacity
+        onPress={onPress}
+        activeOpacity={1}
         style={[
           {
             width: ORIGINAL_DOCUMENT_CARD_WIDTH,
@@ -74,7 +78,7 @@ const Card: React.FC<CardProps> = React.memo(
           },
           animatedStyle,
         ]}
-      ></Animated.View>
+      ></AnimatedTouchableOpacity>
     )
   },
   (prev, next) => prev.isExpanded === next.isExpanded,
