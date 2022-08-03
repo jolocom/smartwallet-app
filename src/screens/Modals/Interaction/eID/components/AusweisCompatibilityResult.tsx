@@ -1,25 +1,45 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { ErrorIcon, PurpleTickSuccess, SuccessTick } from '~/assets/svg'
+import { StyleSheet, View } from 'react-native'
+import {
+  ErrorIcon,
+  PurpleTickSuccess,
+  SuccessTick,
+  ErrorIconYellow,
+} from '~/assets/svg'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
-import { JoloTextSizes } from '~/utils/fonts'
 import { AusweisStackParamList } from '..'
 import { eIDScreens } from '../types'
 import BP from '~/utils/breakpoints'
 import { useGoBack } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
+import Option from '~/screens/LoggedIn/Settings/components/Option'
+import Btn from '~/components/Btn'
+import BottomSheet from '~/components/BottomSheet'
 
-const SuccessResult: React.FC<{ title: string }> = ({ title }) => {
+interface ResultProps {
+  result: 'success' | 'error'
+  title: string
+  color?: Colors
+}
+
+const Result: React.FC<ResultProps> = ({ title, color, result }) => {
   return (
-    <View style={styles.successContainer}>
-      <JoloText size={JoloTextSizes.big}>{title}</JoloText>
-      <View style={styles.successTickContainer}>
-        <PurpleTickSuccess />
-      </View>
-    </View>
+    <Option customStyles={{ width: '100%', backgroundColor: Colors.mainDark }}>
+      <Option.Title
+        title={title}
+        customStyles={{ width: '80%', color: color }}
+      />
+      <Option.IconContainer>
+        {result === 'success' ? (
+          <PurpleTickSuccess w={20} h={20} />
+        ) : (
+          <ErrorIconYellow />
+        )}
+      </Option.IconContainer>
+    </Option>
   )
 }
 
@@ -29,110 +49,120 @@ export const AusweisCompatibilityResult: React.FC = () => {
   const { inoperative, deactivated } =
     useRoute<RouteProp<AusweisStackParamList, eIDScreens.CompatibilityResult>>()
       .params
+  const [sheetVisible, setSheetVisible] = useState(true)
 
   const isFailed = inoperative || deactivated
 
-  useEffect(() => {
-    const id = setTimeout(() => {
+  const handleDone = () => {
+    setSheetVisible(false)
+    setTimeout(() => {
       goBack()
-    }, 5000)
-
-    return () => {
-      clearTimeout(id)
-    }
-  }, [])
+    }, 100)
+  }
 
   return (
-    <ScreenContainer backgroundColor={Colors.black}>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={goBack}
-        style={{ justifyContent: 'flex-end', alignItems: 'center' }}
-        testID="dismissable-background"
+    <ScreenContainer backgroundColor={Colors.black65} isFullscreen>
+      <BottomSheet
+        visible={sheetVisible}
+        customStyles={styles.sheet}
+        onDismiss={handleDone}
       >
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <JoloText kind={JoloTextKind.title}>
-              {t('AusweisCompatibilityStatus.header')}
-            </JoloText>
-          </View>
-          <View style={styles.resultContainer}>
-            {isFailed ? (
-              <JoloText size={JoloTextSizes.big} color={Colors.error}>
-                {t('AusweisCompatibilityStatus.error')}
-              </JoloText>
-            ) : (
-              <>
-                <SuccessResult
-                  title={t('AusweisCompatibilityStatus.status1')}
-                />
-                <SuccessResult
-                  title={t('AusweisCompatibilityStatus.status2')}
-                />
-                <SuccessResult
-                  title={t('AusweisCompatibilityStatus.status3')}
-                />
-              </>
-            )}
-          </View>
-        </View>
-        <View style={styles.footerContainer}>
-          <View style={styles.iconContainer}>
-            {isFailed ? (
+        <View style={styles.iconContainer}>
+          <View style={styles.icon}>
+            {isFailed || deactivated ? (
               <ErrorIcon color={Colors.white90} />
             ) : (
               <SuccessTick color={Colors.white90} />
             )}
           </View>
-          <JoloText color={Colors.white80} size={JoloTextSizes.big}>
-            {isFailed
-              ? t('AusweisCompatibilityStatus.error')
-              : t('AusweisCompatibilityStatus.success')}
+        </View>
+        <View style={styles.headerContainer}>
+          <JoloText kind={JoloTextKind.title}>
+            {t('AusweisCompatibilityStatus.header')}
           </JoloText>
         </View>
-      </TouchableOpacity>
+        <View style={styles.resultContainer}>
+          <View>
+            {isFailed ? (
+              <Result
+                result={'error'}
+                title={t('AusweisCompatibilityStatus.status1')}
+                color={Colors.error}
+              />
+            ) : (
+              <Result
+                result={'success'}
+                title={t('AusweisCompatibilityStatus.status1')}
+                color={Colors.white90}
+              />
+            )}
+            {deactivated ? (
+              <Result
+                result={'error'}
+                title={t('AusweisCompatibilityStatus.status2')}
+                color={Colors.error}
+              />
+            ) : (
+              <Result
+                result={'success'}
+                title={t('AusweisCompatibilityStatus.status2')}
+                color={Colors.white90}
+              />
+            )}
+            {inoperative ? (
+              <Result
+                result={'error'}
+                title={t('AusweisCompatibilityStatus.status3')}
+                color={Colors.error}
+              />
+            ) : (
+              <Result
+                result={'success'}
+                title={t('AusweisCompatibilityStatus.status3')}
+                color={Colors.white90}
+              />
+            )}
+          </View>
+        </View>
+        <View style={styles.btnContainer}>
+          <Btn onPress={handleDone}>{t('CredentialForm.confirmBtn')}</Btn>
+        </View>
+      </BottomSheet>
     </ScreenContainer>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: BP({ default: 64, small: 44, xsmall: 44 }),
-  },
   headerContainer: {
-    justifyContent: 'flex-end',
     marginBottom: BP({ default: 36, large: 72 }),
   },
   resultContainer: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 52,
+    width: '100%',
   },
   iconContainer: {
+    marginBottom: 20,
+  },
+  icon: {
+    marginTop: -33,
     borderRadius: 34,
     borderWidth: 3,
     width: 67,
     height: 67,
     padding: 17,
     borderColor: Colors.white90,
-    alignItems: 'center',
+    backgroundColor: Colors.mainDark,
     justifyContent: 'center',
-    marginBottom: 20,
   },
-  successContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
+  btnContainer: {
+    width: '100%',
+    marginBottom: 24,
+    marginTop: 36,
   },
-  successTickContainer: {
-    width: 20,
-    height: 20,
-    marginTop: 16,
-  },
-  footerContainer: {
-    flex: 1,
-    alignItems: 'center',
+  sheet: {
+    backgroundColor: Colors.mainDark,
+    marginHorizontal: 8,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    paddingHorizontal: 16,
   },
 })

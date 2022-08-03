@@ -3,12 +3,8 @@ import { createSelector } from 'reselect'
 import { RootReducerI } from '~/types/reducer'
 import {
   AttributeTypes,
-  CredentialsByCategory,
   DisplayCredentialDocument,
-  DisplayCredentialOther,
-  OfferedCredential,
-  RequestedCredentialsByCategoryByType,
-  CredentialCategories,
+  CredentialsByType,
 } from '~/types/credentials'
 import { InteractionDetails } from './types'
 import {
@@ -19,12 +15,7 @@ import {
   isNotActiveInteraction,
 } from './guards'
 import BP from '~/utils/breakpoints'
-import {
-  mapDisplayToCustomDisplay,
-  reduceCustomDisplayCredentialsByType,
-  transformCategoriesTo,
-} from '~/hooks/signedCredentials/utils'
-import { categorizedCredentials } from '~/utils/categoriedCredentials'
+import { mapDisplayToDocuments } from '~/hooks/signedCredentials/utils'
 import { getObjectFirstValue } from '~/utils/objectUtils'
 import { AttributeI } from '~/modules/attributes/types'
 import { attributeConfig } from '~/config/claims'
@@ -170,41 +161,28 @@ export const getIsFullscreenCredShare = createSelector(
   },
 )
 
-/**
- * Getting requested credentials by type and category
- * @category used to separate into Documents and Other
- * @type used to group credentials by type and present them in a carousel
- */
-const getRequestedCredentialsByCategoryByType = createSelector(
-  [getCredShareDetails],
-  (shareDetails) => {
-    const groupCategoriesByType = transformCategoriesTo(
-      categorizedCredentials(shareDetails.credentials),
-    )
-    return groupCategoriesByType(reduceCustomDisplayCredentialsByType)
-  },
-)
+export const getRequestedDocumentsByType = createSelector(
+  [getRequestedCredentials],
+  (requestedCredentials) => {
+    const requestedDocuments = mapDisplayToDocuments(requestedCredentials)
+    return requestedDocuments.reduce<
+      Array<CredentialsByType<DisplayCredentialDocument>>
+    >((acc, document) => {
+      const typeObject = acc.find((t) => t.value === document.type)
 
-export const getCustomRequestedCredentialsByCategoryByType = createSelector(
-  [getRequestedCredentialsByCategoryByType],
-  (requestedCategories) => {
-    return Object.keys(requestedCategories).reduce<
-      RequestedCredentialsByCategoryByType<
-        DisplayCredentialDocument | DisplayCredentialOther
-      >
-    >(
-      (categories, catName) => {
-        const categoryName = catName as CredentialCategories
-        categories[categoryName] = requestedCategories[categoryName].map(
-          (d) => ({
-            ...d,
-            credentials: d.credentials.map(mapDisplayToCustomDisplay),
-          }),
-        )
-        return categories
-      },
-      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
-    )
+      if (!typeObject) {
+        acc = [
+          ...acc,
+          { key: 'type', value: document.type, credentials: [document] },
+        ]
+      } else {
+        typeObject.credentials.push(document)
+        acc = acc.filter((t) => t.value !== document.type)
+        acc = [...acc, typeObject]
+      }
+
+      return acc
+    }, [])
   },
 )
 
@@ -288,35 +266,6 @@ export const getOfferedCredentials = createSelector(
   (ssi) => ssi.credentials.service_issued,
 )
 
-/**
- * Gets the categorized @OfferedCredential from the @interactionDetails.
- */
-export const getOfferedCredentialsByCategories = createSelector(
-  [getCredOfferDetails],
-  (ssi) => {
-    // TODO: will be moving away from the `credentials.service_issued` structure in favor of
-    // just credentials, since during this flow we only receive "service issued" credentials
-    // anyways
-    return ssi.credentials.service_issued.reduce<
-      CredentialsByCategory<OfferedCredential>
-    >(
-      (acc, cred) => {
-        acc[cred.category] = [...acc[cred.category], cred]
-
-        return acc
-      },
-      { [CredentialCategories.document]: [], [CredentialCategories.other]: [] },
-    )
-  },
-)
-
-export const getServiceImage = createSelector(
-  [getInteractionCounterparty],
-  (counterparty) => {
-    return counterparty.publicProfile?.image
-  },
-)
-
 export const getServiceDescription = createSelector(
   [getInteractionCounterparty],
   (counterparty) => {
@@ -324,6 +273,7 @@ export const getServiceDescription = createSelector(
       did: counterparty.did,
       name: counterparty.publicProfile?.name,
       image: counterparty.publicProfile?.image,
+      serviceUrl: counterparty.publicProfile?.url,
       isAnonymous: counterparty.publicProfile === undefined,
     }
   },

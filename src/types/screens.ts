@@ -64,6 +64,7 @@ export enum ScreenNames {
   PrivacyPolicy = 'PrivacyPolicy',
 
   //Development
+  CardsTest = 'CardsTest',
   ButtonsTest = 'ButtonsTest',
   LoaderTest = 'LoaderTest',
   NotificationsTest = 'NotificationsTest',
@@ -73,6 +74,10 @@ export enum ScreenNames {
   InteractionPasteTest = 'InteractionPasteTest',
   CardStack = 'CardStack',
 
-  //Modals
+  //Global Screens
   GlobalModals = 'GlobalModals',
+  TermsConsentStack = 'TermsConsentStack',
+  TermsConsent = 'TermsConsent',
+  ConsentTermsOfService = 'ConsentTermsOfService',
+  ConsentPrivacyPolicy = 'ConsentPrivacyPolicy',
 }

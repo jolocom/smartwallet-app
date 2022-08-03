@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
 import { ScreenNames } from '~/types/screens'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
@@ -18,7 +17,6 @@ import LoaderTest from './Settings/Development/DevLoaders'
 import CardStack from './Settings/Development/CardStack'
 import InputTest from './Settings/Development/InputTest'
 import PasscodeTest from './Settings/Development/PasscodeTest'
-import { getIsTermsConsentOutdated } from '~/modules/account/selectors'
 import MainTabs from './MainTabs'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
@@ -41,10 +39,11 @@ import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { Colors } from '~/utils/colors'
 import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
-import { setTermsConsentVisibility } from '~/modules/account/actions'
 import Interaction from '../Modals/Interaction'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
+import { CardTest } from './Settings/Development/CardsTest'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -87,12 +86,15 @@ export type MainStackParamList = {
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
   [ScreenNames.FieldDetails]: {
-    fields: IField[]
+    fields: DisplayVal[]
     title?: string
     photo?: string
     backgroundColor?: Colors
+    issuerIcon?: string
+    contextIcons?: string[]
   }
   // DEV
+  [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
   [ScreenNames.ButtonsTest]: undefined
   [ScreenNames.CollapsibleTest]: undefined
@@ -111,15 +113,6 @@ export type MainStackParamList = {
 const MainStack = createStackNavigator<MainStackParamList>()
 
 const Main: React.FC = () => {
-  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (isTermsConsentOutdated) {
-      dispatch(setTermsConsentVisibility(true))
-    }
-  }, [isTermsConsentOutdated])
-
   return (
     <MainStack.Navigator
       headerMode="none"
@@ -204,6 +197,7 @@ const Main: React.FC = () => {
             name={ScreenNames.LoaderTest}
             component={LoaderTest}
           />
+          <MainStack.Screen name={ScreenNames.CardsTest} component={CardTest} />
           <MainStack.Screen
             name={ScreenNames.NotificationsTest}
             component={NotificationsTest}
@@ -232,6 +226,7 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
+        options={screenTransitionSlideFromBottom}
       />
       <MainStack.Screen
         name={ScreenNames.Interaction}
@@ -276,7 +271,7 @@ const Main: React.FC = () => {
           cardStyle: {
             backgroundColor: 'transparent',
           },
-          ...screenTransitionSlideFromBottom,
+          ...transparentModalFadeOptions,
         }}
       />
       {/* Modals -> End */}

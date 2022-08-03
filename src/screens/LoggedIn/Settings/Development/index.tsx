@@ -98,6 +98,9 @@ const DevelopmentSection = () => {
           <Option onPress={() => redirect(ScreenNames.NotificationsTest)}>
             <Option.Title title="Notifications" />
           </Option>
+          <Option onPress={() => redirect(ScreenNames.CardsTest)}>
+            <Option.Title title="Cards" />
+          </Option>
           <Option onPress={() => redirect(ScreenNames.InputTest)}>
             <Option.Title title="Inputs" />
           </Option>

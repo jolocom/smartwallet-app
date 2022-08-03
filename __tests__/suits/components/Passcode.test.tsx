@@ -1,12 +1,6 @@
 import React from 'react'
-import {
-  fireEvent,
-  render,
-  waitFor,
-  cleanup,
-} from '@testing-library/react-native'
+import { render, waitFor, cleanup } from '@testing-library/react-native'
 import Passcode from '~/components/Passcode'
-import { ScreenNames } from '~/types/screens'
 import { inputPasscode } from '../../utils/inputPasscode'
 
 const mockSubmit = jest.fn()

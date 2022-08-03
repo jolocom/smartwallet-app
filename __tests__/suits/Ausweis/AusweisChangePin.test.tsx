@@ -1,19 +1,18 @@
+import React from 'react'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
-
-import AusweisChangePin from '~/screens/LoggedIn/eID/components/AusweisChangePin'
-import { AusweisScannerParams } from '~/screens/LoggedIn/eID/types'
+import AusweisChangePin from '~/screens/Modals/Interaction/eID/components/AusweisChangePin'
+import { AusweisScannerParams } from '~/screens/Modals/Interaction/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { useGoBack, usePopStack } from '~/hooks/navigation'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import {
   AUSWEIS_SUPPORT_EMAIL,
   AUSWEIS_SUPPORT_PHONE,
-} from '~/screens/LoggedIn/eID/constants'
+} from '~/screens/Modals/Interaction/eID/constants'
 
 const mockOpenUrl = jest.fn()
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
@@ -36,14 +35,17 @@ describe('Ausweis change pin screen', () => {
   const mockNavigate = jest.fn()
   const mockShowScanner = jest.fn()
   let registeredHandlers: Partial<EventHandlers>
+
   beforeAll(() => {
-    // mock redux store values that are beng used on the screen
+    // mock redux store values that are being used on the screen
     mockSelectorReturn({
       toasts: {
         active: null,
       },
-      ausweis: {
-        scannerKey: '123',
+      interaction: {
+        ausweis: {
+          scannerKey: '123',
+        },
       },
     })
     ;(useNavigation as jest.Mock).mockReturnValue({
@@ -72,15 +74,18 @@ describe('Ausweis change pin screen', () => {
       showScanner: mockShowScanner,
     })
   })
+
   afterEach(() => {
     mockNavigate.mockClear()
     mockShowScanner.mockClear()
     ;(aa2Module.startChangePin as jest.Mock).mockClear()
   })
+
   test('is displayed according to the designs', () => {
     const { toJSON } = renderWithSafeArea(<AusweisChangePin />)
     expect(toJSON()).toMatchSnapshot()
   })
+
   test('user can proceed with changing transport pin', async () => {
     const { getByText } = renderWithSafeArea(<AusweisChangePin />)
     const changeTransportPinBtn = getByText('AusweisChangePin.transportPinBtn')
@@ -102,6 +107,7 @@ describe('Ausweis change pin screen', () => {
     })
     expect(mockShowScanner).toHaveBeenCalledTimes(1)
   })
+
   test('user can proceed with changing 6-digit pin', async () => {
     const { getByText } = renderWithSafeArea(<AusweisChangePin />)
     const changePinBtn = getByText('AusweisChangePin.pinBtn')
@@ -145,6 +151,7 @@ describe('Ausweis change pin screen', () => {
       )
     })
   })
+
   test('user cannot proceed with changing 6-digit pin, because card is blocked', async () => {
     const { getByText } = renderWithSafeArea(<AusweisChangePin />)
     const changePinBtn = getByText('AusweisChangePin.pinBtn')
@@ -172,6 +179,7 @@ describe('Ausweis change pin screen', () => {
       )
     })
   })
+
   test('user is able to navigate to email app', async () => {
     const { getByText } = renderWithSafeArea(<AusweisChangePin />)
     const contactLink = getByText(AUSWEIS_SUPPORT_EMAIL)

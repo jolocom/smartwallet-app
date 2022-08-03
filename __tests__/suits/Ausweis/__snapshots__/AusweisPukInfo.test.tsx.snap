@@ -118,7 +118,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
             <RNSVGGroup>
               <RNSVGPath
                 d="M24.48 7.438H3.34l5.362-5.469a.536.536 0 00.152-.375V.53A.53.53 0 008.334 0a.516.516 0 00-.369.156L.153 8.124a.539.539 0 000 .752l7.812 7.968c.15.152.372.198.568.116a.53.53 0 00.321-.491v-1.063a.536.536 0 00-.152-.375L3.34 9.562h21.138c.288 0 .521-.237.521-.53V7.968a.526.526 0 00-.52-.531z"
-                fill={-855310}
+                fill={4294111986}
                 fillRule={1}
                 propList={
                   Array [
@@ -166,7 +166,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
           style={
             Array [
               Object {
-                "paddingTop": undefined,
+                "paddingTop": 5,
                 "textAlign": "center",
               },
               Object {
@@ -186,7 +186,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
           style={
             Array [
               Object {
-                "paddingTop": undefined,
+                "paddingTop": 5,
                 "textAlign": "center",
               },
               Object {
@@ -251,12 +251,12 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
                     "stroke",
                   ]
                 }
-                stroke={-1}
+                stroke={4294967295}
               >
                 <RNSVGCircle
                   cx={138}
                   cy={138}
-                  fill={-15263977}
+                  fill={4279703319}
                   propList={
                     Array [
                       "fill",
@@ -278,7 +278,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
                 >
                   <RNSVGPath
                     d="M190.08 103.814l17.272 15.252a7.832 7.832 0 012.648 5.871v88.095c0 5.505-4.463 9.968-9.968 9.968H76.968c-5.505 0-9.968-4.463-9.968-9.968v-89.045c0-2.32 1.028-4.52 2.808-6.007l17.368-14.525h0"
-                    fill={-15724528}
+                    fill={4279242768}
                     propList={
                       Array [
                         "fill",
@@ -287,7 +287,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
                   />
                   <RNSVGPath
                     d="M207.154 220.51c-25.375-26.092-43.635-43.051-54.78-50.878-11.147-7.828-23.716-5.1-37.707 8.183"
-                    fill={-15724528}
+                    fill={4279242768}
                     propList={
                       Array [
                         "fill",
@@ -299,7 +299,7 @@ exports[`Ausweis PUK info screen is displayed according to the designs 1`] = `
                   />
                   <RNSVGPath
                     d="M87.276 140.101V58.984A4.984 4.984 0 0192.26 54h92.48a4.984 4.984 0 014.984 4.984v67.241h0"
-                    fill={-15724528}
+                    fill={4279242768}
                     propList={
                       Array [
                         "fill",

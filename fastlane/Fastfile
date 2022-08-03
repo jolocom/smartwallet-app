@@ -28,8 +28,12 @@ end
 desc 'Get API token for MS AppCenter'
 lane :get_appcenter_token do
   begin
-    File.read("common-secrets/appcenter/api_key.txt")
+    sh("git clone dev@hetz1.jolocom.io:common-secrets -b master")
+  rescue
+    puts "common-secrets already exists"
   end
+
+  File.read("common-secrets/appcenter/api_key.txt")
 end
 
 desc 'Get Sentry Auth Token for iOS and Android'
@@ -124,7 +128,7 @@ platform :android do
   desc "Clones the secrets repo for android and provides the keystore, the store API key and returns the keystore Password"
   lane :get_secrets do
     begin
-      sh("git clone dev@hetz1.jolocom.io:android-secrets")
+      sh("git clone dev@hetz1.jolocom.io:android-secrets -b master")
     rescue
       puts "secrets already present"
     end
@@ -146,7 +150,12 @@ platform :android do
   # NOTE: you should run build lane from the root dir of the project
   lane :build do
     releaseFilePath = File.join(Dir.pwd, "android-secrets", "JoloSmartWallet.keystore")
-    #build_android_app(task: 'clean')
+    build_android_app(
+      task: 'clean',
+      project_dir: './android',
+      gradle_path: './gradlew',
+      print_command: true
+    )
     sentry_auth
 
     keyPass = get_secrets.strip
