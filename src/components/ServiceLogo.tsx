@@ -9,6 +9,7 @@ import {
 import { useToasts } from '~/hooks/toasts'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
+import LinearGradient from 'react-native-linear-gradient'
 
 interface Props {
   source?: string
@@ -29,12 +30,28 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
   }
 
   return source ? (
-    <TouchableOpacity
-      onPress={serviceUrl && handleRedirectToCounterparty}
-      activeOpacity={serviceUrl ? 0.9 : 1}
-    >
-      <Image style={styles.image} source={{ uri: source }} />
-    </TouchableOpacity>
+    <View>
+      <LinearGradient
+        start={{ x: 1.0, y: 0.3 }}
+        end={{ x: 1.0, y: 1.0 }}
+        style={{
+          width: 84,
+          height: 84,
+          borderRadius: 42,
+          borderWidth: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        colors={[Colors.azureRadiance, Colors.white]}
+      >
+        <TouchableOpacity
+          onPress={serviceUrl && handleRedirectToCounterparty}
+          activeOpacity={serviceUrl ? 0.9 : 1}
+        >
+          <Image style={styles.image} source={{ uri: source }} />
+        </TouchableOpacity>
+      </LinearGradient>
+    </View>
   ) : (
     <View style={[styles.image, { backgroundColor: Colors.white }]}>
       <InitiatorPlaceholderIcon />
