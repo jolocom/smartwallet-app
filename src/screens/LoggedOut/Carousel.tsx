@@ -9,10 +9,10 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import {
   Walkthrough1_de,
-  Walkthrough1_en,
+  Walkthrough1,
   Walkthrough2,
   Walkthrough3_de,
-  Walkthrough3_en,
+  Walkthrough3,
 } from '~/assets/images'
 import useTranslation from '~/hooks/useTranslation'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
@@ -36,7 +36,7 @@ const CustomCarousel = () => {
 
   const walkthroughData = [
     {
-      background: currentLanguage === 'en' ? Walkthrough1_en : Walkthrough1_de,
+      background: currentLanguage === 'en' ? Walkthrough1 : Walkthrough1_de,
       header: t('Walkthrough.titleOne'),
       paragraph: t('Walkthrough.descriptionOne'),
     },
@@ -46,7 +46,7 @@ const CustomCarousel = () => {
       paragraph: t('Walkthrough.descriptionTwo'),
     },
     {
-      background: currentLanguage === 'en' ? Walkthrough3_en : Walkthrough3_de,
+      background: currentLanguage === 'en' ? Walkthrough3 : Walkthrough3_de,
       header: t('Walkthrough.titleThree'),
       paragraph: t('Walkthrough.descriptionThree'),
     },
