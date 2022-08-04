@@ -1,3 +1,5 @@
-export { default as Walkthrough1 } from './walkthrough1.png'
+export { default as Walkthrough1_en } from './walkthrough1_en.png'
+export { default as Walkthrough1_de } from './walkthrough1_de.png'
 export { default as Walkthrough2 } from './walkthrough2.png'
-export { default as Walkthrough3 } from './walkthrough3.png'
+export { default as Walkthrough3_en } from './walkthrough3_en.png'
+export { default as Walkthrough3_de } from './walkthrough3_de.png'
