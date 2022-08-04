@@ -7,13 +7,21 @@ import {
   Platform,
 } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { Walkthrough1, Walkthrough2, Walkthrough3 } from '~/assets/images'
+import {
+  Walkthrough1_de,
+  Walkthrough1_en,
+  Walkthrough2,
+  Walkthrough3_de,
+  Walkthrough3_en,
+} from '~/assets/images'
 import useTranslation from '~/hooks/useTranslation'
 import AbsoluteBottom from '~/components/AbsoluteBottom'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
+import { useSelector } from 'react-redux'
+import { getCurrentLanguage } from '~/modules/account/selectors'
 
 const SLIDER_WIDTH = Dimensions.get('window').width + 80
 const ITEM_WIDTH = Dimensions.get('window').width
@@ -24,9 +32,11 @@ const CustomCarousel = () => {
 
   const [index, setIndex] = useState(0)
 
+  const currentLanguage = useSelector(getCurrentLanguage)
+
   const walkthroughData = [
     {
-      background: Walkthrough1,
+      background: currentLanguage === 'en' ? Walkthrough1_en : Walkthrough1_de,
       header: t('Walkthrough.titleOne'),
       paragraph: t('Walkthrough.descriptionOne'),
     },
@@ -36,7 +46,7 @@ const CustomCarousel = () => {
       paragraph: t('Walkthrough.descriptionTwo'),
     },
     {
-      background: Walkthrough3,
+      background: currentLanguage === 'en' ? Walkthrough3_en : Walkthrough3_de,
       header: t('Walkthrough.titleThree'),
       paragraph: t('Walkthrough.descriptionThree'),
     },
