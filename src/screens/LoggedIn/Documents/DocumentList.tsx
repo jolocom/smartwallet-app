@@ -19,6 +19,10 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { DisplayCredentialDocument } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
+import { StackScrollView } from '~/components/CardStack'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import { ORIGINAL_DOCUMENT_CARD_HEIGHT } from '~/components/Cards/consts'
+import { debugView } from '~/utils/dev'
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()
@@ -170,8 +174,27 @@ export const DocumentList = () => {
             description={t('Documents.documentsPlaceholderSubheader')}
           />
         ) : (
-          <CardList>
-            {documents.map((c, index) => {
+          <StackScrollView
+            data={[
+              { stackId: 'Favorites', data: documents },
+              { stackId: 'All', data: documents },
+            ]}
+            itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
+            visibleHeaderHeight={20}
+            itemDistance={12}
+            renderStack={(stack, Item) => {
+              return (
+                <ScreenContainer.Padding>
+                  <View style={{ width: '100%', justifyContent: 'center' }}>
+                    <JoloText kind={JoloTextKind.title}>
+                      {stack.stackId}
+                    </JoloText>
+                    {Item}
+                  </View>
+                </ScreenContainer.Padding>
+              )
+            }}
+            renderItem={(c) => {
               const hasImageFields = c.properties.some(
                 (prop) => prop.mime_type === ClaimMimeType.image_png,
               )
@@ -182,26 +205,22 @@ export const DocumentList = () => {
                 : getOptionalFields(c)
 
               return (
-                <ScreenContainer.Padding key={`${index}-${c.id}`}>
-                  <View style={styles.sectionContainer}>
-                    <DocumentCard
-                      onPress={() => handlePressDetails(c)}
-                      credentialName={c.name || t('General.unknown')}
-                      holderName={c.holderName}
-                      fields={fields}
-                      photo={c.photo}
-                      onHandleMore={() => handlePressMore(c)}
-                      backgroundColor={c.styles?.background?.color}
-                      backgroundImage={c.styles?.background?.image_url?.uri}
-                      issuerIcon={c.issuer?.publicProfile?.image}
-                      hasImageFields={hasImageFields}
-                      icons={getContextIcons(c)}
-                    />
-                  </View>
-                </ScreenContainer.Padding>
+                <DocumentCard
+                  onPress={() => handlePressDetails(c)}
+                  credentialName={c.name || t('General.unknown')}
+                  holderName={c.holderName}
+                  fields={fields}
+                  photo={c.photo}
+                  onHandleMore={() => handlePressMore(c)}
+                  backgroundColor={c.styles?.background?.color}
+                  backgroundImage={c.styles?.background?.image_url?.uri}
+                  issuerIcon={c.issuer?.publicProfile?.image}
+                  hasImageFields={hasImageFields}
+                  icons={getContextIcons(c)}
+                />
               )
-            })}
-          </CardList>
+            }}
+          />
         )}
       </View>
     </>
