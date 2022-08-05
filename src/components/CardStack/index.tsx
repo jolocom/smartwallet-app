@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import Animated, {
   runOnJS,
-  useAnimatedScrollHandler,
+  useAnimatedScrollHandler
 } from 'react-native-reanimated'
-import { debugView } from '~/utils/dev'
 import { StackItem, StackItemConfig } from './StackItem'
 
 export interface StackData<T extends { id: string }> {
@@ -55,7 +54,7 @@ export const StackScrollView = <T extends { id: string }>({
       onScroll={scrollHandler}
       //ref={scrollRef}
       scrollEventThrottle={4}
-      style={{ flex: 1, ...debugView() }}
+      style={{ flex: 1 }}
       contentContainerStyle={{
         paddingVertical: 40,
         paddingBottom: 400,

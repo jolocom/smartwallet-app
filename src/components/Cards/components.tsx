@@ -12,13 +12,14 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
+import useImagePrefetch from '~/hooks/useImagePrefetch'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import { DOCUMENT_HEADER_HEIGHT } from './consts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
-import useImagePrefetch from '~/hooks/useImagePrefetch'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -405,7 +406,7 @@ const styles = StyleSheet.create({
     borderRadius: 41,
   },
   headerContainer: {
-    height: 68,
+    height: DOCUMENT_HEADER_HEIGHT,
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',

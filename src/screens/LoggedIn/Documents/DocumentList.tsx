@@ -1,28 +1,33 @@
-import React, { useCallback } from 'react'
-import { useSelector } from 'react-redux'
-import { ScrollView, StyleSheet, View } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import React, { useMemo } from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { getAllDocuments } from '~/modules/credentials/selectors'
+import { ClaimMimeType } from '@jolocom/protocol-ts'
+import { DocumentCard } from '~/components/Cards'
+import {
+  DOCUMENT_HEADER_HEIGHT,
+  ORIGINAL_DOCUMENT_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_CARD_WIDTH,
+  ORIGINAL_DOCUMENT_SCREEN_WIDTH,
+} from '~/components/Cards/consts'
+import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimenstions'
+import { StackScrollView } from '~/components/CardStack'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
+import ScreenContainer from '~/components/ScreenContainer'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
-import { ScreenNames } from '~/types/screens'
-import useTranslation from '~/hooks/useTranslation'
 import {
   useCredentialOptionalFields,
   useDeleteCredential,
 } from '~/hooks/credentials'
-import { useToasts } from '~/hooks/toasts'
-import { usePopupMenu } from '~/hooks/popupMenu'
-import { DocumentCard } from '~/components/Cards'
-import { truncateString } from '~/utils/stringUtils'
-import ScreenContainer from '~/components/ScreenContainer'
-import { DisplayCredentialDocument } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
-import { ClaimMimeType } from '@jolocom/protocol-ts'
-import { StackScrollView } from '~/components/CardStack'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { ORIGINAL_DOCUMENT_CARD_HEIGHT } from '~/components/Cards/consts'
-import { debugView } from '~/utils/dev'
+import { usePopupMenu } from '~/hooks/popupMenu'
+import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
+import { getAllDocuments } from '~/modules/credentials/selectors'
+import { DisplayCredentialDocument } from '~/types/credentials'
+import { ScreenNames } from '~/types/screens'
+import { truncateString } from '~/utils/stringUtils'
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()
@@ -159,6 +164,16 @@ export const DocumentList = () => {
     return contextIcons
   }
 
+  const { scaleBy } = useMemo(
+    () =>
+      getCardDimensions(
+        ORIGINAL_DOCUMENT_CARD_HEIGHT,
+        ORIGINAL_DOCUMENT_CARD_WIDTH,
+        { originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH },
+      ),
+    [],
+  )
+
   if (!documents) return null
   return (
     <>
@@ -175,12 +190,9 @@ export const DocumentList = () => {
           />
         ) : (
           <StackScrollView
-            data={[
-              { stackId: 'Favorites', data: documents },
-              { stackId: 'All', data: documents },
-            ]}
+            data={[{ stackId: 'Favorites', data: documents }]}
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
-            visibleHeaderHeight={20}
+            visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
             itemDistance={12}
             renderStack={(stack, Item) => {
               return (
