@@ -32,10 +32,13 @@ import JoloText, {
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
 import { useToasts } from '~/hooks/toasts'
+import { TextLayoutEvent } from '~/types/props'
 
 const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
 const SCREEN_HEIGHT = Dimensions.get('window').height
+const NUM_OF_LINES = 4
+const LINE_HEIGHT = 32
 
 interface IProps {
   route: RouteProp<RootStackParamList, ScreenNames.DragToConfirm>
@@ -165,6 +168,23 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
     animateValues: { riseShadow, resetMagic },
   } = useMagicBtnAnimations(1200)
 
+  const [truncate, setTruncate] = useState<boolean | null>(null)
+
+  const shouldTruncateTitle = (e) => {
+    e.nativeEvent.layout.height / LINE_HEIGHT > NUM_OF_LINES
+      ? setTruncate(true)
+      : setTruncate(false)
+  }
+
+  const originalNrLines = useRef<number | null>(null)
+
+  const onTextLayout = (e: TextLayoutEvent) => {
+    console.log(e.nativeEvent.lines[3].text)
+    if (originalNrLines.current === null) {
+      originalNrLines.current = e.nativeEvent.lines.length
+    }
+  }
+
   useEffect(() => {
     if (isBallOverTheHole) {
       riseShadow.start()
@@ -183,9 +203,15 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       }}
     >
       <JoloText
+        // @ts-expect-error
+        onTextLayout={onTextLayout}
         color={Colors.white90}
         kind={JoloTextKind.title}
         weight={JoloTextWeight.regular}
+        customStyles={{ lineHeight: LINE_HEIGHT }}
+        // numberOfLines={4}
+        // ellipsizeMode={'tail'}
+        // onLayout={truncateTitle}
       >
         {title}
       </JoloText>
