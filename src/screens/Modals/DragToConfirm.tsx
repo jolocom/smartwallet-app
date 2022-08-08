@@ -48,8 +48,6 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const { title, cancelText, instructionText, onComplete } = route?.params
   const goBack = useGoBack()
 
-  const { scheduleErrorWarning } = useToasts()
-
   const holeRef = useRef<View>(null)
 
   const [isBallShown, setIsBallShown] = useState(true)
