@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // @ts-expect-error
 import { enabled as enablePrivacyOverlay } from 'react-native-privacy-snapshot'
 
+import { useInitDocuments } from '~/hooks/documents'
 import { setAppLocked } from '~/modules/account/actions'
 import {
   getIsAppLocked,
@@ -13,7 +14,6 @@ import { dismissLoader } from '~/modules/loader/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { ScreenNames } from '~/types/screens'
 import { useRedirect, useReplaceWith } from './navigation'
-import { useInitDocuments } from './signedCredentials'
 import { useAppBackgroundChange } from './useAppState'
 
 export const useInitApp = () => {

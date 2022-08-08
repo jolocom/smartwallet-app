@@ -4,6 +4,7 @@ import { Platform } from 'react-native'
 import { Agent } from 'react-native-jolocom'
 import { useDispatch } from 'react-redux'
 
+import { useInitDocuments } from '~/hooks/documents'
 import {
   setDid,
   setLocalAuth,
@@ -15,7 +16,6 @@ import { generateSecureRandomBytes } from '~/utils/generateBytes'
 import { ScreenshotManager } from '~/utils/screenshots'
 import { AgentContext } from '~/utils/sdk/context'
 import useTermsConsent from './consent'
-import { useInitDocuments } from './documents'
 import { useLoader } from './loader'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 import { useToasts } from './toasts'

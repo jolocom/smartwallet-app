@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux'
 
+import { useInitDocuments } from '~/hooks/documents'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { addCredentials } from '~/modules/credentials/actions'
 import { ScreenNames } from '~/types/screens'
-import { useInitDocuments } from '../documents'
 import { useCompleteInteraction } from './useCompleteInteraction'
 
 const useCredentialOfferSubmit = () => {
