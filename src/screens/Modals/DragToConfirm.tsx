@@ -31,7 +31,6 @@ import JoloText, {
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
-import { useToasts } from '~/hooks/toasts'
 import { TextLayoutEvent } from '~/types/props'
 
 const HOLE_DIAMETER = 100
