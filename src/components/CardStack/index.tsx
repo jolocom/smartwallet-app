@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Animated, {
   runOnJS,
-  useAnimatedScrollHandler
+  useAnimatedScrollHandler,
 } from 'react-native-reanimated'
 import { StackItem, StackItemConfig } from './StackItem'
 
@@ -52,7 +52,6 @@ export const StackScrollView = <T extends { id: string }>({
   return (
     <Animated.ScrollView
       onScroll={scrollHandler}
-      //ref={scrollRef}
       scrollEventThrottle={4}
       style={{ flex: 1 }}
       contentContainerStyle={{

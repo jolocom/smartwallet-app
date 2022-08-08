@@ -1,11 +1,10 @@
-import { useAgent } from './sdk'
+import { ClaimMimeType } from '@jolocom/protocol-ts'
+import moment from 'moment'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { deleteCredential } from '~/modules/credentials/actions'
 import { ClaimKeys, DisplayCredential } from '~/types/credentials'
-import { useTranslation } from 'react-i18next'
-import moment from 'moment'
-import { ClaimMimeType } from '@jolocom/protocol-ts'
-import { useCallback } from 'react'
+import { useAgent } from './sdk'
 
 export const useDeleteCredential = () => {
   const agent = useAgent()
@@ -51,7 +50,7 @@ export const useCredentialOptionalFields = () => {
         preview: false,
       },
       {
-        key: 'expire',
+        key: 'expires',
         label: t('Documents.expiresFieldLabel'),
         value: moment(credential.expires).format('DD.MM.YYYY'),
         mime_type: ClaimMimeType.text_plain,

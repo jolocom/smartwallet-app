@@ -42,6 +42,21 @@ function mapToBaseUICredential(c: SignedCredential): BaseUICredential {
   }
 }
 
+const getContextIcons = (c: DisplayCredentialDocument) => {
+  const heroIcon = c.styles?.hero?.uri
+  const thumbnailIcon = c.styles?.thumbnail?.uri
+  const contextIcons: string[] = []
+
+  if (heroIcon) {
+    contextIcons.push(heroIcon)
+  }
+  if (thumbnailIcon) {
+    contextIcons.push(thumbnailIcon)
+  }
+
+  return contextIcons
+}
+
 export async function mapCredentialsToDisplay(
   credentials: CredentialIssuer,
   c: SignedCredential,
@@ -105,13 +120,14 @@ export function mapDisplayToDocument(
     .filter((p) => p.preview === true)
     .map((p) => p.key!)
 
+  let icons = []
+
   return {
     ...credential,
     properties: updatedProperties,
     holderName,
     previewKeys,
     photo: photo?.trim(),
-    highlight: credential.id,
   }
 }
 

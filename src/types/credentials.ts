@@ -1,12 +1,12 @@
-import { KeyboardTypeOptions } from 'react-native'
 import {
   BaseMetadata,
-  CredentialDefinition,
   ClaimEntry,
+  CredentialDefinition,
 } from '@jolocom/protocol-ts'
+import { IdentitySummary } from '@jolocom/sdk'
 import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
-import { IdentitySummary } from '@jolocom/sdk'
+import { KeyboardTypeOptions } from 'react-native'
 import { ObjectSchema } from 'yup'
 
 export enum AttributeKeys {
@@ -78,13 +78,11 @@ export type DisplayCredential = { issuer: IdentitySummary | undefined } & {
   properties: Array<DisplayVal>
   previewKeys: Array<string>
   styles?: CredentialDefinition['styles']
-} & BaseUICredential
-
-export type DisplayCredentialDocument = DisplayCredential & {
   holderName?: string
   photo?: string
-  highlight?: string
-}
+  issuerIcon?: string
+  icons: string[]
+} & BaseUICredential
 
 export type CredentialsBy<BT, CT> = {
   key: BT

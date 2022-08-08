@@ -1,4 +1,4 @@
-import { DisplayCredential } from '~/types/credentials'
+import { Document } from '~/hooks/signedCredentials/types'
 
 export enum CredentialsActionType {
   setCredentials = 'setCredentials',
@@ -9,8 +9,8 @@ export enum CredentialsActionType {
 // Expressing dependency between action type and action payload;
 // key: action type, value: action payload
 export interface CredentialsActions {
-  [CredentialsActionType.setCredentials]: DisplayCredential[]
-  [CredentialsActionType.addCredentials]: DisplayCredential[]
+  [CredentialsActionType.setCredentials]: Document[]
+  [CredentialsActionType.addCredentials]: Document[]
   [CredentialsActionType.deleteCredential]: string
 }
 
@@ -21,5 +21,5 @@ export type CredentialsAction<A extends keyof CredentialsActions> = {
 }
 
 export interface CredentialsState {
-  all: DisplayCredential[]
+  all: Document[]
 }

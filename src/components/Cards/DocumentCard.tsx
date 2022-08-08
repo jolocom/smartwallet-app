@@ -6,16 +6,12 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
-import ScaledCard, { ScaledView } from './ScaledCard'
-import { useCredentialNameScale } from './hooks'
-import {
-  ORIGINAL_DOCUMENT_CARD_HEIGHT,
-  ORIGINAL_DOCUMENT_CARD_WIDTH,
-  ORIGINAL_DOCUMENT_SCREEN_WIDTH,
-} from './consts'
+import { ScanDocumentIcon } from '~/assets/svg'
+import { DocumentProperty } from '~/hooks/signedCredentials/types'
+import { TextLayoutEvent } from '~/types/props'
+import { Colors } from '~/utils/colors'
 import {
   DocumentBackgroundColor,
   DocumentBackgroundImage,
@@ -25,14 +21,18 @@ import {
   DocumentHolderName,
   DocumentPhoto,
 } from './components'
-import { TextLayoutEvent } from '~/types/props'
-import { Colors } from '~/utils/colors'
-import { ScanDocumentIcon } from '~/assets/svg'
+import {
+  ORIGINAL_DOCUMENT_CARD_HEIGHT,
+  ORIGINAL_DOCUMENT_CARD_WIDTH,
+  ORIGINAL_DOCUMENT_SCREEN_WIDTH,
+} from './consts'
+import { useCredentialNameScale } from './hooks'
+import ScaledCard, { ScaledView } from './ScaledCard'
 
 interface DocumentCardProps {
   credentialName: string
   onPress?: () => void
-  fields: Array<DisplayVal>
+  fields: Array<DocumentProperty>
   onHandleMore: () => void
   holderName?: string
   photo?: string
@@ -150,7 +150,6 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
       distance = distance - 12
     }
 
-    console.log({ distance })
     return distance
   }
 
