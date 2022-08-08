@@ -9,7 +9,7 @@ import {
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 import { ScanDocumentIcon } from '~/assets/svg'
-import { DocumentProperty } from '~/hooks/signedCredentials/types'
+import { DocumentProperty } from '~/hooks/documents/types'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import {

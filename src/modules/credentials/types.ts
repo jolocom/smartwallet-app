@@ -1,4 +1,4 @@
-import { Document } from '~/hooks/signedCredentials/types'
+import { Document } from '~/hooks/documents/types'
 
 export enum CredentialsActionType {
   setCredentials = 'setCredentials',

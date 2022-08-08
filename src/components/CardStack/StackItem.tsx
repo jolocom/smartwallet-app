@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -65,6 +65,7 @@ export const StackItem: React.FC<StackItemProps> = ({
         {
           marginBottom: itemDistance,
           zIndex: index,
+          alignItems: 'center',
         },
         animatedStyle,
       ]}

@@ -5,11 +5,11 @@ import {
 } from '@jolocom/sdk/js/interactionManager/types'
 
 import { FlowType, Interaction } from 'react-native-jolocom'
-import { useAgent } from '../sdk'
 import useTranslation from '~/hooks/useTranslation'
-import { useToasts } from '../toasts'
 import { CredentialRequestHandler } from '~/middleware/interaction/credentialRequestConstrains'
 import { getCounterpartyName } from '~/utils/dataMapping'
+import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({
   description: state.description,
@@ -64,9 +64,11 @@ export const useInteractionHandler = () => {
         break
       }
       case FlowType.CredentialOffer: {
+        console.log(JSON.stringify(state, null, 2))
         flowSpecificData = credentialOfferHandler(
           state as CredentialOfferFlowState,
         )
+        console.log(JSON.stringify(flowSpecificData))
         break
       }
       case FlowType.CredentialShare: {

@@ -7,6 +7,7 @@ export interface DocumentProperty {
   label?: string
   key: string
   value: string
+  preview: boolean
   mime_type: PropertyMimeType
 }
 

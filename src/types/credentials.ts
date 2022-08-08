@@ -8,6 +8,7 @@ import { CredentialDisplay, DisplayVal } from '@jolocom/sdk/js/credentials'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { KeyboardTypeOptions } from 'react-native'
 import { ObjectSchema } from 'yup'
+import { Document } from '~/hooks/documents/types'
 
 export enum AttributeKeys {
   emailAddress = 'emailAddress',
@@ -67,9 +68,10 @@ export type BaseUICredential = Pick<
   'id' | 'issued' | 'expires' | 'subject' | 'name'
 > & { type: string }
 
-export type OfferedCredential = Pick<BaseUICredential, 'type' | 'name'> & {
-  properties: DisplayVal[]
-}
+export type OfferedCredential = Pick<
+  Document,
+  'type' | 'name' | 'previewKeys' | 'issuer' | 'style' | 'properties'
+>
 
 export type OfferedCredentialDisplay = OfferedCredential &
   Pick<CredentialDisplay['display'], 'properties'>

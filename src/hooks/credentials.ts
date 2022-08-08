@@ -50,7 +50,7 @@ export const useCredentialOptionalFields = () => {
         preview: false,
       },
       {
-        key: 'expires',
+        key: 'expire',
         label: t('Documents.expiresFieldLabel'),
         value: moment(credential.expires).format('DD.MM.YYYY'),
         mime_type: ClaimMimeType.text_plain,

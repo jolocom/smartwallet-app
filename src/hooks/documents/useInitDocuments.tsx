@@ -35,7 +35,7 @@ export const useInitDocuments = () => {
 
     const previewKeys: string[] = []
     const mappedProperties = properties.map((p) => {
-      const base = pick(p, ['key', 'label', 'value', 'mime_type'])
+      const base = pick(p, ['key', 'label', 'value', 'mime_type', 'preview'])
       if (p.preview) previewKeys.push(p.key!)
 
       return base

@@ -1,4 +1,3 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React, { ReactNode, useEffect } from 'react'
 import {
   Image,
@@ -12,6 +11,7 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
+import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
@@ -182,7 +182,7 @@ export const DocumentHolderName: React.FC<{
 
 export const DocumentFields: React.FC<{
   // NOTE: fields to be (potentially) displayed on the card
-  fields: DisplayVal[]
+  fields: DocumentProperty[]
   // NOTE: (scaled) styles for the field label
   labelScaledStyle: TextStyle
   // NOTE: (scaled) styles for the field value
@@ -200,7 +200,7 @@ export const DocumentFields: React.FC<{
   // NOTE: allow fields taking up available space if possible
   allowOverflowingFields?: boolean
   // NOTE: called after calculating the fields that will be displayed
-  onFinishCalculation?: (displayedFields: DisplayVal[]) => void
+  onFinishCalculation?: (displayedFields: DocumentProperty[]) => void
 }> = ({
   fields,
   maxLines,
@@ -226,7 +226,7 @@ export const DocumentFields: React.FC<{
   rows = rows.splice(0, maxRows)
 
   useEffect(() => {
-    const fields = rows.reduce<DisplayVal[]>((acc, row) => {
+    const fields = rows.reduce<DocumentProperty[]>((acc, row) => {
       acc = [...acc, ...row]
 
       return acc
@@ -235,7 +235,7 @@ export const DocumentFields: React.FC<{
     onFinishCalculation && onFinishCalculation(fields)
   }, [rows])
 
-  const renderField = (field: DisplayVal) => {
+  const renderField = (field: DocumentProperty) => {
     return (
       <ScaledView
         key={field.key}

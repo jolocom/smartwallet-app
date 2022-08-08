@@ -58,7 +58,6 @@ export const StackScrollView = <T extends { id: string }>({
         paddingVertical: 40,
         paddingBottom: 400,
         width: '100%',
-        paddingTop: 80,
         alignItems: 'center',
       }}
     >
