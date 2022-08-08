@@ -13,10 +13,12 @@ import { dismissLoader } from '~/modules/loader/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { ScreenNames } from '~/types/screens'
 import { useRedirect, useReplaceWith } from './navigation'
+import { useInitDocuments } from './signedCredentials'
 import { useAppBackgroundChange } from './useAppState'
 
 export const useInitApp = () => {
   const lockState = useInitLock()
+  const { initialize: initDocuments } = useInitDocuments()
 
   useInitAusweis()
   useInitTerms()
@@ -24,6 +26,8 @@ export const useInitApp = () => {
   useEffect(() => {
     // @ts-ignore no types for now
     enablePrivacyOverlay(true)
+
+    initDocuments()
   }, [])
 
   return { ...lockState }

@@ -1,25 +1,25 @@
-import { useState, useEffect, useContext } from 'react'
-import { useDispatch } from 'react-redux'
 import { entropyToMnemonic, mnemonicToEntropy } from 'bip39'
+import { useContext, useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import { Agent } from 'react-native-jolocom'
+import { useDispatch } from 'react-redux'
 
-import { AgentContext } from '~/utils/sdk/context'
-import { useLoader } from './loader'
 import {
   setDid,
-  setLogged,
   setLocalAuth,
-  setMnemonicWarningVisibility,
+  setLogged,
   setMakingScreenshotDisability,
+  setMnemonicWarningVisibility,
 } from '~/modules/account/actions'
 import { generateSecureRandomBytes } from '~/utils/generateBytes'
+import { ScreenshotManager } from '~/utils/screenshots'
+import { AgentContext } from '~/utils/sdk/context'
 import useTermsConsent from './consent'
-import { makeInitializeCredentials, useCredentials } from './signedCredentials'
-import useTranslation from './useTranslation'
+import { useInitDocuments } from './documents'
+import { useLoader } from './loader'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 import { useToasts } from './toasts'
-import { ScreenshotManager } from '~/utils/screenshots'
+import useTranslation from './useTranslation'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
@@ -81,7 +81,6 @@ export const useWalletInit = () => {
 
       const idw = await agent.loadIdentity()
 
-      await makeInitializeCredentials(agent, idw.did, dispatch)()
       dispatch(setDid(idw.did))
       dispatch(setLogged(true))
 
@@ -104,12 +103,12 @@ export const useWalletReset = () => {
   const { checkConsent } = useTermsConsent()
   const dispatch = useDispatch()
   const agent = useAgent()
-  const { initializeCredentials } = useCredentials()
+  const { initialize: initDocuments } = useInitDocuments()
 
   return async () => {
     await checkConsent(agent)
     dispatch(setDid(agent.idw.did))
-    await initializeCredentials()
+    await initDocuments()
   }
 }
 
