@@ -25,7 +25,10 @@ import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import AbsoluteBottom from '../../components/AbsoluteBottom'
 import Btn, { BtnTypes } from '../../components/Btn'
-import JoloText from '../../components/JoloText'
+import JoloText, {
+  JoloTextKind,
+  JoloTextWeight,
+} from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
 import TruncatedJoloText from '~/components/TruncatedJoloText'
@@ -172,22 +175,6 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
     }
   }, [isBallOverTheHole])
 
-  const onTextLayout = (e) => {
-    const { lines } = e.nativeEvent
-    let text: string =
-      lines.length <= NUM_OF_LINES
-        ? lines
-            .splice(0, NUM_OF_LINES)
-            .map((line) => line.text)
-            .join('')
-        : lines
-            .splice(0, NUM_OF_LINES)
-            .map((line) => line.text)
-            .join('')
-            .slice(0, -4) + '...?'
-    setTruncatedText(text)
-  }
-
   return (
     <ScreenContainer
       backgroundColor={Colors.black}
@@ -197,7 +184,13 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
         paddingHorizontal: 36,
       }}
     >
-      <TruncatedJoloText text={title} numOfLines={NUM_OF_LINES} />
+      <TruncatedJoloText
+        text={title}
+        numOfLines={NUM_OF_LINES}
+        color={Colors.white90}
+        kind={JoloTextKind.title}
+        weight={JoloTextWeight.regular}
+      />
       <Animated.View
         ref={holeRef}
         style={[
