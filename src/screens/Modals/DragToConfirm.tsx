@@ -214,7 +214,6 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       </JoloText>
       <Animated.View
         ref={holeRef}
-        //onLayout={handleHoleLayout}
         style={[
           styles.hole,
           styles.holeContainer,
