@@ -31,7 +31,6 @@ import JoloText, {
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
-import { TextLayoutEvent } from '~/types/props'
 
 const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
@@ -48,6 +47,8 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const goBack = useGoBack()
 
   const holeRef = useRef<View>(null)
+
+  const [truncatedText, setTruncatedText] = useState('')
 
   const [isBallShown, setIsBallShown] = useState(true)
   const [holePosition, setHolePosition] = useState<LayoutRectangle | null>(null)
@@ -165,23 +166,6 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
     animateValues: { riseShadow, resetMagic },
   } = useMagicBtnAnimations(1200)
 
-  const [truncate, setTruncate] = useState<boolean | null>(null)
-
-  const shouldTruncateTitle = (e) => {
-    e.nativeEvent.layout.height / LINE_HEIGHT > NUM_OF_LINES
-      ? setTruncate(true)
-      : setTruncate(false)
-  }
-
-  const originalNrLines = useRef<number | null>(null)
-
-  const onTextLayout = (e: TextLayoutEvent) => {
-    console.log(e.nativeEvent.lines[3].text)
-    if (originalNrLines.current === null) {
-      originalNrLines.current = e.nativeEvent.lines.length
-    }
-  }
-
   useEffect(() => {
     if (isBallOverTheHole) {
       riseShadow.start()
@@ -189,6 +173,16 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       resetMagic.start()
     }
   }, [isBallOverTheHole])
+
+  const onTextLayout = (e) => {
+    const { lines } = e.nativeEvent
+    let text: string = lines
+      .splice(0, NUM_OF_LINES)
+      .map((line) => line.text)
+      .join('')
+    let construct: string = text.slice(0, -4) + '...?'
+    setTruncatedText(construct)
+  }
 
   return (
     <ScreenContainer
@@ -199,19 +193,31 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
         paddingHorizontal: 36,
       }}
     >
-      <JoloText
-        // @ts-expect-error
-        onTextLayout={onTextLayout}
-        color={Colors.white90}
-        kind={JoloTextKind.title}
-        weight={JoloTextWeight.regular}
-        customStyles={{ lineHeight: LINE_HEIGHT }}
-        // numberOfLines={4}
-        // ellipsizeMode={'tail'}
-        // onLayout={truncateTitle}
-      >
-        {title}
-      </JoloText>
+      {truncatedText ? (
+        <JoloText
+          color={Colors.white90}
+          kind={JoloTextKind.title}
+          weight={JoloTextWeight.regular}
+          customStyles={{ lineHeight: LINE_HEIGHT }}
+        >
+          {truncatedText}
+        </JoloText>
+      ) : (
+        <JoloText
+          // @ts-expect-error
+          onTextLayout={onTextLayout}
+          color={Colors.white90}
+          kind={JoloTextKind.title}
+          weight={JoloTextWeight.regular}
+          customStyles={{ lineHeight: LINE_HEIGHT }}
+          // numberOfLines={4}
+          // ellipsizeMode={'tail'}
+          // onLayout={truncateTitle}
+        >
+          {title}
+        </JoloText>
+      )}
+
       <Animated.View
         ref={holeRef}
         style={[
