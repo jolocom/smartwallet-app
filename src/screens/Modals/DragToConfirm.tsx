@@ -176,12 +176,18 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
 
   const onTextLayout = (e) => {
     const { lines } = e.nativeEvent
-    let text: string = lines
-      .splice(0, NUM_OF_LINES)
-      .map((line) => line.text)
-      .join('')
-    let construct: string = text.slice(0, -4) + '...?'
-    setTruncatedText(construct)
+    let text: string =
+      lines.length <= NUM_OF_LINES
+        ? lines
+            .splice(0, NUM_OF_LINES)
+            .map((line) => line.text)
+            .join('')
+        : lines
+            .splice(0, NUM_OF_LINES)
+            .map((line) => line.text)
+            .join('')
+            .slice(0, -4) + '...?'
+    setTruncatedText(text)
   }
 
   return (
@@ -210,14 +216,10 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
           kind={JoloTextKind.title}
           weight={JoloTextWeight.regular}
           customStyles={{ lineHeight: LINE_HEIGHT }}
-          // numberOfLines={4}
-          // ellipsizeMode={'tail'}
-          // onLayout={truncateTitle}
         >
           {title}
         </JoloText>
       )}
-
       <Animated.View
         ref={holeRef}
         style={[
