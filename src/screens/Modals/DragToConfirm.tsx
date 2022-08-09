@@ -44,12 +44,9 @@ interface IProps {
 
 const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const { title, cancelText, instructionText, onComplete } = route?.params
-
   const goBack = useGoBack()
 
   const holeRef = useRef<View>(null)
-
-  const [truncatedText, setTruncatedText] = useState('')
 
   const [isBallShown, setIsBallShown] = useState(true)
   const [holePosition, setHolePosition] = useState<LayoutRectangle | null>(null)
