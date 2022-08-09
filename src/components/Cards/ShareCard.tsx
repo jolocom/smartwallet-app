@@ -1,10 +1,10 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React, { useCallback } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import ScaledCard from './ScaledCard'
 
+import { DocumentProperty } from '~/hooks/documents/types'
 import {
   DocumentFields,
   DocumentHeader,
@@ -19,7 +19,7 @@ import {
 interface Props {
   credentialName: string
   issuerIcon?: string
-  fields: Array<DisplayVal>
+  fields: Array<DocumentProperty>
   selected?: boolean
   holderName?: string
   photo?: string

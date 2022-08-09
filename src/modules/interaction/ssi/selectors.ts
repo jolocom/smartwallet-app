@@ -1,12 +1,17 @@
 import { createSelector } from 'reselect'
 
-import { RootReducerI } from '~/types/reducer'
+import { attributeConfig } from '~/config/claims'
+import { mapDisplayToDocuments } from '~/hooks/documents/utils'
+import { AttributeI } from '~/modules/attributes/types'
 import {
   AttributeTypes,
-  DisplayCredentialDocument,
   CredentialsByType,
+  DisplayCredentialDocument,
 } from '~/types/credentials'
-import { InteractionDetails } from './types'
+import { RootReducerI } from '~/types/reducer'
+import BP from '~/utils/breakpoints'
+import { getCounterpartyName } from '~/utils/dataMapping'
+import { getObjectFirstValue } from '~/utils/objectUtils'
 import {
   isAuthDetails,
   isAuthzDetails,
@@ -14,12 +19,7 @@ import {
   isCredShareDetails,
   isNotActiveInteraction,
 } from './guards'
-import BP from '~/utils/breakpoints'
-import { mapDisplayToDocuments } from '~/hooks/signedCredentials/utils'
-import { getObjectFirstValue } from '~/utils/objectUtils'
-import { AttributeI } from '~/modules/attributes/types'
-import { attributeConfig } from '~/config/claims'
-import { getCounterpartyName } from '~/utils/dataMapping'
+import { InteractionDetails } from './types'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (ssi: InteractionDetails) => ssi is T,

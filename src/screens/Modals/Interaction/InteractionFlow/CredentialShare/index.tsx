@@ -1,26 +1,36 @@
 import React, { useEffect } from 'react'
 import { TouchableWithoutFeedback, View } from 'react-native'
-import { useSelector } from 'react-redux'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 
+import AdoptedCarousel from '~/components/AdoptedCarousel'
+import { ShareCard } from '~/components/Cards'
+import Collapsible from '~/components/Collapsible'
+import ScreenContainer from '~/components/ScreenContainer'
+import { ServiceLogo } from '~/components/ServiceLogo'
+import Space from '~/components/Space'
+import { attributeConfig } from '~/config/claims'
+import { useCredentialOptionalFields } from '~/hooks/credentials'
+import { Document } from '~/hooks/documents/types'
+import { mapDisplayToDocument } from '~/hooks/documents/utils'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useRedirect } from '~/hooks/navigation'
-import { mapDisplayToDocument } from '~/hooks/signedCredentials/utils'
+import useTranslation from '~/hooks/useTranslation'
 import {
-  getRequestedCredentialDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
+  getRequestedCredentialDetailsBAS,
+  getRequestedDocumentsByType,
   getSelectedShareCredentials,
   getServiceDescription,
-  getRequestedDocumentsByType,
 } from '~/modules/interaction/selectors'
-import {
-  CredentialsByType,
-  AttributeTypes,
-  DisplayCredentialDocument,
-} from '~/types/credentials'
+import { AttributeTypes, CredentialsByType } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
+import { SCREEN_WIDTH } from '~/utils/dimensions'
+import { getObjectFirstValue } from '~/utils/objectUtils'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionTitle from '../components/InteractionTitle'
@@ -31,20 +41,7 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
-import Collapsible from '~/components/Collapsible'
 import ShareAttributeWidget from './ShareAttributeWidget'
-import BP from '~/utils/breakpoints'
-import AdoptedCarousel from '~/components/AdoptedCarousel'
-import { getObjectFirstValue } from '~/utils/objectUtils'
-import Space from '~/components/Space'
-import { SCREEN_WIDTH } from '~/utils/dimensions'
-import useTranslation from '~/hooks/useTranslation'
-import { attributeConfig } from '~/config/claims'
-import { useCredentialOptionalFields } from '~/hooks/credentials'
-import ScreenContainer from '~/components/ScreenContainer'
-import { Colors } from '~/utils/colors'
-import { ServiceLogo } from '~/components/ServiceLogo'
-import { ShareCard } from '~/components/Cards'
 
 export const CredentialShareBAS = () => {
   const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
@@ -180,10 +177,10 @@ const CredentialShareFAS = () => {
   const documentsByType = useSelector(getRequestedDocumentsByType)
 
   const handleRenderCredentials = (
-    credCollections: Array<CredentialsByType<DisplayCredentialDocument>>,
+    credCollections: Array<CredentialsByType<Document>>,
   ) =>
     credCollections.map(({ value, credentials }) => (
-      <AdoptedCarousel<DisplayCredentialDocument>
+      <AdoptedCarousel<Document>
         key={value}
         activeSlideAlignment="center"
         data={credentials}

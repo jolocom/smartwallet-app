@@ -22,8 +22,9 @@ export const useInitDocuments = () => {
   const dispatch = useDispatch()
   const did = useSelector(getDid)
 
-  const queryAllCredentials = async () => {
-    return agent.credentials.query()
+  //NOTE: The query can be moved as a separate type
+  const queryCredentials = async (query?: { type: string[] }[]) => {
+    return agent.credentials.query(query)
   }
 
   const getProperties = async (
@@ -45,7 +46,9 @@ export const useInitDocuments = () => {
     return { properties: mappedProperties as DocumentProperty[], previewKeys }
   }
 
-  const getStyle = async (credential: SignedCredential): DocumentStyle => {
+  const getStyle = async (
+    credential: SignedCredential,
+  ): Promise<DocumentStyle> => {
     const { styles } = await agent.credentials.display(credential)
 
     const heroIcon = styles?.hero?.uri
@@ -154,7 +157,7 @@ export const useInitDocuments = () => {
   }
 
   const initialize = async () => {
-    const credentials = await queryAllCredentials()
+    const credentials = await queryCredentials()
     const { rest, attributes } = splitAttributes(credentials)
     const documents = await Promise.all(rest.map(toDocument))
 
@@ -166,5 +169,11 @@ export const useInitDocuments = () => {
     dispatch(initAttrs(attributes))
   }
 
-  return { initialize, toDocument }
+  return {
+    initialize,
+    toDocument,
+    queryCredentials,
+    sortDocuments,
+    splitAttributes,
+  }
 }
