@@ -1,13 +1,9 @@
 import { createSelector } from 'reselect'
 
 import { attributeConfig } from '~/config/claims'
-import { mapDisplayToDocuments } from '~/hooks/documents/utils'
+import { Document } from '~/hooks/documents/types'
 import { AttributeI } from '~/modules/attributes/types'
-import {
-  AttributeTypes,
-  CredentialsByType,
-  DisplayCredentialDocument,
-} from '~/types/credentials'
+import { AttributeTypes, CredentialsByType } from '~/types/credentials'
 import { RootReducerI } from '~/types/reducer'
 import BP from '~/utils/breakpoints'
 import { getCounterpartyName } from '~/utils/dataMapping'
@@ -163,26 +159,27 @@ export const getIsFullscreenCredShare = createSelector(
 
 export const getRequestedDocumentsByType = createSelector(
   [getRequestedCredentials],
-  (requestedCredentials) => {
-    const requestedDocuments = mapDisplayToDocuments(requestedCredentials)
-    return requestedDocuments.reduce<
-      Array<CredentialsByType<DisplayCredentialDocument>>
-    >((acc, document) => {
-      const typeObject = acc.find((t) => t.value === document.type)
+  (requestedDocuments) => {
+    return requestedDocuments.reduce<Array<CredentialsByType<Document>>>(
+      (acc, document) => {
+        const specificType = document.type[document.type.length - 1]
+        const typeObject = acc.find((t) => t.value === specificType)
 
-      if (!typeObject) {
-        acc = [
-          ...acc,
-          { key: 'type', value: document.type, credentials: [document] },
-        ]
-      } else {
-        typeObject.credentials.push(document)
-        acc = acc.filter((t) => t.value !== document.type)
-        acc = [...acc, typeObject]
-      }
+        if (!typeObject) {
+          acc = [
+            ...acc,
+            { key: 'type', value: specificType, credentials: [document] },
+          ]
+        } else {
+          typeObject.credentials.push(document)
+          acc = acc.filter((t) => t.value !== specificType)
+          acc = [...acc, typeObject]
+        }
 
-      return acc
-    }, [])
+        return acc
+      },
+      [],
+    )
   },
 )
 
@@ -212,25 +209,6 @@ export const getIsReadyToSubmitRequest = createSelector(
     if (singleAttribute && !getObjectFirstValue(singleAttribute).length)
       return true
     return ssi.requestedTypes.every((c) => ssi.selectedCredentials[c])
-  },
-)
-
-export const getAttributesToSelect = createSelector(
-  [getCredShareDetails],
-  (ssi) => {
-    return Object.keys(ssi.attributes).reduce<Record<string, string>>(
-      (acc, value) => {
-        const attrType = value as AttributeTypes
-        if (!acc[attrType]) {
-          const attr = ssi.attributes || []
-          if (attr.length) {
-            acc[attrType] = attr[0].id
-          }
-        }
-        return acc
-      },
-      {},
-    )
   },
 )
 

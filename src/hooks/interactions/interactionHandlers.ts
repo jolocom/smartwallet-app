@@ -99,7 +99,6 @@ export const useInteractionHandler = () => {
           )
           .then((creds) => splitAttributes(creds))
 
-        console.log({ attributes })
         const documents = await Promise.all(rest.map(toDocument)).then((docs) =>
           sortDocuments(docs, DocumentsSortingType.issuanceDate),
         )
@@ -115,10 +114,14 @@ export const useInteractionHandler = () => {
             return !documents.find((d) => d.type[d.type.length - 1] === t)
           })
 
+        const specificRequestedTypes = requestedTypes.map(
+          (t) => t[t.length - 1],
+        )
+
         flowSpecificData = {
           credentials: documents,
           attributes: attributes,
-          requestedTypes: requestedTypes.map((t) => t[t.length - 1]),
+          requestedTypes: specificRequestedTypes,
           selectedCredentials: {},
         }
 
