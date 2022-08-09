@@ -36,7 +36,6 @@ const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const NUM_OF_LINES = 4
-const LINE_HEIGHT = 32
 
 interface IProps {
   route: RouteProp<RootStackParamList, ScreenNames.DragToConfirm>
@@ -44,6 +43,7 @@ interface IProps {
 
 const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const { title, cancelText, instructionText, onComplete } = route?.params
+
   const goBack = useGoBack()
 
   const holeRef = useRef<View>(null)
@@ -204,7 +204,6 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
           color={Colors.white90}
           kind={JoloTextKind.title}
           weight={JoloTextWeight.regular}
-          customStyles={{ lineHeight: LINE_HEIGHT }}
         >
           {truncatedText}
         </JoloText>
@@ -215,7 +214,6 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
           color={Colors.white90}
           kind={JoloTextKind.title}
           weight={JoloTextWeight.regular}
-          customStyles={{ lineHeight: LINE_HEIGHT }}
         >
           {title}
         </JoloText>
