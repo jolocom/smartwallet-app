@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Linking,
+  Platform,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated, {
@@ -28,10 +29,15 @@ interface Props {
 export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
   const { scheduleErrorWarning } = useToasts()
 
-  const rotationValue = useSharedValue(0)
+  const rotationValue = useSharedValue(
+    Platform.select({ ios: 0, android: '0deg' }),
+  )
   const startAnimation = () => {
     rotationValue.value = withRepeat(
-      withTiming(360, { duration: 37500, easing: Easing.linear }),
+      withTiming(Platform.select({ ios: 360, android: '360deg' }), {
+        duration: 37500,
+        easing: Easing.linear,
+      }),
       -1,
     )
   }
