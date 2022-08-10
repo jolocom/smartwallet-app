@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { TouchableOpacity } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -43,7 +43,10 @@ export const StackItem: React.FC<StackItemProps> = ({
   itemDistance,
   children,
 }) => {
-  const expandedMargin = -(itemHeight - visibleHeaderHeight - itemDistance)
+  const expandedMargin = useMemo(
+    () => -(itemHeight - visibleHeaderHeight + itemDistance),
+    [itemDistance, itemHeight, visibleHeaderHeight],
+  )
 
   const animatedStyle = useAnimatedStyle(
     () => ({

@@ -77,7 +77,7 @@ export const DocumentList = () => {
         ) : (
           <StackScrollView
             data={[{ stackId: 'Favorites', data: documents }]}
-            itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT}
+            itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
             visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
             itemDistance={12}
             renderStack={(stack, Item) => {

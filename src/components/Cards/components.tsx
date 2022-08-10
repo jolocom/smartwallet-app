@@ -113,7 +113,13 @@ export const DocumentHeader: React.FC<{
   const prefetchedIcon = useImagePrefetch(icon)
 
   return (
-    <View style={styles.headerContainer}>
+    <ScaledView
+      scaleStyle={{
+        height: DOCUMENT_HEADER_HEIGHT,
+        padding: 16,
+      }}
+      style={styles.headerContainer}
+    >
       {prefetchedIcon && (
         <ScaledView
           scaleStyle={{
@@ -150,7 +156,7 @@ export const DocumentHeader: React.FC<{
           }}
         />
       )}
-    </View>
+    </ScaledView>
   )
 }
 
@@ -406,11 +412,9 @@ const styles = StyleSheet.create({
     borderRadius: 41,
   },
   headerContainer: {
-    height: DOCUMENT_HEADER_HEIGHT,
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 16,
   },
   photo: {
     width: '100%',
