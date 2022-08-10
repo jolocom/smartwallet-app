@@ -63,8 +63,8 @@ export const useInitDocuments = () => {
     }
 
     return {
-      backgroundColor: styles?.background?.image_url?.uri,
-      backgroundImage: styles?.background?.color,
+      backgroundImage: styles?.background?.image_url?.uri,
+      backgroundColor: styles?.background?.color,
       contextIcons,
     }
   }

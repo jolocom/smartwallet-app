@@ -32,7 +32,7 @@ export const useDocuments = () => {
 
     if (!givenName || !familyName) return undefined
 
-    return `${givenName} ${familyName}`
+    return `${givenName.value} ${familyName.value}`
   }
 
   const getHolderPhoto = (doc: Document) => {

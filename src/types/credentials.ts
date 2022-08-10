@@ -18,8 +18,9 @@ export enum AttributeKeys {
 }
 
 export enum ClaimKeys {
-  givenName = 'givenName',
-  familyName = 'familyName',
+  givenName = '$.givenName',
+  familyName = '$.familyName',
+  photo = '$.photo',
   email = 'email',
   addressLine = 'addressLine1',
   postalCode = 'postalCode',
@@ -27,7 +28,6 @@ export enum ClaimKeys {
   country = 'country',
   telephone = 'telephone',
   id = 'id',
-  photo = 'photo',
 }
 
 export enum AttributeTypes {
