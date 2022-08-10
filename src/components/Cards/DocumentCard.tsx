@@ -13,8 +13,6 @@ import { DocumentProperty } from '~/hooks/documents/types'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import {
-  DocumentBackgroundColor,
-  DocumentBackgroundImage,
   DocumentFields,
   DocumentFooter,
   DocumentHeader,
@@ -110,16 +108,6 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH,
   }
 
-  const renderBackground = useCallback(() => {
-    if (backgroundImage) {
-      return <DocumentBackgroundImage image={backgroundImage} />
-    } else if (backgroundColor) {
-      return <DocumentBackgroundColor color={backgroundColor} />
-    } else {
-      return <ScaledView scaleStyle={{ height: 24 }} />
-    }
-  }, [backgroundColor, backgroundImage])
-
   const isBackground = backgroundImage || backgroundColor
 
   const getPhotoPosition = () => {
@@ -189,13 +177,14 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
             name={credentialName}
             icon={issuerIcon}
             onPressMenu={onHandleMore}
+            backgroundImage={backgroundImage}
+            backgroundColor={backgroundColor}
           />
           <TouchableOpacity
             onPress={handlePress}
             activeOpacity={1}
             style={{ flex: 1 }}
           >
-            {renderBackground()}
             {photo && (
               <DocumentPhoto
                 photo={photo}

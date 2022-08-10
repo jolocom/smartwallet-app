@@ -107,56 +107,101 @@ export const DocumentHeader: React.FC<{
   icon?: string
   onPressMenu?: () => void
   selected?: boolean
-}> = ({ name, icon, onPressMenu, selected }) => {
+  backgroundImage?: string
+  backgroundColor?: string
+}> = ({
+  name,
+  icon,
+  onPressMenu,
+  selected,
+  backgroundColor,
+  backgroundImage,
+}) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   const prefetchedIcon = useImagePrefetch(icon)
 
+  const renderBackground = (children: () => React.ReactChild) => {
+    if (backgroundImage) {
+      return (
+        <DocumentBackgroundImage image={backgroundImage}>
+          {children()}
+        </DocumentBackgroundImage>
+      )
+    } else if (backgroundColor) {
+      return (
+        <DocumentBackgroundColor color={backgroundColor}>
+          {children()}
+        </DocumentBackgroundColor>
+      )
+    } else {
+      return (
+        <ScaledView scaleStyle={{ paddingBottom: 40 }}>{children()}</ScaledView>
+      )
+    }
+  }
+
   return (
-    <ScaledView
-      scaleStyle={{
-        height: DOCUMENT_HEADER_HEIGHT,
-        padding: 16,
-      }}
-      style={styles.headerContainer}
-    >
-      {prefetchedIcon && (
+    <View>
+      {renderBackground(() => (
         <ScaledView
           scaleStyle={{
-            width: 32,
-            height: 32,
-            marginRight: 10,
+            height: DOCUMENT_HEADER_HEIGHT,
+            padding: 16,
           }}
+          style={styles.headerContainer}
         >
-          <Image
-            resizeMode="cover"
-            style={[styles.photo, { borderRadius: 4.2 }]}
-            source={{ uri: prefetchedIcon }}
-          />
+          {prefetchedIcon && (
+            <ScaledView
+              scaleStyle={{
+                width: 32,
+                height: 32,
+                marginRight: 10,
+              }}
+            >
+              <Image
+                resizeMode="cover"
+                style={[styles.photo, { borderRadius: 4.2 }]}
+                source={{ uri: prefetchedIcon }}
+              />
+            </ScaledView>
+          )}
+          <ScaledView
+            scaleStyle={styles.credentialName}
+            style={{ flex: 1, flexDirection: 'row' }}
+          >
+            <ScaledText
+              // @ts-expect-error
+              onTextLayout={handleCredentialNameTextLayout}
+              numberOfLines={1}
+              scaleStyle={styles.credentialName}
+              style={[
+                styles.mediumText,
+                {
+                  backgroundColor: 'rgba(255,255,255,0.5)',
+                  borderRadius: 8,
+                },
+              ]}
+            >
+              {name}
+            </ScaledText>
+            <View style={{ flex: 1 }} />
+          </ScaledView>
+          {typeof selected !== 'undefined' && (
+            <SelectedToggle selected={selected} />
+          )}
+          {onPressMenu && (
+            <CardMoreBtn
+              onPress={onPressMenu}
+              positionStyles={{
+                top: 18,
+                right: 17,
+              }}
+            />
+          )}
         </ScaledView>
-      )}
-      <ScaledText
-        // @ts-expect-error
-        onTextLayout={handleCredentialNameTextLayout}
-        numberOfLines={1}
-        scaleStyle={styles.credentialName}
-        style={[styles.mediumText, { flex: 1 }]}
-      >
-        {name}
-      </ScaledText>
-      {typeof selected !== 'undefined' && (
-        <SelectedToggle selected={selected} />
-      )}
-      {onPressMenu && (
-        <CardMoreBtn
-          onPress={onPressMenu}
-          positionStyles={{
-            top: 18,
-            right: 17,
-          }}
-        />
-      )}
-    </ScaledView>
+      ))}
+    </View>
   )
 }
 
@@ -171,6 +216,8 @@ export const DocumentHolderName: React.FC<{
       scaleStyle={{
         paddingLeft: 24,
         marginRight: cropName ? 116 : 0,
+        marginBottom: 8,
+        marginTop: -40,
       }}
     >
       <ScaledText
@@ -316,21 +363,28 @@ export const DocumentFields: React.FC<{
   )
 }
 
-const BackgroundOpacity = () => (
+const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
     colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
     style={{ flex: 1 }}
-  />
+  >
+    {children}
+  </LinearGradient>
 )
 
 export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
   image,
+  children,
 }) => (
-  <ScaledView scaleStyle={{ height: 112 }} style={{ width: '100%' }}>
+  <ScaledView
+    scaleStyle={{ height: 112 + DOCUMENT_HEADER_HEIGHT }}
+    style={{ width: '100%' }}
+  >
     <ImageBackground
       style={{ width: '100%', height: '100%' }}
       source={{ uri: image }}
     >
+      <View style={{ zIndex: 99 }}>{children}</View>
       <BackgroundOpacity />
     </ImageBackground>
   </ScaledView>
@@ -338,10 +392,19 @@ export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
 
 export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
   color,
+  children,
 }) => (
-  <View style={{ height: 84, width: '100%', backgroundColor: color }}>
-    <BackgroundOpacity />
-  </View>
+  <ScaledView
+    scaleStyle={{
+      height: 84 + DOCUMENT_HEADER_HEIGHT,
+    }}
+    style={{
+      width: '100%',
+      backgroundColor: color,
+    }}
+  >
+    <BackgroundOpacity>{children}</BackgroundOpacity>
+  </ScaledView>
 )
 
 export const SelectedToggle: React.FC<{ selected: boolean }> = ({
@@ -364,12 +427,14 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
 const styles = StyleSheet.create({
   dotsContainerScaled: {
     paddingVertical: 3,
-    width: 30,
+    width: 20,
     height: 30,
     justifyContent: 'center',
   },
   dotsContainer: {
     height: '100%',
+    backgroundColor: Colors.white50,
+    borderRadius: 8,
   },
   scaledDots: {
     flex: 1,
@@ -394,7 +459,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 26,
     fontWeight: '500',
-    paddingRight: 12,
+    paddingHorizontal: 8,
   },
   holderName: {
     fontSize: 24,
