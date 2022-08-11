@@ -35,6 +35,7 @@ const TruncateAfterFourLines: React.FC<Props> = ({
 
   return (
     <JoloText
+      // @ts-expect-error
       onTextLayout={onTextLayout}
       color={color}
       kind={kind}
