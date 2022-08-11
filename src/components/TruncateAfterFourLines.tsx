@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { TextLayoutEvent } from '~/types/props'
 import JoloText, { IJoloTextProps } from './JoloText'
 
 interface Props extends IJoloTextProps {
