@@ -87,6 +87,10 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     ) {
       return 3
     } else if (
+      checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
+    ) {
+      return 3
+    } else if (
       checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
     ) {
       return 4
@@ -141,14 +145,6 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
     return distance
   }
-
-  // NOTE: sor/ting the fields from shortest value to longest to fit more fields in the card.
-  // Nevertheless, this leads to the "metadata" fields (i.e. issuer, expires, etc.) to be prioritized,
-  // which is not desireable.
-
-  //fields = fields.sort((prev, next) =>
-  //  prev.value.length > next.value.length ? 1 : -1,
-  //)
 
   return (
     <ScaledCard
