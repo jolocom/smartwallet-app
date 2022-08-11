@@ -14,7 +14,7 @@ export interface StackScrollViewProps<T extends { id: string }>
   extends StackItemConfig {
   data: StackData<T>[]
   renderStack: (data: StackData<T>, item: React.ReactNode) => React.ReactNode
-  renderItem: (data: T, i: number) => React.ReactNode
+  renderItem: (data: T, visible: boolean) => React.ReactNode
 }
 
 interface ExpandState {
@@ -73,8 +73,11 @@ export const StackScrollView = <T extends { id: string }>({
                 isExpanded = true
               }
             }
+
+            const visible = expandState?.itemId === item.id
             return (
               <StackItem
+                key={item.id}
                 id={item.id}
                 index={i}
                 onPress={() => {
@@ -83,7 +86,7 @@ export const StackScrollView = <T extends { id: string }>({
                 isExpanded={isExpanded}
                 {...itemConfig}
               >
-                {renderItem(item, i)}
+                {renderItem(item, visible)}
               </StackItem>
             )
           })

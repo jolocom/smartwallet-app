@@ -100,7 +100,7 @@ export const DocumentList = () => {
                 </View>
               )
             }}
-            renderItem={(c) => {
+            renderItem={(c, visible) => {
               const previewFields = getPreviewProperties(c)
 
               const fields = previewFields.length
@@ -114,7 +114,7 @@ export const DocumentList = () => {
                   holderName={getHolderName(c)}
                   fields={fields}
                   photo={getHolderPhoto(c)}
-                  onHandleMore={() => handlePressMore(c)}
+                  onHandleMore={visible ? () => handlePressMore(c) : undefined}
                   backgroundColor={c.style.backgroundColor}
                   backgroundImage={c.style.backgroundImage}
                   issuerIcon={c.issuer.icon}
