@@ -29,13 +29,11 @@ interface Props {
 export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
   const { scheduleErrorWarning } = useToasts()
 
-  const rotationValue = useSharedValue(
-    Platform.select({ ios: 0, android: '0deg' }),
-  )
+  const rotationValue = useSharedValue('0deg')
   const startAnimation = () => {
     rotationValue.value = withRepeat(
-      withTiming(Platform.select({ ios: 360, android: '360deg' }), {
-        duration: 37500,
+      withTiming('360deg', {
+        duration: 750,
         easing: Easing.linear,
       }),
       -1,
