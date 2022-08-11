@@ -85,13 +85,12 @@ const FormContainer: React.FC<Props> = ({
               </JoloText>
             </TouchableOpacity>
             <View style={{ paddingHorizontal: 8, flex: 1 }}>
-              <Animated.Text
+              <Animated.View
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
-                  marginTop: Platform.OS === 'ios' ? 5 : 0,
+                  marginTop: 0,
                   alignSelf: 'center',
                 }}
-                numberOfLines={1}
               >
                 <JoloText
                   kind={JoloTextKind.title}
@@ -100,10 +99,11 @@ const FormContainer: React.FC<Props> = ({
                   customStyles={{
                     fontFamily: Fonts.Medium,
                   }}
+                  numberOfLines={1}
                 >
                   {currentTitleText}
                 </JoloText>
-              </Animated.Text>
+              </Animated.View>
             </View>
             <TouchableOpacity
               onPress={handleSubmit}
