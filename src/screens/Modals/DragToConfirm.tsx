@@ -184,7 +184,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       <TruncateAfterFourLines
         text={title}
         numOfLines={NUM_OF_LINES}
-        // showAsQuestion={true}
+        showAsQuestion={true}
         color={Colors.white90}
         kind={JoloTextKind.title}
         weight={JoloTextWeight.regular}
