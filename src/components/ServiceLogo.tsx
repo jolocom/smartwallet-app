@@ -64,7 +64,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
 
   return source ? (
     <View>
-      <View style={styles.gradient}>
+      <View style={styles.gradientContainer}>
         <Animated.View style={rotationStyles}>
           <LinearGradient
             start={{ x: 1.0, y: 0.3 }}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 35,
   },
-  gradient: {
+  gradientContainer: {
     position: 'absolute',
     left: -7,
     top: -7,
