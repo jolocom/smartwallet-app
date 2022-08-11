@@ -67,9 +67,7 @@ const ShareCard: React.FC<Props> = ({
         <View style={{ flexDirection: 'row', flex: 1 }}>
           <View style={{ flex: 1 }}>
             {holderName && (
-              <View style={{ marginBottom: 12 }}>
-                <DocumentHolderName name={holderName} numberOfLines={1} />
-              </View>
+              <DocumentHolderName name={holderName} numberOfLines={1} />
             )}
             <DocumentFields
               fields={fields}
@@ -82,7 +80,7 @@ const ShareCard: React.FC<Props> = ({
             />
           </View>
           <View style={{ flex: 0.5 }}>
-            {photo && <DocumentPhoto photo={photo} verticalPosition={-80} />}
+            {photo && <DocumentPhoto photo={photo} />}
           </View>
         </View>
       </View>

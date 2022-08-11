@@ -31,7 +31,7 @@ interface DocumentCardProps {
   credentialName: string
   onPress?: () => void
   fields: Array<DocumentProperty>
-  onHandleMore: () => void
+  onHandleMore?: () => void
   holderName?: string
   photo?: string
   issuerIcon?: string
@@ -73,29 +73,26 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     }
   }
 
+  const checkLayoutCase = (...args: Boolean[]) => args.every((arg) => arg)
+
   const calculateMaxRows = useCallback(() => {
-    let maxRows = 4
-    if (backgroundImage) {
-      maxRows = maxRows - 2
-    } else if (backgroundColor) {
-      maxRows--
-      if (!holderName) maxRows--
-      else maxRows = maxRows - 2
-    }
+    const isBackgroundImage = Boolean(backgroundImage)
+    const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
+    const isHolderName = Boolean(holderName)
 
-    if (holderNameLines > 1 && backgroundImage) {
-      maxRows--
+    if (checkLayoutCase(isBackgroundImage || isBackgroundColor, isHolderName)) {
+      return 2
+    } else if (
+      checkLayoutCase(!isBackgroundColor, !isBackgroundImage, isHolderName)
+    ) {
+      return 3
+    } else if (
+      checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
+    ) {
+      return 4
+    } else {
+      return 0
     }
-
-    if (!holderName && !backgroundImage) {
-      maxRows++
-    }
-
-    if (!holderName && !backgroundImage && !backgroundColor && photo) {
-      maxRows = maxRows - 2
-    }
-
-    return maxRows
   }, [holderName, backgroundColor, backgroundImage, holderNameLines])
 
   const maxRows = calculateMaxRows()
@@ -108,16 +105,20 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH,
   }
 
-  const isBackground = backgroundImage || backgroundColor
+  const isBackground = Boolean(backgroundImage || backgroundColor)
 
-  const getPhotoPosition = () => {
-    let verticalPosition = -30
-
-    if (!isBackground) {
-      verticalPosition = verticalPosition - 20
+  const getSubheaderStyles = (): ViewStyle | undefined => {
+    if (checkLayoutCase(isBackground)) {
+      return {
+        marginTop: -30,
+        justifyContent: 'flex-end',
+      }
+    } else if (checkLayoutCase(!isBackground)) {
+      return {
+        marginTop: 12,
+        justifyContent: 'center',
+      }
     }
-
-    return verticalPosition
   }
 
   const getFieldsTopDistance = () => {
@@ -183,21 +184,18 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
           <TouchableOpacity
             onPress={handlePress}
             activeOpacity={1}
-            style={{ flex: 1 }}
+            style={{ flex: 1, marginTop: 12 }}
           >
-            {photo && (
-              <DocumentPhoto
-                photo={photo}
-                verticalPosition={getPhotoPosition()}
-              />
-            )}
-            {holderName && (
-              <DocumentHolderName
-                name={holderName}
-                cropName={!!photo}
-                onLayout={handleHolderNameTextLayout}
-              />
-            )}
+            <ScaledView scaleStyle={[getSubheaderStyles()]}>
+              {photo && <DocumentPhoto photo={photo} />}
+              {holderName && (
+                <DocumentHolderName
+                  name={holderName}
+                  cropName={!!photo}
+                  onLayout={handleHolderNameTextLayout}
+                />
+              )}
+            </ScaledView>
             <ScaledView
               scaleStyle={{ paddingBottom: getFieldsTopDistance() }}
             />

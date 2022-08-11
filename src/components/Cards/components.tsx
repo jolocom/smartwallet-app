@@ -90,16 +90,13 @@ export const DocumentFooter: React.FC<{
 
 export const DocumentPhoto: React.FC<{
   photo: string
-  verticalPosition?: number
-}> = ({ photo, verticalPosition = -30 }) => (
-  <View>
-    <ScaledView
-      scaleStyle={[styles.photoContainerScaled, { bottom: verticalPosition }]}
-      style={styles.photoContainer}
-    >
-      <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
-    </ScaledView>
-  </View>
+}> = ({ photo }) => (
+  <ScaledView
+    scaleStyle={[styles.photoContainerScaled]}
+    style={styles.photoContainer}
+  >
+    <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
+  </ScaledView>
 )
 
 export const DocumentHeader: React.FC<{
@@ -135,9 +132,7 @@ export const DocumentHeader: React.FC<{
         </DocumentBackgroundColor>
       )
     } else {
-      return (
-        <ScaledView scaleStyle={{ paddingBottom: 40 }}>{children()}</ScaledView>
-      )
+      return children()
     }
   }
 
@@ -217,7 +212,6 @@ export const DocumentHolderName: React.FC<{
         paddingLeft: 24,
         marginRight: cropName ? 116 : 0,
         marginBottom: 8,
-        marginTop: -40,
       }}
     >
       <ScaledText
