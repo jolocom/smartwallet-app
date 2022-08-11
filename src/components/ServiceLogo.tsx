@@ -78,7 +78,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
               justifyContent: 'center',
             }}
             colors={[Colors.azureRadiance, Colors.white]}
-          ></LinearGradient>
+          />
         </Animated.View>
       </View>
       <TouchableOpacity
