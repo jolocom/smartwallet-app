@@ -88,8 +88,6 @@ const FormContainer: React.FC<Props> = ({
               <Animated.View
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
-                  marginTop: 0,
-                  alignSelf: 'center',
                 }}
               >
                 <JoloText
