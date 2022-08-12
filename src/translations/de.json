@@ -401,7 +401,8 @@
         "issueOption_5": "Probleme mit der Benutzeroberfläche",
         "issueOption_6": "Irgendetwas scheint nicht richtig zu sein",
         "issueOption_7": "Sonstiges",
-        "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ..."
+        "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ...",
+        "errorHeader": "Fehler melden"
     },
     "General": {
         "unknown": "Unbekannt",

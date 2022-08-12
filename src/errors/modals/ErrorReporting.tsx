@@ -130,7 +130,9 @@ const ErrorReporting = () => {
           onPress={resetError}
           customStyles={{ paddingHorizontal: 4 }}
         >
-          <NavigationHeaderText>{t('Toasts.reportBtn')}</NavigationHeaderText>
+          <NavigationHeaderText>
+            {t('ErrorReporting.errorHeader')}
+          </NavigationHeaderText>
         </NavigationHeader>
         <ScrollView>
           <ScreenContainer.Padding>
