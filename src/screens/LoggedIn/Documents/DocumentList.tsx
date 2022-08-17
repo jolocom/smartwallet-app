@@ -1,5 +1,10 @@
 import React, { useMemo } from 'react'
-import { View } from 'react-native'
+import {
+  LayoutAnimation,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 import { DocumentCard } from '~/components/Cards'
 import {
@@ -9,7 +14,7 @@ import {
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from '~/components/Cards/consts'
 import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimenstions'
-import { StackScrollView } from '~/components/CardStack'
+import { StackData, StackScrollView } from '~/components/CardStack'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { useDocuments } from '~/hooks/documents'
@@ -17,8 +22,15 @@ import { Document } from '~/hooks/documents/types'
 import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
+import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useDocumentMenu } from './useDocumentMenu'
+
+enum DocumentStacks {
+  Favorites = 'Favorites',
+  All = 'All',
+  Expired = 'Expired',
+}
 
 export const DocumentList = () => {
   const { t } = useTranslation()
@@ -61,6 +73,47 @@ export const DocumentList = () => {
 
   if (!documents) return null
 
+  //TODO: add translations (i.e. stackTitle)
+  const stackData = useMemo(
+    () => [
+      { stackId: DocumentStacks.Favorites, data: [] },
+      { stackId: DocumentStacks.All, data: documents },
+      { stackId: DocumentStacks.Expired, data: [] },
+    ],
+    [documents],
+  )
+  const [openedStack, setOpenedStack] = React.useState<DocumentStacks | null>(
+    DocumentStacks.Favorites,
+  )
+  const handleStackPress = (stackId: DocumentStacks) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    setOpenedStack(stackId)
+  }
+
+  const renderStack = (
+    stack: StackData<Document>,
+    stackItems: React.ReactNode,
+  ) => {
+    return (
+      <View key={stack.stackId} style={styles.stackContainer}>
+        <TouchableOpacity
+          onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
+          style={styles.stackBtn}
+        >
+          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+            {stack.stackId}
+          </JoloText>
+          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+            {stack.data.length}
+          </JoloText>
+        </TouchableOpacity>
+        {openedStack === stack.stackId && stack.data.length !== 0 && (
+          <View style={styles.stackItems}>{stackItems}</View>
+        )}
+      </View>
+    )
+  }
+
   return (
     <>
       <View
@@ -76,31 +129,11 @@ export const DocumentList = () => {
           />
         ) : (
           <StackScrollView
-            data={[{ stackId: 'Favorites', data: documents }]}
+            data={stackData}
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
             visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
             itemDistance={12}
-            renderStack={(stack, Items) => {
-              return (
-                <View
-                  key={stack.stackId}
-                  style={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    paddingHorizontal: 20,
-                  }}
-                >
-                  <JoloText
-                    customStyles={{ marginBottom: 24, textAlign: 'left' }}
-                    kind={JoloTextKind.title}
-                    size={JoloTextSizes.mini}
-                  >
-                    {stack.stackId}
-                  </JoloText>
-                  {Items}
-                </View>
-              )
-            }}
+            renderStack={renderStack}
             renderItem={(c, visible) => {
               const previewFields = getPreviewProperties(c)
 
@@ -132,3 +165,25 @@ export const DocumentList = () => {
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  stackBtn: {
+    flex: 1,
+    marginHorizontal: 20,
+    paddingHorizontal: 24,
+    height: 50,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.mainDark,
+    flexDirection: 'row',
+    borderRadius: 6,
+  },
+  stackContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  stackItems: {
+    marginTop: 24,
+  },
+})
