@@ -30,8 +30,8 @@ const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity)
 
 const springConfig: Animated.WithSpringConfig = {
-  damping: 15,
-  mass: 1,
+  damping: 20,
+  mass: 2,
   stiffness: 200,
   velocity: 2,
 }
@@ -83,9 +83,9 @@ export const StackItem: React.FC<StackItemProps> = ({
       activeOpacity={1}
       style={[
         {
+          alignItems: 'center',
           marginBottom: itemDistance,
           zIndex: index,
-          alignItems: 'center',
         },
         animatedStyle,
       ]}

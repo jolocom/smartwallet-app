@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { StyleSheet } from 'react-native'
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -69,13 +70,8 @@ export const StackScrollView = <T extends { id: string }>({
     <Animated.ScrollView
       onScroll={scrollHandler}
       scrollEventThrottle={4}
-      style={{ flex: 1 }}
-      contentContainerStyle={{
-        paddingVertical: 40,
-        paddingBottom: 400,
-        width: '100%',
-        alignItems: 'center',
-      }}
+      style={styles.scroll}
+      contentContainerStyle={styles.scrollContainer}
     >
       {data.map((stack) => {
         const renderStackChildren = () => {
@@ -87,3 +83,15 @@ export const StackScrollView = <T extends { id: string }>({
     </Animated.ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingVertical: 40,
+    paddingBottom: 100,
+    width: '100%',
+    alignItems: 'center',
+  },
+  scroll: {
+    flex: 1,
+  },
+})
