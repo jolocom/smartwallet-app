@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Platform,
   StyleProp,
@@ -30,6 +30,7 @@ import { useCredentialNameScale } from './hooks'
 import ScaledCard, { ScaledView } from './ScaledCard'
 
 interface DocumentCardProps {
+  id: string
   credentialName: string
   onPress?: () => void
   fields: Array<DocumentProperty>
@@ -44,167 +45,185 @@ interface DocumentCardProps {
   style?: StyleProp<ViewStyle>
 }
 
-const DocumentCard: React.FC<DocumentCardProps> = ({
-  credentialName,
-  fields,
-  photo,
-  onHandleMore,
-  holderName,
-  backgroundColor,
-  backgroundImage,
-  issuerIcon,
-  hasImageFields = false,
-  icons,
-  style = {},
-  onPress,
-}) => {
-  const { isCredentialNameScaled } = useCredentialNameScale()
+const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
+  ({
+    id,
+    credentialName,
+    fields,
+    photo,
+    onHandleMore,
+    holderName,
+    backgroundColor,
+    backgroundImage,
+    issuerIcon,
+    hasImageFields = false,
+    icons,
+    style = {},
+    onPress,
+  }) => {
+    const { isCredentialNameScaled } = useCredentialNameScale()
 
-  const [holderNameLines, setHolderNameLines] = useState(0)
-  const handleHolderNameTextLayout = (e: TextLayoutEvent) => {
-    setHolderNameLines(e.nativeEvent.lines.length)
-  }
-
-  const handlePress = () => {
-    if (onPress) {
-      ReactNativeHapticFeedback.trigger('impactLight', {
-        enableVibrateFallback: true,
-        ignoreAndroidSystemSettings: true,
-      })
-      onPress && onPress()
+    const [holderNameLines, setHolderNameLines] = useState(0)
+    const handleHolderNameTextLayout = (e: TextLayoutEvent) => {
+      setHolderNameLines(e.nativeEvent.lines.length)
     }
-  }
 
-  const checkLayoutCase = (...args: Boolean[]) => args.every((arg) => arg)
-
-  const calculateMaxRows = useCallback(() => {
-    const isBackgroundImage = Boolean(backgroundImage)
-    const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
-    const isHolderName = Boolean(holderName)
-
-    if (checkLayoutCase(isBackgroundImage || isBackgroundColor, isHolderName)) {
-      return 2
-    } else if (
-      checkLayoutCase(!isBackgroundColor, !isBackgroundImage, isHolderName)
-    ) {
-      return 3
-    } else if (
-      checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
-    ) {
-      return 3
-    } else if (
-      checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
-    ) {
-      return 4
-    } else {
-      return 0
-    }
-  }, [holderName, backgroundColor, backgroundImage, holderNameLines])
-
-  const maxRows = calculateMaxRows()
-  const maxLinesPerField =
-    isCredentialNameScaled && holderNameLines === 2 ? 4 : 5
-
-  const scalingConfig = {
-    originalHeight: ORIGINAL_DOCUMENT_CARD_HEIGHT,
-    originalWidth: ORIGINAL_DOCUMENT_CARD_WIDTH,
-    originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH,
-  }
-
-  const isBackground = Boolean(backgroundImage || backgroundColor)
-
-  const getSubheaderStyles = (): ViewStyle | undefined => {
-    if (checkLayoutCase(isBackground)) {
-      return {
-        marginTop: -30,
-        justifyContent: 'flex-end',
-      }
-    } else if (checkLayoutCase(!isBackground)) {
-      return {
-        marginTop: 12,
-        justifyContent: 'center',
+    const handlePress = () => {
+      if (onPress) {
+        ReactNativeHapticFeedback.trigger('impactLight', {
+          enableVibrateFallback: true,
+          ignoreAndroidSystemSettings: true,
+        })
+        onPress && onPress()
       }
     }
-  }
 
-  const getFieldsTopDistance = () => {
-    let distance = 0
+    const checkLayoutCase = (...args: Boolean[]) => args.every((arg) => arg)
 
-    if (photo) {
-      distance = distance + 12
+    const calculateMaxRows = useCallback(() => {
+      const isBackgroundImage = Boolean(backgroundImage)
+      const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
+      const isHolderName = Boolean(holderName)
+
+      if (
+        checkLayoutCase(isBackgroundImage || isBackgroundColor, isHolderName)
+      ) {
+        return 2
+      } else if (
+        checkLayoutCase(!isBackgroundColor, !isBackgroundImage, isHolderName)
+      ) {
+        return 3
+      } else if (
+        checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
+      ) {
+        return 3
+      } else if (
+        checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
+      ) {
+        return 4
+      } else {
+        return 0
+      }
+    }, [holderName, backgroundColor, backgroundImage, holderNameLines])
+
+    const maxRows = calculateMaxRows()
+    const maxLinesPerField =
+      isCredentialNameScaled && holderNameLines === 2 ? 4 : 5
+
+    const scalingConfig = {
+      originalHeight: ORIGINAL_DOCUMENT_CARD_HEIGHT,
+      originalWidth: ORIGINAL_DOCUMENT_CARD_WIDTH,
+      originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH,
     }
 
-    if (!holderName && photo) {
-      distance = distance + 42
-    } else if (holderName) {
-      distance = distance + 16
+    const isBackground = Boolean(backgroundImage || backgroundColor)
+
+    const getSubheaderStyles = (): ViewStyle | undefined => {
+      if (checkLayoutCase(isBackground)) {
+        return {
+          marginTop: -30,
+          justifyContent: 'flex-end',
+        }
+      } else if (checkLayoutCase(!isBackground)) {
+        return {
+          marginTop: 12,
+          justifyContent: 'center',
+        }
+      }
     }
 
-    // FIXME: with backgroundColor, the fields are a bit too low
-    if (isBackground && Platform.OS === 'android') {
-      distance = distance - 12
+    const getFieldsTopDistance = () => {
+      let distance = 0
+
+      if (photo) {
+        distance = distance + 12
+      }
+
+      if (!holderName && photo) {
+        distance = distance + 42
+      } else if (holderName) {
+        distance = distance + 16
+      }
+
+      // FIXME: with backgroundColor, the fields are a bit too low
+      if (isBackground && Platform.OS === 'android') {
+        distance = distance - 12
+      }
+
+      return distance
     }
 
-    return distance
-  }
+    useEffect(() => {
+      console.log('rendering card: ', id)
+    })
 
-  return (
-    <ScaledCard
-      originalHeight={scalingConfig.originalHeight}
-      originalWidth={scalingConfig.originalWidth}
-      originalScreenWidth={scalingConfig.originalScreenWidth}
-      style={[styles.card, style]}
-      scaleStyle={styles.cardScaled}
-      testID="documentCard"
-    >
-      <View style={styles.contentContainer}>
-        <DocumentHeader
-          name={credentialName}
-          icon={issuerIcon}
-          onPressMenu={onHandleMore}
-          backgroundImage={backgroundImage}
-          backgroundColor={backgroundColor}
-        />
-        <View style={styles.content}>
-          <ScaledView scaleStyle={[getSubheaderStyles()]}>
-            {photo && <DocumentPhoto photo={photo} />}
-            {holderName && (
-              <DocumentHolderName
-                name={holderName}
-                cropName={!!photo}
-                onLayout={handleHolderNameTextLayout}
-              />
-            )}
-          </ScaledView>
-          <ScaledView scaleStyle={{ paddingBottom: getFieldsTopDistance() }} />
-          <DocumentFields
-            fields={fields}
-            maxLines={maxLinesPerField}
-            maxRows={maxRows}
-            rowDistance={14}
-            labelScaledStyle={styles.fieldLabel}
-            valueScaledStyle={styles.fieldValue}
+    return (
+      <ScaledCard
+        originalHeight={scalingConfig.originalHeight}
+        originalWidth={scalingConfig.originalWidth}
+        originalScreenWidth={scalingConfig.originalScreenWidth}
+        style={[styles.card, style]}
+        scaleStyle={styles.cardScaled}
+        testID="documentCard"
+      >
+        <View style={styles.contentContainer}>
+          <DocumentHeader
+            name={credentialName}
+            icon={issuerIcon}
+            onPressMenu={onHandleMore}
+            backgroundImage={backgroundImage}
+            backgroundColor={backgroundColor}
           />
-        </View>
-        {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.
+          <View style={styles.content}>
+            <ScaledView scaleStyle={[getSubheaderStyles()]}>
+              {photo && <DocumentPhoto photo={photo} />}
+              {holderName && (
+                <DocumentHolderName
+                  name={holderName}
+                  cropName={!!photo}
+                  onLayout={handleHolderNameTextLayout}
+                />
+              )}
+            </ScaledView>
+            <ScaledView
+              scaleStyle={{ paddingBottom: getFieldsTopDistance() }}
+            />
+            <DocumentFields
+              fields={fields}
+              maxLines={maxLinesPerField}
+              maxRows={maxRows}
+              rowDistance={14}
+              labelScaledStyle={styles.fieldLabel}
+              valueScaledStyle={styles.fieldValue}
+            />
+          </View>
+          {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.
               Also, the header shouln't be pressable due to additional behavior + the menu button. Finally, it has
               to be at the bottom so that it's rendered last, otherwise the press events don't propagate.
            */}
-        <TouchableOpacity
-          onPress={handlePress}
-          activeOpacity={1}
-          style={styles.btn}
+          <TouchableOpacity
+            onPress={handlePress}
+            activeOpacity={1}
+            style={styles.btn}
+          />
+        </View>
+        <DocumentFooter
+          leftIcons={icons}
+          renderRightIcon={
+            hasImageFields ? () => <ScanDocumentIcon /> : undefined
+          }
         />
-      </View>
-      <DocumentFooter
-        leftIcons={icons}
-        renderRightIcon={
-          hasImageFields ? () => <ScanDocumentIcon /> : undefined
-        }
-      />
-    </ScaledCard>
-  )
-}
+      </ScaledCard>
+    )
+  },
+  // FIXME: figure out why memoization doesn't work!
+  ({ id: prevId }, { id: nextId }) => {
+    const shouldRender = prevId !== nextId
+    console.log({ prevId, nextId })
+
+    return shouldRender
+  },
+)
 
 const styles = StyleSheet.create({
   btn: {

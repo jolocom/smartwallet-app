@@ -26,10 +26,6 @@ export const StackScrollView = <T extends { id: string }>({
 }: StackScrollViewProps<T>) => {
   const expandState = useSharedValue<ExpandState | null>(null)
 
-  const resetStack = () => {
-    expandState.value = null
-  }
-
   const handlePress = (item: ExpandState) => {
     expandState.value = item
   }
@@ -75,10 +71,18 @@ export const StackScrollView = <T extends { id: string }>({
     >
       {data.map((stack) => {
         const renderStackChildren = () => {
-          return stack.data.map((item, i) => renderStackItem(item, i, stack))
+          return stack.data.map((item, i) => (
+            <React.Fragment key={item.id}>
+              {renderStackItem(item, i, stack)}
+            </React.Fragment>
+          ))
         }
 
-        return renderStack(stack, renderStackChildren())
+        return (
+          <React.Fragment key={stack.stackId}>
+            {renderStack(stack, renderStackChildren())}
+          </React.Fragment>
+        )
       })}
     </Animated.ScrollView>
   )

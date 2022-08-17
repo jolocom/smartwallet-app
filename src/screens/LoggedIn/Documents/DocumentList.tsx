@@ -6,7 +6,7 @@ import {
   DOCUMENT_HEADER_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_WIDTH,
-  ORIGINAL_DOCUMENT_SCREEN_WIDTH
+  ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from '~/components/Cards/consts'
 import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimenstions'
 import { StackScrollView } from '~/components/CardStack'
@@ -80,7 +80,7 @@ export const DocumentList = () => {
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
             visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
             itemDistance={12}
-            renderStack={(stack, Item) => {
+            renderStack={(stack, Items) => {
               return (
                 <View
                   key={stack.stackId}
@@ -97,7 +97,7 @@ export const DocumentList = () => {
                   >
                     {stack.stackId}
                   </JoloText>
-                  {Item}
+                  {Items}
                 </View>
               )
             }}
@@ -110,6 +110,7 @@ export const DocumentList = () => {
 
               return (
                 <DocumentCard
+                  id={c.id}
                   key={c.id}
                   onPress={() => handlePressDetails(c.id)}
                   credentialName={c.name}
