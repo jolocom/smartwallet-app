@@ -2,9 +2,15 @@ import React, { useMemo } from 'react'
 import { TouchableOpacity } from 'react-native'
 import Animated, {
   useAnimatedStyle,
+  useDerivedValue,
   withSpring,
   withTiming,
 } from 'react-native-reanimated'
+
+export interface ExpandState {
+  stackId: string
+  itemId: string
+}
 
 export interface StackItemConfig {
   itemHeight: number
@@ -13,10 +19,11 @@ export interface StackItemConfig {
 }
 
 export interface StackItemProps extends StackItemConfig {
-  id: string
+  stackId: string
   index: number
   onPress: () => void
-  isExpanded: boolean
+  expandState: Animated.SharedValue<ExpandState | null>
+  prevItemId: string | undefined
 }
 
 const AnimatedTouchableOpacity =
@@ -35,30 +42,40 @@ const timingConfig = {
 
 export const StackItem: React.FC<StackItemProps> = ({
   onPress,
-  id,
+  stackId,
   index,
   itemHeight,
   visibleHeaderHeight,
-  isExpanded,
   itemDistance,
   children,
+  expandState,
+  prevItemId,
 }) => {
   const expandedMargin = useMemo(
     () => -(itemHeight - visibleHeaderHeight + itemDistance),
     [itemDistance, itemHeight, visibleHeaderHeight],
   )
 
-  const animatedStyle = useAnimatedStyle(
-    () => ({
-      marginTop:
-        index === 0
-          ? withTiming(0, timingConfig)
-          : isExpanded
-          ? withTiming(0, timingConfig)
-          : withSpring(expandedMargin, springConfig),
-    }),
-    [isExpanded],
-  )
+  const isExpanded = useDerivedValue(() => {
+    if (expandState.value) {
+      const isSameStack = expandState.value.stackId === stackId
+      const isSameItem = expandState.value.itemId === prevItemId
+      if (isSameStack && isSameItem) {
+        return true
+      }
+    }
+
+    return false
+  })
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    marginTop:
+      index === 0
+        ? withTiming(0, timingConfig)
+        : isExpanded.value
+        ? withTiming(0, timingConfig)
+        : withSpring(expandedMargin, springConfig),
+  }))
 
   return (
     <AnimatedTouchableOpacity

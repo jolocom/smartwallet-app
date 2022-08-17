@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useCallback } from 'react'
 import Animated, {
-  runOnJS,
   useAnimatedScrollHandler,
+  useSharedValue,
 } from 'react-native-reanimated'
-import { StackItem, StackItemConfig } from './StackItem'
+import { ExpandState, StackItem, StackItemConfig } from './StackItem'
 
 export interface StackData<T extends { id: string }> {
   stackId: string
@@ -17,37 +17,53 @@ export interface StackScrollViewProps<T extends { id: string }>
   renderItem: (data: T, visible: boolean) => React.ReactNode
 }
 
-interface ExpandState {
-  stackId: string
-  itemId: string
-}
-
 export const StackScrollView = <T extends { id: string }>({
   data,
   renderItem,
   renderStack,
   ...itemConfig
 }: StackScrollViewProps<T>) => {
-  const [expandState, setExpandState] = useState<ExpandState | null>(null)
+  const expandState = useSharedValue<ExpandState | null>(null)
 
   const resetStack = () => {
-    setExpandState(null)
+    expandState.value = null
   }
-
-  const scrollHandler = useAnimatedScrollHandler(
-    {
-      onBeginDrag: () => {
-        if (expandState) {
-          runOnJS(resetStack)()
-        }
-      },
-    },
-    [JSON.stringify(expandState)],
-  )
 
   const handlePress = (item: ExpandState) => {
-    setExpandState(item)
+    expandState.value = item
   }
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onBeginDrag: () => {
+      if (expandState.value) {
+        expandState.value = null
+      }
+    },
+  })
+
+  const renderStackItem = useCallback(
+    (item: T, i: number, stack: StackData<T>) => {
+      const prevItem = stack.data[i - 1]
+
+      const visible = expandState.value?.itemId === item.id
+      return (
+        <StackItem
+          key={item.id}
+          stackId={stack.stackId}
+          index={i}
+          onPress={() => {
+            handlePress({ stackId: stack.stackId, itemId: item.id })
+          }}
+          prevItemId={prevItem?.id}
+          expandState={expandState}
+          {...itemConfig}
+        >
+          {renderItem(item, visible)}
+        </StackItem>
+      )
+    },
+    [expandState],
+  )
 
   return (
     <Animated.ScrollView
@@ -63,33 +79,7 @@ export const StackScrollView = <T extends { id: string }>({
     >
       {data.map((stack) => {
         const renderStackChildren = () => {
-          return stack.data.map((item, i) => {
-            let isExpanded = false
-
-            const prevItem = stack.data[i - 1]
-
-            if (expandState && expandState.stackId === stack.stackId) {
-              if (prevItem && expandState.itemId === prevItem.id) {
-                isExpanded = true
-              }
-            }
-
-            const visible = expandState?.itemId === item.id
-            return (
-              <StackItem
-                key={item.id}
-                id={item.id}
-                index={i}
-                onPress={() => {
-                  handlePress({ stackId: stack.stackId, itemId: item.id })
-                }}
-                isExpanded={isExpanded}
-                {...itemConfig}
-              >
-                {renderItem(item, visible)}
-              </StackItem>
-            )
-          })
+          return stack.data.map((item, i) => renderStackItem(item, i, stack))
         }
 
         return renderStack(stack, renderStackChildren())

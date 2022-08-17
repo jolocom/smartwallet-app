@@ -6,7 +6,7 @@ import {
   DOCUMENT_HEADER_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_WIDTH,
-  ORIGINAL_DOCUMENT_SCREEN_WIDTH,
+  ORIGINAL_DOCUMENT_SCREEN_WIDTH
 } from '~/components/Cards/consts'
 import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimenstions'
 import { StackScrollView } from '~/components/CardStack'
@@ -83,6 +83,7 @@ export const DocumentList = () => {
             renderStack={(stack, Item) => {
               return (
                 <View
+                  key={stack.stackId}
                   style={{
                     width: '100%',
                     justifyContent: 'center',
@@ -109,6 +110,7 @@ export const DocumentList = () => {
 
               return (
                 <DocumentCard
+                  key={c.id}
                   onPress={() => handlePressDetails(c.id)}
                   credentialName={c.name}
                   holderName={getHolderName(c)}
