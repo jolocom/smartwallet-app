@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import {
   Platform,
   StyleProp,
+  StyleSheet,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -20,6 +21,7 @@ import {
   DocumentPhoto,
 } from './components'
 import {
+  DOCUMENT_HEADER_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_WIDTH,
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
@@ -151,76 +153,91 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
       originalHeight={scalingConfig.originalHeight}
       originalWidth={scalingConfig.originalWidth}
       originalScreenWidth={scalingConfig.originalScreenWidth}
-      style={[
-        {
-          overflow: 'hidden',
-          flex: 1,
-          backgroundColor: Colors.white,
-        },
-        style,
-      ]}
-      scaleStyle={{ borderRadius: 15 }}
+      style={[styles.card, style]}
+      scaleStyle={styles.cardScaled}
       testID="documentCard"
     >
-      <View style={{ flex: 1 }}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            width: '100%',
-          }}
-        >
-          <DocumentHeader
-            name={credentialName}
-            icon={issuerIcon}
-            onPressMenu={onHandleMore}
-            backgroundImage={backgroundImage}
-            backgroundColor={backgroundColor}
+      <View style={styles.contentContainer}>
+        <DocumentHeader
+          name={credentialName}
+          icon={issuerIcon}
+          onPressMenu={onHandleMore}
+          backgroundImage={backgroundImage}
+          backgroundColor={backgroundColor}
+        />
+        <View style={styles.content}>
+          <ScaledView scaleStyle={[getSubheaderStyles()]}>
+            {photo && <DocumentPhoto photo={photo} />}
+            {holderName && (
+              <DocumentHolderName
+                name={holderName}
+                cropName={!!photo}
+                onLayout={handleHolderNameTextLayout}
+              />
+            )}
+          </ScaledView>
+          <ScaledView scaleStyle={{ paddingBottom: getFieldsTopDistance() }} />
+          <DocumentFields
+            fields={fields}
+            maxLines={maxLinesPerField}
+            maxRows={maxRows}
+            rowDistance={14}
+            labelScaledStyle={styles.fieldLabel}
+            valueScaledStyle={styles.fieldValue}
           />
-          <TouchableOpacity
-            onPress={handlePress}
-            activeOpacity={1}
-            style={{ flex: 1, marginTop: 12 }}
-          >
-            <ScaledView scaleStyle={[getSubheaderStyles()]}>
-              {photo && <DocumentPhoto photo={photo} />}
-              {holderName && (
-                <DocumentHolderName
-                  name={holderName}
-                  cropName={!!photo}
-                  onLayout={handleHolderNameTextLayout}
-                />
-              )}
-            </ScaledView>
-            <ScaledView
-              scaleStyle={{ paddingBottom: getFieldsTopDistance() }}
-            />
-            <DocumentFields
-              fields={fields}
-              maxLines={maxLinesPerField}
-              maxRows={maxRows}
-              rowDistance={14}
-              labelScaledStyle={{
-                fontSize: 16,
-                lineHeight: 16,
-                marginBottom: 6,
-              }}
-              valueScaledStyle={{
-                fontSize: 20,
-                lineHeight: 20,
-              }}
-            />
-          </TouchableOpacity>
         </View>
-        <DocumentFooter
-          leftIcons={icons}
-          renderRightIcon={
-            hasImageFields ? () => <ScanDocumentIcon /> : undefined
-          }
+        {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.
+              Also, the header shouln't be pressable due to additional behavior + the menu button. Finally, it has
+              to be at the bottom so that it's rendered last, otherwise the press events don't propagate.
+           */}
+        <TouchableOpacity
+          onPress={handlePress}
+          activeOpacity={1}
+          style={styles.btn}
         />
       </View>
+      <DocumentFooter
+        leftIcons={icons}
+        renderRightIcon={
+          hasImageFields ? () => <ScanDocumentIcon /> : undefined
+        }
+      />
     </ScaledCard>
   )
 }
+
+const styles = StyleSheet.create({
+  btn: {
+    ...StyleSheet.absoluteFillObject,
+    top: DOCUMENT_HEADER_HEIGHT,
+    flex: 1,
+  },
+  fieldLabel: {
+    fontSize: 16,
+    lineHeight: 16,
+    marginBottom: 6,
+  },
+  fieldValue: {
+    fontSize: 20,
+    lineHeight: 20,
+  },
+  content: {
+    flex: 1,
+    marginTop: 12,
+  },
+  contentContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    width: '100%',
+  },
+  card: {
+    overflow: 'hidden',
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  cardScaled: {
+    borderRadius: 15,
+  },
+})
 
 export default DocumentCard
