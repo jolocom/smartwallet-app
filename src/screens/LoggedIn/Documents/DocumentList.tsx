@@ -74,24 +74,53 @@ export const DocumentList = () => {
   if (!documents) return null
 
   //TODO: add translations (i.e. stackTitle)
-  const stackData = useMemo(
+  const stackData = useMemo<
+    StackData<Document, { title: string; subtitle: string }>[]
+  >(
     () => [
-      { stackId: DocumentStacks.Favorites, data: [] },
-      { stackId: DocumentStacks.All, data: documents },
-      { stackId: DocumentStacks.Expired, data: [] },
+      {
+        stackId: DocumentStacks.Favorites,
+        data: [],
+        extra: {
+          title: 'Nothing here yet',
+          subtitle:
+            'Favourite a document by tapping the star icon on a document.',
+        },
+      },
+      {
+        stackId: DocumentStacks.All,
+        data: documents,
+        extra: {
+          title: 'It’s still empty',
+          subtitle: "You haven't saved any documents yet. Get one today!",
+        },
+      },
+      {
+        stackId: DocumentStacks.Expired,
+        data: [],
+        extra: {
+          title: 'It’s still empty',
+          subtitle: 'You don’t have any expired documents.',
+        },
+      },
     ],
     [documents],
   )
   const [openedStack, setOpenedStack] = React.useState<DocumentStacks | null>(
     DocumentStacks.Favorites,
   )
+
   const handleStackPress = (stackId: DocumentStacks) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-    setOpenedStack(stackId)
+    if (openedStack === stackId) {
+      setOpenedStack(null)
+    } else {
+      setOpenedStack(stackId)
+    }
   }
 
   const renderStack = (
-    stack: StackData<Document>,
+    stack: StackData<Document, { title: string; subtitle: string }>,
     stackItems: React.ReactNode,
   ) => {
     return (
@@ -107,8 +136,25 @@ export const DocumentList = () => {
             {stack.data.length}
           </JoloText>
         </TouchableOpacity>
-        {openedStack === stack.stackId && stack.data.length !== 0 && (
-          <View style={styles.stackItems}>{stackItems}</View>
+        {openedStack === stack.stackId && (
+          <View style={styles.stackItems}>
+            {stack.data.length ? (
+              stackItems
+            ) : (
+              <View style={{ paddingHorizontal: 80 }}>
+                <JoloText
+                  size={JoloTextSizes.middle}
+                  color={Colors.white90}
+                  customStyles={{ marginBottom: 4 }}
+                >
+                  {stack.extra.title}
+                </JoloText>
+                <JoloText size={JoloTextSizes.mini}>
+                  {stack.extra.subtitle}
+                </JoloText>
+              </View>
+            )}
+          </View>
         )}
       </View>
     )
@@ -133,6 +179,7 @@ export const DocumentList = () => {
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
             visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
             itemDistance={12}
+            // @ts-expect-error FIXME: fix typescript inferrence issue
             renderStack={renderStack}
             renderItem={(c, visible) => {
               const previewFields = getPreviewProperties(c)
