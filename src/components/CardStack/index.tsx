@@ -71,6 +71,7 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
       scrollEventThrottle={4}
       style={styles.scroll}
       contentContainerStyle={styles.scrollContainer}
+      showsVerticalScrollIndicator={false}
     >
       {data.map((stack) => {
         const renderStackChildren = () => {
