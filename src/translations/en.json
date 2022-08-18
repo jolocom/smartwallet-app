@@ -243,7 +243,16 @@
         "subjectNameField": "Subject name",
         "issuedFieldLabel": "Issued",
         "issuerFieldLabel": "Issuer",
-        "expiresFieldLabel": "Expires"
+        "expiresFieldLabel": "Expires",
+        "favoriteSection": "Favorites",
+        "allSection": "All",
+        "expiredSection": "Expired",
+        "favoritePlaceholderTitle": "Nothing here yet",
+        "favoritePlaceholderSubtitle": "Favorite a document by tapping the star icon on a document.",
+        "allPlaceholderTitle": "It’s still empty",
+        "allPlaceholderSubtitle": "You haven't saved any documents yet. Get one today!",
+        "expiredPlaceholderTitle": "It’s still empty",
+        "expiredPlaceholderSubtitle": "You don’t have any expired documents."
     },
     "CredentialRequest": {
         "header": "Incoming request",
@@ -401,7 +410,8 @@
         "issueOption_5": "Problems with the interface",
         "issueOption_6": "Something doesn't seem right",
         "issueOption_7": "Other",
-        "contactPlaceholder": "Write your email here …"
+        "contactPlaceholder": "Write your email here …",
+        "errorHeader": "Report error"
     },
     "General": {
         "unknown": "Unknown",

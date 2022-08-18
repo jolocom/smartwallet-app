@@ -27,9 +27,15 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { useDocumentMenu } from './useDocumentMenu'
 
 enum DocumentStacks {
-  Favorites = 'Favorites',
-  All = 'All',
-  Expired = 'Expired',
+  Favorites = 'favorites',
+  All = 'all',
+  Expired = 'expired',
+}
+
+interface StackExtraData {
+  name: string
+  title: string
+  subtitle: string
 }
 
 export const DocumentList = () => {
@@ -74,33 +80,33 @@ export const DocumentList = () => {
   if (!documents) return null
 
   //TODO: add translations (i.e. stackTitle, placeholders)
-  const stackData = useMemo<
-    StackData<Document, { title: string; subtitle: string }>[]
-  >(
+  const stackData = useMemo<StackData<Document, StackExtraData>[]>(
     () => [
       {
         stackId: DocumentStacks.Favorites,
         data: [],
         extra: {
-          title: 'Nothing here yet',
-          subtitle:
-            'Favourite a document by tapping the star icon on a document.',
+          name: t('Documents.favoriteSection'),
+          title: t('Documents.favoritePlaceholderTitle'),
+          subtitle: t('Documents.favoritePlaceholderSubtitle'),
         },
       },
       {
         stackId: DocumentStacks.All,
         data: documents,
         extra: {
-          title: 'It’s still empty',
-          subtitle: "You haven't saved any documents yet. Get one today!",
+          name: t('Documents.allSection'),
+          title: t('Documents.allPlaceholderTitle'),
+          subtitle: t('Documents.allPlaceholderSubtitle'),
         },
       },
       {
         stackId: DocumentStacks.Expired,
         data: [],
         extra: {
-          title: 'It’s still empty',
-          subtitle: 'You don’t have any expired documents.',
+          name: t('Documents.expiredSection'),
+          title: t('Documents.expiredPlaceholderTitle'),
+          subtitle: t('Documents.expiredPlaceholderSubtitle'),
         },
       },
     ],
@@ -111,8 +117,10 @@ export const DocumentList = () => {
   )
 
   const handleStackPress = (stackId: DocumentStacks) => {
+    // NOTE: Not applying the "updated" configuration because it always animates the hiding with scaling,
+    // which looks weird. In case the hiding animation has to be added, it must be custom made instead of LayoutAnimation.
     LayoutAnimation.configureNext({
-      duration: 200,
+      duration: 300,
       create: {
         type: LayoutAnimation.Types.easeInEaseOut,
         property: LayoutAnimation.Properties.opacity,
@@ -127,7 +135,7 @@ export const DocumentList = () => {
 
   const renderStack = useCallback(
     (
-      stack: StackData<Document, { title: string; subtitle: string }>,
+      stack: StackData<Document, StackExtraData>,
       stackItems: React.ReactNode,
     ) => {
       return (
@@ -137,7 +145,7 @@ export const DocumentList = () => {
             style={styles.stackBtn}
           >
             <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-              {stack.stackId}
+              {stack.extra.name}
             </JoloText>
             <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
               {stack.data.length}
