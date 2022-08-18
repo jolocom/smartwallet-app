@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import {
   LayoutAnimation,
   StyleSheet,
@@ -73,7 +73,7 @@ export const DocumentList = () => {
 
   if (!documents) return null
 
-  //TODO: add translations (i.e. stackTitle)
+  //TODO: add translations (i.e. stackTitle, placeholders)
   const stackData = useMemo<
     StackData<Document, { title: string; subtitle: string }>[]
   >(
@@ -111,7 +111,13 @@ export const DocumentList = () => {
   )
 
   const handleStackPress = (stackId: DocumentStacks) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    LayoutAnimation.configureNext({
+      duration: 200,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+    })
     if (openedStack === stackId) {
       setOpenedStack(null)
     } else {
@@ -119,25 +125,36 @@ export const DocumentList = () => {
     }
   }
 
-  const renderStack = (
-    stack: StackData<Document, { title: string; subtitle: string }>,
-    stackItems: React.ReactNode,
-  ) => {
-    return (
-      <View key={stack.stackId} style={styles.stackContainer}>
-        <TouchableOpacity
-          onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
-          style={styles.stackBtn}
-        >
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {stack.stackId}
-          </JoloText>
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {stack.data.length}
-          </JoloText>
-        </TouchableOpacity>
-        {openedStack === stack.stackId && (
-          <View style={styles.stackItems}>
+  const renderStack = useCallback(
+    (
+      stack: StackData<Document, { title: string; subtitle: string }>,
+      stackItems: React.ReactNode,
+    ) => {
+      return (
+        <View key={stack.stackId} style={styles.stackContainer}>
+          <TouchableOpacity
+            onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
+            style={styles.stackBtn}
+          >
+            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+              {stack.stackId}
+            </JoloText>
+            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+              {stack.data.length}
+            </JoloText>
+          </TouchableOpacity>
+          <View
+            style={[
+              styles.stackItems,
+              {
+                // NOTE: Opening and closing using the display style instead of conditionally rendering
+                // the component is faster, but the exiting layout animation is messed up. Also, this makes memoization
+                // work, where each component is only rendered once. Otherwise, with conditional rendering
+                // each card is rendered twice.
+                display: openedStack === stack.stackId ? 'flex' : 'none',
+              },
+            ]}
+          >
             {stack.data.length ? (
               stackItems
             ) : (
@@ -155,10 +172,11 @@ export const DocumentList = () => {
               </View>
             )}
           </View>
-        )}
-      </View>
-    )
-  }
+        </View>
+      )
+    },
+    [openedStack],
+  )
 
   return (
     <>

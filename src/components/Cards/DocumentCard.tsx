@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   Platform,
   StyleProp,
@@ -153,10 +153,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       return distance
     }
 
-    useEffect(() => {
-      console.log('rendering card: ', id)
-    })
-
     return (
       <ScaledCard
         originalHeight={scalingConfig.originalHeight}
@@ -216,10 +212,8 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       </ScaledCard>
     )
   },
-  // FIXME: figure out why memoization doesn't work!
   ({ id: prevId }, { id: nextId }) => {
-    const shouldRender = prevId !== nextId
-    console.log({ prevId, nextId })
+    const shouldRender = prevId === nextId
 
     return shouldRender
   },
