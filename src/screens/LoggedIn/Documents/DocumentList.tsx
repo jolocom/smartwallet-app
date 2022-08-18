@@ -1,10 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import {
-  LayoutAnimation,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { DocumentCard } from '~/components/Cards'
 import {
@@ -19,24 +14,14 @@ import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
-import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
-import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useDocumentMenu } from './useDocumentMenu'
-
-enum DocumentStacks {
-  Favorites = 'favorites',
-  All = 'all',
-  Expired = 'expired',
-}
-
-interface StackExtraData {
-  name: string
-  title: string
-  subtitle: string
-}
+import {
+  DocumentStacks,
+  StackExtraData,
+  useDocumentsScreen,
+} from './useDocumentsScreen'
 
 export const DocumentList = () => {
   const { t } = useTranslation()
@@ -48,24 +33,13 @@ export const DocumentList = () => {
     getExtraProperties,
     getPreviewProperties,
   } = useDocuments()
-  const redirect = useRedirect()
-
-  const onHandleMore = useDocumentMenu()
-
-  const handlePressDetails = (id: string) => {
-    redirect(ScreenNames.Main, {
-      screen: ScreenNames.FieldDetails,
-      params: {
-        id,
-      },
-    })
-  }
-
-  const handlePressMore = (c: Document) => {
-    onHandleMore({
-      id: c.id,
-    })
-  }
+  const {
+    stackData,
+    handleStackPress,
+    openedStack,
+    handlePressDetails,
+    handlePressMenu,
+  } = useDocumentsScreen()
 
   const { scaleBy } = useMemo(
     () =>
@@ -78,60 +52,6 @@ export const DocumentList = () => {
   )
 
   if (!documents) return null
-
-  //TODO: add translations (i.e. stackTitle, placeholders)
-  const stackData = useMemo<StackData<Document, StackExtraData>[]>(
-    () => [
-      {
-        stackId: DocumentStacks.Favorites,
-        data: [],
-        extra: {
-          name: t('Documents.favoriteSection'),
-          title: t('Documents.favoritePlaceholderTitle'),
-          subtitle: t('Documents.favoritePlaceholderSubtitle'),
-        },
-      },
-      {
-        stackId: DocumentStacks.All,
-        data: documents,
-        extra: {
-          name: t('Documents.allSection'),
-          title: t('Documents.allPlaceholderTitle'),
-          subtitle: t('Documents.allPlaceholderSubtitle'),
-        },
-      },
-      {
-        stackId: DocumentStacks.Expired,
-        data: [],
-        extra: {
-          name: t('Documents.expiredSection'),
-          title: t('Documents.expiredPlaceholderTitle'),
-          subtitle: t('Documents.expiredPlaceholderSubtitle'),
-        },
-      },
-    ],
-    [documents],
-  )
-  const [openedStack, setOpenedStack] = React.useState<DocumentStacks | null>(
-    DocumentStacks.Favorites,
-  )
-
-  const handleStackPress = (stackId: DocumentStacks) => {
-    // NOTE: Not applying the "updated" configuration because it always animates the hiding with scaling,
-    // which looks weird. In case the hiding animation has to be added, it must be custom made instead of LayoutAnimation.
-    LayoutAnimation.configureNext({
-      duration: 300,
-      create: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-    })
-    if (openedStack === stackId) {
-      setOpenedStack(null)
-    } else {
-      setOpenedStack(stackId)
-    }
-  }
 
   const renderStack = useCallback(
     (
@@ -223,7 +143,7 @@ export const DocumentList = () => {
                   holderName={getHolderName(c)}
                   fields={fields}
                   photo={getHolderPhoto(c)}
-                  onHandleMore={visible ? () => handlePressMore(c) : undefined}
+                  onHandleMore={visible ? () => handlePressMenu(c) : undefined}
                   backgroundColor={c.style.backgroundColor}
                   backgroundImage={c.style.backgroundImage}
                   issuerIcon={c.issuer.icon}
