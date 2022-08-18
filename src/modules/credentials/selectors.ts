@@ -9,3 +9,5 @@ export const getDocumentById = (id: string) =>
 
     return doc
   })
+
+export const getExpiredDocuments = (state: RootReducerI) => state.credentials.all.filter(doc => doc.expires.getTime() < Date.now())

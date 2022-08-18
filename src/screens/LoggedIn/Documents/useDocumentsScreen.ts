@@ -22,7 +22,7 @@ export interface StackExtraData {
 }
 
 export const useDocumentsScreen = () => {
-  const { documents } = useDocuments()
+  const { documents, expiredDocuments } = useDocuments()
   const { t } = useTranslation()
   const redirect = useRedirect()
 
@@ -64,7 +64,7 @@ export const useDocumentsScreen = () => {
       },
       {
         stackId: DocumentStacks.Expired,
-        data: [],
+        data: expiredDocuments,
         extra: {
           name: t('Documents.expiredSection'),
           title: t('Documents.expiredPlaceholderTitle'),
