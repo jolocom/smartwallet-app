@@ -61,6 +61,7 @@ const Documents: React.FC = () => {
       return (
         <View key={stack.stackId} style={styles.stackContainer}>
           <TouchableOpacity
+            activeOpacity={0.7}
             onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
             style={styles.stackBtn}
           >
@@ -163,7 +164,7 @@ const Documents: React.FC = () => {
 
 const styles = StyleSheet.create({
   stackBtn: {
-    flex: 1,
+    width: '100%',
     paddingHorizontal: 24,
     height: 50,
     justifyContent: 'space-between',
