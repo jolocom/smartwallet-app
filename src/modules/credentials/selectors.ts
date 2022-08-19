@@ -2,12 +2,8 @@ import { createSelector } from 'reselect'
 import { Document } from '~/hooks/documents/types'
 import { RootReducerI } from '~/types/reducer'
 
-// TODO: uncomment!
-// const isDocumentExpired = (document: Document) =>
-//   document.expires.getTime() < Date.now()
-
 const isDocumentExpired = (document: Document) =>
-  document.name === 'Expired document'
+  document.expires.getTime() < Date.now()
 
 export const getAllDocuments = (state: RootReducerI) => state.credentials.all
 
