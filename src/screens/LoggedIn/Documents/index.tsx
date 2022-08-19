@@ -130,7 +130,7 @@ const Documents: React.FC = () => {
             itemDistance={12}
             // @ts-expect-error FIXME: fix typescript inferrence issue
             renderStack={renderStack}
-            renderItem={(c, visible) => {
+            renderItem={(c, stack, visible) => {
               const previewFields = getPreviewProperties(c)
 
               const fields = previewFields.length
@@ -147,11 +147,13 @@ const Documents: React.FC = () => {
                   fields={fields}
                   photo={getHolderPhoto(c)}
                   onHandleMore={visible ? () => handlePressMenu(c) : undefined}
+                  showMenu={visible}
                   backgroundColor={c.style.backgroundColor}
                   backgroundImage={c.style.backgroundImage}
                   issuerIcon={c.issuer.icon}
                   hasImageFields={hasImageProperties(c)}
                   icons={c.style.contextIcons}
+                  expired={stack.stackId === DocumentStacks.Expired}
                 />
               )
             }}

@@ -30,8 +30,7 @@ export const FieldsCalculator: React.FC<{
   > | null
 
 export const CardMoreBtn: React.FC<{
-  onPress: () => void
-  positionStyles: Partial<Pick<ViewStyle, 'left' | 'right' | 'top' | 'bottom'>>
+  onPress?: () => void
 }> = ({ onPress }) => (
   <ScaledView
     scaleStyle={styles.dotsContainerScaled}
@@ -102,18 +101,10 @@ export const DocumentPhoto: React.FC<{
 export const DocumentHeader: React.FC<{
   name: string
   icon?: string
-  onPressMenu?: () => void
   selected?: boolean
   backgroundImage?: string
   backgroundColor?: string
-}> = ({
-  name,
-  icon,
-  onPressMenu,
-  selected,
-  backgroundColor,
-  backgroundImage,
-}) => {
+}> = ({ name, icon, selected, backgroundColor, backgroundImage }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   const prefetchedIcon = useImagePrefetch(icon)
@@ -184,15 +175,6 @@ export const DocumentHeader: React.FC<{
           </ScaledView>
           {typeof selected !== 'undefined' && (
             <SelectedToggle selected={selected} />
-          )}
-          {onPressMenu && (
-            <CardMoreBtn
-              onPress={onPressMenu}
-              positionStyles={{
-                top: 18,
-                right: 17,
-              }}
-            />
           )}
         </ScaledView>
       ))}
@@ -420,12 +402,16 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
 
 const styles = StyleSheet.create({
   dotsContainerScaled: {
+    top: 18,
+    right: 18,
     paddingVertical: 3,
     width: 20,
     height: 30,
-    justifyContent: 'center',
   },
   dotsContainer: {
+    justifyContent: 'center',
+    zIndex: 99,
+    position: 'absolute',
     height: '100%',
     backgroundColor: Colors.white50,
     borderRadius: 8,

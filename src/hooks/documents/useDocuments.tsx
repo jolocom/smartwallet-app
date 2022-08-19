@@ -4,6 +4,7 @@ import { deleteCredential } from '~/modules/credentials/actions'
 import {
   getAllDocuments,
   getExpiredDocuments,
+  getValidDocuments,
 } from '~/modules/credentials/selectors'
 import { ClaimKeys } from '~/types/credentials'
 import { useAgent } from '../sdk'
@@ -16,6 +17,7 @@ export const useDocuments = () => {
   const dispatch = useDispatch()
   const documents = useSelector(getAllDocuments)
   const expiredDocuments = useSelector(getExpiredDocuments)
+  const validDocuments = useSelector(getValidDocuments)
 
   const deleteDocument = async (id: string) => {
     await agent.credentials.delete({ id })
@@ -86,6 +88,7 @@ export const useDocuments = () => {
   return {
     documents,
     expiredDocuments,
+    validDocuments,
     deleteDocument,
     getDocumentById,
     getHolderName,
