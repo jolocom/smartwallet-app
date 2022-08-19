@@ -167,7 +167,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
         scaleStyle={styles.cardScaled}
         testID="documentCard"
       >
-        <View style={styles.contentContainer}>
+        <View style={[styles.contentContainer, expired && { opacity: 0.5 }]}>
           <DocumentHeader
             name={credentialName}
             icon={issuerIcon}
@@ -208,12 +208,15 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           />
         </View>
         {showMenu && <CardMoreBtn onPress={onHandleMore} />}
-        <DocumentFooter
-          leftIcons={icons}
-          renderRightIcon={
-            hasImageFields ? () => <ScanDocumentIcon /> : undefined
-          }
-        />
+        {Boolean(icons?.length || hasImageFields || expired) && (
+          <DocumentFooter
+            leftIcons={icons}
+            expired={expired}
+            renderRightIcon={
+              hasImageFields ? () => <ScanDocumentIcon /> : undefined
+            }
+          />
+        )}
       </ScaledCard>
     )
   },

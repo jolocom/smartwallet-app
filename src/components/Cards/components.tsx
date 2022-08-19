@@ -13,9 +13,11 @@ import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
+import useTranslation from '~/hooks/useTranslation'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import JoloText from '../JoloText'
 import { DOCUMENT_HEADER_HEIGHT } from './consts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
@@ -49,39 +51,52 @@ export const CardMoreBtn: React.FC<{
 export const DocumentFooter: React.FC<{
   leftIcons?: string[]
   renderRightIcon?: () => JSX.Element
+  expired?: boolean
   style?: StyleProp<ViewStyle>
-}> = ({ renderRightIcon, leftIcons, style = {} }) => {
+}> = ({ renderRightIcon, leftIcons, style = {}, expired = false }) => {
+  const { t } = useTranslation()
+
   return (
     <ScaledView
       style={[styles.footerContainer, style]}
       scaleStyle={styles.footerContainerScaled}
     >
       <View style={styles.footerBorder} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-          {leftIcons &&
-            leftIcons.map((icon, i) => (
-              <ScaledView
-                key={i}
-                scaleStyle={{ width: 40, height: 30 }}
-                style={{ marginRight: 10 }}
-              >
-                <Image
-                  source={{ uri: icon }}
-                  resizeMode="contain"
-                  style={{ width: '100%', height: '100%', borderRadius: 4.2 }}
-                />
-              </ScaledView>
-            ))}
-        </View>
-        <View>{renderRightIcon && renderRightIcon()}</View>
+      <View style={styles.footerContent}>
+        {expired ? (
+          <View style={styles.footerExpiredContainer}>
+            <JoloText
+              customStyles={{ fontFamily: Fonts.Medium }}
+              color={Colors.mainBlack}
+            >
+              {t('DocumentCard.expired')}
+            </JoloText>
+          </View>
+        ) : (
+          <>
+            <View style={styles.footerIconsContainer}>
+              {leftIcons &&
+                leftIcons.map((icon, i) => (
+                  <ScaledView
+                    key={i}
+                    scaleStyle={{ width: 40, height: 30 }}
+                    style={{ marginRight: 10 }}
+                  >
+                    <Image
+                      source={{ uri: icon }}
+                      resizeMode="contain"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 4.2,
+                      }}
+                    />
+                  </ScaledView>
+                ))}
+            </View>
+            <View>{renderRightIcon && renderRightIcon()}</View>
+          </>
+        )}
       </View>
     </ScaledView>
   )
@@ -477,6 +492,22 @@ const styles = StyleSheet.create({
     width: '100%',
     borderTopWidth: 1,
     borderTopColor: '#D8D8D8',
+  },
+  footerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100%',
+  },
+  footerExpiredContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: Colors.yellow,
+    borderRadius: 9,
+  },
+  footerIconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
   regularText: {
     fontFamily: Fonts.Regular,
