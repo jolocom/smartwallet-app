@@ -2,7 +2,9 @@ import React, { useCallback, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
   runOnJS,
+  scrollTo,
   useAnimatedReaction,
+  useAnimatedRef,
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated'
@@ -33,6 +35,8 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
   renderStack,
   ...itemConfig
 }: StackScrollViewProps<T, P>) => {
+  const scrollRef = useAnimatedRef<Animated.ScrollView>()
+
   const expandValue = useSharedValue<ExpandState | null>(null)
   // NOTE: Only reason it's here is to force re-renders when needed
   const [expandState, setExpandState] = useState(expandValue.value)
@@ -42,12 +46,23 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
   // order for the animations to run smoothly.
   useAnimatedReaction(
     () => {
-      return (
+      const changed =
         expandValue.value?.itemId !== expandState?.itemId ||
         expandValue.value?.stackId !== expandState?.stackId
-      )
+      const expanded =
+        expandValue.value?.itemId !== undefined &&
+        expandState?.itemId === undefined
+      const collapsed =
+        expandValue.value?.itemId === undefined &&
+        (expandState?.itemId !== undefined) !== undefined
+
+      return { changed, expanded, collapsed }
     },
-    (changed) => {
+    ({ changed, expanded }) => {
+      if (expanded) {
+        scrollTo(scrollRef, 0, 150, true)
+      }
+
       if (changed) {
         runOnJS(setExpandState)(expandValue.value)
       }
@@ -100,6 +115,7 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
       style={styles.scroll}
       contentContainerStyle={styles.scrollContainer}
       showsVerticalScrollIndicator={false}
+      ref={scrollRef}
     >
       {data.map((stack) => {
         const renderStackChildren = () => {
