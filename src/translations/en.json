@@ -401,7 +401,8 @@
         "issueOption_5": "Problems with the interface",
         "issueOption_6": "Something doesn't seem right",
         "issueOption_7": "Other",
-        "contactPlaceholder": "Write your email here …"
+        "contactPlaceholder": "Write your email here …",
+        "errorHeader": "Report error"
     },
     "General": {
         "unknown": "Unknown",
