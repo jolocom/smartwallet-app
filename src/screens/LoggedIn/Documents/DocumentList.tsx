@@ -1,27 +1,26 @@
-import React, { useCallback } from 'react'
-import { useSelector } from 'react-redux'
-import { ScrollView, StyleSheet, View } from 'react-native'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import React from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { getAllDocuments } from '~/modules/credentials/selectors'
+import { ClaimMimeType } from '@jolocom/protocol-ts'
+import { DocumentCard } from '~/components/Cards'
+import ScreenContainer from '~/components/ScreenContainer'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
-import { ScreenNames } from '~/types/screens'
-import useTranslation from '~/hooks/useTranslation'
 import {
   useCredentialOptionalFields,
   useDeleteCredential,
 } from '~/hooks/credentials'
-import { useToasts } from '~/hooks/toasts'
-import { usePopupMenu } from '~/hooks/popupMenu'
-import { DocumentCard } from '~/components/Cards'
-import { truncateString } from '~/utils/stringUtils'
-import ScreenContainer from '~/components/ScreenContainer'
-import { DisplayCredentialDocument } from '~/types/credentials'
 import { useRedirect } from '~/hooks/navigation'
-import { ClaimMimeType } from '@jolocom/protocol-ts'
-import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
-import { DrivingLicensePersonalization } from './DrivingLicenseDemo/DrivingLicensePersonalization'
+import { usePopupMenu } from '~/hooks/popupMenu'
+import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
+import { getAllDocuments } from '~/modules/credentials/selectors'
+import { DisplayCredentialDocument } from '~/types/credentials'
+import { ScreenNames } from '~/types/screens'
+import { truncateString } from '~/utils/stringUtils'
 import { DrivingLicenseCard } from './DrivingLicenseDemo'
+import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
 
 const useHandleMorePress = () => {
   const { t } = useTranslation()

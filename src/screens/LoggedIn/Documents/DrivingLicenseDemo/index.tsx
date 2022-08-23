@@ -1,7 +1,7 @@
-import { LogBox } from 'react-native'
 import { ClaimMimeType } from '@jolocom/protocol-ts'
 import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React from 'react'
+import { LogBox } from 'react-native'
 import { DrivingLicenseData, DrivingPrivilege } from 'react-native-mdl'
 import { DocumentCard } from '~/components/Cards'
 import { useRedirect } from '~/hooks/navigation'
@@ -12,17 +12,38 @@ import { ScreenNames } from '~/types/screens'
 import { useDrivingLicense } from './hooks'
 import { utf8ToBase64Image } from './utils'
 
-const formatLabel = (key: string) => {
-  return key
-    .split('_')
-    .map((word, i) => {
-      if (i === 0) {
-        return word.charAt(0).toUpperCase() + word.slice(1)
-      }
+enum DrivingLicenseKeys {
+  document_number = 'document_number',
+  issue_date = 'issue_date',
+  expiry_date = 'expiry_date',
+  resident_address = 'resident_address',
+  issuing_authority = 'issuing_authority',
+  issuing_country = 'issuing_country',
+  given_name = 'given_name',
+  family_name = 'family_name',
+  resident_postal_code = 'resident_postal_code',
+  birth_place = 'birth_place',
+  birth_date = 'birth_date',
+  portrait = 'portrait',
+  un_distinguishing_sign = 'un_distinguishing_sign',
+  driving_privileges = 'driving_privileges',
+  age_over_18 = 'age_over_18',
+  age_over_21 = 'age_over_21',
+  age_over_35 = 'age_over_35',
+  age_over_50 = 'age_over_50',
+}
 
-      return word
-    })
-    .join(' ')
+const fieldLabels = {
+  [DrivingLicenseKeys.given_name]: 'Vorname',
+  [DrivingLicenseKeys.family_name]: 'Familienname',
+  [DrivingLicenseKeys.birth_date]: 'Geburtsdatum',
+  [DrivingLicenseKeys.document_number]: 'Führerscheinnummer',
+  [DrivingLicenseKeys.issuing_authority]: 'Ausstellende Behörde',
+  [DrivingLicenseKeys.expiry_date]: 'Gültig bis',
+  [DrivingLicenseKeys.issue_date]: 'Letztes Update',
+  [DrivingLicenseKeys.issuing_country]: 'Ausstellungsland',
+  [DrivingLicenseKeys.un_distinguishing_sign]: 'Länderkennzeichen',
+  [DrivingLicenseKeys.driving_privileges]: 'Führerscheinrechte',
 }
 
 LogBox.ignoreAllLogs()
@@ -34,37 +55,32 @@ export const DrivingLicenseCard: React.FC<{
   const { deleteDrivingLicense } = useDrivingLicense()
   const redirect = useRedirect()
 
-  const fields: DisplayVal[] = Object.entries(drivingLicense)
-    .map(([key, value]) => {
-      console.log({ key, value_type: typeof value })
-      let label = formatLabel(key)
+  const fields: DisplayVal[] = Object.entries(fieldLabels).map(
+    ([key, label]) => {
+      let value = drivingLicense[key as keyof DrivingLicenseData]
 
-      const boolean_value_keys = [
-        'age_over_18',
-        'age_over_21',
-        'age_over_35',
-        'age_over_50',
-      ]
-      if (key === 'un_distinguishing_sign') {
-        label = 'UN Distinguishing sign'
-      } else if (key === 'driving_privileges') {
+      if (key === DrivingLicenseKeys.driving_privileges) {
         value = (value as DrivingPrivilege[]).reduce((acc, value) => {
           return acc + ' ' + value.vehicle_category_code
         }, '')
-      } else if (boolean_value_keys.includes(key)) {
-        value = value ? 'Yes' : 'No'
       }
 
-      return { key, value, label, mime_type: ClaimMimeType.text_plain }
-    })
-    .filter((field) => field.key !== 'portrait')
+      return {
+        key,
+        label,
+        value: value as string,
+        mime_type: ClaimMimeType.text_plain,
+      }
+    },
+  )
 
   const previewFieldsList = [
-    'resident_address',
     'birth_date',
     'expiry_date',
     'document_number',
+    'issuing_country',
   ]
+
   const previewFields = fields.filter((field) =>
     previewFieldsList.includes(field.key!),
   )
