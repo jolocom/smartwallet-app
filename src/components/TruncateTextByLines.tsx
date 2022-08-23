@@ -1,5 +1,6 @@
 import React, { SyntheticEvent, useState } from 'react'
 
+import { TextLayoutEvent } from '~/types/props'
 import JoloText, { IJoloTextProps } from './JoloText'
 
 interface Props extends IJoloTextProps {
@@ -7,8 +8,6 @@ interface Props extends IJoloTextProps {
   numOfLines: number
   suffix: string
 }
-
-type OnTextLayoutEvent = SyntheticEvent<{}, { lines: Array<{ text: string }> }>
 
 const TruncateTextByLines: React.FC<Props> = ({
   text,
@@ -18,7 +17,7 @@ const TruncateTextByLines: React.FC<Props> = ({
 }) => {
   const [truncatedText, setTruncatedText] = useState('')
 
-  const onTextLayout = (e: OnTextLayoutEvent) => {
+  const onTextLayout = (e: TextLayoutEvent<Array<{ text: string }>>) => {
     const { lines } = e.nativeEvent
 
     if (lines.length > numOfLines) {

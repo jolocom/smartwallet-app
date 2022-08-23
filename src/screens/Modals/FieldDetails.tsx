@@ -63,7 +63,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
    * Decide whether to render 'Show more' btn to expand a
    * field content
    */
-  const handleTextLayout = (e: TextLayoutEvent) => {
+  const handleTextLayout = (e: TextLayoutEvent<number[]>) => {
     if (originalNrLines.current === null) {
       originalNrLines.current = e.nativeEvent.lines.length
       if (originalNrLines.current > 4) {

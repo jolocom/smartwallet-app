@@ -7,7 +7,7 @@ import { TextLayoutEvent } from '~/types/props'
  */
 export const useCredentialNameScale = () => {
   const [isCredentialNameScaled, setIsCredentialNameScaled] = useState(false)
-  const handleCredentialNameTextLayout = (e: TextLayoutEvent) => {
+  const handleCredentialNameTextLayout = (e: TextLayoutEvent<number[]>) => {
     if (!isCredentialNameScaled) {
       setIsCredentialNameScaled(e.nativeEvent.lines.length > 2)
     }
@@ -31,7 +31,7 @@ export const useTrimFields = <FP>(
   const lines = useRef(0)
   const handleOptionalFieldTextLayout = () => {
     let calculatedTimes = 0
-    return (e: TextLayoutEvent) => {
+    return (e: TextLayoutEvent<number[]>) => {
       calculatedTimes++
       // disable lines manipulation if the number of times this function was invoked
       // exceeds length of optional fields twice (because we calculate field name and
@@ -61,7 +61,10 @@ export const useTrimFields = <FP>(
  */
 export const useCalculateFieldLines = (maxLinesPerField = 2) => {
   const [fieldLines, setFieldLines] = useState<Record<number, number>>({})
-  const handleFieldValueLayout = (e: TextLayoutEvent, idx: number) => {
+  const handleFieldValueLayout = (
+    e: TextLayoutEvent<number[]>,
+    idx: number,
+  ) => {
     const lines = e.nativeEvent.lines.length
     setFieldLines((prevState) => {
       const value = prevState[idx] ?? lines

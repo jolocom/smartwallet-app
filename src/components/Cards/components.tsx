@@ -155,7 +155,7 @@ export const DocumentHeader: React.FC<{
 
 export const DocumentHolderName: React.FC<{
   name: string
-  onLayout?: (e: TextLayoutEvent) => void
+  onLayout?: (e: TextLayoutEvent<number[]>) => void
   cropName?: boolean
   numberOfLines?: number
 }> = ({ name, onLayout, cropName = false, numberOfLines = 2 }) => {
