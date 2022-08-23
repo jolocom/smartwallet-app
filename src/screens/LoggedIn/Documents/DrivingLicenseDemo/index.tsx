@@ -86,7 +86,7 @@ export const DrivingLicenseCard: React.FC<{
   )
 
   const photo = utf8ToBase64Image(drivingLicense.portrait)
-  const credentialName = 'Driving License'
+  const credentialName = 'Führerschein'
 
   const issuerIcon =
     'https://cloudsignatureconsortium.org/wp-content/uploads/2019/11/Logo_300dpi-300x160-1.png'
@@ -113,13 +113,13 @@ export const DrivingLicenseCard: React.FC<{
         },
       },
       {
-        title: 'Share',
+        title: 'Teilen',
         navigation: {
           screen: ScreenNames.DrivingLicenseShare,
         },
       },
       {
-        title: 'Delete',
+        title: 'Löschen',
         navigation: {
           screen: ScreenNames.DragToConfirm,
           params: {

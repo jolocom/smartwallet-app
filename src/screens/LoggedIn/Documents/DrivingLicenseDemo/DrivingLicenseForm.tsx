@@ -1,10 +1,6 @@
 import { RouteProp, useRoute } from '@react-navigation/core'
-import { prepareDataForValidation } from 'formik'
 import React, { useState } from 'react'
-import {
-  PersonalizationInputRequest,
-  PersonalizationInputResponse,
-} from 'react-native-mdl'
+import { PersonalizationInputResponse } from 'react-native-mdl'
 
 import { FormFieldContainer } from '~/components/Form/components'
 import FormContainer from '~/components/FormContainer'
@@ -47,9 +43,9 @@ export const DrivingLicenseForm = () => {
 
   return (
     <FormContainer
-      title={'Driving License'}
+      title={'Führerschein'}
       description={
-        'Submit your personal information to receive your Driving License'
+        'Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten'
       }
       onSubmit={handleSubmit}
       isSubmitDisabled={isSubmitDisabled}

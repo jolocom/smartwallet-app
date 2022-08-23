@@ -37,7 +37,7 @@ export const DrivingLicensePersonalization = () => {
         color={Colors.white60}
         size={JoloTextSizes.mini}
       >
-        Add Driving License
+        Digitalen Führerschein zur Wallet hinzufügen
       </JoloText>
     </TouchableOpacity>
   )

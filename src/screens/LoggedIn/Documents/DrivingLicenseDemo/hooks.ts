@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import DrivingLicenseSDK, {
-  DrivingLicenseData,
   DrivingLicenseError,
   DrivingLicenseEvents,
   EngagementState,
   EngagementStateNames,
   PersonalizationInputRequest,
-  PersonalizationInputResponse,
+  PersonalizationInputResponse
 } from 'react-native-mdl'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
@@ -50,10 +49,13 @@ export const useDrivingLicense = () => {
       unsubscribe()
 
       redirect(ScreenNames.Documents)
-      sdk.getDisplayData().then((displayData) => {
-        dispatch(setMdlDisplayData(displayData))
-        dispatch(dismissLoader())
-      })
+      sdk
+        .getDisplayData()
+        .then((displayData) => {
+          dispatch(setMdlDisplayData(displayData))
+          dispatch(dismissLoader())
+        })
+        .catch(console.warn)
     }
     const errorHandler = (error: string) => {
       unsubscribe()
@@ -61,10 +63,7 @@ export const useDrivingLicense = () => {
       dispatch(dismissLoader())
       //FIXME currently returns null, but should return stringified DrivingLicenseError
       const jsonError = JSON.parse(error) as DrivingLicenseError
-      scheduleWarning({
-        title: 'Oops!',
-        message: 'Something went wrong! Are you sure you sent the right data?',
-      })
+      scheduleErrorWarning(new Error(jsonError.name))
     }
 
     sdk.emitter.addListener(
@@ -100,7 +99,7 @@ export const useDrivingLicense = () => {
     dispatch(
       setLoader({
         type: LoaderTypes.default,
-        msg: 'Personalizing Driving License',
+        msg: 'Führerscheindaten hinzufügen',
       }),
     )
     return sdk.finishPersonalization(responses)
@@ -124,7 +123,7 @@ export const useDrivingLicense = () => {
           dispatch(
             setLoader({
               type: LoaderTypes.default,
-              msg: 'Sharing the Driving License...',
+              msg: 'Führerscheindaten werden übertragen…',
             }),
           )
           break
@@ -132,7 +131,7 @@ export const useDrivingLicense = () => {
           dispatch(
             setLoader({
               type: LoaderTypes.success,
-              msg: 'Success! Your driving license was successfully shared!',
+              msg: 'Ihre Führerscheindaten wurden erfolgreich übermittelt!',
             }),
           )
 
@@ -141,7 +140,7 @@ export const useDrivingLicense = () => {
           dispatch(
             setLoader({
               type: LoaderTypes.error,
-              msg: 'Sharing was canceled! Please try again.',
+              msg: 'Die Datenübertragen wurde abgebrochen. Bitte versuchen Sie es erneut.',
             }),
           )
           break
@@ -149,9 +148,10 @@ export const useDrivingLicense = () => {
           dispatch(
             setLoader({
               type: LoaderTypes.error,
-              msg: `Failed to share! ${jsonState.error?.localizedDescription}`,
+              msg: `Die Datenübertragung war nicht erfolgreich!`,
             }),
           )
+          break
         default:
           break
       }
