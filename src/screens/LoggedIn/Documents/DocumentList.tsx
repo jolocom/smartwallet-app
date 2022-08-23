@@ -175,11 +175,11 @@ export const DocumentList = () => {
         ) : (
           <CardList>
             <ScreenContainer.Padding>
-              <View style={{ alignItems: 'center' }}>
-                {drivingLicense && (
+              {drivingLicense && (
+                <View style={{ alignItems: 'center', marginBottom: 22 }}>
                   <DrivingLicenseCard drivingLicense={drivingLicense} />
-                )}
-              </View>
+                </View>
+              )}
             </ScreenContainer.Padding>
             {documents.map((c, index) => {
               const hasImageFields = c.properties.some(

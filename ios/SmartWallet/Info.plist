@@ -63,7 +63,7 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>The SmartWallet will use Bluetooth to allow sharing the Driving License</string>
+	<string>Die SmartWallet verwendet Bluetooth, um den Führerschein zu teilen</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera will be used to scan QR Codes and interact with services</string>
 	<key>NSFaceIDUsageDescription</key>
