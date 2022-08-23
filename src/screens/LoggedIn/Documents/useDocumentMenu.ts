@@ -3,11 +3,13 @@ import { usePopupMenu } from '~/hooks/popupMenu'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
+import { useFavoriteDocuments } from './useFavoriteDocuments'
 
 export const useDocumentMenu = () => {
   const { t } = useTranslation()
   const { scheduleErrorWarning } = useToasts()
   const { deleteDocument, getDocumentById } = useDocuments()
+  const {addFavorite} = useFavoriteDocuments()
 
   const { showPopup } = usePopupMenu()
 
@@ -26,6 +28,12 @@ export const useDocumentMenu = () => {
             id,
           },
         },
+      },
+      {
+        title: "Add to Favorites",
+        onPress: () => {
+          addFavorite(id)
+        }
       },
       {
         title: t('Documents.deleteCardOption'),

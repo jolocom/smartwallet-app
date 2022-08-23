@@ -6,6 +6,7 @@ import { getDid } from '~/modules/account/selectors'
 import { initAttrs } from '~/modules/attributes/actions'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
 import { setCredentials } from '~/modules/credentials/actions'
+import { useFavoriteDocuments } from '~/screens/LoggedIn/Documents/useFavoriteDocuments'
 import { AttributeTypes } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
 import { useAgent } from '../sdk'
@@ -21,6 +22,7 @@ export const useInitDocuments = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
   const did = useSelector(getDid)
+  const { getFavorites } = useFavoriteDocuments()
 
   //NOTE: The query can be moved as a separate type
   const queryCredentials = async (query?: { type: string[] }[]) => {
@@ -166,6 +168,7 @@ export const useInitDocuments = () => {
         sortDocuments(documents, DocumentsSortingType.issuanceDate),
       ),
     )
+    getFavorites()
     dispatch(initAttrs(attributes))
   }
 

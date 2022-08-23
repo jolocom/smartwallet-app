@@ -4,6 +4,9 @@ export enum CredentialsActionType {
   setCredentials = 'setCredentials',
   addCredentials = 'addCredentials',
   deleteCredential = 'deleteCredential',
+  addFavorite = 'addFavorite',
+  deleteFavorite = 'deleteFavorite',
+  setFavorites = 'setFavorites',
 }
 
 // Expressing dependency between action type and action payload;
@@ -12,6 +15,9 @@ export interface CredentialsActions {
   [CredentialsActionType.setCredentials]: Document[]
   [CredentialsActionType.addCredentials]: Document[]
   [CredentialsActionType.deleteCredential]: string
+  [CredentialsActionType.addFavorite]: string
+  [CredentialsActionType.deleteFavorite]: string
+  [CredentialsActionType.setFavorites]: string[]
 }
 
 // Dependency between action type and its payload following Action type signature
@@ -22,4 +28,5 @@ export type CredentialsAction<A extends keyof CredentialsActions> = {
 
 export interface CredentialsState {
   all: Document[]
+  favorites: string[]
 }

@@ -23,3 +23,9 @@ export const getDocumentById = (id: string) =>
 
     return doc
   })
+
+export const getFavoriteDocumentIds = (state: RootReducerI) => state.credentials.favorites
+
+export const getFavoriteDocuments = createSelector(getFavoriteDocumentIds, (documentIds) => {
+  return documentIds.map((id) => getDocumentById(id))
+})

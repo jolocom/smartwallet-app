@@ -8,6 +8,7 @@ import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import { useDocumentMenu } from './useDocumentMenu'
+import { useFavoriteDocuments } from './useFavoriteDocuments'
 
 export enum DocumentStacks {
   Favorites = 'favorites',
@@ -25,6 +26,7 @@ export const useDocumentsScreen = () => {
   const { validDocuments: documents, expiredDocuments } = useDocuments()
   const { t } = useTranslation()
   const redirect = useRedirect()
+  const {favorites: favoriteDocuments} = useFavoriteDocuments()
 
   const onHandleMore = useDocumentMenu()
 
@@ -47,7 +49,7 @@ export const useDocumentsScreen = () => {
     () => [
       {
         stackId: DocumentStacks.Favorites,
-        data: [],
+        data: favoriteDocuments,
         extra: {
           name: t('Documents.favoriteSection'),
           title: t('Documents.favoritePlaceholderTitle'),
