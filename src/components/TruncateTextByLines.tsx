@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react'
+import React, { useState } from 'react'
 
 import { TextLayoutEvent } from '~/types/props'
 import JoloText, { IJoloTextProps } from './JoloText'
