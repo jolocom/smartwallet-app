@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   Linking,
-  Platform,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated, {
@@ -64,23 +63,25 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
 
   return source ? (
     <View>
-      <View style={styles.gradientContainer}>
-        <Animated.View style={rotationStyles}>
-          <LinearGradient
-            start={{ x: 1.0, y: 0.3 }}
-            end={{ x: 1.0, y: 1.0 }}
-            style={{
-              width: 84,
-              height: 84,
-              borderRadius: 42,
-              borderWidth: 5,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            colors={[Colors.azureRadiance, Colors.white]}
-          />
-        </Animated.View>
-      </View>
+      {serviceUrl && (
+        <View style={styles.gradientContainer}>
+          <Animated.View style={rotationStyles}>
+            <LinearGradient
+              start={{ x: 1.0, y: 0.3 }}
+              end={{ x: 1.0, y: 1.0 }}
+              style={{
+                width: 84,
+                height: 84,
+                borderRadius: 42,
+                borderWidth: 5,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              colors={[Colors.azureRadiance, Colors.white]}
+            />
+          </Animated.View>
+        </View>
+      )}
       <TouchableOpacity
         onPress={serviceUrl && handleRedirectToCounterparty}
         activeOpacity={serviceUrl ? 0.9 : 1}
