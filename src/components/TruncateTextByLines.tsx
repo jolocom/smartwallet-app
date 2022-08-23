@@ -10,7 +10,7 @@ interface Props extends IJoloTextProps {
 
 type OnTextLayoutEvent = SyntheticEvent<{}, { lines: Array<{ text: string }> }>
 
-const TruncateTextAfterNumOfLines: React.FC<Props> = ({
+const TruncateTextByLines: React.FC<Props> = ({
   text,
   numOfLines,
   suffix,
@@ -44,4 +44,4 @@ const TruncateTextAfterNumOfLines: React.FC<Props> = ({
   )
 }
 
-export default TruncateTextAfterNumOfLines
+export default TruncateTextByLines
