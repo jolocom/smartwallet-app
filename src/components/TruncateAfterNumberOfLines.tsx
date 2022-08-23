@@ -4,16 +4,14 @@ import JoloText, { IJoloTextProps } from './JoloText'
 interface Props extends IJoloTextProps {
   text: string
   numOfLines: number
-  showAsQuestion?: boolean
+  suffix: string
 }
 
-const TruncateAfterFourLines: React.FC<Props> = ({
+const TruncateAfterNumberOfLines: React.FC<Props> = ({
   text,
   numOfLines,
-  color,
-  kind,
-  weight,
-  showAsQuestion,
+  suffix,
+  ...rest
 }) => {
   const [truncatedText, setTruncatedText] = useState('')
 
@@ -26,8 +24,8 @@ const TruncateAfterFourLines: React.FC<Props> = ({
         .map((line) => line.text)
         .join('')
 
-      showAsQuestion
-        ? setTruncatedText(output.slice(0, -4) + '...?')
+      suffix
+        ? setTruncatedText(output.slice(0, -4) + '...' + suffix)
         : setTruncatedText(output.slice(0, -3) + '...')
     }
   }
@@ -36,13 +34,11 @@ const TruncateAfterFourLines: React.FC<Props> = ({
     <JoloText
       // @ts-expect-error
       onTextLayout={onTextLayout}
-      color={color}
-      kind={kind}
-      weight={weight}
+      {...rest}
     >
       {truncatedText ? truncatedText : text}
     </JoloText>
   )
 }
 
-export default TruncateAfterFourLines
+export default TruncateAfterNumberOfLines

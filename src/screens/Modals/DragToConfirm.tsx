@@ -31,7 +31,7 @@ import JoloText, {
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
-import TruncateAfterFourLines from '~/components/TruncateAfterFourLines'
+import TruncateAfterNumberOfLines from '~/components/TruncateAfterNumberOfLines'
 
 const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
@@ -181,10 +181,10 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
         paddingHorizontal: 36,
       }}
     >
-      <TruncateAfterFourLines
+      <TruncateAfterNumberOfLines
         text={title}
         numOfLines={NUM_OF_LINES}
-        showAsQuestion={true}
+        suffix={'?'}
         color={Colors.white90}
         kind={JoloTextKind.title}
         weight={JoloTextWeight.regular}
