@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import { useSelector } from 'react-redux'
 
 import { ScreenNames } from '~/types/screens'
 import Language from './Settings/Language'
@@ -42,10 +45,7 @@ import Interaction from '../Modals/Interaction'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
 import { CardTest } from './Settings/Development/CardsTest'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import { useSelector } from 'react-redux'
 import { isLocalAuthSet, getIsAppLocked } from '~/modules/account/selectors'
-import { useNavigation } from '@react-navigation/native'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
