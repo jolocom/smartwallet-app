@@ -13,13 +13,18 @@ import {
   resetInteraction,
   setInteractionDetails,
 } from '~/modules/interaction/actions'
-import { getInteractionId } from '~/modules/interaction/selectors'
+import {
+  getInteractionId,
+  getInteractionType,
+} from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import { parseJWT } from '~/utils/parseJWT'
 import useConnection from '../connection'
 import { useAgent } from '../sdk'
 import { useToasts } from '../toasts'
 import { useInteractionHandler } from './interactionHandlers'
+import { useEffect } from 'react'
+import { getIsAppLocked } from '~/modules/account/selectors'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -36,6 +41,15 @@ export const useInteractionStart = () => {
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
   const { connected, showDisconnectedToast } = useConnection()
+
+  const isInteracting = useSelector(getInteractionType)
+  const isAppLocked = useSelector(getIsAppLocked)
+
+  useEffect(() => {
+    if (!isAppLocked && isInteracting) {
+      navigation.navigate(ScreenNames.Interaction)
+    }
+  }, [isAppLocked, isInteracting])
 
   const processInteraction = async (
     jwt: string,
@@ -73,16 +87,11 @@ export const useInteractionStart = () => {
     }
   }
 
-  const navigateInteraction = () => {
-    navigation.navigate(ScreenNames.Interaction)
-  }
-
   const startInteraction = async (jwt: string) => {
     try {
       const interaction = await processInteraction(jwt)
       if (interaction) {
         await showInteraction(interaction)
-        navigateInteraction()
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -95,7 +104,6 @@ export const useInteractionStart = () => {
     processInteraction,
     showInteraction,
     startInteraction,
-    navigateInteraction,
   }
 }
 
