@@ -31,7 +31,6 @@ import JoloText, {
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
-import TruncateTextByLines from '~/components/TruncateTextByLines'
 
 const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
@@ -181,14 +180,14 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
         paddingHorizontal: 36,
       }}
     >
-      <TruncateTextByLines
-        text={title}
-        numOfLines={NUM_OF_LINES}
-        suffix={'?'}
+      <JoloText
+        ellipseSuffix={{ numOfLines: NUM_OF_LINES, suffix: '?' }}
         color={Colors.white90}
         kind={JoloTextKind.title}
         weight={JoloTextWeight.regular}
-      />
+      >
+        {title}
+      </JoloText>
       <Animated.View
         ref={holeRef}
         style={[
