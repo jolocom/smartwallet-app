@@ -2375,17 +2375,10 @@
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@../jolocom-sdk/jolocom-sdk-v1.4.1.tgz":
-  version "1.4.1"
-  resolved "../jolocom-sdk/jolocom-sdk-v1.4.1.tgz#ea384e453ca090df07fcf2301007c0975a7eb415"
-  dependencies:
-    "@jolocom/protocol-ts" "^0.6.1"
-    form-data "^3.0.0"
-    ramda "^0.26.1"
-
-"@jolocom/sdk@./jolocom-sdk-v1.4.1.tgz":
-  version "1.4.1"
-  resolved "./jolocom-sdk-v1.4.1.tgz#ea384e453ca090df07fcf2301007c0975a7eb415"
+"@jolocom/sdk@^1.3.2", "@jolocom/sdk@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.4.0.tgz#4a58fe3b21c185217507b4b90e8915b44ac96592"
+  integrity sha512-KLE3jpL1F93mi5mQRvG966ismwSYLOWuEERKyDJcMrcUhIvDTWcggtq3WGv3LFmaYvqr5xQXXigMZi/pK/tYsw==
   dependencies:
     "@jolocom/protocol-ts" "^0.6.1"
     form-data "^3.0.0"
@@ -7912,7 +7905,7 @@ jimp@^0.16.1:
     "@jimp/types" "^0.16.1"
     regenerator-runtime "^0.13.3"
 
-jolocom-lib@^5.5.1:
+jolocom-lib@^5.2.1, jolocom-lib@^5.5.1:
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.5.1.tgz#2febc3a79e328495d790b3e57583cc3a866cbdbb"
   integrity sha512-nGQQmVpRAgWBz1pO1xkshMSwGO4oeq5f1b/d0lgTAviSZFh1PTt+E++h1C2IdLnkSDjyuGaa/l6zs1Z1+Ajxwg==
@@ -10268,14 +10261,15 @@ react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-react-native-jolocom@./react-native-jolocom-v2.7.1.tgz:
-  version "2.7.1"
-  resolved "./react-native-jolocom-v2.7.1.tgz#87265924e523ae8326a4a959f30ebcafec55dbe4"
+react-native-jolocom@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.7.2.tgz#0d2f5fb342a8eb13fd2261c590af6059e3f97bfa"
+  integrity sha512-YLv3WN7QVRyj/3hwZEClOflcdR2iZIB4E4E+XSskczUWujc99v3eKt5Aj2L5ezks0OJOjoJCcMdlKLjYDI1Zfg==
   dependencies:
-    "@jolocom/sdk" "../jolocom-sdk/jolocom-sdk-v1.4.1.tgz"
+    "@jolocom/sdk" "^1.3.2"
     "@jolocom/sdk-storage-typeorm" "^4.3.0-rc0"
     crypto-browserify "^3.12.0"
-    jolocom-lib "^5.5.1"
+    jolocom-lib "^5.2.1"
     object.assign "^4.1.0"
     react-native-crypto "^2.2.0"
     react-native-encrypted-storage "^4.0.2"
