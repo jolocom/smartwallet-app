@@ -61,7 +61,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   const { isCredentialNameScaled } = useCredentialNameScale()
 
   const [holderNameLines, setHolderNameLines] = useState(0)
-  const handleHolderNameTextLayout = (e: TextLayoutEvent<number[]>) => {
+  const handleHolderNameTextLayout = (e: TextLayoutEvent) => {
     setHolderNameLines(e.nativeEvent.lines.length)
   }
 
