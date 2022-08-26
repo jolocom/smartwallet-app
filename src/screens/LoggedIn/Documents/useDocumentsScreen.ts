@@ -95,11 +95,14 @@ export const useDocumentsScreen = () => {
     }
   }
 
+  const isDocumentFavorite = (id: string) => favoriteDocuments.some(d => d.id === id)
+
   return {
     stackData,
     handleStackPress,
     openedStack,
     handlePressDetails,
     handlePressMenu,
+    isDocumentFavorite
   }
 }

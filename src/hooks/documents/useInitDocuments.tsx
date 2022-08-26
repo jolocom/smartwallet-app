@@ -168,7 +168,7 @@ export const useInitDocuments = () => {
         sortDocuments(documents, DocumentsSortingType.issuanceDate),
       ),
     )
-    getFavorites()
+    await getFavorites()
     dispatch(initAttrs(attributes))
   }
 
