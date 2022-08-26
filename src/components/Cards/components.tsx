@@ -356,7 +356,7 @@ export const DocumentFields: React.FC<{
 
 const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
-    colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
+    colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0)']}
     style={{ flex: 1 }}
   >
     {children}
