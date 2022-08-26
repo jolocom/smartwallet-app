@@ -179,7 +179,6 @@ export const DocumentHeader: React.FC<{
               style={[
                 styles.mediumText,
                 {
-                  backgroundColor: 'rgba(255,255,255,0.5)',
                   borderRadius: 8,
                 },
               ]}
