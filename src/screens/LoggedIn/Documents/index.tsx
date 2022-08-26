@@ -16,13 +16,10 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
+import { DocumentStacks } from '~/modules/credentials/types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import {
-  DocumentStacks,
-  StackExtraData,
-  useDocumentsScreen,
-} from './useDocumentsScreen'
+import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
 
 const Documents: React.FC = () => {
   const { t } = useTranslation()

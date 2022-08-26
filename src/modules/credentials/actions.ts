@@ -34,3 +34,7 @@ export const deleteFavoriteDocument = createCredentialsAction(
 export const setFavoriteDocuments = createCredentialsAction(
   CredentialsActionType.setFavorites,
 )
+
+export const setOpenedStack = createCredentialsAction(
+  CredentialsActionType.setOpenedStack,
+)

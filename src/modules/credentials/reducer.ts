@@ -1,15 +1,17 @@
-import { addCredentials, addFavoriteDocument, deleteCredential, deleteFavoriteDocument, setCredentials, setFavoriteDocuments } from './actions'
-import { CredentialsActionType, CredentialsState } from './types'
+import { addCredentials, addFavoriteDocument, deleteCredential, deleteFavoriteDocument, setCredentials, setFavoriteDocuments, setOpenedStack } from './actions'
+import { CredentialsActionType, CredentialsState, DocumentStacks } from './types'
 
 //TODO: check if additional nesting is required
 const initialState: CredentialsState = {
   all: [],
-  favorites: []
+  favorites: [],
+  openedStack: DocumentStacks.Favorites
 }
+
 const credentialsReducer = (
   state = initialState,
   action: ReturnType<
-    typeof setCredentials | typeof addCredentials | typeof deleteCredential | typeof addFavoriteDocument | typeof deleteFavoriteDocument | typeof setFavoriteDocuments
+    typeof setCredentials | typeof addCredentials | typeof deleteCredential | typeof addFavoriteDocument | typeof deleteFavoriteDocument | typeof setFavoriteDocuments | typeof setOpenedStack
   >,
 ) => {
   switch (action.type) {
@@ -29,6 +31,8 @@ const credentialsReducer = (
       return { ...state, favorites: filteredFavorites }
     case CredentialsActionType.setFavorites:
       return { ...state, favorites: action.payload }
+    case CredentialsActionType.setOpenedStack:
+      return { ...state, openedStack: action.payload }
     default:
       return state
   }

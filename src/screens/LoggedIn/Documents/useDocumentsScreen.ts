@@ -1,20 +1,18 @@
-import React, { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { LayoutAnimation } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { StackData } from '~/components/CardStack'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
 import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
+import { setOpenedStack } from '~/modules/credentials/actions'
+import { getOpenedStack } from '~/modules/credentials/selectors'
+import { DocumentStacks } from '~/modules/credentials/types'
 import { ScreenNames } from '~/types/screens'
 import { useDocumentMenu } from './useDocumentMenu'
 import { useFavoriteDocuments } from './useFavoriteDocuments'
-
-export enum DocumentStacks {
-  Favorites = 'favorites',
-  All = 'all',
-  Expired = 'expired',
-}
 
 export interface StackExtraData {
   name: string
@@ -27,6 +25,8 @@ export const useDocumentsScreen = () => {
   const { t } = useTranslation()
   const redirect = useRedirect()
   const {favorites: favoriteDocuments} = useFavoriteDocuments()
+  const openedStack = useSelector(getOpenedStack)
+  const dispatch = useDispatch()
 
   const onHandleMore = useDocumentMenu()
 
@@ -39,11 +39,11 @@ export const useDocumentsScreen = () => {
     })
   }
 
-  const handlePressMenu = useCallback((c: Document) => {
+  const handlePressMenu = (c: Document) => {
     onHandleMore({
       id: c.id,
     })
-  }, [])
+  }
 
   const stackData = useMemo<StackData<Document, StackExtraData>[]>(
     () => [
@@ -75,10 +75,7 @@ export const useDocumentsScreen = () => {
         },
       },
     ],
-    [documents],
-  )
-  const [openedStack, setOpenedStack] = React.useState<DocumentStacks | null>(
-    DocumentStacks.Favorites,
+    [documents, expiredDocuments, favoriteDocuments],
   )
 
   const handleStackPress = (stackId: DocumentStacks) => {
@@ -92,9 +89,9 @@ export const useDocumentsScreen = () => {
       },
     })
     if (openedStack === stackId) {
-      setOpenedStack(null)
+      dispatch(setOpenedStack(null))
     } else {
-      setOpenedStack(stackId)
+      dispatch(setOpenedStack(stackId))
     }
   }
 
