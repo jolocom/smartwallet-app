@@ -176,12 +176,7 @@ export const DocumentHeader: React.FC<{
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={1}
               scaleStyle={styles.credentialName}
-              style={[
-                styles.mediumText,
-                {
-                  borderRadius: 8,
-                },
-              ]}
+              style={[styles.mediumText]}
             >
               {name}
             </ScaledText>
@@ -452,7 +447,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 26,
     fontWeight: '500',
-    paddingHorizontal: 8,
+    paddingHorizontal: 2,
   },
   holderName: {
     fontSize: 24,
