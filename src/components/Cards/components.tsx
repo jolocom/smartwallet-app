@@ -427,7 +427,6 @@ const styles = StyleSheet.create({
     zIndex: 99,
     position: 'absolute',
     height: '100%',
-    backgroundColor: Colors.white50,
     borderRadius: 8,
   },
   scaledDots: {
