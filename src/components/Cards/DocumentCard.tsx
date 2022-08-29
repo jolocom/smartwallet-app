@@ -176,12 +176,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           <View style={styles.content}>
             <ScaledView scaleStyle={[getSubheaderStyles()]}>
               {photo && (
-                <DocumentPhoto
-                  photo={photo}
-                  cardHasBackground={
-                    Boolean(backgroundColor) || Boolean(backgroundImage)
-                  }
-                />
+                <DocumentPhoto photo={photo} cardHasBackground={isBackground} />
               )}
               {!backgroundColor && !backgroundImage && holderName && (
                 <DocumentHolderName
