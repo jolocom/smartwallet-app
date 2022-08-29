@@ -194,8 +194,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             <ScaledView
               scaleStyle={{
                 paddingBottom: getFieldsTopDistance(),
-                marginTop:
-                  (backgroundColor || backgroundImage) && holderName && 8,
               }}
             />
             {(backgroundColor || backgroundImage) && holderName && (

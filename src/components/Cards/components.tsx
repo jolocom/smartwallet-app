@@ -206,7 +206,7 @@ export const DocumentHolderName: React.FC<{
       scaleStyle={{
         paddingLeft: 24,
         marginRight: cropName ? 116 : 0,
-        marginBottom: 8,
+        marginVertical: 10,
       }}
     >
       <ScaledText
