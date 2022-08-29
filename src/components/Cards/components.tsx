@@ -370,7 +370,6 @@ export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
       source={{ uri: image }}
     >
       <View style={{ zIndex: 99 }}>{children}</View>
-      <BackgroundOpacity />
     </ImageBackground>
   </ScaledView>
 )
