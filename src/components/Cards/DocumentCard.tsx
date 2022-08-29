@@ -177,7 +177,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           <View style={styles.content}>
             <ScaledView scaleStyle={[getSubheaderStyles()]}>
               {photo && <DocumentPhoto photo={photo} />}
-              {holderName && (
+              {!backgroundColor && !backgroundImage && holderName && (
                 <DocumentHolderName
                   name={holderName}
                   cropName={!!photo}
@@ -186,8 +186,19 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               )}
             </ScaledView>
             <ScaledView
-              scaleStyle={{ paddingBottom: getFieldsTopDistance() }}
+              scaleStyle={{
+                paddingBottom: getFieldsTopDistance(),
+                marginTop:
+                  (backgroundColor || backgroundImage) && holderName && 8,
+              }}
             />
+            {(backgroundColor || backgroundImage) && holderName && (
+              <DocumentHolderName
+                name={holderName}
+                cropName={!!photo}
+                onLayout={handleHolderNameTextLayout}
+              />
+            )}
             <DocumentFields
               fields={fields}
               maxLines={maxLinesPerField}
