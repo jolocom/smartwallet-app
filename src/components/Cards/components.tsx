@@ -362,7 +362,7 @@ export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
   children,
 }) => (
   <ScaledView
-    scaleStyle={{ height: 112 + DOCUMENT_HEADER_HEIGHT }}
+    scaleStyle={{ height: 84 + DOCUMENT_HEADER_HEIGHT }}
     style={{ width: '100%' }}
   >
     <ImageBackground
