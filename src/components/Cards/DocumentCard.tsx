@@ -126,8 +126,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     const getSubheaderStyles = (): ViewStyle | undefined => {
       if (checkLayoutCase(isBackground)) {
         return {
-          marginTop: -30,
-          justifyContent: 'flex-end',
+          marginTop: -18,
         }
       } else if (checkLayoutCase(!isBackground)) {
         return {
@@ -176,7 +175,14 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           />
           <View style={styles.content}>
             <ScaledView scaleStyle={[getSubheaderStyles()]}>
-              {photo && <DocumentPhoto photo={photo} />}
+              {photo && (
+                <DocumentPhoto
+                  photo={photo}
+                  cardHasBackground={
+                    Boolean(backgroundColor) || Boolean(backgroundImage)
+                  }
+                />
+              )}
               {!backgroundColor && !backgroundImage && holderName && (
                 <DocumentHolderName
                   name={holderName}
@@ -256,7 +262,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: 12,
   },
   contentContainer: {
     flex: 1,
