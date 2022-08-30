@@ -79,12 +79,12 @@ export const DocumentFooter: React.FC<{
                 leftIcons.map((icon, i) => (
                   <ScaledView
                     key={i}
-                    scaleStyle={{ width: 40, height: 30 }}
+                    scaleStyle={{ width: 30, height: 30 }}
                     style={{ marginRight: 10 }}
                   >
                     <Image
                       source={{ uri: icon }}
-                      resizeMode="contain"
+                      resizeMode="cover"
                       style={{
                         width: '100%',
                         height: '100%',
