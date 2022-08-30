@@ -104,13 +104,10 @@ export const DocumentFooter: React.FC<{
 
 export const DocumentPhoto: React.FC<{
   photo: string
-  cardHasBackground?: boolean
-}> = ({ photo, cardHasBackground }) => (
+  topPosition?: number
+}> = ({ photo, topPosition = 0 }) => (
   <ScaledView
-    scaleStyle={[
-      styles.photoContainerScaled,
-      cardHasBackground && { top: -26 },
-    ]}
+    scaleStyle={[styles.photoContainerScaled, { top: topPosition }]}
     style={styles.photoContainer}
   >
     <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
