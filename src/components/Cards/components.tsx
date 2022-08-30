@@ -162,6 +162,7 @@ export const DocumentHeader: React.FC<{
           }}
           style={styles.headerContainer}
         >
+          {!backgroundImage && !backgroundColor && <GradientSeparator />}
           {prefetchedIcon && (
             <ScaledView
               scaleStyle={{
@@ -433,6 +434,26 @@ export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
     <BackgroundOpacity>{children}</BackgroundOpacity>
   </ScaledView>
 )
+
+export const GradientSeparator = () => {
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        left: 0,
+        height: 50,
+        opacity: 0.15,
+      }}
+    >
+      <LinearGradient
+        colors={[Colors.randomGrey, Colors.white]}
+        style={{ flex: 1 }}
+      />
+    </View>
+  )
+}
 
 export const SelectedToggle: React.FC<{ selected: boolean }> = ({
   selected,
