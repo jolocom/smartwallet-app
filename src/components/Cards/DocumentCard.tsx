@@ -188,30 +188,39 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             icon={issuerIcon}
             backgroundImage={backgroundImage}
             backgroundColor={backgroundColor}
+            truncateName={showMenu}
           />
           <View style={styles.content}>
-            <ScaledView scaleStyle={[getSubheaderStyles()]}>
+            <View
+              style={
+                !isBackground &&
+                photo && {
+                  height: holderName ? 86 : 21.5,
+                  alignItems: photo ? 'center' : 'flex-start',
+                  justifyContent: 'center',
+                  // ...debugView(),
+                }
+              }
+            >
               {photo && (
-                <DocumentPhoto photo={photo} cardHasBackground={isBackground} />
+                <DocumentPhoto
+                  photo={photo}
+                  topPosition={backgroundImage || backgroundColor ? -44 : 0}
+                />
               )}
-              {!backgroundColor && !backgroundImage && holderName && (
+              {holderName && (
                 <DocumentHolderName
                   name={holderName}
                   cropName={!!photo}
                   onLayout={handleHolderNameTextLayout}
                 />
               )}
-            </ScaledView>
-            <ScaledView
-              scaleStyle={{
-                paddingBottom: getFieldsTopDistance(),
-              }}
-            />
-            {(backgroundColor || backgroundImage) && holderName && (
-              <DocumentHolderName
-                name={holderName}
-                cropName={!!photo}
-                onLayout={handleHolderNameTextLayout}
+            </View>
+            {isBackground && (
+              <ScaledView
+                scaleStyle={{
+                  paddingBottom: getFieldsTopDistance(),
+                }}
               />
             )}
             <DocumentFields
@@ -221,6 +230,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               rowDistance={14}
               labelScaledStyle={styles.fieldLabel}
               valueScaledStyle={styles.fieldValue}
+              shoudIsolateFirstRow={showSecondaryField}
             />
           </View>
           {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.
