@@ -1,18 +1,11 @@
 import { createSelector } from 'reselect'
-import {
-  mapDisplayToDocuments,
-  sortCredentialsByRecentIssueDate,
-} from '~/hooks/signedCredentials/utils'
 import { RootReducerI } from '~/types/reducer'
 
-export const getAllCredentials = (state: RootReducerI) => state.credentials.all
+export const getAllDocuments = (state: RootReducerI) => state.credentials.all
 
-export const getAllDocuments = createSelector(
-  [getAllCredentials],
-  (documents) => {
-    const sorted = sortCredentialsByRecentIssueDate(documents)
-    const docs = mapDisplayToDocuments(sorted)
+export const getDocumentById = (id: string) =>
+  createSelector([getAllDocuments], (documents) => {
+    const doc = documents.find((d) => d.id === id)
 
-    return docs
-  },
-)
+    return doc
+  })

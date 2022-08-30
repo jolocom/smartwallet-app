@@ -1,26 +1,33 @@
+import { RouteProp, useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import { useRoute, RouteProp } from '@react-navigation/native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
-import { Colors } from '~/utils/colors'
-import Block from '~/components/Block'
-import BP from '~/utils/breakpoints'
-import ScreenContainer from '~/components/ScreenContainer'
-import { NavHeaderType } from '~/components/NavigationHeader'
-import { MainStackParamList } from '../Main'
-import { ScreenNames } from '~/types/screens'
-import { useToggleExpand } from '~/hooks/ui'
-import Collapsible from '~/components/Collapsible'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
+import Block from '~/components/Block'
+import Collapsible from '~/components/Collapsible'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { NavHeaderType } from '~/components/NavigationHeader'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useToggleExpand } from '~/hooks/ui'
+import { getDocumentById } from '~/modules/credentials/selectors'
+import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
+import { MainStackParamList } from '../Main'
 
 const IMAGE_SIZE = BP({ large: 100, default: 90 })
 
 const CredentialDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-  const { title, photo, fields } = route.params
+  const { id } = route.params
+  const document = useSelector(getDocumentById(id))
+
+  if (!document) {
+    throw new Error('CredentialDetails: Document not found')
+  }
 
   const [expandedFieldIdx, setExpandedFieldIdx] = useState(-1)
   const { isExpanded, onToggleExpand } = useToggleExpand()
@@ -45,10 +52,10 @@ const CredentialDetails = () => {
           <ScreenContainer.Padding>
             <Collapsible.Scroll>
               <Collapsible.Title
-                text={title ?? ''}
+                text={document.name}
                 customContainerStyles={{
-                  width: photo ? '68%' : '100%',
-                  ...(photo && { marginTop: 30 }),
+                  width: document.photo ? '68%' : '100%',
+                  ...(document.photo && { marginTop: 30 }),
                   paddingBottom: 12,
                 }}
               >
@@ -62,14 +69,17 @@ const CredentialDetails = () => {
                   color={Colors.white90}
                   weight={JoloTextWeight.regular}
                 >
-                  {title}
+                  {document.name}
                 </JoloText>
               </Collapsible.Title>
               <Block customStyles={{ backgroundColor: Colors.white }}>
-                {photo && (
-                  <Image source={{ uri: photo }} style={styles.photo} />
+                {document.photo && (
+                  <Image
+                    source={{ uri: document.photo }}
+                    style={styles.photo}
+                  />
                 )}
-                {fields.map((field, i) => (
+                {document.properties.map((field, i) => (
                   <React.Fragment key={i}>
                     <View style={styles.fieldContainer}>
                       <JoloText
@@ -97,7 +107,7 @@ const CredentialDetails = () => {
                         </JoloText>
                       </TouchableOpacity>
                     </View>
-                    {i !== Object.keys(fields).length - 1 && (
+                    {i !== Object.keys(document.properties).length - 1 && (
                       <View style={styles.divider} />
                     )}
                   </React.Fragment>

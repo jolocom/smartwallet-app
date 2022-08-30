@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // @ts-expect-error
 import { enabled as enablePrivacyOverlay } from 'react-native-privacy-snapshot'
 
+import { useInitDocuments } from '~/hooks/documents'
 import { setAppLocked } from '~/modules/account/actions'
 import {
   getIsAppLocked,
@@ -17,6 +18,7 @@ import { useAppBackgroundChange } from './useAppState'
 
 export const useInitApp = () => {
   const lockState = useInitLock()
+  const { initialize: initDocuments } = useInitDocuments()
 
   useInitAusweis()
   useInitTerms()
@@ -24,6 +26,8 @@ export const useInitApp = () => {
   useEffect(() => {
     // @ts-ignore no types for now
     enablePrivacyOverlay(true)
+
+    initDocuments()
   }, [])
 
   return { ...lockState }

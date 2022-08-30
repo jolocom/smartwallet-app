@@ -1,10 +1,10 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React, { useCallback } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import ScaledCard from './ScaledCard'
 
+import { DocumentProperty } from '~/hooks/documents/types'
 import {
   DocumentFields,
   DocumentHeader,
@@ -19,7 +19,7 @@ import {
 interface Props {
   credentialName: string
   issuerIcon?: string
-  fields: Array<DisplayVal>
+  fields: Array<DocumentProperty>
   selected?: boolean
   holderName?: string
   photo?: string
@@ -67,9 +67,7 @@ const ShareCard: React.FC<Props> = ({
         <View style={{ flexDirection: 'row', flex: 1 }}>
           <View style={{ flex: 1 }}>
             {holderName && (
-              <View style={{ marginBottom: 12 }}>
-                <DocumentHolderName name={holderName} numberOfLines={1} />
-              </View>
+              <DocumentHolderName name={holderName} numberOfLines={1} />
             )}
             <DocumentFields
               fields={fields}
@@ -82,7 +80,7 @@ const ShareCard: React.FC<Props> = ({
             />
           </View>
           <View style={{ flex: 0.5 }}>
-            {photo && <DocumentPhoto photo={photo} verticalPosition={-80} />}
+            {photo && <DocumentPhoto photo={photo} />}
           </View>
         </View>
       </View>

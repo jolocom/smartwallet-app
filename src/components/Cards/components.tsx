@@ -1,4 +1,3 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React, { ReactNode, useEffect } from 'react'
 import {
   Image,
@@ -12,13 +11,15 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
+import { DocumentProperty } from '~/hooks/documents/types'
+import useImagePrefetch from '~/hooks/useImagePrefetch'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import { DOCUMENT_HEADER_HEIGHT } from './consts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
-import useImagePrefetch from '~/hooks/useImagePrefetch'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -89,16 +90,13 @@ export const DocumentFooter: React.FC<{
 
 export const DocumentPhoto: React.FC<{
   photo: string
-  verticalPosition?: number
-}> = ({ photo, verticalPosition = -30 }) => (
-  <View>
-    <ScaledView
-      scaleStyle={[styles.photoContainerScaled, { bottom: verticalPosition }]}
-      style={styles.photoContainer}
-    >
-      <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
-    </ScaledView>
-  </View>
+}> = ({ photo }) => (
+  <ScaledView
+    scaleStyle={[styles.photoContainerScaled]}
+    style={styles.photoContainer}
+  >
+    <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
+  </ScaledView>
 )
 
 export const DocumentHeader: React.FC<{
@@ -106,49 +104,98 @@ export const DocumentHeader: React.FC<{
   icon?: string
   onPressMenu?: () => void
   selected?: boolean
-}> = ({ name, icon, onPressMenu, selected }) => {
+  backgroundImage?: string
+  backgroundColor?: string
+}> = ({
+  name,
+  icon,
+  onPressMenu,
+  selected,
+  backgroundColor,
+  backgroundImage,
+}) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   const prefetchedIcon = useImagePrefetch(icon)
 
+  const renderBackground = (children: () => React.ReactChild) => {
+    if (backgroundImage) {
+      return (
+        <DocumentBackgroundImage image={backgroundImage}>
+          {children()}
+        </DocumentBackgroundImage>
+      )
+    } else if (backgroundColor) {
+      return (
+        <DocumentBackgroundColor color={backgroundColor}>
+          {children()}
+        </DocumentBackgroundColor>
+      )
+    } else {
+      return children()
+    }
+  }
+
   return (
-    <View style={styles.headerContainer}>
-      {prefetchedIcon && (
+    <View>
+      {renderBackground(() => (
         <ScaledView
           scaleStyle={{
-            width: 32,
-            height: 32,
-            marginRight: 10,
+            height: DOCUMENT_HEADER_HEIGHT,
+            padding: 16,
           }}
+          style={styles.headerContainer}
         >
-          <Image
-            resizeMode="cover"
-            style={[styles.photo, { borderRadius: 4.2 }]}
-            source={{ uri: prefetchedIcon }}
-          />
+          {prefetchedIcon && (
+            <ScaledView
+              scaleStyle={{
+                width: 32,
+                height: 32,
+                marginRight: 10,
+              }}
+            >
+              <Image
+                resizeMode="cover"
+                style={[styles.photo, { borderRadius: 4.2 }]}
+                source={{ uri: prefetchedIcon }}
+              />
+            </ScaledView>
+          )}
+          <ScaledView
+            scaleStyle={styles.credentialName}
+            style={{ flex: 1, flexDirection: 'row' }}
+          >
+            <ScaledText
+              // @ts-expect-error
+              onTextLayout={handleCredentialNameTextLayout}
+              numberOfLines={1}
+              scaleStyle={styles.credentialName}
+              style={[
+                styles.mediumText,
+                {
+                  backgroundColor: 'rgba(255,255,255,0.5)',
+                  borderRadius: 8,
+                },
+              ]}
+            >
+              {name}
+            </ScaledText>
+            <View style={{ flex: 1 }} />
+          </ScaledView>
+          {typeof selected !== 'undefined' && (
+            <SelectedToggle selected={selected} />
+          )}
+          {onPressMenu && (
+            <CardMoreBtn
+              onPress={onPressMenu}
+              positionStyles={{
+                top: 18,
+                right: 17,
+              }}
+            />
+          )}
         </ScaledView>
-      )}
-      <ScaledText
-        // @ts-expect-error
-        onTextLayout={handleCredentialNameTextLayout}
-        numberOfLines={1}
-        scaleStyle={styles.credentialName}
-        style={[styles.mediumText, { flex: 1 }]}
-      >
-        {name}
-      </ScaledText>
-      {typeof selected !== 'undefined' && (
-        <SelectedToggle selected={selected} />
-      )}
-      {onPressMenu && (
-        <CardMoreBtn
-          onPress={onPressMenu}
-          positionStyles={{
-            top: 18,
-            right: 17,
-          }}
-        />
-      )}
+      ))}
     </View>
   )
 }
@@ -164,6 +211,7 @@ export const DocumentHolderName: React.FC<{
       scaleStyle={{
         paddingLeft: 24,
         marginRight: cropName ? 116 : 0,
+        marginBottom: 8,
       }}
     >
       <ScaledText
@@ -181,7 +229,7 @@ export const DocumentHolderName: React.FC<{
 
 export const DocumentFields: React.FC<{
   // NOTE: fields to be (potentially) displayed on the card
-  fields: DisplayVal[]
+  fields: DocumentProperty[]
   // NOTE: (scaled) styles for the field label
   labelScaledStyle: TextStyle
   // NOTE: (scaled) styles for the field value
@@ -199,7 +247,7 @@ export const DocumentFields: React.FC<{
   // NOTE: allow fields taking up available space if possible
   allowOverflowingFields?: boolean
   // NOTE: called after calculating the fields that will be displayed
-  onFinishCalculation?: (displayedFields: DisplayVal[]) => void
+  onFinishCalculation?: (displayedFields: DocumentProperty[]) => void
 }> = ({
   fields,
   maxLines,
@@ -225,7 +273,7 @@ export const DocumentFields: React.FC<{
   rows = rows.splice(0, maxRows)
 
   useEffect(() => {
-    const fields = rows.reduce<DisplayVal[]>((acc, row) => {
+    const fields = rows.reduce<DocumentProperty[]>((acc, row) => {
       acc = [...acc, ...row]
 
       return acc
@@ -234,7 +282,7 @@ export const DocumentFields: React.FC<{
     onFinishCalculation && onFinishCalculation(fields)
   }, [rows])
 
-  const renderField = (field: DisplayVal) => {
+  const renderField = (field: DocumentProperty) => {
     return (
       <ScaledView
         key={field.key}
@@ -309,21 +357,28 @@ export const DocumentFields: React.FC<{
   )
 }
 
-const BackgroundOpacity = () => (
+const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
     colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
     style={{ flex: 1 }}
-  />
+  >
+    {children}
+  </LinearGradient>
 )
 
 export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
   image,
+  children,
 }) => (
-  <ScaledView scaleStyle={{ height: 112 }} style={{ width: '100%' }}>
+  <ScaledView
+    scaleStyle={{ height: 112 + DOCUMENT_HEADER_HEIGHT }}
+    style={{ width: '100%' }}
+  >
     <ImageBackground
       style={{ width: '100%', height: '100%' }}
       source={{ uri: image }}
     >
+      <View style={{ zIndex: 99 }}>{children}</View>
       <BackgroundOpacity />
     </ImageBackground>
   </ScaledView>
@@ -331,10 +386,19 @@ export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
 
 export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
   color,
+  children,
 }) => (
-  <View style={{ height: 84, width: '100%', backgroundColor: color }}>
-    <BackgroundOpacity />
-  </View>
+  <ScaledView
+    scaleStyle={{
+      height: 84 + DOCUMENT_HEADER_HEIGHT,
+    }}
+    style={{
+      width: '100%',
+      backgroundColor: color,
+    }}
+  >
+    <BackgroundOpacity>{children}</BackgroundOpacity>
+  </ScaledView>
 )
 
 export const SelectedToggle: React.FC<{ selected: boolean }> = ({
@@ -357,12 +421,14 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
 const styles = StyleSheet.create({
   dotsContainerScaled: {
     paddingVertical: 3,
-    width: 30,
+    width: 20,
     height: 30,
     justifyContent: 'center',
   },
   dotsContainer: {
     height: '100%',
+    backgroundColor: Colors.white50,
+    borderRadius: 8,
   },
   scaledDots: {
     flex: 1,
@@ -387,7 +453,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 26,
     fontWeight: '500',
-    paddingRight: 12,
+    paddingHorizontal: 8,
   },
   holderName: {
     fontSize: 24,
@@ -405,11 +471,9 @@ const styles = StyleSheet.create({
     borderRadius: 41,
   },
   headerContainer: {
-    height: 68,
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 16,
   },
   photo: {
     width: '100%',

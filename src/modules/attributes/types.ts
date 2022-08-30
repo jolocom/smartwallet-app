@@ -1,6 +1,5 @@
-import { AttributeTypes, ClaimKeys } from '~/types/credentials'
 import { ClaimEntry } from 'jolocom-lib/js/credentials/credential/types'
-
+import { AttributeTypes, ClaimKeys } from '~/types/credentials'
 export enum AttrActionType {
   initAttrs = 'initAttrs',
   updateAttrs = 'updateAttrs',

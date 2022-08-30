@@ -1,14 +1,22 @@
 import React from 'react'
 import { View } from 'react-native'
-import { useSelector } from 'react-redux'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 
+import { OfferCard } from '~/components/Cards'
+import Collapsible from '~/components/Collapsible'
+import ScreenContainer from '~/components/ScreenContainer'
+import { ServiceLogo } from '~/components/ServiceLogo'
+import Space from '~/components/Space'
 import useCredentialOfferSubmit from '~/hooks/interactions/useCredentialOfferSubmit'
+import useTranslation from '~/hooks/useTranslation'
 import {
   getIsFullscreenCredOffer,
   getOfferedCredentials,
   getServiceDescription,
 } from '~/modules/interaction/selectors'
+import { OfferedCredential } from '~/types/credentials'
+import { Colors } from '~/utils/colors'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionTitle from '../components/InteractionTitle'
@@ -19,15 +27,13 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
-import Space from '~/components/Space'
-import Collapsible from '~/components/Collapsible'
-import useTranslation from '~/hooks/useTranslation'
-import ScreenContainer from '~/components/ScreenContainer'
-import { Colors } from '~/utils/colors'
-import { ServiceLogo } from '~/components/ServiceLogo'
-import { getAllDocuments } from '~/modules/credentials/selectors'
-import { OfferedCredentialDisplay } from '~/types/credentials'
-import { OfferCard } from '~/components/Cards'
+
+const assemblePreviewProperties = (offer: OfferedCredential) => {
+  let previewFields = offer.properties.filter((f) => f.preview === true)
+  previewFields = previewFields.length ? previewFields : offer.properties
+
+  return previewFields
+}
 
 const CredentialOfferBAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
@@ -46,16 +52,12 @@ const CredentialOfferBAS = () => {
       />
       <Space />
       {offeredCredentials.map((d) => {
-        let previewFields = d.properties.filter((f) => f.preview === true)
-        previewFields = previewFields.length ? previewFields : d.properties
-
+        const previewFields = assemblePreviewProperties(d)
         return (
           <OfferCard
             key={d.name}
             credentialName={d.name || t('General.unknown')}
-            fields={previewFields.map((p) => ({
-              label: p.label || t('Documents.unspecifiedField'),
-            }))}
+            fields={previewFields}
             issuerIcon={image}
           />
         )
@@ -74,27 +76,26 @@ const CredentialOfferFAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
 
   const documents = useSelector(getOfferedCredentials)
+  console.log({ documents })
 
   const { name, image, serviceUrl } = useSelector(getServiceDescription)
   const { t } = useTranslation()
 
-  const handleRenderCredentials = (credentials: OfferedCredentialDisplay[]) =>
-    documents.map(({ properties, name, type }, idx) => {
-      let previewFields = properties.filter((f) => f.preview === true)
-      previewFields = previewFields.length ? previewFields : properties
+  const handleRenderCredentials = (credentials: OfferedCredential[]) =>
+    documents.map((doc, idx) => {
+      const previewFields = assemblePreviewProperties(doc)
+
       return (
         <View
-          key={`${type}${idx}`}
+          key={`${doc.type}${idx}`}
           style={{
             marginBottom: idx === credentials.length - 1 ? 0 : 30,
           }}
         >
           <OfferCard
-            key={name + type}
+            key={doc.name + doc.type}
             credentialName={name || t('General.unknown')}
-            fields={previewFields.map((p) => ({
-              label: p.label || t('Documents.unspecifiedField'),
-            }))}
+            fields={previewFields}
             issuerIcon={image}
           />
         </View>
