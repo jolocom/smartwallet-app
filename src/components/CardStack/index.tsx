@@ -6,24 +6,27 @@ import Animated, {
 } from 'react-native-reanimated'
 import { ExpandState, StackItem, StackItemConfig } from './StackItem'
 
-export interface StackData<T extends { id: string }> {
+export interface StackData<T extends { id: string }, P extends {} = {}> {
   stackId: string
   data: T[]
+  extra: P
 }
 
-export interface StackScrollViewProps<T extends { id: string }>
-  extends StackItemConfig {
-  data: StackData<T>[]
+export interface StackScrollViewProps<
+  T extends { id: string },
+  P extends {} = {},
+> extends StackItemConfig {
+  data: StackData<T, P>[]
   renderStack: (data: StackData<T>, item: React.ReactNode) => React.ReactNode
   renderItem: (data: T, visible: boolean) => React.ReactNode
 }
 
-export const StackScrollView = <T extends { id: string }>({
+export const StackScrollView = <T extends { id: string }, P extends {}>({
   data,
   renderItem,
   renderStack,
   ...itemConfig
-}: StackScrollViewProps<T>) => {
+}: StackScrollViewProps<T, P>) => {
   const expandState = useSharedValue<ExpandState | null>(null)
 
   const handlePress = (item: ExpandState) => {
@@ -68,6 +71,7 @@ export const StackScrollView = <T extends { id: string }>({
       scrollEventThrottle={4}
       style={styles.scroll}
       contentContainerStyle={styles.scrollContainer}
+      showsVerticalScrollIndicator={false}
     >
       {data.map((stack) => {
         const renderStackChildren = () => {

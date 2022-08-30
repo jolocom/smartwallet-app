@@ -31,7 +31,7 @@ const AnimatedTouchableOpacity =
 
 const springConfig: Animated.WithSpringConfig = {
   damping: 20,
-  mass: 2,
+  mass: 1,
   stiffness: 200,
   velocity: 2,
 }
