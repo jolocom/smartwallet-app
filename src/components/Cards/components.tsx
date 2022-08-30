@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import {
   Image,
   ImageBackground,
@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { FavoriteHeartIcon, PurpleTickSuccess } from '~/assets/svg'
+import { PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
 import useTranslation from '~/hooks/useTranslation'
@@ -79,12 +80,12 @@ export const DocumentFooter: React.FC<{
                 leftIcons.map((icon, i) => (
                   <ScaledView
                     key={i}
-                    scaleStyle={{ width: 40, height: 30 }}
+                    scaleStyle={{ width: 30, height: 30 }}
                     style={{ marginRight: 10 }}
                   >
                     <Image
                       source={{ uri: icon }}
-                      resizeMode="contain"
+                      resizeMode="cover"
                       style={{
                         width: '100%',
                         height: '100%',
@@ -104,9 +105,10 @@ export const DocumentFooter: React.FC<{
 
 export const DocumentPhoto: React.FC<{
   photo: string
-}> = ({ photo }) => (
+  topPosition?: number
+}> = ({ photo, topPosition = 0 }) => (
   <ScaledView
-    scaleStyle={[styles.photoContainerScaled]}
+    scaleStyle={[styles.photoContainerScaled, { top: topPosition }]}
     style={styles.photoContainer}
   >
     <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
@@ -119,7 +121,15 @@ export const DocumentHeader: React.FC<{
   selected?: boolean
   backgroundImage?: string
   backgroundColor?: string
-}> = ({ name, icon, selected, backgroundColor, backgroundImage }) => {
+  truncateName: boolean
+}> = ({
+  name,
+  icon,
+  selected,
+  backgroundColor,
+  backgroundImage,
+  truncateName,
+}) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   const prefetchedIcon = useImagePrefetch(icon)
@@ -138,7 +148,7 @@ export const DocumentHeader: React.FC<{
         </DocumentBackgroundColor>
       )
     } else {
-      return children()
+      return <GradientSeparator>{children()}</GradientSeparator>
     }
   }
 
@@ -176,13 +186,10 @@ export const DocumentHeader: React.FC<{
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={1}
               scaleStyle={styles.credentialName}
-              style={[
-                styles.mediumText,
-                {
-                  backgroundColor: 'rgba(255,255,255,0.5)',
-                  borderRadius: 8,
-                },
-              ]}
+              style={{
+                ...styles.mediumText,
+                paddingRight: truncateName ? 24 : 0,
+              }}
             >
               {name}
             </ScaledText>
@@ -203,20 +210,32 @@ export const DocumentHolderName: React.FC<{
   cropName?: boolean
   numberOfLines?: number
 }> = ({ name, onLayout, cropName = false, numberOfLines = 2 }) => {
+  const [renderedLines, setRenderedLines] = useState<number>()
+
+  const handleLayout = (e: TextLayoutEvent) => {
+    if (!renderedLines) {
+      const lines = e.nativeEvent.lines.length
+      setRenderedLines(lines)
+    }
+    onLayout && onLayout(e)
+  }
+
   return (
     <ScaledView
       scaleStyle={{
         paddingLeft: 24,
         marginRight: cropName ? 116 : 0,
-        marginBottom: 8,
+        marginVertical: 8,
       }}
     >
       <ScaledText
         // @ts-expect-error
-        onTextLayout={onLayout}
+        onTextLayout={handleLayout}
         numberOfLines={numberOfLines}
+        scaleStyle={
+          renderedLines === 1 ? styles.holderName : styles.holderNameSmall
+        }
         style={styles.mediumText}
-        scaleStyle={styles.holderName}
       >
         {name}
       </ScaledText>
@@ -245,6 +264,8 @@ export const DocumentFields: React.FC<{
   allowOverflowingFields?: boolean
   // NOTE: called after calculating the fields that will be displayed
   onFinishCalculation?: (displayedFields: DocumentProperty[]) => void
+  // NOTE: allow extra fields next to the photo if no holderName is present
+  shoudIsolateFirstRow?: boolean
 }> = ({
   fields,
   maxLines,
@@ -256,17 +277,21 @@ export const DocumentFields: React.FC<{
   nrOfColumns = 2,
   onFinishCalculation,
   allowOverflowingFields = true,
+  shoudIsolateFirstRow = false,
 }) => {
-  const maxFields = maxRows * 2
+  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 1 : maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
     fields,
     maxFields,
     maxLines,
   )
 
+  const secondaryField = shoudIsolateFirstRow ? displayedFields.shift() : null
+
   let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
   // we have to cut it to the max nr of rows.
+
   rows = rows.splice(0, maxRows)
 
   useEffect(() => {
@@ -283,7 +308,7 @@ export const DocumentFields: React.FC<{
     return (
       <ScaledView
         key={field.key}
-        style={{ flex: 1 }}
+        style={{ flex: !shoudIsolateFirstRow ? 1 : undefined }}
         scaleStyle={{ paddingRight: 12 }}
       >
         <ScaledText
@@ -331,12 +356,24 @@ export const DocumentFields: React.FC<{
             alignItems: 'flex-start',
           }}
         >
+          {secondaryField && (
+            <ScaledView
+              style={{
+                flexDirection: 'column',
+                maxWidth: '65%',
+              }}
+              scaleStyle={{
+                marginVertical: 14,
+              }}
+            >
+              {renderField(secondaryField)}
+            </ScaledView>
+          )}
           {rows.map((row, idx) => (
             <ScaledView
               key={idx}
               style={{
                 flexDirection: 'row',
-                alignItems: 'flex-start',
               }}
               scaleStyle={{
                 marginTop: idx === 0 ? 0 : rowDistance,
@@ -356,27 +393,39 @@ export const DocumentFields: React.FC<{
 
 const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
-    colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
+    colors={[Colors.randomGrey, Colors.white00]}
     style={{ flex: 1 }}
   >
     {children}
   </LinearGradient>
 )
 
+export const GradientSeparator: React.FC = ({ children }) => {
+  return (
+    <ScaledView scaleStyle={{ height: DOCUMENT_HEADER_HEIGHT }}>
+      <LinearGradient
+        colors={[Colors.randomGrey, Colors.white]}
+        style={{ flex: 1 }}
+      >
+        {children}
+      </LinearGradient>
+    </ScaledView>
+  )
+}
+
 export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
   image,
   children,
 }) => (
   <ScaledView
-    scaleStyle={{ height: 112 + DOCUMENT_HEADER_HEIGHT }}
+    scaleStyle={{ height: 84 + DOCUMENT_HEADER_HEIGHT }}
     style={{ width: '100%' }}
   >
     <ImageBackground
       style={{ width: '100%', height: '100%' }}
       source={{ uri: image }}
     >
-      <View style={{ zIndex: 99 }}>{children}</View>
-      <BackgroundOpacity />
+      <BackgroundOpacity>{children}</BackgroundOpacity>
     </ImageBackground>
   </ScaledView>
 )
@@ -445,7 +494,6 @@ const styles = StyleSheet.create({
     zIndex: 99,
     position: 'absolute',
     height: '100%',
-    backgroundColor: Colors.white50,
     borderRadius: 8,
   },
   scaledDots: {
@@ -471,11 +519,15 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 26,
     fontWeight: '500',
-    paddingHorizontal: 8,
+    paddingHorizontal: 2,
   },
   holderName: {
     fontSize: 24,
     lineHeight: 28,
+  },
+  holderNameSmall: {
+    fontSize: 22,
+    lineHeight: 26,
   },
   photoContainer: {
     position: 'absolute',
