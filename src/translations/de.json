@@ -589,5 +589,8 @@
     },
     "TermsOfService": {
         "header": "Nutzungsbedingungen"
+    },
+    "DocumentCard": {
+        "expired": ""
     }
 }

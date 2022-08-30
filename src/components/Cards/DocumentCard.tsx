@@ -14,6 +14,7 @@ import { DocumentProperty } from '~/hooks/documents/types'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import {
+  CardMoreBtn,
   DocumentFields,
   DocumentFooter,
   DocumentHeader,
@@ -43,6 +44,8 @@ interface DocumentCardProps {
   backgroundImage?: string
   backgroundColor?: string
   style?: StyleProp<ViewStyle>
+  expired?: boolean
+  showMenu?: boolean
 }
 
 const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
@@ -60,6 +63,8 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     icons,
     style = {},
     onPress,
+    expired = false,
+    showMenu = false,
   }) => {
     const { isCredentialNameScaled } = useCredentialNameScale()
 
@@ -162,11 +167,10 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
         scaleStyle={styles.cardScaled}
         testID="documentCard"
       >
-        <View style={styles.contentContainer}>
+        <View style={[styles.contentContainer, expired && { opacity: 0.5 }]}>
           <DocumentHeader
             name={credentialName}
             icon={issuerIcon}
-            onPressMenu={onHandleMore}
             backgroundImage={backgroundImage}
             backgroundColor={backgroundColor}
           />
@@ -203,19 +207,24 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             style={styles.btn}
           />
         </View>
-        <DocumentFooter
-          leftIcons={icons}
-          renderRightIcon={
-            hasImageFields ? () => <ScanDocumentIcon /> : undefined
-          }
-        />
+        {showMenu && <CardMoreBtn onPress={onHandleMore} />}
+        {Boolean(icons?.length || hasImageFields || expired) && (
+          <DocumentFooter
+            leftIcons={icons}
+            expired={expired}
+            renderRightIcon={
+              hasImageFields ? () => <ScanDocumentIcon /> : undefined
+            }
+          />
+        )}
       </ScaledCard>
     )
   },
-  ({ id: prevId }, { id: nextId }) => {
-    const shouldRender = prevId === nextId
+  (prev, next) => {
+    const skipRender: boolean =
+      prev.id === next.id && prev?.showMenu === next?.showMenu
 
-    return shouldRender
+    return skipRender
   },
 )
 

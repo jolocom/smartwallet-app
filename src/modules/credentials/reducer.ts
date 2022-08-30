@@ -16,7 +16,7 @@ const credentialsReducer = (
       return { ...state, all: action.payload }
     case CredentialsActionType.addCredentials:
       return action.payload
-        ? { ...state, all: [...state.all, ...action.payload] }
+        ? { ...state, all: [...action.payload, ...state.all ] }
         : state
     case CredentialsActionType.deleteCredential:
       const filtered = state.all.filter((c) => c.id !== action.payload)

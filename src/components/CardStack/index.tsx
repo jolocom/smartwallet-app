@@ -1,6 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
+  runOnJS,
+  scrollTo,
+  useAnimatedReaction,
+  useAnimatedRef,
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated'
@@ -18,7 +22,11 @@ export interface StackScrollViewProps<
 > extends StackItemConfig {
   data: StackData<T, P>[]
   renderStack: (data: StackData<T>, item: React.ReactNode) => React.ReactNode
-  renderItem: (data: T, visible: boolean) => React.ReactNode
+  renderItem: (
+    data: T,
+    stack: StackData<T>,
+    visible: boolean,
+  ) => React.ReactNode
 }
 
 export const StackScrollView = <T extends { id: string }, P extends {}>({
@@ -27,16 +35,48 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
   renderStack,
   ...itemConfig
 }: StackScrollViewProps<T, P>) => {
-  const expandState = useSharedValue<ExpandState | null>(null)
+  const scrollRef = useAnimatedRef<Animated.ScrollView>()
+
+  const expandValue = useSharedValue<ExpandState | null>(null)
+  // NOTE: Only reason it's here is to force re-renders when needed
+  const [expandState, setExpandState] = useState(expandValue.value)
+
+  // NOTE: We are converting the animated expand state to React's state to make sure the StackItem is re-rendered
+  // when the expand state changes. Nevertheless, the StackItem should only receive the animated expand state in
+  // order for the animations to run smoothly.
+  useAnimatedReaction(
+    () => {
+      const changed =
+        expandValue.value?.itemId !== expandState?.itemId ||
+        expandValue.value?.stackId !== expandState?.stackId
+      const expanded =
+        expandValue.value?.itemId !== undefined &&
+        expandState?.itemId === undefined
+      const collapsed =
+        expandValue.value?.itemId === undefined &&
+        (expandState?.itemId !== undefined) !== undefined
+
+      return { changed, expanded, collapsed }
+    },
+    ({ changed, expanded }) => {
+      if (expanded) {
+        scrollTo(scrollRef, 0, 150, true)
+      }
+
+      if (changed) {
+        runOnJS(setExpandState)(expandValue.value)
+      }
+    },
+  )
 
   const handlePress = (item: ExpandState) => {
-    expandState.value = item
+    expandValue.value = item
   }
 
   const scrollHandler = useAnimatedScrollHandler({
     onBeginDrag: () => {
-      if (expandState.value) {
-        expandState.value = null
+      if (expandValue.value) {
+        expandValue.value = null
       }
     },
   })
@@ -44,8 +84,11 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
   const renderStackItem = useCallback(
     (item: T, i: number, stack: StackData<T>) => {
       const prevItem = stack.data[i - 1]
+      const lastItem = stack.data[stack.data.length - 1]
 
-      const visible = expandState.value?.itemId === item.id
+      // NOTE: The last card in the stack is always "visible". Furthermore,
+      // the card is visibile when it's expanded as well.
+      const visible = expandState?.itemId === item.id || item.id === lastItem.id
       return (
         <StackItem
           key={item.id}
@@ -55,14 +98,14 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
             handlePress({ stackId: stack.stackId, itemId: item.id })
           }}
           prevItemId={prevItem?.id}
-          expandState={expandState}
+          expandState={expandValue}
           {...itemConfig}
         >
-          {renderItem(item, visible)}
+          {renderItem(item, stack, visible)}
         </StackItem>
       )
     },
-    [expandState],
+    [expandState?.itemId, expandState?.stackId],
   )
 
   return (
@@ -72,6 +115,7 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
       style={styles.scroll}
       contentContainerStyle={styles.scrollContainer}
       showsVerticalScrollIndicator={false}
+      ref={scrollRef}
     >
       {data.map((stack) => {
         const renderStackChildren = () => {

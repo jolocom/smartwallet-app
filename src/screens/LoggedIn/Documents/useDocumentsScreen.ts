@@ -1,13 +1,13 @@
-import React, { useMemo } from "react"
-import { LayoutAnimation } from "react-native"
+import React, { useCallback, useMemo } from 'react'
+import { LayoutAnimation } from 'react-native'
 
-import { StackData } from "~/components/CardStack"
-import { useDocuments } from "~/hooks/documents"
-import { Document } from "~/hooks/documents/types"
-import { useRedirect } from "~/hooks/navigation"
-import useTranslation from "~/hooks/useTranslation"
-import { ScreenNames } from "~/types/screens"
-import { useDocumentMenu } from "./useDocumentMenu"
+import { StackData } from '~/components/CardStack'
+import { useDocuments } from '~/hooks/documents'
+import { Document } from '~/hooks/documents/types'
+import { useRedirect } from '~/hooks/navigation'
+import useTranslation from '~/hooks/useTranslation'
+import { ScreenNames } from '~/types/screens'
+import { useDocumentMenu } from './useDocumentMenu'
 
 export enum DocumentStacks {
   Favorites = 'favorites',
@@ -22,7 +22,7 @@ export interface StackExtraData {
 }
 
 export const useDocumentsScreen = () => {
-  const { documents } = useDocuments()
+  const { validDocuments: documents, expiredDocuments } = useDocuments()
   const { t } = useTranslation()
   const redirect = useRedirect()
 
@@ -37,11 +37,12 @@ export const useDocumentsScreen = () => {
     })
   }
 
-  const handlePressMenu = (c: Document) => {
+  const handlePressMenu = useCallback((c: Document) => {
     onHandleMore({
       id: c.id,
     })
-  }
+  }, [])
+
   const stackData = useMemo<StackData<Document, StackExtraData>[]>(
     () => [
       {
@@ -64,7 +65,7 @@ export const useDocumentsScreen = () => {
       },
       {
         stackId: DocumentStacks.Expired,
-        data: [],
+        data: expiredDocuments,
         extra: {
           name: t('Documents.expiredSection'),
           title: t('Documents.expiredPlaceholderTitle'),
@@ -95,5 +96,11 @@ export const useDocumentsScreen = () => {
     }
   }
 
-  return { stackData, handleStackPress, openedStack, handlePressDetails, handlePressMenu }
+  return {
+    stackData,
+    handleStackPress,
+    openedStack,
+    handlePressDetails,
+    handlePressMenu,
+  }
 }

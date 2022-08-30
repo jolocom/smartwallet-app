@@ -13,9 +13,11 @@ import LinearGradient from 'react-native-linear-gradient'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
+import useTranslation from '~/hooks/useTranslation'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import JoloText from '../JoloText'
 import { DOCUMENT_HEADER_HEIGHT } from './consts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
@@ -30,8 +32,7 @@ export const FieldsCalculator: React.FC<{
   > | null
 
 export const CardMoreBtn: React.FC<{
-  onPress: () => void
-  positionStyles: Partial<Pick<ViewStyle, 'left' | 'right' | 'top' | 'bottom'>>
+  onPress?: () => void
 }> = ({ onPress }) => (
   <ScaledView
     scaleStyle={styles.dotsContainerScaled}
@@ -50,39 +51,52 @@ export const CardMoreBtn: React.FC<{
 export const DocumentFooter: React.FC<{
   leftIcons?: string[]
   renderRightIcon?: () => JSX.Element
+  expired?: boolean
   style?: StyleProp<ViewStyle>
-}> = ({ renderRightIcon, leftIcons, style = {} }) => {
+}> = ({ renderRightIcon, leftIcons, style = {}, expired = false }) => {
+  const { t } = useTranslation()
+
   return (
     <ScaledView
       style={[styles.footerContainer, style]}
       scaleStyle={styles.footerContainerScaled}
     >
       <View style={styles.footerBorder} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-          {leftIcons &&
-            leftIcons.map((icon, i) => (
-              <ScaledView
-                key={i}
-                scaleStyle={{ width: 40, height: 30 }}
-                style={{ marginRight: 10 }}
-              >
-                <Image
-                  source={{ uri: icon }}
-                  resizeMode="contain"
-                  style={{ width: '100%', height: '100%', borderRadius: 4.2 }}
-                />
-              </ScaledView>
-            ))}
-        </View>
-        <View>{renderRightIcon && renderRightIcon()}</View>
+      <View style={styles.footerContent}>
+        {expired ? (
+          <View style={styles.footerExpiredContainer}>
+            <JoloText
+              customStyles={{ fontFamily: Fonts.Medium }}
+              color={Colors.mainBlack}
+            >
+              {t('DocumentCard.expired')}
+            </JoloText>
+          </View>
+        ) : (
+          <>
+            <View style={styles.footerIconsContainer}>
+              {leftIcons &&
+                leftIcons.map((icon, i) => (
+                  <ScaledView
+                    key={i}
+                    scaleStyle={{ width: 40, height: 30 }}
+                    style={{ marginRight: 10 }}
+                  >
+                    <Image
+                      source={{ uri: icon }}
+                      resizeMode="contain"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 4.2,
+                      }}
+                    />
+                  </ScaledView>
+                ))}
+            </View>
+            <View>{renderRightIcon && renderRightIcon()}</View>
+          </>
+        )}
       </View>
     </ScaledView>
   )
@@ -102,18 +116,10 @@ export const DocumentPhoto: React.FC<{
 export const DocumentHeader: React.FC<{
   name: string
   icon?: string
-  onPressMenu?: () => void
   selected?: boolean
   backgroundImage?: string
   backgroundColor?: string
-}> = ({
-  name,
-  icon,
-  onPressMenu,
-  selected,
-  backgroundColor,
-  backgroundImage,
-}) => {
+}> = ({ name, icon, selected, backgroundColor, backgroundImage }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   const prefetchedIcon = useImagePrefetch(icon)
@@ -184,15 +190,6 @@ export const DocumentHeader: React.FC<{
           </ScaledView>
           {typeof selected !== 'undefined' && (
             <SelectedToggle selected={selected} />
-          )}
-          {onPressMenu && (
-            <CardMoreBtn
-              onPress={onPressMenu}
-              positionStyles={{
-                top: 18,
-                right: 17,
-              }}
-            />
           )}
         </ScaledView>
       ))}
@@ -420,12 +417,16 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
 
 const styles = StyleSheet.create({
   dotsContainerScaled: {
+    top: 18,
+    right: 18,
     paddingVertical: 3,
     width: 20,
     height: 30,
-    justifyContent: 'center',
   },
   dotsContainer: {
+    justifyContent: 'center',
+    zIndex: 99,
+    position: 'absolute',
     height: '100%',
     backgroundColor: Colors.white50,
     borderRadius: 8,
@@ -491,6 +492,22 @@ const styles = StyleSheet.create({
     width: '100%',
     borderTopWidth: 1,
     borderTopColor: '#D8D8D8',
+  },
+  footerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100%',
+  },
+  footerExpiredContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: Colors.yellow,
+    borderRadius: 9,
+  },
+  footerIconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
   regularText: {
     fontFamily: Fonts.Regular,

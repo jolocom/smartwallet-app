@@ -1,7 +1,11 @@
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteCredential } from '~/modules/credentials/actions'
-import { getAllDocuments } from '~/modules/credentials/selectors'
+import {
+  getAllDocuments,
+  getExpiredDocuments,
+  getValidDocuments,
+} from '~/modules/credentials/selectors'
 import { ClaimKeys } from '~/types/credentials'
 import { useAgent } from '../sdk'
 import useTranslation from '../useTranslation'
@@ -12,6 +16,8 @@ export const useDocuments = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
   const documents = useSelector(getAllDocuments)
+  const expiredDocuments = useSelector(getExpiredDocuments)
+  const validDocuments = useSelector(getValidDocuments)
 
   const deleteDocument = async (id: string) => {
     await agent.credentials.delete({ id })
@@ -81,6 +87,8 @@ export const useDocuments = () => {
 
   return {
     documents,
+    expiredDocuments,
+    validDocuments,
     deleteDocument,
     getDocumentById,
     getHolderName,
