@@ -215,15 +215,17 @@ export const DocumentHolderName: React.FC<{
       scaleStyle={{
         paddingLeft: 24,
         marginRight: cropName ? 116 : 0,
-        marginVertical: 10,
+        marginVertical: 8,
       }}
     >
       <ScaledText
         // @ts-expect-error
         onTextLayout={onLayout}
         numberOfLines={numberOfLines}
+        scaleStyle={
+          numberOfLines === 1 ? styles.holderName : styles.holderNameSmall
+        }
         style={styles.mediumText}
-        scaleStyle={styles.holderName}
       >
         {name}
       </ScaledText>
