@@ -35,13 +35,13 @@ export const useDocumentMenu = () => {
       },
       isFavorite(id)
         ? {
-            title: 'Remove from Favorites',
+            title: t('Documents.removeFavorite'),
             onPress: () => {
               deleteFavorite(id)
             },
-        }
+          }
         : {
-            title: 'Add to Favorites',
+            title: t('Documents.addFavorite'),
             onPress: () => {
               addFavorite(id)
             },

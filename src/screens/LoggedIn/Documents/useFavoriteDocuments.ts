@@ -2,11 +2,12 @@ import { LayoutAnimation } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import useSettings, { SettingKeys } from '~/hooks/settings'
 import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
 import {
   addFavoriteDocument,
   deleteFavoriteDocument,
   setFavoriteDocuments,
-  setOpenedStack
+  setOpenedStack,
 } from '~/modules/credentials/actions'
 import { getFavoriteDocuments } from '~/modules/credentials/selectors'
 import { DocumentStacks } from '~/modules/credentials/types'
@@ -19,6 +20,7 @@ export const useFavoriteDocuments = () => {
   const dispatch = useDispatch()
   const favorites = useSelector(getFavoriteDocuments)
   const { scheduleInfo } = useToasts()
+  const { t } = useTranslation()
 
   const animateLayout = () => {
     LayoutAnimation.configureNext({
@@ -27,33 +29,31 @@ export const useFavoriteDocuments = () => {
     })
   }
 
-  const addFavorite = 
-    async (id: string) => {
-      if (favorites.length > MAX_FAVORITES - 1) {
-        scheduleInfo({
-          title: 'Take it easy',
-          message: `You can't have more than ${MAX_FAVORITES} favorites`,
-        })
-
-        return
-      }
-
-      const updatedFavorites = [...favorites.map((d) => d.id), id]
-
-      await settings.set(SettingKeys.favoriteDocuments, {
-        all: updatedFavorites,
+  const addFavorite = async (id: string) => {
+    if (favorites.length > MAX_FAVORITES - 1) {
+      scheduleInfo({
+        title: t('Toasts.documentsFavoritesLimitTitle'),
+        message: t('Toasts.documentsFavoritesLimitMsg', { max: MAX_FAVORITES }),
       })
 
-      animateLayout()
-      dispatch(addFavoriteDocument(id))
+      return
     }
+
+    const updatedFavorites = [...favorites.map((d) => d.id), id]
+
+    await settings.set(SettingKeys.favoriteDocuments, {
+      all: updatedFavorites,
+    })
+
+    animateLayout()
+    dispatch(addFavoriteDocument(id))
+  }
 
   const getFavorites = async () => {
     const favorites = (await settings.get(SettingKeys.favoriteDocuments)) as {
       all: string[]
     }
 
-    console.log({favorites})
     dispatch(setFavoriteDocuments(favorites.all))
     return favorites.all
   }
@@ -76,12 +76,11 @@ export const useFavoriteDocuments = () => {
     })
   }
 
-
   return {
     favorites,
     addFavorite,
     getFavorites,
     deleteFavorite,
-    resetFavorites
+    resetFavorites,
   }
 }

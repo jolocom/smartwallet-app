@@ -212,7 +212,9 @@
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
         "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
         "refreshTitle": "Fertig!",
-        "refreshMsg": "Die Identifikation war erfolgreich. Fahren Sie jetzt bitte mit Ihrem Prozess bei ${serviceName} außerhalb der SmartWallet fort."
+        "refreshMsg": "Die Identifikation war erfolgreich. Fahren Sie jetzt bitte mit Ihrem Prozess bei ${serviceName} außerhalb der SmartWallet fort.",
+        "documentsFavoritesLimitTitle": "Ruhe bewahren",
+        "documentsFavoritesLimitMsg": "Sie können nicht mehr als ${max} Favoriten hinzufügen"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
@@ -244,15 +246,17 @@
         "issuedFieldLabel": "Ausgestellt",
         "issuerFieldLabel": "Aussteller",
         "expiresFieldLabel": "Läuft ab",
-        "favoriteSection": "",
-        "allSection": "",
-        "expiredSection": "",
-        "favoritePlaceholderTitle": "",
-        "favoritePlaceholderSubtitle": "",
-        "allPlaceholderTitle": "",
-        "allPlaceholderSubtitle": "",
-        "expiredPlaceholderTitle": "",
-        "expiredPlaceholderSubtitle": ""
+        "favoriteSection": "Favoriten",
+        "allSection": "Alle",
+        "expiredSection": "Abgelaufen",
+        "favoritePlaceholderTitle": "Noch sind keine Dokumente vorhanden",
+        "favoritePlaceholderSubtitle": "Drücken Sie auf das Stern Icon um Favoriten hinzuzufügen.",
+        "allPlaceholderTitle": "Noch keine Dokumente verfügbar",
+        "allPlaceholderSubtitle": "Sie haben noch keine Dokumente abgespeichert. Fügen Sie noch heute ein Dokument hinzu!",
+        "expiredPlaceholderTitle": "Noch keine Dokumente verfügbar",
+        "expiredPlaceholderSubtitle": "Sie besitzen keine abgelaufenen Dokumente.",
+        "removeFavorite": "Von Favoriten entfernen",
+        "addFavorite": "Zu Favoriten hinzufügen"
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -591,6 +595,6 @@
         "header": "Nutzungsbedingungen"
     },
     "DocumentCard": {
-        "expired": ""
+        "expired": "Abgelaufen"
     }
 }
