@@ -155,22 +155,21 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const getFieldsTopDistance = () => {
       let distance = 0
-
       if (photo) {
-        distance = distance + 12
+        distance += 4
       }
-
       if (!holderName && photo) {
-        distance = distance + 42
+        distance += isBackground ? 42 : 84
       } else if (holderName) {
-        distance = distance + 16
+        distance -= isBackground ? 2 : 8
+      } else {
+        distance += isBackground ? 8 : 2
       }
 
       // FIXME: with backgroundColor, the fields are a bit too low
       if (isBackground && Platform.OS === 'android') {
         distance = distance - 12
       }
-
       return distance
     }
 
