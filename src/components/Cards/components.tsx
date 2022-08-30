@@ -180,7 +180,7 @@ export const DocumentHeader: React.FC<{
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={1}
               scaleStyle={styles.credentialName}
-              style={[styles.mediumText]}
+              style={(styles.mediumText, { paddingRight: 24 })}
             >
               {name}
             </ScaledText>
