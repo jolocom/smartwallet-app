@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { LayoutAnimation } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import useSettings, { SettingKeys } from '~/hooks/settings'
@@ -58,17 +59,23 @@ export const useFavoriteDocuments = () => {
     return favorites.all
   }
 
-  const deleteFavorite = async (id: string) => {
-    const filtered = favorites.filter((f) => f.id !== id)
-    await settings.set(SettingKeys.favoriteDocuments, {
-      all: filtered,
-    })
-    animateLayout()
-    dispatch(deleteFavoriteDocument(id))
-    if (filtered.length === 0) {
-      dispatch(setOpenedStack(DocumentStacks.All))
-    }
-  }
+  const deleteFavorite = useCallback(
+    async (id: string) => {
+      const filtered = favorites
+        .filter((f) => f.id !== id)
+        .map((document) => document.id)
+
+      await settings.set(SettingKeys.favoriteDocuments, {
+        all: filtered,
+      })
+      animateLayout()
+      dispatch(deleteFavoriteDocument(id))
+      if (filtered.length === 0) {
+        dispatch(setOpenedStack(DocumentStacks.All))
+      }
+    },
+    [favorites.length],
+  )
 
   const resetFavorites = async () => {
     await settings.set(SettingKeys.favoriteDocuments, {

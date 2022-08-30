@@ -63,7 +63,6 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
         expandValue.value?.stackId === data[0].stackId &&
         expandValue.value?.itemId === data[0].data[0].id
 
-      console.log({ isFirstItem, expandState })
       if (expanded && !isFirstItem) {
         scrollTo(scrollRef, 0, 150, true)
       }

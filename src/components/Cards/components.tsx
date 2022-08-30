@@ -11,7 +11,6 @@ import {
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { FavoriteHeartIcon, PurpleTickSuccess } from '~/assets/svg'
-import { PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
 import useTranslation from '~/hooks/useTranslation'
