@@ -195,7 +195,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               style={
                 !isBackground &&
                 photo && {
-                  height: holderName ? 86 : 0,
+                  height: holderName ? 86 : 21.5,
                   justifyContent: 'center',
                 }
               }

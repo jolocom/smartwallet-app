@@ -279,16 +279,14 @@ export const DocumentFields: React.FC<{
   allowOverflowingFields = true,
   shoudIsolateFirstRow = false,
 }) => {
-  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 2 : maxRows * 2
+  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 1 : maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
     fields,
     maxFields,
     maxLines,
   )
 
-  const secondaryField = shoudIsolateFirstRow
-    ? displayedFields.splice(0, 2)
-    : null
+  const secondaryField = shoudIsolateFirstRow ? displayedFields.shift() : null
 
   let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
@@ -365,14 +363,10 @@ export const DocumentFields: React.FC<{
                 maxWidth: '65%',
               }}
               scaleStyle={{
-                marginTop: 0,
+                marginVertical: 14,
               }}
             >
-              {secondaryField.map((field) => (
-                <ScaledView scaleStyle={{ marginBottom: 14 }}>
-                  {renderField(field)}
-                </ScaledView>
-              ))}
+              {renderField(secondaryField)}
             </ScaledView>
           )}
           {rows.map((row, idx) => (
