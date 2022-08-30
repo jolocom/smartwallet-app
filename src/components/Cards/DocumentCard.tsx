@@ -89,11 +89,31 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       const isBackgroundImage = Boolean(backgroundImage)
       const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
       const isHolderName = Boolean(holderName)
+      const isIcons = Boolean(icons)
+      const isImageFields = Boolean(hasImageFields)
 
       if (
+        checkLayoutCase(
+          isBackgroundImage || isBackgroundColor,
+          isHolderName,
+          !isIcons,
+          !isImageFields,
+        )
+      ) {
+        return 3
+      } else if (
         checkLayoutCase(isBackgroundImage || isBackgroundColor, isHolderName)
       ) {
         return 2
+      } else if (
+        checkLayoutCase(
+          !isBackgroundColor,
+          !isBackgroundImage,
+          !isIcons,
+          !isImageFields,
+        )
+      ) {
+        return 4
       } else if (
         checkLayoutCase(!isBackgroundColor, !isBackgroundImage, isHolderName)
       ) {
@@ -101,11 +121,11 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       } else if (
         checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
       ) {
-        return 3
+        return isIcons || isImageFields ? 2 : 3
       } else if (
         checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
       ) {
-        return 4
+        return 3
       } else {
         return 0
       }
@@ -122,14 +142,10 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     }
 
     const isBackground = Boolean(backgroundImage || backgroundColor)
+    const showSecondaryField = !holderName && !isBackground
 
     const getSubheaderStyles = (): ViewStyle | undefined => {
-      if (checkLayoutCase(isBackground)) {
-        return {
-          marginTop: -30,
-          justifyContent: 'flex-end',
-        }
-      } else if (checkLayoutCase(!isBackground)) {
+      if (checkLayoutCase(!isBackground)) {
         return {
           marginTop: 12,
           justifyContent: 'center',
@@ -139,22 +155,21 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const getFieldsTopDistance = () => {
       let distance = 0
-
       if (photo) {
-        distance = distance + 12
+        distance += 4
       }
-
       if (!holderName && photo) {
-        distance = distance + 42
+        distance += isBackground ? 42 : 84
       } else if (holderName) {
-        distance = distance + 16
+        distance -= isBackground ? 2 : 8
+      } else {
+        distance += isBackground ? 8 : 2
       }
 
       // FIXME: with backgroundColor, the fields are a bit too low
       if (isBackground && Platform.OS === 'android') {
         distance = distance - 12
       }
-
       return distance
     }
 
@@ -173,10 +188,24 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             icon={issuerIcon}
             backgroundImage={backgroundImage}
             backgroundColor={backgroundColor}
+            truncateName={showMenu}
           />
           <View style={styles.content}>
-            <ScaledView scaleStyle={[getSubheaderStyles()]}>
-              {photo && <DocumentPhoto photo={photo} />}
+            <View
+              style={
+                !isBackground &&
+                photo && {
+                  height: holderName ? 86 : 21.5,
+                  justifyContent: 'center',
+                }
+              }
+            >
+              {photo && (
+                <DocumentPhoto
+                  photo={photo}
+                  topPosition={backgroundImage || backgroundColor ? -44 : 0}
+                />
+              )}
               {holderName && (
                 <DocumentHolderName
                   name={holderName}
@@ -184,10 +213,14 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
                   onLayout={handleHolderNameTextLayout}
                 />
               )}
-            </ScaledView>
-            <ScaledView
-              scaleStyle={{ paddingBottom: getFieldsTopDistance() }}
-            />
+            </View>
+            {isBackground && (
+              <ScaledView
+                scaleStyle={{
+                  paddingBottom: getFieldsTopDistance(),
+                }}
+              />
+            )}
             <DocumentFields
               fields={fields}
               maxLines={maxLinesPerField}
@@ -195,6 +228,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               rowDistance={14}
               labelScaledStyle={styles.fieldLabel}
               valueScaledStyle={styles.fieldValue}
+              shoudIsolateFirstRow={showSecondaryField}
             />
           </View>
           {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.
@@ -245,7 +279,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: 12,
   },
   contentContainer: {
     flex: 1,
