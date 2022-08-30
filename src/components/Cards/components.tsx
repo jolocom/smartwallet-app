@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import {
   Image,
   ImageBackground,
@@ -210,6 +210,16 @@ export const DocumentHolderName: React.FC<{
   cropName?: boolean
   numberOfLines?: number
 }> = ({ name, onLayout, cropName = false, numberOfLines = 2 }) => {
+  const [renderedLines, setRenderedLines] = useState<number>()
+
+  const handleLayout = (e: TextLayoutEvent) => {
+    if (!renderedLines) {
+      const lines = e.nativeEvent.lines.length
+      setRenderedLines(lines)
+    }
+    onLayout && onLayout(e)
+  }
+
   return (
     <ScaledView
       scaleStyle={{
@@ -220,10 +230,10 @@ export const DocumentHolderName: React.FC<{
     >
       <ScaledText
         // @ts-expect-error
-        onTextLayout={onLayout}
+        onTextLayout={handleLayout}
         numberOfLines={numberOfLines}
         scaleStyle={
-          numberOfLines === 1 ? styles.holderName : styles.holderNameSmall
+          renderedLines === 1 ? styles.holderName : styles.holderNameSmall
         }
         style={styles.mediumText}
       >
@@ -269,14 +279,16 @@ export const DocumentFields: React.FC<{
   allowOverflowingFields = true,
   shoudIsolateFirstRow = false,
 }) => {
-  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 1 : maxRows * 2
+  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 2 : maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
     fields,
     maxFields,
     maxLines,
   )
 
-  const secondaryField = shoudIsolateFirstRow ? displayedFields.shift() : null
+  const secondaryField = shoudIsolateFirstRow
+    ? displayedFields.splice(0, 2)
+    : null
 
   let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
@@ -298,7 +310,7 @@ export const DocumentFields: React.FC<{
     return (
       <ScaledView
         key={field.key}
-        style={{ flex: 1 }}
+        style={{ flex: !shoudIsolateFirstRow ? 1 : undefined }}
         scaleStyle={{ paddingRight: 12 }}
       >
         <ScaledText
@@ -349,15 +361,18 @@ export const DocumentFields: React.FC<{
           {secondaryField && (
             <ScaledView
               style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
+                flexDirection: 'column',
                 maxWidth: '65%',
               }}
               scaleStyle={{
-                marginVertical: 14,
+                marginTop: 0,
               }}
             >
-              {renderField(secondaryField)}
+              {secondaryField.map((field) => (
+                <ScaledView scaleStyle={{ marginBottom: 14 }}>
+                  {renderField(field)}
+                </ScaledView>
+              ))}
             </ScaledView>
           )}
           {rows.map((row, idx) => (
@@ -365,7 +380,6 @@ export const DocumentFields: React.FC<{
               key={idx}
               style={{
                 flexDirection: 'row',
-                alignItems: 'flex-start',
               }}
               scaleStyle={{
                 marginTop: idx === 0 ? 0 : rowDistance,
