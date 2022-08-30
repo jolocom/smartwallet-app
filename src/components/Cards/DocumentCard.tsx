@@ -89,11 +89,31 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       const isBackgroundImage = Boolean(backgroundImage)
       const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
       const isHolderName = Boolean(holderName)
+      const isIcons = Boolean(icons)
+      const isImageFields = Boolean(hasImageFields)
 
       if (
+        checkLayoutCase(
+          isBackgroundImage || isBackgroundColor,
+          isHolderName,
+          !isIcons,
+          !isImageFields,
+        )
+      ) {
+        return 3
+      } else if (
         checkLayoutCase(isBackgroundImage || isBackgroundColor, isHolderName)
       ) {
         return 2
+      } else if (
+        checkLayoutCase(
+          !isBackgroundColor,
+          !isBackgroundImage,
+          !isIcons,
+          !isImageFields,
+        )
+      ) {
+        return 4
       } else if (
         checkLayoutCase(!isBackgroundColor, !isBackgroundImage, isHolderName)
       ) {
@@ -101,11 +121,11 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       } else if (
         checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
       ) {
-        return 3
+        return isIcons || isImageFields ? 2 : 3
       } else if (
         checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
       ) {
-        return 4
+        return 3
       } else {
         return 0
       }
@@ -122,13 +142,10 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     }
 
     const isBackground = Boolean(backgroundImage || backgroundColor)
+    const showSecondaryField = !holderName && !isBackground
 
     const getSubheaderStyles = (): ViewStyle | undefined => {
-      if (checkLayoutCase(isBackground)) {
-        return {
-          marginTop: -18,
-        }
-      } else if (checkLayoutCase(!isBackground)) {
+      if (checkLayoutCase(!isBackground)) {
         return {
           marginTop: 12,
           justifyContent: 'center',
