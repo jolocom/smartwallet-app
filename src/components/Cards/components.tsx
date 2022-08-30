@@ -148,7 +148,7 @@ export const DocumentHeader: React.FC<{
         </DocumentBackgroundColor>
       )
     } else {
-      return children()
+      return <GradientSeparator>{children()}</GradientSeparator>
     }
   }
 
@@ -162,7 +162,6 @@ export const DocumentHeader: React.FC<{
           }}
           style={styles.headerContainer}
         >
-          {!backgroundImage && !backgroundColor && <GradientSeparator />}
           {prefetchedIcon && (
             <ScaledView
               scaleStyle={{
@@ -394,12 +393,25 @@ export const DocumentFields: React.FC<{
 
 const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
-    colors={[Colors.white100, Colors.white00]}
+    colors={[Colors.randomGrey, Colors.white00]}
     style={{ flex: 1 }}
   >
     {children}
   </LinearGradient>
 )
+
+export const GradientSeparator: React.FC = ({ children }) => {
+  return (
+    <ScaledView scaleStyle={{ height: DOCUMENT_HEADER_HEIGHT }}>
+      <LinearGradient
+        colors={[Colors.randomGrey, Colors.white]}
+        style={{ flex: 1 }}
+      >
+        {children}
+      </LinearGradient>
+    </ScaledView>
+  )
+}
 
 export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
   image,
@@ -434,26 +446,6 @@ export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
     <BackgroundOpacity>{children}</BackgroundOpacity>
   </ScaledView>
 )
-
-export const GradientSeparator = () => {
-  return (
-    <View
-      style={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
-        height: 50,
-        opacity: 0.15,
-      }}
-    >
-      <LinearGradient
-        colors={[Colors.randomGrey, Colors.white]}
-        style={{ flex: 1 }}
-      />
-    </View>
-  )
-}
 
 export const SelectedToggle: React.FC<{ selected: boolean }> = ({
   selected,
