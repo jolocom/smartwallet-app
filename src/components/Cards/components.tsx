@@ -10,6 +10,7 @@ import {
   ViewStyle,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+
 import { PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
@@ -120,7 +121,15 @@ export const DocumentHeader: React.FC<{
   selected?: boolean
   backgroundImage?: string
   backgroundColor?: string
-}> = ({ name, icon, selected, backgroundColor, backgroundImage }) => {
+  truncateName: boolean
+}> = ({
+  name,
+  icon,
+  selected,
+  backgroundColor,
+  backgroundImage,
+  truncateName,
+}) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   const prefetchedIcon = useImagePrefetch(icon)
@@ -177,7 +186,10 @@ export const DocumentHeader: React.FC<{
               onTextLayout={handleCredentialNameTextLayout}
               numberOfLines={1}
               scaleStyle={styles.credentialName}
-              style={(styles.mediumText, { paddingRight: 24 })}
+              style={{
+                ...styles.mediumText,
+                paddingRight: truncateName ? 24 : 0,
+              }}
             >
               {name}
             </ScaledText>
