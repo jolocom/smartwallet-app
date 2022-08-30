@@ -487,6 +487,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 28,
   },
+  holderNameSmall: {
+    fontSize: 22,
+    lineHeight: 26,
+  },
   photoContainer: {
     position: 'absolute',
     overflow: 'hidden',
