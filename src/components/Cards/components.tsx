@@ -254,6 +254,8 @@ export const DocumentFields: React.FC<{
   allowOverflowingFields?: boolean
   // NOTE: called after calculating the fields that will be displayed
   onFinishCalculation?: (displayedFields: DocumentProperty[]) => void
+  // NOTE: allow extra fields next to the photo if no holderName is present
+  shoudIsolateFirstRow?: boolean
 }> = ({
   fields,
   maxLines,
@@ -265,17 +267,21 @@ export const DocumentFields: React.FC<{
   nrOfColumns = 2,
   onFinishCalculation,
   allowOverflowingFields = true,
+  shoudIsolateFirstRow = false,
 }) => {
-  const maxFields = maxRows * 2
+  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 1 : maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
     fields,
     maxFields,
     maxLines,
   )
 
+  const secondaryField = shoudIsolateFirstRow ? displayedFields.shift() : null
+
   let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
   // we have to cut it to the max nr of rows.
+
   rows = rows.splice(0, maxRows)
 
   useEffect(() => {
@@ -340,6 +346,20 @@ export const DocumentFields: React.FC<{
             alignItems: 'flex-start',
           }}
         >
+          {secondaryField && (
+            <ScaledView
+              style={{
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                maxWidth: '65%',
+              }}
+              scaleStyle={{
+                marginVertical: 14,
+              }}
+            >
+              {renderField(secondaryField)}
+            </ScaledView>
+          )}
           {rows.map((row, idx) => (
             <ScaledView
               key={idx}
