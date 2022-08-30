@@ -195,10 +195,8 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               style={
                 !isBackground &&
                 photo && {
-                  height: holderName ? 86 : 21.5,
-                  alignItems: photo ? 'center' : 'flex-start',
+                  height: holderName ? 86 : 0,
                   justifyContent: 'center',
-                  // ...debugView(),
                 }
               }
             >
