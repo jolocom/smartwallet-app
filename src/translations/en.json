@@ -212,7 +212,9 @@
         "ausweisDeactivatedCardTitle": "Your card is deactivated",
         "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
         "refreshTitle": "All done here!",
-        "refreshMsg": "Identification data was shared successfully. Please continue the process with ${serviceName} in the initial application outside the Smart Wallet."
+        "refreshMsg": "Identification data was shared successfully. Please continue the process with ${serviceName} in the initial application outside the Smart Wallet.",
+        "documentsFavoritesLimitTitle": "Take it easy",
+        "documentsFavoritesLimitMsg": "You can't have more than ${max} favorites"
     },
     "Interaction": {
         "cancelBtn": "Ignore",
@@ -252,7 +254,9 @@
         "allPlaceholderTitle": "It’s still empty",
         "allPlaceholderSubtitle": "You haven't saved any documents yet. Get one today!",
         "expiredPlaceholderTitle": "It’s still empty",
-        "expiredPlaceholderSubtitle": "You don’t have any expired documents."
+        "expiredPlaceholderSubtitle": "You don’t have any expired documents.",
+        "removeFavorite": "Remove from Favorites",
+        "addFavorite": "Add to Favorites"
     },
     "CredentialRequest": {
         "header": "Incoming request",

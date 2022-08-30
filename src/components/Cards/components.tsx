@@ -10,7 +10,7 @@ import {
   ViewStyle,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-
+import { FavoriteHeartIcon, PurpleTickSuccess } from '~/assets/svg'
 import { PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
@@ -464,7 +464,24 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
   )
 }
 
+export const CardFavorite = () => (
+  <View style={styles.favoriteContainer}>
+    <FavoriteHeartIcon />
+  </View>
+)
+
 const styles = StyleSheet.create({
+  favoriteContainer: {
+    position: 'absolute',
+    top: -10,
+    right: 6,
+    height: 32,
+    width: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+  },
   dotsContainerScaled: {
     top: 18,
     right: 18,

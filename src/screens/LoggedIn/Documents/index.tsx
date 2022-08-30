@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { DocumentCard } from '~/components/Cards'
+import { CardFavorite } from '~/components/Cards/components'
 import {
   DOCUMENT_HEADER_HEIGHT,
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
@@ -16,13 +17,10 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
+import { DocumentStacks } from '~/modules/credentials/types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import {
-  DocumentStacks,
-  StackExtraData,
-  useDocumentsScreen,
-} from './useDocumentsScreen'
+import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
 
 const Documents: React.FC = () => {
   const { t } = useTranslation()
@@ -41,6 +39,7 @@ const Documents: React.FC = () => {
     openedStack,
     handlePressDetails,
     handlePressMenu,
+    isDocumentFavorite,
   } = useDocumentsScreen()
 
   const { scaleBy } = useMemo(
@@ -138,23 +137,28 @@ const Documents: React.FC = () => {
                 : getExtraProperties(c)
 
               return (
-                <DocumentCard
-                  id={c.id}
-                  key={c.id}
-                  onPress={() => handlePressDetails(c.id)}
-                  credentialName={c.name}
-                  holderName={getHolderName(c)}
-                  fields={fields}
-                  photo={getHolderPhoto(c)}
-                  onHandleMore={visible ? () => handlePressMenu(c) : undefined}
-                  showMenu={visible}
-                  backgroundColor={c.style.backgroundColor}
-                  backgroundImage={c.style.backgroundImage}
-                  issuerIcon={c.issuer.icon}
-                  hasImageFields={hasImageProperties(c)}
-                  icons={c.style.contextIcons}
-                  expired={stack.stackId === DocumentStacks.Expired}
-                />
+                <>
+                  <DocumentCard
+                    id={c.id}
+                    key={c.id}
+                    onPress={() => handlePressDetails(c.id)}
+                    credentialName={c.name}
+                    holderName={getHolderName(c)}
+                    fields={fields}
+                    photo={getHolderPhoto(c)}
+                    onHandleMore={
+                      visible ? () => handlePressMenu(c) : undefined
+                    }
+                    showMenu={visible}
+                    backgroundColor={c.style.backgroundColor}
+                    backgroundImage={c.style.backgroundImage}
+                    issuerIcon={c.issuer.icon}
+                    hasImageFields={hasImageProperties(c)}
+                    icons={c.style.contextIcons}
+                    expired={stack.stackId === DocumentStacks.Expired}
+                  />
+                  {isDocumentFavorite(c.id) && <CardFavorite />}
+                </>
               )
             }}
           />

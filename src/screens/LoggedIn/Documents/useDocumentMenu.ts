@@ -3,16 +3,22 @@ import { usePopupMenu } from '~/hooks/popupMenu'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
+import { useFavoriteDocuments } from './useFavoriteDocuments'
 
 export const useDocumentMenu = () => {
   const { t } = useTranslation()
   const { scheduleErrorWarning } = useToasts()
   const { deleteDocument, getDocumentById } = useDocuments()
+  const { addFavorite, favorites, deleteFavorite } = useFavoriteDocuments()
 
   const { showPopup } = usePopupMenu()
 
   const handleDelete = (id: string) => {
     deleteDocument(id).catch(scheduleErrorWarning)
+  }
+
+  const isFavorite = (id: string) => {
+    return Boolean(favorites.find((d) => d.id === id))
   }
 
   return ({ id }: { id: string }) => {
@@ -27,6 +33,19 @@ export const useDocumentMenu = () => {
           },
         },
       },
+      isFavorite(id)
+        ? {
+            title: t('Documents.removeFavorite'),
+            onPress: () => {
+              deleteFavorite(id)
+            },
+          }
+        : {
+            title: t('Documents.addFavorite'),
+            onPress: () => {
+              addFavorite(id)
+            },
+          },
       {
         title: t('Documents.deleteCardOption'),
         navigation: {

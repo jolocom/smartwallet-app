@@ -255,10 +255,12 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     )
   },
   (prev, next) => {
-    const skipRender: boolean =
-      prev.id === next.id && prev?.showMenu === next?.showMenu
+    const relevantProps: Array<keyof DocumentCardProps> = ['id', 'showMenu']
+    const arePropsEqual = relevantProps.every(
+      (prop) => prev[prop] === next[prop],
+    )
 
-    return skipRender
+    return arePropsEqual
   },
 )
 

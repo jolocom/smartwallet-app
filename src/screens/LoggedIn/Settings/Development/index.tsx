@@ -1,16 +1,17 @@
 import React from 'react'
 import { Linking, View } from 'react-native'
 
-import Section from '../components/Section'
-import Option from '../components/Option'
 import ToggleSwitch from '~/components/ToggleSwitch'
-import { useToasts } from '~/hooks/toasts'
-import { useRedirect } from '~/hooks/navigation'
-import { ScreenNames } from '~/types/screens'
-import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
-import { usePopupMenu } from '~/hooks/popupMenu'
 import { DeeplinkParams } from '~/hooks/deeplinks'
+import { useRedirect } from '~/hooks/navigation'
+import { usePopupMenu } from '~/hooks/popupMenu'
+import { useToasts } from '~/hooks/toasts'
+import useErrors from '~/hooks/useErrors'
+import { ScreenNames } from '~/types/screens'
+import { useFavoriteDocuments } from '../../Documents/useFavoriteDocuments'
+import Option from '../components/Option'
+import Section from '../components/Section'
 
 const TC_TOKEN =
   'https://servicekonto.test.governikus-eid.de/AutentIDConnect/npa/authorize?scope=openid&response_type=code&redirect_uri=https%3A%2F%2Fservicekonto.test.governikus-eid.de%2Ftest-client%2Fopenid-connect%2Fauthcode&state=1&nonce=nonce&client_id=tNwyiRVez8xM8t1YZ9YnaMXd2tviISKw&acr_values=integrated'
@@ -20,6 +21,7 @@ const TEST_URL = encodeURIComponent('https://smartwallet.free.beeceptor.com')
 const DevelopmentSection = () => {
   const { scheduleInfo } = useToasts()
   const { showErrorDisplay } = useErrors()
+  const { resetFavorites } = useFavoriteDocuments()
 
   const redirect = useRedirect()
   const { showPopup } = usePopupMenu()
@@ -69,6 +71,9 @@ const DevelopmentSection = () => {
       <Section>
         <Section.Title>[DEV] UI component</Section.Title>
         <Section.Block>
+          <Option onPress={resetFavorites}>
+            <Option.Title title="Reset favorite documents" />
+          </Option>
           <Option>
             <Option.Title title="Toggle Switch" />
             <View style={{ position: 'absolute', right: 16 }}>

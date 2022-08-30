@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
   runOnJS,
@@ -59,7 +59,12 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
       return { changed, expanded, collapsed }
     },
     ({ changed, expanded }) => {
-      if (expanded) {
+      const isFirstItem =
+        expandValue.value?.stackId === data[0].stackId &&
+        expandValue.value?.itemId === data[0].data[0].id
+
+      console.log({ isFirstItem, expandState })
+      if (expanded && !isFirstItem) {
         scrollTo(scrollRef, 0, 150, true)
       }
 
@@ -81,32 +86,29 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
     },
   })
 
-  const renderStackItem = useCallback(
-    (item: T, i: number, stack: StackData<T>) => {
-      const prevItem = stack.data[i - 1]
-      const lastItem = stack.data[stack.data.length - 1]
+  const renderStackItem = (item: T, i: number, stack: StackData<T>) => {
+    const prevItem = stack.data[i - 1]
+    const lastItem = stack.data[stack.data.length - 1]
 
-      // NOTE: The last card in the stack is always "visible". Furthermore,
-      // the card is visibile when it's expanded as well.
-      const visible = expandState?.itemId === item.id || item.id === lastItem.id
-      return (
-        <StackItem
-          key={item.id}
-          stackId={stack.stackId}
-          index={i}
-          onPress={() => {
-            handlePress({ stackId: stack.stackId, itemId: item.id })
-          }}
-          prevItemId={prevItem?.id}
-          expandState={expandValue}
-          {...itemConfig}
-        >
-          {renderItem(item, stack, visible)}
-        </StackItem>
-      )
-    },
-    [expandState?.itemId, expandState?.stackId],
-  )
+    // NOTE: The last card in the stack is always "visible". Furthermore,
+    // the card is visibile when it's expanded as well.
+    const visible = expandState?.itemId === item.id || item.id === lastItem.id
+    return (
+      <StackItem
+        key={item.id}
+        stackId={stack.stackId}
+        index={i}
+        onPress={() => {
+          handlePress({ stackId: stack.stackId, itemId: item.id })
+        }}
+        prevItemId={prevItem?.id}
+        expandState={expandValue}
+        {...itemConfig}
+      >
+        {renderItem(item, stack, visible)}
+      </StackItem>
+    )
+  }
 
   return (
     <Animated.ScrollView

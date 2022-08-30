@@ -1,15 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { Alert, Text, TouchableOpacity, View } from 'react-native'
 import Animated, {
-  useAnimatedProps,
-  useAnimatedScrollHandler,
   useAnimatedStyle,
-  useSharedValue,
   withSpring,
   withTiming,
-  runOnJS,
-  scrollTo,
-  useAnimatedRef,
 } from 'react-native-reanimated'
 import {
   ORIGINAL_DOCUMENT_CARD_HEIGHT,
@@ -90,68 +84,7 @@ interface StackScrollViewProps<T extends { id: string | number }> {
   renderCard: (item: T, i: number) => React.ReactNode
 }
 
-//export const StackScrollView: React.FC<
-//  StackScrollViewProps<{ id: string }>
-//> = ({ data, renderCard }) => {
-//  const [expandedId, setExpandedId] = useState<string | null>(null)
-//
-//  const handlePress = (id: string) => {
-//    //scrollTo(scrollRef, 0, ORIGINAL_DOCUMENT_CARD_HEIGHT / 2, true)
-//    //scrollRef.current.scrollTo({ x: 0, y: ORIGINAL_DOCUMENT_CARD_HEIGHT / 2 })
-//    console.log('pressing', id)
-//    setExpandedId(id)
-//  }
-//
-//  const resetStack = () => {
-//    setExpandedId(null)
-//  }
-//
-//  const scrollHandler = useAnimatedScrollHandler(
-//    {
-//      onBeginDrag: (event) => {
-//        if (expandedId) {
-//          console.log(JSON.stringify(event, null, 2))
-//          runOnJS(resetStack)()
-//          //runOnJS(setExpandVelocity)(event.velocity?.y)
-//        }
-//      },
-//    },
-//    [expandedId],
-//  )
-//
-//  return (
-//    <Animated.ScrollView
-//      onScroll={scrollHandler}
-//      //ref={scrollRef}
-//      scrollEventThrottle={4}
-//      contentContainerStyle={{
-//        paddingVertical: 40,
-//        width: '100%',
-//        paddingTop: 80,
-//      }}
-//    >
-//      {data.map((n, i) => {
-//        const nextId = data[i + 1] ? data[i + 1].id : false
-//
-//        return (
-//          <Card
-//            key={n.id}
-//            id={n.id}
-//            index={i}
-//            onPress={() => handlePress(n.id)}
-//            isExpanded={expandedId !== null ? n.id === data[i + 1].id : false}
-//          >
-//            {renderCard(n, i)}
-//          </Card>
-//        )
-//      })}
-//    </Animated.ScrollView>
-//  )
-//}
-
 const CardStack = () => {
-  //const scrollRef = useAnimatedRef<Animated.ScrollView>()
-
   return (
     <ScreenContainer>
       <StackScrollView
@@ -198,14 +131,4 @@ const CardStack = () => {
     </ScreenContainer>
   )
 }
-
-/*
- *
- * const expandedId = useSharedValue(null)
- *
- *
- *
- *
- */
-
 export default CardStack
