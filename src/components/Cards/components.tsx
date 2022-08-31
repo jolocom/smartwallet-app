@@ -120,7 +120,7 @@ export const DocumentHeader: React.FC<{
   selected?: boolean
   backgroundImage?: string
   backgroundColor?: string
-  truncateName: boolean
+  truncateName?: boolean
 }> = ({
   name,
   icon,
