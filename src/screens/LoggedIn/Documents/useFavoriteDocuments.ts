@@ -61,9 +61,11 @@ export const useFavoriteDocuments = () => {
 
   const deleteFavorite = useCallback(
     async (id: string) => {
+      const favorites = await getFavorites()
+
       const filtered = favorites
-        .filter((f) => f.id !== id)
-        .map((document) => document.id)
+        .filter((documentId) => documentId !== id)
+        .map((document) => document)
 
       await settings.set(SettingKeys.favoriteDocuments, {
         all: filtered,
