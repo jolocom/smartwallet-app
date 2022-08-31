@@ -135,8 +135,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     }
 
     const isBackground = Boolean(backgroundImage || backgroundColor)
-    const showSecondaryField =
-      !holderName && !isBackground && fields.length >= 6
+    const showSecondaryField = !holderName && !isBackground
 
     const getSubheaderStyles = (): ViewStyle | undefined => {
       if (checkLayoutCase(!isBackground)) {
