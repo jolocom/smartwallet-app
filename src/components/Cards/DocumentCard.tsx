@@ -89,15 +89,13 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       const isBackgroundImage = Boolean(backgroundImage)
       const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
       const isHolderName = Boolean(holderName)
-      const isIcons = Boolean(icons)
-      const isImageFields = Boolean(hasImageFields)
+      const isFooterIcons = Boolean(hasImageFields || icons?.length)
 
       if (
         checkLayoutCase(
           isBackgroundImage || isBackgroundColor,
           isHolderName,
-          !isIcons,
-          !isImageFields,
+          !isFooterIcons,
         )
       ) {
         return 3
@@ -106,12 +104,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       ) {
         return 2
       } else if (
-        checkLayoutCase(
-          !isBackgroundColor,
-          !isBackgroundImage,
-          !isIcons,
-          !isImageFields,
-        )
+        checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isFooterIcons)
       ) {
         return 4
       } else if (
@@ -121,7 +114,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       } else if (
         checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
       ) {
-        return isIcons || isImageFields ? 2 : 3
+        return isFooterIcons ? 2 : 3
       } else if (
         checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
       ) {
@@ -193,11 +186,12 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           <View style={styles.content}>
             <View
               style={
-                !isBackground &&
-                photo && {
-                  height: holderName ? 86 : 21.5,
-                  justifyContent: 'center',
-                }
+                !isBackground && photo
+                  ? {
+                      height: holderName ? 86 : 21.5,
+                      justifyContent: 'center',
+                    }
+                  : {}
               }
             >
               {photo && (
