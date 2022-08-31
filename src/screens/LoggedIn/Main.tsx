@@ -29,7 +29,6 @@ import BackupIdentity from './Settings/BackupIdentity'
 import ChangePin from './Settings/ChangePin'
 import ContactUs from './Settings/ContactUs'
 import ButtonsTest from './Settings/Development/ButtonsTest'
-import CardStack from './Settings/Development/CardStack'
 import { CardTest } from './Settings/Development/CardsTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
 import LoaderTest from './Settings/Development/DevLoaders'
@@ -97,7 +96,6 @@ export type MainStackParamList = {
   [ScreenNames.InputTest]: undefined
   [ScreenNames.PasscodeTest]: undefined
   [ScreenNames.PinRecoveryInstructions]: undefined
-  [ScreenNames.CardStack]: undefined
   [ScreenNames.PasscodeRecovery]: {
     isAccessRestore: boolean
   }
@@ -205,11 +203,6 @@ const Main: React.FC = () => {
           <MainStack.Screen
             name={ScreenNames.PasscodeTest}
             component={PasscodeTest}
-            options={screenTransitionSlideFromRight}
-          />
-          <MainStack.Screen
-            name={ScreenNames.CardStack}
-            component={CardStack}
             options={screenTransitionSlideFromRight}
           />
         </>
