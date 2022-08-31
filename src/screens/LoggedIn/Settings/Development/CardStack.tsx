@@ -26,9 +26,6 @@ interface CardProps {
 }
 const Card: React.FC<CardProps> = React.memo(
   ({ id, index, onPress, isExpanded, children }) => {
-    useEffect(() => {
-      console.log({ isExpanded })
-    }, [isExpanded])
     const expandedMargin = -(
       ORIGINAL_DOCUMENT_CARD_HEIGHT -
       VERTICAL_MARGIN -

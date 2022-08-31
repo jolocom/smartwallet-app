@@ -76,7 +76,6 @@ const CredentialOfferFAS = () => {
   const handleSubmit = useCredentialOfferSubmit()
 
   const documents = useSelector(getOfferedCredentials)
-  console.log({ documents })
 
   const { name, image, serviceUrl } = useSelector(getServiceDescription)
   const { t } = useTranslation()

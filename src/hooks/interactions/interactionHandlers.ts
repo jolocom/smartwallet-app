@@ -78,7 +78,6 @@ export const useInteractionHandler = () => {
         const shareState = state as CredentialRequestFlowState
         const requestedTypes =
           shareState.constraints[0].requestedCredentialTypes
-        console.log({ requestedTypes })
 
         // NOTE: The query doesn't work as expected. Have to find manually, which is slow :(
         const { attributes, rest } = await queryCredentials(
