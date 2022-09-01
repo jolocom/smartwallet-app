@@ -19,6 +19,7 @@ import useTermsConsent from './consent'
 import { useLoader } from './loader'
 import { SecureStorageKeys, useSecureStorage } from './secureStorage'
 import { useToasts } from './toasts'
+import useTranslation from './useTranslation'
 
 // TODO: add a hook which manages setting/getting properties from storage
 // and handles their types
