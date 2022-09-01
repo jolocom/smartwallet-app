@@ -21,9 +21,13 @@ import { DocumentStacks } from '~/modules/credentials/types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
+import { DrivingLicenseCard } from './DrivingLicenseDemo'
+import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
 
 const Documents: React.FC = () => {
   const { t } = useTranslation()
+
+  const { drivingLicense } = useDrivingLicense()
 
   const {
     documents,
@@ -115,13 +119,20 @@ const Documents: React.FC = () => {
       <ScreenContainer.Header customStyles={{ marginBottom: 18 }}>
         {t('BottomBar.documents')}
       </ScreenContainer.Header>
-      {!documents.length ? (
+      {!documents.length && !drivingLicense ? (
         <ScreenPlaceholder
           title={t('Documents.placeholderHeader')}
           description={t('Documents.documentsPlaceholderSubheader')}
         />
       ) : (
         <View style={{ flex: 1 }}>
+          <ScreenContainer.Padding>
+            {drivingLicense && (
+              <View style={{ alignItems: 'center', marginBottom: 22 }}>
+                <DrivingLicenseCard drivingLicense={drivingLicense} />
+              </View>
+            )}
+          </ScreenContainer.Padding>
           <StackScrollView
             data={stackData}
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
