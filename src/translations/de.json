@@ -5,9 +5,9 @@
         "registrationBtn": "Wallet einrichten",
         "recoveryBtn": "Identität importieren",
         "titleTwo": "Schützen Sie Ihre Daten",
-        "descriptionTwo": "Verwalten Sie Ihre Identitätsdaten sicher in der Wallet",
-        "titleThree": "Einfaches Backup",
-        "descriptionThree": "Mit der Backup Funktion sind Ihre Daten nicht verloren, selbst wenn Sie Ihr Wallet verlieren"
+        "descriptionTwo": "Ihre Digitalen Identitäten liegen sicher in der Wallet",
+        "titleThree": "Alles an einem Ort",
+        "descriptionThree": "Alle digitalen Identitäten und Nachweise werden auf Ihrem Smartphone gespeichert."
     },
     "TermsConsent": {
         "header": "Nutzungsbedingungen & Datenschutzerklärung",
@@ -134,7 +134,7 @@
         "subheader2": "Durch Eingabe Ihrer geheimen Wortkombination können Sie Ihre Wallet PIN  ändern. Klicken Sie unten auf Zugang wiederherstellen, um die Änderung vorzunehmen.",
         "imageCaption": "Wort für Wort wiederholen",
         "submitBtn": "Zugang wiederherstellen",
-        "footer": "Ein neuer Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten",
+        "footer": "Eine neue Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten",
         "cancelBtn": "Abbrechen"
     },
     "Lock": {
@@ -180,7 +180,7 @@
         "noInternetMsg": "Zum Fortfahren ist eine Internetverbindung erforderlich.",
         "errorWarningTitle": "Hoppla ...",
         "errorWarningMsg": "Damit haben wir auch nicht gerechnet. Bitte helfen Sie uns, indem Sie uns den Fehler mitteilen, auf den Sie gestoßen sind.",
-        "successfulInteractionTitle": "Ausstellung erfolgreich!",
+        "successfulInteractionTitle": "Abgeschlossen!",
         "successfulInternetMsg": "Sie sollten jetzt alles haben, was Sie benötigen, um Ihre Interaktion fortzusetzen",
         "successfulOfferInteractionBtn": "Überprüfung",
         "offerDuplicateTitle": "Duplikat gefunden",
@@ -207,18 +207,20 @@
         "ausweisFailedCheckMsg": "Nicht das erste Mal gescheitert?\nStarten Sie die Kompatibilitätsdiagnose, um es erneut zu probieren",
         "ausweisFailedCheckBtn": "Start",
         "ausweisChangePinSuccessHeader": "Fertig",
-        "ausweisChangePinSuccessMsg": "Sie können Ihre neue PIN nun benutzen",
+        "ausweisChangePinSuccessMsg": "Sie können Ihre neue eID PIN nun benutzen",
         "copied": "Einfügen",
         "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
         "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
         "refreshTitle": "Fertig!",
-        "refreshMsg": "Bitte kehren Sie zu ${serviceName} zurück, um fortzufahren."
+        "refreshMsg": "Die Identifikation war erfolgreich. Fahren Sie jetzt bitte mit Ihrem Prozess bei ${serviceName} außerhalb der SmartWallet fort.",
+        "documentsFavoritesLimitTitle": "Ruhe bewahren",
+        "documentsFavoritesLimitMsg": "Sie können nicht mehr als ${max} Favoriten hinzufügen"
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
         "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
         "redirectTitle": "Fertig!",
-        "redirectDescription": "${serviceName} leitet Sie zu einem Dienst oder einer Anwendung außerhalb von SmartWallet weiter.",
+        "redirectDescription": "Sie werden zu ${serviceName} weitergeleitet.",
         "redirectBtn": "Weiter"
     },
     "Documents": {
@@ -243,7 +245,18 @@
         "subjectNameField": "Betreff",
         "issuedFieldLabel": "Ausgestellt",
         "issuerFieldLabel": "Aussteller",
-        "expiresFieldLabel": "Läuft ab"
+        "expiresFieldLabel": "Läuft ab",
+        "favoriteSection": "Favoriten",
+        "allSection": "Alle",
+        "expiredSection": "Abgelaufen",
+        "favoritePlaceholderTitle": "Noch sind keine Dokumente vorhanden",
+        "favoritePlaceholderSubtitle": "Drücken Sie auf das Stern Icon um Favoriten hinzuzufügen.",
+        "allPlaceholderTitle": "Noch keine Dokumente verfügbar",
+        "allPlaceholderSubtitle": "Sie haben noch keine Dokumente abgespeichert. Fügen Sie noch heute ein Dokument hinzu!",
+        "expiredPlaceholderTitle": "Noch keine Dokumente verfügbar",
+        "expiredPlaceholderSubtitle": "Sie besitzen keine abgelaufenen Dokumente.",
+        "removeFavorite": "Von Favoriten entfernen",
+        "addFavorite": "Zu Favoriten hinzufügen"
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -313,7 +326,7 @@
         "screenshotAlertMsg": "Der Inhalt bleibt sichtbar, auch wenn Sie zu anderen Apps wechseln",
         "screenshotAlertCta": "Aktivieren",
         "screenshotAlertCancel": "Abbrechen",
-        "mnemonicPhraseWarning": "Es besteht die Gefahr, dass Ihre Daten unwiederbringlich verloren zu gehen. Fahren Sie mit Ihrer geheimen Wortkombination fort."
+        "mnemonicPhraseWarning": "Es besteht die Gefahr, dass Ihre Daten unwiederbringlich verloren gehen. Fahren Sie mit Ihrer geheimen Wortkombination fort."
     },
     "Language": {
         "english": "Englisch",
@@ -332,7 +345,7 @@
     "FAQ": {
         "header": "Häufige Fragen",
         "header_q1": "Was passiert, wenn ich mein Telefon verliere oder es gestohlen wird?",
-        "subheader_q1": "Sie können die Kontrolle über Ihre Wallet wiedererlangen, indem Sie die geheime Wortkombination verwenden, die Sie während der Einrichtung Ihrer SmartWallet erstellt haben. Diese wiederhergestellte Wallet wird noch keine Dokumente oder andere Informationen wiederherstellen, die in einer Wallet auf einem verlorenen Gerät gespeichert sind. Wir empfehlen Ihnen dringend daher zusätzlich, Backups Ihrer SmartWallet zu erstellen (über das Einstellungsmenü), um den Inhalt Ihrer Wallet zu schützen. Erst die Kombination führt zu einer vollständigen Wiederherstellung.",
+        "subheader_q1": "Sie können die Kontrolle über Ihre Wallet wiedererlangen, indem Sie die geheime Wortkombination verwenden, die Sie während der Einrichtung Ihrer SmartWallet erstellt haben. Diese wiederhergestellte Wallet wird noch keine Dokumente oder andere Informationen wiederherstellen, die in einer Wallet auf einem verlorenen Gerät gespeichert sind. In Zukunft bieten wir hierfür eine Backup Funktionalität an. Erst die Kombination führt zu einer vollständigen Wiederherstellung.",
         "header_q2": "Wer hat Zugriff auf meine Daten?",
         "subheader_q2": "Alle Ihre Daten werden auf Ihrem Gerät gespeichert und verwaltet. Sie haben die volle Kontrolle darüber, wer Zugang zu den Informationen erhält. Jolocom hat keinen Zugriff auf die Daten auf Ihrem Gerät, noch hat irgendjemand anderes ohne Ihre Erlaubnis Zugriff darauf. Falls Sie einer anderen Partei Zugriff auf Informationen gewähren, können Sie jederzeit sehen, was Sie geteilt haben. Tatsächlich können Sie immer schnell und einfach überprüfen, welcher Dienst Zugriff auf welche Daten hat. So erhalten Sie einen sofortigen Überblick über Ihre Verbindungen.",
         "header_q3": "Ist die Jolocom SmartWallet DSGVO-konform?",
@@ -343,12 +356,9 @@
     "About": {
         "versionInfo": "Sie benutzen die Version ${version}"
     },
-    "Terms of Service": {
-        "header": "Nutzungsbedingungen"
-    },
     "ChangePasscode": {
-        "wrongCodeHeader": "Falscher Wallet PIN",
-        "currentHeader": "Aktueller Wallet PIN",
+        "wrongCodeHeader": "Falsche Wallet PIN",
+        "currentHeader": "Aktuelle Wallet PIN",
         "successHeader": "Wallet PIN geändert!",
         "sameCodeHeader": "Sie haben die bisherige Wallet PIN eingegeben"
     },
@@ -360,10 +370,10 @@
         "issueOption_5": "Sonstiges",
         "issueHeader": "Worüber werden wir sprechen?",
         "issuePlaceholder": "Wählen Sie eine Option aus",
-        "suggestionHeader": "Gibt es etwas Konkretes zu sagen?",
+        "suggestionHeader": "Möchten Sie etwas Konkretes sagen?",
         "suggestionSubheader": "Trau dich uns zu sagen, was du auf dem Herzen hast – damit sind wir für die zukünftigen Gespräche vorbereitet",
         "suggestionPlaceholder": "Zum Schreiben antippen ...",
-        "contactHeader": "Willst du Kontakt aufnehmen?",
+        "contactHeader": "Möchten Sie Kontakt aufnehmen?",
         "contactPlaceholder": "Tragen Sie Ihre E-Mail Adresse hier ein ...",
         "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam",
         "submitBtn": "Senden"
@@ -388,7 +398,7 @@
     "ErrorReporting": {
         "issueHeader": "Schildern Sie uns das Problem",
         "issuePlaceholder": "Zugehöriges Thema wählen",
-        "detailsHeader": "Gibt es etwas Konkretes zu sagen?",
+        "detailsHeader": "Möchten Sie etwas Konkretes sagen?",
         "detailsSubheader": "Wenn das Problem nicht aufgelistet ist - das Textfeld unten ist der beste Platz, um es zu beschreiben",
         "logsHeader": "Ihre Logs einbeziehen",
         "logsSubheader": "Dies beinhaltet bestimmte private Metadaten (wie z.B. Dateigrößen - aber keine persönlichen Informationen) und wird den Entwicklern helfen, Fehler schneller zu beheben.",
@@ -404,7 +414,8 @@
         "issueOption_5": "Probleme mit der Benutzeroberfläche",
         "issueOption_6": "Irgendetwas scheint nicht richtig zu sein",
         "issueOption_7": "Sonstiges",
-        "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ..."
+        "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ...",
+        "errorHeader": "Fehler melden"
     },
     "General": {
         "unknown": "Unbekannt",
@@ -412,7 +423,7 @@
         "moreInfo": "Mehr Informationen"
     },
     "Authentication": {
-        "header": "Bist du es wirklich?",
+        "header": "Sind Sie es?",
         "subheader": "${serviceName} möchte deine digitale Identität bestätigen, bevor es weiter geht",
         "confirmBtn": "Erlauben"
     },
@@ -439,7 +450,7 @@
         "descriptionTitle": "Versuchen Sie es in",
         "headerBlockedTitle": "Sie haben die maximale Anzahl an Versuchen erreicht",
         "submitBtn": "Zugang wiederherstellen",
-        "submitDescription": "Das Erstellen eines neuen Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten"
+        "submitDescription": "Das Erstellen einer neuen Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten"
     },
     "Ausweis": {
         "birthName": "Geburtsname",
@@ -497,7 +508,7 @@
         "validityLabel": "Gültigkeit"
     },
     "AusweisPasscode": {
-        "authPinHeader": "PIN eingeben",
+        "authPinHeader": "eID PIN eingeben",
         "pinForgotBtn": "Wenn Sie Ihre PIN vergessen oder noch nicht aktiviert haben, <1>klicken Sie hier.</1>",
         "transportPinHeader": "5-stelllige PIN eingeben",
         "transportPinBtn": "Wo kann ich das finden?",
@@ -512,33 +523,33 @@
     },
     "AusweisPukLock": {
         "header": "Ihre Karte ist gesperrt und Sie müssen zum Entsperren den PUK-Code eingeben",
-        "subtitle": "Sie können Ihre Karte im Menü \"Identität\" entsperren, indem Sie \"Meine Karte entsperren\" klicken",
+        "subtitle": "Sie können Ihre Karte im Menü \"Identität\" entsperren, indem Sie \"Karte entsperren\" klicken",
         "proceedBtn": "Weiter mit dem PUK-Code",
         "closeBtn": "Interaktion beenden"
     },
     "AusweisIdentity": {
         "header": "Online-Ausweisfunktion",
-        "subheader": "Dies ist ein Early-Access-Zugang zur online Version der Deutschen Digitalen Identität. Es ist ausschließlich Nutzern zugänglich, die am Pilotprojekt \"Schaufenster Sichere Digitale Identitäten\" teilnehmen.",
+        "subheader": "Dies ist ein Early-Access-Zugang zur Online-Ausweisfunktion in der Jolocom SmartWallet. Vorerst ist er nur für Nutzer:innen der Schaufensterprojekte “Sichere Digitale Identitäten” verfügbar.",
         "compatibilityBtn": "Kompabilitätstest",
         "changePinBtn": "PIN ändern",
         "unlockBtn": "Karte entsperren",
         "ausweisBadge": "Online-Ausweisfunktion",
-        "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID-PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
+        "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
         "moreInfoHeader": "Mehr Informationen"
     },
     "AusweisChangePin": {
         "transportPinHeader": "eID PIN einrichten",
-        "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport-PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
+        "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
         "transportPinBtn": "eID PIN einrichten",
         "pinHeader": "6-stellige eID PIN ändern",
         "pinSubheader": "Wenn Sie bereits eine 6-stellige PIN festgelegt haben, können Sie diese hier ändern.",
         "pinBtn": "PIN ändern",
         "forgotHeader": "Haben Sie Ihre eID PIN vergessen?",
-        "forgotSubheader": "Wenn Sie Ihre eID-PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
+        "forgotSubheader": "Wenn Sie Ihre eID PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
     },
     "AusweisPinInfo": {
         "header": "PIN Informationen",
-        "description": "Wählen Sie für die 6-stellige eID-PIN eine Zahlenkombination, die nicht leicht zu erraten ist.\n\nBei erstmaliger PIN-Änderung verwenden Sie bitte die fünfstellige Transport-PIN. Die Transport-PIN finden Sie im Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie mit der fünfstelligen Transport-PIN die Online-eID-Funktion nicht nutzen können. Eine Änderung auf eine 6-stellige PIN ist zwingend erforderlich.",
+        "description": "Wählen Sie für die 6-stellige Ausweis PIN eine Zahlenkombination, die nicht leicht zu erraten ist.\n\nBei erstmaliger PIN-Änderung verwenden Sie bitte die 5-stellige Transport-PIN. Die Transport-PIN finden Sie im Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie mit der 5-stelligen Transport-PIN die Online-Ausweisfunktion nicht nutzen können. Eine Änderung auf eine 6-stellige PIN ist zwingend erforderlich.",
         "btn": "Zu den eID PIN Einstellungen"
     },
     "AusweisScanner": {
@@ -551,17 +562,17 @@
         "description": "Die Kartenzugangsnummer (CAN) wird nur benötigt, wenn Sie bereits zweimal die falsche Ausweis PIN eingegeben haben. Um zu verhindern, dass ohne Ihre Zustimmung ein drittes Mal eine falsche Ausweis PIN eingegeben wird und somit Ihre Karte gesperrt wird, müssen Sie an dieser Stelle die CAN eingeben. Die CAN ist eine 6-stellige Nummer, die Sie auf der Vorderseite Ihres Ausweises unten rechts finden."
     },
     "AusweisTransportPin": {
-        "warning1": "Bitte beachten Sie, dass die fünfstellige Transport-PIN nicht mehr gültig ist, wenn Sie zuvor bereits eine sechsstellige Ausweis PIN festgelegt haben",
+        "warning1": "Bitte beachten Sie, dass die 5-stellige Transport-PIN nicht mehr gültig ist, wenn Sie zuvor bereits eine 6-stellige Ausweis PIN festgelegt haben",
         "continueBtn": "Weiter",
-        "warning2": "Sie können die fünfstellige Transport-PIN nur einmal verwenden, um die PIN zu ändern"
+        "warning2": "Sie können die 5-stellige Transport-PIN nur einmal verwenden, um die Ausweis PIN zu ändern"
     },
     "AusweisTransportPinInfo": {
         "header": "Transport PIN Info",
-        "description": "Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige Ausweis PIN ist zwingend erforderlich."
+        "description": "Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der 5-stelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine 6-stellige Ausweis PIN ist zwingend erforderlich."
     },
     "AusweisPukInfo": {
         "header": "PUK Nummer Info",
-        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der fünfstelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine sechsstellige Ausweis PIN ist zwingend erforderlich."
+        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der 5-stelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine 6-stellige Ausweis PIN ist zwingend erforderlich."
     },
     "AusweisUnlock": {
         "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",
@@ -579,5 +590,11 @@
     },
     "Dashboard": {
         "header": "Jolocom WebAgent"
+    },
+    "TermsOfService": {
+        "header": "Nutzungsbedingungen"
+    },
+    "DocumentCard": {
+        "expired": "Abgelaufen"
     }
 }

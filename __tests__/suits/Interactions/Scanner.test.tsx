@@ -1,9 +1,7 @@
 import React from 'react'
 import Permissions from 'react-native-permissions'
-
-import ScannerIntro from '~/screens/Modals/Interaction/Scanner'
+import Scanner from '~/screens/Modals/Interaction/Scanner'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { strings } from '~/translations/strings'
 import { fireEvent, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native-permissions', () => ({
@@ -38,7 +36,7 @@ test('it displays permission request, denies it and opens settings ', async () =
   const openSettings = jest.spyOn(Permissions, 'openSettings')
   openSettings.mockResolvedValue()
 
-  const { getByText } = renderWithSafeArea(<ScannerIntro />)
+  const { getByText } = renderWithSafeArea(<Scanner />)
 
   expect(getByText(/CameraPermission.header/)).toBeDefined()
 

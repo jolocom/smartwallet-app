@@ -88,7 +88,7 @@ const FormContainer: React.FC<Props> = ({
               <Animated.Text
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
-                  color: 'white',
+                  color: Colors.white,
                   marginTop: Platform.OS === 'ios' ? 3 : 0,
                 }}
                 numberOfLines={1}

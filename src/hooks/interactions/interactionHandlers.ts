@@ -2,14 +2,17 @@ import {
   AuthenticationFlowState,
   AuthorizationFlowState,
   CredentialOfferFlowState,
+  CredentialRequestFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
 
 import { FlowType, Interaction } from 'react-native-jolocom'
-import { useAgent } from '../sdk'
 import useTranslation from '~/hooks/useTranslation'
-import { useToasts } from '../toasts'
-import { CredentialRequestHandler } from '~/middleware/interaction/credentialRequestConstrains'
+import { AttributeTypes } from '~/types/credentials'
 import { getCounterpartyName } from '~/utils/dataMapping'
+import { useInitDocuments } from '../documents'
+import { DocumentsSortingType } from '../documents/types'
+import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({
   description: state.description,
@@ -43,6 +46,8 @@ export const useInteractionHandler = () => {
   const { did } = agent.idw
   const { t } = useTranslation()
   const { scheduleWarning } = useToasts()
+  const { queryCredentials, sortDocuments, toDocument, splitAttributes } =
+    useInitDocuments()
 
   return async (interaction: Interaction) => {
     const { state, initiator } = interaction.getSummary()
@@ -70,17 +75,56 @@ export const useInteractionHandler = () => {
         break
       }
       case FlowType.CredentialShare: {
-        const handler = new CredentialRequestHandler(
-          interaction,
-          agent.credentials,
+        const shareState = state as CredentialRequestFlowState
+        const requestedTypes =
+          shareState.constraints[0].requestedCredentialTypes
+
+        // NOTE: The query doesn't work as expected. Have to find manually, which is slow :(
+        const { attributes, rest } = await queryCredentials(
+          requestedTypes.map((t) => ({ type: t })),
+        )
+          .then((creds) =>
+            creds.filter((cred) => {
+              if (
+                requestedTypes.find(
+                  (t) => t[t.length - 1] === cred.type[cred.type.length - 1],
+                )
+              ) {
+                return true
+              }
+
+              return false
+            }),
+          )
+          .then((creds) => splitAttributes(creds))
+
+        const documents = await Promise.all(rest.map(toDocument)).then((docs) =>
+          sortDocuments(docs, DocumentsSortingType.issuanceDate),
         )
 
-        flowSpecificData = await (await handler.getStoredRequestedCredentials())
-          .validateAgainstConstrains()
-          .checkForMissingServiceIssuedCredentials()
-          .prepareCredentialsForUI(did)
+        const missingDocuments = requestedTypes
+          .map((t) => t[t.length - 1])
+          .filter((t) => {
+            const isAttribute = Object.values(AttributeTypes).includes(
+              t as AttributeTypes,
+            )
 
-        if (handler.missingCredentialTypes.length) {
+            if (isAttribute) return false
+            return !documents.find((d) => d.type[d.type.length - 1] === t)
+          })
+
+        const specificRequestedTypes = requestedTypes.map(
+          (t) => t[t.length - 1],
+        )
+
+        flowSpecificData = {
+          credentials: documents,
+          attributes: attributes,
+          requestedTypes: specificRequestedTypes,
+          selectedCredentials: {},
+        }
+
+        if (missingDocuments.length) {
           flowSpecificData = undefined
           // FIXME: there is an issue with the strings here, will be fixed when the
           // i18n and PoEditor are properly set up.
@@ -88,7 +132,7 @@ export const useInteractionHandler = () => {
             title: t('Toasts.shareMissingDocsTitle'),
             message: t('Toasts.shareMissingDocsMsg', {
               serviceName,
-              documentType: handler.missingCredentialTypes.join(', '),
+              documentType: missingDocuments.join(', '),
             }),
           })
         }

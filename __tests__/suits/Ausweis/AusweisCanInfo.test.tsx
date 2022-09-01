@@ -1,6 +1,6 @@
 import React from 'react'
 import { useGoBack } from '~/hooks/navigation'
-import { AusweisCanInfo } from '~/screens/LoggedIn/eID/components/AusweisCanInfo'
+import { AusweisCanInfo } from '~/screens/Modals/Interaction/eID/components/AusweisCanInfo'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 jest.mock('../../../src/hooks/navigation')

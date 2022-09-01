@@ -1,13 +1,12 @@
 import React from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-
 import {
   getMockedDispatch,
   mockSelectorReturn,
 } from '../../mocks/libs/react-redux'
-import { AusweisScannerState } from '~/screens/LoggedIn/eID/types'
+import { AusweisScannerState } from '~/screens/Modals/Interaction/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { AusweisScanner } from '~/screens/LoggedIn/eID/components'
+import { AusweisScanner } from '~/screens/Modals/Interaction/eID/components'
 import { useGoBack } from '~/hooks/navigation'
 import * as nfcHooks from '~/hooks/nfc'
 import { fireEvent, waitFor } from '@testing-library/react-native'

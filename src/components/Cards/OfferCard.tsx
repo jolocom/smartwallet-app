@@ -1,4 +1,3 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleProp, View, ViewStyle } from 'react-native'
@@ -7,6 +6,7 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import ScaledCard, { ScaledText } from './ScaledCard'
 
+import { DocumentProperty } from '~/hooks/documents/types'
 import { DocumentFields, DocumentHeader } from './components'
 import {
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
@@ -16,7 +16,7 @@ import {
 interface Props {
   credentialName: string
   issuerIcon?: string
-  fields: Array<DisplayVal>
+  fields: DocumentProperty[]
   selected?: boolean
   style?: StyleProp<ViewStyle>
 }
@@ -32,7 +32,7 @@ const OfferCard: React.FC<Props> = ({
   const maxRows = 3
   const [nrDisplayedFields, setNrDisplayFields] = useState(fields.length)
 
-  const handleDisplayedFields = (fields: DisplayVal[]) => {
+  const handleDisplayedFields = (fields: DocumentProperty[]) => {
     setNrDisplayFields(fields.length)
   }
 

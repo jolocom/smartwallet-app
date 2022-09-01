@@ -107,7 +107,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 style={
                   Array [
                     Object {
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlign": "center",
                     },
                     Object {
@@ -136,7 +136,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 style={
                   Array [
                     Object {
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlign": "center",
                     },
                     Object {
@@ -206,7 +206,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 <RNSVGGroup>
                   <RNSVGPath
                     d="M10.852 12.004L.23 22.7a.764.764 0 000 1.076.75.75 0 001.068 0L12 13l10.703 10.778a.75.75 0 001.069 0 .764.764 0 000-1.076L13.148 12.004l10.63-10.706a.764.764 0 000-1.075.752.752 0 00-1.067 0L12 11.008 1.289.223a.752.752 0 00-1.068 0 .764.764 0 000 1.076l10.631 10.705z"
-                    fill={-419430401}
+                    fill={3875536895}
                     fillRule={1}
                     propList={
                       Array [
@@ -222,7 +222,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -353,7 +353,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 style={
                   Array [
                     Object {
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlign": "center",
                     },
                     Object {
@@ -391,7 +391,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                   style={
                     Array [
                       Object {
-                        "paddingTop": undefined,
+                        "paddingTop": 5,
                         "textAlign": "center",
                       },
                       Object {
@@ -455,7 +455,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                       >
                         <RNSVGPath
                           d="M17.071 2.929A9.935 9.935 0 0010 0a9.935 9.935 0 00-7.071 2.929A9.935 9.935 0 000 10a9.934 9.934 0 002.929 7.071A9.935 9.935 0 0010 20a9.935 9.935 0 007.071-2.929A9.935 9.935 0 0020 10a9.935 9.935 0 00-2.929-7.071z"
-                          fill={-11382335}
+                          fill={4283584961}
                           propList={
                             Array [
                               "fill",
@@ -464,7 +464,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                         />
                         <RNSVGPath
                           d="M14.727 7.172a.586.586 0 00-.829 0l-5.174 5.174L6 9.622a.586.586 0 00-.828.829l3.138 3.138a.584.584 0 00.828 0L14.727 8a.586.586 0 000-.828z"
-                          fill={-1}
+                          fill={4294967295}
                           propList={
                             Array [
                               "fill",
@@ -489,7 +489,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                   style={
                     Array [
                       Object {
-                        "paddingTop": undefined,
+                        "paddingTop": 5,
                         "textAlign": "center",
                       },
                       Object {
@@ -553,7 +553,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                       >
                         <RNSVGPath
                           d="M17.071 2.929A9.935 9.935 0 0010 0a9.935 9.935 0 00-7.071 2.929A9.935 9.935 0 000 10a9.934 9.934 0 002.929 7.071A9.935 9.935 0 0010 20a9.935 9.935 0 007.071-2.929A9.935 9.935 0 0020 10a9.935 9.935 0 00-2.929-7.071z"
-                          fill={-11382335}
+                          fill={4283584961}
                           propList={
                             Array [
                               "fill",
@@ -562,7 +562,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                         />
                         <RNSVGPath
                           d="M14.727 7.172a.586.586 0 00-.829 0l-5.174 5.174L6 9.622a.586.586 0 00-.828.829l3.138 3.138a.584.584 0 00.828 0L14.727 8a.586.586 0 000-.828z"
-                          fill={-1}
+                          fill={4294967295}
                           propList={
                             Array [
                               "fill",
@@ -587,7 +587,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                   style={
                     Array [
                       Object {
-                        "paddingTop": undefined,
+                        "paddingTop": 5,
                         "textAlign": "center",
                       },
                       Object {
@@ -651,7 +651,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                       >
                         <RNSVGPath
                           d="M17.071 2.929A9.935 9.935 0 0010 0a9.935 9.935 0 00-7.071 2.929A9.935 9.935 0 000 10a9.934 9.934 0 002.929 7.071A9.935 9.935 0 0010 20a9.935 9.935 0 007.071-2.929A9.935 9.935 0 0020 10a9.935 9.935 0 00-2.929-7.071z"
-                          fill={-11382335}
+                          fill={4283584961}
                           propList={
                             Array [
                               "fill",
@@ -660,7 +660,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                         />
                         <RNSVGPath
                           d="M14.727 7.172a.586.586 0 00-.829 0l-5.174 5.174L6 9.622a.586.586 0 00-.828.829l3.138 3.138a.584.584 0 00.828 0L14.727 8a.586.586 0 000-.828z"
-                          fill={-1}
+                          fill={4294967295}
                           propList={
                             Array [
                               "fill",
@@ -726,7 +726,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 <RNSVGGroup>
                   <RNSVGPath
                     d="M31.333.357a1.219 1.219 0 00-1.724 0L9.852 20.114 2.08 12.343a1.219 1.219 0 10-1.724 1.724L8.99 22.7a1.22 1.22 0 001.724 0L31.333 2.08a1.219 1.219 0 000-1.723z"
-                    fill={-419430401}
+                    fill={3875536895}
                     fillRule={1}
                     propList={
                       Array [
@@ -742,7 +742,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {
@@ -873,7 +873,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 style={
                   Array [
                     Object {
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlign": "center",
                     },
                     Object {
@@ -902,7 +902,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 style={
                   Array [
                     Object {
-                      "paddingTop": undefined,
+                      "paddingTop": 5,
                       "textAlign": "center",
                     },
                     Object {
@@ -972,7 +972,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
                 <RNSVGGroup>
                   <RNSVGPath
                     d="M10.852 12.004L.23 22.7a.764.764 0 000 1.076.75.75 0 001.068 0L12 13l10.703 10.778a.75.75 0 001.069 0 .764.764 0 000-1.076L13.148 12.004l10.63-10.706a.764.764 0 000-1.075.752.752 0 00-1.067 0L12 11.008 1.289.223a.752.752 0 00-1.068 0 .764.764 0 000 1.076l10.631 10.705z"
-                    fill={-419430401}
+                    fill={3875536895}
                     fillRule={1}
                     propList={
                       Array [
@@ -988,7 +988,7 @@ exports[`Ausweis compatibility result screen is according to the designs when: s
               style={
                 Array [
                   Object {
-                    "paddingTop": undefined,
+                    "paddingTop": 5,
                     "textAlign": "center",
                   },
                   Object {

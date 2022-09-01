@@ -1,17 +1,17 @@
 import React from 'react'
-import { within } from '@testing-library/react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation } from '@react-navigation/native'
-import { act, fireEvent, waitFor } from '@testing-library/react-native'
-
+import { act, fireEvent, waitFor, within } from '@testing-library/react-native'
 import { usePopStack, useRedirect } from '../../../src/hooks/navigation'
-import { AusweisRequestReview } from '~/screens/LoggedIn/eID/components'
-import { AusweisFields } from '~/screens/LoggedIn/eID/types'
+import { AusweisRequestReview } from '~/screens/Modals/Interaction/eID/components'
+import {
+  AusweisFields,
+  AusweisScannerParams,
+} from '~/screens/Modals/Interaction/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { triggerHeaderLayout } from '../components/Collapsible/collapsible-utils'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
-import { AusweisScannerParams } from '~/screens/LoggedIn/eID/types'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 
 const mockedRequestData = {
   requiredFields: [

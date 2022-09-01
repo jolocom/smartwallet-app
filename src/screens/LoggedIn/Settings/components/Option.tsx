@@ -4,24 +4,20 @@ import {
   View,
   Platform,
   TouchableOpacity,
-  TextProps,
   TextStyle,
+  ViewStyle,
 } from 'react-native'
 import { CaretRight } from '~/assets/svg'
-import { IWithCustomStyle } from '~/components/Card/types'
+import { IWithCustomStyle } from '~/types/props'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-interface TitlePropsI {
+interface TitlePropsI extends IWithCustomStyle<TextStyle> {
   title: string | number
   color?: Colors
 }
-const Title: React.FC<TitlePropsI & IWithCustomStyle<TextStyle>> = ({
-  title,
-  color,
-  customStyles,
-}) => (
+const Title: React.FC<TitlePropsI> = ({ title, color, customStyles }) => (
   <JoloText
     kind={JoloTextKind.subtitle}
     size={JoloTextSizes.middle}
@@ -42,19 +38,25 @@ const RightIcon: React.FC = () => (
   </IconContainer>
 )
 
-interface PropsI {
+interface PropsI extends IWithCustomStyle<ViewStyle> {
   onPress?: () => void
   hasBorder?: boolean
   disabled?: boolean
 }
 
 const Option: React.FC<PropsI> & {
-  Title: React.FC<TitlePropsI & IWithCustomStyle<TextStyle>>
+  Title: React.FC<TitlePropsI>
   RightIcon: React.FC
   IconContainer: React.FC
-} = ({ onPress, hasBorder = true, disabled = false, children }) => {
+} = ({
+  onPress,
+  hasBorder = true,
+  disabled = false,
+  customStyles,
+  children,
+}) => {
   return (
-    <View style={[styles.container, hasBorder && styles.border]}>
+    <View style={[styles.container, hasBorder && styles.border, customStyles]}>
       <TouchableOpacity
         activeOpacity={onPress ? 0.2 : 1}
         onPress={onPress}

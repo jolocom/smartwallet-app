@@ -32,11 +32,12 @@ const SingleSelectBlock: React.FC<Props> = ({
 
   return (
     <Block>
-      {selection.map((item) => (
+      {selection.map((item, i) => (
         <Option
           key={item.id}
           disabled={item.disabled}
           onPress={() => handleSelect(item)}
+          hasBorder={i !== selection.length - 1}
         >
           <Option.Title title={item.value} />
           {item.id === selected.id && !item.disabled ? (

@@ -9,9 +9,7 @@ import {
   StatusBar,
 } from 'react-native'
 import { useSelector } from 'react-redux'
-
 import Circle from '~/components/Circle'
-
 import { getLoaderState } from '~/modules/loader/selectors'
 import { Colors } from '~/utils/colors'
 import { SuccessTick, ErrorIcon } from '~/assets/svg'

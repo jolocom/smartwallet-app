@@ -2,7 +2,6 @@ import { fireEvent, getQueriesForElement } from '@testing-library/react-native'
 import React from 'react'
 import { ReactTestInstance } from 'react-test-renderer'
 import IdentityCredentials from '~/screens/LoggedIn/Identity/IdentityCredentials'
-import { strings } from '~/translations'
 import { AttributeTypes } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
 import {
@@ -57,7 +56,7 @@ describe('Primitive credentials component displays', () => {
     const { getByText, getAllByTestId } = renderWithSafeArea(
       <IdentityCredentials />,
     )
-    expect(getByText(/Identity.attributesMissingInfo/)).toBeDefined()
+    expect(getByText(/Identity.credentialsDescription/)).toBeDefined()
 
     const emptyFields = getAllByTestId('widget-field-empty')
     expect(emptyFields.length).toBe(4)

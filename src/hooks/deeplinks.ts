@@ -35,7 +35,7 @@ interface DeeplinkParamsValues {
 // NOTE: This should be called only in one place!
 export const useDeeplinkInteractions = () => {
   const { processAusweisToken } = eIDHooks.useAusweisInteraction()
-  const { processInteraction } = useInteractionStart()
+  const { startInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
   const loader = useLoader()
   const currentLanguage = useSelector(getCurrentLanguage)
@@ -131,13 +131,13 @@ export const useDeeplinkInteractions = () => {
           )
 
           if (token) {
-            processInteraction(token).catch(scheduleErrorWarning)
+            startInteraction(token).catch(scheduleErrorWarning)
             return
           } else if (tcTokenUrl) {
             loader(() => processAusweisToken(tcTokenUrl), {
               showSuccess: false,
               showFailed: false,
-            })
+            }).catch(scheduleErrorWarning)
             return
           } else if (
             !params['+clicked_branch_link'] ||

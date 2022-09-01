@@ -1,57 +1,54 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
-
-import { ScreenNames } from '~/types/screens'
-import Language from './Settings/Language'
-import ChangePin from './Settings/ChangePin'
-import FAQ from './Settings/FAQ'
-import ContactUs from './Settings/ContactUs'
-import About from './Settings/About'
-import Imprint from './Settings/Imprint'
-import PrivacyPolicy from './Settings/PrivacyPolicy'
-import TermsOfService from './Settings/TermsOfService'
-import BackupIdentity from './Settings/BackupIdentity'
-import ButtonsTest from './Settings/Development/ButtonsTest'
-import NotificationsTest from './Settings/Development/NotificationsTest'
-import DragToConfirm from '~/screens/Modals/DragToConfirm'
-import LoaderTest from './Settings/Development/DevLoaders'
-import InputTest from './Settings/Development/InputTest'
-import PasscodeTest from './Settings/Development/PasscodeTest'
 import { getIsTermsConsentOutdated } from '~/modules/account/selectors'
-import MainTabs from './MainTabs'
-import CredentialForm from '../Modals/Forms/CredentialForm'
+import PopupMenu, { PopupMenuProps } from '~/screens/LoggedIn/PopupMenu'
+import DragToConfirm from '~/screens/Modals/DragToConfirm'
+import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
+import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import FieldDetails from '../Modals/FieldDetails'
-import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
-import Recovery from '../Modals/Recovery'
+import { ScreenNames } from '~/types/screens'
+import { Colors } from '~/utils/colors'
 import {
+  screenDisableGestures,
   screenTransitionFromBottomDisabledGestures,
   screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
-  transparentModalOptions,
-  screenDisableGestures,
   transparentModalFadeOptions,
+  transparentModalOptions,
 } from '~/utils/screenSettings'
-import PopupMenu, { PopupMenuProps } from '~/components/PopupMenu'
-import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
-import CollapsibleTest from './Settings/Development/CollapsibleTest'
-import { IField } from '~/types/props'
-import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
-import { Colors } from '~/utils/colors'
-import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import Registration from '../LoggedOut/Onboarding/Registration'
-import { setTermsConsentVisibility } from '~/modules/account/actions'
+import FieldDetails from '../Modals/FieldDetails'
+import CredentialForm from '../Modals/Forms/CredentialForm'
 import Interaction from '../Modals/Interaction'
-import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
+import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
+import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
+import Recovery from '../Modals/Recovery'
+import MainTabs from './MainTabs'
+import About from './Settings/About'
+import BackupIdentity from './Settings/BackupIdentity'
+import ChangePin from './Settings/ChangePin'
+import ContactUs from './Settings/ContactUs'
+import ButtonsTest from './Settings/Development/ButtonsTest'
 import { CardTest } from './Settings/Development/CardsTest'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import CollapsibleTest from './Settings/Development/CollapsibleTest'
+import LoaderTest from './Settings/Development/DevLoaders'
+import InputTest from './Settings/Development/InputTest'
+import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
+import NotificationsTest from './Settings/Development/NotificationsTest'
+import PasscodeTest from './Settings/Development/PasscodeTest'
+import FAQ from './Settings/FAQ'
+import Imprint from './Settings/Imprint'
+import Language from './Settings/Language'
+import PrivacyPolicy from './Settings/PrivacyPolicy'
+import TermsOfService from './Settings/TermsOfService'
 import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
 import { useToasts } from '~/hooks/toasts'
 import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
 import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
 import { PersonalizationInputRequest } from 'react-native-mdl'
+import { setTermsConsentVisibility } from '~/modules/account/actions'
+import { useDispatch, useSelector } from 'react-redux'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -94,12 +91,8 @@ export type MainStackParamList = {
   [ScreenNames.DragToConfirm]: undefined
   [ScreenNames.CredentialForm]: { type: PrimitiveAttributeTypes; id?: string }
   [ScreenNames.FieldDetails]: {
-    fields: DisplayVal[]
-    title?: string
-    photo?: string
+    id: string
     backgroundColor?: Colors
-    issuerIcon?: string
-    contextIcons?: string[]
   }
   // DEV
   [ScreenNames.CardsTest]: undefined
