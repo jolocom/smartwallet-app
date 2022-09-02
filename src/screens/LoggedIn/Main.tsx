@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
+import { PersonalizationInputRequest } from 'react-native-mdl'
 import { createStackNavigator } from '@react-navigation/stack'
-import { getIsTermsConsentOutdated } from '~/modules/account/selectors'
+
 import PopupMenu, { PopupMenuProps } from '~/screens/LoggedIn/PopupMenu'
 import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
@@ -46,9 +47,6 @@ import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
 import { useToasts } from '~/hooks/toasts'
 import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
 import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
-import { PersonalizationInputRequest } from 'react-native-mdl'
-import { setTermsConsentVisibility } from '~/modules/account/actions'
-import { useDispatch, useSelector } from 'react-redux'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -118,20 +116,12 @@ export type MainStackParamList = {
 const MainStack = createStackNavigator<MainStackParamList>()
 
 const Main: React.FC = () => {
-  const isTermsConsentOutdated = useSelector(getIsTermsConsentOutdated)
-  const dispatch = useDispatch()
   const { initDrivingLicense } = useDrivingLicense()
   const { scheduleErrorWarning } = useToasts()
 
   useEffect(() => {
     initDrivingLicense().catch(scheduleErrorWarning)
   }, [])
-
-  useEffect(() => {
-    if (isTermsConsentOutdated) {
-      dispatch(setTermsConsentVisibility(true))
-    }
-  }, [isTermsConsentOutdated])
 
   return (
     <MainStack.Navigator
