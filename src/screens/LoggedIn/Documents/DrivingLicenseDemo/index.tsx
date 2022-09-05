@@ -1,13 +1,11 @@
-import { ClaimMimeType } from '@jolocom/protocol-ts'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React from 'react'
 import { LogBox } from 'react-native'
 import { DrivingLicenseData, DrivingPrivilege } from 'react-native-mdl'
+
 import { DocumentCard } from '~/components/Cards'
 import { DocumentProperty, PropertyMimeType } from '~/hooks/documents/types'
-import { useRedirect } from '~/hooks/navigation'
-
 import { usePopupMenu } from '~/hooks/popupMenu'
+import { useRedirect } from '~/hooks/navigation'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import { useDrivingLicense } from './hooks'
