@@ -4,6 +4,7 @@ import React from 'react'
 import { LogBox } from 'react-native'
 import { DrivingLicenseData, DrivingPrivilege } from 'react-native-mdl'
 import { DocumentCard } from '~/components/Cards'
+import { DocumentProperty, PropertyMimeType } from '~/hooks/documents/types'
 import { useRedirect } from '~/hooks/navigation'
 
 import { usePopupMenu } from '~/hooks/popupMenu'
@@ -55,7 +56,7 @@ export const DrivingLicenseCard: React.FC<{
   const { deleteDrivingLicense } = useDrivingLicense()
   const redirect = useRedirect()
 
-  const fields: DisplayVal[] = Object.entries(fieldLabels).map(
+  const fields: DocumentProperty[] = Object.entries(fieldLabels).map(
     ([key, label]) => {
       let value = drivingLicense[key as keyof DrivingLicenseData]
 
@@ -66,10 +67,12 @@ export const DrivingLicenseCard: React.FC<{
       }
 
       return {
+        id: key,
         key,
         label,
+        preview: false,
         value: value as string,
-        mime_type: ClaimMimeType.text_plain,
+        mime_type: PropertyMimeType.text_plain,
       }
     },
   )
