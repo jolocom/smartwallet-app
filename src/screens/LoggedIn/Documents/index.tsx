@@ -142,9 +142,11 @@ const Documents: React.FC = () => {
 
               return (
                 <>
-                  {drivingLicense && (
-                    <DrivingLicenseCard drivingLicense={drivingLicense} />
-                  )}
+                  {stack.data.indexOf(c) === 0 &&
+                    stack.stackId === 'all' &&
+                    drivingLicense && (
+                      <DrivingLicenseCard drivingLicense={drivingLicense} />
+                    )}
                   <DocumentCard
                     id={c.id}
                     key={c.id}
