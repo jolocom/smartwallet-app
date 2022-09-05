@@ -152,12 +152,17 @@ const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
   const { id, backgroundColor = Colors.mainBlack } = route.params
-  const document = useSelector(getDocumentById(id))!
+
+  const document = id && useSelector(getDocumentById(id))!
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  const fields = [...document.properties, ...getExtraProperties(document)]
+  const fields = document
+    ? [...document.properties, ...getExtraProperties(document)]
+    : [...route.params.fields]
 
-  const prefechedIcon = useImagePrefetch(document.issuer.icon)
+  const prefechedIcon = document
+    ? useImagePrefetch(document.issuer.icon)
+    : useImagePrefetch(route.params.issuerIcon)
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
@@ -166,11 +171,13 @@ const FieldDetails = () => {
     })
   }
 
-  const holderPhoto = getHolderPhoto(document)
+  const holderPhoto = document ? getHolderPhoto(document) : route.params.photo
 
-  const showIconContainer =
-    Boolean(document.issuer.icon) ||
-    Boolean(document.style.contextIcons?.length)
+  const showIconContainer = document
+    ? Boolean(document.issuer.icon) ||
+      Boolean(document.style.contextIcons?.length)
+    : Boolean(route.params.issuerIcon) ||
+      Boolean(route.params.contextIcons?.length)
 
   const { top } = useSafeArea()
   return (
@@ -192,7 +199,7 @@ const FieldDetails = () => {
           <ScreenContainer.Padding>
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
-                text={document.name}
+                text={document ? document.name : route.params.title}
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
                   ...(holderPhoto && { marginTop: 30 }),
@@ -211,7 +218,7 @@ const FieldDetails = () => {
                   color={Colors.white90}
                   weight={JoloTextWeight.medium}
                 >
-                  {document.name}
+                  {document ? document.name : route.params.title}
                 </JoloText>
               </Collapsible.Title>
               {showIconContainer && (
@@ -224,8 +231,13 @@ const FieldDetails = () => {
                   }}
                 >
                   {prefechedIcon && <Icon url={prefechedIcon} />}
-                  {document.style.contextIcons &&
+                  {document &&
+                    document.style.contextIcons &&
                     document.style.contextIcons.map((icon, i) => (
+                      <Icon key={i} url={icon} />
+                    ))}
+                  {route.params.contextIcons &&
+                    route.params.contextIcons.map((icon, i) => (
                       <Icon key={i} url={icon} />
                     ))}
                 </View>
