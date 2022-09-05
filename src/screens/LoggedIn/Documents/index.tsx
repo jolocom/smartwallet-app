@@ -126,13 +126,6 @@ const Documents: React.FC = () => {
         />
       ) : (
         <View style={{ flex: 1 }}>
-          <ScreenContainer.Padding>
-            {drivingLicense && (
-              <View style={{ alignItems: 'center', marginBottom: 22 }}>
-                <DrivingLicenseCard drivingLicense={drivingLicense} />
-              </View>
-            )}
-          </ScreenContainer.Padding>
           <StackScrollView
             data={stackData}
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
@@ -149,6 +142,9 @@ const Documents: React.FC = () => {
 
               return (
                 <>
+                  {drivingLicense && (
+                    <DrivingLicenseCard drivingLicense={drivingLicense} />
+                  )}
                   <DocumentCard
                     id={c.id}
                     key={c.id}
