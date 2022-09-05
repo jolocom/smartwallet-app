@@ -147,6 +147,7 @@ export const DrivingLicenseCard: React.FC<{
       onHandleMore={handleMorePress}
       fields={previewFields}
       photo={photo}
+      showMenu={true}
       issuerIcon={issuerIcon}
       icons={contextIcons}
       backgroundImage={backgroundImage}
