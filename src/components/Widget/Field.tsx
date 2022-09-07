@@ -58,12 +58,8 @@ const FieldText: React.FC<
 
 const StaticFieldEditable: React.FC<
   Pick<IWidgetField, 'value' | 'onSelect'>
-> = ({ value, onSelect = () => {} }) => (
-  <TouchableOpacity
-    testID="widget-field-static"
-    onPress={onSelect}
-    activeOpacity={0.7}
-  >
+> = ({ value, onSelect }) => (
+  <TouchableOpacity onPress={onSelect} activeOpacity={0.7}>
     <FieldContainer>
       <FieldText value={value} />
     </FieldContainer>
@@ -71,7 +67,7 @@ const StaticFieldEditable: React.FC<
 )
 
 const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => (
-  <View>
+  <View testID="widget-field-static">
     <FieldContainer>
       <FieldText value={value} />
     </FieldContainer>
