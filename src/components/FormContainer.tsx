@@ -15,7 +15,7 @@ import { useToasts } from '~/hooks/toasts'
 interface Props {
   title: string
   description: string
-  onSubmit: () => Promise<void>
+  onSubmit: (() => Promise<void>) | (() => void)
   isSubmitDisabled?: boolean
 }
 
@@ -37,7 +37,7 @@ const FormContainer: React.FC<Props> = ({
   }
 
   const handleSubmit = () => {
-    onSubmit().catch(scheduleErrorWarning)
+    onSubmit()?.catch(scheduleErrorWarning)
   }
 
   const getHeaderTitleOpacity = (

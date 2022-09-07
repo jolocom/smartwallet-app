@@ -32,9 +32,12 @@ interface InputState {
 }
 
 export const DrivingLicenseForm = () => {
+  const goBack = useGoBack()
+  const { finishPersonalization } = useDrivingLicense()
+  const { t } = useTranslation()
+
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.DrivingLicenseForm>>()
-
   const { requests } = route.params
 
   const initState = requests.reduce<InputState>((acc, val) => {
@@ -43,14 +46,9 @@ export const DrivingLicenseForm = () => {
   }, {})
 
   const [inputs, setInputs] = useState<InputState>(initState)
-
-  const goBack = useGoBack()
-  const { t } = useTranslation()
-
   const [showBottomSheet, setShowBottomSheet] = useState(true)
-  const drivingLicensNumber = inputs['DL-Number']
 
-  const { finishPersonalization } = useDrivingLicense()
+  const drivingLicensNumber = inputs['DL-Number']
 
   const handleSubmit = async () => {
     const responses: PersonalizationInputResponse[] = Object.entries(
@@ -108,9 +106,7 @@ export const DrivingLicenseForm = () => {
             <Space />
             <BottomButtons
               onSubmit={
-                drivingLicensNumber
-                  ? handleSubmit
-                  : () => setShowBottomSheet(false)
+                drivingLicensNumber ? handleSubmit : setShowBottomSheet(false)
               }
               submitLabel={!drivingLicensNumber ? 'add info' : 'issue mdl'}
               onCancel={() => goBack()}
@@ -125,9 +121,7 @@ export const DrivingLicenseForm = () => {
             'Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten'
           }
           onSubmit={() => {
-            return new Promise((res) => {
-              res(setShowBottomSheet(true))
-            })
+            setShowBottomSheet(true)
           }}
           isSubmitDisabled={isSubmitDisabled}
         >
