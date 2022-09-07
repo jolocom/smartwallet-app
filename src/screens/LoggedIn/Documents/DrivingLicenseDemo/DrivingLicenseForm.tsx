@@ -48,6 +48,10 @@ export const DrivingLicenseForm = () => {
   const [inputs, setInputs] = useState<InputState>(initState)
   const [showBottomSheet, setShowBottomSheet] = useState(true)
 
+  const toggleBottomSheet = () => {
+    setShowBottomSheet(!showBottomSheet)
+  }
+
   const drivingLicenseNumber = inputs['DL-Number']
 
   // TODO: replace with actual data / translations
@@ -92,11 +96,7 @@ export const DrivingLicenseForm = () => {
               {t('CredentialRequest.subheader', { serviceName })}
             </JoloText>
             <Space />
-            <Widget
-              onAdd={() => {
-                setShowBottomSheet(false)
-              }}
-            >
+            <Widget onAdd={toggleBottomSheet}>
               <Widget.Header>
                 <Widget.Header.Name value={widgetValue} />
               </Widget.Header>
@@ -115,17 +115,13 @@ export const DrivingLicenseForm = () => {
             </Widget>
             <Space />
             <BottomButtons
-              onSubmit={
-                drivingLicenseNumber
-                  ? handleSubmit
-                  : () => setShowBottomSheet(false)
-              }
+              onSubmit={drivingLicenseNumber ? handleSubmit : toggleBottomSheet}
               submitLabel={
                 !drivingLicenseNumber
                   ? t('CredentialShare.singleMissingAcceptBtn')
                   : issueMdl
               }
-              onCancel={() => goBack()}
+              onCancel={goBack}
               isSubmitDisabled={!drivingLicenseNumber}
             />
           </ContainerBAS>
@@ -134,13 +130,9 @@ export const DrivingLicenseForm = () => {
         <FormContainer
           title={title}
           description={description}
-          onSubmit={() => {
-            setShowBottomSheet(true)
-          }}
+          onSubmit={toggleBottomSheet}
           isSubmitDisabled={isSubmitDisabled}
-          onCancel={() => {
-            setShowBottomSheet(true)
-          }}
+          onCancel={toggleBottomSheet}
         >
           {requests.map((request) => {
             return (
