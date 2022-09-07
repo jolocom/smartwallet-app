@@ -103,9 +103,7 @@ export const DrivingLicenseForm = () => {
               {drivingLicenseNumber ? (
                 <Field.Editable
                   value={drivingLicenseNumber}
-                  onSelect={() => {
-                    setShowBottomSheet(false)
-                  }}
+                  onSelect={toggleBottomSheet}
                 />
               ) : (
                 <Field.Empty>
