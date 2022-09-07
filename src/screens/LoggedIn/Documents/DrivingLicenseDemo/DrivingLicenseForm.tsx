@@ -138,6 +138,9 @@ export const DrivingLicenseForm = () => {
             setShowBottomSheet(true)
           }}
           isSubmitDisabled={isSubmitDisabled}
+          onCancel={() => {
+            setShowBottomSheet(true)
+          }}
         >
           {requests.map((request) => {
             return (
