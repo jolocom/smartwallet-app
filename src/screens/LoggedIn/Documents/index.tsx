@@ -20,9 +20,8 @@ import useTranslation from '~/hooks/useTranslation'
 import { DocumentStacks } from '~/modules/credentials/types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
-import { DrivingLicenseCard } from './DrivingLicenseDemo'
 import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
+import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
 
 const Documents: React.FC = () => {
   const { t } = useTranslation()
@@ -142,11 +141,6 @@ const Documents: React.FC = () => {
 
               return (
                 <>
-                  {stack.data.indexOf(c) === 0 &&
-                    stack.stackId === 'all' &&
-                    drivingLicense && (
-                      <DrivingLicenseCard drivingLicense={drivingLicense} />
-                    )}
                   <DocumentCard
                     id={c.id}
                     key={c.id}
