@@ -16,6 +16,7 @@ interface IFieldComposition {
     Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect' | 'disabled'>
   >
   Empty: React.FC
+  Editable: React.FC<Pick<IWidgetField, 'value' | 'onSelect'>>
 }
 
 export interface IWidgetField {
@@ -55,10 +56,9 @@ const FieldText: React.FC<
   )
 }
 
-const StaticField: React.FC<Pick<IWidgetField, 'value' | 'onSelect'>> = ({
-  value,
-  onSelect = () => {},
-}) => (
+const StaticFieldEditable: React.FC<
+  Pick<IWidgetField, 'value' | 'onSelect'>
+> = ({ value, onSelect = () => {} }) => (
   <TouchableOpacity
     testID="widget-field-static"
     onPress={onSelect}
@@ -68,6 +68,14 @@ const StaticField: React.FC<Pick<IWidgetField, 'value' | 'onSelect'>> = ({
       <FieldText value={value} />
     </FieldContainer>
   </TouchableOpacity>
+)
+
+const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => (
+  <View>
+    <FieldContainer>
+      <FieldText value={value} />
+    </FieldContainer>
+  </View>
 )
 
 const SelectableField: React.FC<
@@ -155,5 +163,6 @@ const styles = StyleSheet.create({
 Field.Static = StaticField
 Field.Selectable = SelectableField
 Field.Empty = EmptyField
+Field.Editable = StaticFieldEditable
 
 export default Field

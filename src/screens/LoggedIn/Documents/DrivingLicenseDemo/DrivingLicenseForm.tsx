@@ -101,7 +101,7 @@ export const DrivingLicenseForm = () => {
                 <Widget.Header.Name value={widgetValue} />
               </Widget.Header>
               {drivingLicenseNumber ? (
-                <Field.Static
+                <Field.Editable
                   value={drivingLicenseNumber}
                   onSelect={() => {
                     setShowBottomSheet(false)
