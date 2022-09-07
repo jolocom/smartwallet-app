@@ -8,7 +8,7 @@ import DrivingLicenseSDK, {
   EngagementState,
   EngagementStateNames,
   PersonalizationInputRequest,
-  PersonalizationInputResponse
+  PersonalizationInputResponse,
 } from 'react-native-mdl'
 import { useDispatch, useSelector } from 'react-redux'
 import { useInitDocuments } from '~/hooks/documents'
@@ -21,7 +21,7 @@ import { LoaderTypes } from '~/modules/loader/types'
 import { setMdlDisplayData } from '~/modules/mdl/actions'
 import { getMdlDisplayData } from '~/modules/mdl/selectors'
 import { ScreenNames } from '~/types/screens'
-import { mdlManifest, mdlMetadata } from './data'
+import { makeMdlManifest, mdlMetadata } from './data'
 
 export const useDrivingLicense = () => {
   const agent = useAgent()
@@ -31,7 +31,7 @@ export const useDrivingLicense = () => {
   const drivingLicense = useSelector(getMdlDisplayData)
   const goBack = useGoBack()
   const redirect = useRedirect()
-  const {toDocument} = useInitDocuments()
+  const { toDocument } = useInitDocuments()
 
   const initDrivingLicense = async () => {
     const mdlDisplayData = await sdk
@@ -60,18 +60,25 @@ export const useDrivingLicense = () => {
       'portrait',
     ])
     // TODO
-    filteredData.driving_privileges = JSON.stringify(filteredData.driving_privileges)
+    filteredData.driving_privileges = JSON.stringify(
+      filteredData.driving_privileges,
+    )
     filteredData.portrait = 'data:image/png;base64,' + filteredData.portrait
+
+    const did = agent.identityWallet.did
+
     const vc = await agent.credentials.create({
       metadata: mdlMetadata,
-      subject: agent.identityWallet.did,
+      subject: did,
       claim: filteredData,
     })
 
-     await agent.credentials.types.create(mdlManifest as CredentialMetadataSummary)
+    await agent.credentials.types.create(
+      makeMdlManifest(did) as CredentialMetadataSummary,
+    )
 
-     const mdlDocument = await toDocument(vc)
-     dispatch(addCredentials([mdlDocument]))
+    const mdlDocument = await toDocument(vc)
+    dispatch(addCredentials([mdlDocument]))
   }
 
   const personalizeLicense = (
