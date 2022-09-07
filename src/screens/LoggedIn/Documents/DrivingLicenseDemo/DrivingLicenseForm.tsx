@@ -106,7 +106,9 @@ export const DrivingLicenseForm = () => {
             <Space />
             <BottomButtons
               onSubmit={
-                drivingLicensNumber ? handleSubmit : setShowBottomSheet(false)
+                drivingLicensNumber
+                  ? handleSubmit
+                  : () => setShowBottomSheet(false)
               }
               submitLabel={!drivingLicensNumber ? 'add info' : 'issue mdl'}
               onCancel={() => goBack()}
