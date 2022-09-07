@@ -19,7 +19,7 @@ export const DrivingLicenseForm = () => {
     useRoute<RouteProp<MainStackParamList, ScreenNames.DrivingLicenseForm>>()
   const { requests } = route.params
   const initState = requests.reduce<InputState>((acc, val) => {
-    acc[val.name] = ''
+    acc[val.name] = 'Z021AB37X13'
     return acc
   }, {})
   const [inputs, setInputs] = useState<InputState>(initState)
