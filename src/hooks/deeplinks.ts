@@ -89,11 +89,12 @@ export const useDeeplinkInteractions = () => {
 
   const handleDrivingLicensePersonalization = (qrCodeString: string) => {
     if (qrCodeString.startsWith('iso23220-3-sed:')) {
-      personalizeLicense(qrCodeString, (requests) => {
-        redirect(ScreenNames.DrivingLicenseForm, { requests })
-      })
+      personalizeLicense(qrCodeString, (requests) =>
+        redirect(ScreenNames.DrivingLicenseForm, { requests }),
+      )
     }
   }
+
   useEffect(() => {
     //NOTE: used for Driving Licenses
     Linking.getInitialURL().then((url) => {
