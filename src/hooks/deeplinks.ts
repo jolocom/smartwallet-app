@@ -104,7 +104,6 @@ export const useDeeplinkInteractions = () => {
     })
 
     Linking.addListener('url', (e) => {
-      console.log({ e })
       if (e.data) {
         handleDrivingLicensePersonalization(e.data)
       }
