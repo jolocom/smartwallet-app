@@ -20,6 +20,8 @@ export enum AttributeKeys {
 export enum ClaimKeys {
   givenName = '$.givenName',
   familyName = '$.familyName',
+  given_name = '$.given_name',
+  family_name = '$.family_name',
   photo = '$.photo',
   email = 'email',
   addressLine = 'addressLine1',

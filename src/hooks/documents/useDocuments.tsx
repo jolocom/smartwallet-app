@@ -31,9 +31,11 @@ export const useDocuments = () => {
   const getHolderName = (doc: Document) => {
     if (!doc.properties.length) return undefined
 
-    const givenName = doc.properties.find((p) => p.key === ClaimKeys.givenName)
+    const givenName = doc.properties.find(
+      (p) => p.key === ClaimKeys.givenName || ClaimKeys.given_name,
+    )
     const familyName = doc.properties.find(
-      (p) => p.key === ClaimKeys.familyName,
+      (p) => p.key === ClaimKeys.familyName || ClaimKeys.family_name,
     )
 
     if (!givenName || !familyName) return undefined
