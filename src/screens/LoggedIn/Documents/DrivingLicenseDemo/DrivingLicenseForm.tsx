@@ -48,7 +48,17 @@ export const DrivingLicenseForm = () => {
   const [inputs, setInputs] = useState<InputState>(initState)
   const [showBottomSheet, setShowBottomSheet] = useState(true)
 
-  const drivingLicensNumber = inputs['DL-Number']
+  const drivingLicenseNumber = inputs['DL-Number']
+
+  // TODO: replace with actual data / translations
+  const serviceName = 'Bundesdruckerei'
+  const serviceUrl = 'https://www.jolocom.io'
+  const source = 'https://avatars0.githubusercontent.com/u/4603324?s=200&v=4'
+  const widgetValue = 'Driving License Number'
+  const title = 'Führerschein'
+  const description =
+    'Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten'
+  const issueMdl = 'Issue mdl'
 
   const handleSubmit = async () => {
     const responses: PersonalizationInputResponse[] = Object.entries(
@@ -70,12 +80,7 @@ export const DrivingLicenseForm = () => {
         <BottomSheet onDismiss={goBack}>
           <ContainerBAS>
             <LogoContainerBAS>
-              <ServiceLogo
-                source={
-                  'https://avatars0.githubusercontent.com/u/4603324?s=200&v=4'
-                }
-                serviceUrl={'https://www.jolocom.io'}
-              />
+              <ServiceLogo source={source} serviceUrl={serviceUrl} />
             </LogoContainerBAS>
             <InteractionTitle label={t('CredentialRequest.header')} />
             <JoloText
@@ -84,7 +89,7 @@ export const DrivingLicenseForm = () => {
               color={Colors.white70}
               customStyles={{ paddingHorizontal: 10 }}
             >
-              Choose one or more documents requested serviceName by to proceed
+              {t('CredentialRequest.subheader', { serviceName })}
             </JoloText>
             <Space />
             <Widget
@@ -93,10 +98,10 @@ export const DrivingLicenseForm = () => {
               }}
             >
               <Widget.Header>
-                <Widget.Header.Name value={'Driving License Number'} />
+                <Widget.Header.Name value={widgetValue} />
               </Widget.Header>
-              {drivingLicensNumber ? (
-                <Field.Static value={drivingLicensNumber} />
+              {drivingLicenseNumber ? (
+                <Field.Static value={drivingLicenseNumber} />
               ) : (
                 <Field.Empty>
                   <PencilIcon />
@@ -106,22 +111,24 @@ export const DrivingLicenseForm = () => {
             <Space />
             <BottomButtons
               onSubmit={
-                drivingLicensNumber
+                drivingLicenseNumber
                   ? handleSubmit
                   : () => setShowBottomSheet(false)
               }
-              submitLabel={!drivingLicensNumber ? 'add info' : 'issue mdl'}
+              submitLabel={
+                !drivingLicenseNumber
+                  ? t('CredentialShare.singleMissingAcceptBtn')
+                  : issueMdl
+              }
               onCancel={() => goBack()}
-              isSubmitDisabled={!drivingLicensNumber}
+              isSubmitDisabled={!drivingLicenseNumber}
             />
           </ContainerBAS>
         </BottomSheet>
       ) : (
         <FormContainer
-          title={'Führerschein'}
-          description={
-            'Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten'
-          }
+          title={title}
+          description={description}
           onSubmit={() => {
             setShowBottomSheet(true)
           }}
