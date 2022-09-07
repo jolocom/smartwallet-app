@@ -55,12 +55,19 @@ const FieldText: React.FC<
   )
 }
 
-const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => (
-  <View testID="widget-field-static">
+const StaticField: React.FC<Pick<IWidgetField, 'value' | 'onSelect'>> = ({
+  value,
+  onSelect = () => {},
+}) => (
+  <TouchableOpacity
+    testID="widget-field-static"
+    onPress={onSelect}
+    activeOpacity={0.7}
+  >
     <FieldContainer>
       <FieldText value={value} />
     </FieldContainer>
-  </View>
+  </TouchableOpacity>
 )
 
 const SelectableField: React.FC<
