@@ -45,13 +45,13 @@ export const makeMdlManifest = (did: string) => {
             path: ['$.birth_date'],
             label: 'Geburtsdatum',
             mime_type: 'text/plain',
-            preview: false,
+            preview: true,
           },
           {
             path: ['$.document_number'],
             label: 'Führerscheinnummer',
             mime_type: 'text/plain',
-            preview: false,
+            preview: true,
           },
           {
             path: ['$.issuing_authority'],
@@ -63,7 +63,7 @@ export const makeMdlManifest = (did: string) => {
             path: ['$.expiry_date'],
             label: 'Gültig bis',
             mime_type: 'text/plain',
-            preview: false,
+            preview: true,
           },
           {
             path: ['$.issue_date'],
@@ -75,7 +75,7 @@ export const makeMdlManifest = (did: string) => {
             path: ['$.issuing_country'],
             label: 'Ausstellungsland',
             mime_type: 'text/plain',
-            preview: false,
+            preview: true,
           },
           {
             path: ['$.un_distinguishing_sign'],
