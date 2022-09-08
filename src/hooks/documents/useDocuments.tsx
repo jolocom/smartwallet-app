@@ -32,10 +32,10 @@ export const useDocuments = () => {
     if (!doc.properties.length) return undefined
 
     const givenName = doc.properties.find(
-      (p) => p.key === ClaimKeys.givenName || ClaimKeys.given_name,
+      (p) => p.key === ClaimKeys.givenName || p.key === ClaimKeys.given_name,
     )
     const familyName = doc.properties.find(
-      (p) => p.key === ClaimKeys.familyName || ClaimKeys.family_name,
+      (p) => p.key === ClaimKeys.familyName || p.key === ClaimKeys.family_name,
     )
 
     if (!givenName || !familyName) return undefined
