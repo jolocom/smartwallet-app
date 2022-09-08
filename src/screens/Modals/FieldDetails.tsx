@@ -245,7 +245,7 @@ const FieldDetails = () => {
                   /**
                    * NOTE @thwalln
                    *
-                   * figure out why portrail needs to be excluded imperativly while photo doen't get renderd at all
+                   * figure out why portrait needs to be excluded imperatively while photo doesn't get rendered at all
                    */
                   (field, i) =>
                     field.key !== '$.portrait' && (
