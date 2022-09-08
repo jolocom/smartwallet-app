@@ -61,18 +61,22 @@ export const useDrivingLicense = () => {
       'portrait',
     ])
 
-    // TODO
-    filteredData.driving_privileges = JSON.stringify(
+    const stringifiedDrivingPrivileges = JSON.stringify(
       filteredData.driving_privileges,
     )
-    filteredData.portrait = utf8ToBase64Image(filteredData.portrait)
+
+    const stringifiedPortrait = utf8ToBase64Image(filteredData.portrait)
 
     const did = agent.identityWallet.did
 
     const vc = await agent.credentials.create({
       metadata: mdlMetadata,
       subject: did,
-      claim: filteredData,
+      claim: {
+        ...filteredData,
+        driving_privileges: stringifiedDrivingPrivileges,
+        portrait: stringifiedPortrait,
+      },
     })
 
     await agent.credentials.types.create(

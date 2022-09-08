@@ -247,30 +247,29 @@ const FieldDetails = () => {
                    *
                    * figure out why portrait needs to be excluded imperatively while photo doesn't get rendered at all
                    */
-                  (field, i) =>
-                    field.key !== '$.portrait' && (
-                      <React.Fragment key={i}>
-                        <View
-                          style={styles.fieldContainer}
-                          onLayout={handleLayout}
+                  (field, i) => (
+                    <React.Fragment key={i}>
+                      <View
+                        style={styles.fieldContainer}
+                        onLayout={handleLayout}
+                      >
+                        <JoloText
+                          customStyles={styles.fieldText}
+                          size={JoloTextSizes.mini}
+                          color={Colors.osloGray}
                         >
-                          <JoloText
-                            customStyles={styles.fieldText}
-                            size={JoloTextSizes.mini}
-                            color={Colors.osloGray}
-                          >
-                            {field.label}
-                          </JoloText>
-                          <FieldValue
-                            value={field.value as string}
-                            mime_type={field.mime_type}
-                          />
-                        </View>
-                        {i !== Object.keys(fields).length - 1 && (
-                          <View style={styles.divider} />
-                        )}
-                      </React.Fragment>
-                    ),
+                          {field.label}
+                        </JoloText>
+                        <FieldValue
+                          value={field.value as string}
+                          mime_type={field.mime_type}
+                        />
+                      </View>
+                      {i !== Object.keys(fields).length - 1 && (
+                        <View style={styles.divider} />
+                      )}
+                    </React.Fragment>
+                  ),
                 )}
               </Block>
             </Collapsible.Scroll>
