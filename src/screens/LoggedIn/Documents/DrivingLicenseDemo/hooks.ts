@@ -22,6 +22,7 @@ import { setMdlDisplayData } from '~/modules/mdl/actions'
 import { getMdlDisplayData } from '~/modules/mdl/selectors'
 import { ScreenNames } from '~/types/screens'
 import { makeMdlManifest, mdlMetadata } from './data'
+import { utf8ToBase64Image } from './utils'
 
 export const useDrivingLicense = () => {
   const agent = useAgent()
@@ -59,11 +60,12 @@ export const useDrivingLicense = () => {
       'driving_privileges',
       'portrait',
     ])
+
     // TODO
     filteredData.driving_privileges = JSON.stringify(
       filteredData.driving_privileges,
     )
-    filteredData.portrait = 'data:image/png;base64,' + filteredData.portrait
+    filteredData.portrait = utf8ToBase64Image(filteredData.portrait)
 
     const did = agent.identityWallet.did
 

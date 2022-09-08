@@ -44,13 +44,16 @@ export const useDocuments = () => {
   }
 
   const getHolderPhoto = (doc: Document) => {
-    return doc.properties.find((p) => p.key === ClaimKeys.photo)?.value
+    return doc.properties.find(
+      (p) => p.key === ClaimKeys.photo || p.key === ClaimKeys.portrait,
+    )?.value
   }
 
   const hasImageProperties = (doc: Document) => {
     return doc.properties.some(
       (prop) =>
         prop.key !== ClaimKeys.photo &&
+        prop.key !== ClaimKeys.portrait &&
         prop.mime_type === PropertyMimeType.image_png,
     )
   }

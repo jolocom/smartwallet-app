@@ -1,5 +1,3 @@
-import { useAgent } from '~/hooks/sdk'
-
 export const mdlMetadata = {
   type: ['VerifiableCredential', 'DrivingLicenseCredential'],
   name: 'Führerschein',
@@ -87,6 +85,12 @@ export const makeMdlManifest = (did: string) => {
             path: ['$.driving_privileges'],
             label: 'Führerscheinrechte',
             mime_type: 'text/plain',
+            preview: false,
+          },
+          {
+            path: ['$.portrait'],
+            label: 'Portrait',
+            mime_type: 'image/png',
             preview: false,
           },
         ],

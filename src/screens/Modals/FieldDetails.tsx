@@ -241,26 +241,37 @@ const FieldDetails = () => {
                   marginBottom: 16,
                 }}
               >
-                {fields.map((field, i) => (
-                  <React.Fragment key={i}>
-                    <View style={styles.fieldContainer} onLayout={handleLayout}>
-                      <JoloText
-                        customStyles={styles.fieldText}
-                        size={JoloTextSizes.mini}
-                        color={Colors.osloGray}
-                      >
-                        {field.label}
-                      </JoloText>
-                      <FieldValue
-                        value={field.value as string}
-                        mime_type={field.mime_type}
-                      />
-                    </View>
-                    {i !== Object.keys(fields).length - 1 && (
-                      <View style={styles.divider} />
-                    )}
-                  </React.Fragment>
-                ))}
+                {fields.map(
+                  /**
+                   * NOTE @thwalln
+                   *
+                   * figure out why portrail needs to be excluded imperativly while photo doen't get renderd at all
+                   */
+                  (field, i) =>
+                    field.key !== '$.portrait' && (
+                      <React.Fragment key={i}>
+                        <View
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={field.value as string}
+                            mime_type={field.mime_type}
+                          />
+                        </View>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    ),
+                )}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
