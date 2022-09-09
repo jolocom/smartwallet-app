@@ -85,7 +85,7 @@ export const useDocuments = () => {
     )
   }
 
-  const getAllPropertiesButPhotoAndName = (doc: Document) => {
+  const getCustomFields = (doc: Document) => {
     return doc.properties.filter(
       (prop) =>
         prop.key !== ClaimKeys.photo &&
@@ -105,6 +105,6 @@ export const useDocuments = () => {
     hasImageProperties,
     getExtraProperties,
     getPreviewProperties,
-    getAllPropertiesButPhotoAndName,
+    getCustomFields,
   }
 }

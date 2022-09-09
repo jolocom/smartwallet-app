@@ -32,7 +32,7 @@ const Documents: React.FC = () => {
     hasImageProperties,
     getExtraProperties,
     getPreviewProperties,
-    getAllPropertiesButPhotoAndName,
+    getCustomFields,
   } = useDocuments()
   const {
     stackData,
@@ -132,13 +132,12 @@ const Documents: React.FC = () => {
             renderStack={renderStack}
             renderItem={(c, stack, visible) => {
               const previewFields = getPreviewProperties(c)
-              const allPropertiesButPhotoAndName =
-                getAllPropertiesButPhotoAndName(c)
+              const customFields = getCustomFields(c)
 
               const fields = previewFields.length
                 ? previewFields
-                : allPropertiesButPhotoAndName.length
-                ? allPropertiesButPhotoAndName
+                : customFields.length
+                ? customFields
                 : getExtraProperties(c)
 
               return (
