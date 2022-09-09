@@ -195,8 +195,9 @@ const FieldDetails = () => {
                 text={document.name}
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
-                  ...(holderPhoto && { marginTop: 30 }),
+                  ...(holderPhoto && !showIconContainer && { marginTop: 30 }),
                   paddingBottom: 12,
+                  paddingTop: !showIconContainer ? 18 : 0,
                 }}
               >
                 <JoloText
@@ -232,7 +233,10 @@ const FieldDetails = () => {
               )}
               {holderPhoto && (
                 <View>
-                  <Image source={{ uri: holderPhoto }} style={styles.photo} />
+                  <Image
+                    source={{ uri: holderPhoto }}
+                    style={[styles.photo, !showIconContainer && { bottom: 12 }]}
+                  />
                 </View>
               )}
               <Block
