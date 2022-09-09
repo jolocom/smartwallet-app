@@ -69,11 +69,23 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
     expandValue.value = item
   }
 
+  const lastContentOffset = useSharedValue(0)
+  const isScrolling = useSharedValue(false)
+
   const scrollHandler = useAnimatedScrollHandler({
     onBeginDrag: () => {
-      if (expandValue.value) {
-        expandValue.value = null
+      isScrolling.value = true
+    },
+    onEndDrag: () => {
+      isScrolling.value = false
+    },
+    onScroll: (event) => {
+      if (lastContentOffset.value > event.contentOffset.y) {
+        if (expandValue.value) {
+          expandValue.value = null
+        }
       }
+      lastContentOffset.value = event.contentOffset.y
     },
   })
 
