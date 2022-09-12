@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Platform } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { CheckmarkIconSmall } from '~/assets/svg'
@@ -17,7 +17,6 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import i18n from '~/translations/i18n'
 import { ScreenNames } from '~/types/screens'
-import BP from '~/utils/breakpoints'
 
 const legalTextConfig = [
   {
@@ -58,11 +57,6 @@ const MainContent: React.FC = () => {
         </JoloText>
         <Section.Block
           customStyles={{
-            height: Platform.select({
-              android: BP({ large: 110, medium: 110, default: 100 }),
-              ios: 100,
-            }),
-
             marginTop: 24,
           }}
         >
