@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 
 import { DocumentCard } from '~/components/Cards'
 import { CardFavorite } from '~/components/Cards/components'
@@ -17,10 +18,12 @@ import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
+import { setOpenedStack } from '~/modules/credentials/actions'
 import { DocumentStacks } from '~/modules/credentials/types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
+import { useFavoriteDocuments } from './useFavoriteDocuments'
 
 const Documents: React.FC = () => {
   const { t } = useTranslation()
@@ -33,6 +36,7 @@ const Documents: React.FC = () => {
     getExtraProperties,
     getPreviewProperties,
   } = useDocuments()
+
   const {
     stackData,
     handleStackPress,
@@ -41,6 +45,18 @@ const Documents: React.FC = () => {
     handlePressMenu,
     isDocumentFavorite,
   } = useDocumentsScreen()
+
+  const { favorites } = useFavoriteDocuments()
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!favorites.length) {
+      dispatch(setOpenedStack(DocumentStacks.All))
+    } else {
+      dispatch(setOpenedStack(DocumentStacks.Favorites))
+    }
+  }, [])
 
   const { scaleBy } = useMemo(
     () =>
