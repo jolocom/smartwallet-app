@@ -1,0 +1,155 @@
+
+----------Missing dependency---------
+
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: java.lang.RuntimeException: Could not invoke DrivingLicense.sendPersonalizationResponses
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.JavaMethodWrapper.invoke(JavaMethodWrapper.java:383)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.JavaModuleWrapper.invoke(JavaModuleWrapper.java:151)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.queue.NativeRunnable.run(Native Method)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at android.os.Handler.handleCallback(Handler.java:938)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.java:27)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at android.os.Looper.loop(Looper.java:313)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.queue.MessageQueueThreadImpl$4.run(MessageQueueThreadImpl.java:226)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at java.lang.Thread.run(Thread.java:920)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: Caused by: java.lang.reflect.InvocationTargetException
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at java.lang.reflect.Method.invoke(Native Method)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.JavaMethodWrapper.invoke(JavaMethodWrapper.java:372)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	... 9 more
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: Caused by: java.lang.NoClassDefFoundError: Failed resolution of: Lorg/spongycastle/util/encoders/Base64;
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at a0.a.parseQrCode(Unknown Source:1)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at com.jolocom.mdl.MdlModule.sendPersonalizationResponses(MdlModule.kt:145)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	... 11 more
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: Caused by: java.lang.ClassNotFoundException: Didn't find class "org.spongycastle.util.encoders.Base64" on path: DexPathList[[zip file "/data/app/~~HOYXUonydnQFvR_b6_X2FQ==/com.jolocomwallet.debug-n2-iRbVQ9DiPQGtjTgfj5Q==/base.apk"],nativeLibraryDirectories=[/data/app/~~HOYXUonydnQFvR_b6_X2FQ==/com.jolocomwallet.debug-n2-iRbVQ9DiPQGtjTgfj5Q==/lib/arm64, /data/app/~~HOYXUonydnQFvR_b6_X2FQ==/com.jolocomwallet.debug-n2-iRbVQ9DiPQGtjTgfj5Q==/base.apk!/lib/arm64-v8a, /system/lib64, /system/system_ext/lib64]]
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:218)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at java.lang.ClassLoader.loadClass(ClassLoader.java:379)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	at java.lang.ClassLoader.loadClass(ClassLoader.java:312)
+09-12 14:15:03.349 12463 12592 E unknown:ReactNative: 	... 13 more
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: Exception in native call
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: java.lang.RuntimeException: Could not invoke DrivingLicense.sendPersonalizationResponses
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.JavaMethodWrapper.invoke(JavaMethodWrapper.java:383)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.JavaModuleWrapper.invoke(JavaModuleWrapper.java:151)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.queue.NativeRunnable.run(Native Method)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at android.os.Handler.handleCallback(Handler.java:938)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.java:27)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at android.os.Looper.loop(Looper.java:313)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.queue.MessageQueueThreadImpl$4.run(MessageQueueThreadImpl.java:226)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at java.lang.Thread.run(Thread.java:920)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: Caused by: java.lang.reflect.InvocationTargetException
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at java.lang.reflect.Method.invoke(Native Method)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at com.facebook.react.bridge.JavaMethodWrapper.invoke(JavaMethodWrapper.java:372)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	... 9 more
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: Caused by: java.lang.NoClassDefFoundError: Failed resolution of: Lorg/spongycastle/util/encoders/Base64;
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at a0.a.parseQrCode(Unknown Source:1)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at com.jolocom.mdl.MdlModule.sendPersonalizationResponses(MdlModule.kt:145)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	... 11 more
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: Caused by: java.lang.ClassNotFoundException: Didn't find class "org.spongycastle.util.encoders.Base64" on path: DexPathList[[zip file "/data/app/~~HOYXUonydnQFvR_b6_X2FQ==/com.jolocomwallet.debug-n2-iRbVQ9DiPQGtjTgfj5Q==/base.apk"],nativeLibraryDirectories=[/data/app/~~HOYXUonydnQFvR_b6_X2FQ==/com.jolocomwallet.debug-n2-iRbVQ9DiPQGtjTgfj5Q==/lib/arm64, /data/app/~~HOYXUonydnQFvR_b6_X2FQ==/com.jolocomwallet.debug-n2-iRbVQ9DiPQGtjTgfj5Q==/base.apk!/lib/arm64-v8a, /system/lib64, /system/system_ext/lib64]]
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:218)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at java.lang.ClassLoader.loadClass(ClassLoader.java:379)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	at java.lang.ClassLoader.loadClass(ClassLoader.java:312)
+09-12 14:15:03.351 12463 12592 E unknown:ReactNative: 	... 13 more
+
+>>>>>>>>>>>>>>>>>>>>>>FIXED
+
+-------------baseUrl error------------------
+
+-12 15:27:48.057 18289 18500 D l       : version = org.iso.23220-3-1.0
+09-12 15:27:48.057 18289 18500 D l       : serverUrl = https://demo.mdl.bundesdruckerei.de/api/devicediscoverability/message
+09-12 15:27:48.057 18289 18499 I ReactNativeJS: 'LOG: ', { dlNumber: 'Z021AB37X13' }
+09-12 15:27:48.057 18289 18500 D l       : provisioningCode = hEOhASahGCFZAXIwggFuMIIBFaADAgECAgRiChS/MAoGCCqGSM49BAMCMC0xCzAJBgNVBAYTAkRFMR4wHAYDVQQDDBViZHIgbURMIFRFU1QgcHJvdmNvZGUwHhcNMjIwMjE0MDgzNzE5WhcNMjMwMjE0MDgzNzE5WjAtMQswCQYDVQQGEwJERTEeMBwGA1UEAwwVYmRyIG1ETCBURVNUIHByb3Zjb2RlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEwiK3J/ykBNGsB2jDVY/PxzJZVMNic9+DEKXZg3NXtSToShieCofMU4RSYSi6WOHLI/kZwUvEdROq3b7CHTsQsqMjMCEwEgYDVR0lBAswCQYHKIGMXQUBAjALBgNVHQ8EBAMCB4AwCgYIKoZIzj0EAwIDRwAwRAIgMatXNLz6R9sCCN1fjYZ0NxJqMtxcb8u8T3nY/KxaC2YCIDQ0WRYDtvPjF90GbCD2vJKVCeKAhru3s1j9atOVYY3TWDHYGFgtoWlIYXNoTWRsSWRYINFlfKsqgvg7IP6NnWLfHCx0gr6pFha9Z9UHeVwe8pnQWEA2GVUcEKsioxx9ENqSYbdorJZ7B98pr7798FJ0rfxGeEjsgLa0RG98X4VTFOusDM/KK8y37fh7LTpF3ifLv/8P
+09-12 15:27:48.059 18289 18700 I m       : ******************************************************************************
+09-12 15:27:48.060 18289 18700 I m       :                        Start Provisioning Request ...
+09-12 15:27:48.060 18289 18700 I m       : ******************************************************************************
+09-12 15:27:48.062 18289 18700 I m       : ******************************************************************************
+09-12 15:27:48.063 18289 18700 W System.err: java.lang.IllegalArgumentException: baseUrl must end in /: https://demo.mdl.bundesdruckerei.de/api/devicediscoverability/message
+09-12 15:27:48.063 18289 18700 W System.err: 	at retrofit2.Retrofit$Builder.baseUrl(Retrofit.java:563)
+09-12 15:27:48.063 18289 18700 W System.err: 	at retrofit2.Retrofit$Builder.baseUrl(Retrofit.java:506)
+09-12 15:27:48.063 18289 18700 W System.err: 	at c0.b$b.invoke(Unknown Source:3)
+09-12 15:27:48.063 18289 18700 W System.err: 	at kotlin.SynchronizedLazyImpl.getValue(LazyJVM.kt:74)
+09-12 15:27:48.063 18289 18700 W System.err: 	at c0.b$a.invoke(Unknown Source:2)
+09-12 15:27:48.063 18289 18700 W System.err: 	at kotlin.SynchronizedLazyImpl.getValue(LazyJVM.kt:74)
+09-12 15:27:48.063 18289 18700 W System.err: 	at c0.b.a(Unknown Source:2)
+09-12 15:27:48.063 18289 18700 W System.err: 	at a0.m$h.invokeSuspend(Unknown Source:28)
+09-12 15:27:48.064 18289 18700 W System.err: 	at a0.m$h.invoke(Unknown Source:2)
+09-12 15:27:48.064 18289 18700 W System.err: 	at a0.m$b.a(Unknown Source:6)
+09-12 15:27:48.064 18289 18700 W System.err: 	at a0.m.b(Unknown Source:103)
+09-12 15:27:48.064 18289 18700 W System.err: 	at a0.c.invokeSuspend(Unknown Source:73)
+09-12 15:27:48.064 18289 18700 W System.err: 	at a0.c.invoke(Unknown Source:1)
+09-12 15:27:48.064 18289 18700 W System.err: 	at a0.e.invokeSuspend(Unknown Source:34)
+09-12 15:27:48.064 18289 18700 W System.err: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+09-12 15:27:48.064 18289 18700 W System.err: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+09-12 15:27:48.064 18289 18700 W System.err: 	at kotlinx.coroutines.internal.LimitedDispatcher.run(LimitedDispatcher.kt:42)
+09-12 15:27:48.064 18289 18700 W System.err: 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:95)
+09-12 15:27:48.064 18289 18700 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:570)
+09-12 15:27:48.065 18289 18700 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:750)
+09-12 15:27:48.065 18289 18700 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:677)
+09-12 15:27:48.065 18289 18700 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:664)
+09-12 15:27:48.066 18289 18700 E b       : java.lang.IllegalArgumentException: baseUrl must end in /: https://demo.mdl.bundesdruckerei.de/api/devicediscoverability/message
+09-12 15:27:48.066 18289 18700 E b       : java.lang.IllegalArgumentException: baseUrl must end in /: https://demo.mdl.bundesdruckerei.de/api/devicediscoverability/message
+09-12 15:27:48.066 18289 18700 E b       : 	at retrofit2.Retrofit$Builder.baseUrl(Retrofit.java:563)
+09-12 15:27:48.066 18289 18700 E b       : 	at retrofit2.Retrofit$Builder.baseUrl(Retrofit.java:506)
+09-12 15:27:48.066 18289 18700 E b       : 	at c0.b$b.invoke(Unknown Source:3)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlin.SynchronizedLazyImpl.getValue(LazyJVM.kt:74)
+09-12 15:27:48.066 18289 18700 E b       : 	at c0.b$a.invoke(Unknown Source:2)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlin.SynchronizedLazyImpl.getValue(LazyJVM.kt:74)
+09-12 15:27:48.066 18289 18700 E b       : 	at c0.b.a(Unknown Source:2)
+09-12 15:27:48.066 18289 18700 E b       : 	at a0.m$h.invokeSuspend(Unknown Source:28)
+09-12 15:27:48.066 18289 18700 E b       : 	at a0.m$h.invoke(Unknown Source:2)
+09-12 15:27:48.066 18289 18700 E b       : 	at a0.m$b.a(Unknown Source:6)
+09-12 15:27:48.066 18289 18700 E b       : 	at a0.m.b(Unknown Source:103)
+09-12 15:27:48.066 18289 18700 E b       : 	at a0.c.invokeSuspend(Unknown Source:73)
+09-12 15:27:48.066 18289 18700 E b       : 	at a0.c.invoke(Unknown Source:1)
+09-12 15:27:48.066 18289 18700 E b       : 	at a0.e.invokeSuspend(Unknown Source:34)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlinx.coroutines.internal.LimitedDispatcher.run(LimitedDispatcher.kt:42)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:95)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:570)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:750)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:677)
+09-12 15:27:48.066 18289 18700 E b       : 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:664)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIXED
+
+--------------build error--------------
+
+   > More than one file was found with OS independent path 'META-INF/com.android.tools/proguard/coroutines.pro'
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIXED: locking the coroutines dependencies to v1.2.1 
+
+-------------http error---------------
+
+09-12 16:27:36.671 26959 27722 W System.err: a0.h: http status = 404, message = {"timestamp":"2022-09-12T14:27:36.351+00:00","status":404,"error":"Not Found","path":"/message/message"}
+09-12 16:27:36.675 26959 27722 W System.err: 	at a0.m$b$b.invokeSuspend(Unknown Source:13)
+09-12 16:27:36.676 26959 27722 W System.err: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+09-12 16:27:36.676 26959 27722 W System.err: 	at kotlinx.coroutines.DispatchedTask.run(Dispatched.kt:238)
+09-12 16:27:36.676 26959 27722 W System.err: 	at android.os.Handler.handleCallback(Handler.java:938)
+09-12 16:27:36.680 26959 27722 W System.err: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-12 16:27:36.680 26959 27722 W System.err: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-12 16:27:36.681 26959 27722 W System.err: 	at android.os.Looper.loop(Looper.java:313)
+09-12 16:27:36.681 26959 27722 W System.err: 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-12 16:27:36.681 26959 27722 W System.err: 	at java.lang.reflect.Method.invoke(Native Method)
+09-12 16:27:36.682 26959 27722 W System.err: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+09-12 16:27:36.682 26959 27722 W System.err: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1135)
+09-12 16:27:36.700 26959 27722 E b       : a0.h: http status = 404, message = {"timestamp":"2022-09-12T14:27:36.351+00:00","status":404,"error":"Not Found","path":"/message/message"}
+09-12 16:27:36.700 26959 27722 E b       : a0.h: http status = 404, message = {"timestamp":"2022-09-12T14:27:36.351+00:00","status":404,"error":"Not Found","path":"/message/message"}
+09-12 16:27:36.700 26959 27722 E b       : 	at a0.m$b$b.invokeSuspend(Unknown Source:13)
+09-12 16:27:36.700 26959 27722 E b       : 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+09-12 16:27:36.700 26959 27722 E b       : 	at kotlinx.coroutines.DispatchedTask.run(Dispatched.kt:238)
+09-12 16:27:36.700 26959 27722 E b       : 	at android.os.Handler.handleCallback(Handler.java:938)
+09-12 16:27:36.700 26959 27722 E b       : 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-12 16:27:36.700 26959 27722 E b       : 	at android.os.Looper.loopOnce(Looper.java:226)
+09-12 16:27:36.700 26959 27722 E b       : 	at android.os.Looper.loop(Looper.java:313)
+09-12 16:27:36.700 26959 27722 E b       : 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-12 16:27:36.700 26959 27722 E b       : 	at java.lang.reflect.Method.invoke(Native Method)
+09-12 16:27:36.700 26959 27722 E b       : 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIXED
+
+----------------another dependency error------------
+09-12 17:01:36.166   990  1711 I System.out: CoroutineExceptionHandler got java.lang.NoClassDefFoundError: Failed resolution of: LCOSE/Sign1Message;
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Not fixed :|

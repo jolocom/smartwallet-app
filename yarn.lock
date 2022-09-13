@@ -9896,7 +9896,7 @@ react-native-localize@^1.4.3:
 
 "react-native-mdl@git+ssh://git@github.com:jolocom/react-native-mdl.git#feat/android-sdk":
   version "1.0.35"
-  resolved "git+ssh://git@github.com:jolocom/react-native-mdl.git#5e213f964aa794e83067a03e0100a708de48c580"
+  resolved "git+ssh://git@github.com:jolocom/react-native-mdl.git#25249793aa8fc556dbfd7c855837fc2386fd6ed1"
   dependencies:
     cbor-js "^0.1.0"
 

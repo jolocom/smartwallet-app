@@ -25,27 +25,38 @@ export const useDrivingLicense = () => {
   const redirect = useRedirect()
 
   const initDrivingLicense = async () => {
-    const mdlDisplayData = await sdk
-      .getPersonalizationStatus()
-      .then((isPersonalized) => {
-        if (isPersonalized) return sdk.getDisplayData()
-        return null
-      })
-    dispatch(setMdlDisplayData(mdlDisplayData))
+    const initializedSdk = await sdk.init()
+    const isPersonalized = await sdk.getPersonalizationStatus()
+    if (isPersonalized) {
+      console.log({isPersonalized})
+      const displayData = await sdk.getDisplayData()
+      dispatch(setMdlDisplayData(displayData))
+    }
   }
 
   const personalizeLicense = (
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
+    console.log('before startPersonalization')
     sdk.startPersonalization(qrString)
+    console.log('after startPersonalization')
 
-    const requestHandler = (requests: string) => {
-      const jsonRequests = JSON.parse(requests) as PersonalizationInputRequest[]
+    const requestHandler = (request: string | PersonalizationInputRequest) => {
+      // NOTE: this is a thing bc on ios we can't send objects through events, while
+      // on android we can only send objects
+      let jsonRequests: PersonalizationInputRequest[]
+      if (typeof request === 'string') {
+        jsonRequests = JSON.parse(request) as PersonalizationInputRequest[]
+      } else {
+        jsonRequests = [request]
+      }
 
+      console.log('REQUESTS: ', jsonRequests)
       onRequests(jsonRequests)
     }
     const successHandler = () => {
+      console.log('SUCCESSFUL PERSONALIZATION')
       unsubscribe()
 
       redirect(ScreenNames.Documents)
@@ -57,13 +68,23 @@ export const useDrivingLicense = () => {
         })
         .catch(console.warn)
     }
-    const errorHandler = (error: string) => {
+    const errorHandler = (error: string | DrivingLicenseError) => {
       unsubscribe()
 
       dispatch(dismissLoader())
+      let jsonError: DrivingLicenseError
       //FIXME currently returns null, but should return stringified DrivingLicenseError
-      const jsonError = JSON.parse(error) as DrivingLicenseError
+      if (typeof error === 'string') {
+        jsonError = JSON.parse(error) as DrivingLicenseError
+      } else {
+        jsonError = error
+      }
+      console.log('PERSONALIZATION FAILED ', jsonError)
       scheduleErrorWarning(new Error(jsonError.name))
+    }
+
+    const logHandler = (data: any) => {
+      console.log("LOG: ", data)
     }
 
     sdk.emitter.addListener(
@@ -78,6 +99,10 @@ export const useDrivingLicense = () => {
       DrivingLicenseEvents.personalizationError,
       errorHandler,
     )
+    sdk.emitter.addListener(
+      "log",
+      logHandler,
+    )
 
     const unsubscribe = () => {
       sdk.emitter.removeListener(
@@ -91,6 +116,10 @@ export const useDrivingLicense = () => {
       sdk.emitter.removeListener(
         DrivingLicenseEvents.personalizationRequests,
         errorHandler,
+      )
+      sdk.emitter.removeListener(
+	"log",
+        logHandler,
       )
     }
   }
