@@ -5,26 +5,22 @@
  * with module caching, that appeared after upgrading to RN63.
  */
 
-import { useDispatch, useSelector } from 'react-redux'
-
 import { useNavigation } from '@react-navigation/native'
 import { Interaction, TransportAPI } from 'react-native-jolocom'
+import { useDispatch, useSelector } from 'react-redux'
+
 import {
   resetInteraction,
   setInteractionDetails,
 } from '~/modules/interaction/actions'
-import {
-  getInteractionId,
-  getInteractionType,
-} from '~/modules/interaction/selectors'
+import { getInteractionId } from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import { parseJWT } from '~/utils/parseJWT'
+
+import { useInteractionHandler } from './interactionHandlers'
 import useConnection from '../connection'
 import { useAgent } from '../sdk'
 import { useToasts } from '../toasts'
-import { useInteractionHandler } from './interactionHandlers'
-import { useEffect } from 'react'
-import { getIsAppLocked } from '~/modules/account/selectors'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -37,19 +33,10 @@ export const useInteraction = () => {
 export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
-  const navigation = useNavigation()
+
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
   const { connected, showDisconnectedToast } = useConnection()
-
-  const isInteracting = useSelector(getInteractionType)
-  const isAppLocked = useSelector(getIsAppLocked)
-
-  useEffect(() => {
-    if (!isAppLocked && isInteracting) {
-      navigation.navigate(ScreenNames.Interaction)
-    }
-  }, [isAppLocked, isInteracting])
 
   const processInteraction = async (
     jwt: string,
