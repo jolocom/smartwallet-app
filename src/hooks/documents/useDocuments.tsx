@@ -19,6 +19,12 @@ export const useDocuments = () => {
   const expiredDocuments = useSelector(getExpiredDocuments)
   const validDocuments = useSelector(getValidDocuments)
 
+  const propertyKeys = {
+    photo: [ClaimKeys.photo, ClaimKeys.portrait],
+    givenName: [ClaimKeys.givenName, ClaimKeys.given_name],
+    familyName: [ClaimKeys.familyName, ClaimKeys.family_name],
+  }
+
   const deleteDocument = async (id: string) => {
     await agent.credentials.delete({ id })
     dispatch(deleteCredential(id))
@@ -31,11 +37,11 @@ export const useDocuments = () => {
   const getHolderName = (doc: Document) => {
     if (!doc.properties.length) return undefined
 
-    const givenName = doc.properties.find(
-      (p) => p.key === ClaimKeys.givenName || p.key === ClaimKeys.given_name,
+    const givenName = doc.properties.find((p) =>
+      propertyKeys.givenName.includes(p.key as ClaimKeys),
     )
-    const familyName = doc.properties.find(
-      (p) => p.key === ClaimKeys.familyName || p.key === ClaimKeys.family_name,
+    const familyName = doc.properties.find((p) =>
+      propertyKeys.familyName.includes(p.key as ClaimKeys),
     )
 
     if (!givenName || !familyName) return undefined
@@ -44,8 +50,8 @@ export const useDocuments = () => {
   }
 
   const getHolderPhoto = (doc: Document) => {
-    return doc.properties.find(
-      (p) => p.key === ClaimKeys.photo || p.key === ClaimKeys.portrait,
+    return doc.properties.find((p) =>
+      propertyKeys.photo.includes(p.key as ClaimKeys),
     )?.value
   }
 
