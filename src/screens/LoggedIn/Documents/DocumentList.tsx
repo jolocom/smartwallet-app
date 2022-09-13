@@ -68,7 +68,7 @@ const useHandleMorePress = () => {
           screen: ScreenNames.DragToConfirm,
           params: {
             title: t('Documents.deleteDocumentHeader', {
-              documentName: displayDocumentName,
+              documentName: credentialName,
               interpolation: { escapeValue: false },
             }),
             cancelText: t('Documents.cancelCardOption'),
