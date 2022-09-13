@@ -1,5 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
+import { DisplayVal } from '@jolocom/sdk/js/credentials'
+
 import { ScreenNames } from '~/types/screens'
 import Language from './Settings/Language'
 import ChangePin from './Settings/ChangePin'
@@ -33,7 +35,6 @@ import {
 import PopupMenu, { PopupMenuProps } from '~/screens/LoggedIn/PopupMenu'
 import InteractionPasteTest from './Settings/Development/InteractionPasteTest'
 import CollapsibleTest from './Settings/Development/CollapsibleTest'
-import { IField } from '~/types/props'
 import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { Colors } from '~/utils/colors'
 import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
@@ -42,7 +43,6 @@ import Interaction from '../Modals/Interaction'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
 import { CardTest } from './Settings/Development/CardsTest'
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps

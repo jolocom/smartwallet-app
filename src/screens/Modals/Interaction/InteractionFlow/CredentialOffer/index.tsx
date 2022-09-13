@@ -25,7 +25,6 @@ import useTranslation from '~/hooks/useTranslation'
 import ScreenContainer from '~/components/ScreenContainer'
 import { Colors } from '~/utils/colors'
 import { ServiceLogo } from '~/components/ServiceLogo'
-import { getAllDocuments } from '~/modules/credentials/selectors'
 import { OfferedCredentialDisplay } from '~/types/credentials'
 import { OfferCard } from '~/components/Cards'
 
