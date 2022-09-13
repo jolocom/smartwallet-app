@@ -15,7 +15,7 @@ import { useToasts } from '~/hooks/toasts'
 interface Props {
   title: string
   description: string
-  onSubmit: (() => Promise<void>) | (() => void)
+  onSubmit: () => Promise<void>
   isSubmitDisabled?: boolean
   onCancel?: () => void
 }

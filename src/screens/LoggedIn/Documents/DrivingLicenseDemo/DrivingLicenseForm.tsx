@@ -15,6 +15,7 @@ import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
 import { useGoBack } from '~/hooks/navigation'
+import { useToasts } from '~/hooks/toasts'
 import {
   ContainerBAS,
   LogoContainerBAS,
@@ -35,6 +36,7 @@ export const DrivingLicenseForm = () => {
   const goBack = useGoBack()
   const { finishPersonalization } = useDrivingLicense()
   const { t } = useTranslation()
+  const { scheduleErrorWarning } = useToasts()
 
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.DrivingLicenseForm>>()
@@ -49,7 +51,9 @@ export const DrivingLicenseForm = () => {
   const [showBottomSheet, setShowBottomSheet] = useState(true)
 
   const toggleBottomSheet = () => {
-    setShowBottomSheet(!showBottomSheet)
+    return new Promise<void>((res) => {
+      res(setShowBottomSheet(!showBottomSheet))
+    }).catch(scheduleErrorWarning)
   }
 
   const drivingLicenseNumber = inputs['DL-Number']
