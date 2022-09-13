@@ -2,6 +2,7 @@ export enum LoaderTypes {
   default = 'default',
   error = 'error',
   success = 'success',
+  empty = '',
 }
 
 export enum LoaderActionType {

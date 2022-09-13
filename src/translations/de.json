@@ -216,7 +216,7 @@
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
-        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Seien Sie achtsam, bevor Sie Ihre Daten teilen.",
         "redirectTitle": "Fertig!",
         "redirectDescription": "Sie werden zu ${serviceName} weitergeleitet.",
         "redirectBtn": "Weiter"
@@ -401,7 +401,8 @@
         "issueOption_5": "Probleme mit der Benutzeroberfläche",
         "issueOption_6": "Irgendetwas scheint nicht richtig zu sein",
         "issueOption_7": "Sonstiges",
-        "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ..."
+        "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ...",
+        "errorHeader": "Fehler melden"
     },
     "General": {
         "unknown": "Unbekannt",
