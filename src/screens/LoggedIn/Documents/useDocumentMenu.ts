@@ -9,7 +9,7 @@ export const useDocumentMenu = () => {
   const { t } = useTranslation()
   const { scheduleErrorWarning } = useToasts()
   const { deleteDocument, getDocumentById } = useDocuments()
-  const { addFavorite, favorites, deleteFavorite } = useFavoriteDocuments()
+  const { addFavorite, deleteFavorite } = useFavoriteDocuments()
 
   const { showPopup } = usePopupMenu()
 
