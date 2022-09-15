@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import {
-  Platform,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
@@ -157,11 +156,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
         distance -= isBackground ? 2 : 8
       } else {
         distance += isBackground ? 8 : 2
-      }
-
-      // FIXME: with backgroundColor, the fields are a bit too low
-      if (isBackground && Platform.OS === 'android') {
-        distance = distance - 12
       }
       return distance
     }
