@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
   runOnJS,
-  scrollTo,
   useAnimatedReaction,
   useAnimatedRef,
   useAnimatedScrollHandler,
@@ -69,11 +68,23 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
     expandValue.value = item
   }
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onBeginDrag: () => {
-      if (expandValue.value) {
-        expandValue.value = null
+  const scrollHandler = useAnimatedScrollHandler<{
+    isScrolling: boolean
+    lastContentOffset: number
+  }>({
+    onBeginDrag: (_, ctx) => {
+      ctx.isScrolling = true
+    },
+    onEndDrag: (_, ctx) => {
+      ctx.isScrolling = false
+    },
+    onScroll: (e, ctx) => {
+      if (ctx.lastContentOffset > e.contentOffset.y) {
+        if (expandValue.value) {
+          expandValue.value = null
+        }
       }
+      ctx.lastContentOffset = e.contentOffset.y
     },
   })
 
