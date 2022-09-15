@@ -9,7 +9,7 @@ export const useDocumentMenu = () => {
   const { t } = useTranslation()
   const { scheduleErrorWarning } = useToasts()
   const { deleteDocument, getDocumentById } = useDocuments()
-  const { addFavorite, favorites, deleteFavorite } = useFavoriteDocuments()
+  const { addFavorite, deleteFavorite } = useFavoriteDocuments()
 
   const { showPopup } = usePopupMenu()
 
@@ -17,11 +17,7 @@ export const useDocumentMenu = () => {
     deleteDocument(id).catch(scheduleErrorWarning)
   }
 
-  const isFavorite = (id: string) => {
-    return Boolean(favorites.find((d) => d.id === id))
-  }
-
-  return ({ id }: { id: string }) => {
+  return ({ id, isFavorite }: { id: string; isFavorite: boolean }) => {
     const document = getDocumentById(id)!
     const popupOptions = [
       {
@@ -33,7 +29,7 @@ export const useDocumentMenu = () => {
           },
         },
       },
-      isFavorite(id)
+      isFavorite
         ? {
             title: t('Documents.removeFavorite'),
             onPress: () => {

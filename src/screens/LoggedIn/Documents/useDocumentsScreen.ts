@@ -24,7 +24,7 @@ export const useDocumentsScreen = () => {
   const { validDocuments: documents, expiredDocuments } = useDocuments()
   const { t } = useTranslation()
   const redirect = useRedirect()
-  const {favorites: favoriteDocuments} = useFavoriteDocuments()
+  const { favorites: favoriteDocuments, getFavorites } = useFavoriteDocuments()
   const openedStack = useSelector(getOpenedStack)
   const dispatch = useDispatch()
 
@@ -39,9 +39,13 @@ export const useDocumentsScreen = () => {
     })
   }
 
-  const handlePressMenu = (c: Document) => {
+  const handlePressMenu = async (c: Document) => {
+    const favorites = await getFavorites()
+    const isFavorite = Boolean(favorites.find((id) => id === c.id))
+
     onHandleMore({
       id: c.id,
+      isFavorite,
     })
   }
 
@@ -95,7 +99,8 @@ export const useDocumentsScreen = () => {
     }
   }
 
-  const isDocumentFavorite = (id: string) => favoriteDocuments.some(d => d.id === id)
+  const isDocumentFavorite = (id: string) =>
+    favoriteDocuments.some((d) => d.id === id)
 
   return {
     stackData,
@@ -103,6 +108,6 @@ export const useDocumentsScreen = () => {
     openedStack,
     handlePressDetails,
     handlePressMenu,
-    isDocumentFavorite
+    isDocumentFavorite,
   }
 }
