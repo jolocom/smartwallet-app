@@ -52,17 +52,12 @@ export const useFavoriteDocuments = () => {
   }
 
   const getFavorites = async () => {
-    try {
-      const favorites = (await settings.get(SettingKeys.favoriteDocuments)) as {
-        all: string[]
-      }
-
-      dispatch(setFavoriteDocuments(favorites.all))
-      return favorites.all
-    } catch (error) {
-      console.log({ error })
-      return []
+    const favorites = (await settings.get(SettingKeys.favoriteDocuments)) as {
+      all: string[]
     }
+
+    dispatch(setFavoriteDocuments(favorites.all))
+    return favorites.all
   }
 
   const deleteFavorite = useCallback(
