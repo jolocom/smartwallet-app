@@ -80,18 +80,22 @@ export const useDocuments = () => {
   }
 
   const getPreviewProperties = (doc: Document) => {
-    return doc.previewKeys.map(
-      (key) => doc.properties.find((property) => property.key === key)!,
-    )
-  }
+    let previewFields: DocumentProperty[] = []
 
-  const getCustomFields = (doc: Document) => {
-    return doc.properties.filter(
-      (prop) =>
-        prop.key !== ClaimKeys.photo &&
-        prop.key !== ClaimKeys.givenName &&
-        prop.key !== ClaimKeys.familyName,
-    )
+    if (doc.previewKeys.length) {
+      previewFields = doc.previewKeys.map(
+        (key) => doc.properties.find((property) => property.key === key)!,
+      )
+    } else if (doc.properties.length) {
+      previewFields = doc.properties.filter(
+        (prop) =>
+          prop.key !== ClaimKeys.photo &&
+          prop.key !== ClaimKeys.givenName &&
+          prop.key !== ClaimKeys.familyName,
+      )
+    }
+
+    return previewFields
   }
 
   return {
@@ -105,6 +109,5 @@ export const useDocuments = () => {
     hasImageProperties,
     getExtraProperties,
     getPreviewProperties,
-    getCustomFields,
   }
 }
