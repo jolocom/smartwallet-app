@@ -30,7 +30,6 @@ const Documents: React.FC = () => {
     getHolderName,
     getHolderPhoto,
     hasImageProperties,
-    getExtraProperties,
     getPreviewProperties,
   } = useDocuments()
   const {
@@ -130,11 +129,7 @@ const Documents: React.FC = () => {
             // @ts-expect-error FIXME: fix typescript inferrence issue
             renderStack={renderStack}
             renderItem={(c, stack, visible) => {
-              const previewFields = getPreviewProperties(c)
-
-              const fields = previewFields.length
-                ? previewFields
-                : getExtraProperties(c)
+              const fields = getPreviewProperties(c)
 
               return (
                 <>
