@@ -182,7 +182,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               style={
                 !isBackground && photo
                   ? {
-                      height: holderName ? 86 : 21.5,
+                      height: holderName ? 90 : 21.5,
                       justifyContent: 'center',
                     }
                   : {}
@@ -191,7 +191,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               {photo && (
                 <DocumentPhoto
                   photo={photo}
-                  topPosition={backgroundImage || backgroundColor ? -44 : 0}
+                  topPosition={backgroundImage || backgroundColor ? -42 : 0}
                 />
               )}
               {holderName && (
