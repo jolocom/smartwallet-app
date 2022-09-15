@@ -41,9 +41,7 @@ export const useDocumentsScreen = () => {
 
   const handlePressMenu = async (c: Document) => {
     const favorites = await getFavorites()
-    const isDocumentFavorite = (id: string) =>
-      Boolean(favorites.find((d) => d === id))
-    const isFavorite = isDocumentFavorite(c.id)
+    const isFavorite = Boolean(favorites.find((id) => id === c.id))
 
     onHandleMore({
       id: c.id,
