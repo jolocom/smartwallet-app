@@ -25,7 +25,7 @@ export enum JoloTextWeight {
 
 type ellipseSuffix = {
   numOfLines: number
-  suffix?: string
+  suffix: string
 }
 
 export interface IJoloTextProps extends TextProps {
