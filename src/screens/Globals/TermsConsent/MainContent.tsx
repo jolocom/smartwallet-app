@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
+import { CheckmarkIconSmall } from '~/assets/svg'
+import Btn from '~/components/Btn'
+import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
+import useTermsConsent from '~/hooks/consent'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
+import { useAgent } from '~/hooks/sdk'
+import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import Option from '~/screens/LoggedIn/Settings/components/Option'
 import Section from '~/screens/LoggedIn/Settings/components/Section'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import Btn from '~/components/Btn'
-import useTermsConsent from '~/hooks/consent'
-import JoloText, { JoloTextKind } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
-import { CheckmarkIconSmall } from '~/assets/svg'
-import { useAgent } from '~/hooks/sdk'
-import { useGoBack, useRedirect } from '~/hooks/navigation'
-import { ScreenNames } from '~/types/screens'
-import { useToasts } from '~/hooks/toasts'
+import { JoloTextSizes } from '~/utils/fonts'
 import i18n from '~/translations/i18n'
+import { ScreenNames } from '~/types/screens'
 
 const legalTextConfig = [
   {
@@ -54,7 +55,11 @@ const MainContent: React.FC = () => {
         <JoloText customStyles={{ textAlign: 'left' }}>
           {t('TermsConsent.subheader')}
         </JoloText>
-        <Section.Block customStyles={{ height: 100, marginTop: 24 }}>
+        <Section.Block
+          customStyles={{
+            marginTop: 24,
+          }}
+        >
           {legalTextConfig.map((legalText) => {
             return (
               <Option

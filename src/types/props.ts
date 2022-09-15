@@ -11,7 +11,7 @@ export interface WithNavigation {
   navigation: NavigationProp<{}>
 }
 
-export type TextLayoutEvent = SyntheticEvent<{}, { lines: number[] }>
+export type TextLayoutEvent = SyntheticEvent<{}, { lines: { text: string }[] }>
 
 export interface IField {
   label: string

@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { SectionList, View, ViewToken } from 'react-native'
 import { FlowType, Interaction } from 'react-native-jolocom'
-
 import { useTabs } from '~/components/Tabs/context'
 import { useHistory } from '~/hooks/history'
+import { useToasts } from '~/hooks/toasts'
 import {
   useInteractionCreate,
   useInteractionUpdate,
 } from '~/hooks/interactions/listeners'
-import { IPreLoadedInteraction } from '~/types/records'
+import { IPreLoadedInteraction, IHistorySectionData } from '~/types/records'
 import { groupBySection } from '~/hooks/history/utils'
-import { useToasts } from '~/hooks/toasts'
 import { IRecordItemsListProps } from './types'
-import { IHistorySectionData } from '~/types/records'
 import { useRecord } from './context'
 import RecordItem from './components/RecordItem'
 import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import RecordHeader from './RecordHeader'
 import useTranslation from '~/hooks/useTranslation'
+import { LoaderTypes } from '~/modules/loader/types'
+import { LoaderAnimation } from '~/components/LoaderAnimation/LoaderAnimation'
 
 const ITEMS_PER_PAGE = 5
 
@@ -30,6 +30,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
   const [page, setPage] = useState(0)
   const [focusedItem, setFocusedItem] = useState<string | null>(null)
+  const [loaderType, setLoaderType] = useState(LoaderTypes.default)
 
   const {
     getInteractions: getInteractionTokens,
@@ -69,6 +70,19 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
 
   useEffect(() => {
     setNextPage()
+  }, [])
+
+  useEffect(() => {
+    getInteractionTokens(ITEMS_PER_PAGE, 0, flows)
+      .then((tokens) => {
+        setLoaderType(LoaderTypes.success)
+        setInteractions(tokens)
+      })
+      .catch((e) => {
+        console.log('An error occured while fetching Record list items', e)
+        setLoaderType(LoaderTypes.error)
+        scheduleErrorWarning(e)
+      })
   }, [])
 
   useEffect(() => {
@@ -139,43 +153,58 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
     [focusedItem, sections, JSON.stringify(setFocusedItem)],
   )
 
-  return sections.length ? (
-    <SectionList<IHistorySectionData>
-      testID={`record-list-${id}`}
-      ref={sectionListRef}
-      sections={sections}
-      showsVerticalScrollIndicator={false}
-      keyExtractor={(item, i) => `id:${item.lastUpdate}${i}`}
-      overScrollMode={'never'}
-      onEndReachedThreshold={0.9}
-      onViewableItemsChanged={handleSectionChange}
-      onEndReached={handleEndReached}
-      contentContainerStyle={{
-        marginTop: 32,
-        // NOTE: focused padding to allow the last item to be centered when toggled
-        paddingBottom: focusedItem ? 300 : 100,
-      }}
-      renderSectionHeader={({ section }) => {
-        if (section.title === sections[0].title) return null
-        return <RecordHeader title={section.title} />
-      }}
-      renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
-      renderItem={({ item, index, section }) => (
-        <RecordItem
-          key={`${index}-${section}-${item.lastUpdate}`}
-          isFocused={focusedItem === item.id}
-          id={item.id}
-          onDropdown={() => handleFocusItem(item.id, index, section.title)}
-          lastUpdated={item.lastUpdate}
+  return (
+    <>
+      {loaderType ? (
+        <LoaderAnimation
+          type={loaderType}
+          resetLoader={() => setLoaderType(LoaderTypes.empty)}
         />
+      ) : (
+        <>
+          {sections.length > 0 ? (
+            <SectionList<IHistorySectionData>
+              testID={`record-list-${id}`}
+              ref={sectionListRef}
+              sections={sections}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, i) => `id:${item.lastUpdate}${i}`}
+              overScrollMode={'never'}
+              onEndReachedThreshold={0.9}
+              onViewableItemsChanged={handleSectionChange}
+              onEndReached={handleEndReached}
+              contentContainerStyle={{
+                marginTop: 32,
+                // NOTE: focused padding to allow the last item to be centered when toggled
+                paddingBottom: focusedItem ? 300 : 100,
+              }}
+              renderSectionHeader={({ section }) => {
+                if (section.title === sections[0].title) return null
+                return <RecordHeader title={section.title} />
+              }}
+              renderSectionFooter={() => <View style={{ marginBottom: 36 }} />}
+              renderItem={({ item, index, section }) => (
+                <RecordItem
+                  key={`${index}-${section}-${item.lastUpdate}`}
+                  isFocused={focusedItem === item.id}
+                  id={item.id}
+                  onDropdown={() =>
+                    handleFocusItem(item.id, index, section.title)
+                  }
+                  lastUpdated={item.lastUpdate}
+                />
+              )}
+              stickySectionHeadersEnabled={false}
+            />
+          ) : (
+            <ScreenPlaceholder
+              title={t('History.placeholderHeader')}
+              description={t('History.placeholderSubheader')}
+            />
+          )}
+        </>
       )}
-      stickySectionHeadersEnabled={false}
-    />
-  ) : (
-    <ScreenPlaceholder
-      title={t('History.placeholderHeader')}
-      description={t('History.placeholderSubheader')}
-    />
+    </>
   )
 }
 

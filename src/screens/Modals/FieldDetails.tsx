@@ -153,6 +153,9 @@ const FieldDetails = () => {
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
   const { id, backgroundColor = Colors.mainBlack } = route.params
   const document = useSelector(getDocumentById(id))!
+
+  const [numOfLines, setNumOfLines] = useState(1)
+
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
   const fields = [...document.properties, ...getExtraProperties(document)]
@@ -173,6 +176,12 @@ const FieldDetails = () => {
     Boolean(document.style.contextIcons?.length)
 
   const { top } = useSafeArea()
+
+  const getNumOfLines = (e: TextLayoutEvent) => {
+    const { lines } = e.nativeEvent
+    setNumOfLines(lines.length)
+  }
+
   return (
     <View
       style={{
@@ -195,8 +204,9 @@ const FieldDetails = () => {
                 text={document.name}
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
-                  ...(holderPhoto && !showIconContainer && { marginTop: 30 }),
-                  paddingBottom: 12,
+                  ...(holderPhoto &&
+                    !showIconContainer &&
+                    numOfLines === 1 && { marginTop: 26 }),
                   paddingTop: !showIconContainer ? 18 : 0,
                 }}
               >
@@ -205,8 +215,11 @@ const FieldDetails = () => {
                     ...styles.fieldText,
                     lineHeight: BP({ xsmall: 24, default: 28 }),
                     marginLeft: 12,
+                    top: holderPhoto && numOfLines === 1 && -24,
                   }}
                   numberOfLines={2}
+                  // @ts-expect-error
+                  onTextLayout={getNumOfLines}
                   kind={JoloTextKind.title}
                   size={JoloTextSizes.middle}
                   color={Colors.white90}
@@ -218,10 +231,10 @@ const FieldDetails = () => {
               {showIconContainer && (
                 <View
                   style={{
-                    paddingTop: 18,
                     paddingBottom: 24,
                     flexDirection: 'row',
                     marginLeft: 12,
+                    bottom: -8,
                   }}
                 >
                   {prefechedIcon && <Icon url={prefechedIcon} />}
@@ -281,7 +294,7 @@ const styles = StyleSheet.create({
     borderRadius: IMAGE_SIZE / 2,
     position: 'absolute',
     right: 12,
-    bottom: 26,
+    bottom: 16,
   },
   fieldContainer: {
     paddingVertical: BP({

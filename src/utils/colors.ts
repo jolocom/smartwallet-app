@@ -75,4 +75,5 @@ export enum Colors {
   blue = '#0084ff',
   corn = '#E3B705',
   yellow = '#FFCC01',
+  azureRadiance = '#0A84FF',
 }

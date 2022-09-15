@@ -218,7 +218,7 @@
     },
     "Interaction": {
         "cancelBtn": "Ignorieren",
-        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Sind Sie sicher, dass Sie die angefragten Daten teilen möchten?",
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Seien Sie achtsam, bevor Sie Ihre Daten teilen.",
         "redirectTitle": "Fertig!",
         "redirectDescription": "Sie werden zu ${serviceName} weitergeleitet.",
         "redirectBtn": "Weiter"

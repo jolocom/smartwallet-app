@@ -63,12 +63,7 @@ export const CredentialShareBAS = () => {
   const handleShare = useCredentialShareSubmit()
   const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
-  const {
-    getExtraProperties,
-    getPreviewProperties,
-    getHolderName,
-    getHolderPhoto,
-  } = useDocuments()
+  const { getPreviewProperties, getHolderName, getHolderPhoto } = useDocuments()
 
   /* We are preselecting a credential that is requested */
   useEffect(() => {
@@ -91,10 +86,7 @@ export const CredentialShareBAS = () => {
     else if (document) {
       const { name, issuer } = document
 
-      let previewFields = getPreviewProperties(document)
-      previewFields = previewFields.length
-        ? previewFields
-        : getExtraProperties(document)
+      const previewFields = getPreviewProperties(document)
 
       return (
         <>
@@ -167,12 +159,7 @@ const CredentialShareFAS = () => {
     serviceUrl,
   } = useSelector(getServiceDescription)
 
-  const {
-    getExtraProperties,
-    getPreviewProperties,
-    getHolderName,
-    getHolderPhoto,
-  } = useDocuments()
+  const { getPreviewProperties, getHolderName, getHolderPhoto } = useDocuments()
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
@@ -192,10 +179,7 @@ const CredentialShareFAS = () => {
         itemWidth={SCREEN_WIDTH - 48}
         customStyles={{ marginLeft: 0 }}
         renderItem={({ item: cred }) => {
-          let previewFields = getPreviewProperties(cred)
-          previewFields = previewFields.length
-            ? previewFields
-            : getExtraProperties(cred)
+          const previewFields = getPreviewProperties(cred)
 
           const { name, type, id, issuer } = cred
           const specificType = type[type.length - 1]

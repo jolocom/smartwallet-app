@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // @ts-expect-error
 import { enabled as enablePrivacyOverlay } from 'react-native-privacy-snapshot'
+import { useNavigation } from '@react-navigation/native'
 
 import { useInitDocuments } from '~/hooks/documents'
 import { setAppLocked } from '~/modules/account/actions'
@@ -10,6 +11,7 @@ import {
   getIsTermsConsentOutdated,
   isLocalAuthSet,
 } from '~/modules/account/selectors'
+import { getInteractionType } from '~/modules/interaction/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { ScreenNames } from '~/types/screens'
@@ -19,6 +21,9 @@ import { useAppBackgroundChange } from './useAppState'
 export const useInitApp = () => {
   const lockState = useInitLock()
   const { initialize: initDocuments } = useInitDocuments()
+  const isInteracting = useSelector(getInteractionType)
+  const isAppLocked = useSelector(getIsAppLocked)
+  const navigation = useNavigation()
 
   useInitAusweis()
   useInitTerms()
@@ -29,6 +34,12 @@ export const useInitApp = () => {
 
     initDocuments()
   }, [])
+
+  useEffect(() => {
+    if (!isAppLocked && isInteracting) {
+      navigation.navigate(ScreenNames.Interaction)
+    }
+  }, [isAppLocked, isInteracting])
 
   return { ...lockState }
 }

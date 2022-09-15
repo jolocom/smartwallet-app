@@ -31,6 +31,7 @@ export const useFavoriteDocuments = () => {
   }
 
   const addFavorite = async (id: string) => {
+    const favorites = await getFavorites()
     if (favorites.length > MAX_FAVORITES - 1) {
       scheduleInfo({
         title: t('Toasts.documentsFavoritesLimitTitle'),
@@ -40,7 +41,7 @@ export const useFavoriteDocuments = () => {
       return
     }
 
-    const updatedFavorites = [...favorites.map((d) => d.id), id]
+    const updatedFavorites = [...favorites.map((docId) => docId), id]
 
     await settings.set(SettingKeys.favoriteDocuments, {
       all: updatedFavorites,
