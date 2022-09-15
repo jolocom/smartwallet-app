@@ -93,6 +93,8 @@ export const useDocuments = () => {
           prop.key !== ClaimKeys.givenName &&
           prop.key !== ClaimKeys.familyName,
       )
+    } else {
+      previewFields = getExtraProperties(doc)
     }
 
     return previewFields
