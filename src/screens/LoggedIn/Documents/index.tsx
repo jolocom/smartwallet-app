@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo, useLayoutEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -50,7 +50,7 @@ const Documents: React.FC = () => {
 
   const dispatch = useDispatch()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!favorites.length) {
       dispatch(setOpenedStack(DocumentStacks.All))
     } else {
