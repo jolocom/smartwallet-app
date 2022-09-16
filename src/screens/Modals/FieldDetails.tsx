@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native'
 import { DrivingPrivilege } from 'react-native-mdl'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -30,6 +31,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../LoggedIn/Main'
 import { OpenIcon } from '~/assets/svg'
+import { useGoBack } from '~/hooks/navigation'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -198,6 +200,48 @@ const FieldDetails = () => {
 
   const fields = [...document.properties, ...getExtraProperties(document)]
 
+  const vehicleFields =
+    mdlDocument?.properties &&
+    JSON.parse(
+      mdlDocument?.properties.filter((f) => f.key === '$.driving_privileges')[0]
+        .value,
+    )
+
+  console.log({ vehicleFields })
+
+  const catergories = [
+    {
+      title: 'Moped and Motorcycle',
+      icon: null,
+      data: {
+        'Vehicle Code': 'AM',
+        'Issue Date': '02.02.2002',
+        Restrictions: '-',
+        'Expiry Date': '02.02.2002',
+      },
+    },
+    {
+      title: 'Passenger Car',
+      icon: null,
+      data: {
+        'Vehicle Code': 'AM',
+        'Issue Date': '02.02.2002',
+        Restrictions: '-',
+        'Expiry Date': '02.02.2002',
+      },
+    },
+    {
+      title: 'Tractor and Forklift',
+      icon: null,
+      data: {
+        'Vehicle Code': 'AM',
+        'Issue Date': '02.02.2002',
+        Restrictions: '-',
+        'Expiry Date': '02.02.2002',
+      },
+    },
+  ]
+
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
   const handleLayout = () => {
@@ -222,14 +266,58 @@ const FieldDetails = () => {
 
   const Open = () => (
     <View style={styles.openIconContainer}>
+      {/* TODO rename to PopOutIcon */}
       <OpenIcon />
     </View>
   )
 
+  const [showPrivileges, setShowPrivileges] = useState(false)
+
+  const goBack = useGoBack()
+
+  const renderPrivileges = (vehicleFields) =>
+    catergories.map((field, i) => {
+      return (
+        <React.Fragment key={i}>
+          <TouchableOpacity
+            style={styles.fieldContainer}
+            onLayout={handleLayout}
+          >
+            <JoloText
+              customStyles={styles.fieldText}
+              size={JoloTextSizes.mini}
+              color={Colors.osloGray}
+            >
+              {field.title}
+            </JoloText>
+            <View style={{ justifyContent: 'space-between' }}>
+              {field.data.map((f, i) => (
+                <View>
+                  {Object.keys(f)} {f}
+                </View>
+              ))}
+            </View>
+          </TouchableOpacity>
+          {i !== Object.keys(fields).length - 1 && (
+            <View style={styles.divider} />
+          )}
+        </React.Fragment>
+      )
+    })
+
   const renderField = (fields: DocumentProperty[]) =>
     fields.map((field, i) => (
       <React.Fragment key={i}>
-        <View style={styles.fieldContainer} onLayout={handleLayout}>
+        <TouchableOpacity
+          style={styles.fieldContainer}
+          onLayout={handleLayout}
+          onPress={
+            field.key === '$.driving_privileges'
+              ? () => setShowPrivileges(true)
+              : null
+          }
+          activeOpacity={0.6}
+        >
           <JoloText
             customStyles={styles.fieldText}
             size={JoloTextSizes.mini}
@@ -242,7 +330,7 @@ const FieldDetails = () => {
             mime_type={field.mime_type}
           />
           {field.key === '$.driving_privileges' && <Open />}
-        </View>
+        </TouchableOpacity>
         {i !== Object.keys(fields).length - 1 && (
           <View style={styles.divider} />
         )}
@@ -261,7 +349,10 @@ const FieldDetails = () => {
         renderHeader={() => (
           <Collapsible.Header
             customStyles={{ backgroundColor }}
-            type={NavHeaderType.Close}
+            type={!showPrivileges ? NavHeaderType.Close : NavHeaderType.Back}
+            onPress={() => {
+              !showPrivileges ? goBack() : setShowPrivileges(false)
+            }}
           />
         )}
         renderScroll={() => (
@@ -319,7 +410,11 @@ const FieldDetails = () => {
                   marginBottom: 16,
                 }}
               >
-                {mdlFields ? renderField(mdlFields) : renderField(fields)}
+                {showPrivileges
+                  ? renderPrivileges(vehicleFields)
+                  : mdlFields
+                  ? renderField(mdlFields)
+                  : renderField(fields)}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
