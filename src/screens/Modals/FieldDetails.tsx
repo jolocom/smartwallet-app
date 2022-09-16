@@ -219,6 +219,28 @@ const FieldDetails = () => {
     setNumOfLines(lines.length)
   }
 
+  const renderField = (fields: DocumentProperty[]) =>
+    fields.map((field, i) => (
+      <React.Fragment key={i}>
+        <View style={styles.fieldContainer} onLayout={handleLayout}>
+          <JoloText
+            customStyles={styles.fieldText}
+            size={JoloTextSizes.mini}
+            color={Colors.osloGray}
+          >
+            {field.label}
+          </JoloText>
+          <FieldValue
+            value={field.value as string}
+            mime_type={field.mime_type}
+          />
+        </View>
+        {i !== Object.keys(fields).length - 1 && (
+          <View style={styles.divider} />
+        )}
+      </React.Fragment>
+    ))
+
   return (
     <View
       style={{
@@ -289,53 +311,7 @@ const FieldDetails = () => {
                   marginBottom: 16,
                 }}
               >
-                {isMdl
-                  ? mdlFields.map((field, i) => (
-                      <React.Fragment key={i}>
-                        <View
-                          style={styles.fieldContainer}
-                          onLayout={handleLayout}
-                        >
-                          <JoloText
-                            customStyles={styles.fieldText}
-                            size={JoloTextSizes.mini}
-                            color={Colors.osloGray}
-                          >
-                            {field.label}
-                          </JoloText>
-                          <FieldValue
-                            value={field.value as string}
-                            mime_type={field.mime_type}
-                          />
-                        </View>
-                        {i !== Object.keys(fields).length - 1 && (
-                          <View style={styles.divider} />
-                        )}
-                      </React.Fragment>
-                    ))
-                  : fields.map((field, i) => (
-                      <React.Fragment key={i}>
-                        <View
-                          style={styles.fieldContainer}
-                          onLayout={handleLayout}
-                        >
-                          <JoloText
-                            customStyles={styles.fieldText}
-                            size={JoloTextSizes.mini}
-                            color={Colors.osloGray}
-                          >
-                            {field.label}
-                          </JoloText>
-                          <FieldValue
-                            value={field.value as string}
-                            mime_type={field.mime_type}
-                          />
-                        </View>
-                        {i !== Object.keys(fields).length - 1 && (
-                          <View style={styles.divider} />
-                        )}
-                      </React.Fragment>
-                    ))}
+                {mdlFields ? renderField(mdlFields) : renderField(fields)}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
