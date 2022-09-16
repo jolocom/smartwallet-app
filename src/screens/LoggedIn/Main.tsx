@@ -189,6 +189,7 @@ const Main: React.FC = () => {
       {/* Driving License screens */}
 
       <MainStack.Screen
+        options={{ ...transparentModalFadeOptions, ...screenDisableGestures }}
         name={ScreenNames.DrivingLicenseForm}
         component={DrivingLicenseForm}
       />

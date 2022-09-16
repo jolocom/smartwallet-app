@@ -1,22 +1,20 @@
 import { useEffect } from 'react'
+import { Linking } from 'react-native'
 import branch, { BranchParams } from 'react-native-branch'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { SWErrorCodes } from '~/errors/codes'
-import {
-  getCurrentLanguage,
-  getIsBranchSubscribed,
-} from '~/modules/account/selectors'
 import { setIsBranchSubscribed } from '~/modules/account/actions'
+import { getIsBranchSubscribed } from '~/modules/account/selectors'
 import { setDeeplinkConfig } from '~/modules/interaction/actions'
+import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
+import { ScreenNames } from '~/types/screens'
+
 import { useInteractionStart } from './interactions/handlers'
 import { useLoader } from './loader'
-import { useToasts } from './toasts'
-import { Linking } from 'react-native'
-import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
 import { useRedirect } from './navigation'
-import { ScreenNames } from '~/types/screens'
+import { useToasts } from './toasts'
 
 export enum DeeplinkParams {
   redirectUrl = 'redirectUrl',
@@ -38,7 +36,6 @@ export const useDeeplinkInteractions = () => {
   const { startInteraction } = useInteractionStart()
   const { scheduleErrorWarning } = useToasts()
   const loader = useLoader()
-  const currentLanguage = useSelector(getCurrentLanguage)
   const dispatch = useDispatch()
   const isBranchSubscribed = useSelector(getIsBranchSubscribed)
   const { personalizeLicense } = useDrivingLicense()
@@ -89,11 +86,12 @@ export const useDeeplinkInteractions = () => {
 
   const handleDrivingLicensePersonalization = (qrCodeString: string) => {
     if (qrCodeString.startsWith('iso23220-3-sed:')) {
-      personalizeLicense(qrCodeString, (requests) => {
-        redirect(ScreenNames.DrivingLicenseForm, { requests })
-      })
+      personalizeLicense(qrCodeString, (requests) =>
+        redirect(ScreenNames.DrivingLicenseForm, { requests }),
+      )
     }
   }
+
   useEffect(() => {
     //NOTE: used for Driving Licenses
     Linking.getInitialURL().then((url) => {
@@ -103,7 +101,6 @@ export const useDeeplinkInteractions = () => {
     })
 
     Linking.addListener('url', (e) => {
-      console.log({ e })
       if (e.data) {
         handleDrivingLicensePersonalization(e.data)
       }

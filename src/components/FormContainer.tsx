@@ -17,6 +17,7 @@ interface Props {
   description: string
   onSubmit: () => Promise<void>
   isSubmitDisabled?: boolean
+  onCancel?: () => void
 }
 
 const FormContainer: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const FormContainer: React.FC<Props> = ({
   description,
   onSubmit,
   children,
+  onCancel,
   isSubmitDisabled = false,
 }) => {
   const { t } = useTranslation()
@@ -37,7 +39,7 @@ const FormContainer: React.FC<Props> = ({
   }
 
   const handleSubmit = () => {
-    onSubmit().catch(scheduleErrorWarning)
+    onSubmit()?.catch(scheduleErrorWarning)
   }
 
   const getHeaderTitleOpacity = (
@@ -74,7 +76,7 @@ const FormContainer: React.FC<Props> = ({
               height: 50,
             }}
           >
-            <TouchableOpacity onPress={dismissScreen}>
+            <TouchableOpacity onPress={onCancel ? onCancel : dismissScreen}>
               <JoloText
                 kind={JoloTextKind.title}
                 size={JoloTextSizes.mini}
