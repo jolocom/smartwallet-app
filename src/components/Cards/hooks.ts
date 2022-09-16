@@ -1,5 +1,5 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
 import React, { useMemo, useRef, useState } from 'react'
+import { DocumentProperty } from '~/hooks/documents/types'
 import { TextLayoutEvent } from '~/types/props'
 
 /**
@@ -98,7 +98,7 @@ export const useCalculateFieldLines = (maxLinesPerField = 2) => {
  * and how many field lines in field value are displayed. Should it thould beused in FieldCalculator component
  */
 export const usePruneFields = (
-  fields: Array<DisplayVal>,
+  fields: Array<DocumentProperty>,
   maxNrFields: number,
   maxNrFieldLines: number,
 ) => {

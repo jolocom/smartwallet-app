@@ -6,6 +6,7 @@ export enum SettingKeys {
   pinNrAttemptsLeft = 'pinNrAttemptsLeft',
   countdown = 'countdown',
   ausweisSkipCompatibility = 'ausweisSkipCompatibility',
+  favoriteDocuments = 'favoriteDocuments'
 }
 
 const handleRetrieveSettingValue = (agent: Agent) => {

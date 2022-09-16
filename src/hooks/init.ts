@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { enabled as enablePrivacyOverlay } from 'react-native-privacy-snapshot'
 import { useNavigation } from '@react-navigation/native'
 
+import { useInitDocuments } from '~/hooks/documents'
 import { setAppLocked } from '~/modules/account/actions'
 import {
   getIsAppLocked,
@@ -19,6 +20,7 @@ import { useAppBackgroundChange } from './useAppState'
 
 export const useInitApp = () => {
   const lockState = useInitLock()
+  const { initialize: initDocuments } = useInitDocuments()
   const isInteracting = useSelector(getInteractionType)
   const isAppLocked = useSelector(getIsAppLocked)
   const navigation = useNavigation()
@@ -29,6 +31,8 @@ export const useInitApp = () => {
   useEffect(() => {
     // @ts-ignore no types for now
     enablePrivacyOverlay(true)
+
+    initDocuments()
   }, [])
 
   useEffect(() => {

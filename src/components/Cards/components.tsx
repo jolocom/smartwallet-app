@@ -1,5 +1,4 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import {
   Image,
   ImageBackground,
@@ -11,14 +10,18 @@ import {
   ViewStyle,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import { PurpleTickSuccess } from '~/assets/svg'
+import { FavoriteHeartIcon, PurpleTickSuccess } from '~/assets/svg'
+import { DocumentProperty } from '~/hooks/documents/types'
+import useImagePrefetch from '~/hooks/useImagePrefetch'
+import useTranslation from '~/hooks/useTranslation'
 import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import JoloText from '../JoloText'
+import { DOCUMENT_HEADER_HEIGHT } from './consts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
-import useImagePrefetch from '~/hooks/useImagePrefetch'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -29,8 +32,7 @@ export const FieldsCalculator: React.FC<{
   > | null
 
 export const CardMoreBtn: React.FC<{
-  onPress: () => void
-  positionStyles: Partial<Pick<ViewStyle, 'left' | 'right' | 'top' | 'bottom'>>
+  onPress?: () => void
 }> = ({ onPress }) => (
   <ScaledView
     scaleStyle={styles.dotsContainerScaled}
@@ -49,39 +51,52 @@ export const CardMoreBtn: React.FC<{
 export const DocumentFooter: React.FC<{
   leftIcons?: string[]
   renderRightIcon?: () => JSX.Element
+  expired?: boolean
   style?: StyleProp<ViewStyle>
-}> = ({ renderRightIcon, leftIcons, style = {} }) => {
+}> = ({ renderRightIcon, leftIcons, style = {}, expired = false }) => {
+  const { t } = useTranslation()
+
   return (
     <ScaledView
       style={[styles.footerContainer, style]}
       scaleStyle={styles.footerContainerScaled}
     >
       <View style={styles.footerBorder} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-          {leftIcons &&
-            leftIcons.map((icon, i) => (
-              <ScaledView
-                key={i}
-                scaleStyle={{ width: 40, height: 30 }}
-                style={{ marginRight: 10 }}
-              >
-                <Image
-                  source={{ uri: icon }}
-                  resizeMode="contain"
-                  style={{ width: '100%', height: '100%', borderRadius: 4.2 }}
-                />
-              </ScaledView>
-            ))}
-        </View>
-        <View>{renderRightIcon && renderRightIcon()}</View>
+      <View style={styles.footerContent}>
+        {expired ? (
+          <View style={styles.footerExpiredContainer}>
+            <JoloText
+              customStyles={{ fontFamily: Fonts.Medium }}
+              color={Colors.mainBlack}
+            >
+              {t('DocumentCard.expired')}
+            </JoloText>
+          </View>
+        ) : (
+          <>
+            <View style={styles.footerIconsContainer}>
+              {leftIcons &&
+                leftIcons.map((icon, i) => (
+                  <ScaledView
+                    key={i}
+                    scaleStyle={{ width: 30, height: 30 }}
+                    style={{ marginRight: 10 }}
+                  >
+                    <Image
+                      source={{ uri: icon }}
+                      resizeMode="cover"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 4.2,
+                      }}
+                    />
+                  </ScaledView>
+                ))}
+            </View>
+            <View>{renderRightIcon && renderRightIcon()}</View>
+          </>
+        )}
       </View>
     </ScaledView>
   )
@@ -89,66 +104,101 @@ export const DocumentFooter: React.FC<{
 
 export const DocumentPhoto: React.FC<{
   photo: string
-  verticalPosition?: number
-}> = ({ photo, verticalPosition = -30 }) => (
-  <View>
-    <ScaledView
-      scaleStyle={[styles.photoContainerScaled, { bottom: verticalPosition }]}
-      style={styles.photoContainer}
-    >
-      <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
-    </ScaledView>
-  </View>
+  topPosition?: number
+}> = ({ photo, topPosition = 0 }) => (
+  <ScaledView
+    scaleStyle={[styles.photoContainerScaled, { top: topPosition }]}
+    style={styles.photoContainer}
+  >
+    <Image resizeMode="cover" style={styles.photo} source={{ uri: photo }} />
+  </ScaledView>
 )
 
 export const DocumentHeader: React.FC<{
   name: string
   icon?: string
-  onPressMenu?: () => void
   selected?: boolean
-}> = ({ name, icon, onPressMenu, selected }) => {
+  backgroundImage?: string
+  backgroundColor?: string
+  truncateName?: boolean
+}> = ({
+  name,
+  icon,
+  selected,
+  backgroundColor,
+  backgroundImage,
+  truncateName,
+}) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
   const prefetchedIcon = useImagePrefetch(icon)
 
+  const renderBackground = (children: () => React.ReactChild) => {
+    if (backgroundImage) {
+      return (
+        <DocumentBackgroundImage image={backgroundImage}>
+          {children()}
+        </DocumentBackgroundImage>
+      )
+    } else if (backgroundColor) {
+      return (
+        <DocumentBackgroundColor color={backgroundColor}>
+          {children()}
+        </DocumentBackgroundColor>
+      )
+    } else {
+      return <GradientSeparator>{children()}</GradientSeparator>
+    }
+  }
+
   return (
-    <View style={styles.headerContainer}>
-      {prefetchedIcon && (
+    <View>
+      {renderBackground(() => (
         <ScaledView
           scaleStyle={{
-            width: 32,
-            height: 32,
-            marginRight: 10,
+            height: DOCUMENT_HEADER_HEIGHT,
+            padding: 16,
           }}
+          style={styles.headerContainer}
         >
-          <Image
-            resizeMode="cover"
-            style={[styles.photo, { borderRadius: 4.2 }]}
-            source={{ uri: prefetchedIcon }}
-          />
+          {prefetchedIcon && (
+            <ScaledView
+              scaleStyle={{
+                width: 32,
+                height: 32,
+                marginRight: 10,
+              }}
+            >
+              <Image
+                resizeMode="cover"
+                style={[styles.photo, { borderRadius: 4.2 }]}
+                source={{ uri: prefetchedIcon }}
+              />
+            </ScaledView>
+          )}
+          <ScaledView
+            scaleStyle={styles.credentialName}
+            style={{ flex: 1, flexDirection: 'row' }}
+          >
+            <ScaledText
+              // @ts-expect-error
+              onTextLayout={handleCredentialNameTextLayout}
+              numberOfLines={1}
+              scaleStyle={styles.credentialName}
+              style={{
+                ...styles.mediumText,
+                paddingRight: truncateName ? 24 : 0,
+              }}
+            >
+              {name}
+            </ScaledText>
+            <View style={{ flex: 1 }} />
+          </ScaledView>
+          {typeof selected !== 'undefined' && (
+            <SelectedToggle selected={selected} />
+          )}
         </ScaledView>
-      )}
-      <ScaledText
-        // @ts-expect-error
-        onTextLayout={handleCredentialNameTextLayout}
-        numberOfLines={1}
-        scaleStyle={styles.credentialName}
-        style={[styles.mediumText, { flex: 1 }]}
-      >
-        {name}
-      </ScaledText>
-      {typeof selected !== 'undefined' && (
-        <SelectedToggle selected={selected} />
-      )}
-      {onPressMenu && (
-        <CardMoreBtn
-          onPress={onPressMenu}
-          positionStyles={{
-            top: 18,
-            right: 17,
-          }}
-        />
-      )}
+      ))}
     </View>
   )
 }
@@ -159,19 +209,32 @@ export const DocumentHolderName: React.FC<{
   cropName?: boolean
   numberOfLines?: number
 }> = ({ name, onLayout, cropName = false, numberOfLines = 2 }) => {
+  const [renderedLines, setRenderedLines] = useState<number>()
+
+  const handleLayout = (e: TextLayoutEvent) => {
+    if (!renderedLines) {
+      const lines = e.nativeEvent.lines.length
+      setRenderedLines(lines)
+    }
+    onLayout && onLayout(e)
+  }
+
   return (
     <ScaledView
       scaleStyle={{
         paddingLeft: 24,
         marginRight: cropName ? 116 : 0,
+        marginVertical: 8,
       }}
     >
       <ScaledText
         // @ts-expect-error
-        onTextLayout={onLayout}
+        onTextLayout={handleLayout}
         numberOfLines={numberOfLines}
+        scaleStyle={
+          renderedLines === 1 ? styles.holderName : styles.holderNameSmall
+        }
         style={styles.mediumText}
-        scaleStyle={styles.holderName}
       >
         {name}
       </ScaledText>
@@ -181,7 +244,7 @@ export const DocumentHolderName: React.FC<{
 
 export const DocumentFields: React.FC<{
   // NOTE: fields to be (potentially) displayed on the card
-  fields: DisplayVal[]
+  fields: DocumentProperty[]
   // NOTE: (scaled) styles for the field label
   labelScaledStyle: TextStyle
   // NOTE: (scaled) styles for the field value
@@ -199,7 +262,9 @@ export const DocumentFields: React.FC<{
   // NOTE: allow fields taking up available space if possible
   allowOverflowingFields?: boolean
   // NOTE: called after calculating the fields that will be displayed
-  onFinishCalculation?: (displayedFields: DisplayVal[]) => void
+  onFinishCalculation?: (displayedFields: DocumentProperty[]) => void
+  // NOTE: allow extra fields next to the photo if no holderName is present
+  shoudIsolateFirstRow?: boolean
 }> = ({
   fields,
   maxLines,
@@ -211,21 +276,25 @@ export const DocumentFields: React.FC<{
   nrOfColumns = 2,
   onFinishCalculation,
   allowOverflowingFields = true,
+  shoudIsolateFirstRow = false,
 }) => {
-  const maxFields = maxRows * 2
+  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 1 : maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
     fields,
     maxFields,
     maxLines,
   )
 
+  const secondaryField = shoudIsolateFirstRow ? displayedFields.shift() : null
+
   let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
   // we have to cut it to the max nr of rows.
+
   rows = rows.splice(0, maxRows)
 
   useEffect(() => {
-    const fields = rows.reduce<DisplayVal[]>((acc, row) => {
+    const fields = rows.reduce<DocumentProperty[]>((acc, row) => {
       acc = [...acc, ...row]
 
       return acc
@@ -234,11 +303,11 @@ export const DocumentFields: React.FC<{
     onFinishCalculation && onFinishCalculation(fields)
   }, [rows])
 
-  const renderField = (field: DisplayVal) => {
+  const renderField = (field: DocumentProperty) => {
     return (
       <ScaledView
         key={field.key}
-        style={{ flex: 1 }}
+        style={{ flex: !shoudIsolateFirstRow ? 1 : undefined }}
         scaleStyle={{ paddingRight: 12 }}
       >
         <ScaledText
@@ -286,12 +355,24 @@ export const DocumentFields: React.FC<{
             alignItems: 'flex-start',
           }}
         >
+          {secondaryField && (
+            <ScaledView
+              style={{
+                flexDirection: 'column',
+                maxWidth: '65%',
+              }}
+              scaleStyle={{
+                marginVertical: 14,
+              }}
+            >
+              {renderField(secondaryField)}
+            </ScaledView>
+          )}
           {rows.map((row, idx) => (
             <ScaledView
               key={idx}
               style={{
                 flexDirection: 'row',
-                alignItems: 'flex-start',
               }}
               scaleStyle={{
                 marginTop: idx === 0 ? 0 : rowDistance,
@@ -309,32 +390,60 @@ export const DocumentFields: React.FC<{
   )
 }
 
-const BackgroundOpacity = () => (
+const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
-    colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
+    colors={[Colors.randomGrey, Colors.white00]}
     style={{ flex: 1 }}
-  />
+  >
+    {children}
+  </LinearGradient>
 )
+
+export const GradientSeparator: React.FC = ({ children }) => {
+  return (
+    <ScaledView scaleStyle={{ height: DOCUMENT_HEADER_HEIGHT }}>
+      <LinearGradient
+        colors={[Colors.randomGrey, Colors.white]}
+        style={{ flex: 1 }}
+      >
+        {children}
+      </LinearGradient>
+    </ScaledView>
+  )
+}
 
 export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
   image,
+  children,
 }) => (
-  <ScaledView scaleStyle={{ height: 112 }} style={{ width: '100%' }}>
+  <ScaledView
+    scaleStyle={{ height: 84 + DOCUMENT_HEADER_HEIGHT }}
+    style={{ width: '100%' }}
+  >
     <ImageBackground
       style={{ width: '100%', height: '100%' }}
       source={{ uri: image }}
     >
-      <BackgroundOpacity />
+      <BackgroundOpacity>{children}</BackgroundOpacity>
     </ImageBackground>
   </ScaledView>
 )
 
 export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
   color,
+  children,
 }) => (
-  <View style={{ height: 84, width: '100%', backgroundColor: color }}>
-    <BackgroundOpacity />
-  </View>
+  <ScaledView
+    scaleStyle={{
+      height: 84 + DOCUMENT_HEADER_HEIGHT,
+    }}
+    style={{
+      width: '100%',
+      backgroundColor: color,
+    }}
+  >
+    <BackgroundOpacity>{children}</BackgroundOpacity>
+  </ScaledView>
 )
 
 export const SelectedToggle: React.FC<{ selected: boolean }> = ({
@@ -354,15 +463,37 @@ export const SelectedToggle: React.FC<{ selected: boolean }> = ({
   )
 }
 
+export const CardFavorite = () => (
+  <View style={styles.favoriteContainer}>
+    <FavoriteHeartIcon />
+  </View>
+)
+
 const styles = StyleSheet.create({
-  dotsContainerScaled: {
-    paddingVertical: 3,
-    width: 30,
-    height: 30,
+  favoriteContainer: {
+    position: 'absolute',
+    top: -10,
+    right: 6,
+    height: 32,
+    width: 32,
+    alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+  },
+  dotsContainerScaled: {
+    top: 18,
+    right: 18,
+    paddingVertical: 3,
+    width: 20,
+    height: 30,
   },
   dotsContainer: {
+    justifyContent: 'center',
+    zIndex: 99,
+    position: 'absolute',
     height: '100%',
+    borderRadius: 8,
   },
   scaledDots: {
     flex: 1,
@@ -387,11 +518,15 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 26,
     fontWeight: '500',
-    paddingRight: 12,
+    paddingHorizontal: 2,
   },
   holderName: {
     fontSize: 24,
     lineHeight: 28,
+  },
+  holderNameSmall: {
+    fontSize: 22,
+    lineHeight: 26,
   },
   photoContainer: {
     position: 'absolute',
@@ -405,11 +540,9 @@ const styles = StyleSheet.create({
     borderRadius: 41,
   },
   headerContainer: {
-    height: 68,
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 16,
   },
   photo: {
     width: '100%',
@@ -427,6 +560,22 @@ const styles = StyleSheet.create({
     width: '100%',
     borderTopWidth: 1,
     borderTopColor: '#D8D8D8',
+  },
+  footerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100%',
+  },
+  footerExpiredContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: Colors.yellow,
+    borderRadius: 9,
+  },
+  footerIconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
   regularText: {
     fontFamily: Fonts.Regular,

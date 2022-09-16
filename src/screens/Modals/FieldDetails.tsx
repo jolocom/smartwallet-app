@@ -1,34 +1,37 @@
-import React, { useState, useRef } from 'react'
+import Clipboard from '@react-native-clipboard/clipboard'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import React, { useRef, useState } from 'react'
 import {
-  View,
   Image,
+  LayoutAnimation,
   StyleSheet,
   TouchableOpacity,
-  LayoutAnimation,
+  View,
 } from 'react-native'
-import { useRoute, RouteProp } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
-import Clipboard from '@react-native-clipboard/clipboard'
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
-import { Colors } from '~/utils/colors'
+import { useSelector } from 'react-redux'
 import Block from '~/components/Block'
-import BP from '~/utils/breakpoints'
-import ScreenContainer from '~/components/ScreenContainer'
-import { NavHeaderType } from '~/components/NavigationHeader'
-import { MainStackParamList } from '../LoggedIn/Main'
-import { ScreenNames } from '~/types/screens'
-import { useToggleExpand } from '~/hooks/ui'
 import Collapsible from '~/components/Collapsible'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { NavHeaderType } from '~/components/NavigationHeader'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useDocuments } from '~/hooks/documents'
+import { PropertyMimeType } from '~/hooks/documents/types'
 import { useToasts } from '~/hooks/toasts'
-import useTranslation from '~/hooks/useTranslation'
-import { TextLayoutEvent } from '~/types/props'
-import { ClaimMimeType } from '@jolocom/protocol-ts'
+import { useToggleExpand } from '~/hooks/ui'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
+import useTranslation from '~/hooks/useTranslation'
+import { getDocumentById } from '~/modules/credentials/selectors'
+import { TextLayoutEvent } from '~/types/props'
+import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
+import { MainStackParamList } from '../LoggedIn/Main'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
-type FieldValueProps = { value: string; mime_type: ClaimMimeType }
+type FieldValueProps = { value: string; mime_type: PropertyMimeType }
 
 const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   const { scheduleInfo } = useToasts()
@@ -37,8 +40,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(5)
   const [seeMoreBtnVisible, setSeeMoreBtnVisibility] = useState(false)
 
-  // FIXME: Some weird eslint issue here
-  const isImageField = mime_type === ClaimMimeType.image_png
+  const isImageField = mime_type === PropertyMimeType.image_png
 
   const { isExpanded, onToggleExpand } = useToggleExpand({
     onExpand: () => {
@@ -149,16 +151,16 @@ const Icon = ({ url }: { url: string }) => {
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-  const {
-    title,
-    photo,
-    fields,
-    issuerIcon,
-    contextIcons,
-    backgroundColor = Colors.mainBlack,
-  } = route.params
+  const { id, backgroundColor = Colors.mainBlack } = route.params
+  const document = useSelector(getDocumentById(id))!
 
-  const prefechedIcon = useImagePrefetch(issuerIcon)
+  const [numOfLines, setNumOfLines] = useState(1)
+
+  const { getHolderPhoto, getExtraProperties } = useDocuments()
+
+  const fields = [...document.properties, ...getExtraProperties(document)]
+
+  const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
@@ -167,9 +169,19 @@ const FieldDetails = () => {
     })
   }
 
-  const showIconContainer = issuerIcon || contextIcons
+  const holderPhoto = getHolderPhoto(document)
+
+  const showIconContainer =
+    Boolean(document.issuer.icon) ||
+    Boolean(document.style.contextIcons?.length)
 
   const { top } = useSafeArea()
+
+  const getNumOfLines = (e: TextLayoutEvent) => {
+    const { lines } = e.nativeEvent
+    setNumOfLines(lines.length)
+  }
+
   return (
     <View
       style={{
@@ -189,11 +201,10 @@ const FieldDetails = () => {
           <ScreenContainer.Padding>
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
-                text={title ?? ''}
+                text={document.name}
                 customContainerStyles={{
-                  width: photo ? '68%' : '100%',
-                  ...(photo && { marginTop: 30 }),
-                  paddingBottom: 12,
+                  width: holderPhoto ? '68%' : '100%',
+                  ...(holderPhoto && numOfLines === 1 && { marginTop: 26 }),
                 }}
               >
                 <JoloText
@@ -201,33 +212,38 @@ const FieldDetails = () => {
                     ...styles.fieldText,
                     lineHeight: BP({ xsmall: 24, default: 28 }),
                     marginLeft: 12,
+                    top: holderPhoto && numOfLines === 1 && -24,
                   }}
                   numberOfLines={2}
+                  // @ts-expect-error
+                  onTextLayout={getNumOfLines}
                   kind={JoloTextKind.title}
                   size={JoloTextSizes.middle}
                   color={Colors.white90}
                   weight={JoloTextWeight.medium}
                 >
-                  {title}
+                  {document.name}
                 </JoloText>
               </Collapsible.Title>
               {showIconContainer && (
                 <View
                   style={{
-                    paddingTop: 18,
                     paddingBottom: 24,
                     flexDirection: 'row',
                     marginLeft: 12,
+                    bottom: -8,
                   }}
                 >
                   {prefechedIcon && <Icon url={prefechedIcon} />}
-                  {contextIcons &&
-                    contextIcons.map((icon, i) => <Icon key={i} url={icon} />)}
+                  {document.style.contextIcons &&
+                    document.style.contextIcons.map((icon, i) => (
+                      <Icon key={i} url={icon} />
+                    ))}
                 </View>
               )}
-              {photo && (
+              {holderPhoto && (
                 <View>
-                  <Image source={{ uri: photo }} style={styles.photo} />
+                  <Image source={{ uri: holderPhoto }} style={styles.photo} />
                 </View>
               )}
               <Block
@@ -272,7 +288,7 @@ const styles = StyleSheet.create({
     borderRadius: IMAGE_SIZE / 2,
     position: 'absolute',
     right: 12,
-    bottom: 26,
+    bottom: 16,
   },
   fieldContainer: {
     paddingVertical: BP({
