@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { DrivingPrivilege } from 'react-native-mdl'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 import Block from '~/components/Block'
@@ -16,7 +17,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useDocuments } from '~/hooks/documents'
-import { PropertyMimeType } from '~/hooks/documents/types'
+import { DocumentProperty, PropertyMimeType } from '~/hooks/documents/types'
 import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
@@ -154,9 +155,45 @@ const FieldDetails = () => {
   const { id, backgroundColor = Colors.mainBlack } = route.params
   const document = useSelector(getDocumentById(id))!
 
+  const mdlDocument =
+    document.type[1] === 'DrivingLicenseCredential' ? { ...document } : null
+
+  const isMdl = Boolean(mdlDocument)
+
+  const parsedDrivingPrivileges: string =
+    isMdl &&
+    JSON.parse(
+      document.properties.filter((f) => {
+        if (f.key === '$.driving_privileges') {
+          return f.value
+        }
+      })[0].value,
+    )
+      .map((f: DrivingPrivilege) => f['vehicle_category_code'])
+      .join(', ')
+
+  let mdlProperties =
+    isMdl &&
+    mdlDocument!.properties.map((f) => {
+      if (f.key !== '$.driving_privileges') {
+        return f
+      } else {
+        return {
+          key: f.key,
+          label: f.label,
+          value: parsedDrivingPrivileges,
+        } as DocumentProperty
+      }
+    })
+
   const [numOfLines, setNumOfLines] = useState(1)
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
+
+  const mdlFields = mdlProperties && [
+    ...mdlProperties,
+    ...getExtraProperties(mdlDocument!),
+  ]
 
   const fields = [...document.properties, ...getExtraProperties(document)]
 
@@ -252,26 +289,53 @@ const FieldDetails = () => {
                   marginBottom: 16,
                 }}
               >
-                {fields.map((field, i) => (
-                  <React.Fragment key={i}>
-                    <View style={styles.fieldContainer} onLayout={handleLayout}>
-                      <JoloText
-                        customStyles={styles.fieldText}
-                        size={JoloTextSizes.mini}
-                        color={Colors.osloGray}
-                      >
-                        {field.label}
-                      </JoloText>
-                      <FieldValue
-                        value={field.value as string}
-                        mime_type={field.mime_type}
-                      />
-                    </View>
-                    {i !== Object.keys(fields).length - 1 && (
-                      <View style={styles.divider} />
-                    )}
-                  </React.Fragment>
-                ))}
+                {isMdl
+                  ? mdlFields.map((field, i) => (
+                      <React.Fragment key={i}>
+                        <View
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={field.value as string}
+                            mime_type={field.mime_type}
+                          />
+                        </View>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    ))
+                  : fields.map((field, i) => (
+                      <React.Fragment key={i}>
+                        <View
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={field.value as string}
+                            mime_type={field.mime_type}
+                          />
+                        </View>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    ))}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
