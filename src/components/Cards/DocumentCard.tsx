@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import {
-  Platform,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
@@ -158,11 +157,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       } else {
         distance += isBackground ? 8 : 2
       }
-
-      // FIXME: with backgroundColor, the fields are a bit too low
-      if (isBackground && Platform.OS === 'android') {
-        distance = distance - 12
-      }
       return distance
     }
 
@@ -188,7 +182,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               style={
                 !isBackground && photo
                   ? {
-                      height: holderName ? 86 : 21.5,
+                      height: holderName ? 90 : 21.5,
                       justifyContent: 'center',
                     }
                   : {}
@@ -197,7 +191,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               {photo && (
                 <DocumentPhoto
                   photo={photo}
-                  topPosition={backgroundImage || backgroundColor ? -44 : 0}
+                  topPosition={backgroundImage || backgroundColor ? -42 : 0}
                 />
               )}
               {holderName && (

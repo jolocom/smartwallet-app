@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   TextStyle,
   Animated,
@@ -8,6 +8,8 @@ import {
   TextProps,
   StyleProp,
 } from 'react-native'
+
+import { TextLayoutEvent } from '~/types/props'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes, Fonts, fonts, scaleFont } from '~/utils/fonts'
 
@@ -21,6 +23,11 @@ export enum JoloTextWeight {
   regular = 'regular',
 }
 
+type ellipseSuffix = {
+  numOfLines: number
+  suffix: string
+}
+
 export interface IJoloTextProps extends TextProps {
   kind?: JoloTextKind
   size?: JoloTextSizes
@@ -30,21 +37,23 @@ export interface IJoloTextProps extends TextProps {
   animated?: boolean
   testID?: string
   ignoreScaling?: boolean
+  ellipseSuffix?: ellipseSuffix
 }
 
-const JoloText: React.FC<IJoloTextProps> = (props) => {
-  const {
-    children,
-    kind = JoloTextKind.subtitle,
-    size = JoloTextSizes.middle,
-    weight,
-    color,
-    customStyles,
-    animated,
-    testID,
-    ignoreScaling = false,
-    ...rest
-  } = props
+const JoloText: React.FC<IJoloTextProps> = ({
+  kind = JoloTextKind.subtitle,
+  size = JoloTextSizes.middle,
+  weight,
+  color,
+  customStyles,
+  animated,
+  testID,
+  ellipseSuffix,
+  ignoreScaling = false,
+  children,
+  ...rest
+}) => {
+  const [truncatedText, setTruncatedText] = useState('')
 
   const TextComponent = animated ? Animated.Text : Text
 
@@ -62,13 +71,30 @@ const JoloText: React.FC<IJoloTextProps> = (props) => {
     }),
   }
 
+  const truncateTextByNumOfLines = (e: TextLayoutEvent) => {
+    const { lines } = e.nativeEvent
+
+    if (lines.length > ellipseSuffix!.numOfLines) {
+      const output = lines
+        .splice(0, ellipseSuffix!.numOfLines)
+        .map((line) => line.text)
+        .join('')
+
+      ellipseSuffix!.suffix
+        ? setTruncatedText(output.slice(0, -4) + '...' + ellipseSuffix!.suffix)
+        : setTruncatedText(output.slice(0, -3) + '...')
+    }
+  }
+
   return (
     <TextComponent
       {...(rest as typeof Text)}
       testID={testID}
       style={[styles.title, propStyles, customStyles]}
+      // @ts-expect-error
+      onTextLayout={ellipseSuffix && truncateTextByNumOfLines}
     >
-      {children}
+      {truncatedText || children}
     </TextComponent>
   )
 }
