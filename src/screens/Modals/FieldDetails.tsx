@@ -29,6 +29,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../LoggedIn/Main'
+import { OpenIcon } from '~/assets/svg'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -219,6 +220,12 @@ const FieldDetails = () => {
     setNumOfLines(lines.length)
   }
 
+  const Open = () => (
+    <View style={styles.openIconContainer}>
+      <OpenIcon />
+    </View>
+  )
+
   const renderField = (fields: DocumentProperty[]) =>
     fields.map((field, i) => (
       <React.Fragment key={i}>
@@ -234,6 +241,7 @@ const FieldDetails = () => {
             value={field.value as string}
             mime_type={field.mime_type}
           />
+          {field.key === '$.driving_privileges' && <Open />}
         </View>
         {i !== Object.keys(fields).length - 1 && (
           <View style={styles.divider} />
@@ -347,6 +355,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.genevaGray,
     width: '100%',
     opacity: 0.15,
+  },
+  openIconContainer: {
+    position: 'absolute',
+    right: 8,
+    top: 8,
   },
 })
 
