@@ -25,7 +25,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../../LoggedIn/Main'
-import { OpenIcon } from '~/assets/svg'
+import { PopOutIcon } from '~/assets/svg'
 import { useGoBack } from '~/hooks/navigation'
 import useDrivingPrivileges from './hooks'
 
@@ -93,10 +93,10 @@ const FieldDetails = () => {
     setNumOfLines(lines.length)
   }
 
-  const Open = () => (
+  const MdlPopOutIcon = () => (
     <View style={styles.openIconContainer}>
       {/* TODO rename to PopOutIcon */}
-      <OpenIcon />
+      <PopOutIcon />
     </View>
   )
 
@@ -154,7 +154,7 @@ const FieldDetails = () => {
             value={field.value as string}
             mime_type={field.mime_type}
           />
-          {field.key === '$.driving_privileges' && <Open />}
+          {field.key === '$.driving_privileges' && <MdlPopOutIcon />}
         </TouchableOpacity>
         {i !== Object.keys(fields).length - 1 && (
           <View style={styles.divider} />

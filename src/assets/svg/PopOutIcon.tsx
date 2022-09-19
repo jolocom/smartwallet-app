@@ -1,7 +1,7 @@
 import React from 'react'
 import Svg, { Path } from 'react-native-svg'
 
-function OpenIcon() {
+function PopOutIcon() {
   return (
     <Svg width={18} height={18} viewBox="0 0 18 18">
       <Path
@@ -21,4 +21,4 @@ function OpenIcon() {
   )
 }
 
-export default OpenIcon
+export default PopOutIcon
