@@ -63,13 +63,13 @@ const FieldDetails = () => {
     showPrivileges,
   } = useDrivingPrivileges(document)
 
-  const [numOfLines, setNumOfLines] = useState(1)
+  const goBack = useGoBack()
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  const fields = [...document.properties, ...getExtraProperties(document)]
+  const [numOfLines, setNumOfLines] = useState(1)
 
-  console.log({ vehicleFields })
+  const fields = [...document.properties, ...getExtraProperties(document)]
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
@@ -94,43 +94,116 @@ const FieldDetails = () => {
   }
 
   const MdlPopOutIcon = () => (
-    <View style={styles.openIconContainer}>
-      {/* TODO rename to PopOutIcon */}
+    <View style={styles.popOutIconContainer}>
       <PopOutIcon />
     </View>
   )
 
-  const goBack = useGoBack()
-
-  const renderPrivileges = (vehicleFields) =>
-    catergories.map((field, i) => {
-      return (
-        <React.Fragment key={i}>
-          <TouchableOpacity
-            style={styles.fieldContainer}
-            onLayout={handleLayout}
-          >
-            <JoloText
-              customStyles={styles.fieldText}
-              size={JoloTextSizes.mini}
-              color={Colors.osloGray}
+  const renderPrivileges = () => {
+    return catergories.map((field, i) => {
+      if (field.data['Vehicle Code'].length) {
+        return (
+          <React.Fragment key={i}>
+            <TouchableOpacity
+              style={styles.fieldContainer}
+              onLayout={handleLayout}
             >
-              {field.title}
-            </JoloText>
-            <View style={{ justifyContent: 'space-between' }}>
-              {field.data.map((f, i) => (
-                <View>
-                  {Object.keys(f)} {f}
+              <JoloText
+                customStyles={styles.fieldText}
+                size={JoloTextSizes.mini}
+                color={Colors.osloGray}
+              >
+                {field.title}
+              </JoloText>
+
+              <View
+                style={{
+                  width: '100%',
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    color={Colors.black}
+                    weight={JoloTextWeight.medium}
+                  >
+                    Expiry Date
+                  </JoloText>
+                  <JoloText color={Colors.black}>
+                    {field.data['Expiry Date']}
+                  </JoloText>
                 </View>
-              ))}
-            </View>
-          </TouchableOpacity>
-          {i !== Object.keys(fields).length - 1 && (
-            <View style={styles.divider} />
-          )}
-        </React.Fragment>
-      )
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    color={Colors.black}
+                    weight={JoloTextWeight.medium}
+                  >
+                    Issue Date
+                  </JoloText>
+                  <JoloText color={Colors.black}>
+                    {field.data['Issue Date']}
+                  </JoloText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    color={Colors.black}
+                    weight={JoloTextWeight.medium}
+                  >
+                    Restrictions
+                  </JoloText>
+                  <JoloText color={Colors.black}>
+                    {field.data.Restrictions}
+                  </JoloText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    color={Colors.black}
+                    weight={JoloTextWeight.medium}
+                  >
+                    Vehicle Code
+                  </JoloText>
+                  <JoloText color={Colors.black}>
+                    {field.data['Vehicle Code'].join(', ')}
+                  </JoloText>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <View
+              style={{
+                height: 6,
+                backgroundColor: Colors.genevaGray,
+                width: '100%',
+                opacity: 0.15,
+              }}
+            />
+          </React.Fragment>
+        )
+      }
     })
+  }
 
   const renderField = (fields: DocumentProperty[]) =>
     fields.map((field, i) => (
@@ -236,7 +309,7 @@ const FieldDetails = () => {
                 }}
               >
                 {showPrivileges
-                  ? renderPrivileges(vehicleFields)
+                  ? renderPrivileges()
                   : mdlFields
                   ? renderField(mdlFields)
                   : renderField(fields)}
@@ -276,7 +349,7 @@ const styles = StyleSheet.create({
     width: '100%',
     opacity: 0.15,
   },
-  openIconContainer: {
+  popOutIconContainer: {
     position: 'absolute',
     right: 8,
     top: 8,
