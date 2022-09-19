@@ -96,7 +96,7 @@ const FieldDetails = () => {
   )
 
   const renderPrivileges = () => {
-    return catergories.map((field, i) => {
+    return catergories.map((field, i, arr) => {
       if (field.data['Vehicle Code'].length) {
         return (
           <React.Fragment key={i}>
@@ -116,7 +116,7 @@ const FieldDetails = () => {
                   width: '100%',
                 }}
               >
-                {Object.keys(field.data).map((key, i) => (
+                {Object.keys(field.data).map((key, i, arr) => (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -135,7 +135,10 @@ const FieldDetails = () => {
                     >
                       {key}
                     </JoloText>
-                    <JoloText color={Colors.black}>
+                    <JoloText
+                      color={Colors.black}
+                      customStyles={{ width: 100, textAlign: 'left' }}
+                    >
                       {key === 'Vehicle Code'
                         ? field.data[key].join(', ')
                         : field.data[key]}
@@ -144,14 +147,16 @@ const FieldDetails = () => {
                 ))}
               </View>
             </TouchableOpacity>
-            <View
-              style={{
-                height: 6,
-                backgroundColor: Colors.genevaGray,
-                width: '100%',
-                opacity: 0.15,
-              }}
-            />
+            {i !== catergories.length - 1 && (
+              <View
+                style={{
+                  height: 6,
+                  backgroundColor: Colors.genevaGray,
+                  width: '100%',
+                  opacity: 0.15,
+                }}
+              />
+            )}
           </React.Fragment>
         )
       }
