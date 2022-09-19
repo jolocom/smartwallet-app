@@ -128,3 +128,17 @@ export const makeMdlManifest = (did: string) => {
     },
   }
 }
+
+export enum DrivingPrivilegesKeys {
+  VehicleCode = 'Vehicle Code',
+  IssueDate = 'Issue Date',
+  Restrictions = 'Restrictions',
+  ExpiryDate = 'Expiry Date',
+}
+
+export enum VehicleTypes {
+  MopedAndMotorcycle = 'Moped and Motorcycle',
+  PassengerCar = 'Passenger Car',
+  TractorAndForklift = 'Tractor and Forklift',
+  Truck = 'Truck',
+}
