@@ -25,7 +25,12 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../../LoggedIn/Main'
-import { PopOutIcon } from '~/assets/svg'
+import {
+  PopOutIcon,
+  MotorCycleIcon,
+  PassengerCarIcon,
+  TractorIcon,
+} from '~/assets/svg'
 import { useGoBack } from '~/hooks/navigation'
 import useDrivingPrivileges from './hooks'
 
@@ -55,7 +60,13 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
-  const { mdlFields, catergories, togglePrivileges, showPrivileges } =
+  const {
+    mdlFields,
+    catergories,
+    togglePrivileges,
+    showPrivileges,
+    PriviligesKeys,
+  } =
     document.type[1] === 'DrivingLicenseCredential' &&
     useDrivingPrivileges(document)
 
@@ -95,6 +106,34 @@ const FieldDetails = () => {
     </View>
   )
 
+  const VehicleIcon = (title) => {
+    switch (title) {
+      case 'Moped and Motorcycle':
+        return (
+          <View style={{ position: 'absolute', right: 8, top: 8 }}>
+            <MotorCycleIcon />
+          </View>
+        )
+        break
+      case 'Passenger Car':
+        return (
+          <View style={{ position: 'absolute', right: 8, top: 8 }}>
+            <PassengerCarIcon />
+          </View>
+        )
+        break
+      case 'Truck':
+        return (
+          <View style={{ position: 'absolute', right: 8, top: 8 }}>
+            <TractorIcon />
+          </View>
+        )
+        break
+      default:
+        break
+    }
+  }
+
   const renderPrivileges = () => {
     return catergories.map((field, i, arr) => {
       if (field.data['Vehicle Code'].length) {
@@ -104,6 +143,7 @@ const FieldDetails = () => {
               style={styles.fieldContainer}
               onLayout={handleLayout}
             >
+              {VehicleIcon(field.title)}
               <JoloText
                 customStyles={styles.fieldText}
                 size={JoloTextSizes.mini}
@@ -122,11 +162,14 @@ const FieldDetails = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       borderBottomWidth: 1,
+                      position: 'relative',
+
                       borderBottomColor:
-                        key !== 'Expiry Date'
+                        key !== PriviligesKeys['ExpiryDate']
                           ? 'rgba(151, 151, 151, 0.15)'
                           : 'transparent',
                     }}
+                    key={i}
                   >
                     <JoloText
                       kind={JoloTextKind.subtitle}
@@ -139,7 +182,7 @@ const FieldDetails = () => {
                       color={Colors.black}
                       customStyles={{ width: 100, textAlign: 'left' }}
                     >
-                      {key === 'Vehicle Code'
+                      {key === PriviligesKeys['VehicleCode']
                         ? field.data[key].join(', ')
                         : field.data[key]}
                     </JoloText>
@@ -148,14 +191,7 @@ const FieldDetails = () => {
               </View>
             </TouchableOpacity>
             {i !== catergories.length - 1 && (
-              <View
-                style={{
-                  height: 6,
-                  backgroundColor: Colors.genevaGray,
-                  width: '100%',
-                  opacity: 0.15,
-                }}
-              />
+              <View style={styles.privilegesDivider} />
             )}
           </React.Fragment>
         )
@@ -303,6 +339,12 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
+    backgroundColor: Colors.genevaGray,
+    width: '100%',
+    opacity: 0.15,
+  },
+  privilegesDivider: {
+    height: 6,
     backgroundColor: Colors.genevaGray,
     width: '100%',
     opacity: 0.15,

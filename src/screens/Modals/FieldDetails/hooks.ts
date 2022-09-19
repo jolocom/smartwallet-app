@@ -12,6 +12,13 @@ const useDrivingPrivileges = (document: Document) => {
     setShowPrivileges(!showPrivileges)
   }
 
+  enum PriviligesKeys {
+    VehicleCode = 'Vehicle Code',
+    IssueDate = 'Issue Date',
+    Restrictions = 'Restrictions',
+    ExpiryDate = 'Expiry Date',
+  }
+
   const mdlDocument =
     document.type[1] === 'DrivingLicenseCredential' ? { ...document } : null
 
@@ -104,23 +111,19 @@ const useDrivingPrivileges = (document: Document) => {
     },
   ]
 
-  const test = () => {
-    return vehicleFields.map((field) => {
-      catergories.map((category) => {
-        if (category.classes.includes(field.vehicle_category_code)) {
-          category.data['Vehicle Code'].push(field.vehicle_category_code)
-          return {
-            ...category,
-            ...category.classes,
-            ...category.data,
-            ...category.data['Vehicle Code'],
-          }
+  vehicleFields.map((field) => {
+    catergories.map((category) => {
+      if (category.classes.includes(field.vehicle_category_code)) {
+        category.data['Vehicle Code'].push(field.vehicle_category_code)
+        return {
+          ...category,
+          ...category.classes,
+          ...category.data,
+          ...category.data['Vehicle Code'],
         }
-      })
+      }
     })
-  }
-
-  test()
+  })
 
   return {
     mdlDocument,
@@ -132,6 +135,7 @@ const useDrivingPrivileges = (document: Document) => {
     catergories,
     togglePrivileges,
     showPrivileges,
+    PriviligesKeys,
   }
 }
 
