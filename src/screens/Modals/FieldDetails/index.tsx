@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { DrivingPrivilege } from 'react-native-mdl'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 import Block from '~/components/Block'
@@ -28,6 +27,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../../LoggedIn/Main'
 import { OpenIcon } from '~/assets/svg'
 import { useGoBack } from '~/hooks/navigation'
+import useDrivingPrivileges from './hooks'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -50,92 +50,26 @@ const Icon = ({ url }: { url: string }) => {
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
+
   const { id, backgroundColor = Colors.mainBlack } = route.params
+
   const document = useSelector(getDocumentById(id))!
 
-  const mdlDocument =
-    document.type[1] === 'DrivingLicenseCredential' ? { ...document } : null
-
-  const isMdl = Boolean(mdlDocument)
-
-  const parsedDrivingPrivileges: string =
-    isMdl &&
-    JSON.parse(
-      document.properties.filter((f) => {
-        if (f.key === '$.driving_privileges') {
-          return f.value
-        }
-      })[0].value,
-    )
-      .map((f: DrivingPrivilege) => f['vehicle_category_code'])
-      .join(', ')
-
-  let mdlProperties =
-    isMdl &&
-    mdlDocument!.properties.map((f) => {
-      if (f.key !== '$.driving_privileges') {
-        return f
-      } else {
-        return {
-          key: f.key,
-          label: f.label,
-          value: parsedDrivingPrivileges,
-        } as DocumentProperty
-      }
-    })
+  const {
+    mdlFields,
+    vehicleFields,
+    catergories,
+    togglePrivileges,
+    showPrivileges,
+  } = useDrivingPrivileges(document)
 
   const [numOfLines, setNumOfLines] = useState(1)
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  const mdlFields = mdlProperties && [
-    ...mdlProperties,
-    ...getExtraProperties(mdlDocument!),
-  ]
-
   const fields = [...document.properties, ...getExtraProperties(document)]
 
-  const vehicleFields =
-    mdlDocument?.properties &&
-    JSON.parse(
-      mdlDocument?.properties.filter((f) => f.key === '$.driving_privileges')[0]
-        .value,
-    )
-
   console.log({ vehicleFields })
-
-  const catergories = [
-    {
-      title: 'Moped and Motorcycle',
-      icon: null,
-      data: {
-        'Vehicle Code': 'AM',
-        'Issue Date': '02.02.2002',
-        Restrictions: '-',
-        'Expiry Date': '02.02.2002',
-      },
-    },
-    {
-      title: 'Passenger Car',
-      icon: null,
-      data: {
-        'Vehicle Code': 'AM',
-        'Issue Date': '02.02.2002',
-        Restrictions: '-',
-        'Expiry Date': '02.02.2002',
-      },
-    },
-    {
-      title: 'Tractor and Forklift',
-      icon: null,
-      data: {
-        'Vehicle Code': 'AM',
-        'Issue Date': '02.02.2002',
-        Restrictions: '-',
-        'Expiry Date': '02.02.2002',
-      },
-    },
-  ]
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
@@ -165,8 +99,6 @@ const FieldDetails = () => {
       <OpenIcon />
     </View>
   )
-
-  const [showPrivileges, setShowPrivileges] = useState(false)
 
   const goBack = useGoBack()
 
@@ -207,9 +139,7 @@ const FieldDetails = () => {
           style={styles.fieldContainer}
           onLayout={handleLayout}
           onPress={
-            field.key === '$.driving_privileges'
-              ? () => setShowPrivileges(true)
-              : null
+            field.key === '$.driving_privileges' ? togglePrivileges : null
           }
           activeOpacity={0.6}
         >
@@ -246,7 +176,7 @@ const FieldDetails = () => {
             customStyles={{ backgroundColor }}
             type={!showPrivileges ? NavHeaderType.Close : NavHeaderType.Back}
             onPress={() => {
-              !showPrivileges ? goBack() : setShowPrivileges(false)
+              !showPrivileges ? goBack() : togglePrivileges
             }}
           />
         )}
