@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { DrivingPrivilege } from 'react-native-mdl'
+import { cat } from 'shelljs'
 import { useDocuments } from '~/hooks/documents'
 import { Document, DocumentProperty } from '~/hooks/documents/types'
 
@@ -10,13 +11,6 @@ const useDrivingPrivileges = (document: Document) => {
 
   const togglePrivileges = () => {
     setShowPrivileges(!showPrivileges)
-  }
-
-  enum PriviligesKeys {
-    VehicleCode = 'Vehicle Code',
-    IssueDate = 'Issue Date',
-    Restrictions = 'Restrictions',
-    ExpiryDate = 'Expiry Date',
   }
 
   const mdlDocument =
@@ -56,57 +50,53 @@ const useDrivingPrivileges = (document: Document) => {
   const catergories = [
     {
       title: 'Moped and Motorcycle',
-      icon: null,
       classes: ['AM', 'A1', 'A2', 'A'],
       data: {
         'Vehicle Code': [],
-        'Issue Date': '02.02.2002',
+        'Issue Date': '',
         Restrictions: '-',
-        'Expiry Date': '02.02.2002',
+        'Expiry Date': '-',
       },
     },
     {
       title: 'Passenger Car',
-      icon: null,
       classes: ['B', 'BF17', 'B96', 'BE'],
       data: {
         'Vehicle Code': [],
-        'Issue Date': '02.02.2002',
+        'Issue Date': '',
         Restrictions: '-',
-        'Expiry Date': '02.02.2002',
+        'Expiry Date': '-',
       },
     },
     {
       title: 'Tractor and Forklift',
-      icon: null,
+
       classes: ['T', 'L'],
       data: {
         'Vehicle Code': [],
-        'Issue Date': '02.02.2002',
+        'Issue Date': '',
         Restrictions: '-',
-        'Expiry Date': '02.02.2002',
+        'Expiry Date': '-',
       },
     },
     {
       title: 'Bus',
-      icon: null,
       classes: ['D1', 'D1E', 'D', 'DE'],
       data: {
         'Vehicle Code': [],
         'Issue Date': '02.02.2002',
-        Restrictions: '-',
-        'Expiry Date': '02.02.2002',
+        Restrictions: '',
+        'Expiry Date': '-',
       },
     },
     {
       title: 'Truck',
-      icon: null,
       classes: ['C1', 'C1E', 'C', 'CE'],
       data: {
         'Vehicle Code': [],
-        'Issue Date': '02.02.2002',
+        'Issue Date': '',
         Restrictions: '-',
-        'Expiry Date': '02.02.2002',
+        'Expiry Date': '-',
       },
     },
   ]
@@ -114,12 +104,15 @@ const useDrivingPrivileges = (document: Document) => {
   vehicleFields.map((field) => {
     catergories.map((category) => {
       if (category.classes.includes(field.vehicle_category_code)) {
+        console.log(field)
         category.data['Vehicle Code'].push(field.vehicle_category_code)
+        category.data['Issue Date'] = field['issue_date']
         return {
           ...category,
           ...category.classes,
           ...category.data,
           ...category.data['Vehicle Code'],
+          ...category.data['Issue Date'],
         }
       }
     })
@@ -135,7 +128,6 @@ const useDrivingPrivileges = (document: Document) => {
     catergories,
     togglePrivileges,
     showPrivileges,
-    PriviligesKeys,
   }
 }
 

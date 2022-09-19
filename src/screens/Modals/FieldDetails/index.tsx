@@ -31,6 +31,10 @@ import {
   PassengerCarIcon,
   TractorIcon,
 } from '~/assets/svg'
+import {
+  DrivingPrivilegesKeys,
+  VehicleTypes,
+} from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/data'
 import { useGoBack } from '~/hooks/navigation'
 import useDrivingPrivileges from './hooks'
 
@@ -60,13 +64,7 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
-  const {
-    mdlFields,
-    catergories,
-    togglePrivileges,
-    showPrivileges,
-    PriviligesKeys,
-  } =
+  const { mdlFields, catergories, togglePrivileges, showPrivileges } =
     document.type[1] === 'DrivingLicenseCredential' &&
     useDrivingPrivileges(document)
 
@@ -106,44 +104,26 @@ const FieldDetails = () => {
     </View>
   )
 
-  const VehicleIcon = (title) => {
-    switch (title) {
-      case 'Moped and Motorcycle':
-        return (
-          <View style={{ position: 'absolute', right: 8, top: 8 }}>
-            <MotorCycleIcon />
-          </View>
-        )
-        break
-      case 'Passenger Car':
-        return (
-          <View style={{ position: 'absolute', right: 8, top: 8 }}>
-            <PassengerCarIcon />
-          </View>
-        )
-        break
-      case 'Truck':
-        return (
-          <View style={{ position: 'absolute', right: 8, top: 8 }}>
-            <TractorIcon />
-          </View>
-        )
-        break
-      default:
-        break
-    }
-  }
+  const GetVehicleIcon = (type: VehicleTypes) => (
+    <View style={styles.vehicleIconContainer}>
+      {type === VehicleTypes.MopedAndMotorcycle && <MotorCycleIcon />}
+      {type === VehicleTypes.PassengerCar && <PassengerCarIcon />}
+      {type === VehicleTypes.TractorAndForklift && <TractorIcon />}
+      {type === VehicleTypes.Truck && <TractorIcon />}
+    </View>
+  )
 
-  const renderPrivileges = () => {
-    return catergories.map((field, i, arr) => {
+  const renderPrivileges = (catergories) => {
+    return catergories.map((field, i) => {
       if (field.data['Vehicle Code'].length) {
         return (
           <React.Fragment key={i}>
             <TouchableOpacity
-              style={styles.fieldContainer}
+              style={styles.privilegesContainer}
               onLayout={handleLayout}
+              activeOpacity={1}
             >
-              {VehicleIcon(field.title)}
+              {GetVehicleIcon(field.title)}
               <JoloText
                 customStyles={styles.fieldText}
                 size={JoloTextSizes.mini}
@@ -156,21 +136,18 @@ const FieldDetails = () => {
                   width: '100%',
                 }}
               >
-                {Object.keys(field.data).map((key, i, arr) => (
+                {Object.keys(field.data).map((key, i) => (
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      borderBottomWidth: 1,
-                      position: 'relative',
-
-                      borderBottomColor:
-                        key !== PriviligesKeys['ExpiryDate']
-                          ? 'rgba(151, 151, 151, 0.15)'
-                          : 'transparent',
+                      ...styles.vehicleFieldsContainer,
+                      ...(i !== Object.keys(field.data).length - 1 && {
+                        borderBottomColor: Colors.genevaGray15,
+                        borderBottomWidth: 1,
+                      }),
                     }}
                     key={i}
                   >
+                    {console.log(field.data)}
                     <JoloText
                       kind={JoloTextKind.subtitle}
                       color={Colors.black}
@@ -180,9 +157,9 @@ const FieldDetails = () => {
                     </JoloText>
                     <JoloText
                       color={Colors.black}
-                      customStyles={{ width: 100, textAlign: 'left' }}
+                      customStyles={styles.fieldText}
                     >
-                      {key === PriviligesKeys['VehicleCode']
+                      {key === DrivingPrivilegesKeys.VehicleCode
                         ? field.data[key].join(', ')
                         : field.data[key]}
                     </JoloText>
@@ -251,7 +228,7 @@ const FieldDetails = () => {
           <ScreenContainer.Padding>
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
-                text={document.name}
+                text={showPrivileges ? 'Driving Privileges' : document.name}
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
                   ...(holderPhoto && numOfLines === 1 && { marginTop: 26 }),
@@ -272,7 +249,7 @@ const FieldDetails = () => {
                   color={Colors.white90}
                   weight={JoloTextWeight.medium}
                 >
-                  {document.name}
+                  {showPrivileges ? 'Driving Privileges' : document.name}
                 </JoloText>
               </Collapsible.Title>
               {showIconContainer && (
@@ -303,7 +280,7 @@ const FieldDetails = () => {
                 }}
               >
                 {showPrivileges
-                  ? renderPrivileges()
+                  ? renderPrivileges(catergories)
                   : mdlFields
                   ? renderField(mdlFields)
                   : renderField(fields)}
@@ -353,6 +330,28 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 8,
     top: 8,
+  },
+  privilegesContainer: {
+    paddingVertical: BP({
+      default: 8,
+      xsmall: 4,
+    }),
+    paddingHorizontal: 16,
+    alignItems: 'flex-start',
+    position: 'relative',
+  },
+  vehicleFieldsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'relative',
+  },
+  vehicleIconContainer: {
+    position: 'absolute',
+    right: 16,
+    top: BP({
+      default: 8,
+      xsmall: 4,
+    }),
   },
 })
 
