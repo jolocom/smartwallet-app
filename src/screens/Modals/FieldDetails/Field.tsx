@@ -9,7 +9,7 @@ import {
 import Clipboard from '@react-native-clipboard/clipboard'
 
 import JoloText from '~/components/JoloText'
-import { PropertyMimeType } from '~/hooks/documents/types'
+import { PropertyMimeType, DocumentProperty } from '~/hooks/documents/types'
 import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
@@ -17,6 +17,7 @@ import { TextLayoutEvent } from '~/types/props'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import { PopOutIcon } from '~/assets/svg'
 
 type FieldValueProps = { value: string; mime_type: PropertyMimeType }
 
@@ -119,8 +120,68 @@ export const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   )
 }
 
+export const handleLayout = () => {
+  LayoutAnimation.configureNext({
+    ...LayoutAnimation.Presets.linear,
+    duration: 200,
+  })
+}
+
+const MdlPopOutIcon = () => (
+  <View style={styles.popOutIconContainer}>
+    <PopOutIcon />
+  </View>
+)
+
+export const renderField = (
+  fields: DocumentProperty[],
+  togglePrivileges?: () => void,
+) => {
+  return fields.map((field, i) => (
+    <React.Fragment key={i}>
+      <TouchableOpacity
+        style={styles.fieldContainer}
+        onLayout={handleLayout}
+        onPress={field.key === '$.driving_privileges' ? togglePrivileges : null}
+        activeOpacity={0.6}
+      >
+        <JoloText
+          customStyles={styles.fieldText}
+          size={JoloTextSizes.mini}
+          color={Colors.osloGray}
+        >
+          {field.label}
+        </JoloText>
+        <FieldValue value={field.value as string} mime_type={field.mime_type} />
+        {field.key === '$.driving_privileges' && <MdlPopOutIcon />}
+      </TouchableOpacity>
+      {i !== Object.keys(fields).length - 1 && <View style={styles.divider} />}
+    </React.Fragment>
+  ))
+}
+
 const styles = StyleSheet.create({
   fieldText: {
     textAlign: 'left',
+  },
+  fieldContainer: {
+    paddingVertical: BP({
+      default: 16,
+      xsmall: 8,
+    }),
+    paddingHorizontal: 16,
+    alignItems: 'flex-start',
+    position: 'relative',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: Colors.genevaGray,
+    width: '100%',
+    opacity: 0.15,
+  },
+  popOutIconContainer: {
+    position: 'absolute',
+    right: 8,
+    top: 8,
   },
 })

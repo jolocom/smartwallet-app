@@ -1,12 +1,6 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
-import {
-  Image,
-  LayoutAnimation,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 import Block from '~/components/Block'
@@ -15,9 +9,8 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useDocuments } from '~/hooks/documents'
-import { DocumentProperty } from '~/hooks/documents/types'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
-import { FieldValue } from './FieldValue'
+import { renderField, handleLayout } from './Field'
 import { getDocumentById } from '~/modules/credentials/selectors'
 import { TextLayoutEvent } from '~/types/props'
 import { ScreenNames } from '~/types/screens'
@@ -25,12 +18,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../../LoggedIn/Main'
-import {
-  PopOutIcon,
-  MotorCycleIcon,
-  PassengerCarIcon,
-  TractorIcon,
-} from '~/assets/svg'
+import { MotorCycleIcon, PassengerCarIcon, TractorIcon } from '~/assets/svg'
 import {
   DrivingPrivilegesKeys,
   VehicleTypes,
@@ -78,13 +66,6 @@ const FieldDetails = () => {
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
-  const handleLayout = () => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.linear,
-      duration: 200,
-    })
-  }
-
   const holderPhoto = getHolderPhoto(document)
 
   const showIconContainer =
@@ -98,18 +79,12 @@ const FieldDetails = () => {
     setNumOfLines(lines.length)
   }
 
-  const MdlPopOutIcon = () => (
-    <View style={styles.popOutIconContainer}>
-      <PopOutIcon />
-    </View>
-  )
-
-  const GetVehicleIcon = (type: VehicleTypes) => (
+  const GetVehicleIcon = (title: VehicleTypes) => (
     <View style={styles.vehicleIconContainer}>
-      {type === VehicleTypes.MopedAndMotorcycle && <MotorCycleIcon />}
-      {type === VehicleTypes.PassengerCar && <PassengerCarIcon />}
-      {type === VehicleTypes.TractorAndForklift && <TractorIcon />}
-      {type === VehicleTypes.Truck && <TractorIcon />}
+      {title === VehicleTypes.MopedAndMotorcycle && <MotorCycleIcon />}
+      {title === VehicleTypes.PassengerCar && <PassengerCarIcon />}
+      {title === VehicleTypes.TractorAndForklift && <TractorIcon />}
+      {title === VehicleTypes.Truck && <TractorIcon />}
     </View>
   )
 
@@ -147,7 +122,6 @@ const FieldDetails = () => {
                     }}
                     key={i}
                   >
-                    {console.log(field.data)}
                     <JoloText
                       kind={JoloTextKind.subtitle}
                       color={Colors.black}
@@ -175,36 +149,6 @@ const FieldDetails = () => {
       }
     })
   }
-
-  const renderField = (fields: DocumentProperty[]) =>
-    fields.map((field, i) => (
-      <React.Fragment key={i}>
-        <TouchableOpacity
-          style={styles.fieldContainer}
-          onLayout={handleLayout}
-          onPress={
-            field.key === '$.driving_privileges' ? togglePrivileges : null
-          }
-          activeOpacity={0.6}
-        >
-          <JoloText
-            customStyles={styles.fieldText}
-            size={JoloTextSizes.mini}
-            color={Colors.osloGray}
-          >
-            {field.label}
-          </JoloText>
-          <FieldValue
-            value={field.value as string}
-            mime_type={field.mime_type}
-          />
-          {field.key === '$.driving_privileges' && <MdlPopOutIcon />}
-        </TouchableOpacity>
-        {i !== Object.keys(fields).length - 1 && (
-          <View style={styles.divider} />
-        )}
-      </React.Fragment>
-    ))
 
   return (
     <View
@@ -282,7 +226,7 @@ const FieldDetails = () => {
                 {showPrivileges
                   ? renderPrivileges(categories)
                   : mdlFields
-                  ? renderField(mdlFields)
+                  ? renderField(mdlFields, togglePrivileges)
                   : renderField(fields)}
               </Block>
             </Collapsible.Scroll>
@@ -302,34 +246,15 @@ const styles = StyleSheet.create({
     right: 12,
     bottom: 16,
   },
-  fieldContainer: {
-    paddingVertical: BP({
-      default: 16,
-      xsmall: 8,
-    }),
-    paddingHorizontal: 16,
-    alignItems: 'flex-start',
-    position: 'relative',
-  },
+
   fieldText: {
     textAlign: 'left',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: Colors.genevaGray,
-    width: '100%',
-    opacity: 0.15,
   },
   privilegesDivider: {
     height: 6,
     backgroundColor: Colors.genevaGray,
     width: '100%',
     opacity: 0.15,
-  },
-  popOutIconContainer: {
-    position: 'absolute',
-    right: 8,
-    top: 8,
   },
   privilegesContainer: {
     paddingVertical: BP({
