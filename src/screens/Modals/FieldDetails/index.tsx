@@ -55,13 +55,9 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
-  const {
-    mdlFields,
-    vehicleFields,
-    catergories,
-    togglePrivileges,
-    showPrivileges,
-  } = useDrivingPrivileges(document)
+  const { mdlFields, catergories, togglePrivileges, showPrivileges } =
+    document.type[1] === 'DrivingLicenseCredential' &&
+    useDrivingPrivileges(document)
 
   const goBack = useGoBack()
 
@@ -115,80 +111,37 @@ const FieldDetails = () => {
               >
                 {field.title}
               </JoloText>
-
               <View
                 style={{
                   width: '100%',
                 }}
               >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <JoloText
-                    kind={JoloTextKind.subtitle}
-                    color={Colors.black}
-                    weight={JoloTextWeight.medium}
+                {Object.keys(field.data).map((key, i) => (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderBottomWidth: 1,
+                      borderBottomColor:
+                        key !== 'Expiry Date'
+                          ? 'rgba(151, 151, 151, 0.15)'
+                          : 'transparent',
+                    }}
                   >
-                    Expiry Date
-                  </JoloText>
-                  <JoloText color={Colors.black}>
-                    {field.data['Expiry Date']}
-                  </JoloText>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <JoloText
-                    kind={JoloTextKind.subtitle}
-                    color={Colors.black}
-                    weight={JoloTextWeight.medium}
-                  >
-                    Issue Date
-                  </JoloText>
-                  <JoloText color={Colors.black}>
-                    {field.data['Issue Date']}
-                  </JoloText>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <JoloText
-                    kind={JoloTextKind.subtitle}
-                    color={Colors.black}
-                    weight={JoloTextWeight.medium}
-                  >
-                    Restrictions
-                  </JoloText>
-                  <JoloText color={Colors.black}>
-                    {field.data.Restrictions}
-                  </JoloText>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <JoloText
-                    kind={JoloTextKind.subtitle}
-                    color={Colors.black}
-                    weight={JoloTextWeight.medium}
-                  >
-                    Vehicle Code
-                  </JoloText>
-                  <JoloText color={Colors.black}>
-                    {field.data['Vehicle Code'].join(', ')}
-                  </JoloText>
-                </View>
+                    <JoloText
+                      kind={JoloTextKind.subtitle}
+                      color={Colors.black}
+                      weight={JoloTextWeight.medium}
+                    >
+                      {key}
+                    </JoloText>
+                    <JoloText color={Colors.black}>
+                      {key === 'Vehicle Code'
+                        ? field.data[key].join(', ')
+                        : field.data[key]}
+                    </JoloText>
+                  </View>
+                ))}
               </View>
             </TouchableOpacity>
             <View
@@ -249,7 +202,7 @@ const FieldDetails = () => {
             customStyles={{ backgroundColor }}
             type={!showPrivileges ? NavHeaderType.Close : NavHeaderType.Back}
             onPress={() => {
-              !showPrivileges ? goBack() : togglePrivileges
+              !showPrivileges ? goBack() : togglePrivileges()
             }}
           />
         )}
