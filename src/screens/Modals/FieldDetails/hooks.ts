@@ -47,7 +47,7 @@ const useDrivingPrivileges = (document: Document) => {
       .value,
   )
 
-  const catergories = [
+  const categories = [
     {
       title: 'Moped and Motorcycle',
       classes: ['AM', 'A1', 'A2', 'A'],
@@ -102,7 +102,7 @@ const useDrivingPrivileges = (document: Document) => {
   ]
 
   vehicleFields.map((field) => {
-    catergories.map((category) => {
+    categories.map((category) => {
       if (category.classes.includes(field.vehicle_category_code)) {
         console.log(field)
         category.data['Vehicle Code'].push(field.vehicle_category_code)
@@ -125,7 +125,7 @@ const useDrivingPrivileges = (document: Document) => {
     mdlProperties,
     mdlFields,
     vehicleFields,
-    catergories,
+    categories,
     togglePrivileges,
     showPrivileges,
   }

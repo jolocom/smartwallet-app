@@ -64,7 +64,7 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
-  const { mdlFields, catergories, togglePrivileges, showPrivileges } =
+  const { mdlFields, categories, togglePrivileges, showPrivileges } =
     document.type[1] === 'DrivingLicenseCredential' &&
     useDrivingPrivileges(document)
 
@@ -113,9 +113,9 @@ const FieldDetails = () => {
     </View>
   )
 
-  const renderPrivileges = (catergories) => {
-    return catergories.map((field, i) => {
-      if (field.data['Vehicle Code'].length) {
+  const renderPrivileges = (categories) => {
+    return categories.map((field, i) => {
+      if (field.data[DrivingPrivilegesKeys.VehicleCode].length) {
         return (
           <React.Fragment key={i}>
             <TouchableOpacity
@@ -167,7 +167,7 @@ const FieldDetails = () => {
                 ))}
               </View>
             </TouchableOpacity>
-            {i !== catergories.length - 1 && (
+            {i !== categories.length - 1 && (
               <View style={styles.privilegesDivider} />
             )}
           </React.Fragment>
@@ -280,7 +280,7 @@ const FieldDetails = () => {
                 }}
               >
                 {showPrivileges
-                  ? renderPrivileges(catergories)
+                  ? renderPrivileges(categories)
                   : mdlFields
                   ? renderField(mdlFields)
                   : renderField(fields)}
