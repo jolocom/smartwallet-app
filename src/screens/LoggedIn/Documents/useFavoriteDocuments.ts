@@ -20,7 +20,7 @@ export const useFavoriteDocuments = () => {
   const settings = useSettings()
   const dispatch = useDispatch()
   const favorites = useSelector(getFavoriteDocuments)
-  const { scheduleInfo } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
   const { t } = useTranslation()
 
   const animateLayout = () => {
@@ -59,9 +59,12 @@ export const useFavoriteDocuments = () => {
 
       dispatch(setFavoriteDocuments(favorites.all))
       return favorites.all
-    } catch (error) {
-      console.log({ error })
-      return []
+    } catch (e) {
+      if (e instanceof TypeError) {
+        return []
+      } else {
+        scheduleErrorWarning(e as Error)
+      }
     }
   }
 
