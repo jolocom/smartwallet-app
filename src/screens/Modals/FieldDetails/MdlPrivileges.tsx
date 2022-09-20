@@ -3,24 +3,24 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { handleLayout } from './Field'
 import BP from '~/utils/breakpoints'
+import { Category } from './types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MotorCycleIcon, PassengerCarIcon, TractorIcon } from '~/assets/svg'
-import {
-  DrivingPrivilegesKeys,
-  VehicleTypes,
-} from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/data'
+import { DrivingPrivilegesKeys, VehicleTypes } from './types'
 
-const GetVehicleIcon = (title: VehicleTypes) => (
-  <View style={styles.vehicleIconContainer}>
-    {title === VehicleTypes.MopedAndMotorcycle && <MotorCycleIcon />}
-    {title === VehicleTypes.PassengerCar && <PassengerCarIcon />}
-    {title === VehicleTypes.TractorAndForklift && <TractorIcon />}
-    {title === VehicleTypes.Truck && <TractorIcon />}
-  </View>
-)
+const GetVehicleIcon = (title: VehicleTypes) =>
+  title && (
+    <View style={styles.vehicleIconContainer}>
+      {title === VehicleTypes.MopedAndMotorcycle && <MotorCycleIcon />}
+      {title === VehicleTypes.PassengerCar && <PassengerCarIcon />}
+      {title === VehicleTypes.TractorAndForklift && <TractorIcon />}
+      {title === VehicleTypes.Truck && <PassengerCarIcon />}
+      {title === VehicleTypes.Bus && <PassengerCarIcon />}
+    </View>
+  )
 
-export const renderPrivileges = (categories) => {
+export const renderPrivileges = (categories: Category[]) => {
   return categories.map((field, i) => {
     if (field.data[DrivingPrivilegesKeys.VehicleCode].length) {
       return (

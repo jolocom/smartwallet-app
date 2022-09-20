@@ -48,7 +48,12 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
-  const { mdlFields, categories, togglePrivileges, showPrivileges } =
+  const {
+    mdlFields,
+    drivingPrivilegesCategories,
+    togglePrivileges,
+    showPrivileges,
+  } =
     document.type[1] === 'DrivingLicenseCredential' &&
     useDrivingPrivileges(document)
 
@@ -149,7 +154,7 @@ const FieldDetails = () => {
                 }}
               >
                 {showPrivileges
-                  ? renderPrivileges(categories)
+                  ? renderPrivileges(drivingPrivilegesCategories)
                   : mdlFields
                   ? renderField(mdlFields, togglePrivileges)
                   : renderField(fields)}

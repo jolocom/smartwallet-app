@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { DrivingPrivilege } from 'react-native-mdl'
-import { cat } from 'shelljs'
+
+import { Category, VehicleTypes } from './types'
 import { useDocuments } from '~/hooks/documents'
 import { Document, DocumentProperty } from '~/hooks/documents/types'
 
@@ -18,114 +19,138 @@ const useDrivingPrivileges = (document: Document) => {
 
   const isDocumentMdl = Boolean(mdlDocument)
 
-  const parsedDrivingPrivileges: string = JSON.parse(
-    document.properties.filter((f) => {
-      if (f.key === '$.driving_privileges') {
-        return f.value
-      }
-    })[0].value,
+  const parsedDrivingPrivileges: DrivingPrivilege[] = JSON.parse(
+    mdlDocument!.properties.filter((f) => f.key === '$.driving_privileges')[0]
+      .value,
   )
-    .map((f: DrivingPrivilege) => f['vehicle_category_code'])
+
+  const vehicleCategoryCodes = parsedDrivingPrivileges
+    .map((f) => f['vehicle_category_code'])
     .join(', ')
 
-  let mdlProperties = mdlDocument?.properties.map((f) => {
+  const mdlProperties = mdlDocument!.properties.map((f) => {
     if (f.key !== '$.driving_privileges') {
       return f
     } else {
       return {
         key: f.key,
         label: f.label,
-        value: parsedDrivingPrivileges,
+        value: vehicleCategoryCodes,
       } as DocumentProperty
     }
   })
 
   const mdlFields = [...mdlProperties!, ...getExtraProperties(mdlDocument!)]
 
-  const vehicleFields = JSON.parse(
-    mdlDocument!.properties.filter((f) => f.key === '$.driving_privileges')[0]
-      .value,
-  )
-
-  const categories = [
+  const drivingPrivilegesCategories: Category[] = [
     {
-      title: 'Moped and Motorcycle',
+      title: VehicleTypes.MopedAndMotorcycle,
       classes: ['AM', 'A1', 'A2', 'A'],
       data: {
-        'Vehicle Code': [],
-        'Issue Date': '',
-        Restrictions: '-',
-        'Expiry Date': '-',
+        vehicleCode: [],
+        issueDate: '',
+        restrictions: '-',
+        expiryDate: '-',
       },
     },
     {
-      title: 'Passenger Car',
+      title: VehicleTypes.PassengerCar,
       classes: ['B', 'BF17', 'B96', 'BE'],
       data: {
-        'Vehicle Code': [],
-        'Issue Date': '',
-        Restrictions: '-',
-        'Expiry Date': '-',
+        vehicleCode: [],
+        issueDate: '',
+        restrictions: '-',
+        expiryDate: '-',
       },
     },
     {
-      title: 'Tractor and Forklift',
-
+      title: VehicleTypes.TractorAndForklift,
       classes: ['T', 'L'],
       data: {
-        'Vehicle Code': [],
-        'Issue Date': '',
-        Restrictions: '-',
-        'Expiry Date': '-',
+        vehicleCode: [],
+        issueDate: '',
+        restrictions: '-',
+        expiryDate: '-',
       },
     },
     {
-      title: 'Bus',
+      title: VehicleTypes.Bus,
       classes: ['D1', 'D1E', 'D', 'DE'],
       data: {
-        'Vehicle Code': [],
-        'Issue Date': '02.02.2002',
-        Restrictions: '',
-        'Expiry Date': '-',
+        vehicleCode: [],
+        issueDate: '',
+        restrictions: '-',
+        expiryDate: '-',
       },
     },
     {
-      title: 'Truck',
+      title: VehicleTypes.Truck,
       classes: ['C1', 'C1E', 'C', 'CE'],
       data: {
-        'Vehicle Code': [],
-        'Issue Date': '',
-        Restrictions: '-',
-        'Expiry Date': '-',
+        vehicleCode: [],
+        issueDate: '',
+        restrictions: '-',
+        expiryDate: '-',
       },
     },
   ]
 
-  vehicleFields.map((field) => {
-    categories.map((category) => {
+  parsedDrivingPrivileges.map((field) => {
+    drivingPrivilegesCategories.map((category) => {
       if (category.classes.includes(field.vehicle_category_code)) {
-        console.log(field)
-        category.data['Vehicle Code'].push(field.vehicle_category_code)
-        category.data['Issue Date'] = field['issue_date']
+        category.data['vehicleCode'].push(field.vehicle_category_code)
+        category.data['issueDate'] = field['issue_date']
         return {
           ...category,
           ...category.classes,
           ...category.data,
-          ...category.data['Vehicle Code'],
-          ...category.data['Issue Date'],
+          ...category.data['vehicleCode'],
+          ...category.data['issueDate'],
         }
       }
     })
   })
 
+  const kartoffel = parsedDrivingPrivileges.map((f) => {
+    switch (f.vehicle_category_code) {
+      case 'AM':
+      case 'A1':
+      case 'A2':
+      case 'A':
+        console.log('moped')
+        break
+      case 'B':
+      case 'BF17':
+      case 'B96':
+      case 'BE':
+        console.log('auto')
+      case 'C':
+      case 'C1E':
+      case 'C1':
+      case 'CE':
+        console.log('truck')
+      case 'D':
+      case 'D1E':
+      case 'D1':
+      case 'DE':
+        console.log('bus')
+      case 'T':
+      case 'L':
+        console.log('gabelstapler')
+      default:
+        break
+    }
+  })
+
+  console.log({ kartoffel })
+
   return {
     mdlDocument,
     isDocumentMdl,
-    parsedDrivingPrivileges,
     mdlProperties,
     mdlFields,
-    vehicleFields,
-    categories,
+    parsedDrivingPrivileges,
+    drivingPrivilegesCategories,
     togglePrivileges,
     showPrivileges,
   }
