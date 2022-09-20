@@ -47,8 +47,6 @@ import { SCREEN_HEIGHT } from '~/utils/dimensions'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
 import { ScreenNames } from '~/types/screens'
-import { SCREEN_HEIGHT } from '~/utils/dimensions'
-import { JoloTextSizes } from '~/utils/fonts'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
