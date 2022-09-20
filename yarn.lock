@@ -9894,9 +9894,9 @@ react-native-localize@^1.4.3:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-1.4.3.tgz#6fde2fb1e73a7205910419a680cb4734187d556f"
   integrity sha512-n3pi89LBeSzB825CBagyaYRtBS93LdvNz3sI386iXwLSg1ONjEGR1Ez36JBuxZalZgORjrKzV2Pun6MO7iwD6w==
 
-"react-native-mdl@git+ssh://git@github.com:jolocom/react-native-mdl.git#feat/android-sdk":
+"react-native-mdl@git+ssh://git@github.com:jolocom/react-native-mdl.git#master":
   version "1.0.35"
-  resolved "git+ssh://git@github.com:jolocom/react-native-mdl.git#25249793aa8fc556dbfd7c855837fc2386fd6ed1"
+  resolved "git+ssh://git@github.com:jolocom/react-native-mdl.git#ef397a89756a7816e2bc54081e5e43eeaf6eb557"
   dependencies:
     cbor-js "^0.1.0"
 

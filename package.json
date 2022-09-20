@@ -85,7 +85,7 @@
     "react-native-level-fs": "^3.0.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^1.4.3",
-    "react-native-mdl": "git+ssh://git@github.com:jolocom/react-native-mdl.git#feat/android-sdk",
+    "react-native-mdl": "git+ssh://git@github.com:jolocom/react-native-mdl.git#master",
     "react-native-nfc-manager": "3.11.0",
     "react-native-permissions": "^2.1.5",
     "react-native-privacy-snapshot": "https://github.com/jolocom/react-native-privacy-snapshot.git#develop",
