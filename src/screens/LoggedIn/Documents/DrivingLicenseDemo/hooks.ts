@@ -59,12 +59,12 @@ export const useDrivingLicense = () => {
       console.log('SUCCESSFUL PERSONALIZATION')
       unsubscribe()
 
-      redirect(ScreenNames.Documents)
       sdk
         .getDisplayData()
         .then((displayData) => {
           dispatch(setMdlDisplayData(displayData))
           dispatch(dismissLoader())
+          redirect(ScreenNames.Documents)
         })
         .catch(console.warn)
     }
@@ -99,10 +99,7 @@ export const useDrivingLicense = () => {
       DrivingLicenseEvents.personalizationError,
       errorHandler,
     )
-    sdk.emitter.addListener(
-      "log",
-      logHandler,
-    )
+    sdk.emitter.addListener('log', logHandler)
 
     const unsubscribe = () => {
       sdk.emitter.removeListener(
@@ -117,10 +114,7 @@ export const useDrivingLicense = () => {
         DrivingLicenseEvents.personalizationRequests,
         errorHandler,
       )
-      sdk.emitter.removeListener(
-	"log",
-        logHandler,
-      )
+      sdk.emitter.removeListener('log', logHandler)
     }
   }
 
@@ -144,8 +138,11 @@ export const useDrivingLicense = () => {
   }
 
   const startSharing = async () => {
-    const engagementHandler = (state: string) => {
-      const jsonState = JSON.parse(state) as EngagementState
+    const engagementHandler = (state: string | EngagementState) => {
+      const jsonState =
+        typeof state === 'string'
+          ? (JSON.parse(state) as EngagementState)
+          : state
 
       switch (jsonState.name) {
         case EngagementStateNames.started:
@@ -174,6 +171,13 @@ export const useDrivingLicense = () => {
           )
           break
         case EngagementStateNames.error:
+          if (
+            jsonState.error?.localizedDescription ===
+            'BLE_PERMISSIONS_NOT_GIVEN'
+          ) {
+            console.warn('WARNING: BLE_PERMISSIONS_NOT_GIVEN')
+            //TODO: add toast with permission
+          }
           dispatch(
             setLoader({
               type: LoaderTypes.error,
