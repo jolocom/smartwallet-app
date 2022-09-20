@@ -5,22 +5,22 @@
  * with module caching, that appeared after upgrading to RN63.
  */
 
+import { useNavigation } from '@react-navigation/native'
+import { Interaction, TransportAPI } from 'react-native-jolocom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useLoader } from '../loader'
 import {
   resetInteraction,
   setInteractionDetails,
 } from '~/modules/interaction/actions'
 import { getInteractionId } from '~/modules/interaction/selectors'
-import { useAgent } from '../sdk'
-import { useNavigation } from '@react-navigation/native'
 import { ScreenNames } from '~/types/screens'
-import { useInteractionHandler } from './interactionHandlers'
-import { useToasts } from '../toasts'
 import { parseJWT } from '~/utils/parseJWT'
-import { Interaction, TransportAPI } from 'react-native-jolocom'
+
+import { useInteractionHandler } from './interactionHandlers'
 import useConnection from '../connection'
+import { useAgent } from '../sdk'
+import { useToasts } from '../toasts'
 
 export const useInteraction = () => {
   const agent = useAgent()
@@ -33,7 +33,7 @@ export const useInteraction = () => {
 export const useInteractionStart = () => {
   const agent = useAgent()
   const dispatch = useDispatch()
-  const loader = useLoader()
+
   const interactionHandler = useInteractionHandler()
   const { scheduleErrorWarning } = useToasts()
   const { connected, showDisconnectedToast } = useConnection()
@@ -48,7 +48,7 @@ export const useInteractionStart = () => {
 
       return interaction
     } catch (e) {
-      scheduleErrorWarning(e)
+      if (e instanceof Error) scheduleErrorWarning(e)
     }
   }
 
@@ -70,32 +70,33 @@ export const useInteractionStart = () => {
         )
       }
     } catch (e) {
-      scheduleErrorWarning(e)
+      if (e instanceof Error) scheduleErrorWarning(e)
     }
   }
 
-  const startInteraction = async (jwt: string) =>
-    loader(
-      async () => {
-        const interaction = await processInteraction(jwt)
-        if (interaction) {
-          await showInteraction(interaction)
-        }
-      },
-      { showSuccess: false, showFailed: false },
-      (error) => {
-        console.log(error)
-        if (error) scheduleErrorWarning(error)
-      },
-    )
+  const startInteraction = async (jwt: string) => {
+    try {
+      const interaction = await processInteraction(jwt)
+      if (interaction) {
+        await showInteraction(interaction)
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        scheduleErrorWarning(e)
+      }
+    }
+  }
 
-  return { processInteraction, showInteraction, startInteraction }
+  return {
+    processInteraction,
+    showInteraction,
+    startInteraction,
+  }
 }
 
 export const useFinishInteraction = () => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
-
   const closeInteraction = (screen?: ScreenNames) => {
     if (screen) {
       navigation.navigate(screen)

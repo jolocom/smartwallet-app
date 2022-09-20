@@ -1,45 +1,22 @@
-import React, { useEffect, useRef } from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { IWithCustomStyle } from '~/types/props'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
-import { SCREEN_HEIGHT } from '~/utils/dimensions'
 
 export const ContainerBAS: React.FC<IWithCustomStyle> = ({
   children,
   customStyles = {},
 }) => {
   const { bottom } = useSafeArea()
-  const positionValue = useRef(new Animated.Value(SCREEN_HEIGHT)).current
-
-  const animatePosition = (value: number) => {
-    Animated.timing(positionValue, {
-      duration: 400,
-      toValue: value,
-      useNativeDriver: true,
-    }).start()
-  }
-
-  useEffect(() => {
-    animatePosition(0)
-
-    return () => {
-      animatePosition(SCREEN_HEIGHT)
-    }
-  }, [])
 
   return (
-    <Animated.View
-      style={[
-        styles.containerBAS,
-        customStyles,
-        { marginBottom: 10 + bottom },
-        { transform: [{ translateY: positionValue }] },
-      ]}
+    <View
+      style={[styles.containerBAS, customStyles, { marginBottom: 10 + bottom }]}
     >
       {children}
-    </Animated.View>
+    </View>
   )
 }
 

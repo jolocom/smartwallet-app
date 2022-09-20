@@ -1,8 +1,9 @@
 import { useIsFocused } from '@react-navigation/core'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
   Animated,
   Dimensions,
+  LayoutAnimation,
   Linking,
   Platform,
   StyleSheet,
@@ -42,6 +43,8 @@ import {
   getIsAusweisInteractionProcessed,
 } from '~/modules/interaction/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
+import { SCREEN_HEIGHT } from '~/utils/dimensions'
+import { JoloTextSizes } from '~/utils/fonts'
 import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
 import { ScreenNames } from '~/types/screens'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
@@ -53,7 +56,7 @@ const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
 const Camera = () => {
   const { t } = useTranslation()
   const { errorScreen } = useErrors()
-  const { processInteraction } = useInteractionStart()
+  const { startInteraction } = useInteractionStart()
   const dispatch = useDispatch()
   const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
@@ -82,6 +85,13 @@ const Camera = () => {
   const colorAnimationValue = useRef(new Animated.Value(0)).current
   const textAnimationValue = useRef(new Animated.Value(0)).current
   const { scheduleErrorWarning } = useToasts()
+
+  useLayoutEffect(() => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 300,
+    })
+  }, [isScreenFocused])
 
   const animateColor = () =>
     Animated.sequence([
@@ -172,7 +182,7 @@ const Camera = () => {
           })
         }).catch(scheduleErrorWarning)
       } else {
-        await processInteraction(e.data)
+        await startInteraction(e.data)
       }
     } catch (err) {
       console.log('handleScan error', { err })

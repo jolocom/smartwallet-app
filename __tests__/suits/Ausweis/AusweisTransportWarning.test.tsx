@@ -2,9 +2,8 @@ import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
-
+import AusweisTransportWarning from '~/screens/Modals/Interaction/eID/components/AusweisTransportWarning'
 import { usePopStack } from '~/hooks/navigation'
-import AusweisTransportWarning from '~/screens/LoggedIn/eID/components/AusweisTransportWarning'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 jest.mock('@react-navigation/native')
@@ -29,10 +28,12 @@ describe('Ausweis transport warning screen', () => {
   afterAll(() => {
     jest.resetAllMocks()
   })
+
   test('is displayed according to designs', () => {
     const { toJSON } = renderWithSafeArea(<AusweisTransportWarning />)
     expect(toJSON()).toMatchSnapshot()
   })
+
   test('user can proceed with the change pin flow', () => {
     const { getByText } = renderWithSafeArea(<AusweisTransportWarning />)
     const continueBtn = getByText('RecoveryInfo.closeBtn')

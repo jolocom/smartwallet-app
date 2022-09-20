@@ -1,11 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-import {
-  Animated,
-  LayoutChangeEvent,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native'
+import { Animated, LayoutChangeEvent, StyleSheet, View } from 'react-native'
+import { IWithCustomStyle } from '~/types/props'
 import { Colors } from '~/utils/colors'
 
 const styles = StyleSheet.create({
@@ -24,13 +19,15 @@ const styles = StyleSheet.create({
   },
 })
 
-interface Props {
+interface Props extends IWithCustomStyle {
   showSlide: boolean
-  customStyles?: ViewStyle
 }
 
-const BottomPopup: React.FC<Props> = (props) => {
-  const { showSlide, customStyles = {} } = props
+const BottomPopup: React.FC<Props> = ({
+  children,
+  customStyles = {},
+  showSlide,
+}) => {
   // NOTE: default height is 9999 to make sure the view is hidden on first render
   const [viewHeight, setViewHeight] = useState(9999)
   const animatedValue = useRef(new Animated.Value(0)).current
@@ -68,12 +65,12 @@ const BottomPopup: React.FC<Props> = (props) => {
     <Animated.View
       style={{
         ...styles.wrapper,
-        ...customStyles,
+        customStyles,
         transform: [{ translateY: interpolatedValue }],
       }}
       onLayout={getDimensions}
     >
-      {props.children}
+      {children}
       <View
         style={{
           position: 'absolute',

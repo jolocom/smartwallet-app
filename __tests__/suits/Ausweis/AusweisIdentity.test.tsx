@@ -4,11 +4,10 @@ import { useNavigation } from '@react-navigation/native'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import React from 'react'
 import { Platform } from 'react-native'
-
-import eIDHooks from '../../../src/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import { AusweisIdentity } from '~/screens/LoggedIn/Identity/AusweisIdentity'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { AusweisScannerParams } from '~/screens/LoggedIn/eID/types'
+import { AusweisScannerParams } from '~/screens/Modals/Interaction/eID/types'
 import { useRedirect } from '~/hooks/navigation'
 
 jest.mock('@react-navigation/native')
@@ -68,6 +67,7 @@ describe('Ausweis identity screen', () => {
     const { toJSON } = renderWithSafeArea(<AusweisIdentity />)
     expect(toJSON()).toMatchSnapshot()
   })
+
   test('enables user to run compatibility check on Android', async () => {
     ;(Platform.select as jest.Mock).mockImplementation((implObj) => {
       implObj['android']()
@@ -93,17 +93,21 @@ describe('Ausweis identity screen', () => {
       // cancelling only happens on iOS
       //expect(aa2Module.cancelFlow).toHaveBeenCalledTimes(1)
       expect(mockRedirect).toBeCalledWith(
-        'eID',
+        'Interaction',
         expect.objectContaining({
-          screen: 'CompatibilityResult',
+          screen: 'eID',
           params: expect.objectContaining({
-            inoperative: true,
-            deactivated: false,
+            screen: 'CompatibilityResult',
+            params: expect.objectContaining({
+              inoperative: true,
+              deactivated: false,
+            }),
           }),
         }),
       )
     })
   })
+
   test('enables user to run compatibility check on iOS', async () => {
     ;(Platform.select as jest.Mock).mockImplementation((implObj) => {
       implObj['ios']()
@@ -129,12 +133,15 @@ describe('Ausweis identity screen', () => {
     await waitFor(() => {
       expect(aa2Module.cancelFlow).toHaveBeenCalledTimes(1)
       expect(mockRedirect).toBeCalledWith(
-        'eID',
+        'Interaction',
         expect.objectContaining({
-          screen: 'CompatibilityResult',
+          screen: 'eID',
           params: expect.objectContaining({
-            inoperative: true,
-            deactivated: false,
+            screen: 'CompatibilityResult',
+            params: expect.objectContaining({
+              inoperative: true,
+              deactivated: false,
+            }),
           }),
         }),
       )
@@ -145,9 +152,12 @@ describe('Ausweis identity screen', () => {
     const changePinBtn = getByText('AusweisIdentity.changePinBtn')
     fireEvent.press(changePinBtn)
     expect(mockNavigate).toBeCalledWith(
-      'eID',
+      'Interaction',
       expect.objectContaining({
-        screen: 'AusweisChangePin',
+        screen: 'eID',
+        params: {
+          screen: 'AusweisChangePin',
+        },
       }),
     )
   })
@@ -194,15 +204,18 @@ describe('Ausweis identity screen', () => {
       })
     })
     expect(mockNavigate).toHaveBeenCalledTimes(1)
-    expect(mockNavigate).toHaveBeenCalledWith('eID', {
-      screen: 'EnterPIN',
-      params: {
-        mode: 'PUK',
-        flow: 'unlock',
-        handlers: {
-          handlePinRequest: expect.any(Function),
-        },
-      },
+    expect(mockNavigate).toHaveBeenCalledWith('Interaction', {
+      screen: 'eID',
+      params: expect.objectContaining({
+        screen: 'EnterPIN',
+        params: expect.objectContaining({
+          mode: 'PUK',
+          flow: 'unlock',
+          handlers: {
+            handlePinRequest: expect.any(Function),
+          },
+        }),
+      }),
     })
   })
 })

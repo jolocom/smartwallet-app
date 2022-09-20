@@ -1,4 +1,4 @@
-import { IPopupOption } from '~/components/PopupMenu'
+import { IPopupOption } from '~/screens/LoggedIn/PopupMenu'
 import { ScreenNames } from '~/types/screens'
 import { useRedirect } from './navigation'
 

@@ -31,11 +31,11 @@ import JoloText, {
 } from '../../components/JoloText'
 import ScreenContainer from '../../components/ScreenContainer'
 import BP from '~/utils/breakpoints'
-import { useToasts } from '~/hooks/toasts'
 
 const HOLE_DIAMETER = 100
 const BALL_DIAMETER = 57
 const SCREEN_HEIGHT = Dimensions.get('window').height
+const NUM_OF_LINES = 4
 
 interface IProps {
   route: RouteProp<RootStackParamList, ScreenNames.DragToConfirm>
@@ -44,8 +44,6 @@ interface IProps {
 const DragToConfirm: React.FC<IProps> = ({ route }) => {
   const { title, cancelText, instructionText, onComplete } = route?.params
   const goBack = useGoBack()
-
-  const { scheduleErrorWarning } = useToasts()
 
   const holeRef = useRef<View>(null)
 
@@ -183,6 +181,7 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       }}
     >
       <JoloText
+        ellipseSuffix={{ numOfLines: NUM_OF_LINES, suffix: '?' }}
         color={Colors.white90}
         kind={JoloTextKind.title}
         weight={JoloTextWeight.regular}
@@ -191,7 +190,6 @@ const DragToConfirm: React.FC<IProps> = ({ route }) => {
       </JoloText>
       <Animated.View
         ref={holeRef}
-        //onLayout={handleHoleLayout}
         style={[
           styles.hole,
           styles.holeContainer,

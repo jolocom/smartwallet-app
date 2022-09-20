@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView, View } from 'react-native'
-import { DocumentCard, ShareCard, OfferCard } from '~/components/Cards'
+import { DocumentCard, OfferCard, ShareCard } from '~/components/Cards'
 import ScreenContainer from '~/components/ScreenContainer'
 import Section from '../components/Section'
 
@@ -15,6 +15,8 @@ const credentialShareProps = [
     ],
     holderName: 'Stanislaw Lem',
     selected: false,
+    backgroundImage:
+      'https://assets.mubicdn.net/images/film/553/image-w1280.jpg?1571191639',
     photo:
       'https://www.sueddeutsche.de/image/sz.1.1197317/640x360?v=1523580533',
     issuerIcon:
@@ -27,6 +29,7 @@ const credentialShareProps = [
       { key: 'two', label: 'Books', value: '44' },
       { key: 'three', label: 'Editor', value: 'Books & Noble' },
     ],
+    backgroundColor: '#000000',
     holderName: 'Stanislaw Lem and a longer name',
     selected: false,
     photo:
@@ -43,6 +46,7 @@ const credentialShareProps = [
       { key: 'seven', label: 'Editor', value: 'Books & Noble' },
       { key: 'eight', label: 'Four', value: 'Four' },
     ],
+    holderName: 'Stanislaw Lem',
     selected: true,
     photo:
       'https://www.sueddeutsche.de/image/sz.1.1197317/640x360?v=1523580533',

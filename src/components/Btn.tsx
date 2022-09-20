@@ -8,6 +8,7 @@ import {
   ViewStyle,
   Platform,
   TouchableOpacityProps,
+  ActivityIndicator,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import useConnection from '~/hooks/connection'
@@ -35,6 +36,7 @@ interface BtnPropsI extends TouchableOpacityProps {
   type?: BtnTypes
   customTextStyles?: TextStyle
   size?: BtnSize | number
+  loading?: boolean
 }
 
 interface PropsI extends BtnPropsI {
@@ -55,6 +57,7 @@ const GRADIENT_END = { x: 1, y: 0 }
 const ButtonText: React.FC<BtnPropsI> = ({
   type = BtnTypes.primary,
   size = BtnSize.medium,
+  loading = false,
   children,
   customTextStyles = {},
 }) => {
@@ -93,7 +96,9 @@ const ButtonText: React.FC<BtnPropsI> = ({
         return styles.textPrimary
     }
   }
-  return (
+  return loading ? (
+    <ActivityIndicator color={Colors.white80} />
+  ) : (
     <Text
       style={[
         styles.text,
@@ -115,6 +120,7 @@ const Btn: React.FC<PropsI> & BtnComposition = ({
   customTextStyles,
   customContainerStyles,
   testID,
+  loading,
   children,
   ...btnProps
 }) => {
@@ -131,7 +137,7 @@ const Btn: React.FC<PropsI> & BtnComposition = ({
       : styles.mediumBtn
 
   const renderButton = () => {
-    const btnTextProps = { size, type, customTextStyles, children }
+    const btnTextProps = { size, type, customTextStyles, children, loading }
     switch (type) {
       case BtnTypes.primary:
         return (

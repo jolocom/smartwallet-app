@@ -10,6 +10,7 @@ export interface IFieldComposition {
   Static: React.FC<Pick<IWidgetField, 'value'>>
   Selectable: React.FC<Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect'>>
   Empty: React.FC
+  Editable: React.FC<Pick<IWidgetField, 'value' | 'onSelect'>>
 }
 
 export interface IWidgetField {

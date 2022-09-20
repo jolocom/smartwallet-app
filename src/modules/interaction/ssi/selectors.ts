@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect'
 
+import { attributeConfig } from '~/config/claims'
+import { Document } from '~/hooks/documents/types'
+import { AttributeI } from '~/modules/attributes/types'
+import { AttributeTypes, CredentialsByType } from '~/types/credentials'
 import { RootReducerI } from '~/types/reducer'
-import {
-  AttributeTypes,
-  DisplayCredentialDocument,
-  CredentialsByType,
-} from '~/types/credentials'
-import { InteractionDetails } from './types'
+import BP from '~/utils/breakpoints'
+import { getCounterpartyName } from '~/utils/dataMapping'
+import { getObjectFirstValue } from '~/utils/objectUtils'
 import {
   isAuthDetails,
   isAuthzDetails,
@@ -14,12 +15,7 @@ import {
   isCredShareDetails,
   isNotActiveInteraction,
 } from './guards'
-import BP from '~/utils/breakpoints'
-import { mapDisplayToDocuments } from '~/hooks/signedCredentials/utils'
-import { getObjectFirstValue } from '~/utils/objectUtils'
-import { AttributeI } from '~/modules/attributes/types'
-import { attributeConfig } from '~/config/claims'
-import { getCounterpartyName } from '~/utils/dataMapping'
+import { InteractionDetails } from './types'
 
 const makeInteractionSelector = <T extends InteractionDetails>(
   guard: (ssi: InteractionDetails) => ssi is T,
@@ -163,26 +159,27 @@ export const getIsFullscreenCredShare = createSelector(
 
 export const getRequestedDocumentsByType = createSelector(
   [getRequestedCredentials],
-  (requestedCredentials) => {
-    const requestedDocuments = mapDisplayToDocuments(requestedCredentials)
-    return requestedDocuments.reduce<
-      Array<CredentialsByType<DisplayCredentialDocument>>
-    >((acc, document) => {
-      const typeObject = acc.find((t) => t.value === document.type)
+  (requestedDocuments) => {
+    return requestedDocuments.reduce<Array<CredentialsByType<Document>>>(
+      (acc, document) => {
+        const specificType = document.type[document.type.length - 1]
+        const typeObject = acc.find((t) => t.value === specificType)
 
-      if (!typeObject) {
-        acc = [
-          ...acc,
-          { key: 'type', value: document.type, credentials: [document] },
-        ]
-      } else {
-        typeObject.credentials.push(document)
-        acc = acc.filter((t) => t.value !== document.type)
-        acc = [...acc, typeObject]
-      }
+        if (!typeObject) {
+          acc = [
+            ...acc,
+            { key: 'type', value: specificType, credentials: [document] },
+          ]
+        } else {
+          typeObject.credentials.push(document)
+          acc = acc.filter((t) => t.value !== specificType)
+          acc = [...acc, typeObject]
+        }
 
-      return acc
-    }, [])
+        return acc
+      },
+      [],
+    )
   },
 )
 
@@ -212,25 +209,6 @@ export const getIsReadyToSubmitRequest = createSelector(
     if (singleAttribute && !getObjectFirstValue(singleAttribute).length)
       return true
     return ssi.requestedTypes.every((c) => ssi.selectedCredentials[c])
-  },
-)
-
-export const getAttributesToSelect = createSelector(
-  [getCredShareDetails],
-  (ssi) => {
-    return Object.keys(ssi.attributes).reduce<Record<string, string>>(
-      (acc, value) => {
-        const attrType = value as AttributeTypes
-        if (!acc[attrType]) {
-          const attr = ssi.attributes || []
-          if (attr.length) {
-            acc[attrType] = attr[0].id
-          }
-        }
-        return acc
-      },
-      {},
-    )
   },
 )
 
@@ -266,13 +244,6 @@ export const getOfferedCredentials = createSelector(
   (ssi) => ssi.credentials.service_issued,
 )
 
-export const getServiceImage = createSelector(
-  [getInteractionCounterparty],
-  (counterparty) => {
-    return counterparty.publicProfile?.image
-  },
-)
-
 export const getServiceDescription = createSelector(
   [getInteractionCounterparty],
   (counterparty) => {
@@ -280,6 +251,7 @@ export const getServiceDescription = createSelector(
       did: counterparty.did,
       name: counterparty.publicProfile?.name,
       image: counterparty.publicProfile?.image,
+      serviceUrl: counterparty.publicProfile?.url,
       isAnonymous: counterparty.publicProfile === undefined,
     }
   },

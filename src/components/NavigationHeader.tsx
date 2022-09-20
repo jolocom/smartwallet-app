@@ -1,11 +1,12 @@
 import React from 'react'
-import { View, StyleSheet, ViewProps } from 'react-native'
+import { StyleSheet, TextProps, View, ViewProps } from 'react-native'
 
+import { BackArrowIcon } from '~/assets/svg'
 import CloseIcon from '~/assets/svg/CloseIcon'
 import { useGoBack } from '~/hooks/navigation'
-import IconBtn from './IconBtn'
-import { BackArrowIcon } from '~/assets/svg'
 import { IWithCustomStyle } from '~/types/props'
+import IconBtn from './IconBtn'
+import JoloText, { JoloTextKind } from './JoloText'
 
 export enum NavHeaderType {
   Back = 'back',
@@ -24,7 +25,14 @@ const NavigationHeader: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const navigateBack = onPress ?? useGoBack()
+  // FIXME: This is really bad and has to be fixed. We're doing this
+  // because we're using the NavigationHeader in the ErrorReporting component,
+  // which is outside the navigation provider.
+  const goBack = onPress ?? useGoBack()
+
+  const navigateBack = () => {
+    goBack()
+  }
 
   return (
     <View
@@ -42,7 +50,7 @@ const NavigationHeader: React.FC<Props> = ({
           testID="backArrow"
           disabled={type !== NavHeaderType.Back}
           onPress={navigateBack}
-          style={styles.button}
+          customStyles={styles.button}
         >
           <BackArrowIcon />
         </IconBtn>
@@ -55,12 +63,28 @@ const NavigationHeader: React.FC<Props> = ({
           testID="closeIcon"
           disabled={type !== NavHeaderType.Close}
           onPress={navigateBack}
-          style={styles.button}
+          customStyles={styles.button}
         >
           <CloseIcon />
         </IconBtn>
       )}
     </View>
+  )
+}
+
+export const NavigationHeaderText: React.FC<TextProps> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <JoloText
+      kind={JoloTextKind.title}
+      numberOfLines={1}
+      customStyles={styles.text}
+      {...props}
+    >
+      {children}
+    </JoloText>
   )
 }
 
@@ -79,7 +103,16 @@ const styles = StyleSheet.create({
   },
   centerComponent: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 24,
+    flexWrap: 'wrap',
+    flexShrink: 1,
+    paddingRight: 12,
   },
 })
 

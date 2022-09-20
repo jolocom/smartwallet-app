@@ -76,7 +76,12 @@ export enum ScreenNames {
   PasscodeTest = 'PasscodeTest',
   CollapsibleTest = 'CollapsibleTest',
   InteractionPasteTest = 'InteractionPasteTest',
+  CardStack = 'CardStack',
 
-  //Modals
+  //Global Screens
   GlobalModals = 'GlobalModals',
+  TermsConsentStack = 'TermsConsentStack',
+  TermsConsent = 'TermsConsent',
+  ConsentTermsOfService = 'ConsentTermsOfService',
+  ConsentPrivacyPolicy = 'ConsentPrivacyPolicy',
 }

@@ -17,6 +17,7 @@ interface Props {
   description: string
   onSubmit: () => Promise<void>
   isSubmitDisabled?: boolean
+  onCancel?: () => void
 }
 
 const FormContainer: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const FormContainer: React.FC<Props> = ({
   description,
   onSubmit,
   children,
+  onCancel,
   isSubmitDisabled = false,
 }) => {
   const { t } = useTranslation()
@@ -37,7 +39,7 @@ const FormContainer: React.FC<Props> = ({
   }
 
   const handleSubmit = () => {
-    onSubmit().catch(scheduleErrorWarning)
+    onSubmit()?.catch(scheduleErrorWarning)
   }
 
   const getHeaderTitleOpacity = (
@@ -74,7 +76,7 @@ const FormContainer: React.FC<Props> = ({
               height: 50,
             }}
           >
-            <TouchableOpacity onPress={dismissScreen}>
+            <TouchableOpacity onPress={onCancel ? onCancel : dismissScreen}>
               <JoloText
                 kind={JoloTextKind.title}
                 size={JoloTextSizes.mini}
@@ -85,16 +87,23 @@ const FormContainer: React.FC<Props> = ({
               </JoloText>
             </TouchableOpacity>
             <View style={{ paddingHorizontal: 8, flex: 1 }}>
-              <Animated.Text
+              <Animated.View
                 style={{
                   opacity: getHeaderTitleOpacity(scrollY, currentTitle),
-                  color: 'white',
-                  marginTop: Platform.OS === 'ios' ? 3 : 0,
                 }}
-                numberOfLines={1}
               >
-                {currentTitleText}
-              </Animated.Text>
+                <JoloText
+                  kind={JoloTextKind.title}
+                  size={JoloTextSizes.mini}
+                  color={Colors.white90}
+                  customStyles={{
+                    fontFamily: Fonts.Medium,
+                  }}
+                  numberOfLines={1}
+                >
+                  {currentTitleText}
+                </JoloText>
+              </Animated.View>
             </View>
             <TouchableOpacity
               onPress={handleSubmit}

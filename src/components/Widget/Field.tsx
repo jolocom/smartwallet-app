@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View, TextStyle } from 'react-native'
-
 import { PurpleTickSuccess } from '~/assets/svg'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -17,6 +16,7 @@ interface IFieldComposition {
     Pick<IWidgetField, 'value' | 'isSelected' | 'onSelect' | 'disabled'>
   >
   Empty: React.FC
+  Editable: React.FC<Pick<IWidgetField, 'value' | 'onSelect'>>
 }
 
 export interface IWidgetField {
@@ -29,7 +29,7 @@ export interface IWidgetField {
 }
 
 const FieldText: React.FC<
-  Pick<IWidgetField, 'value' | 'color'> & { customStyles?: TextStyle }
+  Pick<IWidgetField, 'value' | 'color'> & IWithCustomStyle<TextStyle>
 > = ({ value, color = Colors.white90, customStyles = {} }) => {
   const renderText = (value: string) => (
     <JoloText
@@ -55,6 +55,16 @@ const FieldText: React.FC<
     renderText(value)
   )
 }
+
+const StaticFieldEditable: React.FC<
+  Pick<IWidgetField, 'value' | 'onSelect'>
+> = ({ value, onSelect }) => (
+  <TouchableOpacity onPress={onSelect} activeOpacity={0.7}>
+    <FieldContainer>
+      <FieldText value={value} />
+    </FieldContainer>
+  </TouchableOpacity>
+)
 
 const StaticField: React.FC<Pick<IWidgetField, 'value'>> = ({ value }) => (
   <View testID="widget-field-static">
@@ -149,5 +159,6 @@ const styles = StyleSheet.create({
 Field.Static = StaticField
 Field.Selectable = SelectableField
 Field.Empty = EmptyField
+Field.Editable = StaticFieldEditable
 
 export default Field

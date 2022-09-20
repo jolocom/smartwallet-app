@@ -1,26 +1,35 @@
 import React, { useEffect } from 'react'
 import { TouchableWithoutFeedback, View } from 'react-native'
-import { useSelector } from 'react-redux'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 
+import AdoptedCarousel from '~/components/AdoptedCarousel'
+import { ShareCard } from '~/components/Cards'
+import Collapsible from '~/components/Collapsible'
+import ScreenContainer from '~/components/ScreenContainer'
+import { ServiceLogo } from '~/components/ServiceLogo'
+import Space from '~/components/Space'
+import { attributeConfig } from '~/config/claims'
+import { useDocuments } from '~/hooks/documents'
+import { Document } from '~/hooks/documents/types'
 import { useCredentialShareFlow } from '~/hooks/interactions/useCredentialShareFlow'
 import useCredentialShareSubmit from '~/hooks/interactions/useCredentialShareSubmit'
 import { useRedirect } from '~/hooks/navigation'
-import { mapDisplayToDocument } from '~/hooks/signedCredentials/utils'
+import useTranslation from '~/hooks/useTranslation'
 import {
-  getRequestedCredentialDetailsBAS,
   getIsFullscreenCredShare,
   getIsReadyToSubmitRequest,
+  getRequestedCredentialDetailsBAS,
+  getRequestedDocumentsByType,
   getSelectedShareCredentials,
   getServiceDescription,
-  getRequestedDocumentsByType,
 } from '~/modules/interaction/selectors'
-import {
-  CredentialsByType,
-  AttributeTypes,
-  DisplayCredentialDocument,
-} from '~/types/credentials'
+import { AttributeTypes, CredentialsByType } from '~/types/credentials'
 import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
+import { SCREEN_WIDTH } from '~/utils/dimensions'
+import { getObjectFirstValue } from '~/utils/objectUtils'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
 import InteractionTitle from '../components/InteractionTitle'
@@ -31,28 +40,18 @@ import {
   LogoContainerBAS,
   LogoContainerFAS,
 } from '../components/styled'
-import Collapsible from '~/components/Collapsible'
 import ShareAttributeWidget from './ShareAttributeWidget'
-import BP from '~/utils/breakpoints'
-import AdoptedCarousel from '~/components/AdoptedCarousel'
-import { getObjectFirstValue } from '~/utils/objectUtils'
-import Space from '~/components/Space'
-import { SCREEN_WIDTH } from '~/utils/dimensions'
-import useTranslation from '~/hooks/useTranslation'
-import { attributeConfig } from '~/config/claims'
-import { useCredentialOptionalFields } from '~/hooks/credentials'
-import ScreenContainer from '~/components/ScreenContainer'
-import { Colors } from '~/utils/colors'
-import { ServiceLogo } from '~/components/ServiceLogo'
-import { ShareCard } from '~/components/Cards'
 
 export const CredentialShareBAS = () => {
-  const { singleRequestedAttribute, singleRequestedCredential } = useSelector(
-    getRequestedCredentialDetailsBAS,
-  )
+  const { singleRequestedAttribute, singleRequestedCredential: document } =
+    useSelector(getRequestedCredentialDetailsBAS)
 
   const { t } = useTranslation()
-  const { name: serviceName, image } = useSelector(getServiceDescription)
+  const {
+    name: serviceName,
+    image,
+    serviceUrl,
+  } = useSelector(getServiceDescription)
 
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
   const singleMissingAttribute =
@@ -64,16 +63,16 @@ export const CredentialShareBAS = () => {
   const handleShare = useCredentialShareSubmit()
   const redirect = useRedirect()
   const { handleSelectCredential } = useCredentialShareFlow()
-  const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
+  const { getPreviewProperties, getHolderName, getHolderPhoto } = useDocuments()
 
   /* We are preselecting a credential that is requested */
   useEffect(() => {
-    if (singleRequestedCredential) {
+    if (document) {
       handleSelectCredential({
-        [singleRequestedCredential.type]: singleRequestedCredential?.id,
+        [document.type[document.type.length - 1]]: document.id,
       })
     }
-  }, [JSON.stringify(singleRequestedCredential)])
+  }, [JSON.stringify(document)])
 
   const handleSubmit = async () =>
     singleMissingAttribute
@@ -84,25 +83,19 @@ export const CredentialShareBAS = () => {
 
   const renderBody = () => {
     if (singleMissingAttribute) return null
-    else if (singleRequestedCredential !== undefined) {
-      const displaySingleCredential = mapDisplayToDocument(
-        singleRequestedCredential,
-      )
-      const { name, issuer } = displaySingleCredential
+    else if (document) {
+      const { name, issuer } = document
 
-      let previewFields = getPreviewFields(displaySingleCredential)
-      previewFields = previewFields.length
-        ? previewFields
-        : getOptionalFields(displaySingleCredential)
+      const previewFields = getPreviewProperties(document)
 
       return (
         <>
           <ShareCard
             credentialName={name}
-            holderName={displaySingleCredential.holderName}
+            holderName={getHolderName(document)}
             fields={previewFields}
-            photo={displaySingleCredential.photo}
-            issuerIcon={issuer?.publicProfile?.image}
+            photo={getHolderPhoto(document)}
+            issuerIcon={issuer.icon}
           />
           <Space />
         </>
@@ -120,7 +113,7 @@ export const CredentialShareBAS = () => {
   return (
     <ContainerBAS>
       <LogoContainerBAS>
-        <ServiceLogo source={image} />
+        <ServiceLogo source={image} serviceUrl={serviceUrl} />
       </LogoContainerBAS>
       <InteractionTitle
         label={
@@ -159,8 +152,14 @@ export const CredentialShareBAS = () => {
 const CredentialShareFAS = () => {
   const { t } = useTranslation()
   const isReadyToSubmit = useSelector(getIsReadyToSubmitRequest)
-  const { getOptionalFields, getPreviewFields } = useCredentialOptionalFields()
-  const { name: serviceName, image } = useSelector(getServiceDescription)
+
+  const {
+    name: serviceName,
+    image,
+    serviceUrl,
+  } = useSelector(getServiceDescription)
+
+  const { getPreviewProperties, getHolderName, getHolderPhoto } = useDocuments()
 
   const { handleSelectCredential } = useCredentialShareFlow()
   const selectedCredentials = useSelector(getSelectedShareCredentials)
@@ -170,26 +169,24 @@ const CredentialShareFAS = () => {
   const documentsByType = useSelector(getRequestedDocumentsByType)
 
   const handleRenderCredentials = (
-    credCollections: Array<CredentialsByType<DisplayCredentialDocument>>,
+    credCollections: Array<CredentialsByType<Document>>,
   ) =>
     credCollections.map(({ value, credentials }) => (
-      <AdoptedCarousel<DisplayCredentialDocument>
+      <AdoptedCarousel<Document>
         key={value}
         activeSlideAlignment="center"
         data={credentials}
         itemWidth={SCREEN_WIDTH - 48}
         customStyles={{ marginLeft: 0 }}
         renderItem={({ item: cred }) => {
-          let previewFields = getPreviewFields(cred)
-          previewFields = previewFields.length
-            ? previewFields
-            : getOptionalFields(cred)
+          const previewFields = getPreviewProperties(cred)
 
           const { name, type, id, issuer } = cred
+          const specificType = type[type.length - 1]
           return (
             <TouchableWithoutFeedback
               key={id}
-              onPress={() => handleSelectCredential({ [type]: id })}
+              onPress={() => handleSelectCredential({ [specificType]: id })}
             >
               <View
                 style={{
@@ -197,12 +194,12 @@ const CredentialShareFAS = () => {
                 }}
               >
                 <ShareCard
-                  credentialName={name ?? type}
+                  credentialName={name}
                   fields={previewFields}
-                  holderName={cred.holderName}
-                  photo={cred.photo}
-                  selected={selectedCredentials[type] === id}
-                  issuerIcon={issuer?.publicProfile?.image}
+                  holderName={getHolderName(cred)}
+                  photo={getHolderPhoto(cred)}
+                  selected={selectedCredentials[specificType] === id}
+                  issuerIcon={issuer.icon}
                 />
               </View>
             </TouchableWithoutFeedback>
@@ -221,7 +218,7 @@ const CredentialShareFAS = () => {
             <Collapsible.Scroll containerStyles={{ paddingBottom: '30%' }}>
               <Collapsible.Scale>
                 <LogoContainerFAS>
-                  <ServiceLogo source={image} />
+                  <ServiceLogo source={image} serviceUrl={serviceUrl} />
                 </LogoContainerFAS>
               </Collapsible.Scale>
               <Collapsible.Title text={t('CredentialRequest.header')}>

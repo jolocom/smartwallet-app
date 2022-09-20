@@ -1,28 +1,38 @@
+import _ from 'lodash'
 import { useRef } from 'react'
+import { CredentialMetadataSummary } from 'react-native-jolocom'
 import DrivingLicenseSDK, {
+  DrivingLicenseData,
   DrivingLicenseError,
   DrivingLicenseEvents,
   EngagementState,
   EngagementStateNames,
   PersonalizationInputRequest,
-  PersonalizationInputResponse
+  PersonalizationInputResponse,
 } from 'react-native-mdl'
 import { useDispatch, useSelector } from 'react-redux'
+import { useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
+import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
+import { addCredentials } from '~/modules/credentials/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { setMdlDisplayData } from '~/modules/mdl/actions'
 import { getMdlDisplayData } from '~/modules/mdl/selectors'
 import { ScreenNames } from '~/types/screens'
+import { makeMdlManifest, mdlMetadata } from './data'
+import { utf8ToBase64Image } from './utils'
 
 export const useDrivingLicense = () => {
+  const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
   const { scheduleWarning, scheduleErrorWarning } = useToasts()
   const dispatch = useDispatch()
   const drivingLicense = useSelector(getMdlDisplayData)
   const goBack = useGoBack()
   const redirect = useRedirect()
+  const { toDocument } = useInitDocuments()
 
   const initDrivingLicense = async () => {
     const initializedSdk = await sdk.init()
@@ -32,6 +42,49 @@ export const useDrivingLicense = () => {
       const displayData = await sdk.getDisplayData()
       dispatch(setMdlDisplayData(displayData))
     }
+  }
+
+  const createDrivingLicenseVC = async (
+    data: DrivingLicenseData,
+  ): Promise<void> => {
+    const filteredData = _.pick(data, [
+      'given_name',
+      'family_name',
+      'birth_date',
+      'document_number',
+      'issuing_authority',
+      'expiry_date',
+      'issue_date',
+      'issuing_country',
+      'un_distinguishing_sign',
+      'driving_privileges',
+      'portrait',
+    ])
+
+    const stringifiedDrivingPrivileges = JSON.stringify(
+      filteredData.driving_privileges,
+    )
+
+    const stringifiedPortrait = utf8ToBase64Image(filteredData.portrait)
+
+    const did = agent.identityWallet.did
+
+    const vc = await agent.credentials.create({
+      metadata: mdlMetadata,
+      subject: did,
+      claim: {
+        ...filteredData,
+        driving_privileges: stringifiedDrivingPrivileges,
+        portrait: stringifiedPortrait,
+      },
+    })
+
+    await agent.credentials.types.create(
+      makeMdlManifest(did) as CredentialMetadataSummary,
+    )
+
+    const mdlDocument = await toDocument(vc)
+    dispatch(addCredentials([mdlDocument]))
   }
 
   const personalizeLicense = (
@@ -62,6 +115,7 @@ export const useDrivingLicense = () => {
       sdk
         .getDisplayData()
         .then((displayData) => {
+          createDrivingLicenseVC(displayData).catch(console.warn)
           dispatch(setMdlDisplayData(displayData))
           dispatch(dismissLoader())
           redirect(ScreenNames.Documents)

@@ -1,12 +1,6 @@
 import React from 'react'
-import {
-  Platform,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native'
+import { StyleSheet, TextStyle, View } from 'react-native'
+import { IWithCustomStyle } from '~/types/props'
 
 import JoloText, { JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
@@ -14,7 +8,7 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
 interface IWordPill {
-  customContainerStyles?: StyleProp<ViewStyle>
+  customContainerStyles?: IWithCustomStyle['customStyles']
   customTextStyles?: TextStyle
 }
 

@@ -1,4 +1,4 @@
-import { DisplayVal } from '@jolocom/sdk/js/credentials'
+import { DocumentProperty } from '~/hooks/documents/types'
 
 export const splitFields = <T>(fields: Array<T>) => {
   const halfway = Math.ceil(fields.length / 2)
@@ -9,13 +9,13 @@ export const splitFields = <T>(fields: Array<T>) => {
 }
 
 export const splitIntoRows = (
-  fields: DisplayVal[],
+  fields: DocumentProperty[],
   oneLineLimit: number,
   fieldsPerRow: number,
 ) => {
   let lastPushedIdx = -1
 
-  const rows = fields.reduce<DisplayVal[][]>((acc, field, i, array) => {
+  const rows = fields.reduce<DocumentProperty[][]>((acc, field, i, array) => {
     if (i > lastPushedIdx) {
       if (
         (field?.value && field.value.length >= oneLineLimit) ||

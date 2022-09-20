@@ -1,21 +1,23 @@
+import React from 'react'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
+import { AusweisPasscode } from '~/screens/Modals/Interaction/eID/components'
 
-import React from 'react'
-import { AusweisPasscode } from '~/screens/LoggedIn/eID/components'
 import {
   AusweisFlow,
   AusweisPasscodeMode,
   AusweisScannerParams,
   eIDScreens,
-} from '~/screens/LoggedIn/eID/types'
-import { mockSelectorReturn } from '../../mocks/libs/react-redux'
+} from '~/screens/Modals/Interaction/eID/types'
+import {
+  mockSelectorReturn,
+  getMockedDispatch,
+} from '../../mocks/libs/react-redux'
 import { inputPasscode } from '../../utils/inputPasscode'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { getMockedDispatch } from '../../mocks/libs/react-redux'
-import eIDHooks from '~/screens/LoggedIn/eID/hooks'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 
 jest.mock('@react-navigation/native')
 
@@ -72,8 +74,10 @@ describe('Ausweis passcode screen', () => {
       toasts: {
         active: null,
       },
-      ausweis: {
-        scannerKey: null,
+      interaction: {
+        ausweis: {
+          scannerKey: null,
+        },
       },
     })
     ;(useRoute as jest.Mock).mockReturnValue({

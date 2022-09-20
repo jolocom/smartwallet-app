@@ -55,7 +55,7 @@ const ServiceRedirect = () => {
     <BottomSheet>
       <ContainerBAS>
         <LogoContainerBAS>
-          <ServiceLogo source={counterparty.logo} />
+          <ServiceLogo source={counterparty.logo} serviceUrl={redirectUrl} />
         </LogoContainerBAS>
         <InteractionTitle label={t('Interaction.redirectTitle')} />
         <Space height={48} />

@@ -2,19 +2,19 @@ import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 
 import {
-  IAttributeClaimFieldWithValue,
   IAttributeClaimField,
+  IAttributeClaimFieldWithValue,
 } from '~/types/credentials'
 
-import { attributeConfig } from '~/config/claims'
 import { IdentitySummary } from 'react-native-jolocom'
+import { attributeConfig } from '~/config/claims'
 import truncateDid from './truncateDid'
 
 export const extractClaims = ({ id, ...claims }: IClaimSection) => claims
 
 export const getCredentialType = (types: string[]) => types[types.length - 1]
 
-export const extractCredentialType = (cred: SignedCredential) =>
+export const extractCredentialType = <T extends { type: string[] }>(cred: T) =>
   getCredentialType(cred.type)
 
 export const isTypeAttribute = (type: string) =>
