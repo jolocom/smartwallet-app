@@ -182,6 +182,15 @@ const FieldDetails = () => {
 
   const { top } = useSafeArea()
 
+  const documentNameContainerHeight =
+    !showIconContainer && holderPhoto
+      ? IMAGE_SIZE
+      : showIconContainer && holderPhoto
+      ? IMAGE_SIZE - ICON_SIZE
+      : 'auto'
+
+  const documentNameAlignment = !showIconContainer ? 'center' : 'flex-start'
+
   return (
     <View
       style={{
@@ -209,15 +218,8 @@ const FieldDetails = () => {
               >
                 <View
                   style={{
-                    height:
-                      !showIconContainer && holderPhoto
-                        ? IMAGE_SIZE
-                        : showIconContainer && holderPhoto
-                        ? IMAGE_SIZE - ICON_SIZE
-                        : 'auto',
-                    justifyContent: !showIconContainer
-                      ? 'center'
-                      : 'flex-start',
+                    height: documentNameContainerHeight,
+                    justifyContent: documentNameAlignment,
                   }}
                 >
                   <JoloText
