@@ -2,7 +2,6 @@ import React from 'react'
 import * as Icon from '~/assets/svg/mdl'
 
 const getVehicleIcon = (vehicleClass: string) => {
-  console.log({ vehicleClass })
   switch (vehicleClass) {
     case 'A':
       return <Icon.A />
