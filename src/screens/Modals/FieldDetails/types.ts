@@ -11,11 +11,19 @@ export interface Category {
   data: DrivingPrivilegesData
 }
 
-export enum DrivingPrivilegesKeys {
-  VehicleCode = 'vehicleCode',
-  IssueDate = 'issueDate',
-  Restrictions = 'restrictions',
-  ExpiryDate = 'expiryDate',
+export enum SinglePrivilegesFieldKeys {
+  Title = 'title',
+  VehicleCode = 'Vehicle Code',
+  IssueDate = 'Issue Date',
+  Restrictions = 'Restrictions',
+  ExpiryDate = 'Expiry Date',
+}
+export interface SinglePrivilegesField {
+  [SinglePrivilegesFieldKeys.Title]: string
+  [SinglePrivilegesFieldKeys.VehicleCode]: string
+  [SinglePrivilegesFieldKeys.IssueDate]: string
+  [SinglePrivilegesFieldKeys.Restrictions]: string
+  [SinglePrivilegesFieldKeys.ExpiryDate]: string
 }
 
 export enum VehicleTypes {
