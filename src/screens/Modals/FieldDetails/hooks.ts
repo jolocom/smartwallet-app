@@ -95,54 +95,25 @@ const useDrivingPrivileges = (document: Document) => {
     },
   ]
 
-  parsedDrivingPrivileges.map((field) => {
-    drivingPrivilegesCategories.map((category) => {
-      if (category.classes.includes(field.vehicle_category_code)) {
-        category.data['vehicleCode'].push(field.vehicle_category_code)
-        category.data['issueDate'] = field['issue_date']
-        return {
-          ...category,
-          ...category.classes,
-          ...category.data,
-          ...category.data['vehicleCode'],
-          ...category.data['issueDate'],
-        }
-      }
-    })
-  })
-
-  const kartoffel = parsedDrivingPrivileges.map((f) => {
-    switch (f.vehicle_category_code) {
-      case 'AM':
-      case 'A1':
-      case 'A2':
-      case 'A':
-        console.log('moped')
-        break
-      case 'B':
-      case 'BF17':
-      case 'B96':
-      case 'BE':
-        console.log('auto')
-      case 'C':
-      case 'C1E':
-      case 'C1':
-      case 'CE':
-        console.log('truck')
-      case 'D':
-      case 'D1E':
-      case 'D1':
-      case 'DE':
-        console.log('bus')
-      case 'T':
-      case 'L':
-        console.log('gabelstapler')
-      default:
-        break
-    }
-  })
-
-  console.log({ kartoffel })
+  const mdlFieldData = parsedDrivingPrivileges.map((field) => ({
+    title: field.vehicle_category_code.startsWith('A')
+      ? 'Moped and Motorcycle'
+      : field.vehicle_category_code.startsWith('B')
+      ? 'Passenger Car'
+      : field.vehicle_category_code.startsWith('C')
+      ? 'Truck'
+      : field.vehicle_category_code.startsWith('D')
+      ? 'Bus'
+      : field.vehicle_category_code.startsWith('L')
+      ? 'Tractor and Forklift'
+      : field.vehicle_category_code.startsWith('T')
+      ? 'Tractor and Forklift'
+      : null,
+    'Issue Date': field.issue_date,
+    'Vehicle Code': field.vehicle_category_code,
+    'Expiry Date': '-',
+    Restrictions: '-',
+  }))
 
   return {
     mdlDocument,
@@ -153,6 +124,7 @@ const useDrivingPrivileges = (document: Document) => {
     drivingPrivilegesCategories,
     togglePrivileges,
     showPrivileges,
+    mdlFieldData,
   }
 }
 
