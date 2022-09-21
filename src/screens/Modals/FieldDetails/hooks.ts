@@ -109,10 +109,10 @@ const useDrivingPrivileges = (document: Document) => {
       : field.vehicle_category_code.startsWith('T')
       ? 'Tractor and Forklift'
       : null,
-    'Issue Date': field.issue_date,
     'Vehicle Code': field.vehicle_category_code,
-    'Expiry Date': '-',
+    'Issue Date': field.issue_date,
     Restrictions: '-',
+    'Expiry Date': '-',
   }))
 
   return {

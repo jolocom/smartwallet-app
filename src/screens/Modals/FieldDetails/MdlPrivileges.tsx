@@ -26,7 +26,7 @@ export const renderPrivileges = (categories: Category[]) => {
                 {getVehicleIcon(field['Vehicle Code'])}
               </View>
               <JoloText
-                customStyles={styles.fieldText}
+                customStyles={(styles.fieldText, { width: 'auto' })}
                 size={JoloTextSizes.mini}
                 color={Colors.osloGray}
               >
@@ -81,6 +81,7 @@ export const renderPrivileges = (categories: Category[]) => {
 const styles = StyleSheet.create({
   fieldText: {
     textAlign: 'left',
+    width: 101,
   },
   privilegesDivider: {
     height: 6,
