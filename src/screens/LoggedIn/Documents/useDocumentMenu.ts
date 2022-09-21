@@ -3,6 +3,7 @@ import { usePopupMenu } from '~/hooks/popupMenu'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
+import { MDL_CREDENTIAL_TYPE } from './DrivingLicenseDemo/data'
 import { useFavoriteDocuments } from './useFavoriteDocuments'
 
 export const useDocumentMenu = () => {
@@ -19,6 +20,7 @@ export const useDocumentMenu = () => {
 
   return ({ id, isFavorite }: { id: string; isFavorite: boolean }) => {
     const document = getDocumentById(id)!
+    const isDrivingLicense = document.type[1] === MDL_CREDENTIAL_TYPE
     const popupOptions = [
       {
         title: t('Documents.infoCardOption'),
@@ -58,6 +60,18 @@ export const useDocumentMenu = () => {
         },
       },
     ]
+
+    if (isDrivingLicense) {
+      popupOptions.splice(1, 0, {
+        title: t('CredentialRequest.acceptBtn'),
+        navigation: {
+          screen: ScreenNames.DrivingLicenseShare,
+          //@ts-ignore
+          params: {},
+        },
+      })
+    }
+
     showPopup(popupOptions)
   }
 }
