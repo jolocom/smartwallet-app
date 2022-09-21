@@ -20,7 +20,7 @@ export const useFavoriteDocuments = () => {
   const settings = useSettings()
   const dispatch = useDispatch()
   const favorites = useSelector(getFavoriteDocuments)
-  const { scheduleInfo } = useToasts()
+  const { scheduleInfo, scheduleErrorWarning } = useToasts()
   const { t } = useTranslation()
 
   const animateLayout = () => {
@@ -52,12 +52,20 @@ export const useFavoriteDocuments = () => {
   }
 
   const getFavorites = async () => {
-    const favorites = (await settings.get(SettingKeys.favoriteDocuments)) as {
-      all: string[]
-    }
+    try {
+      const favorites = (await settings.get(SettingKeys.favoriteDocuments)) as {
+        all: string[]
+      }
 
-    dispatch(setFavoriteDocuments(favorites.all))
-    return favorites.all
+      dispatch(setFavoriteDocuments(favorites.all))
+      return favorites.all
+    } catch (e) {
+      if (e instanceof TypeError) {
+        return []
+      } else {
+        scheduleErrorWarning(e as Error)
+      }
+    }
   }
 
   const deleteFavorite = useCallback(
