@@ -6,17 +6,15 @@ import BP from '~/utils/breakpoints'
 import { Category } from './types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { T } from '~/assets/svg/mdl'
-import { DrivingPrivilegesKeys, VehicleTypes } from './types'
 import getVehicleIcon from './utils'
 
 export const renderPrivileges = (categories: Category[]) => {
   if (categories.length) {
+    console.log({ categories })
     return categories.map(
       (field, i) =>
         field['Vehicle Code'] !== 'ALL' && (
           <React.Fragment key={i}>
-            {console.log({ field })}
             <TouchableOpacity
               style={styles.privilegesContainer}
               onLayout={handleLayout}
@@ -50,7 +48,6 @@ export const renderPrivileges = (categories: Category[]) => {
                         }}
                         key={i}
                       >
-                        {console.log({ key })}
                         <JoloText
                           kind={JoloTextKind.subtitle}
                           color={Colors.black}
@@ -81,7 +78,7 @@ export const renderPrivileges = (categories: Category[]) => {
 const styles = StyleSheet.create({
   fieldText: {
     textAlign: 'left',
-    width: 101,
+    width: 90,
   },
   privilegesDivider: {
     height: 6,
