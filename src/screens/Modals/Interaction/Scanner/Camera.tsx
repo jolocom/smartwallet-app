@@ -33,6 +33,7 @@ import Dialog from '~/components/Dialog'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import useConnection from '~/hooks/connection'
 import { useDisableLock } from '~/hooks/generic'
+import { useRedirect } from '~/hooks/navigation'
 import { useToasts } from '~/hooks/toasts'
 import useErrors from '~/hooks/useErrors'
 import useTranslation from '~/hooks/useTranslation'
@@ -46,7 +47,6 @@ import { SCREEN_HEIGHT } from '~/utils/dimensions'
 import { JoloTextSizes } from '~/utils/fonts'
 import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
 import { ScreenNames } from '~/types/screens'
-import { useRedirect } from '~/hooks/navigation'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
 const SHOW_LOCAL_NETWORK_DIALOG = Platform.OS === 'ios' && majorVersionIOS >= 14
@@ -153,8 +153,7 @@ const Camera = () => {
   const handleScan = async (e: { data: string }) => {
     if (!isConnectedToTheInternet) {
       setError(true)
-      /**
-       * TODO:
+      /** * TODO:
        * add copy/translation
        */
       setErrorText('Internet connection is required to proceed')

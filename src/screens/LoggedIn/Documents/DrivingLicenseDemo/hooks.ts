@@ -35,13 +35,13 @@ export const useDrivingLicense = () => {
   const { toDocument } = useInitDocuments()
 
   const initDrivingLicense = async () => {
-    const mdlDisplayData = await sdk
-      .getPersonalizationStatus()
-      .then((isPersonalized) => {
-        if (isPersonalized) return sdk.getDisplayData()
-        return null
-      })
-    dispatch(setMdlDisplayData(mdlDisplayData))
+    const initializedSdk = await sdk.init()
+    const isPersonalized = await sdk.getPersonalizationStatus()
+    if (isPersonalized) {
+      console.log({isPersonalized})
+      const displayData = await sdk.getDisplayData()
+      dispatch(setMdlDisplayData(displayData))
+    }
   }
 
   const createDrivingLicenseVC = async (
@@ -91,33 +91,54 @@ export const useDrivingLicense = () => {
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
+    console.log('before startPersonalization')
     sdk.startPersonalization(qrString)
+    console.log('after startPersonalization')
 
-    const requestHandler = (requests: string) => {
-      const jsonRequests = JSON.parse(requests) as PersonalizationInputRequest[]
+    const requestHandler = (request: string | PersonalizationInputRequest) => {
+      // NOTE: this is a thing bc on ios we can't send objects through events, while
+      // on android we can only send objects
+      let jsonRequests: PersonalizationInputRequest[]
+      if (typeof request === 'string') {
+        jsonRequests = JSON.parse(request) as PersonalizationInputRequest[]
+      } else {
+        jsonRequests = [request]
+      }
 
+      console.log('REQUESTS: ', jsonRequests)
       onRequests(jsonRequests)
     }
     const successHandler = () => {
+      console.log('SUCCESSFUL PERSONALIZATION')
       unsubscribe()
 
-      redirect(ScreenNames.Documents)
       sdk
         .getDisplayData()
         .then((displayData) => {
           createDrivingLicenseVC(displayData).catch(console.warn)
           dispatch(setMdlDisplayData(displayData))
           dispatch(dismissLoader())
+          redirect(ScreenNames.Documents)
         })
         .catch(console.warn)
     }
-    const errorHandler = (error: string) => {
+    const errorHandler = (error: string | DrivingLicenseError) => {
       unsubscribe()
 
       dispatch(dismissLoader())
+      let jsonError: DrivingLicenseError
       //FIXME currently returns null, but should return stringified DrivingLicenseError
-      const jsonError = JSON.parse(error) as DrivingLicenseError
+      if (typeof error === 'string') {
+        jsonError = JSON.parse(error) as DrivingLicenseError
+      } else {
+        jsonError = error
+      }
+      console.log('PERSONALIZATION FAILED ', jsonError)
       scheduleErrorWarning(new Error(jsonError.name))
+    }
+
+    const logHandler = (data: any) => {
+      console.log("LOG: ", data)
     }
 
     sdk.emitter.addListener(
@@ -132,6 +153,7 @@ export const useDrivingLicense = () => {
       DrivingLicenseEvents.personalizationError,
       errorHandler,
     )
+    sdk.emitter.addListener('log', logHandler)
 
     const unsubscribe = () => {
       sdk.emitter.removeListener(
@@ -146,6 +168,7 @@ export const useDrivingLicense = () => {
         DrivingLicenseEvents.personalizationRequests,
         errorHandler,
       )
+      sdk.emitter.removeListener('log', logHandler)
     }
   }
 
@@ -169,8 +192,11 @@ export const useDrivingLicense = () => {
   }
 
   const startSharing = async () => {
-    const engagementHandler = (state: string) => {
-      const jsonState = JSON.parse(state) as EngagementState
+    const engagementHandler = (state: string | EngagementState) => {
+      const jsonState =
+        typeof state === 'string'
+          ? (JSON.parse(state) as EngagementState)
+          : state
 
       switch (jsonState.name) {
         case EngagementStateNames.started:
@@ -199,6 +225,13 @@ export const useDrivingLicense = () => {
           )
           break
         case EngagementStateNames.error:
+          if (
+            jsonState.error?.localizedDescription ===
+            'BLE_PERMISSIONS_NOT_GIVEN'
+          ) {
+            console.warn('WARNING: BLE_PERMISSIONS_NOT_GIVEN')
+            //TODO: add toast with permission
+          }
           dispatch(
             setLoader({
               type: LoaderTypes.error,
