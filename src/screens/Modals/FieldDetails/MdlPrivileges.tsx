@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
-import { PrivilegesData, SinglePrivilegesFieldKeys } from './types'
+import { PrivilegesData } from './types'
 import getVehicleIcon from './utils'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -15,8 +15,7 @@ export const renderPrivileges = (
 ) => {
   if (privileges.length) {
     return privileges.map((p, i) => {
-      const VehicleIcon = getVehicleIcon(p.data.vehicleCode)
-
+      // const VehicleIcon = getVehicleIcon(p.data.vehicleCode)
       return (
         <React.Fragment key={i}>
           <TouchableOpacity
@@ -25,7 +24,7 @@ export const renderPrivileges = (
             activeOpacity={1}
           >
             <View style={styles.vehicleIconContainer}>
-              {/* <VehicleIcon /> */}
+              {getVehicleIcon(p.data.vehicle_category_code)}
             </View>
             <JoloText
               customStyles={(styles.fieldText, { width: 'auto' })}
@@ -50,20 +49,24 @@ export const renderPrivileges = (
                   }}
                   key={i}
                 >
-                  {/* {console.log({ p })}
-                  {console.log({ key })} */}
                   <JoloText
                     kind={JoloTextKind.subtitle}
                     color={Colors.black}
                     weight={JoloTextWeight.medium}
                   >
-                    {key}
+                    {key === 'vehicle_category_code'
+                      ? 'Vehicle Code'
+                      : key === 'issue_date'
+                      ? 'Issue Date'
+                      : key === 'codes'
+                      ? 'Restrictions'
+                      : 'Expiry Date'}
                   </JoloText>
                   <JoloText
                     color={Colors.black}
                     customStyles={styles.fieldText}
                   >
-                    {p.data[key]}
+                    {key === 'codes' ? p.data[key][0].code : p.data[key]}
                   </JoloText>
                 </View>
               ))}
@@ -81,7 +84,7 @@ export const renderPrivileges = (
 const styles = StyleSheet.create({
   fieldText: {
     textAlign: 'left',
-    width: 90,
+    width: 100,
   },
   privilegesDivider: {
     height: 6,

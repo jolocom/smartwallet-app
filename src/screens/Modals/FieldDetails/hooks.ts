@@ -2,18 +2,15 @@ import moment from 'moment'
 import { useState } from 'react'
 import { DrivingPrivilege } from 'react-native-mdl'
 
-import {
-  SinglePrivilegesFieldKeys,
-  VehicleTypes,
-  MdlPropertyKeys,
-  DrivingPrivilegesKeys,
-  MdlCredential,
-} from './types'
+import { MdlPropertyKeys, MdlCredential, PrivilegesData } from './types'
 import { useDocuments } from '~/hooks/documents'
 import { Document, DocumentProperty } from '~/hooks/documents/types'
+import useTranslation from '~/hooks/useTranslation'
 
 const useDrivingPrivileges = (document: Document) => {
   const { getExtraProperties } = useDocuments()
+
+  const { t } = useTranslation()
 
   const [showPrivileges, setShowPrivileges] = useState(false)
 
@@ -21,8 +18,7 @@ const useDrivingPrivileges = (document: Document) => {
     setShowPrivileges(!showPrivileges)
   }
 
-  const mdlDocument =
-    document.type[1] === MdlCredential.type ? { ...document } : null
+  const mdlDocument = document.type[1] === MdlCredential.type ? document : null
 
   const isDocumentMdl = Boolean(mdlDocument)
 
@@ -33,7 +29,7 @@ const useDrivingPrivileges = (document: Document) => {
   )
 
   const vehicleCategoryCodes = drivingPrivileges
-    .map((f) => f[DrivingPrivilegesKeys.vehicleCategoryCode])
+    .map((f) => f['vehicle_category_code'])
     .sort()
     .join(', ')
 
@@ -51,31 +47,36 @@ const useDrivingPrivileges = (document: Document) => {
 
   const mdlFields = [...mdlProperties!, ...getExtraProperties(mdlDocument!)]
 
+  // convert into Switch statement
   const getPrivilegesTitle = (c: string) => {
-    if (c.startsWith('A')) return VehicleTypes.MopedAndMotorcycle
-    if (c.startsWith('B')) return VehicleTypes.PassengerCar
-    if (c.startsWith('C')) return VehicleTypes.Truck
-    if (c.startsWith('D')) return VehicleTypes.Bus
-    if (c.startsWith('L') || c.startsWith('T'))
-      return VehicleTypes.TractorAndForklift
-    return null
+    if (c.startsWith('A')) return 'Moped and Motorcycle'
+    if (c.startsWith('B')) return 'Passenger Car'
+    if (c.startsWith('C')) return 'Truck'
+    if (c.startsWith('D')) return 'Bus'
+    if (c.startsWith('L')) return 'Tractor and Forklift'
+    if (c.startsWith('T')) return 'Tractor and Forklift'
   }
 
-  const mdlPrivileges = drivingPrivileges
-    .map((field) => ({
-      [SinglePrivilegesFieldKeys.Title]: getPrivilegesTitle(
-        field.vehicle_category_code,
-      ),
-      [SinglePrivilegesFieldKeys.VehicleCode]: field.vehicle_category_code,
-      [SinglePrivilegesFieldKeys.IssueDate]: moment(field.issue_date).format(
-        'DD.MM.YYYY',
-      ),
-      [SinglePrivilegesFieldKeys.Restrictions]: '-',
-      [SinglePrivilegesFieldKeys.ExpiryDate]: '-',
-    }))
+  // create terms for the keys and insert them, get rid of the enum
+  const mdlPrivileges: PrivilegesData[] = drivingPrivileges
+    .map((field) => {
+      return {
+        title: getPrivilegesTitle(field.vehicle_category_code),
+        data: {
+          vehicle_category_code: field.vehicle_category_code,
+          issue_date: moment(field.issue_date).format('DD.MM.YYYY'),
+          codes: [
+            {
+              code: field.codes?.map((c) => c.code).join(', ') || '-',
+            },
+          ],
+          expiry_date: '-',
+        },
+      } as PrivilegesData
+    })
     .sort((a, b) =>
-      a[SinglePrivilegesFieldKeys.VehicleCode].localeCompare(
-        b[SinglePrivilegesFieldKeys.VehicleCode],
+      a.data['vehicle_category_code'].localeCompare(
+        b.data['vehicle_category_code'],
       ),
     )
 

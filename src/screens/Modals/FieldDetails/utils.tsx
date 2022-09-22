@@ -1,43 +1,48 @@
 import React from 'react'
 import * as Icon from '~/assets/svg/mdl'
 
-import { VehicleClasses } from './types'
+import { VehicleClasses } from 'react-native-mdl'
 
-const getVehicleIcon = (vehicleClass: VehicleClasses) => {
+// const getVehicleIcon = (vehicleClass: VehicleClasses) => {
+//   // @ts-ignore
+//   return Icon[vehicleClass]
+// }
+
+const getVehicleIcon = (vehicleClass: string) => {
   switch (vehicleClass) {
-    case VehicleClasses.A:
+    case 'A':
       return <Icon.A />
-    case VehicleClasses.A1:
+    case 'A1':
       return <Icon.A1 />
-    case VehicleClasses.A2:
+    case 'A2':
       return <Icon.A2 />
-    case VehicleClasses.AM:
+    case 'AM':
       return <Icon.AM />
-    case VehicleClasses.B96:
+    case 'B96':
       return <Icon.B96 />
-    case VehicleClasses.B:
+    case 'BBF17':
       return <Icon.BBF17 />
-    case VehicleClasses.BE:
+    case 'BE':
       return <Icon.BE />
-    case VehicleClasses.C:
+    case 'C':
       return <Icon.C />
-    case VehicleClasses.C1:
+    case 'C1':
       return <Icon.C1 />
-    case VehicleClasses.C1E:
+    case 'C1E':
       return <Icon.C1E />
-    case VehicleClasses.CE:
+    case 'CE':
       return <Icon.CE />
-    case VehicleClasses.D:
+    case 'D':
       return <Icon.D />
-    case VehicleClasses.D1:
+    case 'D1':
       return <Icon.D1 />
-    case VehicleClasses.D1E:
+    case 'D1E':
       return <Icon.D1E />
-    case VehicleClasses.DE:
+    case 'DE':
       return <Icon.DE />
-    case VehicleClasses.L:
+    case 'L':
       return <Icon.L />
-    case VehicleClasses.T:
+    case 'T':
       return <Icon.T />
     default:
       return null
