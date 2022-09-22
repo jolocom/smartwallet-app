@@ -93,8 +93,8 @@ const FieldDetails = () => {
         renderHeader={() => (
           <Collapsible.Header
             customStyles={{ backgroundColor }}
-            type={!showPrivileges ? NavHeaderType.Close : NavHeaderType.Back}
-            onPress={!showPrivileges ? goBack : togglePrivileges}
+            type={showPrivileges ? NavHeaderType.Back : NavHeaderType.Close}
+            onPress={showPrivileges ? togglePrivileges : goBack}
           />
         )}
         renderScroll={() => (
