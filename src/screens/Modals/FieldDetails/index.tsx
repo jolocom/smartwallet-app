@@ -21,6 +21,7 @@ import { MainStackParamList } from '../../LoggedIn/Main'
 import { useGoBack } from '~/hooks/navigation'
 import { renderPrivileges } from './MdlPrivileges'
 import useDrivingPrivileges from './hooks'
+import { MdlCredential } from './types'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -53,9 +54,7 @@ const FieldDetails = () => {
     togglePrivileges,
     showPrivileges,
     generateSinglePrivilegesField,
-  } =
-    document.type[1] === 'DrivingLicenseCredential' &&
-    useDrivingPrivileges(document)
+  } = document.type[1] === MdlCredential.type && useDrivingPrivileges(document)
 
   const goBack = useGoBack()
 

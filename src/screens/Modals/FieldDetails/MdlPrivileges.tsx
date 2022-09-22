@@ -3,17 +3,16 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { handleLayout } from './Field'
 import BP from '~/utils/breakpoints'
-import { Category } from './types'
+import { DrivingPrivilegesData, SinglePrivilegesFieldKeys } from './types'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import getVehicleIcon from './utils'
 
-export const renderPrivileges = (categories: Category[]) => {
+export const renderPrivileges = (categories: DrivingPrivilegesData[]) => {
   if (categories.length) {
-    console.log({ categories })
     return categories.map(
       (field, i) =>
-        field['Vehicle Code'] !== 'ALL' && (
+        field[SinglePrivilegesFieldKeys.VehicleCode] !== 'ALL' && (
           <React.Fragment key={i}>
             <TouchableOpacity
               style={styles.privilegesContainer}
@@ -21,7 +20,7 @@ export const renderPrivileges = (categories: Category[]) => {
               activeOpacity={1}
             >
               <View style={styles.vehicleIconContainer}>
-                {getVehicleIcon(field['Vehicle Code'])}
+                {getVehicleIcon(field[SinglePrivilegesFieldKeys.VehicleCode])}
               </View>
               <JoloText
                 customStyles={(styles.fieldText, { width: 'auto' })}

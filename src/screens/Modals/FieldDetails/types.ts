@@ -1,14 +1,30 @@
 export interface DrivingPrivilegesData {
-  vehicleCode: string[]
-  restrictions: string
-  expiryDate: string
-  issueDate: string
+  title: VehicleTypes
+  [SinglePrivilegesFieldKeys.VehicleCode]: string[]
+  [SinglePrivilegesFieldKeys.Restrictions]: string
+  [SinglePrivilegesFieldKeys.ExpiryDate]: string
+  [SinglePrivilegesFieldKeys.IssueDate]: string
 }
 
-export interface Category {
-  title: VehicleTypes
-  classes: string[]
-  data: DrivingPrivilegesData
+export enum MdlCredential {
+  type = 'DrivingLicenseCredential',
+}
+
+export enum MdlPropertyKeys {
+  givenName = '$.given_name',
+  familyName = '$.family_name',
+  birthDate = '$.birth_date',
+  documentNumber = '$.document_number',
+  issueDate = '$.issue_date',
+  issuingCountry = '$.issuing_country',
+  unDistinguishingSign = '$.un_distinguishing_sign',
+  drivingPrivileges = '$.driving_privileges',
+  portrait = '$.portrait',
+}
+
+export enum DrivingPrivilegesKeys {
+  issueDate = 'issue_date',
+  vehicleCaegroyCode = 'vehicle_category_code',
 }
 
 export enum SinglePrivilegesFieldKeys {

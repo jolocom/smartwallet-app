@@ -2,7 +2,13 @@ import moment from 'moment'
 import { useState } from 'react'
 import { DrivingPrivilege } from 'react-native-mdl'
 
-import { SinglePrivilegesFieldKeys, VehicleTypes } from './types'
+import {
+  SinglePrivilegesFieldKeys,
+  VehicleTypes,
+  MdlPropertyKeys,
+  DrivingPrivilegesKeys,
+  MdlCredential,
+} from './types'
 import { useDocuments } from '~/hooks/documents'
 import { Document, DocumentProperty } from '~/hooks/documents/types'
 
@@ -16,22 +22,23 @@ const useDrivingPrivileges = (document: Document) => {
   }
 
   const mdlDocument =
-    document.type[1] === 'DrivingLicenseCredential' ? { ...document } : null
+    document.type[1] === MdlCredential.type ? { ...document } : null
 
   const isDocumentMdl = Boolean(mdlDocument)
 
   const parsedDrivingPrivileges: DrivingPrivilege[] = JSON.parse(
-    mdlDocument!.properties.filter((f) => f.key === '$.driving_privileges')[0]
-      .value,
+    mdlDocument!.properties.filter(
+      (f) => f.key === MdlPropertyKeys.drivingPrivileges,
+    )[0].value,
   )
 
   const vehicleCategoryCodes = parsedDrivingPrivileges
-    .map((f) => f['vehicle_category_code'])
+    .map((f) => f[DrivingPrivilegesKeys.vehicleCaegroyCode])
     .sort()
     .join(', ')
 
   const mdlProperties = mdlDocument!.properties.map((f) => {
-    if (f.key !== '$.driving_privileges') {
+    if (f.key !== MdlPropertyKeys.drivingPrivileges) {
       return f
     } else {
       return {
