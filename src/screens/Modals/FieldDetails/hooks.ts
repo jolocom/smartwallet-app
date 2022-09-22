@@ -26,13 +26,13 @@ const useDrivingPrivileges = (document: Document) => {
 
   const isDocumentMdl = Boolean(mdlDocument)
 
-  const parsedDrivingPrivileges: DrivingPrivilege[] = JSON.parse(
+  const drivingPrivileges: DrivingPrivilege[] = JSON.parse(
     mdlDocument!.properties.filter(
       (f) => f.key === MdlPropertyKeys.drivingPrivileges,
     )[0].value,
   )
 
-  const vehicleCategoryCodes = parsedDrivingPrivileges
+  const vehicleCategoryCodes = drivingPrivileges
     .map((f) => f[DrivingPrivilegesKeys.vehicleCategoryCode])
     .sort()
     .join(', ')
@@ -61,7 +61,7 @@ const useDrivingPrivileges = (document: Document) => {
     return null
   }
 
-  const mdlPrivileges = parsedDrivingPrivileges
+  const mdlPrivileges = drivingPrivileges
     .map((field) => ({
       [SinglePrivilegesFieldKeys.Title]: getPrivilegesTitle(
         field.vehicle_category_code,
