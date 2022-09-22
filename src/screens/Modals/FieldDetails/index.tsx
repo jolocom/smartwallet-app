@@ -75,6 +75,12 @@ const FieldDetails = () => {
     setNumOfLines(lines.length)
   }
 
+  const displayFields = () => {
+    if (showPrivileges) return renderPrivileges(mdlPrivileges)
+    if (mdlFields) return renderField(mdlFields, togglePrivileges)
+    return renderField(fields)
+  }
+
   return (
     <View
       style={{
@@ -146,11 +152,7 @@ const FieldDetails = () => {
                   marginBottom: 16,
                 }}
               >
-                {showPrivileges
-                  ? renderPrivileges(mdlPrivileges)
-                  : mdlFields
-                  ? renderField(mdlFields, togglePrivileges)
-                  : renderField(fields)}
+                {displayFields()}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>

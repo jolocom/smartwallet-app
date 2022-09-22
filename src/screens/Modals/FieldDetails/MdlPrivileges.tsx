@@ -67,7 +67,7 @@ export const renderPrivileges = (privileges: DrivingPrivilegesData[]) => {
                 )}
               </View>
             </TouchableOpacity>
-            {i !== categories.length - 1 && (
+            {i !== privileges.length - 1 && (
               <View style={styles.privilegesDivider} />
             )}
           </React.Fragment>
