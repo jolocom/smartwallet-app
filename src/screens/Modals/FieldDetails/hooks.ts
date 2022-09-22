@@ -2,7 +2,7 @@ import moment from 'moment'
 import { useState } from 'react'
 import { DrivingPrivilege } from 'react-native-mdl'
 
-import { SinglePrivilegesFieldKeys } from './types'
+import { SinglePrivilegesFieldKeys, VehicleTypes } from './types'
 import { useDocuments } from '~/hooks/documents'
 import { Document, DocumentProperty } from '~/hooks/documents/types'
 
@@ -49,17 +49,16 @@ const useDrivingPrivileges = (document: Document) => {
       [SinglePrivilegesFieldKeys.Title]: field.vehicle_category_code.startsWith(
         'A',
       )
-        ? 'Moped and Motorcycle'
+        ? VehicleTypes.MopedAndMotorcycle
         : field.vehicle_category_code.startsWith('B')
-        ? 'Passenger Car'
+        ? VehicleTypes.PassengerCar
         : field.vehicle_category_code.startsWith('C')
-        ? 'Truck'
+        ? VehicleTypes.Truck
         : field.vehicle_category_code.startsWith('D')
-        ? 'Bus'
-        : field.vehicle_category_code.startsWith('L')
-        ? 'Tractor and Forklift'
-        : field.vehicle_category_code.startsWith('T')
-        ? 'Tractor and Forklift'
+        ? VehicleTypes.Bus
+        : field.vehicle_category_code.startsWith('L') ||
+          field.vehicle_category_code.startsWith('T')
+        ? VehicleTypes.TractorAndForklift
         : null,
       [SinglePrivilegesFieldKeys.VehicleCode]: field.vehicle_category_code,
       [SinglePrivilegesFieldKeys.IssueDate]: moment(field.issue_date).format(
