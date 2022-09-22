@@ -18,6 +18,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { PopOutIcon } from '~/assets/svg'
+import { MdlPropertyKeys } from './types'
 
 type FieldValueProps = { value: string; mime_type: PropertyMimeType }
 
@@ -142,7 +143,11 @@ export const renderField = (
       <TouchableOpacity
         style={styles.fieldContainer}
         onLayout={handleLayout}
-        onPress={field.key === '$.driving_privileges' ? togglePrivileges : null}
+        onPress={
+          field.key === MdlPropertyKeys.drivingPrivileges
+            ? togglePrivileges
+            : null
+        }
         activeOpacity={0.6}
       >
         <JoloText
@@ -153,7 +158,7 @@ export const renderField = (
           {field.label}
         </JoloText>
         <FieldValue value={field.value as string} mime_type={field.mime_type} />
-        {field.key === '$.driving_privileges' && <MdlPopOutIcon />}
+        {field.key === MdlPropertyKeys.drivingPrivileges && <MdlPopOutIcon />}
       </TouchableOpacity>
       {i !== Object.keys(fields).length - 1 && <View style={styles.divider} />}
     </React.Fragment>

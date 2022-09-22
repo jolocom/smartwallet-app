@@ -51,22 +51,21 @@ const useDrivingPrivileges = (document: Document) => {
 
   const mdlFields = [...mdlProperties!, ...getExtraProperties(mdlDocument!)]
 
+  const getPrivilegesTitle = (c: string) => {
+    if (c.startsWith('A')) return VehicleTypes.MopedAndMotorcycle
+    if (c.startsWith('B')) return VehicleTypes.PassengerCar
+    if (c.startsWith('C')) return VehicleTypes.Truck
+    if (c.startsWith('D')) return VehicleTypes.Bus
+    if (c.startsWith('L') || c.startsWith('T'))
+      return VehicleTypes.TractorAndForklift
+    return null
+  }
+
   const generateSinglePrivilegesField = parsedDrivingPrivileges.map(
     (field) => ({
-      [SinglePrivilegesFieldKeys.Title]: field.vehicle_category_code.startsWith(
-        'A',
-      )
-        ? VehicleTypes.MopedAndMotorcycle
-        : field.vehicle_category_code.startsWith('B')
-        ? VehicleTypes.PassengerCar
-        : field.vehicle_category_code.startsWith('C')
-        ? VehicleTypes.Truck
-        : field.vehicle_category_code.startsWith('D')
-        ? VehicleTypes.Bus
-        : field.vehicle_category_code.startsWith('L') ||
-          field.vehicle_category_code.startsWith('T')
-        ? VehicleTypes.TractorAndForklift
-        : null,
+      [SinglePrivilegesFieldKeys.Title]: getPrivilegesTitle(
+        field.vehicle_category_code,
+      ),
       [SinglePrivilegesFieldKeys.VehicleCode]: field.vehicle_category_code,
       [SinglePrivilegesFieldKeys.IssueDate]: moment(field.issue_date).format(
         'DD.MM.YYYY',
