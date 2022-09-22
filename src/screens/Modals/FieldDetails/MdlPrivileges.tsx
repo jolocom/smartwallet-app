@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
-import { handleLayout } from './Field'
 import { PrivilegesData, SinglePrivilegesFieldKeys } from './types'
 import getVehicleIcon from './utils'
 
@@ -10,69 +9,72 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-export const renderPrivileges = (privileges: PrivilegesData[]) => {
+export const renderPrivileges = (
+  privileges: PrivilegesData[],
+  handleLayout: () => void,
+) => {
   if (privileges.length) {
-    return privileges.map(
-      (p, i) =>
-        p[SinglePrivilegesFieldKeys.VehicleCode] !== 'ALL' && (
-          <React.Fragment key={i}>
-            <TouchableOpacity
-              style={styles.privilegesContainer}
-              onLayout={handleLayout}
-              activeOpacity={1}
+    return privileges.map((p, i) => {
+      const VehicleIcon = getVehicleIcon(p.data.vehicleCode)
+
+      return (
+        <React.Fragment key={i}>
+          <TouchableOpacity
+            style={styles.privilegesContainer}
+            onLayout={handleLayout}
+            activeOpacity={1}
+          >
+            <View style={styles.vehicleIconContainer}>
+              {/* <VehicleIcon /> */}
+            </View>
+            <JoloText
+              customStyles={(styles.fieldText, { width: 'auto' })}
+              size={JoloTextSizes.mini}
+              color={Colors.osloGray}
             >
-              <View style={styles.vehicleIconContainer}>
-                {getVehicleIcon(p[SinglePrivilegesFieldKeys.VehicleCode])}
-              </View>
-              <JoloText
-                customStyles={(styles.fieldText, { width: 'auto' })}
-                size={JoloTextSizes.mini}
-                color={Colors.osloGray}
-              >
-                {p.title}
-              </JoloText>
-              <View
-                style={{
-                  width: '100%',
-                }}
-              >
-                {Object.keys(p).map(
-                  (key, i) =>
-                    key !== SinglePrivilegesFieldKeys.Title && (
-                      <View
-                        style={{
-                          ...styles.vehicleFieldsContainer,
-                          ...(i !== Object.keys(p).length - 1 && {
-                            borderBottomColor: Colors.genevaGray15,
-                            borderBottomWidth: 1,
-                          }),
-                        }}
-                        key={i}
-                      >
-                        <JoloText
-                          kind={JoloTextKind.subtitle}
-                          color={Colors.black}
-                          weight={JoloTextWeight.medium}
-                        >
-                          {key}
-                        </JoloText>
-                        <JoloText
-                          color={Colors.black}
-                          customStyles={styles.fieldText}
-                        >
-                          {p[key]}
-                        </JoloText>
-                      </View>
-                    ),
-                )}
-              </View>
-            </TouchableOpacity>
-            {i !== privileges.length - 1 && (
-              <View style={styles.privilegesDivider} />
-            )}
-          </React.Fragment>
-        ),
-    )
+              {p.title}
+            </JoloText>
+            <View
+              style={{
+                width: '100%',
+              }}
+            >
+              {Object.keys(p.data).map((key, i) => (
+                <View
+                  style={{
+                    ...styles.vehicleFieldsContainer,
+                    ...(i !== Object.keys(p.data).length - 1 && {
+                      borderBottomColor: Colors.genevaGray15,
+                      borderBottomWidth: 1,
+                    }),
+                  }}
+                  key={i}
+                >
+                  {/* {console.log({ p })}
+                  {console.log({ key })} */}
+                  <JoloText
+                    kind={JoloTextKind.subtitle}
+                    color={Colors.black}
+                    weight={JoloTextWeight.medium}
+                  >
+                    {key}
+                  </JoloText>
+                  <JoloText
+                    color={Colors.black}
+                    customStyles={styles.fieldText}
+                  >
+                    {p.data[key]}
+                  </JoloText>
+                </View>
+              ))}
+            </View>
+          </TouchableOpacity>
+          {i !== privileges.length - 1 && (
+            <View style={styles.privilegesDivider} />
+          )}
+        </React.Fragment>
+      )
+    })
   }
 }
 

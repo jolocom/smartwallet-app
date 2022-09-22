@@ -33,6 +33,7 @@ import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
 import { MdlPropertyKeys } from './types'
+import { renderPrivileges } from './MdlPrivileges'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -167,8 +168,13 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
-  const { mdlFields, togglePrivileges, showPrivileges, mdlPrivileges } =
-    document.type[1] === MdlCredential.type && useDrivingPrivileges(document)
+  const {
+    mdlFields,
+    togglePrivileges,
+    showPrivileges,
+    isDocumentMdl,
+    mdlPrivileges,
+  } = document.type[1] === MdlCredential.type && useDrivingPrivileges(document)
 
   const goBack = useGoBack()
 
@@ -272,8 +278,9 @@ const FieldDetails = () => {
                   marginBottom: 16,
                 }}
               >
-                {/* {displayFields()} */}
-                {mdlFields?.length
+                {showPrivileges
+                  ? renderPrivileges(mdlPrivileges, handleLayout)
+                  : isDocumentMdl
                   ? mdlFields.map((field, i) => (
                       <React.Fragment key={i}>
                         <TouchableOpacity
