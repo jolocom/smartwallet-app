@@ -49,12 +49,8 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
-  const {
-    mdlFields,
-    togglePrivileges,
-    showPrivileges,
-    generateSinglePrivilegesField,
-  } = document.type[1] === MdlCredential.type && useDrivingPrivileges(document)
+  const { mdlFields, togglePrivileges, showPrivileges, mdlPrivileges } =
+    document.type[1] === MdlCredential.type && useDrivingPrivileges(document)
 
   const goBack = useGoBack()
 
@@ -92,9 +88,7 @@ const FieldDetails = () => {
           <Collapsible.Header
             customStyles={{ backgroundColor }}
             type={!showPrivileges ? NavHeaderType.Close : NavHeaderType.Back}
-            onPress={() => {
-              !showPrivileges ? goBack() : togglePrivileges()
-            }}
+            onPress={!showPrivileges ? goBack : togglePrivileges}
           />
         )}
         renderScroll={() => (
@@ -153,7 +147,7 @@ const FieldDetails = () => {
                 }}
               >
                 {showPrivileges
-                  ? renderPrivileges(generateSinglePrivilegesField)
+                  ? renderPrivileges(mdlPrivileges)
                   : mdlFields
                   ? renderField(mdlFields, togglePrivileges)
                   : renderField(fields)}

@@ -1,18 +1,20 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+
 import { handleLayout } from './Field'
-import BP from '~/utils/breakpoints'
 import { DrivingPrivilegesData, SinglePrivilegesFieldKeys } from './types'
-import { Colors } from '~/utils/colors'
-import { JoloTextSizes } from '~/utils/fonts'
 import getVehicleIcon from './utils'
 
-export const renderPrivileges = (categories: DrivingPrivilegesData[]) => {
-  if (categories.length) {
-    return categories.map(
-      (field, i) =>
-        field[SinglePrivilegesFieldKeys.VehicleCode] !== 'ALL' && (
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
+
+export const renderPrivileges = (privileges: DrivingPrivilegesData[]) => {
+  if (privileges.length) {
+    return privileges.map(
+      (p, i) =>
+        p[SinglePrivilegesFieldKeys.VehicleCode] !== 'ALL' && (
           <React.Fragment key={i}>
             <TouchableOpacity
               style={styles.privilegesContainer}
@@ -20,27 +22,27 @@ export const renderPrivileges = (categories: DrivingPrivilegesData[]) => {
               activeOpacity={1}
             >
               <View style={styles.vehicleIconContainer}>
-                {getVehicleIcon(field[SinglePrivilegesFieldKeys.VehicleCode])}
+                {getVehicleIcon(p[SinglePrivilegesFieldKeys.VehicleCode])}
               </View>
               <JoloText
                 customStyles={(styles.fieldText, { width: 'auto' })}
                 size={JoloTextSizes.mini}
                 color={Colors.osloGray}
               >
-                {field.title}
+                {p.title}
               </JoloText>
               <View
                 style={{
                   width: '100%',
                 }}
               >
-                {Object.keys(field).map(
+                {Object.keys(p).map(
                   (key, i) =>
                     key !== SinglePrivilegesFieldKeys.Title && (
                       <View
                         style={{
                           ...styles.vehicleFieldsContainer,
-                          ...(i !== Object.keys(field).length - 1 && {
+                          ...(i !== Object.keys(p).length - 1 && {
                             borderBottomColor: Colors.genevaGray15,
                             borderBottomWidth: 1,
                           }),
@@ -58,7 +60,7 @@ export const renderPrivileges = (categories: DrivingPrivilegesData[]) => {
                           color={Colors.black}
                           customStyles={styles.fieldText}
                         >
-                          {field[key]}
+                          {p[key]}
                         </JoloText>
                       </View>
                     ),

@@ -61,7 +61,7 @@ const useDrivingPrivileges = (document: Document) => {
     return null
   }
 
-  const generateSinglePrivilegesField = parsedDrivingPrivileges
+  const mdlPrivileges = parsedDrivingPrivileges
     .map((field) => ({
       [SinglePrivilegesFieldKeys.Title]: getPrivilegesTitle(
         field.vehicle_category_code,
@@ -85,7 +85,7 @@ const useDrivingPrivileges = (document: Document) => {
     mdlFields,
     togglePrivileges,
     showPrivileges,
-    generateSinglePrivilegesField,
+    mdlPrivileges,
   }
 }
 
