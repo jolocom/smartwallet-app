@@ -146,7 +146,7 @@ export const renderField = (
         onPress={
           field.key === MdlPropertyKeys.drivingPrivileges
             ? togglePrivileges
-            : null
+            : undefined
         }
         activeOpacity={0.6}
       >
