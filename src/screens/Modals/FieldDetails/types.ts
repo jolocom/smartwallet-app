@@ -34,6 +34,26 @@ export enum VehicleTypes {
   Bus = 'Bus',
 }
 
+export enum VehicleClasses {
+  A = 'A',
+  A1 = 'A1',
+  A2 = 'A2',
+  AM = 'AM',
+  B96 = 'B96',
+  B = 'B',
+  BE = 'BE',
+  C = 'C',
+  C1 = 'C1',
+  C1E = 'C1E',
+  CE = 'CE',
+  D = 'D',
+  D1 = 'D1',
+  D1E = 'D1E',
+  DE = 'DE',
+  L = 'L',
+  T = 'T',
+}
+
 export interface MotorcycleClass {
   title: VehicleTypes.MopedAndMotorcycle
   classes: ['AM', 'A1', 'A2', 'A']

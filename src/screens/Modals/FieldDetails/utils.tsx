@@ -1,41 +1,43 @@
 import React from 'react'
 import * as Icon from '~/assets/svg/mdl'
 
-const getVehicleIcon = (vehicleClass: string) => {
+import { VehicleClasses } from './types'
+
+const getVehicleIcon = (vehicleClass: VehicleClasses) => {
   switch (vehicleClass) {
-    case 'A':
+    case VehicleClasses.A:
       return <Icon.A />
-    case 'A1':
+    case VehicleClasses.A1:
       return <Icon.A1 />
-    case 'A2':
+    case VehicleClasses.A2:
       return <Icon.A2 />
-    case 'AM':
+    case VehicleClasses.AM:
       return <Icon.AM />
-    case 'B96':
+    case VehicleClasses.B96:
       return <Icon.B96 />
-    case 'B':
+    case VehicleClasses.B:
       return <Icon.BBF17 />
-    case 'BE':
+    case VehicleClasses.BE:
       return <Icon.BE />
-    case 'C':
+    case VehicleClasses.C:
       return <Icon.C />
-    case 'C1':
+    case VehicleClasses.C1:
       return <Icon.C1 />
-    case 'C1E':
+    case VehicleClasses.C1E:
       return <Icon.C1E />
-    case 'CE':
+    case VehicleClasses.CE:
       return <Icon.CE />
-    case 'D':
+    case VehicleClasses.D:
       return <Icon.D />
-    case 'D1':
+    case VehicleClasses.D1:
       return <Icon.D1 />
-    case 'D1E':
+    case VehicleClasses.D1E:
       return <Icon.D1E />
-    case 'DE':
+    case VehicleClasses.DE:
       return <Icon.DE />
-    case 'L':
+    case VehicleClasses.L:
       return <Icon.L />
-    case 'T':
+    case VehicleClasses.T:
       return <Icon.T />
     default:
       return null
