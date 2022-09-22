@@ -24,7 +24,7 @@ export enum MdlPropertyKeys {
 
 export enum DrivingPrivilegesKeys {
   issueDate = 'issue_date',
-  vehicleCaegroyCode = 'vehicle_category_code',
+  vehicleCategoryCode = 'vehicle_category_code',
 }
 
 export enum SinglePrivilegesFieldKeys {

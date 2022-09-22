@@ -33,7 +33,7 @@ const useDrivingPrivileges = (document: Document) => {
   )
 
   const vehicleCategoryCodes = parsedDrivingPrivileges
-    .map((f) => f[DrivingPrivilegesKeys.vehicleCaegroyCode])
+    .map((f) => f[DrivingPrivilegesKeys.vehicleCategoryCode])
     .sort()
     .join(', ')
 
