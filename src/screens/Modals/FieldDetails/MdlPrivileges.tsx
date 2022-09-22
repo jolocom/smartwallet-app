@@ -8,6 +8,7 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import useTranslation from '~/hooks/useTranslation'
 
 export const renderPrivileges = (
   privileges: PrivilegesData[],
@@ -54,19 +55,16 @@ export const renderPrivileges = (
                     color={Colors.black}
                     weight={JoloTextWeight.medium}
                   >
-                    {key === 'vehicle_category_code'
-                      ? 'Vehicle Code'
-                      : key === 'issue_date'
-                      ? 'Issue Date'
-                      : key === 'codes'
-                      ? 'Restrictions'
-                      : 'Expiry Date'}
+                    {key}
                   </JoloText>
                   <JoloText
                     color={Colors.black}
                     customStyles={styles.fieldText}
                   >
-                    {key === 'codes' ? p.data[key][0].code : p.data[key]}
+                    {console.log(p.data)}
+                    {key === 'Restrictions' || key === 'Beschränkungen'
+                      ? p.data[key][0].code
+                      : p.data[key]}
                   </JoloText>
                 </View>
               ))}

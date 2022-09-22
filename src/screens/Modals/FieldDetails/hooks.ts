@@ -64,27 +64,24 @@ const useDrivingPrivileges = (document: Document) => {
     }
   }
 
-  // create terms for the keys and insert them, get rid of the enum
-  const mdlPrivileges: PrivilegesData[] = drivingPrivileges
+  const mdlPrivileges = drivingPrivileges
     .map((field) => {
       return {
         title: getPrivilegesTitle(field.vehicle_category_code),
         data: {
-          vehicle_category_code: field.vehicle_category_code,
-          issue_date: moment(field.issue_date).format('DD.MM.YYYY'),
-          codes: [
+          [t('mdl.vehicleCode')]: field.vehicle_category_code,
+          [t('mdl.issueDate')]: moment(field.issue_date).format('DD.MM.YYYY'),
+          [t('mdl.restrictions')]: [
             {
               code: field.codes?.map((c) => c.code).join(', ') || '-',
             },
           ],
-          expiry_date: field.expiry_date || '-',
+          [t('mdl.expiryDate')]: field.expiry_date || '-',
         },
-      } as PrivilegesData
+      }
     })
     .sort((a, b) =>
-      a.data['vehicle_category_code'].localeCompare(
-        b.data['vehicle_category_code'],
-      ),
+      a.data[t('mdl.vehicleCode')].localeCompare(b.data[t('mdl.vehicleCode')]),
     )
 
   return {
