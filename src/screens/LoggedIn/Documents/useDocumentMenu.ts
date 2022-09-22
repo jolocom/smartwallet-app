@@ -4,6 +4,7 @@ import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { ScreenNames } from '~/types/screens'
 import { MDL_CREDENTIAL_TYPE } from './DrivingLicenseDemo/data'
+import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
 import { useFavoriteDocuments } from './useFavoriteDocuments'
 
 export const useDocumentMenu = () => {
@@ -11,6 +12,7 @@ export const useDocumentMenu = () => {
   const { scheduleErrorWarning } = useToasts()
   const { deleteDocument, getDocumentById } = useDocuments()
   const { addFavorite, deleteFavorite } = useFavoriteDocuments()
+  const { deleteDrivingLicense } = useDrivingLicense()
 
   const { showPopup } = usePopupMenu()
 
@@ -55,7 +57,13 @@ export const useDocumentMenu = () => {
             }),
             cancelText: t('Documents.cancelCardOption'),
             instructionText: t('Documents.deleteCredentialInstruction'),
-            onComplete: () => handleDelete(id),
+            onComplete: () => {
+              if (isDrivingLicense) {
+                deleteDrivingLicense().catch(scheduleErrorWarning)
+              }
+
+              handleDelete(id)
+            },
           },
         },
       },
