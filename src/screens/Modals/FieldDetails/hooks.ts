@@ -61,8 +61,8 @@ const useDrivingPrivileges = (document: Document) => {
     return null
   }
 
-  const generateSinglePrivilegesField = parsedDrivingPrivileges.map(
-    (field) => ({
+  const generateSinglePrivilegesField = parsedDrivingPrivileges
+    .map((field) => ({
       [SinglePrivilegesFieldKeys.Title]: getPrivilegesTitle(
         field.vehicle_category_code,
       ),
@@ -72,8 +72,12 @@ const useDrivingPrivileges = (document: Document) => {
       ),
       [SinglePrivilegesFieldKeys.Restrictions]: '-',
       [SinglePrivilegesFieldKeys.ExpiryDate]: '-',
-    }),
-  )
+    }))
+    .sort((a, b) =>
+      a[SinglePrivilegesFieldKeys.VehicleCode].localeCompare(
+        b[SinglePrivilegesFieldKeys.VehicleCode],
+      ),
+    )
 
   return {
     mdlDocument,
