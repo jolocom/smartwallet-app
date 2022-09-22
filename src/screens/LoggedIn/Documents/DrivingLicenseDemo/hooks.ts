@@ -11,10 +11,11 @@ import DrivingLicenseSDK, {
   PersonalizationInputResponse,
 } from 'react-native-mdl'
 import { useDispatch } from 'react-redux'
-import { useDocuments, useInitDocuments } from '~/hooks/documents'
+import { useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
 import { addCredentials } from '~/modules/credentials/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
@@ -23,6 +24,7 @@ import { makeMdlManifest, mdlMetadata } from './data'
 import { utf8ToBase64Image } from './utils'
 
 export const useDrivingLicense = () => {
+  const { t } = useTranslation()
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
   const { scheduleErrorWarning } = useToasts()
@@ -30,7 +32,6 @@ export const useDrivingLicense = () => {
   const goBack = useGoBack()
   const redirect = useRedirect()
   const { toDocument } = useInitDocuments()
-  const { deleteDocument } = useDocuments()
 
   const initDrivingLicense = async () => {
     await sdk.init()
@@ -162,7 +163,7 @@ export const useDrivingLicense = () => {
     dispatch(
       setLoader({
         type: LoaderTypes.default,
-        msg: 'Führerscheindaten hinzufügen',
+        msg: t('mdl.personalizationLoader'),
       }),
     )
     return sdk.finishPersonalization(responses)
@@ -172,7 +173,12 @@ export const useDrivingLicense = () => {
     return sdk.deleteDrivingLicense().catch(scheduleErrorWarning)
   }
 
-  const startSharing = async () => {
+  const shareDrivingLicense = () => {
+    //TODO check bluetooth
+    redirect(ScreenNames.DrivingLicenseShare)
+  }
+
+  const prepareDeviceEngagement = async () => {
     const engagementHandler = (state: string | EngagementState) => {
       const jsonState =
         typeof state === 'string'
@@ -184,7 +190,7 @@ export const useDrivingLicense = () => {
           dispatch(
             setLoader({
               type: LoaderTypes.default,
-              msg: 'Führerscheindaten werden übertragen…',
+              msg: t('mdl.sharingLoader'),
             }),
           )
           break
@@ -192,7 +198,7 @@ export const useDrivingLicense = () => {
           dispatch(
             setLoader({
               type: LoaderTypes.success,
-              msg: 'Ihre Führerscheindaten wurden erfolgreich übermittelt!',
+              msg: t('mdl.successLoader'),
             }),
           )
 
@@ -201,22 +207,15 @@ export const useDrivingLicense = () => {
           dispatch(
             setLoader({
               type: LoaderTypes.error,
-              msg: 'Die Datenübertragen wurde abgebrochen. Bitte versuchen Sie es erneut.',
+              msg: t('mdl.canceledLoader'),
             }),
           )
           break
         case EngagementStateNames.error:
-          if (
-            jsonState.error?.localizedDescription ===
-            'BLE_PERMISSIONS_NOT_GIVEN'
-          ) {
-            console.warn('WARNING: BLE_PERMISSIONS_NOT_GIVEN')
-            //TODO: add toast with permission
-          }
           dispatch(
             setLoader({
               type: LoaderTypes.error,
-              msg: `Die Datenübertragung war nicht erfolgreich!`,
+              msg: t('mdl.errorLoader'),
             }),
           )
           break
@@ -259,6 +258,7 @@ export const useDrivingLicense = () => {
     deleteDrivingLicense,
     finishPersonalization,
     initDrivingLicense,
-    startSharing,
+    shareDrivingLicense,
+    prepareDeviceEngagement,
   }
 }

@@ -596,5 +596,12 @@
     },
     "DocumentCard": {
         "expired": "Abgelaufen"
+    },
+    "mdl": {
+        "sharingLoader": "Führerscheindaten werden übertragen…",
+        "successLoader": "Ihre Führerscheindaten wurden erfolgreich übermittelt!",
+        "canceledLoader": "Die Datenübertragen wurde abgebrochen. Bitte versuchen Sie es erneut.",
+        "errorLoader": "Die Datenübertragung war nicht erfolgreich!",
+        "personalizationLoader": "Führerscheindaten hinzufügen"
     }
 }
