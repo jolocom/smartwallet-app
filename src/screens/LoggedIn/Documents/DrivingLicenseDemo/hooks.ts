@@ -10,16 +10,14 @@ import DrivingLicenseSDK, {
   PersonalizationInputRequest,
   PersonalizationInputResponse,
 } from 'react-native-mdl'
-import { useDispatch, useSelector } from 'react-redux'
-import { useInitDocuments } from '~/hooks/documents'
+import { useDispatch } from 'react-redux'
+import { useDocuments, useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
 import { addCredentials } from '~/modules/credentials/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import { setMdlDisplayData } from '~/modules/mdl/actions'
-import { getMdlDisplayData } from '~/modules/mdl/selectors'
 import { ScreenNames } from '~/types/screens'
 import { makeMdlManifest, mdlMetadata } from './data'
 import { utf8ToBase64Image } from './utils'
@@ -27,21 +25,15 @@ import { utf8ToBase64Image } from './utils'
 export const useDrivingLicense = () => {
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
-  const { scheduleWarning, scheduleErrorWarning } = useToasts()
+  const { scheduleErrorWarning } = useToasts()
   const dispatch = useDispatch()
-  const drivingLicense = useSelector(getMdlDisplayData)
   const goBack = useGoBack()
   const redirect = useRedirect()
   const { toDocument } = useInitDocuments()
+  const { deleteDocument } = useDocuments()
 
   const initDrivingLicense = async () => {
-    const initializedSdk = await sdk.init()
-    const isPersonalized = await sdk.getPersonalizationStatus()
-    if (isPersonalized) {
-      console.log({isPersonalized})
-      const displayData = await sdk.getDisplayData()
-      dispatch(setMdlDisplayData(displayData))
-    }
+    await sdk.init()
   }
 
   const createDrivingLicenseVC = async (
@@ -91,9 +83,7 @@ export const useDrivingLicense = () => {
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
-    console.log('before startPersonalization')
     sdk.startPersonalization(qrString)
-    console.log('after startPersonalization')
 
     const requestHandler = (request: string | PersonalizationInputRequest) => {
       // NOTE: this is a thing bc on ios we can't send objects through events, while
@@ -105,18 +95,15 @@ export const useDrivingLicense = () => {
         jsonRequests = [request]
       }
 
-      console.log('REQUESTS: ', jsonRequests)
       onRequests(jsonRequests)
     }
     const successHandler = () => {
-      console.log('SUCCESSFUL PERSONALIZATION')
       unsubscribe()
 
       sdk
         .getDisplayData()
         .then((displayData) => {
-          createDrivingLicenseVC(displayData).catch(console.warn)
-          dispatch(setMdlDisplayData(displayData))
+          createDrivingLicenseVC(displayData).catch(scheduleErrorWarning)
           dispatch(dismissLoader())
           redirect(ScreenNames.Documents)
         })
@@ -133,12 +120,11 @@ export const useDrivingLicense = () => {
       } else {
         jsonError = error
       }
-      console.log('PERSONALIZATION FAILED ', jsonError)
       scheduleErrorWarning(new Error(jsonError.name))
     }
 
-    const logHandler = (data: any) => {
-      console.log("LOG: ", data)
+    const logHandler = (data: Record<string, string>) => {
+      console.log('MDL-LOG: ', data)
     }
 
     sdk.emitter.addListener(
@@ -153,7 +139,7 @@ export const useDrivingLicense = () => {
       DrivingLicenseEvents.personalizationError,
       errorHandler,
     )
-    sdk.emitter.addListener('log', logHandler)
+    sdk.emitter.addListener(DrivingLicenseEvents.log, logHandler)
 
     const unsubscribe = () => {
       sdk.emitter.removeListener(
@@ -168,7 +154,7 @@ export const useDrivingLicense = () => {
         DrivingLicenseEvents.personalizationRequests,
         errorHandler,
       )
-      sdk.emitter.removeListener('log', logHandler)
+      sdk.emitter.removeListener(DrivingLicenseEvents.log, logHandler)
     }
   }
 
@@ -183,12 +169,7 @@ export const useDrivingLicense = () => {
   }
 
   const deleteDrivingLicense = () => {
-    return sdk
-      .deleteDrivingLicense()
-      .then(() => {
-        dispatch(setMdlDisplayData(null))
-      })
-      .catch(scheduleErrorWarning)
+    return sdk.deleteDrivingLicense().catch(scheduleErrorWarning)
   }
 
   const startSharing = async () => {
@@ -274,7 +255,6 @@ export const useDrivingLicense = () => {
 
   return {
     drivingLicenseSDK: sdk,
-    drivingLicense,
     personalizeLicense,
     deleteDrivingLicense,
     finishPersonalization,
