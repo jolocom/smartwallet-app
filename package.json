@@ -67,6 +67,7 @@
     "react-i18next": "^11.7.3",
     "react-native": "0.63.4",
     "react-native-biometrics": "^2.1.4",
+    "react-native-bluetooth-status": "^1.5.1",
     "react-native-bootsplash": "^3.2.0",
     "react-native-branch": "^5.0.4",
     "react-native-camera": "3.30.0",

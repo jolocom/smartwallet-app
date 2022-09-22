@@ -602,6 +602,9 @@
         "successLoader": "Your Driving License was shared successfully!",
         "canceledLoader": "The sharing was canceled. Please try again.",
         "errorLoader": "Sharing the Driving License failed!",
-        "personalizationLoader": "Adding Driving License"
+        "personalizationLoader": "Adding Driving License",
+        "bluetoothWarningTitle": "Bluetooth Error",
+        "bluetoothWarningMessage": "Sharing your driver license requires Bluetooth. \nPlease turn on Bluetooth on your device or use a device that supports it.",
+        "bluetoothWarningBtn": "Settings"
     }
 }

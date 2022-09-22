@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import { useRef } from 'react'
+//@ts-expect-error
+import { BluetoothStatus } from 'react-native-bluetooth-status'
 import { CredentialMetadataSummary } from 'react-native-jolocom'
 import DrivingLicenseSDK, {
   DrivingLicenseData,
@@ -10,6 +12,7 @@ import DrivingLicenseSDK, {
   PersonalizationInputRequest,
   PersonalizationInputResponse,
 } from 'react-native-mdl'
+import Permissions from 'react-native-permissions'
 import { useDispatch } from 'react-redux'
 import { useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
@@ -27,7 +30,7 @@ export const useDrivingLicense = () => {
   const { t } = useTranslation()
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
-  const { scheduleErrorWarning } = useToasts()
+  const { scheduleErrorWarning, scheduleWarning } = useToasts()
   const dispatch = useDispatch()
   const goBack = useGoBack()
   const redirect = useRedirect()
@@ -174,8 +177,22 @@ export const useDrivingLicense = () => {
   }
 
   const shareDrivingLicense = () => {
-    //TODO check bluetooth
-    redirect(ScreenNames.DrivingLicenseShare)
+    BluetoothStatus.state().then((isEnabled: boolean) => {
+      if (isEnabled) {
+        redirect(ScreenNames.DrivingLicenseShare)
+      } else {
+        scheduleWarning({
+          title: t('mdl.bluetoothWarningTitle'),
+          message: t('mdl.bluetoothWarningMessage'),
+          interact: {
+            label: t('mdl.bluetoothWarningBtn'),
+            onInteract: () => {
+              Permissions.openSettings()
+            },
+          },
+        })
+      }
+    })
   }
 
   const prepareDeviceEngagement = async () => {
