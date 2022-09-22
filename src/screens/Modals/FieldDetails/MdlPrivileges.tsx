@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { handleLayout } from './Field'
-import { DrivingPrivilegesData, SinglePrivilegesFieldKeys } from './types'
+import { PrivilegesData, SinglePrivilegesFieldKeys } from './types'
 import getVehicleIcon from './utils'
 
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
@@ -10,7 +10,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-export const renderPrivileges = (privileges: DrivingPrivilegesData[]) => {
+export const renderPrivileges = (privileges: PrivilegesData[]) => {
   if (privileges.length) {
     return privileges.map(
       (p, i) =>

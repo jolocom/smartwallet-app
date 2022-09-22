@@ -1,7 +1,7 @@
 export enum MdlCredential {
   type = 'DrivingLicenseCredential',
 }
-export interface DrivingPrivilegesData {
+export interface PrivilegesData {
   title: VehicleTypes
   [SinglePrivilegesFieldKeys.VehicleCode]: string
   [SinglePrivilegesFieldKeys.Restrictions]: string
@@ -65,25 +65,25 @@ export enum VehicleClasses {
 export interface MotorcycleClass {
   title: VehicleTypes.MopedAndMotorcycle
   classes: ['AM', 'A1', 'A2', 'A']
-  data: DrivingPrivilegesData
+  data: PrivilegesData
 }
 export interface PassengerCarClass {
   title: VehicleTypes.PassengerCar
   classes: ['B', 'BF17', 'B96', 'BE']
-  data: DrivingPrivilegesData
+  data: PrivilegesData
 }
 export interface TruckClass {
   title: VehicleTypes.Truck
   classes: ['C1', 'C1E', 'C', 'CE']
-  data: DrivingPrivilegesData
+  data: PrivilegesData
 }
 export interface BusClass {
   title: VehicleTypes.Bus
   classes: ['D1', 'D1E', 'D', 'DE']
-  data: DrivingPrivilegesData
+  data: PrivilegesData
 }
 export interface TractorClass {
   title: VehicleTypes.TractorAndForklift
   classes: ['T', 'L']
-  data: DrivingPrivilegesData
+  data: PrivilegesData
 }
