@@ -1,13 +1,12 @@
+export enum MdlCredential {
+  type = 'DrivingLicenseCredential',
+}
 export interface DrivingPrivilegesData {
   title: VehicleTypes
-  [SinglePrivilegesFieldKeys.VehicleCode]: string[]
+  [SinglePrivilegesFieldKeys.VehicleCode]: string
   [SinglePrivilegesFieldKeys.Restrictions]: string
   [SinglePrivilegesFieldKeys.ExpiryDate]: string
   [SinglePrivilegesFieldKeys.IssueDate]: string
-}
-
-export enum MdlCredential {
-  type = 'DrivingLicenseCredential',
 }
 
 export enum MdlPropertyKeys {
@@ -33,13 +32,6 @@ export enum SinglePrivilegesFieldKeys {
   IssueDate = 'Issue Date',
   Restrictions = 'Restrictions',
   ExpiryDate = 'Expiry Date',
-}
-export interface SinglePrivilegesField {
-  [SinglePrivilegesFieldKeys.Title]: string
-  [SinglePrivilegesFieldKeys.VehicleCode]: string
-  [SinglePrivilegesFieldKeys.IssueDate]: string
-  [SinglePrivilegesFieldKeys.Restrictions]: string
-  [SinglePrivilegesFieldKeys.ExpiryDate]: string
 }
 
 export enum VehicleTypes {

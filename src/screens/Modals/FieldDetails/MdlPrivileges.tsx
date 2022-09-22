@@ -36,7 +36,7 @@ export const renderPrivileges = (categories: DrivingPrivilegesData[]) => {
               >
                 {Object.keys(field).map(
                   (key, i) =>
-                    key !== 'title' && (
+                    key !== SinglePrivilegesFieldKeys.Title && (
                       <View
                         style={{
                           ...styles.vehicleFieldsContainer,
