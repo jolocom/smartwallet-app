@@ -24,18 +24,15 @@ import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../../LoggedIn/Main'
 import { useGoBack } from '~/hooks/navigation'
-import { renderPrivileges } from './MdlPrivileges'
 import useDrivingPrivileges from './hooks'
 import { MdlCredential } from './types'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { PropertyMimeType, DocumentProperty } from '~/hooks/documents/types'
+import { PropertyMimeType } from '~/hooks/documents/types'
 import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
 import { MdlPropertyKeys } from './types'
-
-//ALLES WIEDER ZUSAMMENFÜGREN UND IF ELSE MACHEN OB MDL ODER NICHT
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -140,49 +137,11 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   )
 }
 
-export const handleLayout = () => {
-  LayoutAnimation.configureNext({
-    ...LayoutAnimation.Presets.linear,
-    duration: 200,
-  })
-}
-
 const MdlPopOutIcon = () => (
   <View style={styles.popOutIconContainer}>
     <PopOutIcon />
   </View>
 )
-
-const renderField = (
-  fields: DocumentProperty[],
-  togglePrivileges?: () => void,
-) => {
-  return fields.map((field, i) => (
-    <React.Fragment key={i}>
-      <TouchableOpacity
-        style={styles.fieldContainer}
-        onLayout={handleLayout}
-        onPress={
-          field.key === MdlPropertyKeys.drivingPrivileges
-            ? togglePrivileges
-            : undefined
-        }
-        activeOpacity={0.6}
-      >
-        <JoloText
-          customStyles={styles.fieldText}
-          size={JoloTextSizes.mini}
-          color={Colors.osloGray}
-        >
-          {field.label}
-        </JoloText>
-        <FieldValue value={field.value as string} mime_type={field.mime_type} />
-        {field.key === MdlPropertyKeys.drivingPrivileges && <MdlPopOutIcon />}
-      </TouchableOpacity>
-      {i !== Object.keys(fields).length - 1 && <View style={styles.divider} />}
-    </React.Fragment>
-  ))
-}
 
 const Icon = ({ url }: { url: string }) => {
   return (
@@ -221,6 +180,13 @@ const FieldDetails = () => {
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
+  const handleLayout = () => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.linear,
+      duration: 200,
+    })
+  }
+
   const holderPhoto = getHolderPhoto(document)
 
   const showIconContainer =
@@ -232,12 +198,6 @@ const FieldDetails = () => {
   const getNumOfLines = (e: TextLayoutEvent) => {
     const { lines } = e.nativeEvent
     setNumOfLines(lines.length)
-  }
-
-  const displayFields = () => {
-    if (showPrivileges) return renderPrivileges(mdlPrivileges)
-    if (mdlFields) return renderField(mdlFields, togglePrivileges)
-    return renderField(fields)
   }
 
   return (
@@ -312,7 +272,63 @@ const FieldDetails = () => {
                   marginBottom: 16,
                 }}
               >
-                {displayFields()}
+                {/* {displayFields()} */}
+                {mdlFields?.length
+                  ? mdlFields.map((field, i) => (
+                      <React.Fragment key={i}>
+                        <TouchableOpacity
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                          onPress={
+                            field.key === MdlPropertyKeys.drivingPrivileges
+                              ? togglePrivileges
+                              : undefined
+                          }
+                          activeOpacity={0.6}
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={field.value as string}
+                            mime_type={field.mime_type}
+                          />
+                          {field.key === MdlPropertyKeys.drivingPrivileges && (
+                            <MdlPopOutIcon />
+                          )}
+                        </TouchableOpacity>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    ))
+                  : fields.map((field, i) => (
+                      <React.Fragment key={i}>
+                        <View
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={field.value as string}
+                            mime_type={field.mime_type}
+                          />
+                        </View>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    ))}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
