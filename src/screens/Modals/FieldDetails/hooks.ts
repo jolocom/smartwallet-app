@@ -47,14 +47,21 @@ const useDrivingPrivileges = (document: Document) => {
 
   const mdlFields = [...mdlProperties!, ...getExtraProperties(mdlDocument!)]
 
-  // convert into Switch statement
   const getPrivilegesTitle = (c: string) => {
-    if (c.startsWith('A')) return 'Moped and Motorcycle'
-    if (c.startsWith('B')) return 'Passenger Car'
-    if (c.startsWith('C')) return 'Truck'
-    if (c.startsWith('D')) return 'Bus'
-    if (c.startsWith('L')) return 'Tractor and Forklift'
-    if (c.startsWith('T')) return 'Tractor and Forklift'
+    const firstLetter = c.charAt(0)
+    switch (firstLetter) {
+      case 'A':
+        return 'Moped and Motorcycle'
+      case 'B':
+        return 'Passenger Car'
+      case 'C':
+        return 'Truck'
+      case 'D':
+        return 'Bus'
+      case 'L':
+      case 'T':
+        return 'Tractor and Forklift'
+    }
   }
 
   // create terms for the keys and insert them, get rid of the enum
@@ -70,7 +77,7 @@ const useDrivingPrivileges = (document: Document) => {
               code: field.codes?.map((c) => c.code).join(', ') || '-',
             },
           ],
-          expiry_date: '-',
+          expiry_date: field.expiry_date || '-',
         },
       } as PrivilegesData
     })
