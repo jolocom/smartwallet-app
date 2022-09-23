@@ -69,19 +69,21 @@ const useDrivingPrivileges = (document: Document) => {
       return {
         title: getPrivilegesTitle(field.vehicle_category_code),
         data: {
-          [t('mdl.vehicleCode')]: field.vehicle_category_code,
-          [t('mdl.issueDate')]: moment(field.issue_date).format('DD.MM.YYYY'),
-          [t('mdl.restrictions')]: [
+          vehicle_category_code: field.vehicle_category_code,
+          issue_date: moment(field.issue_date).format('DD.MM.YYYY'),
+          codes: [
             {
               code: field.codes?.map((c) => c.code).join(', ') || '-',
             },
           ],
-          [t('mdl.expiryDate')]: field.expiry_date || '-',
+          expiry_date: field.expiry_date || '-',
         },
       }
     })
     .sort((a, b) =>
-      a.data[t('mdl.vehicleCode')].localeCompare(b.data[t('mdl.vehicleCode')]),
+      a.data['vehicle_category_code'].localeCompare(
+        b.data['vehicle_category_code'],
+      ),
     )
 
   return {
