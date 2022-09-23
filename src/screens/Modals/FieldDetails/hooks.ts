@@ -51,38 +51,50 @@ const useDrivingPrivileges = (document: Document) => {
     const firstLetter = c.charAt(0)
     switch (firstLetter) {
       case 'A':
-        return 'Moped and Motorcycle'
+        return t('mdl.mopedAndMotorcycle')
       case 'B':
-        return 'Passenger Car'
+        return t('mdl.passengerCar')
       case 'C':
-        return 'Truck'
+        return t('mdl.truck')
       case 'D':
-        return 'Bus'
+        return t('mdl.bus')
       case 'L':
       case 'T':
-        return 'Tractor and Forklift'
+        return t('mdl.tractorAndForklift')
     }
   }
 
-  const mdlPrivileges = drivingPrivileges
+  const mdlPrivileges: PrivilegesData[] = drivingPrivileges
     .map((field) => {
       return {
         title: getPrivilegesTitle(field.vehicle_category_code),
-        data: {
-          vehicle_category_code: field.vehicle_category_code,
-          issue_date: moment(field.issue_date).format('DD.MM.YYYY'),
-          codes: [
-            {
-              code: field.codes?.map((c) => c.code).join(', ') || '-',
-            },
-          ],
-          expiry_date: field.expiry_date || '-',
-        },
-      }
+        data: [
+          {
+            vehicle_category_code: field.vehicle_category_code,
+            title: t('mdl.vehicleCode'),
+          },
+          {
+            issue_date: moment(field.issue_date).format('DD.MM.YYYY'),
+            title: t('mdl.issueDate'),
+          },
+          {
+            codes: [
+              {
+                code: field.codes?.map((c) => c.code).join(', ') || '-',
+              },
+            ],
+            title: t('mdl.restrictions'),
+          },
+          {
+            expiry_date: field.expiry_date || '-',
+            title: t('mdl.expiryDate'),
+          },
+        ],
+      } as PrivilegesData
     })
     .sort((a, b) =>
-      a.data['vehicle_category_code'].localeCompare(
-        b.data['vehicle_category_code'],
+      a.data[0].vehicle_category_code.localeCompare(
+        b.data[0].vehicle_category_code,
       ),
     )
 

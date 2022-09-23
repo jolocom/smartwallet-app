@@ -1,11 +1,21 @@
-import { DrivingPrivilege } from 'react-native-mdl'
+import { VehicleClasses } from 'react-native-mdl'
 
 export enum MdlCredential {
   type = 'DrivingLicenseCredential',
 }
 export interface PrivilegesData {
   title: string
-  data: DrivingPrivilege
+  data: [
+    { vehicle_category_code: VehicleClasses; title: string },
+    { issue_date: string; title: string },
+    {
+      codes?: Array<{
+        code: string
+      }>
+      title: string
+    },
+    { expiry_date?: string; title: string },
+  ]
 }
 
 export enum MdlPropertyKeys {

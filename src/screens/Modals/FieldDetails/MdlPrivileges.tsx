@@ -15,7 +15,6 @@ export const renderPrivileges = (
 ) => {
   if (privileges.length) {
     return privileges.map((p, i) => {
-      // const VehicleIcon = getVehicleIcon(p.data.vehicleCode)
       return (
         <React.Fragment key={i}>
           <TouchableOpacity
@@ -24,7 +23,7 @@ export const renderPrivileges = (
             activeOpacity={1}
           >
             <View style={styles.vehicleIconContainer}>
-              {getVehicleIcon(p.data.vehicle_category_code)}
+              {getVehicleIcon(p.data[0].vehicle_category_code)}
             </View>
             <JoloText
               customStyles={(styles.fieldText, { width: 'auto' })}
@@ -38,32 +37,37 @@ export const renderPrivileges = (
                 width: '100%',
               }}
             >
-              {Object.keys(p.data).map((key, i) => (
-                <View
-                  style={{
-                    ...styles.vehicleFieldsContainer,
-                    ...(i !== Object.keys(p.data).length - 1 && {
-                      borderBottomColor: Colors.genevaGray15,
-                      borderBottomWidth: 1,
-                    }),
-                  }}
-                  key={i}
-                >
-                  <JoloText
-                    kind={JoloTextKind.subtitle}
-                    color={Colors.black}
-                    weight={JoloTextWeight.medium}
+              {p.data.map((category, i) => {
+                return (
+                  <View
+                    style={{
+                      ...styles.vehicleFieldsContainer,
+                      ...(i !== Object.keys(p.data).length - 1 && {
+                        borderBottomColor: Colors.genevaGray15,
+                        borderBottomWidth: 1,
+                      }),
+                    }}
+                    key={i}
                   >
-                    {key}
-                  </JoloText>
-                  <JoloText
-                    color={Colors.black}
-                    customStyles={styles.fieldText}
-                  >
-                    {key === 'codes' ? p.data[key][0].code : p.data[key]}
-                  </JoloText>
-                </View>
-              ))}
+                    <JoloText
+                      kind={JoloTextKind.subtitle}
+                      color={Colors.black}
+                      weight={JoloTextWeight.medium}
+                    >
+                      {category.title}
+                    </JoloText>
+                    <JoloText
+                      color={Colors.black}
+                      customStyles={styles.fieldText}
+                    >
+                      {category.vehicle_category_code ||
+                        category.expiry_date ||
+                        category.issue_date ||
+                        category.codes[0].code}
+                    </JoloText>
+                  </View>
+                )
+              })}
             </View>
           </TouchableOpacity>
           {i !== privileges.length - 1 && (

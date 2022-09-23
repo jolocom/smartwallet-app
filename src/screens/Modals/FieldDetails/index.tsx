@@ -27,7 +27,7 @@ import { useGoBack } from '~/hooks/navigation'
 import useDrivingPrivileges from './hooks'
 import { MdlCredential } from './types'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { PropertyMimeType } from '~/hooks/documents/types'
+import { DocumentProperty, PropertyMimeType } from '~/hooks/documents/types'
 import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
@@ -281,7 +281,7 @@ const FieldDetails = () => {
                 {showPrivileges
                   ? renderPrivileges(mdlPrivileges, handleLayout)
                   : isDocumentMdl
-                  ? mdlFields.map((field, i) => (
+                  ? mdlFields.map((field: DocumentProperty, i: number) => (
                       <React.Fragment key={i}>
                         <TouchableOpacity
                           style={styles.fieldContainer}

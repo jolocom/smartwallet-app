@@ -609,6 +609,11 @@
         "vehicleCode": "Fahrerlaubnisklassen",
         "issueDate": "Ausstellungsdatum",
         "expiryDate": "Ablaufdatum",
-        "restrictions": "Beschränkungen"
+        "restrictions": "Beschränkungen",
+        "mopedAndMotorcycle": "Moped und Motorrad",
+        "passengerCar": "PKW",
+        "truck": "LKW",
+        "bus": "Bus",
+        "tractorAndForklift": "Traktor und Gabelstapler"
     }
 }

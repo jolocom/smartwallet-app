@@ -3,12 +3,7 @@ import * as Icon from '~/assets/svg/mdl'
 
 import { VehicleClasses } from 'react-native-mdl'
 
-// const getVehicleIcon = (vehicleClass: VehicleClasses) => {
-//   // @ts-ignore
-//   return Icon[vehicleClass]
-// }
-
-const getVehicleIcon = (vehicleClass: string) => {
+const getVehicleIcon = (vehicleClass: VehicleClasses) => {
   switch (vehicleClass) {
     case 'A':
       return <Icon.A />
@@ -20,7 +15,7 @@ const getVehicleIcon = (vehicleClass: string) => {
       return <Icon.AM />
     case 'B96':
       return <Icon.B96 />
-    case 'BBF17':
+    case 'B':
       return <Icon.BBF17 />
     case 'BE':
       return <Icon.BE />
