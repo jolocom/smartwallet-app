@@ -605,6 +605,18 @@
         "personalizationLoader": "Führerscheindaten hinzufügen",
         "bluetoothWarningTitle": "",
         "bluetoothWarningMessage": "",
-        "bluetoothWarningBtn": ""
+        "bluetoothWarningBtn": "",
+        "vehicleCode": "Fahrerlaubnisklassen",
+        "issueDate": "Ausstellungsdatum",
+        "expiryDate": "Ablaufdatum",
+        "restrictions": "Beschränkungen",
+        "mopedAndMotorcycle": "Moped und Motorrad",
+        "passengerCar": "PKW",
+        "truck": "LKW",
+        "bus": "Bus",
+        "tractorAndForklift": "Traktor und Gabelstapler",
+        "shareHeader": "Digitalen Führerschein teilen",
+        "shareMenu": "",
+        "successToastMsg": ""
     }
 }

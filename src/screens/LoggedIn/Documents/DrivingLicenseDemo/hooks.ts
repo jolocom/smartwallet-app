@@ -30,7 +30,7 @@ export const useDrivingLicense = () => {
   const { t } = useTranslation()
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
-  const { scheduleErrorWarning, scheduleWarning } = useToasts()
+  const { scheduleErrorWarning, scheduleWarning, scheduleInfo } = useToasts()
   const dispatch = useDispatch()
   const goBack = useGoBack()
   const redirect = useRedirect()
@@ -83,6 +83,10 @@ export const useDrivingLicense = () => {
     dispatch(addCredentials([mdlDocument]))
   }
 
+  const logHandler = (data: Record<string, string>) => {
+    console.log('MDL-LOG: ', data)
+  }
+
   const personalizeLicense = (
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
@@ -125,10 +129,6 @@ export const useDrivingLicense = () => {
         jsonError = error
       }
       scheduleErrorWarning(new Error(jsonError.name))
-    }
-
-    const logHandler = (data: Record<string, string>) => {
-      console.log('MDL-LOG: ', data)
     }
 
     sdk.emitter.addListener(
@@ -195,7 +195,7 @@ export const useDrivingLicense = () => {
     })
   }
 
-  const prepareDeviceEngagement = async () => {
+  const prepareEngagementEvents = () => {
     const engagementHandler = (state: string | EngagementState) => {
       const jsonState =
         typeof state === 'string'
@@ -212,12 +212,10 @@ export const useDrivingLicense = () => {
           )
           break
         case EngagementStateNames.ended:
-          dispatch(
-            setLoader({
-              type: LoaderTypes.success,
-              msg: t('mdl.successLoader'),
-            }),
-          )
+          scheduleInfo({
+            title: t('Toasts.ausweisSuccessTitle'),
+            message: t('mdl.successToastMsg'),
+          })
 
           break
         case EngagementStateNames.canceled:
@@ -229,11 +227,10 @@ export const useDrivingLicense = () => {
           )
           break
         case EngagementStateNames.error:
-          dispatch(
-            setLoader({
-              type: LoaderTypes.error,
-              msg: t('mdl.errorLoader'),
-            }),
+          scheduleErrorWarning(
+            new Error(
+              jsonState?.error?.localizedDescription ?? 'Unknown mDL Error',
+            ),
           )
           break
         default:
@@ -259,13 +256,17 @@ export const useDrivingLicense = () => {
       DrivingLicenseEvents.engagementState,
       engagementHandler,
     )
+    sdk.emitter.addListener(DrivingLicenseEvents.log, logHandler)
     const unsubscribe = () => {
       sdk.emitter.removeListener(
         DrivingLicenseEvents.engagementState,
         engagementHandler,
       )
+      sdk.emitter.removeListener(DrivingLicenseEvents.log, logHandler)
     }
+  }
 
+  const prepareDeviceEngagement = async () => {
     return sdk.prepareDeviceEngagement()
   }
 
@@ -277,5 +278,6 @@ export const useDrivingLicense = () => {
     initDrivingLicense,
     shareDrivingLicense,
     prepareDeviceEngagement,
+    prepareEngagementEvents,
   }
 }
