@@ -44,7 +44,7 @@ const About = () => {
             onPress={() => redirect(ScreenNames.TermsOfService)}
             type={BtnTypes.secondary}
           >
-            {t('Terms of Service.header')}
+            {t('TermsOfService.header')}
           </Btn>
           <Btn
             onPress={() => redirect(ScreenNames.PrivacyPolicy)}
