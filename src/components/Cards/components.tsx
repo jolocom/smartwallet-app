@@ -304,7 +304,6 @@ export const DocumentFields: React.FC<{
   }, [rows])
 
   const renderField = (field: DocumentProperty) => {
-    console.log({ fieldValue: field.value })
     return (
       <ScaledView
         key={field.key}
