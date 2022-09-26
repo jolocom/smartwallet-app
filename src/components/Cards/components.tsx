@@ -304,6 +304,7 @@ export const DocumentFields: React.FC<{
   }, [rows])
 
   const renderField = (field: DocumentProperty) => {
+    console.log({ fieldValue: field.value })
     return (
       <ScaledView
         key={field.key}
@@ -322,18 +323,7 @@ export const DocumentFields: React.FC<{
         >
           {field?.label?.trim()}:
         </ScaledText>
-        <ScaledText
-          numberOfLines={1}
-          scaleStyle={[styles.fieldText, valueScaledStyle]}
-          style={[
-            styles.mediumText,
-            {
-              width: '100%',
-            },
-          ]}
-        >
-          {field?.value}
-        </ScaledText>
+        <ScaledView scaleStyle={valueScaledStyle} />
       </ScaledView>
     )
   }
