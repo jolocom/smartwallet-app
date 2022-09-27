@@ -33,7 +33,7 @@ import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
 import { MdlPropertyKeys } from './types'
-import { renderPrivileges } from './MdlPrivileges'
+import { DrivingLicensePrivileges } from './DrivingLicensePrivileges'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 
@@ -281,7 +281,7 @@ const FieldDetails = () => {
                 }}
               >
                 {showPrivileges
-                  ? renderPrivileges(mdlPrivileges, handleLayout)
+                  ? DrivingLicensePrivileges(mdlPrivileges, handleLayout)
                   : isDocumentMdl
                   ? mdlFields.map((field: DocumentProperty, i: number) => (
                       <React.Fragment key={i}>

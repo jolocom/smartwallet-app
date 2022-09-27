@@ -9,7 +9,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 
-export const renderPrivileges = (
+export const DrivingLicensePrivileges = (
   privileges: PrivilegesData[],
   handleLayout: () => void,
 ) => {
