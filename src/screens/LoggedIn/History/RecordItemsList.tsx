@@ -75,7 +75,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   useEffect(() => {
     getInteractionTokens(ITEMS_PER_PAGE, 0, flows)
       .then((tokens) => {
-        setLoaderType(LoaderTypes.success)
+        setTimeout(() => setLoaderType(LoaderTypes.empty), 200)
         setInteractions(tokens)
       })
       .catch((e) => {
@@ -156,10 +156,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   return (
     <>
       {loaderType ? (
-        <LoaderAnimation
-          type={loaderType}
-          resetLoader={() => setLoaderType(LoaderTypes.empty)}
-        />
+        <LoaderAnimation type={loaderType} />
       ) : (
         <>
           {sections.length > 0 ? (
