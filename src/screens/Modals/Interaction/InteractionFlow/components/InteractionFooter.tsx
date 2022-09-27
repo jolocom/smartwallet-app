@@ -25,12 +25,6 @@ const InteractionFooter: React.FC<Props> = ({
   const { clearInteraction, closeInteraction } = useFinishInteraction()
   const { connected } = useConnection()
 
-  const [_, setDisableButton] = useState<boolean | null>(false)
-
-  useEffect(() => {
-    setDisableButton(connected)
-  }, [connected])
-
   const { scheduleErrorWarning } = useToasts()
 
   const handleSubmit = () => {
