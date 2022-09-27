@@ -160,12 +160,13 @@ export const AusweisIdentity = () => {
         </JoloText>
         <JoloText size={JoloTextSizes.mini} customStyles={{ marginTop: 8 }}>
           {t('AusweisIdentity.subheader')}
+          {'\n'}
           <JoloText
             onPress={handleMoreInfo}
             size={JoloTextSizes.mini}
             color={Colors.activity}
           >
-            {` ${t('General.moreInfo')}...`}
+            {t('General.moreInfo')}
           </JoloText>
         </JoloText>
 
