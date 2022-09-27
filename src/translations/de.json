@@ -614,6 +614,10 @@
         "passengerCar": "PKW",
         "truck": "LKW",
         "bus": "Bus",
-        "tractorAndForklift": "Traktor und Gabelstapler"
+        "tractorAndForklift": "Traktor und Gabelstapler",
+        "shareHeader": "Digitalen Führerschein teilen",
+        "shareMenu": "",
+        "successToastMsg": "",
+        "drivingPrivileges": "Fahrerlaubnisklassen"
     }
 }

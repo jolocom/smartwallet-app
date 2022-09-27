@@ -163,7 +163,7 @@ const Icon = ({ url }: { url: string }) => {
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-
+  const { t } = useTranslation()
   const { id, backgroundColor = Colors.mainBlack } = route.params
 
   const document = useSelector(getDocumentById(id))!
@@ -227,7 +227,9 @@ const FieldDetails = () => {
             {/* TODO figure out how scroll to the top in the MDLPrivileges*/}
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
-                text={showPrivileges ? 'Driving Privileges' : document.name}
+                text={
+                  showPrivileges ? t('mdl.drivingPrivileges') : document.name
+                }
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
                   ...(holderPhoto && numOfLines === 1 && { marginTop: 26 }),
@@ -248,7 +250,7 @@ const FieldDetails = () => {
                   color={Colors.white90}
                   weight={JoloTextWeight.medium}
                 >
-                  {showPrivileges ? 'Driving Privileges' : document.name}
+                  {showPrivileges ? t('mdl.drivingPrivileges') : document.name}
                 </JoloText>
               </Collapsible.Title>
               {showIconContainer && (

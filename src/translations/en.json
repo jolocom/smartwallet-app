@@ -614,6 +614,10 @@
         "passengerCar": "Passenger Car",
         "truck": "Truck",
         "bus": "Bus",
-        "tractorAndForklift": "Tractor and Forklift"
+        "tractorAndForklift": "Tractor and Forklift",
+        "shareHeader": "Share Driving License",
+        "shareMenu": "Share via QR Code",
+        "successToastMsg": "Driver License was shared successfully",
+        "drivingPrivileges": "Driving Privileges"
     }
 }
