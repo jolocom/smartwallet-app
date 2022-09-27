@@ -80,6 +80,7 @@ const OfferCard: React.FC<Props> = ({
                 nrOfColumns={2}
                 onFinishCalculation={handleDisplayedFields}
                 allowOverflowingFields={false}
+                hideFieldValues={true}
               />
             </View>
           </View>

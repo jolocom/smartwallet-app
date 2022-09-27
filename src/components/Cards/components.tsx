@@ -265,6 +265,8 @@ export const DocumentFields: React.FC<{
   onFinishCalculation?: (displayedFields: DocumentProperty[]) => void
   // NOTE: allow extra fields next to the photo if no holderName is present
   shoudIsolateFirstRow?: boolean
+  // NOTE: hideFieldValues is only relevant for the OfferCard Component to display the placeholders
+  hideFieldValues?: boolean
 }> = ({
   fields,
   maxLines,
@@ -277,6 +279,7 @@ export const DocumentFields: React.FC<{
   onFinishCalculation,
   allowOverflowingFields = true,
   shoudIsolateFirstRow = false,
+  hideFieldValues = false,
 }) => {
   const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 1 : maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
@@ -322,18 +325,22 @@ export const DocumentFields: React.FC<{
         >
           {field?.label?.trim()}:
         </ScaledText>
-        <ScaledText
-          numberOfLines={1}
-          scaleStyle={[styles.fieldText, valueScaledStyle]}
-          style={[
-            styles.mediumText,
-            {
-              width: '100%',
-            },
-          ]}
-        >
-          {field?.value}
-        </ScaledText>
+        {hideFieldValues ? (
+          <ScaledView scaleStyle={valueScaledStyle} />
+        ) : (
+          <ScaledText
+            numberOfLines={1}
+            scaleStyle={[styles.fieldText, valueScaledStyle]}
+            style={[
+              styles.mediumText,
+              {
+                width: '100%',
+              },
+            ]}
+          >
+            {field?.value}
+          </ScaledText>
+        )}
       </ScaledView>
     )
   }
