@@ -4,9 +4,9 @@ import { deleteCredential } from '~/modules/credentials/actions'
 import {
   getAllDocuments,
   getExpiredDocuments,
-  getValidDocuments,
+  getValidDocuments
 } from '~/modules/credentials/selectors'
-import { ClaimKeys } from '~/types/credentials'
+import { SpecialDocumentKeys } from '~/types/credentials'
 import { useAgent } from '../sdk'
 import useTranslation from '../useTranslation'
 import { Document, DocumentProperty, PropertyMimeType } from './types'
@@ -31,9 +31,9 @@ export const useDocuments = () => {
   const getHolderName = (doc: Document) => {
     if (!doc.properties.length) return undefined
 
-    const givenName = doc.properties.find((p) => p.key === ClaimKeys.givenName)
+    const givenName = doc.properties.find((p) => p.key === SpecialDocumentKeys.givenName)
     const familyName = doc.properties.find(
-      (p) => p.key === ClaimKeys.familyName,
+      (p) => p.key === SpecialDocumentKeys.familyName,
     )
 
     if (!givenName || !familyName) return undefined
@@ -42,13 +42,13 @@ export const useDocuments = () => {
   }
 
   const getHolderPhoto = (doc: Document) => {
-    return doc.properties.find((p) => p.key === ClaimKeys.photo)?.value
+    return doc.properties.find((p) => p.key === SpecialDocumentKeys.photo)?.value
   }
 
   const hasImageProperties = (doc: Document) => {
     return doc.properties.some(
       (prop) =>
-        prop.key !== ClaimKeys.photo &&
+        prop.key !== SpecialDocumentKeys.photo &&
         prop.mime_type === PropertyMimeType.image_png,
     )
   }
@@ -89,9 +89,9 @@ export const useDocuments = () => {
     } else if (doc.properties.length) {
       previewFields = doc.properties.filter(
         (prop) =>
-          prop.key !== ClaimKeys.photo &&
-          prop.key !== ClaimKeys.givenName &&
-          prop.key !== ClaimKeys.familyName,
+          prop.key !== SpecialDocumentKeys.photo &&
+          prop.key !== SpecialDocumentKeys.givenName &&
+          prop.key !== SpecialDocumentKeys.familyName,
       )
     } else {
       previewFields = getExtraProperties(doc)

@@ -17,10 +17,15 @@ export enum AttributeKeys {
   postalAddress = 'postalAddress',
 }
 
-export enum ClaimKeys {
+export enum SpecialDocumentKeys {
   givenName = '$.givenName',
   familyName = '$.familyName',
   photo = '$.photo',
+}
+
+export enum ClaimKeys {
+  givenName = 'givenName',
+  familyName = 'familyName',
   email = 'email',
   addressLine = 'addressLine1',
   postalCode = 'postalCode',
