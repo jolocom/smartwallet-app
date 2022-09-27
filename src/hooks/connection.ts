@@ -1,5 +1,5 @@
 import { useNetInfo } from '@react-native-community/netinfo'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { usePrevious } from './generic'
 import { useToasts } from './toasts'
@@ -9,6 +9,12 @@ const useConnection = () => {
   const { t } = useTranslation()
   const { scheduleWarning, scheduleInfo } = useToasts()
   const netInfo = useNetInfo()
+
+  const [connected, setConnected] = useState(true)
+
+  useEffect(() => {
+    setConnected(netInfo.isConnected === null ? true : netInfo.isConnected)
+  }, [netInfo.isConnected])
 
   const showDisconnectedToast = () => {
     scheduleWarning({
@@ -25,7 +31,7 @@ const useConnection = () => {
   }
 
   return {
-    connected: netInfo.isConnected,
+    connected,
     showDisconnectedToast,
     showConnectedToast,
   }

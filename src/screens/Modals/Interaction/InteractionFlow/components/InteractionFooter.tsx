@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useLoader } from '~/hooks/loader'
 import { useFinishInteraction } from '~/hooks/interactions/handlers'
@@ -24,6 +24,7 @@ const InteractionFooter: React.FC<Props> = ({
   const loader = useLoader()
   const { clearInteraction, closeInteraction } = useFinishInteraction()
   const { connected } = useConnection()
+
   const { scheduleErrorWarning } = useToasts()
 
   const handleSubmit = () => {
