@@ -20,19 +20,17 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import { Colors } from '~/utils/colors'
 import BP from '~/utils/breakpoints'
-import { useSelector } from 'react-redux'
-import { getCurrentLanguage } from '~/modules/account/selectors'
 
 const SLIDER_WIDTH = Dimensions.get('window').width + 80
 const ITEM_WIDTH = Dimensions.get('window').width
 
 const CustomCarousel = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const isCarousel = React.useRef(null)
 
   const [index, setIndex] = useState(0)
 
-  const currentLanguage = useSelector(getCurrentLanguage)
+  const currentLanguage = i18n.language
 
   const walkthroughData = [
     {
