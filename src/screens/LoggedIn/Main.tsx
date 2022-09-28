@@ -96,9 +96,12 @@ export type MainStackParamList = {
   [ScreenNames.DrivingPrivileges]: {
     title: string
     portrait: string
-    icons: string[]
+    issuerIcon: string
     prefechedIcon: string
     document: Document
+    containerHeight: () => void
+    handleLayout: () => void
+    imageSize: number
   }
   // DEV
   [ScreenNames.CardsTest]: undefined
