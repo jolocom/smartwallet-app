@@ -596,5 +596,27 @@
     },
     "DocumentCard": {
         "expired": "Expired"
+    },
+    "mdl": {
+        "sharingLoader": "Sharing Driving License...",
+        "successLoader": "Your Driving License was shared successfully!",
+        "canceledLoader": "The sharing was canceled. Please try again.",
+        "errorLoader": "Sharing the Driving License failed!",
+        "personalizationLoader": "Adding Driving License",
+        "bluetoothWarningTitle": "Bluetooth Error",
+        "bluetoothWarningMessage": "Sharing your driver license requires Bluetooth. \nPlease turn on Bluetooth on your device or use a device that supports it.",
+        "bluetoothWarningBtn": "Settings",
+        "vehicleCode": "Vehicle Code",
+        "issueDate": "Issue Date",
+        "expiryDate": "Expiry Date",
+        "restrictions": "Restrictions",
+        "mopedAndMotorcycle": "Moped and Motorcycle",
+        "passengerCar": "Passenger Car",
+        "truck": "Truck",
+        "bus": "Bus",
+        "tractorAndForklift": "Tractor and Forklift",
+        "shareHeader": "Share Driving License",
+        "shareMenu": "Share via QR Code",
+        "successToastMsg": "Driver License was shared successfully"
     }
 }

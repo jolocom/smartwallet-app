@@ -596,5 +596,27 @@
     },
     "DocumentCard": {
         "expired": "Abgelaufen"
+    },
+    "mdl": {
+        "sharingLoader": "Führerscheindaten werden übertragen…",
+        "successLoader": "Ihre Führerscheindaten wurden erfolgreich übermittelt!",
+        "canceledLoader": "Die Datenübertragen wurde abgebrochen. Bitte versuchen Sie es erneut.",
+        "errorLoader": "Die Datenübertragung war nicht erfolgreich!",
+        "personalizationLoader": "Führerscheindaten hinzufügen",
+        "bluetoothWarningTitle": "",
+        "bluetoothWarningMessage": "",
+        "bluetoothWarningBtn": "",
+        "vehicleCode": "Fahrerlaubnisklassen",
+        "issueDate": "Ausstellungsdatum",
+        "expiryDate": "Ablaufdatum",
+        "restrictions": "Beschränkungen",
+        "mopedAndMotorcycle": "Moped und Motorrad",
+        "passengerCar": "PKW",
+        "truck": "LKW",
+        "bus": "Bus",
+        "tractorAndForklift": "Traktor und Gabelstapler",
+        "shareHeader": "Digitalen Führerschein teilen",
+        "shareMenu": "",
+        "successToastMsg": ""
     }
 }

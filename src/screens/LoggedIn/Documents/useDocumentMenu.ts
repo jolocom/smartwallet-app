@@ -12,7 +12,7 @@ export const useDocumentMenu = () => {
   const { scheduleErrorWarning } = useToasts()
   const { deleteDocument, getDocumentById } = useDocuments()
   const { addFavorite, deleteFavorite } = useFavoriteDocuments()
-  const { deleteDrivingLicense } = useDrivingLicense()
+  const { deleteDrivingLicense, shareDrivingLicense } = useDrivingLicense()
 
   const { showPopup } = usePopupMenu()
 
@@ -72,10 +72,8 @@ export const useDocumentMenu = () => {
     if (isDrivingLicense) {
       popupOptions.splice(1, 0, {
         title: t('CredentialRequest.acceptBtn'),
-        navigation: {
-          screen: ScreenNames.DrivingLicenseShare,
-          //@ts-ignore
-          params: {},
+        onPress: () => {
+          shareDrivingLicense()
         },
       })
     }
