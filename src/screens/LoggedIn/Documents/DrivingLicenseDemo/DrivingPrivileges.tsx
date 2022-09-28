@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, LayoutAnimation } from 'react-native'
+import { View, Image, StyleSheet, LayoutAnimation } from 'react-native'
 import { RouteProp, useRoute } from '@react-navigation/native'
 
 import { MainStackParamList } from '../../Main'
@@ -17,31 +17,10 @@ import Block from '~/components/Block'
 import useDrivingPrivileges from '~/screens/Modals/FieldDetails/hooks'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import getVehicleIcon from '~/screens/Modals/FieldDetails/utils'
+import { Icon } from '~/screens/Modals/FieldDetails/FieldDetails'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
-
-const Icon = ({ url }: { url: string }) => {
-  return (
-    <View
-      style={{
-        width: ICON_SIZE,
-        height: ICON_SIZE,
-        marginRight: 12,
-      }}
-    >
-      <Image
-        source={{ uri: url }}
-        style={{
-          width: '100%',
-          height: '100%',
-          borderRadius: 6,
-          overflow: 'hidden',
-        }}
-      />
-    </View>
-  )
-}
 
 const DrivingPrivileges = () => {
   const route =
@@ -49,7 +28,11 @@ const DrivingPrivileges = () => {
 
   const { title, portrait, icons, prefechedIcon, document } = route.params
 
+  console.log({ document })
+
   const { mdlPrivileges } = useDrivingPrivileges(document)
+  const { top } = useSafeArea()
+  const goBack = useGoBack()
 
   const getDocumentNameContainerHeight = () => {
     if (!icons.length && portrait) {
@@ -67,12 +50,6 @@ const DrivingPrivileges = () => {
       duration: 200,
     })
   }
-
-  const { top } = useSafeArea()
-
-  const goBack = useGoBack()
-
-  console.log({ route })
 
   return (
     <View

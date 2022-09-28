@@ -142,7 +142,7 @@ const MdlPopOutIcon = () => (
   </View>
 )
 
-const Icon = ({ url }: { url: string }) => {
+export const Icon = ({ url }: { url: string }) => {
   return (
     <View
       style={{
