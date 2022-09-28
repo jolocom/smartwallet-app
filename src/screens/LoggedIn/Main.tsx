@@ -48,6 +48,7 @@ import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
 import { useToasts } from '~/hooks/toasts'
 import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
 import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
+import { DrivingPrivilegesProps } from '../Modals/DrivingPrivileges/types'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -93,16 +94,7 @@ export type MainStackParamList = {
     id: string
     backgroundColor?: Colors
   }
-  [ScreenNames.DrivingPrivileges]: {
-    title: string
-    portrait: string
-    issuerIcon: string
-    prefechedIcon: string
-    document: Document
-    containerHeight: () => void
-    handleLayout: () => void
-    imageSize: number
-  }
+  [ScreenNames.DrivingPrivileges]: DrivingPrivilegesProps
   // DEV
   [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
