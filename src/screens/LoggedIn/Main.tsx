@@ -17,9 +17,9 @@ import {
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
-import DrivingPrivileges from './Documents/DrivingLicenseDemo/DrivingPrivileges'
+import DrivingPrivileges from '../Modals/DrivingPrivileges'
 import Registration from '../LoggedOut/Onboarding/Registration'
-import FieldDetails from '../Modals/FieldDetails/FieldDetails'
+import FieldDetails from '../Modals/FieldDetails'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import Interaction from '../Modals/Interaction'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'

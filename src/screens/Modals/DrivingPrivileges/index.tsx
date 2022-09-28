@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Image, StyleSheet, LayoutAnimation } from 'react-native'
 import { RouteProp, useRoute } from '@react-navigation/native'
 
-import { MainStackParamList } from '../../Main'
+import { MainStackParamList } from '../../LoggedIn/Main'
 import { Colors } from '~/utils/colors'
 import { ScreenNames } from '~/types/screens'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -14,10 +14,10 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import Block from '~/components/Block'
-import useDrivingPrivileges from '~/screens/Modals/FieldDetails/hooks'
+import useDrivingPrivileges from '~/screens/Modals/DrivingPrivileges/hooks'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import getVehicleIcon from '~/screens/Modals/FieldDetails/utils'
-import { Icon } from '~/screens/Modals/FieldDetails/FieldDetails'
+import getVehicleIcon from '~/screens/Modals/DrivingPrivileges/utils'
+import { Icon } from '~/screens/Modals/FieldDetails'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })

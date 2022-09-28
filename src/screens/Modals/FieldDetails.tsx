@@ -22,7 +22,7 @@ import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { MainStackParamList } from '../../LoggedIn/Main'
+import { MainStackParamList } from '../LoggedIn/Main'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { PropertyMimeType } from '~/hooks/documents/types'
@@ -30,7 +30,7 @@ import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
-import { MdlPropertyKeys } from './types'
+import { MdlPropertyKeys } from './DrivingPrivileges/types'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
