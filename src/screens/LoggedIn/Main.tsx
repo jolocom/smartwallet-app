@@ -18,7 +18,7 @@ import {
   transparentModalOptions,
 } from '~/utils/screenSettings'
 import Registration from '../LoggedOut/Onboarding/Registration'
-import FieldDetails from '../Modals/FieldDetails'
+import FieldDetails from '../Modals/FieldDetails/FieldDetails'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import Interaction from '../Modals/Interaction'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'

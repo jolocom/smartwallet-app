@@ -1,12 +1,11 @@
-import Clipboard from '@react-native-clipboard/clipboard'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import React, { useRef, useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   Image,
-  LayoutAnimation,
   StyleSheet,
-  TouchableOpacity,
   View,
+  TouchableOpacity,
+  LayoutAnimation,
 } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
@@ -16,18 +15,25 @@ import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useDocuments } from '~/hooks/documents'
-import { PropertyMimeType } from '~/hooks/documents/types'
-import { useToasts } from '~/hooks/toasts'
-import { useToggleExpand } from '~/hooks/ui'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
-import useTranslation from '~/hooks/useTranslation'
 import { getDocumentById } from '~/modules/credentials/selectors'
 import { TextLayoutEvent } from '~/types/props'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { MainStackParamList } from '../LoggedIn/Main'
+import { MainStackParamList } from '../../LoggedIn/Main'
+import { useGoBack } from '~/hooks/navigation'
+import useDrivingPrivileges from './hooks'
+import { MdlCredential } from './types'
+import Clipboard from '@react-native-clipboard/clipboard'
+import { DocumentProperty, PropertyMimeType } from '~/hooks/documents/types'
+import { useToasts } from '~/hooks/toasts'
+import { useToggleExpand } from '~/hooks/ui'
+import useTranslation from '~/hooks/useTranslation'
+import { PopOutIcon } from '~/assets/svg'
+import { MdlPropertyKeys } from './types'
+import { DrivingLicensePrivileges } from './DrivingLicensePrivileges'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
@@ -133,6 +139,12 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   )
 }
 
+const MdlPopOutIcon = () => (
+  <View style={styles.popOutIconContainer}>
+    <PopOutIcon />
+  </View>
+)
+
 const Icon = ({ url }: { url: string }) => {
   return (
     <View
@@ -158,10 +170,24 @@ const Icon = ({ url }: { url: string }) => {
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
+  const { t } = useTranslation()
   const { id, backgroundColor = Colors.mainBlack } = route.params
+
   const document = useSelector(getDocumentById(id))!
 
+  const {
+    mdlFields,
+    togglePrivileges,
+    showPrivileges,
+    isDocumentMdl,
+    mdlPrivileges,
+  } = document.type[1] === MdlCredential.type && useDrivingPrivileges(document)
+
+  const goBack = useGoBack()
+
   const { getHolderPhoto, getExtraProperties } = useDocuments()
+
+  const [numOfLines, setNumOfLines] = useState(1)
 
   const fields = [...document.properties, ...getExtraProperties(document)]
 
@@ -204,14 +230,18 @@ const FieldDetails = () => {
         renderHeader={() => (
           <Collapsible.Header
             customStyles={{ backgroundColor }}
-            type={NavHeaderType.Close}
+            type={showPrivileges ? NavHeaderType.Back : NavHeaderType.Close}
+            onPress={showPrivileges ? togglePrivileges : goBack}
           />
         )}
         renderScroll={() => (
           <ScreenContainer.Padding>
+            {/* TODO figure out how scroll to the top in the MDLPrivileges*/}
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
-                text={document.name}
+                text={
+                  showPrivileges ? t('mdl.drivingPrivileges') : document.name
+                }
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
                   marginTop: holderPhoto && showIconContainer ? 6 : 0,
@@ -237,7 +267,9 @@ const FieldDetails = () => {
                     color={Colors.white90}
                     weight={JoloTextWeight.medium}
                   >
-                    {document.name}
+                    {showPrivileges
+                      ? t('mdl.drivingPrivileges')
+                      : document.name}
                   </JoloText>
                 </View>
               </Collapsible.Title>
@@ -267,26 +299,64 @@ const FieldDetails = () => {
                   marginTop: 16,
                 }}
               >
-                {fields.map((field, i) => (
-                  <React.Fragment key={i}>
-                    <View style={styles.fieldContainer} onLayout={handleLayout}>
-                      <JoloText
-                        customStyles={styles.fieldText}
-                        size={JoloTextSizes.mini}
-                        color={Colors.osloGray}
-                      >
-                        {field.label}
-                      </JoloText>
-                      <FieldValue
-                        value={field.value as string}
-                        mime_type={field.mime_type}
-                      />
-                    </View>
-                    {i !== Object.keys(fields).length - 1 && (
-                      <View style={styles.divider} />
-                    )}
-                  </React.Fragment>
-                ))}
+                {showPrivileges
+                  ? DrivingLicensePrivileges(mdlPrivileges, handleLayout)
+                  : isDocumentMdl
+                  ? mdlFields.map((field: DocumentProperty, i: number) => (
+                      <React.Fragment key={i}>
+                        <TouchableOpacity
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                          onPress={
+                            field.key === MdlPropertyKeys.drivingPrivileges
+                              ? togglePrivileges
+                              : undefined
+                          }
+                          activeOpacity={0.6}
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={field.value as string}
+                            mime_type={field.mime_type}
+                          />
+                          {field.key === MdlPropertyKeys.drivingPrivileges && (
+                            <MdlPopOutIcon />
+                          )}
+                        </TouchableOpacity>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    ))
+                  : fields.map((field, i) => (
+                      <React.Fragment key={i}>
+                        <View
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={field.value as string}
+                            mime_type={field.mime_type}
+                          />
+                        </View>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    ))}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
@@ -330,6 +400,11 @@ const styles = StyleSheet.create({
   iconContainer: {
     flexDirection: 'row',
     marginLeft: 12,
+  },
+  popOutIconContainer: {
+    position: 'absolute',
+    right: 8,
+    top: 8,
   },
 })
 

@@ -35,4 +35,4 @@ export { default as SuccessTickToggleIcon } from './SuccessTickToggleIcon'
 export { default as TorchOffIcon } from './TorchOffIcon'
 export { default as TorchOnIcon } from './TorchOnIcon'
 export { default as WarningIcon } from './WarningIcon'
-
+export { default as PopOutIcon } from './PopOutIcon'
