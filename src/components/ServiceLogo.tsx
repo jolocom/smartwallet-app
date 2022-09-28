@@ -25,6 +25,9 @@ interface Props {
   serviceUrl?: string
 }
 
+const IMAGE_SIZE = 70
+const GRADIENT_SIZE = 74
+
 export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
   const { scheduleErrorWarning } = useToasts()
 
@@ -70,10 +73,9 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
               start={{ x: 1.0, y: 0.3 }}
               end={{ x: 1.0, y: 1.0 }}
               style={{
-                width: 84,
-                height: 84,
-                borderRadius: 42,
-                borderWidth: 5,
+                width: GRADIENT_SIZE,
+                height: GRADIENT_SIZE,
+                borderRadius: GRADIENT_SIZE / 2,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
@@ -98,13 +100,13 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
 
 const styles = StyleSheet.create({
   image: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: IMAGE_SIZE,
+    height: IMAGE_SIZE,
+    borderRadius: IMAGE_SIZE / 2,
   },
   gradientContainer: {
     position: 'absolute',
-    left: -7,
-    top: -7,
+    left: -(GRADIENT_SIZE - IMAGE_SIZE) / 2,
+    top: -(GRADIENT_SIZE - IMAGE_SIZE) / 2,
   },
 })
