@@ -153,6 +153,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
     [focusedItem, sections, JSON.stringify(setFocusedItem)],
   )
 
+  //       <LoaderAnimation type={loaderType} msg={' '} />
   return (
     <>
       {loaderType ? (
