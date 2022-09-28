@@ -53,6 +53,7 @@ export enum ScreenNames {
   AppDisabled = 'AppDisabled',
   PinRecoveryInstructions = 'PinRecoveryInstructions',
   DragToConfirm = 'DragToConfirm',
+  DrivingPrivileges = 'DrivingPrivileges',
   //Settings
   SettingsGeneral = 'SettingsGeneral',
   Language = 'Language',

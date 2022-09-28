@@ -17,6 +17,7 @@ import {
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
+import DrivingPrivileges from './Documents/DrivingLicenseDemo/DrivingPrivileges'
 import Registration from '../LoggedOut/Onboarding/Registration'
 import FieldDetails from '../Modals/FieldDetails/FieldDetails'
 import CredentialForm from '../Modals/Forms/CredentialForm'
@@ -91,6 +92,13 @@ export type MainStackParamList = {
   [ScreenNames.FieldDetails]: {
     id: string
     backgroundColor?: Colors
+  }
+  [ScreenNames.DrivingPrivileges]: {
+    title: string
+    portrait: string
+    icons: string[]
+    prefechedIcon: string
+    document: Document
   }
   // DEV
   [ScreenNames.CardsTest]: undefined
@@ -242,6 +250,11 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
+        options={screenTransitionSlideFromBottom}
+      />
+      <MainStack.Screen
+        name={ScreenNames.DrivingPrivileges}
+        component={DrivingPrivileges}
         options={screenTransitionSlideFromBottom}
       />
       <MainStack.Screen
