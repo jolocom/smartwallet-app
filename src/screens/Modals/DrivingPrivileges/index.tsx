@@ -18,38 +18,28 @@ import useDrivingPrivileges from '~/screens/Modals/DrivingPrivileges/hooks'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import getVehicleIcon from '~/screens/Modals/DrivingPrivileges/utils'
 import { Icon } from '~/screens/Modals/FieldDetails'
-
-const IMAGE_SIZE = BP({ large: 104, default: 90 })
-const ICON_SIZE = BP({ large: 40, default: 30 })
+import { Document } from '~/hooks/documents/types'
 
 const DrivingPrivileges = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.DrivingPrivileges>>()
 
-  const { title, portrait, icons, prefechedIcon, document } = route.params
+  const {
+    title,
+    portrait,
+    issuerIcon,
+    prefechedIcon,
+    document,
+    handleLayout,
+    containerHeight,
+    imageSize,
+  } = route.params
 
-  console.log({ document })
+  const mdlDocument = document as Document
 
-  const { mdlPrivileges } = useDrivingPrivileges(document)
+  const { mdlPrivileges } = useDrivingPrivileges(mdlDocument)
   const { top } = useSafeArea()
   const goBack = useGoBack()
-
-  const getDocumentNameContainerHeight = () => {
-    if (!icons.length && portrait) {
-      return IMAGE_SIZE
-    } else if (icons.length && portrait) {
-      return IMAGE_SIZE - ICON_SIZE
-    } else {
-      return 'auto'
-    }
-  }
-
-  const handleLayout = () => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.linear,
-      duration: 200,
-    })
-  }
 
   return (
     <View
@@ -63,7 +53,7 @@ const DrivingPrivileges = () => {
         renderHeader={() => (
           <Collapsible.Header
             customStyles={{ backgroundColor: Colors.mainDark }}
-            type={NavHeaderType.Close}
+            type={NavHeaderType.Back}
             onPress={goBack}
           />
         )}
@@ -74,13 +64,13 @@ const DrivingPrivileges = () => {
                 text={title}
                 customContainerStyles={{
                   width: portrait ? '68%' : '100%',
-                  marginTop: portrait && icons.length ? 6 : 0,
+                  marginTop: portrait && issuerIcon ? 6 : 0,
                 }}
               >
                 <View
                   style={{
-                    height: getDocumentNameContainerHeight(),
-                    justifyContent: !icons.length ? 'center' : 'flex-start',
+                    height: containerHeight(),
+                    justifyContent: !issuerIcon ? 'center' : 'flex-start',
                   }}
                 >
                   <JoloText
@@ -99,7 +89,7 @@ const DrivingPrivileges = () => {
                   </JoloText>
                 </View>
               </Collapsible.Title>
-              {icons.length && (
+              {issuerIcon && (
                 <View
                   style={{
                     ...styles.iconContainer,
@@ -107,15 +97,23 @@ const DrivingPrivileges = () => {
                   }}
                 >
                   {prefechedIcon && <Icon url={prefechedIcon} />}
-                  {document.style.contextIcons &&
-                    document.style.contextIcons.map((icon, i) => (
+                  {mdlDocument.style.contextIcons &&
+                    mdlDocument.style.contextIcons.map((icon, i) => (
                       <Icon key={i} url={icon} />
                     ))}
                 </View>
               )}
               {portrait && (
                 <View>
-                  <Image source={{ uri: portrait }} style={styles.photo} />
+                  <Image
+                    source={{ uri: portrait }}
+                    style={{
+                      ...styles.photo,
+                      width: imageSize,
+                      height: imageSize,
+                      borderRadius: imageSize / 2,
+                    }}
+                  />
                 </View>
               )}
               <Block
@@ -196,9 +194,6 @@ const DrivingPrivileges = () => {
 
 const styles = StyleSheet.create({
   photo: {
-    width: IMAGE_SIZE,
-    height: IMAGE_SIZE,
-    borderRadius: IMAGE_SIZE / 2,
     position: 'absolute',
     right: 12,
     bottom: 0,

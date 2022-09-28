@@ -209,15 +209,19 @@ const FieldDetails = () => {
     }
   }
 
+  const privilegesParams = {
+    title: t('mdl.drivingPrivileges'),
+    issuerIcon: document.issuer.icon,
+    portrait: holderPhoto,
+    containerHeight: getDocumentNameContainerHeight,
+    prefechedIcon,
+    document,
+    handleLayout,
+    imageSize: IMAGE_SIZE,
+  }
+
   const handlePressPrivileges = () => {
-    redirect(ScreenNames.DrivingPrivileges, {
-      title: 'Driving Privileges',
-      icons: [document.issuer.icon],
-      portrait: holderPhoto,
-      containerHeight: getDocumentNameContainerHeight(),
-      prefechedIcon,
-      document,
-    })
+    redirect(ScreenNames.DrivingPrivileges, privilegesParams)
   }
 
   return (
