@@ -242,7 +242,6 @@ const FieldDetails = () => {
         )}
         renderScroll={() => (
           <ScreenContainer.Padding>
-            {/* TODO figure out how scroll to the top in the MDLPrivileges*/}
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
                 text={document.name}
