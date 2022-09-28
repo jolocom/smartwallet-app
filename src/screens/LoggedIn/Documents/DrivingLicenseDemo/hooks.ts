@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import { useRef } from 'react'
+//@ts-expect-error
+import { BluetoothStatus } from 'react-native-bluetooth-status'
 import { CredentialMetadataSummary } from 'react-native-jolocom'
 import DrivingLicenseSDK, {
   DrivingLicenseData,
@@ -10,38 +12,32 @@ import DrivingLicenseSDK, {
   PersonalizationInputRequest,
   PersonalizationInputResponse,
 } from 'react-native-mdl'
-import { useDispatch, useSelector } from 'react-redux'
+import Permissions from 'react-native-permissions'
+import { useDispatch } from 'react-redux'
 import { useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
 import { addCredentials } from '~/modules/credentials/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
-import { setMdlDisplayData } from '~/modules/mdl/actions'
-import { getMdlDisplayData } from '~/modules/mdl/selectors'
 import { ScreenNames } from '~/types/screens'
 import { makeMdlManifest, mdlMetadata } from './data'
 import { utf8ToBase64Image } from './utils'
 
 export const useDrivingLicense = () => {
+  const { t } = useTranslation()
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
-  const { scheduleWarning, scheduleErrorWarning } = useToasts()
+  const { scheduleErrorWarning, scheduleWarning, scheduleInfo } = useToasts()
   const dispatch = useDispatch()
-  const drivingLicense = useSelector(getMdlDisplayData)
   const goBack = useGoBack()
   const redirect = useRedirect()
   const { toDocument } = useInitDocuments()
 
   const initDrivingLicense = async () => {
-    const mdlDisplayData = await sdk
-      .getPersonalizationStatus()
-      .then((isPersonalized) => {
-        if (isPersonalized) return sdk.getDisplayData()
-        return null
-      })
-    dispatch(setMdlDisplayData(mdlDisplayData))
+    await sdk.init()
   }
 
   const createDrivingLicenseVC = async (
@@ -87,36 +83,51 @@ export const useDrivingLicense = () => {
     dispatch(addCredentials([mdlDocument]))
   }
 
+  const logHandler = (data: Record<string, string>) => {
+    console.log('MDL-LOG: ', data)
+  }
+
   const personalizeLicense = (
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
     sdk.startPersonalization(qrString)
 
-    const requestHandler = (requests: string) => {
-      const jsonRequests = JSON.parse(requests) as PersonalizationInputRequest[]
+    const requestHandler = (request: string | PersonalizationInputRequest) => {
+      // NOTE: this is a thing bc on ios we can't send objects through events, while
+      // on android we can only send objects
+      let jsonRequests: PersonalizationInputRequest[]
+      if (typeof request === 'string') {
+        jsonRequests = JSON.parse(request) as PersonalizationInputRequest[]
+      } else {
+        jsonRequests = [request]
+      }
 
       onRequests(jsonRequests)
     }
     const successHandler = () => {
       unsubscribe()
 
-      redirect(ScreenNames.Documents)
       sdk
         .getDisplayData()
         .then((displayData) => {
-          createDrivingLicenseVC(displayData).catch(console.warn)
-          dispatch(setMdlDisplayData(displayData))
+          createDrivingLicenseVC(displayData).catch(scheduleErrorWarning)
           dispatch(dismissLoader())
+          redirect(ScreenNames.Documents)
         })
         .catch(console.warn)
     }
-    const errorHandler = (error: string) => {
+    const errorHandler = (error: string | DrivingLicenseError) => {
       unsubscribe()
 
       dispatch(dismissLoader())
+      let jsonError: DrivingLicenseError
       //FIXME currently returns null, but should return stringified DrivingLicenseError
-      const jsonError = JSON.parse(error) as DrivingLicenseError
+      if (typeof error === 'string') {
+        jsonError = JSON.parse(error) as DrivingLicenseError
+      } else {
+        jsonError = error
+      }
       scheduleErrorWarning(new Error(jsonError.name))
     }
 
@@ -132,6 +143,7 @@ export const useDrivingLicense = () => {
       DrivingLicenseEvents.personalizationError,
       errorHandler,
     )
+    sdk.emitter.addListener(DrivingLicenseEvents.log, logHandler)
 
     const unsubscribe = () => {
       sdk.emitter.removeListener(
@@ -146,6 +158,7 @@ export const useDrivingLicense = () => {
         DrivingLicenseEvents.personalizationRequests,
         errorHandler,
       )
+      sdk.emitter.removeListener(DrivingLicenseEvents.log, logHandler)
     }
   }
 
@@ -153,57 +166,71 @@ export const useDrivingLicense = () => {
     dispatch(
       setLoader({
         type: LoaderTypes.default,
-        msg: 'Führerscheindaten hinzufügen',
+        msg: t('mdl.personalizationLoader'),
       }),
     )
     return sdk.finishPersonalization(responses)
   }
 
   const deleteDrivingLicense = () => {
-    return sdk
-      .deleteDrivingLicense()
-      .then(() => {
-        dispatch(setMdlDisplayData(null))
-      })
-      .catch(scheduleErrorWarning)
+    return sdk.deleteDrivingLicense().catch(scheduleErrorWarning)
   }
 
-  const startSharing = async () => {
-    const engagementHandler = (state: string) => {
-      const jsonState = JSON.parse(state) as EngagementState
+  const shareDrivingLicense = () => {
+    BluetoothStatus.state().then((isEnabled: boolean) => {
+      if (isEnabled) {
+        redirect(ScreenNames.DrivingLicenseShare)
+      } else {
+        scheduleWarning({
+          title: t('mdl.bluetoothWarningTitle'),
+          message: t('mdl.bluetoothWarningMessage'),
+          interact: {
+            label: t('mdl.bluetoothWarningBtn'),
+            onInteract: () => {
+              Permissions.openSettings()
+            },
+          },
+        })
+      }
+    })
+  }
+
+  const prepareEngagementEvents = () => {
+    const engagementHandler = (state: string | EngagementState) => {
+      const jsonState =
+        typeof state === 'string'
+          ? (JSON.parse(state) as EngagementState)
+          : state
 
       switch (jsonState.name) {
         case EngagementStateNames.started:
           dispatch(
             setLoader({
               type: LoaderTypes.default,
-              msg: 'Führerscheindaten werden übertragen…',
+              msg: t('mdl.sharingLoader'),
             }),
           )
           break
         case EngagementStateNames.ended:
-          dispatch(
-            setLoader({
-              type: LoaderTypes.success,
-              msg: 'Ihre Führerscheindaten wurden erfolgreich übermittelt!',
-            }),
-          )
+          scheduleInfo({
+            title: t('Toasts.ausweisSuccessTitle'),
+            message: t('mdl.successToastMsg'),
+          })
 
           break
         case EngagementStateNames.canceled:
           dispatch(
             setLoader({
               type: LoaderTypes.error,
-              msg: 'Die Datenübertragen wurde abgebrochen. Bitte versuchen Sie es erneut.',
+              msg: t('mdl.canceledLoader'),
             }),
           )
           break
         case EngagementStateNames.error:
-          dispatch(
-            setLoader({
-              type: LoaderTypes.error,
-              msg: `Die Datenübertragung war nicht erfolgreich!`,
-            }),
+          scheduleErrorWarning(
+            new Error(
+              jsonState?.error?.localizedDescription ?? 'Unknown mDL Error',
+            ),
           )
           break
         default:
@@ -229,23 +256,28 @@ export const useDrivingLicense = () => {
       DrivingLicenseEvents.engagementState,
       engagementHandler,
     )
+    sdk.emitter.addListener(DrivingLicenseEvents.log, logHandler)
     const unsubscribe = () => {
       sdk.emitter.removeListener(
         DrivingLicenseEvents.engagementState,
         engagementHandler,
       )
+      sdk.emitter.removeListener(DrivingLicenseEvents.log, logHandler)
     }
+  }
 
+  const prepareDeviceEngagement = async () => {
     return sdk.prepareDeviceEngagement()
   }
 
   return {
     drivingLicenseSDK: sdk,
-    drivingLicense,
     personalizeLicense,
     deleteDrivingLicense,
     finishPersonalization,
     initDrivingLicense,
-    startSharing,
+    shareDrivingLicense,
+    prepareDeviceEngagement,
+    prepareEngagementEvents,
   }
 }

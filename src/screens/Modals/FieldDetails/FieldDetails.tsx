@@ -36,6 +36,7 @@ import { MdlPropertyKeys } from './types'
 import { DrivingLicensePrivileges } from './DrivingLicensePrivileges'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
+const ICON_SIZE = BP({ large: 40, default: 30 })
 
 type FieldValueProps = { value: string; mime_type: PropertyMimeType }
 
@@ -146,7 +147,13 @@ const MdlPopOutIcon = () => (
 
 const Icon = ({ url }: { url: string }) => {
   return (
-    <View style={{ width: 40, height: 40, marginRight: 12 }}>
+    <View
+      style={{
+        width: ICON_SIZE,
+        height: ICON_SIZE,
+        marginRight: 12,
+      }}
+    >
       <Image
         source={{ uri: url }}
         style={{
@@ -201,9 +208,14 @@ const FieldDetails = () => {
 
   const { top } = useSafeArea()
 
-  const getNumOfLines = (e: TextLayoutEvent) => {
-    const { lines } = e.nativeEvent
-    setNumOfLines(lines.length)
+  const getDocumentNameContainerHeight = () => {
+    if (!showIconContainer && holderPhoto) {
+      return IMAGE_SIZE
+    } else if (showIconContainer && holderPhoto) {
+      return IMAGE_SIZE - ICON_SIZE
+    } else {
+      return 'auto'
+    }
   }
 
   return (
@@ -232,34 +244,40 @@ const FieldDetails = () => {
                 }
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
-                  ...(holderPhoto && numOfLines === 1 && { marginTop: 26 }),
+                  marginTop: holderPhoto && showIconContainer ? 6 : 0,
                 }}
               >
-                <JoloText
-                  customStyles={{
-                    ...styles.fieldText,
-                    lineHeight: BP({ xsmall: 24, default: 28 }),
-                    marginLeft: 12,
-                    top: holderPhoto && numOfLines === 1 && -24,
+                <View
+                  style={{
+                    height: getDocumentNameContainerHeight(),
+                    justifyContent: !showIconContainer
+                      ? 'center'
+                      : 'flex-start',
                   }}
-                  numberOfLines={2}
-                  // @ts-expect-error
-                  onTextLayout={getNumOfLines}
-                  kind={JoloTextKind.title}
-                  size={JoloTextSizes.middle}
-                  color={Colors.white90}
-                  weight={JoloTextWeight.medium}
                 >
-                  {showPrivileges ? t('mdl.drivingPrivileges') : document.name}
-                </JoloText>
+                  <JoloText
+                    customStyles={{
+                      ...styles.documentNameContainer,
+                      lineHeight: BP({ xsmall: 24, default: 26 }),
+                      marginLeft: 12,
+                    }}
+                    numberOfLines={2}
+                    kind={JoloTextKind.title}
+                    size={JoloTextSizes.middle}
+                    color={Colors.white90}
+                    weight={JoloTextWeight.medium}
+                  >
+                    {showPrivileges
+                      ? t('mdl.drivingPrivileges')
+                      : document.name}
+                  </JoloText>
+                </View>
               </Collapsible.Title>
               {showIconContainer && (
                 <View
                   style={{
-                    paddingBottom: 24,
-                    flexDirection: 'row',
-                    marginLeft: 12,
-                    bottom: -8,
+                    ...styles.iconContainer,
+                    paddingTop: !holderPhoto ? 8 : 0,
                   }}
                 >
                   {prefechedIcon && <Icon url={prefechedIcon} />}
@@ -278,6 +296,7 @@ const FieldDetails = () => {
                 customStyles={{
                   backgroundColor: Colors.white,
                   marginBottom: 16,
+                  marginTop: 16,
                 }}
               >
                 {showPrivileges
@@ -354,10 +373,7 @@ const styles = StyleSheet.create({
     borderRadius: IMAGE_SIZE / 2,
     position: 'absolute',
     right: 12,
-    bottom: 16,
-  },
-  fieldText: {
-    textAlign: 'left',
+    bottom: 0,
   },
   fieldContainer: {
     paddingVertical: BP({
@@ -368,11 +384,22 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     position: 'relative',
   },
+  fieldText: {
+    textAlign: 'left',
+  },
+  documentNameContainer: {
+    textAlign: 'left',
+    display: 'flex',
+  },
   divider: {
     height: 1,
     backgroundColor: Colors.genevaGray,
     width: '100%',
     opacity: 0.15,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    marginLeft: 12,
   },
   popOutIconContainer: {
     position: 'absolute',

@@ -1,5 +1,7 @@
+export const MDL_CREDENTIAL_TYPE = 'DrivingLicenseCredential'
+
 export const mdlMetadata = {
-  type: ['VerifiableCredential', 'DrivingLicenseCredential'],
+  type: ['VerifiableCredential', MDL_CREDENTIAL_TYPE],
   name: 'Führerschein',
   context: [
     {
