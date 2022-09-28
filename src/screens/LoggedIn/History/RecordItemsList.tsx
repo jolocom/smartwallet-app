@@ -156,7 +156,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   return (
     <>
       {loaderType ? (
-        <LoaderAnimation type={loaderType} />
+        <LoaderAnimation type={loaderType} msg={' '} />
       ) : (
         <>
           {sections.length > 0 ? (
