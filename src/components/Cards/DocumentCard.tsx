@@ -185,6 +185,8 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
                       height: holderName ? 90 : 21.5,
                       justifyContent: 'center',
                     }
+                  : !isBackground && !photo && holderName
+                  ? { marginBottom: 14 }
                   : {}
               }
             >
