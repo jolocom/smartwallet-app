@@ -23,17 +23,14 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../../LoggedIn/Main'
-import { useGoBack } from '~/hooks/navigation'
-import useDrivingPrivileges from './hooks'
-import { MdlCredential } from './types'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { DocumentProperty, PropertyMimeType } from '~/hooks/documents/types'
+import { PropertyMimeType } from '~/hooks/documents/types'
 import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
 import { MdlPropertyKeys } from './types'
-import { DrivingLicensePrivileges } from './DrivingLicensePrivileges'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
@@ -175,6 +172,8 @@ const FieldDetails = () => {
 
   const document = useSelector(getDocumentById(id))!
 
+  const redirect = useRedirect()
+
   const goBack = useGoBack()
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
@@ -193,8 +192,7 @@ const FieldDetails = () => {
   const holderPhoto = getHolderPhoto(document)
 
   const showIconContainer =
-    Boolean(document.issuer.icon) ||
-    Boolean(document.style.contextIcons?.length)
+    Boolean(document.issuer.icon) || Boolean(document.issuer.icon?.length)
 
   const { top } = useSafeArea()
 
@@ -208,8 +206,15 @@ const FieldDetails = () => {
     }
   }
 
-  const logger = () => {
-    console.log('MOIN')
+  const handlePressPrivileges = () => {
+    redirect(ScreenNames.DrivingPrivileges, {
+      title: 'Driving Privileges',
+      icons: [document.issuer.icon],
+      portrait: holderPhoto,
+      containerHeight: getDocumentNameContainerHeight(),
+      prefechedIcon,
+      document,
+    })
   }
 
   return (
@@ -297,7 +302,7 @@ const FieldDetails = () => {
                       activeOpacity={0.6}
                       onPress={
                         field.key === MdlPropertyKeys.drivingPrivileges
-                          ? logger
+                          ? handlePressPrivileges
                           : null
                       }
                     >
