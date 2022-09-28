@@ -31,6 +31,7 @@ import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
 import { MdlPropertyKeys } from './DrivingPrivileges/types'
+import useDrivingPrivileges from './DrivingPrivileges/hooks'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
@@ -189,6 +190,8 @@ const FieldDetails = () => {
     })
   }
 
+  const { vehicleCategoryCodes } = useDrivingPrivileges(document)
+
   const holderPhoto = getHolderPhoto(document)
 
   const showIconContainer =
@@ -314,7 +317,11 @@ const FieldDetails = () => {
                         {field.label}
                       </JoloText>
                       <FieldValue
-                        value={field.value as string}
+                        value={
+                          field.key === MdlPropertyKeys.drivingPrivileges
+                            ? vehicleCategoryCodes
+                            : (field.value as string)
+                        }
                         mime_type={field.mime_type}
                       />
                       {field.key === MdlPropertyKeys.drivingPrivileges && (
