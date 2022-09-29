@@ -30,7 +30,10 @@ import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
-import { MdlPropertyKeys } from './DrivingPrivileges/types'
+import {
+  DrivingPrivilegesProps,
+  MdlPropertyKeys,
+} from './DrivingPrivileges/types'
 import useDrivingPrivileges from './DrivingPrivileges/hooks'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
@@ -209,19 +212,19 @@ const FieldDetails = () => {
     }
   }
 
-  const privilegesParams = {
+  const drivingPrivilegesParams: DrivingPrivilegesProps = {
     title: t('mdl.drivingPrivileges'),
-    issuerIcon: document.issuer.icon,
-    portrait: holderPhoto,
+    issuerIcon: document.issuer.icon as string,
+    portrait: holderPhoto as string,
     containerHeight: getDocumentNameContainerHeight,
-    prefechedIcon,
+    prefechedIcon: prefechedIcon as string,
     document,
     handleLayout,
     imageSize: IMAGE_SIZE,
   }
 
   const handlePressPrivileges = () => {
-    redirect(ScreenNames.DrivingPrivileges, privilegesParams)
+    redirect(ScreenNames.DrivingPrivileges, drivingPrivilegesParams)
   }
 
   return (
