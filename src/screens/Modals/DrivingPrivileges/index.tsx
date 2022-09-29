@@ -19,6 +19,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import getVehicleIcon from '~/screens/Modals/DrivingPrivileges/utils'
 import { Icon } from '~/screens/Modals/FieldDetails'
 import { Document } from '~/hooks/documents/types'
+import { DrivingPrivilegesProps } from './types'
 
 const DrivingPrivileges = () => {
   const route =
@@ -33,7 +34,7 @@ const DrivingPrivileges = () => {
     handleLayout,
     containerHeight,
     imageSize,
-  } = route.params
+  } = route.params as DrivingPrivilegesProps
 
   const mdlDocument = document as Document
 
