@@ -5,13 +5,12 @@ import { MdlPropertyKeys, PrivilegesData } from './types'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
 
-const useDrivingPrivileges = (document: Document) => {
+const useDrivingPrivileges = (mdl: Document) => {
   const { t } = useTranslation()
 
   const drivingPrivileges: DrivingPrivilege[] = JSON.parse(
-    document!.properties.filter(
-      (f) => f.key === MdlPropertyKeys.drivingPrivileges,
-    )[0].value,
+    mdl.properties.filter((f) => f.key === MdlPropertyKeys.drivingPrivileges)[0]
+      .value,
   )
 
   const vehicleCategoryCodes = drivingPrivileges
