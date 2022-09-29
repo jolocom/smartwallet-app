@@ -178,8 +178,8 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             truncateName={showMenu}
           />
           <View style={styles.content}>
-            <View
-              style={
+            <ScaledView
+              scaleStyle={
                 !isBackground && photo
                   ? {
                       height: holderName ? 90 : 21.5,
@@ -203,7 +203,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
                   onLayout={handleHolderNameTextLayout}
                 />
               )}
-            </View>
+            </ScaledView>
             {isBackground && (
               <ScaledView
                 scaleStyle={{
