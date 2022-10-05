@@ -94,7 +94,7 @@ export type MainStackParamList = {
     id: string
     backgroundColor?: Colors
   }
-  [ScreenNames.DrivingPrivileges]: DrivingPrivilegesProps
+  [ScreenNames.DrivingPrivileges]: { id: string }
   // DEV
   [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined

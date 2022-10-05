@@ -1,46 +1,57 @@
 import React from 'react'
 import { View, Image, StyleSheet, LayoutAnimation } from 'react-native'
 import { RouteProp, useRoute } from '@react-navigation/native'
+import { useSafeArea } from 'react-native-safe-area-context'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useSelector } from 'react-redux'
 
 import { MainStackParamList } from '../../LoggedIn/Main'
 import { Colors } from '~/utils/colors'
 import { ScreenNames } from '~/types/screens'
-import { useSafeArea } from 'react-native-safe-area-context'
-import Collapsible from '~/components/Collapsible'
-import { NavHeaderType } from '~/components/NavigationHeader'
-import { useGoBack } from '~/hooks/navigation'
-import ScreenContainer from '~/components/ScreenContainer'
-import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
-import { JoloTextSizes } from '~/utils/fonts'
-import BP from '~/utils/breakpoints'
 import Block from '~/components/Block'
+import Collapsible from '~/components/Collapsible'
+import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
+import { NavHeaderType } from '~/components/NavigationHeader'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useDocuments } from '~/hooks/documents'
+import { useGoBack } from '~/hooks/navigation'
+import useImagePrefetch from '~/hooks/useImagePrefetch'
+import useTranslation from '~/hooks/useTranslation'
+import { getDocumentById } from '~/modules/credentials/selectors'
 import useDrivingPrivileges from '~/screens/Modals/DrivingPrivileges/hooks'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import getVehicleIcon from '~/screens/Modals/DrivingPrivileges/utils'
 import { Icon } from '~/screens/Modals/FieldDetails'
-import { Document } from '~/hooks/documents/types'
-import { DrivingPrivilegesProps } from './types'
+import BP from '~/utils/breakpoints'
+import { JoloTextSizes } from '~/utils/fonts'
 
 const DrivingPrivileges = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.DrivingPrivileges>>()
 
-  const {
-    title,
-    portrait,
-    issuerIcon,
-    prefechedIcon,
-    document,
-    handleLayout,
-    containerHeight,
-    imageSize,
-  } = route.params as DrivingPrivilegesProps
-
-  const mdlDocument = document as Document
-
-  const { mdlPrivileges } = useDrivingPrivileges(mdlDocument)
+  const { t } = useTranslation()
+  const { getHolderPhoto } = useDocuments()
   const { top } = useSafeArea()
   const goBack = useGoBack()
+
+  const IMAGE_SIZE = BP({ large: 104, default: 90 })
+  const ICON_SIZE = BP({ large: 40, default: 30 })
+
+  const { id } = route.params
+
+  const mdlDocument = useSelector(getDocumentById(id))!
+  const issuerIcon = mdlDocument.issuer.icon
+  const prefechedIcon = useImagePrefetch(issuerIcon)
+  const holderPhoto = getHolderPhoto(mdlDocument)
+  const { mdlPrivileges } = useDrivingPrivileges(mdlDocument)
+
+  const handleLayout = () => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.linear,
+      duration: 200,
+    })
+  }
+
+  const containerHeight = IMAGE_SIZE - ICON_SIZE
 
   return (
     <View
@@ -62,15 +73,15 @@ const DrivingPrivileges = () => {
           <ScreenContainer.Padding>
             <Collapsible.Scroll>
               <Collapsible.Title
-                text={title}
+                text={t('mdl.drivingPrivileges')}
                 customContainerStyles={{
-                  width: portrait ? '68%' : '100%',
-                  marginTop: portrait && issuerIcon ? 6 : 0,
+                  width: holderPhoto ? '68%' : '100%',
+                  marginTop: holderPhoto && issuerIcon ? 6 : 0,
                 }}
               >
                 <View
                   style={{
-                    height: containerHeight(),
+                    height: containerHeight,
                     justifyContent: !issuerIcon ? 'center' : 'flex-start',
                   }}
                 >
@@ -86,7 +97,7 @@ const DrivingPrivileges = () => {
                     color={Colors.white90}
                     weight={JoloTextWeight.medium}
                   >
-                    {title}
+                    {t('mdl.drivingPrivileges')}
                   </JoloText>
                 </View>
               </Collapsible.Title>
@@ -94,7 +105,7 @@ const DrivingPrivileges = () => {
                 <View
                   style={{
                     ...styles.iconContainer,
-                    paddingTop: !portrait ? 8 : 0,
+                    paddingTop: !holderPhoto ? 8 : 0,
                   }}
                 >
                   {prefechedIcon && <Icon url={prefechedIcon} />}
@@ -104,15 +115,15 @@ const DrivingPrivileges = () => {
                     ))}
                 </View>
               )}
-              {portrait && (
+              {holderPhoto && (
                 <View>
                   <Image
-                    source={{ uri: portrait }}
+                    source={{ uri: holderPhoto }}
                     style={{
                       ...styles.photo,
-                      width: imageSize,
-                      height: imageSize,
-                      borderRadius: imageSize / 2,
+                      width: IMAGE_SIZE,
+                      height: IMAGE_SIZE,
+                      borderRadius: IMAGE_SIZE / 2,
                     }}
                   />
                 </View>
