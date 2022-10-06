@@ -32,6 +32,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
 import { MdlPropertyKeys } from './DrivingPrivileges/types'
 import useDrivingPrivileges from './DrivingPrivileges/hooks'
+import { ClaimKeys } from '~/types/credentials'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
@@ -178,7 +179,11 @@ const FieldDetails = () => {
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  const fields = [...document.properties, ...getExtraProperties(document)]
+  // NOTE: filtering out portrait property for mdl use case so it doesn't get rendered as field but is still available as holderPhoto
+  const fields = [
+    ...document.properties.filter((p) => p.key !== ClaimKeys.portrait),
+    ...getExtraProperties(document),
+  ]
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
@@ -288,46 +293,42 @@ const FieldDetails = () => {
                   marginTop: 16,
                 }}
               >
-                {fields.map((field, i) => {
-                  if (field.key !== '$.portrait') {
-                    return (
-                      <React.Fragment key={i}>
-                        <TouchableOpacity
-                          style={styles.fieldContainer}
-                          onLayout={handleLayout}
-                          activeOpacity={0.6}
-                          onPress={
-                            field.key === MdlPropertyKeys.drivingPrivileges
-                              ? handlePressPrivileges
-                              : null
-                          }
-                        >
-                          <JoloText
-                            customStyles={styles.fieldText}
-                            size={JoloTextSizes.mini}
-                            color={Colors.osloGray}
-                          >
-                            {field.label}
-                          </JoloText>
-                          <FieldValue
-                            value={
-                              field.key === MdlPropertyKeys.drivingPrivileges
-                                ? vehicleCategoryCodes
-                                : (field.value as string)
-                            }
-                            mime_type={field.mime_type}
-                          />
-                          {field.key === MdlPropertyKeys.drivingPrivileges && (
-                            <MdlPopOutIcon />
-                          )}
-                        </TouchableOpacity>
-                        {i !== Object.keys(fields).length - 1 && (
-                          <View style={styles.divider} />
-                        )}
-                      </React.Fragment>
-                    )
-                  }
-                })}
+                {fields.map((field, i) => (
+                  <React.Fragment key={i}>
+                    <TouchableOpacity
+                      style={styles.fieldContainer}
+                      onLayout={handleLayout}
+                      activeOpacity={0.6}
+                      onPress={
+                        field.key === MdlPropertyKeys.drivingPrivileges
+                          ? handlePressPrivileges
+                          : null
+                      }
+                    >
+                      <JoloText
+                        customStyles={styles.fieldText}
+                        size={JoloTextSizes.mini}
+                        color={Colors.osloGray}
+                      >
+                        {field.label}
+                      </JoloText>
+                      <FieldValue
+                        value={
+                          field.key === MdlPropertyKeys.drivingPrivileges
+                            ? vehicleCategoryCodes
+                            : (field.value as string)
+                        }
+                        mime_type={field.mime_type}
+                      />
+                      {field.key === MdlPropertyKeys.drivingPrivileges && (
+                        <MdlPopOutIcon />
+                      )}
+                    </TouchableOpacity>
+                    {i !== Object.keys(fields).length - 1 && (
+                      <View style={styles.divider} />
+                    )}
+                  </React.Fragment>
+                ))}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
