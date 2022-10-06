@@ -166,6 +166,7 @@ const DrivingPrivileges = () => {
                                   borderBottomColor: Colors.genevaGray15,
                                   borderBottomWidth: 1,
                                 }),
+                                paddingVertical: 2,
                               }}
                               key={i}
                             >
