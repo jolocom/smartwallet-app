@@ -168,7 +168,6 @@ export const Icon = ({ url }: { url: string }) => {
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-  const { t } = useTranslation()
   const { id, backgroundColor = Colors.mainBlack } = route.params
 
   const document = useSelector(getDocumentById(id))!
