@@ -288,42 +288,46 @@ const FieldDetails = () => {
                   marginTop: 16,
                 }}
               >
-                {fields.map((field, i) => (
-                  <React.Fragment key={i}>
-                    <TouchableOpacity
-                      style={styles.fieldContainer}
-                      onLayout={handleLayout}
-                      activeOpacity={0.6}
-                      onPress={
-                        field.key === MdlPropertyKeys.drivingPrivileges
-                          ? handlePressPrivileges
-                          : null
-                      }
-                    >
-                      <JoloText
-                        customStyles={styles.fieldText}
-                        size={JoloTextSizes.mini}
-                        color={Colors.osloGray}
-                      >
-                        {field.label}
-                      </JoloText>
-                      <FieldValue
-                        value={
-                          field.key === MdlPropertyKeys.drivingPrivileges
-                            ? vehicleCategoryCodes
-                            : (field.value as string)
-                        }
-                        mime_type={field.mime_type}
-                      />
-                      {field.key === MdlPropertyKeys.drivingPrivileges && (
-                        <MdlPopOutIcon />
-                      )}
-                    </TouchableOpacity>
-                    {i !== Object.keys(fields).length - 1 && (
-                      <View style={styles.divider} />
-                    )}
-                  </React.Fragment>
-                ))}
+                {fields.map((field, i) => {
+                  if (field.key !== '$.portrait') {
+                    return (
+                      <React.Fragment key={i}>
+                        <TouchableOpacity
+                          style={styles.fieldContainer}
+                          onLayout={handleLayout}
+                          activeOpacity={0.6}
+                          onPress={
+                            field.key === MdlPropertyKeys.drivingPrivileges
+                              ? handlePressPrivileges
+                              : null
+                          }
+                        >
+                          <JoloText
+                            customStyles={styles.fieldText}
+                            size={JoloTextSizes.mini}
+                            color={Colors.osloGray}
+                          >
+                            {field.label}
+                          </JoloText>
+                          <FieldValue
+                            value={
+                              field.key === MdlPropertyKeys.drivingPrivileges
+                                ? vehicleCategoryCodes
+                                : (field.value as string)
+                            }
+                            mime_type={field.mime_type}
+                          />
+                          {field.key === MdlPropertyKeys.drivingPrivileges && (
+                            <MdlPopOutIcon />
+                          )}
+                        </TouchableOpacity>
+                        {i !== Object.keys(fields).length - 1 && (
+                          <View style={styles.divider} />
+                        )}
+                      </React.Fragment>
+                    )
+                  }
+                })}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>
