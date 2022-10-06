@@ -4,6 +4,8 @@ import {
   StackNavigationOptions,
   TransitionPresets,
 } from '@react-navigation/stack'
+import { RevealFromBottomAndroid } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionPresets'
+import { Platform } from 'react-native'
 
 export const SCREEN_HEADER_HEIGHT = 50
 
@@ -12,7 +14,9 @@ export const screenTransitionSlideFromRight = {
 }
 
 export const screenTransitionSlideFromBottom =
-  TransitionPresets.ModalSlideFromBottomIOS
+  Platform.OS === 'ios'
+    ? TransitionPresets.ModalSlideFromBottomIOS
+    : TransitionPresets.RevealFromBottomAndroid
 
 export const screenDisableGestures = { gestureEnabled: false }
 
