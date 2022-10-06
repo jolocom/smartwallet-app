@@ -29,14 +29,3 @@ export enum MdlPropertyKeys {
   drivingPrivileges = '$.driving_privileges',
   portrait = '$.portrait',
 }
-
-export interface DrivingPrivilegesProps {
-  title: string
-  portrait: string
-  issuerIcon: string
-  prefechedIcon: string
-  document: Document
-  containerHeight: () => void
-  handleLayout: () => void
-  imageSize: number
-}
