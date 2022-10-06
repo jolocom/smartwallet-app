@@ -48,7 +48,6 @@ import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
 import { useToasts } from '~/hooks/toasts'
 import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
 import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
-import { DrivingPrivilegesProps } from '../Modals/DrivingPrivileges/types'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
