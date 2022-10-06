@@ -193,7 +193,11 @@ const CredentialForm = () => {
                     updateInput={(v) => handleFieldValueChange(v, field)}
                     value={values[field.key]}
                     // @ts-expect-error @TERMS
-                    placeholder={t(field.label)}
+                    placeholder={
+                      field.key === ClaimKeys.telephone
+                        ? '+49 151 123456789'
+                        : t(field.label)
+                    }
                     autoFocus={i === 0}
                     onBlur={() => setFieldTouched(field.key, true, false)}
                     /* we want to show highlighted focused input only if
