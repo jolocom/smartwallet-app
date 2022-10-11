@@ -80,13 +80,18 @@ export const AusweisScanner = () => {
    * running it with interval
    */
   useEffect(() => {
-    const id = setInterval(() => {
+    const nfcSupportId = setTimeout(() => {
       checkNfcSupport(() => {})
-    }, 10000)
+    }, 15000)
+
+    const dismissId = setTimeout(() => {
+      handleDismiss()
+    }, 30000)
 
     return () => {
       dispatch(setAusweisScannerKey(null))
-      clearInterval(id)
+      clearTimeout(nfcSupportId)
+      clearTimeout(dismissId)
     }
   }, [])
 
