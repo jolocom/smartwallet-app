@@ -2375,19 +2375,10 @@
     class-transformer "^0.3.1"
     ramda "^0.27.1"
 
-"@jolocom/sdk@^1.3.2":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.4.0.tgz#4a58fe3b21c185217507b4b90e8915b44ac96592"
-  integrity sha512-KLE3jpL1F93mi5mQRvG966ismwSYLOWuEERKyDJcMrcUhIvDTWcggtq3WGv3LFmaYvqr5xQXXigMZi/pK/tYsw==
-  dependencies:
-    "@jolocom/protocol-ts" "^0.6.1"
-    form-data "^3.0.0"
-    ramda "^0.26.1"
-
-"@jolocom/sdk@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.4.1.tgz#ba8ba1fe481f769941b7df12d69293ac5d4cd65c"
-  integrity sha512-ryvfrn/5wtCsD6yS1qDNOORfLCO74gsjGfIeKEXbBBB6h1VlolPBjoTI8149m10xEZ3gHON6gUXbLC5+17j3Aw==
+"@jolocom/sdk@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.5.0.tgz#bc9217fc544343da71427f881158f8a688697365"
+  integrity sha512-f3X51GTLQYNIw85HGaCtuiFR5Z51ZNG75UDaQcW08ClHEOYXGHj2U1lCfBTaoOEGw28So11eieUIs5pnZ8BhhQ==
   dependencies:
     "@jolocom/protocol-ts" "^0.6.1"
     form-data "^3.0.0"
@@ -10322,12 +10313,12 @@ react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-react-native-jolocom@^2.7.2:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.7.2.tgz#0d2f5fb342a8eb13fd2261c590af6059e3f97bfa"
-  integrity sha512-YLv3WN7QVRyj/3hwZEClOflcdR2iZIB4E4E+XSskczUWujc99v3eKt5Aj2L5ezks0OJOjoJCcMdlKLjYDI1Zfg==
+react-native-jolocom@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-jolocom/-/react-native-jolocom-2.8.0.tgz#3c42604e9d579c552f1885d68b523918668f4d58"
+  integrity sha512-fRLMSdfz0DWQySq1Mfq2gJwZhpQCGx48RmdCbOqusEjlCJomdSjUekokTyROAb+5etQCHMtyxSwJ1Lqt4uS1qA==
   dependencies:
-    "@jolocom/sdk" "^1.3.2"
+    "@jolocom/sdk" "^1.5.0"
     "@jolocom/sdk-storage-typeorm" "^4.3.0-rc0"
     crypto-browserify "^3.12.0"
     jolocom-lib "^5.2.1"
