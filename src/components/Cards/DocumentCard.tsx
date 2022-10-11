@@ -175,13 +175,15 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             truncateName={showMenu}
           />
           <View style={styles.content}>
-            <View
-              style={
+            <ScaledView
+              scaleStyle={
                 !isBackground && photo
                   ? {
                       height: holderName || showSecondaryField ? 90 : 21.5,
                       justifyContent: 'center',
                     }
+                  : !isBackground && !photo && holderName
+                  ? { marginBottom: 14 }
                   : {}
               }
             >
