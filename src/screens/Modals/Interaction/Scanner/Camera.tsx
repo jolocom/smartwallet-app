@@ -134,7 +134,7 @@ const Camera = () => {
     }
   }, [isAuseisInteractionProcessed])
 
-  const isValidUrl = (url: string) => {
+  const validateUrl = (url: string) => {
     try {
       return Boolean(new URL(url))
     } catch (e) {
@@ -153,10 +153,10 @@ const Camera = () => {
       return
     }
     try {
-      const canOpen = isValidUrl(e.data)
+      const isValidUrl = validateUrl(e.data)
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
-      if (canOpen && e.data.includes('jolocom.app.link')) {
+      if (isValidUrl && e.data.includes('jolocom.app.link')) {
         disableLock(() => {
           // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
           // when the app goes into background when the deeplink is opened
