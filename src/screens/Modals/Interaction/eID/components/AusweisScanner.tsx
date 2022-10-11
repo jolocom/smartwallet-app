@@ -80,13 +80,13 @@ export const AusweisScanner = () => {
    * running it with timeout to check status after 15 seconds.
    */
   useEffect(() => {
-    const nfcSupportId = setTimeout(() => {
+    const id = setTimeout(() => {
       checkNfcSupport(() => {})
     }, 15000)
 
     return () => {
       dispatch(setAusweisScannerKey(null))
-      clearTimeout(nfcSupportId)
+      clearTimeout(id)
     }
   }, [])
 
