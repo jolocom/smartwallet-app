@@ -134,7 +134,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     }
 
     const isBackground = Boolean(backgroundImage || backgroundColor)
-    const showSecondaryField = !holderName && !isBackground
+    const showSecondaryField = photo && !holderName && !isBackground
 
     const getSubheaderStyles = (): ViewStyle | undefined => {
       if (checkLayoutCase(!isBackground)) {
@@ -178,13 +178,15 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             truncateName={showMenu}
           />
           <View style={styles.content}>
-            <View
-              style={
+            <ScaledView
+              scaleStyle={
                 !isBackground && photo
                   ? {
                       height: holderName ? 90 : 21.5,
                       justifyContent: 'center',
                     }
+                  : !isBackground && !photo && holderName
+                  ? { marginBottom: 14 }
                   : {}
               }
             >
@@ -201,7 +203,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
                   onLayout={handleHolderNameTextLayout}
                 />
               )}
-            </View>
+            </ScaledView>
             {isBackground && (
               <ScaledView
                 scaleStyle={{
