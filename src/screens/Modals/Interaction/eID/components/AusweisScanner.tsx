@@ -77,24 +77,16 @@ export const AusweisScanner = () => {
    * Note:
    * In case user has disabled NFC when the scanner is on;
    * we don't have a listener for the NFC enabled, therefore,
-   * running it with timeout to check status after 15 seconds. In case
-   * process is not done after 30 seconds, the scanner gets
-   * closed and user has to start scanning process again which
-   * would result in an error toast in case NFC is disabled.
+   * running it with timeout to check status after 15 seconds.
    */
   useEffect(() => {
     const nfcSupportId = setTimeout(() => {
       checkNfcSupport(() => {})
     }, 15000)
 
-    const dismissId = setTimeout(() => {
-      handleDismiss()
-    }, 30000)
-
     return () => {
       dispatch(setAusweisScannerKey(null))
       clearTimeout(nfcSupportId)
-      clearTimeout(dismissId)
     }
   }, [])
 
