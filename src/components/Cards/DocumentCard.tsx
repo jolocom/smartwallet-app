@@ -207,7 +207,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
                   valueScaledStyle={styles.fieldValue}
                 />
               )}
-            </View>
+            </ScaledView>
             {isBackground && (
               <ScaledView
                 scaleStyle={{

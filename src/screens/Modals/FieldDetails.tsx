@@ -1,6 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import {
   Image,
   LayoutAnimation,
@@ -22,6 +22,7 @@ import { useToggleExpand } from '~/hooks/ui'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
 import useTranslation from '~/hooks/useTranslation'
 import { getDocumentById } from '~/modules/credentials/selectors'
+import { SpecialDocumentKeys } from '~/types/credentials'
 import { TextLayoutEvent } from '~/types/props'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
@@ -98,7 +99,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
             }}
           >
             <Image
-              source={{ uri: value }}
+              source={{ uri: `data:${mime_type};base64,${value}` }}
               resizeMode="contain"
               style={{ width: '100%', height: '100%' }}
             />
@@ -163,7 +164,13 @@ const FieldDetails = () => {
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  const fields = [...document.properties, ...getExtraProperties(document)]
+  const fields = useMemo(
+    () =>
+      [...document.properties, ...getExtraProperties(document)].filter(
+        (field) => field.key !== SpecialDocumentKeys.photo,
+      ),
+    [document],
+  )
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 

@@ -4,7 +4,7 @@ import { deleteCredential } from '~/modules/credentials/actions'
 import {
   getAllDocuments,
   getExpiredDocuments,
-  getValidDocuments
+  getValidDocuments,
 } from '~/modules/credentials/selectors'
 import { SpecialDocumentKeys } from '~/types/credentials'
 import { useAgent } from '../sdk'
@@ -31,7 +31,9 @@ export const useDocuments = () => {
   const getHolderName = (doc: Document) => {
     if (!doc.properties.length) return undefined
 
-    const givenName = doc.properties.find((p) => p.key === SpecialDocumentKeys.givenName)
+    const givenName = doc.properties.find(
+      (p) => p.key === SpecialDocumentKeys.givenName,
+    )
     const familyName = doc.properties.find(
       (p) => p.key === SpecialDocumentKeys.familyName,
     )
@@ -42,7 +44,10 @@ export const useDocuments = () => {
   }
 
   const getHolderPhoto = (doc: Document) => {
-    return doc.properties.find((p) => p.key === SpecialDocumentKeys.photo)?.value
+    const photo = doc.properties.find(
+      (p) => p.key === SpecialDocumentKeys.photo,
+    )
+    if (photo) return `data:${photo?.mime_type};base64,${photo?.value}`
   }
 
   const hasImageProperties = (doc: Document) => {
