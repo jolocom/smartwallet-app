@@ -47,7 +47,7 @@ export const useDocuments = () => {
     const photo = doc.properties.find(
       (p) => p.key === SpecialDocumentKeys.photo,
     )
-    return `data:${photo?.mime_type};base64,${photo?.value}`
+    if (photo) return `data:${photo?.mime_type};base64,${photo?.value}`
   }
 
   const hasImageProperties = (doc: Document) => {
