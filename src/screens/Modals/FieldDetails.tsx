@@ -99,7 +99,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
             }}
           >
             <Image
-              source={{ uri: value }}
+              source={{ uri: `data:${mime_type};base64,${value}` }}
               resizeMode="contain"
               style={{ width: '100%', height: '100%' }}
             />
