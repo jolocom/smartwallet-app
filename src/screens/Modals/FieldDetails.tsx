@@ -218,8 +218,8 @@ const FieldDetails = () => {
     () =>
       [...document.properties, ...getExtraProperties(document)].filter(
         (field) =>
-          field.key !== SpecialDocumentKeys.photo ||
-          SpecialDocumentKeys.portrait,
+          field.key !== SpecialDocumentKeys.photo &&
+          field.key !== SpecialDocumentKeys.portrait,
       ),
     [document],
   )
