@@ -22,25 +22,36 @@ import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { MainStackParamList } from '../../LoggedIn/Main'
-import { useGoBack } from '~/hooks/navigation'
-import useDrivingPrivileges from './hooks'
-import { MdlCredential } from './types'
+import { MainStackParamList } from '../LoggedIn/Main'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { DocumentProperty, PropertyMimeType } from '~/hooks/documents/types'
+import { PropertyMimeType } from '~/hooks/documents/types'
 import { useToasts } from '~/hooks/toasts'
 import { useToggleExpand } from '~/hooks/ui'
 import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
-import { MdlPropertyKeys } from './types'
-import { DrivingLicensePrivileges } from './DrivingLicensePrivileges'
+import { MdlPropertyKeys } from './DrivingPrivileges/types'
+import useDrivingPrivileges from './DrivingPrivileges/hooks'
+import { ClaimKeys } from '~/types/credentials'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
 
-type FieldValueProps = { value: string; mime_type: PropertyMimeType }
+type DocumentFieldProps = {
+  value: string
+  mime_type: PropertyMimeType
+  label: string
+  onPress?: () => void
+  fieldKey: string
+}
 
-const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
+const DocumentField: React.FC<DocumentFieldProps> = ({
+  value,
+  mime_type,
+  label,
+  onPress,
+  fieldKey,
+}) => {
   const { scheduleInfo } = useToasts()
   const { t } = useTranslation()
 
@@ -85,57 +96,79 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
     }
   }
 
+  const handleButtonLayout = () => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.linear,
+      duration: 200,
+    })
+  }
+
+  const handlePress = () => {
+    if (numberOfVisibleLines < 4 && onPress) {
+      onPress()
+    } else {
+      onToggleExpand()
+    }
+  }
+
   return (
-    <>
-      <TouchableOpacity
-        onPress={onToggleExpand}
-        onLongPress={() => handleLongPress(value)}
-        activeOpacity={0.6}
-        style={{ width: '100%' }}
+    <TouchableOpacity
+      style={styles.fieldContainer}
+      onLayout={handleButtonLayout}
+      onLongPress={() => handleLongPress(value)}
+      onPress={handlePress}
+      activeOpacity={0.6}
+    >
+      <JoloText
+        customStyles={styles.fieldText}
+        size={JoloTextSizes.mini}
+        color={Colors.osloGray}
       >
-        {isImageField ? (
-          <View
-            style={{
-              width: '100%',
-              height: 200,
-              paddingVertical: 16,
-              paddingHorizontal: 44,
-              alignItems: 'center',
-            }}
+        {label}
+      </JoloText>
+      {isImageField ? (
+        <View
+          style={{
+            width: '100%',
+            height: 200,
+            paddingVertical: 16,
+            paddingHorizontal: 44,
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            source={{ uri: value }}
+            resizeMode="contain"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
+      ) : (
+        <>
+          <JoloText
+            // @ts-expect-error
+            onTextLayout={handleTextLayout}
+            color={Colors.black95}
+            numberOfLines={numberOfVisibleLines}
+            customStyles={[
+              styles.fieldText,
+              { marginTop: BP({ default: 8, xsmall: 4 }) },
+            ]}
           >
-            <Image
-              source={{ uri: value }}
-              resizeMode="contain"
-              style={{ width: '100%', height: '100%' }}
-            />
-          </View>
-        ) : (
-          <>
+            {value}
+          </JoloText>
+          {seeMoreBtnVisible && !isExpanded && (
             <JoloText
-              // @ts-expect-error
-              onTextLayout={handleTextLayout}
-              color={Colors.black95}
-              numberOfLines={numberOfVisibleLines}
-              customStyles={[
-                styles.fieldText,
-                { marginTop: BP({ default: 8, xsmall: 4 }) },
-              ]}
+              size={JoloTextSizes.mini}
+              color={Colors.osloGray}
+              customStyles={{ textAlign: 'right', marginTop: 5 }}
             >
-              {value}
+              {t('Details.expandBtn')}
             </JoloText>
-            {seeMoreBtnVisible && !isExpanded && (
-              <JoloText
-                size={JoloTextSizes.mini}
-                color={Colors.osloGray}
-                customStyles={{ textAlign: 'right', marginTop: 5 }}
-              >
-                {t('Details.expandBtn')}
-              </JoloText>
-            )}
-          </>
-        )}
-      </TouchableOpacity>
-    </>
+          )}
+        </>
+      )}
+      {fieldKey === MdlPropertyKeys.drivingPrivileges && <MdlPopOutIcon />}
+    </TouchableOpacity>
   )
 }
 
@@ -145,7 +178,7 @@ const MdlPopOutIcon = () => (
   </View>
 )
 
-const Icon = ({ url }: { url: string }) => {
+export const Icon = ({ url }: { url: string }) => {
   return (
     <View
       style={{
@@ -170,26 +203,21 @@ const Icon = ({ url }: { url: string }) => {
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-  const { t } = useTranslation()
   const { id, backgroundColor = Colors.mainBlack } = route.params
 
   const document = useSelector(getDocumentById(id))!
 
-  const {
-    mdlFields,
-    togglePrivileges,
-    showPrivileges,
-    isDocumentMdl,
-    mdlPrivileges,
-  } = document.type[1] === MdlCredential.type && useDrivingPrivileges(document)
+  const redirect = useRedirect()
 
   const goBack = useGoBack()
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  const [numOfLines, setNumOfLines] = useState(1)
-
-  const fields = [...document.properties, ...getExtraProperties(document)]
+  // NOTE: filtering out portrait property for mdl use case so it doesn't get rendered as field but is still available as holderPhoto
+  const fields = [
+    ...document.properties.filter((p) => p.key !== ClaimKeys.portrait),
+    ...getExtraProperties(document),
+  ]
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
@@ -200,11 +228,12 @@ const FieldDetails = () => {
     })
   }
 
+  const { vehicleCategoryCodes } = useDrivingPrivileges(document)
+
   const holderPhoto = getHolderPhoto(document)
 
   const showIconContainer =
-    Boolean(document.issuer.icon) ||
-    Boolean(document.style.contextIcons?.length)
+    Boolean(document.issuer.icon) || Boolean(document.issuer.icon?.length)
 
   const { top } = useSafeArea()
 
@@ -216,6 +245,10 @@ const FieldDetails = () => {
     } else {
       return 'auto'
     }
+  }
+
+  const handlePressPrivileges = () => {
+    redirect(ScreenNames.DrivingPrivileges, { id })
   }
 
   return (
@@ -230,18 +263,15 @@ const FieldDetails = () => {
         renderHeader={() => (
           <Collapsible.Header
             customStyles={{ backgroundColor }}
-            type={showPrivileges ? NavHeaderType.Back : NavHeaderType.Close}
-            onPress={showPrivileges ? togglePrivileges : goBack}
+            type={NavHeaderType.Close}
+            onPress={goBack}
           />
         )}
         renderScroll={() => (
           <ScreenContainer.Padding>
-            {/* TODO figure out how scroll to the top in the MDLPrivileges*/}
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
-                text={
-                  showPrivileges ? t('mdl.drivingPrivileges') : document.name
-                }
+                text={document.name}
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
                   marginTop: holderPhoto && showIconContainer ? 6 : 0,
@@ -267,9 +297,7 @@ const FieldDetails = () => {
                     color={Colors.white90}
                     weight={JoloTextWeight.medium}
                   >
-                    {showPrivileges
-                      ? t('mdl.drivingPrivileges')
-                      : document.name}
+                    {document.name}
                   </JoloText>
                 </View>
               </Collapsible.Title>
@@ -299,64 +327,28 @@ const FieldDetails = () => {
                   marginTop: 16,
                 }}
               >
-                {showPrivileges
-                  ? DrivingLicensePrivileges(mdlPrivileges, handleLayout)
-                  : isDocumentMdl
-                  ? mdlFields.map((field: DocumentProperty, i: number) => (
-                      <React.Fragment key={i}>
-                        <TouchableOpacity
-                          style={styles.fieldContainer}
-                          onLayout={handleLayout}
-                          onPress={
-                            field.key === MdlPropertyKeys.drivingPrivileges
-                              ? togglePrivileges
-                              : undefined
-                          }
-                          activeOpacity={0.6}
-                        >
-                          <JoloText
-                            customStyles={styles.fieldText}
-                            size={JoloTextSizes.mini}
-                            color={Colors.osloGray}
-                          >
-                            {field.label}
-                          </JoloText>
-                          <FieldValue
-                            value={field.value as string}
-                            mime_type={field.mime_type}
-                          />
-                          {field.key === MdlPropertyKeys.drivingPrivileges && (
-                            <MdlPopOutIcon />
-                          )}
-                        </TouchableOpacity>
-                        {i !== Object.keys(fields).length - 1 && (
-                          <View style={styles.divider} />
-                        )}
-                      </React.Fragment>
-                    ))
-                  : fields.map((field, i) => (
-                      <React.Fragment key={i}>
-                        <View
-                          style={styles.fieldContainer}
-                          onLayout={handleLayout}
-                        >
-                          <JoloText
-                            customStyles={styles.fieldText}
-                            size={JoloTextSizes.mini}
-                            color={Colors.osloGray}
-                          >
-                            {field.label}
-                          </JoloText>
-                          <FieldValue
-                            value={field.value as string}
-                            mime_type={field.mime_type}
-                          />
-                        </View>
-                        {i !== Object.keys(fields).length - 1 && (
-                          <View style={styles.divider} />
-                        )}
-                      </React.Fragment>
-                    ))}
+                {fields.map((field, i) => (
+                  <React.Fragment key={i}>
+                    <DocumentField
+                      value={
+                        field.key === MdlPropertyKeys.drivingPrivileges
+                          ? vehicleCategoryCodes
+                          : (field.value as string)
+                      }
+                      label={field.label!}
+                      onPress={
+                        field.key === MdlPropertyKeys.drivingPrivileges
+                          ? handlePressPrivileges
+                          : undefined
+                      }
+                      fieldKey={field.key}
+                      mime_type={field.mime_type}
+                    />
+                    {i !== Object.keys(fields).length - 1 && (
+                      <View style={styles.divider} />
+                    )}
+                  </React.Fragment>
+                ))}
               </Block>
             </Collapsible.Scroll>
           </ScreenContainer.Padding>

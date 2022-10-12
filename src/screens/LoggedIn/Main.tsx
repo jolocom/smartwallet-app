@@ -17,8 +17,9 @@ import {
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
+import DrivingPrivileges from '../Modals/DrivingPrivileges'
 import Registration from '../LoggedOut/Onboarding/Registration'
-import FieldDetails from '../Modals/FieldDetails/FieldDetails'
+import FieldDetails from '../Modals/FieldDetails'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import Interaction from '../Modals/Interaction'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
@@ -92,6 +93,7 @@ export type MainStackParamList = {
     id: string
     backgroundColor?: Colors
   }
+  [ScreenNames.DrivingPrivileges]: { id: string }
   // DEV
   [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
@@ -242,6 +244,11 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
+        options={screenTransitionSlideFromBottom}
+      />
+      <MainStack.Screen
+        name={ScreenNames.DrivingPrivileges}
+        component={DrivingPrivileges}
         options={screenTransitionSlideFromBottom}
       />
       <MainStack.Screen
