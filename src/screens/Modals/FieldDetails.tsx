@@ -37,9 +37,21 @@ import { ClaimKeys } from '~/types/credentials'
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
 
-type FieldValueProps = { value: string; mime_type: PropertyMimeType }
+type DocumentFieldProps = {
+  value: string
+  mime_type: PropertyMimeType
+  label: string
+  onPress?: () => void
+  fieldKey: string
+}
 
-const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
+const DocumentField: React.FC<DocumentFieldProps> = ({
+  value,
+  mime_type,
+  label,
+  onPress,
+  fieldKey,
+}) => {
   const { scheduleInfo } = useToasts()
   const { t } = useTranslation()
 
@@ -84,57 +96,79 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
     }
   }
 
+  const handleButtonLayout = () => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.linear,
+      duration: 200,
+    })
+  }
+
+  const handlePress = () => {
+    if (numberOfVisibleLines < 4 && onPress) {
+      onPress()
+    } else {
+      onToggleExpand()
+    }
+  }
+
   return (
-    <>
-      <TouchableOpacity
-        onPress={onToggleExpand}
-        onLongPress={() => handleLongPress(value)}
-        activeOpacity={0.6}
-        style={{ width: '100%' }}
+    <TouchableOpacity
+      style={styles.fieldContainer}
+      onLayout={handleButtonLayout}
+      onLongPress={() => handleLongPress(value)}
+      onPress={handlePress}
+      activeOpacity={0.6}
+    >
+      <JoloText
+        customStyles={styles.fieldText}
+        size={JoloTextSizes.mini}
+        color={Colors.osloGray}
       >
-        {isImageField ? (
-          <View
-            style={{
-              width: '100%',
-              height: 200,
-              paddingVertical: 16,
-              paddingHorizontal: 44,
-              alignItems: 'center',
-            }}
+        {label}
+      </JoloText>
+      {isImageField ? (
+        <View
+          style={{
+            width: '100%',
+            height: 200,
+            paddingVertical: 16,
+            paddingHorizontal: 44,
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            source={{ uri: value }}
+            resizeMode="contain"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
+      ) : (
+        <>
+          <JoloText
+            // @ts-expect-error
+            onTextLayout={handleTextLayout}
+            color={Colors.black95}
+            numberOfLines={numberOfVisibleLines}
+            customStyles={[
+              styles.fieldText,
+              { marginTop: BP({ default: 8, xsmall: 4 }) },
+            ]}
           >
-            <Image
-              source={{ uri: value }}
-              resizeMode="contain"
-              style={{ width: '100%', height: '100%' }}
-            />
-          </View>
-        ) : (
-          <>
+            {value}
+          </JoloText>
+          {seeMoreBtnVisible && !isExpanded && (
             <JoloText
-              // @ts-expect-error
-              onTextLayout={handleTextLayout}
-              color={Colors.black95}
-              numberOfLines={numberOfVisibleLines}
-              customStyles={[
-                styles.fieldText,
-                { marginTop: BP({ default: 8, xsmall: 4 }) },
-              ]}
+              size={JoloTextSizes.mini}
+              color={Colors.osloGray}
+              customStyles={{ textAlign: 'right', marginTop: 5 }}
             >
-              {value}
+              {t('Details.expandBtn')}
             </JoloText>
-            {seeMoreBtnVisible && !isExpanded && (
-              <JoloText
-                size={JoloTextSizes.mini}
-                color={Colors.osloGray}
-                customStyles={{ textAlign: 'right', marginTop: 5 }}
-              >
-                {t('Details.expandBtn')}
-              </JoloText>
-            )}
-          </>
-        )}
-      </TouchableOpacity>
-    </>
+          )}
+        </>
+      )}
+      {fieldKey === MdlPropertyKeys.drivingPrivileges && <MdlPopOutIcon />}
+    </TouchableOpacity>
   )
 }
 
@@ -295,35 +329,21 @@ const FieldDetails = () => {
               >
                 {fields.map((field, i) => (
                   <React.Fragment key={i}>
-                    <TouchableOpacity
-                      style={styles.fieldContainer}
-                      onLayout={handleLayout}
-                      activeOpacity={0.6}
+                    <DocumentField
+                      value={
+                        field.key === MdlPropertyKeys.drivingPrivileges
+                          ? vehicleCategoryCodes
+                          : (field.value as string)
+                      }
+                      label={field.label!}
                       onPress={
                         field.key === MdlPropertyKeys.drivingPrivileges
                           ? handlePressPrivileges
-                          : null
+                          : undefined
                       }
-                    >
-                      <JoloText
-                        customStyles={styles.fieldText}
-                        size={JoloTextSizes.mini}
-                        color={Colors.osloGray}
-                      >
-                        {field.label}
-                      </JoloText>
-                      <FieldValue
-                        value={
-                          field.key === MdlPropertyKeys.drivingPrivileges
-                            ? vehicleCategoryCodes
-                            : (field.value as string)
-                        }
-                        mime_type={field.mime_type}
-                      />
-                      {field.key === MdlPropertyKeys.drivingPrivileges && (
-                        <MdlPopOutIcon />
-                      )}
-                    </TouchableOpacity>
+                      fieldKey={field.key}
+                      mime_type={field.mime_type}
+                    />
                     {i !== Object.keys(fields).length - 1 && (
                       <View style={styles.divider} />
                     )}
