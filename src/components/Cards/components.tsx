@@ -265,6 +265,8 @@ export const DocumentFields: React.FC<{
   onFinishCalculation?: (displayedFields: DocumentProperty[]) => void
   // NOTE: allow extra fields next to the photo if no holderName is present
   shoudIsolateFirstRow?: boolean
+  // NOTE: hideFieldValues is only relevant for the OfferCard Component to display the placeholders
+  hideFieldValues?: boolean
 }> = ({
   fields,
   maxLines,
@@ -276,16 +278,14 @@ export const DocumentFields: React.FC<{
   nrOfColumns = 2,
   onFinishCalculation,
   allowOverflowingFields = true,
-  shoudIsolateFirstRow = false,
+  hideFieldValues = false,
 }) => {
-  const maxFields = shoudIsolateFirstRow ? maxRows * 2 + 1 : maxRows * 2
+  const maxFields = maxRows * 2
   const { displayedFields, handleFieldValuesVisibility } = usePruneFields(
     fields,
     maxFields,
     maxLines,
   )
-
-  const secondaryField = shoudIsolateFirstRow ? displayedFields.shift() : null
 
   let rows = splitIntoRows(displayedFields, fieldCharacterLimit, nrOfColumns)
   // NOTE: since when splitting we may get more rows than @maxRows due to the value overflowing,
@@ -307,8 +307,10 @@ export const DocumentFields: React.FC<{
     return (
       <ScaledView
         key={field.key}
-        style={{ flex: !shoudIsolateFirstRow ? 1 : undefined }}
-        scaleStyle={{ paddingRight: 12 }}
+        style={{ flex: 1 }}
+        scaleStyle={{
+          paddingRight: 12,
+        }}
       >
         <ScaledText
           numberOfLines={1}
@@ -322,18 +324,22 @@ export const DocumentFields: React.FC<{
         >
           {field?.label?.trim()}:
         </ScaledText>
-        <ScaledText
-          numberOfLines={1}
-          scaleStyle={[styles.fieldText, valueScaledStyle]}
-          style={[
-            styles.mediumText,
-            {
-              width: '100%',
-            },
-          ]}
-        >
-          {field?.value}
-        </ScaledText>
+        {hideFieldValues ? (
+          <ScaledView scaleStyle={valueScaledStyle} />
+        ) : (
+          <ScaledText
+            numberOfLines={1}
+            scaleStyle={[styles.fieldText, valueScaledStyle]}
+            style={[
+              styles.mediumText,
+              {
+                width: '100%',
+              },
+            ]}
+          >
+            {field?.value}
+          </ScaledText>
+        )}
       </ScaledView>
     )
   }
@@ -355,19 +361,6 @@ export const DocumentFields: React.FC<{
             alignItems: 'flex-start',
           }}
         >
-          {secondaryField && (
-            <ScaledView
-              style={{
-                flexDirection: 'column',
-                maxWidth: '65%',
-              }}
-              scaleStyle={{
-                marginVertical: 14,
-              }}
-            >
-              {renderField(secondaryField)}
-            </ScaledView>
-          )}
           {rows.map((row, idx) => (
             <ScaledView
               key={idx}
@@ -389,6 +382,48 @@ export const DocumentFields: React.FC<{
     </ScaledView>
   )
 }
+
+export const SecondaryField: React.FC<{
+  field: DocumentProperty
+  labelScaledStyle: TextStyle
+  valueScaledStyle: TextStyle
+}> = ({ field, labelScaledStyle, valueScaledStyle }) => (
+  <ScaledView
+    key={field.key}
+    style={{ flex: 1 }}
+    scaleStyle={{
+      paddingRight: 12,
+      justifyContent: 'center',
+      paddingHorizontal: 24,
+      maxWidth: '65%',
+    }}
+  >
+    <ScaledText
+      numberOfLines={1}
+      style={[
+        styles.regularText,
+        {
+          width: '100%',
+        },
+      ]}
+      scaleStyle={[styles.fieldLabel, labelScaledStyle]}
+    >
+      {field?.label?.trim()}:
+    </ScaledText>
+    <ScaledText
+      numberOfLines={2}
+      scaleStyle={[styles.fieldText, valueScaledStyle]}
+      style={[
+        styles.mediumText,
+        {
+          width: '100%',
+        },
+      ]}
+    >
+      {field?.value}
+    </ScaledText>
+  </ScaledView>
+)
 
 const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient

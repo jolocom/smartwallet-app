@@ -6,7 +6,7 @@ import {
   getExpiredDocuments,
   getValidDocuments,
 } from '~/modules/credentials/selectors'
-import { ClaimKeys } from '~/types/credentials'
+import { SpecialDocumentKeys } from '~/types/credentials'
 import { useAgent } from '../sdk'
 import useTranslation from '../useTranslation'
 import { Document, DocumentProperty, PropertyMimeType } from './types'
@@ -20,9 +20,12 @@ export const useDocuments = () => {
   const validDocuments = useSelector(getValidDocuments)
 
   const propertyKeys = {
-    photo: [ClaimKeys.photo, ClaimKeys.portrait],
-    givenName: [ClaimKeys.givenName, ClaimKeys.given_name],
-    familyName: [ClaimKeys.familyName, ClaimKeys.family_name],
+    photo: [SpecialDocumentKeys.photo, SpecialDocumentKeys.portrait],
+    givenName: [SpecialDocumentKeys.givenName, SpecialDocumentKeys.given_name],
+    familyName: [
+      SpecialDocumentKeys.familyName,
+      SpecialDocumentKeys.family_name,
+    ],
   }
 
   const deleteDocument = async (id: string) => {
@@ -38,10 +41,10 @@ export const useDocuments = () => {
     if (!doc.properties.length) return undefined
 
     const givenName = doc.properties.find((p) =>
-      propertyKeys.givenName.includes(p.key as ClaimKeys),
+      propertyKeys.givenName.includes(p.key as SpecialDocumentKeys),
     )
     const familyName = doc.properties.find((p) =>
-      propertyKeys.familyName.includes(p.key as ClaimKeys),
+      propertyKeys.familyName.includes(p.key as SpecialDocumentKeys),
     )
 
     if (!givenName || !familyName) return undefined
@@ -50,16 +53,18 @@ export const useDocuments = () => {
   }
 
   const getHolderPhoto = (doc: Document) => {
-    return doc.properties.find((p) =>
-      propertyKeys.photo.includes(p.key as ClaimKeys),
-    )?.value
+    const photo = doc.properties.find((p) =>
+      propertyKeys.photo.includes(p.key as SpecialDocumentKeys),
+    )
+
+    if (photo) return `data:${photo?.mime_type};base64,${photo?.value}`
   }
 
   const hasImageProperties = (doc: Document) => {
     return doc.properties.some(
       (prop) =>
-        prop.key !== ClaimKeys.photo &&
-        prop.key !== ClaimKeys.portrait &&
+        prop.key !== SpecialDocumentKeys.photo &&
+        prop.key !== SpecialDocumentKeys.portrait &&
         prop.mime_type === PropertyMimeType.image_png,
     )
   }
@@ -100,9 +105,9 @@ export const useDocuments = () => {
     } else if (doc.properties.length) {
       previewFields = doc.properties.filter(
         (prop) =>
-          prop.key !== ClaimKeys.photo &&
-          prop.key !== ClaimKeys.givenName &&
-          prop.key !== ClaimKeys.familyName,
+          prop.key !== SpecialDocumentKeys.photo &&
+          prop.key !== SpecialDocumentKeys.givenName &&
+          prop.key !== SpecialDocumentKeys.familyName,
       )
     } else {
       previewFields = getExtraProperties(doc)

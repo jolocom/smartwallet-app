@@ -303,7 +303,7 @@ PODS:
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNJolocom (2.7.1):
+  - RNJolocom (2.8.0):
     - React
   - RNKeychain (7.0.0):
     - React-Core
@@ -348,14 +348,14 @@ PODS:
     - Yoga
   - RNScreens (2.18.1):
     - React-Core
-  - RNSentry (3.4.3):
+  - RNSentry (2.6.2):
     - React-Core
-    - Sentry (= 7.11.0)
+    - Sentry (= 7.1.4)
   - RNSVG (12.1.1):
     - React
-  - Sentry (7.11.0):
-    - Sentry/Core (= 7.11.0)
-  - Sentry/Core (7.11.0)
+  - Sentry (7.1.4):
+    - Sentry/Core (= 7.1.4)
+  - Sentry/Core (7.1.4)
   - SRSRadialGradient (1.0.9):
     - React
   - Yoga (1.14.0)
@@ -610,7 +610,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNJolocom: 92977c418f45679b601c6ee0dcfa91d2a0bd3a81
+  RNJolocom: a203d98394d7d0202d3c2130adec26cc1652f8e3
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
@@ -619,9 +619,9 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: b83bfb4b537bdd78eb4f6ffe63c6884f7b049ead
   RNReanimated: e5040efc7c90da0b190a6525fcfc7e1e75973b21
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNSentry: 85f6525b5fe8d2ada065858026b338605b3c09da
+  RNSentry: 68644ef607b780551cc555f084869764f2566652
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
-  Sentry: 0c5cd63d714187b4a39c331c1f0eb04ba7868341
+  Sentry: 1d3eb1a25f8c5333c88dd5603904a6d461cd9fcf
   SRSRadialGradient: 49ba49a7a8f257c3fe785c250867b07185d1d01e
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 

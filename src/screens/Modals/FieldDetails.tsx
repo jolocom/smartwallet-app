@@ -1,5 +1,5 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
-import React, { useState, useRef } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import {
   Image,
   StyleSheet,
@@ -17,6 +17,7 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useDocuments } from '~/hooks/documents'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
 import { getDocumentById } from '~/modules/credentials/selectors'
+import { SpecialDocumentKeys } from '~/types/credentials'
 import { TextLayoutEvent } from '~/types/props'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
@@ -137,7 +138,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
           }}
         >
           <Image
-            source={{ uri: value }}
+            source={{ uri: `data:${mime_type};base64,${value}` }}
             resizeMode="contain"
             style={{ width: '100%', height: '100%' }}
           />
@@ -213,11 +214,15 @@ const FieldDetails = () => {
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  // NOTE: filtering out portrait property for mdl use case so it doesn't get rendered as field but is still available as holderPhoto
-  const fields = [
-    ...document.properties.filter((p) => p.key !== ClaimKeys.portrait),
-    ...getExtraProperties(document),
-  ]
+  const fields = useMemo(
+    () =>
+      [...document.properties, ...getExtraProperties(document)].filter(
+        (field) =>
+          field.key !== SpecialDocumentKeys.photo ||
+          SpecialDocumentKeys.portrait,
+      ),
+    [document],
+  )
 
   const prefechedIcon = useImagePrefetch(document.issuer.icon)
 

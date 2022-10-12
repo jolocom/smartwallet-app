@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
   },
   logoContainerFAS: {
     alignItems: 'center',
+    marginTop: 8,
   },
   footerContainerFAS: {
     width: '100%',

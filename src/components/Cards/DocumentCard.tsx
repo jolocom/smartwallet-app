@@ -19,6 +19,7 @@ import {
   DocumentHeader,
   DocumentHolderName,
   DocumentPhoto,
+  SecondaryField,
 } from './components'
 import {
   DOCUMENT_HEADER_HEIGHT,
@@ -68,6 +69,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     const { isCredentialNameScaled } = useCredentialNameScale()
 
     const [holderNameLines, setHolderNameLines] = useState(0)
+
     const handleHolderNameTextLayout = (e: TextLayoutEvent) => {
       setHolderNameLines(e.nativeEvent.lines.length)
     }
@@ -134,16 +136,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     }
 
     const isBackground = Boolean(backgroundImage || backgroundColor)
-    const showSecondaryField = !holderName && !isBackground
-
-    const getSubheaderStyles = (): ViewStyle | undefined => {
-      if (checkLayoutCase(!isBackground)) {
-        return {
-          marginTop: 12,
-          justifyContent: 'center',
-        }
-      }
-    }
 
     const getFieldsTopDistance = () => {
       let distance = 0
@@ -159,6 +151,11 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       }
       return distance
     }
+
+    // NOTE: Rendering secondaryField in case no holderName and background but a photo are available.If this is the case, the first field will be shifted from the array and passed down to DocumentFields accordingly. Rendering secondaryField instead of holderName to keep styling in place.
+    const showSecondaryField = !holderName && !isBackground && photo
+
+    const secondaryField = showSecondaryField && fields.shift()
 
     return (
       <ScaledCard
@@ -178,13 +175,15 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
             truncateName={showMenu}
           />
           <View style={styles.content}>
-            <View
-              style={
+            <ScaledView
+              scaleStyle={
                 !isBackground && photo
                   ? {
-                      height: holderName ? 90 : 21.5,
+                      height: holderName || showSecondaryField ? 90 : 21.5,
                       justifyContent: 'center',
                     }
+                  : !isBackground && !photo && holderName
+                  ? { marginBottom: 14 }
                   : {}
               }
             >
@@ -201,7 +200,14 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
                   onLayout={handleHolderNameTextLayout}
                 />
               )}
-            </View>
+              {secondaryField && (
+                <SecondaryField
+                  field={secondaryField}
+                  labelScaledStyle={styles.fieldLabel}
+                  valueScaledStyle={styles.fieldValue}
+                />
+              )}
+            </ScaledView>
             {isBackground && (
               <ScaledView
                 scaleStyle={{
@@ -216,7 +222,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
               rowDistance={14}
               labelScaledStyle={styles.fieldLabel}
               valueScaledStyle={styles.fieldValue}
-              shoudIsolateFirstRow={showSecondaryField}
             />
           </View>
           {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.

@@ -77,16 +77,16 @@ export const AusweisScanner = () => {
    * Note:
    * In case user has disabled NFC when the scanner is on;
    * we don't have a listener for the NFC enabled, therefore,
-   * running it with interval
+   * running it with timeout to check status after 15 seconds.
    */
   useEffect(() => {
-    const id = setInterval(() => {
+    const id = setTimeout(() => {
       checkNfcSupport(() => {})
-    }, 10000)
+    }, 15000)
 
     return () => {
       dispatch(setAusweisScannerKey(null))
-      clearInterval(id)
+      clearTimeout(id)
     }
   }, [])
 
