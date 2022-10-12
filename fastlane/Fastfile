@@ -60,7 +60,7 @@ lane :release do |options|
   )
   case options[:target]
   when "release"
-    upload_to_app_store
+    upload_to_app_store(precheck_include_in_app_purchases: false)
   when "beta"
     upload_to_testflight
   end
