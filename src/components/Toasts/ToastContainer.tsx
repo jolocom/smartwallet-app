@@ -4,6 +4,7 @@ import { useSafeArea } from 'react-native-safe-area-context'
 import { ToastType } from '~/types/toasts'
 import { Colors } from '~/utils/colors'
 import { useToastToShow } from './context'
+import { ErrorToastIcon, InfoToastIcon, SuccessToastIcon } from '~/assets/svg'
 
 export const BOTTOM_PADDING = 20
 
@@ -17,10 +18,26 @@ const ToastContainer: React.FC = ({ children }) => {
         return Colors.error
       case ToastType.info:
         return Colors.white
-      default:
+      case ToastType.success:
         return Colors.success
+      default:
+        return Colors.error
     }
   }
+
+  const getToastIcon = (type: ToastType | undefined) => {
+    switch (type) {
+      case ToastType.warning:
+        return <ErrorToastIcon />
+      case ToastType.info:
+        return <InfoToastIcon />
+      case ToastType.success:
+        return <SuccessToastIcon />
+      default:
+        return <ErrorToastIcon />
+    }
+  }
+
   return (
     <View
       style={{
@@ -37,7 +54,8 @@ const ToastContainer: React.FC = ({ children }) => {
         alignItems: 'center',
       }}
     >
-      {children}
+      {getToastIcon(toastToShow?.type)}
+      <View style={{ flex: 1, marginLeft: 23 }}>{children}</View>
     </View>
   )
 }
