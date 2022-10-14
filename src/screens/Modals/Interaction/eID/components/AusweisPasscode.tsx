@@ -98,7 +98,7 @@ export const AusweisPasscode = () => {
   const ausweisContext = eIDHooks.useAusweisContext()
   const isCardTouched = useSelector(getAusweisReaderState)
 
-  const { scheduleInfo } = useToasts()
+  const { scheduleSuccess } = useToasts()
 
   const [pinVariant, setPinVariant] = useState(mode)
   const [errorText, setErrorText] = useState<string | null>(null)
@@ -380,7 +380,7 @@ export const AusweisPasscode = () => {
       handleChangePinSuccess: () => {
         const completeChangePinFlow = () => {
           navigation.dispatch(StackActions.popToTop())
-          scheduleInfo({
+          scheduleSuccess({
             title: t('Toasts.ausweisChangePinSuccessHeader'),
             message: t('Toasts.ausweisChangePinSuccessMsg'),
           })
