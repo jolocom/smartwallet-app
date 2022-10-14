@@ -7,6 +7,7 @@ import {
   createWarningToast,
   createStickyToast,
   ToastBody,
+  createSuccessToast,
 } from '~/types/toasts'
 import { scheduleToast, removeToastAndUpdate } from '~/modules/toasts/actions'
 import useErrors from './useErrors'
@@ -20,6 +21,10 @@ export const useToasts = () => {
 
   const scheduleInfo = (toast: ToastBody) => {
     dispatch(scheduleToast(createInfoToast(toast)))
+  }
+
+  const scheduleSuccess = (toast: ToastBody) => {
+    dispatch(scheduleToast(createSuccessToast(toast)))
   }
 
   const scheduleWarning = (toast: ToastBody) => {
@@ -87,5 +92,6 @@ export const useToasts = () => {
     removeToast,
     invokeInteract,
     activeToast,
+    scheduleSuccess,
   }
 }
