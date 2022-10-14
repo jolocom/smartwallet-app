@@ -23,7 +23,7 @@ export const useNFC = () => {
 
 export const useCheckNFC = () => {
   const { t } = useTranslation()
-  const { scheduleErrorInfo, scheduleInfo } = useToasts()
+  const { scheduleErrorInfo, scheduleWarning } = useToasts()
 
   const nfcCheck = async () => {
     const supported = await NfcManager.isSupported()
@@ -51,7 +51,7 @@ export const useCheckNFC = () => {
               message: t('Toasts.nfcCompatibilityMsg'),
             })
           } else if (e.message === SWErrorCodes.SWNfcNotEnabled) {
-            scheduleInfo({
+            scheduleWarning({
               title: t('Toasts.nfcOffTitle'),
               message: t('Toasts.nfcOffMsg'),
               interact: {
