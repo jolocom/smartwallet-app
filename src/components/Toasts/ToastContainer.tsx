@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { ToastType } from '~/types/toasts'
 import { Colors } from '~/utils/colors'
@@ -41,17 +41,9 @@ const ToastContainer: React.FC = ({ children }) => {
   return (
     <View
       style={{
-        backgroundColor: Colors.black,
-        paddingVertical: 24,
-        paddingHorizontal: 21,
-        flexDirection: 'row',
-        width: '94%',
+        ...styles.toastContainer,
         borderColor: getBorderColor(toastToShow?.type),
-        borderRadius: 16,
-        borderWidth: 2,
         marginTop: top,
-        alignSelf: 'center',
-        alignItems: 'center',
       }}
     >
       {getToastIcon(toastToShow?.type)}
@@ -59,5 +51,19 @@ const ToastContainer: React.FC = ({ children }) => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  toastContainer: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: Colors.black,
+    borderRadius: 16,
+    borderWidth: 2,
+    flexDirection: 'row',
+    paddingVertical: 24,
+    paddingHorizontal: 21,
+    width: '94%',
+  },
+})
 
 export default ToastContainer
