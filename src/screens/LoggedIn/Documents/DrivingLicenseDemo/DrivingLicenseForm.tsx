@@ -41,7 +41,7 @@ export const DrivingLicenseForm = () => {
   const { requests } = route.params
 
   const initState = requests.reduce<InputState>((acc, val) => {
-    acc[val.name] = 'Z021AB37X13'
+    acc[val.name] = ''
     return acc
   }, {})
 
