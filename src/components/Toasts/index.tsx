@@ -19,13 +19,8 @@ const Toasts: React.FC = () => {
     activeToast,
   )
 
-  const {
-    animationStyles,
-    panResponder,
-    interactionBtnRef,
-    handleContainerLayout,
-    handleInteractionBtnLayout,
-  } = useAnimateLayoutToast(setToastToShow)
+  const { animationStyles, panResponder, handleContainerLayout } =
+    useAnimateLayoutToast(setToastToShow)
 
   const toastColor = toastToShow
     ? toastToShow.type === ToastType.info && toastToShow.dismiss
@@ -60,10 +55,7 @@ const Toasts: React.FC = () => {
           {/* Toast with title and description only */}
           <NormalToast />
           {/* Toast with interaction btn */}
-          <InteractiveToast
-            ref={interactionBtnRef}
-            handleInteractionBtnLayout={handleInteractionBtnLayout}
-          />
+          <InteractiveToast />
           {/* Sticky Toast without interaction btn */}
           <StickyToast />
         </ToastToShowContext.Provider>
