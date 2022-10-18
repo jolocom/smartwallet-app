@@ -6,6 +6,7 @@ import { IWithCustomStyle } from '~/types/props'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
+import { StyleSheet } from 'react-native'
 
 interface Props extends IWithCustomStyle {
   label?: string
@@ -20,8 +21,7 @@ const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
       size={JoloTextSizes.tiniest}
       color={toastColor}
       customStyles={{
-        textAlign: 'left',
-        lineHeight: BP({ xsmall: 14, default: 18 }),
+        ...styles.customText,
         textDecorationLine: 'underline',
       }}
       onPress={invokeInteract}
@@ -37,14 +37,18 @@ const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.tiniest}
       color={Colors.white}
-      customStyles={[
-        { textAlign: 'left', lineHeight: BP({ xsmall: 14, default: 18 }) },
-        customStyles,
-      ]}
+      customStyles={[styles.customText, customStyles]}
     >
       {toastToShow.message} {label && renderLabel()}
     </JoloText>
   )
 }
+
+const styles = StyleSheet.create({
+  customText: {
+    textAlign: 'left',
+    lineHeight: BP({ xsmall: 14, default: 18 }),
+  },
+})
 
 export default ToastDescription

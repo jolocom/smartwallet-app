@@ -47,7 +47,7 @@ const ToastContainer: React.FC = ({ children }) => {
       }}
     >
       {getToastIcon(toastToShow?.type)}
-      <View style={{ flex: 1, marginLeft: 23 }}>{children}</View>
+      <View style={styles.toastContent}>{children}</View>
     </View>
   )
 }
@@ -63,6 +63,10 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     paddingHorizontal: 21,
     width: '94%',
+  },
+  toastContent: {
+    flex: 1,
+    marginLeft: 23,
   },
 })
 
