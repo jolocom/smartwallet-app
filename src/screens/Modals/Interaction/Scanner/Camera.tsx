@@ -4,11 +4,10 @@ import {
   Animated,
   Dimensions,
   LayoutAnimation,
-  Linking,
   Platform,
   StyleSheet,
   TouchableHighlight,
-  View
+  View,
 } from 'react-native'
 import branch from 'react-native-branch'
 import { RNCamera } from 'react-native-camera'
@@ -39,7 +38,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { getIsAppLocked } from '~/modules/account/selectors'
 import {
   getAusweisScannerKey,
-  getIsAusweisInteractionProcessed
+  getIsAusweisInteractionProcessed,
 } from '~/modules/interaction/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import { SCREEN_HEIGHT } from '~/utils/dimensions'
@@ -135,14 +134,12 @@ const Camera = () => {
     }
   }, [isAuseisInteractionProcessed])
 
-  const openURL = async (url: string) => {
-    let canOpen: boolean | undefined
+  const validateUrl = (url: string) => {
     try {
-      canOpen = await Linking.canOpenURL(url)
+      return Boolean(new URL(url))
     } catch (e) {
-      canOpen = false
+      return false
     }
-    return canOpen
   }
 
   const handleScan = async (e: { data: string }) => {
@@ -156,10 +153,10 @@ const Camera = () => {
       return
     }
     try {
-      const canOpen = await openURL(e.data)
+      const isValidUrl = validateUrl(e.data)
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
-      if (canOpen && e.data.includes('jolocom.app.link')) {
+      if (isValidUrl && e.data.includes('jolocom.app.link')) {
         disableLock(() => {
           // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
           // when the app goes into background when the deeplink is opened
