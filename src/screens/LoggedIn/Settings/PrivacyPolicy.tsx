@@ -19,7 +19,11 @@ const PrivacyPolicy = () => {
       <JoloText
         kind={JoloTextKind.subtitle}
         size={JoloTextSizes.tiniest}
-        customStyles={{ opacity: 0.2, lineHeight: 14, marginTop: 145 }}
+        customStyles={{
+          opacity: 0.2,
+          lineHeight: 14,
+          marginTop: 72,
+        }}
       >
         {t('PrivacyPolicy.footer')}
       </JoloText>
