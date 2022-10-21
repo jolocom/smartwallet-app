@@ -106,7 +106,7 @@ const FormContainer: React.FC<Props> = ({
                   }}
                   numberOfLines={1}
                 >
-                  {currentTitleText}
+                  {removeLinebreakAndWhitespace(currentTitleText)}
                 </JoloText>
               </Animated.View>
             </View>
