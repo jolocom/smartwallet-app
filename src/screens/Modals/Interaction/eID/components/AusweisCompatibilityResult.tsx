@@ -23,15 +23,22 @@ interface ResultProps {
   result: 'success' | 'error'
   title: string
   color?: Colors
+  hasBorder?: boolean
 }
 
-const Result: React.FC<ResultProps> = ({ title, color, result }) => {
+const Result: React.FC<ResultProps> = ({
+  title,
+  color,
+  result,
+  hasBorder = true,
+}) => {
   return (
     <Option
       customStyles={{
         width: '100%',
-        backgroundColor: Colors.cinder,
+        backgroundColor: Colors.haiti,
       }}
+      hasBorder={hasBorder}
     >
       <Option.Title
         title={title}
@@ -122,12 +129,14 @@ export const AusweisCompatibilityResult: React.FC = () => {
                 result={'error'}
                 title={t('AusweisCompatibilityStatus.status3')}
                 color={Colors.error}
+                hasBorder={false}
               />
             ) : (
               <Result
                 result={'success'}
                 title={t('AusweisCompatibilityStatus.status3')}
                 color={Colors.white90}
+                hasBorder={false}
               />
             )}
           </View>
