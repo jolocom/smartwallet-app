@@ -556,6 +556,10 @@
         "header": "Ready to scan",
         "startSubheader": "Please do not remove your card until the current step is done",
         "cancelBtn": "Cancel"
+        "sessionStarted": "Please place your ID card on the top of the device's back side.",
+        "sessionFailed": "Scanning process failed.",
+        "sessionSucceeded": "Scanning process has been finished successfully.",
+        "sessionInProgress": "Scanning process has been finished successfully."
     },
     "AusweisCanInfo": {
         "header": "CAN information",

@@ -556,6 +556,10 @@
         "header": "Bereit zu scannen",
         "startSubheader": "Bitte die Karte nicht entfernen, bis der Prozess abgeschlossen ist.",
         "cancelBtn": "Abbrechen"
+        "sessionStarted": "Bitte legen Sie Ihren Ausweis oben auf die Rückseite des Geräts.",
+        "sessionFailed": "Scanvorgang fehlgeschlagen.",
+        "sessionSucceeded": "Der Scanvorgang wurde erfolgreich abgeschlossen.",
+        "sessionInProgress": "Der Scanvorgang wurde erfolgreich abgeschlossen."
     },
     "AusweisCanInfo": {
         "header": "CAN Informationen",
