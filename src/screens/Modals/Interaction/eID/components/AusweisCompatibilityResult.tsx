@@ -27,10 +27,18 @@ interface ResultProps {
 
 const Result: React.FC<ResultProps> = ({ title, color, result }) => {
   return (
-    <Option customStyles={{ width: '100%', backgroundColor: Colors.mainDark }}>
+    <Option
+      customStyles={{
+        width: '100%',
+        backgroundColor: Colors.cinder,
+      }}
+    >
       <Option.Title
         title={title}
-        customStyles={{ width: '80%', color: color }}
+        customStyles={{
+          width: '80%',
+          color: color,
+        }}
       />
       <Option.IconContainer>
         {result === 'success' ? (
@@ -138,6 +146,9 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     width: '100%',
+    backgroundColor: 'red',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   iconContainer: {
     marginBottom: 20,
