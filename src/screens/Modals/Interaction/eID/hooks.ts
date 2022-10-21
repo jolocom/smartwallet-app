@@ -11,6 +11,7 @@ import { aa2Module } from '@jolocom/react-native-ausweis'
 import {
   AccessRightsFields,
   CardInfo,
+  ScannerConfig,
 } from '@jolocom/react-native-ausweis/js/types'
 import {
   AuthMessage,
@@ -97,7 +98,14 @@ const useAusweisInteraction = () => {
         // even though there are specific messages that will be resolved i.e. startAuth will only
         // resolve only to the AccessRightsMessage, even though it handles both the AuthMessage and Access
         // RightsMessage, which are reflected in the current types.
-        const request: any = await aa2Module.startAuth(token)
+        const config: ScannerConfig = {
+          sessionStarted: t('AusweisScanner.sessionStarted'),
+          sessionFailed: t('AusweisScanner.sessionFailed'),
+          sessionSucceeded: t('AusweisScanner.sessionSucceeded'),
+          sessionInProgress: t('AusweisScanner.sessionInProgress'),
+        }
+
+        const request: any = await aa2Module.startAuth(token, config)
         const certificate: any = await aa2Module.getCertificate()
 
         const requestData: IAusweisRequest = {
