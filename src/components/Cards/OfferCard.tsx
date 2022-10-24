@@ -60,47 +60,48 @@ const OfferCard: React.FC<Props> = ({
         />
         <View style={{ flexDirection: 'row', flex: 1 }}>
           <View style={{ flex: 1 }}>
-          <View style={{ width: '100%' }}>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <DocumentFields
-                fields={fields}
-                maxRows={maxRows}
-                maxLines={1}
-                rowDistance={8}
-                fieldCharacterLimit={12}
-                labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
-                valueScaledStyle={{
-                  fontSize: 18,
-                  lineHeight: 20,
-                  height: 20,
-                  borderRadius: 5,
-                  backgroundColor: Colors.alto,
-                  // NOTE: without this iOS doesn't apply the borderRadius (for text)
-                  overflow: 'hidden',
-                }}
-                nrOfColumns={2}
-                onFinishCalculation={handleDisplayedFields}
-                allowOverflowingFields={false}
-                hideFieldValues={true}
-              />
+            <View style={{ width: '100%', flex: 1 }}>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <DocumentFields
+                  fields={fields}
+                  maxRows={maxRows}
+                  maxLines={1}
+                  rowDistance={8}
+                  fieldCharacterLimit={12}
+                  labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
+                  valueScaledStyle={{
+                    fontSize: 18,
+                    lineHeight: 20,
+                    height: 20,
+                    borderRadius: 5,
+                    backgroundColor: Colors.alto,
+                    // NOTE: without this iOS doesn't apply the borderRadius (for text)
+                    overflow: 'hidden',
+                  }}
+                  nrOfColumns={2}
+                  onFinishCalculation={handleDisplayedFields}
+                  allowOverflowingFields={false}
+                  hideFieldValues={true}
+                />
+              </View>
             </View>
-          </View>
-          <View style={{ flex: 0.3, justifyContent: 'flex-end' }}>
-            {!!nrLeftFields && (
-              <ScaledText
-                style={{
-                  fontFamily: Fonts.Regular,
-                  color: Colors.slateGray,
-                }}
-                scaleStyle={{
-                  fontSize: 14,
-                  lineHeight: 18,
-                  marginBottom: 32,
-                }}
-              >
-                {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
-              </ScaledText>
-            )}
+            <View style={{ flex: 0.3, justifyContent: 'flex-end' }}>
+              {!!nrLeftFields && (
+                <ScaledText
+                  style={{
+                    fontFamily: Fonts.Regular,
+                    color: Colors.slateGray,
+                  }}
+                  scaleStyle={{
+                    fontSize: 14,
+                    lineHeight: 18,
+                    marginBottom: 32,
+                  }}
+                >
+                  {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
+                </ScaledText>
+              )}
+            </View>
           </View>
         </View>
       </View>
