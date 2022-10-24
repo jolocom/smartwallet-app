@@ -60,6 +60,7 @@ const OfferCard: React.FC<Props> = ({
         />
         <View style={{ flexDirection: 'row', flex: 1 }}>
           <View style={{ flex: 1 }}>
+          <View style={{ width: '100%' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <DocumentFields
                 fields={fields}
