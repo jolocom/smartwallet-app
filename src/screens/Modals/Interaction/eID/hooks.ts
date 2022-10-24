@@ -11,6 +11,7 @@ import { aa2Module } from '@jolocom/react-native-ausweis'
 import {
   AccessRightsFields,
   CardInfo,
+  ScannerConfig,
 } from '@jolocom/react-native-ausweis/js/types'
 import {
   AuthMessage,
@@ -67,6 +68,13 @@ const useAusweisInteraction = () => {
   const checkNfc = useCheckNFC()
   const { redirectUrl, postRedirect } = useSelector(getDeeplinkConfig)
 
+  const scannerConfig: ScannerConfig = {
+    sessionStarted: t('AusweisScanner.sessionStarted'),
+    sessionFailed: t('AusweisScanner.sessionFailed'),
+    sessionSucceeded: t('AusweisScanner.sessionSucceeded'),
+    sessionInProgress: t('AusweisScanner.sessionInProgress'),
+  }
+
   /*
    * NOTE: if the card is touching the reader while sending a command which triggers
    * the INSERT_CARD message (based on which we usually show the scanner), we should
@@ -97,7 +105,8 @@ const useAusweisInteraction = () => {
         // even though there are specific messages that will be resolved i.e. startAuth will only
         // resolve only to the AccessRightsMessage, even though it handles both the AuthMessage and Access
         // RightsMessage, which are reflected in the current types.
-        const request: any = await aa2Module.startAuth(token)
+
+        const request: any = await aa2Module.startAuth(token, scannerConfig)
         const certificate: any = await aa2Module.getCertificate()
 
         const requestData: IAusweisRequest = {
@@ -144,7 +153,7 @@ const useAusweisInteraction = () => {
       })
     }
 
-    await aa2Module.startChangePin().catch(scheduleErrorWarning)
+    await aa2Module.startChangePin(scannerConfig).catch(scheduleErrorWarning)
   }
 
   const disconnectAusweis = () => {
