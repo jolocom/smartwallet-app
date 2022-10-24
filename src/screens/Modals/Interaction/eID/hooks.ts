@@ -68,7 +68,7 @@ const useAusweisInteraction = () => {
   const checkNfc = useCheckNFC()
   const { redirectUrl, postRedirect } = useSelector(getDeeplinkConfig)
 
-  const config: ScannerConfig = {
+  const scannerConfig: ScannerConfig = {
     sessionStarted: t('AusweisScanner.sessionStarted'),
     sessionFailed: t('AusweisScanner.sessionFailed'),
     sessionSucceeded: t('AusweisScanner.sessionSucceeded'),
@@ -106,7 +106,7 @@ const useAusweisInteraction = () => {
         // resolve only to the AccessRightsMessage, even though it handles both the AuthMessage and Access
         // RightsMessage, which are reflected in the current types.
 
-        const request: any = await aa2Module.startAuth(token, config)
+        const request: any = await aa2Module.startAuth(token, scannerConfig)
         const certificate: any = await aa2Module.getCertificate()
 
         const requestData: IAusweisRequest = {
@@ -153,7 +153,7 @@ const useAusweisInteraction = () => {
       })
     }
 
-    await aa2Module.startChangePin(config).catch(scheduleErrorWarning)
+    await aa2Module.startChangePin(scannerConfig).catch(scheduleErrorWarning)
   }
 
   const disconnectAusweis = () => {
