@@ -58,7 +58,7 @@ const LegalTextWrapper: React.FC<Props> = ({
           <ScreenContainer.Padding>
             <Collapsible.Scroll
               containerStyles={{
-                paddingBottom: '30%',
+                paddingBottom: '10%',
               }}
             >
               <Collapsible.Title text={title}>
