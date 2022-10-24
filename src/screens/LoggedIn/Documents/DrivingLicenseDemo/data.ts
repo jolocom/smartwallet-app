@@ -123,8 +123,7 @@ export const makeMdlManifest = (did: string) => {
         name: 'Jolocom',
         description:
           'Jolocom is a decentralized identity platform that enables users to own and control their own digital identity.',
-        image:
-          'https://cloudsignatureconsortium.org/wp-content/uploads/2019/11/Logo_300dpi-300x160-1.png',
+        image: 'https://i.postimg.cc/VvHJXdqk/bdr.png',
         url: 'https://jolocom.io',
       },
     },
