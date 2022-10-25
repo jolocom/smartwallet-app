@@ -60,7 +60,7 @@ const OfferCard: React.FC<Props> = ({
           // backgroundColor={???}
           isInteracting={true}
         />
-        <View style={{ flexDirection: 'row', flex: 1 }}>
+        <View style={{ flexDirection: 'row', flex: 1, marginTop: 4 }}>
           <View style={{ flex: 1 }}>
             <View style={{ width: '100%', flex: 1 }}>
               <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -82,7 +82,7 @@ const OfferCard: React.FC<Props> = ({
                   }}
                   nrOfColumns={2}
                   onFinishCalculation={handleDisplayedFields}
-                  allowOverflowingFields={false}
+                  allowOverflowingFields={true}
                   hideFieldValues={true}
                 />
               </View>
