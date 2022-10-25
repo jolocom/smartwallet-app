@@ -11,7 +11,6 @@ import { AttributeTypes } from '~/types/credentials'
 import { getCounterpartyName } from '~/utils/dataMapping'
 import { useInitDocuments } from '../documents'
 import { DocumentsSortingType } from '../documents/types'
-import { useAgent } from '../sdk'
 import { useToasts } from '../toasts'
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({
@@ -30,6 +29,7 @@ const credentialOfferHandler = (state: CredentialOfferFlowState) => ({
       type,
       name: credential?.name ?? '',
       properties: credential?.display?.properties || [],
+      style: credential?.styles?.background,
     })),
   },
 })
@@ -42,8 +42,6 @@ const credentialOfferHandler = (state: CredentialOfferFlowState) => ({
  * 2. Map interaction details to the wallet UI structure
  */
 export const useInteractionHandler = () => {
-  const agent = useAgent()
-  const { did } = agent.idw
   const { t } = useTranslation()
   const { scheduleWarning } = useToasts()
   const { queryCredentials, sortDocuments, toDocument, splitAttributes } =

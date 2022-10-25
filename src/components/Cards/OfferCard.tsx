@@ -12,9 +12,12 @@ import {
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH,
 } from './consts'
+import { CredentialDefinitionImage } from '@jolocom/protocol-ts'
+import { DisplayCredential } from '~/types/credentials'
 
 interface Props {
   credentialName: string
+  styles: Pick<DisplayCredential['styles'], 'background'>
   issuerIcon?: string
   fields: DocumentProperty[]
   selected?: boolean
@@ -26,6 +29,7 @@ const OfferCard: React.FC<Props> = ({
   fields,
   selected,
   issuerIcon,
+  styles,
   style = {},
 }) => {
   const { t } = useTranslation()
@@ -35,6 +39,8 @@ const OfferCard: React.FC<Props> = ({
   const handleDisplayedFields = (fields: DocumentProperty[]) => {
     setNrDisplayFields(fields.length)
   }
+
+  const { color, image_url } = styles
 
   const nrLeftFields = fields.length - nrDisplayedFields
 
@@ -57,8 +63,8 @@ const OfferCard: React.FC<Props> = ({
           name={credentialName}
           icon={issuerIcon}
           selected={selected}
-          // backgroundColor={???}
-          // backgroundImage={???}
+          backgroundColor={color}
+          backgroundImage={image_url?.uri}
           isInteracting={true}
         />
         <View style={{ flexDirection: 'row', flex: 1, marginTop: 4 }}>
