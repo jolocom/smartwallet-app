@@ -57,6 +57,8 @@ const OfferCard: React.FC<Props> = ({
           name={credentialName}
           icon={issuerIcon}
           selected={selected}
+          // backgroundColor={???}
+          isInteracting={true}
         />
         <View style={{ flexDirection: 'row', flex: 1 }}>
           <View style={{ flex: 1 }}>

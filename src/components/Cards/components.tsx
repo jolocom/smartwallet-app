@@ -121,13 +121,15 @@ export const DocumentHeader: React.FC<{
   backgroundImage?: string
   backgroundColor?: string
   truncateName?: boolean
+  isInteracting?: boolean
 }> = ({
   name,
   icon,
   selected,
-  backgroundColor,
+  backgroundColor = '#0BB01E',
   backgroundImage,
   truncateName,
+  isInteracting = false,
 }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
@@ -136,13 +138,19 @@ export const DocumentHeader: React.FC<{
   const renderBackground = (children: () => React.ReactChild) => {
     if (backgroundImage) {
       return (
-        <DocumentBackgroundImage image={backgroundImage}>
+        <DocumentBackgroundImage
+          image={backgroundImage}
+          isInteracting={isInteracting}
+        >
           {children()}
         </DocumentBackgroundImage>
       )
     } else if (backgroundColor) {
       return (
-        <DocumentBackgroundColor color={backgroundColor}>
+        <DocumentBackgroundColor
+          color={backgroundColor}
+          isInteracting={isInteracting}
+        >
           {children()}
         </DocumentBackgroundColor>
       )
@@ -447,12 +455,12 @@ export const GradientSeparator: React.FC = ({ children }) => {
   )
 }
 
-export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
-  image,
-  children,
-}) => (
+export const DocumentBackgroundImage: React.FC<{
+  image: string
+  isInteracting?: boolean
+}> = ({ image, children, isInteracting }) => (
   <ScaledView
-    scaleStyle={{ height: 84 + DOCUMENT_HEADER_HEIGHT }}
+    scaleStyle={{ height: isInteracting ? 84 : 84 + DOCUMENT_HEADER_HEIGHT }}
     style={{ width: '100%' }}
   >
     <ImageBackground
@@ -464,13 +472,13 @@ export const DocumentBackgroundImage: React.FC<{ image: string }> = ({
   </ScaledView>
 )
 
-export const DocumentBackgroundColor: React.FC<{ color: string }> = ({
-  color,
-  children,
-}) => (
+export const DocumentBackgroundColor: React.FC<{
+  color: string
+  isInteracting?: boolean
+}> = ({ color, children, isInteracting }) => (
   <ScaledView
     scaleStyle={{
-      height: 84 + DOCUMENT_HEADER_HEIGHT,
+      height: isInteracting ? 84 : 84 + DOCUMENT_HEADER_HEIGHT,
     }}
     style={{
       width: '100%',
