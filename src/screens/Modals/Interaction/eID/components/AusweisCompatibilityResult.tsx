@@ -26,37 +26,24 @@ interface ResultProps {
   hasBorder?: boolean
 }
 
-const Result: React.FC<ResultProps> = ({
-  title,
-  color,
-  result,
-  hasBorder = true,
-}) => {
-  return (
-    <Option
+const Result: React.FC<ResultProps> = ({ title, color, result, hasBorder }) => (
+  <Option customStyles={styles.optionContainer} hasBorder={hasBorder}>
+    <Option.Title
+      title={title}
       customStyles={{
-        width: '100%',
-        backgroundColor: Colors.haiti,
+        width: '80%',
+        color: color,
       }}
-      hasBorder={hasBorder}
-    >
-      <Option.Title
-        title={title}
-        customStyles={{
-          width: '80%',
-          color: color,
-        }}
-      />
-      <Option.IconContainer>
-        {result === 'success' ? (
-          <PurpleTickSuccess w={20} h={20} />
-        ) : (
-          <ErrorIconYellow />
-        )}
-      </Option.IconContainer>
-    </Option>
-  )
-}
+    />
+    <Option.IconContainer>
+      {result === 'success' ? (
+        <PurpleTickSuccess w={20} h={20} />
+      ) : (
+        <ErrorIconYellow />
+      )}
+    </Option.IconContainer>
+  </Option>
+)
 
 export const AusweisCompatibilityResult: React.FC = () => {
   const { t } = useTranslation()
@@ -184,5 +171,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     paddingHorizontal: 16,
+  },
+  optionContainer: {
+    width: '100%',
+    backgroundColor: Colors.haiti,
   },
 })
