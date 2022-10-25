@@ -18,7 +18,7 @@ import { getAusweisInteractionDetails } from '~/modules/interaction/selectors'
 
 export type MainTabsParamList = {
   [ScreenNames.Identity]: undefined
-  [ScreenNames.Documents]: undefined
+  [ScreenNames.Documents]: { ids?: string[] }
   [ScreenNames.History]: undefined
   [ScreenNames.Settings]: undefined
 }

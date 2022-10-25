@@ -4,10 +4,12 @@ import { useInitDocuments } from '~/hooks/documents'
 import useCredentialOfferFlow from '~/hooks/interactions/useCredentialOfferFlow'
 import { addCredentials } from '~/modules/credentials/actions'
 import { ScreenNames } from '~/types/screens'
+import { useRedirect } from '../navigation'
 import { useCompleteInteraction } from './useCompleteInteraction'
 
 const useCredentialOfferSubmit = () => {
   const dispatch = useDispatch()
+  const redirect = useRedirect()
   const {
     assembleOfferResponseToken,
     processOfferReceiveToken,
@@ -24,9 +26,9 @@ const useCredentialOfferSubmit = () => {
     )
     dispatch(addCredentials(displayCredentials))
 
-    return {
-      screenToNavigate: ScreenNames.Documents,
-    }
+    return redirect(ScreenNames.Documents, {
+      ids: issuedCredentials.map((cred) => cred.id),
+    })
   })
 
   return completeInteraction
