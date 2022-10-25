@@ -54,13 +54,6 @@ const FormContainer: React.FC<Props> = ({
     })
   }
 
-  const removeLinebreakAndWhitespace = (title: string) =>
-    title
-      .replace(/(\r\n|\n|\r)/gm, '')
-      .split(' ')
-      .filter((s) => s.length > 1)
-      .join(' ')
-
   return (
     <ScreenContainer
       backgroundColor={Colors.codGrey}
@@ -106,7 +99,7 @@ const FormContainer: React.FC<Props> = ({
                   }}
                   numberOfLines={1}
                 >
-                  {removeLinebreakAndWhitespace(currentTitleText)}
+                  {currentTitleText}
                 </JoloText>
               </Animated.View>
             </View>
@@ -137,9 +130,7 @@ const FormContainer: React.FC<Props> = ({
             }}
           >
             <Collapsible.Title text={title}>
-              <JoloText kind={JoloTextKind.title}>
-                {removeLinebreakAndWhitespace(title)}
-              </JoloText>
+              <JoloText kind={JoloTextKind.title}>{title}</JoloText>
             </Collapsible.Title>
             <JoloText
               size={JoloTextSizes.mini}

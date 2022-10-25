@@ -171,7 +171,7 @@ const CredentialForm = () => {
                   ? 'CredentialForm.editHeader'
                   : 'CredentialForm.addHeader',
                 // @ts-expect-error @TERMS
-                { attributeName: t(formConfig.label).toString() },
+                { attributeName: t(formConfig.label).toString().trim() },
               ) as string
             }
             description={t('CredentialForm.subheader')}
@@ -203,9 +203,7 @@ const CredentialForm = () => {
                         - there are no errors
                         - value is truthy
                       */
-                    withHighlight={
-                      !errors[field.key] && values[field.key]
-                    }
+                    withHighlight={!errors[field.key] && values[field.key]}
                     /* NOTE: all these conditions is an ugly workaround when errors are displayed in postal address.
                          We need to check if a field was touched and only then show an error,
                          otherwise all the errors appear at once if one field is incorrect
