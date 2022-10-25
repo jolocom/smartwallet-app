@@ -129,7 +129,7 @@ export const DocumentHeader: React.FC<{
   backgroundColor,
   backgroundImage,
   truncateName,
-  isInteracting = false,
+  isInteracting,
 }) => {
   const { handleCredentialNameTextLayout } = useCredentialNameScale()
 
