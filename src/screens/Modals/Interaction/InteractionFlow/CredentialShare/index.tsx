@@ -84,7 +84,7 @@ export const CredentialShareBAS = () => {
   const renderBody = () => {
     if (singleMissingAttribute) return null
     else if (document) {
-      const { name, issuer } = document
+      const { name, issuer, style } = document
 
       const previewFields = getPreviewProperties(document)
 
@@ -96,6 +96,8 @@ export const CredentialShareBAS = () => {
             fields={previewFields}
             photo={getHolderPhoto(document)}
             issuerIcon={issuer.icon}
+            backgroundColor={style.backgroundColor}
+            backgroundImage={style.backgroundImage}
           />
           <Space />
         </>

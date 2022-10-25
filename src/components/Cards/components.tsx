@@ -126,7 +126,7 @@ export const DocumentHeader: React.FC<{
   name,
   icon,
   selected,
-  backgroundColor = '#0BB01E',
+  backgroundColor,
   backgroundImage,
   truncateName,
   isInteracting = false,
