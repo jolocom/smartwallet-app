@@ -16,7 +16,7 @@ import { DisplayCredential } from '~/types/credentials'
 
 interface Props {
   credentialName: string
-  styles: Pick<DisplayCredential['styles'], 'background'>
+  background: DisplayCredential['styles']['background']
   issuerIcon?: string
   fields: DocumentProperty[]
   selected?: boolean
@@ -28,7 +28,7 @@ const OfferCard: React.FC<Props> = ({
   fields,
   selected,
   issuerIcon,
-  styles,
+  background,
   style = {},
 }) => {
   const { t } = useTranslation()
@@ -39,7 +39,7 @@ const OfferCard: React.FC<Props> = ({
     setNrDisplayFields(fields.length)
   }
 
-  const { color, image_url } = styles || {}
+  const { color, image_url } = background || {}
 
   const nrLeftFields = fields.length - nrDisplayedFields
   console.log('nrDisplayedFields', nrLeftFields)

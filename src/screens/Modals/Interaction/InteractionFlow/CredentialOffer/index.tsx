@@ -63,7 +63,9 @@ const CredentialOfferBAS = () => {
             credentialName={d.name || t('General.unknown')}
             fields={previewFields}
             issuerIcon={image}
-            styles={d.style as Pick<DisplayCredential['styles'], 'background'>}
+            background={
+              d.style as Pick<DisplayCredential['styles'], 'background'>
+            }
           />
         )
       })}
@@ -101,7 +103,7 @@ const CredentialOfferFAS = () => {
             credentialName={name || t('General.unknown')}
             fields={previewFields}
             issuerIcon={image}
-            styles={
+            background={
               doc.style as Pick<DisplayCredential['styles'], 'background'>
             }
           />
