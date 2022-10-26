@@ -12,7 +12,6 @@ import {
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH,
 } from './consts'
-import { CredentialDefinitionImage } from '@jolocom/protocol-ts'
 import { DisplayCredential } from '~/types/credentials'
 
 interface Props {
@@ -43,6 +42,7 @@ const OfferCard: React.FC<Props> = ({
   const { color, image_url } = styles
 
   const nrLeftFields = fields.length - nrDisplayedFields
+  console.log('nrDisplayedFields', nrLeftFields)
 
   return (
     <ScaledCard
@@ -75,7 +75,7 @@ const OfferCard: React.FC<Props> = ({
                   fields={fields}
                   maxRows={maxRows}
                   maxLines={1}
-                  rowDistance={8}
+                  rowDistance={4}
                   fieldCharacterLimit={12}
                   labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
                   valueScaledStyle={{
@@ -94,8 +94,16 @@ const OfferCard: React.FC<Props> = ({
                 />
               </View>
             </View>
-            <View style={{ flex: 0.3, justifyContent: 'flex-end' }}>
-              {!!nrLeftFields && (
+            <View
+              style={{
+                flex: 0.3,
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+                paddingHorizontal: 8,
+                paddingBottom: 4,
+              }}
+            >
+              {Boolean(nrLeftFields) && (
                 <ScaledText
                   style={{
                     fontFamily: Fonts.Regular,
@@ -104,7 +112,6 @@ const OfferCard: React.FC<Props> = ({
                   scaleStyle={{
                     fontSize: 14,
                     lineHeight: 18,
-                    marginBottom: 32,
                   }}
                 >
                   {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}

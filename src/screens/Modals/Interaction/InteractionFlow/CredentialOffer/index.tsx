@@ -101,6 +101,9 @@ const CredentialOfferFAS = () => {
             credentialName={name || t('General.unknown')}
             fields={previewFields}
             issuerIcon={image}
+            styles={
+              doc.style as Pick<DisplayCredential['styles'], 'background'>
+            }
           />
         </View>
       )
