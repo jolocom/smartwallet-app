@@ -22,6 +22,7 @@ import { DOCUMENT_HEADER_HEIGHT } from './consts'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
+import FastImage from 'react-native-fast-image'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -82,9 +83,12 @@ export const DocumentFooter: React.FC<{
                     scaleStyle={{ width: 30, height: 30 }}
                     style={{ marginRight: 10 }}
                   >
-                    <Image
-                      source={{ uri: icon }}
-                      resizeMode="cover"
+                    <FastImage
+                      source={{
+                        uri: icon,
+                        cache: FastImage.cacheControl.cacheOnly,
+                      }}
+                      resizeMode={FastImage.resizeMode.cover}
                       style={{
                         width: '100%',
                         height: '100%',
