@@ -31,7 +31,7 @@ export const regexValidations = {
   [InputValidation.all]: /./,
   [InputValidation.email]:
     /^(?!\.|_|-{1})+(\d*?[a-z]+\d*)+(([_\.\-])?((?!_)\w))+@([a-z0-9])+([\.\-])?((?!_)\w)+(\.)([a-z][a-z\d]{1,4})+$/,
-  [InputValidation.phone]: /^\+{1}\d+$|^\+$/,
+  [InputValidation.phone]: /^(?:\+|0|\(\d+\)) ?(?:[0-9] ?){0,14}[0-9]$/,
 }
 
 export const generateRandomString = (length: number) => {

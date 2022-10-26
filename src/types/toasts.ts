@@ -29,7 +29,7 @@ interface ToastInteract {
 }
 
 type ToastPayload = {
-  type: ToastType.warning | ToastType.info
+  type: ToastType.warning | ToastType.info | ToastType.success
 } & ToastMessage
 
 interface ToastBase {
@@ -63,10 +63,16 @@ export enum ToastFilter {
 export enum ToastType {
   info = 'info',
   warning = 'warning',
+  success = 'success',
 }
 
 export const createInfoToast = createToastFactory({
   type: ToastType.info,
+  dismiss: 8000,
+})
+
+export const createSuccessToast = createToastFactory({
+  type: ToastType.success,
   dismiss: 8000,
 })
 
