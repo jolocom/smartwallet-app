@@ -86,7 +86,12 @@ const ShareCard: React.FC<Props> = ({
               valueScaledStyle={{ fontSize: 18, lineHeight: 20 }}
             />
           </View>
-          <View style={{ flex: 0.5, bottom: 32 }}>
+          <View
+            style={{
+              flex: 0.5,
+              bottom: (backgroundColor || backgroundImage) && 20,
+            }}
+          >
             {photo && <DocumentPhoto photo={photo} />}
           </View>
         </View>

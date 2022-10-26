@@ -39,7 +39,7 @@ const OfferCard: React.FC<Props> = ({
     setNrDisplayFields(fields.length)
   }
 
-  const { color, image_url } = styles
+  const { color, image_url } = styles || {}
 
   const nrLeftFields = fields.length - nrDisplayedFields
   console.log('nrDisplayedFields', nrLeftFields)
