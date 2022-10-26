@@ -34,7 +34,7 @@ const Documents: React.FC = () => {
   const { params } =
     useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
 
-  const prevAddedIds = params?.ids
+  const prevAddedIds = params?.ids || undefined
 
   const {
     documents,
@@ -146,6 +146,7 @@ const Documents: React.FC = () => {
       ) : (
         <View style={{ flex: 1 }}>
           <StackScrollView
+            prevAdded={prevAddedIds && prevAddedIds[0]}
             data={stackData}
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
             visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
@@ -175,6 +176,7 @@ const Documents: React.FC = () => {
                     hasImageFields={hasImageProperties(c)}
                     icons={c.style.contextIcons}
                     expired={stack.stackId === DocumentStacks.Expired}
+                    highlight={prevAddedIds?.some((i) => i === c.id)}
                   />
                   {isDocumentFavorite(c.id) && <CardFavorite />}
                 </>
