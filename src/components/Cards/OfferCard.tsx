@@ -6,19 +6,19 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import ScaledCard, { ScaledText } from './ScaledCard'
 
-import { DocumentProperty } from '~/hooks/documents/types'
+import { DocumentProperty, Document } from '~/hooks/documents/types'
 import { DocumentFields, DocumentHeader } from './components'
 import {
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
   ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH,
 } from './consts'
-import { DisplayCredential } from '~/types/credentials'
 
 interface Props {
   credentialName: string
-  background: DisplayCredential['styles']['background']
+  styles: Document['style']
   issuerIcon?: string
-  fields: DocumentProperty[]
+  fields: Omit<DocumentProperty, 'value'>[]
+  numberOfFields: number
   selected?: boolean
   style?: StyleProp<ViewStyle>
 }
@@ -28,7 +28,8 @@ const OfferCard: React.FC<Props> = ({
   fields,
   selected,
   issuerIcon,
-  background,
+  numberOfFields,
+  styles,
   style = {},
 }) => {
   const { t } = useTranslation()
@@ -39,10 +40,7 @@ const OfferCard: React.FC<Props> = ({
     setNrDisplayFields(fields.length)
   }
 
-  const { color, image_url } = background || {}
-
-  const nrLeftFields = fields.length - nrDisplayedFields
-  console.log('nrDisplayedFields', nrLeftFields)
+  const nrLeftFields = numberOfFields - nrDisplayedFields
 
   return (
     <ScaledCard
@@ -63,8 +61,8 @@ const OfferCard: React.FC<Props> = ({
           name={credentialName}
           icon={issuerIcon}
           selected={selected}
-          backgroundColor={color}
-          backgroundImage={image_url?.uri}
+          backgroundColor={styles.backgroundColor}
+          backgroundImage={styles.backgroundImage}
           isInteracting={true}
         />
         <View style={{ flexDirection: 'row', flex: 1, marginTop: 4 }}>

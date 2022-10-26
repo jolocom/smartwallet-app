@@ -15,11 +15,7 @@ import {
   getOfferedCredentials,
   getServiceDescription,
 } from '~/modules/interaction/selectors'
-import {
-  CredentialDefinition,
-  CredentialDefinitionImage,
-} from '@jolocom/protocol-ts'
-import { DisplayCredential, OfferedCredential } from '~/types/credentials'
+import { OfferedCredential } from '~/types/credentials'
 import { Colors } from '~/utils/colors'
 import InteractionDescription from '../components/InteractionDescription'
 import InteractionFooter from '../components/InteractionFooter'
@@ -63,9 +59,8 @@ const CredentialOfferBAS = () => {
             credentialName={d.name || t('General.unknown')}
             fields={previewFields}
             issuerIcon={image}
-            background={
-              d.style as Pick<DisplayCredential['styles'], 'background'>
-            }
+            styles={d.style}
+            numberOfFields={d.properties.length}
           />
         )
       })}
@@ -103,9 +98,7 @@ const CredentialOfferFAS = () => {
             credentialName={name || t('General.unknown')}
             fields={previewFields}
             issuerIcon={image}
-            background={
-              doc.style as Pick<DisplayCredential['styles'], 'background'>
-            }
+            styles={doc.style}
           />
         </View>
       )
