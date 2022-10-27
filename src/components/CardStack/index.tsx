@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated'
+import { DocumentStacks } from '~/modules/credentials/types'
 import { ExpandState, StackItem, StackItemConfig } from './StackItem'
 
 export interface StackData<T extends { id: string }, P extends {} = {}> {
@@ -43,7 +44,8 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
   const [expandState, setExpandState] = useState(expandValue.value)
 
   useEffect(() => {
-    if (prevAdded) expandValue.value = { itemId: prevAdded, stackId: 'all' }
+    if (prevAdded)
+      expandValue.value = { itemId: prevAdded, stackId: DocumentStacks.All }
     else return
   }, [prevAdded])
 

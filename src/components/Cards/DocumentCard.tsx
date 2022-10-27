@@ -160,12 +160,8 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const secondaryField = showSecondaryField && fields.shift()
 
-    useEffect(() => {
-      console.log(highlight + ' in DocumentCard')
-    }, [])
-
     const FadeOutView = () => {
-      const opacity = useRef(new Animated.Value(1)).current
+      const opacity = useRef(new Animated.Value(0.8)).current
 
       useEffect(() => {
         Animated.timing(opacity, {
@@ -173,7 +169,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           duration: 2000,
           useNativeDriver: true,
         }).start()
-      }, [])
+      }, [highlight])
 
       return <Animated.View style={{ ...styles.overlay, opacity: opacity }} />
     }

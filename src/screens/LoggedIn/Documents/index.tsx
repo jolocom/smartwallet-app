@@ -63,6 +63,20 @@ const Documents: React.FC = () => {
 
   const dispatch = useDispatch()
 
+  const [highlightedCards, setHighlightedCards] = useState<
+    string[] | undefined
+  >(undefined)
+
+  useEffect(() => {
+    setHighlightedCards(prevAddedIds)
+  }, [prevAddedIds])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setHighlightedCards(undefined)
+    }, 100)
+  }, [highlightedCards])
+
   useLayoutEffect(() => {
     if (!favorites.length) {
       dispatch(setOpenedStack(DocumentStacks.All))
@@ -70,6 +84,12 @@ const Documents: React.FC = () => {
       dispatch(setOpenedStack(DocumentStacks.Favorites))
     }
   }, [])
+
+  useLayoutEffect(() => {
+    if (highlightedCards) {
+      dispatch(setOpenedStack(DocumentStacks.All))
+    }
+  }, [highlightedCards])
 
   const { scaleBy } = useMemo(
     () =>
@@ -81,75 +101,56 @@ const Documents: React.FC = () => {
     [],
   )
 
-  const renderStack = useCallback(
-    (
-      stack: StackData<Document, StackExtraData>,
-      stackItems: React.ReactNode,
-    ) => {
-      return (
-        <View key={stack.stackId} style={styles.stackContainer}>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
-            style={styles.stackBtn}
-          >
-            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-              {stack.extra.name}
-            </JoloText>
-            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-              {stack.data.length}
-            </JoloText>
-          </TouchableOpacity>
-          <View
-            style={[
-              styles.stackItems,
-              {
-                // NOTE: Opening and closing using the display style instead of conditionally rendering
-                // the component is faster, but the exiting layout animation is messed up. Also, this makes memoization
-                // work, where each component is only rendered once. Otherwise, with conditional rendering
-                // each card is rendered twice.
-                display: openedStack === stack.stackId ? 'flex' : 'none',
-              },
-            ]}
-          >
-            {stack.data.length ? (
-              stackItems
-            ) : (
-              <View style={{ paddingHorizontal: 80 }}>
-                <JoloText
-                  size={JoloTextSizes.middle}
-                  color={Colors.white90}
-                  customStyles={{ marginBottom: 4 }}
-                >
-                  {stack.extra.title}
-                </JoloText>
-                <JoloText size={JoloTextSizes.mini}>
-                  {stack.extra.subtitle}
-                </JoloText>
-              </View>
-            )}
-          </View>
+  const renderStack = (
+    stack: StackData<Document, StackExtraData>,
+    stackItems: React.ReactNode,
+  ) => {
+    return (
+      <View key={stack.stackId} style={styles.stackContainer}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
+          style={styles.stackBtn}
+        >
+          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+            {stack.extra.name}
+          </JoloText>
+          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+            {stack.data.length}
+          </JoloText>
+        </TouchableOpacity>
+        <View
+          style={[
+            styles.stackItems,
+            {
+              // NOTE: Opening and closing using the display style instead of conditionally rendering
+              // the component is faster, but the exiting layout animation is messed up. Also, this makes memoization
+              // work, where each component is only rendered once. Otherwise, with conditional rendering
+              // each card is rendered twice.
+              display: openedStack === stack.stackId ? 'flex' : 'none',
+            },
+          ]}
+        >
+          {stack.data.length ? (
+            stackItems
+          ) : (
+            <View style={{ paddingHorizontal: 80 }}>
+              <JoloText
+                size={JoloTextSizes.middle}
+                color={Colors.white90}
+                customStyles={{ marginBottom: 4 }}
+              >
+                {stack.extra.title}
+              </JoloText>
+              <JoloText size={JoloTextSizes.mini}>
+                {stack.extra.subtitle}
+              </JoloText>
+            </View>
+          )}
         </View>
-      )
-    },
-    [openedStack],
-  )
-
-  const [highlightedCards, setHighlightedCards] = useState<
-    string[] | undefined
-  >(undefined)
-
-  console.log({ highlightedCards })
-
-  useEffect(() => {
-    setHighlightedCards(prevAddedIds)
-  }, [prevAddedIds])
-
-  useEffect(() => {
-    setTimeout(() => {
-      setHighlightedCards(undefined)
-    }, 3000)
-  }, [highlightedCards])
+      </View>
+    )
+  }
 
   return (
     <ScreenContainer
@@ -178,6 +179,12 @@ const Documents: React.FC = () => {
             renderItem={(c, stack, visible) => {
               const fields = getPreviewProperties(c)
 
+              const shouldHighlight =
+                highlightedCards !== undefined &&
+                highlightedCards?.some((i) => i === c.id)
+                  ? true
+                  : false
+
               return (
                 <>
                   <DocumentCard
@@ -198,12 +205,7 @@ const Documents: React.FC = () => {
                     hasImageFields={hasImageProperties(c)}
                     icons={c.style.contextIcons}
                     expired={stack.stackId === DocumentStacks.Expired}
-                    highlight={
-                      highlightedCards !== undefined &&
-                      highlightedCards?.some((i) => i === c.id)
-                        ? true
-                        : false
-                    }
+                    highlight={shouldHighlight}
                   />
                   {isDocumentFavorite(c.id) && <CardFavorite />}
                 </>
