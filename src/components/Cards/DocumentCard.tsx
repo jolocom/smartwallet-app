@@ -166,7 +166,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       useEffect(() => {
         Animated.timing(opacity, {
           toValue: 0,
-          duration: 2000,
+          duration: 5000,
           useNativeDriver: true,
         }).start()
       }, [highlight])
