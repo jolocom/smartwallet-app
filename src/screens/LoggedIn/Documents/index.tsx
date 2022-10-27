@@ -1,5 +1,11 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
-import React, { useCallback, useMemo, useLayoutEffect } from 'react'
+import React, {
+  useCallback,
+  useMemo,
+  useLayoutEffect,
+  useState,
+  useEffect,
+} from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -129,6 +135,22 @@ const Documents: React.FC = () => {
     [openedStack],
   )
 
+  const [highlightedCards, setHighlightedCards] = useState<
+    string[] | undefined
+  >(undefined)
+
+  console.log({ highlightedCards })
+
+  useEffect(() => {
+    setHighlightedCards(prevAddedIds)
+  }, [prevAddedIds])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setHighlightedCards(undefined)
+    }, 3000)
+  }, [highlightedCards])
+
   return (
     <ScreenContainer
       customStyles={{
@@ -176,7 +198,12 @@ const Documents: React.FC = () => {
                     hasImageFields={hasImageProperties(c)}
                     icons={c.style.contextIcons}
                     expired={stack.stackId === DocumentStacks.Expired}
-                    highlight={prevAddedIds?.some((i) => i === c.id)}
+                    highlight={
+                      highlightedCards !== undefined &&
+                      highlightedCards?.some((i) => i === c.id)
+                        ? true
+                        : false
+                    }
                   />
                   {isDocumentFavorite(c.id) && <CardFavorite />}
                 </>

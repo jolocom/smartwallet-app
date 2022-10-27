@@ -160,25 +160,20 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const secondaryField = showSecondaryField && fields.shift()
 
-    const [shouldHighlight, setShouldHighlight] = useState(false)
-
     useEffect(() => {
-      setShouldHighlight(Boolean(highlight))
+      console.log(highlight + ' in DocumentCard')
     }, [])
 
     const FadeOutView = () => {
-      const opacity = useRef(new Animated.Value(0.3)).current
+      const opacity = useRef(new Animated.Value(1)).current
 
       useEffect(() => {
         Animated.timing(opacity, {
           toValue: 0,
-          duration: 6000,
+          duration: 2000,
           useNativeDriver: true,
         }).start()
-        setTimeout(() => {
-          setShouldHighlight(false)
-        }, 6000)
-      }, [shouldHighlight])
+      }, [])
 
       return <Animated.View style={{ ...styles.overlay, opacity: opacity }} />
     }
@@ -193,7 +188,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           scaleStyle={styles.cardScaled}
           testID="documentCard"
         >
-          {shouldHighlight && <FadeOutView />}
+          {highlight && <FadeOutView />}
           <View style={[styles.contentContainer, expired && { opacity: 0.5 }]}>
             <DocumentHeader
               name={credentialName}
