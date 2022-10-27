@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgb(113, 114, 254)',
-    zIndex: 10000,
+    zIndex: 1,
     borderRadius: 15,
   },
 })
