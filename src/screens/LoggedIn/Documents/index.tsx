@@ -101,56 +101,59 @@ const Documents: React.FC = () => {
     [],
   )
 
-  const renderStack = (
-    stack: StackData<Document, StackExtraData>,
-    stackItems: React.ReactNode,
-  ) => {
-    return (
-      <View key={stack.stackId} style={styles.stackContainer}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
-          style={styles.stackBtn}
-        >
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {stack.extra.name}
-          </JoloText>
-          <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
-            {stack.data.length}
-          </JoloText>
-        </TouchableOpacity>
-        <View
-          style={[
-            styles.stackItems,
-            {
-              // NOTE: Opening and closing using the display style instead of conditionally rendering
-              // the component is faster, but the exiting layout animation is messed up. Also, this makes memoization
-              // work, where each component is only rendered once. Otherwise, with conditional rendering
-              // each card is rendered twice.
-              display: openedStack === stack.stackId ? 'flex' : 'none',
-            },
-          ]}
-        >
-          {stack.data.length ? (
-            stackItems
-          ) : (
-            <View style={{ paddingHorizontal: 80 }}>
-              <JoloText
-                size={JoloTextSizes.middle}
-                color={Colors.white90}
-                customStyles={{ marginBottom: 4 }}
-              >
-                {stack.extra.title}
-              </JoloText>
-              <JoloText size={JoloTextSizes.mini}>
-                {stack.extra.subtitle}
-              </JoloText>
-            </View>
-          )}
+  const renderStack = useCallback(
+    (
+      stack: StackData<Document, StackExtraData>,
+      stackItems: React.ReactNode,
+    ) => {
+      return (
+        <View key={stack.stackId} style={styles.stackContainer}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => handleStackPress(stack.stackId as DocumentStacks)}
+            style={styles.stackBtn}
+          >
+            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+              {stack.extra.name}
+            </JoloText>
+            <JoloText kind={JoloTextKind.title} size={JoloTextSizes.mini}>
+              {stack.data.length}
+            </JoloText>
+          </TouchableOpacity>
+          <View
+            style={[
+              styles.stackItems,
+              {
+                // NOTE: Opening and closing using the display style instead of conditionally rendering
+                // the component is faster, but the exiting layout animation is messed up. Also, this makes memoization
+                // work, where each component is only rendered once. Otherwise, with conditional rendering
+                // each card is rendered twice.
+                display: openedStack === stack.stackId ? 'flex' : 'none',
+              },
+            ]}
+          >
+            {stack.data.length ? (
+              stackItems
+            ) : (
+              <View style={{ paddingHorizontal: 80 }}>
+                <JoloText
+                  size={JoloTextSizes.middle}
+                  color={Colors.white90}
+                  customStyles={{ marginBottom: 4 }}
+                >
+                  {stack.extra.title}
+                </JoloText>
+                <JoloText size={JoloTextSizes.mini}>
+                  {stack.extra.subtitle}
+                </JoloText>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    )
-  }
+      )
+    },
+    [openedStack],
+  )
 
   return (
     <ScreenContainer
