@@ -161,7 +161,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     const secondaryField = showSecondaryField && fields.shift()
 
     const FadeOutView = () => {
-      const opacity = useRef(new Animated.Value(0.8)).current
+      const opacity = useRef(new Animated.Value(1)).current
 
       useEffect(() => {
         Animated.timing(opacity, {

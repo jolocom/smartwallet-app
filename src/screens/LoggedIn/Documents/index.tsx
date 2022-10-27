@@ -65,7 +65,7 @@ const Documents: React.FC = () => {
 
   const [highlightedCards, setHighlightedCards] = useState<
     string[] | undefined
-  >(undefined)
+  >(prevAddedIds)
 
   useEffect(() => {
     setHighlightedCards(prevAddedIds)
@@ -184,7 +184,7 @@ const Documents: React.FC = () => {
 
               const shouldHighlight =
                 highlightedCards !== undefined &&
-                highlightedCards?.some((i) => i === c.id)
+                highlightedCards.includes(c.id)
                   ? true
                   : false
 
