@@ -28,6 +28,7 @@ const CreateWalletPin = () => {
   const { t } = useTranslation()
   const [isCreating, setIsCreating] = useState(true) // to display create passcode or verify passcode
   const [selectedPasscode, setSelectedPasscode] = useState('')
+  const [shouldResetPasscode, setShouldResetPasscode] = useState(false)
 
   const handleRedirectToLoggedIn = useRedirectToLoggedIn()
   const resetKeychainPasscode = useResetKeychainValues()
@@ -52,6 +53,7 @@ const CreateWalletPin = () => {
   const promisifyPasscodeSubmit = promisifySubmit((pin) => {
     setSelectedPasscode(pin)
     setIsCreating(false)
+    setShouldResetPasscode(false)
   })
   const handlePasscodeSubmit = useCallback(async (pin, cb) => {
     await promisifyPasscodeSubmit(pin, cb)
@@ -88,6 +90,7 @@ const CreateWalletPin = () => {
 
   const resetPasscode = () => {
     setIsCreating(true)
+    setShouldResetPasscode(true)
     setSelectedPasscode('')
   }
 
@@ -102,6 +105,7 @@ const CreateWalletPin = () => {
         onSubmit={
           isCreating ? handlePasscodeSubmit : handleVerifiedPasscodeSubmit
         }
+        reset={shouldResetPasscode}
       >
         <Passcode.Container>
           <ScreenHeader

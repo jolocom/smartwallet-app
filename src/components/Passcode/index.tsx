@@ -11,6 +11,7 @@ import PasscodeExtraAction from './PasscodeExtraAction'
 import { useIsFocused } from '@react-navigation/native'
 
 const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
+  reset,
   children,
   onSubmit,
   length = 4,
@@ -21,6 +22,10 @@ const Passcode: React.FC<IPasscodeProps> & IPasscodeComposition = ({
   const [pinErrorText, setPinErrorText] = useState<string | null>(null)
 
   const isFocused = useIsFocused()
+
+  useEffect(() => {
+    reset && setPin('')
+  }, [reset])
 
   useEffect(() => {
     if (!isFocused) {
