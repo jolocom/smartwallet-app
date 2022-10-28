@@ -4,19 +4,27 @@ import { DrivingPrivilege } from 'react-native-mdl'
 import { MdlPropertyKeys, PrivilegesData } from './types'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
+import { MDL_CREDENTIAL_TYPE } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/data'
 
-const useDrivingPrivileges = (mdl: Document) => {
+const useDrivingPrivileges = (doc: Document) => {
   const { t } = useTranslation()
 
-  const drivingPrivileges: DrivingPrivilege[] = JSON.parse(
-    mdl.properties.filter((f) => f.key === MdlPropertyKeys.drivingPrivileges)[0]
-      .value,
-  )
+  const isMdl = doc.type[1] === MDL_CREDENTIAL_TYPE
 
-  const vehicleCategoryCodes = drivingPrivileges
-    .map((f) => f['vehicle_category_code'])
-    .sort()
-    .join(', ')
+  const drivingPrivileges: DrivingPrivilege[] =
+    isMdl &&
+    JSON.parse(
+      doc.properties.filter(
+        (f) => f.key === MdlPropertyKeys.drivingPrivileges,
+      )[0].value,
+    )
+
+  const vehicleCategoryCodes =
+    drivingPrivileges &&
+    drivingPrivileges
+      .map((f) => f['vehicle_category_code'])
+      .sort()
+      .join(', ')
 
   const getPrivilegesTitle = (c: string) => {
     const firstLetter = c.charAt(0)
@@ -35,39 +43,41 @@ const useDrivingPrivileges = (mdl: Document) => {
     }
   }
 
-  const mdlPrivileges: PrivilegesData[] = drivingPrivileges
-    .map((field) => {
-      return {
-        title: getPrivilegesTitle(field.vehicle_category_code),
-        data: [
-          {
-            vehicle_category_code: field.vehicle_category_code,
-            title: t('mdl.vehicleCode'),
-          },
-          {
-            issue_date: moment(field.issue_date).format('DD.MM.YYYY'),
-            title: t('mdl.issueDate'),
-          },
-          {
-            codes: [
-              {
-                code: field.codes?.map((c) => c.code).join(', ') || '-',
-              },
-            ],
-            title: t('mdl.restrictions'),
-          },
-          {
-            expiry_date: field.expiry_date || '-',
-            title: t('mdl.expiryDate'),
-          },
-        ],
-      } as PrivilegesData
-    })
-    .sort((a, b) =>
-      a.data[0].vehicle_category_code.localeCompare(
-        b.data[0].vehicle_category_code,
-      ),
-    )
+  const mdlPrivileges: PrivilegesData[] =
+    drivingPrivileges &&
+    drivingPrivileges
+      .map((field) => {
+        return {
+          title: getPrivilegesTitle(field.vehicle_category_code),
+          data: [
+            {
+              vehicle_category_code: field.vehicle_category_code,
+              title: t('mdl.vehicleCode'),
+            },
+            {
+              issue_date: moment(field.issue_date).format('DD.MM.YYYY'),
+              title: t('mdl.issueDate'),
+            },
+            {
+              codes: [
+                {
+                  code: field.codes?.map((c) => c.code).join(', ') || '-',
+                },
+              ],
+              title: t('mdl.restrictions'),
+            },
+            {
+              expiry_date: field.expiry_date || '-',
+              title: t('mdl.expiryDate'),
+            },
+          ],
+        } as PrivilegesData
+      })
+      .sort((a, b) =>
+        a.data[0].vehicle_category_code.localeCompare(
+          b.data[0].vehicle_category_code,
+        ),
+      )
 
   return {
     mdlPrivileges,
