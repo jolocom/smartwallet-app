@@ -21,10 +21,21 @@ import { LoaderAnimation } from '~/components/LoaderAnimation/LoaderAnimation'
 
 const ITEMS_PER_PAGE = 5
 
-const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
+const RecordItemsList: React.FC<IRecordItemsListProps> = ({
+  id,
+  itemId,
+  flows,
+}) => {
   const { t } = useTranslation()
   const sectionListRef = useRef<SectionList | null>(null)
   const { updateActiveSection } = useRecord()
+
+  useEffect(() => {
+    itemId && setFocusedItem(itemId)
+    return () => {
+      setFocusedItem(null)
+    }
+  }, [itemId])
 
   const [activeSection, setActiveSection] = useState('')
   const [interactions, setInteractions] = useState<IPreLoadedInteraction[]>([])
@@ -52,12 +63,14 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
 
   useInteractionCreate((interaction) => {
     if (shouldUpdateRecords(interaction, flows)) {
+      setFocusedItem(interaction.id)
       setInteractions((prev) => createInteractionRecord(interaction, prev))
     }
   })
 
   useInteractionUpdate((interaction) => {
     if (shouldUpdateRecords(interaction, flows)) {
+      setFocusedItem(interaction.id)
       setInteractions((prev) => updateInteractionRecord(interaction, prev))
     }
   })
@@ -75,6 +88,7 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({ id, flows }) => {
   useEffect(() => {
     getInteractionTokens(ITEMS_PER_PAGE, 0, flows)
       .then((tokens) => {
+        tokens.length && setFocusedItem(tokens[0].id)
         setTimeout(() => setLoaderType(LoaderTypes.empty), 200)
         setInteractions(tokens)
       })
