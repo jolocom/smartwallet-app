@@ -20,10 +20,7 @@ const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.tiniest}
       color={toastColor}
-      customStyles={{
-        ...styles.customText,
-        textDecorationLine: 'underline',
-      }}
+      customStyles={[styles.customText, styles.customLabel]}
       onPress={invokeInteract}
     >
       {label}
@@ -48,6 +45,9 @@ const styles = StyleSheet.create({
   customText: {
     textAlign: 'left',
     lineHeight: BP({ xsmall: 14, default: 18 }),
+  },
+  customLabel: {
+    textDecorationLine: 'underline',
   },
 })
 
