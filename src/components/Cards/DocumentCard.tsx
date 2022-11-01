@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle,
   Animated,
+  Easing,
 } from 'react-native'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
@@ -161,14 +162,28 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     const secondaryField = showSecondaryField && fields.shift()
 
     const FadeOutView = () => {
-      const opacity = useRef(new Animated.Value(1)).current
+      const opacity = useRef(new Animated.Value(0)).current
+
+      const animateView = (
+        animatedRef: Animated.Value,
+        toValue: number,
+        duration: number,
+        delay: number,
+      ) => {
+        return Animated.timing(animatedRef, {
+          toValue,
+          duration,
+          useNativeDriver: true,
+          easing: Easing.inOut(Easing.ease),
+          delay,
+        })
+      }
 
       useEffect(() => {
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 5000,
-          useNativeDriver: true,
-        }).start()
+        Animated.sequence([
+          animateView(opacity, 0.5, 300, 1000),
+          animateView(opacity, 0, 200, 3000),
+        ]).start()
       }, [highlight])
 
       return <Animated.View style={{ ...styles.overlay, opacity: opacity }} />
