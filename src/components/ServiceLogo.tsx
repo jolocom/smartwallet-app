@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import {
   Image,
-  StyleSheet,
-  View,
-  TouchableOpacity,
   Linking,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import Animated, {
@@ -16,8 +16,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
-import { useToasts } from '~/hooks/toasts'
 import { InitiatorPlaceholderIcon } from '~/assets/svg'
+import { useToasts } from '~/hooks/toasts'
 import { Colors } from '~/utils/colors'
 
 interface Props {
@@ -66,7 +66,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
 
   return source ? (
     <View>
-      {serviceUrl && (
+      {serviceUrl ? (
         <View style={styles.gradientContainer}>
           <Animated.View style={rotationStyles}>
             <LinearGradient
@@ -83,7 +83,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
             />
           </Animated.View>
         </View>
-      )}
+      ) : null}
       <TouchableOpacity
         onPress={serviceUrl && handleRedirectToCounterparty}
         activeOpacity={serviceUrl ? 0.9 : 1}
