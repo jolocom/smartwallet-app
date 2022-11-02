@@ -239,7 +239,6 @@ const FieldDetails = () => {
 
   const showIconContainer =
     Boolean(document.issuer.icon) ||
-    Boolean(document.issuer.icon?.length) ||
     Boolean(document.style.contextIcons?.length)
 
   const { top } = useSafeArea()
