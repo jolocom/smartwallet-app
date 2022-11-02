@@ -50,10 +50,15 @@ const CreateWalletPin = () => {
     resetKeychainPasscode().catch(scheduleErrorWarning)
   }, [])
 
+  useEffect(() => {
+    if (!selectedPasscode) {
+      setShouldResetPasscode(false)
+    }
+  }, [selectedPasscode])
+
   const promisifyPasscodeSubmit = promisifySubmit((pin) => {
     setSelectedPasscode(pin)
     setIsCreating(false)
-    setShouldResetPasscode(false)
   })
   const handlePasscodeSubmit = useCallback(async (pin, cb) => {
     await promisifyPasscodeSubmit(pin, cb)
