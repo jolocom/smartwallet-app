@@ -57,8 +57,6 @@ export const DocumentFooter: React.FC<{
 }> = ({ renderRightIcon, leftIcons, style = {}, expired = false }) => {
   const { t } = useTranslation()
 
-  console.log({ leftIcons: leftIcons })
-
   return (
     <ScaledView
       style={[styles.footerContainer, style]}
