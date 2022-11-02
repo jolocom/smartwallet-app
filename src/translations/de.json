@@ -619,8 +619,10 @@
         "bus": "Bus",
         "tractorAndForklift": "Traktor und Gabelstapler",
         "shareHeader": "Digitalen Führerschein teilen",
-        "shareMenu": "",
+        "shareMenu": "Per QR Code teilen",
         "successToastMsg": "",
-        "drivingPrivileges": "Fahrerlaubnisklassen"
+        "drivingPrivileges": "Fahrerlaubnisklassen",
+        "drivingLicenseNumber": "Führerscheinnummer",
+        "issueMdl": "Mdl ausstellen"
     }
 }

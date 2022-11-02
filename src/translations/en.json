@@ -621,6 +621,8 @@
         "shareHeader": "Share Driving License",
         "shareMenu": "Share via QR Code",
         "successToastMsg": "Driver License was shared successfully",
-        "drivingPrivileges": "Driving Privileges"
+        "drivingPrivileges": "Driving Privileges",
+        "drivingLicenseNumber": "Driving License Number",
+        "issueMdl": "Issue mdl"
     }
 }

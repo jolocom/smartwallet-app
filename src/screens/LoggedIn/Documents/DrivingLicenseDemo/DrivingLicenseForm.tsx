@@ -58,11 +58,11 @@ export const DrivingLicenseForm = () => {
   const serviceName = 'Bundesdruckerei'
   const serviceUrl = 'https://www.jolocom.io'
   const source = 'https://avatars0.githubusercontent.com/u/4603324?s=200&v=4'
-  const widgetValue = 'Driving License Number'
+  const widgetValue = t('mdl.drivingLicenseNumber')
   const title = 'Führerschein'
   const description =
     'Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten'
-  const issueMdl = 'Issue mdl'
+  const issueMdl = t('mdl.issueMdl')
 
   const handleSubmit = async () => {
     const responses: PersonalizationInputResponse[] = Object.entries(
