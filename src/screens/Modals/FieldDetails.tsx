@@ -33,7 +33,6 @@ import useTranslation from '~/hooks/useTranslation'
 import { PopOutIcon } from '~/assets/svg'
 import { MdlPropertyKeys } from './DrivingPrivileges/types'
 import useDrivingPrivileges from './DrivingPrivileges/hooks'
-import { ClaimKeys } from '~/types/credentials'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
@@ -53,7 +52,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
   onPress,
   fieldKey,
 }) => {
-  const { scheduleInfo } = useToasts()
+  const { scheduleSuccess } = useToasts()
   const { t } = useTranslation()
 
   const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(5)
@@ -72,7 +71,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
 
   const handleLongPress = (value: string) => {
     Clipboard.setString(value)
-    scheduleInfo({
+    scheduleSuccess({
       title: t('Toasts.copied'),
       dismiss: 1500,
     })
