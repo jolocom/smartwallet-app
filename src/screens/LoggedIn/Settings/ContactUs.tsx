@@ -83,6 +83,7 @@ const ContactUs: React.FC = () => {
         flex: 1,
         paddingHorizontal: 0,
         paddingTop: 0,
+        paddingBottom: 15,
       }}
     >
       <NavigationHeader type={NavHeaderType.Back} onPress={navigateBack}>
