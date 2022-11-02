@@ -15,20 +15,18 @@ const Toasts: React.FC = () => {
   const { activeToast, invokeInteract, removeToast } = useToasts()
 
   /* Context value that will be share with consumers -> Start */
-  const [toastToShow, setToastToShow] =
-    useState<Toast | null | undefined>(activeToast)
+  const [toastToShow, setToastToShow] = useState<Toast | null | undefined>(
+    activeToast,
+  )
 
-  const {
-    animationStyles,
-    panResponder,
-    interactionBtnRef,
-    handleContainerLayout,
-    handleInteractionBtnLayout,
-  } = useAnimateLayoutToast(setToastToShow)
+  const { animationStyles, panResponder, handleContainerLayout } =
+    useAnimateLayoutToast(setToastToShow)
 
   const toastColor = toastToShow
     ? toastToShow.type === ToastType.info && toastToShow.dismiss
       ? Colors.white
+      : toastToShow.type === ToastType.success
+      ? Colors.success
       : Colors.error
     : Colors.error
 
@@ -57,10 +55,7 @@ const Toasts: React.FC = () => {
           {/* Toast with title and description only */}
           <NormalToast />
           {/* Toast with interaction btn */}
-          <InteractiveToast
-            ref={interactionBtnRef}
-            handleInteractionBtnLayout={handleInteractionBtnLayout}
-          />
+          <InteractiveToast />
           {/* Sticky Toast without interaction btn */}
           <StickyToast />
         </ToastToShowContext.Provider>

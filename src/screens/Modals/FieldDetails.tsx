@@ -36,7 +36,7 @@ const ICON_SIZE = BP({ large: 40, default: 30 })
 type FieldValueProps = { value: string; mime_type: PropertyMimeType }
 
 const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
-  const { scheduleInfo } = useToasts()
+  const { scheduleSuccess } = useToasts()
   const { t } = useTranslation()
 
   const [numberOfVisibleLines, setNumberOfVisibleLines] = useState(5)
@@ -55,7 +55,7 @@ const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
 
   const handleLongPress = (value: string) => {
     Clipboard.setString(value)
-    scheduleInfo({
+    scheduleSuccess({
       title: t('Toasts.copied'),
       dismiss: 1500,
     })
