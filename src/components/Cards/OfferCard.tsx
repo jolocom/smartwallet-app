@@ -4,7 +4,7 @@ import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
-import ScaledCard, { ScaledText } from './ScaledCard'
+import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
 import { DocumentProperty, Document } from '~/hooks/documents/types'
 import { DocumentFields, DocumentHeader } from './components'
@@ -65,7 +65,9 @@ const OfferCard: React.FC<Props> = ({
           backgroundImage={styles.backgroundImage}
           isInteracting={true}
         />
-        <View style={{ flexDirection: 'row', flex: 1, marginTop: 4 }}>
+        <ScaledView
+          scaleStyle={{ flexDirection: 'row', flex: 1, marginTop: 4 }}
+        >
           <View style={{ flex: 1 }}>
             <View style={{ width: '100%', flex: 1 }}>
               <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -92,13 +94,13 @@ const OfferCard: React.FC<Props> = ({
                 />
               </View>
             </View>
-            <View
-              style={{
+            <ScaledView
+              scaleStyle={{
                 flex: 0.3,
                 justifyContent: 'flex-end',
                 alignItems: 'flex-end',
                 paddingHorizontal: 8,
-                paddingBottom: 4,
+                bottom: -8,
               }}
             >
               {Boolean(nrLeftFields) && (
@@ -115,9 +117,9 @@ const OfferCard: React.FC<Props> = ({
                   {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
                 </ScaledText>
               )}
-            </View>
+            </ScaledView>
           </View>
-        </View>
+        </ScaledView>
       </View>
     </ScaledCard>
   )

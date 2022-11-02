@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import ScaledCard from './ScaledCard'
+import ScaledCard, { ScaledView } from './ScaledCard'
 
 import { DocumentProperty } from '~/hooks/documents/types'
 import {
@@ -86,14 +86,14 @@ const ShareCard: React.FC<Props> = ({
               valueScaledStyle={{ fontSize: 18, lineHeight: 20 }}
             />
           </View>
-          <View
-            style={{
+          <ScaledView
+            scaleStyle={{
               flex: 0.5,
               bottom: (backgroundColor || backgroundImage) && 20,
             }}
           >
             {photo && <DocumentPhoto photo={photo} />}
-          </View>
+          </ScaledView>
         </View>
       </View>
     </ScaledCard>
