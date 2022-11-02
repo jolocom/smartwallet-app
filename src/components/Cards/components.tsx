@@ -86,7 +86,6 @@ export const DocumentFooter: React.FC<{
                     <FastImage
                       source={{
                         uri: icon,
-                        cache: FastImage.cacheControl.cacheOnly,
                       }}
                       resizeMode={FastImage.resizeMode.cover}
                       style={{
