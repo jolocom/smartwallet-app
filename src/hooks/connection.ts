@@ -7,7 +7,7 @@ import useTranslation from './useTranslation'
 
 const useConnection = () => {
   const { t } = useTranslation()
-  const { scheduleWarning, scheduleInfo } = useToasts()
+  const { scheduleWarning, scheduleSuccess } = useToasts()
   const netInfo = useNetInfo()
 
   const [connected, setConnected] = useState(true)
@@ -24,7 +24,7 @@ const useConnection = () => {
   }
 
   const showConnectedToast = () => {
-    scheduleInfo({
+    scheduleSuccess({
       title: t('Toasts.reconnectedInternetTitle'),
       message: t('Toasts.reconnectedInternetMsg'),
     })

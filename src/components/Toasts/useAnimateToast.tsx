@@ -131,23 +131,6 @@ export const useAnimateLayoutToast = (setToastToShow: TStateUpdate) => {
   }
   /* Animation -> End */
 
-  /* AreaToAvoidPressing -> Start */
-  const handleInteractionBtnLayout = useCallback(
-    (e: LayoutChangeEvent) => {
-      if (activeToast && !activeToast.interact) return
-      if (interactionBtnRef?.current) {
-        interactionBtnRef.current.measure((fx, fy, width, height, px, py) => {
-          setInteractionBtnDimensions({
-            x: px,
-            width,
-            height,
-          })
-        })
-      }
-    },
-    [JSON.stringify(activeToast)],
-  )
-
   const handleContainerLayout = useCallback(
     (e: LayoutChangeEvent) => {
       if (activeToast && !activeToast.interact) return
@@ -182,7 +165,6 @@ export const useAnimateLayoutToast = (setToastToShow: TStateUpdate) => {
   return {
     animationStyles,
     handleContainerLayout,
-    handleInteractionBtnLayout,
     panResponder,
     interactionBtnRef,
   }

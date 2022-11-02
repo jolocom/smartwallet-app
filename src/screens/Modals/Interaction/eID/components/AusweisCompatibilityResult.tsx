@@ -23,25 +23,27 @@ interface ResultProps {
   result: 'success' | 'error'
   title: string
   color?: Colors
+  hasBorder?: boolean
 }
 
-const Result: React.FC<ResultProps> = ({ title, color, result }) => {
-  return (
-    <Option customStyles={{ width: '100%', backgroundColor: Colors.mainDark }}>
-      <Option.Title
-        title={title}
-        customStyles={{ width: '80%', color: color }}
-      />
-      <Option.IconContainer>
-        {result === 'success' ? (
-          <PurpleTickSuccess w={20} h={20} />
-        ) : (
-          <ErrorIconYellow />
-        )}
-      </Option.IconContainer>
-    </Option>
-  )
-}
+const Result: React.FC<ResultProps> = ({ title, color, result, hasBorder }) => (
+  <Option customStyles={styles.optionContainer} hasBorder={hasBorder}>
+    <Option.Title
+      title={title}
+      customStyles={{
+        width: '80%',
+        color: color,
+      }}
+    />
+    <Option.IconContainer>
+      {result === 'success' ? (
+        <PurpleTickSuccess w={20} h={20} />
+      ) : (
+        <ErrorIconYellow />
+      )}
+    </Option.IconContainer>
+  </Option>
+)
 
 export const AusweisCompatibilityResult: React.FC = () => {
   const { t } = useTranslation()
@@ -114,12 +116,14 @@ export const AusweisCompatibilityResult: React.FC = () => {
                 result={'error'}
                 title={t('AusweisCompatibilityStatus.status3')}
                 color={Colors.error}
+                hasBorder={false}
               />
             ) : (
               <Result
                 result={'success'}
                 title={t('AusweisCompatibilityStatus.status3')}
                 color={Colors.white90}
+                hasBorder={false}
               />
             )}
           </View>
@@ -138,6 +142,9 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     width: '100%',
+    backgroundColor: 'red',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   iconContainer: {
     marginBottom: 20,
@@ -164,5 +171,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     paddingHorizontal: 16,
+  },
+  optionContainer: {
+    width: '100%',
+    backgroundColor: Colors.haiti,
   },
 })

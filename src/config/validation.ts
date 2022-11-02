@@ -90,9 +90,3 @@ export const contactValidation = yup
     [ClaimKeys.email, ClaimKeys.telephone],
     'Validations.atLeastOneValue',
   )
-
-export const companyValidation = yup.object().shape({
-  [ClaimKeys.legalCompanyName]: yup
-    .string()
-    .required('Validations.missingValue'),
-})

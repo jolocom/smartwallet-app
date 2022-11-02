@@ -8,10 +8,10 @@ import useErrors from '~/hooks/useErrors'
 import { SWErrorCodes } from '~/errors/codes'
 
 const NotificationsTest = () => {
-  const { scheduleInfo, scheduleWarning } = useToasts()
+  const { scheduleInfo, scheduleWarning, scheduleSuccess } = useToasts()
   const { showErrorReporting } = useErrors()
 
-  const normal = () => {
+  const info = () => {
     scheduleInfo({
       title: "I'm baby salvia deep v forage",
       message:
@@ -21,14 +21,21 @@ const NotificationsTest = () => {
 
   const warning = () => {
     scheduleWarning({
-      title: "I'm baby salvia deep v forage aesthetic",
-      message: 'deep v normcore adaptogen. Direct trade PBR&B vaporware ',
+      title: "I'm baby salvia deep v forage",
+      message: 'deep v normcore adaptogen. Direct trade PBR&B vaporware',
       interact: {
         label: 'Report',
         onInteract: () => {
           showErrorReporting(new Error(SWErrorCodes.SWUnknown))
         },
       },
+    })
+  }
+
+  const success = () => {
+    scheduleSuccess({
+      title: "I'm baby salvia deep v forage",
+      message: 'deep v normcore adaptogen. Direct trade PBR&B vaporware',
     })
   }
 
@@ -43,8 +50,9 @@ const NotificationsTest = () => {
       >
         Notifications
       </JoloText>
-      <Btn onPress={normal}>Normal</Btn>
+      <Btn onPress={info}>Info</Btn>
       <Btn onPress={warning}>Warning</Btn>
+      <Btn onPress={success}>Success</Btn>
     </ScreenContainer>
   )
 }
