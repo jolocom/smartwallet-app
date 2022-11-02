@@ -57,6 +57,8 @@ export const DocumentFooter: React.FC<{
 }> = ({ renderRightIcon, leftIcons, style = {}, expired = false }) => {
   const { t } = useTranslation()
 
+  console.log({ leftIcons: leftIcons })
+
   return (
     <ScaledView
       style={[styles.footerContainer, style]}
@@ -86,7 +88,6 @@ export const DocumentFooter: React.FC<{
                     <FastImage
                       source={{
                         uri: icon,
-                        cache: FastImage.cacheControl.cacheOnly,
                       }}
                       resizeMode={FastImage.resizeMode.cover}
                       style={{
