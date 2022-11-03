@@ -181,8 +181,8 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
       useEffect(() => {
         Animated.sequence([
-          animateView(opacity, 0.5, 300, 1000),
-          animateView(opacity, 0, 200, 3000),
+          animateView(opacity, 0.5, 500, 1500),
+          animateView(opacity, 0, 500, 2000),
         ]).start()
       }, [highlight])
 
