@@ -104,11 +104,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
   }
 
   const handlePress = () => {
-    if (numberOfVisibleLines < 4 && onPress) {
-      onPress()
-    } else {
-      onToggleExpand()
-    }
+    onPress ? onPress() : onToggleExpand()
   }
 
   return (
