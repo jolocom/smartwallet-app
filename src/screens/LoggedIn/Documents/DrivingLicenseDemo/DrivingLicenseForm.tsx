@@ -136,7 +136,7 @@ export const DrivingLicenseForm = () => {
             return (
               <FormFieldContainer key={request.name}>
                 <InputBlock
-                  placeholder={request.description}
+                  placeholder={t('mdl.drivingLicenseNumber')}
                   value={inputs[request.name]}
                   updateInput={(val) => {
                     setInputs((prev) => ({ ...prev, [request.name]: val }))
