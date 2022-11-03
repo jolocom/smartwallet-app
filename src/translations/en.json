@@ -623,6 +623,7 @@
         "successToastMsg": "Driver License was shared successfully",
         "drivingPrivileges": "Driving Privileges",
         "drivingLicenseNumber": "Driving License Number",
-        "issueMdl": "Issue mdl"
+        "issueMdl": "Issue mdl",
+        "mdl.authenticate": "We need to authenticate you for the Driving License"
     }
 }

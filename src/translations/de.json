@@ -623,6 +623,7 @@
         "successToastMsg": "",
         "drivingPrivileges": "Fahrerlaubnisklassen",
         "drivingLicenseNumber": "Führerscheinnummer",
-        "issueMdl": "Mdl ausstellen"
+        "issueMdl": "Mobilen Führerschein ausstellen",
+        "mdl.authenticate": "Bitte authentifizieren Sie sich für den digitalen Führerschein"
     }
 }
