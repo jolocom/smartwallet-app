@@ -624,6 +624,7 @@
         "drivingPrivileges": "Fahrerlaubnisklassen",
         "drivingLicenseNumber": "Führerscheinnummer",
         "issueMdl": "Mobilen Führerschein ausstellen",
-        "mdl.authenticate": "Bitte authentifizieren Sie sich für den digitalen Führerschein"
+        "authenticationTitle": "Biometrische Authentifizierung",
+        "authenticationSubtitle": "Bitte authentifizieren Sie sich für den digitalen Führerschein"
     }
 }

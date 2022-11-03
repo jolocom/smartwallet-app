@@ -624,6 +624,7 @@
         "drivingPrivileges": "Driving Privileges",
         "drivingLicenseNumber": "Driving License Number",
         "issueMdl": "Issue mdl",
-        "mdl.authenticate": "We need to authenticate you for the Driving License"
+        "authenticationTitle": "Biometry Authentication",
+        "authenticationSubtitle": "We need to authenticate you for the Driving License"
     }
 }
