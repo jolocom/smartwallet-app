@@ -626,7 +626,7 @@
         "issueMdl": "mDL ausstellen",
         "authenticationTitle": "Biometrische Authentifizierung",
         "authenticationSubtitle": "Bitte authentifizieren Sie sich für den digitalen Führerschein",
-        "existingDocumentTitle": "You already have a Driving License document",
+        "existingDocumentTitle": "Sind Sie sich sicher?",
         "existingDocumentDescription": "Sie besitzen bereits einen mobilen Führerschein",
         "existingDocumentBtn": "hier"
     }
