@@ -9838,6 +9838,11 @@ react-native-dash@^0.0.11:
     prop-types "^15.5.10"
     react-native-measureme "0.0.2"
 
+react-native-device-info@^10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.3.0.tgz#6bab64d84d3415dd00cc446c73ec5e2e61fddbe7"
+  integrity sha512-/ziZN1sA1REbJTv5mQZ4tXggcTvSbct+u5kCaze8BmN//lbxcTvWsU6NQd4IihLt89VkbX+14IGc9sVApSxd/w==
+
 react-native-dotenv@^3.3.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.3.1.tgz#8f399cf28ca77d860d8e7f7323e439fa60a8ca0b"
@@ -9988,10 +9993,15 @@ react-native-nfc-manager@3.11.0:
   dependencies:
     "@expo/config-plugins" "^3.0.6"
 
-react-native-permissions@^2.0.2, react-native-permissions@^2.1.5:
+react-native-permissions@^2.0.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-2.2.2.tgz#3d2a63f6b7d6be52fc86e30f77412a9566283028"
   integrity sha512-ihf4shQDSX5Oo9ChQXb9kr13mmyyNem5MaEvOpr3dCjhBOBWyEMztXm9/uPK1Qg5PsNpaYLa1KpcPZDCw87LXg==
+
+react-native-permissions@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.6.1.tgz#73adcc1cef8cd57a9ef167b4507405f4ff5749c4"
+  integrity sha512-fzPpPQXeD34inUccqtoResSwYubfrwUguP4qrVUUv8+KSMjYSaHGoS5HaIJLZHlN9gO+TvLJZ2L5ZljTsb6qnQ==
 
 "react-native-privacy-snapshot@https://github.com/jolocom/react-native-privacy-snapshot.git#develop":
   version "1.0.0"

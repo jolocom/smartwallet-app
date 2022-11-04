@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import { useRef } from 'react'
 //@ts-expect-error
+import { Platform } from 'react-native'
 import { BluetoothStatus } from 'react-native-bluetooth-status'
+import DeviceInfo from 'react-native-device-info'
 import { CredentialMetadataSummary } from 'react-native-jolocom'
 import DrivingLicenseSDK, {
   DrivingLicenseData,
@@ -12,7 +14,10 @@ import DrivingLicenseSDK, {
   PersonalizationInputRequest,
   PersonalizationInputResponse,
 } from 'react-native-mdl'
-import Permissions from 'react-native-permissions'
+import Permissions, {
+  PERMISSIONS,
+  PermissionStatus,
+} from 'react-native-permissions'
 import { useDispatch } from 'react-redux'
 import { useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
@@ -30,7 +35,7 @@ export const useDrivingLicense = () => {
   const { t } = useTranslation()
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
-  const { scheduleErrorWarning, scheduleWarning, scheduleInfo } = useToasts()
+  const { scheduleErrorWarning, scheduleWarning, scheduleSuccess } = useToasts()
   const dispatch = useDispatch()
   const goBack = useGoBack()
   const redirect = useRedirect()
@@ -176,10 +181,18 @@ export const useDrivingLicense = () => {
     return sdk.deleteDrivingLicense().catch(scheduleErrorWarning)
   }
 
-  const shareDrivingLicense = () => {
+  const shareDrivingLicense = async () => {
     BluetoothStatus.state().then((isEnabled: boolean) => {
       if (isEnabled) {
-        redirect(ScreenNames.DrivingLicenseShare)
+        checkBluetoothPermissions().then((status) => {
+          if (status !== 'granted') {
+            scheduleErrorWarning(
+              new Error('Bluetooth permissions not granted: ' + status),
+            )
+          } else {
+            redirect(ScreenNames.DrivingLicenseShare)
+          }
+        })
       } else {
         scheduleWarning({
           title: t('mdl.bluetoothWarningTitle'),
@@ -212,7 +225,7 @@ export const useDrivingLicense = () => {
           )
           break
         case EngagementStateNames.ended:
-          scheduleInfo({
+          scheduleSuccess({
             title: t('Toasts.ausweisSuccessTitle'),
             message: t('mdl.successToastMsg'),
           })
@@ -268,6 +281,17 @@ export const useDrivingLicense = () => {
 
   const prepareDeviceEngagement = async () => {
     return sdk.prepareDeviceEngagement()
+  }
+
+  const checkBluetoothPermissions = async (): Promise<PermissionStatus> => {
+    const apiLevel = await DeviceInfo.getApiLevel()
+    const isAndroid = Platform.OS === 'android'
+
+    if (isAndroid && apiLevel >= 31) {
+      return Permissions.check(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT)
+    }
+
+    return Promise.resolve('granted')
   }
 
   return {
