@@ -86,50 +86,61 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const checkLayoutCase = (...args: Boolean[]) => args.every((arg) => arg)
 
+    const isBackground = Boolean(backgroundImage || backgroundColor)
+
     const calculateMaxRows = useCallback(() => {
       const isBackgroundImage = Boolean(backgroundImage)
       const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
       const isHolderName = Boolean(holderName)
       const isFooterIcons = Boolean(hasImageFields || icons?.length)
+      const isPhoto = Boolean(photo)
 
       if (
         checkLayoutCase(
-          isBackgroundImage || isBackgroundColor,
-          isHolderName,
-          !isFooterIcons,
+          isBackground && (isHolderName || isPhoto) && isFooterIcons,
+        )
+      ) {
+        return 2
+      } else if (
+        checkLayoutCase(
+          isBackground && (isHolderName || isPhoto) && !isFooterIcons,
         )
       ) {
         return 3
       } else if (
-        checkLayoutCase(isBackgroundImage || isBackgroundColor, isHolderName)
+        checkLayoutCase(
+          isBackground && !isHolderName && !isPhoto && isFooterIcons,
+        )
       ) {
-        return 2
+        return 3
       } else if (
-        checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isFooterIcons)
+        checkLayoutCase(
+          isBackground && !isHolderName && !isPhoto && !isFooterIcons,
+        )
       ) {
         return 4
       } else if (
-        checkLayoutCase(!isBackgroundColor, !isBackgroundImage, isHolderName)
-      ) {
-        return 3
-      } else if (
         checkLayoutCase(
-          isBackgroundColor || isBackgroundImage,
-          !isHolderName,
-          !photo,
+          !isBackground && !isHolderName && !isPhoto && !isFooterIcons,
         )
       ) {
-        return 3
+        return 5
       } else if (
         checkLayoutCase(
-          isBackgroundColor || isBackgroundImage,
-          !isHolderName,
-          photo,
+          !isBackground && !isHolderName && !isPhoto && isFooterIcons,
         )
       ) {
-        return 2
+        return 4
       } else if (
-        checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
+        checkLayoutCase(
+          !isBackground && (isHolderName || isPhoto) && !isFooterIcons,
+        )
+      ) {
+        return 4
+      } else if (
+        checkLayoutCase(
+          !isBackground && (isHolderName || isPhoto) && isFooterIcons,
+        )
       ) {
         return 3
       } else {
@@ -138,6 +149,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     }, [holderName, backgroundColor, backgroundImage, holderNameLines])
 
     const maxRows = calculateMaxRows()
+
     const maxLinesPerField =
       isCredentialNameScaled && holderNameLines === 2 ? 4 : 5
 
@@ -146,8 +158,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       originalWidth: ORIGINAL_DOCUMENT_CARD_WIDTH,
       originalScreenWidth: ORIGINAL_DOCUMENT_SCREEN_WIDTH,
     }
-
-    const isBackground = Boolean(backgroundImage || backgroundColor)
 
     const getFieldsTopDistance = () => {
       let distance = 0
