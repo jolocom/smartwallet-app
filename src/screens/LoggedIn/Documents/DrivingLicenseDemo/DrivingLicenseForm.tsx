@@ -58,11 +58,9 @@ export const DrivingLicenseForm = () => {
   const serviceName = 'Bundesdruckerei'
   const serviceUrl = 'https://www.jolocom.io'
   const source = 'https://avatars0.githubusercontent.com/u/4603324?s=200&v=4'
-  const widgetValue = 'Driving License Number'
   const title = 'Führerschein'
   const description =
     'Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten'
-  const issueMdl = 'Issue mdl'
 
   const handleSubmit = async () => {
     const responses: PersonalizationInputResponse[] = Object.entries(
@@ -98,7 +96,7 @@ export const DrivingLicenseForm = () => {
             <Space />
             <Widget onAdd={toggleBottomSheet}>
               <Widget.Header>
-                <Widget.Header.Name value={widgetValue} />
+                <Widget.Header.Name value={t('mdl.drivingLicenseNumber')} />
               </Widget.Header>
               {drivingLicenseNumber ? (
                 <Field.Editable
@@ -117,7 +115,7 @@ export const DrivingLicenseForm = () => {
               submitLabel={
                 !drivingLicenseNumber
                   ? t('CredentialShare.singleMissingAcceptBtn')
-                  : issueMdl
+                  : t('mdl.issueMdl')
               }
               onCancel={goBack}
               isSubmitDisabled={!drivingLicenseNumber}
@@ -136,7 +134,7 @@ export const DrivingLicenseForm = () => {
             return (
               <FormFieldContainer key={request.name}>
                 <InputBlock
-                  placeholder={request.description}
+                  placeholder={t('mdl.drivingLicenseNumber')}
                   value={inputs[request.name]}
                   updateInput={(val) => {
                     setInputs((prev) => ({ ...prev, [request.name]: val }))

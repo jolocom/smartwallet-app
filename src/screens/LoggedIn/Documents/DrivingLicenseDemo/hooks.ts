@@ -42,7 +42,10 @@ export const useDrivingLicense = () => {
   const { toDocument } = useInitDocuments()
 
   const initDrivingLicense = async () => {
-    await sdk.init()
+    await sdk.init(
+      t('mdl.authenticationTitle'),
+      t('mdl.authenticationSubtitle'),
+    )
   }
 
   const createDrivingLicenseVC = async (

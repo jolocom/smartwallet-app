@@ -621,6 +621,13 @@
         "shareHeader": "Share Driving License",
         "shareMenu": "Share via QR Code",
         "successToastMsg": "Driver License was shared successfully",
-        "drivingPrivileges": "Driving Privileges"
+        "drivingPrivileges": "Driving Privileges",
+        "drivingLicenseNumber": "Driving License Number",
+        "issueMdl": "Issue mdl",
+        "authenticationTitle": "Biometry Authentication",
+        "authenticationSubtitle": "We need to authenticate you for the Driving License",
+        "existingDocumentTitle": "Are you sure about this?",
+        "existingDocumentDescription": "You already have a Driving License document",
+        "existingDocumentBtn": "right here"
     }
 }
