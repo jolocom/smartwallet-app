@@ -92,7 +92,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       const isHolderName = Boolean(holderName)
       const isFooterIcons = Boolean(hasImageFields || icons?.length)
       const isPhoto = Boolean(photo)
-      const isNameOrPhoto = isPhoto && isHolderName
+      const isNameOrPhoto = isPhoto || isHolderName
 
       if (checkLayoutCase(isBackground, isNameOrPhoto, isFooterIcons)) {
         return 2
