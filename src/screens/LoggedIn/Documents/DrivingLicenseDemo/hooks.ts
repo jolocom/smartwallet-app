@@ -10,11 +10,11 @@ import DrivingLicenseSDK, {
   EngagementState,
   EngagementStateNames,
   PersonalizationInputRequest,
-  PersonalizationInputResponse,
+  PersonalizationInputResponse
 } from 'react-native-mdl'
 import Permissions from 'react-native-permissions'
 import { useDispatch } from 'react-redux'
-import { useInitDocuments } from '~/hooks/documents'
+import { useDocuments, useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
@@ -23,7 +23,7 @@ import { addCredentials } from '~/modules/credentials/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { ScreenNames } from '~/types/screens'
-import { makeMdlManifest, mdlMetadata } from './data'
+import { makeMdlManifest, mdlMetadata, MDL_CREDENTIAL_TYPE } from './data'
 import { utf8ToBase64Image } from './utils'
 
 export const useDrivingLicense = () => {
@@ -35,9 +35,14 @@ export const useDrivingLicense = () => {
   const goBack = useGoBack()
   const redirect = useRedirect()
   const { toDocument } = useInitDocuments()
+  const { getDocumentByType } = useDocuments()
 
   const initDrivingLicense = async () => {
     await sdk.init()
+  }
+
+  const getDrivingLicense = () => {
+    return getDocumentByType(MDL_CREDENTIAL_TYPE)
   }
 
   const createDrivingLicenseVC = async (
@@ -91,6 +96,21 @@ export const useDrivingLicense = () => {
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
+    const existindMdlDocument = getDrivingLicense()
+
+    if (existindMdlDocument) {
+      return scheduleInfo({
+        title: t('mdl.existingDocumentTitle'),
+        message: t('mdl.existingDocumentDescription'),
+        interact: {
+          label: t('mdl.existingDocumentBtn'),
+          onInteract: () => {
+            redirect(ScreenNames.Documents)
+          },
+        },
+      })
+    }
+
     sdk.startPersonalization(qrString)
 
     const requestHandler = (request: string | PersonalizationInputRequest) => {
@@ -279,5 +299,6 @@ export const useDrivingLicense = () => {
     shareDrivingLicense,
     prepareDeviceEngagement,
     prepareEngagementEvents,
+    getDrivingLicense,
   }
 }
