@@ -89,8 +89,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     const isBackground = Boolean(backgroundImage || backgroundColor)
 
     const calculateMaxRows = useCallback(() => {
-      const isBackgroundImage = Boolean(backgroundImage)
-      const isBackgroundColor = Boolean(backgroundColor) && !isBackgroundImage
       const isHolderName = Boolean(holderName)
       const isFooterIcons = Boolean(hasImageFields || icons?.length)
       const isPhoto = Boolean(photo)
