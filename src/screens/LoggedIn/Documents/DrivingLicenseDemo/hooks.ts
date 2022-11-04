@@ -35,7 +35,12 @@ export const useDrivingLicense = () => {
   const { t } = useTranslation()
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
-  const { scheduleErrorWarning, scheduleWarning, scheduleSuccess } = useToasts()
+  const {
+    scheduleErrorWarning,
+    scheduleWarning,
+    scheduleSuccess,
+    scheduleInfo,
+  } = useToasts()
   const dispatch = useDispatch()
   const goBack = useGoBack()
   const redirect = useRedirect()
