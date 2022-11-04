@@ -113,9 +113,21 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       ) {
         return 3
       } else if (
-        checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
+        checkLayoutCase(
+          isBackgroundColor || isBackgroundImage,
+          !isHolderName,
+          !photo,
+        )
       ) {
         return 3
+      } else if (
+        checkLayoutCase(
+          isBackgroundColor || isBackgroundImage,
+          !isHolderName,
+          photo,
+        )
+      ) {
+        return 2
       } else if (
         checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
       ) {
