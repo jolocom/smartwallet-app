@@ -215,8 +215,6 @@ export const useDrivingLicense = () => {
           ? (JSON.parse(state) as EngagementState)
           : state
 
-      console.log({ state })
-
       switch (jsonState.name) {
         case EngagementStateNames.started:
           dispatch(
