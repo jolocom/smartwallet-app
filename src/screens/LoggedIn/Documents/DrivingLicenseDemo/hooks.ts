@@ -10,7 +10,7 @@ import DrivingLicenseSDK, {
   EngagementState,
   EngagementStateNames,
   PersonalizationInputRequest,
-  PersonalizationInputResponse
+  PersonalizationInputResponse,
 } from 'react-native-mdl'
 import Permissions from 'react-native-permissions'
 import { useDispatch } from 'react-redux'
@@ -171,11 +171,11 @@ export const useDrivingLicense = () => {
         requestHandler,
       )
       sdk.emitter.removeListener(
-        DrivingLicenseEvents.personalizationRequests,
+        DrivingLicenseEvents.personalizationSuccess,
         successHandler,
       )
       sdk.emitter.removeListener(
-        DrivingLicenseEvents.personalizationRequests,
+        DrivingLicenseEvents.personalizationError,
         errorHandler,
       )
       sdk.emitter.removeListener(DrivingLicenseEvents.log, logHandler)
