@@ -19,7 +19,7 @@ import Permissions, {
   PermissionStatus,
 } from 'react-native-permissions'
 import { useDispatch } from 'react-redux'
-import { useInitDocuments } from '~/hooks/documents'
+import { useDocuments, useInitDocuments } from '~/hooks/documents'
 import { useGoBack, useRedirect } from '~/hooks/navigation'
 import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
@@ -28,24 +28,34 @@ import { addCredentials } from '~/modules/credentials/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { ScreenNames } from '~/types/screens'
-import { makeMdlManifest, mdlMetadata } from './data'
+import { makeMdlManifest, mdlMetadata, MDL_CREDENTIAL_TYPE } from './data'
 import { utf8ToBase64Image } from './utils'
 
 export const useDrivingLicense = () => {
   const { t } = useTranslation()
   const agent = useAgent()
   const sdk = useRef(new DrivingLicenseSDK()).current
-  const { scheduleErrorWarning, scheduleWarning, scheduleSuccess } = useToasts()
+  const {
+    scheduleErrorWarning,
+    scheduleWarning,
+    scheduleSuccess,
+    scheduleInfo,
+  } = useToasts()
   const dispatch = useDispatch()
   const goBack = useGoBack()
   const redirect = useRedirect()
   const { toDocument } = useInitDocuments()
+  const { getDocumentByType } = useDocuments()
 
   const initDrivingLicense = async () => {
     await sdk.init(
       t('mdl.authenticationTitle'),
       t('mdl.authenticationSubtitle'),
     )
+  }
+
+  const getDrivingLicense = () => {
+    return getDocumentByType(MDL_CREDENTIAL_TYPE)
   }
 
   const createDrivingLicenseVC = async (
@@ -99,6 +109,21 @@ export const useDrivingLicense = () => {
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
+    const existindMdlDocument = getDrivingLicense()
+
+    if (existindMdlDocument) {
+      return scheduleInfo({
+        title: t('mdl.existingDocumentTitle'),
+        message: t('mdl.existingDocumentDescription'),
+        interact: {
+          label: t('mdl.existingDocumentBtn'),
+          onInteract: () => {
+            redirect(ScreenNames.Documents)
+          },
+        },
+      })
+    }
+
     sdk.startPersonalization(qrString)
 
     const requestHandler = (request: string | PersonalizationInputRequest) => {
@@ -159,11 +184,11 @@ export const useDrivingLicense = () => {
         requestHandler,
       )
       sdk.emitter.removeListener(
-        DrivingLicenseEvents.personalizationRequests,
+        DrivingLicenseEvents.personalizationSuccess,
         successHandler,
       )
       sdk.emitter.removeListener(
-        DrivingLicenseEvents.personalizationRequests,
+        DrivingLicenseEvents.personalizationError,
         errorHandler,
       )
       sdk.emitter.removeListener(DrivingLicenseEvents.log, logHandler)
@@ -306,5 +331,6 @@ export const useDrivingLicense = () => {
     shareDrivingLicense,
     prepareDeviceEngagement,
     prepareEngagementEvents,
+    getDrivingLicense,
   }
 }

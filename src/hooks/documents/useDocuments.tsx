@@ -4,7 +4,7 @@ import { deleteCredential } from '~/modules/credentials/actions'
 import {
   getAllDocuments,
   getExpiredDocuments,
-  getValidDocuments,
+  getValidDocuments
 } from '~/modules/credentials/selectors'
 import { SpecialDocumentKeys } from '~/types/credentials'
 import { useAgent } from '../sdk'
@@ -35,6 +35,10 @@ export const useDocuments = () => {
 
   const getDocumentById = (id: string) => {
     return documents.find((d) => d.id === id)
+  }
+
+  const getDocumentByType = (type: string) => {
+    return documents.find((d) => d.type.includes(type))
   }
 
   const getHolderName = (doc: Document) => {
@@ -122,6 +126,7 @@ export const useDocuments = () => {
     validDocuments,
     deleteDocument,
     getDocumentById,
+    getDocumentByType,
     getHolderName,
     getHolderPhoto,
     hasImageProperties,
