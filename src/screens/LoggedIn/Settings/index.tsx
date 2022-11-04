@@ -1,27 +1,26 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useCallback } from 'react'
 import { Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 
-import { useToasts } from '~/hooks/toasts'
+import Btn, { BtnTypes } from '~/components/Btn'
 import ScreenContainer from '~/components/ScreenContainer'
-import { ScreenNames } from '~/types/screens'
-import { resetAccount } from '~/modules/account/actions'
-import { useResetKeychainValues } from '~/hooks/deviceAuth'
-import Section from './components/Section'
-import Option from './components/Option'
-import DevelopmentSection from './Development'
-import EnableBiometryOption from './EnableBiometryOption'
 import { useBiometry } from '~/hooks/biometry'
+import { useResetKeychainValues } from '~/hooks/deviceAuth'
 import useMarketRating from '~/hooks/rateus'
 import { StorageKeys } from '~/hooks/sdk'
-import ClearIdentityBtn from './components/ClearIdentityBtn'
-import Btn, { BtnTypes } from '~/components/Btn'
-import useTranslation from '~/hooks/useTranslation'
-import EnableScreenshotsOption from './EnableScreenshotsOption'
 import useSettings from '~/hooks/settings'
-import MnemonicPhraseWarning from './MnemonicPhraseWarning'
+import { useToasts } from '~/hooks/toasts'
+import useTranslation from '~/hooks/useTranslation'
+import { resetAccount } from '~/modules/account/actions'
+import { ScreenNames } from '~/types/screens'
+import ClearIdentityBtn from './components/ClearIdentityBtn'
+import Option from './components/Option'
+import Section from './components/Section'
+import DevelopmentSection from './Development'
+import EnableBiometryOption from './EnableBiometryOption'
+import EnableScreenshotsOption from './EnableScreenshotsOption'
 
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
@@ -85,7 +84,6 @@ const SettingsGeneral: React.FC = () => {
 
         <Section>
           <Section.Title>{t('Settings.securitySection')}</Section.Title>
-          <MnemonicPhraseWarning />
           <Section.Block>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
