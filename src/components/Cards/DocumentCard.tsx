@@ -115,7 +115,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       } else if (
         checkLayoutCase(isBackgroundColor || isBackgroundImage, !isHolderName)
       ) {
-        return isFooterIcons ? 2 : 3
+        return 3
       } else if (
         checkLayoutCase(!isBackgroundColor, !isBackgroundImage, !isHolderName)
       ) {
