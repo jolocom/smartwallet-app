@@ -92,38 +92,31 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       const isHolderName = Boolean(holderName)
       const isFooterIcons = Boolean(hasImageFields || icons?.length)
       const isPhoto = Boolean(photo)
+      const isNameOrPhoto = isPhoto && isHolderName
 
-      if (
-        checkLayoutCase(isBackground, isHolderName || isPhoto, isFooterIcons)
-      ) {
+      if (checkLayoutCase(isBackground, isNameOrPhoto, isFooterIcons)) {
         return 2
-      } else if (
-        checkLayoutCase(isBackground, isHolderName || isPhoto, !isFooterIcons)
-      ) {
+      } else if (checkLayoutCase(isBackground, isNameOrPhoto, !isFooterIcons)) {
+        return 3
+      } else if (checkLayoutCase(isBackground, !isNameOrPhoto, isFooterIcons)) {
         return 3
       } else if (
-        checkLayoutCase(isBackground, !isHolderName, !isPhoto, isFooterIcons)
-      ) {
-        return 3
-      } else if (
-        checkLayoutCase(isBackground, !isHolderName, !isPhoto, !isFooterIcons)
+        checkLayoutCase(isBackground, !isNameOrPhoto, !isFooterIcons)
       ) {
         return 4
       } else if (
-        checkLayoutCase(!isBackground, !isHolderName, !isPhoto, !isFooterIcons)
+        checkLayoutCase(!isBackground, !isNameOrPhoto, !isFooterIcons)
       ) {
         return 5
       } else if (
-        checkLayoutCase(!isBackground, !isHolderName, !isPhoto, isFooterIcons)
+        checkLayoutCase(!isBackground, !isNameOrPhoto, isFooterIcons)
       ) {
         return 4
       } else if (
-        checkLayoutCase(!isBackground, isHolderName || isPhoto, !isFooterIcons)
+        checkLayoutCase(!isBackground, isNameOrPhoto, !isFooterIcons)
       ) {
         return 4
-      } else if (
-        checkLayoutCase(!isBackground, isHolderName || isPhoto, isFooterIcons)
-      ) {
+      } else if (checkLayoutCase(!isBackground, isNameOrPhoto, isFooterIcons)) {
         return 3
       } else {
         return 0
