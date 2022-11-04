@@ -7,8 +7,8 @@ target 'SmartWallet' do
   # Pods for SmartWallet
   pod 'RNGestureHandler', :podspec => '../node_modules/react-native-gesture-handler/RNGestureHandler.podspec'
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-  pod 'Permission-Notifications', :path => "../node_modules/react-native-permissions/ios/Notifications.podspec"
-  pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera.podspec"
+  pod 'Permission-Notifications', :path => "../node_modules/react-native-permissions/ios/Notifications/Permission-Notifications.podspec"
+  pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera/Permission-Camera.podspec"
 
   # NOTE: this is needed to enable "modular_headers" for JolocomCore!
   # otherwise we would have to use "use_frameworks!"
