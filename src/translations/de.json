@@ -606,9 +606,9 @@
         "canceledLoader": "Die Datenübertragen wurde abgebrochen. Bitte versuchen Sie es erneut.",
         "errorLoader": "Die Datenübertragung war nicht erfolgreich!",
         "personalizationLoader": "Führerscheindaten hinzufügen",
-        "bluetoothWarningTitle": "",
-        "bluetoothWarningMessage": "",
-        "bluetoothWarningBtn": "",
+        "bluetoothWarningTitle": "Bluetooth Fehler",
+        "bluetoothWarningMessage": "Um Ihren Führerschein zu teilen wird Bluetooth benötigt. Bitte aktivieren Sie Bluetooth oder nutzen Sie ein Gerät welches Bluetooth unterstützt.",
+        "bluetoothWarningBtn": "Einstellungen",
         "vehicleCode": "Fahrerlaubnisklassen",
         "issueDate": "Ausstellungsdatum",
         "expiryDate": "Ablaufdatum",
@@ -620,11 +620,14 @@
         "tractorAndForklift": "Traktor und Gabelstapler",
         "shareHeader": "Digitalen Führerschein teilen",
         "shareMenu": "Per QR Code teilen",
-        "successToastMsg": "",
+        "successToastMsg": "Führerschein wurde erfolgreich geteilt",
         "drivingPrivileges": "Fahrerlaubnisklassen",
         "drivingLicenseNumber": "Führerscheinnummer",
-        "issueMdl": "Mobilen Führerschein ausstellen",
+        "issueMdl": "mDL ausstellen",
         "authenticationTitle": "Biometrische Authentifizierung",
-        "authenticationSubtitle": "Bitte authentifizieren Sie sich für den digitalen Führerschein"
+        "authenticationSubtitle": "Bitte authentifizieren Sie sich für den digitalen Führerschein",
+        "existingDocumentTitle": "You already have a Driving License document",
+        "existingDocumentDescription": "Sie besitzen bereits einen mobilen Führerschein",
+        "existingDocumentBtn": "hier"
     }
 }

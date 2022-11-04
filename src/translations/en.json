@@ -625,6 +625,9 @@
         "drivingLicenseNumber": "Driving License Number",
         "issueMdl": "Issue mdl",
         "authenticationTitle": "Biometry Authentication",
-        "authenticationSubtitle": "We need to authenticate you for the Driving License"
+        "authenticationSubtitle": "We need to authenticate you for the Driving License",
+        "existingDocumentTitle": "Are you sure about this?",
+        "existingDocumentDescription": "You already have a Driving License document",
+        "existingDocumentBtn": "right here"
     }
 }
