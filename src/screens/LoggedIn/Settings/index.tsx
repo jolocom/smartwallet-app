@@ -21,7 +21,6 @@ import Section from './components/Section'
 import DevelopmentSection from './Development'
 import EnableBiometryOption from './EnableBiometryOption'
 import EnableScreenshotsOption from './EnableScreenshotsOption'
-import useSettings from '~/hooks/settings'
 
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
