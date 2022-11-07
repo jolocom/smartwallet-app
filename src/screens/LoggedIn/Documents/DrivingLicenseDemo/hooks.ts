@@ -163,7 +163,7 @@ export const useDrivingLicense = () => {
       }
       jsonError?.name
         ? scheduleErrorWarning(new Error(jsonError.name))
-        : scheduleErrorWarning(new Error('Hoppala'))
+        : scheduleErrorWarning(new Error('Error personalizing mdl'))
     }
 
     sdk.emitter.addListener(
