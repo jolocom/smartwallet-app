@@ -3,7 +3,6 @@ import { useCompleteInteraction } from './useCompleteInteraction'
 import { useAgent } from '../sdk'
 import { ScreenNames } from '~/types/screens'
 import { useRedirect } from '../navigation'
-import History from '~/screens/LoggedIn/History'
 
 const useAuthSubmit = () => {
   const getInteraction = useInteraction()

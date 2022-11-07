@@ -63,14 +63,12 @@ const RecordItemsList: React.FC<IRecordItemsListProps> = ({
 
   useInteractionCreate((interaction) => {
     if (shouldUpdateRecords(interaction, flows)) {
-      setFocusedItem(interaction.id)
       setInteractions((prev) => createInteractionRecord(interaction, prev))
     }
   })
 
   useInteractionUpdate((interaction) => {
     if (shouldUpdateRecords(interaction, flows)) {
-      setFocusedItem(interaction.id)
       setInteractions((prev) => updateInteractionRecord(interaction, prev))
     }
   })
