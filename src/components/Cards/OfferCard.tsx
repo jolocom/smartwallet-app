@@ -66,7 +66,8 @@ const OfferCard: React.FC<Props> = ({
           isInteracting={true}
         />
         <ScaledView
-          scaleStyle={{ flexDirection: 'row', flex: 1, marginTop: 4 }}
+          style={{ flexDirection: 'row', flex: 1 }}
+          scaleStyle={{ marginTop: 4 }}
         >
           <View style={{ flex: 1 }}>
             <View style={{ width: '100%', flex: 1 }}>
@@ -95,10 +96,12 @@ const OfferCard: React.FC<Props> = ({
               </View>
             </View>
             <ScaledView
-              scaleStyle={{
+              style={{
                 flex: 0.3,
                 justifyContent: 'flex-end',
                 alignItems: 'flex-end',
+              }}
+              scaleStyle={{
                 paddingHorizontal: 8,
                 bottom: -8,
               }}

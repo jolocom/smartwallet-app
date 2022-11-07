@@ -87,8 +87,8 @@ const ShareCard: React.FC<Props> = ({
             />
           </View>
           <ScaledView
+            style={{ flex: 0.5 }}
             scaleStyle={{
-              flex: 0.5,
               bottom: (backgroundColor || backgroundImage) && 20,
             }}
           >
