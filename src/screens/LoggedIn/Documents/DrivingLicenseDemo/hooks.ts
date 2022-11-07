@@ -213,7 +213,7 @@ export const useDrivingLicense = () => {
     BluetoothStatus.state().then((isEnabled: boolean) => {
       if (isEnabled) {
         checkBluetoothPermissions().then((status) => {
-          if (status !== 'granted') {
+          if (Object.values(status).some((st) => st !== 'granted')) {
             scheduleErrorWarning(
               new Error('Bluetooth permissions not granted: ' + status),
             )
@@ -311,15 +311,21 @@ export const useDrivingLicense = () => {
     return sdk.prepareDeviceEngagement()
   }
 
-  const checkBluetoothPermissions = async (): Promise<PermissionStatus> => {
+  const checkBluetoothPermissions = async (): Promise<
+    Record<string, PermissionStatus>
+  > => {
     const apiLevel = await DeviceInfo.getApiLevel()
     const isAndroid = Platform.OS === 'android'
 
     if (isAndroid && apiLevel >= 31) {
-      return Permissions.check(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT)
+      return Permissions.requestMultiple([
+        PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+        PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
+        PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+      ])
     }
 
-    return Promise.resolve('granted')
+    return Promise.resolve({ all: 'granted' })
   }
 
   return {
