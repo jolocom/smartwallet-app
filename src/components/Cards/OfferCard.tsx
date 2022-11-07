@@ -4,9 +4,9 @@ import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
-import ScaledCard, { ScaledText } from './ScaledCard'
+import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
-import { DocumentProperty } from '~/hooks/documents/types'
+import { DocumentProperty, Document } from '~/hooks/documents/types'
 import { DocumentFields, DocumentHeader } from './components'
 import {
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
@@ -15,8 +15,10 @@ import {
 
 interface Props {
   credentialName: string
+  styles: Document['style']
   issuerIcon?: string
-  fields: DocumentProperty[]
+  fields: Omit<DocumentProperty, 'value'>[]
+  numberOfFields: number
   selected?: boolean
   style?: StyleProp<ViewStyle>
 }
@@ -26,6 +28,8 @@ const OfferCard: React.FC<Props> = ({
   fields,
   selected,
   issuerIcon,
+  numberOfFields,
+  styles,
   style = {},
 }) => {
   const { t } = useTranslation()
@@ -36,7 +40,7 @@ const OfferCard: React.FC<Props> = ({
     setNrDisplayFields(fields.length)
   }
 
-  const nrLeftFields = fields.length - nrDisplayedFields
+  const nrLeftFields = numberOfFields - nrDisplayedFields
 
   return (
     <ScaledCard
@@ -57,51 +61,68 @@ const OfferCard: React.FC<Props> = ({
           name={credentialName}
           icon={issuerIcon}
           selected={selected}
+          backgroundColor={styles.backgroundColor}
+          backgroundImage={styles.backgroundImage}
+          isInteracting={true}
         />
-        <View style={{ flexDirection: 'row', flex: 1 }}>
+        <ScaledView
+          style={{ flexDirection: 'row', flex: 1 }}
+          scaleStyle={{ marginTop: 4 }}
+        >
           <View style={{ flex: 1 }}>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <DocumentFields
-                fields={fields}
-                maxRows={maxRows}
-                maxLines={1}
-                rowDistance={8}
-                fieldCharacterLimit={12}
-                labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
-                valueScaledStyle={{
-                  fontSize: 18,
-                  lineHeight: 20,
-                  height: 20,
-                  borderRadius: 5,
-                  backgroundColor: Colors.alto,
-                  // NOTE: without this iOS doesn't apply the borderRadius (for text)
-                  overflow: 'hidden',
-                }}
-                nrOfColumns={2}
-                onFinishCalculation={handleDisplayedFields}
-                allowOverflowingFields={false}
-                hideFieldValues={true}
-              />
+            <View style={{ width: '100%', flex: 1 }}>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <DocumentFields
+                  fields={fields}
+                  maxRows={maxRows}
+                  maxLines={1}
+                  rowDistance={4}
+                  fieldCharacterLimit={12}
+                  labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
+                  valueScaledStyle={{
+                    fontSize: 18,
+                    lineHeight: 20,
+                    height: 20,
+                    borderRadius: 5,
+                    backgroundColor: Colors.alto,
+                    // NOTE: without this iOS doesn't apply the borderRadius (for text)
+                    overflow: 'hidden',
+                  }}
+                  nrOfColumns={2}
+                  onFinishCalculation={handleDisplayedFields}
+                  allowOverflowingFields={true}
+                  hideFieldValues={true}
+                />
+              </View>
             </View>
+            <ScaledView
+              style={{
+                flex: 0.3,
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+              }}
+              scaleStyle={{
+                paddingHorizontal: 8,
+                bottom: -8,
+              }}
+            >
+              {Boolean(nrLeftFields) && (
+                <ScaledText
+                  style={{
+                    fontFamily: Fonts.Regular,
+                    color: Colors.slateGray,
+                  }}
+                  scaleStyle={{
+                    fontSize: 14,
+                    lineHeight: 18,
+                  }}
+                >
+                  {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
+                </ScaledText>
+              )}
+            </ScaledView>
           </View>
-          <View style={{ flex: 0.3, justifyContent: 'flex-end' }}>
-            {!!nrLeftFields && (
-              <ScaledText
-                style={{
-                  fontFamily: Fonts.Regular,
-                  color: Colors.slateGray,
-                }}
-                scaleStyle={{
-                  fontSize: 14,
-                  lineHeight: 18,
-                  marginBottom: 32,
-                }}
-              >
-                {t('CredentialOffer.nrOfFieldsLeft', { nr: nrLeftFields })}
-              </ScaledText>
-            )}
-          </View>
-        </View>
+        </ScaledView>
       </View>
     </ScaledCard>
   )

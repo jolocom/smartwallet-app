@@ -59,6 +59,8 @@ const CredentialOfferBAS = () => {
             credentialName={d.name || t('General.unknown')}
             fields={previewFields}
             issuerIcon={image}
+            styles={d.style}
+            numberOfFields={d.properties.length}
           />
         )
       })}
@@ -96,6 +98,7 @@ const CredentialOfferFAS = () => {
             credentialName={name || t('General.unknown')}
             fields={previewFields}
             issuerIcon={image}
+            styles={doc.style}
           />
         </View>
       )

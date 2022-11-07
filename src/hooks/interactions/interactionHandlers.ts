@@ -1,3 +1,4 @@
+import { CredentialManifestDisplayMapping } from '@jolocom/protocol-ts'
 import {
   AuthenticationFlowState,
   AuthorizationFlowState,
@@ -5,13 +6,17 @@ import {
   CredentialRequestFlowState,
 } from '@jolocom/sdk/js/interactionManager/types'
 
-import { FlowType, Interaction } from 'react-native-jolocom'
+import { FlowType, IdentitySummary, Interaction } from 'react-native-jolocom'
 import useTranslation from '~/hooks/useTranslation'
+import { CredOfferI } from '~/modules/interaction/types'
 import { AttributeTypes } from '~/types/credentials'
 import { getCounterpartyName } from '~/utils/dataMapping'
 import { useInitDocuments } from '../documents'
-import { DocumentsSortingType } from '../documents/types'
-import { useAgent } from '../sdk'
+import {
+  DocumentProperty,
+  DocumentsSortingType,
+  PropertyMimeType,
+} from '../documents/types'
 import { useToasts } from '../toasts'
 
 const authenticationHandler = (state: AuthenticationFlowState) => ({
@@ -24,15 +29,48 @@ const authorizationHandler = (state: AuthorizationFlowState) => ({
   imageURL: state.imageURL,
 })
 
-const credentialOfferHandler = (state: CredentialOfferFlowState) => ({
-  credentials: {
-    service_issued: state.offerSummary.map(({ type, credential }) => ({
-      type,
-      name: credential?.name ?? '',
-      properties: credential?.display?.properties || [],
-    })),
-  },
-})
+const credentialOfferHandler = (
+  state: CredentialOfferFlowState,
+  initiator: IdentitySummary,
+): Omit<CredOfferI, 'flowType' | 'id' | 'counterparty'> => {
+  return {
+    credentials: {
+      service_issued: state.offerSummary.map(({ type, credential }) => {
+        const previewKeys: string[] = []
+        const properties = credential?.display?.properties?.map(
+          ({ path, text, preview, mime_type, ...rest }) => {
+            const key = path![0].toString()
+            if (preview) {
+              previewKeys.push(key)
+            }
+            return {
+              ...rest,
+              key,
+              preview: preview ?? false,
+              mime_type: mime_type as unknown as PropertyMimeType,
+            }
+          },
+        )
+
+        return {
+          type,
+          name: credential?.name ?? '',
+          style: {
+            backgroundImage: credential?.styles?.background?.image_url?.uri,
+            backgroundColor: credential?.styles?.background?.color,
+          },
+          issuer: {
+            did: initiator.did,
+            icon: initiator.publicProfile?.image,
+            name: initiator.publicProfile?.name,
+          },
+          previewKeys: previewKeys || [],
+          properties: properties || [],
+        }
+      }),
+    },
+  }
+}
 
 /**
  * 1. Use it to check whatever logic should happen before
@@ -42,8 +80,6 @@ const credentialOfferHandler = (state: CredentialOfferFlowState) => ({
  * 2. Map interaction details to the wallet UI structure
  */
 export const useInteractionHandler = () => {
-  const agent = useAgent()
-  const { did } = agent.idw
   const { t } = useTranslation()
   const { scheduleWarning } = useToasts()
   const { queryCredentials, sortDocuments, toDocument, splitAttributes } =
@@ -71,6 +107,7 @@ export const useInteractionHandler = () => {
       case FlowType.CredentialOffer: {
         flowSpecificData = credentialOfferHandler(
           state as CredentialOfferFlowState,
+          initiator,
         )
         break
       }
