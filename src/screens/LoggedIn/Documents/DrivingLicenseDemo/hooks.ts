@@ -161,7 +161,9 @@ export const useDrivingLicense = () => {
       } else {
         jsonError = error
       }
-      scheduleErrorWarning(new Error(jsonError.name))
+      jsonError?.name
+        ? scheduleErrorWarning(new Error(jsonError.name))
+        : scheduleErrorWarning(new Error('Error personalizing mdl'))
     }
 
     sdk.emitter.addListener(
