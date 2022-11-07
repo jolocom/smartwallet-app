@@ -35,6 +35,7 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://www.jitpack.io' }
+        flatDir { dirs "$rootDir/../node_modules/react-native-mdl/android/libs" } 
     }
 }
 
