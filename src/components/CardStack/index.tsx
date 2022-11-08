@@ -46,7 +46,6 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
   useEffect(() => {
     if (prevAdded)
       expandValue.value = { itemId: prevAdded, stackId: DocumentStacks.All }
-    else return
   }, [prevAdded])
 
   // NOTE: We are converting the animated expand state to React's state to make sure the StackItem is re-rendered
