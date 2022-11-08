@@ -182,11 +182,7 @@ const Documents: React.FC = () => {
             renderItem={(c, stack, visible) => {
               const fields = getPreviewProperties(c)
 
-              const shouldHighlight =
-                highlightedCards !== undefined &&
-                highlightedCards.includes(c.id)
-                  ? true
-                  : false
+              const shouldHighlight = Boolean(highlightedCards?.includes(c.id))
 
               return (
                 <>
