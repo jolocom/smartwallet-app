@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import { SWErrorCodes } from '~/errors/codes'
 import { useToasts } from '~/hooks/toasts'
 import {
-  getDeeplinkConfig, getInteractionCounterparty
+  getDeeplinkConfig,
+  getInteractionCounterparty,
 } from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import { ToastBody } from '~/types/toasts'
@@ -29,7 +30,7 @@ export const useCompleteInteraction = (
   handleInteraction: CompleteInteraction['handleInteraction'],
 ) => {
   const { t } = useTranslation()
-  const { scheduleInfo, scheduleErrorWarning } = useToasts()
+  const { scheduleSuccess, scheduleErrorWarning } = useToasts()
   const { closeInteraction, clearInteraction } = useFinishInteraction()
   const navigation = useNavigation()
 
@@ -44,7 +45,7 @@ export const useCompleteInteraction = (
         clearInteraction()
         closeInteraction(config?.screenToNavigate)
 
-        scheduleInfo({
+        scheduleSuccess({
           title: t('Toasts.successfulInteractionTitle'),
           message: t('Toasts.successfulInteractionMsg'),
           ...config?.toastConfig,

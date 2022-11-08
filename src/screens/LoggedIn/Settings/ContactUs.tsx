@@ -153,6 +153,7 @@ const ContactUs: React.FC = () => {
             type={BtnTypes.primary}
             onPress={handleSubmit}
             disabled={!isBtnEnabled()}
+            style={{ paddingBottom: 16 }}
           >
             {t('ContactUs.submitBtn')}
           </Btn.Online>

@@ -77,7 +77,7 @@ const IdentityCredentials = () => {
               >
                 <Widget.Header>
                   {/* @ts-expect-error @TERMS */}
-                  <Widget.Header.Name value={t(label) as string} />
+                  <Widget.Header.Name value={t(label).trim() as string} />
                   {!hideCreateNew && <Widget.Header.Action.CreateNew />}
                 </Widget.Header>
                 {!isEmpty ? (

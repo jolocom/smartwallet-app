@@ -7,6 +7,7 @@ import { IJoloTextProps } from '../JoloText'
 export interface IPasscodeProps {
   onSubmit: (passcode: string, cb: () => void) => Promise<void>
   length?: number
+  reset?: boolean
 }
 
 export interface IPasscodeHeaderProps extends IJoloTextProps {
