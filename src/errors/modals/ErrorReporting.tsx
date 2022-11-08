@@ -232,6 +232,7 @@ const ErrorReporting = () => {
               type={BtnTypes.primary}
               onPress={handleSubmit}
               disabled={!isSubmitEnabled()}
+              style={{ paddingBottom: 16 }}
             >
               {t('ErrorReporting.submitBtn')}
             </Btn.Online>
