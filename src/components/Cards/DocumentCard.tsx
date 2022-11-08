@@ -1,14 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   StyleProp,
   StyleSheet,
   TouchableOpacity,
   View,
   ViewStyle,
-  Animated,
-  Easing,
 } from 'react-native'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  withSequence,
+  withDelay,
+} from 'react-native-reanimated'
 
 import { ScanDocumentIcon } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
@@ -162,31 +167,24 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     const secondaryField = showSecondaryField && fields.shift()
 
     const FadeOutView = () => {
-      const opacity = useRef(new Animated.Value(0)).current
+      const opacity = useSharedValue(0)
 
-      const animateView = (
-        animatedRef: Animated.Value,
-        toValue: number,
-        duration: number,
-        delay: number,
-      ) => {
-        return Animated.timing(animatedRef, {
-          toValue,
-          duration,
-          useNativeDriver: true,
-          easing: Easing.inOut(Easing.ease),
-          delay,
-        })
+      const animationStyle = useAnimatedStyle(() => {
+        return { opacity: opacity.value }
+      })
+
+      const startAnimation = () => {
+        opacity.value = withSequence(
+          withDelay(1500, withTiming(0.5, { duration: 500 })),
+          withDelay(2000, withTiming(0, { duration: 500 })),
+        )
       }
 
       useEffect(() => {
-        Animated.sequence([
-          animateView(opacity, 0.5, 500, 1500),
-          animateView(opacity, 0, 500, 2000),
-        ]).start()
+        startAnimation()
       }, [highlight])
 
-      return <Animated.View style={{ ...styles.overlay, opacity: opacity }} />
+      return <Animated.View style={[styles.overlay, animationStyle]} />
     }
 
     return (
