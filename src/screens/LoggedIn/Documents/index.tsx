@@ -40,7 +40,7 @@ const Documents: React.FC = () => {
   const { params } =
     useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
 
-  const prevAddedIds = params?.highlightIds || undefined
+  const prevAddedIds = params?.highlightIds
 
   const {
     documents,
