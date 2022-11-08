@@ -27,7 +27,7 @@ const useCredentialOfferSubmit = () => {
     dispatch(addCredentials(displayCredentials))
 
     return redirect(ScreenNames.Documents, {
-      ids: issuedCredentials.map((cred) => cred.id),
+      highlightIds: issuedCredentials.map((cred) => cred.id),
     })
   })
 
