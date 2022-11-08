@@ -14,5 +14,6 @@ export interface IRecordItemProps {
 
 export interface IRecordItemsListProps {
   id: string
+  itemId?: string
   flows?: FlowType[]
 }

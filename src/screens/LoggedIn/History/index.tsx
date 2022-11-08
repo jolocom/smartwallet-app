@@ -1,10 +1,13 @@
 import { FlowType } from '@jolocom/sdk'
+import { RouteProp, useRoute } from '@react-navigation/native'
 import React from 'react'
 
 import ScreenContainer from '~/components/ScreenContainer'
 import TabsContainer from '~/components/Tabs/Container'
 import Tabs from '~/components/Tabs/Tabs'
 import useTranslation from '~/hooks/useTranslation'
+import { ScreenNames } from '~/types/screens'
+import { MainTabsParamList } from '../MainTabs'
 import Record from './Record'
 
 export enum RecordTypes {
@@ -15,6 +18,9 @@ export enum RecordTypes {
 
 const History = () => {
   const { t } = useTranslation()
+  const itemId =
+    useRoute<RouteProp<MainTabsParamList, ScreenNames.History>>().params?.id
+
   const SUBTABS = [
     { id: 'all', value: t('History.allTab') },
     { id: 'shared', value: t('History.sharedTab') },
@@ -43,7 +49,7 @@ const History = () => {
                   {/* ItemsList should have a param type: should be added once there is a
                     support for passing multiple interaction types to support all subtab usecase
                   */}
-                  <Record.ItemsList id="all" />
+                  <Record.ItemsList id="all" itemId={itemId} />
                 </Tabs.PersistChildren>
                 <Tabs.PersistChildren
                   isContentVisible={activeSubtab?.id === 'shared'}
