@@ -13,6 +13,7 @@ import {
 } from '~/utils/screenSettings'
 import ServiceRedirect from './ServiceRedirect'
 import eID from './eID'
+import { getIsAppLocked } from '~/modules/account/selectors'
 
 export type InteractionStackParamList = {
   [ScreenNames.Scanner]: undefined
@@ -35,12 +36,13 @@ const InteractionStack = createStackNavigator<InteractionStackParamList>()
 const Interaction: React.FC = () => {
   const isInteracting = useSelector(getInteractionType)
   const navigation = useNavigation()
+  const isAppLocked = useSelector(getIsAppLocked)
 
   useEffect(() => {
-    if (isInteracting) {
+    if (isInteracting && !isAppLocked) {
       navigation.navigate(ScreenNames.InteractionFlow)
     }
-  }, [isInteracting])
+  }, [isInteracting, isAppLocked])
 
   return (
     <InteractionStack.Navigator headerMode="none" mode="modal">
