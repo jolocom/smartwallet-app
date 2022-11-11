@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
   runOnJS,
@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated'
+import { DocumentStacks } from '~/modules/credentials/types'
 import { ExpandState, StackItem, StackItemConfig } from './StackItem'
 
 export interface StackData<T extends { id: string }, P extends {} = {}> {
@@ -19,6 +20,7 @@ export interface StackScrollViewProps<
   T extends { id: string },
   P extends {} = {},
 > extends StackItemConfig {
+  prevAdded?: string | undefined
   data: StackData<T, P>[]
   renderStack: (data: StackData<T>, item: React.ReactNode) => React.ReactNode
   renderItem: (
@@ -29,6 +31,7 @@ export interface StackScrollViewProps<
 }
 
 export const StackScrollView = <T extends { id: string }, P extends {}>({
+  prevAdded,
   data,
   renderItem,
   renderStack,
@@ -39,6 +42,11 @@ export const StackScrollView = <T extends { id: string }, P extends {}>({
   const expandValue = useSharedValue<ExpandState | null>(null)
   // NOTE: Only reason it's here is to force re-renders when needed
   const [expandState, setExpandState] = useState(expandValue.value)
+
+  useEffect(() => {
+    if (prevAdded)
+      expandValue.value = { itemId: prevAdded, stackId: DocumentStacks.All }
+  }, [prevAdded])
 
   // NOTE: We are converting the animated expand state to React's state to make sure the StackItem is re-rendered
   // when the expand state changes. Nevertheless, the StackItem should only receive the animated expand state in

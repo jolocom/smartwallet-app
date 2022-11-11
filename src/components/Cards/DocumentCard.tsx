@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   StyleProp,
   StyleSheet,
@@ -7,6 +7,13 @@ import {
   ViewStyle,
 } from 'react-native'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  withSequence,
+  withDelay,
+} from 'react-native-reanimated'
 
 import { ScanDocumentIcon } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
@@ -46,6 +53,7 @@ interface DocumentCardProps {
   style?: StyleProp<ViewStyle>
   expired?: boolean
   showMenu?: boolean
+  highlight?: boolean
 }
 
 const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
@@ -63,6 +71,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     icons,
     style = {},
     onPress,
+    highlight,
     expired = false,
     showMenu = false,
   }) => {
@@ -154,94 +163,118 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const secondaryField = showSecondaryField && fields.shift()
 
+    const FadeOutView = () => {
+      const opacity = useSharedValue(0)
+
+      const animationStyle = useAnimatedStyle(() => {
+        return { opacity: opacity.value }
+      })
+
+      const startAnimation = () => {
+        opacity.value = withSequence(
+          withDelay(1500, withTiming(0.5, { duration: 500 })),
+          withDelay(2000, withTiming(0, { duration: 500 })),
+        )
+      }
+
+      useEffect(() => {
+        startAnimation()
+      }, [highlight])
+
+      return <Animated.View style={[styles.overlay, animationStyle]} />
+    }
+
     return (
-      <ScaledCard
-        originalHeight={scalingConfig.originalHeight}
-        originalWidth={scalingConfig.originalWidth}
-        originalScreenWidth={scalingConfig.originalScreenWidth}
-        style={[styles.card, style]}
-        scaleStyle={styles.cardScaled}
-        testID="documentCard"
-      >
-        <View style={[styles.contentContainer, expired && { opacity: 0.5 }]}>
-          <DocumentHeader
-            name={credentialName}
-            icon={issuerIcon}
-            backgroundImage={backgroundImage}
-            backgroundColor={backgroundColor}
-            truncateName={showMenu}
-          />
-          <View style={styles.content}>
-            <ScaledView
-              scaleStyle={
-                !isBackground && photo
-                  ? {
-                      height: holderName || showSecondaryField ? 90 : 21.5,
-                      justifyContent: 'center',
-                    }
-                  : !isBackground && !photo && holderName
-                  ? { marginBottom: 14 }
-                  : {}
-              }
-            >
-              {photo && (
-                <DocumentPhoto
-                  photo={photo}
-                  topPosition={backgroundImage || backgroundColor ? -42 : 0}
-                />
-              )}
-              {holderName && (
-                <DocumentHolderName
-                  name={holderName}
-                  cropName={!!photo}
-                  onLayout={handleHolderNameTextLayout}
-                />
-              )}
-              {secondaryField && (
-                <SecondaryField
-                  field={secondaryField}
-                  labelScaledStyle={styles.fieldLabel}
-                  valueScaledStyle={styles.fieldValue}
-                />
-              )}
-            </ScaledView>
-            {isBackground && (
-              <ScaledView
-                scaleStyle={{
-                  paddingBottom: getFieldsTopDistance(),
-                }}
-              />
-            )}
-            <DocumentFields
-              fields={fields}
-              maxLines={maxLinesPerField}
-              maxRows={maxRows}
-              rowDistance={14}
-              labelScaledStyle={styles.fieldLabel}
-              valueScaledStyle={styles.fieldValue}
+      <>
+        <ScaledCard
+          originalHeight={scalingConfig.originalHeight}
+          originalWidth={scalingConfig.originalWidth}
+          originalScreenWidth={scalingConfig.originalScreenWidth}
+          style={[styles.card, style]}
+          scaleStyle={styles.cardScaled}
+          testID="documentCard"
+        >
+          {highlight && <FadeOutView />}
+          <View style={[styles.contentContainer, expired && { opacity: 0.5 }]}>
+            <DocumentHeader
+              name={credentialName}
+              icon={issuerIcon}
+              backgroundImage={backgroundImage}
+              backgroundColor={backgroundColor}
+              truncateName={showMenu}
             />
-          </View>
-          {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.
+            <View style={styles.content}>
+              <ScaledView
+                scaleStyle={
+                  !isBackground && photo
+                    ? {
+                        height: holderName || showSecondaryField ? 90 : 21.5,
+                        justifyContent: 'center',
+                      }
+                    : !isBackground && !photo && holderName
+                    ? { marginBottom: 14 }
+                    : {}
+                }
+              >
+                {photo && (
+                  <DocumentPhoto
+                    photo={photo}
+                    topPosition={backgroundImage || backgroundColor ? -42 : 0}
+                  />
+                )}
+                {holderName && (
+                  <DocumentHolderName
+                    name={holderName}
+                    cropName={!!photo}
+                    onLayout={handleHolderNameTextLayout}
+                  />
+                )}
+                {secondaryField && (
+                  <SecondaryField
+                    field={secondaryField}
+                    labelScaledStyle={styles.fieldLabel}
+                    valueScaledStyle={styles.fieldValue}
+                  />
+                )}
+              </ScaledView>
+              {isBackground && (
+                <ScaledView
+                  scaleStyle={{
+                    paddingBottom: getFieldsTopDistance(),
+                  }}
+                />
+              )}
+              <DocumentFields
+                fields={fields}
+                maxLines={maxLinesPerField}
+                maxRows={maxRows}
+                rowDistance={14}
+                labelScaledStyle={styles.fieldLabel}
+                valueScaledStyle={styles.fieldValue}
+              />
+            </View>
+            {/* The button has to be absolutely positioned b/c the Header is too large and takes up too much space.
               Also, the header shouln't be pressable due to additional behavior + the menu button. Finally, it has
               to be at the bottom so that it's rendered last, otherwise the press events don't propagate.
            */}
-          <TouchableOpacity
-            onPress={handlePress}
-            activeOpacity={1}
-            style={styles.btn}
-          />
-        </View>
-        {showMenu && <CardMoreBtn onPress={onHandleMore} />}
-        {Boolean(icons?.length || hasImageFields || expired) && (
-          <DocumentFooter
-            leftIcons={icons}
-            expired={expired}
-            renderRightIcon={
-              hasImageFields ? () => <ScanDocumentIcon /> : undefined
-            }
-          />
-        )}
-      </ScaledCard>
+            <TouchableOpacity
+              onPress={handlePress}
+              activeOpacity={1}
+              style={styles.btn}
+            />
+          </View>
+          {showMenu && <CardMoreBtn onPress={onHandleMore} />}
+          {Boolean(icons?.length || hasImageFields || expired) && (
+            <DocumentFooter
+              leftIcons={icons}
+              expired={expired}
+              renderRightIcon={
+                hasImageFields ? () => <ScanDocumentIcon /> : undefined
+              }
+            />
+          )}
+        </ScaledCard>
+      </>
     )
   },
   (prev, next) => {
@@ -283,6 +316,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   cardScaled: {
+    borderRadius: 15,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: Colors.success,
+    zIndex: 1,
     borderRadius: 15,
   },
 })
