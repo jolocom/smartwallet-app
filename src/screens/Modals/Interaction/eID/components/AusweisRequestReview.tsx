@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { View, Platform } from 'react-native'
 import { aa2Module } from '@jolocom/react-native-ausweis'
-import { useSafeArea } from 'react-native-safe-area-context'
-import moment from 'moment'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import moment from 'moment'
+import React, { useEffect, useState } from 'react'
+import { Platform, View } from 'react-native'
+import { useSafeArea } from 'react-native-safe-area-context'
 import Btn, { BtnSize, BtnTypes } from '~/components/Btn'
 import Collapsible from '~/components/Collapsible'
 import ScreenContainer from '~/components/ScreenContainer'
+import { ServiceLogo } from '~/components/ServiceLogo'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
+import { PropertyMimeType } from '~/hooks/documents/types'
 import { useRedirect } from '~/hooks/navigation'
+import { useCheckNFC } from '~/hooks/nfc'
 import useTranslation from '~/hooks/useTranslation'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
@@ -19,7 +22,11 @@ import {
   FooterContainerFAS,
   LogoContainerFAS,
 } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
+import { IField } from '~/types/props'
+import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
+import { IS_ANDROID } from '~/utils/generic'
+import { AusweisStackParamList } from '..'
 import eIDHooks from '../hooks'
 import {
   AusweisButtons,
@@ -32,12 +39,6 @@ import {
   AusweisScannerState,
   eIDScreens,
 } from '../types'
-import { AusweisStackParamList } from '..'
-import { ScreenNames } from '~/types/screens'
-import { IField } from '~/types/props'
-import { IS_ANDROID } from '~/utils/generic'
-import { useCheckNFC } from '~/hooks/nfc'
-import { ServiceLogo } from '~/components/ServiceLogo'
 
 type AusweisRequestReviewNavigation = StackNavigationProp<
   AusweisStackParamList,
@@ -178,26 +179,34 @@ export const AusweisRequestReview = () => {
       {
         label: t('AusweisProvider.providerLabel'),
         value: providerName + '\n' + providerUrl,
+        mime_type: PropertyMimeType.text_plain,
       },
       {
         label: t('AusweisProvider.certificateLabel'),
         value: certificateIssuerName + '\n' + certificateIssuerUrl,
+        mime_type: PropertyMimeType.text_plain,
       },
-      { label: t('AusweisProvider.providerInfoLabel'), value: providerInfo },
+      {
+        label: t('AusweisProvider.providerInfoLabel'),
+        value: providerInfo,
+        mime_type: PropertyMimeType.text_plain,
+      },
       {
         label: t('AusweisProvider.validityLabel'),
         value:
           moment(effectiveValidityDate).format('DD.MM.YYYY') +
           ' - ' +
           moment(expirationDate).format('DD.MM.YYYY'),
+        mime_type: PropertyMimeType.text_plain,
       },
     ]
 
     redirect(ScreenNames.FieldDetails, {
-      fields,
-      title: providerName,
+      eIdData: {
+        fields,
+        title: providerName,
+      },
       backgroundColor: Colors.mainDark,
-      photo: undefined,
     })
   }
 
