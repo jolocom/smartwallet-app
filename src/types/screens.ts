@@ -40,6 +40,7 @@ export enum ScreenNames {
   AusweisCardInfo = 'AusweisCardInfo',
   ServiceRedirect = 'ServiceRedirect',
   AusweisMoreInfo = 'AusweisMoreInfo',
+  AusweisServiceInfo = 'AusweisServiceInfo',
   // Modals
   Loader = 'Loader',
   CredentialForm = 'CredentialForm',

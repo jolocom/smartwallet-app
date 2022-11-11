@@ -35,7 +35,7 @@ const ICON_SIZE = BP({ large: 40, default: 30 })
 
 type FieldValueProps = { value: string; mime_type: PropertyMimeType }
 
-const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
+export const FieldValue: React.FC<FieldValueProps> = ({ value, mime_type }) => {
   const { scheduleSuccess } = useToasts()
   const { t } = useTranslation()
 
