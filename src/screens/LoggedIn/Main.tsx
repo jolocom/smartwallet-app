@@ -5,7 +5,6 @@ import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
-import { IField } from '~/types/props'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import {
@@ -86,10 +85,6 @@ export type MainStackParamList = {
   [ScreenNames.FieldDetails]: {
     id: string
     backgroundColor?: Colors
-    eIdData?: {
-      title?: string
-      fields?: IField[]
-    }
   }
   // DEV
   [ScreenNames.CardsTest]: undefined

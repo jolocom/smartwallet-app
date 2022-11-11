@@ -159,24 +159,20 @@ const Icon = ({ url }: { url: string }) => {
 const FieldDetails = () => {
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.FieldDetails>>()
-  const { id, backgroundColor = Colors.mainBlack, eIdData } = route.params
-
-  const document = useSelector(getDocumentById(id))
+  const { id, backgroundColor = Colors.mainBlack } = route.params
+  const document = useSelector(getDocumentById(id))!
 
   const { getHolderPhoto, getExtraProperties } = useDocuments()
 
-  const fields = eIdData
-    ? eIdData.fields
-    : useMemo(
-        () =>
-          document &&
-          [...document.properties, ...getExtraProperties(document)].filter(
-            (field) => field.key !== SpecialDocumentKeys.photo,
-          ),
-        [document],
-      )
+  const fields = useMemo(
+    () =>
+      [...document.properties, ...getExtraProperties(document)].filter(
+        (field) => field.key !== SpecialDocumentKeys.photo,
+      ),
+    [document],
+  )
 
-  const prefechedIcon = document && useImagePrefetch(document.issuer.icon)
+  const prefechedIcon = useImagePrefetch(document.issuer.icon)
 
   const handleLayout = () => {
     LayoutAnimation.configureNext({
@@ -185,13 +181,11 @@ const FieldDetails = () => {
     })
   }
 
-  const holderPhoto = document && getHolderPhoto(document)
-
-  const title = document?.name || eIdData?.title
+  const holderPhoto = getHolderPhoto(document)
 
   const showIconContainer =
-    Boolean(document?.issuer.icon) ||
-    Boolean(document?.style.contextIcons?.length)
+    Boolean(document.issuer.icon) ||
+    Boolean(document.style.contextIcons?.length)
 
   const { top } = useSafeArea()
 
@@ -224,7 +218,7 @@ const FieldDetails = () => {
           <ScreenContainer.Padding>
             <Collapsible.Scroll disableScrollViewPanResponder>
               <Collapsible.Title
-                text={title!}
+                text={document.name}
                 customContainerStyles={{
                   width: holderPhoto ? '68%' : '100%',
                   marginTop: holderPhoto && showIconContainer ? 6 : 0,
@@ -250,7 +244,7 @@ const FieldDetails = () => {
                     color={Colors.white90}
                     weight={JoloTextWeight.medium}
                   >
-                    {title}
+                    {document.name}
                   </JoloText>
                 </View>
               </Collapsible.Title>
@@ -262,7 +256,7 @@ const FieldDetails = () => {
                   }}
                 >
                   {prefechedIcon && <Icon url={prefechedIcon} />}
-                  {document?.style.contextIcons &&
+                  {document.style.contextIcons &&
                     document.style.contextIcons.map((icon, i) => (
                       <Icon key={i} url={icon} />
                     ))}
@@ -280,7 +274,7 @@ const FieldDetails = () => {
                   marginTop: 16,
                 }}
               >
-                {fields?.map((field, i) => (
+                {fields.map((field, i) => (
                   <React.Fragment key={i}>
                     <View style={styles.fieldContainer} onLayout={handleLayout}>
                       <JoloText
