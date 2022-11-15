@@ -40,7 +40,7 @@ const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
   )
 
   return label ? (
-    <TouchableOpacity onPress={invokeInteract}>
+    <TouchableOpacity onPress={invokeInteract} activeOpacity={0.6}>
       <ToastText />
     </TouchableOpacity>
   ) : (
