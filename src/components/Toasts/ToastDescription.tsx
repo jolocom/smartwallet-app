@@ -13,8 +13,7 @@ interface Props extends IWithCustomStyle {
 }
 
 const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
-  const { toastToShow, toastColor, invokeInteract, isInteractive } =
-    useToastToShow()
+  const { toastToShow, toastColor, invokeInteract } = useToastToShow()
 
   if (!toastToShow || !toastToShow.message) return null
 
