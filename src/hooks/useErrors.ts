@@ -1,8 +1,8 @@
 import { StatusBar } from 'react-native'
 import {
-  useErrorContext,
-  ErrorScreens,
   ErrorDetails,
+  ErrorScreens,
+  useErrorContext,
 } from '~/errors/errorContext'
 
 const useErrors = () => {
