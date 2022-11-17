@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     paddingVertical: BP({ default: 24, xsmall: 20 }),
     paddingHorizontal: BP({ default: 24, xsmall: 16 }),
   },
-  title: { textAlign: 'left' },
   titleWrapper: {
     alignItems: 'center',
     justifyContent: 'space-between',

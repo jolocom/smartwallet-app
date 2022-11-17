@@ -4,7 +4,6 @@ import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  View,
 } from 'react-native'
 
 import BlockExpanded from '~/components/BlockExpanded'
@@ -49,11 +48,9 @@ const FAQ = () => {
 
   function renderTitle() {
     return (
-      <View style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Collapsible.Title text={t('FAQ.header')}>
-          <Section.Title>{t('FAQ.header')}</Section.Title>
-        </Collapsible.Title>
-      </View>
+      <Collapsible.Title text={t('FAQ.header')}>
+        <Section.Title>{t('FAQ.header')}</Section.Title>
+      </Collapsible.Title>
     )
   }
 
