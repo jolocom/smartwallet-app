@@ -1,20 +1,20 @@
-import { useRef } from 'react'
-import React from 'react'
+import React, { useRef } from 'react'
 import {
   Animated,
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  View,
 } from 'react-native'
 
-import ScreenContainer from '~/components/ScreenContainer'
 import BlockExpanded from '~/components/BlockExpanded'
 import Collapsible from '~/components/Collapsible'
-
-type TFAQItem = { question: string; answer: string }
+import { NavHeaderType } from '~/components/NavigationHeader'
+import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import Section from './components/Section'
-import { NavHeaderType } from '~/components/NavigationHeader'
+
+type TFAQItem = { question: string; answer: string }
 
 const FAQ = () => {
   const listRef = useRef<FlatList>(null)
@@ -49,9 +49,11 @@ const FAQ = () => {
 
   function renderTitle() {
     return (
-      <Collapsible.Title text={t('FAQ.header')}>
-        <Section.Title>{t('FAQ.header')}</Section.Title>
-      </Collapsible.Title>
+      <View style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Collapsible.Title text={t('FAQ.header')}>
+          <Section.Title>{t('FAQ.header')}</Section.Title>
+        </Collapsible.Title>
+      </View>
     )
   }
 
@@ -87,6 +89,7 @@ const FAQ = () => {
                   key={index}
                   title={item.question}
                   expandedText={item.answer}
+                  hasDropdown={true}
                   onExpand={() => handleExpand(listRef, index)}
                 />
               )}

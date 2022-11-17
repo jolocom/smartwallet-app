@@ -1,14 +1,19 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import {
+  Animated,
+  FlatList,
+  LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Animated,
   ScrollView,
-  FlatList,
   View,
-  LayoutChangeEvent,
 } from 'react-native'
 
+import { CollapsibleContext } from './context'
+import Header from './Header'
+import KeyboardAwareScrollView from './KeyboardAwareScroll'
+import Scale from './Scale'
+import Scroll from './Scroll'
 import Title from './Title'
 import {
   ICollapsibleComposite,
@@ -19,11 +24,6 @@ import {
   TTitle,
 } from './types'
 import { compare } from './utils'
-import Header from './Header'
-import { CollapsibleContext } from './context'
-import Scroll from './Scroll'
-import Scale from './Scale'
-import KeyboardAwareScrollView from './KeyboardAwareScroll'
 
 interface ICollapsible {
   renderHeader: (context: ICollapsibleContext) => React.ReactElement | null
@@ -158,8 +158,6 @@ const Collapsible: React.FC<ICollapsible> & ICollapsibleComposite = ({
             left: 0,
             right: 0,
             zIndex: 10,
-            // borderColor: 'yellow',
-            // borderWidth: 2,
           }}
         >
           {renderHeader(contextValue)}
