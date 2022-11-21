@@ -1,21 +1,28 @@
+import Clipboard from '@react-native-clipboard/clipboard'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import React, { useMemo, useRef, useState } from 'react'
 import {
   Image,
-  StyleSheet,
-  View,
-  TouchableOpacity,
   LayoutAnimation,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
+import { PopOutIcon } from '~/assets/svg'
 import Block from '~/components/Block'
 import Collapsible from '~/components/Collapsible'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { NavHeaderType } from '~/components/NavigationHeader'
 import ScreenContainer from '~/components/ScreenContainer'
 import { useDocuments } from '~/hooks/documents'
+import { PropertyMimeType } from '~/hooks/documents/types'
+import { useGoBack, useRedirect } from '~/hooks/navigation'
+import { useToasts } from '~/hooks/toasts'
+import { useToggleExpand } from '~/hooks/ui'
 import useImagePrefetch from '~/hooks/useImagePrefetch'
+import useTranslation from '~/hooks/useTranslation'
 import { getDocumentById } from '~/modules/credentials/selectors'
 import { SpecialDocumentKeys } from '~/types/credentials'
 import { TextLayoutEvent } from '~/types/props'
@@ -24,32 +31,25 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainStackParamList } from '../LoggedIn/Main'
-import { useGoBack, useRedirect } from '~/hooks/navigation'
-import Clipboard from '@react-native-clipboard/clipboard'
-import { PropertyMimeType } from '~/hooks/documents/types'
-import { useToasts } from '~/hooks/toasts'
-import { useToggleExpand } from '~/hooks/ui'
-import useTranslation from '~/hooks/useTranslation'
-import { PopOutIcon } from '~/assets/svg'
-import { MdlPropertyKeys } from './DrivingPrivileges/types'
 import useDrivingPrivileges from './DrivingPrivileges/hooks'
+import { MdlPropertyKeys } from './DrivingPrivileges/types'
 
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
 
-type DocumentFieldProps = {
+type DocumentField = {
   value: string
   mime_type: PropertyMimeType
-  label: string
+  label?: string
   onPress?: () => void
-  fieldKey: string
+  fieldKey?: string
 }
 
-const DocumentField: React.FC<DocumentFieldProps> = ({
+export const DocumentField: React.FC<DocumentField> = ({
   value,
   mime_type,
   label,
-  onPress,
+  onPress = () => {},
   fieldKey,
 }) => {
   const { scheduleSuccess } = useToasts()

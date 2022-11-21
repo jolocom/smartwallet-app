@@ -1,4 +1,11 @@
-import React, { useCallback, useMemo, useLayoutEffect } from 'react'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -20,16 +27,20 @@ import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
 import { setOpenedStack } from '~/modules/credentials/actions'
 import { DocumentStacks } from '~/modules/credentials/types'
+import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { useDrivingLicense } from './DrivingLicenseDemo/hooks'
+import { MainTabsParamList } from '../MainTabs'
 import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
 import { useFavoriteDocuments } from './useFavoriteDocuments'
 
 const Documents: React.FC = () => {
   const { t } = useTranslation()
 
-  const { drivingLicense } = useDrivingLicense()
+  const { params } =
+    useRoute<RouteProp<MainTabsParamList, ScreenNames.Documents>>()
+
+  const prevAddedIds = params?.highlightIds
 
   const {
     documents,
@@ -52,6 +63,20 @@ const Documents: React.FC = () => {
 
   const dispatch = useDispatch()
 
+  const [highlightedCards, setHighlightedCards] = useState<
+    string[] | undefined
+  >(prevAddedIds)
+
+  useEffect(() => {
+    setHighlightedCards(prevAddedIds)
+  }, [prevAddedIds])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setHighlightedCards(undefined)
+    }, 100)
+  }, [highlightedCards])
+
   useLayoutEffect(() => {
     if (!favorites.length) {
       dispatch(setOpenedStack(DocumentStacks.All))
@@ -59,6 +84,12 @@ const Documents: React.FC = () => {
       dispatch(setOpenedStack(DocumentStacks.Favorites))
     }
   }, [])
+
+  useLayoutEffect(() => {
+    if (highlightedCards) {
+      dispatch(setOpenedStack(DocumentStacks.All))
+    }
+  }, [highlightedCards])
 
   const { scaleBy } = useMemo(
     () =>
@@ -133,7 +164,7 @@ const Documents: React.FC = () => {
       <ScreenContainer.Header customStyles={{ marginBottom: 18 }}>
         {t('BottomBar.documents')}
       </ScreenContainer.Header>
-      {!documents.length && !drivingLicense ? (
+      {!documents.length ? (
         <ScreenPlaceholder
           title={t('Documents.placeholderHeader')}
           description={t('Documents.documentsPlaceholderSubheader')}
@@ -141,6 +172,7 @@ const Documents: React.FC = () => {
       ) : (
         <View style={{ flex: 1 }}>
           <StackScrollView
+            prevAdded={prevAddedIds && prevAddedIds[0]}
             data={stackData}
             itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
             visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
@@ -149,6 +181,8 @@ const Documents: React.FC = () => {
             renderStack={renderStack}
             renderItem={(c, stack, visible) => {
               const fields = getPreviewProperties(c)
+
+              const shouldHighlight = Boolean(highlightedCards?.includes(c.id))
 
               return (
                 <>
@@ -170,6 +204,7 @@ const Documents: React.FC = () => {
                     hasImageFields={hasImageProperties(c)}
                     icons={c.style.contextIcons}
                     expired={stack.stackId === DocumentStacks.Expired}
+                    highlight={shouldHighlight}
                   />
                   {isDocumentFavorite(c.id) && <CardFavorite />}
                 </>

@@ -84,7 +84,7 @@ export const CredentialShareBAS = () => {
   const renderBody = () => {
     if (singleMissingAttribute) return null
     else if (document) {
-      const { name, issuer } = document
+      const { name, issuer, style } = document
 
       const previewFields = getPreviewProperties(document)
 
@@ -96,6 +96,8 @@ export const CredentialShareBAS = () => {
             fields={previewFields}
             photo={getHolderPhoto(document)}
             issuerIcon={issuer.icon}
+            backgroundColor={style.backgroundColor}
+            backgroundImage={style.backgroundImage}
           />
           <Space />
         </>
@@ -181,7 +183,7 @@ const CredentialShareFAS = () => {
         renderItem={({ item: cred }) => {
           const previewFields = getPreviewProperties(cred)
 
-          const { name, type, id, issuer } = cred
+          const { name, type, id, issuer, style } = cred
           const specificType = type[type.length - 1]
           return (
             <TouchableWithoutFeedback
@@ -200,6 +202,8 @@ const CredentialShareFAS = () => {
                   photo={getHolderPhoto(cred)}
                   selected={selectedCredentials[specificType] === id}
                   issuerIcon={issuer.icon}
+                  backgroundColor={style.backgroundColor}
+                  backgroundImage={style.backgroundImage}
                 />
               </View>
             </TouchableWithoutFeedback>

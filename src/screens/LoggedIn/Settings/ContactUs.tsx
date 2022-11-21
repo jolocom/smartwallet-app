@@ -83,7 +83,6 @@ const ContactUs: React.FC = () => {
         flex: 1,
         paddingHorizontal: 0,
         paddingTop: 0,
-        paddingBottom: 15,
       }}
     >
       <NavigationHeader type={NavHeaderType.Back} onPress={navigateBack}>
@@ -154,6 +153,7 @@ const ContactUs: React.FC = () => {
             type={BtnTypes.primary}
             onPress={handleSubmit}
             disabled={!isBtnEnabled()}
+            style={{ paddingBottom: 16 }}
           >
             {t('ContactUs.submitBtn')}
           </Btn.Online>

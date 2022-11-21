@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
-import ScaledCard from './ScaledCard'
+import ScaledCard, { ScaledView } from './ScaledCard'
 
 import { DocumentProperty } from '~/hooks/documents/types'
 import {
@@ -23,6 +23,8 @@ interface Props {
   selected?: boolean
   holderName?: string
   photo?: string
+  backgroundColor?: string
+  backgroundImage?: string
   style?: StyleProp<ViewStyle>
 }
 
@@ -33,6 +35,8 @@ const ShareCard: React.FC<Props> = ({
   photo,
   selected,
   issuerIcon,
+  backgroundColor,
+  backgroundImage,
   style = {},
 }) => {
   const calculateMaxRows = useCallback(() => {
@@ -63,6 +67,9 @@ const ShareCard: React.FC<Props> = ({
           name={credentialName}
           icon={issuerIcon}
           selected={selected}
+          isInteracting={true}
+          backgroundColor={backgroundColor}
+          backgroundImage={backgroundImage}
         />
         <View style={{ flexDirection: 'row', flex: 1 }}>
           <View style={{ flex: 1 }}>
@@ -79,9 +86,14 @@ const ShareCard: React.FC<Props> = ({
               valueScaledStyle={{ fontSize: 18, lineHeight: 20 }}
             />
           </View>
-          <View style={{ flex: 0.5 }}>
+          <ScaledView
+            style={{ flex: 0.5 }}
+            scaleStyle={{
+              bottom: (backgroundColor || backgroundImage) && 20,
+            }}
+          >
             {photo && <DocumentPhoto photo={photo} />}
-          </View>
+          </ScaledView>
         </View>
       </View>
     </ScaledCard>

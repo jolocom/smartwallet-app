@@ -7,6 +7,7 @@ import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
 import { AusweisCardInfoParams } from '~/screens/Modals/Interaction/eID/types'
 import { PrimitiveAttributeTypes } from '~/types/credentials'
+import { IField } from '~/types/props'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import {
@@ -24,6 +25,7 @@ import CredentialForm from '../Modals/Forms/CredentialForm'
 import Interaction from '../Modals/Interaction'
 import { AusweisMoreInfo } from '../Modals/Interaction/eID/components'
 import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChangePin'
+import AusweisServiceInfo from '../Modals/Interaction/eID/components/AusweisServiceInfo'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
 import MainTabs from './MainTabs'
@@ -76,6 +78,10 @@ export type MainStackParamList = {
   [ScreenNames.Interaction]: undefined
   [ScreenNames.AusweisChangePin]: undefined
   [ScreenNames.AusweisMoreInfo]: undefined
+  [ScreenNames.AusweisServiceInfo]: {
+    eIdData: { title: string; fields: IField[] }
+    backgroundColor: Colors
+  }
   [ScreenNames.MainTabs]: undefined
   [ScreenNames.Language]: undefined
   [ScreenNames.MnemonicPhrase]: undefined
@@ -267,6 +273,11 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.AusweisMoreInfo}
         component={AusweisMoreInfo}
+        options={screenTransitionSlideFromRight}
+      />
+      <MainStack.Screen
+        name={ScreenNames.AusweisServiceInfo}
+        component={AusweisServiceInfo}
         options={screenTransitionSlideFromRight}
       />
       <MainStack.Screen
