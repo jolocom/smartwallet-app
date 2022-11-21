@@ -37,7 +37,7 @@ import { MdlPropertyKeys } from './DrivingPrivileges/types'
 const IMAGE_SIZE = BP({ large: 104, default: 90 })
 const ICON_SIZE = BP({ large: 40, default: 30 })
 
-type DocumentField = {
+type DocumentFieldProps = {
   value: string
   mime_type: PropertyMimeType
   label?: string
@@ -45,7 +45,7 @@ type DocumentField = {
   fieldKey?: string
 }
 
-export const DocumentField: React.FC<DocumentField> = ({
+export const DocumentField: React.FC<DocumentFieldProps> = ({
   value,
   mime_type,
   label,
