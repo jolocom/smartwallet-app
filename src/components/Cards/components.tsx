@@ -170,8 +170,7 @@ export const DocumentHeader: React.FC<{
           scaleStyle={{
             height: DOCUMENT_HEADER_HEIGHT,
             padding: 16,
-            borderTopEndRadius: BORDER_RADIUS,
-            borderTopStartRadius: BORDER_RADIUS,
+            ...styles.borderTopRadius,
           }}
           style={styles.headerContainer}
         >
@@ -444,8 +443,7 @@ const BackgroundOpacity: React.FC = ({ children }) => (
     colors={[Colors.randomGrey, Colors.white00]}
     style={{
       flex: 1,
-      borderTopEndRadius: BORDER_RADIUS,
-      borderTopStartRadius: BORDER_RADIUS,
+      ...styles.borderTopRadius,
     }}
   >
     {children}
@@ -459,8 +457,7 @@ export const GradientSeparator: React.FC = ({ children }) => {
         colors={[Colors.randomGrey, Colors.white]}
         style={{
           flex: 1,
-          borderTopEndRadius: BORDER_RADIUS,
-          borderTopStartRadius: BORDER_RADIUS,
+          ...styles.borderTopRadius,
         }}
       >
         {children}
@@ -481,8 +478,7 @@ export const DocumentBackgroundImage: React.FC<{
       style={{
         width: '100%',
         height: '100%',
-        borderTopEndRadius: BORDER_RADIUS,
-        borderTopStartRadius: BORDER_RADIUS,
+        ...styles.borderTopRadius,
       }}
       source={{ uri: image }}
     >
@@ -502,8 +498,7 @@ export const DocumentBackgroundColor: React.FC<{
     style={{
       width: '100%',
       backgroundColor: color,
-      borderTopEndRadius: BORDER_RADIUS,
-      borderTopStartRadius: BORDER_RADIUS,
+      ...styles.borderTopRadius,
     }}
   >
     <BackgroundOpacity>{children}</BackgroundOpacity>
@@ -674,5 +669,10 @@ const styles = StyleSheet.create({
     height: 20,
     borderWidth: 1,
     borderRadius: 10,
+  },
+  borderTopRadius: {
+    borderTopEndRadius: BORDER_RADIUS,
+    borderTopStartRadius: BORDER_RADIUS,
+    overflow: 'hidden',
   },
 })
