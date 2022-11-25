@@ -170,7 +170,9 @@ export const DocumentHeader: React.FC<{
           scaleStyle={{
             height: DOCUMENT_HEADER_HEIGHT,
             padding: 16,
-            ...styles.borderTopRadius,
+            borderTopEndRadius: BORDER_RADIUS,
+            borderTopStartRadius: BORDER_RADIUS,
+            overflow: 'hidden',
           }}
           style={styles.headerContainer}
         >
@@ -443,7 +445,9 @@ const BackgroundOpacity: React.FC = ({ children }) => (
     colors={[Colors.randomGrey, Colors.white00]}
     style={{
       flex: 1,
-      ...styles.borderTopRadius,
+      borderTopEndRadius: BORDER_RADIUS,
+      borderTopStartRadius: BORDER_RADIUS,
+      overflow: 'hidden',
     }}
   >
     {children}
@@ -457,7 +461,9 @@ export const GradientSeparator: React.FC = ({ children }) => {
         colors={[Colors.randomGrey, Colors.white]}
         style={{
           flex: 1,
-          ...styles.borderTopRadius,
+          borderTopEndRadius: BORDER_RADIUS,
+          borderTopStartRadius: BORDER_RADIUS,
+          overflow: 'hidden',
         }}
       >
         {children}
@@ -478,7 +484,9 @@ export const DocumentBackgroundImage: React.FC<{
       style={{
         width: '100%',
         height: '100%',
-        ...styles.borderTopRadius,
+        borderTopEndRadius: BORDER_RADIUS,
+        borderTopStartRadius: BORDER_RADIUS,
+        overflow: 'hidden',
       }}
       source={{ uri: image }}
     >
@@ -498,7 +506,9 @@ export const DocumentBackgroundColor: React.FC<{
     style={{
       width: '100%',
       backgroundColor: color,
-      ...styles.borderTopRadius,
+      borderTopEndRadius: BORDER_RADIUS,
+      borderTopStartRadius: BORDER_RADIUS,
+      overflow: 'hidden',
     }}
   >
     <BackgroundOpacity>{children}</BackgroundOpacity>
@@ -669,10 +679,5 @@ const styles = StyleSheet.create({
     height: 20,
     borderWidth: 1,
     borderRadius: 10,
-  },
-  borderTopRadius: {
-    borderTopEndRadius: BORDER_RADIUS,
-    borderTopStartRadius: BORDER_RADIUS,
-    overflow: 'hidden',
   },
 })
