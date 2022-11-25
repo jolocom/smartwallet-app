@@ -9,6 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import LinearGradient from 'react-native-linear-gradient'
 import { FavoriteHeartIcon, PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
@@ -19,10 +20,10 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import JoloText from '../JoloText'
 import { DOCUMENT_HEADER_HEIGHT } from './consts'
+import { BORDER_RADIUS } from './DocumentCard'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
-import FastImage from 'react-native-fast-image'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -169,6 +170,8 @@ export const DocumentHeader: React.FC<{
           scaleStyle={{
             height: DOCUMENT_HEADER_HEIGHT,
             padding: 16,
+            borderTopEndRadius: BORDER_RADIUS,
+            borderTopStartRadius: BORDER_RADIUS,
           }}
           style={styles.headerContainer}
         >
@@ -439,7 +442,11 @@ export const SecondaryField: React.FC<{
 const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
     colors={[Colors.randomGrey, Colors.white00]}
-    style={{ flex: 1 }}
+    style={{
+      flex: 1,
+      borderTopEndRadius: BORDER_RADIUS,
+      borderTopStartRadius: BORDER_RADIUS,
+    }}
   >
     {children}
   </LinearGradient>
@@ -450,7 +457,11 @@ export const GradientSeparator: React.FC = ({ children }) => {
     <ScaledView scaleStyle={{ height: DOCUMENT_HEADER_HEIGHT }}>
       <LinearGradient
         colors={[Colors.randomGrey, Colors.white]}
-        style={{ flex: 1 }}
+        style={{
+          flex: 1,
+          borderTopEndRadius: BORDER_RADIUS,
+          borderTopStartRadius: BORDER_RADIUS,
+        }}
       >
         {children}
       </LinearGradient>
@@ -467,7 +478,12 @@ export const DocumentBackgroundImage: React.FC<{
     style={{ width: '100%' }}
   >
     <ImageBackground
-      style={{ width: '100%', height: '100%' }}
+      style={{
+        width: '100%',
+        height: '100%',
+        borderTopEndRadius: BORDER_RADIUS,
+        borderTopStartRadius: BORDER_RADIUS,
+      }}
       source={{ uri: image }}
     >
       <BackgroundOpacity>{children}</BackgroundOpacity>
@@ -486,6 +502,8 @@ export const DocumentBackgroundColor: React.FC<{
     style={{
       width: '100%',
       backgroundColor: color,
+      borderTopEndRadius: BORDER_RADIUS,
+      borderTopStartRadius: BORDER_RADIUS,
     }}
   >
     <BackgroundOpacity>{children}</BackgroundOpacity>

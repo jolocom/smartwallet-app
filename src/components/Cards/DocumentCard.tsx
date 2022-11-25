@@ -10,9 +10,9 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
-  withSequence,
   withDelay,
+  withSequence,
+  withTiming,
 } from 'react-native-reanimated'
 
 import { ScanDocumentIcon } from '~/assets/svg'
@@ -55,6 +55,8 @@ interface DocumentCardProps {
   showMenu?: boolean
   highlight?: boolean
 }
+
+export const BORDER_RADIUS = 15
 
 const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
   ({
@@ -311,12 +313,20 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   card: {
-    overflow: 'hidden',
+    // overflow: 'hidden',
     flex: 1,
     backgroundColor: Colors.white,
+    shadowColor: Colors.mainBlack,
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 5,
   },
   cardScaled: {
-    borderRadius: 15,
+    borderRadius: BORDER_RADIUS,
   },
   overlay: {
     position: 'absolute',
@@ -326,7 +336,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.success,
     zIndex: 1,
-    borderRadius: 15,
+    borderRadius: BORDER_RADIUS,
   },
 })
 

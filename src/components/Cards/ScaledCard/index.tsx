@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-native'
-import { getCardDimensions } from './getCardDimenstions'
 import { ScaledCardContext, useScaledCard } from './context'
+import { getCardDimensions } from './getCardDimenstions'
 import {
   IScaledCardProps,
   IScaledComponentProps,
