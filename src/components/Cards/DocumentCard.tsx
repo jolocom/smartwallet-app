@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import {
+  Platform,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
@@ -36,7 +37,6 @@ import {
 } from './consts'
 import { useCredentialNameScale } from './hooks'
 import ScaledCard, { ScaledView } from './ScaledCard'
-
 interface DocumentCardProps {
   id: string
   credentialName: string
@@ -192,7 +192,10 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           originalHeight={scalingConfig.originalHeight}
           originalWidth={scalingConfig.originalWidth}
           originalScreenWidth={scalingConfig.originalScreenWidth}
-          style={[styles.card, style]}
+          style={[
+            Platform.OS === 'ios' ? styles.cardIos : styles.cardAndroid,
+            style,
+          ]}
           scaleStyle={styles.cardScaled}
           testID="documentCard"
         >
@@ -312,18 +315,21 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
   },
-  card: {
-    // overflow: 'hidden',
+  cardIos: {
     flex: 1,
     backgroundColor: Colors.white,
     shadowColor: Colors.mainBlack,
     shadowOffset: {
       width: 0,
-      height: -2,
+      height: -6,
     },
     shadowOpacity: 0.3,
     shadowRadius: 12,
-    elevation: 5,
+  },
+  cardAndroid: {
+    flex: 1,
+    elevation: 24,
+    backgroundColor: Colors.white,
   },
   cardScaled: {
     borderRadius: BORDER_RADIUS,
