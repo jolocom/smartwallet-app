@@ -41,7 +41,6 @@ import {
   getIsAusweisInteractionProcessed,
 } from '~/modules/interaction/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
-import { DEFAULT_NAVIGATION_HEIGHT } from '~/utils/dimensions'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
@@ -55,6 +54,7 @@ const Camera = () => {
   const disableLock = useDisableLock()
   const isScreenFocused = useIsFocused()
   const { connected: isConnectedToTheInternet } = useConnection()
+  const [scannerReady, setScannerReady] = useState(true)
 
   const ausweisScannerKey = useSelector(getAusweisScannerKey)
 
@@ -67,7 +67,11 @@ const Camera = () => {
   const isFocused = useIsFocused()
 
   const shouldScan =
-    isFocused && !isLoaderVisible && !isAppLocked && !errorScreen
+    isFocused &&
+    !isLoaderVisible &&
+    !isAppLocked &&
+    !errorScreen &&
+    scannerReady
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -145,8 +149,6 @@ const Camera = () => {
   const handleScan = async (e: {
     nativeEvent: { codeStringValue: string }
   }) => {
-    Vibration.vibrate(100)
-
     if (!isConnectedToTheInternet) {
       setError(true)
       /**
@@ -156,7 +158,11 @@ const Camera = () => {
       setErrorText('Internet connection is required to proceed')
       return
     }
+
     try {
+      Vibration.vibrate(100)
+      setScannerReady(false)
+
       const isValidUrl = validateUrl(e.nativeEvent.codeStringValue)
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
@@ -183,6 +189,8 @@ const Camera = () => {
       setError(true)
       setErrorText(t('Camera.errorMsg'))
     }
+
+    setTimeout(() => setScannerReady(true), 1000)
   }
 
   useEffect(() => {
@@ -215,7 +223,7 @@ const Camera = () => {
         )}
         {renderCamera && (
           <QRCamera
-            style={[styles.camera, { top, bottom }]}
+            style={styles.camera}
             cameraType={CameraType.Back}
             torchMode={isTorchPressed ? 'on' : 'off'}
             onReadCode={shouldScan ? handleScan : () => {}}
@@ -224,12 +232,7 @@ const Camera = () => {
           />
         )}
         {isScreenFocused ? (
-          <View
-            style={[
-              styles.overlayWrapper,
-              { top: top + DEFAULT_NAVIGATION_HEIGHT, bottom },
-            ]}
-          >
+          <View style={styles.overlayWrapper}>
             <View style={styles.topOverlay}>
               {SHOW_LOCAL_NETWORK_DIALOG && (
                 <Dialog onPress={handleLocalPermissionPress}>
@@ -315,9 +318,9 @@ const MARKER_SIZE = SCREEN_WIDTH * 0.75
 const styles = StyleSheet.create({
   navigationContainer: {
     position: 'absolute',
-    zIndex: 20,
+    zIndex: 21,
     width: '100%',
-    backgroundColor: Colors.black65,
+    backgroundColor: Colors.transparent,
   },
   scannerContainer: {
     width: '100%',
@@ -376,9 +379,13 @@ const styles = StyleSheet.create({
     zIndex: 15,
     left: 0,
     right: 0,
+    top: 0,
+    bottom: 0,
   },
   overlayWrapper: {
     position: 'absolute',
+    top: 0,
+    bottom: 0,
     zIndex: 20,
   },
 })
