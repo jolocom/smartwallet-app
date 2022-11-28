@@ -201,7 +201,7 @@ const Camera = () => {
     }
   }, [isError])
 
-  const { top, bottom } = useSafeArea()
+  const { top } = useSafeArea()
 
   const handleLocalPermissionPress = () => {
     Permissions.openSettings().catch(scheduleErrorWarning)
