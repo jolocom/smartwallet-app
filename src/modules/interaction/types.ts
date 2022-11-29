@@ -6,8 +6,8 @@ import { OfferedCredential } from '~/types/credentials'
 import { AusweisDetails, AusweisFlowTypePayload } from './ausweis/types'
 import { InteractionDetails } from './ssi/types'
 
-export * from './ssi/types'
 export * from './ausweis/types'
+export * from './ssi/types'
 
 /*
  * Holds the mapped Flow state from the SDK's InteractionManager and additional
@@ -20,12 +20,17 @@ export interface InteractionState {
   ssi: InteractionDetails
   ausweis: AusweisDetails
   deeplinkConfig: DeeplinkConfig
+  mdl: MdlConfig | null
+}
+
+export interface MdlConfig {
+  mdoc: string
 }
 
 export interface DeeplinkConfig {
   // NOTE: Shows the user the `ServiceRedirect` screen, which allows the user to
   // get redirected to another application or browser
-  redirectUrl?: string
+  redirectUrl: string | null | undefined
   // NOTE: Updates the service's UI that the interaction has finished successfully
   postRedirect: boolean
 }
@@ -40,6 +45,7 @@ export enum InteractionActionType {
   setScannerKey = 'setScannerKey',
   setReaderState = 'setReaderState',
   setFlowType = 'setFlowType',
+  setMdoc = 'setMdoc',
 }
 
 // Expressing dependency between action type and action payload;
@@ -57,6 +63,7 @@ export interface InteractionActions {
   [InteractionActionType.setScannerKey]: string | null
   [InteractionActionType.setReaderState]: CardInfo | null
   [InteractionActionType.setFlowType]: AusweisFlowTypePayload
+  [InteractionActionType.setMdoc]: string | null
 }
 
 // Dependency between action type and its payload following Action type signature

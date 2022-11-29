@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { Linking } from 'react-native'
 import branch, { BranchParams } from 'react-native-branch'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -7,13 +6,11 @@ import { SWErrorCodes } from '~/errors/codes'
 import { setIsBranchSubscribed } from '~/modules/account/actions'
 import { getIsBranchSubscribed } from '~/modules/account/selectors'
 import { setDeeplinkConfig } from '~/modules/interaction/actions'
-import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
+import { setMdoc } from '~/modules/interaction/mdl/actions'
 import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
-import { ScreenNames } from '~/types/screens'
 
 import { useInteractionStart } from './interactions/handlers'
 import { useLoader } from './loader'
-import { useRedirect } from './navigation'
 import { useToasts } from './toasts'
 
 export enum DeeplinkParams {
@@ -21,6 +18,7 @@ export enum DeeplinkParams {
   postRedirect = 'postRedirect',
   token = 'token',
   tcTokenUrl = 'tcTokenUrl',
+  mdoc = 'mdoc',
 }
 
 interface DeeplinkParamsValues {
@@ -28,6 +26,7 @@ interface DeeplinkParamsValues {
   [DeeplinkParams.token]?: string
   [DeeplinkParams.tcTokenUrl]?: string
   [DeeplinkParams.postRedirect]: boolean
+  [DeeplinkParams.mdoc]?: string
 }
 
 // NOTE: This should be called only in one place!
@@ -38,8 +37,6 @@ export const useDeeplinkInteractions = () => {
   const loader = useLoader()
   const dispatch = useDispatch()
   const isBranchSubscribed = useSelector(getIsBranchSubscribed)
-  const { personalizeLicense } = useDrivingLicense()
-  const redirect = useRedirect()
 
   // NOTE: for now we assume all the params come in as strings
   const getParamValue = (name: DeeplinkParams, params: BranchParams) => {
@@ -63,6 +60,9 @@ export const useDeeplinkInteractions = () => {
       DeeplinkParams.postRedirect,
       params,
     )
+    // NOTE: mdl mdoc
+    const mdoc = getParamValue(DeeplinkParams.mdoc, params)
+
     let postRedirect = false
 
     if (postRedirectString) {
@@ -81,31 +81,11 @@ export const useDeeplinkInteractions = () => {
       redirectUrl,
       tcTokenUrl,
       token,
-    }
-  }
-
-  const handleDrivingLicensePersonalization = (qrCodeString: string) => {
-    if (qrCodeString.startsWith('iso23220-3-sed:')) {
-      personalizeLicense(qrCodeString, (requests) =>
-        redirect(ScreenNames.DrivingLicenseForm, { requests }),
-      )
+      mdoc,
     }
   }
 
   useEffect(() => {
-    //NOTE: used for Driving Licenses
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        handleDrivingLicensePersonalization(url)
-      }
-    })
-
-    Linking.addListener('url', (e) => {
-      if (e.data) {
-        handleDrivingLicensePersonalization(e.data)
-      }
-    })
-
     // TODO move somewhere
     branch.disableTracking(true)
     if (!isBranchSubscribed) {
@@ -117,7 +97,7 @@ export const useDeeplinkInteractions = () => {
         }
 
         if (params) {
-          const { tcTokenUrl, token, redirectUrl, postRedirect } =
+          const { tcTokenUrl, token, redirectUrl, postRedirect, mdoc } =
             parseParameters(params)
 
           dispatch(
@@ -135,6 +115,9 @@ export const useDeeplinkInteractions = () => {
               showSuccess: false,
               showFailed: false,
             }).catch(scheduleErrorWarning)
+            return
+          } else if (mdoc) {
+            dispatch(setMdoc(mdoc))
             return
           } else if (
             !params['+clicked_branch_link'] ||

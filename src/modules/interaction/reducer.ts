@@ -1,20 +1,21 @@
-import { InteractionActionType, InteractionState } from './types'
-import { isCredShareDetails, isCredOfferDetails } from './ssi/guards'
+import { updateAttrs } from '../attributes/actions'
 import { AttrActionType, AttributePayload } from '../attributes/types'
 import {
-  setInteractionDetails,
   resetInteraction,
   selectShareCredential,
-  updateOfferValidation,
   setDeeplinkConfig,
+  setInteractionDetails,
+  updateOfferValidation,
 } from './actions'
-import { updateAttrs } from '../attributes/actions'
 import {
   setAusweisFlowType,
   setAusweisInteractionDetails,
   setAusweisReaderState,
   setAusweisScannerKey,
 } from './ausweis/actions'
+import { setMdoc } from './mdl/actions'
+import { isCredOfferDetails, isCredShareDetails } from './ssi/guards'
+import { InteractionActionType, InteractionState } from './types'
 
 const initialState: InteractionState = {
   ssi: { flowType: null, id: null, counterparty: null },
@@ -28,6 +29,7 @@ const initialState: InteractionState = {
     redirectUrl: null,
     postRedirect: false,
   },
+  mdl: null,
 }
 
 const reducer = (
@@ -43,6 +45,7 @@ const reducer = (
     | typeof setAusweisScannerKey
     | typeof setAusweisReaderState
     | typeof setAusweisFlowType
+    | typeof setMdoc
   >,
 ) => {
   switch (action.type) {
@@ -126,8 +129,14 @@ const reducer = (
       return state
     }
 
-    // NOTE: Ausweis handlers
+    // NOTE: Mdl handlers
+    case InteractionActionType.setMdoc:
+      return {
+        ...state,
+        mdl: { ...state.mdl, mdoc: action.payload },
+      }
 
+    // NOTE: Ausweis handlers
     case InteractionActionType.setDetails:
       return {
         ...state,
