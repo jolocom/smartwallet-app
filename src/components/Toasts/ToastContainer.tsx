@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { ErrorToastIcon, InfoToastIcon, SuccessToastIcon } from '~/assets/svg'
 import { ToastType } from '~/types/toasts'
 import { Colors } from '~/utils/colors'
 import { useToastToShow } from './context'
-import { ErrorToastIcon, InfoToastIcon, SuccessToastIcon } from '~/assets/svg'
 
 export const BOTTOM_PADDING = 20
 
