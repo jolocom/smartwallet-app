@@ -1,13 +1,14 @@
+import { RouteProp, useRoute } from '@react-navigation/core'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PersonalizationInputResponse } from 'react-native-mdl'
-import { RouteProp, useRoute } from '@react-navigation/core'
+import { useDispatch } from 'react-redux'
 
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { BottomButtons } from '~/components/BottomButtons'
 import BottomSheet from '~/components/BottomSheet'
-import FormContainer from '~/components/FormContainer'
 import { FormFieldContainer } from '~/components/Form/components'
+import FormContainer from '~/components/FormContainer'
 import InputBlock from '~/components/Input/InputBlock'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { ServiceLogo } from '~/components/ServiceLogo'
@@ -15,11 +16,12 @@ import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
 import { useGoBack } from '~/hooks/navigation'
+import { setMdoc } from '~/modules/interaction/mdl/actions'
+import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import {
   ContainerBAS,
   LogoContainerBAS,
 } from '~/screens/Modals/Interaction/InteractionFlow/components/styled'
-import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
@@ -35,6 +37,7 @@ export const DrivingLicenseForm = () => {
   const goBack = useGoBack()
   const { finishPersonalization } = useDrivingLicense()
   const { t } = useTranslation()
+  const dispatch = useDispatch()
 
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.DrivingLicenseForm>>()
@@ -75,6 +78,11 @@ export const DrivingLicenseForm = () => {
   const isSubmitDisabled = Object.entries(inputs).every(
     ([_, value]) => !value.length,
   )
+
+  const onCancel = () => {
+    dispatch(setMdoc(null))
+    goBack()
+  }
 
   return (
     <>
@@ -117,7 +125,7 @@ export const DrivingLicenseForm = () => {
                   ? t('CredentialShare.singleMissingAcceptBtn')
                   : t('mdl.issueMdl')
               }
-              onCancel={goBack}
+              onCancel={onCancel}
               isSubmitDisabled={!drivingLicenseNumber}
             />
           </ContainerBAS>
