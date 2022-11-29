@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   },
   cardAndroid: {
     flex: 1,
-    elevation: 24,
+    elevation: 10,
     backgroundColor: Colors.white,
   },
   cardScaled: {
