@@ -167,23 +167,11 @@ export const DocumentHeader: React.FC<{
     <View>
       {renderBackground(() => (
         <ScaledView
-          scaleStyle={{
-            height: DOCUMENT_HEADER_HEIGHT,
-            padding: 16,
-            borderTopEndRadius: BORDER_RADIUS,
-            borderTopStartRadius: BORDER_RADIUS,
-            overflow: 'hidden',
-          }}
+          scaleStyle={styles.headerContainerScaled}
           style={styles.headerContainer}
         >
           {prefetchedIcon && (
-            <ScaledView
-              scaleStyle={{
-                width: 32,
-                height: 32,
-                marginRight: 10,
-              }}
-            >
+            <ScaledView scaleStyle={styles.prefetchedIconScaled}>
               <Image
                 resizeMode="cover"
                 style={[styles.photo, { borderRadius: 4.2 }]}
@@ -237,9 +225,8 @@ export const DocumentHolderName: React.FC<{
   return (
     <ScaledView
       scaleStyle={{
-        paddingLeft: 24,
+        ...styles.holderNameScaled,
         marginRight: cropName ? 116 : 0,
-        marginVertical: 8,
       }}
     >
       <ScaledText
@@ -406,12 +393,7 @@ export const SecondaryField: React.FC<{
   <ScaledView
     key={field.key}
     style={{ flex: 1 }}
-    scaleStyle={{
-      paddingRight: 12,
-      justifyContent: 'center',
-      paddingHorizontal: 24,
-      maxWidth: '65%',
-    }}
+    scaleStyle={styles.secondaryFieldScaled}
   >
     <ScaledText
       numberOfLines={1}
@@ -443,12 +425,7 @@ export const SecondaryField: React.FC<{
 const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
     colors={[Colors.randomGrey, Colors.white00]}
-    style={{
-      flex: 1,
-      borderTopEndRadius: BORDER_RADIUS,
-      borderTopStartRadius: BORDER_RADIUS,
-      overflow: 'hidden',
-    }}
+    style={styles.backgroundOpacity}
   >
     {children}
   </LinearGradient>
@@ -480,16 +457,7 @@ export const DocumentBackgroundImage: React.FC<{
     scaleStyle={{ height: isInteracting ? 84 : 84 + DOCUMENT_HEADER_HEIGHT }}
     style={{ width: '100%' }}
   >
-    <ImageBackground
-      style={{
-        width: '100%',
-        height: '100%',
-        borderTopEndRadius: BORDER_RADIUS,
-        borderTopStartRadius: BORDER_RADIUS,
-        overflow: 'hidden',
-      }}
-      source={{ uri: image }}
-    >
+    <ImageBackground style={styles.backgroundImage} source={{ uri: image }}>
       <BackgroundOpacity>{children}</BackgroundOpacity>
     </ImageBackground>
   </ScaledView>
@@ -503,13 +471,7 @@ export const DocumentBackgroundColor: React.FC<{
     scaleStyle={{
       height: isInteracting ? 84 : 84 + DOCUMENT_HEADER_HEIGHT,
     }}
-    style={{
-      width: '100%',
-      backgroundColor: color,
-      borderTopEndRadius: BORDER_RADIUS,
-      borderTopStartRadius: BORDER_RADIUS,
-      overflow: 'hidden',
-    }}
+    style={{ ...styles.backgroundColor, backgroundColor: color }}
   >
     <BackgroundOpacity>{children}</BackgroundOpacity>
   </ScaledView>
@@ -613,6 +575,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  headerContainerScaled: {
+    height: DOCUMENT_HEADER_HEIGHT,
+    padding: 16,
+    borderTopEndRadius: BORDER_RADIUS,
+    borderTopStartRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+  },
   photo: {
     width: '100%',
     height: '100%',
@@ -679,5 +648,32 @@ const styles = StyleSheet.create({
     height: 20,
     borderWidth: 1,
     borderRadius: 10,
+  },
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    borderTopEndRadius: BORDER_RADIUS,
+    borderTopStartRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+  },
+  backgroundColor: {
+    width: '100%',
+    borderTopEndRadius: BORDER_RADIUS,
+    borderTopStartRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+  },
+  holderNameScaled: { paddingLeft: 24, marginVertical: 8 },
+  prefetchedIconScaled: { width: 32, height: 32, marginRight: 10 },
+  backgroundOpacity: {
+    flex: 1,
+    borderTopEndRadius: BORDER_RADIUS,
+    borderTopStartRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+  },
+  secondaryFieldScaled: {
+    paddingRight: 12,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    maxWidth: '65%',
   },
 })
