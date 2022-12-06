@@ -11,8 +11,8 @@ import {
   View,
 } from 'react-native'
 import branch from 'react-native-branch'
-import Permissions from 'react-native-permissions'
 import { Camera as QRCamera, CameraType } from 'react-native-camera-kit'
+import Permissions from 'react-native-permissions'
 import { useDispatch, useSelector } from 'react-redux'
 
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
@@ -175,6 +175,7 @@ const Camera = () => {
           // when the app goes into background when the deeplink is opened
           return new Promise<void>((res) => {
             branch.openURL(e.nativeEvent.codeStringValue)
+            isTorchPressed && setTorchPressed(false)
             setTimeout(() => {
               res()
             }, 1000)
@@ -182,10 +183,11 @@ const Camera = () => {
         }).catch(scheduleErrorWarning)
       } else {
         await startInteraction(e.nativeEvent.codeStringValue)
+        isTorchPressed && setTorchPressed(false)
       }
     } catch (err) {
       console.log('handleScan error', { err })
-
+      isTorchPressed && setTorchPressed(false)
       setError(true)
       setErrorText(t('Camera.errorMsg'))
     }
