@@ -175,7 +175,7 @@ const Camera = () => {
           // when the app goes into background when the deeplink is opened
           return new Promise<void>((res) => {
             branch.openURL(e.nativeEvent.codeStringValue)
-            isTorchPressed && setTorchPressed(false)
+            setTorchPressed(false)
             setTimeout(() => {
               res()
             }, 1000)
@@ -183,11 +183,11 @@ const Camera = () => {
         }).catch(scheduleErrorWarning)
       } else {
         await startInteraction(e.nativeEvent.codeStringValue)
-        isTorchPressed && setTorchPressed(false)
+        setTorchPressed(false)
       }
     } catch (err) {
       console.log('handleScan error', { err })
-      isTorchPressed && setTorchPressed(false)
+      setTorchPressed(false)
       setError(true)
       setErrorText(t('Camera.errorMsg'))
     }
