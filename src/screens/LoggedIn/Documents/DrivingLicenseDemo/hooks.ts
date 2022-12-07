@@ -25,6 +25,7 @@ import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { addCredentials } from '~/modules/credentials/actions'
+import { setMdoc } from '~/modules/interaction/mdl/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { ScreenNames } from '~/types/screens'
@@ -198,6 +199,7 @@ export const useDrivingLicense = () => {
   }
 
   const finishPersonalization = (responses: PersonalizationInputResponse[]) => {
+    dispatch(setMdoc(null))
     dispatch(
       setLoader({
         type: LoaderTypes.default,
