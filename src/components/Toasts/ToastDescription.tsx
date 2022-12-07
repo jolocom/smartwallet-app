@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { IWithCustomStyle } from '~/types/props'
 import BP from '~/utils/breakpoints'
@@ -40,13 +39,13 @@ const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
     </JoloText>
   )
 
-  return label ? (
-    <TouchableOpacity onPress={invokeInteract} activeOpacity={0.6}>
-      <ToastText />
-    </TouchableOpacity>
-  ) : (
-    <ToastText />
-  )
+  if (label)
+    return (
+      <TouchableOpacity onPressIn={invokeInteract} activeOpacity={0.6}>
+        <ToastText />
+      </TouchableOpacity>
+    )
+  return <ToastText />
 }
 
 const styles = StyleSheet.create({
