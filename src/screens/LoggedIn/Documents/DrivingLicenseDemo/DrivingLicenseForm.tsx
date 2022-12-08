@@ -1,8 +1,9 @@
 import { RouteProp, useRoute } from '@react-navigation/core'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PersonalizationInputResponse } from 'react-native-mdl'
 import { useDispatch } from 'react-redux'
+import { boolean } from 'yup'
 
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { BottomButtons } from '~/components/BottomButtons'
@@ -51,7 +52,12 @@ export const DrivingLicenseForm = () => {
   const [inputs, setInputs] = useState<InputState>(initState)
   const [showBottomSheet, setShowBottomSheet] = useState(true)
 
-  const toggleBottomSheet = async () => {
+  const toggleBottomSheet = async (
+    config?: { clearInput?: boolean } | undefined,
+  ) => {
+    if (config && config?.clearInput) {
+      setInputs(initState)
+    }
     setShowBottomSheet(!showBottomSheet)
   }
 
@@ -136,7 +142,7 @@ export const DrivingLicenseForm = () => {
           description={description}
           onSubmit={toggleBottomSheet}
           isSubmitDisabled={isSubmitDisabled}
-          onCancel={toggleBottomSheet}
+          onCancel={() => toggleBottomSheet({ clearInput: true })}
         >
           {requests.map((request) => {
             return (
