@@ -39,13 +39,13 @@ const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
     </JoloText>
   )
 
-  return label ? (
-    <TouchableOpacity onPress={invokeInteract} activeOpacity={0.6}>
-      <ToastText />
-    </TouchableOpacity>
-  ) : (
-    <ToastText />
-  )
+  if (label)
+    return (
+      <TouchableOpacity onPressIn={invokeInteract} activeOpacity={0.6}>
+        <ToastText />
+      </TouchableOpacity>
+    )
+  return <ToastText />
 }
 
 const styles = StyleSheet.create({
