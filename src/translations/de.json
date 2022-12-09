@@ -628,6 +628,9 @@
         "authenticationSubtitle": "Bitte authentifizieren Sie sich für den digitalen Führerschein",
         "existingDocumentTitle": "Sind Sie sich sicher?",
         "existingDocumentDescription": "Sie besitzen bereits einen mobilen Führerschein",
-        "existingDocumentBtn": "hier"
+        "existingDocumentBtn": "hier",
+        "title": "Führerschein",
+        "description": "Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten",
+        "serviceName": "Bundesdruckerei"
     }
 }
