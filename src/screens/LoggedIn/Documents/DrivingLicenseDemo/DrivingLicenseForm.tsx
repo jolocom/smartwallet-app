@@ -138,15 +138,19 @@ export const DrivingLicenseForm = () => {
           isSubmitDisabled={isSubmitDisabled}
           onCancel={toggleBottomSheet}
         >
-          {requests.map((request) => {
+          {requests.map((request, index) => {
+            const isLastEntry = index === requests.length - 1
             return (
               <FormFieldContainer key={request.name}>
                 <InputBlock
+                  autoFocus={index === 0}
                   placeholder={t('mdl.drivingLicenseNumber')}
                   value={inputs[request.name]}
                   updateInput={(val) => {
                     setInputs((prev) => ({ ...prev, [request.name]: val }))
                   }}
+                  returnKeyType={isLastEntry ? 'done' : 'default'}
+                  onSubmitEditing={isLastEntry ? toggleBottomSheet : () => {}}
                 />
               </FormFieldContainer>
             )
