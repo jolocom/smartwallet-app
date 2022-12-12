@@ -50,8 +50,18 @@ export const DrivingLicenseForm = () => {
 
   const [inputs, setInputs] = useState<InputState>(initState)
   const [showBottomSheet, setShowBottomSheet] = useState(true)
+  const [previousState, setPreviousState] = useState(initState)
 
-  const toggleBottomSheet = async () => {
+  const isSubmitDisabled = Object.entries(inputs).every(
+    ([_, value]) => !value.length,
+  )
+
+  const toggleBottomSheet = async (config?: { cancel?: boolean }) => {
+    if (config && config?.cancel) {
+      setInputs(previousState)
+    }
+    !showBottomSheet && setPreviousState(inputs)
+
     setShowBottomSheet(!showBottomSheet)
   }
 
@@ -71,10 +81,6 @@ export const DrivingLicenseForm = () => {
     finishPersonalization(responses)
     goBack()
   }
-
-  const isSubmitDisabled = Object.entries(inputs).every(
-    ([_, value]) => !value.length,
-  )
 
   const onCancel = () => {
     dispatch(setMdoc(null))
@@ -133,7 +139,7 @@ export const DrivingLicenseForm = () => {
           description={t('mdl.description')}
           onSubmit={toggleBottomSheet}
           isSubmitDisabled={isSubmitDisabled}
-          onCancel={toggleBottomSheet}
+          onCancel={() => toggleBottomSheet({ cancel: true })}
         >
           {requests.map((request) => {
             return (
