@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import {
+  Platform,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
@@ -10,9 +11,9 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
-  withSequence,
   withDelay,
+  withSequence,
+  withTiming,
 } from 'react-native-reanimated'
 
 import { ScanDocumentIcon } from '~/assets/svg'
@@ -36,7 +37,6 @@ import {
 } from './consts'
 import { useCredentialNameScale } from './hooks'
 import ScaledCard, { ScaledView } from './ScaledCard'
-
 interface DocumentCardProps {
   id: string
   credentialName: string
@@ -55,6 +55,8 @@ interface DocumentCardProps {
   showMenu?: boolean
   highlight?: boolean
 }
+
+export const BORDER_RADIUS = 15
 
 const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
   ({
@@ -190,7 +192,10 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           originalHeight={scalingConfig.originalHeight}
           originalWidth={scalingConfig.originalWidth}
           originalScreenWidth={scalingConfig.originalScreenWidth}
-          style={[styles.card, style]}
+          style={[
+            Platform.OS === 'ios' ? styles.cardIos : styles.cardAndroid,
+            style,
+          ]}
           scaleStyle={styles.cardScaled}
           testID="documentCard"
         >
@@ -310,13 +315,24 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
   },
-  card: {
-    overflow: 'hidden',
+  cardIos: {
     flex: 1,
+    backgroundColor: Colors.white,
+    shadowColor: Colors.mainBlack,
+    shadowOffset: {
+      width: 0,
+      height: -6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+  },
+  cardAndroid: {
+    flex: 1,
+    elevation: 10,
     backgroundColor: Colors.white,
   },
   cardScaled: {
-    borderRadius: 15,
+    borderRadius: BORDER_RADIUS,
   },
   overlay: {
     position: 'absolute',
@@ -326,7 +342,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.success,
     zIndex: 1,
-    borderRadius: 15,
+    borderRadius: BORDER_RADIUS,
   },
 })
 

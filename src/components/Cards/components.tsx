@@ -9,6 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import LinearGradient from 'react-native-linear-gradient'
 import { FavoriteHeartIcon, PurpleTickSuccess } from '~/assets/svg'
 import { DocumentProperty } from '~/hooks/documents/types'
@@ -19,10 +20,10 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import JoloText from '../JoloText'
 import { DOCUMENT_HEADER_HEIGHT } from './consts'
+import { BORDER_RADIUS } from './DocumentCard'
 import { useCredentialNameScale, usePruneFields } from './hooks'
 import { ScaledText, ScaledView } from './ScaledCard'
 import { splitIntoRows } from './utils'
-import FastImage from 'react-native-fast-image'
 
 export const FieldsCalculator: React.FC<{
   cbFieldsVisibility: (child: ReactNode, idx: number) => ReactNode
@@ -166,20 +167,11 @@ export const DocumentHeader: React.FC<{
     <View>
       {renderBackground(() => (
         <ScaledView
-          scaleStyle={{
-            height: DOCUMENT_HEADER_HEIGHT,
-            padding: 16,
-          }}
+          scaleStyle={styles.headerContainerScaled}
           style={styles.headerContainer}
         >
           {prefetchedIcon && (
-            <ScaledView
-              scaleStyle={{
-                width: 32,
-                height: 32,
-                marginRight: 10,
-              }}
-            >
+            <ScaledView scaleStyle={styles.prefetchedIconScaled}>
               <Image
                 resizeMode="cover"
                 style={[styles.photo, { borderRadius: 4.2 }]}
@@ -233,9 +225,8 @@ export const DocumentHolderName: React.FC<{
   return (
     <ScaledView
       scaleStyle={{
-        paddingLeft: 24,
+        ...styles.holderNameScaled,
         marginRight: cropName ? 116 : 0,
-        marginVertical: 8,
       }}
     >
       <ScaledText
@@ -402,12 +393,7 @@ export const SecondaryField: React.FC<{
   <ScaledView
     key={field.key}
     style={{ flex: 1 }}
-    scaleStyle={{
-      paddingRight: 12,
-      justifyContent: 'center',
-      paddingHorizontal: 24,
-      maxWidth: '65%',
-    }}
+    scaleStyle={styles.secondaryFieldScaled}
   >
     <ScaledText
       numberOfLines={1}
@@ -439,7 +425,7 @@ export const SecondaryField: React.FC<{
 const BackgroundOpacity: React.FC = ({ children }) => (
   <LinearGradient
     colors={[Colors.randomGrey, Colors.white00]}
-    style={{ flex: 1 }}
+    style={styles.backgroundOpacity}
   >
     {children}
   </LinearGradient>
@@ -450,7 +436,12 @@ export const GradientSeparator: React.FC = ({ children }) => {
     <ScaledView scaleStyle={{ height: DOCUMENT_HEADER_HEIGHT }}>
       <LinearGradient
         colors={[Colors.randomGrey, Colors.white]}
-        style={{ flex: 1 }}
+        style={{
+          flex: 1,
+          borderTopEndRadius: BORDER_RADIUS,
+          borderTopStartRadius: BORDER_RADIUS,
+          overflow: 'hidden',
+        }}
       >
         {children}
       </LinearGradient>
@@ -467,7 +458,13 @@ export const DocumentBackgroundImage: React.FC<{
     style={{ width: '100%' }}
   >
     <ImageBackground
-      style={{ width: '100%', height: '100%' }}
+      style={{
+        width: '100%',
+        height: '100%',
+        borderTopEndRadius: BORDER_RADIUS,
+        borderTopStartRadius: BORDER_RADIUS,
+        overflow: 'hidden',
+      }}
       source={{ uri: image }}
     >
       <BackgroundOpacity>{children}</BackgroundOpacity>
@@ -485,6 +482,9 @@ export const DocumentBackgroundColor: React.FC<{
     }}
     style={{
       width: '100%',
+      borderTopEndRadius: BORDER_RADIUS,
+      borderTopStartRadius: BORDER_RADIUS,
+      overflow: 'hidden',
       backgroundColor: color,
     }}
   >
@@ -590,6 +590,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  headerContainerScaled: {
+    height: DOCUMENT_HEADER_HEIGHT,
+    padding: 16,
+    borderTopEndRadius: BORDER_RADIUS,
+    borderTopStartRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+  },
   photo: {
     width: '100%',
     height: '100%',
@@ -656,5 +663,19 @@ const styles = StyleSheet.create({
     height: 20,
     borderWidth: 1,
     borderRadius: 10,
+  },
+  holderNameScaled: { paddingLeft: 24, marginVertical: 8 },
+  prefetchedIconScaled: { width: 32, height: 32, marginRight: 10 },
+  backgroundOpacity: {
+    flex: 1,
+    borderTopEndRadius: BORDER_RADIUS,
+    borderTopStartRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+  },
+  secondaryFieldScaled: {
+    paddingRight: 12,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    maxWidth: '65%',
   },
 })

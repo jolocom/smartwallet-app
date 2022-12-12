@@ -7,12 +7,12 @@ import {
   Platform,
   StyleSheet,
   TouchableHighlight,
+  Vibration,
   View,
 } from 'react-native'
 import branch from 'react-native-branch'
-import { RNCamera } from 'react-native-camera'
+import { Camera as QRCamera, CameraType } from 'react-native-camera-kit'
 import Permissions from 'react-native-permissions'
-import QRCodeScanner from 'react-native-qrcode-scanner'
 import { useDispatch, useSelector } from 'react-redux'
 
 import NavigationHeader, { NavHeaderType } from '~/components/NavigationHeader'
@@ -44,7 +44,6 @@ import {
 import { dismissLoader } from '~/modules/loader/actions'
 import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
 import { ScreenNames } from '~/types/screens'
-import { SCREEN_HEIGHT } from '~/utils/dimensions'
 import { JoloTextSizes } from '~/utils/fonts'
 
 const majorVersionIOS = parseInt(Platform.Version as string, 10)
@@ -60,6 +59,7 @@ const Camera = () => {
   const { connected: isConnectedToTheInternet } = useConnection()
   const { personalizeLicense } = useDrivingLicense()
   const redirect = useRedirect()
+  const [scannerReady, setScannerReady] = useState(true)
 
   const ausweisScannerKey = useSelector(getAusweisScannerKey)
 
@@ -72,7 +72,11 @@ const Camera = () => {
   const isFocused = useIsFocused()
 
   const shouldScan =
-    isFocused && !isLoaderVisible && !isAppLocked && !errorScreen
+    isFocused &&
+    !isLoaderVisible &&
+    !isAppLocked &&
+    !errorScreen &&
+    scannerReady
 
   const [renderCamera, setRenderCamera] = useState(false)
   const [isTorchPressed, setTorchPressed] = useState(false)
@@ -147,7 +151,9 @@ const Camera = () => {
     }
   }
 
-  const handleScan = async (e: { data: string }) => {
+  const handleScan = async (e: {
+    nativeEvent: { codeStringValue: string }
+  }) => {
     if (!isConnectedToTheInternet) {
       setError(true)
       /** * TODO:
@@ -156,35 +162,46 @@ const Camera = () => {
       setErrorText('Internet connection is required to proceed')
       return
     }
+
     try {
-      const isValidUrl = validateUrl(e.data)
+      Vibration.vibrate(100)
+      setScannerReady(false)
+
+      const isValidUrl = validateUrl(e.nativeEvent.codeStringValue)
       // FIXME: Ideally we should use the value from the .env config, but there
       // seems to be an issue with reading it.
 
-      if (e.data.startsWith('iso23220-3-sed:')) {
-        personalizeLicense(e.data, (requests) => {
+      if (e.nativeEvent.codeStringValue.startsWith('iso23220-3-sed:')) {
+        personalizeLicense(e.nativeEvent.codeStringValue, (requests) => {
           redirect(ScreenNames.DrivingLicenseForm, { requests })
         })
-      } else if (isValidUrl && e.data.includes('jolocom.app.link')) {
+      } else if (
+        isValidUrl &&
+        e.nativeEvent.codeStringValue.includes('jolocom.app.link')
+      ) {
         disableLock(() => {
           // NOTE: Since `branch.openURL` is not a promise, we need to assure the lock is disabled
           // when the app goes into background when the deeplink is opened
           return new Promise<void>((res) => {
-            branch.openURL(e.data)
+            branch.openURL(e.nativeEvent.codeStringValue)
+            setTorchPressed(false)
             setTimeout(() => {
               res()
             }, 1000)
           })
         }).catch(scheduleErrorWarning)
       } else {
-        await startInteraction(e.data)
+        await startInteraction(e.nativeEvent.codeStringValue)
+        setTorchPressed(false)
       }
     } catch (err) {
       console.log('handleScan error', { err })
-
+      setTorchPressed(false)
       setError(true)
       setErrorText(t('Camera.errorMsg'))
     }
+
+    setTimeout(() => setScannerReady(true), 1000)
   }
 
   useEffect(() => {
@@ -216,25 +233,17 @@ const Camera = () => {
           </View>
         )}
         {renderCamera && (
-          <QRCodeScanner
-            containerStyle={{ position: 'absolute' }}
-            // eslint-disable-next-line
-            onRead={shouldScan ? handleScan : () => {}}
-            vibrate={shouldScan}
-            reactivate={true}
-            reactivateTimeout={3000}
-            fadeIn
-            cameraStyle={{ height: SCREEN_HEIGHT }}
-            cameraProps={{
-              captureAudio: false,
-              flashMode: isTorchPressed
-                ? RNCamera.Constants.FlashMode.torch
-                : RNCamera.Constants.FlashMode.off,
-            }}
+          <QRCamera
+            style={styles.camera}
+            cameraType={CameraType.Back}
+            torchMode={isTorchPressed ? 'on' : 'off'}
+            onReadCode={shouldScan ? handleScan : () => {}}
+            scanBarcode={true}
+            showFrame={false}
           />
         )}
         {isScreenFocused ? (
-          <>
+          <View style={styles.overlayWrapper}>
             <View style={styles.topOverlay}>
               {SHOW_LOCAL_NETWORK_DIALOG && (
                 <Dialog onPress={handleLocalPermissionPress}>
@@ -305,7 +314,7 @@ const Camera = () => {
                 {isTorchPressed ? <TorchOnIcon /> : <TorchOffIcon />}
               </TouchableHighlight>
             </View>
-          </>
+          </View>
         ) : (
           <View style={{ flex: 1 }} />
         )}
@@ -320,8 +329,9 @@ const MARKER_SIZE = SCREEN_WIDTH * 0.75
 const styles = StyleSheet.create({
   navigationContainer: {
     position: 'absolute',
-    zIndex: 10,
+    zIndex: 21,
     width: '100%',
+    backgroundColor: Colors.transparent,
   },
   scannerContainer: {
     width: '100%',
@@ -374,6 +384,22 @@ const styles = StyleSheet.create({
       medium: 40,
       large: 60,
     }),
+  },
+  camera: {
+    position: 'absolute',
+    zIndex: 15,
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+  overlayWrapper: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 20,
   },
 })
 

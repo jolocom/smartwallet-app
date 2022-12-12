@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Colors } from '~/utils/colors'
-import { usePasscode } from './context'
 import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
+import { usePasscode } from './context'
 import { IPasscodeComposition } from './types'
 
 const CELL_ASPECT_RATIO = 0.75
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   caret: {
     width: 1,
     height: '80%',
-    backgroundColor: Colors.success,
+    backgroundColor: Colors.white,
   },
 })
 

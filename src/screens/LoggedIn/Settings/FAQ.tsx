@@ -1,5 +1,4 @@
-import { useRef } from 'react'
-import React from 'react'
+import React, { useRef } from 'react'
 import {
   Animated,
   FlatList,
@@ -7,14 +6,14 @@ import {
   NativeSyntheticEvent,
 } from 'react-native'
 
-import ScreenContainer from '~/components/ScreenContainer'
 import BlockExpanded from '~/components/BlockExpanded'
 import Collapsible from '~/components/Collapsible'
-
-type TFAQItem = { question: string; answer: string }
+import { NavHeaderType } from '~/components/NavigationHeader'
+import ScreenContainer from '~/components/ScreenContainer'
 import useTranslation from '~/hooks/useTranslation'
 import Section from './components/Section'
-import { NavHeaderType } from '~/components/NavigationHeader'
+
+type TFAQItem = { question: string; answer: string }
 
 const FAQ = () => {
   const listRef = useRef<FlatList>(null)
@@ -87,6 +86,7 @@ const FAQ = () => {
                   key={index}
                   title={item.question}
                   expandedText={item.answer}
+                  hasDropdown={true}
                   onExpand={() => handleExpand(listRef, index)}
                 />
               )}

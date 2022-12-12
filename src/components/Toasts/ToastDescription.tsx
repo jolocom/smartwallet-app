@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { useToastToShow } from './context'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import { IWithCustomStyle } from '~/types/props'
 import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
-import { StyleSheet } from 'react-native'
+import { useToastToShow } from './context'
 
 interface Props extends IWithCustomStyle {
   label?: string
@@ -15,30 +15,37 @@ interface Props extends IWithCustomStyle {
 const ToastDescription: React.FC<Props> = ({ label, customStyles = {} }) => {
   const { toastToShow, toastColor, invokeInteract } = useToastToShow()
 
-  const renderLabel = () => (
+  if (!toastToShow || !toastToShow.message) return null
+
+  const ToastLabel = () => (
     <JoloText
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.tiniest}
       color={toastColor}
       customStyles={[styles.customText, styles.customLabel]}
-      onPress={invokeInteract}
     >
       {label}
     </JoloText>
   )
 
-  if (!toastToShow || !toastToShow.message) return null
-
-  return (
+  const ToastText = () => (
     <JoloText
       kind={JoloTextKind.subtitle}
       size={JoloTextSizes.tiniest}
       color={Colors.white}
       customStyles={[styles.customText, customStyles]}
     >
-      {toastToShow.message} {label && renderLabel()}
+      {toastToShow.message} {label && <ToastLabel />}
     </JoloText>
   )
+
+  if (label)
+    return (
+      <TouchableOpacity onPressIn={invokeInteract} activeOpacity={0.6}>
+        <ToastText />
+      </TouchableOpacity>
+    )
+  return <ToastText />
 }
 
 const styles = StyleSheet.create({

@@ -1,3 +1,9 @@
+import { aa2Module } from '@jolocom/react-native-ausweis'
+import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
+import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { StackActions } from '@react-navigation/routers'
+import { StackNavigationProp } from '@react-navigation/stack'
 import React, {
   useEffect,
   useLayoutEffect,
@@ -5,24 +11,24 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { Trans } from 'react-i18next'
+import { LayoutAnimation, Platform, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { View, Platform, LayoutAnimation } from 'react-native'
-import { aa2Module } from '@jolocom/react-native-ausweis'
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
-import { StackActions } from '@react-navigation/routers'
-import { CardError, CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import { Commands } from '@jolocom/react-native-ausweis/js/commandTypes'
-import { StackNavigationProp } from '@react-navigation/stack'
-import ScreenContainer from '~/components/ScreenContainer'
+import JoloText from '~/components/JoloText'
 import Passcode from '~/components/Passcode'
 import { usePasscode } from '~/components/Passcode/context'
+import { ExtraActionProps } from '~/components/Passcode/types'
+import ScreenContainer from '~/components/ScreenContainer'
+import { useRevertToInitialState } from '~/hooks/generic'
+import { useCheckNFC } from '~/hooks/nfc'
 import { useToasts } from '~/hooks/toasts'
-import { Colors } from '~/utils/colors'
 import useTranslation from '~/hooks/useTranslation'
+import { getAusweisReaderState } from '~/modules/interaction/selectors'
 import { ScreenNames } from '~/types/screens'
 import BP from '~/utils/breakpoints'
-import { useRevertToInitialState } from '~/hooks/generic'
+import { Colors } from '~/utils/colors'
 import { AusweisStackParamList } from '..'
+import eIDHooks from '../hooks'
 import {
   AusweisFlow,
   AusweisPasscodeMode,
@@ -31,12 +37,6 @@ import {
   eIDScreens,
   IAusweisRequest,
 } from '../types'
-import eIDHooks from '../hooks'
-import { getAusweisReaderState } from '~/modules/interaction/selectors'
-import { ExtraActionProps } from '~/components/Passcode/types'
-import JoloText from '~/components/JoloText'
-import { Trans } from 'react-i18next'
-import { useCheckNFC } from '~/hooks/nfc'
 
 const ALL_EID_PIN_ATTEMPTS = 3
 const IS_ANDROID = Platform.OS === 'android'
@@ -640,7 +640,7 @@ export const AusweisPasscode = () => {
 
   return (
     <ScreenContainer
-      backgroundColor={Colors.mainDark}
+      backgroundColor={Colors.mainBlack}
       hasHeaderClose
       onClose={handleClosePasscode}
       customStyles={{
@@ -658,10 +658,7 @@ export const AusweisPasscode = () => {
             style={{ paddingHorizontal: 8, flex: 1, justifyContent: 'center' }}
           >
             <Passcode.Header title={title} errorTitle={title} />
-            <Passcode.Input
-              cellColor={Colors.chisinauGrey}
-              numberOfLines={getPasscodeNrLines()}
-            />
+            <Passcode.Input numberOfLines={getPasscodeNrLines()} />
             <Passcode.Error />
           </View>
         </Passcode.Container>
