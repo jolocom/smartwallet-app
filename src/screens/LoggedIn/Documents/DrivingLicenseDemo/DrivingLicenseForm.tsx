@@ -145,7 +145,10 @@ export const DrivingLicenseForm = () => {
                   placeholder={t('mdl.drivingLicenseNumber')}
                   value={inputs[request.name]}
                   updateInput={(val) => {
-                    setInputs((prev) => ({ ...prev, [request.name]: val }))
+                    setInputs((prev) => ({
+                      ...prev,
+                      [request.name]: val.trim(),
+                    }))
                   }}
                 />
               </FormFieldContainer>
