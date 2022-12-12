@@ -1,9 +1,8 @@
 import { RouteProp, useRoute } from '@react-navigation/core'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PersonalizationInputResponse } from 'react-native-mdl'
 import { useDispatch } from 'react-redux'
-import { boolean } from 'yup'
 
 import PencilIcon from '~/assets/svg/PencilIcon'
 import { BottomButtons } from '~/components/BottomButtons'
