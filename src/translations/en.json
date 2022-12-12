@@ -628,6 +628,9 @@
         "authenticationSubtitle": "We need to authenticate you for the Driving License",
         "existingDocumentTitle": "Are you sure about this?",
         "existingDocumentDescription": "You already have a Driving License document",
-        "existingDocumentBtn": "right here"
+        "existingDocumentBtn": "right here",
+        "title": "Driving License",
+        "description": "Please enter your personal data to receive your mobile driving license",
+        "serviceName": "Bundesdruckerei"
     }
 }
