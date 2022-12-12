@@ -58,7 +58,7 @@ export const DrivingLicenseForm = () => {
 
   const toggleBottomSheet = async (config?: { cancel?: boolean }) => {
     if (config && config?.cancel) {
-      isSubmitDisabled ? setInputs(initState) : setInputs(previousState)
+      setInputs(previousState)
     }
     !showBottomSheet && setPreviousState(inputs)
 
