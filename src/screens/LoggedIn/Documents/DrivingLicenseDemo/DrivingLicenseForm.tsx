@@ -70,7 +70,7 @@ export const DrivingLicenseForm = () => {
   // TODO: replace with actual data / translations
   const serviceUrl = 'https://www.jolocom.io'
   const serviceName = t('mdl.serviceName')
-  const source = 'https://avatars0.githubusercontent.com/u/4603324?s=200&v=4'
+  const source = 'https://i.postimg.cc/VvHJXdqk/bdr.png'
 
   const handleSubmit = async () => {
     const responses: PersonalizationInputResponse[] = Object.entries(
@@ -93,7 +93,7 @@ export const DrivingLicenseForm = () => {
         <BottomSheet onDismiss={goBack}>
           <ContainerBAS>
             <LogoContainerBAS>
-              <ServiceLogo source={source} serviceUrl={serviceUrl} />
+              <ServiceLogo source={source} serviceUrl={serviceUrl} isMdl />
             </LogoContainerBAS>
             <InteractionTitle label={t('CredentialRequest.header')} />
             <JoloText
