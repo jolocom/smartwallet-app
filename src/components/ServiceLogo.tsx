@@ -23,12 +23,13 @@ import { Colors } from '~/utils/colors'
 interface Props {
   source?: string
   serviceUrl?: string
+  isMdl?: boolean
 }
 
 const IMAGE_SIZE = 70
 const GRADIENT_SIZE = 74
 
-export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
+export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl, isMdl }) => {
   const { scheduleErrorWarning } = useToasts()
 
   const rotationValue = useSharedValue('0deg')
@@ -85,10 +86,19 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
         </View>
       ) : null}
       <TouchableOpacity
-        onPress={serviceUrl && handleRedirectToCounterparty}
+        onPress={serviceUrl ? handleRedirectToCounterparty : () => {}}
         activeOpacity={serviceUrl ? 0.9 : 1}
       >
-        <Image style={styles.image} source={{ uri: source }} />
+        <View style={isMdl && styles.mdlImageContainer}>
+          <Image
+            style={{
+              ...styles.image,
+              ...(isMdl && { width: '60%' }),
+              ...(isMdl && { height: '60%' }),
+            }}
+            source={{ uri: source }}
+          />
+        </View>
       </TouchableOpacity>
     </View>
   ) : (
@@ -103,6 +113,16 @@ const styles = StyleSheet.create({
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
     borderRadius: IMAGE_SIZE / 2,
+  },
+  mdlImageContainer: {
+    backgroundColor: Colors.white,
+    borderColor: Colors.mainDark,
+    borderWidth: 3,
+    width: IMAGE_SIZE,
+    height: IMAGE_SIZE,
+    borderRadius: IMAGE_SIZE / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   gradientContainer: {
     position: 'absolute',
