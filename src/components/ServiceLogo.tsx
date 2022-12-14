@@ -54,7 +54,9 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
     if (serviceUrl) {
       try {
         await Linking.openURL(serviceUrl)
+        console.log('aaaaa')
       } catch (e) {
+        console.log('bbbbb')
         scheduleErrorWarning(e as Error)
       }
     }
@@ -85,7 +87,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
         </View>
       ) : null}
       <TouchableOpacity
-        onPress={serviceUrl && handleRedirectToCounterparty}
+        onPress={serviceUrl ? handleRedirectToCounterparty : () => {}}
         activeOpacity={serviceUrl ? 0.9 : 1}
       >
         <Image style={styles.image} source={{ uri: source }} />
