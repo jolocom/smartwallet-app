@@ -54,9 +54,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
     if (serviceUrl) {
       try {
         await Linking.openURL(serviceUrl)
-        console.log('aaaaa')
       } catch (e) {
-        console.log('bbbbb')
         scheduleErrorWarning(e as Error)
       }
     }
