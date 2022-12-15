@@ -85,7 +85,7 @@ export const ServiceLogo: React.FC<Props> = ({ source, serviceUrl }) => {
         </View>
       ) : null}
       <TouchableOpacity
-        onPress={serviceUrl && handleRedirectToCounterparty}
+        onPress={serviceUrl ? handleRedirectToCounterparty : () => {}}
         activeOpacity={serviceUrl ? 0.9 : 1}
       >
         <Image style={styles.image} source={{ uri: source }} />
