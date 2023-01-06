@@ -86,7 +86,7 @@ buck-out/
 /ios/Pods/
 
 # env variables
-.env
+bin/.env
 
 # other
 coverage/
