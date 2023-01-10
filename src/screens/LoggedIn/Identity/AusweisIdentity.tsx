@@ -162,9 +162,12 @@ export const AusweisIdentity = () => {
         </JoloText>
       </View>
       <View>
-        <JoloText size={JoloTextSizes.mini} customStyles={{ marginTop: 8 }}>
-          {t('AusweisIdentity.subheader')}
-          {'\n'}
+        <JoloText
+          size={JoloTextSizes.mini}
+          customStyles={styles.subheader}
+          color={Colors.white70}
+        >
+          {t('AusweisIdentity.subheader')}{' '}
           <JoloText
             onPress={handleMoreInfo}
             size={JoloTextSizes.mini}
@@ -208,7 +211,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: '100%',
     aspectRatio: 1.55,
-    marginBottom: 8,
     position: 'relative',
   },
   ausweisBadge: {
@@ -234,5 +236,9 @@ const styles = StyleSheet.create({
   btnContainer: {
     marginTop: BP({ default: 28, large: 42 }),
     paddingVertical: 8,
+  },
+  subheader: {
+    textAlign: 'left',
+    paddingHorizontal: 14,
   },
 })
