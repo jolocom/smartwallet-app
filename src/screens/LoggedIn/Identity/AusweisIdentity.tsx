@@ -3,7 +3,6 @@ import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { useCheckNFC } from '~/hooks/nfc'
 import useTranslation from '~/hooks/useTranslation'
@@ -20,6 +19,7 @@ import BP from '~/utils/breakpoints'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { IS_ANDROID } from '~/utils/generic'
+import { IdentityBtn } from './IdentityBtn'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -136,19 +136,11 @@ export const AusweisIdentity = () => {
   const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
 
   return (
-    <View
-      style={{
-        marginBottom: BP({
-          large: 0,
-          default: 40,
-        }),
-      }}
-      testID="home-ausweis-identity"
-    >
+    <View style={styles.container} testID="home-ausweis-identity">
       <JoloText
         kind={JoloTextKind.title}
         weight={JoloTextWeight.medium}
-        customStyles={{ textAlign: 'left', marginBottom: 12 }}
+        customStyles={styles.header}
       >
         {t('AusweisIdentity.header')}
       </JoloText>
@@ -181,31 +173,26 @@ export const AusweisIdentity = () => {
             {t('General.moreInfo')}
           </JoloText>
         </JoloText>
-
         <View style={styles.btnContainer}>
-          <Btn
-            type={BtnTypes.secondary}
-            customContainerStyles={styles.btn}
-            loading={isLoadingCompatibility}
+          <IdentityBtn
+            title={t('AusweisIdentity.compatibilityBtn')}
+            subtitle={
+              'Check if your device is compatible with the eID functionality.'
+            }
             onPress={handleCompatibility}
-          >
-            {t('AusweisIdentity.compatibilityBtn')}
-          </Btn>
-          <Btn
-            type={BtnTypes.secondary}
-            customContainerStyles={styles.btn}
+            loading={isLoadingCompatibility}
+          />
+          <IdentityBtn
+            title={t('AusweisIdentity.changePinBtn')}
+            subtitle={'Change or set your eID PIN.'}
             onPress={handleChangePin}
-          >
-            {t('AusweisIdentity.changePinBtn')}
-          </Btn>
-          <Btn
-            type={BtnTypes.secondary}
-            customContainerStyles={styles.btn}
+          />
+          <IdentityBtn
+            title={t('AusweisIdentity.unlockBtn')}
+            subtitle={'Unlock your blocked card here.'}
             loading={isLoadingUnlock}
             onPress={handleUnlockCard}
-          >
-            {t('AusweisIdentity.unlockBtn')}
-          </Btn>
+          />
         </View>
       </View>
     </View>
@@ -213,6 +200,12 @@ export const AusweisIdentity = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: BP({
+      large: 0,
+      default: 40,
+    }),
+  },
   cardContainer: {
     width: '100%',
     aspectRatio: 3,
@@ -233,15 +226,10 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain',
   },
-  btn: {
-    borderWidth: 1,
-    borderColor: Colors.borderGray20,
-    marginVertical: 1,
-  },
   btnContainer: {
-    marginTop: BP({ default: 28, large: 42 }),
-    paddingVertical: 8,
+    marginTop: BP({ default: 8, large: 16 }),
   },
+  header: { textAlign: 'left', marginBottom: 12 },
   subheader: {
     textAlign: 'left',
     paddingHorizontal: 14,
