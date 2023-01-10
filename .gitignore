@@ -87,6 +87,7 @@ buck-out/
 
 # env variables
 bin/.env
+.env
 
 # other
 coverage/
