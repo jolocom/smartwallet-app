@@ -137,20 +137,25 @@ export const AusweisIdentity = () => {
 
   return (
     <View
-      style={{ marginBottom: BP({ large: 0, default: 40 }) }}
+      style={{
+        marginBottom: BP({
+          large: 0,
+          default: 40,
+        }),
+      }}
       testID="home-ausweis-identity"
     >
       <JoloText
         kind={JoloTextKind.title}
         weight={JoloTextWeight.medium}
-        customStyles={{ textAlign: 'left' }}
+        customStyles={{ textAlign: 'left', marginBottom: 12 }}
       >
         {t('AusweisIdentity.header')}
       </JoloText>
-      <View style={styles.cardContainer}>
+      <View style={{ ...styles.cardContainer }}>
         <Image
           resizeMode="contain"
-          source={require('~/assets/images/updatedCard.png')}
+          source={require('~/assets/images/cardBanner.png')}
           style={styles.card}
         />
         <JoloText
@@ -210,13 +215,14 @@ export const AusweisIdentity = () => {
 const styles = StyleSheet.create({
   cardContainer: {
     width: '100%',
-    aspectRatio: 1.55,
+    aspectRatio: 3,
     position: 'relative',
+    alignSelf: 'center',
   },
   ausweisBadge: {
     position: 'absolute',
-    bottom: 23,
-    left: 18,
+    bottom: 12,
+    left: 24,
     fontSize: 16,
     lineHeight: 18.4,
     letterSpacing: 0.15,
@@ -226,7 +232,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
-    transform: [{ scale: 1.1 }],
   },
   btn: {
     borderWidth: 1,
@@ -240,5 +245,6 @@ const styles = StyleSheet.create({
   subheader: {
     textAlign: 'left',
     paddingHorizontal: 14,
+    marginTop: 8,
   },
 })
