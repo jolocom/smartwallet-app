@@ -1,604 +1,636 @@
 {
-  "Walkthrough": {
-    "titleOne": "Nutzen Sie Ihre Identität",
-    "descriptionOne": "Für einen einfachem Zugang zu Ihren Apps und Services",
-    "registrationBtn": "Wallet einrichten",
-    "recoveryBtn": "Identität importieren",
-    "titleTwo": "Schützen Sie Ihre Daten",
-    "descriptionTwo": "Ihre Digitalen Identitäten liegen sicher in der Wallet",
-    "titleThree": "Alles an einem Ort",
-    "descriptionThree": "Alle digitalen Identitäten und Nachweise werden auf Ihrem Smartphone gespeichert."
-  },
-  "TermsConsent": {
-    "header": "Nutzungsbedingungen & Datenschutzerklärung",
-    "subheader": "Nachfolgend finden Sie die deutsche und englische Version der Dokumente. Bitte beachten Sie, dass die deutsche Version rechtsgültig ist",
-    "footer": "Ich habe die Nutzungsbedingungen und Datenschutzrichtlinien verstanden und akzeptiere sie",
-    "footerBtn": "Neue Bedingungen annehmen"
-  },
-  "Recovery": {
-    "header": "Wiederherstellung",
-    "subheader": "Geben Sie Ihre geheime Wortkombination ein und sie wird hier erscheinen",
-    "forgotBtn": "Geheime Wortkombination vergessen?",
-    "wrongWord": "Dieses Wort passt nicht",
-    "confirmBtn": "Bestätigen",
-    "exitBtn": "Wiederherstellung abbrechen",
-    "confirmLoader": "Überprüfung findet statt"
-  },
-  "Loader": {
-    "successDefault": "Überprüfung erfolgreich!",
-    "failedDefault": "Überprüfung fehlgeschlagen",
-    "loading": "Ladevorgang"
-  },
-  "OnboardingBackup": {
-    "header": "Möchten Sie ein Backup wiederherstellen?",
-    "instruction": "Ziehen Sie zum Starten den Punkt in den Kreis",
-    "skipBtn": "Ich habe kein Backup"
-  },
-  "RecoveryInfo": {
-    "header": "Was könnnen Sie tun, wenn Sie Ihre geheime Wortkombination vergessen haben?",
-    "textPartOne": "Ohne Ihre geheime Wortkombination können Sie Ihre Identität leider nicht wiederherzustellen.",
-    "textPartTwo": "Um Ihre gesamte Wallet wiederherzustellen, brauchen Sie ihre geheime Wortkombination und die Backup-Datei.",
-    "textPartThree": "Sind Sie sicher, dass Sie nirgendwo eine Abschrift Ihrer geheimen Wortkombination hinterlegt haben?",
-    "textPartFour": "Erinnern Sie sich zurück an den Moment, als Sie Ihre Identität angelegt haben.",
-    "closeBtn": "Weiter"
-  },
-  "Entropy": {
-    "header": "Machen Sie es einzigartig",
-    "subheader": "Zeichnen Sie irgendetwas, bis 100% erreicht wurde",
-    "loader": "Fantastisch!\nDie Identität wird gesichert"
-  },
-  "SeedphraseWrite": {
-    "touchInstructions": "Berühren Sie den Kreis mit Ihrem Finger",
-    "writeInstructions": "Notieren Sie sich die geheime Wortkombination in der angegebenen Reihenfolge. Bewahren Sie diese zur Wiederherstellung Ihrer Identität sicher auf!",
-    "confirmBtn": "Fertig",
-    "exitBtn": "Zurück zur Funktionsübersicht",
-    "writeInstructionsWarning": "Sie werden nicht mehr in der Lage sein, dies zu sehen"
-  },
-  "SeedphraseInfo": {
-    "header": "Warum diese geheime Wortkombination für Sie wichtig ist",
-    "textOne": "In Ihrer Wallet werden sensible Daten gespeichert, die einen besonderen Schutz benötigen.\n",
-    "textTwoHighlight": "Nur diese geheime Wortkombination ",
-    "textTwoDefault": "kann verwendet werden, um Ihre Identität wiederherzustellen, wenn Ihr Gerät verloren oder kaputt gegangen ist. ",
-    "textThree": "Wir empfehlen dringend, Ihre geheime Wortkombination an einem sicheren Ort aufzubewahren. Am besten schreiben Síe diese auf oder benutzen einen verschlüsselten Passwortmanager.",
-    "textFour": "Teilen Sie Ihre geheime Wortombination mit niemandem.",
-    "confirmBtn": "Verstanden"
-  },
-  "SeedphraseRepeat": {
-    "orderInstructions": "Ziehen Sie die Wörter in die korrekte Reihenfolge der geheimen Wortkombination",
-    "confirmBtn": "Fertig",
-    "matchingError": "Überprüfen Sie die Wortkombination und versuchen Sie es erneut."
-  },
-  "Identity": {
-    "widgetWelcome": "Bearbeiten Sie Ihre Digitale Identität",
-    "widgetStartBtn": "Jetzt beginnen",
-    "widgetNameHeader": "Wie heißen Sie?",
-    "widgetConfirmBtn": "Erstellen",
-    "widgetNextBtn": "Weiter",
-    "header": "Nachweise",
-    "nameLabel": "Name",
-    "emailLabel": "E-Mail",
-    "phoneNumberLabel": "Telefonnummer",
-    "addressLabel": "Anschrift \n",
-    "addClaimBtn": "Neu Hinzufügen",
-    "credentialsDescription": "Verwalten Sie ihre wichtigsten Kontaktinformationen an einem Ort. Zu einem späteren Zeitpunkt können Sie diese Daten mit einem Klick teilen und Formulare ohne zusätzlichem Aufwand ausfüllen.",
-    "headerAusweis": "Ihre eID",
-    "headerCredentials": "Nachweise"
-  },
-  "BottomBar": {
-    "identity": "Identität",
-    "documents": "Dokumente",
-    "history": "Verlauf",
-    "settings": "Einstellungen"
-  },
-  "InputPlaceholder": {
-    "givenName": "Vorname",
-    "familyName": "Nachname"
-  },
-  "Placeholder": {
-    "companyName": "Firma",
-    "addressLine": "Straße",
-    "postalCode": "Postleitzahl",
-    "country": "Land",
-    "city": "Stadt"
-  },
-  "CredentialForm": {
-    "editHeader": "${attributeName} bearbeiten",
-    "subheader": "Sobald Sie auf \"Fertig\" klicken, wird es im Bereich \"Persönliche Infos\" angezeigt.",
-    "closeBtn": "Abbrechen",
-    "confirmBtn": "Fertig",
-    "addHeader": "Fügen Sie Ihren ${attributeName, lowercase} hinzu",
-    "errorAttributeExists": "Ein identisches Attribut existiert bereits"
-  },
-  "CreatePasscode": {
-    "createHeader": "Wallet PIN erstellen",
-    "createSubheader": "Die Wallet PIN sorgt dafür, dass niemand unerlaubt Zugriff auf Ihre Wallet bekommt",
-    "helperText": "Sie können die Wallet PIN später ändern, indem Sie Ihre geheime Wortkombination verwenden."
-  },
-  "VerifyPasscode": {
-    "verifyHeader": "Wallet PIN bestätigen",
-    "verifySubheader": "Die Wallet PIN sorgt dafür, dass niemand unerlaubt Zugriff auf Ihre Wallet bekommt",
-    "resetBtn": "Zurücksetzen"
-  },
-  "Biometry": {
-    "header": "Verwenden Sie ${biometryType} um Ihre Wallet zu schützen",
-    "subheader": "So müssen Sie Ihre Wallet PIN nicht jedes Mal eingeben, wenn Sie die App öffnen",
-    "activateBtn": "Zum Aktivieren antippen",
-    "skipBtn": "Überspringen",
-    "promptFaceId": "Erfassen Sie Ihr Gesicht, um fortzufahren",
-    "promptFingerprint": "Scannen Sie Ihren Fingerabdruck auf dem Gerätescanner, um fortzufahren",
-    "promptBiometrics": "Biometrische Daten bereitstellen um fortzufahren"
-  },
-  "PasscodeRecoveryInstructions": {
-    "header": "So ändern Sie Ihre Wallet PIN",
-    "subheader1": "Es tut uns Leid, dass Sie Ihre Wallet PIN vergessen haben. Aber keine Sorge, es gibt eine Lösung!",
-    "subheader2": "Durch Eingabe Ihrer geheimen Wortkombination können Sie Ihre Wallet PIN  ändern. Klicken Sie unten auf Zugang wiederherstellen, um die Änderung vorzunehmen.",
-    "imageCaption": "Wort für Wort wiederholen",
-    "submitBtn": "Zugang wiederherstellen",
-    "footer": "Eine neue Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten",
-    "cancelBtn": "Abbrechen"
-  },
-  "Lock": {
-    "header": "Geben Sie Ihre Wallet PIN ein",
-    "forgotBtn": "Haben Sie Ihre Wallet PIN vergessen?",
-    "errorMsg": "Sie haben ${attempts} Versuche genutzt"
-  },
-  "CameraPermission": {
-    "header": "Kamera Berechtigung",
-    "subheader": "Ohne diese Berechtigung können Sie nicht scannen. Bitte erlauben Sie dies in Ihren Einstellungen.",
-    "confirmBtn": "Berechtigungen hier ändern"
-  },
-  "Camera": {
-    "details": "Platzieren Sie einfach Ihr Gerät über dem Code, der Rest passiert automatisch.",
-    "errorMsg": "Wir konnten den Code nicht einlesen. Es scheint, als können wir diesen Service nicht anbieten.",
-    "localNetworkMessage": "Um Geräte im lokalen Netzwerk zu aktivieren, erlauben Sie bitte den Zugriff für die SmartWallet",
-    "localNetworkBtn_long": "Zum Verwalten antippen",
-    "localNetworkBtn_short": "Verwalten"
-  },
-  "CredentialShare": {
-    "missingDocsToastHeader": "${documentType} nicht vorhanden",
-    "missingDocsToastSubheader": "${serviceName} fordert einen Nachweis/Credential an, das nicht in Ihrer Wallet vorhanden ist",
-    "attributeMissingValue": "Information nicht vorhanden",
-    "headerSingleMissing": "${serviceName} benötigt ${attribute, lowercase}",
-    "singleMissingSubheader": "In Ihrer Wallet scheinen erforderliche Daten für diese Anfrage zu fehlen",
-    "singleMissingAcceptBtn": "Information hinzufügen",
-    "selectInstructions": "Zur Auswahl antippen"
-  },
-  "CredentialOffer": {
-    "invalidDocsToastHeader": "Ungültige Übertragung",
-    "invalidDocsToastSubheader": "Die von ${serviceName} gesendeten Nachweie/Credentials konnten gespeichert werden",
-    "header": "Eingehende Übertragung",
-    "subheader": "Ihr Wallet hat folgende(s) Dokument(e) von ${serviceName} erhalten:",
-    "cardInfoHeader": "Enthaltene Information",
-    "confirmBtn": "Akzeptieren",
-    "acceptBtn": "Akzeptieren",
-    "cardNoPreview": "Es können keine Informationen angezeigt werden",
-    "nrOfFieldsLeft": "+${nr} mehr"
-  },
-  "Toasts": {
-    "reportBtn": "Fehler Melden",
-    "noInternetTitle": "Hoppala ... Sie sind nicht verbunden!",
-    "noInternetMsg": "Zum Fortfahren ist eine Internetverbindung erforderlich.",
-    "errorWarningTitle": "Hoppla ...",
-    "errorWarningMsg": "Damit haben wir auch nicht gerechnet. Bitte helfen Sie uns, indem Sie uns den Fehler mitteilen, auf den Sie gestoßen sind.",
-    "successfulInteractionTitle": "Abgeschlossen!",
-    "successfulInternetMsg": "Sie sollten jetzt alles haben, was Sie benötigen, um Ihre Interaktion fortzusetzen",
-    "successfulOfferInteractionBtn": "Überprüfung",
-    "offerDuplicateTitle": "Duplikat gefunden",
-    "offerDuplicateSingleMsg": "Sie haben dieses Dokument bereits",
-    "offerDuplicateMultipleMsg": "Sie können immer noch die anderen Dokumente erhalten",
-    "offerInvalidDocsTitle": "Kann nicht gespeichert werden",
-    "offerInvalidDocsMsg": "Anscheinend gibt es ein Problem mit den Dokumenten, die von ${serviceName} gesendet werden.",
-    "offerRenegotiationTitle": "Sei aufmerksam",
-    "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden.",
-    "shareMissingDocsTitle": "Fehlende Dokumente",
-    "shareMissingDocsMsg": "${serviceName} fordert ein Dokument an, das sich nicht in Ihrer Wallet befindet. \nEs fehlt: ${documentType}",
-    "failedStoreMsg": "Leider konnten wir Ihre Wallet PIN nicht speichern. Bitte versuchen Sie es erneut.",
-    "reconnectedInternetTitle": "Sie sind wieder online.",
-    "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
-    "successfulInteractionMsg": "Ihre Interaktion war erfolgreich. Details dazu finden Sie hier",
-    "nfcCompatibilityTitle": "NFC Kompabilitätsproblem",
-    "nfcCompatibilityMsg": "Leider unterstützt Ihr Telefon die erforderliche NFC-Funktionalität nicht",
-    "nfcOffTitle": "NFC inaktiv",
-    "nfcOffMsg": "Um die Online-Ausweisfunktion zu nutzen, müssen Sie NFC aktivieren",
-    "nfcOffBtn": "Einstellungen",
-    "ausweisSuccessTitle": "Vorgang abgeschlossen",
-    "ausweisSuccessMsg": "Identifikation war erfolgreich",
-    "ausweisFailedCheckTitle": "Kompabilität überprüfen",
-    "ausweisFailedCheckMsg": "Nicht das erste Mal gescheitert?\nStarten Sie die Kompatibilitätsdiagnose, um es erneut zu probieren",
-    "ausweisFailedCheckBtn": "Start",
-    "ausweisChangePinSuccessHeader": "Fertig",
-    "ausweisChangePinSuccessMsg": "Sie können Ihre neue eID PIN nun benutzen",
-    "copied": "Einfügen",
-    "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
-    "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
-    "refreshTitle": "Fertig!",
-    "refreshMsg": "Die Identifikation war erfolgreich. Fahren Sie jetzt bitte mit Ihrem Prozess bei ${serviceName} außerhalb der SmartWallet fort.",
-    "documentsFavoritesLimitTitle": "Ruhe bewahren",
-    "documentsFavoritesLimitMsg": "Sie können nicht mehr als ${max} Favoriten hinzufügen"
-  },
-  "Interaction": {
-    "cancelBtn": "Ignorieren",
-    "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Seien Sie achtsam, bevor Sie Ihre Daten teilen.",
-    "redirectTitle": "Fertig!",
-    "redirectDescription": "Sie werden zu ${serviceName} weitergeleitet.",
-    "redirectBtn": "Weiter"
-  },
-  "Documents": {
-    "documentsTab": "Dokumente",
-    "othersTab": "Sonstige",
-    "typeSubtab": "Dokumententyp",
-    "issuerSubtab": "Herausgeber",
-    "identificationCategory": "Identifikation",
-    "educationCategory": "Ausbildung",
-    "ticketsCategory": "Tickets",
-    "infoCardOption": "Informationen",
-    "deleteCardOption": "Löschen",
-    "cancelCardOption": "Abbrechen",
-    "deleteDocumentHeader": "Möchten Sie ${documentName} löschen?",
-    "deleteCredentialInstruction": "Lassen Sie den Kreis zum Löschen los",
-    "cancelBtn": "Abbrechen",
-    "placeholderHeader": "Noch sind keine Dokumente vorhanden",
-    "documentsPlaceholderSubheader": "Fügen Sie doch noch heute welche hinzu!",
-    "othersPlaceholderHeader": "Noch sind keine Dokumente vorhanden",
-    "othersPlaceholderSubheader": "Fügen Sie doch noch heute welche hinzu!",
-    "unspecifiedField": "Keine Angaben",
-    "subjectNameField": "Betreff",
-    "issuedFieldLabel": "Ausgestellt",
-    "issuerFieldLabel": "Aussteller",
-    "expiresFieldLabel": "Läuft ab",
-    "favoriteSection": "Favoriten",
-    "allSection": "Alle",
-    "expiredSection": "Abgelaufen",
-    "favoritePlaceholderTitle": "Noch sind keine Dokumente vorhanden",
-    "favoritePlaceholderSubtitle": "Drücken Sie auf das Stern Icon um Favoriten hinzuzufügen.",
-    "allPlaceholderTitle": "Noch keine Dokumente verfügbar",
-    "allPlaceholderSubtitle": "Sie haben noch keine Dokumente abgespeichert. Fügen Sie noch heute ein Dokument hinzu!",
-    "expiredPlaceholderTitle": "Noch keine Dokumente verfügbar",
-    "expiredPlaceholderSubtitle": "Sie besitzen keine abgelaufenen Dokumente.",
-    "removeFavorite": "Von Favoriten entfernen",
-    "addFavorite": "Zu Favoriten hinzufügen"
-  },
-  "CredentialRequest": {
-    "header": "Eingehende Anfrage",
-    "subheader": "Wählen Sie ein oder mehrere von ${serviceName} angeforderte Dokumente aus, um fortzufahren",
-    "acceptBtn": "Daten Teilen"
-  },
-  "Authorization": {
-    "header": "Möchten Sie ${authAction}?",
-    "subheader": "${serviceName} ist jetzt bereit, Ihnen Zugang zu gewähren",
-    "acceptBtn": "Erlauben"
-  },
-  "Dates": {
-    "today": "Heute",
-    "yesterday": "Gestern",
-    "lastDay": "Letzten ${day}",
-    "lastMonday": "Letzter Montag\n",
-    "lastTuesday": "Letzter Dienstag",
-    "lastWednesday": "Letzter Mittwoch",
-    "lastThursday": "Letzter Donnerstag",
-    "lastFriday": "Letzter Freitag",
-    "lastSaturday": "Letzter Samstag",
-    "lastSunday": "Letzter Sonntag"
-  },
-  "History": {
-    "allTab": "Alle",
-    "sharedTab": "Freigegeben",
-    "receivedTab": "Erhalten",
-    "authenticationHeader": "Authentifizierung",
-    "credentialOfferHeader": "Eingegangene Übertragung",
-    "offerRequestStepHeader": "Angeboten",
-    "offerResponseStepHeader": "Ausgewählt",
-    "offerReceiveStepHeader": "Ausgestellt",
-    "authenticationRequestStepHeader": "Angefordert",
-    "authResponseStepHeader": "Bestätigt",
-    "notFinishedStepHeader": "Nicht ${text}",
-    "pendingState": "Ausstehend",
-    "expiredState": "Abgelaufen",
-    "credShareHeader": "Eingehende Übertragung",
-    "credShareRequestStepHeader": "Angefordert",
-    "credShareResponseStepHeader": "Freigegeben",
-    "placeholderHeader": "Noch ist kein Verlauf vorhanden",
-    "placeholderSubheader": "Sie haben noch keine Interaktionen durchgeführt.\n",
-    "authzHeader": "Autorisierung",
-    "authzRequestStepHeader": "Autorisiert",
-    "authzResponseStepHeader": "Bestätigt",
-    "authzActionPlaceholder": "Autorisieren"
-  },
-  "Settings": {
-    "preferencesSection": "App Einstellungen",
-    "notificationsBlock": "Benachrichtigungen",
-    "languageBlock": "Sprache",
-    "securitySection": "Sicherheit",
-    "changePasscodeBlock": "Wallet PIN ändern",
-    "biometricsBlock": "Biometrie in der Wallet verwenden",
-    "backupBlock": "Wallet Backup erstellen",
-    "backupBlockWarning": "Ihre Dokumente laufen Gefahr, verloren zu gehen. Stellen Sie mit einem Backup sicher, dass sie langfristig Zugriff auf Ihre Wallet haben.",
-    "generalSection": "Allgemein",
-    "faqBlock": "FAQ",
-    "contactUsBlock": "Kontaktieren Sie uns",
-    "rateBlock": "Bewerten Sie uns",
-    "aboutBlock": "Über uns",
-    "imprintBlock": "Impressum",
-    "deleteDataInfo": "Wenn Sie neu anfangen möchten und alle Daten löschen wollen, die mit der Identität dieser Wallet zusammenhängen,",
-    "deleteDataBtn": "klicken Sie hier",
-    "screenshotBlock": "Screenshots erlauben",
-    "screenshotAlertTitle": "Achtung",
-    "screenshotAlertMsg": "Der Inhalt bleibt sichtbar, auch wenn Sie zu anderen Apps wechseln",
-    "screenshotAlertCta": "Aktivieren",
-    "screenshotAlertCancel": "Abbrechen",
-    "mnemonicPhraseWarning": "Es besteht die Gefahr, dass Ihre Daten unwiederbringlich verloren gehen. Fahren Sie mit Ihrer geheimen Wortkombination fort."
-  },
-  "Language": {
-    "english": "Englisch",
-    "german": "Deutsch"
-  },
-  "BackupOptions": {
-    "header": "Backup Optionen",
-    "exportHeader": "Sicheren Sie Ihre Daten",
-    "exportSubheader": "Laden Sie eine verschlüsselte Kopie der Daten in Ihrer SmartWallet auf Ihr Gerät herunter. Achten Sie darauf, Ihre Backups aktuell zu halten und an einem sicheren Ort aufzubewahren.",
-    "exportBtn": "Backup-Datei exportieren",
-    "importHeader": "Backup wiederherstellen",
-    "importSubheader": "Für den Fall, dass Sie aus Versehen etwas Wichtiges gelöscht haben. Diese Option besteht nur, wenn das Backup mit dieser Wallet erstellt wurde.",
-    "importBtn": "Datei importieren",
-    "lastBackupInfo": "Letztes Backup"
-  },
-  "FAQ": {
-    "header": "Häufige Fragen",
-    "header_q1": "Was passiert, wenn ich mein Telefon verliere oder es gestohlen wird?",
-    "subheader_q1": "Sie können die Kontrolle über Ihre Wallet wiedererlangen, indem Sie die geheime Wortkombination verwenden, die Sie während der Einrichtung Ihrer SmartWallet erstellt haben. Diese wiederhergestellte Wallet wird noch keine Dokumente oder andere Informationen wiederherstellen, die in einer Wallet auf einem verlorenen Gerät gespeichert sind. In Zukunft bieten wir hierfür eine Backup Funktionalität an. Erst die Kombination führt zu einer vollständigen Wiederherstellung.",
-    "header_q2": "Wer hat Zugriff auf meine Daten?",
-    "subheader_q2": "Alle Ihre Daten werden auf Ihrem Gerät gespeichert und verwaltet. Sie haben die volle Kontrolle darüber, wer Zugang zu den Informationen erhält. Jolocom hat keinen Zugriff auf die Daten auf Ihrem Gerät, noch hat irgendjemand anderes ohne Ihre Erlaubnis Zugriff darauf. Falls Sie einer anderen Partei Zugriff auf Informationen gewähren, können Sie jederzeit sehen, was Sie geteilt haben. Tatsächlich können Sie immer schnell und einfach überprüfen, welcher Dienst Zugriff auf welche Daten hat. So erhalten Sie einen sofortigen Überblick über Ihre Verbindungen.",
-    "header_q3": "Ist die Jolocom SmartWallet DSGVO-konform?",
-    "subheader_q3": "JA, absolut. Die SmartWallet und alle unsere Produkte sind so konzipiert, dass die Integrität, die Privatsphäre und die Sicherheit der Nutzerdaten im Vordergrund stehen. Sowohl die Wallet als auch das Protokoll zur Erstellung von Identitäten und zum Austausch von Identitätsinformationen sind DSGVO-konform.",
-    "header_q4": "Was kann das SmartWallet?",
-    "subheader_q4": "Die SmartWallet ist eine von Jolocom entwickelte Anwendung, mit der Sie Daten verwalten können, die mit Ihrer Identität zusammenhängen - wie Ihre E-Mail-Adresse, Telefonnummer oder Ihr Personalausweis.\nIhre Wallet enthält Dokumente und andere digitale Inhalte, die Sie per Knopfdruck mit Diensten austauschen und teilen können."
-  },
-  "About": {
-    "versionInfo": "Sie benutzen die Version ${version}"
-  },
-  "ChangePasscode": {
-    "wrongCodeHeader": "Falsche Wallet PIN",
-    "currentHeader": "Aktuelle Wallet PIN",
-    "successHeader": "Wallet PIN geändert!",
-    "sameCodeHeader": "Sie haben die bisherige Wallet PIN eingegeben"
-  },
-  "ContactUs": {
-    "issueOption_1": "Mögliche Partnerschaft mit Jolocom",
-    "issueOption_2": "Probleme mit der Anwendung",
-    "issueOption_3": "Ich habe meine Wallet verloren",
-    "issueOption_4": "Wie kann man Teil des Projekts werden?",
-    "issueOption_5": "Sonstiges",
-    "issueHeader": "Worüber werden wir sprechen?",
-    "issuePlaceholder": "Wählen Sie eine Option aus",
-    "suggestionHeader": "Möchten Sie etwas Konkretes sagen?",
-    "suggestionSubheader": "Trau dich uns zu sagen, was du auf dem Herzen hast – damit sind wir für die zukünftigen Gespräche vorbereitet",
-    "suggestionPlaceholder": "Zum Schreiben antippen ...",
-    "contactHeader": "Möchten Sie Kontakt aufnehmen?",
-    "contactPlaceholder": "Tragen Sie Ihre E-Mail Adresse hier ein ...",
-    "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam",
-    "submitBtn": "Senden"
-  },
-  "EraseData": {
-    "dialogTitle": "Bist du sicher?",
-    "dialogMessage": "Bitte beachte, dass gelöschte Daten in Zukunft nicht wiederhergestellt werden können",
-    "submitBtn": "Ich habe verstanden",
-    "cancelBtn": "Abbrechen",
-    "loader": "Daten werden gelöscht",
-    "dragInstructions": "Zum löschen den Punkt ziehen"
-  },
-  "Errors": {
-    "unknownTitle": "Unbekannter Fehler",
-    "unknownMessage": "Und wenn es nicht das erste Mal ist, würden wir uns freuen, wenn Sie uns das mitteilen.",
-    "reportBtn": "Bericht senden",
-    "closeBtn": "Schließen",
-    "crashTitle": "Systemabsturz",
-    "crashMessage": "Aber keine Sorge - deine Daten sind sicher und es geht nichts verloren",
-    "restartBtn": "App neu starten"
-  },
-  "ErrorReporting": {
-    "issueHeader": "Schildern Sie uns das Problem",
-    "issuePlaceholder": "Zugehöriges Thema wählen",
-    "detailsHeader": "Möchten Sie etwas Konkretes sagen?",
-    "detailsSubheader": "Wenn das Problem nicht aufgelistet ist - das Textfeld unten ist der beste Platz, um es zu beschreiben",
-    "logsHeader": "Ihre Logs einbeziehen",
-    "logsSubheader": "Dies beinhaltet bestimmte private Metadaten (wie z.B. Dateigrößen - aber keine persönlichen Informationen) und wird den Entwicklern helfen, Fehler schneller zu beheben.",
-    "contactHeader": "Möchten Sie Kontakt aufnehmen?",
-    "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam. Jegliche Benutzerinformationen werden sofort nach Lösung des Problems gelöscht.",
-    "rateHeader": "Bewerten Sie diesen Vorfall",
-    "submitBtn": "Bericht senden",
-    "contactInputError": "Bitte geben Sie eine gültige E-Mail ein",
-    "issueOption_1": "Keine Internetverbindung",
-    "issueOption_2": "Die App stürzt immer wieder ab",
-    "issueOption_3": "Ich kann mich nicht anmelden",
-    "issueOption_4": "Das Backup enthält keine Daten",
-    "issueOption_5": "Probleme mit der Benutzeroberfläche",
-    "issueOption_6": "Irgendetwas scheint nicht richtig zu sein",
-    "issueOption_7": "Sonstiges",
-    "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ...",
-    "errorHeader": "Fehler melden"
-  },
-  "General": {
-    "unknown": "Unbekannt",
-    "anonymous": "Anonym",
-    "moreInfo": "Mehr Informationen"
-  },
-  "Authentication": {
-    "header": "Sind Sie es?",
-    "subheader": "${serviceName} möchte deine digitale Identität bestätigen, bevor es weiter geht",
-    "confirmBtn": "Erlauben"
-  },
-  "PrivacyPolicy": {
-    "header": "Datenschutzbestimmungen",
-    "footer": "Wenn Sie Fragen oder Anregungen zu unseren Datenschutzrichtlinien haben, sprechen Sie uns einfach an."
-  },
-  "DragToConfirm": {
-    "instruction": "Punkt zur Bestätigung loslassen"
-  },
-  "Test": {
-    "testTerm": "whoopsytest"
-  },
-  "Validations": {
-    "onlyNumbers": "Es sind nur Zahlen erlaubt",
-    "tooMany": "Zu viele Zeichen",
-    "tooFew": "Zu wenig Zeichen",
-    "missingValue": "Bitte geben Sie einen Wert an",
-    "wrongEmail": "Die Email scheint ungültig zu sein",
-    "atLeastOneValue": "Tragen Sie bitte mindestens einen der Werte ein"
-  },
-  "DisableOverlay": {
-    "headerTitle": "Ihre Wallet ist aus Sicherheitsgründen deaktiviert",
-    "descriptionTitle": "Versuchen Sie es in",
-    "headerBlockedTitle": "Sie haben die maximale Anzahl an Versuchen erreicht",
-    "submitBtn": "Zugang wiederherstellen",
-    "submitDescription": "Das Erstellen einer neuen Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten"
-  },
-  "Ausweis": {
-    "birthName": "Geburtsname",
-    "address": "Adresse",
-    "communityID": "Kommunal ID",
-    "writeAddress": "Adresse eingeben",
-    "residencePermitI": "Aufenthaltsgenehmigung",
-    "familyName": "Familienname",
-    "documentType": "Dokumenten Typ",
-    "ageVerification": "Altersnachweis",
-    "issuingCountry": "Ausgabeland",
-    "writeResidencePermitII": "Schreib Aufenthaltsgenehmigung II",
-    "writeCommunityID": "Schreib Amtlichen Gemeindeschlüssel",
-    "artisticName": "Ordens- oder Künstlername",
-    "residencePermitII": "Aufenthaltsgenehmigung II",
-    "writeResidencePermitI": "Schreib Aufenthaltsgenehmigung I",
-    "givenNames": "Vorname",
-    "placeOfBirth": "Geburtsort",
-    "dateOfBirth": "Geburtsdatum",
-    "doctoralDegree": "Doktorgrad",
-    "pseudonym": "Pseudonym",
-    "validUntil": "Gültig bis",
-    "nationality": "Staatsangehörigkeit",
-    "addressVerification": "Adressnachweis",
-    "canAllowed": "CAN erlaubt",
-    "pinManagement": "PIN verwalten",
-    "header": "Eingehende eID Anfrage"
-  },
-  "AusweisLostPin": {
-    "title": "Wie kann ich den Kartenzugriff wiederherstellen?",
-    "description": "Sie können Ihren PIN-Brief nicht finden? Sie haben beim Abholen des Ausweises oder später eine PIN festgelegt, an die Sie sich jetzt nicht mehr erinnern können? Bitte wenden Sie sich in diesem Fall an die zuständige Behörde und legen Sie dort eine neue PIN fest.",
-    "contact": "Sie können sich auch per Email an den Kundendienst wenden",
-    "phoneRate": "Ortstarif"
-  },
-  "AusweisCompatibilityStatus": {
-    "header": "Kompatibilitätsprüfung",
-    "status1": "Zugang zum Ausweis erfolgreich",
-    "status2": "Online-Ausweisfunktion aktiviert",
-    "status3": "NFC unterstützt",
-    "success": "Erfolgreich!",
-    "errorStatus1": "Diese Karte ist außer Betrieb",
-    "error": "Gescheitert"
-  },
-  "AusweisReview": {
-    "subheader": "Wählen Sie zum Fortfahren die von ${serviceName} angeforderten Attribute aus",
-    "providerBtn": "Anbieter Info",
-    "mandatoryHeader": "Pflichtfelder",
-    "optionalHeader": "Freiwillige Angabe",
-    "proceedBtn": "Teilen"
-  },
-  "AusweisProvider": {
-    "providerLabel": "Anbieter",
-    "certificateLabel": "Zertifikatsaussteller",
-    "providerInfoLabel": "Anbieter Info",
-    "validityLabel": "Gültigkeit"
-  },
-  "AusweisPasscode": {
-    "authPinHeader": "eID PIN eingeben",
-    "pinForgotBtn": "Wenn Sie Ihre PIN vergessen oder noch nicht aktiviert haben, <1>klicken Sie hier.</1>",
-    "transportPinHeader": "5-stelllige PIN eingeben",
-    "transportPinBtn": "Wo kann ich das finden?",
-    "canHeader": "CAN eingeben",
-    "canBtn": "Wo finde ich die CAN?",
-    "pukHeader": "PUK eingeben",
-    "pukBtn": "Wo finde ich die PUK?",
-    "newPinHeader": "Geben Sie Ihre neue eID PIN ein",
-    "repeatNewPinHeader": "Wiederholen Sie Ihre neue eID PIN",
-    "pinMatchError": "PIN Eingaben stimmen nicht überein",
-    "pinWrongError": "Falsche ${pinVariant}"
-  },
-  "AusweisPukLock": {
-    "header": "Ihre Karte ist gesperrt und Sie müssen zum Entsperren den PUK-Code eingeben",
-    "subtitle": "Sie können Ihre Karte im Menü \"Identität\" entsperren, indem Sie \"Karte entsperren\" klicken",
-    "proceedBtn": "Weiter mit dem PUK-Code",
-    "closeBtn": "Interaktion beenden"
-  },
-  "AusweisIdentity": {
-    "header": "Online-Ausweisfunktion",
-    "subheader": "Dies ist ein Early-Access-Zugang zur Online-Ausweisfunktion in der Jolocom SmartWallet. Vorerst ist er nur für Nutzer:innen der Schaufensterprojekte “Sichere Digitale Identitäten” verfügbar.",
-    "compatibilityBtn": "Kompabilitätstest",
-    "changePinBtn": "PIN ändern",
-    "unlockBtn": "Karte entsperren",
-    "ausweisBadge": "Online-Ausweisfunktion",
-    "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
-    "moreInfoHeader": "Mehr Informationen"
-  },
-  "AusweisChangePin": {
-    "transportPinHeader": "eID PIN einrichten",
-    "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
-    "transportPinBtn": "eID PIN einrichten",
-    "pinHeader": "6-stellige eID PIN ändern",
-    "pinSubheader": "Wenn Sie bereits eine 6-stellige PIN festgelegt haben, können Sie diese hier ändern.",
-    "pinBtn": "PIN ändern",
-    "forgotHeader": "Haben Sie Ihre eID PIN vergessen?",
-    "forgotSubheader": "Wenn Sie Ihre eID PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
-  },
-  "AusweisPinInfo": {
-    "header": "PIN Informationen",
-    "description": "Wählen Sie für die 6-stellige Ausweis PIN eine Zahlenkombination, die nicht leicht zu erraten ist.\n\nBei erstmaliger PIN-Änderung verwenden Sie bitte die 5-stellige Transport-PIN. Die Transport-PIN finden Sie im Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie mit der 5-stelligen Transport-PIN die Online-Ausweisfunktion nicht nutzen können. Eine Änderung auf eine 6-stellige PIN ist zwingend erforderlich.",
-    "btn": "Zu den eID PIN Einstellungen"
-  },
-  "AusweisScanner": {
-    "header": "Bereit zu scannen",
-    "startSubheader": "Bitte die Karte nicht entfernen, bis der Prozess abgeschlossen ist.",
-    "cancelBtn": "Abbrechen",
-    "sessionStarted": "Bitte legen Sie Ihren Ausweis oben auf die Rückseite des Geräts.",
-    "sessionFailed": "Scanvorgang fehlgeschlagen.",
-    "sessionSucceeded": "Der Scanvorgang wurde erfolgreich abgeschlossen.",
-    "sessionInProgress": "Der Scanvorgang ist im Gange."
-  },
-  "AusweisCanInfo": {
-    "header": "CAN Informationen",
-    "description": "Die Kartenzugangsnummer (CAN) wird nur benötigt, wenn Sie bereits zweimal die falsche Ausweis PIN eingegeben haben. Um zu verhindern, dass ohne Ihre Zustimmung ein drittes Mal eine falsche Ausweis PIN eingegeben wird und somit Ihre Karte gesperrt wird, müssen Sie an dieser Stelle die CAN eingeben. Die CAN ist eine 6-stellige Nummer, die Sie auf der Vorderseite Ihres Ausweises unten rechts finden."
-  },
-  "AusweisTransportPin": {
-    "warning1": "Bitte beachten Sie, dass die 5-stellige Transport-PIN nicht mehr gültig ist, wenn Sie zuvor bereits eine 6-stellige Ausweis PIN festgelegt haben",
-    "continueBtn": "Weiter",
-    "warning2": "Sie können die 5-stellige Transport-PIN nur einmal verwenden, um die Ausweis PIN zu ändern"
-  },
-  "AusweisTransportPinInfo": {
-    "header": "Transport PIN Info",
-    "description": "Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der 5-stelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine 6-stellige Ausweis PIN ist zwingend erforderlich."
-  },
-  "AusweisPukInfo": {
-    "header": "PUK Nummer Info",
-    "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der 5-stelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine 6-stellige Ausweis PIN ist zwingend erforderlich."
-  },
-  "AusweisUnlock": {
-    "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",
-    "closeBtn": "Schließen",
-    "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
-    "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!",
-    "standaloneUnblockHeader": "Entsperren Sie Ihre Karte  <1>${screen}</1>",
-    "identityScreen": "Identität Bildschirm"
-  },
-  "Details": {
-    "expandBtn": "Mehr"
-  },
-  "Wallet": {
-    "prepareWallet": "Ihr Wallet wird vorbereitet"
-  },
-  "Dashboard": {
-    "header": "Jolocom WebAgent"
-  },
-  "TermsOfService": {
-    "header": "Nutzungsbedingungen"
-  },
-  "DocumentCard": {
-    "expired": "Abgelaufen"
-  }
+    "Walkthrough": {
+        "titleOne": "Nutzen Sie Ihre Identität",
+        "descriptionOne": "Für einen einfachem Zugang zu Ihren Apps und Services",
+        "registrationBtn": "Wallet einrichten",
+        "recoveryBtn": "Identität importieren",
+        "titleTwo": "Schützen Sie Ihre Daten",
+        "descriptionTwo": "Ihre Digitalen Identitäten liegen sicher in der Wallet",
+        "titleThree": "Alles an einem Ort",
+        "descriptionThree": "Alle digitalen Identitäten und Nachweise werden auf Ihrem Smartphone gespeichert."
+    },
+    "TermsConsent": {
+        "header": "Nutzungsbedingungen & Datenschutzerklärung",
+        "subheader": "Nachfolgend finden Sie die deutsche und englische Version der Dokumente. Bitte beachten Sie, dass die deutsche Version rechtsgültig ist",
+        "footer": "Ich habe die Nutzungsbedingungen und Datenschutzrichtlinien verstanden und akzeptiere sie",
+        "footerBtn": "Neue Bedingungen annehmen"
+    },
+    "Recovery": {
+        "header": "Wiederherstellung",
+        "subheader": "Geben Sie Ihre geheime Wortkombination ein und sie wird hier erscheinen",
+        "forgotBtn": "Geheime Wortkombination vergessen?",
+        "wrongWord": "Dieses Wort passt nicht",
+        "confirmBtn": "Bestätigen",
+        "exitBtn": "Wiederherstellung abbrechen",
+        "confirmLoader": "Überprüfung findet statt"
+    },
+    "Loader": {
+        "successDefault": "Überprüfung erfolgreich!",
+        "failedDefault": "Überprüfung fehlgeschlagen",
+        "loading": "Ladevorgang"
+    },
+    "OnboardingBackup": {
+        "header": "Möchten Sie ein Backup wiederherstellen?",
+        "instruction": "Ziehen Sie zum Starten den Punkt in den Kreis",
+        "skipBtn": "Ich habe kein Backup"
+    },
+    "RecoveryInfo": {
+        "header": "Was könnnen Sie tun, wenn Sie Ihre geheime Wortkombination vergessen haben?",
+        "textPartOne": "Ohne Ihre geheime Wortkombination können Sie Ihre Identität leider nicht wiederherzustellen.",
+        "textPartTwo": "Um Ihre gesamte Wallet wiederherzustellen, brauchen Sie ihre geheime Wortkombination und die Backup-Datei.",
+        "textPartThree": "Sind Sie sicher, dass Sie nirgendwo eine Abschrift Ihrer geheimen Wortkombination hinterlegt haben?",
+        "textPartFour": "Erinnern Sie sich zurück an den Moment, als Sie Ihre Identität angelegt haben.",
+        "closeBtn": "Weiter"
+    },
+    "Entropy": {
+        "header": "Machen Sie es einzigartig",
+        "subheader": "Zeichnen Sie irgendetwas, bis 100% erreicht wurde",
+        "loader": "Fantastisch!\nDie Identität wird gesichert"
+    },
+    "SeedphraseWrite": {
+        "touchInstructions": "Berühren Sie den Kreis mit Ihrem Finger",
+        "writeInstructions": "Notieren Sie sich die geheime Wortkombination in der angegebenen Reihenfolge. Bewahren Sie diese zur Wiederherstellung Ihrer Identität sicher auf!",
+        "confirmBtn": "Fertig",
+        "exitBtn": "Zurück zur Funktionsübersicht",
+        "writeInstructionsWarning": "Sie werden nicht mehr in der Lage sein, dies zu sehen"
+    },
+    "SeedphraseInfo": {
+        "header": "Warum diese geheime Wortkombination für Sie wichtig ist",
+        "textOne": "In Ihrer Wallet werden sensible Daten gespeichert, die einen besonderen Schutz benötigen.\n",
+        "textTwoHighlight": "Nur diese geheime Wortkombination ",
+        "textTwoDefault": "kann verwendet werden, um Ihre Identität wiederherzustellen, wenn Ihr Gerät verloren oder kaputt gegangen ist. ",
+        "textThree": "Wir empfehlen dringend, Ihre geheime Wortkombination an einem sicheren Ort aufzubewahren. Am besten schreiben Síe diese auf oder benutzen einen verschlüsselten Passwortmanager.",
+        "textFour": "Teilen Sie Ihre geheime Wortombination mit niemandem.",
+        "confirmBtn": "Verstanden"
+    },
+    "SeedphraseRepeat": {
+        "orderInstructions": "Ziehen Sie die Wörter in die korrekte Reihenfolge der geheimen Wortkombination",
+        "confirmBtn": "Fertig",
+        "matchingError": "Überprüfen Sie die Wortkombination und versuchen Sie es erneut."
+    },
+    "Identity": {
+        "widgetWelcome": "Bearbeiten Sie Ihre Digitale Identität",
+        "widgetStartBtn": "Jetzt beginnen",
+        "widgetNameHeader": "Wie heißen Sie?",
+        "widgetConfirmBtn": "Erstellen",
+        "widgetNextBtn": "Weiter",
+        "header": "Nachweise",
+        "nameLabel": "Name",
+        "emailLabel": "E-Mail",
+        "phoneNumberLabel": "Telefonnummer",
+        "addressLabel": "Anschrift \n",
+        "addClaimBtn": "Neu Hinzufügen",
+        "credentialsDescription": "Verwalten Sie ihre wichtigsten Kontaktinformationen an einem Ort. Zu einem späteren Zeitpunkt können Sie diese Daten mit einem Klick teilen und Formulare ohne zusätzlichem Aufwand ausfüllen.",
+        "headerAusweis": "Ihre eID",
+        "headerCredentials": "Nachweise"
+    },
+    "BottomBar": {
+        "identity": "Identität",
+        "documents": "Dokumente",
+        "history": "Verlauf",
+        "settings": "Einstellungen"
+    },
+    "InputPlaceholder": {
+        "givenName": "Vorname",
+        "familyName": "Nachname"
+    },
+    "Placeholder": {
+        "companyName": "Firma",
+        "addressLine": "Straße",
+        "postalCode": "Postleitzahl",
+        "country": "Land",
+        "city": "Stadt"
+    },
+    "CredentialForm": {
+        "editHeader": "${attributeName} bearbeiten",
+        "subheader": "Sobald Sie auf \"Fertig\" klicken, wird es im Bereich \"Persönliche Infos\" angezeigt.",
+        "closeBtn": "Abbrechen",
+        "confirmBtn": "Fertig",
+        "addHeader": "Fügen Sie Ihren ${attributeName, lowercase} hinzu",
+        "errorAttributeExists": "Ein identisches Attribut existiert bereits"
+    },
+    "CreatePasscode": {
+        "createHeader": "Wallet PIN erstellen",
+        "createSubheader": "Die Wallet PIN sorgt dafür, dass niemand unerlaubt Zugriff auf Ihre Wallet bekommt",
+        "helperText": "Sie können Ihre Wallet PIN nicht wiederherstellen, falls Sie diese vergessen sollten."
+    },
+    "VerifyPasscode": {
+        "verifyHeader": "Wallet PIN bestätigen",
+        "verifySubheader": "Die Wallet PIN sorgt dafür, dass niemand unerlaubt Zugriff auf Ihre Wallet bekommt",
+        "resetBtn": "Zurücksetzen"
+    },
+    "Biometry": {
+        "header": "Verwenden Sie ${biometryType} um Ihre Wallet zu schützen",
+        "subheader": "So müssen Sie Ihre Wallet PIN nicht jedes Mal eingeben, wenn Sie die App öffnen",
+        "activateBtn": "Zum Aktivieren antippen",
+        "skipBtn": "Überspringen",
+        "promptFaceId": "Erfassen Sie Ihr Gesicht, um fortzufahren",
+        "promptFingerprint": "Scannen Sie Ihren Fingerabdruck auf dem Gerätescanner, um fortzufahren",
+        "promptBiometrics": "Biometrische Daten bereitstellen um fortzufahren"
+    },
+    "PasscodeRecoveryInstructions": {
+        "header": "So ändern Sie Ihre Wallet PIN",
+        "subheader1": "Es tut uns Leid, dass Sie Ihre Wallet PIN vergessen haben. Aber keine Sorge, es gibt eine Lösung!",
+        "subheader2": "Durch Eingabe Ihrer geheimen Wortkombination können Sie Ihre Wallet PIN  ändern. Klicken Sie unten auf Zugang wiederherstellen, um die Änderung vorzunehmen.",
+        "imageCaption": "Wort für Wort wiederholen",
+        "submitBtn": "Zugang wiederherstellen",
+        "footer": "Eine neue Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten",
+        "cancelBtn": "Abbrechen"
+    },
+    "Lock": {
+        "header": "Geben Sie Ihre Wallet PIN ein",
+        "forgotBtn": "Sie können Ihre Wallet PIN nicht wiederherstellen, falls Sie diese vergessen sollten.",
+        "errorMsg": "Sie haben ${attempts} Versuche genutzt"
+    },
+    "CameraPermission": {
+        "header": "Kamera Berechtigung",
+        "subheader": "Ohne diese Berechtigung können Sie nicht scannen. Bitte erlauben Sie dies in Ihren Einstellungen.",
+        "confirmBtn": "Berechtigungen hier ändern"
+    },
+    "Camera": {
+        "details": "Platzieren Sie einfach Ihr Gerät über dem Code, der Rest passiert automatisch.",
+        "errorMsg": "Wir konnten den Code nicht einlesen. Es scheint, als können wir diesen Service nicht anbieten.",
+        "localNetworkMessage": "Um Geräte im lokalen Netzwerk zu aktivieren, erlauben Sie bitte den Zugriff für die SmartWallet",
+        "localNetworkBtn_long": "Zum Verwalten antippen",
+        "localNetworkBtn_short": "Verwalten"
+    },
+    "CredentialShare": {
+        "missingDocsToastHeader": "${documentType} nicht vorhanden",
+        "missingDocsToastSubheader": "${serviceName} fordert einen Nachweis/Credential an, das nicht in Ihrer Wallet vorhanden ist",
+        "attributeMissingValue": "Information nicht vorhanden",
+        "headerSingleMissing": "${serviceName} benötigt ${attribute, lowercase}",
+        "singleMissingSubheader": "In Ihrer Wallet scheinen erforderliche Daten für diese Anfrage zu fehlen",
+        "singleMissingAcceptBtn": "Information hinzufügen",
+        "selectInstructions": "Zur Auswahl antippen"
+    },
+    "CredentialOffer": {
+        "invalidDocsToastHeader": "Ungültige Übertragung",
+        "invalidDocsToastSubheader": "Die von ${serviceName} gesendeten Nachweie/Credentials konnten gespeichert werden",
+        "header": "Eingehende Übertragung",
+        "subheader": "Ihr Wallet hat folgende(s) Dokument(e) von ${serviceName} erhalten:",
+        "cardInfoHeader": "Enthaltene Information",
+        "confirmBtn": "Akzeptieren",
+        "acceptBtn": "Akzeptieren",
+        "cardNoPreview": "Es können keine Informationen angezeigt werden",
+        "nrOfFieldsLeft": "+${nr} mehr"
+    },
+    "Toasts": {
+        "reportBtn": "Fehler Melden",
+        "noInternetTitle": "Hoppala ... Sie sind nicht verbunden!",
+        "noInternetMsg": "Zum Fortfahren ist eine Internetverbindung erforderlich.",
+        "errorWarningTitle": "Hoppla ...",
+        "errorWarningMsg": "Damit haben wir auch nicht gerechnet. Bitte helfen Sie uns, indem Sie uns den Fehler mitteilen, auf den Sie gestoßen sind.",
+        "successfulInteractionTitle": "Abgeschlossen!",
+        "successfulInternetMsg": "Sie sollten jetzt alles haben, was Sie benötigen, um Ihre Interaktion fortzusetzen",
+        "successfulOfferInteractionBtn": "Überprüfung",
+        "offerDuplicateTitle": "Duplikat gefunden",
+        "offerDuplicateSingleMsg": "Sie haben dieses Dokument bereits",
+        "offerDuplicateMultipleMsg": "Sie können immer noch die anderen Dokumente erhalten",
+        "offerInvalidDocsTitle": "Kann nicht gespeichert werden",
+        "offerInvalidDocsMsg": "Anscheinend gibt es ein Problem mit den Dokumenten, die von ${serviceName} gesendet werden.",
+        "offerRenegotiationTitle": "Sei aufmerksam",
+        "offerRenegotiationMsg": "Einige Dokumente haben unsere Sicherheitsprüfung nicht bestanden und können nicht gespeichert oder empfangen werden.",
+        "shareMissingDocsTitle": "Fehlende Dokumente",
+        "shareMissingDocsMsg": "${serviceName} fordert ein Dokument an, das sich nicht in Ihrer Wallet befindet. \nEs fehlt: ${documentType}",
+        "failedStoreMsg": "Leider konnten wir Ihre Wallet PIN nicht speichern. Bitte versuchen Sie es erneut.",
+        "reconnectedInternetTitle": "Sie sind wieder online.",
+        "reconnectedInternetMsg": "Alle Funktionalitäten der Wallet sind wieder verfügbar",
+        "successfulInteractionMsg": "Ihre Interaktion war erfolgreich. Details dazu finden Sie hier",
+        "nfcCompatibilityTitle": "NFC Kompabilitätsproblem",
+        "nfcCompatibilityMsg": "Leider unterstützt Ihr Telefon die erforderliche NFC-Funktionalität nicht",
+        "nfcOffTitle": "NFC inaktiv",
+        "nfcOffMsg": "Um die Online-Ausweisfunktion zu nutzen, müssen Sie NFC aktivieren",
+        "nfcOffBtn": "Einstellungen",
+        "ausweisSuccessTitle": "Vorgang abgeschlossen",
+        "ausweisSuccessMsg": "Identifikation war erfolgreich",
+        "ausweisFailedCheckTitle": "Kompabilität überprüfen",
+        "ausweisFailedCheckMsg": "Nicht das erste Mal gescheitert?\nStarten Sie die Kompatibilitätsdiagnose, um es erneut zu probieren",
+        "ausweisFailedCheckBtn": "Start",
+        "ausweisChangePinSuccessHeader": "Fertig",
+        "ausweisChangePinSuccessMsg": "Sie können Ihre neue eID PIN nun benutzen",
+        "copied": "Einfügen",
+        "ausweisDeactivatedCardTitle": "Ihre Karte ist deaktiviert",
+        "ausweisDeactivatedCardMsg": "Ihre Karte unterstützt die eID Funktionalität nicht",
+        "refreshTitle": "Fertig!",
+        "refreshMsg": "Die Identifikation war erfolgreich. Fahren Sie jetzt bitte mit Ihrem Prozess bei ${serviceName} außerhalb der SmartWallet fort.",
+        "documentsFavoritesLimitTitle": "Ruhe bewahren",
+        "documentsFavoritesLimitMsg": "Sie können nicht mehr als ${max} Favoriten hinzufügen"
+    },
+    "Interaction": {
+        "cancelBtn": "Ignorieren",
+        "subheaderAnonymous": "Das öffentliche Profil ${did} hat sich entschieden, anonym zu bleiben. Seien Sie achtsam, bevor Sie Ihre Daten teilen.",
+        "redirectTitle": "Fertig!",
+        "redirectDescription": "Sie werden zu ${serviceName} weitergeleitet.",
+        "redirectBtn": "Weiter"
+    },
+    "Documents": {
+        "documentsTab": "Dokumente",
+        "othersTab": "Sonstige",
+        "typeSubtab": "Dokumententyp",
+        "issuerSubtab": "Herausgeber",
+        "identificationCategory": "Identifikation",
+        "educationCategory": "Ausbildung",
+        "ticketsCategory": "Tickets",
+        "infoCardOption": "Informationen",
+        "deleteCardOption": "Löschen",
+        "cancelCardOption": "Abbrechen",
+        "deleteDocumentHeader": "Möchten Sie ${documentName} löschen?",
+        "deleteCredentialInstruction": "Lassen Sie den Kreis zum Löschen los",
+        "cancelBtn": "Abbrechen",
+        "placeholderHeader": "Noch sind keine Dokumente vorhanden",
+        "documentsPlaceholderSubheader": "Fügen Sie doch noch heute welche hinzu!",
+        "othersPlaceholderHeader": "Noch sind keine Dokumente vorhanden",
+        "othersPlaceholderSubheader": "Fügen Sie doch noch heute welche hinzu!",
+        "unspecifiedField": "Keine Angaben",
+        "subjectNameField": "Betreff",
+        "issuedFieldLabel": "Ausgestellt",
+        "issuerFieldLabel": "Aussteller",
+        "expiresFieldLabel": "Läuft ab",
+        "favoriteSection": "Favoriten",
+        "allSection": "Alle",
+        "expiredSection": "Abgelaufen",
+        "favoritePlaceholderTitle": "Noch sind keine Dokumente vorhanden",
+        "favoritePlaceholderSubtitle": "Drücken Sie auf das Stern Icon um Favoriten hinzuzufügen.",
+        "allPlaceholderTitle": "Noch keine Dokumente verfügbar",
+        "allPlaceholderSubtitle": "Sie haben noch keine Dokumente abgespeichert. Fügen Sie noch heute ein Dokument hinzu!",
+        "expiredPlaceholderTitle": "Noch keine Dokumente verfügbar",
+        "expiredPlaceholderSubtitle": "Sie besitzen keine abgelaufenen Dokumente.",
+        "removeFavorite": "Von Favoriten entfernen",
+        "addFavorite": "Zu Favoriten hinzufügen"
+    },
+    "CredentialRequest": {
+        "header": "Eingehende Anfrage",
+        "subheader": "Wählen Sie ein oder mehrere von ${serviceName} angeforderte Dokumente aus, um fortzufahren",
+        "acceptBtn": "Daten Teilen"
+    },
+    "Authorization": {
+        "header": "Möchten Sie ${authAction}?",
+        "subheader": "${serviceName} ist jetzt bereit, Ihnen Zugang zu gewähren",
+        "acceptBtn": "Erlauben"
+    },
+    "Dates": {
+        "today": "Heute",
+        "yesterday": "Gestern",
+        "lastDay": "Letzten ${day}",
+        "lastMonday": "Letzter Montag\n",
+        "lastTuesday": "Letzter Dienstag",
+        "lastWednesday": "Letzter Mittwoch",
+        "lastThursday": "Letzter Donnerstag",
+        "lastFriday": "Letzter Freitag",
+        "lastSaturday": "Letzter Samstag",
+        "lastSunday": "Letzter Sonntag"
+    },
+    "History": {
+        "allTab": "Alle",
+        "sharedTab": "Freigegeben",
+        "receivedTab": "Erhalten",
+        "authenticationHeader": "Authentifizierung",
+        "credentialOfferHeader": "Eingegangene Übertragung",
+        "offerRequestStepHeader": "Angeboten",
+        "offerResponseStepHeader": "Ausgewählt",
+        "offerReceiveStepHeader": "Ausgestellt",
+        "authenticationRequestStepHeader": "Angefordert",
+        "authResponseStepHeader": "Bestätigt",
+        "notFinishedStepHeader": "Nicht ${text}",
+        "pendingState": "Ausstehend",
+        "expiredState": "Abgelaufen",
+        "credShareHeader": "Eingehende Übertragung",
+        "credShareRequestStepHeader": "Angefordert",
+        "credShareResponseStepHeader": "Freigegeben",
+        "placeholderHeader": "Noch ist kein Verlauf vorhanden",
+        "placeholderSubheader": "Sie haben noch keine Interaktionen durchgeführt.\n",
+        "authzHeader": "Autorisierung",
+        "authzRequestStepHeader": "Autorisiert",
+        "authzResponseStepHeader": "Bestätigt",
+        "authzActionPlaceholder": "Autorisieren"
+    },
+    "Settings": {
+        "preferencesSection": "App Einstellungen",
+        "notificationsBlock": "Benachrichtigungen",
+        "languageBlock": "Sprache",
+        "securitySection": "Sicherheit",
+        "changePasscodeBlock": "Wallet PIN ändern",
+        "biometricsBlock": "Biometrie in der Wallet verwenden",
+        "backupBlock": "Wallet Backup erstellen",
+        "backupBlockWarning": "Ihre Dokumente laufen Gefahr, verloren zu gehen. Stellen Sie mit einem Backup sicher, dass sie langfristig Zugriff auf Ihre Wallet haben.",
+        "generalSection": "Allgemein",
+        "faqBlock": "FAQ",
+        "contactUsBlock": "Kontaktieren Sie uns",
+        "rateBlock": "Bewerten Sie uns",
+        "aboutBlock": "Über uns",
+        "imprintBlock": "Impressum",
+        "deleteDataInfo": "Wenn Sie neu anfangen möchten und alle Daten löschen wollen, die mit der Identität dieser Wallet zusammenhängen,",
+        "deleteDataBtn": "klicken Sie hier",
+        "screenshotBlock": "Screenshots erlauben",
+        "screenshotAlertTitle": "Achtung",
+        "screenshotAlertMsg": "Der Inhalt bleibt sichtbar, auch wenn Sie zu anderen Apps wechseln",
+        "screenshotAlertCta": "Aktivieren",
+        "screenshotAlertCancel": "Abbrechen"
+    },
+    "Language": {
+        "english": "Englisch",
+        "german": "Deutsch"
+    },
+    "BackupOptions": {
+        "header": "Backup Optionen",
+        "exportHeader": "Sicheren Sie Ihre Daten",
+        "exportSubheader": "Laden Sie eine verschlüsselte Kopie der Daten in Ihrer SmartWallet auf Ihr Gerät herunter. Achten Sie darauf, Ihre Backups aktuell zu halten und an einem sicheren Ort aufzubewahren.",
+        "exportBtn": "Backup-Datei exportieren",
+        "importHeader": "Backup wiederherstellen",
+        "importSubheader": "Für den Fall, dass Sie aus Versehen etwas Wichtiges gelöscht haben. Diese Option besteht nur, wenn das Backup mit dieser Wallet erstellt wurde.",
+        "importBtn": "Datei importieren",
+        "lastBackupInfo": "Letztes Backup"
+    },
+    "FAQ": {
+        "header": "Häufige Fragen",
+        "header_q1": "Was passiert, wenn ich mein Telefon verliere oder es gestohlen wird?",
+        "subheader_q1": "Sie können die Kontrolle über Ihre Wallet wiedererlangen, indem Sie die geheime Wortkombination verwenden, die Sie während der Einrichtung Ihrer SmartWallet erstellt haben. Diese wiederhergestellte Wallet wird noch keine Dokumente oder andere Informationen wiederherstellen, die in einer Wallet auf einem verlorenen Gerät gespeichert sind. In Zukunft bieten wir hierfür eine Backup Funktionalität an. Erst die Kombination führt zu einer vollständigen Wiederherstellung.",
+        "header_q2": "Wer hat Zugriff auf meine Daten?",
+        "subheader_q2": "Alle Ihre Daten werden auf Ihrem Gerät gespeichert und verwaltet. Sie haben die volle Kontrolle darüber, wer Zugang zu den Informationen erhält. Jolocom hat keinen Zugriff auf die Daten auf Ihrem Gerät, noch hat irgendjemand anderes ohne Ihre Erlaubnis Zugriff darauf. Falls Sie einer anderen Partei Zugriff auf Informationen gewähren, können Sie jederzeit sehen, was Sie geteilt haben. Tatsächlich können Sie immer schnell und einfach überprüfen, welcher Dienst Zugriff auf welche Daten hat. So erhalten Sie einen sofortigen Überblick über Ihre Verbindungen.",
+        "header_q3": "Ist die Jolocom SmartWallet DSGVO-konform?",
+        "subheader_q3": "JA, absolut. Die SmartWallet und alle unsere Produkte sind so konzipiert, dass die Integrität, die Privatsphäre und die Sicherheit der Nutzerdaten im Vordergrund stehen. Sowohl die Wallet als auch das Protokoll zur Erstellung von Identitäten und zum Austausch von Identitätsinformationen sind DSGVO-konform.",
+        "header_q4": "Was kann das SmartWallet?",
+        "subheader_q4": "Die SmartWallet ist eine von Jolocom entwickelte Anwendung, mit der Sie Daten verwalten können, die mit Ihrer Identität zusammenhängen - wie Ihre E-Mail-Adresse, Telefonnummer oder Ihr Personalausweis.\nIhre Wallet enthält Dokumente und andere digitale Inhalte, die Sie per Knopfdruck mit Diensten austauschen und teilen können."
+    },
+    "About": {
+        "versionInfo": "Sie benutzen die Version ${version}"
+    },
+    "ChangePasscode": {
+        "wrongCodeHeader": "Falsche Wallet PIN",
+        "currentHeader": "Aktuelle Wallet PIN",
+        "successHeader": "Wallet PIN geändert!",
+        "sameCodeHeader": "Sie haben die bisherige Wallet PIN eingegeben"
+    },
+    "ContactUs": {
+        "issueOption_1": "Mögliche Partnerschaft mit Jolocom",
+        "issueOption_2": "Probleme mit der Anwendung",
+        "issueOption_3": "Ich habe meine Wallet verloren",
+        "issueOption_4": "Wie kann man Teil des Projekts werden?",
+        "issueOption_5": "Sonstiges",
+        "issueHeader": "Worüber werden wir sprechen?",
+        "issuePlaceholder": "Wählen Sie eine Option aus",
+        "suggestionHeader": "Möchten Sie etwas Konkretes sagen?",
+        "suggestionSubheader": "Trau dich uns zu sagen, was du auf dem Herzen hast – damit sind wir für die zukünftigen Gespräche vorbereitet",
+        "suggestionPlaceholder": "Zum Schreiben antippen ...",
+        "contactHeader": "Möchten Sie Kontakt aufnehmen?",
+        "contactPlaceholder": "Tragen Sie Ihre E-Mail Adresse hier ein ...",
+        "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam",
+        "submitBtn": "Senden"
+    },
+    "EraseData": {
+        "dialogTitle": "Bist du sicher?",
+        "dialogMessage": "Bitte beachte, dass gelöschte Daten in Zukunft nicht wiederhergestellt werden können",
+        "submitBtn": "Ich habe verstanden",
+        "cancelBtn": "Abbrechen",
+        "loader": "Daten werden gelöscht",
+        "dragInstructions": "Zum löschen den Punkt ziehen"
+    },
+    "Errors": {
+        "unknownTitle": "Unbekannter Fehler",
+        "unknownMessage": "Und wenn es nicht das erste Mal ist, würden wir uns freuen, wenn Sie uns das mitteilen.",
+        "reportBtn": "Bericht senden",
+        "closeBtn": "Schließen",
+        "crashTitle": "Systemabsturz",
+        "crashMessage": "Aber keine Sorge - deine Daten sind sicher und es geht nichts verloren",
+        "restartBtn": "App neu starten"
+    },
+    "ErrorReporting": {
+        "issueHeader": "Schildern Sie uns das Problem",
+        "issuePlaceholder": "Zugehöriges Thema wählen",
+        "detailsHeader": "Möchten Sie etwas Konkretes sagen?",
+        "detailsSubheader": "Wenn das Problem nicht aufgelistet ist - das Textfeld unten ist der beste Platz, um es zu beschreiben",
+        "logsHeader": "Ihre Logs einbeziehen",
+        "logsSubheader": "Dies beinhaltet bestimmte private Metadaten (wie z.B. Dateigrößen - aber keine persönlichen Informationen) und wird den Entwicklern helfen, Fehler schneller zu beheben.",
+        "contactHeader": "Möchten Sie Kontakt aufnehmen?",
+        "contactInputInfo": "Wir speichern keine Daten und verschicken keinen Spam. Jegliche Benutzerinformationen werden sofort nach Lösung des Problems gelöscht.",
+        "rateHeader": "Bewerten Sie diesen Vorfall",
+        "submitBtn": "Bericht senden",
+        "contactInputError": "Bitte geben Sie eine gültige E-Mail ein",
+        "issueOption_1": "Keine Internetverbindung",
+        "issueOption_2": "Die App stürzt immer wieder ab",
+        "issueOption_3": "Ich kann mich nicht anmelden",
+        "issueOption_4": "Das Backup enthält keine Daten",
+        "issueOption_5": "Probleme mit der Benutzeroberfläche",
+        "issueOption_6": "Irgendetwas scheint nicht richtig zu sein",
+        "issueOption_7": "Sonstiges",
+        "contactPlaceholder": "Tragen Sie Ihre E-Mail hier ein ...",
+        "errorHeader": "Fehler melden"
+    },
+    "General": {
+        "unknown": "Unbekannt",
+        "anonymous": "Anonym",
+        "moreInfo": "Mehr Informationen"
+    },
+    "Authentication": {
+        "header": "Sind Sie es?",
+        "subheader": "${serviceName} möchte deine digitale Identität bestätigen, bevor es weiter geht",
+        "confirmBtn": "Erlauben"
+    },
+    "PrivacyPolicy": {
+        "header": "Datenschutzbestimmungen",
+        "footer": "Wenn Sie Fragen oder Anregungen zu unseren Datenschutzrichtlinien haben, sprechen Sie uns einfach an."
+    },
+    "DragToConfirm": {
+        "instruction": "Punkt zur Bestätigung loslassen"
+    },
+    "Test": {
+        "testTerm": "whoopsytest"
+    },
+    "Validations": {
+        "onlyNumbers": "Es sind nur Zahlen erlaubt",
+        "tooMany": "Zu viele Zeichen",
+        "tooFew": "Zu wenig Zeichen",
+        "missingValue": "Bitte geben Sie einen Wert an",
+        "wrongEmail": "Die Email scheint ungültig zu sein",
+        "atLeastOneValue": "Tragen Sie bitte mindestens einen der Werte ein"
+    },
+    "DisableOverlay": {
+        "headerTitle": "Ihre Wallet ist aus Sicherheitsgründen deaktiviert",
+        "descriptionTitle": "Versuchen Sie es in",
+        "headerBlockedTitle": "Sie haben die maximale Anzahl an Versuchen erreicht",
+        "submitBtn": "Zugang wiederherstellen",
+        "submitDescription": "Das Erstellen einer neuen Wallet PIN hat keinen Einfluss auf Ihre gespeicherten Daten"
+    },
+    "Ausweis": {
+        "birthName": "Geburtsname",
+        "address": "Adresse",
+        "communityID": "Kommunal ID",
+        "writeAddress": "Adresse eingeben",
+        "residencePermitI": "Aufenthaltsgenehmigung",
+        "familyName": "Familienname",
+        "documentType": "Dokumenten Typ",
+        "ageVerification": "Altersnachweis",
+        "issuingCountry": "Ausgabeland",
+        "writeResidencePermitII": "Schreib Aufenthaltsgenehmigung II",
+        "writeCommunityID": "Schreib Amtlichen Gemeindeschlüssel",
+        "artisticName": "Ordens- oder Künstlername",
+        "residencePermitII": "Aufenthaltsgenehmigung II",
+        "writeResidencePermitI": "Schreib Aufenthaltsgenehmigung I",
+        "givenNames": "Vorname",
+        "placeOfBirth": "Geburtsort",
+        "dateOfBirth": "Geburtsdatum",
+        "doctoralDegree": "Doktorgrad",
+        "pseudonym": "Pseudonym",
+        "validUntil": "Gültig bis",
+        "nationality": "Staatsangehörigkeit",
+        "addressVerification": "Adressnachweis",
+        "canAllowed": "CAN erlaubt",
+        "pinManagement": "PIN verwalten",
+        "header": "Eingehende eID Anfrage"
+    },
+    "AusweisLostPin": {
+        "title": "Wie kann ich den Kartenzugriff wiederherstellen?",
+        "description": "Sie können Ihren PIN-Brief nicht finden? Sie haben beim Abholen des Ausweises oder später eine PIN festgelegt, an die Sie sich jetzt nicht mehr erinnern können? Bitte wenden Sie sich in diesem Fall an die zuständige Behörde und legen Sie dort eine neue PIN fest.",
+        "contact": "Sie können sich auch per Email an den Kundendienst wenden",
+        "phoneRate": "Ortstarif"
+    },
+    "AusweisCompatibilityStatus": {
+        "header": "Kompatibilitätsprüfung",
+        "status1": "Zugang zum Ausweis erfolgreich",
+        "status2": "Online-Ausweisfunktion aktiviert",
+        "status3": "NFC unterstützt",
+        "success": "Erfolgreich!",
+        "errorStatus1": "Diese Karte ist außer Betrieb",
+        "error": "Gescheitert"
+    },
+    "AusweisReview": {
+        "subheader": "Wählen Sie zum Fortfahren die von ${serviceName} angeforderten Attribute aus",
+        "providerBtn": "Anbieter Info",
+        "mandatoryHeader": "Pflichtfelder",
+        "optionalHeader": "Freiwillige Angabe",
+        "proceedBtn": "Teilen"
+    },
+    "AusweisProvider": {
+        "providerLabel": "Anbieter",
+        "certificateLabel": "Zertifikatsaussteller",
+        "providerInfoLabel": "Anbieter Info",
+        "validityLabel": "Gültigkeit"
+    },
+    "AusweisPasscode": {
+        "authPinHeader": "eID PIN eingeben",
+        "pinForgotBtn": "Wenn Sie Ihre PIN vergessen oder noch nicht aktiviert haben, <1>klicken Sie hier.</1>",
+        "transportPinHeader": "5-stelllige PIN eingeben",
+        "transportPinBtn": "Wo kann ich das finden?",
+        "canHeader": "CAN eingeben",
+        "canBtn": "Wo finde ich die CAN?",
+        "pukHeader": "PUK eingeben",
+        "pukBtn": "Wo finde ich die PUK?",
+        "newPinHeader": "Geben Sie Ihre neue eID PIN ein",
+        "repeatNewPinHeader": "Wiederholen Sie Ihre neue eID PIN",
+        "pinMatchError": "PIN Eingaben stimmen nicht überein",
+        "pinWrongError": "Falsche ${pinVariant}"
+    },
+    "AusweisPukLock": {
+        "header": "Ihre Karte ist gesperrt und Sie müssen zum Entsperren den PUK-Code eingeben",
+        "subtitle": "Sie können Ihre Karte im Menü \"Identität\" entsperren, indem Sie \"Karte entsperren\" klicken",
+        "proceedBtn": "Weiter mit dem PUK-Code",
+        "closeBtn": "Interaktion beenden"
+    },
+    "AusweisIdentity": {
+        "header": "Online-Ausweisfunktion",
+        "subheader": "Dies ist ein Early-Access-Zugang zur Online-Ausweisfunktion in der Jolocom SmartWallet. Vorerst ist er nur für Nutzer:innen der Schaufensterprojekte “Sichere Digitale Identitäten” verfügbar.",
+        "compatibilityBtn": "Kompabilitätstest",
+        "changePinBtn": "PIN ändern",
+        "unlockBtn": "Karte entsperren",
+        "ausweisBadge": "Online-Ausweisfunktion",
+        "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
+        "moreInfoHeader": "Mehr Informationen"
+    },
+    "AusweisChangePin": {
+        "transportPinHeader": "eID PIN einrichten",
+        "transportPinSubheader": "Um Ihre PIN einzurichten, müssen Sie die 5-stellige Transport PIN eingeben, die Sie zusammen mit Ihrem Personalausweis erhalten haben.",
+        "transportPinBtn": "eID PIN einrichten",
+        "pinHeader": "6-stellige eID PIN ändern",
+        "pinSubheader": "Wenn Sie bereits eine 6-stellige PIN festgelegt haben, können Sie diese hier ändern.",
+        "pinBtn": "PIN ändern",
+        "forgotHeader": "Haben Sie Ihre eID PIN vergessen?",
+        "forgotSubheader": "Wenn Sie Ihre eID PIN vergessen oder Ihren PIN-Brief nicht finden können, wenden Sie sich bitte an die zuständige Behörde, um eine neue PIN festzulegen. Sie können den Support auch kontaktieren unter:"
+    },
+    "AusweisPinInfo": {
+        "header": "PIN Informationen",
+        "description": "Wählen Sie für die 6-stellige Ausweis PIN eine Zahlenkombination, die nicht leicht zu erraten ist.\n\nBei erstmaliger PIN-Änderung verwenden Sie bitte die 5-stellige Transport-PIN. Die Transport-PIN finden Sie im Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie mit der 5-stelligen Transport-PIN die Online-Ausweisfunktion nicht nutzen können. Eine Änderung auf eine 6-stellige PIN ist zwingend erforderlich.",
+        "btn": "Zu den eID PIN Einstellungen"
+    },
+    "AusweisScanner": {
+        "header": "Bereit zu scannen",
+        "startSubheader": "Bitte die Karte nicht entfernen, bis der Prozess abgeschlossen ist.",
+        "cancelBtn": "Abbrechen",
+        "sessionStarted": "Bitte legen Sie Ihren Ausweis oben auf die Rückseite des Geräts.",
+        "sessionFailed": "Scanvorgang fehlgeschlagen.",
+        "sessionSucceeded": "Der Scanvorgang wurde erfolgreich abgeschlossen.",
+        "sessionInProgress": "Der Scanvorgang ist im Gange."
+    },
+    "AusweisCanInfo": {
+        "header": "CAN Informationen",
+        "description": "Die Kartenzugangsnummer (CAN) wird nur benötigt, wenn Sie bereits zweimal die falsche Ausweis PIN eingegeben haben. Um zu verhindern, dass ohne Ihre Zustimmung ein drittes Mal eine falsche Ausweis PIN eingegeben wird und somit Ihre Karte gesperrt wird, müssen Sie an dieser Stelle die CAN eingeben. Die CAN ist eine 6-stellige Nummer, die Sie auf der Vorderseite Ihres Ausweises unten rechts finden."
+    },
+    "AusweisTransportPin": {
+        "warning1": "Bitte beachten Sie, dass die 5-stellige Transport-PIN nicht mehr gültig ist, wenn Sie zuvor bereits eine 6-stellige Ausweis PIN festgelegt haben",
+        "continueBtn": "Weiter",
+        "warning2": "Sie können die 5-stellige Transport-PIN nur einmal verwenden, um die Ausweis PIN zu ändern"
+    },
+    "AusweisTransportPinInfo": {
+        "header": "Transport PIN Info",
+        "description": "Die Transport-PIN finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert) nach Beantragung Ihres Personalausweises.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der 5-stelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine 6-stellige Ausweis PIN ist zwingend erforderlich."
+    },
+    "AusweisPukInfo": {
+        "header": "PUK Nummer Info",
+        "description": "Die PUK-Nummer finden Sie in dem Schreiben Ihrer zuständigen Behörde (rot markiert), nachdem Sie Ihren Personalausweis beantragt haben.\n\nBitte beachten Sie, dass Sie die Online-Ausweisfunktion mit der 5-stelligen Transport-PIN nicht nutzen können. Eine Änderung auf eine 6-stellige Ausweis PIN ist zwingend erforderlich."
+    },
+    "AusweisUnlock": {
+        "notLockedHeader": "Das System hat die Sperrung Ihrer Karte nicht erkannt",
+        "closeBtn": "Schließen",
+        "pukExhaustedHeader": "Sie haben alle verfügbaren PUK-Versuche verwendet. Die Karte ist jetzt gesperrt",
+        "unlockedHeader": "Ihre Karte ist freigeschaltet und einsatzbereit!",
+        "standaloneUnblockHeader": "Entsperren Sie Ihre Karte  <1>${screen}</1>",
+        "identityScreen": "Identität Bildschirm"
+    },
+    "Details": {
+        "expandBtn": "Mehr"
+    },
+    "Wallet": {
+        "prepareWallet": "Ihr Wallet wird vorbereitet"
+    },
+    "Dashboard": {
+        "header": "Jolocom WebAgent"
+    },
+    "TermsOfService": {
+        "header": "Nutzungsbedingungen"
+    },
+    "DocumentCard": {
+        "expired": "Abgelaufen"
+    },
+    "mdl": {
+        "sharingLoader": "Führerscheindaten werden übertragen…",
+        "successLoader": "Ihre Führerscheindaten wurden erfolgreich übermittelt!",
+        "canceledLoader": "Die Datenübertragen wurde abgebrochen. Bitte versuchen Sie es erneut.",
+        "errorLoader": "Die Datenübertragung war nicht erfolgreich!",
+        "personalizationLoader": "Führerscheindaten hinzufügen",
+        "bluetoothWarningTitle": "Bluetooth Fehler",
+        "bluetoothWarningMessage": "Um Ihren Führerschein zu teilen wird Bluetooth benötigt. Bitte aktivieren Sie Bluetooth oder nutzen Sie ein Gerät welches Bluetooth unterstützt.",
+        "bluetoothWarningBtn": "Einstellungen",
+        "vehicleCode": "Fahrerlaubnisklassen",
+        "issueDate": "Ausstellungsdatum",
+        "expiryDate": "Ablaufdatum",
+        "restrictions": "Beschränkungen",
+        "mopedAndMotorcycle": "Moped und Motorrad",
+        "passengerCar": "PKW",
+        "truck": "LKW",
+        "bus": "Bus",
+        "tractorAndForklift": "Traktor und Gabelstapler",
+        "shareHeader": "Digitalen Führerschein teilen",
+        "shareMenu": "Per QR Code teilen",
+        "successToastMsg": "Führerschein wurde erfolgreich geteilt",
+        "drivingPrivileges": "Fahrerlaubnisklassen",
+        "drivingLicenseNumber": "Führerscheinnummer",
+        "issueMdl": "mDL ausstellen",
+        "authenticationTitle": "Biometrische Authentifizierung",
+        "authenticationSubtitle": "Bitte authentifizieren Sie sich für den digitalen Führerschein",
+        "existingDocumentTitle": "Sind Sie sich sicher?",
+        "existingDocumentDescription": "Sie besitzen bereits einen mobilen Führerschein",
+        "existingDocumentBtn": "hier",
+        "title": "Führerschein",
+        "description": "Geben Sie Ihre Personendaten ein, um Ihren digitalen Führerschein zu erhalten",
+        "serviceName": "Bundesdruckerei"
+    }
 }
