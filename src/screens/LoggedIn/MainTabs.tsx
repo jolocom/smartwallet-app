@@ -45,20 +45,20 @@ const MainTabs = () => {
 
   return (
     <MainTabsNavigator.Navigator
-      initialRouteName={ScreenNames.Identity}
+      initialRouteName={ScreenNames.Documents}
       tabBar={(props: BottomTabBarProps) => {
         return <BottomBar {...props} />
       }}
     >
       <MainTabsNavigator.Screen
-        name={ScreenNames.Identity}
-        component={Identity}
-        options={{ tabBarLabel: t('BottomBar.identity') }}
-      />
-      <MainTabsNavigator.Screen
         name={ScreenNames.Documents}
         component={Documents}
         options={{ tabBarLabel: t('BottomBar.documents') }}
+      />
+      <MainTabsNavigator.Screen
+        name={ScreenNames.Identity}
+        component={Identity}
+        options={{ tabBarLabel: t('BottomBar.identity') }}
       />
       <MainTabsNavigator.Screen
         name={ScreenNames.History}
