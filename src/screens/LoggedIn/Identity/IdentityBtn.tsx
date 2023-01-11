@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import JoloText from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
@@ -51,5 +51,10 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     textAlign: 'left',
+    ...Platform.select({
+      android: {
+        marginTop: 6,
+      },
+    }),
   },
 })
