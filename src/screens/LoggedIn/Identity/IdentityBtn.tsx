@@ -1,5 +1,11 @@
 import React from 'react'
-import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import JoloText from '~/components/JoloText'
 import { Colors } from '~/utils/colors'
 import { Fonts, JoloTextSizes } from '~/utils/fonts'
@@ -24,6 +30,15 @@ export const IdentityBtn: React.FC<IdentityBtnProps> = ({
       onPress={onPress}
       disabled={loading}
     >
+      <View
+        style={{
+          ...styles.activityIndicatorContainer,
+          display: loading ? 'flex' : 'none',
+          zIndex: loading ? 100 : 0,
+        }}
+      >
+        <ActivityIndicator color={Colors.white80} animating={loading} />
+      </View>
       <JoloText color={Colors.white} size={JoloTextSizes.middle}>
         {title}
       </JoloText>
@@ -39,6 +54,17 @@ export const IdentityBtn: React.FC<IdentityBtnProps> = ({
 }
 
 const styles = StyleSheet.create({
+  activityIndicatorContainer: {
+    alignItems: 'center',
+    backgroundColor: Colors.mainDark,
+    borderRadius: 12,
+    bottom: 0,
+    justifyContent: 'center',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
   container: {
     alignItems: 'flex-start',
     backgroundColor: Colors.mainDark,
