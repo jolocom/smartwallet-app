@@ -144,7 +144,7 @@ export const AusweisIdentity = () => {
       >
         {t('AusweisIdentity.header')}
       </JoloText>
-      <View style={{ ...styles.cardContainer }}>
+      <View style={styles.cardContainer}>
         <Image
           resizeMode="contain"
           source={require('~/assets/images/cardBanner.png')}
@@ -176,20 +176,18 @@ export const AusweisIdentity = () => {
         <View style={styles.btnContainer}>
           <IdentityBtn
             title={t('AusweisIdentity.compatibilityBtn')}
-            subtitle={
-              'Check if your device is compatible with the eID functionality.'
-            }
+            subtitle={t('AusweisIdentity.compatibilityBtnDescription')}
             onPress={handleCompatibility}
             loading={isLoadingCompatibility}
           />
           <IdentityBtn
             title={t('AusweisIdentity.changePinBtn')}
-            subtitle={'Change or set your eID PIN.'}
+            subtitle={t('AusweisIdentity.changePinBtnDescription')}
             onPress={handleChangePin}
           />
           <IdentityBtn
             title={t('AusweisIdentity.unlockBtn')}
-            subtitle={'Unlock your blocked card here.'}
+            subtitle={t('AusweisIdentity.unlockBtnDescription')}
             loading={isLoadingUnlock}
             onPress={handleUnlockCard}
           />
