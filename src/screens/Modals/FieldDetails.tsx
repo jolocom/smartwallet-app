@@ -211,7 +211,7 @@ const FieldDetails = () => {
         renderHeader={() => (
           <Collapsible.Header
             customStyles={{ backgroundColor }}
-            type={NavHeaderType.Close}
+            type={NavHeaderType.Back}
           />
         )}
         renderScroll={() => (
