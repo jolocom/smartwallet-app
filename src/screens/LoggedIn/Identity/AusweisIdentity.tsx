@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   moreBtn: {
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     paddingHorizontal: 14,
     paddingTop: 4,
   },
