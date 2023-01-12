@@ -1,16 +1,12 @@
+import { aa2Module } from '@jolocom/react-native-ausweis'
+import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import { aa2Module } from '@jolocom/react-native-ausweis'
-import { useNavigation } from '@react-navigation/native'
-import { CardInfo } from '@jolocom/react-native-ausweis/js/types'
-import Btn, { BtnTypes } from '~/components/Btn'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
-import { Colors } from '~/utils/colors'
-import BP from '~/utils/breakpoints'
-import { JoloTextSizes } from '~/utils/fonts'
-import { ScreenNames } from '~/types/screens'
-import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
+import { useCheckNFC } from '~/hooks/nfc'
 import useTranslation from '~/hooks/useTranslation'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import {
   AusweisFlow,
   AusweisPasscodeMode,
@@ -18,8 +14,12 @@ import {
   CardInfoMode,
   eIDScreens,
 } from '~/screens/Modals/Interaction/eID/types'
+import { ScreenNames } from '~/types/screens'
+import BP from '~/utils/breakpoints'
+import { Colors } from '~/utils/colors'
+import { JoloTextSizes } from '~/utils/fonts'
 import { IS_ANDROID } from '~/utils/generic'
-import { useCheckNFC } from '~/hooks/nfc'
+import { IdentityBtn } from './IdentityBtn'
 
 export const AusweisIdentity = () => {
   const { t } = useTranslation()
@@ -136,14 +136,18 @@ export const AusweisIdentity = () => {
   const handleMoreInfo = () => navigation.navigate(ScreenNames.AusweisMoreInfo)
 
   return (
-    <View
-      style={{ marginBottom: BP({ large: 0, default: 40 }) }}
-      testID="home-ausweis-identity"
-    >
+    <View style={styles.container} testID="home-ausweis-identity">
+      <JoloText
+        kind={JoloTextKind.title}
+        weight={JoloTextWeight.medium}
+        customStyles={styles.header}
+      >
+        {t('AusweisIdentity.header')}
+      </JoloText>
       <View style={styles.cardContainer}>
         <Image
           resizeMode="contain"
-          source={require('~/assets/images/updatedCard.png')}
+          source={require('~/assets/images/cardBanner.png')}
           style={styles.card}
         />
         <JoloText
@@ -155,45 +159,39 @@ export const AusweisIdentity = () => {
         </JoloText>
       </View>
       <View>
-        <JoloText kind={JoloTextKind.title} weight={JoloTextWeight.regular}>
-          {t('AusweisIdentity.header')}
-        </JoloText>
-        <JoloText size={JoloTextSizes.mini} customStyles={{ marginTop: 8 }}>
+        <JoloText
+          size={JoloTextSizes.mini}
+          customStyles={styles.subheader}
+          color={Colors.white70}
+        >
           {t('AusweisIdentity.subheader')}
-          {'\n'}
-          <JoloText
-            onPress={handleMoreInfo}
-            size={JoloTextSizes.mini}
-            color={Colors.activity}
-          >
-            {t('General.moreInfo')}
-          </JoloText>
         </JoloText>
-
+        <JoloText
+          onPress={handleMoreInfo}
+          size={JoloTextSizes.mini}
+          color={Colors.activity}
+          customStyles={styles.moreBtn}
+        >
+          {t('General.moreInfo')}
+        </JoloText>
         <View style={styles.btnContainer}>
-          <Btn
-            type={BtnTypes.secondary}
-            customContainerStyles={styles.btn}
-            loading={isLoadingCompatibility}
+          <IdentityBtn
+            title={t('AusweisIdentity.compatibilityBtn')}
+            subtitle={t('AusweisIdentity.compatibilityBtnDescription')}
             onPress={handleCompatibility}
-          >
-            {t('AusweisIdentity.compatibilityBtn')}
-          </Btn>
-          <Btn
-            type={BtnTypes.secondary}
-            customContainerStyles={styles.btn}
+            loading={isLoadingCompatibility}
+          />
+          <IdentityBtn
+            title={t('AusweisIdentity.changePinBtn')}
+            subtitle={t('AusweisIdentity.changePinBtnDescription')}
             onPress={handleChangePin}
-          >
-            {t('AusweisIdentity.changePinBtn')}
-          </Btn>
-          <Btn
-            type={BtnTypes.secondary}
-            customContainerStyles={styles.btn}
+          />
+          <IdentityBtn
+            title={t('AusweisIdentity.unlockBtn')}
+            subtitle={t('AusweisIdentity.unlockBtnDescription')}
             loading={isLoadingUnlock}
             onPress={handleUnlockCard}
-          >
-            {t('AusweisIdentity.unlockBtn')}
-          </Btn>
+          />
         </View>
       </View>
     </View>
@@ -201,16 +199,22 @@ export const AusweisIdentity = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: BP({
+      large: 0,
+      default: 40,
+    }),
+  },
   cardContainer: {
     width: '100%',
-    aspectRatio: 1.55,
-    marginBottom: 8,
+    aspectRatio: 3,
     position: 'relative',
+    alignSelf: 'center',
   },
   ausweisBadge: {
     position: 'absolute',
-    bottom: 23,
-    left: 18,
+    bottom: 12,
+    left: 24,
     fontSize: 16,
     lineHeight: 18.4,
     letterSpacing: 0.15,
@@ -220,15 +224,19 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
-    transform: [{ scale: 1.1 }],
-  },
-  btn: {
-    borderWidth: 1,
-    borderColor: Colors.borderGray20,
-    marginVertical: 1,
   },
   btnContainer: {
-    marginTop: BP({ default: 28, large: 42 }),
-    paddingVertical: 8,
+    marginTop: BP({ default: 8, large: 16 }),
+  },
+  header: { textAlign: 'left', marginBottom: 12 },
+  subheader: {
+    textAlign: 'left',
+    paddingHorizontal: 14,
+    marginTop: 8,
+  },
+  moreBtn: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 14,
+    paddingTop: 4,
   },
 })
