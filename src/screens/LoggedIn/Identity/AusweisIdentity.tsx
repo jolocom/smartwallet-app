@@ -164,7 +164,7 @@ export const AusweisIdentity = () => {
           customStyles={styles.subheader}
           color={Colors.white70}
         >
-          {t('AusweisIdentity.subheader')}{' '}
+          {t('AusweisIdentity.subheader')}
           <JoloText
             onPress={handleMoreInfo}
             size={JoloTextSizes.mini}

@@ -528,7 +528,7 @@
     },
     "AusweisIdentity": {
         "header": "Online-Ausweisfunktion",
-        "subheader": "Dies ist ein Early-Access-Zugang zur Online-Ausweisfunktion in der Jolocom SmartWallet. Vorerst ist er nur für Nutzer:innen der Schaufensterprojekte “Sichere Digitale Identitäten” verfügbar.",
+        "subheader": "Dies ist ein Early-Access-Zugang zur Online-Ausweisfunktion in der Jolocom SmartWallet. Vorerst ist er nur für Nutzer:innen der Schaufensterprojekte “Sichere Digitale Identitäten” verfügbar. ",
         "compatibilityBtn": "Kompabilitätstest",
         "changePinBtn": "eID PIN ändern",
         "unlockBtn": "Karte entsperren",

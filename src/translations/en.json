@@ -528,7 +528,7 @@
     },
     "AusweisIdentity": {
         "header": "German eID",
-        "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\".",
+        "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\". ",
         "compatibilityBtn": "Compatibility Test",
         "changePinBtn": "Change your eID PIN",
         "unlockBtn": "Unlock blocked card",
