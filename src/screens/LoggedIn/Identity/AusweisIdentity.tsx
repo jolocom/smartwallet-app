@@ -165,13 +165,14 @@ export const AusweisIdentity = () => {
           color={Colors.white70}
         >
           {t('AusweisIdentity.subheader')}
-          <JoloText
-            onPress={handleMoreInfo}
-            size={JoloTextSizes.mini}
-            color={Colors.activity}
-          >
-            {t('General.moreInfo')}
-          </JoloText>
+        </JoloText>
+        <JoloText
+          onPress={handleMoreInfo}
+          size={JoloTextSizes.mini}
+          color={Colors.activity}
+          customStyles={styles.moreBtn}
+        >
+          {t('General.moreInfo')}
         </JoloText>
         <View style={styles.btnContainer}>
           <IdentityBtn
@@ -232,5 +233,10 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     paddingHorizontal: 14,
     marginTop: 8,
+  },
+  moreBtn: {
+    textAlign: 'left',
+    paddingHorizontal: 14,
+    paddingTop: 4,
   },
 })
