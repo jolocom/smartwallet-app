@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import moment from 'moment'
 import { useRef } from 'react'
 //@ts-expect-error
 import { Platform } from 'react-native'
@@ -85,6 +86,7 @@ export const useDrivingLicense = () => {
     filteredData.issue_date = moment(filteredData.issue_date).format(
       'DD.MM.YYYY',
     )
+
     const stringifiedDrivingPrivileges = JSON.stringify(
       filteredData.driving_privileges,
     )
@@ -119,9 +121,9 @@ export const useDrivingLicense = () => {
     qrString: string,
     onRequests: (requests: PersonalizationInputRequest[]) => void,
   ) => {
-    const existindMdlDocument = getDrivingLicense()
+    const existingMdlDocument = getDrivingLicense()
 
-    if (existindMdlDocument) {
+    if (existingMdlDocument) {
       return scheduleInfo({
         title: t('mdl.existingDocumentTitle'),
         message: t('mdl.existingDocumentDescription'),
