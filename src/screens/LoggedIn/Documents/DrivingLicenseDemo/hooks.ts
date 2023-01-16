@@ -76,6 +76,15 @@ export const useDrivingLicense = () => {
       'portrait',
     ])
 
+    filteredData.birth_date = moment(filteredData.birth_date).format(
+      'DD.MM.YYYY',
+    )
+    filteredData.expiry_date = moment(filteredData.expiry_date).format(
+      'DD.MM.YYYY',
+    )
+    filteredData.issue_date = moment(filteredData.issue_date).format(
+      'DD.MM.YYYY',
+    )
     const stringifiedDrivingPrivileges = JSON.stringify(
       filteredData.driving_privileges,
     )
