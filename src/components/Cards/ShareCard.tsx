@@ -46,6 +46,8 @@ const ShareCard: React.FC<Props> = ({
     return maxRows
   }, [holderName])
 
+  const cardHasBackground = Boolean(backgroundColor || backgroundImage)
+
   const maxRows = calculateMaxRows()
 
   return (
@@ -66,7 +68,12 @@ const ShareCard: React.FC<Props> = ({
           backgroundImage={backgroundImage}
         />
         <View style={styles.fieldsContainer}>
-          <View style={{ flex: 1, marginTop: !holderName ? 8 : 0 }}>
+          <View
+            style={{
+              flex: 1,
+              marginTop: !holderName && !cardHasBackground ? 8 : 0,
+            }}
+          >
             {holderName && (
               <DocumentHolderName name={holderName} numberOfLines={1} />
             )}
