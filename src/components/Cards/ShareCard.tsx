@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
 import { Colors } from '~/utils/colors'
 import ScaledCard, { ScaledView } from './ScaledCard'
@@ -56,13 +56,7 @@ const ShareCard: React.FC<Props> = ({
       scaleStyle={{ borderRadius: 13 }}
       scaleToFit
     >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          width: '100%',
-        }}
-      >
+      <View style={styles.cardContainer}>
         <DocumentHeader
           name={credentialName}
           icon={issuerIcon}
@@ -71,8 +65,8 @@ const ShareCard: React.FC<Props> = ({
           backgroundColor={backgroundColor}
           backgroundImage={backgroundImage}
         />
-        <View style={{ flexDirection: 'row', flex: 1 }}>
-          <View style={{ flex: 1 }}>
+        <View style={styles.fieldsContainer}>
+          <View style={{ flex: 1, marginTop: !holderName ? 8 : 0 }}>
             {holderName && (
               <DocumentHolderName name={holderName} numberOfLines={1} />
             )}
@@ -99,5 +93,10 @@ const ShareCard: React.FC<Props> = ({
     </ScaledCard>
   )
 }
+
+const styles = StyleSheet.create({
+  cardContainer: { flex: 1, flexDirection: 'column', width: '100%' },
+  fieldsContainer: { flexDirection: 'row', flex: 1 },
+})
 
 export default ShareCard
