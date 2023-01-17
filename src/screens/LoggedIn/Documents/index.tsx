@@ -105,12 +105,15 @@ const Documents: React.FC = () => {
       stack: StackData<Document, StackExtraData>,
       stackItems: React.ReactNode,
     ) => {
-      const getDisplayValue = () =>
-        !documents.length
-          ? 'flex'
-          : openedStack === stack.stackId
-          ? 'flex'
-          : 'none'
+      const getDisplayValue = useMemo(
+        () =>
+          !documents.length
+            ? 'flex'
+            : openedStack === stack.stackId
+            ? 'flex'
+            : 'none',
+        [openedStack, documents.length],
+      )
 
       return (
         <View key={stack.stackId} style={styles.stackContainer}>
@@ -134,7 +137,7 @@ const Documents: React.FC = () => {
                 // the component is faster, but the exiting layout animation is messed up. Also, this makes memoization
                 // work, where each component is only rendered once. Otherwise, with conditional rendering
                 // each card is rendered twice.
-                display: getDisplayValue(),
+                display: getDisplayValue,
               },
             ]}
           >
