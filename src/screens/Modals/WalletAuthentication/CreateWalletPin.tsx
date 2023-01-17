@@ -105,6 +105,7 @@ const CreateWalletPin = () => {
         justifyContent: 'flex-start',
         paddingTop: BP({ default: 36, small: 28, xsmall: 24 }),
       }}
+      backgroundColor={Colors.bastille}
     >
       <Passcode
         onSubmit={
