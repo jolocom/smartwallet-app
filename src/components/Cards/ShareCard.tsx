@@ -71,7 +71,7 @@ const ShareCard: React.FC<Props> = ({
           <View
             style={{
               flex: 1,
-              marginTop: !holderName && !cardHasBackground ? 8 : 0,
+              marginTop: !holderName && cardHasBackground ? 8 : 0,
             }}
           >
             {holderName && (
