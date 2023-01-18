@@ -1,7 +1,8 @@
+import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import { PersonalizationInputRequest } from 'react-native-mdl'
-import { createStackNavigator } from '@react-navigation/stack'
 
+import { useToasts } from '~/hooks/toasts'
 import PopupMenu, { PopupMenuProps } from '~/screens/LoggedIn/PopupMenu'
 import DragToConfirm from '~/screens/Modals/DragToConfirm'
 import AusweisCardInfo from '~/screens/Modals/Interaction/eID/components/AusweisCardInfo'
@@ -17,8 +18,8 @@ import {
   transparentModalFadeOptions,
   transparentModalOptions,
 } from '~/utils/screenSettings'
-import DrivingPrivileges from '../Modals/DrivingPrivileges'
 import Registration from '../LoggedOut/Onboarding/Registration'
+import DrivingPrivileges from '../Modals/DrivingPrivileges'
 import FieldDetails from '../Modals/FieldDetails'
 import CredentialForm from '../Modals/Forms/CredentialForm'
 import Interaction from '../Modals/Interaction'
@@ -27,6 +28,9 @@ import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChange
 import AusweisServiceInfo from '../Modals/Interaction/eID/components/AusweisServiceInfo'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
+import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
+import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
+import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
 import MainTabs from './MainTabs'
 import About from './Settings/About'
 import BackupIdentity from './Settings/BackupIdentity'
@@ -45,10 +49,6 @@ import Imprint from './Settings/Imprint'
 import Language from './Settings/Language'
 import PrivacyPolicy from './Settings/PrivacyPolicy'
 import TermsOfService from './Settings/TermsOfService'
-import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
-import { useToasts } from '~/hooks/toasts'
-import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
-import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
 
 export type TransparentModalsParamsList = {
   [ScreenNames.PopupMenu]: PopupMenuProps
@@ -254,7 +254,7 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.DrivingPrivileges}
         component={DrivingPrivileges}
-        options={screenTransitionSlideFromBottom}
+        options={screenTransitionSlideFromRight}
       />
       <MainStack.Screen
         name={ScreenNames.Interaction}
