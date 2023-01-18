@@ -6,7 +6,7 @@ import { Colors } from '~/utils/colors'
 import { Fonts } from '~/utils/fonts'
 import ScaledCard, { ScaledText, ScaledView } from './ScaledCard'
 
-import { DocumentProperty, Document } from '~/hooks/documents/types'
+import { Document, DocumentProperty } from '~/hooks/documents/types'
 import { DocumentFields, DocumentHeader } from './components'
 import {
   ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT,
@@ -96,14 +96,10 @@ const OfferCard: React.FC<Props> = ({
               </View>
             </View>
             <ScaledView
-              style={{
-                flex: 0.3,
-                justifyContent: 'flex-end',
-                alignItems: 'flex-end',
-              }}
+              style={{ position: 'absolute' }}
               scaleStyle={{
-                paddingHorizontal: 8,
-                bottom: -8,
+                right: 8,
+                bottom: 6,
               }}
             >
               {Boolean(nrLeftFields) && (

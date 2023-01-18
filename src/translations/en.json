@@ -528,13 +528,16 @@
     },
     "AusweisIdentity": {
         "header": "German eID",
-        "subheader": "This is an early access feature for the German eID (Online-Ausweisfunktion) in the Jolocom SmartWallet. For the time being, it is only available to users of the \"Secure Digital Identities\" showcase projects.",
-        "compatibilityBtn": "Compatibility check",
-        "changePinBtn": "Change your PIN",
+        "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\". ",
+        "compatibilityBtn": "Compatibility Test",
+        "changePinBtn": "Change your eID PIN",
         "unlockBtn": "Unlock blocked card",
         "ausweisBadge": "Online-Ausweisfunktion",
         "moreInfoDescription": "SmartWallet allows you to use the German eID function (e.g. with the German electronic residence permit) without having to go through other apps. \n\nIf the German eID function is required during a registration process, the SmartWallet will prompt you to hold your eID card up to the NFC reader on your smartphone and enter your 6-digit eID PIN. You also have the option to specify which data you want to share and to check with whom you share it. In addition, you can change your transport PIN to unlock the eID card, change your eID card PIN and unlock the eID card if necessary.\n\nFor the time being, the German eID function is only available to participants of the pilot applications from the research program \"Secure Digital Identities\" of the federal Ministry of Economic Affairs and Climate Action. Furthermore, Jolocom is involved in the ONCE, ID-Ideal and SDIKA projects. The German eID function was implemented on the basis of the AusweisApp2 SDK and uses its existing infrastructure (Online-Ausweisfunktion).",
-        "moreInfoHeader": "German eID Info"
+        "moreInfoHeader": "German eID Info",
+        "compatibilityBtnDescription": "Check if your device is compatible with the eID functionality.",
+        "changePinBtnDescription": "Change or set your eID PIN.",
+        "unlockBtnDescription": "Unlock your blocked card here."
     },
     "AusweisChangePin": {
         "transportPinHeader": "Set up your eID PIN",

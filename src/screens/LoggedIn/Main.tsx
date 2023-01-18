@@ -13,7 +13,6 @@ import { Colors } from '~/utils/colors'
 import {
   screenDisableGestures,
   screenTransitionFromBottomDisabledGestures,
-  screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalFadeOptions,
   transparentModalOptions,
@@ -250,7 +249,7 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.FieldDetails}
         component={FieldDetails}
-        options={screenTransitionSlideFromBottom}
+        options={screenTransitionSlideFromRight}
       />
       <MainStack.Screen
         name={ScreenNames.DrivingPrivileges}
