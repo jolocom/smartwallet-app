@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import CrossIcon from '~/assets/svg/CrossIcon'
 
 import { DocumentCard } from '~/components/Cards'
 import { CardFavorite } from '~/components/Cards/components'
@@ -101,6 +102,8 @@ const Documents: React.FC = () => {
     [],
   )
 
+  const toggleMenuModal = () => {}
+
   const renderStack = useCallback(
     (
       stack: StackData<Document, StackExtraData>,
@@ -161,7 +164,11 @@ const Documents: React.FC = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <ScreenContainer.Header customStyles={{ marginBottom: 18 }}>
+      <ScreenContainer.Header
+        customStyles={{ marginBottom: 18 }}
+        rightButtonIcon={<CrossIcon />}
+        rightButtonAction={toggleMenuModal}
+      >
         {t('BottomBar.documents')}
       </ScreenContainer.Header>
       {!documents.length ? (

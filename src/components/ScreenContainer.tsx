@@ -12,6 +12,7 @@ import { JoloTextSizes } from '~/utils/fonts'
 import BP from '~/utils/breakpoints'
 import { SCREEN_HEADER_HEIGHT } from '~/utils/screenSettings'
 import { IWithCustomStyle } from '~/types/props'
+import IconBtn from './IconBtn'
 
 interface ScreenContainerI extends IWithCustomStyle {
   isTransparent?: boolean
@@ -24,8 +25,13 @@ interface ScreenContainerI extends IWithCustomStyle {
   testID?: string
 }
 
+interface IScreenHeaderProps extends IJoloTextProps {
+  rightButtonIcon?: React.ReactElement
+  rightButtonAction?: () => void
+}
+
 interface IScreenContainerCompound {
-  Header: React.FC<IJoloTextProps>
+  Header: React.FC<IScreenHeaderProps>
   Padding: React.FC<{ distance?: number }>
 }
 
@@ -99,27 +105,41 @@ const ScreenContainer: React.FC<ScreenContainerI> &
 const ScreenContainerHeader: IScreenContainerCompound['Header'] = ({
   children,
   customStyles,
+  rightButtonIcon,
+  rightButtonAction,
   ...props
 }) => {
   return (
-    <JoloText
-      kind={JoloTextKind.title}
-      size={JoloTextSizes.middle}
-      weight={JoloTextWeight.regular}
-      color={Colors.white85}
-      {...props}
-      customStyles={[
-        {
-          alignSelf: 'flex-start',
-          textAlign: 'left',
-          marginTop: 16,
-          marginBottom: BP({ default: 8, small: 4, xsmall: 4 }),
-        },
-        customStyles,
-      ]}
-    >
-      {children}
-    </JoloText>
+    <View style={styles.headerContainer}>
+      <JoloText
+        kind={JoloTextKind.title}
+        size={JoloTextSizes.middle}
+        weight={JoloTextWeight.regular}
+        color={Colors.white85}
+        {...props}
+        customStyles={[
+          {
+            alignSelf: 'flex-start',
+            textAlign: 'left',
+            marginTop: 16,
+            marginBottom: BP({ default: 8, small: 4, xsmall: 4 }),
+          },
+          customStyles,
+        ]}
+      >
+        {children}
+      </JoloText>
+      {rightButtonIcon && rightButtonAction && (
+        <IconBtn
+          testID="closeIcon"
+          disabled={false}
+          onPress={rightButtonAction}
+          customStyles={styles.rightIconButton}
+        >
+          {rightButtonIcon}
+        </IconBtn>
+      )}
+    </View>
   )
 }
 
@@ -159,6 +179,18 @@ const styles = StyleSheet.create({
   padding: {
     // TODO: double check in places that use ScreenContainer.Padding
     width: Dimensions.get('window').width,
+  },
+  headerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  rightIconButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 20,
   },
 })
 
