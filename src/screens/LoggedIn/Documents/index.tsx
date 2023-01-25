@@ -32,6 +32,7 @@ import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainTabsParamList } from '../MainTabs'
+import { useAddDocumentMenu } from './useAddDocumentMenu'
 import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
 import { useFavoriteDocuments } from './useFavoriteDocuments'
 
@@ -61,6 +62,7 @@ const Documents: React.FC = () => {
   } = useDocumentsScreen()
 
   const { favorites } = useFavoriteDocuments()
+  const { showMenu } = useAddDocumentMenu()
 
   const dispatch = useDispatch()
 
@@ -102,7 +104,26 @@ const Documents: React.FC = () => {
     [],
   )
 
-  const toggleMenuModal = () => {}
+  const showAddDocumentMenu = () => {
+    showMenu([
+      {
+        title: t('AddDocument.menu.personalInfo'),
+        navigation: {
+          screen: ScreenNames.MainTabs,
+          params: { screen: ScreenNames.Identity },
+        },
+      },
+      { title: t('AddDocument.menu.addMDL'), onPress: () => {} },
+      { title: t('AddDocument.menu.addZBI'), onPress: () => {} },
+      {
+        title: t('AddDocument.menu.scanQRCode'),
+        navigation: {
+          screen: ScreenNames.Interaction,
+          params: { screen: ScreenNames.Scanner },
+        },
+      },
+    ])
+  }
 
   const renderStack = useCallback(
     (
@@ -167,7 +188,7 @@ const Documents: React.FC = () => {
       <ScreenContainer.Header
         customStyles={{ marginBottom: 18 }}
         rightButtonIcon={<CrossIcon />}
-        rightButtonAction={toggleMenuModal}
+        rightButtonAction={showAddDocumentMenu}
       >
         {t('BottomBar.documents')}
       </ScreenContainer.Header>

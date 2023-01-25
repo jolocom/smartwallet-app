@@ -600,5 +600,15 @@
   },
   "DocumentCard": {
     "expired": "Expired"
+  },
+  "AddDocument": {
+    "header": "Add Documents to Wallet",
+    "description": "Add new documents to your Smart Wallet using the options below.",
+    "menu": {
+      "personalInfo": "Set up Personal Info Card",
+      "addMDL": "Add Mobile Drovers License",
+      "addZBI": "Add eZBI",
+      "scanQRCode": "Scan QR Code"
+    }
   }
 }

@@ -24,6 +24,7 @@ export enum ScreenNames {
   MainTabs = 'MainTabs',
   Identity = 'Identity',
   Documents = 'Documents',
+  AddDocumentMenu = 'AddDocumentMenu',
   History = 'History',
   Settings = 'Settings',
   // Device Authentication
