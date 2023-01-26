@@ -14,7 +14,7 @@ const useConnection = () => {
 
   useEffect(() => {
     setConnected(netInfo.isConnected === null ? true : netInfo.isConnected)
-  }, [netInfo.isConnected])
+  }, [netInfo])
 
   const showDisconnectedToast = () => {
     scheduleWarning({
