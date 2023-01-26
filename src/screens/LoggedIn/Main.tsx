@@ -11,6 +11,7 @@ import { Colors } from '~/utils/colors'
 import {
   screenDisableGestures,
   screenTransitionFromBottomDisabledGestures,
+  screenTransitionSlideFromBottom,
   screenTransitionSlideFromRight,
   transparentModalFadeOptions,
   transparentModalOptions,
