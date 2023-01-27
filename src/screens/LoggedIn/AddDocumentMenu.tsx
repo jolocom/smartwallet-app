@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingHorizontal: 12,
-    marginVertical: 25,
+    marginBottom: 25,
     width: '100%',
   },
   menuContainer: {

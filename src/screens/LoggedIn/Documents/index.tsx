@@ -122,6 +122,7 @@ const Documents: React.FC = () => {
           params: { screen: ScreenNames.Scanner },
         },
       },
+      { title: t('Documents.cancelBtn') },
     ])
   }
 
