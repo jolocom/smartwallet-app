@@ -129,7 +129,6 @@ export const DrivingLicenseForm = () => {
                   : t('mdl.issueMdl')
               }
               onCancel={onCancel}
-              isSubmitDisabled={!drivingLicenseNumber}
             />
           </ContainerBAS>
         </BottomSheet>
