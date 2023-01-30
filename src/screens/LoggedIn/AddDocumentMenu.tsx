@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, View, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Colors } from '~/utils/colors'
 import JoloText, { JoloTextKind, JoloTextWeight } from '~/components/JoloText'
 import { RouteProp, useRoute } from '@react-navigation/core'
@@ -9,6 +9,7 @@ import { useGoBack, useReplaceWith } from '~/hooks/navigation'
 import { MainStackParamList } from '~/screens/LoggedIn/Main'
 import useTranslation from '~/hooks/useTranslation'
 import { JoloTextSizes } from '~/utils/fonts'
+import Btn, { BtnTypes } from '~/components/Btn'
 
 export interface IAddDocumentOption {
   title: string
@@ -22,22 +23,6 @@ export interface IAddDocumentOption {
 export interface AddDocumentMenuProps {
   options: IAddDocumentOption[]
 }
-
-const MenuButton: React.FC<{ onPress: () => void }> = ({
-  onPress,
-  children,
-}) => (
-  <TouchableOpacity
-    style={styles.button}
-    activeOpacity={0.5}
-    onPress={onPress}
-    testID="add-document-menu-button"
-  >
-    <JoloText size={JoloTextSizes.middle} color={Colors.white}>
-      {children}
-    </JoloText>
-  </TouchableOpacity>
-)
 
 const AddDocumentMenu = () => {
   const { t } = useTranslation()
@@ -88,11 +73,13 @@ const AddDocumentMenu = () => {
       <View style={styles.menuContainer}>
         {options.map(({ title, navigation, onPress }, i) => (
           <React.Fragment key={i}>
-            <MenuButton
+            <Btn
+              type={BtnTypes.secondary}
+              customContainerStyles={styles.button}
               onPress={() => onOptionBtnPress({ navigation, onPress })}
             >
               {title}
-            </MenuButton>
+            </Btn>
           </React.Fragment>
         ))}
       </View>
@@ -117,10 +104,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(143, 146, 161, 0.2)',
-    marginBottom: 20,
+    backgroundColor: Colors.borderGray20,
   },
 })
 

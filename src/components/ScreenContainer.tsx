@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   rightIconButton: {
     width: 40,
     height: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: Colors.white21,
     borderRadius: 20,
   },
 })
