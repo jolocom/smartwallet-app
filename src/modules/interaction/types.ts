@@ -25,6 +25,7 @@ export interface InteractionState {
 
 export interface MdlConfig {
   mdoc: string
+  isPersonalizingMdl: boolean
 }
 
 export interface DeeplinkConfig {
@@ -46,6 +47,7 @@ export enum InteractionActionType {
   setReaderState = 'setReaderState',
   setFlowType = 'setFlowType',
   setMdoc = 'setMdoc',
+  setIsPersonalizingMdl = 'setIsPersonalizingMdl',
 }
 
 // Expressing dependency between action type and action payload;
@@ -64,6 +66,7 @@ export interface InteractionActions {
   [InteractionActionType.setReaderState]: CardInfo | null
   [InteractionActionType.setFlowType]: AusweisFlowTypePayload
   [InteractionActionType.setMdoc]: string | null
+  [InteractionActionType.setIsPersonalizingMdl]: boolean | null
 }
 
 // Dependency between action type and its payload following Action type signature

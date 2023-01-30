@@ -26,7 +26,10 @@ import { useAgent } from '~/hooks/sdk'
 import { useToasts } from '~/hooks/toasts'
 import useTranslation from '~/hooks/useTranslation'
 import { addCredentials } from '~/modules/credentials/actions'
-import { setMdoc } from '~/modules/interaction/mdl/actions'
+import {
+  setIsPersonalizingMdl,
+  setMdoc,
+} from '~/modules/interaction/mdl/actions'
 import { dismissLoader, setLoader } from '~/modules/loader/actions'
 import { LoaderTypes } from '~/modules/loader/types'
 import { ScreenNames } from '~/types/screens'
@@ -124,6 +127,7 @@ export const useDrivingLicense = () => {
     const existingMdlDocument = getDrivingLicense()
 
     if (existingMdlDocument) {
+      dispatch(setIsPersonalizingMdl(false))
       return scheduleInfo({
         title: t('mdl.existingDocumentTitle'),
         message: t('mdl.existingDocumentDescription'),
@@ -158,6 +162,7 @@ export const useDrivingLicense = () => {
         .then((displayData) => {
           createDrivingLicenseVC(displayData).catch(scheduleErrorWarning)
           dispatch(dismissLoader())
+          dispatch(setIsPersonalizingMdl(false))
           redirect(ScreenNames.Documents)
         })
         .catch(console.warn)
@@ -166,6 +171,7 @@ export const useDrivingLicense = () => {
       unsubscribe()
 
       dispatch(dismissLoader())
+      dispatch(setIsPersonalizingMdl(false))
       let jsonError: DrivingLicenseError
       //FIXME currently returns null, but should return stringified DrivingLicenseError
       if (typeof error === 'string') {

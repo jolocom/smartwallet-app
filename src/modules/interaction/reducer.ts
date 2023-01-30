@@ -13,7 +13,7 @@ import {
   setAusweisReaderState,
   setAusweisScannerKey,
 } from './ausweis/actions'
-import { setMdoc } from './mdl/actions'
+import { setIsPersonalizingMdl, setMdoc } from './mdl/actions'
 import { isCredOfferDetails, isCredShareDetails } from './ssi/guards'
 import { InteractionActionType, InteractionState } from './types'
 
@@ -46,6 +46,7 @@ const reducer = (
     | typeof setAusweisReaderState
     | typeof setAusweisFlowType
     | typeof setMdoc
+    | typeof setIsPersonalizingMdl
   >,
 ) => {
   switch (action.type) {
@@ -134,6 +135,11 @@ const reducer = (
       return {
         ...state,
         mdl: { ...state.mdl, mdoc: action.payload },
+      }
+    case InteractionActionType.setIsPersonalizingMdl:
+      return {
+        ...state,
+        mdl: { ...state.mdl, isPersonalizingMdl: action.payload },
       }
 
     // NOTE: Ausweis handlers
