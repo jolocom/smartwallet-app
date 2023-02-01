@@ -15,6 +15,7 @@ import { ServiceLogo } from '~/components/ServiceLogo'
 import Space from '~/components/Space'
 import Field from '~/components/Widget/Field'
 import Widget from '~/components/Widget/Widget'
+import useConnection from '~/hooks/connection'
 import { useGoBack } from '~/hooks/navigation'
 import { setMdoc } from '~/modules/interaction/mdl/actions'
 import InteractionTitle from '~/screens/Modals/Interaction/InteractionFlow/components/InteractionTitle'
@@ -38,6 +39,7 @@ export const DrivingLicenseForm = () => {
   const { finishPersonalization } = useDrivingLicense()
   const { t } = useTranslation()
   const dispatch = useDispatch()
+  const { connected } = useConnection()
 
   const route =
     useRoute<RouteProp<MainStackParamList, ScreenNames.DrivingLicenseForm>>()
@@ -87,6 +89,8 @@ export const DrivingLicenseForm = () => {
     goBack()
   }
 
+  const isSubmitMdlDisabled = Boolean(!connected && drivingLicenseNumber)
+
   return (
     <>
       {showBottomSheet ? (
@@ -128,6 +132,7 @@ export const DrivingLicenseForm = () => {
                   ? t('CredentialShare.singleMissingAcceptBtn')
                   : t('mdl.issueMdl')
               }
+              isSubmitDisabled={isSubmitMdlDisabled}
               onCancel={onCancel}
             />
           </ContainerBAS>
