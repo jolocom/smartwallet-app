@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import {
   Image,
   ImageBackground,
+  Platform,
   StyleProp,
   StyleSheet,
   TextStyle,
@@ -526,6 +527,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.white,
     borderRadius: 16,
+    elevation: Platform.select({
+      android: 11,
+    }),
   },
   dotsContainerScaled: {
     top: 18,
