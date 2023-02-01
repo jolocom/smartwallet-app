@@ -50,6 +50,7 @@ build/
 .gradle
 local.properties
 *.iml
+*.hprof
 
 # Visual Studio Code
 #
@@ -85,6 +86,7 @@ buck-out/
 /ios/Pods/
 
 # env variables
+bin/.env
 .env
 
 # other

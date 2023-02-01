@@ -1,10 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@color/main_black</item>
         <item name="android:windowBackground">@color/main_black</item>
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
         <!-- sets cursor color -->
         <item name="colorControlActivated">#5251c1</item>
         <!-- removes jump on splash screen -->
