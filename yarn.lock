@@ -2627,10 +2627,10 @@
   resolved "https://registry.yarnpkg.com/@jolocom/native-core-node-14-win32-x64/-/native-core-node-14-win32-x64-1.1.1.tgz#87359f08bf05b330f4176f22a9d69c81223d0887"
   integrity sha512-Hj0Lg286bKPoSnX64P5pjvRpJwnuP2cR5HdUvKu5q3kSp6JWyi8IXsahZJJepZiCUdqjpR2AEtCu7YiLzX6BOw==
 
-"@jolocom/native-core-react-native@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.3.0.tgz#bec4ead2aafa4fa96456aa156c9b5b38528268e4"
-  integrity sha512-9VbqH1UB5lJ3taews0zM0tZfHo0S+bONDDRYV/lgzaZxoFVCjR6QrGi5MpvoklcwllG4XzCVesciyyUoM/0eQw==
+"@jolocom/native-core-react-native@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@jolocom/native-core-react-native/-/native-core-react-native-1.3.1.tgz#907c089e105e93c99ee44579617973ebdf442f76"
+  integrity sha512-LduE0M99WR0eGl8rg6ht4y4UKebido17PSLzGusxDbEtb2Xg/H0cl8Nn06tZtenjqedUgcE7fjdhjqlSuiC2Zg==
 
 "@jolocom/native-core@^1.0.0":
   version "1.1.0"
@@ -2654,10 +2654,10 @@
   dependencies:
     cred-types-jolocom-core "^0.0.11"
 
-"@jolocom/react-native-ausweis@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/react-native-ausweis/-/react-native-ausweis-2.0.0.tgz#b375c0ad6542ed73107700214595b08aa3330a5f"
-  integrity sha512-PjFjnJapokH9rk/D5bGs1AXl2TO34Y4xlybmkS87WttKfLsNg94KnQmkKiifgMqFnD29NauuPJ7bAEnuGUEF/A==
+"@jolocom/react-native-ausweis@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@jolocom/react-native-ausweis/-/react-native-ausweis-2.0.2.tgz#5a6a9e6c3ffb6ea020e6ad40402816186e205566"
+  integrity sha512-160woTCgtHEDa6+XaTMr2vBrNmmh7+6nAE8EqLlDsdRD82SvcKAQkuYNzDJHPRSa6taIsablRTdVrRzA9lR9vA==
 
 "@jolocom/registry-contract@1.0.4":
   version "1.0.4"
