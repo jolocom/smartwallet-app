@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'flex-start',
-    backgroundColor: Colors.mainDark,
+    backgroundColor: Colors.white08,
     borderRadius: 12,
     fontFamily: Fonts.Regular,
     justifyContent: 'flex-start',
