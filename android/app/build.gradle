@@ -146,8 +146,8 @@ android {
         applicationId "com.jolocomwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 62
-        versionName "2.5.1"
+        versionCode 67
+        versionName "2.5.4"
 		multiDexEnabled true
 		missingDimensionStrategy 'react-native-camera', 'general'
     }
