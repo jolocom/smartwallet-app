@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
-import { Colors } from '~/utils/colors'
 import ScaledCard, { ScaledView } from './ScaledCard'
 
 import { DocumentProperty } from '~/hooks/documents/types'
+import { Colors } from '~/utils/colors'
 import {
   DocumentFields,
   DocumentHeader,
@@ -82,19 +82,21 @@ const ShareCard: React.FC<Props> = ({
               maxRows={maxRows}
               maxLines={1}
               rowDistance={8}
-              fieldCharacterLimit={12}
+              fieldCharacterLimit={!photo ? 16 : 12}
               labelScaledStyle={styles.scaledLabel}
               valueScaledStyle={styles.scaledValue}
             />
           </View>
-          <ScaledView
-            style={styles.scaledView}
-            scaleStyle={{
-              ...(cardHasBackground && { bottom: 20 }),
-            }}
-          >
-            {photo && <DocumentPhoto photo={photo} />}
-          </ScaledView>
+          {photo && (
+            <ScaledView
+              style={styles.scaledView}
+              scaleStyle={{
+                ...(cardHasBackground && { bottom: 20 }),
+              }}
+            >
+              <DocumentPhoto photo={photo} />
+            </ScaledView>
+          )}
         </View>
       </View>
     </ScaledCard>
