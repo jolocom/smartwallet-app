@@ -1,7 +1,7 @@
+import { useNavigation } from '@react-navigation/native'
 import { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // @ts-expect-error
-import { useNavigation } from '@react-navigation/native'
 import { enabled as enablePrivacyOverlay } from 'react-native-privacy-snapshot'
 
 import { useInitDocuments } from '~/hooks/documents'
@@ -11,7 +11,11 @@ import {
   getIsTermsConsentOutdated,
   isLocalAuthSet,
 } from '~/modules/account/selectors'
-import { getMdoc } from '~/modules/interaction/mdl/selectors'
+import { setIsPersonalizingMdl } from '~/modules/interaction/mdl/actions'
+import {
+  getIsPersonalizingMdl,
+  getMdoc,
+} from '~/modules/interaction/mdl/selectors'
 import { getInteractionType } from '~/modules/interaction/selectors'
 import { dismissLoader } from '~/modules/loader/actions'
 import { useDrivingLicense } from '~/screens/LoggedIn/Documents/DrivingLicenseDemo/hooks'
@@ -56,16 +60,23 @@ const useInitAusweis = () => {
 const useInitMdl = () => {
   const isAppLocked = useSelector(getIsAppLocked)
   const mdlDoc = useSelector(getMdoc)
+  const isPersonalizingMdl = useSelector(getIsPersonalizingMdl)
   const redirect = useRedirect()
   const { personalizeLicense } = useDrivingLicense()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!isAppLocked && mdlDoc?.startsWith('iso23220-3-sed:')) {
+    if (
+      !isAppLocked &&
+      !isPersonalizingMdl &&
+      mdlDoc?.startsWith('iso23220-3-sed:')
+    ) {
+      dispatch(setIsPersonalizingMdl(true))
       personalizeLicense(mdlDoc, (requests) =>
         redirect(ScreenNames.DrivingLicenseForm, { requests }),
       )
     }
-  }, [isAppLocked, mdlDoc])
+  }, [isAppLocked, mdlDoc, isPersonalizingMdl])
 }
 
 const useInitLock = () => {
