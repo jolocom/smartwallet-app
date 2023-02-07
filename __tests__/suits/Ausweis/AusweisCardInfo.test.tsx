@@ -19,6 +19,7 @@ describe('Ausweis card info screen', () => {
   })
   afterEach(() => {
     mockNavigate.mockClear()
+    jest.useFakeTimers()
   })
   afterAll(() => {
     jest.resetAllMocks()
