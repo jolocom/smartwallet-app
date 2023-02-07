@@ -56,7 +56,6 @@
         android:theme="@style/BootTheme"
         android:launchMode="singleTask">
       </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
       <meta-data android:name="io.branch.sdk.BranchKey" android:value="@string/BRANCH_LIVE_KEY"/>
     </application>
 
