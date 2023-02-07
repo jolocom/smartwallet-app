@@ -110,7 +110,7 @@ jest.mock('react-native-keyboard-aware-scroll-view', () => {
 })
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
-jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 jest.mock('react-native-nfc-manager', () => ({
   __esModule: true,
