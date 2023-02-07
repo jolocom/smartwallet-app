@@ -46,6 +46,9 @@ describe('Ausweis change pin screen', () => {
         ausweis: {
           scannerKey: '123',
         },
+        deeplinkConfig: {
+          redirectUrl: 'https://jolocom.io/',
+        },
       },
     })
     ;(useNavigation as jest.Mock).mockReturnValue({
