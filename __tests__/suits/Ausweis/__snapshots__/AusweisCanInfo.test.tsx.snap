@@ -69,7 +69,13 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
         }
       >
         <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
           accessible={true}
+          collapsable={false}
           focusable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -133,8 +139,11 @@ exports[`Ausweis CAN info screen is displayed according to the designs 1`] = `
         <View
           style={
             Object {
+              "alignItems": "center",
               "flex": 1,
-              "paddingHorizontal": 10,
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "paddingHorizontal": 12,
             }
           }
           testID="heading"
