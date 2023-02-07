@@ -48,20 +48,6 @@ jest.mock('../../src/errors/errorContext.tsx', () => ({
   }),
 }))
 
-jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation', () => ({
-  ...require.requireActual(
-    'react-native/Libraries/LayoutAnimation/LayoutAnimation',
-  ),
-  configureNext: jest.fn(),
-}))
-
-// jest.mock(
-//   'react-native-reanimated',
-//   () =>
-//     jest.requireActual('../../node_modules/react-native-reanimated/mock')
-//       .default,
-// )
-
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock')
 
@@ -145,7 +131,7 @@ export const Platform = {
   OS: 'ios',
   Version: 123,
   isTesting: true,
-  select: (objs) => objs['ios'],
+  select: objs => objs['ios'],
 }
 
 export default Object.setPrototypeOf(
