@@ -11,7 +11,7 @@ import useTranslation from '~/hooks/useTranslation'
 import { JoloTextSizes } from '~/utils/fonts'
 import Btn, { BtnTypes } from '~/components/Btn'
 
-export interface IAddDocumentOption {
+export interface AddDocumentOption {
   title: string
   navigation?: {
     screen: ScreenNames
@@ -21,7 +21,7 @@ export interface IAddDocumentOption {
 }
 
 export interface AddDocumentMenuProps {
-  options: IAddDocumentOption[]
+  options: AddDocumentOption[]
 }
 
 const AddDocumentMenu = () => {
@@ -97,14 +97,15 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   menuContainer: {
-    marginTop: 10,
+    marginTop: 5,
     paddingHorizontal: 12,
     width: '100%',
   },
   button: {
     width: '100%',
     height: 60,
-    backgroundColor: Colors.borderGray20,
+    borderColor: Colors.borderGray20,
+    borderWidth: 1,
   },
 })
 

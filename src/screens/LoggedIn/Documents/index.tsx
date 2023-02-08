@@ -107,15 +107,6 @@ const Documents: React.FC = () => {
   const showAddDocumentMenu = () => {
     showMenu([
       {
-        title: t('AddDocument.menu.personalInfo'),
-        navigation: {
-          screen: ScreenNames.MainTabs,
-          params: { screen: ScreenNames.Identity },
-        },
-      },
-      { title: t('AddDocument.menu.addMDL'), onPress: () => {} },
-      { title: t('AddDocument.menu.addZBI'), onPress: () => {} },
-      {
         title: t('AddDocument.menu.scanQRCode'),
         navigation: {
           screen: ScreenNames.Interaction,
