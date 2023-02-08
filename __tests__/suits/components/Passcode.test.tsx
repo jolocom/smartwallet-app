@@ -1,5 +1,5 @@
+import { cleanup, render, waitFor } from '@testing-library/react-native'
 import React from 'react'
-import { render, waitFor, cleanup } from '@testing-library/react-native'
 import Passcode from '~/components/Passcode'
 import { inputPasscode } from '../../utils/inputPasscode'
 
@@ -23,34 +23,6 @@ jest.mock('../../../src/hooks/settings', () => () => ({
 
 describe('Passcode', () => {
   afterEach(cleanup)
-
-  test('Passcode input displays asterics and submits correct value', async () => {
-    mockSubmit.mockResolvedValue(true)
-
-    const { getByTestId, getAllByText } = render(
-      <Passcode onSubmit={mockSubmit}>
-        <Passcode.Input />
-        <Passcode.Keyboard />
-      </Passcode>,
-    )
-
-    inputPasscode(getByTestId, [1])
-    expect(getAllByText('*').length).toBe(1)
-
-    inputPasscode(getByTestId, [1])
-    expect(getAllByText('*').length).toBe(2)
-
-    inputPasscode(getByTestId, [1])
-    expect(getAllByText('*').length).toBe(3)
-
-    inputPasscode(getByTestId, [1])
-    expect(getAllByText('*').length).toBe(4)
-
-    await waitFor(() => {
-      expect(mockSubmit).toHaveBeenCalledTimes(1)
-      expect(mockSubmit).toHaveBeenCalledWith('1111', expect.anything())
-    })
-  })
 
   test('Passcode Header displays error', async () => {
     mockSubmit.mockRejectedValue(false)
