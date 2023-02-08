@@ -1,7 +1,7 @@
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation } from '@react-navigation/native'
-import { fireEvent } from '@testing-library/react-native'
+import { act, fireEvent, waitFor } from '@testing-library/react-native'
 import React from 'react'
 import { useRedirect } from '~/hooks/navigation'
 import { AusweisIdentity } from '~/screens/LoggedIn/Identity/AusweisIdentity'
@@ -87,5 +87,65 @@ describe('Ausweis identity screen', () => {
     const changePinBtn = getByText('AusweisIdentity.changePinBtn')
     fireEvent.press(changePinBtn)
     expect(mockNavigate).toBeCalledWith('AusweisChangePin')
+  })
+
+  test('enables user to try to unblock a card: card is not blocked', async () => {
+    const { getByText } = renderWithSafeArea(<AusweisIdentity />)
+    const unlockBtn = getByText('AusweisIdentity.unlockBtn')
+    fireEvent.press(unlockBtn)
+    await waitFor(() => {
+      expect(aa2Module.startChangePin).toHaveBeenCalledTimes(1)
+    })
+    /**
+     * Immitate receiving READER msg
+     * to update compatibility values
+     */
+    act(() => {
+      registeredHandlers!.handlePinRequest!({
+        inoperative: false,
+        deactivated: false,
+        retryCounter: 1,
+      })
+    })
+    expect(mockNavigate).toHaveBeenCalledTimes(1)
+    expect(mockNavigate).toHaveBeenCalledWith('TransparentModals', {
+      screen: 'AusweisCardInfo',
+      params: {
+        mode: 'notBlocked',
+        onDismiss: expect.any(Function),
+      },
+    })
+  })
+
+  test('enables user to try to unblock a card: card might be blocked', async () => {
+    const { getByText } = renderWithSafeArea(<AusweisIdentity />)
+    const unlockBtn = getByText('AusweisIdentity.unlockBtn')
+    fireEvent.press(unlockBtn)
+    /**
+     * Immitate receiving READER msg
+     * to update compatibility values
+     */
+
+    act(() => {
+      registeredHandlers!.handlePukRequest!({
+        inoperative: false,
+        deactivated: false,
+        retryCounter: 1,
+      })
+    })
+    expect(mockNavigate).toHaveBeenCalledTimes(1)
+    expect(mockNavigate).toHaveBeenCalledWith('Interaction', {
+      screen: 'eID',
+      params: expect.objectContaining({
+        screen: 'EnterPIN',
+        params: expect.objectContaining({
+          mode: 'PUK',
+          flow: 'unlock',
+          handlers: {
+            handlePinRequest: expect.any(Function),
+          },
+        }),
+      }),
+    })
   })
 })
