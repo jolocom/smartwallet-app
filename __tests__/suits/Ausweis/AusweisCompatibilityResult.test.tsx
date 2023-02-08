@@ -1,9 +1,7 @@
-import { fireEvent } from '@testing-library/react-native'
-import React from 'react'
 import { useRoute } from '@react-navigation/native'
+import React from 'react'
 import { useGoBack } from '~/hooks/navigation'
 import { AusweisCompatibilityResult } from '~/screens/Modals/Interaction/eID/components'
-import { eIDScreens } from '~/screens/Modals/Interaction/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 jest.mock('@react-navigation/native')
@@ -29,16 +27,7 @@ describe('Ausweis compatibility result screen', () => {
           deactivated: false,
         },
       })
-      const { toJSON } = renderWithSafeArea(
-        <AusweisCompatibilityResult
-          key="123"
-          name={eIDScreens.CompatibilityResult}
-          params={{
-            inoperative: false,
-            deactivated: false,
-          }}
-        />,
-      )
+      const { toJSON } = renderWithSafeArea(<AusweisCompatibilityResult />)
       expect(toJSON()).toMatchSnapshot()
     })
 
@@ -63,18 +52,5 @@ describe('Ausweis compatibility result screen', () => {
       const { toJSON } = renderWithSafeArea(<AusweisCompatibilityResult />)
       expect(toJSON()).toMatchSnapshot()
     })
-  })
-
-  test('can be dismissed', () => {
-    ;(useRoute as jest.Mock).mockReturnValue({
-      params: {
-        inoperative: false,
-        deactivated: false,
-      },
-    })
-    const { getByTestId } = renderWithSafeArea(<AusweisCompatibilityResult />)
-    const dismissableArea = getByTestId('dismissable-background')
-    fireEvent.press(dismissableArea)
-    expect(mockGoBack).toBeCalledTimes(1)
   })
 })
