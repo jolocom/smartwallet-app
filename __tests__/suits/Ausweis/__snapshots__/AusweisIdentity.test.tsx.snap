@@ -17,11 +17,34 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
     }
     testID="home-ausweis-identity"
   >
+    <Text
+      style={
+        Array [
+          Object {
+            "paddingTop": 5,
+            "textAlign": "center",
+          },
+          Object {
+            "color": "rgba(255,255,255,0.85)",
+            "fontFamily": "TTCommons-Medium",
+            "fontSize": 28,
+            "letterSpacing": 0,
+            "lineHeight": 32,
+          },
+          Object {
+            "marginBottom": 12,
+            "textAlign": "left",
+          },
+        ]
+      }
+    >
+      AusweisIdentity.header
+    </Text>
     <View
       style={
         Object {
-          "aspectRatio": 1.55,
-          "marginBottom": 8,
+          "alignSelf": "center",
+          "aspectRatio": 3,
           "position": "relative",
           "width": "100%",
         }
@@ -31,7 +54,7 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
         resizeMode="contain"
         source={
           Object {
-            "testUri": "../../../src/assets/images/updatedCard.png",
+            "testUri": "../../../src/assets/images/cardBanner.png",
           }
         }
         style={
@@ -39,11 +62,6 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
             "flex": 1,
             "height": "100%",
             "resizeMode": "contain",
-            "transform": Array [
-              Object {
-                "scale": 1.1,
-              },
-            ],
             "width": "100%",
           }
         }
@@ -63,9 +81,9 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
               "lineHeight": 22,
             },
             Object {
-              "bottom": 23,
+              "bottom": 12,
               "fontSize": 16,
-              "left": 18,
+              "left": 24,
               "letterSpacing": 0.15,
               "lineHeight": 18.4,
               "position": "absolute",
@@ -85,27 +103,7 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
               "textAlign": "center",
             },
             Object {
-              "color": "rgba(255,255,255,0.85)",
-              "fontFamily": "TTCommons-Regular",
-              "fontSize": 28,
-              "letterSpacing": 0,
-              "lineHeight": 32,
-            },
-            undefined,
-          ]
-        }
-      >
-        AusweisIdentity.header
-      </Text>
-      <Text
-        style={
-          Array [
-            Object {
-              "paddingTop": 5,
-              "textAlign": "center",
-            },
-            Object {
-              "color": "rgba(255, 255, 255, 0.4)",
+              "color": "rgba(255, 255, 255, 0.7)",
               "fontFamily": "TTCommons-Regular",
               "fontSize": 16,
               "letterSpacing": 0,
@@ -113,43 +111,54 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
             },
             Object {
               "marginTop": 8,
+              "paddingHorizontal": 14,
+              "textAlign": "left",
             },
           ]
         }
       >
         AusweisIdentity.subheader
-        <Text
-          onPress={[Function]}
-          style={
-            Array [
-              Object {
-                "paddingTop": 5,
-                "textAlign": "center",
-              },
-              Object {
-                "color": "#fa3384",
-                "fontFamily": "TTCommons-Regular",
-                "fontSize": 16,
-                "letterSpacing": 0,
-                "lineHeight": 18,
-              },
-              undefined,
-            ]
-          }
-        >
-           General.moreInfo...
-        </Text>
+      </Text>
+      <Text
+        onPress={[Function]}
+        style={
+          Array [
+            Object {
+              "paddingTop": 5,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "#fa3384",
+              "fontFamily": "TTCommons-Regular",
+              "fontSize": 16,
+              "letterSpacing": 0,
+              "lineHeight": 18,
+            },
+            Object {
+              "alignSelf": "flex-start",
+              "paddingHorizontal": 14,
+              "paddingTop": 4,
+            },
+          ]
+        }
+      >
+        General.moreInfo
       </Text>
       <View
         style={
           Object {
-            "marginTop": 42,
-            "paddingVertical": 8,
+            "marginTop": 16,
           }
         }
       >
         <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
           accessible={true}
+          collapsable={false}
           focusable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -160,68 +169,91 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "alignItems": "center",
-              "borderRadius": 8,
-              "justifyContent": "center",
+              "alignItems": "flex-start",
+              "backgroundColor": "rgba(255, 255, 255, 0.08)",
+              "borderRadius": 12,
+              "fontFamily": "TTCommons-Regular",
+              "justifyContent": "flex-start",
               "marginVertical": 5,
               "opacity": 1,
-              "width": "100%",
+              "paddingHorizontal": 24,
+              "paddingVertical": 16,
             }
           }
-          testID="button"
         >
           <View
             style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#101010",
+                "borderRadius": 12,
+                "bottom": 0,
+                "display": "none",
+                "justifyContent": "center",
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+                "zIndex": 0,
+              }
+            }
+          >
+            <ActivityIndicator
+              animating={false}
+              color="rgba(255, 255, 255, 0.8)"
+            />
+          </View>
+          <Text
+            style={
               Array [
-                Array [
-                  Object {
-                    "alignItems": "center",
-                    "borderRadius": 8,
-                    "justifyContent": "center",
-                    "width": "100%",
-                  },
-                  false,
-                  Object {
-                    "marginVertical": 5,
-                  },
-                ],
                 Object {
-                  "height": 45,
+                  "paddingTop": 5,
+                  "textAlign": "center",
                 },
                 Object {
-                  "borderColor": "rgba(143, 146, 161, 0.2)",
-                  "borderWidth": 1,
-                  "marginVertical": 1,
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 20,
+                  "letterSpacing": 0.14,
+                  "lineHeight": 22,
+                },
+                undefined,
+              ]
+            }
+          >
+            AusweisIdentity.compatibilityBtn
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255, 255, 255, 0.7)",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 18,
+                },
+                Object {
+                  "textAlign": "left",
                 },
               ]
             }
-            testID="non-gradient"
           >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "color": "#ffffff",
-                    "paddingTop": 5,
-                    "textAlignVertical": "center",
-                  },
-                  Object {
-                    "fontFamily": "TTCommons-Regular",
-                    "opacity": 0.8,
-                  },
-                  Object {
-                    "fontSize": 18,
-                  },
-                  Object {},
-                ]
-              }
-            >
-              AusweisIdentity.compatibilityBtn
-            </Text>
-          </View>
+            AusweisIdentity.compatibilityBtnDescription
+          </Text>
         </View>
         <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
           accessible={true}
+          collapsable={false}
           focusable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -232,68 +264,91 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "alignItems": "center",
-              "borderRadius": 8,
-              "justifyContent": "center",
+              "alignItems": "flex-start",
+              "backgroundColor": "rgba(255, 255, 255, 0.08)",
+              "borderRadius": 12,
+              "fontFamily": "TTCommons-Regular",
+              "justifyContent": "flex-start",
               "marginVertical": 5,
               "opacity": 1,
-              "width": "100%",
+              "paddingHorizontal": 24,
+              "paddingVertical": 16,
             }
           }
-          testID="button"
         >
           <View
             style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#101010",
+                "borderRadius": 12,
+                "bottom": 0,
+                "display": "none",
+                "justifyContent": "center",
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+                "zIndex": 0,
+              }
+            }
+          >
+            <ActivityIndicator
+              animating={false}
+              color="rgba(255, 255, 255, 0.8)"
+            />
+          </View>
+          <Text
+            style={
               Array [
-                Array [
-                  Object {
-                    "alignItems": "center",
-                    "borderRadius": 8,
-                    "justifyContent": "center",
-                    "width": "100%",
-                  },
-                  false,
-                  Object {
-                    "marginVertical": 5,
-                  },
-                ],
                 Object {
-                  "height": 45,
+                  "paddingTop": 5,
+                  "textAlign": "center",
                 },
                 Object {
-                  "borderColor": "rgba(143, 146, 161, 0.2)",
-                  "borderWidth": 1,
-                  "marginVertical": 1,
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 20,
+                  "letterSpacing": 0.14,
+                  "lineHeight": 22,
+                },
+                undefined,
+              ]
+            }
+          >
+            AusweisIdentity.changePinBtn
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255, 255, 255, 0.7)",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 18,
+                },
+                Object {
+                  "textAlign": "left",
                 },
               ]
             }
-            testID="non-gradient"
           >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "color": "#ffffff",
-                    "paddingTop": 5,
-                    "textAlignVertical": "center",
-                  },
-                  Object {
-                    "fontFamily": "TTCommons-Regular",
-                    "opacity": 0.8,
-                  },
-                  Object {
-                    "fontSize": 18,
-                  },
-                  Object {},
-                ]
-              }
-            >
-              AusweisIdentity.changePinBtn
-            </Text>
-          </View>
+            AusweisIdentity.changePinBtnDescription
+          </Text>
         </View>
         <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
           accessible={true}
+          collapsable={false}
           focusable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -304,65 +359,82 @@ exports[`Ausweis identity screen is disalyed according to the designs 1`] = `
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "alignItems": "center",
-              "borderRadius": 8,
-              "justifyContent": "center",
+              "alignItems": "flex-start",
+              "backgroundColor": "rgba(255, 255, 255, 0.08)",
+              "borderRadius": 12,
+              "fontFamily": "TTCommons-Regular",
+              "justifyContent": "flex-start",
               "marginVertical": 5,
               "opacity": 1,
-              "width": "100%",
+              "paddingHorizontal": 24,
+              "paddingVertical": 16,
             }
           }
-          testID="button"
         >
           <View
             style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#101010",
+                "borderRadius": 12,
+                "bottom": 0,
+                "display": "none",
+                "justifyContent": "center",
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+                "zIndex": 0,
+              }
+            }
+          >
+            <ActivityIndicator
+              animating={false}
+              color="rgba(255, 255, 255, 0.8)"
+            />
+          </View>
+          <Text
+            style={
               Array [
-                Array [
-                  Object {
-                    "alignItems": "center",
-                    "borderRadius": 8,
-                    "justifyContent": "center",
-                    "width": "100%",
-                  },
-                  false,
-                  Object {
-                    "marginVertical": 5,
-                  },
-                ],
                 Object {
-                  "height": 45,
+                  "paddingTop": 5,
+                  "textAlign": "center",
                 },
                 Object {
-                  "borderColor": "rgba(143, 146, 161, 0.2)",
-                  "borderWidth": 1,
-                  "marginVertical": 1,
+                  "color": "#ffffff",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 20,
+                  "letterSpacing": 0.14,
+                  "lineHeight": 22,
+                },
+                undefined,
+              ]
+            }
+          >
+            AusweisIdentity.unlockBtn
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "paddingTop": 5,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "rgba(255, 255, 255, 0.7)",
+                  "fontFamily": "TTCommons-Regular",
+                  "fontSize": 16,
+                  "letterSpacing": 0,
+                  "lineHeight": 18,
+                },
+                Object {
+                  "textAlign": "left",
                 },
               ]
             }
-            testID="non-gradient"
           >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "color": "#ffffff",
-                    "paddingTop": 5,
-                    "textAlignVertical": "center",
-                  },
-                  Object {
-                    "fontFamily": "TTCommons-Regular",
-                    "opacity": 0.8,
-                  },
-                  Object {
-                    "fontSize": 18,
-                  },
-                  Object {},
-                ]
-              }
-            >
-              AusweisIdentity.unlockBtn
-            </Text>
-          </View>
+            AusweisIdentity.unlockBtnDescription
+          </Text>
         </View>
       </View>
     </View>
