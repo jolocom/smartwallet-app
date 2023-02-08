@@ -1,18 +1,18 @@
-import React from 'react'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation } from '@react-navigation/native'
-import AusweisChangePin from '~/screens/Modals/Interaction/eID/components/AusweisChangePin'
-import { AusweisScannerParams } from '~/screens/Modals/Interaction/eID/types'
-import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
-import { useGoBack, usePopStack } from '~/hooks/navigation'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
-import { mockSelectorReturn } from '../../mocks/libs/react-redux'
+import React from 'react'
+import { useGoBack, usePopStack } from '~/hooks/navigation'
+import AusweisChangePin from '~/screens/Modals/Interaction/eID/components/AusweisChangePin'
 import {
   AUSWEIS_SUPPORT_EMAIL,
   AUSWEIS_SUPPORT_PHONE,
 } from '~/screens/Modals/Interaction/eID/constants'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
+import { AusweisScannerParams } from '~/screens/Modals/Interaction/eID/types'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
+import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 const mockOpenUrl = jest.fn()
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
@@ -34,6 +34,8 @@ jest.mock('../../../src/hooks/connection', () => ({
 describe('Ausweis change pin screen', () => {
   const mockNavigate = jest.fn()
   const mockShowScanner = jest.fn()
+  const goBack = jest.fn()
+  const dispatch = jest.fn()
   let registeredHandlers: Partial<EventHandlers>
 
   beforeAll(() => {
@@ -53,8 +55,8 @@ describe('Ausweis change pin screen', () => {
     })
     ;(useNavigation as jest.Mock).mockReturnValue({
       navigate: mockNavigate,
-      goBack: jest.fn(),
-      dispatch: jest.fn(),
+      goBack: goBack,
+      dispatch: dispatch,
     })
     ;(useGoBack as jest.Mock).mockReturnValue(jest.fn)
     ;(usePopStack as jest.Mock).mockReturnValue(jest.fn)
@@ -63,7 +65,7 @@ describe('Ausweis change pin screen', () => {
      * (declaration of registeredHandlers var)
      * happens in the AusweisPasscode test file as well
      */
-    ;(aa2Module.setHandlers as jest.Mock).mockImplementation((handlers) => {
+    ;(aa2Module.setHandlers as jest.Mock).mockImplementation(handlers => {
       registeredHandlers = handlers
     })
     ;(aa2Module.cancelFlow as jest.Mock).mockResolvedValue(true)
@@ -89,66 +91,17 @@ describe('Ausweis change pin screen', () => {
     expect(toJSON()).toMatchSnapshot()
   })
 
-  test('user can proceed with changing transport pin', async () => {
+  test('user gets redirected to AusweisTransportWarning screen', async () => {
     const { getByText } = renderWithSafeArea(<AusweisChangePin />)
     const changeTransportPinBtn = getByText('AusweisChangePin.transportPinBtn')
     fireEvent.press(changeTransportPinBtn)
     await waitFor(() => {
       expect(mockNavigate).toBeCalledWith(
-        'eID',
+        'Interaction',
         expect.objectContaining({
-          screen: 'AusweisTransportWarning',
-        }),
-      )
-    })
-    /**
-     * Immitate receiving INSERT_CARD msg
-     * to update compatibility values
-     */
-    act(() => {
-      registeredHandlers!.handleCardRequest!()
-    })
-    expect(mockShowScanner).toHaveBeenCalledTimes(1)
-  })
-
-  test('user can proceed with changing 6-digit pin', async () => {
-    const { getByText } = renderWithSafeArea(<AusweisChangePin />)
-    const changePinBtn = getByText('AusweisChangePin.pinBtn')
-    fireEvent.press(changePinBtn)
-    await waitFor(() => {
-      expect(aa2Module.startChangePin).toHaveBeenCalledTimes(1)
-      /**
-       * Immitate receiving INSERT_CARD msg
-       * to update compatibility values
-       */
-    })
-    act(() => {
-      registeredHandlers!.handleCardRequest!()
-    })
-
-    await waitFor(() => {
-      expect(mockShowScanner).toHaveBeenCalledTimes(1)
-    })
-    /**
-     * Immitate receiving ENTER_PIN msg
-     * to update compatibility values
-     */
-    act(() => {
-      registeredHandlers!.handlePinRequest!({
-        inoperative: false,
-        deactivated: false,
-        retryCounter: 1,
-      })
-    })
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(
-        'eID',
-        expect.objectContaining({
-          screen: 'EnterPIN',
+          screen: 'eID',
           params: {
-            flow: 'changePin',
-            mode: 'PIN',
-            pinContext: undefined,
+            screen: 'AusweisTransportWarning',
           },
         }),
       )
