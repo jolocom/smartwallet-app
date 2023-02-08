@@ -1,10 +1,11 @@
-import React from 'react'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { act, fireEvent, waitFor } from '@testing-library/react-native'
+import React from 'react'
 import { AusweisPasscode } from '~/screens/Modals/Interaction/eID/components'
 
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import {
   AusweisFlow,
   AusweisPasscodeMode,
@@ -12,12 +13,11 @@ import {
   eIDScreens,
 } from '~/screens/Modals/Interaction/eID/types'
 import {
-  mockSelectorReturn,
   getMockedDispatch,
+  mockSelectorReturn,
 } from '../../mocks/libs/react-redux'
 import { inputPasscode } from '../../utils/inputPasscode'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 
 jest.mock('@react-navigation/native')
 
@@ -26,7 +26,7 @@ describe('Ausweis passcode screen', () => {
   let mockedNavigation = jest.fn()
   let mockedNavigationDispatch = jest.fn()
   beforeAll(() => {
-    ;(aa2Module.setHandlers as jest.Mock).mockImplementation((handlers) => {
+    ;(aa2Module.setHandlers as jest.Mock).mockImplementation(handlers => {
       registeredHandlers = handlers
     })
     ;(useNavigation as jest.Mock).mockReturnValue({
@@ -42,12 +42,26 @@ describe('Ausweis passcode screen', () => {
       showScanner: jest.fn(),
     })
     jest.spyOn(eIDHooks, 'useAusweisCancelBackHandler')
+    mockSelectorReturn({
+      toasts: {
+        active: null,
+      },
+      interaction: {
+        ausweis: {
+          scannerKey: null,
+        },
+        deeplinkConfig: {
+          redirectUrl: 'https://jolocom.io/',
+        },
+      },
+    })
   })
 
   test('message handlers for the Ausweis screen were registered', async () => {
     ;(useRoute as jest.Mock).mockReturnValue({
       params: {},
     })
+
     renderWithSafeArea(<AusweisPasscode />)
 
     await waitFor(() => {
@@ -67,19 +81,10 @@ describe('Ausweis passcode screen', () => {
       )
     })
   })
+
   test('user successfully completes the AUTH flow', async () => {
     // @ts-ignore
     fetch = jest.fn(() => Promise.resolve())
-    mockSelectorReturn({
-      toasts: {
-        active: null,
-      },
-      interaction: {
-        ausweis: {
-          scannerKey: null,
-        },
-      },
-    })
     ;(useRoute as jest.Mock).mockReturnValue({
       params: {
         mode: AusweisPasscodeMode.PIN,
