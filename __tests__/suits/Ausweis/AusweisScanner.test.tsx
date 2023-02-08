@@ -1,15 +1,15 @@
-import React from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { fireEvent, waitFor } from '@testing-library/react-native'
+import React from 'react'
+import { useGoBack } from '~/hooks/navigation'
+import * as nfcHooks from '~/hooks/nfc'
+import { AusweisScanner } from '~/screens/Modals/Interaction/eID/components'
+import { AusweisScannerState } from '~/screens/Modals/Interaction/eID/types'
 import {
   getMockedDispatch,
   mockSelectorReturn,
 } from '../../mocks/libs/react-redux'
-import { AusweisScannerState } from '~/screens/Modals/Interaction/eID/types'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
-import { AusweisScanner } from '~/screens/Modals/Interaction/eID/components'
-import { useGoBack } from '~/hooks/navigation'
-import * as nfcHooks from '~/hooks/nfc'
-import { fireEvent, waitFor } from '@testing-library/react-native'
 
 jest.mock('@react-navigation/native')
 jest.mock('../../../src/hooks/navigation')
@@ -26,8 +26,13 @@ describe('Ausweis scanner screen', () => {
       toasts: {
         active: null,
       },
-      ausweis: {
-        scannerKey: null,
+      interaction: {
+        ausweis: {
+          scannerKey: null,
+        },
+        deeplinkConfig: {
+          redirectUrl: 'https://jolocom.io/',
+        },
       },
     })
     ;(useNavigation as jest.Mock).mockReturnValue({

@@ -13,8 +13,11 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
     style={
       Object {
         "backgroundColor": "rgba(0,0,0,0.65)",
-        "height": "100%",
-        "width": "100%",
+        "bottom": 0,
+        "left": 0,
+        "position": "absolute",
+        "right": 0,
+        "top": 0,
       }
     }
   >
@@ -36,30 +39,44 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
       }
     />
     <View
+      collapsable={false}
       style={
         Object {
           "alignItems": "center",
-          "flex": 0,
+          "backgroundColor": "transparent",
+          "transform": Array [
+            Object {
+              "translateY": 1334,
+            },
+          ],
         }
       }
     >
       <View
         style={
-          Object {
-            "backgroundColor": "#1f1f1f",
-            "borderRadius": 20,
-            "justifyContent": "center",
-            "marginBottom": 10,
-            "paddingBottom": 22,
-            "paddingHorizontal": 20,
-            "paddingTop": 32,
-            "transform": Array [
+          Array [
+            Object {
+              "backgroundColor": "#090909",
+              "borderRadius": 20,
+              "justifyContent": "center",
+              "paddingBottom": 36,
+              "paddingHorizontal": 20,
+              "paddingTop": 48,
+              "width": "96%",
+            },
+            Array [
               Object {
-                "translateY": 1334,
+                "paddingBottom": 22,
+                "paddingTop": 32,
+              },
+              Object {
+                "backgroundColor": "#1f1f1f",
               },
             ],
-            "width": "96%",
-          }
+            Object {
+              "marginBottom": 10,
+            },
+          ]
         }
       >
         <View
@@ -104,6 +121,7 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
             }
           >
             <View
+              collapsable={false}
               style={
                 Object {
                   "alignItems": "center",
@@ -337,6 +355,7 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
               </RNSVGSvgView>
             </View>
             <View
+              collapsable={false}
               style={
                 Object {
                   "alignItems": "center",
@@ -361,6 +380,7 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
                 }
               >
                 <View
+                  collapsable={false}
                   style={
                     Object {
                       "borderColor": "#ffffff",
@@ -380,6 +400,7 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
                   }
                 />
                 <View
+                  collapsable={false}
                   style={
                     Object {
                       "borderColor": "#ffffff",
@@ -401,6 +422,7 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
               </View>
             </View>
             <View
+              collapsable={false}
               style={
                 Object {
                   "alignItems": "center",
@@ -467,6 +489,7 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
               </View>
             </View>
             <View
+              collapsable={false}
               style={
                 Object {
                   "alignItems": "center",
@@ -558,7 +581,13 @@ exports[`Ausweis scanner screen is displayed according to the designs 1`] = `
           </Text>
         </View>
         <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
           accessible={true}
+          collapsable={false}
           focusable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
