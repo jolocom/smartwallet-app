@@ -1,11 +1,12 @@
-import React from 'react'
-import { StackActions, useNavigation } from '@react-navigation/native'
+import { aa2Module } from '@jolocom/react-native-ausweis'
+import { useNavigation } from '@react-navigation/native'
 import { fireEvent, waitFor } from '@testing-library/react-native'
-import { AusweisPinInfo } from '~/screens/Modals/Interaction/eID/components'
+import React from 'react'
 import { useGoBack } from '~/hooks/navigation'
+import { AusweisPinInfo } from '~/screens/Modals/Interaction/eID/components'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { triggerHeaderLayout } from '../components/Collapsible/collapsible-utils'
-import { aa2Module } from '@jolocom/react-native-ausweis'
 
 jest.mock('@react-navigation/native')
 jest.mock('../../../src/hooks/navigation')
@@ -19,6 +20,19 @@ describe('Ausweis passcode details screen', () => {
     ;(useNavigation as jest.Mock).mockReturnValue({
       dispatch: mockHandleNavigateChangePin,
     })
+    mockSelectorReturn({
+      toasts: {
+        active: null,
+      },
+      interaction: {
+        ausweis: {
+          scannerKey: null,
+        },
+        deeplinkConfig: {
+          redirectUrl: 'https://jolocom.io/',
+        },
+      },
+    })
   })
 
   test('is displayed according to the designs', () => {
@@ -27,19 +41,24 @@ describe('Ausweis passcode details screen', () => {
   })
 
   test('user can choose to proceed with change pin flow', async () => {
-    const { getByTestId } = renderWithSafeArea(<AusweisPinInfo />)
-    triggerHeaderLayout(getByTestId('collapsible-header-container'))
-    const changePinBtn = getByTestId('ausweis-pass-info-change-btn')
+    const { getByText, getByTestId } = renderWithSafeArea(<AusweisPinInfo />)
+    triggerHeaderLayout(getByTestId('collapsible-header'))
+    const changePinBtn = getByText('AusweisPinInfo.btn')
     fireEvent.press(changePinBtn)
 
     await waitFor(() => {
-      console.log(StackActions.popToTop())
       expect(mockHandleNavigateChangePin).toHaveBeenCalledTimes(2)
       expect(mockHandleNavigateChangePin).toHaveBeenCalledWith({
         type: 'POP_TO_TOP',
       })
       expect(mockHandleNavigateChangePin).toHaveBeenCalledWith({
-        payload: { name: 'AusweisChangePin' },
+        payload: {
+          name: 'Main',
+          params: {
+            screen: 'AusweisChangePin',
+            initial: false,
+          },
+        },
         type: 'REPLACE',
       })
     })
