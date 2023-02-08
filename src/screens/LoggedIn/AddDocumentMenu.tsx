@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingHorizontal: 12,
-    marginBottom: 25,
+    marginBottom: 15,
     width: '100%',
   },
   menuContainer: {
