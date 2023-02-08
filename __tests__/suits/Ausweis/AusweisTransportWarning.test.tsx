@@ -2,8 +2,9 @@ import { aa2Module } from '@jolocom/react-native-ausweis'
 import { useNavigation } from '@react-navigation/native'
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
-import AusweisTransportWarning from '~/screens/Modals/Interaction/eID/components/AusweisTransportWarning'
 import { usePopStack } from '~/hooks/navigation'
+import AusweisTransportWarning from '~/screens/Modals/Interaction/eID/components/AusweisTransportWarning'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 
 jest.mock('@react-navigation/native')
@@ -23,6 +24,19 @@ describe('Ausweis transport warning screen', () => {
     ;(usePopStack as jest.Mock).mockReturnValue(jest.fn())
     ;(useNavigation as jest.Mock).mockReturnValue({
       navigate: jest.fn(),
+    })
+    mockSelectorReturn({
+      toasts: {
+        active: null,
+      },
+      interaction: {
+        ausweis: {
+          scannerKey: null,
+        },
+        deeplinkConfig: {
+          redirectUrl: 'https://jolocom.io/',
+        },
+      },
     })
   })
   afterAll(() => {
