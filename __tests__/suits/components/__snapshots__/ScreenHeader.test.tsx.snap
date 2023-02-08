@@ -6,7 +6,7 @@ exports[`ScreenHeader renders correctly 1`] = `
     style={
       Array [
         Object {
-          "paddingTop": undefined,
+          "paddingTop": 5,
           "textAlign": "center",
         },
         Object {
@@ -27,7 +27,7 @@ exports[`ScreenHeader renders correctly 1`] = `
     style={
       Array [
         Object {
-          "paddingTop": undefined,
+          "paddingTop": 5,
           "textAlign": "center",
         },
         Object {
