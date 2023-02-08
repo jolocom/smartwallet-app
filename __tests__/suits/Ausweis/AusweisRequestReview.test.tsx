@@ -1,17 +1,18 @@
-import React from 'react'
 import { aa2Module } from '@jolocom/react-native-ausweis'
 import { EventHandlers } from '@jolocom/react-native-ausweis/js/commandTypes'
 import { useNavigation } from '@react-navigation/native'
 import { act, fireEvent, waitFor, within } from '@testing-library/react-native'
-import { usePopStack, useRedirect } from '../../../src/hooks/navigation'
+import React from 'react'
 import { AusweisRequestReview } from '~/screens/Modals/Interaction/eID/components'
+import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 import {
   AusweisFields,
   AusweisScannerParams,
 } from '~/screens/Modals/Interaction/eID/types'
+import { usePopStack, useRedirect } from '../../../src/hooks/navigation'
+import { mockSelectorReturn } from '../../mocks/libs/react-redux'
 import { renderWithSafeArea } from '../../utils/renderWithSafeArea'
 import { triggerHeaderLayout } from '../components/Collapsible/collapsible-utils'
-import eIDHooks from '~/screens/Modals/Interaction/eID/hooks'
 
 const mockedRequestData = {
   requiredFields: [
@@ -62,11 +63,24 @@ describe('Ausweis request review screen', () => {
     jest
       .spyOn(eIDHooks, 'useAusweisCancelBackHandler')
       .mockReturnValue(undefined)
-    ;(aa2Module.setHandlers as jest.Mock).mockImplementation((handlers) => {
+    ;(aa2Module.setHandlers as jest.Mock).mockImplementation(handlers => {
       registeredHandlers = handlers
     })
     ;(aa2Module.cancelFlow as jest.Mock).mockResolvedValue(true)
     ;(usePopStack as jest.Mock).mockReturnValue(jest.fn())
+    mockSelectorReturn({
+      toasts: {
+        active: null,
+      },
+      interaction: {
+        ausweis: {
+          scannerKey: null,
+        },
+        deeplinkConfig: {
+          redirectUrl: 'https://jolocom.io/',
+        },
+      },
+    })
   })
   afterEach(() => {
     mockedNavigation.mockClear()
@@ -107,16 +121,6 @@ describe('Ausweis request review screen', () => {
       )
       expect(aa2Module.acceptAuthRequest).toBeCalledTimes(1)
     })
-    /**
-     * Immitate receiving INSERT_CARD msg
-     * to update compatibility values
-     */
-    act(() => {
-      registeredHandlers!.handleCardRequest!()
-    })
-    await waitFor(() => {
-      expect(mockShowScanner).toHaveBeenCalledTimes(1)
-    })
   })
 
   test('user chooses to terminate the flow', async () => {
@@ -130,6 +134,7 @@ describe('Ausweis request review screen', () => {
       expect(aa2Module.cancelFlow).toBeCalledTimes(1)
     })
   })
+
   test('user chooses to preview more info about the requester', async () => {
     const mockRedirect = jest.fn()
     ;(useRedirect as jest.Mock).mockReturnValue(mockRedirect)
@@ -141,9 +146,9 @@ describe('Ausweis request review screen', () => {
     act(() => {
       fireEvent.press(providerBtn)
     })
-    expect(mockRedirect).toBeCalledWith(
-      'FieldDetails',
-      expect.objectContaining({
+    expect(mockRedirect).toBeCalledWith('AusweisServiceInfo', {
+      backgroundColor: '#101010',
+      eIdData: {
         title: 'ProviderName',
         fields: expect.arrayContaining([
           expect.objectContaining({
@@ -163,7 +168,7 @@ describe('Ausweis request review screen', () => {
             value: '31.07.2016 - 30.08.2016',
           }),
         ]),
-      }),
-    )
+      },
+    })
   })
 })

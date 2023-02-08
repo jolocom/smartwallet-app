@@ -60,13 +60,17 @@ exports[`Ausweis request review screen is displayed according to the designs 1`]
           <View
             style={
               Object {
+                "alignItems": "center",
                 "flex": 1,
-                "paddingHorizontal": 10,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "paddingHorizontal": 12,
               }
             }
             testID="heading"
           >
             <Text
+              collapsable={false}
               numberOfLines={1}
               style={
                 Object {
