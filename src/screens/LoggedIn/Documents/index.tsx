@@ -107,7 +107,7 @@ const Documents: React.FC = () => {
   const showAddDocumentMenu = () => {
     showMenu([
       {
-        title: t('AddDocument.menu.scanQRCode'),
+        title: t('Documents.addDocumentScanQRCode'),
         navigation: {
           screen: ScreenNames.Interaction,
           params: { screen: ScreenNames.Scanner },

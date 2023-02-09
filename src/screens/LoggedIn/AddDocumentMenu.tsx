@@ -57,7 +57,7 @@ const AddDocumentMenu = () => {
     >
       <View style={styles.headerContainer}>
         <JoloText testID="title" kind={JoloTextKind.title}>
-          {t('AddDocument.header')}
+          {t('Documents.addDocumentHeader')}
         </JoloText>
         <JoloText
           testID="description"
@@ -66,7 +66,7 @@ const AddDocumentMenu = () => {
           weight={JoloTextWeight.regular}
           customStyles={{ marginTop: 12, paddingHorizontal: 32 }}
         >
-          {t('AddDocument.description')}
+          {t('Documents.addDocumentDescription')}
         </JoloText>
       </View>
 
