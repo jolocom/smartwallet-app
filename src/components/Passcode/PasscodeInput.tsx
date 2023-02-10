@@ -42,7 +42,7 @@ const PasscodeCell: React.FC<{
 }
 
 const PasscodeInput: IPasscodeComposition['Input'] = ({
-  cellColor = Colors.black30,
+  cellColor = Colors.white08,
   numberOfLines = 1,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)

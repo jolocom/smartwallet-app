@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
-import { Colors } from '~/utils/colors'
 import ScaledCard, { ScaledView } from './ScaledCard'
 
 import { DocumentProperty } from '~/hooks/documents/types'
+import { Colors } from '~/utils/colors'
 import {
   DocumentFields,
   DocumentHeader,
@@ -46,23 +46,19 @@ const ShareCard: React.FC<Props> = ({
     return maxRows
   }, [holderName])
 
+  const cardHasBackground = Boolean(backgroundColor || backgroundImage)
+
   const maxRows = calculateMaxRows()
 
   return (
     <ScaledCard
       originalWidth={ORIGINAL_DOCUMENT_SHARE_CARD_WIDTH}
       originalHeight={ORIGINAL_DOCUMENT_SHARE_CARD_HEIGHT}
-      style={[{ overflow: 'hidden', backgroundColor: Colors.white }, style]}
-      scaleStyle={{ borderRadius: 13 }}
+      style={[styles.scaledCardStyle, style]}
+      scaleStyle={styles.scaledCardScaleStyle}
       scaleToFit
     >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          width: '100%',
-        }}
-      >
+      <View style={styles.cardContainer}>
         <DocumentHeader
           name={credentialName}
           icon={issuerIcon}
@@ -71,8 +67,13 @@ const ShareCard: React.FC<Props> = ({
           backgroundColor={backgroundColor}
           backgroundImage={backgroundImage}
         />
-        <View style={{ flexDirection: 'row', flex: 1 }}>
-          <View style={{ flex: 1 }}>
+        <View style={styles.fieldsContainer}>
+          <View
+            style={{
+              ...styles.contentContainer,
+              ...(!holderName && cardHasBackground && { marginTop: 8 }),
+            }}
+          >
             {holderName && (
               <DocumentHolderName name={holderName} numberOfLines={1} />
             )}
@@ -81,23 +82,36 @@ const ShareCard: React.FC<Props> = ({
               maxRows={maxRows}
               maxLines={1}
               rowDistance={8}
-              fieldCharacterLimit={12}
-              labelScaledStyle={{ fontSize: 14, lineHeight: 18 }}
-              valueScaledStyle={{ fontSize: 18, lineHeight: 20 }}
+              fieldCharacterLimit={!photo ? 16 : 12}
+              labelScaledStyle={styles.scaledLabel}
+              valueScaledStyle={styles.scaledValue}
             />
           </View>
-          <ScaledView
-            style={{ flex: 0.5 }}
-            scaleStyle={{
-              bottom: (backgroundColor || backgroundImage) && 20,
-            }}
-          >
-            {photo && <DocumentPhoto photo={photo} />}
-          </ScaledView>
+          {photo && (
+            <ScaledView
+              style={styles.scaledView}
+              scaleStyle={{
+                ...(cardHasBackground && { bottom: 20 }),
+              }}
+            >
+              <DocumentPhoto photo={photo} />
+            </ScaledView>
+          )}
         </View>
       </View>
     </ScaledCard>
   )
 }
+
+const styles = StyleSheet.create({
+  scaledCardStyle: { overflow: 'hidden', backgroundColor: Colors.white },
+  scaledCardScaleStyle: { borderRadius: 13 },
+  cardContainer: { flex: 1, flexDirection: 'column', width: '100%' },
+  contentContainer: { flex: 1 },
+  fieldsContainer: { flexDirection: 'row', flex: 1 },
+  scaledView: { flex: 0.5 },
+  scaledLabel: { fontSize: 14, lineHeight: 18 },
+  scaledValue: { fontSize: 18, lineHeight: 20 },
+})
 
 export default ShareCard

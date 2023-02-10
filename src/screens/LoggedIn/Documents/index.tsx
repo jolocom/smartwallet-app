@@ -1,10 +1,10 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
 import React, {
   useCallback,
-  useMemo,
-  useLayoutEffect,
-  useState,
   useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
 } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
@@ -22,7 +22,6 @@ import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimensti
 import { StackData, StackScrollView } from '~/components/CardStack'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
 import ScreenContainer from '~/components/ScreenContainer'
-import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
@@ -122,6 +121,16 @@ const Documents: React.FC = () => {
       stack: StackData<Document, StackExtraData>,
       stackItems: React.ReactNode,
     ) => {
+      const getDisplayValue = useMemo(
+        () =>
+          !documents.length
+            ? 'flex'
+            : openedStack === stack.stackId
+            ? 'flex'
+            : 'none',
+        [openedStack, documents.length],
+      )
+
       return (
         <View key={stack.stackId} style={styles.stackContainer}>
           <TouchableOpacity
@@ -144,14 +153,14 @@ const Documents: React.FC = () => {
                 // the component is faster, but the exiting layout animation is messed up. Also, this makes memoization
                 // work, where each component is only rendered once. Otherwise, with conditional rendering
                 // each card is rendered twice.
-                display: openedStack === stack.stackId ? 'flex' : 'none',
+                display: getDisplayValue,
               },
             ]}
           >
             {stack.data.length ? (
               stackItems
             ) : (
-              <View style={{ paddingHorizontal: 80 }}>
+              <View style={{ paddingHorizontal: 52 }}>
                 <JoloText
                   size={JoloTextSizes.middle}
                   color={Colors.white90}
@@ -168,7 +177,7 @@ const Documents: React.FC = () => {
         </View>
       )
     },
-    [openedStack],
+    [openedStack, documents.length],
   )
 
   return (
@@ -184,55 +193,44 @@ const Documents: React.FC = () => {
       >
         {t('BottomBar.documents')}
       </ScreenContainer.Header>
-      {!documents.length ? (
-        <ScreenPlaceholder
-          title={t('Documents.placeholderHeader')}
-          description={t('Documents.documentsPlaceholderSubheader')}
+      <View style={{ flex: 1 }}>
+        <StackScrollView
+          prevAdded={prevAddedIds && prevAddedIds[0]}
+          data={stackData}
+          itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
+          visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
+          itemDistance={12}
+          // @ts-expect-error FIXME: fix typescript inferrence issue
+          renderStack={renderStack}
+          renderItem={(c, stack, visible) => {
+            const fields = getPreviewProperties(c)
+            const shouldHighlight = Boolean(highlightedCards?.includes(c.id))
+            return (
+              <>
+                <DocumentCard
+                  id={c.id}
+                  key={c.id}
+                  onPress={() => handlePressDetails(c.id)}
+                  credentialName={c.name}
+                  holderName={getHolderName(c)}
+                  fields={fields}
+                  photo={getHolderPhoto(c)}
+                  onHandleMore={visible ? () => handlePressMenu(c) : undefined}
+                  showMenu={visible}
+                  backgroundColor={c.style.backgroundColor}
+                  backgroundImage={c.style.backgroundImage}
+                  issuerIcon={c.issuer.icon}
+                  hasImageFields={hasImageProperties(c)}
+                  icons={c.style.contextIcons}
+                  expired={stack.stackId === DocumentStacks.Expired}
+                  highlight={shouldHighlight}
+                />
+                {isDocumentFavorite(c.id) && <CardFavorite />}
+              </>
+            )
+          }}
         />
-      ) : (
-        <View style={{ flex: 1 }}>
-          <StackScrollView
-            prevAdded={prevAddedIds && prevAddedIds[0]}
-            data={stackData}
-            itemHeight={ORIGINAL_DOCUMENT_CARD_HEIGHT * scaleBy}
-            visibleHeaderHeight={DOCUMENT_HEADER_HEIGHT * scaleBy}
-            itemDistance={12}
-            // @ts-expect-error FIXME: fix typescript inferrence issue
-            renderStack={renderStack}
-            renderItem={(c, stack, visible) => {
-              const fields = getPreviewProperties(c)
-
-              const shouldHighlight = Boolean(highlightedCards?.includes(c.id))
-
-              return (
-                <>
-                  <DocumentCard
-                    id={c.id}
-                    key={c.id}
-                    onPress={() => handlePressDetails(c.id)}
-                    credentialName={c.name}
-                    holderName={getHolderName(c)}
-                    fields={fields}
-                    photo={getHolderPhoto(c)}
-                    onHandleMore={
-                      visible ? () => handlePressMenu(c) : undefined
-                    }
-                    showMenu={visible}
-                    backgroundColor={c.style.backgroundColor}
-                    backgroundImage={c.style.backgroundImage}
-                    issuerIcon={c.issuer.icon}
-                    hasImageFields={hasImageProperties(c)}
-                    icons={c.style.contextIcons}
-                    expired={stack.stackId === DocumentStacks.Expired}
-                    highlight={shouldHighlight}
-                  />
-                  {isDocumentFavorite(c.id) && <CardFavorite />}
-                </>
-              )
-            }}
-          />
-        </View>
-      )}
+      </View>
     </ScreenContainer>
   )
 }

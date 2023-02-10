@@ -259,7 +259,8 @@
         "addFavorite": "Zu Favoriten hinzufügen",
         "addDocumentHeader": "Dokumente hinzufügen",
         "addDocumentDescription": "Fügen Sie neue Dokumente zur Smart Wallet hinzu, indem Sie eine der unten aufgeführten Optionen wählen.",
-        "addDocumentScanQRCode": "QR Code scannen"
+        "addDocumentScanQRCode": "QR Code scannen",
+        "addFavorite": "Zu Favoriten hinzufügen"
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -306,7 +307,8 @@
         "authzRequestStepHeader": "Autorisiert",
         "authzResponseStepHeader": "Bestätigt",
         "authzActionPlaceholder": "Autorisieren",
-        "eidAlert": "Der History Screen beinhaltet derzeit keine eID Interaktionen."
+        "eidAlert": "Der History Screen beinhaltet derzeit keine eID Interaktionen.",
+        "authzActionPlaceholder": "Autorisieren"
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",
