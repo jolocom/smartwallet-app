@@ -36,8 +36,8 @@ const AddDocumentMenu = () => {
     navigation,
     onPress,
   }: {
-    navigation: IAddDocumentOption['navigation']
-    onPress: IAddDocumentOption['onPress']
+    navigation: AddDocumentOption['navigation']
+    onPress: AddDocumentOption['onPress']
   }) => {
     if (onPress) {
       onPress()
@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
-    height: 60,
+    height: 45,
     borderColor: Colors.borderGray20,
-    borderWidth: 1,
+    borderWidth: 2,
   },
 })
 
