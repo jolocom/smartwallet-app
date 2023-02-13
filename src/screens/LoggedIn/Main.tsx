@@ -31,6 +31,7 @@ import Recovery from '../Modals/Recovery'
 import { DrivingLicenseForm } from './Documents/DrivingLicenseDemo/DrivingLicenseForm'
 import { DrivingLicenseShare } from './Documents/DrivingLicenseDemo/DrivingLicenseShare'
 import { useDrivingLicense } from './Documents/DrivingLicenseDemo/hooks'
+import AddDocumentMenu, { AddDocumentMenuProps } from './AddDocumentMenu'
 import MainTabs from './MainTabs'
 import About from './Settings/About'
 import BackupIdentity from './Settings/BackupIdentity'
@@ -99,6 +100,7 @@ export type MainStackParamList = {
     backgroundColor?: Colors
   }
   [ScreenNames.DrivingPrivileges]: { id: string }
+  [ScreenNames.AddDocumentMenu]: AddDocumentMenuProps
   // DEV
   [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
@@ -293,6 +295,11 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.PasscodeRecovery}
         component={Recovery}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      <MainStack.Screen
+        name={ScreenNames.AddDocumentMenu}
+        component={AddDocumentMenu}
         options={screenTransitionFromBottomDisabledGestures}
       />
       {/* END NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}

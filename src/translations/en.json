@@ -1,13 +1,13 @@
 {
     "Walkthrough": {
-        "titleOne": "Use your identity",
-        "descriptionOne": "Get where you need to go with convenient access to apps & services",
+        "titleOne": "Connect your identity",
+        "descriptionOne": "Add your ID's to start using them with with other apps and services",
         "registrationBtn": "Get started",
         "recoveryBtn": "Import identity",
         "titleTwo": "Control your data",
-        "descriptionTwo": "Your digital identities are securely stored in the Wallet.",
+        "descriptionTwo": "Choose which information you want to share with other services",
         "titleThree": "Everything in one place",
-        "descriptionThree": "All digital identities and credentials are stored locally on your device."
+        "descriptionThree": "Securely store your digital identity on your device"
     },
     "TermsConsent": {
         "header": "Terms of Service & Privacy Policy",
@@ -256,6 +256,10 @@
         "expiredPlaceholderTitle": "It’s still empty",
         "expiredPlaceholderSubtitle": "You don’t have any expired documents.",
         "removeFavorite": "Remove from Favorites",
+        "addFavorite": "Add to Favorites",
+        "addDocumentHeader": "Add Documents to Wallet",
+        "addDocumentDescription": "Add new documents to your Smart Wallet using the options below.",
+        "addDocumentScanQRCode": "Scan QR Code",
         "addFavorite": "Add to Favorites"
     },
     "CredentialRequest": {
@@ -302,6 +306,8 @@
         "authzHeader": "Authorization",
         "authzRequestStepHeader": "Authorized",
         "authzResponseStepHeader": "Confirmed",
+        "authzActionPlaceholder": "Authorize",
+        "eidAlert": "The History Screen currently does not include eID interactions.",
         "authzActionPlaceholder": "Authorize"
     },
     "Settings": {

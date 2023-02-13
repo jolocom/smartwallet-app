@@ -256,6 +256,10 @@
         "expiredPlaceholderTitle": "Noch keine Dokumente verfügbar",
         "expiredPlaceholderSubtitle": "Sie besitzen keine abgelaufenen Dokumente.",
         "removeFavorite": "Von Favoriten entfernen",
+        "addFavorite": "Zu Favoriten hinzufügen",
+        "addDocumentHeader": "Dokumente hinzufügen",
+        "addDocumentDescription": "Fügen Sie neue Dokumente zur Smart Wallet hinzu, indem Sie eine der unten aufgeführten Optionen wählen.",
+        "addDocumentScanQRCode": "QR Code scannen",
         "addFavorite": "Zu Favoriten hinzufügen"
     },
     "CredentialRequest": {
@@ -302,6 +306,8 @@
         "authzHeader": "Autorisierung",
         "authzRequestStepHeader": "Autorisiert",
         "authzResponseStepHeader": "Bestätigt",
+        "authzActionPlaceholder": "Autorisieren",
+        "eidAlert": "Der History Screen beinhaltet derzeit keine eID Interaktionen.",
         "authzActionPlaceholder": "Autorisieren"
     },
     "Settings": {
