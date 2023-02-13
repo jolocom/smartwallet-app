@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { getActiveToast } from '~/modules/toasts/selectors'
@@ -18,6 +19,7 @@ export const useToasts = () => {
   const dispatch = useDispatch()
   const activeToast = useSelector(getActiveToast)
   const { showErrorReporting } = useErrors()
+  const [prevErrorWarning, setPrevErrorWarning] = useState<null | string>(null)
 
   const scheduleInfo = (toast: ToastBody) => {
     dispatch(scheduleToast(createInfoToast(toast)))
@@ -52,17 +54,23 @@ export const useToasts = () => {
 
   const scheduleErrorWarning = (error: Error, config?: Partial<ToastBody>) => {
     console.warn(error)
-    return scheduleWarning({
-      title: t('Toasts.errorWarningTitle'),
-      message: t('Toasts.errorWarningMsg'),
-      interact: {
-        label: t('Toasts.reportBtn'),
-        onInteract: () => {
-          showErrorReporting(error)
+    if (prevErrorWarning === null || prevErrorWarning !== error.message) {
+      setPrevErrorWarning(error.message)
+
+      return scheduleWarning({
+        title: t('Toasts.errorWarningTitle'),
+        message: t('Toasts.errorWarningMsg'),
+        interact: {
+          label: t('Toasts.reportBtn'),
+          onInteract: () => {
+            showErrorReporting(error)
+          },
         },
-      },
-      ...config,
-    })
+        ...config,
+      })
+    }
+
+    return setPrevErrorWarning(error.message)
   }
 
   const removeToast = (toast: Toast) => {
