@@ -2660,10 +2660,10 @@
   dependencies:
     cred-types-jolocom-core "^0.0.11"
 
-"@jolocom/react-native-ausweis@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@jolocom/react-native-ausweis/-/react-native-ausweis-2.0.2.tgz#5a6a9e6c3ffb6ea020e6ad40402816186e205566"
-  integrity sha512-160woTCgtHEDa6+XaTMr2vBrNmmh7+6nAE8EqLlDsdRD82SvcKAQkuYNzDJHPRSa6taIsablRTdVrRzA9lR9vA==
+"@jolocom/react-native-ausweis@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@jolocom/react-native-ausweis/-/react-native-ausweis-2.0.3.tgz#fac3073080721ca9b9367098d95f0cb246602420"
+  integrity sha512-NLemR7swPag53wZKE8WfiGpyN0p+nzDc8ye/ZXkrCKgs1ltPwLPnKdqZxoBYVV7gVcnGpo7PGm3p8ooeTmt1OQ==
 
 "@jolocom/registry-contract@1.0.4":
   version "1.0.4"
