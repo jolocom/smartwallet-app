@@ -24,6 +24,7 @@ import AusweisChangePin from '../Modals/Interaction/eID/components/AusweisChange
 import AusweisServiceInfo from '../Modals/Interaction/eID/components/AusweisServiceInfo'
 import PinRecoveryInstructions from '../Modals/PinRecoveryInstructions'
 import Recovery from '../Modals/Recovery'
+import AddDocumentMenu, { AddDocumentMenuProps } from './AddDocumentMenu'
 import MainTabs from './MainTabs'
 import About from './Settings/About'
 import BackupIdentity from './Settings/BackupIdentity'
@@ -91,6 +92,7 @@ export type MainStackParamList = {
     id: string
     backgroundColor?: Colors
   }
+  [ScreenNames.AddDocumentMenu]: AddDocumentMenuProps
   // DEV
   [ScreenNames.CardsTest]: undefined
   [ScreenNames.InteractionPasteTest]: undefined
@@ -257,6 +259,11 @@ const Main: React.FC = () => {
       <MainStack.Screen
         name={ScreenNames.PasscodeRecovery}
         component={Recovery}
+        options={screenTransitionFromBottomDisabledGestures}
+      />
+      <MainStack.Screen
+        name={ScreenNames.AddDocumentMenu}
+        component={AddDocumentMenu}
         options={screenTransitionFromBottomDisabledGestures}
       />
       {/* END NOTE: Duplicate Screens from LockStack, so they're available in @ChangePin */}

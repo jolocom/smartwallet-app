@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import CrossIcon from '~/assets/svg/CrossIcon'
 
 import { DocumentCard } from '~/components/Cards'
 import { CardFavorite } from '~/components/Cards/components'
@@ -30,6 +31,7 @@ import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
 import { JoloTextSizes } from '~/utils/fonts'
 import { MainTabsParamList } from '../MainTabs'
+import { useAddDocumentMenu } from './useAddDocumentMenu'
 import { StackExtraData, useDocumentsScreen } from './useDocumentsScreen'
 import { useFavoriteDocuments } from './useFavoriteDocuments'
 
@@ -59,6 +61,7 @@ const Documents: React.FC = () => {
   } = useDocumentsScreen()
 
   const { favorites } = useFavoriteDocuments()
+  const { showMenu } = useAddDocumentMenu()
 
   const dispatch = useDispatch()
 
@@ -99,6 +102,19 @@ const Documents: React.FC = () => {
       ),
     [],
   )
+
+  const showAddDocumentMenu = () => {
+    showMenu([
+      {
+        title: t('Documents.addDocumentScanQRCode'),
+        navigation: {
+          screen: ScreenNames.Interaction,
+          params: { screen: ScreenNames.Scanner },
+        },
+      },
+      { title: t('Documents.cancelBtn') },
+    ])
+  }
 
   const renderStack = useCallback(
     (
@@ -170,7 +186,11 @@ const Documents: React.FC = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <ScreenContainer.Header customStyles={{ marginBottom: 18 }}>
+      <ScreenContainer.Header
+        customStyles={{ marginBottom: 18 }}
+        rightButtonIcon={<CrossIcon />}
+        rightButtonAction={showAddDocumentMenu}
+      >
         {t('BottomBar.documents')}
       </ScreenContainer.Header>
       <View style={{ flex: 1 }}>
