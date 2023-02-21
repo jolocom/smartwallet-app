@@ -36,7 +36,6 @@ exports[`BlockExpanded should match the initial snapshot 1`] = `
       onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "alignItems": "flex-start",
           "paddingHorizontal": 24,
           "paddingVertical": 24,
           "width": "100%",
@@ -44,29 +43,40 @@ exports[`BlockExpanded should match the initial snapshot 1`] = `
       }
       testID="blockExpandedButton"
     >
-      <Text
+      <View
         style={
-          Array [
-            Object {
-              "paddingTop": undefined,
-              "textAlign": "center",
-            },
-            Object {
-              "color": "rgba(255,255,255,0.9)",
-              "fontFamily": "TTCommons-Regular",
-              "fontSize": 20,
-              "letterSpacing": 0.14,
-              "lineHeight": 22,
-            },
-            Object {
-              "textAlign": "left",
-            },
-          ]
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+          }
         }
-        testID="title"
       >
-        Test title
-      </Text>
+        <Text
+          style={
+            Array [
+              Object {
+                "paddingTop": 5,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "rgba(255,255,255,0.9)",
+                "fontFamily": "TTCommons-Regular",
+                "fontSize": 20,
+                "letterSpacing": 0.14,
+                "lineHeight": 22,
+              },
+              Object {
+                "maxWidth": "100%",
+                "textAlign": "left",
+              },
+            ]
+          }
+          testID="title"
+        >
+          Test title
+        </Text>
+      </View>
     </View>
   </View>
 </RNCSafeAreaView>
@@ -100,7 +110,6 @@ exports[`BlockExpanded should render props correctly 1`] = `
     onStartShouldSetResponder={[Function]}
     style={
       Object {
-        "alignItems": "flex-start",
         "paddingHorizontal": 24,
         "paddingVertical": 24,
         "width": "100%",
@@ -108,35 +117,46 @@ exports[`BlockExpanded should render props correctly 1`] = `
     }
     testID="blockExpandedButton"
   >
-    <Text
+    <View
       style={
-        Array [
-          Object {
-            "paddingTop": undefined,
-            "textAlign": "center",
-          },
-          Object {
-            "color": "rgba(255,255,255,0.9)",
-            "fontFamily": "TTCommons-Regular",
-            "fontSize": 20,
-            "letterSpacing": 0.14,
-            "lineHeight": 22,
-          },
-          Object {
-            "textAlign": "left",
-          },
-        ]
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+        }
       }
-      testID="title"
     >
-      Test title
-    </Text>
+      <Text
+        style={
+          Array [
+            Object {
+              "paddingTop": 5,
+              "textAlign": "center",
+            },
+            Object {
+              "color": "rgba(255,255,255,0.9)",
+              "fontFamily": "TTCommons-Regular",
+              "fontSize": 20,
+              "letterSpacing": 0.14,
+              "lineHeight": 22,
+            },
+            Object {
+              "maxWidth": "100%",
+              "textAlign": "left",
+            },
+          ]
+        }
+        testID="title"
+      >
+        Test title
+      </Text>
+    </View>
     <View>
       <Text
         style={
           Array [
             Object {
-              "paddingTop": undefined,
+              "paddingTop": 5,
               "textAlign": "center",
             },
             Object {

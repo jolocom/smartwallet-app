@@ -19,7 +19,13 @@ exports[`Navigation Header renders BackArrowIcon correctly 1`] = `
   }
 >
   <View
+    accessibilityState={
+      Object {
+        "disabled": false,
+      }
+    }
     accessible={true}
+    collapsable={false}
     focusable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
@@ -68,7 +74,7 @@ exports[`Navigation Header renders BackArrowIcon correctly 1`] = `
       <RNSVGGroup>
         <RNSVGPath
           d="M24.48 7.438H3.34l5.362-5.469a.536.536 0 00.152-.375V.53A.53.53 0 008.334 0a.516.516 0 00-.369.156L.153 8.124a.539.539 0 000 .752l7.812 7.968c.15.152.372.198.568.116a.53.53 0 00.321-.491v-1.063a.536.536 0 00-.152-.375L3.34 9.562h21.138c.288 0 .521-.237.521-.53V7.968a.526.526 0 00-.52-.531z"
-          fill={-855310}
+          fill={4294111986}
           fillRule={1}
           propList={
             Array [
@@ -83,8 +89,11 @@ exports[`Navigation Header renders BackArrowIcon correctly 1`] = `
   <View
     style={
       Object {
+        "alignItems": "center",
         "flex": 1,
-        "paddingHorizontal": 10,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "paddingHorizontal": 12,
       }
     }
     testID="heading"
@@ -113,14 +122,23 @@ exports[`Navigation Header renders CloseIcon correctly 1`] = `
   <View
     style={
       Object {
+        "alignItems": "center",
         "flex": 1,
-        "paddingHorizontal": 10,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "paddingHorizontal": 12,
       }
     }
     testID="heading"
   />
   <View
+    accessibilityState={
+      Object {
+        "disabled": false,
+      }
+    }
     accessible={true}
+    collapsable={false}
     focusable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
@@ -183,7 +201,7 @@ exports[`Navigation Header renders CloseIcon correctly 1`] = `
           strokeWidth={1}
         >
           <RNSVGGroup
-            fill={-1}
+            fill={4294967295}
             fillRule={1}
             matrix={
               Array [
@@ -234,7 +252,13 @@ exports[`Navigation Header renders children correctly 1`] = `
   }
 >
   <View
+    accessibilityState={
+      Object {
+        "disabled": false,
+      }
+    }
     accessible={true}
+    collapsable={false}
     focusable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
@@ -283,7 +307,7 @@ exports[`Navigation Header renders children correctly 1`] = `
       <RNSVGGroup>
         <RNSVGPath
           d="M24.48 7.438H3.34l5.362-5.469a.536.536 0 00.152-.375V.53A.53.53 0 008.334 0a.516.516 0 00-.369.156L.153 8.124a.539.539 0 000 .752l7.812 7.968c.15.152.372.198.568.116a.53.53 0 00.321-.491v-1.063a.536.536 0 00-.152-.375L3.34 9.562h21.138c.288 0 .521-.237.521-.53V7.968a.526.526 0 00-.52-.531z"
-          fill={-855310}
+          fill={4294111986}
           fillRule={1}
           propList={
             Array [
@@ -298,8 +322,11 @@ exports[`Navigation Header renders children correctly 1`] = `
   <View
     style={
       Object {
+        "alignItems": "center",
         "flex": 1,
-        "paddingHorizontal": 10,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "paddingHorizontal": 12,
       }
     }
     testID="heading"
@@ -332,8 +359,11 @@ exports[`Navigation Header renders correctly 1`] = `
   <View
     style={
       Object {
+        "alignItems": "center",
         "flex": 1,
-        "paddingHorizontal": 10,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "paddingHorizontal": 12,
       }
     }
     testID="heading"

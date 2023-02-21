@@ -1,6 +1,7 @@
-import React from 'react'
-import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 import { render } from '@testing-library/react-native'
+import React from 'react'
+import { Platform } from 'react-native'
+import ScreenPlaceholder from '~/components/ScreenPlaceholder'
 
 describe('ScreenPlaceholder', () => {
   const defaultProps = {
@@ -33,7 +34,10 @@ describe('ScreenPlaceholder', () => {
 
     const description = rendered.getByTestId('description')
     expect(description.props.style).toMatchObject([
-      { textAlign: 'center', paddingTop: undefined },
+      {
+        textAlign: 'center',
+        paddingTop: Platform.select({ ios: 5, android: 0 }),
+      },
       {
         fontSize: 16,
         lineHeight: 18,

@@ -1,11 +1,5 @@
 import * as ReactNative from 'react-native'
 
-jest.mock('react-native-keychain', () => ({
-  SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
-  SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
-  SECURITY_LEVEL_SECURE_HARDWARE: 'MOCK_SECURITY_LEVEL_SECURE_HARDWARE',
-}))
-
 jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
   useDispatch: jest.fn(),
@@ -36,32 +30,6 @@ jest.mock('react-native-jolocom', () => ({
   },
 }))
 
-jest.mock('react-native-localize', () => ({
-  findBestAvailableLanguage: (_: string[]) => 'en',
-}))
-
-jest.mock('../../src/errors/errorContext.tsx', () => ({
-  useErrorContext: () => ({
-    error: null,
-    errorScreen: null,
-    setError: jest.fn(),
-  }),
-}))
-
-jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation', () => ({
-  ...require.requireActual(
-    'react-native/Libraries/LayoutAnimation/LayoutAnimation',
-  ),
-  configureNext: jest.fn(),
-}))
-
-// jest.mock(
-//   'react-native-reanimated',
-//   () =>
-//     jest.requireActual('../../node_modules/react-native-reanimated/mock')
-//       .default,
-// )
-
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock')
 
@@ -70,18 +38,6 @@ jest.mock('react-native-reanimated', () => {
   Reanimated.default.call = () => {}
 
   return Reanimated
-})
-
-jest.mock('react-native-gesture-handler', () => {
-  const gestureHandlerMocks = jest.requireActual(
-    '../../node_modules/react-native-gesture-handler/src/mocks.ts',
-  ).default
-
-  return {
-    ...gestureHandlerMocks,
-    TouchableOpacity: gestureHandlerMocks.PanGestureHandler,
-    TouchableWithoutFeedback: gestureHandlerMocks.PanGestureHandler,
-  }
 })
 
 jest.mock('../../src/hooks/useTranslation.ts', () => () => ({
@@ -104,13 +60,8 @@ jest.mock('@react-native-community/netinfo', () => ({
   }),
 }))
 
-jest.mock('react-native-keyboard-aware-scroll-view', () => {
-  const KeyboardAwareScrollView = ({ children }: { children: any }) => children
-  return { KeyboardAwareScrollView }
-})
-
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
-jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 jest.mock('react-native-nfc-manager', () => ({
   __esModule: true,
@@ -138,19 +89,10 @@ jest.mock('@jolocom/react-native-ausweis', () => ({
   },
 }))
 
-ReactNative.NativeModules.RNBranch = {}
-
 export const Platform = {
   ...ReactNative.Platform,
   OS: 'ios',
   Version: 123,
   isTesting: true,
-  select: (objs) => objs['ios'],
+  select: objs => objs['ios'],
 }
-
-export default Object.setPrototypeOf(
-  {
-    Platform,
-  },
-  ReactNative,
-)

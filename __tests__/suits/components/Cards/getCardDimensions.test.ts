@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native'
-import { getCardDimensions } from '~/components/Cards/getCardDimenstions'
+import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimenstions'
 
 const mockBaseCardWidth = 300
 const mockBaseCardHeight = 200
