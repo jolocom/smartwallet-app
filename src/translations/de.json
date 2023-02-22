@@ -259,8 +259,7 @@
         "addFavorite": "Zu Favoriten hinzufügen",
         "addDocumentHeader": "Dokumente hinzufügen",
         "addDocumentDescription": "Fügen Sie neue Dokumente zur Smart Wallet hinzu, indem Sie eine der unten aufgeführten Optionen wählen.",
-        "addDocumentScanQRCode": "QR Code scannen",
-        "addFavorite": "Zu Favoriten hinzufügen"
+        "addDocumentScanQRCode": "QR Code scannen"
     },
     "CredentialRequest": {
         "header": "Eingehende Anfrage",
@@ -307,8 +306,7 @@
         "authzRequestStepHeader": "Autorisiert",
         "authzResponseStepHeader": "Bestätigt",
         "authzActionPlaceholder": "Autorisieren",
-        "eidAlert": "Der History Screen beinhaltet derzeit keine eID Interaktionen.",
-        "authzActionPlaceholder": "Autorisieren"
+        "eidAlert": "Der History Screen beinhaltet derzeit keine eID Interaktionen."
     },
     "Settings": {
         "preferencesSection": "App Einstellungen",
@@ -331,7 +329,8 @@
         "screenshotAlertTitle": "Achtung",
         "screenshotAlertMsg": "Der Inhalt bleibt sichtbar, auch wenn Sie zu anderen Apps wechseln",
         "screenshotAlertCta": "Aktivieren",
-        "screenshotAlertCancel": "Abbrechen"
+        "screenshotAlertCancel": "Abbrechen",
+        "mnemonicPhraseWarning": "Es besteht die Gefahr, dass Ihre Daten unwiederbringlich verloren gehen. Fahren Sie mit Ihrer geheimen Wortkombination fort."
     },
     "Language": {
         "english": "Englisch",

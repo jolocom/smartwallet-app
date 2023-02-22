@@ -259,8 +259,7 @@
         "addFavorite": "Add to Favorites",
         "addDocumentHeader": "Add Documents to Wallet",
         "addDocumentDescription": "Add new documents to your Smart Wallet using the options below.",
-        "addDocumentScanQRCode": "Scan QR Code",
-        "addFavorite": "Add to Favorites"
+        "addDocumentScanQRCode": "Scan QR Code"
     },
     "CredentialRequest": {
         "header": "Incoming request",
@@ -307,8 +306,7 @@
         "authzRequestStepHeader": "Authorized",
         "authzResponseStepHeader": "Confirmed",
         "authzActionPlaceholder": "Authorize",
-        "eidAlert": "The History Screen currently does not include eID interactions.",
-        "authzActionPlaceholder": "Authorize"
+        "eidAlert": "The History Screen currently does not include eID interactions."
     },
     "Settings": {
         "preferencesSection": "App preferences",
@@ -331,7 +329,8 @@
         "screenshotAlertTitle": "Pay attention",
         "screenshotAlertMsg": "All content will be visible when switching between apps running in the background",
         "screenshotAlertCta": "Turn on",
-        "screenshotAlertCancel": "Cancel"
+        "screenshotAlertCancel": "Cancel",
+        "mnemonicPhraseWarning": "Your data run the risk of being irreversibly lost, please proceed with the seedphrase"
     },
     "Language": {
         "english": "English",
