@@ -18,6 +18,7 @@ const PasscodeExtraAction: IPasscodeComposition['ExtraAction'] = ({
   if (!children) return null
   return (
     <TouchableOpacity
+      disabled={!onPress}
       onPress={handlePress}
       style={{ paddingHorizontal: 20, marginBottom: 24 }}
     >

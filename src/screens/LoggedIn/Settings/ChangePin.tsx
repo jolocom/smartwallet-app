@@ -52,7 +52,7 @@ const ChangePin: React.FC = () => {
         await secureStorage.setItem(SecureStorageKeys.passcode, newPin)
       },
       { success: t('ChangePasscode.successHeader'), showSuccess: true },
-      (error) => {
+      error => {
         if (error) {
           scheduleErrorWarning(error, {
             message: t('Toasts.failedStoreMsg'),
@@ -132,6 +132,9 @@ const ChangePin: React.FC = () => {
         return undefined
     }
   }
+
+  const isExtractionClickable = passcodeState === PasscodeState.repeat
+
   return (
     <ScreenContainer
       customStyles={{
@@ -145,7 +148,9 @@ const ChangePin: React.FC = () => {
           <Passcode.Input />
         </Passcode.Container>
         <Passcode.Container customStyles={{ justifyContent: 'flex-end' }}>
-          <Passcode.ExtraAction onPress={handleExtraAction}>
+          <Passcode.ExtraAction
+            onPress={isExtractionClickable ? handleExtraAction : undefined}
+          >
             {getExtraActionTitle()}
           </Passcode.ExtraAction>
           <Passcode.Keyboard />
