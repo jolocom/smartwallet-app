@@ -85,7 +85,6 @@ const SettingsGeneral: React.FC = () => {
 
         <Section>
           <Section.Title>{t('Settings.securitySection')}</Section.Title>
-          <MnemonicPhraseWarning />
           <Section.Block>
             <Option
               onPress={() => handleNavigateToScreen(ScreenNames.ChangePin)}
