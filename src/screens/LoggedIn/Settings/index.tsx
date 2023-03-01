@@ -21,7 +21,6 @@ import Btn, { BtnTypes } from '~/components/Btn'
 import useTranslation from '~/hooks/useTranslation'
 import EnableScreenshotsOption from './EnableScreenshotsOption'
 import useSettings from '~/hooks/settings'
-import MnemonicPhraseWarning from './MnemonicPhraseWarning'
 
 const SettingsGeneral: React.FC = () => {
   const { t } = useTranslation()
