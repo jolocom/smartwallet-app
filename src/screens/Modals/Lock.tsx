@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { BackHandler, View } from 'react-native'
+import { BackHandler, StyleSheet, View } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 import { BiometryType } from 'react-native-biometrics'
 
@@ -104,19 +104,9 @@ const Lock = () => {
     }
   }
   return (
-    <ScreenContainer
-      customStyles={{
-        justifyContent: 'flex-start',
-      }}
-    >
+    <ScreenContainer customStyles={styles.container}>
       <Passcode onSubmit={handlePINSubmit}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            width: '100%',
-          }}
-        >
+        <View style={styles.code}>
           <Passcode.Header
             title={t('Lock.header')}
             errorTitle={t('ChangePasscode.wrongCodeHeader')}
@@ -125,11 +115,7 @@ const Lock = () => {
           <Passcode.Error />
         </View>
         <Passcode.Container>
-          <Passcode.ExtraAction
-            onPress={() => redirect(ScreenNames.PinRecoveryInstructions)}
-          >
-            {t('Lock.forgotBtn')}
-          </Passcode.ExtraAction>
+          <Passcode.ExtraAction>{t('Lock.forgotBtn')}</Passcode.ExtraAction>
           <Passcode.Keyboard
             biometryType={isBiometrySelected ? biometryType : undefined}
             onBiometryPress={
@@ -142,5 +128,16 @@ const Lock = () => {
     </ScreenContainer>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'flex-start',
+  },
+  code: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+  },
+})
 
 export default Lock

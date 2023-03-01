@@ -1,8 +1,6 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
-import { debugView } from '~/utils/dev'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { JoloTextSizes } from '~/utils/fonts'
-import Btn, { BtnTypes } from '../Btn'
 import JoloText from '../JoloText'
 import { usePasscode } from './context'
 import { IPasscodeComposition } from './types'
@@ -18,16 +16,25 @@ const PasscodeExtraAction: IPasscodeComposition['ExtraAction'] = ({
   if (!children) return null
   return (
     <TouchableOpacity
+      disabled={!onPress}
       onPress={handlePress}
-      style={{ paddingHorizontal: 20, marginBottom: 24 }}
+      style={styles.button}
     >
-      <JoloText
-        size={JoloTextSizes.mini}
-        customStyles={{ textAlign: 'center' }}
-      >
+      <JoloText size={JoloTextSizes.mini} customStyles={styles.text}>
         {children}
       </JoloText>
     </TouchableOpacity>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    paddingHorizontal: 20,
+    marginBottom: 24,
+  },
+  text: {
+    textAlign: 'center',
+  },
+})
+
 export default PasscodeExtraAction
