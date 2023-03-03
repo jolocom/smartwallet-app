@@ -1,7 +1,7 @@
 {
     "Walkthrough": {
         "titleOne": "Nutzen Sie Ihre Identität",
-        "descriptionOne": "Für einen einfachem Zugang zu Ihren Apps und Services",
+        "descriptionOne": "Für einen einfachen Zugang zu Ihren Apps und Services",
         "registrationBtn": "Wallet einrichten",
         "recoveryBtn": "Identität importieren",
         "titleTwo": "Schützen Sie Ihre Daten",
@@ -540,7 +540,7 @@
         "ausweisBadge": "Online-Ausweisfunktion",
         "moreInfoDescription": "Mit SmartWallet können Sie die deutsche eID-Funktion (z. B. mit dem deutschen elektronischen Aufenthaltstitel) nutzen, ohne andere Apps öffnen zu müssen.\n\nWird bei einem Registrierungsvorgang die deutsche eID-Funktion benötigt, fordert Sie das SmartWallet auf, Ihre eID-Karte an das NFC-Lesegerät Ihres Smartphones zu halten und Ihre 6-stellige eID PIN einzugeben. Sie haben auch die Möglichkeit festzulegen, welche Daten Sie teilen möchten, und zu überprüfen, mit wem Sie  diese teilen. Darüber hinaus können Sie Ihre Transport-PIN ändern, um die eID-Karte zu entsperren, Ihre eID-Karten-PIN zu ändern und die eID-Karte bei Bedarf zu entsperren.\n\nDie deutsche eID-Funktion steht vorerst nur Teilnehmern der Pilotanwendungen aus dem Forschungsprogramm „Sichere digitale Identitäten“ des Bundesministeriums für Wirtschaft und Klimaschutz zur Verfügung. Darüber hinaus ist Jolocom an den Projekten ONCE, ID-Ideal und SDIKA beteiligt. Die deutsche eID-Funktion wurde auf Basis des AusweisApp2 SDK implementiert und nutzt dessen vorhandene Infrastruktur (Online-Ausweisfunktion).",
         "moreInfoHeader": "Mehr Informationen",
-        "compatibilityBtnDescription": "Prüfen Sie hier ob Ihr Gerät mit der eID Funktionalität kompatibel ist.",
+        "compatibilityBtnDescription": "Prüfen Sie hier ob Ihr Gerät mit der Online-Ausweisfunktionalität kompatibel ist.",
         "changePinBtnDescription": "Ändern oder setzen Sie Ihre eID PIN hier.",
         "unlockBtnDescription": "Schalten Sie Ihre gesperrte Karte hier frei."
     },

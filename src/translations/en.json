@@ -1,644 +1,644 @@
 {
-    "Walkthrough": {
-        "titleOne": "Connect your identity",
-        "descriptionOne": "Add your ID's to start using them with with other apps and services",
-        "registrationBtn": "Get started",
-        "recoveryBtn": "Import identity",
-        "titleTwo": "Control your data",
-        "descriptionTwo": "Choose which information you want to share with other services",
-        "titleThree": "Everything in one place",
-        "descriptionThree": "Securely store your digital identity on your device"
-    },
-    "TermsConsent": {
-        "header": "Terms of Service & Privacy Policy",
-        "subheader": "You can find the German and English version of the documents below. Please note that the German version is legally binding",
-        "footer": "I understand and accept the Terms of Service and Privacy Policy",
-        "footerBtn": "Accept new terms"
-    },
-    "Recovery": {
-        "header": "Recovery",
-        "subheader": "Enter your secret phrase word by word and it will appear here",
-        "forgotBtn": "What if I forgot my phrase?",
-        "wrongWord": "Can’t match this word",
-        "confirmBtn": "Confirm",
-        "exitBtn": "Exit Recovery",
-        "confirmLoader": "Matching two instances"
-    },
-    "Loader": {
-        "successDefault": "Success!",
-        "failedDefault": "Failed",
-        "loading": "Loading"
-    },
-    "OnboardingBackup": {
-        "header": "Upload backup file?",
-        "instruction": "Drag the ball into the circle to start",
-        "skipBtn": "I don't have it"
-    },
-    "RecoveryInfo": {
-        "header": "What to do if you forgot your secret phrase",
-        "textPartOne": "Without your secret phrase you will not be able to re-activate your identity.",
-        "textPartTwo": "Recovering your entire wallet requires both the secret phrase and a backup file.",
-        "textPartThree": "Are you sure you do not have a copy stored somewhere safe?",
-        "textPartFour": "Think back to when you first created your identity",
-        "closeBtn": "Continue"
-    },
-    "Entropy": {
-        "header": "Add uniqueness",
-        "subheader": "Randomly draw untill 100% to secure your identity",
-        "loader": "Awesome!\nIdentity is being secured"
-    },
-    "SeedphraseWrite": {
-        "touchInstructions": "Hold your finger on the circle",
-        "writeInstructions": "Write down the collection of words exactly as shown below. Keep this safe!",
-        "confirmBtn": "Done",
-        "exitBtn": "Back to walkthrough",
-        "writeInstructionsWarning": "You will not be able to view this again"
-    },
-    "SeedphraseInfo": {
-        "header": "Why these words are important to you",
-        "textOne": "Your wallet will store very sensitive data about you. We want to make sure that you keep it safe right from the start.",
-        "textTwoHighlight": "Only this unique set of words ",
-        "textTwoDefault": "can be used to regenerate your identity when your phone is lost or broken.",
-        "textThree": "We strongly recommend storing your set of words in a safe place. Writing it down or using an encrypted password manager are the best options.",
-        "textFour": "Do not share your secret phrase with anyone.",
-        "confirmBtn": "Got this"
-    },
-    "SeedphraseRepeat": {
-        "orderInstructions": "Drag and drop the words until they are in the correct order",
-        "confirmBtn": "Done",
-        "matchingError": "Check carefully for mistakes and try again"
-    },
-    "Identity": {
-        "widgetWelcome": "It’s time to create your first Digital Identity",
-        "widgetStartBtn": "Start now",
-        "widgetNameHeader": "What is your name?",
-        "widgetConfirmBtn": "Create",
-        "widgetNextBtn": "Next",
-        "header": "Credentials",
-        "nameLabel": "Name",
-        "emailLabel": "Email",
-        "phoneNumberLabel": "Phone number",
-        "addressLabel": "Address",
-        "addClaimBtn": "Add new one",
-        "credentialsDescription": "Manage your most important contact data in one place. Later on, you will be able to share this data in one click and fill in forms with no extra effort.",
-        "headerAusweis": "Your eID",
-        "headerCredentials": "Personal Info"
-    },
-    "BottomBar": {
-        "identity": "Identity",
-        "documents": "Documents",
-        "history": "History",
-        "settings": "Settings"
-    },
-    "InputPlaceholder": {
-        "givenName": "Given name",
-        "familyName": "Family name"
-    },
-    "Placeholder": {
-        "companyName": "Company name",
-        "addressLine": "Address line",
-        "postalCode": "Postal code",
-        "country": "Country",
-        "city": "City"
-    },
-    "CredentialForm": {
-        "editHeader": "Edit your ${attributeName, lowercase}",
-        "subheader": "Once you click done, it will be displayed in the personal info section.",
-        "closeBtn": "Cancel",
-        "confirmBtn": "Done",
-        "addHeader": "Add your ${attributeName, lowercase}",
-        "errorAttributeExists": "Attribute with the same value already exists"
-    },
-    "CreatePasscode": {
-        "createHeader": "Create wallet PIN",
-        "createSubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
-        "helperText": "You cannot recover your wallet PIN if you forget it."
-    },
-    "VerifyPasscode": {
-        "verifyHeader": "Verify wallet PIN",
-        "verifySubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
-        "resetBtn": "Reset"
-    },
-    "Biometry": {
-        "header": "Use ${biometryType} to authorize wallet",
-        "subheader": "So you don’t need to confirm your wallet PIN every time you open the app",
-        "activateBtn": "Tap to activate",
-        "skipBtn": "Skip",
-        "promptFaceId": "Scan your face to continue",
-        "promptFingerprint": "Scan your fingerprint on the device scanner to continue",
-        "promptBiometrics": "Provide biometrics to continue"
-    },
-    "PasscodeRecoveryInstructions": {
-        "header": "How to change your wallet PIN",
-        "subheader1": "We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!",
-        "subheader2": "You can change your wallet PIN by entering your secret phrase. Click Restore Access below to make the change",
-        "imageCaption": "Repeat your phrase word by word",
-        "submitBtn": "Restore access",
-        "footer": "Setting a new wallet PIN will not affect your stored data",
-        "cancelBtn": "Cancel"
-    },
-    "Lock": {
-        "header": "Enter wallet PIN",
-        "forgotBtn": "You cannot recover your wallet PIN if you forget it.",
-        "errorMsg": "You have used ${attempts} attempts"
-    },
-    "CameraPermission": {
-        "header": "Camera permission",
-        "subheader": "You can’t scan without this permission. Please allow this in your settings.",
-        "confirmBtn": "Tap to activate camera"
-    },
-    "Camera": {
-        "details": "It’s all automatic, just place your phone above the code",
-        "errorMsg": "Looks like we can’t provide this service.",
-        "localNetworkMessage": "To activate devices within the local network please allow access for the SmartWallet",
-        "localNetworkBtn_long": "Tap to manage",
-        "localNetworkBtn_short": "Manage"
-    },
-    "CredentialShare": {
-        "missingDocsToastHeader": "Missing ${documentType, lowercase}",
-        "missingDocsToastSubheader": "${serviceName} is requesting a document that can’t be found in your wallet",
-        "attributeMissingValue": "Missing info",
-        "headerSingleMissing": "${serviceName} requests ${attribute, lowercase}",
-        "singleMissingSubheader": "It seems like your wallet is missing something important for this request",
-        "singleMissingAcceptBtn": "Add info",
-        "selectInstructions": "Tap to choose"
-    },
-    "CredentialOffer": {
-        "invalidDocsToastHeader": "Invalid offer",
-        "invalidDocsToastSubheader": "Unable to save any of the documents sent by ${serviceName}",
-        "header": "Incoming offer",
-        "subheader": "${serviceName} sent your wallet the following document(s):",
-        "cardInfoHeader": "Included info",
-        "confirmBtn": "Accept",
-        "acceptBtn": "Accept",
-        "cardNoPreview": "No info can be previewed",
-        "nrOfFieldsLeft": "+${nr} more"
-    },
-    "Toasts": {
-        "reportBtn": "Report",
-        "noInternetTitle": "Uh, oh ... you’re not connected!",
-        "noInternetMsg": "An internet connection is required to proceed.",
-        "errorWarningTitle": "Whoops...",
-        "errorWarningMsg": "We weren't expecting that to happen either. Help us help everyone by sharing the error you encountered",
-        "successfulInteractionTitle": "Success!",
-        "successfulInternetMsg": "You should have all you need to continue your interaction now",
-        "successfulOfferInteractionBtn": "Review",
-        "offerDuplicateTitle": "Duplicate detected",
-        "offerDuplicateSingleMsg": "You already have this document",
-        "offerDuplicateMultipleMsg": "You can still receive the other documents",
-        "offerInvalidDocsTitle": "Unable to save",
-        "offerInvalidDocsMsg": "There seems to be an issue with the documents sent by ${serviceName}",
-        "offerRenegotiationTitle": "Be aware",
-        "offerRenegotiationMsg": "Some documents didn't pass our security check and cannot be saved or received",
-        "shareMissingDocsTitle": "Missing documents",
-        "shareMissingDocsMsg": "${serviceName} is requesting a document that can’t be found in your wallet. \nMissing: ${documentType}",
-        "failedStoreMsg": "We could not store your wallet PIN. Please try again",
-        "reconnectedInternetTitle": "You're back online",
-        "reconnectedInternetMsg": "All wallet functionalities are back again",
-        "successfulInteractionMsg": "Your interaction was successful. You can find the details here",
-        "nfcCompatibilityTitle": "NFC Compatibilty problem",
-        "nfcCompatibilityMsg": "Unfortunately your phone does not support the required NFC functionality",
-        "nfcOffTitle": "NFC is off",
-        "nfcOffMsg": "You need to enable NFC to use the online eID function",
-        "nfcOffBtn": "Settings",
-        "ausweisSuccessTitle": "Process completed",
-        "ausweisSuccessMsg": "Identification Data was shared successfully",
-        "ausweisFailedCheckTitle": "Check compatibility",
-        "ausweisFailedCheckMsg": "Not the first time failing? \nStart compatibility diagnostics to be sure",
-        "ausweisFailedCheckBtn": "Start",
-        "ausweisChangePinSuccessHeader": "Action Completed",
-        "ausweisChangePinSuccessMsg": "You can use your new PIN now",
-        "copied": "Copied",
-        "ausweisDeactivatedCardTitle": "Your card is deactivated",
-        "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
-        "refreshTitle": "All done here!",
-        "refreshMsg": "Identification data was shared successfully. Please continue the process with ${serviceName} in the initial application outside the Smart Wallet.",
-        "documentsFavoritesLimitTitle": "Take it easy",
-        "documentsFavoritesLimitMsg": "You can't have more than ${max} favorites"
-    },
-    "Interaction": {
-        "cancelBtn": "Ignore",
-        "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
-        "redirectTitle": "We're all done!",
-        "redirectDescription": "You are being redirected to ${serviceName}.",
-        "redirectBtn": "Follow link"
-    },
-    "Documents": {
-        "documentsTab": "Documents",
-        "othersTab": "Others",
-        "typeSubtab": "Type",
-        "issuerSubtab": "Issuer",
-        "identificationCategory": "Identification",
-        "educationCategory": "Education",
-        "ticketsCategory": "Tickets",
-        "infoCardOption": "Info",
-        "deleteCardOption": "Delete",
-        "cancelCardOption": "Cancel",
-        "deleteDocumentHeader": "Do you want to delete ${documentName}?",
-        "deleteCredentialInstruction": "Drop the ball to delete",
-        "cancelBtn": "Cancel",
-        "placeholderHeader": "It’s still empty",
-        "documentsPlaceholderSubheader": "You haven't saved any documents yet.\nGet one today!",
-        "othersPlaceholderHeader": "Nothing here yet",
-        "othersPlaceholderSubheader": "You haven't saved anything yet",
-        "unspecifiedField": "Not specified",
-        "subjectNameField": "Subject name",
-        "issuedFieldLabel": "Issued",
-        "issuerFieldLabel": "Issuer",
-        "expiresFieldLabel": "Expires",
-        "favoriteSection": "Favorites",
-        "allSection": "All",
-        "expiredSection": "Expired",
-        "favoritePlaceholderTitle": "Nothing here yet",
-        "favoritePlaceholderSubtitle": "Favorite a document by tapping the star icon on a document.",
-        "allPlaceholderTitle": "It’s still empty",
-        "allPlaceholderSubtitle": "You haven't saved any documents yet. Get one today!",
-        "expiredPlaceholderTitle": "It’s still empty",
-        "expiredPlaceholderSubtitle": "You don’t have any expired documents.",
-        "removeFavorite": "Remove from Favorites",
-        "addFavorite": "Add to Favorites",
-        "addDocumentHeader": "Add Documents to Wallet",
-        "addDocumentDescription": "Add new documents to your Smart Wallet using the options below.",
-        "addDocumentScanQRCode": "Scan QR Code"
-    },
-    "CredentialRequest": {
-        "header": "Incoming request",
-        "subheader": "Choose one or more documents requested by ${serviceName} to proceed",
-        "acceptBtn": "Share"
-    },
-    "Authorization": {
-        "header": "Would you like to ${authAction}?",
-        "subheader": "${serviceName}  is now ready to grant you access",
-        "acceptBtn": "Allow"
-    },
-    "Dates": {
-        "today": "Today",
-        "yesterday": "Yesterday",
-        "lastDay": "Last ${day}",
-        "lastMonday": "Last Monday",
-        "lastTuesday": "Last Tuesday",
-        "lastWednesday": "Last Wednesday",
-        "lastThursday": "Last Thursday",
-        "lastFriday": "Last Friday",
-        "lastSaturday": "Last Saturday",
-        "lastSunday": "Last Sunday"
-    },
-    "History": {
-        "allTab": "All",
-        "sharedTab": "Shared",
-        "receivedTab": "Received",
-        "authenticationHeader": "Authentication",
-        "credentialOfferHeader": "Incoming offer",
-        "offerRequestStepHeader": "Offered",
-        "offerResponseStepHeader": "Selected",
-        "offerReceiveStepHeader": "Issued",
-        "authenticationRequestStepHeader": "Requested",
-        "authResponseStepHeader": "Confirmed",
-        "notFinishedStepHeader": "Not ${text}",
-        "pendingState": "Pending",
-        "expiredState": "Expired",
-        "credShareHeader": "Incoming request",
-        "credShareRequestStepHeader": "Requested",
-        "credShareResponseStepHeader": "Shared",
-        "placeholderHeader": "No history yet",
-        "placeholderSubheader": "You dont have any completed interactions yet.\nMake one today!",
-        "authzHeader": "Authorization",
-        "authzRequestStepHeader": "Authorized",
-        "authzResponseStepHeader": "Confirmed",
-        "authzActionPlaceholder": "Authorize",
-        "eidAlert": "The History Screen currently does not include eID interactions."
-    },
-    "Settings": {
-        "preferencesSection": "App preferences",
-        "notificationsBlock": "Notifications",
-        "languageBlock": "Language",
-        "securitySection": "Security",
-        "changePasscodeBlock": "Change wallet PIN",
-        "biometricsBlock": "Use Biometrics to log in",
-        "backupBlock": "Backup identity",
-        "backupBlockWarning": "Your documents run the risk of being irreversibly lost",
-        "generalSection": "General",
-        "faqBlock": "FAQ",
-        "contactUsBlock": "Contact us",
-        "rateBlock": "Rate us",
-        "aboutBlock": "About",
-        "imprintBlock": "Imprint",
-        "deleteDataInfo": "If you want to start fresh and erase all data related to this wallet’s identity ",
-        "deleteDataBtn": "click here",
-        "screenshotBlock": "Allow screenshots",
-        "screenshotAlertTitle": "Pay attention",
-        "screenshotAlertMsg": "All content will be visible when switching between apps running in the background",
-        "screenshotAlertCta": "Turn on",
-        "screenshotAlertCancel": "Cancel",
-        "mnemonicPhraseWarning": "Your data run the risk of being irreversibly lost, please proceed with the seedphrase"
-    },
-    "Language": {
-        "english": "English",
-        "german": "German"
-    },
-    "BackupOptions": {
-        "header": "Backup options",
-        "exportHeader": "Backup your data",
-        "exportSubheader": "Download an encrypted copy of the data in your SmartWallet to your device. Make sure to keep your backups up-to-date and stored somewhere safe",
-        "exportBtn": "Export backup file",
-        "importHeader": "Restore your data",
-        "importSubheader": "In case you deleted something important by mistake. Only possible if backup was created using this wallet",
-        "importBtn": "Import file",
-        "lastBackupInfo": "Last backup"
-    },
-    "FAQ": {
-        "header": "Popular questions",
-        "header_q1": "What happens if my phone gets lost or stolen?",
-        "subheader_q1": "You can regain control over your wallet using the secret phrase created during setup of your SmartWallet. This will not recover any documents or other information stored in a wallet on a lost device. In the future, we will offer a backup feature to secure all data to a backup file in order to safeguard the contents of your wallet.",
-        "header_q2": "Who has access to my data?",
-        "subheader_q2": "All your data is stored and managed on your device. You are in full control over who gets access to information. Jolocom has no access to the data on your device nor does anybody else without your permission. If you give another party access to your information, you can always see what you have shared. In fact, you can always quickly and easily check which service has access to which data. This provides you with an instant overview of your connections.",
-        "header_q3": "Are Jolocom identities and the SmartWallet GDPR-compliant?",
-        "subheader_q3": "Emphatically, YES. Jolocom identities, the SmartWallet, and all our products are designed to prioritize the integrity, privacy, and security of user data. The wallet as well as the protocol for creating identities and sharing identity information are fully GDPR-compliant.",
-        "header_q4": "What can the SmartWallet do?",
-        "subheader_q4": "The SmartWallet is an application designed by Jolocom that lets you manage data related to your identity — like your email address, phone number, or ID card.\nYour wallet holds documents and other digital contents which you can exchange and share with services at the press of a button."
-    },
-    "About": {
-        "versionInfo": "You are running version ${version}"
-    },
-    "ChangePasscode": {
-        "wrongCodeHeader": "Wrong wallet PIN",
-        "currentHeader": "Current wallet PIN",
-        "successHeader": "Wallet PIN changed!",
-        "sameCodeHeader": "You have entered the current wallet PIN"
-    },
-    "ContactUs": {
-        "issueOption_1": "Possible partnership with Jolocom",
-        "issueOption_2": "Issues with the application",
-        "issueOption_3": "I lost my wallet",
-        "issueOption_4": "How to become a part of the project?",
-        "issueOption_5": "Other",
-        "issueHeader": "What are we going to talk about?",
-        "issuePlaceholder": "Select an option",
-        "suggestionHeader": "Anything specific to mention?",
-        "suggestionSubheader": "Dare to suggest you have something to tell us, so we will \nbe prepared for the future conversations",
-        "suggestionPlaceholder": "Tap to write …",
-        "contactHeader": "Want to get in touch?",
-        "contactPlaceholder": "Write your email here …",
-        "contactInputInfo": "We do not store data and do not spam",
-        "submitBtn": "Send"
-    },
-    "EraseData": {
-        "dialogTitle": "Are you sure?",
-        "dialogMessage": "Please pay attention that deleted data cannot be recovered in the future",
-        "submitBtn": "I understand",
-        "cancelBtn": "Cancel",
-        "loader": "Processing data removal",
-        "dragInstructions": "Drop the ball to delete"
-    },
-    "Errors": {
-        "unknownTitle": "Unknown error",
-        "unknownMessage": "And if this is not the first time, we’d appreciate you letting us know",
-        "reportBtn": "Submit Report",
-        "closeBtn": "Close",
-        "crashTitle": "System crash",
-        "crashMessage": "But don’t worry - your data is safe and nothing will be lost",
-        "restartBtn": "Restart Application"
-    },
-    "ErrorReporting": {
-        "issueHeader": "Tell us the problem",
-        "issuePlaceholder": "Choose related topic",
-        "detailsHeader": "Anything specific to mention?",
-        "detailsSubheader": "If the problem is not listed - the space below is the best place to describe it",
-        "logsHeader": "Include your logs",
-        "logsSubheader": "This includes certain private metadata info (like file sizes — but not personal information) and will help developers fix bugs more quickly",
-        "contactHeader": "Want to get in touch?",
-        "contactInputInfo": "We do not store data and do not spam. Any user information will be deleted immediately after solving the problem",
-        "rateHeader": "Rate this issue",
-        "submitBtn": "Submit report",
-        "contactInputError": "Please enter a valid email",
-        "issueOption_1": "No internet connection",
-        "issueOption_2": "The app keeps crashing",
-        "issueOption_3": "Can’t login",
-        "issueOption_4": "Backup is empty",
-        "issueOption_5": "Problems with the interface",
-        "issueOption_6": "Something doesn't seem right",
-        "issueOption_7": "Other",
-        "contactPlaceholder": "Write your email here …",
-        "errorHeader": "Report error"
-    },
-    "General": {
-        "unknown": "Unknown",
-        "anonymous": "Anonymous",
-        "moreInfo": "More info"
-    },
-    "Authentication": {
-        "header": "Is it really you?",
-        "subheader": "${serviceName} would like to confirm your digital identity before proceeding",
-        "confirmBtn": "Allow"
-    },
-    "PrivacyPolicy": {
-        "header": "Privacy Policy",
-        "footer": "If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us."
-    },
-    "DragToConfirm": {
-        "instruction": "Drop the ball"
-    },
-    "Test": {
-        "testTerm": "whoopsytest"
-    },
-    "Validations": {
-        "onlyNumbers": "Only number characters are allowed",
-        "tooMany": "Too many characters",
-        "tooFew": "Too few characters",
-        "missingValue": "Please provide a value",
-        "wrongEmail": "Seems like this is not a valid email",
-        "atLeastOneValue": "Please provide at least one of the values"
-    },
-    "DisableOverlay": {
-        "headerTitle": "Your wallet is disabled for security reasons",
-        "descriptionTitle": "Try again in",
-        "headerBlockedTitle": "You have reached the limit of your attempts",
-        "submitBtn": "Restore Access",
-        "submitDescription": "Setting a new passcode will not affect your stored data"
-    },
-    "Ausweis": {
-        "birthName": "Birth name",
-        "address": "Address",
-        "communityID": "Community ID",
-        "writeAddress": "Write address",
-        "residencePermitI": "Residence permit I",
-        "familyName": "Family name",
-        "documentType": "Document type",
-        "ageVerification": "Age verification",
-        "issuingCountry": "Issuing country",
-        "writeResidencePermitII": "Write residence permit II",
-        "writeCommunityID": "Write community ID",
-        "artisticName": "Artistic name",
-        "residencePermitII": "Residence permit II",
-        "writeResidencePermitI": "Write residence permit I",
-        "givenNames": "Given names",
-        "placeOfBirth": "Place of birth",
-        "dateOfBirth": "Date of birth",
-        "doctoralDegree": "Doctoral degree",
-        "pseudonym": "Pseudonym",
-        "validUntil": "Valid until",
-        "nationality": "Nationality",
-        "addressVerification": "Address verification",
-        "canAllowed": "CAN allowed",
-        "pinManagement": "PIN management",
-        "header": "Incoming eID request"
-    },
-    "AusweisLostPin": {
-        "title": "How to restore access to my card?",
-        "description": "You can not find your PIN letter? You have set a PIN when picking up the ID card or later that you cannot recall now? If this is the case please turn to the competent authority and set a new PIN there.",
-        "contact": "You can also contact the support by email",
-        "phoneRate": "local rate"
-    },
-    "AusweisCompatibilityStatus": {
-        "header": "Compatibility check",
-        "status1": "ID card access succesful",
-        "status2": "Online identification feature enabled",
-        "status3": "NFC Supported",
-        "success": "Success!",
-        "errorStatus1": "This card is inoperative",
-        "error": "Failed"
-    },
-    "AusweisReview": {
-        "subheader": "Choose one or more attributes requested by ${serviceName} to proceed",
-        "providerBtn": "Service Info",
-        "mandatoryHeader": "Mandatory fields",
-        "optionalHeader": "Optional fields",
-        "proceedBtn": "Share"
-    },
-    "AusweisProvider": {
-        "providerLabel": "Provider",
-        "certificateLabel": "Certificate issuer",
-        "providerInfoLabel": "Provider info",
-        "validityLabel": "Validity"
-    },
-    "AusweisPasscode": {
-        "authPinHeader": "Enter eID PIN",
-        "pinForgotBtn": "If you forgot your pin or haven’t activated it yet, <1>click here.</1>",
-        "transportPinHeader": "Enter your 5-digit PIN",
-        "transportPinBtn": "Where can I find this?",
-        "canHeader": "Enter CAN",
-        "canBtn": "Where to find CAN?",
-        "pukHeader": "Enter PUK",
-        "pukBtn": "Where to find the PUK?",
-        "newPinHeader": "Enter your new eID PIN",
-        "repeatNewPinHeader": "Repeat your new eID PIN",
-        "pinMatchError": "PINs don't match",
-        "pinWrongError": "Wrong ${pinVariant}"
-    },
-    "AusweisPukLock": {
-        "header": "Your card is locked now and you have to introduce the PUK code to unlock it",
-        "subtitle": "You can always unlock your card by using the “Unlock my card” button in the Identity tab",
-        "proceedBtn": "Continue with the PUK code",
-        "closeBtn": "Close interaction"
-    },
-    "AusweisIdentity": {
-        "header": "German eID",
-        "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\". ",
-        "compatibilityBtn": "Compatibility Test",
-        "changePinBtn": "Change your eID PIN",
-        "unlockBtn": "Unlock blocked card",
-        "ausweisBadge": "Online-Ausweisfunktion",
-        "moreInfoDescription": "SmartWallet allows you to use the German eID function (e.g. with the German electronic residence permit) without having to go through other apps. \n\nIf the German eID function is required during a registration process, the SmartWallet will prompt you to hold your eID card up to the NFC reader on your smartphone and enter your 6-digit eID PIN. You also have the option to specify which data you want to share and to check with whom you share it. In addition, you can change your transport PIN to unlock the eID card, change your eID card PIN and unlock the eID card if necessary.\n\nFor the time being, the German eID function is only available to participants of the pilot applications from the research program \"Secure Digital Identities\" of the federal Ministry of Economic Affairs and Climate Action. Furthermore, Jolocom is involved in the ONCE, ID-Ideal and SDIKA projects. The German eID function was implemented on the basis of the AusweisApp2 SDK and uses its existing infrastructure (Online-Ausweisfunktion).",
-        "moreInfoHeader": "German eID Info",
-        "compatibilityBtnDescription": "Check if your device is compatible with the eID functionality.",
-        "changePinBtnDescription": "Change or set your eID PIN.",
-        "unlockBtnDescription": "Unlock your blocked card here."
-    },
-    "AusweisChangePin": {
-        "transportPinHeader": "Set up your eID PIN",
-        "transportPinSubheader": "To set up your PIN, you will need to enter the 5 digit transport PIN that came in a letter alongside your ID card.",
-        "transportPinBtn": "Set up eID PIN",
-        "pinHeader": "Change 6-digit eID PIN",
-        "pinSubheader": "If you have already set a 6 digit PIN before, you can change it here.",
-        "pinBtn": "Change PIN",
-        "forgotHeader": "Forgot eID PIN?",
-        "forgotSubheader": "If you forgot your eID PIN or cannot find your transport PIN letter, please turn to the competent authority to set a new PIN. You can also contact the support at:"
-    },
-    "AusweisPinInfo": {
-        "header": "PIN information",
-        "description": "For the 6-digit eID PIN, choose a combination of numbers that’s not easy to guess\n\nWhen changing the PIN for the first time, please use the five-digit Transport PIN. You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a 6-digit PIN is mandatory\n",
-        "btn": "Go to eID PIN Settings"
-    },
-    "AusweisScanner": {
-        "header": "Ready to scan",
-        "startSubheader": "Please do not remove your card until the current step is done",
-        "cancelBtn": "Cancel",
-        "sessionStarted": "Please place your ID card on the top of the device's back side.",
-        "sessionFailed": "Scanning process failed.",
-        "sessionSucceeded": "Scanning process has been finished successfully.",
-        "sessionInProgress": "Scanning process is in progress."
-    },
-    "AusweisCanInfo": {
-        "header": "CAN information",
-        "description": "The card access number (CAN) is only required if you have entered the wrong PIN twice already. In order to prevent that a wrong PIN is entered for a third time without your consent, thus blocking your card, you have to enter the CAN at this point. The CAN is a 6-digit number that you can find on the front side of your ID card at the bottom right."
-    },
-    "AusweisTransportPin": {
-        "warning1": "Please note that If you already set a six-digit PIN previously, the five-digit Transport PIN is no longer valid\n",
-        "continueBtn": "Continue",
-        "warning2": "You may use the five-digit Transport PIN only once to change your PIN\n"
-    },
-    "AusweisTransportPinInfo": {
-        "header": "Transport PIN info",
-        "description": "You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
-    },
-    "AusweisPukInfo": {
-        "header": "PUK number info",
-        "description": "You will find the PUK number in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
-    },
-    "AusweisUnlock": {
-        "notLockedHeader": "System did not detect your card being blocked",
-        "closeBtn": "Close",
-        "pukExhaustedHeader": "We didn't manage to unlock your card",
-        "unlockedHeader": "Your card is unlocked and ready to use!",
-        "standaloneUnblockHeader": "Unlock the card from the <1>${screen}</1>",
-        "identityScreen": "Identity screen"
-    },
-    "Details": {
-        "expandBtn": "See more"
-    },
-    "Wallet": {
-        "prepareWallet": "Preparing your wallet"
-    },
-    "Dashboard": {
-        "header": "Jolocom WebAgent"
-    },
-    "TermsOfService": {
-        "header": "Terms of Service"
-    },
-    "DocumentCard": {
-        "expired": "Expired"
-    },
-    "mdl": {
-        "sharingLoader": "Sharing Driving License...",
-        "successLoader": "Your Driving License was shared successfully!",
-        "canceledLoader": "The sharing was canceled. Please try again.",
-        "errorLoader": "Sharing the Driving License failed!",
-        "personalizationLoader": "Adding Driving License",
-        "bluetoothWarningTitle": "Bluetooth Error",
-        "bluetoothWarningMessage": "Sharing your driver license requires Bluetooth. \nPlease turn on Bluetooth on your device or use a device that supports it.",
-        "bluetoothWarningBtn": "Settings",
-        "vehicleCode": "Vehicle Code",
-        "issueDate": "Issue Date",
-        "expiryDate": "Expiry Date",
-        "restrictions": "Restrictions",
-        "mopedAndMotorcycle": "Moped and Motorcycle",
-        "passengerCar": "Passenger Car",
-        "truck": "Truck",
-        "bus": "Bus",
-        "tractorAndForklift": "Tractor and Forklift",
-        "shareHeader": "Share Driving License",
-        "shareMenu": "Share via QR Code",
-        "successToastMsg": "Driver License was shared successfully",
-        "drivingPrivileges": "Driving Privileges",
-        "drivingLicenseNumber": "Driving License Number",
-        "issueMdl": "Issue mdl",
-        "authenticationTitle": "Biometry Authentication",
-        "authenticationSubtitle": "We need to authenticate you for the Driving License",
-        "existingDocumentTitle": "Are you sure about this?",
-        "existingDocumentDescription": "You already have a Driving License document",
-        "existingDocumentBtn": "right here",
-        "title": "Driving License",
-        "description": "Please enter your personal data to receive your mobile driving license",
-        "serviceName": "Bundesdruckerei"
-    }
+  "Walkthrough": {
+    "titleOne": "Digitise your identity",
+    "descriptionOne": "Add your credentials to start using them with with other apps and services",
+    "registrationBtn": "Get started",
+    "recoveryBtn": "Import identity",
+    "titleTwo": "Control your data",
+    "descriptionTwo": "Choose which information you want to share with other services",
+    "titleThree": "Everything in one place",
+    "descriptionThree": "Securely store your digital identity on your device"
+  },
+  "TermsConsent": {
+    "header": "Terms of Service & Privacy Policy",
+    "subheader": "You can find the German and English version of the documents below. Please note that the German version is legally binding",
+    "footer": "I understand and accept the Terms of Service and Privacy Policy",
+    "footerBtn": "Accept new terms"
+  },
+  "Recovery": {
+    "header": "Recovery",
+    "subheader": "Enter your secret phrase word by word and it will appear here",
+    "forgotBtn": "What if I forgot my phrase?",
+    "wrongWord": "Can’t match this word",
+    "confirmBtn": "Confirm",
+    "exitBtn": "Exit Recovery",
+    "confirmLoader": "Matching two instances"
+  },
+  "Loader": {
+    "successDefault": "Success!",
+    "failedDefault": "Failed",
+    "loading": "Loading"
+  },
+  "OnboardingBackup": {
+    "header": "Upload backup file?",
+    "instruction": "Drag the ball into the circle to start",
+    "skipBtn": "I don't have it"
+  },
+  "RecoveryInfo": {
+    "header": "What to do if you forgot your secret phrase",
+    "textPartOne": "Without your secret phrase you will not be able to re-activate your identity.",
+    "textPartTwo": "Recovering your entire wallet requires both the secret phrase and a backup file.",
+    "textPartThree": "Are you sure you do not have a copy stored somewhere safe?",
+    "textPartFour": "Think back to when you first created your identity",
+    "closeBtn": "Continue"
+  },
+  "Entropy": {
+    "header": "Add uniqueness",
+    "subheader": "Randomly draw untill 100% to secure your identity",
+    "loader": "Awesome!\nIdentity is being secured"
+  },
+  "SeedphraseWrite": {
+    "touchInstructions": "Hold your finger on the circle",
+    "writeInstructions": "Write down the collection of words exactly as shown below. Keep this safe!",
+    "confirmBtn": "Done",
+    "exitBtn": "Back to walkthrough",
+    "writeInstructionsWarning": "You will not be able to view this again"
+  },
+  "SeedphraseInfo": {
+    "header": "Why these words are important to you",
+    "textOne": "Your wallet will store very sensitive data about you. We want to make sure that you keep it safe right from the start.",
+    "textTwoHighlight": "Only this unique set of words ",
+    "textTwoDefault": "can be used to regenerate your identity when your phone is lost or broken.",
+    "textThree": "We strongly recommend storing your set of words in a safe place. Writing it down or using an encrypted password manager are the best options.",
+    "textFour": "Do not share your secret phrase with anyone.",
+    "confirmBtn": "Got this"
+  },
+  "SeedphraseRepeat": {
+    "orderInstructions": "Drag and drop the words until they are in the correct order",
+    "confirmBtn": "Done",
+    "matchingError": "Check carefully for mistakes and try again"
+  },
+  "Identity": {
+    "widgetWelcome": "It’s time to create your first Digital Identity",
+    "widgetStartBtn": "Start now",
+    "widgetNameHeader": "What is your name?",
+    "widgetConfirmBtn": "Create",
+    "widgetNextBtn": "Next",
+    "header": "Credentials",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "phoneNumberLabel": "Phone number",
+    "addressLabel": "Address",
+    "addClaimBtn": "Add new one",
+    "credentialsDescription": "Manage your most important contact data in one place. Later on, you will be able to share this data in one click and fill in forms with no extra effort.",
+    "headerAusweis": "Your eID",
+    "headerCredentials": "Personal Info"
+  },
+  "BottomBar": {
+    "identity": "Identity",
+    "documents": "Documents",
+    "history": "History",
+    "settings": "Settings"
+  },
+  "InputPlaceholder": {
+    "givenName": "Given name",
+    "familyName": "Family name"
+  },
+  "Placeholder": {
+    "companyName": "Company name",
+    "addressLine": "Address line",
+    "postalCode": "Postal code",
+    "country": "Country",
+    "city": "City"
+  },
+  "CredentialForm": {
+    "editHeader": "Edit your ${attributeName, lowercase}",
+    "subheader": "Once you click done, it will be displayed in the personal info section.",
+    "closeBtn": "Cancel",
+    "confirmBtn": "Done",
+    "addHeader": "Add your ${attributeName, lowercase}",
+    "errorAttributeExists": "Attribute with the same value already exists"
+  },
+  "CreatePasscode": {
+    "createHeader": "Create wallet PIN",
+    "createSubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
+    "helperText": "You cannot recover your wallet PIN if you forget it."
+  },
+  "VerifyPasscode": {
+    "verifyHeader": "Verify wallet PIN",
+    "verifySubheader": "Adding an extra layer of security helps prevent unwanted access to your wallet",
+    "resetBtn": "Reset"
+  },
+  "Biometry": {
+    "header": "Use ${biometryType} to authorize wallet",
+    "subheader": "So you don’t need to confirm your wallet PIN every time you open the app",
+    "activateBtn": "Tap to activate",
+    "skipBtn": "Skip",
+    "promptFaceId": "Scan your face to continue",
+    "promptFingerprint": "Scan your fingerprint on the device scanner to continue",
+    "promptBiometrics": "Provide biometrics to continue"
+  },
+  "PasscodeRecoveryInstructions": {
+    "header": "How to change your wallet PIN",
+    "subheader1": "We are very sorry that you forgot your password and may not have access to your wallet, but no worries there is a soluton!",
+    "subheader2": "You can change your wallet PIN by entering your secret phrase. Click Restore Access below to make the change",
+    "imageCaption": "Repeat your phrase word by word",
+    "submitBtn": "Restore access",
+    "footer": "Setting a new wallet PIN will not affect your stored data",
+    "cancelBtn": "Cancel"
+  },
+  "Lock": {
+    "header": "Enter wallet PIN",
+    "forgotBtn": "You cannot recover your wallet PIN if you forget it.",
+    "errorMsg": "You have used ${attempts} attempts"
+  },
+  "CameraPermission": {
+    "header": "Camera permission",
+    "subheader": "You can’t scan without this permission. Please allow this in your settings.",
+    "confirmBtn": "Tap to activate camera"
+  },
+  "Camera": {
+    "details": "It’s all automatic, just place the code inside the frame",
+    "errorMsg": "Looks like we can’t provide this service.",
+    "localNetworkMessage": "To activate devices within the local network please allow access for the SmartWallet",
+    "localNetworkBtn_long": "Tap to manage",
+    "localNetworkBtn_short": "Manage"
+  },
+  "CredentialShare": {
+    "missingDocsToastHeader": "Missing ${documentType, lowercase}",
+    "missingDocsToastSubheader": "${serviceName} is requesting a document that can’t be found in your wallet",
+    "attributeMissingValue": "Missing info",
+    "headerSingleMissing": "${serviceName} requests ${attribute, lowercase}",
+    "singleMissingSubheader": "It seems like your wallet is missing something important for this request",
+    "singleMissingAcceptBtn": "Add info",
+    "selectInstructions": "Tap to choose"
+  },
+  "CredentialOffer": {
+    "invalidDocsToastHeader": "Invalid offer",
+    "invalidDocsToastSubheader": "Unable to save any of the documents sent by ${serviceName}",
+    "header": "Incoming offer",
+    "subheader": "${serviceName} sent your wallet the following document(s):",
+    "cardInfoHeader": "Included info",
+    "confirmBtn": "Accept",
+    "acceptBtn": "Accept",
+    "cardNoPreview": "No info can be previewed",
+    "nrOfFieldsLeft": "+${nr} more"
+  },
+  "Toasts": {
+    "reportBtn": "Report",
+    "noInternetTitle": "Uh, oh ... you’re not connected!",
+    "noInternetMsg": "An internet connection is required to proceed.",
+    "errorWarningTitle": "Whoops...",
+    "errorWarningMsg": "We weren't expecting that to happen either. Help us help everyone by sharing the error you encountered",
+    "successfulInteractionTitle": "Success!",
+    "successfulInternetMsg": "You should have all you need to continue your interaction now",
+    "successfulOfferInteractionBtn": "Review",
+    "offerDuplicateTitle": "Duplicate detected",
+    "offerDuplicateSingleMsg": "You already have this document",
+    "offerDuplicateMultipleMsg": "You can still receive the other documents",
+    "offerInvalidDocsTitle": "Unable to save",
+    "offerInvalidDocsMsg": "There seems to be an issue with the documents sent by ${serviceName}",
+    "offerRenegotiationTitle": "Be aware",
+    "offerRenegotiationMsg": "Some documents didn't pass our security check and cannot be saved or received",
+    "shareMissingDocsTitle": "Missing documents",
+    "shareMissingDocsMsg": "${serviceName} is requesting a document that can’t be found in your wallet. \nMissing: ${documentType}",
+    "failedStoreMsg": "We could not store your wallet PIN. Please try again",
+    "reconnectedInternetTitle": "You're back online",
+    "reconnectedInternetMsg": "All wallet functionalities are back again",
+    "successfulInteractionMsg": "Your interaction was successful. You can find the details here",
+    "nfcCompatibilityTitle": "NFC Compatibilty problem",
+    "nfcCompatibilityMsg": "Your phone does not support the required NFC functionality, which is needed to read your eID card.",
+    "nfcOffTitle": "NFC is off",
+    "nfcOffMsg": "You need to enable NFC to use the online eID function",
+    "nfcOffBtn": "Settings",
+    "ausweisSuccessTitle": "Process completed",
+    "ausweisSuccessMsg": "Identification Data was shared successfully",
+    "ausweisFailedCheckTitle": "Check compatibility",
+    "ausweisFailedCheckMsg": "Not the first time failing? \nStart compatibility diagnostics to be sure",
+    "ausweisFailedCheckBtn": "Start",
+    "ausweisChangePinSuccessHeader": "Action Completed",
+    "ausweisChangePinSuccessMsg": "You can use your new PIN now",
+    "copied": "Copied",
+    "ausweisDeactivatedCardTitle": "Your card is deactivated",
+    "ausweisDeactivatedCardMsg": "Seems like your card doesn't support eID functionality, which is necessary to continue",
+    "refreshTitle": "All done here!",
+    "refreshMsg": "Identification data was shared successfully. Please continue the process with ${serviceName} in the initial application outside the Smart Wallet.",
+    "documentsFavoritesLimitTitle": "Take it easy",
+    "documentsFavoritesLimitMsg": "You can't have more than ${max} favorites"
+  },
+  "Interaction": {
+    "cancelBtn": "Cancel",
+    "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
+    "redirectTitle": "We're all done!",
+    "redirectDescription": "You are being redirected to ${serviceName}.",
+    "redirectBtn": "Follow link"
+  },
+  "Documents": {
+    "documentsTab": "Documents",
+    "othersTab": "Others",
+    "typeSubtab": "Type",
+    "issuerSubtab": "Issuer",
+    "identificationCategory": "Identification",
+    "educationCategory": "Education",
+    "ticketsCategory": "Tickets",
+    "infoCardOption": "Info",
+    "deleteCardOption": "Delete",
+    "cancelCardOption": "Cancel",
+    "deleteDocumentHeader": "Do you want to delete ${documentName}?",
+    "deleteCredentialInstruction": "Drop the ball to delete",
+    "cancelBtn": "Cancel",
+    "placeholderHeader": "It’s still empty",
+    "documentsPlaceholderSubheader": "You haven't saved any documents yet.\nGet one today!",
+    "othersPlaceholderHeader": "Nothing here yet",
+    "othersPlaceholderSubheader": "You haven't saved anything yet",
+    "unspecifiedField": "Not specified",
+    "subjectNameField": "Subject name",
+    "issuedFieldLabel": "Issued",
+    "issuerFieldLabel": "Issuer",
+    "expiresFieldLabel": "Expires",
+    "favoriteSection": "Favorites",
+    "allSection": "All",
+    "expiredSection": "Expired",
+    "favoritePlaceholderTitle": "Nothing here yet",
+    "favoritePlaceholderSubtitle": "Favorite a document by tapping the star icon on a document.",
+    "allPlaceholderTitle": "It’s still empty",
+    "allPlaceholderSubtitle": "You haven't saved any documents yet. Get one today!",
+    "expiredPlaceholderTitle": "It’s still empty",
+    "expiredPlaceholderSubtitle": "You don’t have any expired documents.",
+    "removeFavorite": "Remove from Favorites",
+    "addFavorite": "Add to Favorites",
+    "addDocumentHeader": "Add Documents to Wallet",
+    "addDocumentDescription": "Add new documents to your Smart Wallet using the options below.",
+    "addDocumentScanQRCode": "Scan QR Code"
+  },
+  "CredentialRequest": {
+    "header": "Incoming request",
+    "subheader": "Choose one or more data fields from your\n ID card requested by \n%{service-name} to proceed ",
+    "acceptBtn": "Share"
+  },
+  "Authorization": {
+    "header": "Would you like to ${authAction}?",
+    "subheader": "${serviceName}  is now ready to grant you access",
+    "acceptBtn": "Allow"
+  },
+  "Dates": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "lastDay": "Last ${day}",
+    "lastMonday": "Last Monday",
+    "lastTuesday": "Last Tuesday",
+    "lastWednesday": "Last Wednesday",
+    "lastThursday": "Last Thursday",
+    "lastFriday": "Last Friday",
+    "lastSaturday": "Last Saturday",
+    "lastSunday": "Last Sunday"
+  },
+  "History": {
+    "allTab": "All",
+    "sharedTab": "Shared",
+    "receivedTab": "Received",
+    "authenticationHeader": "Authentication",
+    "credentialOfferHeader": "Incoming offer",
+    "offerRequestStepHeader": "Offered",
+    "offerResponseStepHeader": "Selected",
+    "offerReceiveStepHeader": "Issued",
+    "authenticationRequestStepHeader": "Requested",
+    "authResponseStepHeader": "Confirmed",
+    "notFinishedStepHeader": "Not ${text}",
+    "pendingState": "Pending",
+    "expiredState": "Expired",
+    "credShareHeader": "Incoming request",
+    "credShareRequestStepHeader": "Requested",
+    "credShareResponseStepHeader": "Shared",
+    "placeholderHeader": "No history yet",
+    "placeholderSubheader": "You dont have any completed interactions yet.\nMake one today!",
+    "authzHeader": "Authorization",
+    "authzRequestStepHeader": "Authorized",
+    "authzResponseStepHeader": "Confirmed",
+    "authzActionPlaceholder": "Authorize",
+    "eidAlert": "The History Screen currently does not include eID interactions."
+  },
+  "Settings": {
+    "preferencesSection": "App preferences",
+    "notificationsBlock": "Notifications",
+    "languageBlock": "Language",
+    "securitySection": "Security",
+    "changePasscodeBlock": "Change wallet PIN",
+    "biometricsBlock": "Use Biometrics to log in",
+    "backupBlock": "Backup identity",
+    "backupBlockWarning": "Your documents run the risk of being irreversibly lost",
+    "generalSection": "General",
+    "faqBlock": "FAQ",
+    "contactUsBlock": "Contact us",
+    "rateBlock": "Rate us",
+    "aboutBlock": "About",
+    "imprintBlock": "Imprint",
+    "deleteDataInfo": "If you want to start fresh and erase all data related to this wallet’s identity ",
+    "deleteDataBtn": "click here",
+    "screenshotBlock": "Allow screenshots",
+    "screenshotAlertTitle": "Pay attention",
+    "screenshotAlertMsg": "All content will be visible when switching between apps running in the background",
+    "screenshotAlertCta": "Turn on",
+    "screenshotAlertCancel": "Cancel",
+    "mnemonicPhraseWarning": "Your data run the risk of being irreversibly lost, please proceed with the seedphrase"
+  },
+  "Language": {
+    "english": "English",
+    "german": "German"
+  },
+  "BackupOptions": {
+    "header": "Backup options",
+    "exportHeader": "Backup your data",
+    "exportSubheader": "Download an encrypted copy of the data in your SmartWallet to your device. Make sure to keep your backups up-to-date and stored somewhere safe",
+    "exportBtn": "Export backup file",
+    "importHeader": "Restore your data",
+    "importSubheader": "In case you deleted something important by mistake. Only possible if backup was created using this wallet",
+    "importBtn": "Import file",
+    "lastBackupInfo": "Last backup"
+  },
+  "FAQ": {
+    "header": "Popular questions",
+    "header_q1": "What happens if my phone gets lost or stolen?",
+    "subheader_q1": "You can regain control over your wallet using the secret phrase created during setup of your SmartWallet. This will not recover any documents or other information stored in a wallet on a lost device. In the future, we will offer a backup feature to secure all data to a backup file in order to safeguard the contents of your wallet.",
+    "header_q2": "Who has access to my data?",
+    "subheader_q2": "All your data is stored and managed on your device. You are in full control over who gets access to information. Jolocom has no access to the data on your device nor does anybody else without your permission. If you give another party access to your information, you can always see what you have shared. In fact, you can always quickly and easily check which service has access to which data. This provides you with an instant overview of your connections.",
+    "header_q3": "Are Jolocom identities and the SmartWallet GDPR-compliant?",
+    "subheader_q3": "Emphatically, YES. Jolocom identities, the SmartWallet, and all our products are designed to prioritize the integrity, privacy, and security of user data. The wallet as well as the protocol for creating identities and sharing identity information are fully GDPR-compliant.",
+    "header_q4": "What can the SmartWallet do?",
+    "subheader_q4": "The SmartWallet is an application designed by Jolocom that lets you manage data related to your identity — like your email address, phone number, or ID card.\nYour wallet holds documents and other digital contents which you can exchange and share with services at the press of a button."
+  },
+  "About": {
+    "versionInfo": "You are running version ${version}"
+  },
+  "ChangePasscode": {
+    "wrongCodeHeader": "Wrong wallet PIN",
+    "currentHeader": "Current wallet PIN",
+    "successHeader": "Wallet PIN changed!",
+    "sameCodeHeader": "You have entered the current wallet PIN"
+  },
+  "ContactUs": {
+    "issueOption_1": "Possible partnership with Jolocom",
+    "issueOption_2": "Issues with the application",
+    "issueOption_3": "I lost my wallet",
+    "issueOption_4": "How to become a part of the project?",
+    "issueOption_5": "Other",
+    "issueHeader": "What are we going to talk about?",
+    "issuePlaceholder": "Select an option",
+    "suggestionHeader": "Anything specific to mention?",
+    "suggestionSubheader": "Dare to suggest you have something to tell us, so we will \nbe prepared for the future conversations",
+    "suggestionPlaceholder": "Tap to write …",
+    "contactHeader": "Want to get in touch?",
+    "contactPlaceholder": "Write your email here …",
+    "contactInputInfo": "We do not store data and do not spam",
+    "submitBtn": "Send"
+  },
+  "EraseData": {
+    "dialogTitle": "Are you sure?",
+    "dialogMessage": "Please pay attention that deleted data cannot be recovered in the future",
+    "submitBtn": "I understand",
+    "cancelBtn": "Cancel",
+    "loader": "Processing data removal",
+    "dragInstructions": "Drop the ball to delete"
+  },
+  "Errors": {
+    "unknownTitle": "Unknown error",
+    "unknownMessage": "And if this is not the first time, we’d appreciate you letting us know",
+    "reportBtn": "Submit Report",
+    "closeBtn": "Close",
+    "crashTitle": "System crash",
+    "crashMessage": "But don’t worry - your data is safe and nothing will be lost",
+    "restartBtn": "Restart Application"
+  },
+  "ErrorReporting": {
+    "issueHeader": "Tell us the problem",
+    "issuePlaceholder": "Choose related topic",
+    "detailsHeader": "Anything specific to mention?",
+    "detailsSubheader": "If the problem is not listed - the space below is the best place to describe it",
+    "logsHeader": "Include your logs",
+    "logsSubheader": "This includes certain private metadata info (like file sizes — but not personal information) and will help developers fix bugs more quickly",
+    "contactHeader": "Want to get in touch?",
+    "contactInputInfo": "We do not store data and do not spam. Any user information will be deleted immediately after solving the problem",
+    "rateHeader": "Rate this issue",
+    "submitBtn": "Submit report",
+    "contactInputError": "Please enter a valid email",
+    "issueOption_1": "No internet connection",
+    "issueOption_2": "The app keeps crashing",
+    "issueOption_3": "Can’t login",
+    "issueOption_4": "Backup is empty",
+    "issueOption_5": "Problems with the interface",
+    "issueOption_6": "Something doesn't seem right",
+    "issueOption_7": "Other",
+    "contactPlaceholder": "Write your email here …",
+    "errorHeader": "Report error"
+  },
+  "General": {
+    "unknown": "Unknown",
+    "anonymous": "Anonymous",
+    "moreInfo": "More info"
+  },
+  "Authentication": {
+    "header": "Is it really you?",
+    "subheader": "${serviceName} would like to confirm your digital identity before proceeding",
+    "confirmBtn": "Allow"
+  },
+  "PrivacyPolicy": {
+    "header": "Privacy Policy",
+    "footer": "If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us."
+  },
+  "DragToConfirm": {
+    "instruction": "Drop the ball"
+  },
+  "Test": {
+    "testTerm": "whoopsytest"
+  },
+  "Validations": {
+    "onlyNumbers": "Only number characters are allowed",
+    "tooMany": "Too many characters",
+    "tooFew": "Too few characters",
+    "missingValue": "Please provide a value",
+    "wrongEmail": "Seems like this is not a valid email",
+    "atLeastOneValue": "Please provide at least one of the values"
+  },
+  "DisableOverlay": {
+    "headerTitle": "Your wallet is disabled for security reasons",
+    "descriptionTitle": "Try again in",
+    "headerBlockedTitle": "You have reached the limit of your attempts",
+    "submitBtn": "Restore Access",
+    "submitDescription": "Setting a new passcode will not affect your stored data"
+  },
+  "Ausweis": {
+    "birthName": "Birth name",
+    "address": "Address",
+    "communityID": "Community ID",
+    "writeAddress": "Write address",
+    "residencePermitI": "Residence permit I",
+    "familyName": "Family name",
+    "documentType": "Document type",
+    "ageVerification": "Age verification",
+    "issuingCountry": "Issuing country",
+    "writeResidencePermitII": "Write residence permit II",
+    "writeCommunityID": "Write community ID",
+    "artisticName": "Artistic name",
+    "residencePermitII": "Residence permit II",
+    "writeResidencePermitI": "Write residence permit I",
+    "givenNames": "Given names",
+    "placeOfBirth": "Place of birth",
+    "dateOfBirth": "Date of birth",
+    "doctoralDegree": "Doctoral degree",
+    "pseudonym": "Pseudonym",
+    "validUntil": "Valid until",
+    "nationality": "Nationality",
+    "addressVerification": "Address verification",
+    "canAllowed": "CAN allowed",
+    "pinManagement": "PIN management",
+    "header": "Incoming eID request"
+  },
+  "AusweisLostPin": {
+    "title": "How to restore access to my card?",
+    "description": "You can not find your PIN letter? You have set a PIN when picking up the ID card or later that you cannot recall now? If this is the case please turn to the competent authority and set a new PIN there.",
+    "contact": "You can also contact the support by email",
+    "phoneRate": "local rate"
+  },
+  "AusweisCompatibilityStatus": {
+    "header": "Compatibility check",
+    "status1": "ID card access successful",
+    "status2": "Online identification feature enabled",
+    "status3": "NFC Supported",
+    "success": "Success!",
+    "errorStatus1": "This card is inoperative",
+    "error": "Failed"
+  },
+  "AusweisReview": {
+    "subheader": "Choose one or more attributes requested by ${serviceName} to proceed",
+    "providerBtn": "Service Info",
+    "mandatoryHeader": "Mandatory fields",
+    "optionalHeader": "Optional fields",
+    "proceedBtn": "Proceed"
+  },
+  "AusweisProvider": {
+    "providerLabel": "Provider",
+    "certificateLabel": "Certificate issuer",
+    "providerInfoLabel": "Provider info",
+    "validityLabel": "Validity"
+  },
+  "AusweisPasscode": {
+    "authPinHeader": "Enter eID PIN",
+    "pinForgotBtn": "If you cannot recall your ID card PIN, you may request a new PIN  <1>click here.</1>",
+    "transportPinHeader": "Enter your 5-digit Transport PIN",
+    "transportPinBtn": "Where can I find this?",
+    "canHeader": "Enter CAN",
+    "canBtn": "Where to find CAN?",
+    "pukHeader": "Enter PUK",
+    "pukBtn": "Where to find the PUK?",
+    "newPinHeader": "Enter your new eID PIN",
+    "repeatNewPinHeader": "Repeat your new eID PIN",
+    "pinMatchError": "PINs don't match",
+    "pinWrongError": "Wrong ${pinVariant}"
+  },
+  "AusweisPukLock": {
+    "header": "You used all PUK attempts and this card is locked. The PUK entered has already been used ten times and can no longer be used to unlock the PIN.\n\nPlease contact your Bürgeramt / PIN Rücksetzdienst for support",
+    "subtitle": "You can always unlock your card by using the “Unlock my card” button in the Identity tab",
+    "proceedBtn": "Continue with the PUK code",
+    "closeBtn": "Close interaction"
+  },
+  "AusweisIdentity": {
+    "header": "German eID",
+    "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\". ",
+    "compatibilityBtn": "Compatibility test",
+    "changePinBtn": "Change your eID PIN",
+    "unlockBtn": "Unlock blocked card",
+    "ausweisBadge": "Online-Ausweisfunktion",
+    "moreInfoDescription": "SmartWallet allows you to use the German eID function (e.g. with the German electronic residence permit) without having to go through other apps. \n\nIf the German eID function is required during a registration process, the SmartWallet will prompt you to hold your eID card up to the NFC reader on your smartphone and enter your 6-digit eID PIN. You also have the option to specify which data you want to share and to check with whom you share it. In addition, you can change your transport PIN to unlock the eID card, change your eID card PIN and unlock the eID card if necessary.\n\nFor the time being, the German eID function is only available to participants of the pilot applications from the research program \"Secure Digital Identities\" of the federal Ministry of Economic Affairs and Climate Action. Furthermore, Jolocom is involved in the ONCE, ID-Ideal and SDIKA projects. The German eID function was implemented on the basis of the AusweisApp2 SDK and uses its existing infrastructure (Online-Ausweisfunktion).",
+    "moreInfoHeader": "German eID Info",
+    "compatibilityBtnDescription": "Check if your device is compatible with the Online-Ausweisfunktion functionality.",
+    "changePinBtnDescription": "Change your eID PIN.",
+    "unlockBtnDescription": "Unlock your blocked card here."
+  },
+  "AusweisChangePin": {
+    "transportPinHeader": "Set up your eID PIN",
+    "transportPinSubheader": "In order to enable eID functionality it is necessary to set up your eID PIN.\nIf you have already changed changed your 5 digit transfer pin into a 6 digit PIN then no further steps are required.",
+    "transportPinBtn": "Set up eID PIN",
+    "pinHeader": "Change 6-digit eID PIN",
+    "pinSubheader": "If you have already set a 6 digit PIN before, you can change it here.",
+    "pinBtn": "Change eID PIN",
+    "forgotHeader": "Forgot eID PIN?",
+    "forgotSubheader": "If you forgot your eID PIN or cannot find your transport PIN letter, please turn to the competent authority to set a new PIN. You can also contact the support at:"
+  },
+  "AusweisPinInfo": {
+    "header": "PIN information",
+    "description": "For the 6-digit eID PIN, choose a combination of numbers that’s not easy to guess. Please refrain from using weak passwords such as 1234.... or your birth date, or any other number printed on the ID card.\n\nWhen changing the PIN for the first time, please use the five-digit Transport PIN. You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a 6-digit PIN is mandatory\n\n",
+    "btn": "Go to eID PIN Settings"
+  },
+  "AusweisScanner": {
+    "header": "Ready to scan",
+    "startSubheader": "Please do not remove your eID card until the current step is done",
+    "cancelBtn": "Cancel",
+    "sessionStarted": "Please place your ID card on the top of the device's back side.",
+    "sessionFailed": "Scanning process failed.",
+    "sessionSucceeded": "Scanning process has been finished successfully.",
+    "sessionInProgress": "Scanning process is in progress."
+  },
+  "AusweisCanInfo": {
+    "header": "CAN information",
+    "description": "The card access number (CAN) is only required if you have entered the wrong PIN twice already. In order to prevent that a wrong PIN is entered for a third time without your consent, thus blocking your card, you have to enter the CAN at this point. The CAN is a 6-digit number that you can find on the front side of your ID card at the bottom right."
+  },
+  "AusweisTransportPin": {
+    "warning1": "Please note that If you have previously set a six-digit eID PIN, the five-digit Transport PIN is no longer valid. \n\nYou may use the five-digit Transport PIN only once to change PIN. \n",
+    "continueBtn": "Continue",
+    "warning2": "You may use the five-digit Transport PIN only once to set your PIN\n"
+  },
+  "AusweisTransportPinInfo": {
+    "header": "Transport PIN info",
+    "description": "You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
+  },
+  "AusweisPukInfo": {
+    "header": "PUK number info",
+    "description": "You will find the PUK number in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
+  },
+  "AusweisUnlock": {
+    "notLockedHeader": "System did not detect your ID card PIN being blocked",
+    "closeBtn": "Close",
+    "pukExhaustedHeader": "We didn't manage to unlock your card",
+    "unlockedHeader": "Your PIN is unlocked and ready to use!\n",
+    "standaloneUnblockHeader": "Unlock the card from the <1>${screen}</1>",
+    "identityScreen": "Identity screen"
+  },
+  "Details": {
+    "expandBtn": "See more"
+  },
+  "Wallet": {
+    "prepareWallet": "Preparing your wallet"
+  },
+  "Dashboard": {
+    "header": "Jolocom WebAgent"
+  },
+  "TermsOfService": {
+    "header": "Terms of Service"
+  },
+  "DocumentCard": {
+    "expired": "Expired"
+  },
+  "mdl": {
+    "sharingLoader": "Sharing Driving License...",
+    "successLoader": "Your Driving License was shared successfully!",
+    "canceledLoader": "The sharing was canceled. Please try again.",
+    "errorLoader": "Sharing the Driving License failed!",
+    "personalizationLoader": "Adding Driving License",
+    "bluetoothWarningTitle": "Bluetooth Error",
+    "bluetoothWarningMessage": "Sharing your driver license requires Bluetooth. \nPlease turn on Bluetooth on your device or use a device that supports it.",
+    "bluetoothWarningBtn": "Settings",
+    "vehicleCode": "Vehicle Code",
+    "issueDate": "Issue Date",
+    "expiryDate": "Expiry Date",
+    "restrictions": "Restrictions",
+    "mopedAndMotorcycle": "Moped and Motorcycle",
+    "passengerCar": "Passenger Car",
+    "truck": "Truck",
+    "bus": "Bus",
+    "tractorAndForklift": "Tractor and Forklift",
+    "shareHeader": "Share Driving License",
+    "shareMenu": "Share via QR Code",
+    "successToastMsg": "Driver License was shared successfully",
+    "drivingPrivileges": "Driving Privileges",
+    "drivingLicenseNumber": "Driving License Number",
+    "issueMdl": "Issue mdl",
+    "authenticationTitle": "Biometry Authentication",
+    "authenticationSubtitle": "We need to authenticate you for the Driving License",
+    "existingDocumentTitle": "Are you sure about this?",
+    "existingDocumentDescription": "You already have a Driving License document",
+    "existingDocumentBtn": "right here",
+    "title": "Driving License",
+    "description": "Please enter your personal data to receive your mobile driving license",
+    "serviceName": "Bundesdruckerei"
+  }
 }
