@@ -197,7 +197,7 @@
         "reconnectedInternetMsg": "All wallet functionalities are back again",
         "successfulInteractionMsg": "Your interaction was successful. You can find the details here",
         "nfcCompatibilityTitle": "NFC Compatibilty problem",
-        "nfcCompatibilityMsg": "Your phone does not support the required NFC functionality, which is needed to read your  eID card.",
+        "nfcCompatibilityMsg": "Your phone does not support the required NFC functionality, which is needed to read your eID card.",
         "nfcOffTitle": "NFC is off",
         "nfcOffMsg": "You need to enable NFC to use the online eID function",
         "nfcOffBtn": "Settings",
@@ -526,7 +526,7 @@
         "pinWrongError": "Wrong ${pinVariant}"
     },
     "AusweisPukLock": {
-        "header": "You used all all PUK attempts and this card is locked. The PUK entered has already been used ten times and can no longer be used to unlock the PIN.\n\nPlease contact your Bürgeramt / PIN Rücksetzdienst for support",
+        "header": "You used all PUK attempts and this card is locked. The PUK entered has already been used ten times and can no longer be used to unlock the PIN.\n\nPlease contact your Bürgeramt / PIN Rücksetzdienst for support",
         "subtitle": "You can always unlock your card by using the “Unlock my card” button in the Identity tab",
         "proceedBtn": "Continue with the PUK code",
         "closeBtn": "Close interaction"
@@ -546,7 +546,7 @@
     },
     "AusweisChangePin": {
         "transportPinHeader": "Set up your eID PIN",
-        "transportPinSubheader": "In order to enable eID functionality  it is necessary to set up your eID PIN.\nIf you have already changed changed your 5 digit transfer pin into a 6 digit PIN then no further steps are required.",
+        "transportPinSubheader": "In order to enable eID functionality it is necessary to set up your eID PIN.\nIf you have already changed changed your 5 digit transfer pin into a 6 digit PIN then no further steps are required.",
         "transportPinBtn": "Set up eID PIN",
         "pinHeader": "Change 6-digit eID PIN",
         "pinSubheader": "If you have already set a 6 digit PIN before, you can change it here.",
