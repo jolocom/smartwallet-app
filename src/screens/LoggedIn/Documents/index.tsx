@@ -7,6 +7,13 @@ import React, {
   useState,
 } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated'
 import { useDispatch } from 'react-redux'
 import CrossIcon from '~/assets/svg/CrossIcon'
 
@@ -18,6 +25,7 @@ import {
   ORIGINAL_DOCUMENT_CARD_WIDTH,
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from '~/components/Cards/consts'
+import { BORDER_RADIUS } from '~/components/Cards/DocumentCard'
 import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimenstions'
 import { StackData, StackScrollView } from '~/components/CardStack'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -69,14 +77,14 @@ const Documents: React.FC = () => {
     string[] | undefined
   >(prevAddedIds)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setHighlightedCards(prevAddedIds)
   }, [prevAddedIds])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTimeout(() => {
       setHighlightedCards(undefined)
-    }, 100)
+    }, 7000)
   }, [highlightedCards])
 
   useLayoutEffect(() => {
@@ -207,6 +215,41 @@ const Documents: React.FC = () => {
             // NOTE: we don't highlight the first document that gets added to the wallet since it is already focused.
             const shouldHighlight =
               documents.length > 1 && Boolean(highlightedCards?.includes(c.id))
+
+            const FadeOutView = () => {
+              const opacity = useSharedValue(0)
+              const zIndex = useSharedValue(0)
+
+              const animationStyle = useAnimatedStyle(() => {
+                return { opacity: opacity.value, zIndex: zIndex.value }
+              })
+
+              // NOTE: Adding animation for zIndex so card gets clickable (TouchableOpacity, styles.btn below) when animation ends
+              const startAnimation = () => {
+                opacity.value = withSequence(
+                  withDelay(1500, withTiming(0.5, { duration: 500 })),
+                  withDelay(2000, withTiming(0, { duration: 750 })),
+                )
+                zIndex.value = withSequence(
+                  withDelay(1500, withTiming(10, { duration: 500 })),
+                  withDelay(2000, withTiming(0, { duration: 750 })),
+                )
+              }
+
+              useEffect(() => {
+                startAnimation()
+              }, [shouldHighlight])
+
+              return (
+                <Animated.View
+                  style={[
+                    styles.overlay,
+                    animationStyle,
+                    { width: ORIGINAL_DOCUMENT_CARD_WIDTH * scaleBy },
+                  ]}
+                />
+              )
+            }
             return (
               <>
                 <DocumentCard
@@ -225,9 +268,9 @@ const Documents: React.FC = () => {
                   hasImageFields={hasImageProperties(c)}
                   icons={c.style.contextIcons}
                   expired={stack.stackId === DocumentStacks.Expired}
-                  highlight={shouldHighlight}
                 />
                 {isDocumentFavorite(c.id) && <CardFavorite />}
+                {shouldHighlight && <FadeOutView />}
               </>
             )
           }}
@@ -255,6 +298,13 @@ const styles = StyleSheet.create({
   },
   stackItems: {
     marginTop: 24,
+  },
+  overlay: {
+    backgroundColor: Colors.success,
+    borderRadius: BORDER_RADIUS,
+    bottom: 0,
+    position: 'absolute',
+    top: 0,
   },
 })
 

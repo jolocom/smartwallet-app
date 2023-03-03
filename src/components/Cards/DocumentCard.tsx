@@ -53,7 +53,6 @@ interface DocumentCardProps {
   style?: StyleProp<ViewStyle>
   expired?: boolean
   showMenu?: boolean
-  highlight?: boolean
 }
 
 export const BORDER_RADIUS = 15
@@ -73,7 +72,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     icons,
     style = {},
     onPress,
-    highlight,
     expired = false,
     showMenu = false,
   }) => {
@@ -165,33 +163,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const secondaryField = showSecondaryField && fields.shift()
 
-    const FadeOutView = () => {
-      const opacity = useSharedValue(0)
-      const zIndex = useSharedValue(0)
-
-      const animationStyle = useAnimatedStyle(() => {
-        return { opacity: opacity.value, zIndex: zIndex.value }
-      })
-
-      // NOTE: Adding animation for zIndex so card gets clickable (TouchableOpacity, styles.btn below) when animation ends
-      const startAnimation = () => {
-        opacity.value = withSequence(
-          withDelay(1500, withTiming(0.5, { duration: 500 })),
-          withDelay(2000, withTiming(0, { duration: 500 })),
-        )
-        zIndex.value = withSequence(
-          withDelay(1500, withTiming(10, { duration: 500 })),
-          withDelay(2000, withTiming(0, { duration: 500 })),
-        )
-      }
-
-      useEffect(() => {
-        startAnimation()
-      }, [highlight])
-
-      return <Animated.View style={[styles.overlay, animationStyle]} />
-    }
-
     return (
       <>
         <ScaledCard
@@ -205,7 +176,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           scaleStyle={styles.cardScaled}
           testID="documentCard"
         >
-          {highlight && <FadeOutView />}
           <View style={[styles.contentContainer, expired && { opacity: 0.5 }]}>
             <DocumentHeader
               name={credentialName}
