@@ -1,7 +1,7 @@
 {
     "Walkthrough": {
-        "titleOne": "Connect your identity",
-        "descriptionOne": "Add your ID's to start using them with with other apps and services",
+        "titleOne": "Digitise your identity",
+        "descriptionOne": "Add your credentials to start using them with with other apps and services",
         "registrationBtn": "Get started",
         "recoveryBtn": "Import identity",
         "titleTwo": "Control your data",
@@ -148,7 +148,7 @@
         "confirmBtn": "Tap to activate camera"
     },
     "Camera": {
-        "details": "It’s all automatic, just place your phone above the code",
+        "details": "It’s all automatic, just place the code inside the frame",
         "errorMsg": "Looks like we can’t provide this service.",
         "localNetworkMessage": "To activate devices within the local network please allow access for the SmartWallet",
         "localNetworkBtn_long": "Tap to manage",
@@ -197,7 +197,7 @@
         "reconnectedInternetMsg": "All wallet functionalities are back again",
         "successfulInteractionMsg": "Your interaction was successful. You can find the details here",
         "nfcCompatibilityTitle": "NFC Compatibilty problem",
-        "nfcCompatibilityMsg": "Unfortunately your phone does not support the required NFC functionality",
+        "nfcCompatibilityMsg": "Your phone does not support the required NFC functionality, which is needed to read your  eID card.",
         "nfcOffTitle": "NFC is off",
         "nfcOffMsg": "You need to enable NFC to use the online eID function",
         "nfcOffBtn": "Settings",
@@ -217,7 +217,7 @@
         "documentsFavoritesLimitMsg": "You can't have more than ${max} favorites"
     },
     "Interaction": {
-        "cancelBtn": "Ignore",
+        "cancelBtn": "Cancel",
         "subheaderAnonymous": "This public profile ${did} chose to remain anonymous. Pay attention before sharing data.",
         "redirectTitle": "We're all done!",
         "redirectDescription": "You are being redirected to ${serviceName}.",
@@ -263,7 +263,7 @@
     },
     "CredentialRequest": {
         "header": "Incoming request",
-        "subheader": "Choose one or more documents requested by ${serviceName} to proceed",
+        "subheader": "Choose one or more data fields from your\n ID card requested by \n%{service-name} to proceed ",
         "acceptBtn": "Share"
     },
     "Authorization": {
@@ -491,7 +491,7 @@
     },
     "AusweisCompatibilityStatus": {
         "header": "Compatibility check",
-        "status1": "ID card access succesful",
+        "status1": "ID card access successful",
         "status2": "Online identification feature enabled",
         "status3": "NFC Supported",
         "success": "Success!",
@@ -503,7 +503,7 @@
         "providerBtn": "Service Info",
         "mandatoryHeader": "Mandatory fields",
         "optionalHeader": "Optional fields",
-        "proceedBtn": "Share"
+        "proceedBtn": "Proceed"
     },
     "AusweisProvider": {
         "providerLabel": "Provider",
@@ -513,8 +513,8 @@
     },
     "AusweisPasscode": {
         "authPinHeader": "Enter eID PIN",
-        "pinForgotBtn": "If you forgot your pin or haven’t activated it yet, <1>click here.</1>",
-        "transportPinHeader": "Enter your 5-digit PIN",
+        "pinForgotBtn": "If you cannot recall your ID card PIN, you may request a new PIN  <1>click here.</1>",
+        "transportPinHeader": "Enter your 5-digit Transport PIN",
         "transportPinBtn": "Where can I find this?",
         "canHeader": "Enter CAN",
         "canBtn": "Where to find CAN?",
@@ -526,7 +526,7 @@
         "pinWrongError": "Wrong ${pinVariant}"
     },
     "AusweisPukLock": {
-        "header": "Your card is locked now and you have to introduce the PUK code to unlock it",
+        "header": "You used all all PUK attempts and this card is locked. The PUK entered has already been used ten times and can no longer be used to unlock the PIN.\n\nPlease contact your Bürgeramt / PIN Rücksetzdienst for support",
         "subtitle": "You can always unlock your card by using the “Unlock my card” button in the Identity tab",
         "proceedBtn": "Continue with the PUK code",
         "closeBtn": "Close interaction"
@@ -534,34 +534,34 @@
     "AusweisIdentity": {
         "header": "German eID",
         "subheader": "This is an early access version to the German online digital identity. It is only available to users that participate in pilot use cases of the \"Schaufenster Sichere Digitale Identitäten\". ",
-        "compatibilityBtn": "Compatibility Test",
+        "compatibilityBtn": "Compatibility test",
         "changePinBtn": "Change your eID PIN",
         "unlockBtn": "Unlock blocked card",
         "ausweisBadge": "Online-Ausweisfunktion",
         "moreInfoDescription": "SmartWallet allows you to use the German eID function (e.g. with the German electronic residence permit) without having to go through other apps. \n\nIf the German eID function is required during a registration process, the SmartWallet will prompt you to hold your eID card up to the NFC reader on your smartphone and enter your 6-digit eID PIN. You also have the option to specify which data you want to share and to check with whom you share it. In addition, you can change your transport PIN to unlock the eID card, change your eID card PIN and unlock the eID card if necessary.\n\nFor the time being, the German eID function is only available to participants of the pilot applications from the research program \"Secure Digital Identities\" of the federal Ministry of Economic Affairs and Climate Action. Furthermore, Jolocom is involved in the ONCE, ID-Ideal and SDIKA projects. The German eID function was implemented on the basis of the AusweisApp2 SDK and uses its existing infrastructure (Online-Ausweisfunktion).",
         "moreInfoHeader": "German eID Info",
-        "compatibilityBtnDescription": "Check if your device is compatible with the eID functionality.",
-        "changePinBtnDescription": "Change or set your eID PIN.",
+        "compatibilityBtnDescription": "Check if your device is compatible with the Online-Ausweisfunktion functionality.",
+        "changePinBtnDescription": "Change your eID PIN",
         "unlockBtnDescription": "Unlock your blocked card here."
     },
     "AusweisChangePin": {
         "transportPinHeader": "Set up your eID PIN",
-        "transportPinSubheader": "To set up your PIN, you will need to enter the 5 digit transport PIN that came in a letter alongside your ID card.",
+        "transportPinSubheader": "In order to enable eID functionality  it is necessary to set up your eID PIN.\nIf you have already changed changed your 5 digit transfer pin into a 6 digit PIN then no further steps are required.",
         "transportPinBtn": "Set up eID PIN",
         "pinHeader": "Change 6-digit eID PIN",
         "pinSubheader": "If you have already set a 6 digit PIN before, you can change it here.",
-        "pinBtn": "Change PIN",
+        "pinBtn": "Change eID PIN",
         "forgotHeader": "Forgot eID PIN?",
         "forgotSubheader": "If you forgot your eID PIN or cannot find your transport PIN letter, please turn to the competent authority to set a new PIN. You can also contact the support at:"
     },
     "AusweisPinInfo": {
         "header": "PIN information",
-        "description": "For the 6-digit eID PIN, choose a combination of numbers that’s not easy to guess\n\nWhen changing the PIN for the first time, please use the five-digit Transport PIN. You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a 6-digit PIN is mandatory\n",
+        "description": "For the 6-digit eID PIN, choose a combination of numbers that’s not easy to guess. Please refrain from using weak passwords such as 1234.... or your birth date, or any other number printed on the ID card.\n\nWhen changing the PIN for the first time, please use the five-digit Transport PIN. You will find the Transport PIN in the letter you received from your responsible authority (marked in red) after you have applied for your identity card.\n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a 6-digit PIN is mandatory\n\n",
         "btn": "Go to eID PIN Settings"
     },
     "AusweisScanner": {
         "header": "Ready to scan",
-        "startSubheader": "Please do not remove your card until the current step is done",
+        "startSubheader": "Please do not remove your eID card until the current step is done",
         "cancelBtn": "Cancel",
         "sessionStarted": "Please place your ID card on the top of the device's back side.",
         "sessionFailed": "Scanning process failed.",
@@ -573,9 +573,9 @@
         "description": "The card access number (CAN) is only required if you have entered the wrong PIN twice already. In order to prevent that a wrong PIN is entered for a third time without your consent, thus blocking your card, you have to enter the CAN at this point. The CAN is a 6-digit number that you can find on the front side of your ID card at the bottom right."
     },
     "AusweisTransportPin": {
-        "warning1": "Please note that If you already set a six-digit PIN previously, the five-digit Transport PIN is no longer valid\n",
+        "warning1": "Please note that If you have previously set a six-digit eID PIN, the five-digit Transport PIN is no longer valid. \n\nYou may use the five-digit Transport PIN only once to change PIN. \n",
         "continueBtn": "Continue",
-        "warning2": "You may use the five-digit Transport PIN only once to change your PIN\n"
+        "warning2": "You may use the five-digit Transport PIN only once to set your PIN\n"
     },
     "AusweisTransportPinInfo": {
         "header": "Transport PIN info",
@@ -586,10 +586,10 @@
         "description": "You will find the PUK number in the letter you received from your responsible authority (marked in red) after you have applied for your identity card. \n\nPlease note that you can not use the online eID function with the five-digit Transport PIN. A change to a six-digit PIN is mandatory"
     },
     "AusweisUnlock": {
-        "notLockedHeader": "System did not detect your card being blocked",
+        "notLockedHeader": "System did not detect your ID card PIN being blocked",
         "closeBtn": "Close",
         "pukExhaustedHeader": "We didn't manage to unlock your card",
-        "unlockedHeader": "Your card is unlocked and ready to use!",
+        "unlockedHeader": "Your PIN is unlocked and ready to use!\n",
         "standaloneUnblockHeader": "Unlock the card from the <1>${screen}</1>",
         "identityScreen": "Identity screen"
     },
