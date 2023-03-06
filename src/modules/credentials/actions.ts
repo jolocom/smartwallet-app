@@ -2,7 +2,7 @@ import createAction from '~/utils/createAction'
 import {
   CredentialsAction,
   CredentialsActions,
-  CredentialsActionType
+  CredentialsActionType,
 } from './types'
 
 // To avoid manually passing a generic type every time we call `createAction`
@@ -37,4 +37,8 @@ export const setFavoriteDocuments = createCredentialsAction(
 
 export const setOpenedStack = createCredentialsAction(
   CredentialsActionType.setOpenedStack,
+)
+
+export const setHasDocuments = createCredentialsAction(
+  CredentialsActionType.hasDocuments,
 )

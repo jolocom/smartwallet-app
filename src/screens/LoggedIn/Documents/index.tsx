@@ -14,7 +14,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CrossIcon from '~/assets/svg/CrossIcon'
 
 import { DocumentCard } from '~/components/Cards'
@@ -33,7 +33,8 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
-import { setOpenedStack } from '~/modules/credentials/actions'
+import { setHasDocuments, setOpenedStack } from '~/modules/credentials/actions'
+import { getHasDocuments } from '~/modules/credentials/selectors'
 import { DocumentStacks } from '~/modules/credentials/types'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
@@ -70,6 +71,10 @@ const Documents: React.FC = () => {
 
   const { favorites } = useFavoriteDocuments()
   const { showMenu } = useAddDocumentMenu()
+
+  // NOTE: Checking if wallet has Documents when component mounts since adding multiple docs without having one in the wallet
+  // will also cause the highlighting animation to run which should only be the case if there are already documents present
+  const hasDocuments = useSelector(getHasDocuments)
 
   const dispatch = useDispatch()
 
@@ -253,6 +258,7 @@ const Documents: React.FC = () => {
                 />
               )
             }
+
             return (
               <>
                 <DocumentCard
@@ -273,7 +279,7 @@ const Documents: React.FC = () => {
                   expired={stack.stackId === DocumentStacks.Expired}
                 />
                 {isDocumentFavorite(c.id) && <CardFavorite />}
-                {shouldHighlight && <FadeOutView />}
+                {hasDocuments && shouldHighlight && <FadeOutView />}
               </>
             )
           }}
