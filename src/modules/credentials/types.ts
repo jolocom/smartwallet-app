@@ -8,6 +8,7 @@ export enum CredentialsActionType {
   deleteFavorite = 'deleteFavorite',
   setFavorites = 'setFavorites',
   setOpenedStack = 'setOpenedStack',
+  hasDocuments = 'hasDocuments',
 }
 
 // Expressing dependency between action type and action payload;
@@ -20,6 +21,7 @@ export interface CredentialsActions {
   [CredentialsActionType.deleteFavorite]: string
   [CredentialsActionType.setFavorites]: string[]
   [CredentialsActionType.setOpenedStack]: DocumentStacks | null
+  [CredentialsActionType.hasDocuments]: boolean
 }
 
 // Dependency between action type and its payload following Action type signature
@@ -32,6 +34,7 @@ export interface CredentialsState {
   all: Document[]
   favorites: string[]
   openedStack: DocumentStacks | null
+  hasDocuments: boolean
 }
 
 export enum DocumentStacks {
