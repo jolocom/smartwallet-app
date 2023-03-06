@@ -81,10 +81,12 @@ const Documents: React.FC = () => {
     setHighlightedCards(prevAddedIds)
   }, [prevAddedIds])
 
-  useLayoutEffect(() => {
-    setTimeout(() => {
-      setHighlightedCards(undefined)
-    }, 7000)
+  useEffect(() => {
+    highlightedCards &&
+      setTimeout(() => {
+        setHighlightedCards(undefined)
+        dispatch(setHasDocuments(true))
+      }, 4000)
   }, [highlightedCards])
 
   useLayoutEffect(() => {
@@ -220,19 +222,20 @@ const Documents: React.FC = () => {
               const opacity = useSharedValue(0)
               const zIndex = useSharedValue(0)
 
-              const animationStyle = useAnimatedStyle(() => {
-                return { opacity: opacity.value, zIndex: zIndex.value }
-              })
+              const animationStyle = useAnimatedStyle(() => ({
+                opacity: opacity.value,
+                zIndex: zIndex.value,
+              }))
 
               // NOTE: Adding animation for zIndex so card gets clickable (TouchableOpacity, styles.btn below) when animation ends
               const startAnimation = () => {
                 opacity.value = withSequence(
-                  withDelay(1500, withTiming(0.5, { duration: 500 })),
-                  withDelay(2000, withTiming(0, { duration: 750 })),
+                  withDelay(250, withTiming(0.5, { duration: 500 })),
+                  withDelay(1250, withTiming(0, { duration: 750 })),
                 )
                 zIndex.value = withSequence(
-                  withDelay(1500, withTiming(10, { duration: 500 })),
-                  withDelay(2000, withTiming(0, { duration: 750 })),
+                  withDelay(250, withTiming(10, { duration: 500 })),
+                  withDelay(1250, withTiming(0, { duration: 750 })),
                 )
               }
 
@@ -281,6 +284,13 @@ const Documents: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    backgroundColor: Colors.success,
+    borderRadius: BORDER_RADIUS,
+    bottom: 0,
+    position: 'absolute',
+    top: 0,
+  },
   stackBtn: {
     width: '100%',
     paddingHorizontal: 24,
@@ -298,13 +308,6 @@ const styles = StyleSheet.create({
   },
   stackItems: {
     marginTop: 24,
-  },
-  overlay: {
-    backgroundColor: Colors.success,
-    borderRadius: BORDER_RADIUS,
-    bottom: 0,
-    position: 'absolute',
-    top: 0,
   },
 })
 
