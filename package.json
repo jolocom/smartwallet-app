@@ -1,6 +1,6 @@
 {
   "name": "SmartWallet",
-  "version": "2.5.5-70",
+  "version": "2.6.0-71",
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
