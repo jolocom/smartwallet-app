@@ -5,7 +5,7 @@ import { attributeConfig } from '~/config/claims'
 import { getDid } from '~/modules/account/selectors'
 import { initAttrs } from '~/modules/attributes/actions'
 import { AttributeI, AttrsState } from '~/modules/attributes/types'
-import { setCredentials } from '~/modules/credentials/actions'
+import { setCredentials, setHasDocuments } from '~/modules/credentials/actions'
 import { useFavoriteDocuments } from '~/screens/LoggedIn/Documents/useFavoriteDocuments'
 import { AttributeTypes } from '~/types/credentials'
 import { extractClaims, extractCredentialType } from '~/utils/dataMapping'
@@ -37,7 +37,7 @@ export const useInitDocuments = () => {
     } = await agent.credentials.display(credential)
 
     const previewKeys: string[] = []
-    const mappedProperties = properties.map((p) => {
+    const mappedProperties = properties.map(p => {
       const base = pick(p, ['key', 'label', 'value', 'mime_type', 'preview'])
       if (p.preview) previewKeys.push(p.key!)
 
@@ -117,7 +117,7 @@ export const useInitDocuments = () => {
     const attributeCredentials: SignedCredential[] = []
     const rest: SignedCredential[] = []
 
-    credentials.forEach((credential) => {
+    credentials.forEach(credential => {
       const isSelfIssued = credential.issuer === did
       const isAttribute =
         intersectionBy(credential.type, Object.keys(attributeConfig)).length !==
@@ -168,6 +168,7 @@ export const useInitDocuments = () => {
         sortDocuments(documents, DocumentsSortingType.issuanceDate),
       ),
     )
+    dispatch(setHasDocuments(Boolean(documents.length)))
     await getFavorites()
     dispatch(initAttrs(attributes))
   }
