@@ -53,7 +53,6 @@ interface DocumentCardProps {
   style?: StyleProp<ViewStyle>
   expired?: boolean
   showMenu?: boolean
-  highlight?: boolean
 }
 
 export const BORDER_RADIUS = 15
@@ -73,7 +72,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
     icons,
     style = {},
     onPress,
-    highlight,
     expired = false,
     showMenu = false,
   }) => {
@@ -95,7 +93,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
       }
     }
 
-    const checkLayoutCase = (...args: Boolean[]) => args.every((arg) => arg)
+    const checkLayoutCase = (...args: Boolean[]) => args.every(arg => arg)
 
     const isBackground = Boolean(backgroundImage || backgroundColor)
 
@@ -165,27 +163,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
 
     const secondaryField = showSecondaryField && fields.shift()
 
-    const FadeOutView = () => {
-      const opacity = useSharedValue(0)
-
-      const animationStyle = useAnimatedStyle(() => {
-        return { opacity: opacity.value }
-      })
-
-      const startAnimation = () => {
-        opacity.value = withSequence(
-          withDelay(1500, withTiming(0.5, { duration: 500 })),
-          withDelay(2000, withTiming(0, { duration: 500 })),
-        )
-      }
-
-      useEffect(() => {
-        startAnimation()
-      }, [highlight])
-
-      return <Animated.View style={[styles.overlay, animationStyle]} />
-    }
-
     return (
       <>
         <ScaledCard
@@ -199,7 +176,6 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
           scaleStyle={styles.cardScaled}
           testID="documentCard"
         >
-          {highlight && <FadeOutView />}
           <View style={[styles.contentContainer, expired && { opacity: 0.5 }]}>
             <DocumentHeader
               name={credentialName}
@@ -284,9 +260,7 @@ const DocumentCard: React.FC<DocumentCardProps> = React.memo<DocumentCardProps>(
   },
   (prev, next) => {
     const relevantProps: Array<keyof DocumentCardProps> = ['id', 'showMenu']
-    const arePropsEqual = relevantProps.every(
-      (prop) => prev[prop] === next[prop],
-    )
+    const arePropsEqual = relevantProps.every(prop => prev[prop] === next[prop])
 
     return arePropsEqual
   },
@@ -297,6 +271,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     top: DOCUMENT_HEADER_HEIGHT,
     flex: 1,
+    zIndex: 1,
   },
   fieldLabel: {
     fontSize: 16,
@@ -335,13 +310,8 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS,
   },
   overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: Colors.success,
-    zIndex: 1,
     borderRadius: BORDER_RADIUS,
   },
 })

@@ -7,7 +7,14 @@ import React, {
   useState,
 } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated'
+import { useDispatch, useSelector } from 'react-redux'
 import CrossIcon from '~/assets/svg/CrossIcon'
 
 import { DocumentCard } from '~/components/Cards'
@@ -18,6 +25,7 @@ import {
   ORIGINAL_DOCUMENT_CARD_WIDTH,
   ORIGINAL_DOCUMENT_SCREEN_WIDTH,
 } from '~/components/Cards/consts'
+import { BORDER_RADIUS } from '~/components/Cards/DocumentCard'
 import { getCardDimensions } from '~/components/Cards/ScaledCard/getCardDimenstions'
 import { StackData, StackScrollView } from '~/components/CardStack'
 import JoloText, { JoloTextKind } from '~/components/JoloText'
@@ -25,7 +33,8 @@ import ScreenContainer from '~/components/ScreenContainer'
 import { useDocuments } from '~/hooks/documents'
 import { Document } from '~/hooks/documents/types'
 import useTranslation from '~/hooks/useTranslation'
-import { setOpenedStack } from '~/modules/credentials/actions'
+import { setHasDocuments, setOpenedStack } from '~/modules/credentials/actions'
+import { getHasDocuments } from '~/modules/credentials/selectors'
 import { DocumentStacks } from '~/modules/credentials/types'
 import { ScreenNames } from '~/types/screens'
 import { Colors } from '~/utils/colors'
@@ -63,20 +72,26 @@ const Documents: React.FC = () => {
   const { favorites } = useFavoriteDocuments()
   const { showMenu } = useAddDocumentMenu()
 
+  // NOTE: Checking if wallet has Documents when component mounts since adding multiple docs without having one in the wallet
+  // will also cause the highlighting animation to run which should only be the case if there are already documents present
+  const hasDocuments = useSelector(getHasDocuments)
+
   const dispatch = useDispatch()
 
   const [highlightedCards, setHighlightedCards] = useState<
     string[] | undefined
   >(prevAddedIds)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setHighlightedCards(prevAddedIds)
   }, [prevAddedIds])
 
   useEffect(() => {
-    setTimeout(() => {
-      setHighlightedCards(undefined)
-    }, 100)
+    highlightedCards &&
+      setTimeout(() => {
+        setHighlightedCards(undefined)
+        !hasDocuments && dispatch(setHasDocuments(true))
+      }, 4000)
   }, [highlightedCards])
 
   useLayoutEffect(() => {
@@ -205,8 +220,44 @@ const Documents: React.FC = () => {
           renderItem={(c, stack, visible) => {
             const fields = getPreviewProperties(c)
             // NOTE: we don't highlight the first document that gets added to the wallet since it is already focused.
-            const shouldHighlight =
-              documents.length > 1 && Boolean(highlightedCards?.includes(c.id))
+            const shouldHighlight = Boolean(highlightedCards?.includes(c.id))
+
+            const FadeOutView = () => {
+              const opacity = useSharedValue(0)
+              const zIndex = useSharedValue(0)
+
+              const animationStyle = useAnimatedStyle(() => ({
+                opacity: opacity.value,
+                zIndex: zIndex.value,
+              }))
+
+              // NOTE: Adding animation for zIndex so card gets clickable (TouchableOpacity, styles.btn below) when animation ends
+              const startAnimation = () => {
+                opacity.value = withSequence(
+                  withDelay(250, withTiming(0.5, { duration: 500 })),
+                  withDelay(1250, withTiming(0, { duration: 500 })),
+                )
+                zIndex.value = withSequence(
+                  withDelay(250, withTiming(10, { duration: 500 })),
+                  withDelay(1250, withTiming(0, { duration: 500 })),
+                )
+              }
+
+              useEffect(() => {
+                startAnimation()
+              }, [shouldHighlight])
+
+              return (
+                <Animated.View
+                  style={[
+                    styles.overlay,
+                    animationStyle,
+                    { width: ORIGINAL_DOCUMENT_CARD_WIDTH * scaleBy },
+                  ]}
+                />
+              )
+            }
+
             return (
               <>
                 <DocumentCard
@@ -225,9 +276,9 @@ const Documents: React.FC = () => {
                   hasImageFields={hasImageProperties(c)}
                   icons={c.style.contextIcons}
                   expired={stack.stackId === DocumentStacks.Expired}
-                  highlight={shouldHighlight}
                 />
                 {isDocumentFavorite(c.id) && <CardFavorite />}
+                {hasDocuments && shouldHighlight && <FadeOutView />}
               </>
             )
           }}
@@ -238,6 +289,13 @@ const Documents: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    backgroundColor: Colors.success,
+    borderRadius: BORDER_RADIUS,
+    bottom: 0,
+    position: 'absolute',
+    top: 0,
+  },
   stackBtn: {
     width: '100%',
     paddingHorizontal: 24,
