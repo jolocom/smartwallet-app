@@ -90,7 +90,7 @@ const Documents: React.FC = () => {
     highlightedCards &&
       setTimeout(() => {
         setHighlightedCards(undefined)
-        dispatch(setHasDocuments(true))
+        !hasDocuments && dispatch(setHasDocuments(true))
       }, 4000)
   }, [highlightedCards])
 
@@ -235,11 +235,11 @@ const Documents: React.FC = () => {
               const startAnimation = () => {
                 opacity.value = withSequence(
                   withDelay(250, withTiming(0.5, { duration: 500 })),
-                  withDelay(1250, withTiming(0, { duration: 750 })),
+                  withDelay(1250, withTiming(0, { duration: 500 })),
                 )
                 zIndex.value = withSequence(
                   withDelay(250, withTiming(10, { duration: 500 })),
-                  withDelay(1250, withTiming(0, { duration: 750 })),
+                  withDelay(1250, withTiming(0, { duration: 500 })),
                 )
               }
 
