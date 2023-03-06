@@ -220,8 +220,7 @@ const Documents: React.FC = () => {
           renderItem={(c, stack, visible) => {
             const fields = getPreviewProperties(c)
             // NOTE: we don't highlight the first document that gets added to the wallet since it is already focused.
-            const shouldHighlight =
-              documents.length > 1 && Boolean(highlightedCards?.includes(c.id))
+            const shouldHighlight = Boolean(highlightedCards?.includes(c.id))
 
             const FadeOutView = () => {
               const opacity = useSharedValue(0)
